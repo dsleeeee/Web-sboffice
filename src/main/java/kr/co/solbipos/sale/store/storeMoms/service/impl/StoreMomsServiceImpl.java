@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.store.storeMoms.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.store.storeMoms.service.StoreMomsService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class StoreMomsServiceImpl implements StoreMomsService {
     private final StoreMomsMapper storeMomsMapper;
+    private final PopupMapper popupMapper;
 
-    public StoreMomsServiceImpl(StoreMomsMapper storeMomsMapper) {
+    public StoreMomsServiceImpl(StoreMomsMapper storeMomsMapper, PopupMapper popupMapper) {
         this.storeMomsMapper = storeMomsMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -46,8 +52,12 @@ public class StoreMomsServiceImpl implements StoreMomsService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storeMomsVO.getStoreCds().split(",");
-        storeMomsVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeMomsVO.getStoreCds(), 3900));
+            storeMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
         return storeMomsMapper.getStoreMomsList(storeMomsVO);
     }
     
@@ -62,8 +72,12 @@ public class StoreMomsServiceImpl implements StoreMomsService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = storeMomsVO.getStoreCds().split(",");
-        storeMomsVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeMomsVO.getStoreCds(), 3900));
+            storeMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
         return storeMomsMapper.getStoreMomsExcelList(storeMomsVO);
     }
 

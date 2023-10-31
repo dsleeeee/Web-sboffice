@@ -509,11 +509,8 @@
                 </if>
             </when>
         </choose>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                tssd.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssd.STORE_CD IN (${storeCdQuery})
         </if>
         AND 	tmp.STORE_CD = tssd.STORE_CD
         AND 	tmp.PROD_CD = tssd.PROD_CD
@@ -556,11 +553,8 @@
                 </if>
             </when>
         </choose>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         ORDER BY SALE_DATE
     </select>
@@ -600,11 +594,8 @@
                 </if>
             </when>
         </choose>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         GROUP BY SALE_DATE
         ORDER BY SALE_DATE

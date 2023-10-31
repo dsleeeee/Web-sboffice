@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.pay.payMonthDevice.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.pay.payMonthDevice.service.PayMonthDeviceService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class PayMonthDeviceServiceImpl implements PayMonthDeviceService {
     private final PayMonthDeviceMapper payMonthDeviceMapper;
+    private final PopupMapper popupMapper;
 
-    public PayMonthDeviceServiceImpl(PayMonthDeviceMapper payMonthDeviceMapper) {
+    public PayMonthDeviceServiceImpl(PayMonthDeviceMapper payMonthDeviceMapper, PopupMapper popupMapper) {
         this.payMonthDeviceMapper = payMonthDeviceMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -49,8 +55,11 @@ public class PayMonthDeviceServiceImpl implements PayMonthDeviceService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = payMonthDeviceVO.getStoreCds().split(",");
-        payMonthDeviceVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(payMonthDeviceVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(payMonthDeviceVO.getStoreCds(), 3900));
+            payMonthDeviceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         // 결제수단 array 값 세팅
         payMonthDeviceVO.setArrPayCol(payMonthDeviceVO.getPayCol().split(","));

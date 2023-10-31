@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.sale.status.orderChannelSale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.mobile.sale.status.orderChannelSale.service.MobileOrderChannelSaleService;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -32,13 +36,15 @@ import java.util.List;
 public class MobileOrderChannelSaleServiceImpl implements MobileOrderChannelSaleService {
 
     private final MobileOrderChannelSaleMapper mobileOrderChannelSaleMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileOrderChannelSaleServiceImpl(MobileOrderChannelSaleMapper mobileOrderChannelSaleMapper) {
+    public MobileOrderChannelSaleServiceImpl(MobileOrderChannelSaleMapper mobileOrderChannelSaleMapper, PopupMapper popupMapper) {
         this.mobileOrderChannelSaleMapper = mobileOrderChannelSaleMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 모바일 매출현황 - 주문채널 구분자 조회 */
@@ -67,7 +73,9 @@ public class MobileOrderChannelSaleServiceImpl implements MobileOrderChannelSale
         if(!StringUtil.getOrBlank(mobileOrderChannelSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileOrderChannelSaleVO.setArrStoreCd(mobileOrderChannelSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileOrderChannelSaleVO.getSrchStoreCd(), 3900));
+            mobileOrderChannelSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileOrderChannelSaleMapper.getOrderChannelSalePayList(mobileOrderChannelSaleVO);
@@ -87,7 +95,9 @@ public class MobileOrderChannelSaleServiceImpl implements MobileOrderChannelSale
         if(!StringUtil.getOrBlank(mobileOrderChannelSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileOrderChannelSaleVO.setArrStoreCd(mobileOrderChannelSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileOrderChannelSaleVO.getSrchStoreCd(), 3900));
+            mobileOrderChannelSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 주문채널 구분자 array 값 세팅

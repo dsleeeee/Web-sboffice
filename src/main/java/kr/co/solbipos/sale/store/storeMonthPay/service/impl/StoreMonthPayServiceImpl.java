@@ -1,7 +1,10 @@
 package kr.co.solbipos.sale.store.storeMonthPay.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.store.storeMonthPay.service.StoreMonthPayService;
 import kr.co.solbipos.sale.store.storeMonthPay.service.StoreMonthPayVO;
@@ -29,9 +32,11 @@ import java.util.List;
 @Transactional
 public class StoreMonthPayServiceImpl implements StoreMonthPayService {
     private final StoreMonthPayMapper storeMonthPayMapper;
+    private final PopupMapper popupMapper;
 
-    public StoreMonthPayServiceImpl(StoreMonthPayMapper storeMonthPayMapper) {
+    public StoreMonthPayServiceImpl(StoreMonthPayMapper storeMonthPayMapper, PopupMapper popupMapper) {
         this.storeMonthPayMapper = storeMonthPayMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -43,8 +48,11 @@ public class StoreMonthPayServiceImpl implements StoreMonthPayService {
         storeMonthPayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeMonthPayVO.getStoreCds().split(",");
-        storeMonthPayVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeMonthPayVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeMonthPayVO.getStoreCds(), 3900));
+            storeMonthPayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         String payCol= "";
         // 쿼리문 PIVOT IN 에 들어갈 문자열 생성

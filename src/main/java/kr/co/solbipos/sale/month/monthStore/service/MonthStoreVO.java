@@ -37,6 +37,9 @@ public class MonthStoreVO extends PageVO {
     private String startMonth;
     private String endMonth;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() { return hqOfficeCd; }
 
     public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
@@ -75,5 +78,13 @@ public class MonthStoreVO extends PageVO {
 
     public void setEndMonth(String endMonth) {
         this.endMonth = endMonth;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

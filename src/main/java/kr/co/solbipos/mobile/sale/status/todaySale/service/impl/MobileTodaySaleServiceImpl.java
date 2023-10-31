@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.sale.status.todaySale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.mobile.sale.status.todaySale.service.MobileTodaySaleService;
@@ -35,13 +38,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class MobileTodaySaleServiceImpl implements MobileTodaySaleService {
     private final MobileTodaySaleMapper mobileTodaySaleMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileTodaySaleServiceImpl(MobileTodaySaleMapper mobileTodaySaleMapper) {
+    public MobileTodaySaleServiceImpl(MobileTodaySaleMapper mobileTodaySaleMapper, PopupMapper popupMapper) {
         this.mobileTodaySaleMapper = mobileTodaySaleMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 당일매출종합 - 조회 */
@@ -51,10 +56,13 @@ public class MobileTodaySaleServiceImpl implements MobileTodaySaleService {
         mobileTodaySaleVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileTodaySaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         mobileTodaySaleVO.setEmpNo(sessionInfoVO.getEmpNo());
+
         if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileTodaySaleVO.getSrchStoreCd(), 3900));
+            mobileTodaySaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileTodaySaleMapper.getMobileTodaySaleTotalList(mobileTodaySaleVO);
@@ -70,7 +78,9 @@ public class MobileTodaySaleServiceImpl implements MobileTodaySaleService {
         if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileTodaySaleVO.getSrchStoreCd(), 3900));
+            mobileTodaySaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileTodaySaleMapper.getMobileTodaySalePayList(mobileTodaySaleVO);
@@ -86,7 +96,9 @@ public class MobileTodaySaleServiceImpl implements MobileTodaySaleService {
         if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileTodaySaleVO.getSrchStoreCd(), 3900));
+            mobileTodaySaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileTodaySaleMapper.getMobileTodaySaleDcList(mobileTodaySaleVO);
@@ -102,7 +114,9 @@ public class MobileTodaySaleServiceImpl implements MobileTodaySaleService {
         if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileTodaySaleVO.getSrchStoreCd(), 3900));
+            mobileTodaySaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileTodaySaleMapper.getMobileTodaySaleDlvrList(mobileTodaySaleVO);
@@ -119,7 +133,9 @@ public class MobileTodaySaleServiceImpl implements MobileTodaySaleService {
         if(!StringUtil.getOrBlank(mobileTodaySaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileTodaySaleVO.setArrStoreCd(mobileTodaySaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileTodaySaleVO.getSrchStoreCd(), 3900));
+            mobileTodaySaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileTodaySaleMapper.getMobileTodaySaleTimeList(mobileTodaySaleVO);

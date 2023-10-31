@@ -524,12 +524,9 @@
                      TB_SL_DAILY_POS_PROD    C
              WHERE   C.PROD_CD       = A.PROD_CD(+)
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-				AND
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						C.STORE_CD = #{item}
-               		</foreach>
-			</if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND C.STORE_CD IN (${storeCdQuery})
+            </if>
 			<if test='startDate != null and startDate != ""'>
 				AND C.SALE_DATE	>= REPLACE(#{startDate}, '-', '')
 			</if>
@@ -601,12 +598,9 @@
                      TB_SL_DAILY_POS_PROD    C
              WHERE   C.PROD_CD       = A.PROD_CD(+)
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-				AND
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						C.STORE_CD	= #{item}
-               		</foreach>
-			</if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND C.STORE_CD IN (${storeCdQuery})
+            </if>
 			<if test='startDate != null and startDate != ""'>
 				AND C.SALE_DATE	>= REPLACE(#{startDate}, '-', '')
 			</if>
@@ -708,12 +702,9 @@
                      TB_SL_MONTHLY_POS_PROD    C
              WHERE   C.PROD_CD       = A.PROD_CD(+)
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-				AND
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						C.STORE_CD = #{item}
-               		</foreach>
-			</if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND C.STORE_CD IN (${storeCdQuery})
+            </if>
 			<if test='saleMonth != null and saleMonth != ""'>
 				AND C.SALE_YM = REPLACE(#{saleMonth}, '-', '')
 			</if>
@@ -770,12 +761,9 @@
                      TB_SL_MONTHLY_POS_PROD    C
              WHERE   C.PROD_CD       = A.PROD_CD(+)
              AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
-            <if test='storeCd != null and storeCd != ""'>
-				AND
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-						C.STORE_CD = #{item}
-               		</foreach>
-			</if>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND C.STORE_CD IN (${storeCdQuery})
+            </if>
 			<if test='saleMonth != null and saleMonth != ""'>
 				AND C.SALE_YM = REPLACE(#{saleMonth}, '-', '')
 			</if>
@@ -814,12 +802,9 @@
 	               , TB_MS_STORE B
          WHERE A.STORE_CD = B.STORE_CD
          AND   A.HQ_OFFICE_CD  = #{hqOfficeCd}
-		<if test='storeCd != null and storeCd != ""'>
-			AND
-                   <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-					   A.STORE_CD =	#{item}
-              		</foreach>
-	 	</if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
 		<if test='startDate != null and startDate != ""'>
 			AND A.SALE_DATE	>= REPLACE(#{startDate}, '-', '')
 		</if>
@@ -887,12 +872,9 @@
 				           , SUM(TSSD.REAL_SALE_AMT) AS REAL_SALE_AMT
 				        FROM TB_SL_SALE_DTL TSSD
 				        WHERE TSSD.HQ_OFFICE_CD = #{hqOfficeCd}
-						<if test='arrStoreCd != null and arrStoreCd != ""'>
-							AND
-							<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-								TSSD.STORE_CD = #{item}
-							</foreach>
-			 			</if>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND TSSD.STORE_CD IN (${storeCdQuery})
+                        </if>
 						<if test='startDate != null and startDate != ""'>
 							AND TSSD.SALE_DATE	>=   REPLACE(#{startDate}, '-', '')
 						</if>
@@ -920,12 +902,9 @@
 				                       	AND Z.SALE_DATE = TSSD.SALE_DATE
 				                       	AND Z.POS_NO = TSSD.POS_NO
 				                       	AND Z.BILL_NO = TSSD.BILL_NO
-				                       	<if test='arrStoreCd != null and arrStoreCd != ""'>
-											AND
-					                       	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												Z.STORE_CD = #{item}
-			                    			</foreach>
-		                    			</if>
+                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND Z.STORE_CD IN (${storeCdQuery})
+                                        </if>
 								        <if test='startDate != null and startDate != ""'>
 											AND Z.SALE_DATE	>=  REPLACE(#{startDate}, '-', '')
 										</if>
@@ -991,12 +970,9 @@
 				           , SUM(TSSD.REAL_SALE_AMT) AS REAL_SALE_AMT
 				        FROM TB_SL_SALE_DTL TSSD
 				        WHERE	TSSD.HQ_OFFICE_CD = #{hqOfficeCd}
-				        <if test='arrStoreCd != null and arrStoreCd != ""'>
-							AND
-			        	    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-								TSSD.STORE_CD = #{item}
-	                    	</foreach>
-                    	</if>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND TSSD.STORE_CD IN (${storeCdQuery})
+                        </if>
 						<if test='startDate != null and startDate != ""'>
 							AND TSSD.SALE_DATE	>=   REPLACE(#{startDate}, '-', '')
 						</if>
@@ -1024,12 +1000,9 @@
 				                       	AND Z.SALE_DATE = TSSD.SALE_DATE
 				                       	AND Z.POS_NO = TSSD.POS_NO
 				                       	AND Z.BILL_NO = TSSD.BILL_NO
-				                        <if test='arrStoreCd != null and arrStoreCd != ""'>
-				                        	AND
-					                       	<foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-												Z.STORE_CD = #{item}
-		                    			   </foreach>
-								        </if>
+                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND Z.STORE_CD IN (${storeCdQuery})
+                                        </if>
 								        <if test='startDate != null and startDate != ""'>
 											AND Z.SALE_DATE	>=  REPLACE(#{startDate}, '-', '')
 										</if>

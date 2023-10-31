@@ -56,7 +56,9 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
 
         if(!StringUtil.getOrBlank(saleComPopupVO.getStoreCd()).equals("")) {
-        	saleComPopupVO.setArrStoreCd(saleComPopupVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(saleComPopupVO.getStoreCd(), 3900));
+            saleComPopupVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         if(!StringUtil.getOrBlank(saleComPopupVO.getCornrCd()).equals("")) {
         	saleComPopupVO.setArrCornrCd(saleComPopupVO.getCornrCd().split(","));

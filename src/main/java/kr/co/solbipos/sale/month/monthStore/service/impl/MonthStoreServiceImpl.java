@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.month.monthStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.month.monthStore.service.MonthStoreService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class MonthStoreServiceImpl implements MonthStoreService {
     private final MonthStoreMapper monthStoreMapper;
+    private final PopupMapper popupMapper;
 
-    public MonthStoreServiceImpl(MonthStoreMapper monthStoreMapper) {
+    public MonthStoreServiceImpl(MonthStoreMapper monthStoreMapper, PopupMapper popupMapper) {
         this.monthStoreMapper = monthStoreMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class MonthStoreServiceImpl implements MonthStoreService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthStoreVO.getStoreCds().split(",");
-        monthStoreVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthStoreVO.getStoreCds(), 3900));
+            monthStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return monthStoreMapper.getMonthStoreList(monthStoreVO);
     }
@@ -63,8 +72,11 @@ public class MonthStoreServiceImpl implements MonthStoreService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = monthStoreVO.getStoreCds().split(",");
-        monthStoreVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(monthStoreVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthStoreVO.getStoreCds(), 3900));
+            monthStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return monthStoreMapper.getMonthStoreExcelList(monthStoreVO);
     }

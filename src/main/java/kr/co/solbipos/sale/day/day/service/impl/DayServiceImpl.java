@@ -203,7 +203,9 @@ public class DayServiceImpl implements DayService {
         }
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayMapper.getDayProdDtlList(dayVO);
@@ -220,7 +222,9 @@ public class DayServiceImpl implements DayService {
         }
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayMapper.getDayDtlList(dayVO);
@@ -237,7 +241,9 @@ public class DayServiceImpl implements DayService {
         }
 
         if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
-            dayVO.setArrStoreCd(dayVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayMapper.getDaySumAvgList(dayVO);

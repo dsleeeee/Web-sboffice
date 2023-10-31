@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.sale.status.timeMonthSale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO;
 import kr.co.solbipos.mobile.sale.status.prod.service.impl.MobileProdSaleMapper;
@@ -33,14 +36,16 @@ import java.util.List;
 public class MobileTimeMonthSaleServiceImpl implements MobileTimeMonthSaleService {
     private final MobileTimeMonthSaleMapper mobileTimeMonthSaleMapper;
     private final MobileProdSaleMapper mobileProdSaleMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileTimeMonthSaleServiceImpl(MobileTimeMonthSaleMapper mobileTimeMonthSaleMapper, MobileProdSaleMapper mobileProdSaleMapper) {
+    public MobileTimeMonthSaleServiceImpl(MobileTimeMonthSaleMapper mobileTimeMonthSaleMapper, MobileProdSaleMapper mobileProdSaleMapper, PopupMapper popupMapper) {
         this.mobileTimeMonthSaleMapper = mobileTimeMonthSaleMapper;
         this.mobileProdSaleMapper = mobileProdSaleMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 일자-시간대별 - 조회 */
@@ -53,7 +58,9 @@ public class MobileTimeMonthSaleServiceImpl implements MobileTimeMonthSaleServic
         if(!StringUtil.getOrBlank(mobileTimeMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileTimeMonthSaleVO.setArrStoreCd(mobileTimeMonthSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileTimeMonthSaleVO.getSrchStoreCd(), 3900));
+            mobileTimeMonthSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         // 매출 발생 시간대 기준, 동적 컬럼 생성을 위한 쿼리 변수;
@@ -95,7 +102,9 @@ public class MobileTimeMonthSaleServiceImpl implements MobileTimeMonthSaleServic
         if(!StringUtil.getOrBlank(mobileTimeMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileTimeMonthSaleVO.setArrStoreCd(mobileTimeMonthSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileTimeMonthSaleVO.getSrchStoreCd(), 3900));
+            mobileTimeMonthSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileTimeMonthSaleMapper.getMobileTimeMonthSaleTimeList(mobileTimeMonthSaleVO);
@@ -111,7 +120,9 @@ public class MobileTimeMonthSaleServiceImpl implements MobileTimeMonthSaleServic
         if(!StringUtil.getOrBlank(mobileTimeMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileTimeMonthSaleVO.setArrStoreCd(mobileTimeMonthSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileTimeMonthSaleVO.getSrchStoreCd(), 3900));
+            mobileTimeMonthSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileTimeMonthSaleMapper.getMobileTimeMonthSaleTimeChartList(mobileTimeMonthSaleVO);

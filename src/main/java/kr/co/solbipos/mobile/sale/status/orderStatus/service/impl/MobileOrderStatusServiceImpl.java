@@ -2,7 +2,10 @@ package kr.co.solbipos.mobile.sale.status.orderStatus.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.sale.status.orderStatus.service.MobileOrderStatusService;
 import kr.co.solbipos.mobile.sale.status.orderStatus.service.MobileOrderStatusVO;
@@ -31,11 +34,13 @@ import java.util.List;
 @Service("MobileOrderStatusService")
 public class MobileOrderStatusServiceImpl implements MobileOrderStatusService {
     private final MobileOrderStatusMapper mobileOrderStatusMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public MobileOrderStatusServiceImpl(MobileOrderStatusMapper mobileOrderStatusMapper, MessageService messageService) {
+    public MobileOrderStatusServiceImpl(MobileOrderStatusMapper mobileOrderStatusMapper, PopupMapper popupMapper, MessageService messageService) {
         this.mobileOrderStatusMapper = mobileOrderStatusMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -46,7 +51,9 @@ public class MobileOrderStatusServiceImpl implements MobileOrderStatusService {
         if(!StringUtil.getOrBlank(mobileOrderStatusVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileOrderStatusVO.setArrStoreCd(mobileOrderStatusVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileOrderStatusVO.getSrchStoreCd(), 3900));
+            mobileOrderStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return mobileOrderStatusMapper.getMobileOrderStatusList(mobileOrderStatusVO);
     }
@@ -58,7 +65,9 @@ public class MobileOrderStatusServiceImpl implements MobileOrderStatusService {
         if(!StringUtil.getOrBlank(mobileOrderStatusVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileOrderStatusVO.setArrStoreCd(mobileOrderStatusVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileOrderStatusVO.getSrchStoreCd(), 3900));
+            mobileOrderStatusVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return mobileOrderStatusMapper.getMobileOrderStatusDtlList(mobileOrderStatusVO);
     }

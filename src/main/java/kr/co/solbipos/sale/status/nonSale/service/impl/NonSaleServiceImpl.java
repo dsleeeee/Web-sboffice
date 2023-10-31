@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.nonSale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.nonSale.service.NonSaleService;
 import kr.co.solbipos.sale.status.nonSale.service.NonSaleVO;
@@ -30,11 +33,13 @@ import java.util.List;
 @Service("nonSaleService")
 public class NonSaleServiceImpl implements NonSaleService {
     private final NonSaleMapper nonSaleMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public NonSaleServiceImpl(OffAddMapper offAddMapper, NonSaleMapper nonSaleMapper, MessageService messageService) {
+    public NonSaleServiceImpl(OffAddMapper offAddMapper, NonSaleMapper nonSaleMapper, PopupMapper popupMapper, MessageService messageService) {
         this.nonSaleMapper = nonSaleMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -47,7 +52,9 @@ public class NonSaleServiceImpl implements NonSaleService {
         nonSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(nonSaleVO.getStoreCd()).equals("")) {
-            nonSaleVO.setArrStoreCd(nonSaleVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(nonSaleVO.getStoreCd(), 3900));
+            nonSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return nonSaleMapper.getNonSaleDayList(nonSaleVO);
@@ -61,7 +68,9 @@ public class NonSaleServiceImpl implements NonSaleService {
         nonSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(nonSaleVO.getStoreCd()).equals("")) {
-            nonSaleVO.setArrStoreCd(nonSaleVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(nonSaleVO.getStoreCd(), 3900));
+            nonSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return nonSaleMapper.getNonSaleDayExcelList(nonSaleVO);
@@ -75,8 +84,11 @@ public class NonSaleServiceImpl implements NonSaleService {
         nonSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(nonSaleVO.getStoreCd()).equals("")) {
-            nonSaleVO.setArrStoreCd(nonSaleVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(nonSaleVO.getStoreCd(), 3900));
+            nonSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
         return nonSaleMapper.getCupRefundList(nonSaleVO);
     }
 
@@ -88,8 +100,11 @@ public class NonSaleServiceImpl implements NonSaleService {
         nonSaleVO.setEmpNo(sessionInfoVO.getEmpNo());
 
         if(!StringUtil.getOrBlank(nonSaleVO.getStoreCd()).equals("")) {
-            nonSaleVO.setArrStoreCd(nonSaleVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(nonSaleVO.getStoreCd(), 3900));
+            nonSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
         return nonSaleMapper.getCupRefundExcelList(nonSaleVO);
     }
 

@@ -51,10 +51,10 @@
                 SEND_YN,		-- 전송여부
                 TO_CHAR(TO_DATE(SEND_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS SEND_DT -- 전송일시
         FROM 	TB_OD_ORDER_HDR
-        WHERE   STORE_CD IN
-            <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                #{item}
-            </foreach>
+        WHERE   1=1
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
+        </if>
         AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
     </select>
 
@@ -72,10 +72,10 @@
                 DLVR_PACK_FG,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
         FROM 	TB_OD_ORDER_DTL
-        WHERE   STORE_CD IN
-        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-            #{item}
-        </foreach>
+        WHERE   1=1
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
+        </if>
         AND 	SALE_DATE = #{saleDate}
         AND     ORDER_NO = #{orderNo}
         GROUP BY POS_NO, ORDER_NO, ORDER_DTL_FG, DLVR_PACK_FG

@@ -40,11 +40,8 @@
                 FROM	TB_SL_DAILY_TOTAL tsdt
                 WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                <if test='storeCds != null and storeCds != ""'>
-                    AND
-                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                        STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND STORE_CD IN (${storeCdQuery})
                 </if>
                 ) A
         ,       (
@@ -55,11 +52,8 @@
                 FROM	TB_SL_DAILY_TOTAL tsdt
                 WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
-                <if test='storeCds != null and storeCds != ""'>
-                    AND
-                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                        STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND STORE_CD IN (${storeCdQuery})
                 </if>
                 ) B
         WHERE	A.YOIL = B.YOIL(+)
@@ -93,11 +87,8 @@
         FROM	TB_SL_DAILY_TOTAL tsdt
         WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         ) A
         ,       (
@@ -108,11 +99,8 @@
         FROM	TB_SL_DAILY_TOTAL tsdt
         WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND STORE_CD IN (${storeCdQuery})
         </if>
         ) B
         WHERE	A.YOIL = B.YOIL(+)

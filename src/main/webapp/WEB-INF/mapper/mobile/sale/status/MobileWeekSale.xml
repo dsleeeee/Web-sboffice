@@ -67,10 +67,9 @@
                     AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdt.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdt.STORE_CD IN (${storeCdQuery})
+                        </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -92,10 +91,9 @@
                     AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdp.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdp.STORE_CD IN (${storeCdQuery})
+                        </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -153,10 +151,9 @@
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdp.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -176,10 +173,9 @@
             AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsspc.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsspc.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -197,10 +193,9 @@
             AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsspc.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsspc.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -219,10 +214,9 @@
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdp.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -257,10 +251,9 @@
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdd.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -279,10 +272,9 @@
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdd.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -330,10 +322,9 @@
                     AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdtd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdtd.STORE_CD IN (${storeCdQuery})
+                        </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -354,10 +345,9 @@
                     AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdtd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdtd.STORE_CD IN (${storeCdQuery})
+                        </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -378,10 +368,9 @@
                     AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdtd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdtd.STORE_CD IN (${storeCdQuery})
+                        </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -451,10 +440,9 @@
                     AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdtd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdtd.STORE_CD IN (${storeCdQuery})
+                        </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -474,10 +462,9 @@
                     AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdtd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdtd.STORE_CD IN (${storeCdQuery})
+                        </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -536,10 +523,9 @@
                 AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                 <!-- 매장 -->
                 <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                    AND tsdtd.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdtd.STORE_CD IN (${storeCdQuery})
+                    </if>
                 </if>
                 <if test='orgnFg != null and orgnFg == "H"'>
                     AND (
@@ -595,10 +581,9 @@
                     AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
                     <!-- 매장 -->
                     <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                        AND tsdtd.STORE_CD IN
-                        <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                            #{item}
-                        </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdtd.STORE_CD IN (${storeCdQuery})
+                        </if>
                     </if>
                     <if test='orgnFg != null and orgnFg == "H"'>
                         AND (
@@ -673,10 +658,9 @@
             AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdt.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdt.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -701,10 +685,9 @@
             AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdtd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdtd.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -726,10 +709,9 @@
             AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdp.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdp.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -751,10 +733,9 @@
             AND tsdd.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tsdd.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdd.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
@@ -774,10 +755,9 @@
             AND tssh.HQ_OFFICE_CD = #{hqOfficeCd}
             <!-- 매장 -->
             <if test='orgnFg != null and orgnFg != "" and orgnFg == "S"'>
-                AND tssh.STORE_CD IN
-                <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                    #{item}
-                </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tssh.STORE_CD IN (${storeCdQuery})
+                </if>
             </if>
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (

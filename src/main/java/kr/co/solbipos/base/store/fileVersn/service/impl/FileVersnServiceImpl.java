@@ -1,6 +1,10 @@
 package kr.co.solbipos.base.store.fileVersn.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.fileVersn.service.FileVersnService;
@@ -29,9 +33,11 @@ import java.util.List;
 @Transactional
 public class FileVersnServiceImpl implements FileVersnService {
     private final FileVersnMapper fileVersnMapper;
+    private final PopupMapper popupMapper;
 
-    public FileVersnServiceImpl(FileVersnMapper fileVersnMapper) {
+    public FileVersnServiceImpl(FileVersnMapper fileVersnMapper, PopupMapper popupMapper) {
         this.fileVersnMapper = fileVersnMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -46,8 +52,11 @@ public class FileVersnServiceImpl implements FileVersnService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = fileVersnVO.getStoreCds().split(",");
-        fileVersnVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(fileVersnVO.getStoreCds()).equals("")) {
+       		StoreVO storeVO = new StoreVO();
+       		storeVO.setArrSplitStoreCd(CmmUtil.splitText(fileVersnVO.getStoreCds(), 3900));
+            fileVersnVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+       	}
 
         return fileVersnMapper.getFileVersnList(fileVersnVO);
     }
@@ -63,8 +72,11 @@ public class FileVersnServiceImpl implements FileVersnService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = fileVersnVO.getStoreCds().split(",");
-        fileVersnVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(fileVersnVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(fileVersnVO.getStoreCds(), 3900));
+            fileVersnVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return fileVersnMapper.getFileVersnExcelList(fileVersnVO);
     }

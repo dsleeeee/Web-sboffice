@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.day.dayDevice.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.day.dayDevice.service.DayDeviceService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class DayDeviceServiceImpl implements DayDeviceService {
     private final DayDeviceMapper dayDeviceMapper;
+    private final PopupMapper popupMapper;
 
-    public DayDeviceServiceImpl(DayDeviceMapper dayDeviceMapper) {
+    public DayDeviceServiceImpl(DayDeviceMapper dayDeviceMapper, PopupMapper popupMapper) {
         this.dayDeviceMapper = dayDeviceMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class DayDeviceServiceImpl implements DayDeviceService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayDeviceVO.getStoreCds().split(",");
-        dayDeviceVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayDeviceVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayDeviceVO.getStoreCds(), 3900));
+            dayDeviceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayDeviceMapper.getDayDeviceList(dayDeviceVO);
     }
@@ -63,8 +72,11 @@ public class DayDeviceServiceImpl implements DayDeviceService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = dayDeviceVO.getStoreCds().split(",");
-        dayDeviceVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(dayDeviceVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayDeviceVO.getStoreCds(), 3900));
+            dayDeviceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return dayDeviceMapper.getDayDeviceExcelList(dayDeviceVO);
     }
