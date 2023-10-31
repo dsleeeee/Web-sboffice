@@ -77,6 +77,11 @@ public class MCoupnCalcController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+
+        // 모바일쿠폰 콤보박스 조회
+        model.addAttribute("mCoupnComboList", convertToJson(mCoupnCalcService.getMCoupnComboList(sessionInfoVO)));
+
+
         /** 맘스터치 */
         // [1250 맘스터치] 환경설정값 조회
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -117,6 +122,8 @@ public class MCoupnCalcController {
         // - 매장관리타입
         List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N));
+
+        /** //맘스터치 */
 
 
         return "sale/status/mCoupnCalc/mCoupnCalc";

@@ -152,4 +152,11 @@ public class MCoupnCalcServiceImpl implements MCoupnCalcService {
 
         return mCoupnCalcMapper.getMCoupnCalcDtlList(mCoupnCalcVO);
     }
+
+    /** 모바일쿠폰 조회(콤보박스용) */
+    @Override
+    public List<DefaultMap<Object>> getMCoupnComboList(SessionInfoVO sessionInfoVO) {
+
+        return mCoupnCalcMapper.getMCoupnComboList(sessionInfoVO);
+    }
 }

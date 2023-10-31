@@ -464,5 +464,24 @@
         </if>
     </select>
 
+    <!-- 모바일쿠폰 조회(콤보박스용) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnComboList" parameterType="sessionInfoVO" resultType="DefaultMap">
+        /* MCoupnCalcMapper.getMCoupnComboList */
+        SELECT
+        '' AS VALUE,
+        '전체' AS NAME
+        FROM DUAL
+        UNION
+        SELECT
+        VAN_CD AS VALUE,
+        VAN_NM AS NAME
+        FROM TB_CM_VAN_CMPNY
+        WHERE VAN_FG = '04'
+        ORDER BY VALUE NULLS FIRST
+    </select>
 
 </mapper>

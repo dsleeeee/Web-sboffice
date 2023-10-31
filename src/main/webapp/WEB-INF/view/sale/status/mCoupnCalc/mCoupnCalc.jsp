@@ -363,7 +363,6 @@
                     <wj-flex-grid-column header="<s:message code="mCoupnCalc.apprAmt"/>" binding="apprAmtOk" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mCoupnCalc.totCnt"/>" binding="cntCancel" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mCoupnCalc.apprAmt"/>" binding="apprAmtCancel" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-
                 </wj-flex-grid>
             </div>
         </div>
@@ -371,11 +370,10 @@
 </div>
 
 <script type="text/javascript">
-
     var orgnFg = "${orgnFg}";
 
     // 모바일쿠폰
-    var mCoupnFg = ${ccu.getCommCode("166")};  //TB_CM_VAN_CMPNY 로 변경예정
+    var mCoupnFg = ${mCoupnComboList};
 
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";

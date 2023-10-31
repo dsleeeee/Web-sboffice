@@ -2,6 +2,7 @@ package kr.co.solbipos.sale.status.mCoupnCalc.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.sale.status.mCoupnCalc.service.MCoupnCalcVO;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -34,4 +35,7 @@ public interface MCoupnCalcMapper {
 
     /** 모바일쿠폰 정산 상세화면 조회 */
     List <DefaultMap<Object>> getMCoupnCalcDtlList(MCoupnCalcVO mCoupnCalcVO);
+
+    /** 모바일쿠폰 조회(콤보박스용) */
+    List<DefaultMap<Object>> getMCoupnComboList(SessionInfoVO sessionInfoVO);
 }
