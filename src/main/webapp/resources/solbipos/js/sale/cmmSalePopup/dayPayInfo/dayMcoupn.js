@@ -21,8 +21,6 @@ app.controller('dayMcoupnCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-    $scope.mcoupnCdMap = new wijmo.grid.DataMap(mcouponCd, 'value', 'name'); // 쿠폰종류
-
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
