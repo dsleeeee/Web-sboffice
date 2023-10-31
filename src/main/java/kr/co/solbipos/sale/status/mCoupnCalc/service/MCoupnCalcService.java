@@ -30,4 +30,7 @@ public interface MCoupnCalcService {
 
     /** 모바일쿠폰 정산 상세화면 조회 */
     List<DefaultMap<Object>> getMCoupnCalcDtlList(MCoupnCalcVO mCoupnCalcVO, SessionInfoVO sessionInfoVO);
+
+    /** 모바일쿠폰 조회(콤보박스용) */
+    List<DefaultMap<Object>> getMCoupnComboList(SessionInfoVO sessionInfoVO);
 }
