@@ -425,6 +425,28 @@
                       </div>
                     </td>
                   </tr>
+                  <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                      <tr>
+                          <%-- 매장그룹 --%>
+                          <th><s:message code="storeManage.moms.momsStoreFg01"/></th>
+                          <td>
+                              <div class="sb-select">
+                                  <wj-combo-box
+                                          id="srchMomsStoreFg01Combo"
+                                          ng-model="store.momsStoreFg01"
+                                          items-source="_getComboData('momsStoreFg01Combo')"
+                                          display-member-path="name"
+                                          selected-value-path="value"
+                                          is-editable="false"
+                                          initialized="_initComboBox(s)"
+                                          control="srchMomsStoreFg01Combo">
+                                  </wj-combo-box>
+                              </div>
+                          </td>
+                          <td></td>
+                          <td></td>
+                      </tr>
+                  </c:if>
                   </tbody>
               </table>
           </div>
@@ -603,7 +625,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20230901.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20231101.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

@@ -223,6 +223,9 @@ public class StoreManageVO extends PageVO {
     /** [벤더시리얼번호] */
     private String vendorSerNo;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -1063,5 +1066,13 @@ public class StoreManageVO extends PageVO {
 
     public void setVendorSerNo(String vendorSerNo) {
         this.vendorSerNo = vendorSerNo;
+    }
+
+    public String getMomsStoreFg01() {
+        return momsStoreFg01;
+    }
+
+    public void setMomsStoreFg01(String momsStoreFg01) {
+        this.momsStoreFg01 = momsStoreFg01;
     }
 }
