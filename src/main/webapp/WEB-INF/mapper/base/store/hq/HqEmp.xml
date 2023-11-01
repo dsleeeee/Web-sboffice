@@ -120,7 +120,8 @@
         the.MOMS_AREA_FG,
         the.MOMS_COMMERCIAL,
         the.MOMS_SHOP_TYPE,
-        the.MOMS_STORE_MANAGE_TYPE
+        the.MOMS_STORE_MANAGE_TYPE,
+        the.MOMS_STORE_FG_01
         FROM TB_HQ_EMPLOYEE the,
         (
             SELECT
@@ -197,7 +198,8 @@
             MOMS_AREA_FG,
             MOMS_COMMERCIAL,
             MOMS_SHOP_TYPE,
-            MOMS_STORE_MANAGE_TYPE
+            MOMS_STORE_MANAGE_TYPE,
+            MOMS_STORE_FG_01
         )
         VALUES
         (
@@ -223,7 +225,8 @@
             #{momsAreaFg},
             #{momsCommercial},
             #{momsShopType},
-            #{momsStoreManageType}
+            #{momsStoreManageType},
+            #{momsStoreFg01}
         )
     </insert>
 
@@ -303,7 +306,8 @@
                the.MOMS_AREA_FG = #{momsAreaFg},
                the.MOMS_COMMERCIAL = #{momsCommercial},
                the.MOMS_SHOP_TYPE = #{momsShopType},
-               the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+               the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
+               the.MOMS_STORE_FG_01 = #{momsStoreFg01}
          WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
            AND the.EMP_NO = #{empNo}
     </update>

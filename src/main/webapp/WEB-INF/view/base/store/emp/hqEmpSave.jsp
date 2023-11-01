@@ -407,6 +407,28 @@
                 </div>
               </td>
             </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+              <tr>
+                <%-- 매장그룹 --%>
+                <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                            id="srchMomsStoreFg01Combo"
+                            ng-model="hqEmpRegistInfo.momsStoreFg01"
+                            items-source="_getComboData('momsStoreFg01Combo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchMomsStoreFg01Combo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </c:if>
             </tbody>
           </table>
         </c:if>
@@ -425,7 +447,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20221101.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20231101.01" charset="utf-8"></script>
 
 <%-- 관리브랜드 조회 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/searchUserHqBrand.jsp">

@@ -221,6 +221,26 @@
                 {{_momsStoreManageType}}
               </td>
             </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+              <tr>
+                <%-- 매장그룹 --%>
+                <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                <td>
+                  <wj-combo-box
+                          ng-model="hqEmp.momsStoreFg01"
+                          ng-hide="true"
+                          text="_momsStoreFg01"
+                          items-source="_getComboData('momsStoreFg01DtlCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false">
+                  </wj-combo-box>
+                  {{_momsStoreFg01}}
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </c:if>
             </tbody>
           </table>
         </c:if>
@@ -239,4 +259,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20221101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20231101.01" charset="utf-8"></script>
