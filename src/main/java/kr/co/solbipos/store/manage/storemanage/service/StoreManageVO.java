@@ -1068,11 +1068,7 @@ public class StoreManageVO extends PageVO {
         this.vendorSerNo = vendorSerNo;
     }
 
-    public String getMomsStoreFg01() {
-        return momsStoreFg01;
-    }
+    public String getMomsStoreFg01() { return momsStoreFg01; }
 
-    public void setMomsStoreFg01(String momsStoreFg01) {
-        this.momsStoreFg01 = momsStoreFg01;
-    }
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }
