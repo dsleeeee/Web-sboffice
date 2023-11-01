@@ -45,7 +45,6 @@ public class MembrNonBilClctServiceImpl implements MembrNonBilClctService {
         membrNonBilClctVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         membrNonBilClctVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         membrNonBilClctVO.setEmpNo(sessionInfoVO.getEmpNo());
-
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             membrNonBilClctVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
