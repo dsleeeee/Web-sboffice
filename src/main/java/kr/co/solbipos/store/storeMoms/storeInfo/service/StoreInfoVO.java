@@ -72,6 +72,9 @@ public class StoreInfoVO extends PageVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -199,4 +202,8 @@ public class StoreInfoVO extends PageVO {
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

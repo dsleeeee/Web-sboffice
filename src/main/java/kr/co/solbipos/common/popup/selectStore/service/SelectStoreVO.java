@@ -87,6 +87,9 @@ public class SelectStoreVO extends PageVO {
     /** 조회매장 팝업 구분 */
     private String selectStoreFg;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -232,4 +235,8 @@ public class SelectStoreVO extends PageVO {
     public String getSelectStoreFg() { return selectStoreFg; }
 
     public void setSelectStoreFg(String selectStoreFg) { this.selectStoreFg = selectStoreFg; }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

@@ -61,6 +61,7 @@
         ,       tmsi.MOMS_COMMERCIAL
         ,       tmsi.MOMS_SHOP_TYPE
         ,       tmsi.MOMS_STORE_MANAGE_TYPE
+        ,       tmsi.MOMS_STORE_FG_01
         FROM    TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -104,7 +105,10 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
-        ORDER
-        BY tms.STORE_CD
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        ORDER BY tms.STORE_CD
     </select>
+
 </mapper>

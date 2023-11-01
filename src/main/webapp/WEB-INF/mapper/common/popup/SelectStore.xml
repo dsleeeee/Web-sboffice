@@ -87,6 +87,9 @@
                 AND thn.STORE_CHG_NOT IS NULL
             </if>
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         AND (
                 ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) != 0) AND (tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId})) )
                 OR
@@ -220,6 +223,13 @@
             <if test='nmcodeGrpCd == "156"'>
                 SELECT
                 the.MOMS_STORE_MANAGE_TYPE
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "167"'>
+                SELECT
+                the.MOMS_STORE_FG_01
                 FROM TB_HQ_EMPLOYEE the
                 WHERE 1=1
                 AND the.USER_ID = #{userId}
