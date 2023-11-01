@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.sale.status.storeProdSale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.sale.status.storeProdSale.service.MobileStoreProdSaleService;
 import kr.co.solbipos.mobile.sale.status.storeProdSale.service.MobileStoreProdSaleVO;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -30,13 +34,15 @@ import java.util.List;
 @Transactional
 public class MobileStoreProdSaleServiceImpl implements MobileStoreProdSaleService {
     private final MobileStoreProdSaleMapper mobileStoreProdSaleMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileStoreProdSaleServiceImpl(MobileStoreProdSaleMapper mobileStoreProdSaleMapper) {
+    public MobileStoreProdSaleServiceImpl(MobileStoreProdSaleMapper mobileStoreProdSaleMapper, PopupMapper popupMapper) {
         this.mobileStoreProdSaleMapper = mobileStoreProdSaleMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 일자별 매출현황 - 조회 */
@@ -49,7 +55,9 @@ public class MobileStoreProdSaleServiceImpl implements MobileStoreProdSaleServic
         if (!StringUtil.getOrBlank(mobileStoreProdSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileStoreProdSaleVO.setArrStoreCd(mobileStoreProdSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileStoreProdSaleVO.getSrchStoreCd(), 3900));
+            mobileStoreProdSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileStoreProdSaleMapper.getMobileStoreProdSaleDtlList(mobileStoreProdSaleVO);

@@ -34,6 +34,12 @@ public class PosSaleServiceImpl implements PosSaleService {
 
         posSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+            posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
         return posSaleMapper.getStorePosList(posSaleVO);
     }
 

@@ -4,10 +4,13 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageService;
 import kr.co.solbipos.adi.dclz.dclzmanage.service.DclzManageVO;
 import kr.co.solbipos.adi.dclz.dclzmanage.service.impl.DclzManageMapper;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.mobile.adi.dclz.dclz.service.MobileDclzManageService;
@@ -44,12 +47,14 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class MobileDclzManageServiceImpl implements MobileDclzManageService {
 
     private final MobileDclzManageMapper mobileDclzManageMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public MobileDclzManageServiceImpl(MobileDclzManageMapper mobileDclzManageMapper, MessageService messageService) {
+    public MobileDclzManageServiceImpl(MobileDclzManageMapper mobileDclzManageMapper, PopupMapper popupMapper, MessageService messageService) {
         this.mobileDclzManageMapper = mobileDclzManageMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -58,8 +63,12 @@ public class MobileDclzManageServiceImpl implements MobileDclzManageService {
     public List<DefaultMap<String>> getDclzManage(MobileDclzManageVO mobileDclzManageVO, SessionInfoVO sessionInfoVO) {
         mobileDclzManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileDclzManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+
         if(!StringUtil.getOrBlank(mobileDclzManageVO.getSrchStoreCd()).equals("")) {
-            mobileDclzManageVO.setArrStoreCd(mobileDclzManageVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileDclzManageVO.getSrchStoreCd(), 3900));
+            mobileDclzManageVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileDclzManageMapper.getDclzManage(mobileDclzManageVO);

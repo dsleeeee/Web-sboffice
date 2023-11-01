@@ -28,11 +28,8 @@
                  WHERE tpri.HQ_OFFICE_CD = #{hqOfficeCd}
                    AND tms.HQ_OFFICE_CD = tpri.HQ_OFFICE_CD
                    AND tms.STORE_CD = tpri.STORE_CD
-                <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND
-                    <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                        tms.STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tms.STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
                    AND tpri.SYS_DATE BETWEEN #{startDate} AND #{endDate}
@@ -67,11 +64,8 @@
                   FROM TB_PS_RESVE_INFO tpri,
                        TB_MS_STORE tms
                  WHERE tpri.HQ_OFFICE_CD = #{hqOfficeCd}
-                <if test='arrStoreCd != null and arrStoreCd.toString() != ""'>
-                   AND
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                        tpri.STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tpri.STORE_CD IN (${storeCdQuery})
                 </if>
                    AND tms.HQ_OFFICE_CD = tpri.HQ_OFFICE_CD
                    AND tms.STORE_CD = tpri.STORE_CD

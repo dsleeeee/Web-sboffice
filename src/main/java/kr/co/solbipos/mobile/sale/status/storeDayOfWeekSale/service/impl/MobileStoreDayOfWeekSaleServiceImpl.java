@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.sale.status.storeDayOfWeekSale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.sale.status.storeDayOfWeekSale.service.MobileStoreDayOfWeekSaleService;
 import kr.co.solbipos.mobile.sale.status.storeDayOfWeekSale.service.MobileStoreDayOfWeekSaleVO;
@@ -29,9 +32,11 @@ import java.util.List;
 @Transactional
 public class MobileStoreDayOfWeekSaleServiceImpl implements MobileStoreDayOfWeekSaleService {
     private final MobileStoreDayOfWeekSaleMapper mobileStoreDayOfWeekSaleMapper;
+    private final PopupMapper popupMapper;
 
-    public MobileStoreDayOfWeekSaleServiceImpl(MobileStoreDayOfWeekSaleMapper mobileStoreDayOfWeekSaleMapper) {
+    public MobileStoreDayOfWeekSaleServiceImpl(MobileStoreDayOfWeekSaleMapper mobileStoreDayOfWeekSaleMapper, PopupMapper popupMapper) {
         this.mobileStoreDayOfWeekSaleMapper = mobileStoreDayOfWeekSaleMapper;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -45,7 +50,9 @@ public class MobileStoreDayOfWeekSaleServiceImpl implements MobileStoreDayOfWeek
         if(!StringUtil.getOrBlank(mobileStoreDayOfWeekSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileStoreDayOfWeekSaleVO.setArrStoreCd(mobileStoreDayOfWeekSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileStoreDayOfWeekSaleVO.getSrchStoreCd(), 3900));
+            mobileStoreDayOfWeekSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileStoreDayOfWeekSaleMapper.getMobileStoreDayOfWeekSaleList(mobileStoreDayOfWeekSaleVO);

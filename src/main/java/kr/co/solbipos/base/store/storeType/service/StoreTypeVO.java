@@ -90,6 +90,8 @@ public class StoreTypeVO extends PageVO {
     private String userBrands;
     /** 매장브랜드코드 */
     private String storeHqBrandCd;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -391,5 +393,13 @@ public class StoreTypeVO extends PageVO {
 
     public void setStoreHqBrandCd(String storeHqBrandCd) {
         this.storeHqBrandCd = storeHqBrandCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

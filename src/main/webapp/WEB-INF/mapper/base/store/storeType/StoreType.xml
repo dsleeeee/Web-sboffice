@@ -1220,11 +1220,8 @@
                     FROM TB_LG_HQ_STORE_TYPE_APP_LOG
                     WHERE 1=1
                     AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    <if test='storeCds != null and storeCds != ""'>
-                        AND
-                        <foreach collection="storeCdList" item="item" open="(" separator="OR" close=")" >
-                            STORE_CD = #{item}
-                        </foreach>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND STORE_CD IN (${storeCdQuery})
                     </if>
                     AND PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
                     <if test='storeTypeCd != null and storeTypeCd != ""'>
@@ -1246,11 +1243,8 @@
         ) C
         WHERE 1=1
         AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open="(" separator="OR" close=")" >
-                A.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
         </if>
         AND A.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
         <if test='storeTypeCd != null and storeTypeCd != ""'>

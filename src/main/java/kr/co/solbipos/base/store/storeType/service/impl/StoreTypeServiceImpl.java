@@ -4,8 +4,12 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.storeType.service.StoreTypeService;
@@ -40,13 +44,15 @@ public class StoreTypeServiceImpl implements StoreTypeService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final StoreTypeMapper storeTypeMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
     @Autowired
-    public StoreTypeServiceImpl(StoreTypeMapper storeTypeMapper,  MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public StoreTypeServiceImpl(StoreTypeMapper storeTypeMapper, PopupMapper popupMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
 
         this.storeTypeMapper = storeTypeMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -536,8 +542,11 @@ public class StoreTypeServiceImpl implements StoreTypeService {
         storeTypeVO.setUserId(sessionInfoVO.getUserId());
 
         // 매장 array 값 세팅
-        String[] storeCds = storeTypeVO.getStoreCds().split(",");
-        storeTypeVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(storeTypeVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeTypeVO.getStoreCds(), 3900));
+            storeTypeVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 선택한 매장브랜드가 없을 때 (매장브랜드가 '전체' 일때)

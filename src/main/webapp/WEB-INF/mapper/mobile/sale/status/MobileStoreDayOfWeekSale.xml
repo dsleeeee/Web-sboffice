@@ -37,11 +37,8 @@
                         TB_MS_STORE tms
                 WHERE 	tms.STORE_CD = tsdt.STORE_CD
                 AND 	tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
-                <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND tsdt.STORE_CD IN
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="," close=")">
-                        #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdt.STORE_CD IN (${storeCdQuery})
                 </if>
                 AND (
                         'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')

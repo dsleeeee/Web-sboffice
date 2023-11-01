@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.adi.resve.resveInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.adi.resve.resveInfo.service.MobileResveInfoService;
 import kr.co.solbipos.mobile.adi.resve.resveInfo.service.MobileResveInfoVO;
@@ -9,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.*;
 import java.util.List;
 
 /**
@@ -31,13 +35,15 @@ import java.util.List;
 @Transactional
 public class MobileResveInfoServiceImpl implements MobileResveInfoService {
     private final MobileResveInfoMapper mobileResveInfoMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileResveInfoServiceImpl(MobileResveInfoMapper mobileResveInfoMapper) {
+    public MobileResveInfoServiceImpl(MobileResveInfoMapper mobileResveInfoMapper, PopupMapper popupMapper) {
         this.mobileResveInfoMapper = mobileResveInfoMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 예약현황 조회 */
@@ -46,7 +52,9 @@ public class MobileResveInfoServiceImpl implements MobileResveInfoService {
         mobileResveInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         mobileResveInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if(!StringUtil.getOrBlank(mobileResveInfoVO.getSrchStoreCd()).equals("")) {
-            mobileResveInfoVO.setArrStoreCd(mobileResveInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileResveInfoVO.getSrchStoreCd(), 3900));
+            mobileResveInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileResveInfoMapper.getResveList(mobileResveInfoVO);

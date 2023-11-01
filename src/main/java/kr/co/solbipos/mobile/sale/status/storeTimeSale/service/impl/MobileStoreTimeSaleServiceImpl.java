@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.sale.status.storeTimeSale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.sale.status.storeTimeSale.service.MobileStoreTimeSaleService;
 import kr.co.solbipos.mobile.sale.status.storeTimeSale.service.MobileStoreTimeSaleVO;
@@ -29,9 +32,11 @@ import java.util.List;
 @Transactional
 public class MobileStoreTimeSaleServiceImpl implements MobileStoreTimeSaleService {
     private final MobileStoreTimeSaleMapper mobileStoreTimeSaleMapper;
+    private final PopupMapper popupMapper;
 
-    public MobileStoreTimeSaleServiceImpl(MobileStoreTimeSaleMapper mobileStoreTimeSaleMapper) {
+    public MobileStoreTimeSaleServiceImpl(MobileStoreTimeSaleMapper mobileStoreTimeSaleMapper, PopupMapper popupMapper) {
         this.mobileStoreTimeSaleMapper = mobileStoreTimeSaleMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 시간대별 - 조회 */
@@ -44,7 +49,9 @@ public class MobileStoreTimeSaleServiceImpl implements MobileStoreTimeSaleServic
         if(!StringUtil.getOrBlank(mobileStoreTimeSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileStoreTimeSaleVO.setArrStoreCd(mobileStoreTimeSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileStoreTimeSaleVO.getSrchStoreCd(), 3900));
+            mobileStoreTimeSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileStoreTimeSaleMapper.getMobileStoreTimeSaleList(mobileStoreTimeSaleVO);

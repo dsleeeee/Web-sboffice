@@ -180,11 +180,8 @@
         AND TSDP.SALE_DATE = TSDPP.SALE_DATE
         AND TSDP.POS_NO = TSDPP.POS_NO
         AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                TSDP.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TSDP.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='arrPosNo != null and arrPosNo != ""'>
             AND TSDP.STORE_CD||'||'||TSDP.POS_NO IN
@@ -212,11 +209,8 @@
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
             AND TMS.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
-        <if test='arrStoreCd != null and arrStoreCd.length >= 0'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="(" close=")" separator="OR">
-                TMP.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TMP.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='arrPosNo != null and arrPosNo.length >= 0'>
             AND TMP.STORE_CD||'||'||TMP.POS_NO IN

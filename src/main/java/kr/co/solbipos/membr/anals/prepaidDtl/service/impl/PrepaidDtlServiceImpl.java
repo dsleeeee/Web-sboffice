@@ -1,7 +1,12 @@
 package kr.co.solbipos.membr.anals.prepaidDtl.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.prepaidDtl.service.PrepaidDtlService;
 import kr.co.solbipos.membr.anals.prepaidDtl.service.PrepaidDtlVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +35,13 @@ import java.util.List;
 public class PrepaidDtlServiceImpl implements PrepaidDtlService {
 
     private final PrepaidDtlMapper mapper;
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public PrepaidDtlServiceImpl(PrepaidDtlMapper mapper) {
+    public PrepaidDtlServiceImpl(PrepaidDtlMapper mapper, PopupMapper popupMapper) {
         this.mapper = mapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 선불 회원 충전, 사용 내역 상세 */
@@ -42,12 +49,18 @@ public class PrepaidDtlServiceImpl implements PrepaidDtlService {
     public List<DefaultMap<Object>> getPrepaidDtlMemberList(PrepaidDtlVO prepaidDtlVO,
                                                             SessionInfoVO sessionInfoVO) {
 
-        String[] storeCds = prepaidDtlVO.getStoreCds().split(",");
-        prepaidDtlVO.setStoreCdList(storeCds);
-
         prepaidDtlVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         prepaidDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prepaidDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prepaidDtlVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(prepaidDtlVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prepaidDtlVO.getStoreCds(), 3900));
+            prepaidDtlVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return mapper.getPrepaidDtlMemberList(prepaidDtlVO);
     }

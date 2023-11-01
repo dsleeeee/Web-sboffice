@@ -48,6 +48,9 @@ public class MobilePayInfoVO extends PageVO {
     /** 현금/현금영수증 구분 */
     private String cashGubun;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -94,5 +97,13 @@ public class MobilePayInfoVO extends PageVO {
 
     public void setCashGubun(String cashGubun) {
         this.cashGubun = cashGubun;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

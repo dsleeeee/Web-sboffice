@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.sale.cmmSalePopup.payInfo.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.mobile.sale.cmmSalePopup.payInfo.service.MobilePayInfoService;
@@ -36,13 +39,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @Transactional
 public class MobilePayInfoServiceImpl implements MobilePayInfoService {
     private final MobilePayInfoMapper mobilePayInfoMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobilePayInfoServiceImpl(MobilePayInfoMapper mobilePayInfoMapper) {
+    public MobilePayInfoServiceImpl(MobilePayInfoMapper mobilePayInfoMapper, PopupMapper popupMapper) {
         this.mobilePayInfoMapper = mobilePayInfoMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 결제수단 신용카드 팝업 - 조회 */
@@ -56,7 +61,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileCardList(mobilePayInfoVO);
@@ -73,7 +80,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileCashList(mobilePayInfoVO);
@@ -90,7 +99,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobilePaycoList(mobilePayInfoVO);
@@ -107,7 +118,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileVpointList(mobilePayInfoVO);
@@ -124,7 +137,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileVchargeList(mobilePayInfoVO);
@@ -141,7 +156,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileMpayList(mobilePayInfoVO);
@@ -158,7 +175,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileMcoupnList(mobilePayInfoVO);
@@ -175,7 +194,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobilePointList(mobilePayInfoVO);
@@ -192,7 +213,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobilePrepaidList(mobilePayInfoVO);
@@ -209,7 +232,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobilePostpaidList(mobilePayInfoVO);
@@ -226,7 +251,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileGiftList(mobilePayInfoVO);
@@ -243,7 +270,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileFstmpList(mobilePayInfoVO);
@@ -260,7 +289,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobilePartnerList(mobilePayInfoVO);
@@ -277,7 +308,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileEmpCardList(mobilePayInfoVO);
@@ -294,7 +327,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileTemporaryList(mobilePayInfoVO);
@@ -311,7 +346,9 @@ public class MobilePayInfoServiceImpl implements MobilePayInfoService {
         if(!StringUtil.getOrBlank(mobilePayInfoVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobilePayInfoVO.setArrStoreCd(mobilePayInfoVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobilePayInfoVO.getSrchStoreCd(), 3900));
+            mobilePayInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobilePayInfoMapper.getMobileVorderList(mobilePayInfoVO);

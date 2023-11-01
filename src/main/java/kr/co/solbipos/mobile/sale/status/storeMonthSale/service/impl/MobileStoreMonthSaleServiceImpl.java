@@ -1,7 +1,10 @@
 package kr.co.solbipos.mobile.sale.status.storeMonthSale.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.sale.status.storeMonthSale.service.MobileStoreMonthSaleVO;
 import kr.co.solbipos.mobile.sale.status.storeMonthSale.service.MobileStoreMonthSaleService;
@@ -30,13 +33,15 @@ import java.util.List;
 @Transactional
 public class MobileStoreMonthSaleServiceImpl implements MobileStoreMonthSaleService {
     private final MobileStoreMonthSaleMapper mobileStoreMonthSaleMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MobileStoreMonthSaleServiceImpl(MobileStoreMonthSaleMapper mobileStoreMonthSaleMapper) {
+    public MobileStoreMonthSaleServiceImpl(MobileStoreMonthSaleMapper mobileStoreMonthSaleMapper, PopupMapper popupMapper) {
         this.mobileStoreMonthSaleMapper = mobileStoreMonthSaleMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 월별 매출현황 - 조회 */
@@ -49,7 +54,9 @@ public class MobileStoreMonthSaleServiceImpl implements MobileStoreMonthSaleServ
         if (!StringUtil.getOrBlank(mobileStoreMonthSaleVO.getSrchStoreCd()).equals("")) {
             // 기존에 매장권한인 경우, AuthenticationInterceptor.java에서 session.storeCd와 request.storeCd를 비교하여 다르면 에러 처리함.
             // 모바일의 경우 매장권한으로 다중매장을 조회하는 경우가 있으므로, request.srchStoreCd(storeCd 사용 X)에 가져와서 ServiceImple에서 다시 담아 처리.
-            mobileStoreMonthSaleVO.setArrStoreCd(mobileStoreMonthSaleVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mobileStoreMonthSaleVO.getSrchStoreCd(), 3900));
+            mobileStoreMonthSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mobileStoreMonthSaleMapper.getMobileStoreMonthSaleDtlList(mobileStoreMonthSaleVO);

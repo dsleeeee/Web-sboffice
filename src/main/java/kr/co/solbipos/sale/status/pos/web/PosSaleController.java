@@ -3,8 +3,12 @@ package kr.co.solbipos.sale.status.pos.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.day.day.service.DayService;
 import kr.co.solbipos.sale.status.pos.service.PosSaleService;
@@ -48,13 +52,15 @@ public class PosSaleController {
     private final PosSaleService posSaleService;
     private final MessageService messageService;
     private final DayService dayService;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public PosSaleController(SessionService sessionService, PosSaleService posSaleService, MessageService messageService, DayService dayService) {
+    public PosSaleController(SessionService sessionService, PosSaleService posSaleService, MessageService messageService, DayService dayService, PopupMapper popupMapper) {
         this.sessionService = sessionService;
         this.posSaleService = posSaleService;
         this.messageService = messageService;
         this.dayService = dayService;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -109,12 +115,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);
@@ -167,12 +172,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);
@@ -229,11 +233,11 @@ public class PosSaleController {
                 }
             }
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
         }
 
@@ -263,12 +267,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);
@@ -320,12 +323,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);
@@ -377,12 +379,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);
@@ -435,12 +436,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);
@@ -492,12 +492,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);
@@ -545,12 +544,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);
@@ -682,12 +680,11 @@ public class PosSaleController {
             posSaleVO.setArrPosNo(arrPosNo);
             posSaleVO.setArrStorePos(arrPosNo);
         } else {
-            String[] arrStoreCd = posSaleVO.getStoreCd().split(",");
 
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    posSaleVO.setArrStoreCd(arrStoreCd);
-                }
+            if(!StringUtil.getOrBlank(posSaleVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(posSaleVO.getStoreCd(), 3900));
+                posSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
 
             List<DefaultMap<String>> list = posSaleService.getPosNmList(posSaleVO, sessionInfoVO);

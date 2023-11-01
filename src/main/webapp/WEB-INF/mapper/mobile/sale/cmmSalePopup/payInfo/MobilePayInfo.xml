@@ -30,11 +30,8 @@
         WHERE 1=1
         AND tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tsspc.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspc.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspc.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -85,11 +82,8 @@
         <if test='cashGubun != null and cashGubun == "02"'>
             AND tsspc.APPR_PROC_FG = '3'
         </if>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspc.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspc.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -132,11 +126,8 @@
         AND     tsspp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND     tms.HQ_OFFICE_CD = tsspp.HQ_OFFICE_CD
         AND     tms.STORE_CD = tsspp.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspp.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspp.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -171,11 +162,8 @@
         AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND     tms.HQ_OFFICE_CD = tsspv.HQ_OFFICE_CD
         AND     tms.STORE_CD = tsspv.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspv.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspv.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -210,11 +198,8 @@
         AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND     tms.HQ_OFFICE_CD = tsspv.HQ_OFFICE_CD
         AND     tms.STORE_CD = tsspv.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspv.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspv.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -256,11 +241,8 @@
         AND     tms.STORE_CD = tsspm.STORE_CD
         AND     tcn.NMCODE_GRP_CD         (+)=   '109'
         AND     tcn.NMCODE_CD             (+)=   tsspm.MPAY_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspm.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspm.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -299,11 +281,8 @@
         AND     tsspm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND     tms.HQ_OFFICE_CD = tsspm.HQ_OFFICE_CD
         AND     tms.STORE_CD = tsspm.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspm.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspm.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -359,11 +338,8 @@
         AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspp.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspp.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -422,11 +398,8 @@
         AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspp.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspp.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -485,11 +458,8 @@
         AND     tmmc.MEMBR_CLASS_CD   (+) =   tmm.MEMBR_CLASS_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_GRP_CD     (+) =   '054' /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tcn.NMCODE_CD         (+) =   tmmc.POINT_SAVE_FG /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspp.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspp.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -534,11 +504,8 @@
         AND     tcn.NMCODE_GRP_CD          =   '048'
         AND     tcn.NMCODE_CD              =   tsspgd.GIFT_PROC_FG
         AND     tms.STORE_CD           (+) =   tsspgd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspgd.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspgd.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -573,11 +540,8 @@
         AND     tsspfd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND     tms.HQ_OFFICE_CD = tsspfd.HQ_OFFICE_CD
         AND     tms.STORE_CD = tsspfd.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspfd.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspfd.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -620,11 +584,8 @@
         AND     tms.STORE_CD = tsspp.STORE_CD
         AND     tmp.STORE_CD = tsspp.STORE_CD
         AND     tmp.PARTN_CD = tsspp.PARTN_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspp.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspp.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -666,11 +627,8 @@
         AND     tsspec.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND     tms.HQ_OFFICE_CD = tsspec.HQ_OFFICE_CD
         AND     tms.STORE_CD = tsspec.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspec.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspec.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -714,11 +672,8 @@
         WHERE 1=1
         AND tsspt.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tsspt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspt.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspt.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
@@ -750,11 +705,8 @@
         AND     tsspv.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND     tms.HQ_OFFICE_CD = tsspv.HQ_OFFICE_CD
         AND     tms.STORE_CD = tsspv.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                tsspv.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspv.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
