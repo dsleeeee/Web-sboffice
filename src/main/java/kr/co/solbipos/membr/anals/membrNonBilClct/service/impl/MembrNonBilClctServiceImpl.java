@@ -42,6 +42,7 @@ public class MembrNonBilClctServiceImpl implements MembrNonBilClctService {
     public List<DefaultMap<Object>> getMembrNonBilClctList(MembrNonBilClctVO membrNonBilClctVO, SessionInfoVO sessionInfoVO) {
 
         membrNonBilClctVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        membrNonBilClctVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         membrNonBilClctVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         membrNonBilClctVO.setEmpNo(sessionInfoVO.getEmpNo());
 
