@@ -288,7 +288,7 @@
             </tr>
             <tr>
               <%-- 그룹 --%>
-              <th><s:message code="storeManage.branch" /></th>
+              <th><s:message code="cmm.moms.branch" /></th>
               <td>
                 <div class="sb-select">
                   <wj-combo-box
@@ -325,7 +325,7 @@
                   <tbody>
                   <tr>
                       <%-- 팀별 --%>
-                      <th><s:message code="storeManage.moms.momsTeam"/></th>
+                      <th><s:message code="cmm.moms.momsTeam"/></th>
                       <td>
                           <div class="sb-select">
                               <wj-combo-box
@@ -341,7 +341,7 @@
                           </div>
                       </td>
                       <%-- AC점포별 --%>
-                      <th><s:message code="storeManage.moms.momsAcShop"/></th>
+                      <th><s:message code="cmm.moms.momsAcShop"/></th>
                       <td>
                           <div class="sb-select">
                               <wj-combo-box
@@ -359,7 +359,7 @@
                   </tr>
                   <tr>
                     <%-- 지역구분 --%>
-                    <th><s:message code="storeManage.moms.momsAreaFg"/></th>
+                    <th><s:message code="cmm.moms.momsAreaFg"/></th>
                     <td>
                       <div class="sb-select">
                         <wj-combo-box
@@ -375,7 +375,7 @@
                       </div>
                     </td>
                     <%-- 상권 --%>
-                    <th><s:message code="storeManage.moms.momsCommercial"/></th>
+                    <th><s:message code="cmm.moms.momsCommercial"/></th>
                     <td>
                       <div class="sb-select">
                         <wj-combo-box
@@ -393,7 +393,7 @@
                   </tr>
                   <tr>
                     <%-- 점포유형 --%>
-                    <th><s:message code="storeManage.moms.momsShopType"/></th>
+                    <th><s:message code="cmm.moms.momsShopType"/></th>
                     <td>
                       <div class="sb-select">
                         <wj-combo-box
@@ -409,7 +409,7 @@
                       </div>
                     </td>
                     <%-- 매장관리타입 --%>
-                    <th><s:message code="storeManage.moms.momsStoreManageType"/></th>
+                    <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                     <td>
                       <div class="sb-select">
                         <wj-combo-box
@@ -428,7 +428,7 @@
                   <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                       <tr>
                           <%-- 매장그룹 --%>
-                          <th><s:message code="storeManage.moms.momsStoreFg01"/></th>
+                          <th><s:message code="cmm.moms.momsStoreFg01"/></th>
                           <td>
                               <div class="sb-select">
                                   <wj-combo-box
