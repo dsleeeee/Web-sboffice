@@ -17,6 +17,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
   $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+  $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -36,7 +37,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.momsCommercialDataMap = new wijmo.grid.DataMap(momsCommercialComboList, 'value', 'name'); // 상권
     $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList, 'value', 'name'); // 점포유형
     $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList, 'value', 'name'); // 매장관리타입
-
+    $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList, 'value', 'name'); // 매장그룹
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -120,7 +121,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
       }
       params.userBrands = momsHqBrandCd;
     }
+    params.momsStoreFg01 = $scope.momsStoreFg01;
     params.listScale = 100;
+
     console.log(params);
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수

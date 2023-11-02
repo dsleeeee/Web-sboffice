@@ -54,7 +54,7 @@
                     <tbody>
                     <tr>
                         <%-- 매장브랜드 --%>
-                        <th><s:message code="selectStore.storeHqBrand" /></th>
+                        <th><s:message code="cmm.moms.storeHqBrand" /></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -69,7 +69,7 @@
                             </div>
                         </td>
                         <%-- 그룹 --%>
-                        <th><s:message code="selectStore.branchCd"/></th>
+                        <th><s:message code="cmm.moms.branch" /></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -88,7 +88,7 @@
                     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                         <tr>
                             <%-- 팀별 --%>
-                            <th><s:message code="selectStore.momsTeam"/></th>
+                            <th><s:message code="cmm.moms.momsTeam"/></th>
                             <td>
                                 <div class="sb-select">
                                     <wj-combo-box
@@ -104,7 +104,7 @@
                                 </div>
                             </td>
                             <%-- AC점포별 --%>
-                            <th><s:message code="selectStore.momsAcShop"/></th>
+                            <th><s:message code="cmm.moms.momsAcShop"/></th>
                             <td>
                                 <div class="sb-select">
                                     <wj-combo-box
@@ -122,7 +122,7 @@
                         </tr>
                         <tr>
                             <%-- 지역구분 --%>
-                            <th><s:message code="selectStore.momsAreaFg"/></th>
+                            <th><s:message code="cmm.moms.momsAreaFg"/></th>
                             <td>
                                 <div class="sb-select">
                                     <wj-combo-box
@@ -138,7 +138,7 @@
                                 </div>
                             </td>
                             <%-- 상권 --%>
-                            <th><s:message code="selectStore.momsCommercial"/></th>
+                            <th><s:message code="cmm.moms.momsCommercial"/></th>
                             <td>
                                 <div class="sb-select">
                                     <wj-combo-box
@@ -156,7 +156,7 @@
                         </tr>
                         <tr>
                             <%-- 점포유형 --%>
-                            <th><s:message code="selectStore.momsShopType"/></th>
+                            <th><s:message code="cmm.moms.momsShopType"/></th>
                             <td>
                                 <div class="sb-select">
                                     <wj-combo-box
@@ -172,7 +172,7 @@
                                 </div>
                             </td>
                             <%-- 매장관리타입 --%>
-                            <th><s:message code="selectStore.momsStoreManageType"/></th>
+                            <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                             <td>
                                 <div class="sb-select">
                                     <wj-combo-box
@@ -206,8 +206,28 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <td></td>
-                        <td></td>
+                        <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                            <%-- 매장그룹 --%>
+                            <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsStoreFg01Combo"
+                                            ng-model="popMomsStoreFg01"
+                                            items-source="_getComboData('popMomsStoreFg01Combo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsStoreFg01Combo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </c:if>
+                        <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                            <td></td>
+                            <td></td>
+                        </c:if>
                     </tr>
                     </tbody>
                 </table>
@@ -543,6 +563,24 @@
 
             // 구분(판매가변경제한매장)
             $scope._setComboData("popStoreChgNotCombo", popStoreChgNotComboData);
+
+            // 매장그룹
+            var params = {};
+            params.nmcodeGrpCd = "167";
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
+                if (response.data.data.list.length > 0) {
+                    var list = response.data.data.list;
+                    $scope._setComboData("popMomsStoreFg01Combo", list);
+                    // 매장그룹
+                    if(list.length <= 1) {
+                        $("#srchPopMomsStoreFg01Combo").css('background-color', '#F0F0F0');
+                        $("#srchPopMomsStoreFg01Combo").attr("disabled", true);
+                    } else {
+                        $("#srchPopMomsStoreFg01Combo").css('background-color', '#FFFFFF');
+                        $("#srchPopMomsStoreFg01Combo").attr("disabled", false);
+                    }
+                }
+            });
         };
 
         $scope.searchFg = "N";
@@ -573,6 +611,7 @@
                 $scope.srchPopMomsStoreManageTypeCombo.selectedIndex = 0;
                 $scope.srchPopBranchCdComboo.selectedIndex = 0;
                 $scope.srchPopStoreChgNotCombo.selectedIndex = 0;
+                $scope.srchPopMomsStoreFg01Combo.selectedIndex = 0;
             });
 
             // 업로드매장 텍스트박스 조회
@@ -628,7 +667,7 @@
                 params.userBrands = momsHqBrandCd;
             }
             params.storeChgNot = $scope.popStoreChgNot;
-            // params.selectStoreFg = targetTypeFg; // 매장선택 (S:싱글, M:멀티)
+            params.momsStoreFg01 = $scope.popMomsStoreFg01;
 
             $scope._inquirySub("/common/popup/selectStore/getSelectStoreList.sb", params, function () {
                 $scope.searchFg = "Y";
@@ -680,7 +719,7 @@
                 $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
             }
             else if (cnt > 1) {
-                $("#" + targetId + "Nm").val(strStoreNm + " "+messages["selectStore.except"]+" " + (cnt - 1) + messages["selectStore.cntStore"]);
+                $("#" + targetId + "Nm").val(strStoreNm + " "+messages["cmm.except"]+" " + (cnt - 1) + messages["cmm.cntStore"]);
                 $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
                 $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
                 $("#" + targetPosId + "Nm").val(messages["cmm.all"]);

@@ -38,6 +38,7 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("momsCommercialDtlCombo", momsCommercialComboList); // 추가정보-상권
   $scope._setComboData("momsShopTypeDtlCombo", momsShopTypeComboList); // 추가정보-점포유형
   $scope._setComboData("momsStoreManageTypeDtlCombo", momsStoreManageTypeComboList); // 추가정보-매장관리타입
+  $scope._setComboData("momsStoreFg01DtlCombo", momsStoreFg01ComboList); // 추가정보-매장그룹
 
   // _broadcast
   $scope.$on("hqEmpDetailCtrl", function(event, data) {
@@ -73,6 +74,7 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmp.momsCommercial = nvl(data.momsCommercial, "");
       $scope.hqEmp.momsShopType = nvl(data.momsShopType, "");
       $scope.hqEmp.momsStoreManageType = nvl(data.momsStoreManageType, "");
+      $scope.hqEmp.momsStoreFg01 = nvl(data.momsStoreFg01, "");
     });
   };
 

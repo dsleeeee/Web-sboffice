@@ -109,10 +109,8 @@
             <td></td>
           </tr>
           <tr>
-            <%-- 그룹정보 --%>
-            <th>
-              <s:message code="hqEmp.branchNm"/>
-            </th>
+            <%-- 그룹 --%>
+            <th><s:message code="cmm.moms.branch" /></th>
             <td>
               {{hqEmp.branchNm}}
             </td>
@@ -135,7 +133,7 @@
             <tbody>
             <tr>
               <%-- 팀별 --%>
-              <th><s:message code="hqEmp.moms.momsTeam"/></th>
+              <th><s:message code="cmm.moms.momsTeam"/></th>
               <td>
                 <wj-combo-box
                         ng-model="hqEmp.momsTeam"
@@ -149,7 +147,7 @@
                 {{_momsTeam}}
               </td>
               <%-- AC점포별 --%>
-              <th><s:message code="hqEmp.moms.momsAcShop"/></th>
+              <th><s:message code="cmm.moms.momsAcShop"/></th>
               <td>
                 <wj-combo-box
                         ng-model="hqEmp.momsAcShop"
@@ -165,7 +163,7 @@
             </tr>
             <tr>
               <%-- 지역구분 --%>
-              <th><s:message code="hqEmp.moms.momsAreaFg"/></th>
+              <th><s:message code="cmm.moms.momsAreaFg"/></th>
               <td>
                 <wj-combo-box
                         ng-model="hqEmp.momsAreaFg"
@@ -179,7 +177,7 @@
                 {{_momsAreaFg}}
               </td>
               <%-- 상권 --%>
-              <th><s:message code="hqEmp.moms.momsCommercial"/></th>
+              <th><s:message code="cmm.moms.momsCommercial"/></th>
               <td>
                 <wj-combo-box
                         ng-model="hqEmp.momsCommercial"
@@ -195,7 +193,7 @@
             </tr>
             <tr>
               <%-- 점포유형 --%>
-              <th><s:message code="hqEmp.moms.momsShopType"/></th>
+              <th><s:message code="cmm.moms.momsShopType"/></th>
               <td>
                 <wj-combo-box
                         ng-model="hqEmp.momsShopType"
@@ -209,7 +207,7 @@
                 {{_momsShopType}}
               </td>
               <%-- 매장관리타입 --%>
-              <th><s:message code="hqEmp.moms.momsStoreManageType"/></th>
+              <th><s:message code="cmm.moms.momsStoreManageType"/></th>
               <td>
                 <wj-combo-box
                         ng-model="hqEmp.momsStoreManageType"
@@ -223,6 +221,26 @@
                 {{_momsStoreManageType}}
               </td>
             </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+              <tr>
+                <%-- 매장그룹 --%>
+                <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                <td>
+                  <wj-combo-box
+                          ng-model="hqEmp.momsStoreFg01"
+                          ng-hide="true"
+                          text="_momsStoreFg01"
+                          items-source="_getComboData('momsStoreFg01DtlCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false">
+                  </wj-combo-box>
+                  {{_momsStoreFg01}}
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
+            </c:if>
             </tbody>
           </table>
         </c:if>
@@ -241,4 +259,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20221101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20231101.01" charset="utf-8"></script>

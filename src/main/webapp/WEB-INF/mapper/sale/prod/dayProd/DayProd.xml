@@ -608,6 +608,13 @@
                 WHERE 1=1
                 AND the.USER_ID = #{userId}
             </if>
+            <if test='nmcodeGrpCd == "167"'>
+                SELECT
+                the.MOMS_STORE_FG_01
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
         </if>
     </select>
 

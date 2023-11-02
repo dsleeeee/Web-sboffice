@@ -16,7 +16,7 @@
         TABLE    : TB_MB_MEMBER_PAID_BALANCE, TB_MB_MEMBER
         COMMENTS : [회원]선/후불_잔액 와 [회원]회원
     -->
-    <select id="getMembrNonBilClctList"  parameterType="membrNonBilClctVO" resultType="DefaultMap">
+    <select id="getMembrNonBilClctList" parameterType="membrNonBilClctVO" resultType="DefaultMap">
         /* MembrNonBilClctMapper.getMembrNonBilClctList */
         SELECT
         tmmpb.MEMBR_NO,
@@ -30,7 +30,6 @@
         (
             SELECT
             MEMBR_NO,
-            HQ_OFFICE_CD,
             SUM(POSTPAID_AMT) AS POSTPAID_AMT,
             SUM(POSTPAID_IN_AMT) AS POSTPAID_IN_AMT,
             SUM(POSTPAID_BAL_AMT) AS POSTPAID_BAL_AMT
@@ -44,7 +43,7 @@
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
                         'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
             </if>
             <if test='membrNo != null and membrNo != ""'>
@@ -71,10 +70,10 @@
             <if test='orgnFg != null and orgnFg == "H"'>
                 AND (
                         'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                     )
             </if>
-        <if test='membrNo != null and membrNo != ""'>
+            <if test='membrNo != null and membrNo != ""'>
                 <![CDATA[
                     AND MEMBR_NO LIKE '%'||#{membrNo}||'%'
                 ]]>
@@ -82,9 +81,9 @@
             GROUP BY MEMBR_NO, HQ_OFFICE_CD
         ) tmmpbdt
         WHERE 1=1
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         AND tmmpb.MEMBR_NO = tmm.MEMBR_NO
         AND tmmpb.MEMBR_NO = tmmpbdt.MEMBR_NO
-        AND tmmpb.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
         <if test='membrNm != null and membrNm != ""'>
             AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
         </if>
@@ -96,12 +95,12 @@
         TABLE    : TB_MB_MEMBER_PAID_BALANCE
         COMMENTS : [회원]선/후불_잔액
     -->
-    <select id="getMembrNonBilClctDetailList"  parameterType="membrNonBilClctVO" resultType="DefaultMap">
+    <select id="getMembrNonBilClctDetailList" parameterType="membrNonBilClctVO" resultType="DefaultMap">
         /* MembrNonBilClctMapper.getMembrNonBilClctDetailList */
         SELECT
-            TO_CHAR(TO_DATE(tmmpb.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
-            tmmpb.POSTPAID_AMT,
-            tmmpb.POSTPAID_IN_AMT
+        TO_CHAR(TO_DATE(tmmpb.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT,
+        tmmpb.POSTPAID_AMT,
+        tmmpb.POSTPAID_IN_AMT
         FROM TB_MB_MEMBER_PAID_BALANCE tmmpb
         WHERE 1=1
         AND tmmpb.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -113,7 +112,7 @@
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                OR	tmmpb.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                OR	tmmpb.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
         AND tmmpb.MEMBR_NO = #{membrNo}

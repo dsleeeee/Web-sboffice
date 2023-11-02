@@ -189,6 +189,20 @@ public class HqEmpController {
             momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
+        // 추가정보-매장그룹
+        List momsStoreFg01ComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "167");
+        String momsStoreFg01ComboListAll = "";
+        if (momsStoreFg01ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg01ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
         /** //맘스터치 */
 
         return "base/store/emp/hqEmp";

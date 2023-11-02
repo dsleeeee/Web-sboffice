@@ -215,7 +215,8 @@
                tmsi.MOMS_STORE_MANAGE_TYPE,
                NVL((SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1250' AND USE_YN = 'Y'), '0') AS ENVST_1250,
                NVL((SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1114' AND USE_YN = 'Y'), '0') AS ENVST_1114,
-               tms.SITE_CD
+               tms.SITE_CD,
+               tmsi.MOMS_STORE_FG_01
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
@@ -8302,7 +8303,8 @@
             MOMS_SHOP_TYPE = #{momsShopType},
             MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
             MOD_ID = #{modId},
-            MOD_DT = #{modDt}
+            MOD_DT = #{modDt},
+            MOMS_STORE_FG_01 = #{momsStoreFg01}
             WHERE 1=1
             AND STORE_CD = #{storeCd}
         WHEN NOT MATCHED THEN
@@ -8317,7 +8319,8 @@
                 REG_DT,
                 REG_ID,
                 MOD_DT,
-                MOD_ID
+                MOD_ID,
+                MOMS_STORE_FG_01
             ) VALUES (
                 #{storeCd},
                 #{momsTeam},
@@ -8329,14 +8332,15 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                #{momsStoreFg01}
             )
     </insert>
 
 
     <!-- 매장정보 저장 (맘스터치 추가정보) -->
     <!--
-        TABLE    : TB_MS_STORE_INFO
+        TABLE    :
         COMMENTS : 매장정보 저장 (맘스터치 추가정보)
     -->
     <insert id="mergeStoreEnv1264" parameterType="storeManageVO">
