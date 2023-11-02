@@ -68,6 +68,9 @@ public class DaySaleReportVO extends PageVO {
     private String sQuery2;
     private String sQuery3;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -152,5 +155,13 @@ public class DaySaleReportVO extends PageVO {
 
     public void setsQuery3(String sQuery3) {
         this.sQuery3 = sQuery3;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

@@ -226,8 +226,11 @@ public class SalePriceServiceImpl implements SalePriceService {
                 //String storeSalePriceReulst = salePriceMapper.saveStoreSalePrice(salePriceVO);
 
                 if (salePriceVO.getApplyFg().equals("choice")){
-                    String[] saveStoreCds = salePriceVO.getSaveStoreCds().split(",");
-                    salePriceVO.setSaveStoreCdList(saveStoreCds);
+                    if(!StringUtil.getOrBlank(salePriceVO.getSaveStoreCds()).equals("")) {
+                        StoreVO storeVO = new StoreVO();
+                        storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceVO.getSaveStoreCds(), 3900));
+                        salePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+                    }
                 }
 
                 result2 = salePriceMapper.modifyMsProdSalePrice(salePriceVO);
@@ -245,8 +248,11 @@ public class SalePriceServiceImpl implements SalePriceService {
 
         if(salePriceVO.getSalePriceOrgnFg().equals("S")) {
             // 매장 array 값 세팅
-            String[] storeCds = salePriceVO.getStoreCds().split(",");
-            salePriceVO.setStoreCdList(storeCds);
+            if(!StringUtil.getOrBlank(salePriceVO.getStoreCds()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceVO.getStoreCds(), 3900));
+                salePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
         }
 
         return salePriceMapper.getSalePriceExcelUploadSampleList(salePriceVO);
@@ -480,10 +486,12 @@ public class SalePriceServiceImpl implements SalePriceService {
                         //기존 전매장적용(판매가변경제한매장)은 제외하고 처리
 
                         if (salePriceVO.getApplyFg().equals("choice")){
-                            String[] saveStoreCds = salePriceVO.getSaveStoreCds().split(",");
-                            salePriceVO.setSaveStoreCdList(saveStoreCds);
+                            if(!StringUtil.getOrBlank(salePriceVO.getSaveStoreCds()).equals("")) {
+                                StoreVO storeVO = new StoreVO();
+                                storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceVO.getSaveStoreCds(), 3900));
+                                salePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+                            }
                         }
-                        System.out.println(salePriceVO.getSaveStoreCdList());
 
                         result2 = salePriceMapper.modifyMsProdSalePrice(salePriceVO);
                     }

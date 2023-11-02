@@ -1,9 +1,11 @@
 package kr.co.solbipos.adi.sms.marketingSmsSend.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendService;
 import kr.co.solbipos.adi.sms.marketingSmsSend.service.MarketingSmsSendVO;
@@ -37,15 +39,17 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
     private final MarketingSmsSendMapper marketingSmsSendMapper;
     private final SmsSendMapper smsSendMapper; // SMS전송 팝업
+    private final PopupMapper popupMapper;
     private final CmmEnvUtil cmmEnvUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public MarketingSmsSendServiceImpl(MarketingSmsSendMapper marketingSmsSendMapper, SmsSendMapper smsSendMapper, CmmEnvUtil cmmEnvUtil) {
+    public MarketingSmsSendServiceImpl(MarketingSmsSendMapper marketingSmsSendMapper, SmsSendMapper smsSendMapper, PopupMapper popupMapper, CmmEnvUtil cmmEnvUtil) {
         this.marketingSmsSendMapper = marketingSmsSendMapper;
         this.smsSendMapper = smsSendMapper; // SMS전송 팝업
+        this.popupMapper = popupMapper;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -122,11 +126,15 @@ public class MarketingSmsSendServiceImpl implements MarketingSmsSendService {
         marketingSmsSendVO.setOrgnGrpCd(sessionInfoVO.getOrgnGrpCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            if (!StringUtil.isEmpties(marketingSmsSendVO.getRegStoreCd())) {
-                marketingSmsSendVO.setRegStoreCds(marketingSmsSendVO.getRegStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            if(!StringUtil.getOrBlank(marketingSmsSendVO.getRegStoreCd()).equals("")) {
+               storeVO.setArrSplitStoreCd(CmmUtil.splitText(marketingSmsSendVO.getRegStoreCd(), 3900));
+                marketingSmsSendVO.setRegStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
-            if (!StringUtil.isEmpties(marketingSmsSendVO.getRegUseStoreCd())) {
-                marketingSmsSendVO.setRegUseStoreCds(marketingSmsSendVO.getRegUseStoreCd().split(","));
+
+            if(!StringUtil.getOrBlank(marketingSmsSendVO.getRegUseStoreCd()).equals("")) {
+               storeVO.setArrSplitStoreCd(CmmUtil.splitText(marketingSmsSendVO.getRegUseStoreCd(), 3900));
+                marketingSmsSendVO.setRegUseStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
         }
 

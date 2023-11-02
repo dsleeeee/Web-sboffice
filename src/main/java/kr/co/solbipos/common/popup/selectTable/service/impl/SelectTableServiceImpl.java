@@ -1,18 +1,17 @@
 package kr.co.solbipos.common.popup.selectTable.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.common.popup.selectTable.service.SelectTableService;
 import kr.co.solbipos.common.popup.selectTable.service.SelectTableVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,13 +33,15 @@ import java.util.List;
 @Transactional
 public class SelectTableServiceImpl implements SelectTableService {
     private final SelectTableMapper selectTableMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public SelectTableServiceImpl(SelectTableMapper selectTableMapper) {
+    public SelectTableServiceImpl(SelectTableMapper selectTableMapper, PopupMapper popupMapper) {
         this.selectTableMapper = selectTableMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 테이블 공통 - 테이블 리스트 조회 */
@@ -61,13 +62,17 @@ public class SelectTableServiceImpl implements SelectTableService {
     		String[] arrStoreCd = selectTableVO.getStoreCd().split(",");
     		if (arrStoreCd.length > 0) {
     			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    selectTableVO.setArrStoreCd(arrStoreCd);
+                    StoreVO storeVO = new StoreVO();
+                    storeVO.setArrSplitStoreCd(CmmUtil.splitText(selectTableVO.getStoreCd(), 3900));
+                    selectTableVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
     			}
     		}
     	}
 
         if(!StringUtil.getOrBlank(selectTableVO.getStoreCd()).equals("")) {
-            selectTableVO.setArrStoreCd(selectTableVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(selectTableVO.getStoreCd(), 3900));
+            selectTableVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return selectTableMapper.getSelectTableList(selectTableVO);

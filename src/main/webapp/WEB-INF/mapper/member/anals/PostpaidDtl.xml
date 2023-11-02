@@ -37,16 +37,8 @@
         TB_CM_NMCODE tcn
         WHERE 1=1
         AND tmmp.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
-                tmmp.STORE_CD = #{item}
-            </foreach>
-        </if>
-        <if test='storeCd != null and storeCd != ""'>
-            <![CDATA[
-             AND tmmp.STORE_CD = #{storeCd}
-             ]]>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tmmp.STORE_CD IN (${storeCdQuery})
         </if>
         AND tmmp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}

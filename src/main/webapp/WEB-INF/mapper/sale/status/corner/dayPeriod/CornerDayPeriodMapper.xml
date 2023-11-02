@@ -37,11 +37,8 @@
           AND TMC.CORNR_CD = TSDCP.CORNR_CD
           AND TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
           AND TSDCP.STORE_CD = TMS.STORE_CD
-	    <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                TSDCP.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TSDCP.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='arrCornrCd != null and arrCornrCd != ""'>
             AND TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD IN
@@ -83,11 +80,8 @@
           AND TMC.CORNR_CD = TSDCP.CORNR_CD
           AND TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
           AND TSDCP.STORE_CD = TMS.STORE_CD
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-           AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                TSDCP.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TSDCP.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='arrCornrCd != null and arrCornrCd != ""'>
             AND TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD IN

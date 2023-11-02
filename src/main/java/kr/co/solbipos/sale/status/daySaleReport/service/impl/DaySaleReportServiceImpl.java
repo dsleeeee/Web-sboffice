@@ -1,7 +1,11 @@
 package kr.co.solbipos.sale.status.daySaleReport.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.daySaleReport.service.DaySaleReportService;
@@ -35,13 +39,15 @@ import static kr.co.common.utils.DateUtil.*;
 @Transactional
 public class DaySaleReportServiceImpl implements DaySaleReportService {
     private final DaySaleReportMapper daySaleReportMapper;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public DaySaleReportServiceImpl(DaySaleReportMapper daySaleReportMapper) {
+    public DaySaleReportServiceImpl(DaySaleReportMapper daySaleReportMapper, PopupMapper popupMapper) {
         this.daySaleReportMapper = daySaleReportMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 일별매출내역 다운로드 - 조회 */
@@ -109,8 +115,11 @@ public class DaySaleReportServiceImpl implements DaySaleReportService {
         daySaleReportVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         // 매장 array 값 세팅
-        String[] storeCds = daySaleReportVO.getStoreCds().split(",");
-        daySaleReportVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(daySaleReportVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(daySaleReportVO.getStoreCds(), 3900));
+            daySaleReportVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return daySaleReportMapper.getDaySaleReportChk(daySaleReportVO);
     }

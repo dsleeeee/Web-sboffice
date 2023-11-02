@@ -2,7 +2,10 @@ package kr.co.solbipos.excclc.excclc.dayClose.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.excclc.excclc.dayClose.service.DayCloseService;
@@ -40,10 +43,12 @@ public class DayCloseServiceImpl implements DayCloseService {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final DayCloseMapper dayCloseMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
-    public DayCloseServiceImpl(DayCloseMapper dayCloseMapper, MessageService messageService) {
+    public DayCloseServiceImpl(DayCloseMapper dayCloseMapper, PopupMapper popupMapper, MessageService messageService) {
         this.dayCloseMapper = dayCloseMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -57,7 +62,9 @@ public class DayCloseServiceImpl implements DayCloseService {
         }
 
         if(!StringUtil.getOrBlank(dayCloseVO.getStoreCd()).equals("")) {
-            dayCloseVO.setArrStoreCd(dayCloseVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayCloseVO.getStoreCd(), 3900));
+            dayCloseVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return dayCloseMapper.getDayCloseList(dayCloseVO);

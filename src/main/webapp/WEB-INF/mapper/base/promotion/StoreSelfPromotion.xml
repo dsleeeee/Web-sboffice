@@ -36,11 +36,8 @@
                         AND tmph.PROMOTION_CD = tmpc.PROMOTION_CD
                         AND tmph.STORE_CD = tms.STORE_CD
                         AND tmpc.DATE_YN = 'N'
-                        <if test='arrStoreCd != null and arrStoreCd != ""'>
-                            AND
-                            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                                tmph.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tmph.STORE_CD IN (${storeCdQuery})
                         </if>
                         AND tmph.REG_FG = 'S'
                       UNION
@@ -64,11 +61,8 @@
                         <if test='endDate != null and endDate != ""'>
                             AND tmpc.END_YMD <![CDATA[<= ]]> #{endDate}
                         </if>
-                        <if test='arrStoreCd != null and arrStoreCd != ""'>
-                            AND
-                            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                                tmph.STORE_CD = #{item}
-                            </foreach>
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tmph.STORE_CD IN (${storeCdQuery})
                         </if>
                         AND tmph.REG_FG = 'S'
                ) A

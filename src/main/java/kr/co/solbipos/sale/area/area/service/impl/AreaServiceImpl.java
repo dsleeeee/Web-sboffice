@@ -1,6 +1,10 @@
 package kr.co.solbipos.sale.area.area.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.area.area.service.AreaService;
@@ -30,9 +34,11 @@ import java.util.List;
 @Transactional
 public class AreaServiceImpl implements AreaService {
     private final AreaMapper areaMapper;
+    private final PopupMapper popupMapper;
 
-    public AreaServiceImpl(AreaMapper areaMapper) {
+    public AreaServiceImpl(AreaMapper areaMapper, PopupMapper popupMapper) {
         this.areaMapper = areaMapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 조회 */
@@ -46,8 +52,11 @@ public class AreaServiceImpl implements AreaService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = areaVO.getStoreCds().split(",");
-        areaVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(areaVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(areaVO.getStoreCds(), 3900));
+            areaVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return areaMapper.getAreaList(areaVO);
     }
@@ -63,8 +72,11 @@ public class AreaServiceImpl implements AreaService {
         }
 
         // 매장 array 값 세팅
-        String[] storeCds = areaVO.getStoreCds().split(",");
-        areaVO.setStoreCdList(storeCds);
+        if(!StringUtil.getOrBlank(areaVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(areaVO.getStoreCds(), 3900));
+            areaVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return areaMapper.getAreaExcelList(areaVO);
     }

@@ -39,7 +39,10 @@ public class CornerDayPeriodVO extends PageVO {
     private String sQuery1;
     /** 본사,매장 구분 */
     private String orgnFg;
-    
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
 
 	public String getStoreCd() {
 		return storeCd;
@@ -180,5 +183,12 @@ public class CornerDayPeriodVO extends PageVO {
 	public void setOrgnFg(String orgnFg) {
 		this.orgnFg = orgnFg;
 	}
-	
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
 }

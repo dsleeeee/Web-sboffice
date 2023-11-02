@@ -5,10 +5,12 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.info.chgBatch.service.ChgBatchService;
@@ -37,16 +39,18 @@ public class ChgBatchServiceImpl implements ChgBatchService {
     private final RegistMapper rMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final PopupMapper popupMapper;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public ChgBatchServiceImpl(ChgBatchMapper mapper, RegistMapper rMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
+    public ChgBatchServiceImpl(ChgBatchMapper mapper, RegistMapper rMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService, PopupMapper popupMapper) {
         this.mapper = mapper;
         this.rMapper = rMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.popupMapper = popupMapper;
     }
 
     @Override
@@ -95,11 +99,15 @@ public class ChgBatchServiceImpl implements ChgBatchService {
         chgBatchVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) { // 본사
-            if (!StringUtil.isEmpties(chgBatchVO.getRegStoreCd())) {
-                chgBatchVO.setRegStoreCds(chgBatchVO.getRegStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            if(!StringUtil.getOrBlank(chgBatchVO.getRegStoreCd()).equals("")) {
+               storeVO.setArrSplitStoreCd(CmmUtil.splitText(chgBatchVO.getRegStoreCd(), 3900));
+               chgBatchVO.setRegStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
-            if (!StringUtil.isEmpties(chgBatchVO.getRegUseStoreCd())) {
-                chgBatchVO.setRegUseStoreCds(chgBatchVO.getRegUseStoreCd().split(","));
+
+            if(!StringUtil.getOrBlank(chgBatchVO.getRegUseStoreCd()).equals("")) {
+               storeVO.setArrSplitStoreCd(CmmUtil.splitText(chgBatchVO.getRegUseStoreCd(), 3900));
+               chgBatchVO.setRegUseStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
             }
         }
 

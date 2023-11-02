@@ -171,6 +171,12 @@ public class MarketingSmsSendVO extends PageVO {
      */
     private String membrClassManageFg;
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String regStoreCdQuery;
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String regUseStoreCdQuery;
+
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -550,5 +556,21 @@ public class MarketingSmsSendVO extends PageVO {
 
     public void setMembrClassManageFg(String membrClassManageFg) {
         this.membrClassManageFg = membrClassManageFg;
+    }
+
+    public String getRegStoreCdQuery() {
+        return regStoreCdQuery;
+    }
+
+    public void setRegStoreCdQuery(String regStoreCdQuery) {
+        this.regStoreCdQuery = regStoreCdQuery;
+    }
+
+    public String getRegUseStoreCdQuery() {
+        return regUseStoreCdQuery;
+    }
+
+    public void setRegUseStoreCdQuery(String regUseStoreCdQuery) {
+        this.regUseStoreCdQuery = regUseStoreCdQuery;
     }
 }

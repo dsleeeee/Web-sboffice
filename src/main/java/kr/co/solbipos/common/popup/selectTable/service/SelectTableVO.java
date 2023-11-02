@@ -36,6 +36,9 @@ public class SelectTableVO extends PageVO {
     /** 그리드 코드 테이블 코드 array */
     private String arrTableCd[];
 
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -74,5 +77,13 @@ public class SelectTableVO extends PageVO {
 
     public void setArrTableCd(String[] arrTableCd) {
         this.arrTableCd = arrTableCd;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }
