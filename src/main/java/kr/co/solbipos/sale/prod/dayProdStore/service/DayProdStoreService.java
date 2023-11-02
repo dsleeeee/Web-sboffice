@@ -25,13 +25,4 @@ public interface DayProdStoreService {
     /** 일별 상품 매출 현황 조회 */
     List<DefaultMap<Object>> getDayProdStoreList(DayProdStoreVO dayProdStoreVO, SessionInfoVO sessionInfoVO);
     List<DefaultMap<Object>> getDayProdStoreExcelList(DayProdStoreVO dayProdStoreVO, SessionInfoVO sessionInfoVO);
-
-    /** 사용자별 브랜드 조회(콤보박스용) */
-    List<DefaultMap<Object>> getUserBrandComboList(DayProdStoreVO dayProdStoreVO, SessionInfoVO sessionInfoVO);
-
-    /** 사용자별 코드별 공통코드 콤보박스 조회 */
-    List<DefaultMap<Object>> getUserHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd);
-
-    /** 사용자별 그룹 콤보박스 조회 */
-    List<DefaultMap<Object>> getUserBranchComboList(SessionInfoVO sessionInfoVO);
 }
