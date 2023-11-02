@@ -10,10 +10,8 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.storeMoms.storeInfo.service.StoreInfoService;
 import kr.co.solbipos.store.storeMoms.storeInfo.service.StoreInfoVO;
-import kr.co.solbipos.sale.day.day.service.DayVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
-import kr.co.solbipos.sale.store.storeChannel.service.StoreChannelVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,8 +73,6 @@ public class StoreInfoController {
     @RequestMapping(value = "/storeInfo/view.sb", method = RequestMethod.GET)
     public String empMonthView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        DayVO dayVO = new DayVO();
-        StoreChannelVO storeChannelVO = new StoreChannelVO();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 사용자별 브랜드 조회(콤보박스용)
