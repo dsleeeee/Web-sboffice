@@ -2,7 +2,11 @@ package kr.co.solbipos.membr.anals.postpaidDtl.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.membr.anals.postpaid.service.PostpaidService;
@@ -36,24 +40,29 @@ import java.util.List;
 public class PostpaidDtlServiceImpl implements PostpaidDtlService {
 
     private final PostpaidDtlMapper mapper;
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public PostpaidDtlServiceImpl(PostpaidDtlMapper mapper) {
+    public PostpaidDtlServiceImpl(PostpaidDtlMapper mapper, PopupMapper popupMapper) {
         this.mapper = mapper;
+        this.popupMapper = popupMapper;
     }
 
     /** 후불 회원 외상, 입금 내역 상세*/
     @Override
     public List<DefaultMap<Object>> getPostpaidDtlMemberList(PostpaidDtlVO postpaidDtlVO, SessionInfoVO sessionInfoVO) {
 
-        String[] storeCds = postpaidDtlVO.getStoreCds().split(",");
-        postpaidDtlVO.setStoreCdList(storeCds);
-
         postpaidDtlVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         postpaidDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            postpaidDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
+            postpaidDtlVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(postpaidDtlVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(postpaidDtlVO.getStoreCds(), 3900));
+            postpaidDtlVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return mapper.getPostpaidDtlMemberList(postpaidDtlVO);

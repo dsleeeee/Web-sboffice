@@ -39,11 +39,8 @@
         AND     tsspg.STORE_CD = tms.STORE_CD
         AND     tsspg.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsspg.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsspg.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspg.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='hqBrandCd != null and hqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{hqBrandCd}
@@ -77,11 +74,8 @@
         AND     tsspg.STORE_CD = tms.STORE_CD
         AND     tsspg.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsspg.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                tsspg.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsspg.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='hqBrandCd != null and hqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{hqBrandCd}

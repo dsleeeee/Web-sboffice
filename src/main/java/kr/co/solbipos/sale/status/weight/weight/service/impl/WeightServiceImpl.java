@@ -76,9 +76,12 @@ public class WeightServiceImpl implements WeightService {
             weightVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            weightVO.setArrStoreCd(weightVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(weightVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(weightVO.getStoreCd(), 3900));
+            weightVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
         return weightMapper.getWeightDayList(weightVO);
     }
 
@@ -94,9 +97,12 @@ public class WeightServiceImpl implements WeightService {
             weightVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            weightVO.setArrStoreCd(weightVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(weightVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(weightVO.getStoreCd(), 3900));
+            weightVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
         return weightMapper.getWeightProdList(weightVO);
     }
 
@@ -112,9 +118,12 @@ public class WeightServiceImpl implements WeightService {
             weightVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            weightVO.setArrStoreCd(weightVO.getStoreCd().split(","));
+        if(!StringUtil.getOrBlank(weightVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(weightVO.getStoreCd(), 3900));
+            weightVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
         return weightMapper.getWeightProdExcelList(weightVO);
     }
 

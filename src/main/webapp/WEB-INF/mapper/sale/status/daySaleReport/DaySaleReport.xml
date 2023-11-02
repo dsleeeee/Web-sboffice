@@ -116,11 +116,8 @@
         FROM TB_MS_SALE_REPORT tmsr
         WHERE 1=1
         AND tmsr.HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='storeCds != null and storeCds != ""'>
-            AND
-            <foreach collection="storeCdList" item="item" open="("  separator="OR" close=")" >
-                tmsr.STORE_CD = #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tmsr.STORE_CD IN (${storeCdQuery})
         </if>
         AND tmsr.FROM_SALE_DATE = #{dataCreateMonth}||'01'
         AND tmsr.TO_SALE_DATE = #{dataCreateMonth}||#{dataCreateMonthLastDate}

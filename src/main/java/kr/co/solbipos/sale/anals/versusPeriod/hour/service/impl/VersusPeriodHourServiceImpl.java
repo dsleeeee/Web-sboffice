@@ -2,6 +2,9 @@ package kr.co.solbipos.sale.anals.versusPeriod.hour.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +18,13 @@ import kr.co.solbipos.sale.anals.versusPeriod.hour.service.VersusPeriodHourVO;
 @Service("VersusPeriodHourService")
 public class VersusPeriodHourServiceImpl implements VersusPeriodHourService {
     private final VersusPeriodHourMapper versusPeriodHourMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public VersusPeriodHourServiceImpl(VersusPeriodHourMapper versusPeriodHourMapper, MessageService messageService) {
+    public VersusPeriodHourServiceImpl(VersusPeriodHourMapper versusPeriodHourMapper, PopupMapper popupMapper, MessageService messageService) {
     	this.versusPeriodHourMapper = versusPeriodHourMapper;
+    	this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -31,9 +36,11 @@ public class VersusPeriodHourServiceImpl implements VersusPeriodHourService {
         versusPeriodHourVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         versusPeriodHourVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         versusPeriodHourVO.setEmpNo(sessionInfoVO.getEmpNo());
-    	
-    	if(!StringUtil.getOrBlank(versusPeriodHourVO.getStoreCd()).equals("")) {
-        	versusPeriodHourVO.setArrStoreCd(versusPeriodHourVO.getStoreCd().split(","));
+
+        if(!StringUtil.getOrBlank(versusPeriodHourVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(versusPeriodHourVO.getStoreCd(), 3900));
+            versusPeriodHourVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
     	
         return versusPeriodHourMapper.getVersusPeriodHourList(versusPeriodHourVO);

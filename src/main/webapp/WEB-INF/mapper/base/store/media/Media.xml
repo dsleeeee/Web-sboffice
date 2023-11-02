@@ -511,17 +511,8 @@
                                       FROM TB_HQ_POS_ADVER_STORE
                                      WHERE ADVER_FILE_NO = #{verSerNo} )
       </if>
-        <if test='storeCd != null and storeCd != ""'>
-           AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
-        </if>
-        <if test='arrStoreCd != null and arrStoreCd != ""'>
-            AND
-            <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")" >
-                tms.STORE_CD = #{item}
-            </foreach>
-        </if>
-        <if test='storeNm != null and storeNm != ""'>
-           AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg}

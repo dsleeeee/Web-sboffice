@@ -2,7 +2,10 @@ package kr.co.solbipos.base.promotion.storeSelfPromotion.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.promotion.promotion.service.PromotionVO;
@@ -37,12 +40,14 @@ public class StoreSelfPromotionServiceImpl implements StoreSelfPromotionService 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final StoreSelfPromotionMapper storeSelfPromotionMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public StoreSelfPromotionServiceImpl(StoreSelfPromotionMapper storeSelfPromotionMapper, MessageService messageService) {
+    public StoreSelfPromotionServiceImpl(StoreSelfPromotionMapper storeSelfPromotionMapper, PopupMapper popupMapper, MessageService messageService) {
         this.storeSelfPromotionMapper = storeSelfPromotionMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -53,7 +58,9 @@ public class StoreSelfPromotionServiceImpl implements StoreSelfPromotionService 
 
         // 매장코드
         if(!StringUtil.getOrBlank(storeSelfPromotionVO.getSrchStoreCd()).equals("")) {
-            storeSelfPromotionVO.setArrStoreCd(storeSelfPromotionVO.getSrchStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(storeSelfPromotionVO.getSrchStoreCd(), 3900));
+            storeSelfPromotionVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return storeSelfPromotionMapper.getStoreSelfPromotionList(storeSelfPromotionVO);

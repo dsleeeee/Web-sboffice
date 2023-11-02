@@ -638,10 +638,9 @@
             AND A.STORE_CD NOT IN (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '164' AND USE_YN = 'Y')
         </if>
         <if test='applyFg != null and applyFg == "choice"'>
-            AND
-            <foreach collection="saveStoreCdList" item="item" open="("  separator="OR" close=")" >
-                A.STORE_CD = #{item}
-            </foreach>
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND A.STORE_CD IN (${storeCdQuery})
+            </if>
         </if>
         AND     B.HQ_OFFICE_CD  =   #{hqOfficeCd}
         AND     B.PROD_CD       =   #{prodCd}
@@ -809,11 +808,8 @@
                 AND USE_YN = 'Y'
                 ) thn
                 WHERE 1=1
-                <if test='storeCds != null and storeCds != ""'>
-                    AND
-                    <foreach collection="storeCdList" item="item" open=" (" separator="OR" close=")" >
-                        tmp.STORE_CD = #{item}
-                    </foreach>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tmp.STORE_CD IN (${storeCdQuery})
                 </if>
                 AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND tms.STORE_CD = tmp.STORE_CD

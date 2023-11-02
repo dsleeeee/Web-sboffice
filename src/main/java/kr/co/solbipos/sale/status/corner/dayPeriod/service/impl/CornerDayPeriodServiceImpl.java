@@ -2,6 +2,9 @@ package kr.co.solbipos.sale.status.corner.dayPeriod.service.impl;
 
 import java.util.List;
 
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +18,13 @@ import kr.co.solbipos.sale.status.corner.dayPeriod.service.CornerDayPeriodVO;
 @Service("cornerDayPeriodService")
 public class CornerDayPeriodServiceImpl implements CornerDayPeriodService {
     private final CornerDayPeriodMapper cornerDayPeriodMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public CornerDayPeriodServiceImpl(CornerDayPeriodMapper cornerDayPeriodMapper, MessageService messageService) {
+    public CornerDayPeriodServiceImpl(CornerDayPeriodMapper cornerDayPeriodMapper, PopupMapper popupMapper, MessageService messageService) {
         this.cornerDayPeriodMapper = cornerDayPeriodMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -38,12 +43,11 @@ public class CornerDayPeriodServiceImpl implements CornerDayPeriodService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = cornerDayPeriodVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerDayPeriodVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(cornerDayPeriodVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(cornerDayPeriodVO.getStoreCd(), 3900));
+                cornerDayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
         return cornerDayPeriodMapper.getCornerDayPeriodList(cornerDayPeriodVO);
     }
@@ -63,12 +67,11 @@ public class CornerDayPeriodServiceImpl implements CornerDayPeriodService {
 				}
 			}
 		} else {
-			String[] arrStoreCd = cornerDayPeriodVO.getStoreCd().split(",");
-			if (arrStoreCd.length > 0) {
-				if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-					cornerDayPeriodVO.setArrStoreCd(arrStoreCd);
-				}
-			}
+            if(!StringUtil.getOrBlank(cornerDayPeriodVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(cornerDayPeriodVO.getStoreCd(), 3900));
+                cornerDayPeriodVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
 		}
 		return cornerDayPeriodMapper.getCornerDayPeriodExcelList(cornerDayPeriodVO);
 	}

@@ -2,7 +2,10 @@ package kr.co.solbipos.sale.status.corner.month.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.corner.month.service.CornerMonthService;
 import kr.co.solbipos.sale.status.corner.month.service.CornerMonthVO;
@@ -15,11 +18,13 @@ import java.util.List;
 @Service("cornerMonthService")
 public class CornerMonthServiceImpl implements CornerMonthService {
     private final CornerMonthMapper cornerMonthMapper;
+    private final PopupMapper popupMapper;
     private final MessageService messageService;
 
     @Autowired
-    public CornerMonthServiceImpl(CornerMonthMapper cornerMonthMapper, MessageService messageService) {
+    public CornerMonthServiceImpl(CornerMonthMapper cornerMonthMapper, PopupMapper popupMapper, MessageService messageService) {
         this.cornerMonthMapper = cornerMonthMapper;
+        this.popupMapper = popupMapper;
         this.messageService = messageService;
     }
 
@@ -38,12 +43,11 @@ public class CornerMonthServiceImpl implements CornerMonthService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = cornerMonthVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerMonthVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(cornerMonthVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(cornerMonthVO.getStoreCd(), 3900));
+                cornerMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
     	
     	if(!StringUtil.getOrBlank(cornerMonthVO.getArrCornrCd()).equals("")) {
@@ -74,12 +78,11 @@ public class CornerMonthServiceImpl implements CornerMonthService {
     			}
     		}
     	} else {
-    		String[] arrStoreCd = cornerMonthVO.getStoreCd().split(",");
-    		if (arrStoreCd.length > 0) {
-    			if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-    				cornerMonthVO.setArrStoreCd(arrStoreCd);
-    			}
-    		}
+            if(!StringUtil.getOrBlank(cornerMonthVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(cornerMonthVO.getStoreCd(), 3900));
+                cornerMonthVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
     	}
     	
     	if(!StringUtil.getOrBlank(cornerMonthVO.getArrCornrCd()).equals("")) {

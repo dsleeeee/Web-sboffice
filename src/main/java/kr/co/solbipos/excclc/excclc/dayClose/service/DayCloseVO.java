@@ -19,6 +19,8 @@ public class DayCloseVO extends PageVO {
     private String closeDate;
     /** 마감구분 */
     private String closeFg;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     private long interestAmt; // 결산이자
     private long inAmt; // 입금액
@@ -265,5 +267,13 @@ public class DayCloseVO extends PageVO {
 
     public void setRemark6(String remark6) {
         this.remark6 = remark6;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

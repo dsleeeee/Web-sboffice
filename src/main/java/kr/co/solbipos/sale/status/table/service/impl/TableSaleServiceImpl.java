@@ -34,9 +34,9 @@ public class TableSaleServiceImpl implements TableSaleService {
 
         tableSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
+        /*if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
             tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
-        }
+        }*/
 
         return tableSaleMapper.getTableDayList(tableSaleVO);
     }
@@ -47,9 +47,9 @@ public class TableSaleServiceImpl implements TableSaleService {
 
         tableSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
+        /*if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
             tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
-        }
+        }*/
 
         return tableSaleMapper.getTableDayExcelList(tableSaleVO);
     }
@@ -59,7 +59,9 @@ public class TableSaleServiceImpl implements TableSaleService {
     public List<DefaultMap<String>> getStoreTableList(TableSaleVO tableSaleVO, SessionInfoVO sessionInfoVO) {
 
         if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
-            tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableSaleVO.getStoreCd(), 3900));
+            tableSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         return tableSaleMapper.getStoreTableList(tableSaleVO);
@@ -71,9 +73,9 @@ public class TableSaleServiceImpl implements TableSaleService {
 
         tableSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
+        /*if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
             tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
-        }
+        }*/
 
         return tableSaleMapper.getTableDayOfWeekList(tableSaleVO);
     }
@@ -84,9 +86,9 @@ public class TableSaleServiceImpl implements TableSaleService {
 
         tableSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
+        /*if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
             tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
-        }
+        }*/
 
         return tableSaleMapper.getTableMonthList(tableSaleVO);
     }
@@ -97,10 +99,10 @@ public class TableSaleServiceImpl implements TableSaleService {
 
         tableSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
+        /*if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
             tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
         }
-
+*/
         return tableSaleMapper.getTableMonthExcelList(tableSaleVO);
     }
 

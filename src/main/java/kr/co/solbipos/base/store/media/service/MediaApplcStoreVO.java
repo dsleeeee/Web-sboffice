@@ -65,7 +65,8 @@ public class MediaApplcStoreVO extends PageVO {
     private String storeHqBrandCd;
     /** 키오스크키맵 */
     private String tuClsType;
-
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     /**
      * @return the verSerNo
@@ -313,5 +314,13 @@ public class MediaApplcStoreVO extends PageVO {
 
     public void setTuClsType(String tuClsType) {
         this.tuClsType = tuClsType;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

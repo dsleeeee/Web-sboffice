@@ -5,8 +5,11 @@ import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.store.media.service.MediaApplcStoreVO;
@@ -49,13 +52,15 @@ public class MediaServiceImpl implements MediaService {
     private final MediaMapper mediaMapper;
     private final MessageService messageService;
     private final MemberTermsMapper memberTermsMapper; // 이용약관관리
+    private final PopupMapper popupMapper;
 
     /** Constructor Injection */
     @Autowired
-    public MediaServiceImpl(MediaMapper mediaMapper, MessageService messageService, MemberTermsMapper memberTermsMapper) {
+    public MediaServiceImpl(MediaMapper mediaMapper, MessageService messageService, MemberTermsMapper memberTermsMapper, PopupMapper popupMapper) {
         this.mediaMapper = mediaMapper;
         this.messageService = messageService;
         this.memberTermsMapper = memberTermsMapper; // 이용약관관리
+        this.popupMapper = popupMapper;
     }
 
     /** 포스버전 목록 조회 */
@@ -367,13 +372,9 @@ public class MediaServiceImpl implements MediaService {
 
         // 매장 멀티 선택
         if(!StringUtil.getOrBlank(applcStore.getStoreCd()).equals("")) {
-            String[] arrStoreCd = applcStore.getStoreCd().split(",");
-            if (arrStoreCd.length > 0) {
-                if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-                    applcStore.setArrStoreCd(arrStoreCd);
-                    applcStore.setStoreCd("");
-                }
-            }
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(applcStore.getStoreCd(), 3900));
+            applcStore.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {

@@ -37,6 +37,8 @@ public class StoreSelfPromotionVO extends PageVO {
     private String promotionCd;
     /** 혜택순번 */
     private String beneSeq;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -104,5 +106,13 @@ public class StoreSelfPromotionVO extends PageVO {
 
     public void setBeneSeq(String beneSeq) {
         this.beneSeq = beneSeq;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }

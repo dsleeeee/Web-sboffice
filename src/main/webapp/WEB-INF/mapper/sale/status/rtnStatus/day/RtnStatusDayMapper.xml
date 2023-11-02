@@ -252,12 +252,6 @@
                 FROM TB_SL_SALE_DTL
                 WHERE 1=1
                 AND HQ_OFFICE_CD = #{hqOfficeCd}
-                <if test='arrStoreCd != null and arrStoreCd != ""'>
-                    AND
-                    <foreach collection="arrStoreCd" item="item" open="("  separator="OR" close=")">
-                        STORE_CD = #{item}
-                    </foreach>
-                </if>
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND STORE_CD IN (${storeCdQuery})
                 </if>
