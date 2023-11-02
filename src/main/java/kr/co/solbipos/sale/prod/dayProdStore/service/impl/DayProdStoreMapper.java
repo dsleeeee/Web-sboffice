@@ -29,22 +29,4 @@ public interface DayProdStoreMapper {
     /** 조회 */
     List<DefaultMap<Object>> getDayProdStoreList(DayProdStoreVO dayProdStoreVO);
     List<DefaultMap<Object>> getDayProdStoreExcelList(DayProdStoreVO dayProdStoreVO);
-
-    /** 사용자별 브랜드 사용 조회 */
-    String getUserBrandCdList(DayProdStoreVO dayProdStoreVO);
-
-    /** 사용자별 브랜드 조회(콤보박스용) */
-    List<DefaultMap<Object>> getUserBrandComboList(DayProdStoreVO dayProdStoreVO);
-
-    /** 사용자별 코드별 공통코드 조회 */
-    String getUserHqNmcodeCdList(DayProdStoreVO dayProdStoreVO);
-
-    /** 사용자별 코드별 공통코드 콤보박스 조회 */
-    List<DefaultMap<Object>> getUserHqNmcodeComboList(DayProdStoreVO dayProdStoreVO);
-
-    /** 사용자별 그룹 조회 */
-    String getUserBranchCdList(DayProdStoreVO dayProdStoreVO);
-
-    /** 사용자별 그룹 콤보박스 조회 */
-    List<DefaultMap<Object>> getUserBranchComboList(DayProdStoreVO dayProdStoreVO);
 }

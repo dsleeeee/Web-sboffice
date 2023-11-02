@@ -10,6 +10,8 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.prod.dayProdStore.service.DayProdStoreService;
 import kr.co.solbipos.sale.prod.dayProdStore.service.DayProdStoreVO;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
+import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,15 +49,17 @@ public class DayProdStoreController {
     private final SessionService sessionService;
     private final DayProdStoreService dayProdStoreService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final DayProdService dayProdService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public DayProdStoreController(SessionService sessionService, DayProdStoreService dayProdStoreService, CmmCodeUtil cmmCodeUtil) {
+    public DayProdStoreController(SessionService sessionService, DayProdStoreService dayProdStoreService, CmmCodeUtil cmmCodeUtil, DayProdService dayProdService) {
         this.sessionService = sessionService;
         this.dayProdStoreService = dayProdStoreService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.dayProdService = dayProdService;
     }
 
     /**
@@ -71,14 +75,14 @@ public class DayProdStoreController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 사용자별 브랜드 조회(콤보박스용)
-        DayProdStoreVO dayProdStoreVO = new DayProdStoreVO();
-        String momsHqBrandCdComboList = convertToJson(dayProdStoreService.getUserBrandComboList(dayProdStoreVO, sessionInfoVO));
+        DayProdVO dayProdVO = new DayProdVO();
+        String momsHqBrandCdComboList = convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO));
         model.addAttribute("momsHqBrandCdComboList", momsHqBrandCdComboList);
         System.out.println("momsHqBrandCdComboList : " + momsHqBrandCdComboList);
 
         // 사용자별 코드별 공통코드 콤보박스 조회
         // 팀별
-        List momsTeamComboList = dayProdStoreService.getUserHqNmcodeComboList(sessionInfoVO, "151");
+        List momsTeamComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "151");
         String momsTeamComboListAll = "";
         if (momsTeamComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -92,7 +96,7 @@ public class DayProdStoreController {
         }
         model.addAttribute("momsTeamComboList", momsTeamComboListAll);
         // AC점포별
-        List momsAcShopComboList = dayProdStoreService.getUserHqNmcodeComboList(sessionInfoVO, "152");
+        List momsAcShopComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "152");
         String momsAcShopComboListAll = "";
         if (momsAcShopComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -106,7 +110,7 @@ public class DayProdStoreController {
         }
         model.addAttribute("momsAcShopComboList", momsAcShopComboListAll);
         // 지역구분
-        List momsAreaFgComboList = dayProdStoreService.getUserHqNmcodeComboList(sessionInfoVO, "153");
+        List momsAreaFgComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "153");
         String momsAreaFgComboListAll = "";
         if (momsAreaFgComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -120,7 +124,7 @@ public class DayProdStoreController {
         }
         model.addAttribute("momsAreaFgComboList", momsAreaFgComboListAll);
         // 상권
-        List momsCommercialComboList = dayProdStoreService.getUserHqNmcodeComboList(sessionInfoVO, "154");
+        List momsCommercialComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "154");
         String momsCommercialComboListAll = "";
         if (momsCommercialComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -134,7 +138,7 @@ public class DayProdStoreController {
         }
         model.addAttribute("momsCommercialComboList", momsCommercialComboListAll);
         // 점포유형
-        List momsShopTypeComboList = dayProdStoreService.getUserHqNmcodeComboList(sessionInfoVO, "155");
+        List momsShopTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "155");
         String momsShopTypeComboListAll = "";
         if (momsShopTypeComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -148,7 +152,7 @@ public class DayProdStoreController {
         }
         model.addAttribute("momsShopTypeComboList", momsShopTypeComboListAll);
         // 매장관리타입
-        List momsStoreManageTypeComboList = dayProdStoreService.getUserHqNmcodeComboList(sessionInfoVO, "156");
+        List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
         String momsStoreManageTypeComboListAll = "";
         if (momsStoreManageTypeComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
@@ -164,7 +168,7 @@ public class DayProdStoreController {
 
         // 사용자별 그룹 콤보박스 조회
         // 그룹
-        List branchCdComboList = dayProdStoreService.getUserBranchComboList(sessionInfoVO);
+        List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
         String branchCdComboListAll = "";
         if (branchCdComboList.isEmpty()) {
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
