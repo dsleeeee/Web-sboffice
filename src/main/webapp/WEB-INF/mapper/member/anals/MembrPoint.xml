@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    Point.xml
+    MembrPoint.xml
     회원 포인트실적
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_HDR_MEMBR, TB_SL_SALE_DTL, TB_MB_MEMBER
         COMMENTS : [매출]헤더_회원 와 [매출]상세, [회원]회원
     -->
-    <select id="getMembrPointList"  parameterType="membrPointVO" resultType="DefaultMap">
+    <select id="getMembrPointList" parameterType="membrPointVO" resultType="DefaultMap">
         /* MembrPointMapper.getMembrPointList */
         SELECT
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssd.STORE_CD) AS STORE_NM,
@@ -37,7 +37,7 @@
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                OR	tsshm.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                OR	tsshm.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
         AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -55,7 +55,7 @@
             ]]>
         </if>
         AND tsshm.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
-        AND tsshm.HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
         AND tsshm.HQ_BRAND_CD = tssd.HQ_BRAND_CD
         AND tsshm.STORE_CD = tssd.STORE_CD
         AND tsshm.SALE_DATE = tssd.SALE_DATE
@@ -95,4 +95,5 @@
             ]]>
         </if>
     </select>
+
 </mapper>

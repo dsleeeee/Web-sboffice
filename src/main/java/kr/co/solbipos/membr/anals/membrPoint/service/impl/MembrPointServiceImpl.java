@@ -56,6 +56,7 @@ public class MembrPointServiceImpl implements MembrPointService {
         LOGGER.debug("sessionInfoVO.getOrgnGrpCd(): {}", sessionInfoVO.getOrgnGrpCd());
 
         membrPointVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        membrPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
         membrPointVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         membrPointVO.setEmpNo(sessionInfoVO.getEmpNo());
 
