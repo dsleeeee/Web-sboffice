@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+var langFgReg = [
+    {"name":"국문","value":"0"},
+    {"name":"영문","value":"1"},
+    {"name":"중문","value":"2"},
+    {"name":"일문","value":"3"}
+];
+
 app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('verRegistCtrl', $scope, $http, true));
@@ -20,6 +27,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 콤보박스 데이터
   $scope._setComboData("useYnCombo", useYnData);
   $scope._setComboData("fileTypeCombo", fileTypeComboList);
+  $scope._setComboData("versionLangFgCombo", langFgReg);
 
   // 등록일자 셋팅
   var startDate = wcombo.genDateVal("#startDate", gvStartDate);
@@ -61,7 +69,10 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.isEdit = true;
       $scope.getVersionInfo();
     } else {
+      // 파일등록시, 사용여부 '사용'으로 기본 셋팅
       $scope.versionUseYnCombo.selectedValue = "Y";
+      // 파일등록시, 언어 '국문'으로 기본 셋팅
+      $scope.versionLangFgCombo.selectedValue = "0";
     }
     event.preventDefault();
   });
@@ -252,6 +263,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("fileSize", $scope.version.fileSize);
     formData.append("useYn", $scope.versionUseYnCombo.selectedValue);
     formData.append("dispTime", nvl($scope.version.dispTime, 3));
+    formData.append("langFg", $scope.versionLangFgCombo.selectedValue);
 
     var url = '';
 
@@ -329,6 +341,12 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 파일사이즈 변환하여 표기
       $scope.version.fileSize = getfileSize($scope.version.fileSize);
+
+      // 언어구분 값이 없는경우, '국문'으로 기본 셋팅
+      if($scope.version.langFg === null || $scope.version.langFg === undefined || $scope.version.langFg === ""){
+        $scope.version.langFg = "0";
+        $scope.versionLangFgCombo.selectedValue = "0";
+      }
     });
   };
 

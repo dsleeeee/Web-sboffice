@@ -188,6 +188,8 @@ public class MediaServiceImpl implements MediaService {
             mediaVO.setDispSeq(dispSeq);
             System.out.println("파일타입 : " +fileType + " / 동영상출력순서 : " + dispSeq);
 
+            mediaVO.setLangFg((String)multi.getParameter("langFg"));
+
             if(mediaMapper.verRegist(mediaVO) > 0) {
                 isSuccess = "0";
             } else {
@@ -261,6 +263,7 @@ public class MediaServiceImpl implements MediaService {
             mediaVO.setModId((String)multi.getParameter("userId"));
 
             mediaVO.setDispTime((String)multi.getParameter("dispTime"));
+            mediaVO.setLangFg((String)multi.getParameter("langFg"));
 
             mediaMapper.verModify(mediaVO);
 

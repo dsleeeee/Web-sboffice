@@ -113,8 +113,21 @@
                 <%-- 이미지출력시간 --%>
                 <th><s:message code="media.dispTime" /></th>
                 <td><input type="text" class="sb-input w100" id="dispTime" ng-model="version.dispTime"></td>
-                <th></th>
-                <td></td>
+                <%-- 언어구분 --%>
+                <th><s:message code="media.langFg" /></th>
+                <td>
+                    <div class="sb-select">
+                    <wj-combo-box
+                            id="langFg"
+                            ng-model="version.langFg"
+                            control="versionLangFgCombo"
+                            items-source="_getComboData('versionLangFgCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false">
+                    </wj-combo-box>
+                    </div>
+                </td>
               </tr>
               </tbody>
             </table>
@@ -143,4 +156,4 @@
   var userId       = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20231026.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20231102.01" charset="utf-8"></script>

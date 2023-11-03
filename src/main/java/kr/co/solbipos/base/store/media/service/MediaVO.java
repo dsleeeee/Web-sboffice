@@ -104,7 +104,8 @@ public class MediaVO extends PageVO {
     private String orgnCd;
     /** 원본 파일 명 */
     private String orginlFileNm;
-
+    /** 언어구분 */
+    private String langFg;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -517,5 +518,13 @@ public class MediaVO extends PageVO {
 
     public void setOrginlFileNm(String orginlFileNm) {
         this.orginlFileNm = orginlFileNm;
+    }
+
+    public String getLangFg() {
+        return langFg;
+    }
+
+    public void setLangFg(String langFg) {
+        this.langFg = langFg;
     }
 }

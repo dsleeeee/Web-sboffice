@@ -13,6 +13,14 @@
  */
 var app = agrid.getApp();
 
+var langFg = [
+    {"name":"전체","value":""},
+    {"name":"국문","value":"0"},
+    {"name":"영문","value":"1"},
+    {"name":"중문","value":"2"},
+    {"name":"일문","value":"3"}
+];
+
 /**********************************************************************
  *  미디어관리 그리드
  **********************************************************************/
@@ -26,6 +34,7 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("listScaleBox", gvListScaleBoxData);
   $scope._setComboData("useYn", useYn);
   $scope._setComboData("fileType", fileTypeComboListAll);
+  $scope._setComboData("langFg", langFg);
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -43,6 +52,7 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.initGrid = function (s, e) {
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.fileTypeDataMap = new wijmo.grid.DataMap(fileTypeComboList, 'value', 'name');
+    $scope.langFgDataMap = new wijmo.grid.DataMap(langFg, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -136,6 +146,7 @@ app.controller('mediaCtrl', ['$scope', '$http', function ($scope, $http) {
     params.useYn = $scope.useYn;
     params.fileType = $scope.fileType;
     params.fileOrgNm = $("#fileOrgNm").text();
+    params.langFg = $scope.langFg;
 
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');

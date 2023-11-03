@@ -13,7 +13,7 @@
     <div ng-controller="mediaPlaySeqCtrl">
 
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl"><s:message code="mediaPlaySeq.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -51,8 +51,8 @@
         </table>
 
         <%-- 그리드 --%>
-        <div class="w100 mt10 mb20">
-            <div class="updownSet oh mb10">
+        <div class="w100">
+            <div class="updownSet mt5">
                 <%-- UP --%>
                 <button class="btn_up" id="btnUp" ng-click="rowMoveUp()"><s:message code="cmm.up" /></button>
                 <%-- DOWN --%>
@@ -77,6 +77,7 @@
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.useDate"/>" binding="useDate" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.fileNm"/>" binding="fileOrgNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.fileType"/>" binding="fileUseType" data-map="fileTypeDataMap" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mediaPlaySeq.langFg"/>" binding="langFg" data-map="langFgDataMap" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.fileSize"/>" binding="fileSize" width="100" align="right" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.dispTime"/>" binding="dispTime" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
@@ -91,4 +92,4 @@
     var useYn = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaPlaySeq.js?ver=20231026.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaPlaySeq.js?ver=20231102.01" charset="utf-8"></script>

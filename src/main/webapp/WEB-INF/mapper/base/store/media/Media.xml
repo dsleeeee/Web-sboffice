@@ -35,7 +35,8 @@
                 A.FILE_NM AS FILE_NM_EXT,
                 A.FILE_EXT,
                 A.FILE_ORG_NM AS REAL_FILE_ORG_NM,
-                NVL(B.STORE_CNT, 0) AS STORE_CNT
+                NVL(B.STORE_CNT, 0) AS STORE_CNT,
+                A.LANG_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_POS_ADVER_FILE A,
                 (
@@ -65,6 +66,9 @@
                 <if test='startDate != null and startDate != ""'>
                     AND #{startDate} BETWEEN A.ADVER_S_DATE AND A.ADVER_E_DATE
                 </if>
+                <if test='langFg != null and langFg != ""'>
+                    AND A.LANG_FG = #{langFg}
+                </if>
                 AND A.FILE_USE_TYPE != '008'
                 AND B.ADVER_FILE_NO (+)= A.ADVER_FILE_NO
                 ORDER BY A.ADVER_FILE_NO DESC
@@ -83,7 +87,8 @@
                 A.FILE_ORG_NM || '.' || A.FILE_EXT AS FILE_ORG_NM,
                 A.DISP_SEQ,
                 A.DISP_TIME,
-                A.FILE_NM AS FILE_NM_EXT
+                A.FILE_NM AS FILE_NM_EXT,
+                A.LANG_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_POS_ADVER_FILE A
                 WHERE A.STORE_CD = #{storeCd}
@@ -104,6 +109,9 @@
                 </if>
                 <if test='startDate != null and startDate != ""'>
                     AND #{startDate} BETWEEN A.ADVER_S_DATE AND A.ADVER_E_DATE
+                </if>
+                <if test='langFg != null and langFg != ""'>
+                    AND A.LANG_FG = #{langFg}
                 </if>
                 AND A.FILE_USE_TYPE != '008'
                 ORDER BY A.ADVER_FILE_NO DESC
@@ -139,12 +147,13 @@
                 REG_DT,
                 DISP_TIME,
                 PROMOTION_CD,
-                NVL2(PROMOTION_CD,(SELECT PROMOTION_NM FROM TB_HQ_PROMO_H thph WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND thph.PROMOTION_CD = thpaf.PROMOTION_CD), '') AS PROMOTION_NM
+                NVL2(PROMOTION_CD,(SELECT PROMOTION_NM FROM TB_HQ_PROMO_H thph WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND thph.PROMOTION_CD = thpaf.PROMOTION_CD), '') AS PROMOTION_NM,
+                LANG_FG
           FROM TB_HQ_POS_ADVER_FILE thpaf
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND ADVER_FILE_NO = #{verSerNo}
         </when>
-        <!-- 본사 -->
+        <!-- 매장 -->
         <when test='orgnFg != null and orgnFg == "S"'>
             SELECT ADVER_FILE_NO AS VER_SER_NO,
                     FILE_USE_TYPE AS FILE_TYPE,
@@ -163,7 +172,8 @@
                     REG_DT,
                     DISP_TIME,
                     PROMOTION_CD,
-                    NVL2(PROMOTION_CD,(SELECT PROMOTION_NM FROM TB_MS_PROMO_H thph WHERE STORE_CD = #{storeCd} AND thph.PROMOTION_CD = tmpaf.PROMOTION_CD), '') AS PROMOTION_NM
+                    NVL2(PROMOTION_CD,(SELECT PROMOTION_NM FROM TB_MS_PROMO_H thph WHERE STORE_CD = #{storeCd} AND thph.PROMOTION_CD = tmpaf.PROMOTION_CD), '') AS PROMOTION_NM,
+                    LANG_FG
               FROM TB_MS_POS_ADVER_FILE tmpaf
              WHERE STORE_CD = #{storeCd}
                AND ADVER_FILE_NO = #{verSerNo}
@@ -244,7 +254,8 @@
                MOD_DT,
                MOD_ID,
                DISP_SEQ,
-               DISP_TIME
+               DISP_TIME,
+               LANG_FG
             )
             VALUES
             (
@@ -267,7 +278,8 @@
                 #{modDt},
                 #{modId},
                 #{dispSeq},
-                #{dispTime}
+                #{dispTime},
+                #{langFg}
             )
             ]]>
         </if>
@@ -295,7 +307,8 @@
                MOD_DT,
                MOD_ID,
                DISP_SEQ,
-               DISP_TIME
+               DISP_TIME,
+               LANG_FG
             )
             VALUES
             (
@@ -319,7 +332,8 @@
                 #{modDt},
                 #{modId},
                 #{dispSeq},
-                #{dispTime}
+                #{dispTime},
+                #{langFg}
             )
             ]]>
         </if>
@@ -353,7 +367,8 @@
                USE_YN           = #{useYn},
                MOD_DT           = #{modDt},
                MOD_ID           = #{modId},
-               DISP_TIME        = #{dispTime}
+               DISP_TIME        = #{dispTime},
+               LANG_FG          = #{langFg}
          WHERE HQ_OFFICE_CD     = #{hqOfficeCd}
            AND ADVER_FILE_NO    = #{verSerNo}
          ]]>
@@ -379,7 +394,8 @@
                USE_YN           = #{useYn},
                MOD_DT           = #{modDt},
                MOD_ID           = #{modId},
-               DISP_TIME        = #{dispTime}
+               DISP_TIME        = #{dispTime},
+               LANG_FG          = #{langFg}
          WHERE STORE_CD         = #{storeCd}
            AND ADVER_FILE_NO    = #{verSerNo}
          ]]>
@@ -669,7 +685,8 @@
                 USE_YN,
                 FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
                 DISP_TIME,
-                DISP_SEQ
+                DISP_SEQ,
+                LANG_FG
                 FROM TB_HQ_POS_ADVER_FILE
                 WHERE 1=1
                 AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -687,7 +704,8 @@
                 USE_YN,
                 FILE_ORG_NM || '.' || FILE_EXT AS FILE_ORG_NM,
                 DISP_TIME,
-                DISP_SEQ
+                DISP_SEQ,
+                LANG_FG
                 FROM TB_MS_POS_ADVER_FILE
                 WHERE 1=1
                 AND STORE_CD = #{storeCd}

@@ -90,6 +90,24 @@
                 <th><s:message code="media.promotionNm" /></th>
                 <td>{{version.promotionNm}}</td>
               </tr>
+              <tr>
+                  <%-- 언어구분 --%>
+                  <th><s:message code="media.langFg" /></th>
+                  <td>
+                      <wj-combo-box
+                          ng-model="version.langFg"
+                          ng-hide="true"
+                          text="_langFg"
+                          items-source="_getComboData('langFgCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false">
+                      </wj-combo-box>
+                    {{_langFg}}
+                  </td>
+                  <th></th>
+                  <td></td>
+              </tr>
               </tbody>
             </table>
           </f:form>
@@ -111,6 +129,6 @@
   var useYn       = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verInfoDtl.js?ver=20231026.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verInfoDtl.js?ver=20231102.01" charset="utf-8"></script>
 
 

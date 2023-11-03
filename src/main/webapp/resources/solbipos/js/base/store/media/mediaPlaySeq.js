@@ -40,6 +40,7 @@ app.controller('mediaPlaySeqCtrl', ['$scope', '$http', function ($scope, $http) 
         // 그리드 DataMap 설정
         $scope.fileTypeDataMap = new wijmo.grid.DataMap(fileTypeMediaPlaySeqComboData, 'value', 'name'); // 파일타입
         $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name'); // 사용여부
+        $scope.langFgDataMap = new wijmo.grid.DataMap(langFg, 'value', 'name'); // 언어구분
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {

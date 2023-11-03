@@ -13,6 +13,14 @@
  */
 var app = agrid.getApp();
 
+var langFgDtl = [
+    {"name":"","value":null},
+    {"name":"국문","value":"0"},
+    {"name":"영문","value":"1"},
+    {"name":"중문","value":"2"},
+    {"name":"일문","value":"3"}
+];
+
 /**********************************************************************
  *  회원정보 그리드
  **********************************************************************/
@@ -23,6 +31,7 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 콤보박스 데이터
   $scope._setComboData("useYnCombo", useYn);
   $scope._setComboData("fileTypeCombo", fileType);
+  $scope._setComboData("langFgCombo", langFgDtl);
 
   // 버전정보
   $scope.version;

@@ -92,6 +92,25 @@
           </div>
         </td>
       </tr>
+      <tr>
+          <%-- 언어구분 --%>
+          <th><s:message code="media.langFg" /></th>
+          <td>
+              <div class="sb-select">
+                  <wj-combo-box
+                          id="langFgCombo"
+                          ng-model="langFg"
+                          items-source="_getComboData('langFg')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          initialized="_initComboBox(s)">
+                  </wj-combo-box>
+              </div>
+          </td>
+          <th></th>
+          <td></td>
+      </tr>
     </tbody>
   </table>
 
@@ -133,6 +152,7 @@
         <wj-flex-grid-column header="<s:message code="media.useDate"/>" binding="useDate" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.fileNm"/>" binding="fileOrgNm" data-map="fileTypeDataMap" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.fileType"/>" binding="fileUseType" data-map="fileTypeDataMap" width="135" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="media.langFg"/>" binding="langFg" data-map="langFgDataMap" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="media.fileSize"/>" binding="fileSize"  width="100" align="right" is-read-only="true"></wj-flex-grid-column>
 <%--        <wj-flex-grid-column header="<s:message code="media.regCnt"/>" binding="regCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
 <%--        <wj-flex-grid-column header="<s:message code="media.recvCnt"/>" binding="recvCnt" align="center" width="80"  is-read-only="true"></wj-flex-grid-column>--%>
@@ -175,7 +195,7 @@
   var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20231026.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/media.js?ver=20231102.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/media/verInfoDtl.jsp">
