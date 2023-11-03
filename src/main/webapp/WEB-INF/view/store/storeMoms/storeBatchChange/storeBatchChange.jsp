@@ -47,7 +47,7 @@
             </tr>
             <tr>
                 <%-- 매장브랜드 --%>
-                <th><s:message code="dayProd.storeHqBrand"/></th>
+                <th><s:message code="cmm.moms.storeHqBrand"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -75,8 +75,8 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                            <%-- 팀별 --%>
-                        <th><s:message code="dayProd.momsTeam"/></th>
+                        <%-- 팀별 --%>
+                        <th><s:message code="cmm.moms.momsTeam"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -91,8 +91,8 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-                            <%-- AC점포별 --%>
-                        <th><s:message code="dayProd.momsAcShop"/></th>
+                        <%-- AC점포별 --%>
+                        <th><s:message code="cmm.moms.momsAcShop"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -109,8 +109,8 @@
                         </td>
                     </tr>
                     <tr>
-                            <%-- 지역구분 --%>
-                        <th><s:message code="dayProd.momsAreaFg"/></th>
+                        <%-- 지역구분 --%>
+                        <th><s:message code="cmm.moms.momsAreaFg"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -125,8 +125,8 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-                            <%-- 상권 --%>
-                        <th><s:message code="dayProd.momsCommercial"/></th>
+                        <%-- 상권 --%>
+                        <th><s:message code="cmm.moms.momsCommercial"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -143,8 +143,8 @@
                         </td>
                     </tr>
                     <tr>
-                            <%-- 점포유형 --%>
-                        <th><s:message code="dayProd.momsShopType"/></th>
+                        <%-- 점포유형 --%>
+                        <th><s:message code="cmm.moms.momsShopType"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -159,8 +159,8 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-                            <%-- 매장관리타입 --%>
-                        <th><s:message code="dayProd.momsStoreManageType"/></th>
+                        <%-- 매장관리타입 --%>
+                        <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -177,8 +177,8 @@
                         </td>
                     </tr>
                     <tr>
-                            <%-- 그룹 --%>
-                        <th><s:message code="dayProd.branchCd"/></th>
+                        <%-- 그룹 --%>
+                        <th><s:message code="cmm.moms.branch"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -193,8 +193,28 @@
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <td></td>
-                        <td></td>
+                        <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                            <%-- 매장그룹 --%>
+                            <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMomsStoreFg01Combo"
+                                            ng-model="momsStoreFg01"
+                                            items-source="_getComboData('momsStoreFg01Combo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMomsStoreFg01Combo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </c:if>
+                        <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                            <td></td>
+                            <td></td>
+                        </c:if>
                     </tr>
                     </tbody>
                 </table>
@@ -219,7 +239,7 @@
             <tr class="brt">
                 <%-- 그룹 --%>
                 <th>
-                    <s:message code="storeBatchChange.branchCd" />
+                    <s:message code="cmm.moms.branch" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -240,7 +260,7 @@
                 </td>
                 <%-- 팀별 --%>
                 <th>
-                    <s:message code="storeBatchChange.momsTeam" />
+                    <s:message code="cmm.moms.momsTeam" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -263,7 +283,7 @@
             <tr>
                 <%-- AC점포별 --%>
                 <th>
-                    <s:message code="storeBatchChange.momsAcShop" />
+                    <s:message code="cmm.moms.momsAcShop" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -276,6 +296,7 @@
                                 is-editable="false"
                                 initialized="_initComboBox(s)">
                         </wj-combo-box>
+                    </div>
                 </td>
                 <%-- 일괄적용 --%>
                 <td>
@@ -283,7 +304,7 @@
                 </td>
                 <%-- 지역구분 --%>
                 <th>
-                    <s:message code="storeBatchChange.momsAreaFg" />
+                    <s:message code="cmm.moms.momsAreaFg" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -306,7 +327,7 @@
             <tr>
                 <%-- 상권 --%>
                 <th>
-                    <s:message code="storeBatchChange.momsCommercial" />
+                    <s:message code="cmm.moms.momsCommercial" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -327,7 +348,7 @@
                 </td>
                 <%-- 점포유형 --%>
                 <th>
-                    <s:message code="storeBatchChange.momsShopType" />
+                    <s:message code="cmm.moms.momsShopType" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -350,7 +371,7 @@
             <tr>
                 <%-- 매장관리타입 --%>
                 <th>
-                    <s:message code="storeBatchChange.momsStoreManageType" />
+                    <s:message code="cmm.moms.momsStoreManageType" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -369,6 +390,32 @@
                 <td>
                     <a href="#" class="btn_grayS ml10" ng-click="batchChange('momsStoreManageTypeChg')"><s:message code="cmm.batchChange" /></a>
                 </td>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <%-- 매장그룹 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg01Chg"
+                                    ng-model="momsStoreFg01Chg"
+                                    items-source="_getComboData('momsStoreFg01ChgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 일괄적용 --%>
+                    <td>
+                        <a href="#" class="btn_grayS ml10" ng-click="batchChange('momsStoreFg01Chg')"><s:message code="cmm.batchChange" /></a>
+                    </td>
+                </c:if>
+                <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </c:if>
             </tr>
             </tbody>
         </table>
@@ -395,13 +442,16 @@
                     <wj-flex-grid-column header="<s:message code="storeBatchChange.ownerNm"/>" binding="ownerNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeBatchChange.hqBrandCd"/>" binding="hqBrandCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storeBatchChange.bizNo"/>" binding="bizNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeBatchChange.branchCd"/>" binding="branchCd" data-map="branchCdDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeBatchChange.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="100" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeBatchChange.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeBatchChange.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeBatchChange.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeBatchChange.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeBatchChange.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.branch"/>" binding="branchCd" data-map="branchCdDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="100" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center"></wj-flex-grid-column>
+                    </c:if>
                 </wj-flex-grid>
             </div>
         </div>
@@ -415,4 +465,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChange.js?ver=20230413.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChange.js?ver=20231101.01" charset="utf-8"></script>

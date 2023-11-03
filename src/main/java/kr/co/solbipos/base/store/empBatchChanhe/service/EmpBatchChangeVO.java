@@ -91,6 +91,9 @@ public class EmpBatchChangeVO extends PageVO {
     private IncldExcldFg incldExcldFg;
     private String useYn;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -314,4 +317,8 @@ public class EmpBatchChangeVO extends PageVO {
     public void setUseYn(String useYn) {
         this.useYn = useYn;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

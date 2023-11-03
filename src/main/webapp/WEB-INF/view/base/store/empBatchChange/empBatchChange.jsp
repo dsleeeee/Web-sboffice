@@ -65,140 +65,160 @@
 <%--            </tr>--%>
             </tbody>
         </table>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
-                    <colgroup>
-                        <col class="w15"/>
-                        <col class="w35"/>
-                        <col class="w15"/>
-                        <col class="w35"/>
-                    </colgroup>
-                    <tbody>
-                    <tr>
-                            <%-- 팀별 --%>
-                        <th><s:message code="dayProd.momsTeam"/></th>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
+                <colgroup>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                </colgroup>
+                <tbody>
+                <tr>
+                    <%-- 팀별 --%>
+                    <th><s:message code="cmm.moms.momsTeam"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsTeamCombo"
+                                    ng-model="momsTeam"
+                                    items-source="_getComboData('momsTeamCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsTeamCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- AC점포별 --%>
+                    <th><s:message code="cmm.moms.momsAcShop"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsAcShopCombo"
+                                    ng-model="momsAcShop"
+                                    items-source="_getComboData('momsAcShopCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsAcShopCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 지역구분 --%>
+                    <th><s:message code="cmm.moms.momsAreaFg"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsAreaFgCombo"
+                                    ng-model="momsAreaFg"
+                                    items-source="_getComboData('momsAreaFgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsAreaFgCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 상권 --%>
+                    <th><s:message code="cmm.moms.momsCommercial"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsCommercialCombo"
+                                    ng-model="momsCommercial"
+                                    items-source="_getComboData('momsCommercialCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsCommercialCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 점포유형 --%>
+                    <th><s:message code="cmm.moms.momsShopType"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsShopTypeCombo"
+                                    ng-model="momsShopType"
+                                    items-source="_getComboData('momsShopTypeCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsShopTypeCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장관리타입 --%>
+                    <th><s:message code="cmm.moms.momsStoreManageType"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreManageTypeCombo"
+                                    ng-model="momsStoreManageType"
+                                    items-source="_getComboData('momsStoreManageTypeCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreManageTypeCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 그룹 --%>
+                    <th><s:message code="cmm.moms.branch"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchBranchCdComboo"
+                                    ng-model="branchCd"
+                                    items-source="_getComboData('branchCdCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchBranchCdComboo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                        <%-- 매장그룹 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg01"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="srchMomsTeamCombo"
-                                        ng-model="momsTeam"
-                                        items-source="_getComboData('momsTeamCombo')"
+                                        id="srchMomsStoreFg01Combo"
+                                        ng-model="momsStoreFg01"
+                                        items-source="_getComboData('momsStoreFg01Combo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
                                         initialized="_initComboBox(s)"
-                                        control="srchMomsTeamCombo">
+                                        control="srchMomsStoreFg01Combo">
                                 </wj-combo-box>
                             </div>
                         </td>
-                            <%-- AC점포별 --%>
-                        <th><s:message code="dayProd.momsAcShop"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchMomsAcShopCombo"
-                                        ng-model="momsAcShop"
-                                        items-source="_getComboData('momsAcShopCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchMomsAcShopCombo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                            <%-- 지역구분 --%>
-                        <th><s:message code="dayProd.momsAreaFg"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchMomsAreaFgCombo"
-                                        ng-model="momsAreaFg"
-                                        items-source="_getComboData('momsAreaFgCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchMomsAreaFgCombo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                            <%-- 상권 --%>
-                        <th><s:message code="dayProd.momsCommercial"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchMomsCommercialCombo"
-                                        ng-model="momsCommercial"
-                                        items-source="_getComboData('momsCommercialCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchMomsCommercialCombo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                            <%-- 점포유형 --%>
-                        <th><s:message code="dayProd.momsShopType"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchMomsShopTypeCombo"
-                                        ng-model="momsShopType"
-                                        items-source="_getComboData('momsShopTypeCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchMomsShopTypeCombo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                            <%-- 매장관리타입 --%>
-                        <th><s:message code="dayProd.momsStoreManageType"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchMomsStoreManageTypeCombo"
-                                        ng-model="momsStoreManageType"
-                                        items-source="_getComboData('momsStoreManageTypeCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchMomsStoreManageTypeCombo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                            <%-- 그룹 --%>
-                        <th><s:message code="dayProd.branchCd"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchBranchCdComboo"
-                                        ng-model="branchCd"
-                                        items-source="_getComboData('branchCdCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchBranchCdComboo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
+                    </c:if>
+                    <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
                         <td></td>
                         <td></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </c:if>
+                    </c:if>
+                </tr>
+                </tbody>
+            </table>
+        </c:if>
 
         <div class="mt10 oh sb-select dkbr">
             <%-- 저장 --%>
@@ -219,7 +239,7 @@
             <tr class="brt">
                 <%-- 그룹 --%>
                 <th>
-                    <s:message code="empBatchChange.branchCd" />
+                    <s:message code="cmm.moms.branch" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -240,7 +260,7 @@
                 </td>
                 <%-- 팀별 --%>
                 <th>
-                    <s:message code="empBatchChange.momsTeam" />
+                    <s:message code="cmm.moms.momsTeam" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -263,7 +283,7 @@
             <tr>
                 <%-- AC점포별 --%>
                 <th>
-                    <s:message code="empBatchChange.momsAcShop" />
+                    <s:message code="cmm.moms.momsAcShop" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -276,6 +296,7 @@
                                 is-editable="false"
                                 initialized="_initComboBox(s)">
                         </wj-combo-box>
+                    </div>
                 </td>
                 <%-- 일괄적용 --%>
                 <td>
@@ -283,7 +304,7 @@
                 </td>
                 <%-- 지역구분 --%>
                 <th>
-                    <s:message code="empBatchChange.momsAreaFg" />
+                    <s:message code="cmm.moms.momsAreaFg" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -306,7 +327,7 @@
             <tr>
                 <%-- 상권 --%>
                 <th>
-                    <s:message code="empBatchChange.momsCommercial" />
+                    <s:message code="cmm.moms.momsCommercial" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -327,7 +348,7 @@
                 </td>
                 <%-- 점포유형 --%>
                 <th>
-                    <s:message code="empBatchChange.momsShopType" />
+                    <s:message code="cmm.moms.momsShopType" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -350,7 +371,7 @@
             <tr>
                 <%-- 매장관리타입 --%>
                 <th>
-                    <s:message code="empBatchChange.momsStoreManageType" />
+                    <s:message code="cmm.moms.momsStoreManageType" />
                 </th>
                 <td>
                     <div class="sb-select">
@@ -369,6 +390,32 @@
                 <td>
                     <a href="#" class="btn_grayS ml10" ng-click="batchChange('momsStoreManageTypeChg')"><s:message code="cmm.batchChange" /></a>
                 </td>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <%-- 매장그룹 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg01Chg"
+                                    ng-model="momsStoreFg01Chg"
+                                    items-source="_getComboData('momsStoreFg01ChgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 일괄적용 --%>
+                    <td>
+                        <a href="#" class="btn_grayS ml10" ng-click="batchChange('momsStoreFg01Chg')"><s:message code="cmm.batchChange" /></a>
+                    </td>
+                </c:if>
+                <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </c:if>
             </tr>
             </tbody>
         </table>
@@ -393,13 +440,16 @@
                     <wj-flex-grid-column header="<s:message code="empBatchChange.empNo"/>" binding="empNo" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="empBatchChange.empNm"/>" binding="empNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="empBatchChange.userId"/>" binding="userId" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empBatchChange.branchCd"/>" binding="branchCd" data-map="branchCdDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="100" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="90" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="empBatchChange.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.branch"/>" binding="branchCd" data-map="branchCdDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="100" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center"></wj-flex-grid-column>
+                    </c:if>
                 </wj-flex-grid>
             </div>
         </div>
@@ -413,4 +463,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChange.js?ver=20230413.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChange.js?ver=20231101.01" charset="utf-8"></script>

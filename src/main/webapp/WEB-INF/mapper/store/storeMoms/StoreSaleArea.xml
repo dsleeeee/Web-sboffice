@@ -77,8 +77,10 @@
         <if test='areaUseYn != null and areaUseYn != ""'>
             AND NVL2(SALE_AREA, 'Y', 'N') = #{areaUseYn}
         </if>
-        ORDER
-           BY tms.STORE_CD
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        ORDER BY tms.STORE_CD
       <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

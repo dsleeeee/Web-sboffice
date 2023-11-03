@@ -22,6 +22,7 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 사원관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -33,6 +34,7 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.momsCommercialDataMap = new wijmo.grid.DataMap(momsCommercialComboList2, 'value', 'name'); // 상권
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList2, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList2, 'value', 'name'); // 매장관리타입
+        $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList2, 'value', 'name'); // 매장그룹
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -102,6 +104,7 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
         //     }
         //     params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
         // }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquirySub("/base/store/empBatchChange/copyAuthorExcept/getEmpList2.sb", params, function (){
@@ -138,6 +141,7 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
     $scope._setComboData("momsShopTypeCombo2", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo2", momsStoreManageTypeComboList); // 사원관리타입
     $scope._setComboData("branchCdCombo2", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo2", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -149,6 +153,7 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
         $scope.momsCommercialDataMap = new wijmo.grid.DataMap(momsCommercialComboList2, 'value', 'name'); // 상권
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList2, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList2, 'value', 'name'); // 매장관리타입
+        $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList2, 'value', 'name'); // 매장그룹
     };
 
     $scope.$on("copyAuthorExcept2Ctrl", function (event, data) {
@@ -186,6 +191,7 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
         //     }
         //     params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
         // }
+        params.momsStoreFg01 = $scope.momsStoreFg012;
         console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -194,7 +200,6 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
 
     // 복사
     $scope.saveCopyAuthorExcept = function () {
-        
         if($("#orgEmpNo").val() === ""){
             $scope._popMsg(messages["empBatchChange.original.emp"] + messages["cmm.require.select"]); // 기준사원을 선택해주세요.
             return false;
@@ -212,15 +217,12 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
         }
 
         $scope._popConfirm(messages["empBatchChange.copy.msg1"], function() {
-
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
-
                     $scope.flex.collectionView.items[i].originalEmpNo = $("#orgEmpNo").val();
                     $scope.flex.collectionView.items[i].targetEmpNo = $scope.flex.collectionView.items[i].empNo;
-
                     params.push($scope.flex.collectionView.items[i]);
                 }
             }

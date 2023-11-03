@@ -19,6 +19,7 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
   $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+  $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
   // // 팀별
   // if(momsTeamComboList.length <= 1) {
@@ -210,6 +211,7 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
       }
       params.userBrands = momsHqBrandCd;
     }
+    params.momsStoreFg01 = $scope.momsStoreFg01;
     params.listScale = 500;
 
     console.log(params);
@@ -260,6 +262,7 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
       }
       params.userBrands = momsHqBrandCd;
     }
+    params.momsStoreFg01 = $scope.momsStoreFg01;
 
     $scope._broadcast('todayMomsExcelCtrl',params);
   }

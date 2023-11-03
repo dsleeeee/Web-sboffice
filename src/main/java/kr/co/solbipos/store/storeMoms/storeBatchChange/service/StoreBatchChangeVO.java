@@ -78,6 +78,9 @@ public class StoreBatchChangeVO extends PageVO {
     /** 명칭코드그룹코드 */
     private String nmcodeGrpCd;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -245,4 +248,8 @@ public class StoreBatchChangeVO extends PageVO {
     public void setNmcodeGrpCd(String nmcodeGrpCd) {
         this.nmcodeGrpCd = nmcodeGrpCd;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

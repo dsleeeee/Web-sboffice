@@ -30,6 +30,7 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     $scope._setComboData("momsTeamChgCombo", momsTeamComboList3); // 팀별
     $scope._setComboData("momsAcShopChgCombo", momsAcShopComboList3); // AC점포별
@@ -38,10 +39,10 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
     $scope._setComboData("momsShopTypeChgCombo", momsShopTypeComboList3); // 점포유형
     $scope._setComboData("momsStoreManageTypeChgCombo", momsStoreManageTypeComboList3); // 매장관리타입
     $scope._setComboData("branchCdChgCombo", branchCdComboList3); // 그룹
+    $scope._setComboData("momsStoreFg01ChgCombo", momsStoreFg01ComboList3); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         // 그리드 DataMap 설정
         $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList2, 'value', 'name'); // 그룹
         $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList2, 'value', 'name'); // 팀별
@@ -50,13 +51,13 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
         $scope.momsCommercialDataMap = new wijmo.grid.DataMap(momsCommercialComboList2, 'value', 'name'); // 상권
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList2, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList2, 'value', 'name'); // 매장관리타입
+        $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList2, 'value', 'name'); // 매장그룹
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
             var ht = s.hitTest(e);
             s.allowSorting = false;
         });
-
 
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -65,7 +66,7 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
                 // 가격 변경시 체크박스 체크
                 if (col.binding === "branchCd" || col.binding === "momsTeam" || col.binding === "momsAcShop"
                     || col.binding === "momsAreaFg" || col.binding === "momsCommercial" || col.binding === "momsShopType"
-                    || col.binding === "momsStoreManageType") {
+                    || col.binding === "momsStoreManageType" || col.binding === "momsStoreFg01") {
                     $scope.checked(item);
                 }
             }
@@ -76,7 +77,7 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
     //수정시 체크박스 체크
     $scope.checked = function (item){
         item.gChk = true;
-    }
+    };
 
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
@@ -115,6 +116,7 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
         //     }
         //     params.userBrands = momsHqBrandCd;
         // }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.listScale = 500;
         console.log(params);
 
@@ -169,6 +171,10 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
                 // 매장관리타입
                 else if(chgGubun == "momsStoreManageTypeChg") {
                     $scope.flex.collectionView.items[i].momsStoreManageType = $scope.momsStoreManageTypeChg;
+                }
+                // 매장그룹
+                else if(chgGubun == "momsStoreFg01Chg") {
+                    $scope.flex.collectionView.items[i].momsStoreFg01 = $scope.momsStoreFg01Chg;
                 }
             }
         }

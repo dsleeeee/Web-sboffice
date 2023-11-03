@@ -30,6 +30,7 @@
         ,		the.MOMS_COMMERCIAL
         ,		the.MOMS_SHOP_TYPE
         ,		the.MOMS_STORE_MANAGE_TYPE
+        ,       the.MOMS_STORE_FG_01
     <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_HQ_EMPLOYEE the
         WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -72,6 +73,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND the.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND the.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         ORDER
         BY the.EMP_NO
     <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -95,6 +99,7 @@
         ,		the.MOMS_COMMERCIAL
         ,		the.MOMS_SHOP_TYPE
         ,		the.MOMS_STORE_MANAGE_TYPE
+        ,       the.MOMS_STORE_FG_01
         FROM    TB_HQ_EMPLOYEE the
         WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     the.WEB_USE_YN = 'Y'
@@ -140,6 +145,9 @@
         <if test='originalEmpNo != null and originalEmpNo != ""'>
             AND the.EMP_NO != #{originalEmpNo}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND the.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         ORDER
         BY the.EMP_NO
     </select>
@@ -160,7 +168,8 @@
                 MOMS_SHOP_TYPE = #{momsShopType},
                 MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
                 MOD_DT = #{modDt},
-                MOD_ID = #{modId}
+                MOD_ID = #{modId},
+                MOMS_STORE_FG_01 = #{momsStoreFg01}
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
         AND     EMP_NO = #{empNo}
     </update>
@@ -462,4 +471,5 @@
         AND the.EMP_NO = #{targetEmpNo}
         AND twu.USER_ID = the.USER_ID)
     </delete>
+
 </mapper>
