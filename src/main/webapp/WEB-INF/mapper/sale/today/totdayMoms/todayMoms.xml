@@ -169,6 +169,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         AND     tsshp.STORE_CD    (+) = tssh.STORE_CD
         AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE
         AND     tsshp.POS_NO      (+) = tssh.POS_NO
@@ -347,6 +350,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         AND     tsshp.STORE_CD    (+) = tssh.STORE_CD
         AND     tsshp.SALE_DATE   (+) = tssh.SALE_DATE

@@ -31,6 +31,7 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 
     // 콤보박스 데이터
     var branchCdComboList2 = ${branchCdComboList2};
@@ -40,6 +41,7 @@
     var momsCommercialComboList2 = ${momsCommercialComboList2};
     var momsShopTypeComboList2 = ${momsShopTypeComboList2};
     var momsStoreManageTypeComboList2 = ${momsStoreManageTypeComboList2};
+    var momsStoreFg01ComboList2 = ${momsStoreFg01ComboList2};
 
     // 콤보박스 데이터(선택)
     var branchCdComboList3 = ${branchCdComboList3};
@@ -49,6 +51,7 @@
     var momsCommercialComboList3 = ${momsCommercialComboList3};
     var momsShopTypeComboList3 = ${momsShopTypeComboList3};
     var momsStoreManageTypeComboList3 = ${momsStoreManageTypeComboList3};
+    var momsStoreFg01ComboList3 = ${momsStoreFg01ComboList3};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeTab.js?ver=20230117.01" charset="utf-8"></script>

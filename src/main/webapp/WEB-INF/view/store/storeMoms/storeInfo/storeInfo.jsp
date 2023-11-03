@@ -276,7 +276,9 @@
         <wj-flex-grid-column header="<s:message code="cmm.moms.momsCommercial"/>" binding="momsCommercial" width="80" align="left" is-read-only="true" data-map="momsCommercialDataMap" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="cmm.moms.momsShopType"/>" binding="momsShopType" width="80" align="left" is-read-only="true" data-map="momsShopTypeDataMap" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" width="80" align="left" is-read-only="true" data-map="momsStoreManageTypeDataMap" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" width="80" align="left" is-read-only="true" data-map="momsStoreFg01DataMap" ></wj-flex-grid-column>
+        <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+            <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" width="80" align="left" is-read-only="true" data-map="momsStoreFg01DataMap" ></wj-flex-grid-column>
+        </c:if>
         <wj-flex-grid-column header="<s:message code="storeManage.storeLocation"/>" binding="storeLocation" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
