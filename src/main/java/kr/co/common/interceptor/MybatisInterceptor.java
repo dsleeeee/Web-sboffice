@@ -72,6 +72,7 @@ public class MybatisInterceptor implements Interceptor {
         str.append(sqlId).append(":" + "\n");
         str.append(sql + "\n");
         str.append("query time:").append(time).append("ms");
+        if(time > (60 * 1000)) str.append("\n" + "query time - check over 60 second - kjs: ").append(time).append("ms, sqlId : ").append(sqlId).append("\n"); // 60초 이상 체크함
         return str.toString();
     }
 

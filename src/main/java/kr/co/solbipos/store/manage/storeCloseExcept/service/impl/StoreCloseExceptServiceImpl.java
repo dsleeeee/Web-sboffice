@@ -53,6 +53,17 @@ public class StoreCloseExceptServiceImpl implements StoreCloseExceptService {
     /** 매장 조회 */
     @Override
     public List<DefaultMap<String>> getStoreCloseExceptList(StoreCloseExceptVO storeCloseExceptVO, SessionInfoVO sessionInfoVO) {
+/*
+        try{
+            System.out.println("시간지연으로 타임아웃 체크중 kjs try sleep:");
+            Thread.sleep(1000 * 120);       // 120초 지연 처리
+        }catch(InterruptedException e){
+            System.out.println("시간지연으로 타임아웃 체크중 kjs try sleep: catch :InterruptedException 발생 e: "+ e);
+            e.printStackTrace();
+        }
+
+        System.out.println("시간지연으로 타임아웃 체크중 kjs try out:");
+*/
         return storeCloseExceptMapper.getStoreCloseExceptList(storeCloseExceptVO);
     }
 
