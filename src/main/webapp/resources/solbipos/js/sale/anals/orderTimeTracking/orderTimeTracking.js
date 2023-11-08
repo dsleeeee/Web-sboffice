@@ -53,6 +53,7 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -87,7 +88,6 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
             params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
-
             // 선택한 매장브랜드가 없을 때('전체' 일때)
             if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
                 var momsHqBrandCd = "";
@@ -98,6 +98,7 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
                 }
                 params.userBrands = momsHqBrandCd;
             }
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         console.log(params);
@@ -140,7 +141,6 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
             params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
-
             // 선택한 매장브랜드가 없을 때('전체' 일때)
             if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
                 var momsHqBrandCd = "";
@@ -151,6 +151,7 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
                 }
                 params.userBrands = momsHqBrandCd;
             }
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         console.log(params);

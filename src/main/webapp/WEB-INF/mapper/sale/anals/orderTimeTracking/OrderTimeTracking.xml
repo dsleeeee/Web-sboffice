@@ -91,7 +91,10 @@
        <if test='branchCd != null and branchCd != ""'>
            AND tms.BRANCH_CD = #{branchCd}
        </if>
-         ORDER BY tpot.CHANNEL_REG_DT DESC, tpot.POS_REG_DT DESC
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        ORDER BY tpot.CHANNEL_REG_DT DESC, tpot.POS_REG_DT DESC
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -172,7 +175,10 @@
        <if test='branchCd != null and branchCd != ""'>
            AND tms.BRANCH_CD = #{branchCd}
        </if>
-         ORDER BY tpot.CHANNEL_REG_DT DESC, tpot.POS_REG_DT DESC
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        ORDER BY tpot.CHANNEL_REG_DT DESC, tpot.POS_REG_DT DESC
     </select>
 
 </mapper>

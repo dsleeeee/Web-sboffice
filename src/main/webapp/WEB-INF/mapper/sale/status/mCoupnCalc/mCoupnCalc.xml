@@ -69,12 +69,12 @@
                         <if test='orgnFg != null and orgnFg == "H"'>
                             AND (
                                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                                OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                                 )
                         </if>
                         <if test='posNo != null and posNo != ""'>
                             AND STORE_CD||'||'||POS_NO IN
-                            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
                                 #{item}
                             </foreach>
                         </if>
@@ -108,12 +108,12 @@
                         <if test='orgnFg != null and orgnFg == "H"'>
                             AND (
                                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                                OR	STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                OR	STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                                 )
                         </if>
                         <if test='posNo != null and posNo != ""'>
                             AND STORE_CD||'||'||POS_NO IN
-                            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
                                 #{item}
                             </foreach>
                         </if>
@@ -176,6 +176,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
        GROUP
        BY    tms.BRANCH_CD
@@ -252,7 +255,7 @@
                         </if>
                         <if test='posNo != null and posNo != ""'>
                             AND STORE_CD||'||'||POS_NO IN
-                            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
                                 #{item}
                             </foreach>
                         </if>
@@ -291,7 +294,7 @@
                         </if>
                         <if test='posNo != null and posNo != ""'>
                             AND STORE_CD||'||'||POS_NO IN
-                            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+                            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
                                 #{item}
                             </foreach>
                         </if>
@@ -355,6 +358,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
        GROUP
        BY    tms.BRANCH_CD
        ,     tsspm2.STORE_CD
@@ -405,12 +411,12 @@
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                OR	tsspm.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                OR	tsspm.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
         <if test='posNo != null and posNo != ""'>
             AND tsspm.STORE_CD||'||'||tsspm.POS_NO IN
-            <foreach collection="arrPosNo" item="item" open="("  separator="," close=")">
+            <foreach collection="arrPosNo" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
@@ -461,6 +467,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
     </select>
 

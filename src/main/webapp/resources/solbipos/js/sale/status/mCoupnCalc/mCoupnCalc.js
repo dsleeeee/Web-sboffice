@@ -48,6 +48,7 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -99,6 +100,7 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
                   params.momsShopType = $scope.momsShopType;
                   params.momsStoreManageType = $scope.momsStoreManageType;
                   params.branchCd = selectedRow.branchCd;
+                  params.momsStoreFg01 = $scope.momsStoreFg01;
               }
 
               // '전체' 일때
@@ -136,8 +138,8 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
         dataItem.storeCd = messages["mCoupnCalc.storeCd"];
         dataItem.storeNm = messages["mCoupnCalc.storeNm"];
         dataItem.brandCd = messages["mCoupnCalc.brandCd"];
-        dataItem.momsTeam = messages["mCoupnCalc.momsTeam"];
-        dataItem.momsAcShop = messages["mCoupnCalc.momsAcShop"];
+        dataItem.momsTeam = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop = messages["cmm.moms.momsAcShop"];
         dataItem.mcoupnCd = messages["mCoupnCalc.coupnCd"];
         dataItem.mcoupnNm = messages["mCoupnCalc.coupnNm"];
         dataItem.cnt = messages["cmm.all"];
@@ -235,6 +237,7 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.momsShopType = $scope.momsShopType;
             params.momsStoreManageType = $scope.momsStoreManageType;
             params.branchCd = $scope.branchCd;
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         // '전체' 일때
@@ -340,6 +343,7 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.momsShopType = $scope.momsShopType;
             params.momsStoreManageType = $scope.momsStoreManageType;
             params.branchCd = $scope.branchCd;
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         // '전체' 일때
@@ -429,8 +433,8 @@ app.controller('mCoupnCalcExcelCtrl', ['$scope', '$http', '$timeout', function (
         dataItem.storeCd = messages["mCoupnCalc.storeCd"];
         dataItem.storeNm = messages["mCoupnCalc.storeNm"];
         dataItem.brandCd = messages["mCoupnCalc.brandCd"];
-        dataItem.momsTeam = messages["mCoupnCalc.momsTeam"];
-        dataItem.momsAcShop = messages["mCoupnCalc.momsAcShop"];
+        dataItem.momsTeam = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop = messages["cmm.moms.momsAcShop"];
         dataItem.mcoupnCd = messages["mCoupnCalc.coupnCd"];
         dataItem.mcoupnNm = messages["mCoupnCalc.coupnNm"];
         dataItem.cnt = messages["cmm.all"];
@@ -554,7 +558,7 @@ app.controller('mCoupnCalcExcelCtrl', ['$scope', '$http', '$timeout', function (
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["mCoupnCalc.mCoupnCalc"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() +'.xlsx', function () {
+                }, '모바일쿠폰 정산_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() +'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

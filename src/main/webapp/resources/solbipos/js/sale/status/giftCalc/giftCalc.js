@@ -44,6 +44,7 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -100,6 +101,7 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
                         }
                         params.userBrands = momsHqBrandCd;
                     }
+                    params.momsStoreFg01 = $scope.momsStoreFg01;
 
                     $scope._broadcast('giftCalcDtlCtrl', params);
                     $scope.wjGiftCalcDtlLayer.show(true);
@@ -119,8 +121,8 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
         dataItem.storeCd = messages["giftCalc.storeCd"];
         dataItem.storeNm = messages["giftCalc.storeNm"];
         dataItem.brandCd = messages["giftCalc.brandCd"];
-        dataItem.momsTeam = messages["giftCalc.momsTeam"];
-        dataItem.momsAcShop = messages["giftCalc.momsAcShop"];
+        dataItem.momsTeam = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop = messages["cmm.moms.momsAcShop"];
         dataItem.giftCd = messages["giftCalc.giftCd"];
         dataItem.giftNm = messages["giftCalc.giftNm"];
         dataItem.saleCnt = messages["cmm.all"];
@@ -220,6 +222,7 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.listScale = 500;
 
         $scope._inquiryMain("/sale/status/giftCalc/giftCalc/getGiftCalcList.sb", params, function() {
@@ -334,6 +337,7 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
         $scope._broadcast('giftCalcExcelCtrl', params);
     };
@@ -360,6 +364,70 @@ app.controller('giftCalcExcelCtrl', ['$scope', '$http', '$timeout', function ($s
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.branchCd = messages["giftCalc.branchCd"];
+        dataItem.branchNm = messages["giftCalc.branchNm"];
+        dataItem.storeCd = messages["giftCalc.storeCd"];
+        dataItem.storeNm = messages["giftCalc.storeNm"];
+        dataItem.brandCd = messages["giftCalc.brandCd"];
+        dataItem.momsTeam = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop = messages["cmm.moms.momsAcShop"];
+        dataItem.giftCd = messages["giftCalc.giftCd"];
+        dataItem.giftNm = messages["giftCalc.giftNm"];
+        dataItem.saleCnt = messages["cmm.all"];
+        dataItem.saleAmt = messages["cmm.all"];
+        dataItem.apprCnt = messages["giftCalc.appr"];
+        dataItem.apprAmt = messages["giftCalc.appr"];
+        dataItem.cancelCnt = messages["giftCalc.cancel"];
+        dataItem.cancelAmt = messages["giftCalc.cancel"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
     };
 
     // <-- 검색 호출 -->

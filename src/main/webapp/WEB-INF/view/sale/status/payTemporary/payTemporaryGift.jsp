@@ -50,7 +50,7 @@
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <tr>
                     <%-- 매장브랜드 --%>
-                    <th><s:message code="saleMcoupon.storeHqBrand"/></th>
+                    <th><s:message code="cmm.moms.storeHqBrand"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -91,7 +91,7 @@
             <tbody>
             <tr>
                 <%-- 팀별 --%>
-                <th><s:message code="payTemporaryGift.momsTeam"/></th>
+                <th><s:message code="cmm.moms.momsTeam"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -107,7 +107,7 @@
                     </div>
                 </td>
                 <%-- AC점포별 --%>
-                <th><s:message code="payTemporaryGift.momsAcShop"/></th>
+                <th><s:message code="cmm.moms.momsAcShop"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -125,7 +125,7 @@
             </tr>
             <tr>
                 <%-- 지역구분 --%>
-                <th><s:message code="payTemporaryGift.momsAreaFg"/></th>
+                <th><s:message code="cmm.moms.momsAreaFg"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -141,7 +141,7 @@
                     </div>
                 </td>
                 <%-- 상권 --%>
-                <th><s:message code="payTemporaryGift.momsCommercial"/></th>
+                <th><s:message code="cmm.moms.momsCommercial"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -159,7 +159,7 @@
             </tr>
             <tr>
                 <%-- 점포유형 --%>
-                <th><s:message code="payTemporaryGift.momsShopType"/></th>
+                <th><s:message code="cmm.moms.momsShopType"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -175,7 +175,7 @@
                     </div>
                 </td>
                 <%-- 매장관리타입 --%>
-                <th><s:message code="payTemporaryGift.momsStoreManageType"/></th>
+                <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -193,7 +193,7 @@
             </tr>
             <tr>
                 <%-- 그룹 --%>
-                <th><s:message code="payTemporaryGift.branch"/></th>
+                <th><s:message code="cmm.moms.branch"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -208,8 +208,28 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <td></td>
-                <td></td>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <%-- 매장그룹 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg01Combo"
+                                    ng-model="momsStoreFg01"
+                                    items-source="_getComboData('momsStoreFg01Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg01Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </c:if>
+                <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                    <td></td>
+                    <td></td>
+                </c:if>
             </tr>
             </tbody>
         </table>
@@ -244,13 +264,16 @@
                     <wj-flex-grid-column header="<s:message code="payTemporaryGift.saleYn"/>" binding="saleYn" data-map="saleYnDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="payTemporaryGift.saleCnt"/>" binding="saleCnt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="payTemporaryGift.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="payTemporaryGift.branch"/>" binding="branchCd" data-map="branchCdDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.branch"/>" binding="branchCd" data-map="branchCdDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                    </c:if>
                 </wj-flex-grid>
             </div>
         </div>
@@ -287,13 +310,16 @@
                 <wj-flex-grid-column header="<s:message code="payTemporaryGift.saleYn"/>" binding="saleYn" data-map="saleYnDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payTemporaryGift.saleCnt"/>" binding="saleCnt" width="65" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="payTemporaryGift.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payTemporaryGift.branch"/>" binding="branchCd" data-map="branchCdDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="payTemporaryGift.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.branch"/>" binding="branchCd" data-map="branchCdDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsTeam"/>" binding="momsTeam" data-map="momsTeamDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsAcShop"/>" binding="momsAcShop" data-map="momsAcShopDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsCommercial"/>" binding="momsCommercial" data-map="momsCommercialDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsShopType"/>" binding="momsShopType" data-map="momsShopTypeDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
             </wj-flex-grid>
         </div>
     </div>
@@ -327,7 +353,7 @@
     var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporaryGift.js?ver=20230509.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporaryGift.js?ver=20231101.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">

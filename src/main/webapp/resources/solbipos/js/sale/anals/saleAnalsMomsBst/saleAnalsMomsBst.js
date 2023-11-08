@@ -90,6 +90,7 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("srchMomsShopType", momsShopTypeComboList);               // 점포유형
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd", branchCdComboList);                       // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // // 팀별
     // if (momsTeamComboList.length <= 1) {
@@ -274,7 +275,6 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
             params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
-
             // '전체' 일때
             if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
                 var momsHqBrandCd = "";
@@ -285,6 +285,7 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
                 }
                 params.userBrands = momsHqBrandCd;
             }
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         // 화면출력과 상품,매장 조회조건 입력에 따른 리스트 타입 셋팅

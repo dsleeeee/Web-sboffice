@@ -121,7 +121,7 @@ app.controller('mCoupnCalcDtlCtrl', ['$scope', '$http', '$timeout', function ($s
             includeColumns: function (column) {
               return column.visible;
             }
-          }, messages["mCoupnCalc.mCoupnCalc"] + '_' + messages["mCoupnCalc.mCoupnCalcDtl"] + '_' + getToday() + '.xlsx', function () {
+          }, '모바일쿠폰 정산_' + messages["mCoupnCalc.mCoupnCalcDtl"] + '_' + getToday() + '.xlsx', function () {
             $timeout(function () {
               $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
             }, 10);

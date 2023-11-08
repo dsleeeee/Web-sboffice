@@ -40,6 +40,7 @@ app.controller('payTemporaryGiftCtrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -52,6 +53,7 @@ app.controller('payTemporaryGiftCtrl', ['$scope', '$http', '$timeout', function 
         $scope.momsCommercialDataMap = new wijmo.grid.DataMap(momsCommercialComboList2, 'value', 'name'); // 상권
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList2, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList2, 'value', 'name'); // 매장관리타입
+        $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList2, 'value', 'name'); // 매장그룹
 
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -137,6 +139,7 @@ app.controller('payTemporaryGiftCtrl', ['$scope', '$http', '$timeout', function 
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.listScale = 500;
 
         $scope._inquiryMain("/sale/status/payTemporary/payTemporaryGift/getPayTemporaryGiftList.sb", params, function() {}, false);
@@ -201,6 +204,7 @@ app.controller('payTemporaryGiftCtrl', ['$scope', '$http', '$timeout', function 
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
         $scope._broadcast('payTemporaryGiftExcelCtrl', params);
     };

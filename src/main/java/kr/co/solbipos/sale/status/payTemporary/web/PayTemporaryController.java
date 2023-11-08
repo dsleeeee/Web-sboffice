@@ -186,6 +186,21 @@ public class PayTemporaryController {
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 
+        // 매장그룹
+        List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
+        String momsStoreFg01ComboListAll = "";
+        if (momsStoreFg01ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg01ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
+
 
         // 전체 없는 콤보박스 데이터
         // 사용자별 코드별 공통코드 콤보박스 조회
@@ -246,6 +261,14 @@ public class PayTemporaryController {
             model.addAttribute("branchCdComboList2", branchCdComboListAll2);
         } else {
             model.addAttribute("branchCdComboList2", branchCdComboListAll);
+        }
+        // 매장관리타입
+        if(momsStoreFg01ComboList.size() > 1) {
+            momsStoreFg01ComboList.remove(0);
+            String momsStoreFg01ComboListAll2 = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsStoreFg01ComboList2", momsStoreFg01ComboListAll2);
+        } else {
+            model.addAttribute("momsStoreFg01ComboList2", momsStoreFg01ComboListAll);
         }
 
 

@@ -80,6 +80,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         GROUP
         BY      tms.BRANCH_CD
         ,		tsspt.STORE_CD
@@ -156,6 +159,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         GROUP
         BY      tms.BRANCH_CD
@@ -246,7 +252,8 @@
         tmsi.MOMS_COMMERCIAL,
         tmsi.MOMS_SHOP_TYPE,
         tmsi.MOMS_STORE_MANAGE_TYPE,
-        tms.BRANCH_CD
+        tms.BRANCH_CD,
+        tmsi.MOMS_STORE_FG_01
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
         TB_MS_STORE tms,
@@ -294,6 +301,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         ORDER BY tsspt.STORE_CD, tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -315,7 +325,15 @@
         tsspt.LINE_SEQ_NO,
         tsspt.SALE_YN,
         (CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT,
-        tsspt.SALE_AMT
+        tsspt.SALE_AMT,
+        tmsi.MOMS_TEAM,
+        tmsi.MOMS_AC_SHOP,
+        tmsi.MOMS_AREA_FG,
+        tmsi.MOMS_COMMERCIAL,
+        tmsi.MOMS_SHOP_TYPE,
+        tmsi.MOMS_STORE_MANAGE_TYPE,
+        tms.BRANCH_CD,
+        tmsi.MOMS_STORE_FG_01
         FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi
@@ -361,6 +379,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         ORDER BY tsspt.STORE_CD, tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
     </select>

@@ -111,6 +111,9 @@
                                 <if test='branchCd != null and branchCd != ""'>
                                     AND tms.BRANCH_CD = #{branchCd}
                                 </if>
+                                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                                </if>
                                 GROUP BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY')
                                 ,		 TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd')
                             ) A
@@ -167,6 +170,9 @@
                                 </if>
                                 <if test='branchCd != null and branchCd != ""'>
                                     AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                                 </if>
                                 GROUP BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY')
                                 ,		 TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd')
@@ -241,6 +247,9 @@
                                 <if test='branchCd != null and branchCd != ""'>
                                     AND tms.BRANCH_CD = #{branchCd}
                                 </if>
+                                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                                </if>
                                 GROUP BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY')
                                 ,		 TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd')
                             ) A
@@ -297,6 +306,9 @@
                                 </if>
                                 <if test='branchCd != null and branchCd != ""'>
                                     AND tms.BRANCH_CD = #{branchCd}
+                                </if>
+                                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                                 </if>
                                 GROUP BY TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY')
                                 ,		 TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'd')

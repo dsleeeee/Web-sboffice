@@ -30,14 +30,14 @@
                         item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="mCoupnCalc.saleDate"/>" binding="saleDate" width="80"	align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="mCoupnCalc.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.posNo"/>" binding="posNo" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.billNo"/>" binding="billNo" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.fg"/>" binding="saleFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="mCoupnCalc.saleAmt"/>" binding="saleAmt"width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="mCoupnCalc.saleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.tipAmt"/>" binding="tipAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.vatAmt"/>"	binding="vatAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="mCoupnCalc.fg"/>" binding="mcoupnTypeFg"width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="mCoupnCalc.fg"/>" binding="mcoupnTypeFg" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.mCoupnUprc"/>" binding="mcoupnUprc" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.mCoupnRemainAmt"/>" binding="mcoupnRemainAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.cashBillApprProcFg"/>" binding="cashBillApprProcFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -54,7 +54,4 @@
     </div>
 </wj-popup>
 
-<script>
-</script>
-
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/mCoupnCalc/mCoupnCalcDtl.js?ver=20230721.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/mCoupnCalc/mCoupnCalcDtl.js?ver=20231101.0`" charset="utf-8"></script>
