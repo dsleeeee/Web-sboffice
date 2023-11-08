@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CaptionMsg.xml
+    다국어관리(기능키/메시지)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2023.11.03     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.store.multilingualCaptionMsg.service.impl.CaptionMsgMapper">
+
+    <!-- 화면구분등록 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
+        COMMENTS : 화면구분등록 탭 리스트를 조회한다.
+    -->
+    <select id="getCaptionMsgGrpList" parameterType="captionMsgVO" resultType="DefaultMap">
+        /* CaptionMsgMapper.getCaptionMsgGrpList */
+        SELECT HQ_OFFICE_CD
+        ,      CAPTION_IMG_CD
+        ,      CAPTION_IMG_NM
+        ,      FILE_DIR
+        ,      FILE_NM
+        ,      FILE_EXT
+        ,      FILE_SIZE
+        ,      FILE_MIME_TYPE
+        ,      FILE_ORG_NM
+        ,      FILE_DESC
+        ,      FILE_CHG_DT
+        FROM   TB_HQ_CAPTION_MESSAGE_GROUP
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='captionImgCd != null and captionImgCd != ""'>
+        AND    CAPTION_IMG_CD LIKE '%' || #{captionImgCd} || '%'
+        </if>
+        <if test='captionImgNm != null and captionImgNm != ""'>
+        AND    CAPTION_IMG_NM LIKE '%' || #{captionImgNm} || '%'
+        </if>
+    </select>
+
+    <!-- 화면구분 상세 조회 -->
+    <!--
+        TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
+        COMMENTS : 화면구분 상세 정보를 조회한다.
+    -->
+    <select id="getCaptionMsgGrpDtl" parameterType="captionMsgVO" resultType="DefaultMap">
+        /* CaptionMsgMapper.getCaptionMsgGrpDtl */
+        SELECT HQ_OFFICE_CD
+        ,      CAPTION_IMG_CD
+        ,      CAPTION_IMG_NM
+        ,      FILE_DIR
+        ,      FILE_NM
+        ,      FILE_EXT
+        ,      FILE_SIZE
+        ,      FILE_MIME_TYPE
+        ,      FILE_ORG_NM
+        ,      FILE_DESC
+        ,      FILE_CHG_DT
+        FROM   TB_HQ_CAPTION_MESSAGE_GROUP
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    CAPTION_IMG_CD = #{captionImgCd}
+    </select>
+
+    <!-- 화면구분코드 채번 -->
+    <!--
+        TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP, TB_MS_CAPTION_MESSAGE_GROUP
+        COMMENTS : 화면구분코드를 채번한다.
+    -->
+    <select id="getCaptionImgCd" parameterType="captionMsgVO" resultType="String">
+        /* USE : CaptionMsgMapper.getCaptionImgCd */
+        SELECT LPAD(NVL(MAX(CAPTION_IMG_CD), 0) +1, 4, '0')
+        FROM   TB_HQ_CAPTION_MESSAGE_GROUP
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 화면구분 신규 등록 -->
+    <!--
+        TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
+        COMMENTS : 화면구분 정보를 등록한다.
+    -->
+    <insert id="regist" parameterType="captionMsgVO">
+        /* USE : CaptionMsgMapper.regist */
+        INSERT INTO TB_HQ_CAPTION_MESSAGE_GROUP
+        (
+            HQ_OFFICE_CD
+        ,   CAPTION_IMG_CD
+        ,   CAPTION_IMG_NM
+        ,   FILE_DIR
+        ,   FILE_NM
+        ,   FILE_EXT
+        ,   FILE_SIZE
+        ,   FILE_MIME_TYPE
+        ,   FILE_ORG_NM
+        ,   FILE_DESC
+        ,   FILE_CHG_DT
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{captionImgCd}
+        ,   #{captionImgNm}
+        ,   #{fileDir}
+        ,   #{fileNm}
+        ,   #{fileExt}
+        ,   #{fileSize}
+        ,   #{fileMimeType}
+        ,   #{fileOrgNm}
+        ,   #{fileDesc}
+        ,   #{modDt}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 화면구분 수정 -->
+    <!--
+        TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
+        COMMENTS : 화면구분 정보를 수정한다.
+    -->
+    <insert id="modify" parameterType="captionMsgVO">
+        /* USE : CaptionMsgMapper.modify */
+        MERGE INTO TB_HQ_CAPTION_MESSAGE_GROUP A
+        USING DUAL
+            ON (
+                A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.CAPTION_IMG_CD = #{captionImgCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET A.CAPTION_IMG_NM     = #{captionImgNm}
+        <if test='fileDir != null and fileDir.toString() != ""'>
+        ,   A.FILE_DIR           = #{fileDir}
+        ,   A.FILE_NM            = #{fileNm}
+        ,   A.FILE_EXT           = #{fileExt}
+        ,   A.FILE_SIZE          = #{fileSize}
+        ,   A.FILE_MIME_TYPE     = #{fileMimeType}
+        ,   A.FILE_ORG_NM        = #{fileOrgNm}
+        ,   A.FILE_CHG_DT        = #{modDt}
+        </if>
+        ,   A.FILE_DESC          = #{fileDesc}
+        ,   A.MOD_DT             = #{modDt}
+        ,   A.MOD_ID             = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            A.HQ_OFFICE_CD
+        ,   A.CAPTION_IMG_CD
+        ,   A.CAPTION_IMG_NM
+        ,   A.FILE_DIR
+        ,   A.FILE_NM
+        ,   A.FILE_EXT
+        ,   A.FILE_SIZE
+        ,   A.FILE_MIME_TYPE
+        ,   A.FILE_ORG_NM
+        ,   A.FILE_DESC
+        ,   A.FILE_CHG_DT
+        ,   A.REG_DT
+        ,   A.REG_ID
+        ,   A.MOD_DT
+        ,   A.MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{captionImgCd}
+        ,   #{captionImgNm}
+        ,   #{fileDir}
+        ,   #{fileNm}
+        ,   #{fileExt}
+        ,   #{fileSize}
+        ,   #{fileMimeType}
+        ,   #{fileOrgNm}
+        ,   #{fileDesc}
+        ,   #{modDt}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 화면구분 삭제 -->
+    <!--
+        TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
+        COMMENTS : 화면구분 정보를 삭제한다.
+    -->
+    <delete id="delCaptionMsgGrp" parameterType="captionMsgVO">
+        /* CaptionMsgMapper.delCaptionMsgGrp */
+        DELETE TB_HQ_CAPTION_MESSAGE_GROUP
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    CAPTION_IMG_CD = #{captionImgCd}
+    </delete>
+
+</mapper>
