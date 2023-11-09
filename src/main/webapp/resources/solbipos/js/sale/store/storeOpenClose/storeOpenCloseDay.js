@@ -31,6 +31,7 @@ app.controller('storeOpenCloseDayTimeCtrl', ['$scope', '$http', '$timeout', func
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
@@ -75,6 +76,7 @@ app.controller('storeOpenCloseDayTimeCtrl', ['$scope', '$http', '$timeout', func
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
         var scope = agrid.getScope("storeOpenCloseDayCtrl");
         // 일별 조회
@@ -143,6 +145,7 @@ app.controller('storeOpenCloseDayCtrl', ['$scope', '$http', '$timeout', function
                         }
                         params.userBrands = momsHqBrandCd;
                     }
+                    params.momsStoreFg01 = scope.momsStoreFg01;
 
                     $scope._broadcast('storeOpenCloseDayDtlCtrl', params);
                 }
@@ -237,6 +240,7 @@ app.controller('storeOpenCloseDayCtrl', ['$scope', '$http', '$timeout', function
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = data.momsStoreFg01;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseDayList.sb", params, function () {
@@ -333,8 +337,8 @@ app.controller('storeOpenCloseDayDtlCtrl', ['$scope', '$http', '$timeout', funct
         dataItem.storeCd		= messages["storeOpenClose.storeCd"];
         dataItem.storeNm		= messages["storeOpenClose.storeNm"];
         dataItem.brand          = messages["dayProd.brand"];
-        dataItem.momsTeam       = messages["dayProd.momsTeam"];
-        dataItem.momsAcShop     = messages["dayProd.momsAcShop"];
+        dataItem.momsTeam       = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop     = messages["cmm.moms.momsAcShop"];
         dataItem.openTime		= messages["storeOpenClose.openTime"];
         dataItem.closeTime		= messages["storeOpenClose.closeTime"];
         dataItem.runTime		= messages["storeOpenClose.runTime"];
@@ -430,6 +434,7 @@ app.controller('storeOpenCloseDayDtlCtrl', ['$scope', '$http', '$timeout', funct
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = data.momsStoreFg01;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseDayDtlList.sb", params, function () {

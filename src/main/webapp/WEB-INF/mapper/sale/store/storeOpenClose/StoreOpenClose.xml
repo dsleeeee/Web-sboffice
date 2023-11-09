@@ -61,6 +61,9 @@
                         <if test='branchCd != null and branchCd != ""'>
                             AND tms.BRANCH_CD = #{branchCd}
                         </if>
+                        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                        </if>
                         AND		EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.OPEN_DT, 'YYYYMMDDHH24MISS')) BETWEEN A.MIN AND A.MAX) AS OPEN_CNT
             ,		(	SELECT	COUNT(DISTINCT tpe.STORE_CD)
                         FROM	TB_PS_EXACTCALC tpe
@@ -108,6 +111,9 @@
                         </if>
                         <if test='branchCd != null and branchCd != ""'>
                             AND tms.BRANCH_CD = #{branchCd}
+                        </if>
+                        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                         </if>
                         AND		EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.CLOSE_DT, 'YYYYMMDDHH24MISS')) BETWEEN A.MIN AND A.MAX) AS CLOSE_CNT
             FROM 	(
@@ -347,6 +353,9 @@
                         <if test='branchCd != null and branchCd != ""'>
                             AND tms.BRANCH_CD = #{branchCd}
                         </if>
+                        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                        </if>
                         <if test='gubun != null and gubun != "" and gubun.toString() == "open"'>
                             AND EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.OPEN_DT, 'YYYYMMDDHH24MISS')) BETWEEN #{min} AND #{max}
                         </if>
@@ -411,6 +420,9 @@
                         </if>
                         <if test='branchCd != null and branchCd != ""'>
                             AND tms.BRANCH_CD = #{branchCd}
+                        </if>
+                        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                         </if>
                         <if test='gubun != null and gubun != "" and gubun.toString() == "close"'>
                             AND EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.CLOSE_DT, 'YYYYMMDDHH24MISS')) BETWEEN #{min} AND #{max}
@@ -495,6 +507,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
     </select>
 
     <!-- 맘스터치 > 점포매출 > 매장 오픈/마감 현황 - 월별 탭 조회 -->
@@ -560,6 +575,9 @@
                         </if>
                         <if test='branchCd != null and branchCd != ""'>
                             AND tms.BRANCH_CD = #{branchCd}
+                        </if>
+                        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                         </if>
                         ) B
                         ,       TB_PS_EXACTCALC C
@@ -757,6 +775,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         ORDER BY tms.STORE_CD
     </select>
