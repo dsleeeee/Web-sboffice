@@ -38,6 +38,7 @@ app.controller('storeOpenCloseMonthTimeCtrl', ['$scope', '$http', '$timeout', fu
     $scope._setComboData("momsShopTypeCombo2", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo2", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo2", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo2", momsStoreFg01ComboList); // 매장그룹
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeOpenCloseMonthTimeCtrl", function (event, data) {
@@ -69,6 +70,7 @@ app.controller('storeOpenCloseMonthTimeCtrl', ['$scope', '$http', '$timeout', fu
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg012;
 
         var scope = agrid.getScope("storeOpenCloseMonthCtrl");
         // 월별 조회
@@ -147,6 +149,7 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
                         }
                         params.userBrands = momsHqBrandCd;
                     }
+                    params.momsStoreFg01 = scope.momsStoreFg01;
 
                     $scope._broadcast('storeOpenCloseMonthDtlCtrl', params);
                 }
@@ -187,6 +190,7 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = data.momsStoreFg01;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthList.sb", params, function () {
@@ -285,8 +289,8 @@ app.controller('storeOpenCloseMonthDtlCtrl', ['$scope', '$http', '$timeout', fun
         dataItem.storeCd		= messages["storeOpenClose.storeCd"];
         dataItem.storeNm		= messages["storeOpenClose.storeNm"];
         dataItem.brand          = messages["dayProd.brand"];
-        dataItem.momsTeam       = messages["dayProd.momsTeam"];
-        dataItem.momsAcShop     = messages["dayProd.momsAcShop"];
+        dataItem.momsTeam       = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop     = messages["cmm.moms.momsAcShop"];
         dataItem.openTime		= messages["storeOpenClose.openTime"];
         dataItem.closeTime		= messages["storeOpenClose.closeTime"];
         dataItem.runTime		= messages["storeOpenClose.runTime"];
@@ -385,11 +389,10 @@ app.controller('storeOpenCloseMonthDtlCtrl', ['$scope', '$http', '$timeout', fun
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = data.momsStoreFg01;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthDtlList.sb", params, function () {
-
-        });
+        $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthDtlList.sb", params, function () {});
     };
 
     //상세 화면 열기

@@ -43,6 +43,7 @@ app.controller('storeMonthPosCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -72,8 +73,8 @@ app.controller('storeMonthPosCtrl', ['$scope', '$http', '$timeout', function ($s
         dataItem.storeNm     = messages["month.storeNm"];
         dataItem.storeCnt    = messages["month.storeCnt"];
         dataItem.brand       = messages["dayProd.brand"];
-        dataItem.momsTeam    = messages["dayProd.momsTeam"];
-        dataItem.momsAcShop  = messages["dayProd.momsAcShop"];
+        dataItem.momsTeam    = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop  = messages["cmm.moms.momsAcShop"];
         dataItem.saleCnt    = messages["month.saleCnt"];
         dataItem.totSaleAmt    = messages["month.sale"];
         dataItem.totDcAmt    = messages["month.sale"];
@@ -330,6 +331,7 @@ app.controller('storeMonthPosCtrl', ['$scope', '$http', '$timeout', function ($s
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.listScale = 500; //-페이지 스케일 갯수
         console.log(params);
 
@@ -436,6 +438,7 @@ app.controller('storeMonthPosCtrl', ['$scope', '$http', '$timeout', function ($s
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
         $scope._broadcast('storeMonthPosExcelCtrl', params);
 
@@ -479,8 +482,8 @@ app.controller('storeMonthPosExcelCtrl', ['$scope', '$http', '$timeout', functio
         dataItem.storeNm     = messages["month.storeNm"];
         dataItem.storeCnt    = messages["month.storeCnt"];
         dataItem.brand       = messages["dayProd.brand"];
-        dataItem.momsTeam    = messages["dayProd.momsTeam"];
-        dataItem.momsAcShop  = messages["dayProd.momsAcShop"];
+        dataItem.momsTeam    = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop  = messages["cmm.moms.momsAcShop"];
         dataItem.saleCnt    = messages["month.saleCnt"];
         dataItem.totSaleAmt    = messages["month.sale"];
         dataItem.totDcAmt    = messages["month.sale"];

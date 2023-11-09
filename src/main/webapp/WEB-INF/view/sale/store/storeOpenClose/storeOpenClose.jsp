@@ -28,7 +28,7 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenClose.js?ver=20221129.05" charset="utf-8"></script>

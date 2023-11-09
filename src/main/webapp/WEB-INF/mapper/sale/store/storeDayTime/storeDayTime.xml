@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.sale.store.storeDayTime.service.impl.StoreDayTimeMapper">
 
@@ -10,7 +9,7 @@
         PARAM    : storeDayTimeVO
         COMMENTS : 매장별 리스트를 조회한다.
     -->
-    <select id="getStoreDayTimeList"  parameterType="storeDayTimeVO" resultType="DefaultMap">
+    <select id="getStoreDayTimeList" parameterType="storeDayTimeVO" resultType="DefaultMap">
         /* StoreDayTimeMapper.getStoreDayTimeList */
         <if test="optionFg != null and optionFg.toString() == 'time'">
             SELECT  COUNT(DISTINCT tssh.STORE_CD) AS STORE_CNT
@@ -43,7 +42,7 @@
             ,       TB_MS_STORE tms
             ,       TB_MS_STORE_INFO tmsi
             WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND     tssh.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+            AND     tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             AND     tssh.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
             AND     tssh.STORE_CD = tms.STORE_CD
             AND     tssh.STORE_CD = tmsi.STORE_CD(+)
@@ -85,6 +84,9 @@
             </if>
             <if test='branchCd != null and branchCd != ""'>
                 AND tms.BRANCH_CD = #{branchCd}
+            </if>
+            <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
             </if>
             HAVING SUM(TOT_SALE_AMT) IS NOT NULL
             GROUP BY tms.BRANCH_CD
@@ -234,6 +236,9 @@
                             <if test='branchCd != null and branchCd != ""'>
                                 AND tms.BRANCH_CD = #{branchCd}
                             </if>
+                            <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                                AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                            </if>
                             GROUP BY tms.BRANCH_CD, tsdt.STORE_CD, TIME_SLOT
                             <if test='option2 != null and option2 != "" and option2 == "store"'>
                                 ,  tms.HQ_BRAND_CD
@@ -278,4 +283,5 @@
             </if>
         </if>
     </select>
+
 </mapper>
