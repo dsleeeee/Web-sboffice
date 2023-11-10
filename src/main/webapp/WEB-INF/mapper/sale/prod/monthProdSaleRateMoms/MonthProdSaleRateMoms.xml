@@ -89,7 +89,7 @@
                     , 	   TB_MS_STORE_INFO tmsi
                     , 	   TB_MS_PRODUCT tmp
                     , 	   TB_MS_PRODUCT tmps2 -- 사이드
-                    ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                    ,      TB_MS_PRODUCT_CLASS_V03 tmpcv
                     WHERE 1=1
                     AND   tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND   tsdpsd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -169,13 +169,14 @@
                        AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
                    </if>
                     AND   tsdpsd.STORE_CD = tms.STORE_CD
+                    AND   tsdpsd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                     AND   tmsi.STORE_CD (+)= tms.STORE_CD
                     AND   tmp.STORE_CD = tsdpsd.STORE_CD
                     AND   tmp.PROD_CD = tsdpsd.PROD_CD
                     AND   tmps2.STORE_CD = tsdpsd.STORE_CD
                     AND   tmps2.PROD_CD = tsdpsd.PROD_CD
                     AND tmpcv.STORE_CD = tmps2.STORE_CD
-                    AND tmpcv.PROD_CD = tmps2.PROD_CD
+                    AND tmpcv.PROD_CLASS_CD = tmps2.PROD_CLASS_CD
                    <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                        GROUP BY tsdpsd.SALE_YM, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdpsd.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdpsd.PROD_CD, tmp.PROD_NM, tsdpsd.SEL_TYPE_FG, tsdpsd.SIDE_PROD_CD, tmps2.PROD_NM
                    </if>
@@ -280,7 +281,7 @@
                     , 	   TB_MS_STORE_INFO tmsi
                     , 	   TB_MS_PRODUCT tmp
                     , 	   TB_MS_PRODUCT tmps2 -- 사이드
-                    ,      TB_MS_PRODUCT_CLASS_V02 tmpcv
+                    ,      TB_MS_PRODUCT_CLASS_V03 tmpcv
                     WHERE 1=1
                     AND   tsdpsd.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND   tsdpsd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -360,13 +361,14 @@
                        AND tsdpsd.SEL_TYPE_FG IN ('N', 'S')
                    </if>
                     AND   tsdpsd.STORE_CD = tms.STORE_CD
+                    AND   tsdpsd.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
                     AND   tmsi.STORE_CD (+)= tms.STORE_CD
                     AND   tmp.STORE_CD = tsdpsd.STORE_CD
                     AND   tmp.PROD_CD = tsdpsd.PROD_CD
                     AND   tmps2.STORE_CD = tsdpsd.STORE_CD
                     AND   tmps2.PROD_CD = tsdpsd.PROD_CD
                     AND tmpcv.STORE_CD = tmps2.STORE_CD
-                    AND tmpcv.PROD_CD = tmps2.PROD_CD
+                    AND tmpcv.PROD_CLASS_CD = tmps2.PROD_CLASS_CD
                    <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
                        GROUP BY tsdpsd.SALE_YM, tms.HQ_OFFICE_CD, tms.BRANCH_CD, tsdpsd.STORE_CD, tms.STORE_NM, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdpsd.PROD_CD, tmp.PROD_NM, tsdpsd.SEL_TYPE_FG, tsdpsd.SIDE_PROD_CD, tmps2.PROD_NM
                    </if>
