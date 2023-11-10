@@ -63,7 +63,8 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
     $scope._setComboData("srchMomsCommercial", momsCommercialComboList);           // 상권
     $scope._setComboData("srchMomsShopType", momsShopTypeComboList);               // 점포유형
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageTypeComboList); // 매장관리타입
-    $scope._setComboData("srchBranchCd", branchCdComboList);   
+    $scope._setComboData("srchBranchCd", branchCdComboList);
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // // 팀별
     // if(momsTeamComboList.length <= 1) {
@@ -134,6 +135,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
         $scope.momsCommercialDataMap = new wijmo.grid.DataMap(momsCommercialComboList, 'value', 'name'); // 상권
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList, 'value', 'name'); // 매장관리타입
+        $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList, 'value', 'name'); // 매장그룹
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -237,6 +239,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
                 }
                 params.userBrands = momsHqBrandCd;
             }
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         console.log(params);
@@ -284,6 +287,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
                 }
                 params.userBrands = momsHqBrandCd;
             // }
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         console.log(params);

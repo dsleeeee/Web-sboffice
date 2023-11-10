@@ -113,6 +113,9 @@
                 <if test='branchCd != null and branchCd != ""'>
                     AND tms.BRANCH_CD = #{branchCd}
                 </if>
+                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                </if>
                 GROUP BY    SUBSTR(tsdt.SALE_DATE,0,6), tms.BRANCH_CD
                 <if test='option != null and option != "" and option == "store"'>
                     , tsdt.STORE_CD, tms.STORE_NM
@@ -225,6 +228,9 @@
                 </if>
                 <if test='branchCd != null and branchCd != ""'>
                     AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                 </if>
                 GROUP BY    SUBSTR(tsdt.SALE_DATE,0,6), tms.BRANCH_CD
                 <if test='option != null and option != "" and option == "store"'>

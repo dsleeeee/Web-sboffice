@@ -100,6 +100,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope._setComboData("prodOptionCombo", prodOptionComboData); // 상품표시옵션
     $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
     $scope._setComboData("dayGubunCombo", dayGubunComboData); // 일/월 구분
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // // 팀별
     // if(momsTeamComboList.length <= 1) {
@@ -365,6 +366,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
         params.dayGubun = $scope.dayGubun;
@@ -648,6 +650,7 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
             }
           params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
         params.dayGubun = $scope.dayGubun;

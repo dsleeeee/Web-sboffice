@@ -143,6 +143,10 @@ public class VirtualLoginController {
             List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
             model.addAttribute("branchCdComboList", branchCdComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N));
 
+            // - 매장그룹
+            List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
+            model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N));
+
         }else{
             // 관리자 또는 총판은 빈 콤보박스 셋팅(script 오류 방지)
             model.addAttribute("userHqBrandCdComboList", CmmUtil.comboListAll());
@@ -153,6 +157,7 @@ public class VirtualLoginController {
             model.addAttribute("momsShopTypeComboList", CmmUtil.comboListAll());
             model.addAttribute("momsStoreManageTypeComboList", CmmUtil.comboListAll());
             model.addAttribute("branchCdComboList", CmmUtil.comboListAll());
+            model.addAttribute("momsStoreFg01ComboList", CmmUtil.comboListAll());
         }
 
         return "store/manage/virtualLogin/virtualLogin";

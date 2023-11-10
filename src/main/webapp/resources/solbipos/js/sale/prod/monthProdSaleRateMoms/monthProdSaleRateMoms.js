@@ -54,6 +54,7 @@ app.controller('monthProdSaleRateMomsCtrl', ['$scope', '$http', '$timeout', func
     $scope._setComboData("srchMomsShopType", momsShopTypeComboList);               // 점포유형
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd", branchCdComboList);                       // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // // 팀별
     // if(momsTeamComboList.length <= 1) {
@@ -386,6 +387,7 @@ app.controller('monthProdSaleRateMomsCtrl', ['$scope', '$http', '$timeout', func
              }
              params.userBrands = momsHqBrandCd;
            }
+           params.momsStoreFg01 = $scope.momsStoreFg01;
        }
 
        // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -520,6 +522,7 @@ app.controller('monthProdSaleRateMomsCtrl', ['$scope', '$http', '$timeout', func
              }
              params.userBrands = momsHqBrandCd;
            }
+           params.momsStoreFg01 = $scope.momsStoreFg01;
        }
 
         params.excelType = excelType;

@@ -100,6 +100,9 @@ public class UptPmixVO extends PageVO {
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -299,4 +302,8 @@ public class UptPmixVO extends PageVO {
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }
