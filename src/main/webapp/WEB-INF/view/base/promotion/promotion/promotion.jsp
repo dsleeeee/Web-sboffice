@@ -872,6 +872,7 @@
     var momsCommercial = ${momsCommercial};
     var momsShopType = ${momsShopType};
     var momsStoreManageType = ${momsStoreManageType};
+    var momsStoreFg01 = ${momsStoreFg01};
 
     // 회원등급
     var memberClassCdFgData = ${memberClassList};

@@ -94,6 +94,9 @@
                         <if test='branchCd != null and branchCd != ""'>
                             AND tms.BRANCH_CD = #{branchCd}
                         </if>
+                        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                        </if>
                         <if test='option != null and option != "" and option == "branch"'>
                         GROUP BY tms.BRANCH_CD
                         </if>
@@ -171,6 +174,9 @@
                         </if>
                         <if test='branchCd != null and branchCd != ""'>
                             AND tms.BRANCH_CD = #{branchCd}
+                        </if>
+                        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                         </if>
                         <if test='option != null and option != "" and option == "branch"'>
                         GROUP BY tms.BRANCH_CD
@@ -285,6 +291,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         <if test='option != null and option != "" and option == "branch"'>
             GROUP BY tms.BRANCH_CD
         </if>
@@ -362,6 +371,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         <if test='option != null and option != "" and option == "branch"'>
             GROUP BY tms.BRANCH_CD

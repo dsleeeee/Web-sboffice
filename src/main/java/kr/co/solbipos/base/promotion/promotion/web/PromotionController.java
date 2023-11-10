@@ -143,6 +143,9 @@ public class PromotionController {
         iostockCmmVO.setNmcodeGrpCd("156");
         model.addAttribute("momsStoreManageType", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));    // 매장관리타입
 
+        iostockCmmVO.setNmcodeGrpCd("167");
+        model.addAttribute("momsStoreFg01", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));    // 매장그룹
+
 
         StoreTypeVO storeTypeVO = new StoreTypeVO();
 

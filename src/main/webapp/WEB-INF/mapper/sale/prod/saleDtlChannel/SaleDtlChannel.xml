@@ -200,6 +200,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+          AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         ) tsdpsd
         , 	   TB_MS_PRODUCT tmp
         , 	   TB_MS_PRODUCT tmps2 -- 사이드
@@ -533,6 +536,7 @@
     ,       MOMS_SHOP_TYPE
     ,       MOMS_STORE_MANAGE_TYPE
     ,       BRANCH_CD
+    ,       '' AS MOMS_STORE_FG_01
     ,       REQ_DATE
     ,       REQ_TIME
     ,       NO_SEQ
@@ -569,6 +573,9 @@
       </if>
       <if test='branchCd != null and branchCd != ""'>
           AND thsrm.BRANCH_CD = #{branchCd}
+      </if>
+      <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+        AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
       </if>
       <if test="prodClassCd != null and prodClassCd != ''">
           AND thsrm.PROD_CLASS_CD = #{prodClassCd}
@@ -738,6 +745,9 @@
       <if test='branchCd != null and branchCd != ""'>
           AND thsrm.BRANCH_CD = #{branchCd}
       </if>
+      <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+        AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+      </if>
       <if test="prodClassCd != null and prodClassCd != ''">
           AND thsrm.PROD_CLASS_CD = #{prodClassCd}
       </if>
@@ -763,4 +773,5 @@
           AND TO_CHAR(thsrm.PROD_CD_LIST) = #{prodCds}
       </if>
   </select>
+
 </mapper>

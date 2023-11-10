@@ -39,6 +39,7 @@ app.controller('payFgCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
   $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+  $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -115,6 +116,7 @@ app.controller('payFgCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
       }
       params.userBrands = momsHqBrandCd;
     }
+    params.momsStoreFg01 = $scope.momsStoreFg01;
     params.listScale = 500;
 
     console.log(params);
@@ -206,6 +208,8 @@ app.controller('payFgCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
       }
       params.userBrands = momsHqBrandCd;
     }
+    params.momsStoreFg01 = $scope.momsStoreFg01;
+
     $scope._broadcast('payFgExcelCtrl',params);
   }
 }]);
@@ -266,6 +270,7 @@ app.controller('payFgExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
       }
       params.userBrands = momsHqBrandCd;
     }
+    params.momsStoreFg01 = $scope.momsStoreFg01;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/pay/payFg/payFg/getPayFgExcelList.sb", params, function() {

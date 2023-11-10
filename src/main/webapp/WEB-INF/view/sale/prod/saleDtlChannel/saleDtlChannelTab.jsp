@@ -23,9 +23,7 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
-
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
     var storeCd = "${storeCd}";
@@ -39,6 +37,7 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 
     // 채널
     var dlvrInFgColList = [];

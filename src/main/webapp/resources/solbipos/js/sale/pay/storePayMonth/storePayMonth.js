@@ -46,6 +46,7 @@ app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -185,6 +186,7 @@ app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($s
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.listScale = 500;
         
         $scope._inquiryMain("/sale/pay/storePayMonth/storePayMonth/getStorePayMonthList.sb", params, function() {
@@ -288,6 +290,7 @@ app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($s
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
         $scope._broadcast('storePayMonthExcelCtrl',params);
     };
@@ -347,6 +350,7 @@ app.controller('storePayMonthExcelCtrl', ['$scope', '$http', '$timeout', functio
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/pay/storePayMonth/storePayMonth/getStorePayMonthExcelList.sb", params, function() {

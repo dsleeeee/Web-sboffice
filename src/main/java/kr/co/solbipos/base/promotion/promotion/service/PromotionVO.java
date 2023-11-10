@@ -212,6 +212,8 @@ public class PromotionVO extends PageVO {
     /** 쿠폰사용여부 */
     private String couponYn;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -948,4 +950,8 @@ public class PromotionVO extends PageVO {
     public void setCouponYn(String couponYn) {
         this.couponYn = couponYn;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

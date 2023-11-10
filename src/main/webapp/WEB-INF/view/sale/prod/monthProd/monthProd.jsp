@@ -132,7 +132,7 @@
             <tr>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                     <%-- 상품브랜드 --%>
-                    <th><s:message code="monthProd.prodHqBrand"/></th>
+                    <th><s:message code="cmm.moms.prodHqBrand"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
