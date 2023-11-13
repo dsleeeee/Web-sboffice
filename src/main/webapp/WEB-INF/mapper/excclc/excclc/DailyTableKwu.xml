@@ -773,7 +773,7 @@
                 WHERE  STORE_CD = #{storeCd}
                 AND    CLOSE_DATE = #{startDate}
                 UNION ALL
-                SELECT '하키' AS IN_INFO
+                SELECT '대관료' AS IN_INFO
                 ,       HOCKEY_AMT AS IN_AMT
                 ,       '' AS OUT_INFO
                 ,       0 AS OUT_AMT
@@ -783,7 +783,7 @@
                 WHERE  STORE_CD = #{storeCd}
                 AND    CLOSE_DATE = #{startDate}
                 UNION ALL
-                SELECT '기타' AS IN_INFO
+                SELECT '1일 카드입금외' AS IN_INFO
                 ,       ETC_AMT AS IN_AMT
                 ,       '' AS OUT_INFO
                 ,       0 AS OUT_AMT
@@ -793,7 +793,7 @@
                 WHERE  STORE_CD = #{storeCd}
                 AND    CLOSE_DATE = #{startDate}
                 UNION ALL
-                SELECT '1일 일계입금' AS IN_INFO
+                SELECT '1일 현금입금' AS IN_INFO
                 ,       IN_DAY_AMT AS IN_AMT
                 ,       '' AS OUT_INFO
                 ,       0 AS OUT_AMT
@@ -803,7 +803,7 @@
                 WHERE  STORE_CD = #{storeCd}
                 AND    CLOSE_DATE = #{startDate}
                 UNION ALL
-                SELECT '입금계' AS IN_INFO
+                SELECT '1일 입금계' AS IN_INFO
                 ,       IN_SUM AS IN_AMT
                 ,       '출금계' AS OUT_INFO
                 ,       OUT_SUM AS OUT_AMT
@@ -856,13 +856,13 @@
                 (
                     SELECT '단체' AS IN_INFO, '' AS OUT_INFO, 1 AS ROW_NUM FROM dual
                     UNION ALL
-                    SELECT '하키' AS IN_INFO, '' AS OUT_INFO, 2 AS ROW_NUM FROM dual
+                    SELECT '대관료' AS IN_INFO, '' AS OUT_INFO, 2 AS ROW_NUM FROM dual
                     UNION ALL
-                    SELECT '기타' AS IN_INFO, '' AS OUT_INFO, 3 AS ROW_NUM FROM dual
+                    SELECT '1일 카드입금외' AS IN_INFO, '' AS OUT_INFO, 3 AS ROW_NUM FROM dual
                     UNION ALL
-                    SELECT '1일 일계입금' AS IN_INFO, '' AS OUT_INFO, 4 AS ROW_NUM FROM dual
+                    SELECT '1일 현금입금' AS IN_INFO, '' AS OUT_INFO, 4 AS ROW_NUM FROM dual
                     UNION ALL
-                    SELECT '입금계' AS IN_INFO, '출금계' AS OUT_INFO, 5 AS ROW_NUM FROM dual
+                    SELECT '1일 입금계' AS IN_INFO, '출금계' AS OUT_INFO, 5 AS ROW_NUM FROM dual
                     UNION ALL
                     SELECT '월입금계' AS IN_INFO, '월출금계' AS OUT_INFO, 6 AS ROW_NUM FROM dual
                     UNION ALL
