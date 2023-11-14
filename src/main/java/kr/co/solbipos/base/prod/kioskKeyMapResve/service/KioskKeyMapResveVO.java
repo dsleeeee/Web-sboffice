@@ -87,6 +87,9 @@ public class KioskKeyMapResveVO extends PageVO {
     private String orgStartDate;
     private String envstCd;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -278,4 +281,8 @@ public class KioskKeyMapResveVO extends PageVO {
     public void setEnvstCd(String envstCd) {
         this.envstCd = envstCd;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

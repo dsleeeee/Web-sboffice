@@ -40,6 +40,7 @@ app.controller('touchKeyResveCtrl', ['$scope', '$http', function ($scope, $http)
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // 오늘날짜
     var date = new Date();
@@ -131,7 +132,9 @@ app.controller('touchKeyResveCtrl', ['$scope', '$http', function ($scope, $http)
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.listScale = 500;
+
         console.log(params);
 
         $scope._inquirySub('/base/prod/touchKeyResve/touchKeyResve/getTouchKeyResveList.sb', params, function() {

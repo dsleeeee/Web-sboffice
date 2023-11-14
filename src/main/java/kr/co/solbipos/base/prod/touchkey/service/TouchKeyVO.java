@@ -170,6 +170,9 @@ public class TouchKeyVO extends PageVO {
     /** 상품브랜드코드 */
     private String prodHqBrandCd;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     /**
      * @return the orgnFg
      */
@@ -702,12 +705,13 @@ public class TouchKeyVO extends PageVO {
         this.userProdBrands = userProdBrands;
     }
 
-    public String getProdHqBrandCd() {
-
-        return prodHqBrandCd;
-    }
+    public String getProdHqBrandCd() {  return prodHqBrandCd; }
 
     public void setProdHqBrandCd(String prodHqBrandCd) {
         this.prodHqBrandCd = prodHqBrandCd;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

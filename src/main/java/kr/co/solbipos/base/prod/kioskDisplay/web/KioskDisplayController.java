@@ -147,6 +147,10 @@ public class KioskDisplayController {
         List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
         model.addAttribute("branchCdComboList", branchCdComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N));
 
+        // - 매장그룹
+        List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N));
+
         return "base/prod/kioskDisplay/kioskDisplay";
     }
 

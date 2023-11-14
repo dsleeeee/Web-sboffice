@@ -27,7 +27,7 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-        <%-- 등록 일자 --%>
+        <%-- 등록일자 --%>
         <tr>
             <th><s:message code="dlvrProd.regDate" /></th>
             <td colspan="3" style="text-align: left;">
@@ -145,14 +145,13 @@
                 </p>
             </th>
             <th class="oh gr fr w50" style="height: 75px; font-size:15px">
-                <%-- excel 업로드 --%>
+                <%-- 엑셀업로드 --%>
                 <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
-                    <s:message code="dlvrProd.excelUpload" />
+                    <s:message code="cmm.excel.excelUpload" />
                 </button>
-
-                <%-- excel 양식 다운로드 --%>
+                <%-- 양식다운로드 --%>
                 <button class="btn_skyblue ml5 fr" id="btnExcelDownload" ng-click="excelDownload()">
-                    <s:message code="dlvrProd.sampleDownload" />
+                    <s:message code="cmm.excel.sampleDown" />
                 </button>
             </th>
         </tr>
@@ -209,7 +208,6 @@
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
                 <s:message code="cmm.save" />
             </button>
-
         </div>
         <div class="wj-gridWrap mt10" style="height:370px; overflow-y: hidden;">
             <div class="row">

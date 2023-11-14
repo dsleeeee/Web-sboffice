@@ -99,6 +99,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         <if test='posNo != null and posNo != ""'>
             AND tmtkgr.POS_NO = #{posNo}
         </if>
@@ -179,6 +182,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         <if test='posNo != null and posNo != ""'>
             AND tmpe.POS_NO = #{posNo}

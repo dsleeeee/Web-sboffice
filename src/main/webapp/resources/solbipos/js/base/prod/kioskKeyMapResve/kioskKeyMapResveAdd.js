@@ -79,8 +79,8 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
         dataItem.posNo          = messages["kioskKeyMapResve.posNo"];
         dataItem.envstCd        = messages["kioskKeyMapResve.envstCd"];
         dataItem.brand          = messages["kioskKeyMapResve.brand"];
-        dataItem.momsTeam       = messages["kioskKeyMapResve.momsTeam"];
-        dataItem.momsAcShop     = messages["kioskKeyMapResve.momsAcShop"];
+        dataItem.momsTeam       = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop     = messages["cmm.moms.momsAcShop"];
         dataItem.startDate      = messages["kioskKeyMapResve.startDate"];
         dataItem.orgTuClsType   = messages["kioskKeyMapResve.tuClsType"];
         dataItem.tuClsType      = messages["kioskKeyMapResve.tuClsType"];
@@ -207,6 +207,7 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         if(orgnFg === "STORE") {params.posNo = $scope.posNoAddCombo.selectedValue;}
 
         $scope._inquirySub('/base/prod/kioskKeyMapResve/kioskKeyMapResve/getKioskKeyMapResveAddList.sb', params, function() {}, false);

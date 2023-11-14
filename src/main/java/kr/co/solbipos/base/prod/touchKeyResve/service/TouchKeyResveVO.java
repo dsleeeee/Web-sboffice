@@ -86,6 +86,9 @@ public class TouchKeyResveVO extends PageVO {
 
     private String orgStartDate;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -269,4 +272,8 @@ public class TouchKeyResveVO extends PageVO {
     public void setOrgStartDate(String orgStartDate) {
         this.orgStartDate = orgStartDate;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

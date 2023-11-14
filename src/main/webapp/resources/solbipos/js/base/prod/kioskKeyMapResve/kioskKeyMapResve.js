@@ -60,6 +60,7 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // 오늘날짜
     var date = new Date();
@@ -159,6 +160,7 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', function ($scope, $ht
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
         params.listScale = 500;
 

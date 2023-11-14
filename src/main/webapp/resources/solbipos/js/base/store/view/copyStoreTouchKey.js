@@ -22,6 +22,7 @@ app.controller('copyStoreTouchKeyCtrl', ['$scope', '$http', function ($scope, $h
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -85,6 +86,7 @@ app.controller('copyStoreTouchKeyCtrl', ['$scope', '$http', function ($scope, $h
             params.momsShopType = $scope.momsShopType;
             params.momsStoreManageType = $scope.momsStoreManageType;
             params.branchCd = $scope.branchCd;
+            params.momsStoreFg01 = $scope.momsStoreFg01;
             // 선택한 매장브랜드가 있을 때
             params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
             // 선택한 매장브랜드가 없을 때('전체' 일때)
@@ -145,6 +147,7 @@ app.controller('copyStoreTouchKey2Ctrl', ['$scope', '$http', '$timeout', functio
     $scope._setComboData("momsShopTypeCombo2", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo2", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo2", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo2", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -173,6 +176,7 @@ app.controller('copyStoreTouchKey2Ctrl', ['$scope', '$http', '$timeout', functio
             params.momsShopType = $scope.momsShopType2;
             params.momsStoreManageType = $scope.momsStoreManageType2;
             params.branchCd = $scope.branchCd2;
+            params.momsStoreFg01 = $scope.momsStoreFg012;
 
             // 선택한 매장브랜드가 있을 때
             params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo2.selectedValue;

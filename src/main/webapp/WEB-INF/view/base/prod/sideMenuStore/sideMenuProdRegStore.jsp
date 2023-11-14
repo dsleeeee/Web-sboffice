@@ -64,7 +64,7 @@
                 </td>
                 <c:if test="${brandUseFg == '1'}">
                     <%-- 상품브랜드 --%>
-                    <th><s:message code="sideMenuStore.prodHqBrand"/></th>
+                    <th><s:message code="cmm.moms.prodHqBrand"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
