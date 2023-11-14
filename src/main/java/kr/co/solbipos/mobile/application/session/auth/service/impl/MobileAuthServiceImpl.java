@@ -245,6 +245,7 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         loginHistVO.setLoginIp(sessionInfoVO.getLoginIp());
         loginHistVO.setLoginDate(currentDateString());
         loginHistVO.setLoginDt(currentDateTimeString());
+        loginHistVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
         return loginHist(loginHistVO);
     }

@@ -454,7 +454,7 @@
 
         <div <c:if test="${orgnFg == 'HQ' and membrClassManageFg == '0'}">style="display: none;"</c:if>>
             <%-- 신규 회원 등록 --%>
-            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="registMember()">
+            <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="registMember()" <c:if test="${hqOfficeCd == 'A0007'}">style="display: none;"</c:if>><%-- 비티스(A0007) 회원등록금지 20231114 --%>
                 <s:message code="webMenu.new"/>
             </button>
             <%-- 선택회원 삭제 --%>

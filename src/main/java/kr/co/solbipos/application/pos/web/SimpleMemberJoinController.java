@@ -476,6 +476,11 @@ public class SimpleMemberJoinController {
                     throw new AuthenticationException(messageService.get("cmm.access.denied"), "/application/pos/posSmsSend/smsSendMenuAuth.sb");
                 }
             }
+            // POS 화면에서 회원등록(포스용)
+            else if(request.getParameter("url").equals("simpleMemberJoin")){
+                // 본사코드 셋팅(비티스(A0007) 소속 매장은 회원등록금지, 금지여부 체크시 사용)
+                model.addAttribute("hqOfficeCd", sessionInfoVO.getHqOfficeCd());
+            }
         }
         else {
             throw new AuthenticationException(messageService.get("login.pos.error"), "/error/application/pos/403.sb");
