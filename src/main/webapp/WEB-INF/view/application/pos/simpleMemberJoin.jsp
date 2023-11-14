@@ -16,66 +16,78 @@
 <div class="cusWrap">
     <div class="content-middle">
         <div class="subCon">
-            <div class="searchBar flddUnfld">
-                <span class="cusTitle"><s:message code="application.pos.simpleMemberJoin.title"/></span>
-            </div>
-            <table class="searchTbl">
-                <colgroup>
-                    <col class="w30" />
-                    <col class="w70" />
-                </colgroup>
-                <tbody>
-                <tr>
-                    <%-- 연락처 --%>
-                    <th><s:message code="application.pos.simpleMemberJoin.telNo"/></th>
-                    <td><input type="text" id="telNo" name="telNo" class="sb-input w100" maxlength="13" placeholder="<s:message code='application.pos.simpleMemberJoin.numberOnly'/> <s:message code='application.pos.simpleMemberJoin.telNo.ex'/>"/></td>
-                </tr>
-                <tr>
-                    <%-- 회원명 --%>
-                    <th><s:message code="application.pos.simpleMemberJoin.membrNm"/></th>
-                    <td><input type="text" id="membrNm" name="membrNm" class="sb-input w100" maxlength="25" /></td>
-                </tr>
-                <tr>
-                    <%-- 생년월일 --%>
-                    <th><s:message code="application.pos.simpleMemberJoin.birthday"/></th>
-                    <td><input type="text" id="birthday" name="birthday" class="sb-input w100" maxlength="8" placeholder="<s:message code='application.pos.simpleMemberJoin.numberOnly'/> <s:message code='application.pos.simpleMemberJoin.birthday.ex'/>"/></td>
-                </tr>
-                <tr>
-                    <%-- 성별 --%>
-                    <th><s:message code="application.pos.simpleMemberJoin.gendrFg"/></th>
-                    <td>
-                        <span class="sb-radio"><input type="radio" id="gendrFgM" name="gendrFg" value="M" checked /><label for="gendrFgM">남</label></span>
-                        <span class="sb-radio"><input type="radio" id="gendrFgF" name="gendrFg" value="F" /><label for="gendrFgF">여</label></span>
-                    </td>
-                </tr>
-                <tr id="tr_membrFg">
-                    <%-- 회원구분 --%>
-                    <th><s:message code="application.pos.simpleMemberJoin.membrFg"/></th>
-                    <td>
-                        <span class="sb-radio"><input type="radio" id="membrFgPr" name="membrFg" value="prepaid" checked /><label for="membrFgPr">선불</label></span>
-                        <span class="sb-radio"><input type="radio" id="membrFgPo" name="membrFg" value="postpaid" /><label for="membrFgPo">후불</label></span>
-                        <span class="sb-radio"><input type="radio" id="membrFgPrPo" name="membrFg" value="prepostpaid" /><label for="membrFgPrPo">선후불</label></span>
-                    </td>
-                </tr>
-                <%--<tr>--%>
-                <%--&lt;%&ndash; 회원분류 &ndash;%&gt;--%>
-                <%--<th><s:message code="application.pos.simpleMemberJoin.membrClass"/></th>--%>
-                <%--<td>--%>
-                <%--<div class="sb-select">--%>
-                <%--<div id="membrClass"></div>--%>
-                <%--</div>--%>
-                <%--</td>--%>
-                <%--</tr>--%>
-                <tr>
-                    <%-- 비고 --%>
-                    <th><s:message code="application.pos.simpleMemberJoin.remark"/></th>
-                    <td><input type="text" id="remark" name="remark" class="sb-input w100" maxlength="100" /></td>
-                </tr>
-                </tbody>
-            </table>
 
-            <div class="mt10 pdb20 oh">
-                <button class="btn_blue fr" id="btnSave"><s:message code="cmm.save" /></button>
+            <div id="divNoPermissionMsg" class="contents" style="display: none;">
+                <div class="elseCon">
+                    <p class="lgTxt">
+                        회원등록 기능을 사용하실 수 없습니다.
+                    </p>
+                </div>
+            </div>
+
+            <div id="divContents" style="display: block;">
+
+                <div class="searchBar flddUnfld">
+                    <span class="cusTitle"><s:message code="application.pos.simpleMemberJoin.title"/></span>
+                </div>
+                <table class="searchTbl">
+                    <colgroup>
+                        <col class="w30" />
+                        <col class="w70" />
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <%-- 연락처 --%>
+                        <th><s:message code="application.pos.simpleMemberJoin.telNo"/></th>
+                        <td><input type="text" id="telNo" name="telNo" class="sb-input w100" maxlength="13" placeholder="<s:message code='application.pos.simpleMemberJoin.numberOnly'/> <s:message code='application.pos.simpleMemberJoin.telNo.ex'/>"/></td>
+                    </tr>
+                    <tr>
+                        <%-- 회원명 --%>
+                        <th><s:message code="application.pos.simpleMemberJoin.membrNm"/></th>
+                        <td><input type="text" id="membrNm" name="membrNm" class="sb-input w100" maxlength="25" /></td>
+                    </tr>
+                    <tr>
+                        <%-- 생년월일 --%>
+                        <th><s:message code="application.pos.simpleMemberJoin.birthday"/></th>
+                        <td><input type="text" id="birthday" name="birthday" class="sb-input w100" maxlength="8" placeholder="<s:message code='application.pos.simpleMemberJoin.numberOnly'/> <s:message code='application.pos.simpleMemberJoin.birthday.ex'/>"/></td>
+                    </tr>
+                    <tr>
+                        <%-- 성별 --%>
+                        <th><s:message code="application.pos.simpleMemberJoin.gendrFg"/></th>
+                        <td>
+                            <span class="sb-radio"><input type="radio" id="gendrFgM" name="gendrFg" value="M" checked /><label for="gendrFgM">남</label></span>
+                            <span class="sb-radio"><input type="radio" id="gendrFgF" name="gendrFg" value="F" /><label for="gendrFgF">여</label></span>
+                        </td>
+                    </tr>
+                    <tr id="tr_membrFg">
+                        <%-- 회원구분 --%>
+                        <th><s:message code="application.pos.simpleMemberJoin.membrFg"/></th>
+                        <td>
+                            <span class="sb-radio"><input type="radio" id="membrFgPr" name="membrFg" value="prepaid" checked /><label for="membrFgPr">선불</label></span>
+                            <span class="sb-radio"><input type="radio" id="membrFgPo" name="membrFg" value="postpaid" /><label for="membrFgPo">후불</label></span>
+                            <span class="sb-radio"><input type="radio" id="membrFgPrPo" name="membrFg" value="prepostpaid" /><label for="membrFgPrPo">선후불</label></span>
+                        </td>
+                    </tr>
+                    <%--<tr>--%>
+                    <%--&lt;%&ndash; 회원분류 &ndash;%&gt;--%>
+                    <%--<th><s:message code="application.pos.simpleMemberJoin.membrClass"/></th>--%>
+                    <%--<td>--%>
+                    <%--<div class="sb-select">--%>
+                    <%--<div id="membrClass"></div>--%>
+                    <%--</div>--%>
+                    <%--</td>--%>
+                    <%--</tr>--%>
+                    <tr>
+                        <%-- 비고 --%>
+                        <th><s:message code="application.pos.simpleMemberJoin.remark"/></th>
+                        <td><input type="text" id="remark" name="remark" class="sb-input w100" maxlength="100" /></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="mt10 pdb20 oh">
+                    <button class="btn_blue fr" id="btnSave"><s:message code="cmm.save" /></button>
+                </div>
             </div>
         </div>
     </div>
@@ -85,6 +97,16 @@
     $(document).ready(function(){
 
         var posMemberFgEnvstVal  = ${posMemberFgEnvstVal};
+        var hqOfficeCd = "${hqOfficeCd}";
+
+        // 비티스(A0007) 소속 매장은 회원등록금지
+        if(hqOfficeCd === "A0007"){
+            $("#divNoPermissionMsg").css('display', '');
+            $("#divContents").css('display', 'none');
+        }else{
+            $("#divNoPermissionMsg").css('display', 'none');
+            $("#divContents").css('display', '');
+        }
 
         // 환경변수값(1067)을 가져와 회원구분항목 display
         if(posMemberFgEnvstVal === 0){

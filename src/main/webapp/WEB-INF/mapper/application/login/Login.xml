@@ -168,7 +168,8 @@
           BRWSR_INFO,
           LOGIN_DATE,
           LOGIN_DT,
-          V_USER_ID
+          V_USER_ID,
+          ORGN_CD
         )
         VALUES
         (
@@ -180,7 +181,8 @@
           #{brwsrInfo},
           #{loginDate},
           #{loginDt},
-          #{vUserId}
+          #{vUserId},
+          #{orgnCd}
         )
     </insert>
 
