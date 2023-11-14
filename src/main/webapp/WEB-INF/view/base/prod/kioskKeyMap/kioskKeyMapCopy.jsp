@@ -23,16 +23,16 @@
                 </c:if>
             </c:if>
         </div>
-        <table class="searchTbl">
-            <colgroup>
-                <col class="w15"/>
-                <col class="w35"/>
-                <col class="w15"/>
-                <col class="w35"/>
-            </colgroup>
-            <tbody>
-            <c:if test="${brandUseFg == '1'}">
-                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                </colgroup>
+                <tbody>
+                <c:if test="${brandUseFg == '1'}">
                     <tr>
                         <th><s:message code="cmm.moms.storeHqBrand" /></th>
                         <td>
@@ -52,22 +52,20 @@
                         <td></td>
                     </tr>
                 </c:if>
-            </c:if>
-            <tr>
-                <%-- 매장코드 --%>
-                <th><s:message code="kioskKeyMap.storeCd" /></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="srchStoreCd1" onkeyup="fnNxBtnSearch('1');"/>
-                </td>
-                <%-- 매장명 --%>
-                <th><s:message code="kioskKeyMap.storeNm" /></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="srchStoreNm1" onkeyup="fnNxBtnSearch('1');"/>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
+                <tr>
+                    <%-- 매장코드 --%>
+                    <th><s:message code="kioskKeyMap.storeCd" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStoreCd1" onkeyup="fnNxBtnSearch('1');"/>
+                    </td>
+                    <%-- 매장명 --%>
+                    <th><s:message code="kioskKeyMap.storeNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStoreNm1" onkeyup="fnNxBtnSearch('1');"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             <table class="searchTbl" id="tblSearchAddShowCopy" style="display: none;">
                 <colgroup>
                     <col class="w15"/>
@@ -316,16 +314,16 @@
                 </c:if>
             </c:if>
         </div>
-        <table class="searchTbl">
-            <colgroup>
-                <col class="w15"/>
-                <col class="w35"/>
-                <col class="w15"/>
-                <col class="w35"/>
-            </colgroup>
-            <tbody>
-            <c:if test="${brandUseFg == '1'}">
-                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                </colgroup>
+                <tbody>
+                <c:if test="${brandUseFg == '1'}">
                     <tr>
                         <th><s:message code="cmm.moms.storeHqBrand" /></th>
                         <td>
@@ -345,22 +343,20 @@
                         <td></td>
                     </tr>
                 </c:if>
-            </c:if>
-            <tr>
-                <%-- 매장코드 --%>
-                <th><s:message code="kioskKeyMap.storeCd" /></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="srchStoreCd2" onkeyup="fnNxBtnSearch('2');"/>
-                </td>
-                <%-- 매장명 --%>
-                <th><s:message code="kioskKeyMap.storeNm" /></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="srchStoreNm2" onkeyup="fnNxBtnSearch('2');"/>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
+                <tr>
+                    <%-- 매장코드 --%>
+                    <th><s:message code="kioskKeyMap.storeCd" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStoreCd2" onkeyup="fnNxBtnSearch('2');"/>
+                    </td>
+                    <%-- 매장명 --%>
+                    <th><s:message code="kioskKeyMap.storeNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStoreNm2" onkeyup="fnNxBtnSearch('2');"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             <table class="searchTbl" id="tblSearchAddShowCopy2" style="display: none;">
                 <colgroup>
                     <col class="w15"/>
@@ -555,4 +551,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapCopy.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapCopy.js?ver=20231114.01" charset="utf-8"></script>

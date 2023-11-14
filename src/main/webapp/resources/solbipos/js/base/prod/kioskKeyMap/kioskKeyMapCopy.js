@@ -127,8 +127,7 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreCopyKioskPosList.sb", params, function () {
-        });
+        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreCopyKioskPosList.sb", params, function () {});
     };
 
     // 확장조회 숨김/보임
@@ -141,6 +140,7 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
     };
 
 }]);
+
 
 // 적용대상매장포스
 app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -215,8 +215,7 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreCopyKioskPosList.sb", params, function () {
-        });
+        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreCopyKioskPosList.sb", params, function () {});
     };
 
     // 선택한 기준매장포스 정보 셋팅
