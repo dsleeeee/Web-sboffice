@@ -27,12 +27,10 @@ app.controller('touchKeyResveAddCtrl', ['$scope', '$http', function ($scope, $ht
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
         $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
         $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
         $scope.touchKeyGrpDataMap = new wijmo.grid.DataMap(touchKeyGrpData, 'value', 'name');
-
 
         // 예약일시 날짜셋팅
         $scope.startDateCombo.value = getTomorrow('-');
@@ -67,8 +65,8 @@ app.controller('touchKeyResveAddCtrl', ['$scope', '$http', function ($scope, $ht
         dataItem.storeNm        = messages["touchKeyResve.storeNm"];
         dataItem.posNo          = messages["touchKeyResve.posNo"];
         dataItem.brand          = messages["touchKeyResve.brand"];
-        dataItem.momsTeam       = messages["touchKeyResve.momsTeam"];
-        dataItem.momsAcShop     = messages["touchKeyResve.momsAcShop"];
+        dataItem.momsTeam       = messages["cmm.moms.momsTeam"];
+        dataItem.momsAcShop     = messages["cmm.moms.momsAcShop"];
         dataItem.startDate      = messages["touchKeyResve.startDate"];
         dataItem.orgTouchKeyGrp = messages["touchKeyResve.touchKeyGrp"];
         dataItem.touchKeyGrp    = messages["touchKeyResve.touchKeyGrp"];
@@ -188,6 +186,7 @@ app.controller('touchKeyResveAddCtrl', ['$scope', '$http', function ($scope, $ht
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
         $scope._inquirySub('/base/prod/touchKeyResve/touchKeyResve/getTouchKeyResveAddList.sb', params, function() {}, false);
     };

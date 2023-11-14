@@ -350,6 +350,7 @@
         <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
         </c:import>
     </c:if>
+
     <%-- 터치키 매장적용 팝업 --%>
     <c:import url="/WEB-INF/view/base/prod/touchKey/popUpTouchKeyApplyStore.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
@@ -381,6 +382,7 @@
     </c:import>
 
     <%-- 터치키사용그룹코드 --%>
+    <%-- 매장사용터치키설정 --%>
     <c:import url="/WEB-INF/view/base/prod/touchKey/popUpTouchKeyEnv.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
         <c:param name="menuNm" value="${menuNm}"/>
@@ -543,6 +545,7 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js"

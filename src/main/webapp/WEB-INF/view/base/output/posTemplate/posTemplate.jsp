@@ -179,6 +179,7 @@
   var momsCommercialComboList = ${momsCommercialComboList};
   var momsShopTypeComboList = ${momsShopTypeComboList};
   var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+  var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 
   // POS에서 해당 WEB 화면 최초 접속한 경우(접속하면서 session 생성), 왼쪽 메뉴영역은 접어두기.
   // 최초 접속시에는 이전 URL 인자값으로 판별가능

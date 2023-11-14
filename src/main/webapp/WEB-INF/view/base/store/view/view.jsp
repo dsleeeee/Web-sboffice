@@ -218,26 +218,26 @@
 </div>
 
 <script>
-var orgnFg = "${orgnFg}";
-var clsFg = ${ccu.getCommCodeSelect("001")};
-var sysStatFg = ${ccu.getCommCodeSelect("005")};
-var areaCd = ${ccu.getCommCodeSelect("061")};
-// 브랜드 사용여부
-var brandUseFg = "${brandUseFg}";
-// 사용자 브랜드
-var userHqBrandCdComboList = ${userHqBrandCdComboList};
-var brandList = ${brandList};
+  var orgnFg = "${orgnFg}";
+  var clsFg = ${ccu.getCommCodeSelect("001")};
+  var sysStatFg = ${ccu.getCommCodeSelect("005")};
+  var areaCd = ${ccu.getCommCodeSelect("061")};
+  // 브랜드 사용여부
+  var brandUseFg = "${brandUseFg}";
+  // 사용자 브랜드
+  var userHqBrandCdComboList = ${userHqBrandCdComboList};
+  var brandList = ${brandList};
 
-// [1250 맘스터치] 환경설정값
-var momsEnvstVal = "${momsEnvstVal}";
-var branchCdComboList = ${branchCdComboList};
-var momsTeamComboList = ${momsTeamComboList};
-var momsAcShopComboList = ${momsAcShopComboList};
-var momsAreaFgComboList = ${momsAreaFgComboList};
-var momsCommercialComboList = ${momsCommercialComboList};
-var momsShopTypeComboList = ${momsShopTypeComboList};
-var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-
+  // [1250 맘스터치] 환경설정값
+  var momsEnvstVal = "${momsEnvstVal}";
+  var branchCdComboList = ${branchCdComboList};
+  var momsTeamComboList = ${momsTeamComboList};
+  var momsAcShopComboList = ${momsAcShopComboList};
+  var momsAreaFgComboList = ${momsAreaFgComboList};
+  var momsCommercialComboList = ${momsCommercialComboList};
+  var momsShopTypeComboList = ${momsShopTypeComboList};
+  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+  var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/view/view.js?ver=20230223.01" charset="utf-8"></script>

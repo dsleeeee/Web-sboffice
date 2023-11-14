@@ -159,6 +159,9 @@ public class KioskKeyMapVO extends PageVO {
 
     private String userId;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -652,4 +655,8 @@ public class KioskKeyMapVO extends PageVO {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

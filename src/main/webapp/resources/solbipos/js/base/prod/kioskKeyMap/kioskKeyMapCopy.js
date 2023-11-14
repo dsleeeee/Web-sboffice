@@ -34,6 +34,7 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData("srchMomsShopType1", momsShopTypeComboList); // 점포유형
     $scope._setComboData("srchMomsStoreManageType1", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd1", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo1", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -105,6 +106,7 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
             params.momsShopType = $scope.srchMomsShopType1Combo.selectedValue;
             params.momsStoreManageType = $scope.srchMomsStoreManageType1Combo.selectedValue;
             params.branchCd = $scope.srchBranchCd1Combo.selectedValue;
+            params.momsStoreFg01 = $scope.momsStoreFg011;
         }
 
         if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능
@@ -125,8 +127,7 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreCopyKioskPosList.sb", params, function () {
-        });
+        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreCopyKioskPosList.sb", params, function () {});
     };
 
     // 확장조회 숨김/보임
@@ -139,6 +140,7 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
     };
 
 }]);
+
 
 // 적용대상매장포스
 app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -154,6 +156,7 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("srchMomsShopType2", momsShopTypeComboList); // 점포유형
     $scope._setComboData("srchMomsStoreManageType2", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd2", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo2", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -192,6 +195,7 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function 
             params.momsShopType = $scope.srchMomsShopType2Combo.selectedValue;
             params.momsStoreManageType = $scope.srchMomsStoreManageType2Combo.selectedValue;
             params.branchCd = $scope.srchBranchCd2Combo.selectedValue;
+            params.momsStoreFg01 = $scope.momsStoreFg012;
         }
 
         if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능
@@ -211,8 +215,7 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreCopyKioskPosList.sb", params, function () {
-        });
+        $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreCopyKioskPosList.sb", params, function () {});
     };
 
     // 선택한 기준매장포스 정보 셋팅

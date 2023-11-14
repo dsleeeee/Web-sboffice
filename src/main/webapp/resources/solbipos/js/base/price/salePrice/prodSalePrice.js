@@ -66,6 +66,7 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
   $scope.prodSaleUprcApply = true;
 
@@ -301,6 +302,7 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
             }
             params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
     }
     // console.log(params);
 

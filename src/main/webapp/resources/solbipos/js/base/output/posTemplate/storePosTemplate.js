@@ -24,6 +24,8 @@ app.controller('storePosTemplateCtrl', ['$scope', '$http', function ($scope, $ht
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
   $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
@@ -101,7 +103,9 @@ app.controller('storePosTemplateCtrl', ['$scope', '$http', function ($scope, $ht
         }
         params.userBrands = momsHqBrandCd;
       }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
     }
+
     $scope._inquirySub("/base/output/posTemplate/template/getRegStoreList.sb", params, function() {}, false);
   };
 

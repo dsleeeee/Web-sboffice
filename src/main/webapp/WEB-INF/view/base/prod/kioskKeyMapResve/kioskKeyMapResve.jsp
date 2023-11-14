@@ -13,7 +13,7 @@
 <div class="subCon" id="kioskKeyMapResve" ng-controller="kioskKeyMapResveCtrl">
 
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="kioskKeyMapResve.kioskKeyMapResve" /></a>
+        <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" id="nxBtnSearch" ng-click="_pageView('kioskKeyMapResveCtrl', 1)">
@@ -132,7 +132,7 @@
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <tr>
                 <%-- 매장브랜드 --%>
-                <th><s:message code="dayProd.storeHqBrand"/></th>
+                <th><s:message code="cmm.moms.storeHqBrand"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -160,8 +160,8 @@
             </colgroup>
             <tbody>
             <tr>
-                    <%-- 팀별 --%>
-                <th><s:message code="dayProd.momsTeam"/></th>
+                <%-- 팀별 --%>
+                <th><s:message code="cmm.moms.momsTeam"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -176,8 +176,8 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                    <%-- AC점포별 --%>
-                <th><s:message code="dayProd.momsAcShop"/></th>
+                <%-- AC점포별 --%>
+                <th><s:message code="cmm.moms.momsAcShop"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -194,8 +194,8 @@
                 </td>
             </tr>
             <tr>
-                    <%-- 지역구분 --%>
-                <th><s:message code="dayProd.momsAreaFg"/></th>
+                <%-- 지역구분 --%>
+                <th><s:message code="cmm.moms.momsAreaFg"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -210,8 +210,8 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                    <%-- 상권 --%>
-                <th><s:message code="dayProd.momsCommercial"/></th>
+                <%-- 상권 --%>
+                <th><s:message code="cmm.moms.momsCommercial"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -228,8 +228,8 @@
                 </td>
             </tr>
             <tr>
-                    <%-- 점포유형 --%>
-                <th><s:message code="dayProd.momsShopType"/></th>
+                <%-- 점포유형 --%>
+                <th><s:message code="cmm.moms.momsShopType"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -244,8 +244,8 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                    <%-- 매장관리타입 --%>
-                <th><s:message code="dayProd.momsStoreManageType"/></th>
+                <%-- 매장관리타입 --%>
+                <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -262,8 +262,8 @@
                 </td>
             </tr>
             <tr>
-                    <%-- 그룹 --%>
-                <th><s:message code="dayProd.branchCd"/></th>
+                <%-- 그룹 --%>
+                <th><s:message code="cmm.moms.branch"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -278,8 +278,28 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <td></td>
-                <td></td>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <%-- 매장그룹 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg01Combo"
+                                    ng-model="momsStoreFg01"
+                                    items-source="_getComboData('momsStoreFg01Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg01Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </c:if>
+                <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                    <td></td>
+                    <td></td>
+                </c:if>
             </tr>
             </tbody>
         </table>
@@ -352,8 +372,8 @@
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.posNo"/>" binding="posNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.envstCd"/>" binding="envstCd" width="70" is-read-only="true" align="center" data-map="envstDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.brand"/>" binding="brand" is-read-only="true" width="80" align="center" data-map="brandDataMap" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsTeam"/>" binding="momsTeam" is-read-only="true" width="80" align="center" data-map="momsTeamDataMap" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.momsAcShop"/>" binding="momsAcShop" width="80" align="center" data-map="momsAcShopDataMap" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsTeam"/>" binding="momsTeam" is-read-only="true" width="80" align="center" data-map="momsTeamDataMap" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsAcShop"/>" binding="momsAcShop" width="80" align="center" data-map="momsAcShopDataMap" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgStartDate" width="100" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.nowTuClsType"/>" binding="nowTuClsType" width="90" align="center" is-read-only="true" data-map="tuClsTypeDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="kioskKeyMapResve.orgModDt"/>" binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -385,7 +405,6 @@
         </ul>
     </div>
     <%--//페이지 리스트--%>
-    </div>
 </div>
 
 <script>
@@ -412,9 +431,10 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20230526.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20231101.01" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.jsp">

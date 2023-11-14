@@ -23,18 +23,18 @@
                 </c:if>
             </c:if>
         </div>
-        <table class="searchTbl">
-            <colgroup>
-                <col class="w15"/>
-                <col class="w35"/>
-                <col class="w15"/>
-                <col class="w35"/>
-            </colgroup>
-            <tbody>
-            <c:if test="${brandUseFg == '1'}">
-                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                </colgroup>
+                <tbody>
+                <c:if test="${brandUseFg == '1'}">
                     <tr>
-                        <th><s:message code="kioskKeyMap.storeHqBrand" /></th>
+                        <th><s:message code="cmm.moms.storeHqBrand" /></th>
                         <td>
                             <div class="sb-select">
                               <wj-combo-box
@@ -52,22 +52,20 @@
                         <td></td>
                     </tr>
                 </c:if>
-            </c:if>
-            <tr>
-                <%-- 매장코드 --%>
-                <th><s:message code="kioskKeyMap.storeCd" /></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="srchStoreCd1" onkeyup="fnNxBtnSearch('1');"/>
-                </td>
-                <%-- 매장명 --%>
-                <th><s:message code="kioskKeyMap.storeNm" /></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="srchStoreNm1" onkeyup="fnNxBtnSearch('1');"/>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
+                <tr>
+                    <%-- 매장코드 --%>
+                    <th><s:message code="kioskKeyMap.storeCd" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStoreCd1" onkeyup="fnNxBtnSearch('1');"/>
+                    </td>
+                    <%-- 매장명 --%>
+                    <th><s:message code="kioskKeyMap.storeNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStoreNm1" onkeyup="fnNxBtnSearch('1');"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             <table class="searchTbl" id="tblSearchAddShowCopy" style="display: none;">
                 <colgroup>
                     <col class="w15"/>
@@ -78,7 +76,7 @@
                 <tbody>
                 <tr>
                     <%-- 팀별 --%>
-                    <th><s:message code="kioskKeyMap.team"/></th>
+                    <th><s:message code="cmm.moms.momsTeam"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -94,7 +92,7 @@
                         </div>
                     </td>
                     <%-- AC점포별 --%>
-                    <th><s:message code="kioskKeyMap.acShop"/></th>
+                    <th><s:message code="cmm.moms.momsAcShop"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -112,7 +110,7 @@
                 </tr>
                 <tr>
                     <%-- 지역구분 --%>
-                    <th><s:message code="kioskKeyMap.areaFg"/></th>
+                    <th><s:message code="cmm.moms.momsAreaFg"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -128,7 +126,7 @@
                         </div>
                     </td>
                     <%-- 상권 --%>
-                    <th><s:message code="kioskKeyMap.commercial"/></th>
+                    <th><s:message code="cmm.moms.momsCommercial"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -146,7 +144,7 @@
                 </tr>
                 <tr>
                     <%-- 점포유형 --%>
-                    <th><s:message code="kioskKeyMap.shopType"/></th>
+                    <th><s:message code="cmm.moms.momsShopType"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -162,7 +160,7 @@
                         </div>
                     </td>
                     <%-- 매장관리타입 --%>
-                    <th><s:message code="kioskKeyMap.storeManageType"/></th>
+                    <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -180,7 +178,7 @@
                 </tr>
                 <tr>
                     <%-- 그룹 --%>
-                    <th><s:message code="kioskKeyMap.branchCd"/></th>
+                    <th><s:message code="cmm.moms.branch"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -195,8 +193,28 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                        <%-- 매장그룹 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg01Combo1"
+                                        ng-model="momsStoreFg011"
+                                        items-source="_getComboData('momsStoreFg01Combo1')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg01Combo1">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </c:if>
+                    <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                        <td></td>
+                        <td></td>
+                    </c:if>
                 </tr>
                 </tbody>
             </table>
@@ -296,18 +314,18 @@
                 </c:if>
             </c:if>
         </div>
-        <table class="searchTbl">
-            <colgroup>
-                <col class="w15"/>
-                <col class="w35"/>
-                <col class="w15"/>
-                <col class="w35"/>
-            </colgroup>
-            <tbody>
-            <c:if test="${brandUseFg == '1'}">
-                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                    <col class="w15"/>
+                    <col class="w35"/>
+                </colgroup>
+                <tbody>
+                <c:if test="${brandUseFg == '1'}">
                     <tr>
-                        <th><s:message code="kioskKeyMap.storeHqBrand" /></th>
+                        <th><s:message code="cmm.moms.storeHqBrand" /></th>
                         <td>
                             <div class="sb-select">
                               <wj-combo-box
@@ -325,22 +343,20 @@
                         <td></td>
                     </tr>
                 </c:if>
-            </c:if>
-            <tr>
-                <%-- 매장코드 --%>
-                <th><s:message code="kioskKeyMap.storeCd" /></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="srchStoreCd2" onkeyup="fnNxBtnSearch('2');"/>
-                </td>
-                <%-- 매장명 --%>
-                <th><s:message code="kioskKeyMap.storeNm" /></th>
-                <td>
-                    <input type="text" class="sb-input w100" id="srchStoreNm2" onkeyup="fnNxBtnSearch('2');"/>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
+                <tr>
+                    <%-- 매장코드 --%>
+                    <th><s:message code="kioskKeyMap.storeCd" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStoreCd2" onkeyup="fnNxBtnSearch('2');"/>
+                    </td>
+                    <%-- 매장명 --%>
+                    <th><s:message code="kioskKeyMap.storeNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchStoreNm2" onkeyup="fnNxBtnSearch('2');"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             <table class="searchTbl" id="tblSearchAddShowCopy2" style="display: none;">
                 <colgroup>
                     <col class="w15"/>
@@ -351,7 +367,7 @@
                 <tbody>
                 <tr>
                     <%-- 팀별 --%>
-                    <th><s:message code="kioskKeyMap.team"/></th>
+                    <th><s:message code="cmm.moms.momsTeam"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -367,7 +383,7 @@
                         </div>
                     </td>
                     <%-- AC점포별 --%>
-                    <th><s:message code="kioskKeyMap.acShop"/></th>
+                    <th><s:message code="cmm.moms.momsAcShop"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -385,7 +401,7 @@
                 </tr>
                 <tr>
                     <%-- 지역구분 --%>
-                    <th><s:message code="kioskKeyMap.areaFg"/></th>
+                    <th><s:message code="cmm.moms.momsAreaFg"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -401,7 +417,7 @@
                         </div>
                     </td>
                     <%-- 상권 --%>
-                    <th><s:message code="kioskKeyMap.commercial"/></th>
+                    <th><s:message code="cmm.moms.momsCommercial"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -419,7 +435,7 @@
                 </tr>
                 <tr>
                     <%-- 점포유형 --%>
-                    <th><s:message code="kioskKeyMap.shopType"/></th>
+                    <th><s:message code="cmm.moms.momsShopType"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -435,7 +451,7 @@
                         </div>
                     </td>
                     <%-- 매장관리타입 --%>
-                    <th><s:message code="kioskKeyMap.storeManageType"/></th>
+                    <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -453,7 +469,7 @@
                 </tr>
                 <tr>
                     <%-- 그룹 --%>
-                    <th><s:message code="kioskKeyMap.branchCd"/></th>
+                    <th><s:message code="cmm.moms.branch"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -468,8 +484,28 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                        <%-- 매장그룹 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg01Combo2"
+                                        ng-model="momsStoreFg012"
+                                        items-source="_getComboData('momsStoreFg01Combo2')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg01Combo2">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </c:if>
+                    <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                        <td></td>
+                        <td></td>
+                    </c:if>
                 </tr>
                 </tbody>
             </table>
@@ -514,7 +550,5 @@
     </div>
 
 </div>
-<script>
 
-</script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapCopy.js?ver=20230502.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapCopy.js?ver=20231114.01" charset="utf-8"></script>

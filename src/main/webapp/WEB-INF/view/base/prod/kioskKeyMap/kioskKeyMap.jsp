@@ -10,17 +10,14 @@
                 <a id="kioskKeyMapRegistTab" href="#" class="on" ng-click="kioskKeyMapRegistShow()"><s:message code="kioskKeyMap.kioskKeyMapRegist"/></a>
             </li>
             <%-- 키오스크키맵복사 탭 --%>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                <li>
-                    <a id="kioskKeyMapCopyTab" href="#" ng-click="kioskKeyMapCopyShow()"><s:message code="kioskKeyMap.kioskKeyMapCopy"/></a>
-                </li>
-            </c:if>
+            <li>
+                <a id="kioskKeyMapCopyTab" href="#" ng-click="kioskKeyMapCopyShow()"><s:message code="kioskKeyMap.kioskKeyMapCopy"/></a>
+            </li>
         </ul>
     </div>
 </div>
 
 <script type="text/javascript">
-
     // 브랜드 사용여부
     var brandUseFg = "${brandUseFg}";
     // 사용자 브랜드
@@ -28,6 +25,7 @@
 
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
+
     var subPriceFg = "${subPriceFg}";
     var coercionFg = "${coercionFg}";
 
@@ -38,6 +36,7 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 
     // 본사권한 [기초관리] - [매장관리] - [매장정보조회]의 판매터치키변경을 클릭하여 접속한 경우, 왼쪽 메뉴영역은 접어두기.
     var referrer = document.referrer;

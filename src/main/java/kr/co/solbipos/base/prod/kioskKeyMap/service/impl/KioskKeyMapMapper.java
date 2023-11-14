@@ -43,6 +43,7 @@ public interface KioskKeyMapMapper {
     /** 키오스크 터치키그룹명 복사 */
     int copyKioskTuClsTypeNm(KioskKeyMapVO kioskKeyMapVO);
     int copyKioskStoreTuClsTypeNm(KioskKeyMapVO kioskKeyMapVO);
+    int copyKioskStoreTuClsTypeNmStore(KioskKeyMapVO kioskKeyMapVO);
 
     /** 키오스크 키맵그룹코드 생성 */
     String getKiosTuClsTypeCode(KioskKeyMapVO kioskKeyMapVO);
@@ -116,10 +117,12 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(분류) 저장 */
     int insertKioskCategoryStoreReg(KioskKeyMapVO kioskKeyMapVO);
+    int insertKioskCategoryStoreRegStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
 
     /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품 매장에도 복사 */
     int copyKioskKeyMapStoreReg(KioskKeyMapVO kioskKeyMapVO);
     int copyKioskKeyMapStoreReg2(KioskKeyMapVO kioskKeyMapVO);
+    int copyKioskKeyMapStoreRegStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
 
     /** 키오스크 매장적용(매장/포장) - 매장 키오스크 포스 리스트 조회 */
     List<DefaultMap<String>> getStoreKioskPosList(KioskKeyMapVO kioskKeyMapVO);
@@ -203,6 +206,7 @@ public interface KioskKeyMapMapper {
     /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장 */
     int insertKioskCategoryStoreRegM(KioskKeyMapVO kioskKeyMapVO);
     int insertKioskCategoryStoreRegM2(KioskKeyMapVO kioskKeyMapVO);
+    int insertKioskCategoryStoreRegMStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
 
     /** 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제(중분류) */
     int deleteStoreTuClsTypeM(KioskKeyMapVO kioskKeyMapVO);

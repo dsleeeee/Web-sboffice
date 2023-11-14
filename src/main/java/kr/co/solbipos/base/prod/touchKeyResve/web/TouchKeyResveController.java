@@ -122,7 +122,6 @@ public class TouchKeyResveController {
             model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
             System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
         }
-        /** //맘스터치 */
 
         // 사용자별 브랜드 조회(콤보박스용)
         DayProdVO dayProdVO = new DayProdVO();
@@ -232,6 +231,21 @@ public class TouchKeyResveController {
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
 
+        // 매장그룹
+        List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
+        String momsStoreFg01ComboListAll = "";
+        if (momsStoreFg01ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg01ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
+        /** //맘스터치 */
 
         return "base/prod/touchKeyResve/touchKeyResve";
     }

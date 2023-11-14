@@ -90,6 +90,9 @@ public class ViewVO extends PageVO {
     /** 환경설정 [1250 맘스터치] */
     private String momsEnvstVal;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     /**
      * @return the hqOfficeCd
      */
@@ -390,4 +393,8 @@ public class ViewVO extends PageVO {
     public void setMomsEnvstVal(String momsEnvstVal) {
         this.momsEnvstVal = momsEnvstVal;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }
