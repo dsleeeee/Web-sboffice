@@ -23,12 +23,13 @@
                 <col class="w35" />
             </colgroup>
             <tbody>
-            <%-- 등록 일자 --%>
             <tr>
                 <th><s:message code="empWebMenu.sMenuNm" /></th>
                 <td>
                     <input type="text" id="srchSMenuNm" ng-model="sMenuNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                 </td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <th><s:message code="outstockReqDate.empNo" /></th>
@@ -67,7 +68,7 @@
                     </div>
                 </td>
                 <%-- 그룹 --%>
-                <th><s:message code="outstockReqDate.branchCd"/></th>
+                <th><s:message code="cmm.moms.branch"/></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -85,8 +86,8 @@
             </tr>
             <c:if test="${momsEnvstVal == '1'}">
                 <tr>
-                        <%-- 팀별 --%>
-                    <th><s:message code="outstockReqDate.momsTeam"/></th>
+                    <%-- 팀별 --%>
+                    <th><s:message code="cmm.moms.momsTeam"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -101,8 +102,8 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- AC점포별 --%>
-                    <th><s:message code="outstockReqDate.momsAcShop"/></th>
+                    <%-- AC점포별 --%>
+                    <th><s:message code="cmm.moms.momsAcShop"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -119,8 +120,8 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 지역구분 --%>
-                    <th><s:message code="outstockReqDate.momsAreaFg"/></th>
+                    <%-- 지역구분 --%>
+                    <th><s:message code="cmm.moms.momsAreaFg"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -135,8 +136,8 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- 상권 --%>
-                    <th><s:message code="outstockReqDate.momsCommercial"/></th>
+                    <%-- 상권 --%>
+                    <th><s:message code="cmm.moms.momsCommercial"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -153,8 +154,8 @@
                     </td>
                 </tr>
                 <tr>
-                        <%-- 점포유형 --%>
-                    <th><s:message code="outstockReqDate.momsShopType"/></th>
+                    <%-- 점포유형 --%>
+                    <th><s:message code="cmm.moms.momsShopType"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -169,8 +170,8 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- 매장관리타입 --%>
-                    <th><s:message code="outstockReqDate.momsStoreManageType"/></th>
+                    <%-- 매장관리타입 --%>
+                    <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
@@ -186,6 +187,28 @@
                         </div>
                     </td>
                 </tr>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <tr>
+                        <%-- 매장그룹 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg01Combo"
+                                        ng-model="momsStoreFg01"
+                                        items-source="_getComboData('momsStoreFg01Combo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg01Combo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </c:if>
             </c:if>
             </tbody>
         </table>
@@ -324,6 +347,7 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var branchCdComboList = ${branchCdComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empWebMenu.js?ver=20230726.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/empWebMenu.js?ver=20231101.01" charset="utf-8"></script>

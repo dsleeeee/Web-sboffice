@@ -166,6 +166,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR

@@ -27,9 +27,9 @@ app.controller('empWebMenuCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     $scope.initGrid = function (s, e) {
-
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -114,6 +114,8 @@ app.controller('useEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         params.momsShopType = scope.momsShopType;
         params.momsStoreManageType = scope.momsStoreManageType;
         params.branchCd = scope.branchCd;
+        params.momsStoreFg01 = scope.momsStoreFg01;
+
         $scope._inquirySub("/base/store/emp/empWebMenu/getUseEmp.sb", params, function() {
 
             // 미사용사원조회
@@ -121,7 +123,7 @@ app.controller('useEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             scope.searchUnusedEmp();
 
         }, false);
-    }
+    };
 
     // 사용사원삭제(미사용사원으로 등록)
     $scope.delEmp = function(){
@@ -195,6 +197,8 @@ app.controller('unusedEmpCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.momsShopType = scope.momsShopType;
         params.momsStoreManageType = scope.momsStoreManageType;
         params.branchCd = scope.branchCd;
+        params.momsStoreFg01 = scope.momsStoreFg01;
+
         $scope._inquirySub("/base/store/emp/empWebMenu/getUnuesdEmp.sb", params);
     };
 

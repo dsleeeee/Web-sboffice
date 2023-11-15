@@ -97,6 +97,7 @@
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_CD = the.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_CD = the.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_CD = the.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_CD = the.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01
         FROM 	TB_HQ_EMPLOYEE the
         ,        (
                 SELECT  twub.USER_ID
@@ -162,6 +163,9 @@
         <if test='momsStoreManageType != null and momsStoreManageType != ""'>
             AND the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND the.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         ORDER BY the.EMP_NO
     </select>
 
@@ -184,6 +188,7 @@
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_CD = the.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_CD = the.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_CD = the.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_CD = the.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01
         FROM    (
                 SELECT  DISTINCT the.EMP_NO
                 ,		the.EMP_NM
@@ -196,6 +201,7 @@
                 ,       the.MOMS_COMMERCIAL
                 ,       the.MOMS_SHOP_TYPE
                 ,       the.MOMS_STORE_MANAGE_TYPE
+                ,       the.MOMS_STORE_FG_01
                 FROM    TB_HQ_EMPLOYEE the
                 ,       TB_WB_USER_INFO twu
                 ,       TB_WB_AUTHOR_EXCEPT_V01 twa
@@ -254,6 +260,9 @@
         </if>
         <if test='momsStoreManageType != null and momsStoreManageType != ""'>
             AND the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND the.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         ORDER BY the.EMP_NO
     </select>

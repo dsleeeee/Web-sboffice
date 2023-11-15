@@ -98,6 +98,9 @@ public class EmpWebMenuVO extends PageVO {
     private String mpNo;
     private String userHqBrand;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -361,4 +364,8 @@ public class EmpWebMenuVO extends PageVO {
     public void setUserHqBrand(String userHqBrand) {
         this.userHqBrand = userHqBrand;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

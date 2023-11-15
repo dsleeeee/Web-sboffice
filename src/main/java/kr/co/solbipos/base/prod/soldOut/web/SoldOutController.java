@@ -79,7 +79,6 @@ public class SoldOutController {
      * @param model
      * @return
      */
-
     @RequestMapping(value = "soldOut/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
@@ -117,7 +116,6 @@ public class SoldOutController {
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
         }
-        /** //맘스터치 */
 
         // 사용자별 코드별 공통코드 콤보박스 조회
         // - 팀별
@@ -147,6 +145,12 @@ public class SoldOutController {
         // - 사용자별 그룹 콤보박스 조회
         List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
         model.addAttribute("branchCdComboList", branchCdComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹
+        List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N));
+
+        /** //맘스터치 */
 
         return "base/prod/soldOut/soldOutTab";
     }

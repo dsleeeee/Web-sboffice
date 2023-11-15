@@ -109,6 +109,7 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
   $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+  $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
@@ -225,6 +226,7 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       params.momsShopType = $scope.momsShopType;
       params.momsStoreManageType = $scope.momsStoreManageType;
       params.branchCd = $scope.branchCd;
+      params.momsStoreFg01 = $scope.momsStoreFg01;
     }
 
     if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능
