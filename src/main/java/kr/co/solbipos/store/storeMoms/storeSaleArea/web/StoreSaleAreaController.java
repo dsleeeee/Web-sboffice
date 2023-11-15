@@ -8,10 +8,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.day.day.service.DayVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
-import kr.co.solbipos.sale.store.storeChannel.service.StoreChannelVO;
 import kr.co.solbipos.store.storeMoms.storeSaleArea.service.StoreSaleAreaService;
 import kr.co.solbipos.store.storeMoms.storeSaleArea.service.StoreSaleAreaVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,9 +77,6 @@ public class StoreSaleAreaController {
     public String view(StoreSaleAreaVO storeSaleAreaVO, HttpServletRequest request,
                        HttpServletResponse response, Model model) {
 
-
-        DayVO dayVO = new DayVO();
-        StoreChannelVO storeChannelVO = new StoreChannelVO();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 사용자별 브랜드 조회(콤보박스용)
@@ -209,7 +204,6 @@ public class StoreSaleAreaController {
             momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
-
 
         return "store/storeMoms/storeSaleArea/storeSaleArea";
     }
