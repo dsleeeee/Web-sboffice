@@ -26,6 +26,14 @@ public class SaleAnalsMonthlyMomsServiceImpl implements SaleAnalsMonthlyMomsServ
     /** 월력판매분석 - 월력판매분석 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getSaleAnalsMonthlyMomsList(SaleAnalsMonthlyMomsVO saleAnalsMonthlyMomsVO, SessionInfoVO sessionInfoVO) {
+
+        // 매장브랜드 '전체' 일때
+        if (saleAnalsMonthlyMomsVO.getStoreHqBrandCd() == "" || saleAnalsMonthlyMomsVO.getStoreHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            String[] userBrandList = saleAnalsMonthlyMomsVO.getUserBrands().split(",");
+            saleAnalsMonthlyMomsVO.setUserBrandList(userBrandList);
+        }
+
         return saleAnalsMonthlyMomsMapper.getSaleAnalsMonthlyMomsList(saleAnalsMonthlyMomsVO);
     }
 

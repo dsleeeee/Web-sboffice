@@ -5,15 +5,27 @@ var app = agrid.getApp();
 
 /** 세트재고조정 그리드 controller */
 app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function ($scope, $http, $sce) {
+
 	// 상위 객체 상속 : T/F 는 picker
-	angular.extend(this, new RootController('saleAnalsMonthlyMomsCtrl', $scope, $http, true));
+	angular.extend(this, new RootController('saleAnalsMonthlyMomsCtrl', $scope, $http, false));
 
 	//$scope.reqYearMonth = wcombo.genDateVal("#reqYearMonth", gvStartDate);
+
 	//검색조건에 조회기간
 	var startMonth = new wijmo.input.InputDate('#reqYearMonth', {
 		format       : "yyyy-MM",
 		selectionMode: "2" // 달력 선택 모드(1:day 2:month)
 	});
+
+	$scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+	$scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+	$scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+	$scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+	$scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+	$scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+	$scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+	$scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+	$scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
 	//초기화
 	$scope.init = function () {
@@ -35,7 +47,16 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 	$scope.saleAnalsMonthlyMomsSelectStoreShow = function () {
 		$scope._broadcast('saleAnalsMonthlyMomsSelectStoreCtrl');
 	};
-	
+
+	// 확장조회 숨김/보임
+	$scope.searchAddShowChange = function(){
+		if( $("#tblSearchAddShow").css("display") === 'none') {
+			$("#tblSearchAddShow").show();
+		} else {
+			$("#tblSearchAddShow").hide();
+		}
+	};
+
 	// 리스트 조회
 	$scope.searchSaleAnalsMonthlyMomsList = function () {
 
@@ -67,6 +88,34 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 		params.storeCd = $("#saleAnalsMonthlyMomsSelectStoreCd").val();
 		params.hqOfficeCd = gvHqOfficeCd;
 		params.empNo = empNo;
+
+		params.momsTeam = $scope.momsTeam;
+		params.momsAcShop = $scope.momsAcShop;
+		params.momsAreaFg = $scope.momsAreaFg;
+		params.momsCommercial = $scope.momsCommercial;
+		params.momsShopType = $scope.momsShopType;
+		params.momsStoreManageType = $scope.momsStoreManageType;
+		params.branchCd = $scope.branchCd;
+		params.storeHqBrandCd = $scope.storeHqBrandCd;
+		// '전체' 일때
+		if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+			var momsHqBrandCd = "";
+			for(var i=0; i < momsHqBrandCdComboList.length; i++){
+				if(momsHqBrandCdComboList[i].value !== null) {
+					momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+				}
+			}
+			params.userBrands = momsHqBrandCd;
+		}
+		params.momsStoreFg01 = $scope.momsStoreFg01;
+
+		// $scope.init() 호출때문에 오류
+		if($scope.storeHqBrandCd === undefined) {
+			params.storeHqBrandCd = "";
+			if($scope.userBrands === undefined) {
+				params.userBrands = "";
+			}
+		}
 
 		var url = "/sale/anals/monthlyMoms/SaleAnalsMonthlyMoms/list.sb";
 
