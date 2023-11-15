@@ -23,42 +23,43 @@
     </div>
 
     <table class="searchTbl">
-    <colgroup>
-      <col class="w15" />
-      <col class="w35" />
-      <col class="w15" />
-      <col class="w35" />
-    </colgroup>
-    <tbody>
-      <tr>
-          <%-- 매장코드 --%>
-          <th><s:message code="storeInfo.storeCd"/></th>
-          <td>
-              <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
-          </td>
-          <%-- 매장명 --%>
-          <th><s:message code="storeInfo.storeNm"/></th>
-          <td>
-              <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
-          </td>
-      </tr>
-      <tr>
-          <%-- 매장브랜드 --%>
-          <th><s:message code="cmm.moms.storeHqBrand"/></th>
-          <td>
-              <div class="sb-select">
-                  <wj-combo-box
-                          id="srchStoreHqBrandCdCombo"
-                          ng-model="storeHqBrandCd"
-                          items-source="_getComboData('storeHqBrandCdCombo')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false"
-                          control="srchStoreHqBrandCdCombo">
-                  </wj-combo-box>
-              </div>
-            <%-- 사용여부 --%>
-            <th><s:message code="storeSaleArea.useYn" /></th>
+        <colgroup>
+          <col class="w15" />
+          <col class="w35" />
+          <col class="w15" />
+          <col class="w35" />
+        </colgroup>
+        <tbody>
+          <tr>
+              <%-- 매장코드 --%>
+              <th><s:message code="storeInfo.storeCd"/></th>
+              <td>
+                  <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+              </td>
+              <%-- 매장명 --%>
+              <th><s:message code="storeInfo.storeNm"/></th>
+              <td>
+                  <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+              </td>
+          </tr>
+          <tr>
+              <%-- 매장브랜드 --%>
+              <th><s:message code="cmm.moms.storeHqBrand"/></th>
+              <td>
+                  <div class="sb-select">
+                      <wj-combo-box
+                              id="srchStoreHqBrandCdCombo"
+                              ng-model="storeHqBrandCd"
+                              items-source="_getComboData('storeHqBrandCdCombo')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              control="srchStoreHqBrandCdCombo">
+                      </wj-combo-box>
+                  </div>
+              </td>
+              <%-- 사용여부 --%>
+              <th><s:message code="storeSaleArea.useYn" /></th>
               <td>
                 <div class="sb-select">
                   <wj-combo-box
@@ -72,8 +73,8 @@
                   </wj-combo-box>
                 </div>
               </td>
-        </tr>
-    </tbody>
+            </tr>
+        </tbody>
     </table>
     <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
         <colgroup>
