@@ -48,7 +48,7 @@
       <wj-flex-grid-column header="<s:message code="storeManage.bellUseYn"/>" binding="bellUseYn" data-map="useYnFgDataMap" width="100" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="75" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.tPosNo"/>" binding="tPosNo" data-map="posDataMap" width="90" align="center"></wj-flex-grid-column>
-      <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.onlinePrintYn"/>" binding="onlinePrintYn" data-map="useYnFgDataMap" width="135" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.onlinePrintYn"/>" binding="onlinePrintYn" data-map="useYnFgDataMap" width="135" align="center" visible="false"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.dlvrPrintYn"/>" binding="dlvrPrintYn" data-map="useYnFgDataMap" width="150" align="center"></wj-flex-grid-column>
     </wj-flex-grid>
   </div>

@@ -293,7 +293,7 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         $scope.prodClassCd = "";
         $scope.prodClassNm = "";
     };
-  
+
     // 조회조건 엑셀다운로드
     $scope.excelDownload = function () {
 
@@ -307,7 +307,11 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             return false;
         }
 
-        if(userId == "momsaseralee" || userId == "h0393") {
+        if(userId == "momsaseralee"             // 맘스터치 이세라 20230905
+        || userId == "sunwoo04"                 // 맘스터치 박선우 20231116
+        || userId == "momsaq0465"               // 맘스터치 강진호 20231116
+        || userId == "h0393")
+        {
             // 조회일자 최대 한달(31일) 제한
             if (diffDay > 31) {
                 $scope._popMsg(messages['cmm.dateOver.1month.error']);

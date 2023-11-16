@@ -614,11 +614,11 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             if(i === 0) {
                 paymentStatus2ListHtml += '<tr class="h25">'
                     + '<td class="tc" rowspan="6" style="background-color: lightgrey;">비고</td>'
-                    + '<td class="tl" colspan="4" style="font-size: 15px; line-height: normal;">' + content + '</td>'
+                    + '<td class="tl" colspan="4" style="font-size: 13px; line-height: 18px;">' + content + '</td>'
                     + '</tr>';
             } else {
                 paymentStatus2ListHtml += '<tr class="h25">'
-                    + '<td class="tl" colspan="4" style="font-size: 15px; line-height: normal;">' + content + '</td>'
+                    + '<td class="tl" colspan="4" style="font-size: 13px; line-height: 18px;">' + content + '</td>'
                     + '</tr>';
             }
         }
