@@ -35,6 +35,7 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/printerGroupTab.js?ver=20230921.01" charset="utf-8"></script>
