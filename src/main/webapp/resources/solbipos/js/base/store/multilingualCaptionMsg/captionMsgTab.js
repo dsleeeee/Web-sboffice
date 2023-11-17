@@ -28,9 +28,8 @@ app.controller('captionMsgTabCtrl', ['$scope', function ($scope) {
         $("#captionMsgView").show();
         $("#captionMsgGrpView").hide();
 
-        // angular 그리드 hide 시 깨지므로 refresh()
-       /* var scope = agrid.getScope("captionMsgCtrl");
-        scope.flex.refresh();*/
+        //
+        $scope._broadcast("captionMsgCtrl");
     };
 
     // 화면구분등록 탭 보이기

@@ -1,15 +1,18 @@
 package kr.co.solbipos.base.store.multilingualCaptionMsg.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.media.service.MediaVO;
 import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgService;
 import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgVO;
+import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -54,15 +57,17 @@ public class CaptionMsgContoller {
     private final SessionService sessionService;
     private final CaptionMsgService captionMsgService;
     private final MessageService messageService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public CaptionMsgContoller(SessionService sessionService, CaptionMsgService captionMsgService, MessageService messageService) {
+    public CaptionMsgContoller(SessionService sessionService, CaptionMsgService captionMsgService, MessageService messageService, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.captionMsgService = captionMsgService;
         this.messageService = messageService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -75,10 +80,119 @@ public class CaptionMsgContoller {
      * @since   2023. 11. 03.
      */
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
-    public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public String view(CaptionMsgVO captionMsgVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 화면구분 콤보박스 조회
+        model.addAttribute("captionMsgGrpList", cmmCodeUtil.assmblObj(captionMsgService.getCaptionMsgGrpComboList(captionMsgVO, sessionInfoVO), "name", "value", UseYn.N));
 
         return "base/store/multilingualCaptionMsg/captionMsgTab";
     }
+
+    /**
+     *  화면구분 선택에 따른 기능키/메시지 탭 리스트 조회
+     *
+     * @param captionMsgVO
+     * @param request
+     * @author  이다솜
+     * @since   2023. 11. 03.
+     */
+    @RequestMapping(value = "/getCaptionMsgList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCaptionMsgList(CaptionMsgVO captionMsgVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = captionMsgService.getCaptionMsgList(captionMsgVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, captionMsgVO);
+    }
+
+    /**
+     * 기능키 or 메시지코드 중복체크
+     *
+     * @param captionMsgVO
+     * @param request
+     * @author  이다솜
+     * @since   2023. 11. 03.
+     */
+    @RequestMapping(value = "/chkCaptionMsgId.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkCaptionMsgId(CaptionMsgVO captionMsgVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        return returnJson(Status.OK, captionMsgService.chkCaptionMsgId(captionMsgVO, sessionInfoVO));
+    }
+
+    /**
+     * 기능키/메시지 저장
+     * @param captionMsgVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2023. 11. 03.
+     */
+    @RequestMapping(value = "/saveCaptionMsg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveCaptionMsg(@RequestBody CaptionMsgVO[] captionMsgVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = captionMsgService.saveCaptionMsg(captionMsgVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 기능키/메시지 삭제
+     * @param captionMsgVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2023. 11. 03.
+     */
+    @RequestMapping(value = "/deleteCaptionMsg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteCaptionMsg(@RequestBody CaptionMsgVO[] captionMsgVOs, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = captionMsgService.deleteCaptionMsg(captionMsgVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 화면구분 콤보박스 조회
+     *
+     * @param captionMsgVO
+     * @param request
+     * @author  이다솜
+     * @since   2023. 11. 03.
+     */
+    @RequestMapping(value = "/getCaptionMsgGrpCombo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCaptionMsgGrpCombo(CaptionMsgVO captionMsgVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = captionMsgService.getCaptionMsgGrpComboList(captionMsgVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, captionMsgVO);
+    }
+
+
+
+
+
+
+
 
     /**
      * 화면구분등록 탭 리스트 조회
@@ -88,7 +202,7 @@ public class CaptionMsgContoller {
      * @author  이다솜
      * @since   2023. 11. 03.
      */
-    @RequestMapping(value = "/list.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCaptionMsgGrpList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getCaptionMsgGrpList(CaptionMsgVO captionMsgVO, HttpServletRequest request) {
 
@@ -106,7 +220,7 @@ public class CaptionMsgContoller {
      * @author  이다솜
      * @since   2023. 11. 03.
      */
-    @RequestMapping(value = "/dtlInfo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getCaptionMsgGrpDtl.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getCaptionMsgGrpDtl(CaptionMsgVO captionMsgVO, HttpServletRequest request) {
 
@@ -123,13 +237,13 @@ public class CaptionMsgContoller {
      * @author  이다솜
      * @since   2023. 11. 03.
      */
-    @RequestMapping(value = "/regist.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveCaptionMsgGrp.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result regist(MultipartHttpServletRequest request) {
+    public Result saveCaptionMsgGrp(MultipartHttpServletRequest request) {
 
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
-        String result = captionMsgService.regist(request, sessionInfo);
+        String result = captionMsgService.saveCaptionMsgGrp(request, sessionInfo);
 
         if(result.equals("0")) {
             return returnJson(Status.OK);
@@ -148,13 +262,13 @@ public class CaptionMsgContoller {
      * @author  이다솜
      * @since   2023. 11. 03.
      */
-    @RequestMapping(value = "/modify.sb", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/updateCaptionMsgGrp.sb", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Result modify(MultipartHttpServletRequest request){
+    public Result updateCaptionMsgGrp(MultipartHttpServletRequest request){
 
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
-        String result = captionMsgService.modify(request, sessionInfo);
+        String result = captionMsgService.updateCaptionMsgGrp(request, sessionInfo);
 
         if(result.equals("0")) {
             return returnJson(Status.OK);
@@ -176,20 +290,20 @@ public class CaptionMsgContoller {
      * @author  이다솜
      * @since   2023. 11. 03.
      */
-    @RequestMapping(value = "/delCaptionMsgGrp.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteCaptionMsgGrp.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result delCaptionMsgGrp(@RequestBody CaptionMsgVO[] captionMsgVOs, HttpServletRequest request,
+    public Result deleteCaptionMsgGrp(@RequestBody CaptionMsgVO[] captionMsgVOs, HttpServletRequest request,
                                  HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = captionMsgService.delCaptionMsgGrp(captionMsgVOs, sessionInfoVO);
+        int result = captionMsgService.deleteCaptionMsgGrp(captionMsgVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /**
-     *
+     * 화면구분 첨부파일 다운로드
      * @param captionMsgVO
      * @param request
      * @param response

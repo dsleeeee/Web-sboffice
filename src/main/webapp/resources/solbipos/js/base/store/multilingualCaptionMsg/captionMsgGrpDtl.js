@@ -31,7 +31,7 @@ app.controller('captionMsgGrpDtlCtrl', ['$scope', '$http', function ($scope, $ht
 
         var params = data;
 
-        $scope._postJSONQuery.withOutPopUp( "/base/store/multilingualCaptionMsg/dtlInfo.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp( "/base/store/multilingualCaptionMsg/getCaptionMsgGrpDtl.sb", params, function(response){
 
             $scope.version = response.data.data;
 

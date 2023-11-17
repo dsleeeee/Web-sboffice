@@ -32,6 +32,24 @@ public class CaptionMsgVO extends PageVO {
     private String result;
     /** 파일타입 */
     private String fileType;
+    /** 기능키 or 메시지 코드(고유 ID) array */
+    private String arrCaptionMsgId[];
+    /** 기능키 or 메시지 코드(고유 ID) */
+    private String captionMsgId;
+    /** 기능키, 메시지 명 */
+    private String captionMsgNm;
+    /** 기능키, 메시지 구분 */
+    private String captionMsgGb;
+    /** 기능키, 메시지명[영어] */
+    private String captionMsgEnNm;
+    /** 기능키, 메시지명[중국어] */
+    private String captionMsgCnNm;
+    /** 기능키, 메시지명[일어] */
+    private String captionMsgJpNm;
+    /** 화면이미지 고유번호 */
+    private String captionNo;
+    /** 비고 */
+    private String remark;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -135,5 +153,77 @@ public class CaptionMsgVO extends PageVO {
 
     public void setFileType(String fileType) {
         this.fileType = fileType;
+    }
+
+    public String[] getArrCaptionMsgId() {
+        return arrCaptionMsgId;
+    }
+
+    public void setArrCaptionMsgId(String[] arrCaptionMsgId) {
+        this.arrCaptionMsgId = arrCaptionMsgId;
+    }
+
+    public String getCaptionMsgId() {
+        return captionMsgId;
+    }
+
+    public void setCaptionMsgId(String captionMsgId) {
+        this.captionMsgId = captionMsgId;
+    }
+
+    public String getCaptionMsgNm() {
+        return captionMsgNm;
+    }
+
+    public void setCaptionMsgNm(String captionMsgNm) {
+        this.captionMsgNm = captionMsgNm;
+    }
+
+    public String getCaptionMsgGb() {
+        return captionMsgGb;
+    }
+
+    public void setCaptionMsgGb(String captionMsgGb) {
+        this.captionMsgGb = captionMsgGb;
+    }
+
+    public String getCaptionMsgEnNm() {
+        return captionMsgEnNm;
+    }
+
+    public void setCaptionMsgEnNm(String captionMsgEnNm) {
+        this.captionMsgEnNm = captionMsgEnNm;
+    }
+
+    public String getCaptionMsgCnNm() {
+        return captionMsgCnNm;
+    }
+
+    public void setCaptionMsgCnNm(String captionMsgCnNm) {
+        this.captionMsgCnNm = captionMsgCnNm;
+    }
+
+    public String getCaptionMsgJpNm() {
+        return captionMsgJpNm;
+    }
+
+    public void setCaptionMsgJpNm(String captionMsgJpNm) {
+        this.captionMsgJpNm = captionMsgJpNm;
+    }
+
+    public String getCaptionNo() {
+        return captionNo;
+    }
+
+    public void setCaptionNo(String captionNo) {
+        this.captionNo = captionNo;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

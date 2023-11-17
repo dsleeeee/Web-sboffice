@@ -81,6 +81,9 @@
                 <wj-flex-grid-column header="" binding="fileNm" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="fileExt" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
+                <%-- 삭제시 필요(확인용) --%>
+                <wj-flex-grid-column header="" binding="msgCnt" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+
             </wj-flex-grid>
         </div>
     </div>
@@ -94,7 +97,7 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/multilingualCaptionMsg/captionMsgGrp.js?ver=20231109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/multilingualCaptionMsg/captionMsgGrp.js?ver=20231117.01" charset="utf-8"></script>
 
 <%-- 신규등록 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/multilingualCaptionMsg/captionMsgGrpReg.jsp">

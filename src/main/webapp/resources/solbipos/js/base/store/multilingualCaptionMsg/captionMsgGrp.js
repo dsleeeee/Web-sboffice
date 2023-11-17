@@ -53,7 +53,7 @@ app.controller('captionMsgGrpCtrl', ['$scope', '$http', function ($scope, $http)
 
                 // 다운로드
                 if(col.binding === "downLoad"){
-                    e.cell.innerHTML = "<td><a href=\"/base/store/multilingualCaptionMsg/download.sb?fileNm=" + item.fileNm + "&orginlFileNm=" + item.fileOrgNm + "&fileExt=" + item.fileExt + "\">다운로드</a></td>";
+                    e.cell.innerHTML = "<td><a href=\"/base/store/multilingualCaptionMsg/download.sb?fileNm=" + item.fileNm + "&fileOrgNm=" + item.fileOrgNm + "&fileExt=" + item.fileExt + "\">다운로드</a></td>";
                 }
                 
                 // 파일사이즈 변환
@@ -108,7 +108,7 @@ app.controller('captionMsgGrpCtrl', ['$scope', '$http', function ($scope, $http)
         params.captionImgNm = $scope.captionImgNm;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/base/store/multilingualCaptionMsg/list.sb", params);
+        $scope._inquiryMain("/base/store/multilingualCaptionMsg/getCaptionMsgGrpList.sb", params);
     };
 
     // 신규등록 팝업
@@ -141,14 +141,26 @@ app.controller('captionMsgGrpCtrl', ['$scope', '$http', function ($scope, $http)
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
+
+                    // 기능키/메시지가 등록되어 있는 화면구분은 삭제 불가
+                    if($scope.flex.collectionView.items[i].msgCnt > 0){
+                        //'' 은(는) 기능키/메시지가 등록되어있는 화면구분입니다.<br/> 기능키/메시지 먼저 삭제후 화면구분을 삭제하세요.
+                        $scope._popMsg($scope.flex.collectionView.items[i].captionImgNm + messages["multilingualCaptionMsg.captionMsgGrp.del.chk.msg"]);
+                        return false;
+                    }
+
                     params.push($scope.flex.collectionView.items[i]);
                 }
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/base/store/multilingualCaptionMsg/delCaptionMsgGrp.sb", params, function(){
+            $scope._save("/base/store/multilingualCaptionMsg/deleteCaptionMsgGrp.sb", params, function(){
                 // 재조회
-                $scope.getCaptionMsgGrpList()
+                $scope.getCaptionMsgGrpList();
+
+                // 기능키/메시지 탭 화면구분 검색조건 콤보박스 재조회
+                var vScope = agrid.getScope('captionMsgCtrl');
+                vScope.setCaptionMsgGrpCombo();
             });
         });
     };

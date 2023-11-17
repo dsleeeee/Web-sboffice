@@ -46,7 +46,7 @@ app.controller('captionMsgGrpRegCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.dtlInfo = function (data) {
         var params = data;
 
-        $scope._postJSONQuery.withOutPopUp( "/base/store/multilingualCaptionMsg/dtlInfo.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp( "/base/store/multilingualCaptionMsg/getCaptionMsgGrpDtl.sb", params, function(response){
             $scope.version = response.data.data;
 
             // 파일사이즈 변환하여 표기
@@ -83,9 +83,9 @@ app.controller('captionMsgGrpRegCtrl', ['$scope', '$http', function ($scope, $ht
             var url = '';
 
             if (!$scope.isEdit && isEmptyObject($scope.version.captionImgCd)) {
-                url = '/base/store/multilingualCaptionMsg/regist.sb';
+                url = '/base/store/multilingualCaptionMsg/saveCaptionMsgGrp.sb';
             } else {
-                url = '/base/store/multilingualCaptionMsg/modify.sb';
+                url = '/base/store/multilingualCaptionMsg/updateCaptionMsgGrp.sb';
             }
 
             $scope.$broadcast('loadingPopupActive');
@@ -214,6 +214,10 @@ app.controller('captionMsgGrpRegCtrl', ['$scope', '$http', function ($scope, $ht
 
         // 화면구분등록 리스트 재조회
         $scope._pageView('captionMsgGrpCtrl', 1);
+
+        // 기능키/메시지 탭 화면구분 검색조건 콤보박스 재조회
+        var vScope = agrid.getScope('captionMsgCtrl');
+        vScope.setCaptionMsgGrpCombo();
 
         // 신규등록 팝업 hide
         $scope.captionMsgGrpRegLayer.hide();

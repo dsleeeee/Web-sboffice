@@ -12,6 +12,144 @@
 
 <mapper namespace="kr.co.solbipos.base.store.multilingualCaptionMsg.service.impl.CaptionMsgMapper">
 
+    <!-- 화면구분 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
+        COMMENTS : 화면구분 리스트(콤보박스용)를 조회한다.
+    -->
+    <select id="getCaptionMsgGrpComboList" parameterType="captionMsgVO" resultType="DefaultMap">
+        /* CaptionMsgMapper.getCaptionMsgGrpComboList */
+        SELECT CAPTION_IMG_CD AS VALUE
+        ,      CAPTION_IMG_NM AS NAME
+        FROM   TB_HQ_CAPTION_MESSAGE_GROUP
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        ORDER BY CAPTION_IMG_CD
+    </select>
+
+    <!-- 화면구분 선택에 따른 기능키/메시지 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_CAPTION_MESSAGE
+        COMMENTS : 화면구분 선택에 따른 기능키/메시지 리스트를 조회한다.
+    -->
+    <select id="getCaptionMsgList" parameterType="captionMsgVO" resultType="DefaultMap">
+        /* CaptionMsgMapper.getCaptionMsgList */
+        SELECT HQ_OFFICE_CD
+        ,      CAPTION_MSG_ID
+        ,      CAPTION_IMG_CD
+        ,      CAPTION_MSG_NM
+        ,      CAPTION_MSG_GB
+        ,      CAPTION_MSG_EN_NM
+        ,      CAPTION_MSG_CN_NM
+        ,      CAPTION_MSG_JP_NM
+        ,      CAPTION_NO
+        ,      REMARK
+        FROM   TB_HQ_CAPTION_MESSAGE
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    CAPTION_IMG_CD = #{captionImgCd}
+        ORDER BY CAPTION_MSG_ID
+    </select>
+
+    <!-- 기능키 or 메시지코드 중복체크 -->
+    <!--
+    TABLE    : TB_HQ_CAPTION_MESSAGE
+    COMMENTS : 기능키 or 메시지코드 중복여부를 조회한다.
+    -->
+    <select id="chkCaptionMsgId" parameterType="captionMsgVO" resultType="String">
+        /* USE : CaptionMsgMapper.chkCaptionMsgId */
+        SELECT LISTAGG(CAPTION_MSG_ID, ', ')  WITHIN GROUP (ORDER BY CAPTION_MSG_ID) AS CAPTION_MSG_ID
+        FROM   TB_HQ_CAPTION_MESSAGE
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    CAPTION_MSG_ID IN
+        <foreach collection="arrCaptionMsgId" item="item" open="("  separator="," close=")">
+          #{item}
+        </foreach>
+    </select>
+
+    <!-- 기능키/메시지 저장 -->
+    <!--
+    TABLE    : TB_HQ_CAPTION_MESSAGE
+    COMMENTS : 기능키/메시지 정보를 저장한다.
+    -->
+    <insert id="saveCaptionMsg" parameterType="captionMsgVO">
+        /* USE : CaptionMsgMapper.saveCaptionMsg */
+        MERGE INTO TB_HQ_CAPTION_MESSAGE A
+        USING DUAL
+            ON (
+                A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.CAPTION_MSG_ID = #{captionMsgId}
+            AND A.CAPTION_IMG_CD = #{captionImgCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET A.CAPTION_MSG_NM      = #{captionMsgNm}
+        ,   A.CAPTION_MSG_GB      = #{captionMsgGb}
+        ,   A.CAPTION_MSG_EN_NM   = #{captionMsgEnNm}
+        ,   A.CAPTION_MSG_CN_NM   = #{captionMsgCnNm}
+        ,   A.CAPTION_MSG_JP_NM   = #{captionMsgJpNm}
+        ,   A.CAPTION_NO          = #{captionNo}
+        ,   A.REMARK              = #{remark}
+        ,   A.MOD_DT              = #{modDt}
+        ,   A.MOD_ID              = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            A.HQ_OFFICE_CD
+        ,   A.CAPTION_MSG_ID
+        ,   A.CAPTION_IMG_CD
+        ,   A.CAPTION_MSG_NM
+        ,   A.CAPTION_MSG_GB
+        ,   A.CAPTION_MSG_EN_NM
+        ,   A.CAPTION_MSG_CN_NM
+        ,   A.CAPTION_MSG_JP_NM
+        ,   A.CAPTION_NO
+        ,   A.REMARK
+        ,   A.REG_DT
+        ,   A.REG_ID
+        ,   A.MOD_DT
+        ,   A.MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{captionMsgId}
+        ,   #{captionImgCd}
+        ,   #{captionMsgNm}
+        ,   #{captionMsgGb}
+        ,   #{captionMsgEnNm}
+        ,   #{captionMsgCnNm}
+        ,   #{captionMsgJpNm}
+        ,   #{captionNo}
+        ,   #{remark}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 기능키/메시지 삭제 -->
+    <!--
+    TABLE    : TB_HQ_CAPTION_MESSAGE
+    COMMENTS : 기능키/메시지 정보를 삭제한다.
+    -->
+    <delete id="deleteCaptionMsg" parameterType="captionMsgVO">
+        /* CaptionMsgMapper.deleteCaptionMsg */
+        DELETE TB_HQ_CAPTION_MESSAGE
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    CAPTION_MSG_ID = #{captionMsgId}
+        AND    CAPTION_IMG_CD = #{captionImgCd}
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
     <!-- 화면구분등록 탭 리스트 조회 -->
     <!--
         TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
@@ -19,25 +157,27 @@
     -->
     <select id="getCaptionMsgGrpList" parameterType="captionMsgVO" resultType="DefaultMap">
         /* CaptionMsgMapper.getCaptionMsgGrpList */
-        SELECT HQ_OFFICE_CD
-        ,      CAPTION_IMG_CD
-        ,      CAPTION_IMG_NM
-        ,      FILE_DIR
-        ,      FILE_NM
-        ,      FILE_EXT
-        ,      FILE_SIZE
-        ,      FILE_MIME_TYPE
-        ,      FILE_ORG_NM
-        ,      FILE_DESC
-        ,      FILE_CHG_DT
-        FROM   TB_HQ_CAPTION_MESSAGE_GROUP
-        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        SELECT A.HQ_OFFICE_CD
+        ,      A.CAPTION_IMG_CD
+        ,      A.CAPTION_IMG_NM
+        ,      A.FILE_DIR
+        ,      A.FILE_NM
+        ,      A.FILE_EXT
+        ,      A.FILE_SIZE
+        ,      A.FILE_MIME_TYPE
+        ,      A.FILE_ORG_NM
+        ,      A.FILE_DESC
+        ,      A.FILE_CHG_DT
+        ,	   (SELECT COUNT(*) FROM TB_HQ_CAPTION_MESSAGE WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND CAPTION_IMG_CD = A.CAPTION_IMG_CD) AS MSG_CNT
+        FROM   TB_HQ_CAPTION_MESSAGE_GROUP A
+        WHERE  A.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='captionImgCd != null and captionImgCd != ""'>
-        AND    CAPTION_IMG_CD LIKE '%' || #{captionImgCd} || '%'
+        AND    A.CAPTION_IMG_CD LIKE '%' || #{captionImgCd} || '%'
         </if>
         <if test='captionImgNm != null and captionImgNm != ""'>
-        AND    CAPTION_IMG_NM LIKE '%' || #{captionImgNm} || '%'
+        AND    A.CAPTION_IMG_NM LIKE '%' || #{captionImgNm} || '%'
         </if>
+        ORDER BY CAPTION_IMG_CD
     </select>
 
     <!-- 화면구분 상세 조회 -->
@@ -80,8 +220,8 @@
         TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
         COMMENTS : 화면구분 정보를 등록한다.
     -->
-    <insert id="regist" parameterType="captionMsgVO">
-        /* USE : CaptionMsgMapper.regist */
+    <insert id="saveCaptionMsgGrp" parameterType="captionMsgVO">
+        /* USE : CaptionMsgMapper.saveCaptionMsgGrp */
         INSERT INTO TB_HQ_CAPTION_MESSAGE_GROUP
         (
             HQ_OFFICE_CD
@@ -125,8 +265,8 @@
         TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
         COMMENTS : 화면구분 정보를 수정한다.
     -->
-    <insert id="modify" parameterType="captionMsgVO">
-        /* USE : CaptionMsgMapper.modify */
+    <insert id="updateCaptionMsgGrp" parameterType="captionMsgVO">
+        /* USE : CaptionMsgMapper.updateCaptionMsgGrp */
         MERGE INTO TB_HQ_CAPTION_MESSAGE_GROUP A
         USING DUAL
             ON (
@@ -192,8 +332,8 @@
         TABLE    : TB_HQ_CAPTION_MESSAGE_GROUP
         COMMENTS : 화면구분 정보를 삭제한다.
     -->
-    <delete id="delCaptionMsgGrp" parameterType="captionMsgVO">
-        /* CaptionMsgMapper.delCaptionMsgGrp */
+    <delete id="deleteCaptionMsgGrp" parameterType="captionMsgVO">
+        /* CaptionMsgMapper.deleteCaptionMsgGrp */
         DELETE TB_HQ_CAPTION_MESSAGE_GROUP
         WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
         AND    CAPTION_IMG_CD = #{captionImgCd}

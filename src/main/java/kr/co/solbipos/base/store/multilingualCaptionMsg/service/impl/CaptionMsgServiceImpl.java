@@ -1,14 +1,11 @@
 package kr.co.solbipos.base.store.multilingualCaptionMsg.service.impl;
 
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.base.store.media.service.MediaVO;
 import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgService;
 import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgVO;
 import org.apache.commons.io.FilenameUtils;
@@ -51,6 +48,73 @@ public class CaptionMsgServiceImpl implements CaptionMsgService {
         this.messageService = messageService;
     }
 
+
+    /** 화면구분 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<String>> getCaptionMsgGrpComboList(CaptionMsgVO captionMsgVO, SessionInfoVO sessionInfoVO){
+
+        captionMsgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return captionMsgMapper.getCaptionMsgGrpComboList(captionMsgVO);
+    }
+
+    /** 화면구분 선택에 따른 기능키/메시지 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getCaptionMsgList(CaptionMsgVO captionMsgVO, SessionInfoVO sessionInfoVO) {
+
+        captionMsgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return captionMsgMapper.getCaptionMsgList(captionMsgVO);
+    }
+
+    /** 기능키 or 메시지코드 중복체크 */
+    @Override
+    public String chkCaptionMsgId(CaptionMsgVO captionMsgVO, SessionInfoVO sessionInfoVO){
+        captionMsgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        captionMsgVO.setArrCaptionMsgId(captionMsgVO.getCaptionMsgId().split(","));
+        return captionMsgMapper.chkCaptionMsgId(captionMsgVO);
+    }
+
+    /** 기능키/메시지 저장 */
+    @Override
+    public int saveCaptionMsg(CaptionMsgVO[] captionMsgVOs, SessionInfoVO sessionInfoVO){
+
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for (CaptionMsgVO captionMsgVO : captionMsgVOs) {
+
+            captionMsgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            captionMsgVO.setRegDt(dt);
+            captionMsgVO.setRegId(sessionInfoVO.getUserId());
+            captionMsgVO.setModDt(dt);
+            captionMsgVO.setModId(sessionInfoVO.getUserId());
+
+            result += captionMsgMapper.saveCaptionMsg(captionMsgVO);
+        }
+
+        if (result == captionMsgVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 기능키/메시지 삭제*/
+    @Override
+    public int deleteCaptionMsg(CaptionMsgVO[] captionMsgVOs, SessionInfoVO sessionInfoVO){
+
+        int procCnt = 0;
+
+        for(CaptionMsgVO captionMsgVO : captionMsgVOs) {
+
+            captionMsgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = captionMsgMapper.deleteCaptionMsg(captionMsgVO);
+            if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        return procCnt;
+    }
+
     /** 화면구분등록 탭 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getCaptionMsgGrpList(CaptionMsgVO captionMsgVO, SessionInfoVO sessionInfoVO) {
@@ -69,7 +133,7 @@ public class CaptionMsgServiceImpl implements CaptionMsgService {
 
     /** 화면구분 신규 등록 */
     @Override
-    public String regist(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
+    public String saveCaptionMsgGrp(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
         String isSuccess;
 
@@ -104,7 +168,7 @@ public class CaptionMsgServiceImpl implements CaptionMsgService {
                 captionMsgVO.setFileOrgNm(captionMsgVO.getCaptionImgCd());
             }
 
-            if(captionMsgMapper.regist(captionMsgVO) > 0) {
+            if(captionMsgMapper.saveCaptionMsgGrp(captionMsgVO) > 0) {
                 isSuccess = "0";
             } else {
                 isSuccess = "1";
@@ -118,7 +182,7 @@ public class CaptionMsgServiceImpl implements CaptionMsgService {
 
     /** 화면구분 수정*/
     @Override
-    public String modify(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
+    public String updateCaptionMsgGrp(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
 
         String isSuccess;
 
@@ -174,7 +238,7 @@ public class CaptionMsgServiceImpl implements CaptionMsgService {
             }
 
             // 수정
-            captionMsgMapper.modify(captionMsgVO);
+            captionMsgMapper.updateCaptionMsgGrp(captionMsgVO);
 
             isSuccess = "0";
 
@@ -272,7 +336,7 @@ public class CaptionMsgServiceImpl implements CaptionMsgService {
 
     /** 화면구분 삭제*/
     @Override
-    public int delCaptionMsgGrp(CaptionMsgVO[] captionMsgVOs, SessionInfoVO sessionInfoVO){
+    public int deleteCaptionMsgGrp(CaptionMsgVO[] captionMsgVOs, SessionInfoVO sessionInfoVO){
 
         int procCnt = 0;
 
@@ -280,7 +344,7 @@ public class CaptionMsgServiceImpl implements CaptionMsgService {
 
             captionMsgVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            procCnt = captionMsgMapper.delCaptionMsgGrp(captionMsgVO);
+            procCnt = captionMsgMapper.deleteCaptionMsgGrp(captionMsgVO);
             if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
 

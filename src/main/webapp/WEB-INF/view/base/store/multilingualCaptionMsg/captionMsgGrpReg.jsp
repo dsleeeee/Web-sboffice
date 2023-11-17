@@ -94,4 +94,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/multilingualCaptionMsg/captionMsgGrpReg.js?ver=20231109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/multilingualCaptionMsg/captionMsgGrpReg.js?ver=20231117.01" charset="utf-8"></script>
