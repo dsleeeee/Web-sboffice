@@ -24,12 +24,11 @@
             <p class="tl s14 mt5 lh15">- 업로드된 검증결과가 전체 '검증성공'일때만 저장됩니다.</p>
             <p class="tl s14 mt5 lh15 red">※ 검증결과가 실패인 경우</p>
             <p class="tl s14 mt5 lh15 red">- 아래 해당 정보를 수정하신 후에 엑셀다운로드 하여 다시 업로드 해주세요.</p>
+            <p class="tl s14 mt5 lh15 red">※ 업로드시 '매장코드, 그룹, 팀별, AC점포별, 지역구분, 상권, 정포유형, 매장관리타입
             <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                <p class="tl s14 mt5 lh15 red">※ 업로드시 '매장코드, 그룹, 팀별, AC점포별, 지역구분, 상권, 정포유형, 매장관리타입, 매장그룹' 기준으로 처리됩니다.</p>
+                , 매장그룹
             </c:if>
-            <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
-                <p class="tl s14 mt5 lh15 red">※ 업로드시 '매장코드, 그룹, 팀별, AC점포별, 지역구분, 상권, 정포유형, 매장관리타입' 기준으로 처리됩니다.</p>
-            </c:if>
+            ' 기준으로 처리됩니다.</p>
 
             <%-- 엑셀업로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelUpload()">
