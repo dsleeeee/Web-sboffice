@@ -19,7 +19,6 @@
         </div>
         <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
             <div class="w100">
-
                 <%-- 조회조건 --%>
                 <table class="tblType01">
                     <colgroup>
@@ -40,6 +39,26 @@
                         <td>
                             <input type="text" id="srchStoreNm" ng-model="srchStoreNm"/>
                         </td>
+                    </tr>
+                    <tr>
+                        <%-- 구분(판매가변경제한매장) --%>
+                        <th><s:message code="selectStore.gubun"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPopStoreChgNotCombo"
+                                        ng-model="popStoreChgNot"
+                                        items-source="_getComboData('popStoreChgNotCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchPopStoreChgNotCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     </tbody>
                 </table>
@@ -73,14 +92,14 @@
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="srchPopBranchCdComboo"
+                                        id="srchPopBranchCdCombo"
                                         ng-model="popBranchCd"
                                         items-source="_getComboData('popBranchCdCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
                                         initialized="_initComboBox(s)"
-                                        control="srchPopBranchCdComboo">
+                                        control="srchPopBranchCdCombo">
                                 </wj-combo-box>
                             </div>
                         </td>
@@ -189,24 +208,8 @@
                             </td>
                         </tr>
                     </c:if>
-                    <tr>
-                        <%-- 구분(판매가변경제한매장) --%>
-                        <th><s:message code="selectStore.gubun"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchPopStoreChgNotCombo"
-                                        ng-model="popStoreChgNot"
-                                        items-source="_getComboData('popStoreChgNotCombo')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchPopStoreChgNotCombo">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                        <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                        <tr>
                             <%-- 매장그룹 --%>
                             <th><s:message code="cmm.moms.momsStoreFg01"/></th>
                             <td>
@@ -223,12 +226,10 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                        </c:if>
-                        <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
                             <td></td>
                             <td></td>
-                        </c:if>
-                    </tr>
+                        </tr>
+                    </c:if>
                     </tbody>
                 </table>
                 <%-- 조회조건 --%>
@@ -348,11 +349,14 @@
         var targetPosId = '${param.targetPosId}';
         var targetTypeFg = '${param.targetTypeFg}'; // 매장선택 (S:싱글, M:멀티)
 
+        // 상위 객체 상속 : T/F 는 picker
+        angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, false));
+
         // 회사 구분 (COMMON:공통, MOMS:맘스터치)
         var companyFg = "COMMON";
 
-        // 상위 객체 상속 : T/F 는 picker
-        angular.extend(this, new RootController(targetId + 'Ctrl', $scope, $http, false));
+        // 조회조건 콤보박스 데이터 Set
+        $scope._setComboData("popStoreChgNotCombo", popStoreChgNotComboData); // 구분(판매가변경제한매장)
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
@@ -552,17 +556,14 @@
                     $scope._setComboData("popBranchCdCombo", list);
                     // 그룹
                     if(list.length <= 1) {
-                        $("#srchPopBranchCdComboo").css('background-color', '#F0F0F0');
-                        $("#srchPopBranchCdComboo").attr("disabled", true);
+                        $("#srchPopBranchCdCombo").css('background-color', '#F0F0F0');
+                        $("#srchPopBranchCdCombo").attr("disabled", true);
                     } else {
-                        $("#srchPopBranchCdComboo").css('background-color', '#FFFFFF');
-                        $("#srchPopBranchCdComboo").attr("disabled", false);
+                        $("#srchPopBranchCdCombo").css('background-color', '#FFFFFF');
+                        $("#srchPopBranchCdCombo").attr("disabled", false);
                     }
                 }
             });
-
-            // 구분(판매가변경제한매장)
-            $scope._setComboData("popStoreChgNotCombo", popStoreChgNotComboData);
 
             // 매장그룹
             var params = {};
@@ -609,7 +610,7 @@
                 $scope.srchPopMomsCommercialCombo.selectedIndex = 0;
                 $scope.srchPopMomsShopTypeCombo.selectedIndex = 0;
                 $scope.srchPopMomsStoreManageTypeCombo.selectedIndex = 0;
-                $scope.srchPopBranchCdComboo.selectedIndex = 0;
+                $scope.srchPopBranchCdCombo.selectedIndex = 0;
                 $scope.srchPopStoreChgNotCombo.selectedIndex = 0;
                 $scope.srchPopMomsStoreFg01Combo.selectedIndex = 0;
             });

@@ -85,17 +85,12 @@
 
         <div class="mt10 oh sb-select dkbr">
             <div id="excelStoreSaveStore" class="fr oh bk mr10" style="width: 200px; height:25px; display: none;">
-                <%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
-                <c:if test="${momsEnvstVal == '0'}">
-                    <jsp:include page="/WEB-INF/view/application/layer/searchPriceStoreM.jsp" flush="true">
-                        <jsp:param name="targetId" value="excelChoiceSaveStore"/>
-                    </jsp:include>
-                </c:if>
-                <c:if test="${momsEnvstVal == '1'}">
-                    <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreMMoms.jsp" flush="true">
-                        <jsp:param name="targetId" value="excelChoiceSaveStore"/>
-                    </jsp:include>
-                </c:if>
+                <%-- 매장선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="M"/>
+                    <jsp:param name="targetId" value="excelChoiceSaveStore"/>
+                </jsp:include>
+                <%--// 매장선택 모듈 사용시 include --%>
             </div>
             <div class="sb-select w200px fr mr10">
                 <wj-combo-box

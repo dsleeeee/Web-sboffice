@@ -110,6 +110,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
     /** 임시테이블 삭제 */
     @Override
     public int getEmpExcelUploadCheckDeleteAll(EmpBatchChangeVO empBatchChangeVO, SessionInfoVO sessionInfoVO) {
+
         int result = 0;
         empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
@@ -122,6 +123,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
     /** 검증결과 삭제 */
     @Override
     public int getEmpExcelUploadCheckDelete(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+
         int result = 0;
 
         for(EmpBatchChangeVO empBatchChangeVO : empBatchChangeVOs) {
@@ -137,6 +139,7 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
     /** 임시테이블 검증 후 저장 */
     @Override
     public int getEmpExcelUploadCheckSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+
         int storeCnt = 0;
         int i = 1;
         String currentDt = currentDateTimeString();
@@ -218,6 +221,15 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
                         result += "매장관리타입, ";
                     }
                 }
+                // 매장그룹
+                if(empBatchChangeVO.getMomsStoreFg01() != null && !"".equals(empBatchChangeVO.getMomsStoreFg01())){
+                    empBatchChangeVO.setNmcodeGrpCd("167");
+                    String hqNmcode = empBatchChangeMapper.getHqNmcodeChk(empBatchChangeVO);
+                    // 잘못된 정보 입력시
+                    if(hqNmcode == null || hqNmcode == "") {
+                        result += "매장그룹, ";
+                    }
+                }
             } else {
                 result += "존재하지 않는 매장입니다";
             }
@@ -243,12 +255,14 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
 
         empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
         empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return empBatchChangeMapper.getEmpExcelUploadCheckList(empBatchChangeVO);
     }
 
     /** 사원정보 저장 */
     @Override
     public int getSimpleSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+
         int storeCnt = 0;
         String currentDt = currentDateTimeString();
 

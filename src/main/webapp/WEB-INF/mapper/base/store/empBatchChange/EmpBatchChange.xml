@@ -194,7 +194,8 @@
                 (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_NM = C.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE,
                 (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_NM = C.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE,
                 #{modDt} AS MOD_DT,
-                #{modId} AS MOD_ID
+                #{modId} AS MOD_ID,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_NM = C.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01
                 FROM TB_TMP_EXCEL_EMPLOYEE C
                 WHERE 1=1
                 AND C.SESSION_ID = #{sessionId}
@@ -214,7 +215,8 @@
             A.MOMS_SHOP_TYPE = B.MOMS_SHOP_TYPE,
             A.MOMS_STORE_MANAGE_TYPE = B.MOMS_STORE_MANAGE_TYPE,
             A.MOD_DT = B.MOD_DT,
-            A.MOD_ID = B.MOD_ID
+            A.MOD_ID = B.MOD_ID,
+            A.MOMS_STORE_FG_01 = B.MOMS_STORE_FG_01
     </update>
 
     <!-- 검증결과 전체 삭제 -->
@@ -284,6 +286,9 @@
         <if test='nmcodeGrpCd != null and nmcodeGrpCd == "156"'>
             AND     NMCODE_NM = #{momsStoreManageType}
         </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "167"'>
+            AND     NMCODE_NM = #{momsStoreFg01}
+        </if>
     </select>
 
     <!-- 검증결과 저장 -->
@@ -306,7 +311,8 @@
             MOMS_COMMERCIAL,
             MOMS_SHOP_TYPE,
             MOMS_STORE_MANAGE_TYPE,
-            RESULT
+            RESULT,
+            MOMS_STORE_FG_01
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -319,7 +325,8 @@
             #{momsCommercial},
             #{momsShopType},
             #{momsStoreManageType},
-            #{result}
+            #{result},
+            #{momsStoreFg01}
          )
     </insert>
 
@@ -344,7 +351,8 @@
         A.MOMS_COMMERCIAL,
         A.MOMS_SHOP_TYPE,
         A.MOMS_STORE_MANAGE_TYPE,
-        A.RESULT
+        A.RESULT,
+        A.MOMS_STORE_FG_01
         FROM TB_TMP_EXCEL_EMPLOYEE A,
         TB_HQ_EMPLOYEE B
         WHERE 1=1
