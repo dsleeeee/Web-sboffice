@@ -10,6 +10,8 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.base.prod.prod.service.impl.ProdMapper;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,13 +40,15 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 public class SideMenuServiceImpl implements SideMenuService {
 
     private final SideMenuMapper sideMenuMapper;
+    private final ProdMapper prodMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SideMenuServiceImpl(SideMenuMapper sideMenuMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public SideMenuServiceImpl(SideMenuMapper sideMenuMapper, ProdMapper prodMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
         this.sideMenuMapper = sideMenuMapper;
+        this.prodMapper = prodMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
@@ -741,5 +745,33 @@ public class SideMenuServiceImpl implements SideMenuService {
         }
 
         return procCnt;
+    }
+
+    /** 상품정보 저장 전 체크 - 선택한 선택메뉴코드가 세트('C')이면서, 나(현재 선택한 상품)를 가진 세트가 있는지 확인 */
+    @Override
+    public String getSideMenuChk(SideMenuManageVO[] sideMenuManageVOs, SessionInfoVO sessionInfoVO){
+
+        String result = "";
+
+        for(SideMenuManageVO sideMenuManageVO : sideMenuManageVOs) {
+
+            ProdVO prodVO = new ProdVO();
+            prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            prodVO.setSdselGrpCd(sideMenuManageVO.getSdselGrpCd());
+            prodVO.setProdCd(sideMenuManageVO.getProdCd());
+            prodVO.setProdNm(sideMenuManageVO.getProdNm());
+
+            if(prodMapper.getSideMenuChk(prodVO).equals("N")){
+                result = prodVO.getProdNm() + "[" + prodVO.getProdCd() + "]";
+                return result;
+            }
+        }
+
+        return result;
     }
 }

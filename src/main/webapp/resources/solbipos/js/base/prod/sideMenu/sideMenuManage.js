@@ -203,8 +203,8 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
         $scope.flex.refresh();
     };
 
-    // 저장
-    $scope.prodBatchSave = function() {
+    // 저장 전 입력값 체크
+    $scope.prodBatchChk = function() {
         if($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["cmm.empty.data"]);
             return false;
@@ -224,21 +224,71 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
                 }
             }
 
-            // 파라미터 설정
+            // 상품정보 저장 전 체크 - 선택한 선택메뉴코드가 세트('C')이면서, 나(현재 선택한 상품)를 가진 세트가 있는지 확인
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
-                    $scope.flex.collectionView.items[i].status = "U";
-                    params.push($scope.flex.collectionView.items[i]);
+                    if ($scope.flex.collectionView.items[i].sideProdYn === "Y") {  // 사이드메뉴여부 '사용' 인 상품에 대해
+                        params.push($scope.flex.collectionView.items[i]);
+                    }
                 }
             }
 
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save("/base/prod/sideMenu/menuProd/saveSideMenuManageProdBatch.sb", params, function(){
-                
-                // 재조회
-                $scope.searchSideMenuManage();
+            //가상로그인 session 설정
+            var sParam = {};
+            if(document.getElementsByName('sessionId')[0]){
+                sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+            }
+
+            // ajax 통신 설정
+            $http({
+                method : 'POST', //방식
+                url    : '/base/prod/sideMenu/menuProd/getSideMenuChk.sb', /* 통신할 URL */
+                data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+                params : sParam,
+                headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+            }).then(function successCallback(response) {
+                if ($scope._httpStatusCheck(response, true)) {
+                    if (!$.isEmptyObject(response.data.data)) {
+                        if(response.data.data !== ""){
+                            $scope._popMsg( response.data.data + "은(는)<br/>" + messages["prod.sideProdChk.msg"]); // '' 은(는) 선택한 선택메뉴의 세트구분이 '세트' 이면서 <br/> 사이드메뉴관리에 선택상품으로 등록된 상품은 <br/> '사이드상품여부'를 '사용'으로 선택할 수 없습니다.
+                            return false;
+                        }else{
+                            // 저장
+                            $scope.prodBatchSave();
+                        }
+                    }
+                }
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                if (response.data.message) {
+                    $scope._popMsg(response.data.message);
+                } else {
+                    $scope._popMsg(messages['cmm.error']);
+                }
+                return false;
             });
+        });
+    };
+
+    // 저장
+    $scope.prodBatchSave = function(){
+
+        // 파라미터 설정
+        var params = new Array();
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                $scope.flex.collectionView.items[i].status = "U";
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/base/prod/sideMenu/menuProd/saveSideMenuManageProdBatch.sb", params, function(){
+
+            // 재조회
+            $scope.searchSideMenuManage();
         });
     };
 
