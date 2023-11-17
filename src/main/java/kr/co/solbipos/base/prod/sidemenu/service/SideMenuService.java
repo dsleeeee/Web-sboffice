@@ -100,4 +100,7 @@ public interface SideMenuService {
 
     /** 선택상품 적용매장 전체 삭제 */
     int getSdselProdRegStoreDeleteAll(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품정보 저장 전 체크 - 선택한 선택메뉴코드가 세트('C')이면서, 나(현재 선택한 상품)를 가진 세트가 있는지 확인 */
+    String getSideMenuChk(SideMenuManageVO[] sideMenuManageVOs, SessionInfoVO sessionInfoVO);
 }

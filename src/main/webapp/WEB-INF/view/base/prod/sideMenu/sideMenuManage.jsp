@@ -129,7 +129,7 @@
                 initialized="_initComboBox(s)">
         </wj-combo-box>
         <%-- 저장 --%>
-        <button class="btn_blue ml5 fr" ng-click="prodBatchSave()"><s:message code="cmm.save" /></button>
+        <button class="btn_blue ml5 fr" ng-click="prodBatchChk()"><s:message code="cmm.save" /></button>
         <%-- 프랜차이즈 매장일때만 --%>
         <c:if test="${orgnFg eq 'STORE' and hqOfficeCd ne '00000'}">
             <%-- 상품등록구분이 '본사'인 상품은 수정할 수 없습니다. --%>
@@ -287,4 +287,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuManage.js?ver=20230407.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuManage.js?ver=20231117.01" charset="utf-8"></script>

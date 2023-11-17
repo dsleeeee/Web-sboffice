@@ -832,4 +832,26 @@ public class SideMenuController {
 
         return returnJson(Status.OK, result);
     }
+
+
+    /**
+     * 상품정보 저장 전 체크 - 선택한 선택메뉴코드가 세트('C')이면서, 나(현재 선택한 상품)를 가진 세트가 있는지 확인
+     * @param sideMenuManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2023. 11. 17.
+     */
+    @RequestMapping(value = "menuProd/getSideMenuChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideMenuChk(@RequestBody SideMenuManageVO[] sideMenuManageVOs, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = sideMenuService.getSideMenuChk(sideMenuManageVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
