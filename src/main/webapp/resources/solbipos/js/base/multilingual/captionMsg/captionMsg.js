@@ -89,8 +89,17 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
         var params = {};
         params.captionImgCd = $scope.srchCaptionMsgGrpCombo.selectedValue;
 
-        // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/base/multilingual/captionMsg/getCaptionMsgList.sb", params);
+        // 화면구분 이미지 조회
+        $scope._postJSONQuery.withOutPopUp("/base/multilingual/captionMsg/getCaptionMsgGrpDtl.sb", params, function (response) {
+
+            var fileInfo = response.data.data;
+
+            // 이미지 셋팅
+            $("#imgCaptionMsgGrpView").attr("src", "http://" + window.location.host + "/Media/" + fileInfo.fileNm);
+
+            // 화면구분 선택에 따른 기능키/메시지 탭 리스트 조회
+            $scope._inquiryMain("/base/multilingual/captionMsg/getCaptionMsgList.sb", params);
+        });
     };
 
     // 추가
