@@ -240,6 +240,21 @@ public class SideMenuController {
             branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
+
+        // 매장그룹
+        List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
+        String momsStoreFg01ComboListAll = "";
+        if (momsStoreFg01ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg01ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
         /** //맘스터치 */
 
 

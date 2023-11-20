@@ -99,6 +99,9 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 그룹코드 */
     private String branchCd;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     /**
      * @return the hqOfficeCd
      */
@@ -336,4 +339,8 @@ public class SideMenuSelClassVO extends CmmVO {
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

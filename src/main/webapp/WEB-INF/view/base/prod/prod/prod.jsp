@@ -302,6 +302,7 @@
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 
     // 사용자 매장브랜드(조회용)
     var userHqBrandCdComboList = ${userHqBrandCdComboList};

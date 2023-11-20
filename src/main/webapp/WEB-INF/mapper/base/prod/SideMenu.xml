@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
     SideMenu.xml
@@ -2366,6 +2365,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         AND tms.HQ_OFFICE_CD (+)= thpscrs.HQ_OFFICE_CD
         AND tms.STORE_CD (+)= thpscrs.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
@@ -2414,6 +2416,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         AND tmsi.STORE_CD (+)= tms.STORE_CD
         ORDER BY tms.STORE_CD
@@ -2529,6 +2534,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         AND tms.HQ_OFFICE_CD (+)= thpsprs.HQ_OFFICE_CD
         AND tms.STORE_CD (+)= thpsprs.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
@@ -2578,6 +2586,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         AND tmsi.STORE_CD (+)= tms.STORE_CD
         ORDER BY tms.STORE_CD

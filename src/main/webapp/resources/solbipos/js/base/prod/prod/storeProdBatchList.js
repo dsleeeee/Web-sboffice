@@ -28,7 +28,7 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
-
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
     
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -99,9 +99,9 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
               params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
           }
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
 
-        $scope._inquirySub("/base/prod/prod/prod/selectStoreList.sb", params, function () {
-        });
+        $scope._inquirySub("/base/prod/prod/prod/selectStoreList.sb", params, function () {});
     };
 
     // 확장조회 숨김/보임

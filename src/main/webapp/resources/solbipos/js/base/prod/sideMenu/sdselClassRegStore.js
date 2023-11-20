@@ -36,6 +36,7 @@ app.controller('sdselClassRegStoreCtrl', ['$scope', '$http', function ($scope, $
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -75,6 +76,7 @@ app.controller('sdselClassRegStoreCtrl', ['$scope', '$http', function ($scope, $
             params.momsShopType = $scope.momsShopType;
             params.momsStoreManageType = $scope.momsStoreManageType;
             params.branchCd = $scope.branchCd;
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         var storeScope = agrid.getScope('sdselClassYesRegStoreCtrl');
@@ -120,6 +122,7 @@ app.controller('sdselClassRegStoreCtrl', ['$scope', '$http', function ($scope, $
         $scope.srchMomsShopTypeCombo.selectedIndex = 0;
         $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
         $scope.srchBranchCdCombo.selectedIndex = 0;
+        $scope.srchMomsStoreFg01Combo.selectedIndex = 0;
 
         // 선택분류
         $("#lblClassRegStoreClass").text("");

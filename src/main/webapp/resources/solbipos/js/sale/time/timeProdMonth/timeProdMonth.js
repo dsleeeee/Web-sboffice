@@ -96,6 +96,9 @@ app.controller('timeProdMonthCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+
+    // 콤보박스 셋팅
     $scope._setComboData("prodOptionCombo", prodOptionComboData); // 상품표시옵션
     $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
     $scope._setComboData("dayGubunCombo", dayGubunComboData); // 일/월 구분
@@ -150,11 +153,11 @@ app.controller('timeProdMonthCtrl', ['$scope', '$http', '$timeout', function ($s
     // }
     // // 그룹
     // if(branchCdComboList.length <= 1) {
-    //     $("#srchBranchCdComboo").css('background-color', '#F0F0F0');
-    //     $("#srchBranchCdComboo").attr("disabled", true);
+    //     $("#srchBranchCdCombo").css('background-color', '#F0F0F0');
+    //     $("#srchBranchCdCombo").attr("disabled", true);
     // } else {
-    //     $("#srchBranchCdComboo").css('background-color', '#FFFFFF');
-    //     $("#srchBranchCdComboo").attr("disabled", false);
+    //     $("#srchBranchCdCombo").css('background-color', '#FFFFFF');
+    //     $("#srchBranchCdCombo").attr("disabled", false);
     // }
 
     // 그리드 매출구분
@@ -364,6 +367,7 @@ app.controller('timeProdMonthCtrl', ['$scope', '$http', '$timeout', function ($s
             }
             params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
         params.dayGubun = $scope.dayGubun;
@@ -647,6 +651,7 @@ app.controller('timeProdMonthCtrl', ['$scope', '$http', '$timeout', function ($s
             }
           params.userBrands = momsHqBrandCd;
         }
+        params.momsStoreFg01 = $scope.momsStoreFg01;
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
         params.dayGubun = $scope.dayGubun;

@@ -405,6 +405,9 @@ public class ProdVO extends PageVO {
     /** 상품분류코드 */
     private String sdselClassCd;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1751,4 +1754,8 @@ public class ProdVO extends PageVO {
     public void setSdselClassCd(String sdselClassCd) {
         this.sdselClassCd = sdselClassCd;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

@@ -108,6 +108,9 @@ public class SideMenuSelProdVO extends PageVO {
     /**  출력여부 */
     private String printYn;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     /**
      * @return the hqOfficeCd
      */
@@ -412,4 +415,8 @@ public class SideMenuSelProdVO extends PageVO {
     public void setPrintYn(String printYn) {
         this.printYn = printYn;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }
