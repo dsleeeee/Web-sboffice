@@ -1,4 +1,4 @@
-package kr.co.solbipos.base.store.multilingualCaptionMsg.service.impl;
+package kr.co.solbipos.base.multilingual.captionMsg.service.impl;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -6,8 +6,8 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.system.BaseEnv;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgService;
-import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgVO;
+import kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgService;
+import kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgVO;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

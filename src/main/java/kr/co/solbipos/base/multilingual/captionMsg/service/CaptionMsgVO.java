@@ -1,4 +1,4 @@
-package kr.co.solbipos.base.store.multilingualCaptionMsg.service;
+package kr.co.solbipos.base.multilingual.captionMsg.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 

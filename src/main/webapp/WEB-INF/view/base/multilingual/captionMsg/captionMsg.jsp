@@ -5,7 +5,7 @@
 
 <div class="subCon" ng-controller="captionMsgCtrl" id="captionMsgView" style="display: none;">
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="multilingualCaptionMsg.captionMsg"/></a>
+        <a href="#" class="open fl"><s:message code="captionMsg.captionMsg"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('captionMsgCtrl', 1)">
@@ -23,7 +23,7 @@
         </colgroup>
         <tbody>
         <tr>
-            <th><s:message code="multilingualCaptionMsg.captionMsgGrp2"/></th>
+            <th><s:message code="captionMsg.captionMsgGrp2"/></th>
             <td colspan="3">
                 <div class="sb-select w30">
                     <wj-combo-box
@@ -85,15 +85,15 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionMsgId"/>" binding="captionMsgId" align="left" width="200" max-length="33"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionMsgGb"/>" binding="captionMsgGb" data-map="captionMsgGbDataMap" align="center" width="100"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionMsgNm"/>" binding="captionMsgNm" align="left" width="200" max-length="160"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.en"/>" binding="captionMsgEnNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.cn"/>" binding="captionMsgCnNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.jp"/>" binding="captionMsgJpNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgId"/>" binding="captionMsgId" align="left" width="200" max-length="33"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgGb"/>" binding="captionMsgGb" data-map="captionMsgGbDataMap" align="center" width="100"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgNm"/>" binding="captionMsgNm" align="left" width="200" max-length="160"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.en"/>" binding="captionMsgEnNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.cn"/>" binding="captionMsgCnNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.jp"/>" binding="captionMsgJpNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
 
                 <%-- 저장시 필요 --%>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionImgCd"/>" binding="captionImgCd" width="0" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.captionImgCd"/>" binding="captionImgCd" width="0" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -118,15 +118,15 @@
 
             <!-- define columns -->
            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-           <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionMsgId"/>" binding="captionMsgId" align="left" width="200" max-length="33"></wj-flex-grid-column>
-           <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionMsgGb"/>" binding="captionMsgGb" data-map="captionMsgGbDataMap" align="center" width="100"></wj-flex-grid-column>
-           <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionMsgNm"/>" binding="captionMsgNm" align="left" width="200" max-length="160"></wj-flex-grid-column>
-           <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.en"/>" binding="captionMsgEnNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
-           <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.cn"/>" binding="captionMsgCnNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
-           <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.jp"/>" binding="captionMsgJpNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
+           <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgId"/>" binding="captionMsgId" align="left" width="200" max-length="33"></wj-flex-grid-column>
+           <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgGb"/>" binding="captionMsgGb" data-map="captionMsgGbDataMap" align="center" width="100"></wj-flex-grid-column>
+           <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgNm"/>" binding="captionMsgNm" align="left" width="200" max-length="160"></wj-flex-grid-column>
+           <wj-flex-grid-column header="<s:message code="captionMsg.en"/>" binding="captionMsgEnNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
+           <wj-flex-grid-column header="<s:message code="captionMsg.cn"/>" binding="captionMsgCnNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
+           <wj-flex-grid-column header="<s:message code="captionMsg.jp"/>" binding="captionMsgJpNm" align="left" width="150" max-length="160"></wj-flex-grid-column>
 
         </wj-flex-grid>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/multilingualCaptionMsg/captionMsg.js?ver=20231117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsg.js?ver=20231120.01" charset="utf-8"></script>

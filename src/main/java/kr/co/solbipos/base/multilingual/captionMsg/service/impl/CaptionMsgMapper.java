@@ -1,7 +1,7 @@
-package kr.co.solbipos.base.store.multilingualCaptionMsg.service.impl;
+package kr.co.solbipos.base.multilingual.captionMsg.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgVO;
+import kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

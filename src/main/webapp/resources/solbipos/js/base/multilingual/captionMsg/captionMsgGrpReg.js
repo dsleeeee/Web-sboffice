@@ -30,12 +30,12 @@ app.controller('captionMsgGrpRegCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.$on("captionMsgGrpRegCtrl", function(event, data) {
 
         if(!isEmptyObject(data)) {
-            $("#lblTitle").text(messages["multilingualCaptionMsg.captionMsgMod"]);
+            $("#lblTitle").text(messages["captionMsg.captionMsgMod"]);
             $scope.isEdit = true;
             $scope.selCaptionMsgGrp = data;
             $scope.dtlInfo($scope.selCaptionMsgGrp);
         } else {
-            $("#lblTitle").text(messages["multilingualCaptionMsg.captionMsgGrp"]);
+            $("#lblTitle").text(messages["captionMsg.captionMsgGrp"]);
             $scope.isEdit = false;
             $scope.selCaptionMsgGrp = {};
         }
@@ -46,7 +46,7 @@ app.controller('captionMsgGrpRegCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.dtlInfo = function (data) {
         var params = data;
 
-        $scope._postJSONQuery.withOutPopUp( "/base/store/multilingualCaptionMsg/getCaptionMsgGrpDtl.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp( "/base/multilingual/captionMsg/getCaptionMsgGrpDtl.sb", params, function(response){
             $scope.version = response.data.data;
 
             // 파일사이즈 변환하여 표기
@@ -83,9 +83,9 @@ app.controller('captionMsgGrpRegCtrl', ['$scope', '$http', function ($scope, $ht
             var url = '';
 
             if (!$scope.isEdit && isEmptyObject($scope.version.captionImgCd)) {
-                url = '/base/store/multilingualCaptionMsg/saveCaptionMsgGrp.sb';
+                url = '/base/multilingual/captionMsg/saveCaptionMsgGrp.sb';
             } else {
-                url = '/base/store/multilingualCaptionMsg/updateCaptionMsgGrp.sb';
+                url = '/base/multilingual/captionMsg/updateCaptionMsgGrp.sb';
             }
 
             $scope.$broadcast('loadingPopupActive');
@@ -141,21 +141,21 @@ app.controller('captionMsgGrpRegCtrl', ['$scope', '$http', function ($scope, $ht
         // 화면구분코드 체크
         if($scope.isEdit) { // 수정모드 시, 체크
             if ($("#regCaptionImgCd").val() === null || $("#regCaptionImgCd").val() === undefined || $("#regCaptionImgCd").val() === "") {
-                $scope._popMsg(messages["multilingualCaptionMsg.captionImgCd"] + " " + messages["cmm.require.text"]);
+                $scope._popMsg(messages["captionMsg.captionImgCd"] + " " + messages["cmm.require.text"]);
                 return false;
             }
         }
 
         // 화면구분명 체크
         if ($("#regCaptionImgNm").val() === null || $("#regCaptionImgNm").val() === undefined || $("#regCaptionImgNm").val() === "") {
-            $scope._popMsg(messages["multilingualCaptionMsg.captionImgNm"] + " " + messages["cmm.require.text"]);
+            $scope._popMsg(messages["captionMsg.captionImgNm"] + " " + messages["cmm.require.text"]);
             return false;
         }
 
         // 첨부파일 체크
         if(!$scope.isEdit) { // 신규등록시, 체크
             if ($("#file").val() === null || $("#file").val() === undefined || $("#file").val() === "") {
-                $scope._popMsg(messages["multilingualCaptionMsg.file"] + " " + messages["cmm.require.text"]);
+                $scope._popMsg(messages["captionMsg.file"] + " " + messages["cmm.require.text"]);
                 return;
             }
         }
