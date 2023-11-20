@@ -76,10 +76,6 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     event.preventDefault();
   });
 
-  $scope.prodSaleUprcApplyChk = function (){
-
-  }
-
   // 등록된 매장 조회
   $scope.searchRegStore = function(){
 
@@ -93,7 +89,13 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqBrandCd  = $scope.hqBrandCd;
     // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'Y';
-
+    params.momsTeam = $("#hdSrchPsrMomsTeam").val();
+    params.momsAcShop = $("#hdSrchPsrMomsAcShop").val();
+    params.momsAreaFg = $("#hdSrchPsrMomsAreaFg").val();
+    params.momsCommercial = $("#hdSrchPsrMomsCommercial").val();
+    params.momsShopType = $("#hdSrchPsrMomsShopType").val();
+    params.momsStoreManageType = $("#hdSrchPsrMomsStoreManageType").val();
+    params.branchCd = $("#hdSrchPsrBranchCd").val();
     if(hqOfficeCd !== 'A0001'){
         if(brandUseFg === "1" && orgnFg === "HQ"){
 
@@ -252,6 +254,27 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setPsrStoreHqBrandCd = function(s) {
     $('#hdSrchPsrStoreHqBrandCd').val(s.selectedValue);
   };
+  $scope.setPsrMomsTeam = function(s) {
+    $('#hdSrchPsrMomsTeam').val(s.selectedValue);
+  };
+  $scope.setPsrMomsAcShop = function(s) {
+    $('#hdSrchPsrMomsAcShop').val(s.selectedValue);
+  };
+  $scope.setPsrMomsAreaFg = function(s) {
+    $('#hdSrchPsrMomsAreaFg').val(s.selectedValue);
+  };
+  $scope.setPsrMomsCommercial = function(s) {
+    $('#hdSrchPsrMomsCommercial').val(s.selectedValue);
+  };
+  $scope.setPsrMomsShopType = function(s) {
+    $('#hdSrchPsrMomsShopType').val(s.selectedValue);
+  };
+  $scope.setPsrMomsStoreManageType = function(s) {
+    $('#hdSrchPsrMomsStoreManageType').val(s.selectedValue);
+  };
+  $scope.setPsrBranchCd = function(s) {
+    $('#hdSrchPsrBranchCd').val(s.selectedValue);
+  };
 
   // 확장조회 숨김/보임
   $scope.searchAddShowChangeReg = function(){
@@ -294,13 +317,13 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqBrandCd  = $scope.hqBrandCd;
     // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'N';
-    params.momsTeam = $scope.momsTeam;
-    params.momsAcShop = $scope.momsAcShop;
-    params.momsAreaFg = $scope.momsAreaFg;
-    params.momsCommercial = $scope.momsCommercial;
-    params.momsShopType = $scope.momsShopType;
-    params.momsStoreManageType = $scope.momsStoreManageType;
-    params.branchCd = $scope.branchCd;
+    params.momsTeam = $("#hdSrchPsrMomsTeam").val();
+    params.momsAcShop = $("#hdSrchPsrMomsAcShop").val();
+    params.momsAreaFg = $("#hdSrchPsrMomsAreaFg").val();
+    params.momsCommercial = $("#hdSrchPsrMomsCommercial").val();
+    params.momsShopType = $("#hdSrchPsrMomsShopType").val();
+    params.momsStoreManageType = $("#hdSrchPsrMomsStoreManageType").val();
+    params.branchCd = $("#hdSrchPsrBranchCd").val();
     if(hqOfficeCd !== 'A0001') {
       if (brandUseFg === "1" && orgnFg === "HQ") {
 
