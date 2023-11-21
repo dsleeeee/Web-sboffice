@@ -114,6 +114,7 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
     }
+    params.momsStoreFg01 = $("#hdSrchPsrMomsStoreFg01").val();
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
   };
@@ -275,6 +276,9 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setPsrBranchCd = function(s) {
     $('#hdSrchPsrBranchCd').val(s.selectedValue);
   };
+  $scope.setPsrMomsStoreFg01 = function(s) {
+    $('#hdSrchPsrMomsStoreFg01').val(s.selectedValue);
+  };
 
   // 확장조회 숨김/보임
   $scope.searchAddShowChangeReg = function(){
@@ -342,6 +346,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
           }
       }
     }
+    params.momsStoreFg01 = $("#hdSrchPsrMomsStoreFg01").val();
     console.log(params);
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);

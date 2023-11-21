@@ -95,7 +95,7 @@
                      <input type="hidden" id="hdSrchPsrStoreHqBrandCd" />
                    </div>
                  </td>
-                 <th></th>
+                 <td></td>
                  <td></td>
                </tr>
              </c:if>
@@ -251,8 +251,30 @@
                   <input type="hidden" id="hdSrchPsrBranchCd" />
                 </div>
               </td>
-              <td></td>
-              <td></td>
+              <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                <%-- 매장그룹 --%>
+                <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                            id="srchMomsStoreFg01Combo"
+                            ng-model="momsStoreFg01"
+                            items-source="_getComboData('momsStoreFg01Combo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchMomsStoreFg01Combo"
+                            selected-index-changed="setPsrMomsStoreFg01(s)">
+                    </wj-combo-box>
+                    <input type="hidden" id="hdSrchPsrMomsStoreFg01" />
+                  </div>
+                </td>
+              </c:if>
+              <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                <td></td>
+                <td></td>
+              </c:if>
             </tr>
             </tbody>
           </table>
@@ -368,4 +390,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20231120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20231121.01" charset="utf-8"></script>
