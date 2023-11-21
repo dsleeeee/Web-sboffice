@@ -70,7 +70,7 @@ public class PostpaidDtlController {
     }
 
     /**
-     * 후불 회원 외상, 입금 내역 상세
+     * 후불 회원 외상, 입금 내역 상세 - 조회
      *
      * @param postpaidDtlVO
      * @param request
@@ -86,6 +86,27 @@ public class PostpaidDtlController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = service.getPostpaidDtlMemberList(postpaidDtlVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, postpaidDtlVO);
+    }
+
+    /**
+     * 후불 회원 외상, 입금 내역 상세 - 엑셀 조회
+     *
+     * @param postpaidDtlVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "postpaidDtl/getPostpaidDtlMemberExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPostpaidDtlMemberExcelList(PostpaidDtlVO postpaidDtlVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getPostpaidDtlMemberExcelList(postpaidDtlVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, postpaidDtlVO);
     }

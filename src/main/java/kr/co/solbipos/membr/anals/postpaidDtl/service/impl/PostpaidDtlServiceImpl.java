@@ -49,7 +49,7 @@ public class PostpaidDtlServiceImpl implements PostpaidDtlService {
         this.popupMapper = popupMapper;
     }
 
-    /** 후불 회원 외상, 입금 내역 상세*/
+    /** 후불 회원 외상, 입금 내역 상세 - 조회 */
     @Override
     public List<DefaultMap<Object>> getPostpaidDtlMemberList(PostpaidDtlVO postpaidDtlVO, SessionInfoVO sessionInfoVO) {
 
@@ -66,5 +66,24 @@ public class PostpaidDtlServiceImpl implements PostpaidDtlService {
         }
 
         return mapper.getPostpaidDtlMemberList(postpaidDtlVO);
+    }
+
+    /** 후불 회원 외상, 입금 내역 상세 - 엑셀 조회 */
+    @Override
+    public List<DefaultMap<Object>> getPostpaidDtlMemberExcelList(PostpaidDtlVO postpaidDtlVO, SessionInfoVO sessionInfoVO) {
+
+        postpaidDtlVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        postpaidDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            postpaidDtlVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(postpaidDtlVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(postpaidDtlVO.getStoreCds(), 3900));
+            postpaidDtlVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return mapper.getPostpaidDtlMemberExcelList(postpaidDtlVO);
     }
 }

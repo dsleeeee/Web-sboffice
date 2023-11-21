@@ -26,6 +26,9 @@ import java.util.List;
 @Repository
 public interface PostpaidDtlMapper {
 
-    /** 후불 회원 외상, 입금 내역 상세*/
+    /** 후불 회원 외상, 입금 내역 상세 - 조회 */
     List<DefaultMap<Object>> getPostpaidDtlMemberList(PostpaidDtlVO postpaidDtlVO);
+
+    /** 후불 회원 외상, 입금 내역 상세 - 엑셀 조회 */
+    List<DefaultMap<Object>> getPostpaidDtlMemberExcelList(PostpaidDtlVO postpaidDtlVO);
 }

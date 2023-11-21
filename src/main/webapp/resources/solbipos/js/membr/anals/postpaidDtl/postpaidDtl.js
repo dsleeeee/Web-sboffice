@@ -16,9 +16,10 @@ var app = agrid.getApp();
 /**
  *  후불회원 그리드 생성
  */
-app.controller('postpaidDtlCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('postpaidDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('postpaidDtlCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('postpaidDtlCtrl', $scope, $http, false));
 
   // 접속사용자의 권한(H : 본사, S: 매장)
   $scope.orgnFg = gvOrgnFg;
@@ -49,11 +50,8 @@ app.controller('postpaidDtlCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 후불회원상세 그리드 조회
   $scope.searchPostpaidDtl = function(){
-
-    var params      = {};
+    var params = {};
     params.storeCds = $("#storeCd").val();
-    /*params.startDate = '20190501';
-    params.endDate = '20190506';*/
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
 
@@ -65,6 +63,64 @@ app.controller('postpaidDtlCtrl', ['$scope', '$http', function ($scope, $http) {
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
   $scope.storeShow = function () {
     $scope._broadcast('storeCtrl');
+  };
+
+  // 엑셀 다운로드
+  $scope.excelDownload = function () {
+    var params = {};
+    params.storeCds = $("#storeCd").val();
+    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+
+    $scope._broadcast('postpaidDtlExcelCtrl', params);
+  };
+
+}]);
+
+
+/**
+ *  후불회원 엑셀 그리드 생성
+ */
+app.controller('postpaidDtlExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('postpaidDtlExcelCtrl', $scope, $http, false));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // 그리드 DataMap 설정
+    $scope.postpaidFgDataMap = new wijmo.grid.DataMap(postpaidFgData, 'value', 'name');
+  };
+
+  $scope.$on("postpaidDtlExcelCtrl", function(event, data) {
+    $scope.excelDownload(data);
+    event.preventDefault();
+  });
+
+  // 엑셀 다운로드
+  $scope.excelDownload = function (params) {
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquiryMain("/membr/anals/postpaidDtl/postpaidDtl/getPostpaidDtlMemberExcelList.sb", params, function (){
+      if ($scope.excelFlex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+        return false;
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+      $timeout(function () {
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+          includeColumnHeaders: true,
+          includeCellStyles   : true,
+          includeColumns      : function (column) {
+            return column.visible;
+          }
+        },  '외상발생/입금내역 상세_'+ getToday() + '.xlsx', function () {
+          $timeout(function () {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+          }, 10);
+        });
+      }, 10);
+    });
   };
 
 }]);

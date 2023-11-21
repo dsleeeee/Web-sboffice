@@ -11,7 +11,7 @@
 -->
 <mapper namespace="kr.co.solbipos.membr.anals.postpaidDtl.service.impl.PostpaidDtlMapper">
 
-    <!-- 후불 회원 외상, 입금 내역 상세-->
+    <!-- 후불 회원 외상, 입금 내역 상세 - 조회 -->
     <!--
         TABLE    :  TB_MB_MEMBER_POSTPAID, TB_MB_MEMBER, TB_MS_STORE, TB_CM_NMCODE
         COMMENTS : 후불 외상내역과 입금내역의 상세를 조회(건 by 건)
@@ -60,4 +60,52 @@
         ORDER BY tmmp.SALE_DATE DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
+
+    <!-- 후불 회원 외상, 입금 내역 상세 - 엑셀 조회 -->
+    <!--
+        TABLE    :  TB_MB_MEMBER_POSTPAID, TB_MB_MEMBER, TB_MS_STORE, TB_CM_NMCODE
+        COMMENTS : 후불 외상내역과 입금내역의 상세를 조회(건 by 건)
+    -->
+    <select id="getPostpaidDtlMemberExcelList"  parameterType="postpaidDtlVO" resultType="DefaultMap">
+        /* PostpaidDtlMapper.getPostpaidDtlMemberExcelList */
+        SELECT tmmp.HQ_OFFICE_CD,
+        tmmp.STORE_CD,
+        tms.STORE_NM,
+        tmmp.MEMBR_NO,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+        (SUBSTR(tmmp.SALE_DATE, 1,4) || '/' || SUBSTR(tmmp.SALE_DATE, 5,2) || '/' || SUBSTR(tmmp.SALE_DATE, 7)) AS SALE_DATE,
+        tmmp.POSTPAID_FG,
+        tmmp.POSTPAID_AMT,
+        tmmp.DEPOSIT_AMT,
+        tmmp.POSTPAID_PAY_FG,
+        tcn.NMCODE_NM AS POSTPAID_PAY_FG_NM
+        FROM TB_MB_MEMBER_POSTPAID tmmp,
+        TB_MB_MEMBER tmm,
+        TB_MS_STORE tms,
+        TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tmmp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tmmp.STORE_CD IN (${storeCdQuery})
+        </if>
+        AND tmmp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmm.MEMBR_NO = tmmp.MEMBR_NO
+        AND tms.HQ_OFFICE_CD = tmmp.HQ_OFFICE_CD
+        AND tms.STORE_CD = tmmp.STORE_CD
+        AND tcn.NMCODE_GRP_CD (+) = '074'
+        AND tcn.NMCODE_CD (+) = tmmp.POSTPAID_PAY_FG
+        <if test='membrNo != null and membrNo != ""'>
+            <![CDATA[
+                AND tmmp.MEMBR_NO LIKE '%'|| #{membrNo} ||'%'
+            ]]>
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+            <![CDATA[
+                AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
+            ]]>
+        </if>
+        ORDER BY tmmp.SALE_DATE DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
+    </select>
+
 </mapper>

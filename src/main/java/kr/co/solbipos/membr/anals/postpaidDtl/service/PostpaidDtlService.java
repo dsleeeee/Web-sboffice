@@ -23,6 +23,9 @@ import java.util.List;
  */
 public interface PostpaidDtlService {
 
-    /** 후불 회원 외상, 입금 내역 상세*/
+    /** 후불 회원 외상, 입금 내역 상세 - 조회 */
     List<DefaultMap<Object>> getPostpaidDtlMemberList(PostpaidDtlVO postpaidDtlVO, SessionInfoVO sessionInfoVO);
+
+    /** 후불 회원 외상, 입금 내역 상세 - 엑셀 조회 */
+    List<DefaultMap<Object>> getPostpaidDtlMemberExcelList(PostpaidDtlVO postpaidDtlVO, SessionInfoVO sessionInfoVO);
 }
