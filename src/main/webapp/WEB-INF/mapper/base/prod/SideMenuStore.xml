@@ -166,6 +166,9 @@
             <if test='branchCd != null and branchCd != ""'>
                 AND C.BRANCH_CD = #{branchCd}
             </if>
+            <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                AND E.MOMS_STORE_FG_01 = #{momsStoreFg01}
+            </if>
             AND A.USE_YN = 'Y'
             AND B.USE_YN = 'Y'
             AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
@@ -366,6 +369,9 @@
             </if>
             <if test='branchCd != null and branchCd != ""'>
                 AND E.BRANCH_CD = #{branchCd}
+            </if>
+            <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                AND G.MOMS_STORE_FG_01 = #{momsStoreFg01}
             </if>
             AND A.USE_YN = 'Y'
             AND B.USE_YN = 'Y'
