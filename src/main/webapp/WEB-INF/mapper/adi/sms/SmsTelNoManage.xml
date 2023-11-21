@@ -92,7 +92,7 @@
         TABLE    : HCS_SENDM_T
         COMMENTS : [본사매장]발신번호인증||
     -->
-    <select id="getSmsTelNoManageChk"  parameterType="SmsTelNoManageVO" resultType="Integer">
+    <select id="getSmsTelNoManageChk" parameterType="SmsTelNoManageVO" resultType="Integer">
         /* SmsTelNoManageMapper.getSmsTelNoManageChk */
         SELECT  COUNT(*)
         FROM    HCS_SENDM_T

@@ -398,8 +398,8 @@
         PARAM    : MsgManageVO
         COMMENTS : 본사 메시지그룹을 매장에 적용한다.
     -->
-    <select id="insertMsgGrpToStore" statementType="CALLABLE"  parameterType="MsgManageVO" resultType="String">
-        /* USE : MsgManageMapper.insertMsgGrpToStore   */
+    <select id="insertMsgGrpToStore" statementType="CALLABLE" parameterType="MsgManageVO" resultType="String">
+        /* USE : MsgManageMapper.insertMsgGrpToStore  */
         {
             CALL PKG_HCS_MSGGR_T_01.SP_PKG_HCS_MSGGR_T_001
           (
@@ -416,8 +416,8 @@
         PARAM    : MsgManageVO
         COMMENTS : 본사 메시지를 매장에 적용한다.
     -->
-    <select id="insertMsgSmsToStore" statementType="CALLABLE"  parameterType="MsgManageVO" resultType="String">
-        /* USE : MsgManageMapper.insertMsgSmsToStore   */
+    <select id="insertMsgSmsToStore" statementType="CALLABLE" parameterType="MsgManageVO" resultType="String">
+        /* USE : MsgManageMapper.insertMsgSmsToStore  */
         {
             CALL PKG_HCS_SMSMS_T_01.SP_PKG_HCS_SMSMS_T_001
           (

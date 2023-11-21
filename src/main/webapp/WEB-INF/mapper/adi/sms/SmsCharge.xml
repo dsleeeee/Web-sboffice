@@ -304,7 +304,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="msgOneAmtSettingAuth"  parameterType="SessionInfoVO" resultType="String">
+    <select id="msgOneAmtSettingAuth" parameterType="SessionInfoVO" resultType="String">
         /* SmsChargeMapper.msgOneAmtSettingAuth */
         SELECT
         COUNT(tce.USER_ID)
