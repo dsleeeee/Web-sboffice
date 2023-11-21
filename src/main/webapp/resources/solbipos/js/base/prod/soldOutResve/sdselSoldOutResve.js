@@ -345,7 +345,7 @@ app.controller('sdselSoldOutResveCtrl', ['$scope', '$http', '$timeout', function
 
 
   // 확장조회 숨김/보임
-  $scope.searchAddShowChange = function(){
+  $scope.searchAddShowChange2 = function(){
       if( $("#tblSearchAddShow2").css("display") === 'none') {
           $("#tblSearchAddShow2").show();
       } else {
