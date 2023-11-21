@@ -79,7 +79,7 @@
         TABLE    : HCS_SMS_SEND_REG_T
         COMMENTS :
     -->
-    <select id="getMarketingSmsSendMsgManageDtlList"  parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+    <select id="getMarketingSmsSendMsgManageDtlList" parameterType="MarketingSmsSendVO" resultType="DefaultMap">
         /* MarketingSmsSendMapper.getMarketingSmsSendMsgManageDtlList */
         SELECT
         0 AS SEQ_NO,
@@ -147,7 +147,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getMarketingSmsSendList"  parameterType="MarketingSmsSendVO" resultType="DefaultMap">
+    <select id="getMarketingSmsSendList" parameterType="MarketingSmsSendVO" resultType="DefaultMap">
         /* MarketingSmsSendMapper.getMarketingSmsSendList */
         SELECT
         SUBSTR(SBPENC.D(sssemr.DEST_INFO), INSTR(SBPENC.D(sssemr.DEST_INFO), '^')+1) AS TEL_NO,

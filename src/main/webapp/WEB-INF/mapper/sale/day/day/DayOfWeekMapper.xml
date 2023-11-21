@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_DTL
         COMMENTS : [매출]헤더 와 [매출]헤더_결제, [매출]상세
     -->
-    <select id="getDayOfWeekTotalList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getDayOfWeekTotalList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekTotalList */
         SELECT  tssh.YOIL,
                 tssh.STORE_CNT,
@@ -127,7 +127,7 @@
         TABLE    : TB_SL_SALE_HDR_DC
         COMMENTS : [매출]헤더_할인
     -->
-    <select id="getDayOfWeekDcList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getDayOfWeekDcList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekDcList */
         SELECT
         YOIL,
@@ -192,7 +192,7 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getDayOfWeekTaxList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getDayOfWeekTaxList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekTaxList */
         SELECT
         YOIL,
@@ -240,7 +240,7 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getDayOfWeekTimeList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getDayOfWeekTimeList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekTimeList */
         <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT tssh.YOIL
@@ -345,7 +345,7 @@
         COMMENTS : [매출]상세, [본사]상품, [본사]상품_분류, [본사]상품_바코드
                    [매장]매장 정보, [매장]상품, [매장]상품_분류, [매장]상품_바코드
     -->
-    <select id="getDayOfWeekProdClassList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getDayOfWeekProdClassList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekProdClassList */
         <choose>
             <!-- 분류없음 -->
@@ -709,7 +709,7 @@
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세
     -->
-    <select id="getDayOfWeekCornerList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getDayOfWeekCornerList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekCornerList */
         SELECT
         YOIL,
@@ -780,7 +780,7 @@
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세
     -->
-    <select id="getDayOfWeekTableList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getDayOfWeekTableList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekTableList */
         SELECT
         YOIL,
@@ -861,7 +861,7 @@
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세
     -->
-    <select id="getDayOfWeekPosList"  parameterType="DayOfWeekVO" resultType="DefaultMap">
+    <select id="getDayOfWeekPosList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekPosList */
         SELECT	DECODE(GROUPING(STORE_POS_NO), 1, 'TOTAL', STORE_POS_NO) AS STORE_POS_NO,
                 YOIL_NUM,
@@ -888,7 +888,7 @@
                 )
         GROUP BY YOIL_NUM, YOIL,  ROLLUP(STORE_POS_NO)
     </select>
-<!--    <select id="getDayOfWeekPosList"  parameterType="DayOfWeekVO" resultType="DefaultMap">-->
+<!--    <select id="getDayOfWeekPosList" parameterType="DayOfWeekVO" resultType="DefaultMap">-->
 <!--        /* DayOfWeekMapper.getDayOfWeekPosList */-->
 <!--        SELECT-->
 <!--        YOIL_NUM,-->

@@ -16,7 +16,7 @@
         TABLE    : TB_WB_BOARD_MASTER
         COMMENTS : 게시판 마스터
     -->
-    <select id="getBoardMasterList"  parameterType="BoardMasterVO" resultType="DefaultMap">
+    <select id="getBoardMasterList" parameterType="BoardMasterVO" resultType="DefaultMap">
         /* BoardMasterMapper.getBoardMasterList */
         SELECT
         twbm.BOARD_CD,

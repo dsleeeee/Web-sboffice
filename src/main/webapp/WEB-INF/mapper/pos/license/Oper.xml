@@ -16,7 +16,7 @@
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_MS_POS, TB_CM_INSTLL, TB_SL_SALE_HDR
         COMMENTS : [매장]매장 정보 와 [본사]본사 정보, [매장]포스 정보, 설치의뢰, [매출]헤더
     -->
-    <select id="getRunSaleStoreList"  parameterType="OperVO" resultType="DefaultMap">
+    <select id="getRunSaleStoreList" parameterType="OperVO" resultType="DefaultMap">
         /* OperMapper.getRunSaleStoreList */
         SELECT  A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
         ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG, B.OWNER_NM, B.BIZ_NO
@@ -285,7 +285,7 @@
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_MS_POS, TB_CM_INSTLL, TB_SL_SALE_HDR
         COMMENTS : [매장]매장 정보 와 [본사]본사 정보, [매장]포스 정보, 설치의뢰, [매출]헤더
     -->
-    <select id="getSaleStoreList"  parameterType="OperVO" resultType="DefaultMap">
+    <select id="getSaleStoreList" parameterType="OperVO" resultType="DefaultMap">
         /* OperMapper.getSaleStoreList */
         SELECT  A.HQ_OFFICE_CD, A.HQ_OFFICE_NM
         ,       B.STORE_CD, B.STORE_NM, B.SYS_STAT_FG, B.OWNER_NM, B.BIZ_NO
@@ -539,7 +539,7 @@
         TABLE    : TB_CM_AGENCY, TB_CM_INSTLL
         COMMENTS : [공통]대리점 정보 와 설치의뢰
     -->
-    <select id="getAgencyAuthList"  parameterType="OperVO" resultType="DefaultMap">
+    <select id="getAgencyAuthList" parameterType="OperVO" resultType="DefaultMap">
         /* OperMapper.getAgencyAuthList */
         SELECT
         tca.AGENCY_CD,

@@ -16,7 +16,7 @@
         TABLE    : HCS_SMS_SEND_REG_T
         COMMENTS : SMS전송이력
     -->
-    <select id="getSmsSendHistList"  parameterType="SmsSendHistVO" resultType="DefaultMap">
+    <select id="getSmsSendHistList" parameterType="SmsSendHistVO" resultType="DefaultMap">
         /* SmsSendHistMapper.getSmsSendHistList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -124,7 +124,7 @@
         TABLE    : HCS_SMS_SEND_REG_T
         COMMENTS : SMS전송이력
     -->
-    <select id="getSmsSendHistExcelList"  parameterType="SmsSendHistVO" resultType="DefaultMap">
+    <select id="getSmsSendHistExcelList" parameterType="SmsSendHistVO" resultType="DefaultMap">
         /* SmsSendHistMapper.getSmsSendHistExcelList */
         SELECT
         hssrt.REG_DT,
@@ -229,7 +229,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAddresseeDtlList"  parameterType="SmsSendHistVO" resultType="DefaultMap">
+    <select id="getAddresseeDtlList" parameterType="SmsSendHistVO" resultType="DefaultMap">
         /* SmsSendHistMapper.getAddresseeDtlList */
         SELECT
         A.PHONE_NUMBER,

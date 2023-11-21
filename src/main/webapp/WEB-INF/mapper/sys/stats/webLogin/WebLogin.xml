@@ -22,7 +22,7 @@
                    [매장]사원 정보, [매장]매장 정보,
                    [공통]시스템/대리점 사원 정보, [공통]대리점 정보
     -->
-    <select id="getWebLoginList"  parameterType="WebLoginVO" resultType="DefaultMap">
+    <select id="getWebLoginList" parameterType="WebLoginVO" resultType="DefaultMap">
         /* WebLoginMapper.getWebLoginList */
         SELECT
         twlh.USER_ID,
@@ -177,7 +177,7 @@
         TABLE    : TB_WB_LOGIN_HIST
         COMMENTS : 로그인 이력
     -->
-    <select id="getWebLoginDayDetailList"  parameterType="WebLoginVO" resultType="DefaultMap">
+    <select id="getWebLoginDayDetailList" parameterType="WebLoginVO" resultType="DefaultMap">
         /* WebLoginMapper.getWebLoginDayDetailList */
         SELECT
         twlh.LOGIN_DATE,
@@ -237,7 +237,7 @@
                    [매장]사원 정보, [매장]매장 정보,
                    [공통]시스템/대리점 사원 정보, [공통]대리점 정보
     -->
-    <select id="getWebLoginLoginDetailList"  parameterType="WebLoginVO" resultType="DefaultMap">
+    <select id="getWebLoginLoginDetailList" parameterType="WebLoginVO" resultType="DefaultMap">
         /* WebLoginMapper.getWebLoginLoginDetailList */
         SELECT
         twlh.LOGIN_DATE,

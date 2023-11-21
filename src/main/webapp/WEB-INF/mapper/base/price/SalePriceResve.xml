@@ -897,7 +897,7 @@
         PARAM    : salePriceResveVO
         COMMENTS : 가격예약(판매가관리) 리스트 조회
     -->
-    <select id="getSalePriceResveList"  parameterType="SalePriceManageVO" resultType="DefaultMap">
+    <select id="getSalePriceResveList" parameterType="SalePriceManageVO" resultType="DefaultMap">
         /* SalePriceResveMapper.getSalePriceResveList */
         <choose>
             <!-- 매장 -->

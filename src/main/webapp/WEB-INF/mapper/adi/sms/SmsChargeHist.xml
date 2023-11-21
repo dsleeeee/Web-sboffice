@@ -16,7 +16,7 @@
         TABLE    : CET_PGLOG_T, CET_SMSPT_T, TB_WB_USER_INFO_DTL_V01
         COMMENTS : [로그-시스템]서버관리-본사매장-SMS충전결제기록, [마스터-공용]SMS-본사/매장-SMS잔여수량, 웹 사용자 정보 veiw
     -->
-    <select id="getSmsChargeHistList"  parameterType="SmsChargeHistVO" resultType="DefaultMap">
+    <select id="getSmsChargeHistList" parameterType="SmsChargeHistVO" resultType="DefaultMap">
         /* SmsChargeHistMapper.getSmsChargeHistList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -113,7 +113,7 @@
         TABLE    : CET_PGLOG_T, CET_SMSPT_T, TB_WB_USER_INFO_DTL_V01
         COMMENTS : [로그-시스템]서버관리-본사매장-SMS충전결제기록, [마스터-공용]SMS-본사/매장-SMS잔여수량, 웹 사용자 정보 veiw
     -->
-    <select id="getSmsChargeHistExcelList"  parameterType="SmsChargeHistVO" resultType="DefaultMap">
+    <select id="getSmsChargeHistExcelList" parameterType="SmsChargeHistVO" resultType="DefaultMap">
         /* SmsChargeHistMapper.getSmsChargeHistExcelList */
         SELECT
         cpt.OGN_CD AS ORGN_CD,
@@ -207,7 +207,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSmsChargeRegistList"  parameterType="SmsChargeHistVO" resultType="DefaultMap">
+    <select id="getSmsChargeRegistList" parameterType="SmsChargeHistVO" resultType="DefaultMap">
         /* SmsChargeHistMapper.getSmsChargeRegistList */
         SELECT
         twuidv01.ORGN_CD,

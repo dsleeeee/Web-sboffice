@@ -16,7 +16,7 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
         COMMENTS : [매장]상품, [매장]상품_판매금, [본사]상품, [본사]상품_판매금
     -->
-    <select id="getSalePriceManageList"  parameterType="SalePriceManageVO" resultType="DefaultMap">
+    <select id="getSalePriceManageList" parameterType="SalePriceManageVO" resultType="DefaultMap">
         /* SalePriceManageMapper.getSalePriceManageList */
         <choose>
             <!-- 매장 -->

@@ -16,7 +16,7 @@
         TABLE    : TB_HQ_PRODUCT_ALGI_INFO, TB_MS_PRODUCT_ALGI_INFO
         COMMENTS : [본사-식품안전]재료-알레르기정보, [매장-식품안전]재료-알레르기정보
     -->
-    <select id="getFoodAllergyList"  parameterType="FoodAllergyVO" resultType="DefaultMap">
+    <select id="getFoodAllergyList" parameterType="FoodAllergyVO" resultType="DefaultMap">
         /* FoodAllergyMapper.getFoodAllergyList */
         <choose>
             <!-- 본사 -->
@@ -251,7 +251,7 @@
         COMMENTS : [본사-식품안전]재료/알러지-상품맵핑정보, [본사]상품, [본사]상품_분류,
                    [매장-식품안전]재료/알러지-상품맵핑정보, [매장]상품, [매장]상품_분류
     -->
-    <select id="getFoodAllergyDetailList"  parameterType="FoodAllergyVO" resultType="DefaultMap">
+    <select id="getFoodAllergyDetailList" parameterType="FoodAllergyVO" resultType="DefaultMap">
         /* FoodAllergyMapper.getFoodAllergyDetailList */
         <choose>
             <!-- 본사 -->
@@ -345,7 +345,7 @@
         COMMENTS : [본사]상품, [본사]상품_분류, [본사-식품안전]재료/알러지-상품맵핑정보,
                    [매장]상품, [매장]상품_분류, [매장-식품안전]재료/알러지-상품맵핑정보
     -->
-    <select id="getFoodAllergyProdList"  parameterType="FoodAllergyVO" resultType="DefaultMap">
+    <select id="getFoodAllergyProdList" parameterType="FoodAllergyVO" resultType="DefaultMap">
         /* FoodAllergyMapper.getFoodAllergyProdList */
         <choose>
             <!-- 본사 -->

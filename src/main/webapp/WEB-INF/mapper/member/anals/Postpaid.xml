@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_PAY_CREDIT, TB_MB_MEMBER_POSTPAID
         COMMENTS : 후불 외상내역과 입금내역을 조회
     -->
-    <select id="getPostpaidMemberList"  parameterType="postpaidStoreVO" resultType="DefaultMap">
+    <select id="getPostpaidMemberList" parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* PostpaidMapper.getPostpaidMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  b.STORE_CD,

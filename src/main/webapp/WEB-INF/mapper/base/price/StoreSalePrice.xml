@@ -16,7 +16,7 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_SALE_PRICE
         COMMENTS : 매장 판매가 현황을 조회함
     -->
-    <select id="getSalePriceList"  parameterType="storeSalePriceVO" resultType="DefaultMap">
+    <select id="getSalePriceList" parameterType="storeSalePriceVO" resultType="DefaultMap">
         /* StoreSalePrice.getSalePriceList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -125,7 +125,7 @@
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
         COMMENTS : 매장 판매가 현황을 조회함
     -->
-    <select id="getSalePriceExcelList"  parameterType="storeSalePriceVO" resultType="DefaultMap">
+    <select id="getSalePriceExcelList" parameterType="storeSalePriceVO" resultType="DefaultMap">
         /* StoreSalePrice.getSalePriceExcelList */
         SELECT
         tms.STORE_CD,

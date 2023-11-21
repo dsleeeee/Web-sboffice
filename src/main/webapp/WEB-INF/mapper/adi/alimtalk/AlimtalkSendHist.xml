@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkSendHistList"  parameterType="AlimtalkSendHistVO" resultType="DefaultMap">
+    <select id="getAlimtalkSendHistList" parameterType="AlimtalkSendHistVO" resultType="DefaultMap">
         /* AlimtalkSendHistMapper.getAlimtalkSendHistList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -124,7 +124,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkSendHistExcelList"  parameterType="AlimtalkSendHistVO" resultType="DefaultMap">
+    <select id="getAlimtalkSendHistExcelList" parameterType="AlimtalkSendHistVO" resultType="DefaultMap">
         /* AlimtalkSendHistMapper.getAlimtalkSendHistExcelList */
         SELECT
         hssrt.REG_DT,
@@ -229,7 +229,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkAddresseeDtlList"  parameterType="AlimtalkSendHistVO" resultType="DefaultMap">
+    <select id="getAlimtalkAddresseeDtlList" parameterType="AlimtalkSendHistVO" resultType="DefaultMap">
         /* AlimtalkSendHistMapper.getAlimtalkAddresseeDtlList */
         SELECT
         A.PHONE_NUMBER,

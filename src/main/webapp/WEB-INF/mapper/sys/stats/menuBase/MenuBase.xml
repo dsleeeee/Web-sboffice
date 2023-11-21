@@ -22,7 +22,7 @@
                    [매장]사원 정보, [매장]매장 정보,
                    [공통]시스템/대리점 사원 정보, [공통]대리점 정보
     -->
-    <select id="getMenuBaseList"  parameterType="MenuBaseVO" resultType="DefaultMap">
+    <select id="getMenuBaseList" parameterType="MenuBaseVO" resultType="DefaultMap">
         /* MenuBaseMapper.getMenuBaseList */
         SELECT
         LEVEL1,
@@ -257,7 +257,7 @@
                    [매장]사원 정보, [매장]매장 정보,
                    [공통]시스템/대리점 사원 정보, [공통]대리점 정보
     -->
-    <select id="getMenuBaseDetailList"  parameterType="MenuBaseVO" resultType="DefaultMap">
+    <select id="getMenuBaseDetailList" parameterType="MenuBaseVO" resultType="DefaultMap">
         /* MenuBaseMapper.getMenuBaseDetailList */
         SELECT
         LEVEL1,

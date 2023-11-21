@@ -44,7 +44,7 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE
         COMMENTS : 판매가 관리 대상 목록을 조회한다.
     -->
-    <select id="getProdSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
+    <select id="getProdSalePriceList" parameterType="salePriceVO" resultType="DefaultMap">
         /* SalePriceMapper.getProdSalePriceList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -300,7 +300,7 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE
         COMMENTS : 판매가 관리 대상 목록을 조회한다.
     -->
-    <select id="getStoreSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
+    <select id="getStoreSalePriceList" parameterType="salePriceVO" resultType="DefaultMap">
         /* SalePriceMapper.getStoreSalePriceList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -400,7 +400,7 @@
         TABLE    : 본사판매가 관리 조회
         COMMENTS : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
     -->
-    <select id="getHqSalePriceList"  parameterType="salePriceVO" resultType="DefaultMap">
+    <select id="getHqSalePriceList" parameterType="salePriceVO" resultType="DefaultMap">
         /* SalePriceMapper.getHqSalePriceList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -704,7 +704,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSalePriceExcelUploadSampleList"  parameterType="salePriceVO" resultType="DefaultMap">
+    <select id="getSalePriceExcelUploadSampleList" parameterType="salePriceVO" resultType="DefaultMap">
         /* SalePriceMapper.getSalePriceExcelUploadSampleList */
         <choose>
             <!-- 본사판매가 -->
@@ -838,7 +838,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSalePriceExcelUploadCheckList"  parameterType="salePriceVO" resultType="DefaultMap">
+    <select id="getSalePriceExcelUploadCheckList" parameterType="salePriceVO" resultType="DefaultMap">
         /* SalePriceMapper.getSalePriceExcelUploadCheckList */
         <choose>
             <!-- 본사판매가 -->

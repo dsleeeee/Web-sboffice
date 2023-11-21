@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_PAY_PREPAID, TB_MB_MEMBER_PREPAID
         COMMENTS : 선불 충전내역과 사용내역의 상세를 조회
     -->
-    <select id="getPrepaidDtlMemberList"  parameterType="prepaidDtlVO" resultType="DefaultMap">
+    <select id="getPrepaidDtlMemberList" parameterType="prepaidDtlVO" resultType="DefaultMap">
         /* PrepaidDtlMapper.getPrepaidDtlMemberList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmmp.HQ_OFFICE_CD,

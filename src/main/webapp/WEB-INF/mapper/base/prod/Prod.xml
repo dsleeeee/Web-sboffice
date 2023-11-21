@@ -6576,7 +6576,7 @@
         PARAM    : prodVO
         COMMENTS : 상품 전체리스트 조회
     -->
-    <select id="getAllProdList"  parameterType="prodVO" resultType="DefaultMap">
+    <select id="getAllProdList" parameterType="prodVO" resultType="DefaultMap">
         /* ProdMapper.getAllProdList */
         <choose>
             <!-- 본사 -->

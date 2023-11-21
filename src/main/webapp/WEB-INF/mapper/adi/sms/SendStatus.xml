@@ -32,7 +32,7 @@
         TABLE    : SDK_SMS_SEND_ENC, SDK_MMS_SEND_ENC, SDK_SMS_REPORT, SDK_SMS_REPORT_DETAIL, SDK_MMS_REPORT, SDK_MMS_REPORT_DETAIL
         COMMENTS : SMS 발송, LMS/MMS 발송, SMS 문자전송결과, LMS/MMS 문자전송결과
     -->
-    <select id="getSendStatusList"  parameterType="SendStatusVO" resultType="DefaultMap">
+    <select id="getSendStatusList" parameterType="SendStatusVO" resultType="DefaultMap">
         /* SendStatusMapper.getSendStatusList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -378,7 +378,7 @@
         TABLE    : HCS_DDSMS_T
         COMMENTS : [공통_로그]SMS충전내역
     -->
-    <select id="getDaySendStatusList"  parameterType="SendStatusVO" resultType="DefaultMap">
+    <select id="getDaySendStatusList" parameterType="SendStatusVO" resultType="DefaultMap">
         /* SendStatusMapper.getDaySendStatusList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -474,7 +474,7 @@
         TABLE    : HCS_DDSMS_T
         COMMENTS : [공통_로그]SMS충전내역
     -->
-    <select id="getPeriodSendStatusList"  parameterType="SendStatusVO" resultType="DefaultMap">
+    <select id="getPeriodSendStatusList" parameterType="SendStatusVO" resultType="DefaultMap">
         /* SendStatusMapper.getPeriodSendStatusList */
         SELECT
         hdt.OGN_CD AS ORGN_CD,

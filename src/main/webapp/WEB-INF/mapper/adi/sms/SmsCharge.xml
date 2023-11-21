@@ -147,7 +147,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getMsgOneAmtSettingList"  parameterType="SmsChargeVO" resultType="DefaultMap">
+    <select id="getMsgOneAmtSettingList" parameterType="SmsChargeVO" resultType="DefaultMap">
         /* SmsChargeMapper.getMsgOneAmtSettingList */
         SELECT
         twuidv01.ORGN_FG,
@@ -186,7 +186,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getMsgOneAmtSettingDetailList"  parameterType="SmsChargeVO" resultType="DefaultMap">
+    <select id="getMsgOneAmtSettingDetailList" parameterType="SmsChargeVO" resultType="DefaultMap">
         /* SmsChargeMapper.getMsgOneAmtSettingDetailList */
         SELECT
         #{orgnCd} AS ORGN_CD,

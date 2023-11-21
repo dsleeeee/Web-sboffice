@@ -21,7 +21,7 @@
         TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
         COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
-    <select id="getBoardList"  parameterType="BoardVO" resultType="DefaultMap">
+    <select id="getBoardList" parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getBoardList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT *
@@ -746,7 +746,7 @@
         TABLE    : TB_WB_BOARD_ANSWER
         COMMENTS : 게시판 댓글
     -->
-    <select id="getBoardDetailAnswerList"  parameterType="BoardVO" resultType="DefaultMap">
+    <select id="getBoardDetailAnswerList" parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getBoardDetailAnswerList */
         SELECT
         twba.IDX,
@@ -906,7 +906,7 @@
         TABLE    : TB_WB_BOARD_ATCH
         COMMENTS : 게시판 첨부
     -->
-    <select id="getBoardInfoAtchList"  parameterType="BoardVO" resultType="DefaultMap">
+    <select id="getBoardInfoAtchList" parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getBoardInfoAtchList */
         SELECT
 --         SUBSTR(SUBSTR(twba.ORGINL_FILE_NM, INSTR(twba.ORGINL_FILE_NM, '\', -1, 1)), 2) AS ORGINL_FILE_NM,
@@ -929,7 +929,7 @@
         TABLE    : TB_WB_BOARD_ATCH
         COMMENTS : 게시판 첨부
     -->
-    <select id="getBoardDetailAtchList"  parameterType="BoardVO" resultType="BoardVO">
+    <select id="getBoardDetailAtchList" parameterType="BoardVO" resultType="BoardVO">
         /* BoardMapper.getBoardDetailAtchList */
         SELECT
         twba.ORGINL_FILE_NM,
@@ -967,7 +967,7 @@
         TABLE    : TB_WB_BOARD_READNG_HIST, TB_WB_USER_INFO_DTL_V01
         COMMENTS : 게시판 열람 이력, 웹 사용자 정보 veiw
     -->
-    <select id="getBoardReadingHistList"  parameterType="BoardVO" resultType="DefaultMap">
+    <select id="getBoardReadingHistList" parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getBoardReadingHistList */
         SELECT *
         FROM
@@ -1042,7 +1042,7 @@
         TABLE    : TB_WB_BOARD_ATCH
         COMMENTS :  게시글에 속한 첨부파일 조회
     -->
-    <select id="getAtchList"  parameterType="BoardVO" resultType="DefaultMap">
+    <select id="getAtchList" parameterType="BoardVO" resultType="DefaultMap">
         /* BoardMapper.getAtchList */
         SELECT TEMP_PATH,
                 FILE_NM

@@ -18,7 +18,7 @@
         PARAM    : stockVO
         COMMENTS : 재고현황(매장)을 조회한다.
     -->
-    <select id="getStockList"  parameterType="stockVO" resultType="DefaultMap">
+    <select id="getStockList" parameterType="stockVO" resultType="DefaultMap">
         /* StockMapper.getStockList */
         SELECT  A.LV1_CD
         , 		A.LV1_NM

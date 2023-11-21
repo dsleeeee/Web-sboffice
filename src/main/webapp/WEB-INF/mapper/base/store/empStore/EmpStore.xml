@@ -16,7 +16,7 @@
         TABLE    : TB_HQ_EMPLOYEE, TB_HQ_EMPLOYEE_STORE
         COMMENTS : [본사]사원 정보, [본사]사원별_관리매장
     -->
-    <select id="getEmpStoreEmpList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+    <select id="getEmpStoreEmpList" parameterType="EmpStoreVO" resultType="DefaultMap">
         /* EmpStoreMapper.getEmpStoreEmpList */
         SELECT
         the.EMP_NO,
@@ -34,7 +34,7 @@
         TABLE    : TB_HQ_EMPLOYEE_STORE, TB_MS_STORE
         COMMENTS : [본사]사원별_관리매장, [매장]매장 정보
     -->
-    <select id="getEmpManageStoreList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+    <select id="getEmpManageStoreList" parameterType="EmpStoreVO" resultType="DefaultMap">
         /* EmpStoreMapper.getEmpManageStoreList */
         SELECT
         thes.HQ_OFFICE_CD,
@@ -56,7 +56,7 @@
         TABLE    : TB_MS_STORE, TB_HQ_EMPLOYEE, TB_HQ_EMPLOYEE_STORE
         COMMENTS : [매장]매장 정보, [본사]사원 정보, [본사]사원별_관리매장
     -->
-    <select id="getEmpNoManageStoreList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+    <select id="getEmpNoManageStoreList" parameterType="EmpStoreVO" resultType="DefaultMap">
         /* EmpStoreMapper.getEmpNoManageStoreList */
         SELECT
         tms.HQ_OFFICE_CD,
@@ -132,7 +132,7 @@
         TABLE    : TB_MS_STORE, TB_HQ_EMPLOYEE_STORE
         COMMENTS : [매장]매장 정보, [본사]사원별_관리매장
     -->
-    <select id="getEmpStoreStoreList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+    <select id="getEmpStoreStoreList" parameterType="EmpStoreVO" resultType="DefaultMap">
         /* EmpStoreMapper.getEmpStoreStoreList */
         SELECT
         tms.STORE_CD,
@@ -154,7 +154,7 @@
         TABLE    : TB_HQ_EMPLOYEE_STORE, TB_HQ_EMPLOYEE
         COMMENTS : [본사]사원별_관리매장, [본사]사원 정보
     -->
-    <select id="getStoreManageEmpList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+    <select id="getStoreManageEmpList" parameterType="EmpStoreVO" resultType="DefaultMap">
         /* EmpStoreMapper.getStoreManageEmpList */
         SELECT
         thes.HQ_OFFICE_CD,
@@ -182,7 +182,7 @@
         TABLE    : TB_HQ_EMPLOYEE, TB_MS_STORE, TB_HQ_EMPLOYEE_STORE
         COMMENTS : [본사]사원 정보, [매장]매장 정보, [본사]사원별_관리매장
     -->
-    <select id="getStoreNoManageEmpList"  parameterType="EmpStoreVO" resultType="DefaultMap">
+    <select id="getStoreNoManageEmpList" parameterType="EmpStoreVO" resultType="DefaultMap">
         /* EmpStoreMapper.getStoreNoManageEmpList */
         SELECT
         the.HQ_OFFICE_CD,

@@ -16,7 +16,7 @@
         TABLE    : TB_MS_EMPLOYEE, TB_MS_EMPLOYEE_CORNR
         COMMENTS : [매장]사원 정보, [매장]사원_관리코너
     -->
-    <select id="getEmpCornerEmpList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+    <select id="getEmpCornerEmpList" parameterType="EmpCornerVO" resultType="DefaultMap">
         /* EmpCornerMapper.getEmpCornerEmpList */
         SELECT
         tme.EMP_NO,
@@ -39,7 +39,7 @@
         TABLE    : TB_MS_EMPLOYEE_CORNR, TB_MS_CORNER, TB_MS_STORE, TB_MS_EMPLOYEE
         COMMENTS : [매장]사원_관리코너, [매장]코너, [매장]매장 정보, [매장]사원 정보
     -->
-    <select id="getEmpManageCornerList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+    <select id="getEmpManageCornerList" parameterType="EmpCornerVO" resultType="DefaultMap">
         /* EmpCornerMapper.getEmpManageCornerList */
         SELECT
         tmec.STORE_CD,
@@ -68,7 +68,7 @@
         TABLE    : TB_MS_CORNER, TB_MS_STORE, TB_MS_EMPLOYEE, TB_MS_EMPLOYEE_CORNR
         COMMENTS : [매장]코너, [매장]매장 정보, [매장]사원 정보, [매장]사원_관리코너
     -->
-    <select id="getEmpNoManageCornerList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+    <select id="getEmpNoManageCornerList" parameterType="EmpCornerVO" resultType="DefaultMap">
         /* EmpCornerMapper.getEmpNoManageCornerList */
         SELECT
         tmc.STORE_CD,
@@ -151,7 +151,7 @@
         TABLE    : TB_MS_CORNER, TB_MS_STORE, TB_MS_EMPLOYEE_CORNR
         COMMENTS : [매장]코너, [매장]매장 정보, [매장]사원_관리코너
     -->
-    <select id="getEmpCornerCornerList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+    <select id="getEmpCornerCornerList" parameterType="EmpCornerVO" resultType="DefaultMap">
         /* EmpCornerMapper.getEmpCornerCornerList */
         SELECT
         tmc.STORE_CD,
@@ -178,7 +178,7 @@
         TABLE    : TB_MS_EMPLOYEE_CORNR, TB_MS_EMPLOYEE
         COMMENTS : [매장]사원_관리코너, [매장]사원 정보
     -->
-    <select id="getCornerManageEmpList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+    <select id="getCornerManageEmpList" parameterType="EmpCornerVO" resultType="DefaultMap">
         /* EmpCornerMapper.getCornerManageEmpList */
         SELECT
         tmec.STORE_CD,
@@ -202,7 +202,7 @@
         TABLE    : TB_MS_EMPLOYEE, TB_MS_CORNER, TB_MS_EMPLOYEE_CORNR,
         COMMENTS : [매장]사원 정보, [매장]코너, [매장]사원_관리코너,
     -->
-    <select id="getCornerNoManageEmpList"  parameterType="EmpCornerVO" resultType="DefaultMap">
+    <select id="getCornerNoManageEmpList" parameterType="EmpCornerVO" resultType="DefaultMap">
         /* EmpCornerMapper.getCornerNoManageEmpList */
         SELECT
         tme.STORE_CD,

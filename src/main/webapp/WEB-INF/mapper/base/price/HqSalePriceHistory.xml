@@ -16,7 +16,7 @@
         TABLE    : TB_LG_MS_PRODUCT_SALE_PRICE_LOG, TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_CLASS
         COMMENTS : 매장판매가변경이력을 조회함
     -->
-    <select id="getStoreSalePriceHistoryList"  parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
+    <select id="getStoreSalePriceHistoryList" parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
         /* HqSalePriceHistory.getStoreSalePriceHistoryList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT 	tlmpspl.STORE_CD,
@@ -89,7 +89,7 @@
         TABLE    : TB_LG_MS_PRODUCT_SALE_PRICE_LOG, TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_CLASS
         COMMENTS : 매장판매가변경이력을 조회함
     -->
-    <select id="getStoreSalePriceHistoryExcelList"  parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
+    <select id="getStoreSalePriceHistoryExcelList" parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
         /* HqSalePriceHistory.getStoreSalePriceHistoryExcelList */
         SELECT 	tlmpspl.STORE_CD,
                 tms.STORE_NM,
@@ -159,7 +159,7 @@
         TABLE    : TB_LG_HQ_PRODUCT_SALE_PRICE_LOG, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS
         COMMENTS : 본사판매가변경이력을 조회함
     -->
-    <select id="getHqSalePriceHistoryList"  parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
+    <select id="getHqSalePriceHistoryList" parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
         /* HqSalePriceHistory.getHqSalePriceHistoryList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT 	tlhpspl.PROD_CD,
@@ -213,7 +213,7 @@
         TABLE    : TB_LG_HQ_PRODUCT_SALE_PRICE_LOG, TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS
         COMMENTS : 본사판매가변경이력을 조회함
     -->
-    <select id="getHqSalePriceHistoryExcelList"  parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
+    <select id="getHqSalePriceHistoryExcelList" parameterType="hqSalePriceHistoryVO" resultType="DefaultMap">
         /* HqSalePriceHistory.getHqSalePriceHistoryExcelList */
         SELECT 	tlhpspl.PROD_CD,
                 thp.PROD_NM,

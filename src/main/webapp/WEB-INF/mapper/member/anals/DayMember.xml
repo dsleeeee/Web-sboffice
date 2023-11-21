@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_HDR_MEMBR, TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_MB_MEMBER
         COMMENTS : [매출]헤더_회원, [매출]헤더, [매출]헤더_결제, [회원]회원
     -->
-    <select id="getDayMembrList"  parameterType="dayMembrVO" resultType="DefaultMap">
+    <select id="getDayMembrList" parameterType="dayMembrVO" resultType="DefaultMap">
         /* DayMembrMapper.getDayMembrList */
         SELECT
         SALE_DATE,
@@ -98,7 +98,7 @@
         TABLE    : TB_SL_SALE_DTL, TB_SL_SALE_HDR_MEMBR
         COMMENTS : [매출]상세 와 [매출]헤더_회원
     -->
-    <select id="getDayMembrPurchsList"  parameterType="dayMembrVO" resultType="DefaultMap">
+    <select id="getDayMembrPurchsList" parameterType="dayMembrVO" resultType="DefaultMap">
         /* DayMembrMapper.getDayMembrPurchsList */
         SELECT
         tssd.SALE_DATE,
@@ -191,7 +191,7 @@
         TABLE    : TB_SL_SALE_DTL, TB_SL_SALE_HDR_MEMBR
         COMMENTS : [매출]상세 와 [매출]헤더_회원
     -->
-    <select id="getDayMembrDetailPurchsList"  parameterType="dayMembrVO" resultType="DefaultMap">
+    <select id="getDayMembrDetailPurchsList" parameterType="dayMembrVO" resultType="DefaultMap">
         /* DayMembrMapper.getDayMembrDetailPurchsList */
         SELECT
         tsshm.SALE_DATE,

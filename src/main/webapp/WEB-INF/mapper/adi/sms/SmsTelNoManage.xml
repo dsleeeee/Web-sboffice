@@ -16,7 +16,7 @@
         TABLE    : HCS_SENDM_T
         COMMENTS : [본사매장]발신번호인증||
     -->
-    <select id="getSmsTelNoManageList"  parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+    <select id="getSmsTelNoManageList" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
         /* SmsTelNoManageMapper.getSmsTelNoManageList */
         SELECT *
         FROM
@@ -156,7 +156,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSmsTelNoStopList"  parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+    <select id="getSmsTelNoStopList" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
         /* SmsTelNoManageMapper.getSmsTelNoStopList */
         SELECT
         hst.OGN_CD AS ORGN_CD,
@@ -217,7 +217,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSmsGeneralNoManageList"  parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+    <select id="getSmsGeneralNoManageList" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
         /* SmsTelNoManageMapper.getSmsGeneralNoManageList */
         SELECT
         tcasn.ORGN_CD,

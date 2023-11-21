@@ -16,7 +16,7 @@
         TABLE    : TB_HQ_PRODUCT_RECP_ORIGIN, TB_MS_PRODUCT_RECP_ORIGIN
         COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
-    <select id="getRecpOriginList"  parameterType="RecpOriginVO" resultType="DefaultMap">
+    <select id="getRecpOriginList" parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getRecpOriginList */
         <choose>
             <!-- 본사 -->
@@ -265,7 +265,7 @@
         COMMENTS : [본사]재료-원산지정보, [본사]상품, [본사]상품_분류,
                    [매장]재료-원산지정보, [매장]상품, [매장]상품_분류
     -->
-    <select id="getRecpOriginDetailList"  parameterType="RecpOriginVO" resultType="DefaultMap">
+    <select id="getRecpOriginDetailList" parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getRecpOriginDetailList */
         <choose>
             <!-- 본사 -->
@@ -359,7 +359,7 @@
         COMMENTS : [본사]상품, [본사]상품_분류, [본사]재료-상품맵핑정보,
                    [매장]상품, [매장]상품_분류, [매장]재료-상품맵핑정보
     -->
-    <select id="getRecpProdList"  parameterType="RecpOriginVO" resultType="DefaultMap">
+    <select id="getRecpProdList" parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getRecpProdList */
         <choose>
             <!-- 본사 -->
@@ -615,7 +615,7 @@
         COMMENTS : [본사]상품, [본사]상품_바코드, [본사]재료-원산지정보
                    [매장]상품, [매장]상품_바코드, [매장]재료-원산지정보
     -->
-    <select id="getProdRecpOriginList"  parameterType="RecpOriginVO" resultType="DefaultMap">
+    <select id="getProdRecpOriginList" parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getProdRecpOriginList */
         <choose>
             <!-- 본사 -->
@@ -827,7 +827,7 @@
         COMMENTS : [본사]재료-원산지정보, [본사]재료-원산지정보
                    [매장]재료-원산지정보, [매장]재료-원산지정보
     -->
-    <select id="getProdRecpOriginDetailList"  parameterType="RecpOriginVO" resultType="DefaultMap">
+    <select id="getProdRecpOriginDetailList" parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getProdRecpOriginDetailList */
         <choose>
             <!-- 본사 -->
@@ -879,7 +879,7 @@
         COMMENTS : [본사]재료-원산지정보, [본사]재료-원산지정보
                    [매장]재료-원산지정보, [매장]재료-원산지정보
     -->
-    <select id="getProdRecpOriginAddList"  parameterType="RecpOriginVO" resultType="DefaultMap">
+    <select id="getProdRecpOriginAddList" parameterType="RecpOriginVO" resultType="DefaultMap">
         /* RecpOriginMapper.getProdRecpOriginAddList */
         <choose>
             <!-- 본사 -->

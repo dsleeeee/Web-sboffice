@@ -16,7 +16,7 @@
         TABLE    : TB_WB_BOARD_INFO
         COMMENTS : 게시판 정보
     -->
-    <select id="getLibraryList"  parameterType="LibraryVO" resultType="DefaultMap">
+    <select id="getLibraryList" parameterType="LibraryVO" resultType="DefaultMap">
         /* LibraryMapper.getLibraryList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -58,7 +58,7 @@
         TABLE    : TB_WB_BOARD_ATCH, TB_WB_BOARD_INFO
         COMMENTS : 게시판 첨부, 게시판 정보
     -->
-    <select id="getLibraryDetailAtchList"  parameterType="LibraryVO" resultType="LibraryVO">
+    <select id="getLibraryDetailAtchList" parameterType="LibraryVO" resultType="LibraryVO">
         /* LibraryMapper.getLibraryDetailAtchList */
         SELECT
         twbi.TITLE,
@@ -81,7 +81,7 @@
         TABLE    : TB_WB_BOARD_ATCH
         COMMENTS : 게시판 첨부
     -->
-    <select id="getLibraryInfoList"  parameterType="LibraryVO" resultType="DefaultMap">
+    <select id="getLibraryInfoList" parameterType="LibraryVO" resultType="DefaultMap">
         /* LibraryMapper.getLibraryInfoList */
         SELECT
         twba.IDX,

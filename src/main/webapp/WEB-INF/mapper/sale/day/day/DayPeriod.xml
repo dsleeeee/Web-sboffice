@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getDayPeriodTimeList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodTimeList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodTimeList */
         <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT SALE_HOUR AS SALE_TIME,
@@ -88,7 +88,7 @@
         TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT
         COMMENTS : [매출]상세, [매장]상품
     -->
-    <select id="getDayPeriodTimeDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodTimeDetailList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodTimeDetailList */
         SELECT  tsdpt.PROD_CD,
                 tmp.PROD_NM,
@@ -126,7 +126,7 @@
         COMMENTS : [매출]상세, [본사]상품, [본사]상품_분류
                    [매장]매장 정보, [매장]상품, [매장]상품_분류
     -->
-    <select id="getDayPeriodProdClassList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodProdClassList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodProdClassList */
         SELECT
         tssd1.Level1 AS PROD_CLASS_CD,
@@ -197,7 +197,7 @@
         COMMENTS : [매출]상세, [본사]상품, [본사]상품_분류
                    [매장]매장 정보, [매장]상품, [매장]상품_분류
     -->
-    <select id="getDayPeriodProdClassDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodProdClassDetailList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodProdClassDetailList */
         SELECT
         tmp.PROD_CLASS_CD,
@@ -240,7 +240,7 @@
         TABLE    : TB_SL_SALE_HDR, TB_MS_TABLE
         COMMENTS : [매출]헤더, [매장]테이블
     -->
-    <select id="getDayPeriodTableList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodTableList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodTableList */
         SELECT
         TBL_CD,
@@ -287,7 +287,7 @@
         TABLE    : TB_SL_SALE_DTL, TB_MS_STORE, TB_MS_CORNER
         COMMENTS : [매출]상세, [매장]매장 정보, [매장]코너
     -->
-    <select id="getDayPeriodCornerList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodCornerList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodCornerList */
         SELECT
         tssd.STORE_CD,
@@ -323,7 +323,7 @@
         TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT
         COMMENTS : [매출]상세, [매장]상품
     -->
-    <select id="getDayPeriodCornerDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodCornerDetailList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodCornerDetailList */
         SELECT
         tssd.PROD_CD,
@@ -348,7 +348,7 @@
         TABLE    : TB_SL_SALE_PAY_GIFT_DTL, TB_MS_GIFT, TB_MS_PAY_METHOD_CLASS
         COMMENTS : [매출]결제_상품권_상세, [매장]상품권, [매장]결제수단분류
     -->
-    <select id="getDayPeriodGiftList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodGiftList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodGiftList */
         SELECT
         tsspgd.STORE_CD,
@@ -386,7 +386,7 @@
         TABLE    : TB_SL_SALE_PAY_GIFT_DTL, TB_MS_GIFT
         COMMENTS : [매출]결제_상품권_상세, [매장]상품권
     -->
-    <select id="getDayPeriodGiftDetailList"  parameterType="DayPeriodVO" resultType="DefaultMap">
+    <select id="getDayPeriodGiftDetailList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodGiftDetailList */
         SELECT
         TO_CHAR(TO_DATE(tsspgd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,

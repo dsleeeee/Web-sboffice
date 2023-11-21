@@ -310,7 +310,7 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getMonthTaxList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthTaxList" parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthTaxList */
         SELECT  TO_CHAR(TO_DATE(SUBSTR(SALE_DATE, 0, 6), 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
                 COUNT(DISTINCT STORE_CD) AS STORE_CNT,
@@ -344,7 +344,7 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getMonthTimeList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthTimeList" parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthTimeList */
         <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT tssh.YEAR_MONTH
@@ -450,7 +450,7 @@
         COMMENTS : [매출]상세, [본사]상품, [본사]상품_분류, [본사]상품_바코드
                    [매장]매장 정보, [매장]상품, [매장]상품_분류, [매장]상품_바코드
     -->
-    <select id="getMonthProdClassList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthProdClassList" parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthProdClassList */
         <choose>
             <!-- 분류없음 -->
@@ -790,7 +790,7 @@
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세
     -->
-    <select id="getMonthCornerList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthCornerList" parameterType="MonthVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getMonthCornerList */
         SELECT
         YEAR_MONTH,
@@ -861,7 +861,7 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getMonthTableList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthTableList" parameterType="MonthVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getMonthTableList */
         SELECT
         YEAR_MONTH,
@@ -942,7 +942,7 @@
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세
     -->
-    <select id="getMonthPosList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthPosList" parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthPosList */
         SELECT	DECODE(GROUPING(STORE_POS_NO), 1, 'TOTAL', STORE_POS_NO) AS STORE_POS_NO,
                 YEAR_MONTH,
@@ -967,7 +967,7 @@
                 )
         GROUP BY YEAR_MONTH,  ROLLUP(STORE_POS_NO)
     </select>
-<!--    <select id="getMonthPosList"  parameterType="MonthVO" resultType="DefaultMap">-->
+<!--    <select id="getMonthPosList" parameterType="MonthVO" resultType="DefaultMap">-->
 <!--        /* MonthMapper.getMonthPosList */-->
 <!--        SELECT-->
 <!--        YEAR_MONTH,-->
@@ -1058,7 +1058,7 @@
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세
     -->
-    <select id="getMonthEmpCardList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthEmpCardList" parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthEmpCardList */
         SELECT  B.OFFICE_NM
         ,       B.OFFICE_DEPT_NM

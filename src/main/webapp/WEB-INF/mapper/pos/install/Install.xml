@@ -16,7 +16,7 @@
         TABLE    : TB_CM_INSTLL, TB_MS_STORE, TB_CM_AGENCY
         COMMENTS : 설치요청 목록 조회
     -->
-    <select id="getInstallRequestList"  parameterType="installVO" resultType="DefaultMap">
+    <select id="getInstallRequestList" parameterType="installVO" resultType="DefaultMap">
         /* InstallManageMapper.getInstallRequestList */
       <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tci.STORE_CD,
@@ -72,7 +72,7 @@
         TABLE    : TB_MS_POS, TB_MS_STORE, TB_HQ_OFFICE, TB_CM_INSTLL, TB_CM_AGENCY
         COMMENTS : 포스 목록 조회
     -->
-    <select id="getPosList"  parameterType="installVO" resultType="DefaultMap">
+    <select id="getPosList" parameterType="installVO" resultType="DefaultMap">
         /* InstallManageMapper.getPosList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tms.HQ_OFFICE_CD,

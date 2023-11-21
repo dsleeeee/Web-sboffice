@@ -16,7 +16,7 @@
         TABLE    : TB_MB_MEMBER_TAX_BILL, TB_MB_MEMBER
         COMMENTS :  세금계산서 발행 요청 목록을 조회한다.
     -->
-    <select id="getTaxBillRequestList"  parameterType="taxBillVO" resultType="DefaultMap">
+    <select id="getTaxBillRequestList" parameterType="taxBillVO" resultType="DefaultMap">
         /* TaxBillMapper.getTaxBillRequestList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT tmmtb.BILL_DATE,

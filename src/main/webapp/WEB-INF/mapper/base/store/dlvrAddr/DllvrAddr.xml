@@ -15,7 +15,7 @@
     <!--
         TABLE    : TB_MS_MY_DLVR_ADDR
     -->
-    <select id="dlvrAddrList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
+    <select id="dlvrAddrList" parameterType="dlvrAddrVO" resultType="DefaultMap">
         /* DlvrAddrMapper.dlvrAddrList */
         SELECT A.SIDO_NM, A.SIGUNGU_NM, A.LAW_DONG_NM, A.MY_AREA_CD, B.EUPMYEON_NM
           FROM TB_MS_MY_DLVR_ADDR A,
@@ -30,7 +30,7 @@
     <!--
         TABLE    : TB_CM_POST_DONG
     -->
-    <select id="dlvrAddrCodeList"  parameterType="dlvrAddrVO" resultType="DefaultMap">
+    <select id="dlvrAddrCodeList" parameterType="dlvrAddrVO" resultType="DefaultMap">
         /* DlvrAddrMapper.dlvrAddrCodeList */
         SELECT SIDO_NM,
                SIGUNGU_NM,

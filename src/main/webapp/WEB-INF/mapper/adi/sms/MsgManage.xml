@@ -16,7 +16,7 @@
         TABLE    : HCS_MSGGR_T, HCS_SMSMS_T
         COMMENTS : [마스터-공용]SMS-고객메세지전송그룹정보, [마스터-공용]SMS-고객메세지서식관리
     -->
-    <select id="getMsgManageList"  parameterType="MsgManageVO" resultType="DefaultMap">
+    <select id="getMsgManageList" parameterType="MsgManageVO" resultType="DefaultMap">
         /* MsgManageMapper.getMsgManageList */
         SELECT
         A.MSG_GRP_CD,
@@ -144,7 +144,7 @@
         TABLE    : HCS_SMSMS_T
         COMMENTS : [마스터-공용]SMS-고객메세지서식관리
     -->
-    <select id="getMsgManageDtlList"  parameterType="MsgManageVO" resultType="DefaultMap">
+    <select id="getMsgManageDtlList" parameterType="MsgManageVO" resultType="DefaultMap">
         /* MsgManageMapper.getMsgManageDtlList */
         SELECT
         hst.SEQ_NO,

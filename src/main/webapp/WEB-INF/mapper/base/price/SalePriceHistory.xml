@@ -16,7 +16,7 @@
         TABLE    : TB_LG_MS_PRODUCT_SALE_PRICE_LOG, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
         COMMENTS : 판매가변경이력을 조회함
     -->
-    <select id="getSalePriceHistoryList"  parameterType="storeSalePriceVO" resultType="DefaultMap">
+    <select id="getSalePriceHistoryList" parameterType="storeSalePriceVO" resultType="DefaultMap">
         /* SalePriceHistory.getSalePriceHistoryList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT 	tlmpspl.PROD_CD,
@@ -65,7 +65,7 @@
         TABLE    : TB_LG_MS_PRODUCT_SALE_PRICE_LOG, TB_MS_PRODUCT, TB_MS_PRODUCT_CLASS
         COMMENTS : 판매가변경이력을 조회함
     -->
-    <select id="getSalePriceHistoryExcelList"  parameterType="storeSalePriceVO" resultType="DefaultMap">
+    <select id="getSalePriceHistoryExcelList" parameterType="storeSalePriceVO" resultType="DefaultMap">
         /* SalePriceHistory.getSalePriceHistoryExcelList */
         SELECT 	tlmpspl.PROD_CD,
                 tmp.PROD_NM,

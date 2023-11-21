@@ -22,7 +22,7 @@
                    [매장]사원 정보, [매장]매장 정보,
                    [공통]시스템/대리점 사원 정보, [공통]대리점 정보
     -->
-    <select id="getUserBaseList"  parameterType="UserBaseVO" resultType="DefaultMap">
+    <select id="getUserBaseList" parameterType="UserBaseVO" resultType="DefaultMap">
         /* UserBaseMapper.getUserBaseList */
         SELECT
         HQ_OFFICE_CD,
@@ -253,7 +253,7 @@
                    [매장]사원 정보, [매장]매장 정보,
                    [공통]시스템/대리점 사원 정보, [공통]대리점 정보
     -->
-    <select id="getUserList"  parameterType="UserBaseVO" resultType="DefaultMap">
+    <select id="getUserList" parameterType="UserBaseVO" resultType="DefaultMap">
         /* UserBaseMapper.getUserList */
         SELECT *
         FROM
@@ -411,7 +411,7 @@
                    [매장]사원 정보, [매장]매장 정보,
                    [공통]시스템/대리점 사원 정보, [공통]대리점 정보
     -->
-    <select id="getUseMenuList"  parameterType="UserBaseVO" resultType="DefaultMap">
+    <select id="getUseMenuList" parameterType="UserBaseVO" resultType="DefaultMap">
         /* UserBaseMapper.getUseMenuList */
         SELECT *
         FROM
