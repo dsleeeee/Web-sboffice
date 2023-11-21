@@ -92,7 +92,7 @@
         TABLE    : TB_TMP_EXCEL_PRODUCT
         COMMENTS : [임시]상품엑셀업로드
     -->
-    <select id="getProdExcelUploadCheckList"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
+    <select id="getProdExcelUploadCheckList" parameterType="ProdExcelUploadVO" resultType="DefaultMap">
         /* ProdExcelUploadMapper.getProdExcelUploadCheckList */
         SELECT
         SESSION_ID,
@@ -553,7 +553,7 @@
         TABLE    : TB_TMP_EXCEL_PRODUCT
         COMMENTS : [임시]상품엑셀업로드
     -->
-    <select id="getProdClassCdInsertList"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
+    <select id="getProdClassCdInsertList" parameterType="ProdExcelUploadVO" resultType="DefaultMap">
         /* ProdExcelUploadMapper.getProdClassCdInsertList */
         SELECT  DISTINCT PROD_CLASS_CD
         ,       REGEXP_SUBSTR(PROD_CLASS_CD,'[^▶]+', 1, 1) AS Level1
@@ -582,7 +582,7 @@
         TABLE    : TB_TMP_EXCEL_PRODUCT
         COMMENTS : [임시]상품엑셀업로드
     -->
-    <select id="getVendrCdInsertList"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
+    <select id="getVendrCdInsertList" parameterType="ProdExcelUploadVO" resultType="DefaultMap">
         /* ProdExcelUploadMapper.getVendrCdInsertList */
         SELECT 	DISTINCT VENDR_CD AS VENDR_NM,
         '1' AS VENDOR_FG,

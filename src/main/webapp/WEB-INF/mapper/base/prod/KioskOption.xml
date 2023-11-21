@@ -18,7 +18,7 @@
         COMMENTS : [본사]상품, [본사]상품_판매금액, [본사]상품_분류, [본사]상품_바코드,
                    [매장]상품, [매장]상품_판매금액, [매장]상품_분류, [매장]상품_바코드
     -->
-    <select id="getKioskOptionList"  parameterType="KioskOptionVO" resultType="DefaultMap">
+    <select id="getKioskOptionList" parameterType="KioskOptionVO" resultType="DefaultMap">
         /* KioskOptionMapper.getKioskOptionList */
         <choose>
             <!-- 본사 -->
@@ -149,7 +149,7 @@
         COMMENTS : [본사]마스터-키오스크옵션상품, [본사]상품_판매금액,
                    [매장]마스터-키오스크옵션상품, [매장]상품_판매금액
     -->
-    <select id="getKioskOptionDetailList"  parameterType="KioskOptionVO" resultType="DefaultMap">
+    <select id="getKioskOptionDetailList" parameterType="KioskOptionVO" resultType="DefaultMap">
         /* KioskOptionMapper.getKioskOptionDetailList */
         <choose>
             <!-- 본사 -->
@@ -290,7 +290,7 @@
         COMMENTS : [본사]상품, [본사]상품_분류, [본사]상품_바코드, [본사]마스터-키오스크옵션상품,
                    [매장]상품, [매장]상품_분류, [매장]상품_바코드, [매장]마스터-키오스크옵션상품
     -->
-    <select id="getKioskOptionProdList"  parameterType="KioskOptionVO" resultType="DefaultMap">
+    <select id="getKioskOptionProdList" parameterType="KioskOptionVO" resultType="DefaultMap">
         /* KioskOptionMapper.getKioskOptionProdList */
         <choose>
             <!-- 본사 -->

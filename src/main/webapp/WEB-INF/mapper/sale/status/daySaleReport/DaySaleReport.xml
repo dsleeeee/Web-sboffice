@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getDaySaleReportList"  parameterType="DaySaleReportVO" resultType="DefaultMap">
+    <select id="getDaySaleReportList" parameterType="DaySaleReportVO" resultType="DefaultMap">
         /* DaySaleReportMapper.getDaySaleReportList */
         SELECT
         SUBSTR(tmsr.FROM_SALE_DATE, 0, 6) AS SALE_MONTH,
@@ -129,7 +129,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getDaySaleReportListList"  parameterType="DaySaleReportVO" resultType="DefaultMap">
+    <select id="getDaySaleReportListList" parameterType="DaySaleReportVO" resultType="DefaultMap">
         /* DaySaleReportMapper.getDaySaleReportListList */
         SELECT *
         FROM

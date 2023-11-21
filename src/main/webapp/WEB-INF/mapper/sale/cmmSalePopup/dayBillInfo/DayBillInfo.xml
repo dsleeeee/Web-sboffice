@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getDayStoreBillList"  parameterType="DayBillInfoVO" resultType="DefaultMap">
+    <select id="getDayStoreBillList" parameterType="DayBillInfoVO" resultType="DefaultMap">
         /* DayBillInfoMapper.getDayStoreBillList */
         SELECT
         A.STORE_CD,

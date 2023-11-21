@@ -173,7 +173,7 @@
         TABLE    : TB_SL_SALE_HDR_PAY
         COMMENTS : [매출]헤더_결제
     -->
-    <select id="getMobileTodaySalePayList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+    <select id="getMobileTodaySalePayList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
         /* MobileTodaySaleMapper.getMobileTodaySalePayList */
         SELECT
         A.PAY_CD,
@@ -299,7 +299,7 @@
         TABLE    : TB_SL_SALE_HDR_DC
         COMMENTS : [매출]헤더_할인
     -->
-    <select id="getMobileTodaySaleDcList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+    <select id="getMobileTodaySaleDcList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
         /* MobileTodaySaleMapper.getMobileTodaySaleDcList */
         SELECT
         A.DC_CD,
@@ -359,7 +359,7 @@
         TABLE    : TB_SL_SALE_DTL
         COMMENTS : [매출]상세
     -->
-    <select id="getMobileTodaySaleDlvrList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+    <select id="getMobileTodaySaleDlvrList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
         /* MobileTodaySaleMapper.getMobileTodaySaleDlvrList */
         SELECT
         A.DLVR_PACK_FG,
@@ -447,7 +447,7 @@
         TABLE    : TB_SL_SALE_HDR
         COMMENTS : [매출]헤더
     -->
-    <select id="getMobileTodaySaleTimeList"  parameterType="MobileTodaySaleVO" resultType="DefaultMap">
+    <select id="getMobileTodaySaleTimeList" parameterType="MobileTodaySaleVO" resultType="DefaultMap">
         /* MobileTodaySaleMapper.getMobileTodaySaleTimeList */
         <if test="optionFg != null and optionFg.toString() == 'time'">
         SELECT  A.SALE_TIME,

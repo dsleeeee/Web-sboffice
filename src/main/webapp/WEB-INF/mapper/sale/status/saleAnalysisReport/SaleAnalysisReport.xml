@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getStorerColList"  parameterType="saleAnalysisReportVO" resultType="DefaultMap">
+    <select id="getStorerColList" parameterType="saleAnalysisReportVO" resultType="DefaultMap">
         /* SaleAnalysisReportMapper.getStorerColList */
         SELECT
         tms.STORE_CD,
@@ -32,7 +32,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSaleAnalysisReportList"  parameterType="saleAnalysisReportVO" resultType="DefaultMap">
+    <select id="getSaleAnalysisReportList" parameterType="saleAnalysisReportVO" resultType="DefaultMap">
         /* SaleAnalysisReportMapper.getSaleAnalysisReportList */
         SELECT
         PROD_CD,
@@ -188,7 +188,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSaleAnalysisReportStoreList"  parameterType="saleAnalysisReportVO" resultType="DefaultMap">
+    <select id="getSaleAnalysisReportStoreList" parameterType="saleAnalysisReportVO" resultType="DefaultMap">
         /* SaleAnalysisReportMapper.getSaleAnalysisReportStoreList */
         SELECT
         LISTAGG(A.STORE_CD, ',') WITHIN GROUP (ORDER BY A.STORE_CD) AS STORE_CD

@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getStockPeriodList"  parameterType="StockPeriodVO" resultType="DefaultMap">
+    <select id="getStockPeriodList" parameterType="StockPeriodVO" resultType="DefaultMap">
         /* StockPeriodMapper.getStockPeriodList */
         SELECT
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>

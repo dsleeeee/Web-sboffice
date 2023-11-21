@@ -16,7 +16,7 @@
         TABLE    : HCS_SENDM_T
         COMMENTS : [본사매장]발신번호인증||
     -->
-    <select id="getSmsTelNoComboList"  parameterType="SmsSendVO" resultType="DefaultMap">
+    <select id="getSmsTelNoComboList" parameterType="SmsSendVO" resultType="DefaultMap">
         /* SmsSendMapper.getSmsTelNoComboList */
         <![CDATA[
             SELECT
@@ -38,7 +38,7 @@
         TABLE    : TB_WB_USER_INFO_DTL_V01
         COMMENTS : 웹 사용자 정보 veiw
     -->
-    <select id="getStoreNmList"  parameterType="SmsSendVO" resultType="DefaultMap">
+    <select id="getStoreNmList" parameterType="SmsSendVO" resultType="DefaultMap">
         /* SmsSendMapper.getStoreNmList */
         SELECT
         twuidv01.ORGN_NM AS STORE_NM
@@ -52,7 +52,7 @@
         TABLE    : CET_SMSPT_T
         COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
     -->
-    <select id="getSmsAmtList"  parameterType="SmsSendVO" resultType="DefaultMap">
+    <select id="getSmsAmtList" parameterType="SmsSendVO" resultType="DefaultMap">
         /* SmsSendMapper.getSmsAmtList */
         SELECT
         NVL(MAX(cst.SMS_AMT), 0) AS SMS_AMT,
@@ -386,7 +386,7 @@
         TABLE    : HCS_SENDM_T
         COMMENTS : [본사매장]발신번호인증||
     -->
-    <select id="getAddresseeAddList"  parameterType="SmsSendVO" resultType="DefaultMap">
+    <select id="getAddresseeAddList" parameterType="SmsSendVO" resultType="DefaultMap">
         /* SmsSendMapper.getAddresseeAddList */
         SELECT
         tce.ORGN_FG,

@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getWeightStockList"  parameterType="WeightStockVO" resultType="DefaultMap">
+    <select id="getWeightStockList" parameterType="WeightStockVO" resultType="DefaultMap">
         /* WeightStockMapper.getWeightStockList */
         SELECT  A.LV1_CD
         , 		A.LV1_NM

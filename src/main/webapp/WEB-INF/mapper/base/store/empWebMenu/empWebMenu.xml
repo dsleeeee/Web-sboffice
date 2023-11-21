@@ -16,7 +16,7 @@
         TABLE    : TB_MS_EMPLOYEE, TB_MS_EMPLOYEE_CORNR
         COMMENTS :
     -->
-    <select id="getMenuList"  parameterType="empWebMenuVO" resultType="DefaultMap">
+    <select id="getMenuList" parameterType="empWebMenuVO" resultType="DefaultMap">
         /* EmpWebMenuMapper.getMenuList */
         SELECT twr.*
         FROM (

@@ -17,7 +17,7 @@
         PARAM    : saleRegistVO
         COMMENTS : 매출수기등록 리스트 조회
     -->
-    <select id="getSaleRegistList"  parameterType="saleRegistVO" resultType="DefaultMap">
+    <select id="getSaleRegistList" parameterType="saleRegistVO" resultType="DefaultMap">
         /* SaleRegistMapper.getSaleRegistList */
         SELECT  POS_NO,
                 BILL_NO,
@@ -87,7 +87,7 @@
         PARAM    : saleRegistVO
         COMMENTS : 매출수기등록 상품 조회
     -->
-    <select id="getSelectProdList"  parameterType="saleRegistVO" resultType="DefaultMap">
+    <select id="getSelectProdList" parameterType="saleRegistVO" resultType="DefaultMap">
         /* SaleRegistMapper.getSelectProdList */
         SELECT 	FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
                 tmp.PROD_CD,
@@ -701,7 +701,7 @@
         PARAM    : saleRegistVO
         COMMENTS : 매출수기등록 특정 전표 조회
     -->
-    <select id="getBillDtlList"  parameterType="saleRegistVO" resultType="DefaultMap">
+    <select id="getBillDtlList" parameterType="saleRegistVO" resultType="DefaultMap">
         /* SaleRegistMapper.getBillDtlList */
         SELECT 	tssd.PROD_CD,
                 tmp.PROD_NM,

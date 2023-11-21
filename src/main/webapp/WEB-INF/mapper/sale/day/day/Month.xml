@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_DTL
         COMMENTS : [매출]헤더 와 [매출]헤더_결제, [매출]상세
     -->
-    <select id="getMonthTotalList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthTotalList" parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthTotalList */
         SELECT  TO_CHAR(TO_DATE(tsdt.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
                 tsdt.STORE_CNT,
@@ -107,7 +107,7 @@
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY, TB_SL_SALE_DTL
         COMMENTS : [매출]헤더 와 [매출]헤더_결제, [매출]상세
     -->
-    <!--<select id="getMonthTotalList"  parameterType="MonthVO" resultType="DefaultMap">-->
+    <!--<select id="getMonthTotalList" parameterType="MonthVO" resultType="DefaultMap">-->
         <!--/* MonthMapper.getMonthTotalList */-->
         <!--SELECT-->
         <!--tsshpd.YEAR_MONTH,-->
@@ -248,7 +248,7 @@
         TABLE    : TB_SL_SALE_HDR_DC
         COMMENTS : [매출]헤더_할인
     -->
-    <select id="getMonthDcList"  parameterType="MonthVO" resultType="DefaultMap">
+    <select id="getMonthDcList" parameterType="MonthVO" resultType="DefaultMap">
         /* MonthMapper.getMonthDcList */
         SELECT
         YEAR_MONTH,

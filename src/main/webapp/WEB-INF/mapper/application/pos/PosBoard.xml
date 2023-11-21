@@ -16,7 +16,7 @@
         TABLE    : TB_WB_BOARD_INFO, TB_WB_USER_INFO_DTL_V01
         COMMENTS : 게시판 정보, 웹 사용자 정보 veiw
     -->
-    <select id="getPosBoardList"  parameterType="PosBoardVO" resultType="DefaultMap">
+    <select id="getPosBoardList" parameterType="PosBoardVO" resultType="DefaultMap">
         /* PosBoardMapper.getPosBoardList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT *

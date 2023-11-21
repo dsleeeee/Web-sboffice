@@ -16,7 +16,7 @@
         TABLE    : TB_MIG_DATA_MAPPING
         COMMENTS : OKPOS 매장 컨버전 정보
     -->
-    <select id="getMigDataMappingList"  parameterType="MigDataMappingVO" resultType="DefaultMap">
+    <select id="getMigDataMappingList" parameterType="MigDataMappingVO" resultType="DefaultMap">
         /* MigDataMappingMapper.getMigDataMappingList */
         SELECT
         tmdm.OKPOS_STORE_CD,
@@ -77,7 +77,7 @@
         TABLE    : OKPOS_TB_MS_STORE
         COMMENTS :
     -->
-    <select id="getMigDataMappingInfoList"  parameterType="MigDataMappingVO" resultType="DefaultMap">
+    <select id="getMigDataMappingInfoList" parameterType="MigDataMappingVO" resultType="DefaultMap">
         /* MigDataMappingMapper.getMigDataMappingInfoList */
         SELECT
         otms.HQ_OFFICE_CD

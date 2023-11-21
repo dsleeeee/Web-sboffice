@@ -16,7 +16,7 @@
         TABLE    : TB_CM_EMPLOYEE, TB_CM_AGENCY, TB_CM_NMCODE
         COMMENTS : [공통]시스템/대리점 사원 정보, [공통]대리점 정보, [공통]명칭코드
     -->
-    <select id="getVirtualLoginAgencyrList"  parameterType="VirtualLoginAgencyVO" resultType="DefaultMap">
+    <select id="getVirtualLoginAgencyrList" parameterType="VirtualLoginAgencyVO" resultType="DefaultMap">
         /* VirtualLoginAgencyMapper.getVirtualLoginAgencyrList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT

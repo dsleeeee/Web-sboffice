@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_HDR_MEMBR, TB_SL_DAILY_MEMBR_PROD, TB_MS_PRODUCT
         COMMENTS : [매출]헤더_회원, [매출]상세, [매장]상품
     -->
-    <select id="getMembrProdList"  parameterType="membrProdVO" resultType="DefaultMap">
+    <select id="getMembrProdList" parameterType="membrProdVO" resultType="DefaultMap">
         /* MembrProdMapper.getMembrProdList */
         SELECT
         tsshm.MEMBR_NO,

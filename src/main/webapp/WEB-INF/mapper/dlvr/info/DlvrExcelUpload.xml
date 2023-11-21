@@ -80,7 +80,7 @@
         TABLE    : TB_TMP_DELIVERY_TEL_NO
         COMMENTS : [임시]배달지엑셀업로드
     -->
-    <select id="getDlvrExcelUploadCheckList"  parameterType="dlvrExcelUploadVO" resultType="DefaultMap">
+    <select id="getDlvrExcelUploadCheckList" parameterType="dlvrExcelUploadVO" resultType="DefaultMap">
         /* DlvrExcelUploadMapper.getDlvrExcelUploadCheckList */
         SELECT  SESSION_ID,
                 SEQ,

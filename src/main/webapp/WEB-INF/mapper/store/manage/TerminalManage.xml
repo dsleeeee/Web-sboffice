@@ -400,7 +400,7 @@
         TABLE    : TB_HQ_OFFICE, TB_HQ_OFFICE
         COMMENTS :
     -->
-    <select id="getTerminalManageList"  parameterType="storeTerminalVO" resultType="DefaultMap">
+    <select id="getTerminalManageList" parameterType="storeTerminalVO" resultType="DefaultMap">
         /* TerminalManageMapper.getTerminalManageList */
         SELECT
         tho.HQ_OFFICE_CD,

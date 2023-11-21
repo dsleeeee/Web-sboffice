@@ -17,7 +17,7 @@
         PARAM    : dayCloseVO
         COMMENTS : 매출 조회
     -->
-    <select id="getSaleList"  parameterType="dayCloseVO" resultType="DefaultMap">
+    <select id="getSaleList" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getSaleList */
         SELECT	tsdt.TOT_SALE_AMT AS SALE_AMT
              ,		tsdt.TOT_DC_AMT	AS DC_AMT
@@ -62,7 +62,7 @@
         PARAM    : dayCloseVO
         COMMENTS : 분류별 조회
     -->
-    <select id="getProdClassList"  parameterType="dayCloseVO" resultType="DefaultMap">
+    <select id="getProdClassList" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getProdClassList */
         SELECT 	A.PROD_CLASS_CD
         ,		FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, A.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
@@ -116,7 +116,7 @@
         PARAM    : dayCloseVO
         COMMENTS : 결제수단별 조회
     -->
-    <select id="getPayList"  parameterType="dayCloseVO" resultType="DefaultMap">
+    <select id="getPayList" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getPayList */
         SELECT  tsdt.PAY_AMT_02 AS CASH_AMT
         ,		tsdt.PAY_AMT_01 AS CARD_AMT
@@ -141,7 +141,7 @@
         PARAM    : dayCloseVO
         COMMENTS : 반품출납 조회
     -->
-    <select id="getRtnList"  parameterType="dayCloseVO" resultType="DefaultMap">
+    <select id="getRtnList" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DailyTableMapper.getRtnList */
         SELECT  RTN_SALE_CNT
         ,		RTN_SALE_AMT

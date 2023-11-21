@@ -16,7 +16,7 @@
         TABLE    : TB_HQ_OFFICE, TB_HQ_ENVST, TB_MS_STORE, TB_MS_STORE_ENVST, TB_CM_ENVST
         COMMENTS : [본사]본사 정보, [본사]본사_환경설정, [매장]매장 정보, [매장]환경설정, [공통]환경설정
     -->
-    <select id="getEnvConfgBatchChangeHqList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getEnvConfgBatchChangeHqList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeHqList */
         SELECT
         the.HQ_OFFICE_CD,
@@ -99,7 +99,7 @@
         TABLE    : TB_CM_ENVST, TB_CM_NMCODE
         COMMENTS : [공통]환경설정, [공통]명칭코드
     -->
-    <select id="getSearchEnvConfgList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getSearchEnvConfgList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getSearchEnvConfgList */
         SELECT
         tce.ENVST_CD,
@@ -120,7 +120,7 @@
         TABLE    : TB_CM_ENVST, TB_CM_NMCODE
         COMMENTS : [공통]환경설정, [공통]명칭코드
     -->
-    <select id="getSearchEnvConfgStoreList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getSearchEnvConfgStoreList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getSearchEnvConfgStoreList */
         SELECT
         tce.ENVST_CD,
@@ -141,7 +141,7 @@
         TABLE    : TB_CM_ENVST, TB_CM_NMCODE
         COMMENTS : [공통]환경설정, [공통]명칭코드
     -->
-    <select id="getSearchEnvConfgStorePosList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getSearchEnvConfgStorePosList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getSearchEnvConfgStorePosList */
         SELECT
         tce.ENVST_CD,
@@ -162,7 +162,7 @@
         TABLE    : TB_CM_ENVST_DTL
         COMMENTS : [공통]환경설정_상세
     -->
-    <select id="getEnvstValComboList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getEnvstValComboList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getEnvstValComboList */
         SELECT
         tced.ENVST_VAL_CD AS VALUE,
@@ -265,7 +265,7 @@
         TABLE    : TB_MS_STORE
         COMMENTS : [매장]매장 정보
     -->
-    <select id="getStoreCdList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getStoreCdList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getStoreCdList */
         SELECT tms.STORE_CD
         FROM TB_MS_STORE tms
@@ -279,7 +279,7 @@
         TABLE    : TB_HQ_OFFICE, TB_MS_STORE, TB_MS_STORE_ENVST, TB_CM_ENVST
         COMMENTS : [본사]본사 정보, [매장]매장 정보, [매장]환경설정, [공통]환경설정
     -->
-    <select id="getEnvConfgBatchChangeStoreList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getEnvConfgBatchChangeStoreList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeStoreList */
         SELECT
         HQ_OFFICE_CD,
@@ -348,7 +348,7 @@
         TABLE    : TB_HQ_OFFICE, TB_MS_STORE, TB_MS_POS, TB_MS_POS_ENVST, TB_CM_ENVST
         COMMENTS : [본사]본사 정보, [매장]매장 정보, [매장]포스 정보, [매장]포스 환경설정, [공통]환경설정
     -->
-    <select id="getEnvConfgBatchChangeStorePosList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getEnvConfgBatchChangeStorePosList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeStorePosList */
         SELECT
         HQ_OFFICE_CD,
@@ -472,7 +472,7 @@
         TABLE    : TB_CM_ENVST, TB_CM_NMCODE
         COMMENTS : [공통]환경설정, [공통]명칭코드
     -->
-    <select id="getSearchFnkeyList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getSearchFnkeyList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getSearchFnkeyList */
         SELECT 	FNKEY_NO, FNKEY_NM
         FROM 	TB_CM_POS_FNKEY tcpf
@@ -486,7 +486,7 @@
         TABLE    : TB_MS_STORE_FNKEY, TB_MS_STORE, TB_HQ_OFFICE
         COMMENTS : [공통]환경설정, [공통]명칭코드
     -->
-    <select id="getEnvConfgBatchChangeFnkeyList"  parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+    <select id="getEnvConfgBatchChangeFnkeyList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeFnkeyList */
         SELECT 	tms.HQ_OFFICE_CD,
                 tho.HQ_OFFICE_NM,

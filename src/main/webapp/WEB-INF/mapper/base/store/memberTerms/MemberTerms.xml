@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getMemberTermsList"  parameterType="MemberTermsVO" resultType="DefaultMap">
+    <select id="getMemberTermsList" parameterType="MemberTermsVO" resultType="DefaultMap">
         /* MemberTermsMapper.getMemberTermsList */
         <choose>
             <!-- 본사 -->

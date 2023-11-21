@@ -16,7 +16,7 @@
         TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_HDR_PAY
         COMMENTS : [매출]헤더 와 [매출]헤더_결제
     -->
-    <select id="getSaleDtlList"  parameterType="SaleInfoVO" resultType="DefaultMap">
+    <select id="getSaleDtlList" parameterType="SaleInfoVO" resultType="DefaultMap">
         /* SaleInfoMapper.getSaleDtlList */
         SELECT
         tssh.STORE_CD,
@@ -99,7 +99,7 @@
         TABLE    : TB_SL_SALE_PAY_CARD, TB_LG_CARD_APPR
         COMMENTS : [매출]결제_신용카드, [로그-POS]카드승인
     -->
-    <select id="getSaleCardDtlList"  parameterType="SaleInfoVO" resultType="DefaultMap">
+    <select id="getSaleCardDtlList" parameterType="SaleInfoVO" resultType="DefaultMap">
         /* SaleInfoMapper.getSaleCardDtlList */
         SELECT
         (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = tsspc.STORE_CD AND CORNR_CD = tsspc.CORNR_CD) AS CORNR_NM,
@@ -139,7 +139,7 @@
         TABLE    : TB_SL_SALE_PAY_CASH
         COMMENTS : [매출]결제_현금영수증
     -->
-    <select id="getSaleCashDtlList"  parameterType="SaleInfoVO" resultType="DefaultMap">
+    <select id="getSaleCashDtlList" parameterType="SaleInfoVO" resultType="DefaultMap">
         /* SaleInfoMapper.getSaleCashDtlList */
         SELECT
         (SELECT CORNR_NM FROM TB_MS_CORNER WHERE STORE_CD = tsspc.STORE_CD AND CORNR_CD = tsspc.CORNR_CD) AS CORNR_NM,
@@ -165,7 +165,7 @@
         TABLE    : TB_SL_SALE_DTL, TB_MS_PRODUCT
         COMMENTS : [매출]상세, [매장]상품
     -->
-    <select id="getSaleProdDtlList"  parameterType="SaleInfoVO" resultType="DefaultMap">
+    <select id="getSaleProdDtlList" parameterType="SaleInfoVO" resultType="DefaultMap">
         /* SaleInfoMapper.getSaleProdDtlList */
          SELECT
         (SELECT PROD_NM FROM TB_MS_PRODUCT WHERE STORE_CD = tssd.STORE_CD AND PROD_CD = tssd.PROD_CD) AS PROD_NM,

@@ -16,7 +16,7 @@
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_MS_STORE_ENVST
         COMMENTS : [매장]매장 정보 와 [본사]본사 정보, [매장]환경설정
     -->
-    <select id="getStatusStoreList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusStoreList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusStoreList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -152,7 +152,7 @@
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_MS_STORE_ENVST
         COMMENTS : [매장]매장 정보 와 [본사]본사 정보, [매장]환경설정
     -->
-    <select id="getStatusStoreExcelList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusStoreExcelList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusStoreExcelList */
         SELECT
         tms.HQ_OFFICE_CD,
@@ -285,7 +285,7 @@
         TABLE    : TB_MS_CORNER, TB_MS_STORE, TB_MS_CORNER_TERMNL
         COMMENTS : [매장]코너 와 [매장]매장 정보, [매장]코너별_터미널관리
     -->
-    <select id="getStatusStoreCornerList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusStoreCornerList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusStoreCornerList */
         SELECT
         tmc.CORNR_NM,
@@ -314,7 +314,7 @@
         TABLE    : TB_CM_AGENCY, TB_MS_STORE
         COMMENTS : [공통]대리점 정보 와 [매장]매장 정보
     -->
-    <select id="getStatusAgencyList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusAgencyList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusAgencyList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -388,7 +388,7 @@
         TABLE    : TB_MS_STORE
         COMMENTS : [매장]매장 정보
     -->
-    <select id="getStatusAgencyDetailList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusAgencyDetailList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusAgencyDetailList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -420,7 +420,7 @@
         TABLE    : TB_CM_VAN_CMPNY, TB_MS_STORE
         COMMENTS : [공통]밴사 정보 와 [매장]매장 정보
     -->
-    <select id="getStatusVanList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusVanList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusVanList */
         SELECT
         VAN_CD,
@@ -478,7 +478,7 @@
         TABLE    : TB_MS_STORE
         COMMENTS : [매장]매장 정보
     -->
-    <select id="getStatusVanDetailList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusVanDetailList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusVanDetailList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -522,7 +522,7 @@
         TABLE    : TB_CM_INSTLL, TB_MS_STORE, TB_HQ_OFFICE
         COMMENTS : 설치요청 와 [매장]매장 정보, [본사]본사 정보
     -->
-    <select id="getStatusPosInstallList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusPosInstallList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusPosInstallList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -617,7 +617,7 @@
         TABLE    : TB_CM_INSTLL, TB_MS_STORE, TB_HQ_OFFICE
         COMMENTS : 설치요청 와 [매장]매장 정보, [본사]본사 정보
     -->
-    <select id="getStatusPosInstallExcelList"  parameterType="StoreStatusVO" resultType="DefaultMap">
+    <select id="getStatusPosInstallExcelList" parameterType="StoreStatusVO" resultType="DefaultMap">
         /* StoreStatusMapper.getStatusPosInstallExcelList */
         SELECT
         tms.HQ_OFFICE_CD,

@@ -508,7 +508,7 @@
       TABLE    :
       COMMENTS :
   -->
-  <select id="getSaleDtlChannelExcelList"  parameterType="SaleDtlChannelVO" resultType="DefaultMap">
+  <select id="getSaleDtlChannelExcelList" parameterType="SaleDtlChannelVO" resultType="DefaultMap">
     /* SaleDtlChannelMapper.getSaleDtlChannelExcelList */
     SELECT  SUBSTR(thsrm.FROM_SALE_DATE, 0, 6) AS SALE_MONTH
     ,       TO_CHAR(TO_DATE(thsrm.FROM_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE

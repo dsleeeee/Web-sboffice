@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkSendStatusList"  parameterType="AlimtalkSendStatusVO" resultType="DefaultMap">
+    <select id="getAlimtalkSendStatusList" parameterType="AlimtalkSendStatusVO" resultType="DefaultMap">
         /* AlimtalkSendStatusMapper.getAlimtalkSendStatusList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -264,7 +264,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkDaySendStatusList"  parameterType="AlimtalkSendStatusVO" resultType="DefaultMap">
+    <select id="getAlimtalkDaySendStatusList" parameterType="AlimtalkSendStatusVO" resultType="DefaultMap">
         /* AlimtalkSendStatusMapper.getAlimtalkDaySendStatusList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -346,7 +346,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAlimtalkPeriodSendStatusList"  parameterType="AlimtalkSendStatusVO" resultType="DefaultMap">
+    <select id="getAlimtalkPeriodSendStatusList" parameterType="AlimtalkSendStatusVO" resultType="DefaultMap">
         /* AlimtalkSendStatusMapper.getAlimtalkPeriodSendStatusList */
         SELECT
         hdt.OGN_CD AS ORGN_CD,

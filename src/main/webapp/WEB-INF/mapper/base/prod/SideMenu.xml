@@ -1683,7 +1683,7 @@
         COMMENTS : [본사]상품, [본사]상품_분류, [본사]상품_바코드, [본사]속성, [본사]선택그룹
                    [매장]상품, [매장]상품_분류, [매장]상품_바코드, [매장]속성, [매장]선택그룹
     -->
-    <select id="getSideMenuManageProdList"  parameterType="sideMenuManageVO" resultType="DefaultMap">
+    <select id="getSideMenuManageProdList" parameterType="sideMenuManageVO" resultType="DefaultMap">
         /* SideMenuMapper.getSideMenuManageProdList */
         <choose>
             <!-- 본사 -->

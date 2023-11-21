@@ -16,7 +16,7 @@
         TABLE    : TB_PS_DELIVERY_TEL_NO
         COMMENTS :
     -->
-    <select id="getDeliveryTelNoList"  parameterType="deliveryTelNoVO" resultType="DefaultMap">
+    <select id="getDeliveryTelNoList" parameterType="deliveryTelNoVO" resultType="DefaultMap">
         /* DeliveryTelNoMapper.getDeliveryTelNoList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,

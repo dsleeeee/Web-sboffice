@@ -301,7 +301,7 @@
         TABLE    : TB_TMP_PRODUCT
         COMMENTS : [임시]간편상품등록
     -->
-    <select id="getSimpleProdList"  parameterType="SimpleProdVO" resultType="DefaultMap">
+    <select id="getSimpleProdList" parameterType="SimpleProdVO" resultType="DefaultMap">
         /* SimpleProdMapper.getSimpleProdList */
         SELECT
         SESSION_ID,

@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getStoreProdSaleReportList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+    <select id="getStoreProdSaleReportList" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
         /* StoreProdSaleReportMapper.getStoreProdSaleReportList */
         SELECT
         SUBSTR(thsr.FROM_SALE_DATE, 0, 6) AS SALE_MONTH,
@@ -121,7 +121,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getDayStoreProdSaleReportList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+    <select id="getDayStoreProdSaleReportList" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
         /* StoreProdSaleReportMapper.getDayStoreProdSaleReportList */
         SELECT
         thsr.FROM_SALE_DATE AS SALE_DATE,
@@ -223,7 +223,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getBranchAreaList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+    <select id="getBranchAreaList" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
         /* StoreProdSaleReportMapper.getBranchAreaList */
         SELECT
         thn.NMCODE_CD AS BRANCH_CD,
@@ -341,7 +341,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getBranchAreaDetailList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+    <select id="getBranchAreaDetailList" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
         /* StoreProdSaleReportMapper.getBranchAreaDetailList */
         SELECT
         thn.NMCODE_CD AS AREA_CD,
@@ -445,7 +445,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAreaStoreMappingList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+    <select id="getAreaStoreMappingList" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
         /* StoreProdSaleReportMapper.getAreaStoreMappingList */
         SELECT
         thn.PARENT_CD AS BRANCH_CD,
@@ -475,7 +475,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAreaStoreMappingDetailList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+    <select id="getAreaStoreMappingDetailList" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
         /* StoreProdSaleReportMapper.getAreaStoreMappingDetailList */
         SELECT
         thas.BRANCH_CD,
@@ -497,7 +497,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getAreaStoreMappingStoreList"  parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
+    <select id="getAreaStoreMappingStoreList" parameterType="StoreProdSaleReportVO" resultType="DefaultMap">
         /* StoreProdSaleReportMapper.getAreaStoreMappingStoreList */
         SELECT
         tms.STORE_CD,

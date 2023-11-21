@@ -16,7 +16,7 @@
         TABLE    : TB_OD_ORDER_HDR
         COMMENTS : 주문현황을 조회함
     -->
-    <select id="getOrderStatusList"  parameterType="orderStatusVO" resultType="DefaultMap">
+    <select id="getOrderStatusList" parameterType="orderStatusVO" resultType="DefaultMap">
         /* OrderStatus.getOrderStatusList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT	TO_CHAR(TO_DATE(tooh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,		-- 영업일자
@@ -88,7 +88,7 @@
         TABLE    : TB_OD_ORDER_DTL
         COMMENTS : 주문현황 상세 팝업을 조회함
     -->
-    <select id="getOrderStatusDtlList"  parameterType="orderStatusVO" resultType="DefaultMap">
+    <select id="getOrderStatusDtlList" parameterType="orderStatusVO" resultType="DefaultMap">
         /* OrderStatus.getOrderStatusDtlList */
         SELECT  tood.ORDER_SEQ,
                 tood.ORDER_DTL_NO,
@@ -220,7 +220,7 @@
         TABLE    : TB_OD_ORDER_HDR, TB_OD_ORDER_DTL
         COMMENTS : 주문취소내역을 조회한다.
     -->
-    <select id="getOrderCancelList"  parameterType="orderStatusVO" resultType="DefaultMap">
+    <select id="getOrderCancelList" parameterType="orderStatusVO" resultType="DefaultMap">
         /* OrderStatus.getOrderCancelList */
         SELECT  A.STORE_CD
         ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE

@@ -18,7 +18,7 @@
         COMMENTS : [본사]상품, [본사]상품_분류, [본사]상품_바코드,
                    [매장]상품, [매장]상품_분류, [매장]상품_바코드
     -->
-    <select id="getProdBatchChangeList"  parameterType="ProdBatchChangeVO" resultType="DefaultMap">
+    <select id="getProdBatchChangeList" parameterType="ProdBatchChangeVO" resultType="DefaultMap">
         /* ProdBatchChangeMapper.getProdBatchChangeList */
         <choose>
             <!-- 본사 -->
@@ -296,7 +296,7 @@
         COMMENTS : [본사]상품, [본사]상품_분류, [본사]상품_바코드,
                    [매장]상품, [매장]상품_분류, [매장]상품_바코드
     -->
-    <select id="getProdBatchChangeExcelList"  parameterType="ProdBatchChangeVO" resultType="DefaultMap">
+    <select id="getProdBatchChangeExcelList" parameterType="ProdBatchChangeVO" resultType="DefaultMap">
         /* ProdBatchChangeMapper.getProdBatchChangeExcelList */
         <choose>
             <!-- 본사 -->

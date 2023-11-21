@@ -16,7 +16,7 @@
         TABLE    : TB_OD_ORDER_HDR
         COMMENTS : 주문현황을 조회함
     -->
-    <select id="getMobileOrderStatusList"  parameterType="mobileOrderStatusVO" resultType="DefaultMap">
+    <select id="getMobileOrderStatusList" parameterType="mobileOrderStatusVO" resultType="DefaultMap">
         /* MobileOrderStatus.getMobileOrderStatusList */
         SELECT	TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,		-- 영업일자
                 POS_NO,			-- 포스번호
@@ -64,7 +64,7 @@
         TABLE    : TB_OD_ORDER_DTL
         COMMENTS : 주문현황 상세 팝업을 조회함
     -->
-    <select id="getMobileOrderStatusDtlList"  parameterType="mobileOrderStatusVO" resultType="DefaultMap">
+    <select id="getMobileOrderStatusDtlList" parameterType="mobileOrderStatusVO" resultType="DefaultMap">
         /* MobileOrderStatus.getMobileOrderStatusDtlList */
         SELECT  POS_NO,
                 ORDER_NO,
