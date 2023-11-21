@@ -5,7 +5,7 @@
 
 <div class="subCon" ng-controller="captionMsgGrpCtrl" id="captionMsgGrpView" style="display: none;">
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="multilingualCaptionMsg.captionMsgGrp"/></a>
+        <a href="#" class="open fl"><s:message code="captionMsg.captionMsgGrp"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('captionMsgGrpCtrl', 1)">
@@ -24,12 +24,12 @@
         <tbody>
         <tr>
             <%-- 기능키/메시지 화면구분코드 --%>
-            <th><%--<s:message code="multilingualCaptionMsg.captionMsg"/>&nbsp;--%><s:message code="multilingualCaptionMsg.captionImgCd"/></th>
+            <th><%--<s:message code="captionMsg.captionMsg"/>&nbsp;--%><s:message code="captionMsg.captionImgCd"/></th>
             <td>
                 <input type="text" id="captionImgCd" class="sb-input w100" ng-model="captionImgCd" onkeyup="fnNxBtnSearch();"/>
             </td>
             <!-- 기능키/메시지 화면구분명 -->
-            <th><%--<s:message code="multilingualCaptionMsg.captionMsg"/>&nbsp;--%><s:message code="multilingualCaptionMsg.captionImgNm"/></th>
+            <th><%--<s:message code="captionMsg.captionMsg"/>&nbsp;--%><s:message code="captionMsg.captionImgNm"/></th>
             <td>
                 <input type="text" id="captionImgNm" class="sb-input w100" ng-model="captionImgNm" onkeyup="fnNxBtnSearch();"/>
             </td>
@@ -70,12 +70,12 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionImgCd"/>" binding="captionImgCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.captionImgNm"/>" binding="captionImgNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.fileOrgNm"/>" binding="fileOrgNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.fileSize"/>" binding="fileSize" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.preview"/>" binding="preview" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="multilingualCaptionMsg.download"/>" binding="downLoad" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.captionImgCd"/>" binding="captionImgCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.captionImgNm"/>" binding="captionImgNm" align="left" width="200" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.fileOrgNm"/>" binding="fileOrgNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.fileSize"/>" binding="fileSize" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.preview"/>" binding="preview" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="captionMsg.download"/>" binding="downLoad" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
 
                 <%-- 저장시 필요 --%>
                 <wj-flex-grid-column header="" binding="fileNm" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -97,16 +97,16 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/multilingualCaptionMsg/captionMsgGrp.js?ver=20231117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsgGrp.js?ver=20231120.01" charset="utf-8"></script>
 
 <%-- 신규등록 팝업 레이어 --%>
-<c:import url="/WEB-INF/view/base/store/multilingualCaptionMsg/captionMsgGrpReg.jsp">
+<c:import url="/WEB-INF/view/base/multilingual/captionMsg/captionMsgGrpReg.jsp">
 </c:import>
 
 <%-- 상세팝업 레이어 --%>
-<c:import url="/WEB-INF/view/base/store/multilingualCaptionMsg/captionMsgGrpDtl.jsp">
+<c:import url="/WEB-INF/view/base/multilingual/captionMsg/captionMsgGrpDtl.jsp">
 </c:import>
 
 <%-- 미리보기 --%>
-<c:import url="/WEB-INF/view/base/store/multilingualCaptionMsg/captionMsgGrpImg.jsp">
+<c:import url="/WEB-INF/view/base/multilingual/captionMsg/captionMsgGrpImg.jsp">
 </c:import>

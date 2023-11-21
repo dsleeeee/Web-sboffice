@@ -283,7 +283,7 @@
     <!-- 기초관리 > 매장관리 > 이벤트등록 -->
     <typeAlias alias="specificDayMemoVO" type="kr.co.solbipos.base.store.specificDayMemo.service.SpecificDayMemoVO"/>
     <!-- 기초관리 매장관리 다국어관리(기능키/메시지) -->
-    <typeAlias alias="captionMsgVO" type="kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgVO"/>
+    <typeAlias alias="captionMsgVO" type="kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgVO"/>
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="empBrandVO" type="kr.co.solbipos.base.store.empbrand.service.EmpBrandVO"/>

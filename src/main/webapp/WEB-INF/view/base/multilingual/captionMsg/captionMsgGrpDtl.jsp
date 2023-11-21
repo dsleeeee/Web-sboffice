@@ -9,7 +9,7 @@
     <div class="wj-dialog wj-dialog-columns title" ng-controller="captionMsgGrpDtlCtrl">
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="multilingualCaptionMsg.captionMsgDtl"/>
+            <s:message code="captionMsg.captionMsgDtl"/>
             <span id="versionDetailTitle" class="ml20"></span>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
@@ -28,33 +28,33 @@
                         <tbody>
                             <tr>
                                 <%-- 화면구분코드 --%>
-                                <th><s:message code="multilingualCaptionMsg.captionImgCd" /></th>
+                                <th><s:message code="captionMsg.captionImgCd" /></th>
                                 <td>{{version.captionImgCd}}</td>
                                 <%-- 화면구분명 --%>
-                                <th><s:message code="multilingualCaptionMsg.captionImgNm" /></th>
+                                <th><s:message code="captionMsg.captionImgNm" /></th>
                                 <td>{{version.captionImgNm}}</td>
                             </tr>
                             <tr>
                                 <%-- 첨부파일 --%>
-                                <th><s:message code="multilingualCaptionMsg.file"/></th>
+                                <th><s:message code="captionMsg.file"/></th>
                                 <td id="fileIn">
                                     {{version.fileOrgNm}}
                                 </td>
-                                <th id="fileOrgH" style="display:none;"><s:message code="multilingualCaptionMsg.fileOrgNm"/></th>
+                                <th id="fileOrgH" style="display:none;"><s:message code="captionMsg.fileOrgNm"/></th>
                                 <td id="fileOrgD" style="display:none;">
                                     <input type="text" class="sb-input w100" id="fileOrgNm" ng-model="version.fileOrgNm" readonly/>
                                 </td>
                             </tr>
                             <tr>
                                 <%-- 파일사이즈 --%>
-                                <th><s:message code="multilingualCaptionMsg.fileSize" /></th>
+                                <th><s:message code="captionMsg.fileSize" /></th>
                                 <td colspan="3">
                                     {{version.fileSize}}
                                 </td>
                             </tr>
                             <tr>
                                 <%-- 파일설명 --%>
-                                <th><s:message code="multilingualCaptionMsg.fileDesc" /></th>
+                                <th><s:message code="captionMsg.fileDesc" /></th>
                                 <td colspan="3">
                                     {{version.fileDesc}}
                                 </td>
@@ -74,7 +74,7 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/multilingualCaptionMsg/captionMsgGrpDtl.js?ver=20231117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsgGrpDtl.js?ver=20231120.01" charset="utf-8"></script>
 
 <script type="text/javascript">
     var orgnCd = "${orgnCd}";
