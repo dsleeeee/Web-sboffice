@@ -10,7 +10,7 @@
     1       이다솜     2023.11.03     최초작성
 -->
 
-<mapper namespace="kr.co.solbipos.base.store.multilingualCaptionMsg.service.impl.CaptionMsgMapper">
+<mapper namespace="kr.co.solbipos.base.multilingual.captionMsg.service.impl.CaptionMsgMapper">
 
     <!-- 화면구분 콤보박스 조회 -->
     <!--

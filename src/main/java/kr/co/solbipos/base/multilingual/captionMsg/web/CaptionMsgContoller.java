@@ -1,4 +1,4 @@
-package kr.co.solbipos.base.store.multilingualCaptionMsg.web;
+package kr.co.solbipos.base.multilingual.captionMsg.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
@@ -10,9 +10,8 @@ import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgService;
-import kr.co.solbipos.base.store.multilingualCaptionMsg.service.CaptionMsgVO;
-import kr.co.solbipos.iostock.cmm.service.IostockCmmVO;
+import kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgService;
+import kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -51,7 +50,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping("/base/store/multilingualCaptionMsg")
+@RequestMapping("/base/multilingual/captionMsg")
 public class CaptionMsgContoller {
 
     private final SessionService sessionService;
@@ -87,7 +86,7 @@ public class CaptionMsgContoller {
         // 화면구분 콤보박스 조회
         model.addAttribute("captionMsgGrpList", cmmCodeUtil.assmblObj(captionMsgService.getCaptionMsgGrpComboList(captionMsgVO, sessionInfoVO), "name", "value", UseYn.N));
 
-        return "base/store/multilingualCaptionMsg/captionMsgTab";
+        return "base/multilingual/captionMsg/captionMsgTab";
     }
 
     /**
@@ -138,7 +137,7 @@ public class CaptionMsgContoller {
     @RequestMapping(value = "/saveCaptionMsg.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveCaptionMsg(@RequestBody CaptionMsgVO[] captionMsgVOs, HttpServletRequest request,
-                                       HttpServletResponse response, Model model) {
+                                 HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -159,7 +158,7 @@ public class CaptionMsgContoller {
     @RequestMapping(value = "/deleteCaptionMsg.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result deleteCaptionMsg(@RequestBody CaptionMsgVO[] captionMsgVOs, HttpServletRequest request,
-                                 HttpServletResponse response, Model model) {
+                                   HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -250,7 +249,7 @@ public class CaptionMsgContoller {
         } else if(result.equals("1")) {
             return returnJson(Status.FAIL);
         } else if(result.equals("2")) {
-            return returnJson(Status.FAIL, "msg", messageService.get("multilingualCaptionMsg.fileExtensionChk.msg"));
+            return returnJson(Status.FAIL, "msg", messageService.get("captionMsg.fileExtensionChk.msg"));
         } else {
             return returnJson(Status.FAIL);
         }
@@ -275,7 +274,7 @@ public class CaptionMsgContoller {
         } else if(result.equals("1")) {
             return returnJson(Status.FAIL);
         } else if(result.equals("2")) {
-            return returnJson(Status.FAIL, "msg", messageService.get("multilingualCaptionMsg.fileExtensionChk.msg"));
+            return returnJson(Status.FAIL, "msg", messageService.get("captionMsg.fileExtensionChk.msg"));
         } else {
             return returnJson(Status.FAIL);
         }
@@ -293,7 +292,7 @@ public class CaptionMsgContoller {
     @RequestMapping(value = "/deleteCaptionMsgGrp.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result deleteCaptionMsgGrp(@RequestBody CaptionMsgVO[] captionMsgVOs, HttpServletRequest request,
-                                 HttpServletResponse response, Model model) {
+                                      HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 

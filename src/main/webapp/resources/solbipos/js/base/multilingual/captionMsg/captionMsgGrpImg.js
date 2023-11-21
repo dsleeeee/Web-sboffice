@@ -32,7 +32,7 @@ app.controller('captionMsgGrpImgCtrl', ['$scope', '$http', function ($scope, $ht
             params.captionImgCd = data;
 
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._postJSONQuery.withOutPopUp("/base/store/multilingualCaptionMsg/getCaptionMsgGrpDtl.sb", params, function (response) {
+            $scope._postJSONQuery.withOutPopUp("/base/multilingual/captionMsg/getCaptionMsgGrpDtl.sb", params, function (response) {
 
                 var fileInfo = response.data.data;
 

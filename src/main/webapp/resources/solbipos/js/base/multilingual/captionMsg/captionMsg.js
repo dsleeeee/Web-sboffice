@@ -89,8 +89,17 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
         var params = {};
         params.captionImgCd = $scope.srchCaptionMsgGrpCombo.selectedValue;
 
-        // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/base/store/multilingualCaptionMsg/getCaptionMsgList.sb", params);
+        // 화면구분 이미지 조회
+        $scope._postJSONQuery.withOutPopUp("/base/multilingual/captionMsg/getCaptionMsgGrpDtl.sb", params, function (response) {
+
+            var fileInfo = response.data.data;
+
+            // 이미지 셋팅
+            $("#imgCaptionMsgGrpView").attr("src", "http://" + window.location.host + "/Media/" + fileInfo.fileNm);
+
+            // 화면구분 선택에 따른 기능키/메시지 탭 리스트 조회
+            $scope._inquiryMain("/base/multilingual/captionMsg/getCaptionMsgList.sb", params);
+        });
     };
 
     // 추가
@@ -128,7 +137,7 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
                 }
             }
 
-            $scope._save('/base/store/multilingualCaptionMsg/deleteCaptionMsg.sb', params, function(){
+            $scope._save('/base/multilingual/captionMsg/deleteCaptionMsg.sb', params, function(){
                 // 재조회
                 $scope.getCaptionMsgList();
             });
@@ -145,17 +154,17 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
                 if($scope.flex.collectionView.itemsEdited[u].captionMsgId == ""){
-                    $scope._popMsg(messages["multilingualCaptionMsg.captionMsgId"] + messages["cmm.require.text"]); // 기능키 or 메시지코드(을)를 입력하세요.
+                    $scope._popMsg(messages["captionMsg.captionMsgId"] + messages["cmm.require.text"]); // 기능키 or 메시지코드(을)를 입력하세요.
                     return false;
                 }
 
                 if($scope.flex.collectionView.itemsEdited[u].captionMsgNm == ""){
-                    $scope._popMsg(messages["multilingualCaptionMsg.captionMsgNm"] + messages["cmm.require.text"]); // 기능키 or 메시지명(을)를 입력하세요.
+                    $scope._popMsg(messages["captionMsg.captionMsgNm"] + messages["cmm.require.text"]); // 기능키 or 메시지명(을)를 입력하세요.
                     return false;
                 }
 
                 if($scope.flex.collectionView.itemsEdited[u].captionMsgEnNm == "" && $scope.flex.collectionView.itemsEdited[u].captionMsgCnNm == "" && $scope.flex.collectionView.itemsEdited[u].captionMsgJpNm == ""){
-                    $scope._popMsg(messages["multilingualCaptionMsg.multilingual.chk.msg"]); // 영문, 중문, 일문을 입력하세요.(영문, 중문, 일문 중 하나는 입력해야 합니다)
+                    $scope._popMsg(messages["captionMsg.multilingual.chk.msg"]); // 영문, 중문, 일문을 입력하세요.(영문, 중문, 일문 중 하나는 입력해야 합니다)
                     return false;
                 }
 
@@ -165,17 +174,17 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
                 if($scope.flex.collectionView.itemsAdded[i].captionMsgId == ""){
-                    $scope._popMsg(messages["multilingualCaptionMsg.captionMsgId"] + messages["cmm.require.text"]); // 기능키 or 메시지코드(을)를 입력하세요.
+                    $scope._popMsg(messages["captionMsg.captionMsgId"] + messages["cmm.require.text"]); // 기능키 or 메시지코드(을)를 입력하세요.
                     return false;
                 }
 
                 if($scope.flex.collectionView.itemsAdded[i].captionMsgNm == ""){
-                    $scope._popMsg(messages["multilingualCaptionMsg.captionMsgNm"] + messages["cmm.require.text"]); // 기능키 or 메시지명(을)를 입력하세요.
+                    $scope._popMsg(messages["captionMsg.captionMsgNm"] + messages["cmm.require.text"]); // 기능키 or 메시지명(을)를 입력하세요.
                     return false;
                 }
 
                 if($scope.flex.collectionView.itemsAdded[i].captionMsgEnNm == "" && $scope.flex.collectionView.itemsAdded[i].captionMsgCnNm == "" && $scope.flex.collectionView.itemsAdded[i].captionMsgJpNm == ""){
-                    $scope._popMsg(messages["multilingualCaptionMsg.multilingual.chk.msg"]); // 영문, 중문, 일문을 입력하세요.(영문, 중문, 일문 중 하나는 입력해야 합니다)
+                    $scope._popMsg(messages["captionMsg.multilingual.chk.msg"]); // 영문, 중문, 일문을 입력하세요.(영문, 중문, 일문 중 하나는 입력해야 합니다)
                     return false;
                 }
 
@@ -207,17 +216,17 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             if(arrDuplicate.length > 0){
                 // 기능키 or 메시지코드 '' 가 중복됩니다. 다른 기능키 or 메시지코드를 입력하세요.
-                $scope._popMsg(messages["multilingualCaptionMsg.captionMsgId"] + " " + arrDuplicate.toString() + messages["multilingualCaptionMsg.captionMsgId.duplicate"]);
+                $scope._popMsg(messages["captionMsg.captionMsgId"] + " " + arrDuplicate.toString() + messages["captionMsg.captionMsgId.duplicate"]);
                 return false;
             }
 
             // 새로 입력한(신규) 기능키 or 메시지코드와 기존에 입력되어있는 기능키 or 메시지코드 중 중복되는 코드가 있는지 확인
             if (strCaptionMsgId.length > 0) {
                 vParams.captionMsgId = strCaptionMsgId.substr(0, strCaptionMsgId.length - 1);
-                $scope._postJSONQuery.withOutPopUp('/base/store/multilingualCaptionMsg/chkCaptionMsgId.sb', vParams, function (response) {
+                $scope._postJSONQuery.withOutPopUp('/base/multilingual/captionMsg/chkCaptionMsgId.sb', vParams, function (response) {
                     if (!isEmptyObject(response.data.data)) {
                         // 기능키 or 메시지코드 '' 은(는) 이미 등록되어 있습니다. 다른 기능키 or 메시지코드를 입력하세요.
-                        $scope._popMsg(messages["multilingualCaptionMsg.captionMsgId"] + " " + response.data.data + messages["multilingualCaptionMsg.captionMsgId.duplicate2"]);
+                        $scope._popMsg(messages["captionMsg.captionMsgId"] + " " + response.data.data + messages["captionMsg.captionMsgId.duplicate2"]);
                         return false;
                     }else{
                         $scope.saveData(params);
@@ -231,7 +240,7 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 저장
     $scope.saveData = function(params){
-        $scope._save("/base/store/multilingualCaptionMsg/saveCaptionMsg.sb", params, function(result) {
+        $scope._save("/base/multilingual/captionMsg/saveCaptionMsg.sb", params, function(result) {
             // 재조회
             $scope.getCaptionMsgList();
         });
@@ -245,7 +254,7 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 화면구분등록 탭에서 화면구분정보 변경시, 기능키/메시지 탭의 화면구분 콤보박스 재조회
     $scope.setCaptionMsgGrpCombo = function(){
 
-        var url = '/base/store/multilingualCaptionMsg/getCaptionMsgGrpCombo.sb';
+        var url = '/base/multilingual/captionMsg/getCaptionMsgGrpCombo.sb';
         var params = {};
 
         //가상로그인 session 설정
@@ -302,7 +311,7 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["multilingualCaptionMsg.captionMsg"]  + '_' +  getCurDateTime() + '.xlsx', function () {
+                }, messages["captionMsg.captionMsg"]  + '_' +  getCurDateTime() + '.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -362,7 +371,7 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
                includeColumns : function (column) {
                    return column.visible;
                }
-           }, messages["multilingualCaptionMsg.captionMsg"] + '_엑셀업로드_양식.xlsx');
+           }, messages["captionMsg.captionMsg"] + '_엑셀업로드_양식.xlsx');
          }, 10);
     };
 
@@ -427,7 +436,7 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
                 }, 10);
             } else {
                 $("#excelUpFile").val('');
-                $scope._popMsg(messages['multilingualCaptionMsg.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
+                $scope._popMsg(messages['captionMsg.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
         }
@@ -483,55 +492,55 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
 
             if (nvl(item.captionMsgId, '').toString() === '') {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.captionMsgId"] + " " + messages["cmm.require.text"]);  // 기능키 or 메시지코드 을(를) 입력하세요.
+                $scope._popMsg(messages["captionMsg.captionMsgId"] + " " + messages["cmm.require.text"]);  // 기능키 or 메시지코드 을(를) 입력하세요.
                 return false;
             }
 
             if (nvl(item.captionMsgGb, '').toString() === '') {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.captionMsgGb"] + " " + messages["cmm.require.text"]);  // 구분 을(를) 입력하세요.
+                $scope._popMsg(messages["captionMsg.captionMsgGb"] + " " + messages["cmm.require.text"]);  // 구분 을(를) 입력하세요.
                 return false;
             }
 
             if (nvl(item.captionMsgNm, '').toString() === '') {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.captionMsgNm"] + " " + messages["cmm.require.text"]);  // 기능키 or 메시지명 을(를) 입력하세요.
+                $scope._popMsg(messages["captionMsg.captionMsgNm"] + " " + messages["cmm.require.text"]);  // 기능키 or 메시지명 을(를) 입력하세요.
                 return false;
             }
 
             if (nvl(item.captionMsgEnNm, '').toString() === '' && nvl(item.captionMsgCnNm, '').toString() === '' && nvl(item.captionMsgJpNm, '').toString() === '') {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.multilingual.chk.msg"]);  // 영문, 중문, 일문을 입력하세요.(영문, 중문, 일문 중 하나는 입력해야 합니다)
+                $scope._popMsg(messages["captionMsg.multilingual.chk.msg"]);  // 영문, 중문, 일문을 입력하세요.(영문, 중문, 일문 중 하나는 입력해야 합니다)
                 return false;
             }
 
             if (nvl(item.captionMsgId + '', '').getByteLengthForOracle() > 100) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.captionMsgId"] + " " + messages["multilingualCaptionMsg.valueSize.chk.msg"]);  // 기능키 or 메시지코드 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                $scope._popMsg(messages["captionMsg.captionMsgId"] + " " + messages["captionMsg.valueSize.chk.msg"]);  // 기능키 or 메시지코드 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
             if (nvl(item.captionMsgNm + '', '').getByteLengthForOracle() > 500) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.captionMsgNm"] + " " + messages["multilingualCaptionMsg.valueSize.chk.msg"]);  // 기능키 or 메시지명 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                $scope._popMsg(messages["captionMsg.captionMsgNm"] + " " + messages["captionMsg.valueSize.chk.msg"]);  // 기능키 or 메시지명 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
             if (nvl(item.captionMsgEnNm + '', '').getByteLengthForOracle() > 500) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.en"] + " " + messages["multilingualCaptionMsg.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                $scope._popMsg(messages["captionMsg.en"] + " " + messages["captionMsg.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
             if (nvl(item.captionMsgCnNm + '', '').getByteLengthForOracle() > 500) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.cn"] + " " + messages["multilingualCaptionMsg.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                $scope._popMsg(messages["captionMsg.cn"] + " " + messages["captionMsg.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
             if (nvl(item.captionMsgJpNm + '', '').getByteLengthForOracle() > 500) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["multilingualCaptionMsg.jp"] + " " + messages["multilingualCaptionMsg.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                $scope._popMsg(messages["captionMsg.jp"] + " " + messages["captionMsg.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
         }
@@ -562,17 +571,17 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
         if(arrDuplicate.length > 0){
             $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
             // 기능키 or 메시지코드 '' 가 중복됩니다. 다른 기능키 or 메시지코드를 입력하세요.
-            $scope._popMsg(messages["multilingualCaptionMsg.captionMsgId"] + " " + arrDuplicate.toString() + messages["multilingualCaptionMsg.captionMsgId.duplicate"]);
+            $scope._popMsg(messages["captionMsg.captionMsgId"] + " " + arrDuplicate.toString() + messages["captionMsg.captionMsgId.duplicate"]);
             return false;
         }
 
         // 새로 입력한(신규) 기능키 or 메시지코드와 기존에 입력되어있는 기능키 or 메시지코드 중 중복되는 코드가 있는지 확인
         vParams.captionMsgId = strCaptionMsgId.substr(0, strCaptionMsgId.length - 1);
-        $scope._postJSONQuery.withOutPopUp('/base/store/multilingualCaptionMsg/chkCaptionMsgId.sb', vParams, function (response) {
+        $scope._postJSONQuery.withOutPopUp('/base/multilingual/captionMsg/chkCaptionMsgId.sb', vParams, function (response) {
             if (!isEmptyObject(response.data.data)) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                 // 기능키 or 메시지코드 '' 은(는) 이미 등록되어 있습니다. 다른 기능키 or 메시지코드를 입력하세요.
-                $scope._popMsg(messages["multilingualCaptionMsg.captionMsgId"] + " " + response.data.data + messages["multilingualCaptionMsg.captionMsgId.duplicate2"]);
+                $scope._popMsg(messages["captionMsg.captionMsgId"] + " " + response.data.data + messages["captionMsg.captionMsgId.duplicate2"]);
                 return false;
             }else{
                 // 데이터 저장
@@ -614,7 +623,7 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/base/store/multilingualCaptionMsg/saveCaptionMsg.sb', /* 통신할 URL */
+            url    : '/base/multilingual/captionMsg/saveCaptionMsg.sb', /* 통신할 URL */
             data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
