@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    SoldOutResve.xml
+    비노출관리(예약)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.05.24      최초작성
+-->
 <mapper namespace="kr.co.solbipos.base.prod.kioskDisplayResve.service.impl.KioskDisplayResveMapper">
 
     <!-- 리스트 조회 -->
@@ -123,6 +130,9 @@
                     <if test='branchCd != null and branchCd != ""'>
                         AND tms.BRANCH_CD = #{branchCd}
                     </if>
+                    <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                        AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                    </if>
                     <if test='kioskDisplayYn != null and kioskDisplayYn != ""'>
                         AND tmkdr.KIOSK_DISPLAY_YN = #{kioskDisplayYn}
                     </if>
@@ -237,6 +247,9 @@
                 </if>
                 <if test='branchCd != null and branchCd != ""'>
                     AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                 </if>
                 )
         WHERE   1=1

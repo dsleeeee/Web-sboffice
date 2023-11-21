@@ -236,7 +236,7 @@
             <td>
               <div class="sb-select">
                 <wj-combo-box
-                        id="srchBranchCdComboo"
+                        id="srchBranchCdCombo"
                         ng-model="branchCd"
                         items-source="_getComboData('branchCdCombo')"
                         display-member-path="name"

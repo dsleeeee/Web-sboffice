@@ -152,11 +152,11 @@ app.controller('timeProdCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // }
     // // 그룹
     // if(branchCdComboList.length <= 1) {
-    //     $("#srchBranchCdComboo").css('background-color', '#F0F0F0');
-    //     $("#srchBranchCdComboo").attr("disabled", true);
+    //     $("#srchBranchCdCombo").css('background-color', '#F0F0F0');
+    //     $("#srchBranchCdCombo").attr("disabled", true);
     // } else {
-    //     $("#srchBranchCdComboo").css('background-color', '#FFFFFF');
-    //     $("#srchBranchCdComboo").attr("disabled", false);
+    //     $("#srchBranchCdCombo").css('background-color', '#FFFFFF');
+    //     $("#srchBranchCdCombo").attr("disabled", false);
     // }
 
     // 그리드 매출구분

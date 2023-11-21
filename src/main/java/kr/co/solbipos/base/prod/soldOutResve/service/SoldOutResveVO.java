@@ -301,6 +301,9 @@ public class SoldOutResveVO extends PageVO {
     private String soldOutResve;
     private String orgSoldOutResve;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1398,4 +1401,8 @@ public class SoldOutResveVO extends PageVO {
     public void setOrgSoldOutResve(String orgSoldOutResve) {
         this.orgSoldOutResve = orgSoldOutResve;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

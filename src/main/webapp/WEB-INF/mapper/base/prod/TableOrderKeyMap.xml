@@ -69,6 +69,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         AND  tmsi.STORE_CD (+)= tms.STORE_CD
         ORDER BY tms.STORE_CD ASC
     </select>

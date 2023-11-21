@@ -37,13 +37,13 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 등록 일자 --%>
+                <%-- 예약일자 --%>
                 <th><s:message code="soldOutResve.startDate" /></th>
                 <td colspan="3">
                     <div class="sb-select">
-                    <span class="txtIn"><input id="srchStartDate" ng-model="startDate" class="w120px"></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"><input id="srchEndDate" ng-model="endDate" class="w120px"></span>
+                        <span class="txtIn"><input id="srchStartDate" ng-model="startDate" class="w110px"></span>
+                        <span class="rg">~</span>
+                        <span class="txtIn"><input id="srchEndDate" ng-model="endDate" class="w110px"></span>
                         <%--전체기간--%>
                         <span class="chk ml10">
                           <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
@@ -58,7 +58,7 @@
                 <tr>
                     <c:if test="${brandUseFg == '1'}">
                         <%-- 매장브랜드 --%>
-                        <th><s:message code="dayProd.storeHqBrand"/></th>
+                        <th><s:message code="cmm.moms.storeHqBrand"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -92,7 +92,7 @@
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                     <c:if test="${brandUseFg == '1'}">
                        <%-- 상품브랜드 --%>
-                        <th><s:message code="prodSaleRate.prodHqBrand"/></th>
+                        <th><s:message code="cmm.moms.prodHqBrand"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -203,7 +203,7 @@
                 <tbody>
                     <tr>
                         <%-- 팀별 --%>
-                        <th><s:message code="dayProd.momsTeam"/></th>
+                        <th><s:message code="cmm.moms.momsTeam"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -219,7 +219,7 @@
                             </div>
                         </td>
                         <%-- AC점포별 --%>
-                        <th><s:message code="dayProd.momsAcShop"/></th>
+                        <th><s:message code="cmm.moms.momsAcShop"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -237,7 +237,7 @@
                     </tr>
                     <tr>
                         <%-- 지역구분 --%>
-                        <th><s:message code="dayProd.momsAreaFg"/></th>
+                        <th><s:message code="cmm.moms.momsAreaFg"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -253,7 +253,7 @@
                             </div>
                         </td>
                         <%-- 상권 --%>
-                        <th><s:message code="dayProd.momsCommercial"/></th>
+                        <th><s:message code="cmm.moms.momsCommercial"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -271,7 +271,7 @@
                     </tr>
                     <tr>
                         <%-- 점포유형 --%>
-                        <th><s:message code="dayProd.momsShopType"/></th>
+                        <th><s:message code="cmm.moms.momsShopType"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -287,7 +287,7 @@
                             </div>
                         </td>
                         <%-- 매장관리타입 --%>
-                        <th><s:message code="dayProd.momsStoreManageType"/></th>
+                        <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -305,23 +305,43 @@
                     </tr>
                     <tr>
                         <%-- 그룹 --%>
-                        <th><s:message code="dayProd.branchCd"/></th>
+                        <th><s:message code="cmm.moms.branch"/></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
-                                        id="srchBranchCdComboo"
+                                        id="srchBranchCdCombo"
                                         ng-model="branchCd"
                                         items-source="_getComboData('branchCdCombo')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
                                         initialized="_initComboBox(s)"
-                                        control="srchBranchCdComboo">
+                                        control="srchBranchCdCombo">
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <td></td>
-                        <td></td>
+                        <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                            <%-- 매장그룹 --%>
+                            <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMomsStoreFg01Combo"
+                                            ng-model="momsStoreFg01"
+                                            items-source="_getComboData('momsStoreFg01Combo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMomsStoreFg01Combo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </c:if>
+                        <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                            <td></td>
+                            <td></td>
+                        </c:if>
                     </tr>
                 </tbody>
             </table>
@@ -428,7 +448,8 @@
         <%--//페이지 리스트--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/sdselSoldOutResve.js?ver=20231121.01" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/sdselSoldOutResve.js?ver=20231101.01" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/soldOutResve/sdselSoldOutResveAdd.jsp">

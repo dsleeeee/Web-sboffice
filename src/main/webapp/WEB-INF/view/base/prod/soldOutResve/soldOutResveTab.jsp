@@ -36,6 +36,7 @@
 
     }
 </script>
+
 <script>
     var orgnFg = "${orgnFg}";
     // 내점/배달/포장 가격관리 사용여부 (0: 미사용 1: 사용)
@@ -56,7 +57,9 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var branchCdComboList = ${branchCdComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/soldOutResveTab.js?ver=20230530.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    SoldOutResve.xml
+    품절관리(예약)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.05.30      최초작성
+-->
 <mapper namespace="kr.co.solbipos.base.prod.soldOutResve.service.impl.SoldOutResveMapper">
 
     <!-- 리스트 조회 -->
@@ -132,6 +139,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         <if test='soldOutYn != null and soldOutYn != ""'>
             AND tmkdr.SOLD_OUT_YN = #{soldOutYn}
         </if>
@@ -208,6 +218,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         ORDER
         BY      STORE_CD, PROD_CD
@@ -412,6 +425,9 @@
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
         </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
         <if test='soldOutYn != null and soldOutYn != ""'>
             AND tmkdr.SOLD_OUT_YN = #{soldOutYn}
         </if>
@@ -493,6 +509,9 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
         <if test="sdselGrpCd != null and sdselGrpCd != ''">
             AND tmpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'

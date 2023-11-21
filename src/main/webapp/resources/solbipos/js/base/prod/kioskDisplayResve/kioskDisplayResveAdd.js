@@ -180,6 +180,7 @@ app.controller('kioskDisplayResveAddCtrl', ['$scope', '$http', function ($scope,
             params.momsShopType = $scope.momsShopType;
             params.momsStoreManageType = $scope.momsStoreManageType;
             params.branchCd = $scope.branchCd;
+            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능

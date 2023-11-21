@@ -198,7 +198,7 @@
                                     selected-value-path="value"
                                     is-editable="false"
                                     initialized="_initComboBox(s)"
-                                    control="srchBranchCdComboo">
+                                    control="srchBranchCdCombo2">
                             </wj-combo-box>
                         </div>
                     </td>

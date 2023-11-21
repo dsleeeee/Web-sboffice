@@ -191,14 +191,14 @@
                             <td>
                                 <div class="sb-select">
                                     <wj-combo-box
-                                            id="srchBranchCdComboo"
+                                            id="srchBranchCdCombo"
                                             ng-model="branchCd"
                                             items-source="_getComboData('branchCdCombo')"
                                             display-member-path="name"
                                             selected-value-path="value"
                                             is-editable="false"
                                             initialized="_initComboBox(s)"
-                                            control="srchBranchCdComboo">
+                                            control="srchBranchCdCombo">
                                     </wj-combo-box>
                                 </div>
                             </td>
@@ -467,14 +467,14 @@
                             <td>
                                 <div class="sb-select">
                                     <wj-combo-box
-                                            id="srchBranchCdComboo2"
+                                            id="srchBranchCdCombo2"
                                             ng-model="branchCd2"
                                             items-source="_getComboData('branchCdCombo2')"
                                             display-member-path="name"
                                             selected-value-path="value"
                                             is-editable="false"
                                             initialized="_initComboBox(s)"
-                                            control="srchBranchCdComboo2">
+                                            control="srchBranchCdCombo2">
                                     </wj-combo-box>
                                 </div>
                             </td>

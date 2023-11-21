@@ -298,6 +298,9 @@ public class KioskDisplayResveVO extends PageVO {
     private String startTime;
     private String orgKioskDisplayYn;
 
+    /** 매장그룹 */
+    private String momsStoreFg01;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1371,4 +1374,8 @@ public class KioskDisplayResveVO extends PageVO {
     public void setOrgKioskDisplayYn(String orgKioskDisplayYn) {
         this.orgKioskDisplayYn = orgKioskDisplayYn;
     }
+
+    public String getMomsStoreFg01() { return momsStoreFg01; }
+
+    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
 }

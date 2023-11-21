@@ -196,14 +196,14 @@
             <td>
               <div class="sb-select">
                 <wj-combo-box
-                        id="srchBranchCdComboo"
+                        id="srchBranchCdCombo"
                         ng-model="branchCd"
                         items-source="_getComboData('branchCdCombo')"
                         display-member-path="name"
                         selected-value-path="value"
                         is-editable="false"
                         initialized="_initComboBox(s)"
-                        control="srchBranchCdComboo">
+                        control="srchBranchCdCombo">
                 </wj-combo-box>
               </div>
             </td>
