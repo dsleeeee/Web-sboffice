@@ -228,6 +228,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
             params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
+            params.momsStoreFg01 = $scope.momsStoreFg01;
 
             // '전체' 일때
             if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
@@ -239,7 +240,6 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
                 }
                 params.userBrands = momsHqBrandCd;
             }
-            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         console.log(params);
@@ -276,6 +276,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
             params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
+            params.momsStoreFg01 = $scope.momsStoreFg01;
 
             // '전체' 일때
             // if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
@@ -287,7 +288,6 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
                 }
                 params.userBrands = momsHqBrandCd;
             // }
-            params.momsStoreFg01 = $scope.momsStoreFg01;
         }
 
         console.log(params);

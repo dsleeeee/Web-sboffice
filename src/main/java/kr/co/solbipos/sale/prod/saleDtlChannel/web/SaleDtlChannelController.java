@@ -283,20 +283,20 @@ public class SaleDtlChannelController {
      * @author  권지현
      * @since   2023.01.06
      */
-    @RequestMapping(value = "/saleDtlChannelExcel/getSaleDtlChannelChk.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getSaleDtlChannelChk(SaleDtlChannelVO saleDtlChannelVO, HttpServletRequest request,
-                                       HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        DefaultMap<String> result = saleDtlChannelService.getSaleDtlChannelChk(saleDtlChannelVO, sessionInfoVO);
-
-        DefaultMap<Object> resultMap = new DefaultMap<Object>();
-        resultMap.put("result", result);
-
-        return returnJson(Status.OK, resultMap);
-    }
+//    @RequestMapping(value = "/saleDtlChannelExcel/getSaleDtlChannelChk.sb", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Result getSaleDtlChannelChk(SaleDtlChannelVO saleDtlChannelVO, HttpServletRequest request,
+//                                       HttpServletResponse response, Model model) {
+//
+//        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+//
+//        DefaultMap<String> result = saleDtlChannelService.getSaleDtlChannelChk(saleDtlChannelVO, sessionInfoVO);
+//
+//        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+//        resultMap.put("result", result);
+//
+//        return returnJson(Status.OK, resultMap);
+//    }
 
     /**
      * 매출상세현황(채널별) 매출 다운로드 탭 - 첨부파일 다운로드
