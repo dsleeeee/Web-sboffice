@@ -100,7 +100,7 @@
       TABLE    : TB_WB_BOARD_INFO
         COMMENTS : 게시판 정보
     -->
-    <select id="getBoardBoardSeqNo"  parameterType="LibraryVO" resultType="String">
+    <select id="getBoardBoardSeqNo" parameterType="LibraryVO" resultType="String">
         /* LibraryMapper.getBoardBoardSeqNo */
         SELECT
         (NVL(MAX(twbi.BOARD_SEQ_NO), 0) + 1) AS BOARD_SEQ_NO
@@ -114,7 +114,7 @@
         TABLE    : TB_WB_BOARD_ATCH
         COMMENTS : 게시판 첨부
     -->
-    <select id="getBoardAtchIdx"  parameterType="LibraryVO" resultType="String">
+    <select id="getBoardAtchIdx" parameterType="LibraryVO" resultType="String">
         /* LibraryMapper.getBoardAtchIdx */
         SELECT
         (NVL(MAX(twba.IDX), 0) + 1) AS IDX

@@ -5292,7 +5292,7 @@
         PARAM    : storeNmcodeVO
         COMMENTS : 시스템 공통코드 테이블에서 매장용 공통코드 복사
     -->
-    <select id="copyCmmNameCode" statementType="CALLABLE"  parameterType="storeNmcodeVO" resultType="String">
+    <select id="copyCmmNameCode" statementType="CALLABLE" parameterType="storeNmcodeVO" resultType="String">
         /* USE : StoreManageMapper.copyCmmNameCode */
         {
             CALL PKG_CM_NMCODE.SP_STORE_NMCODE_I
@@ -5452,7 +5452,7 @@
         PARAM    : storeEnvVO
         COMMENTS : 터치키 재설정 프로시저 호출
     -->
-    <select id="updateTouchKeyMng" statementType="CALLABLE"  parameterType="storeEnvVO" resultType="DefaultMap">
+    <select id="updateTouchKeyMng" statementType="CALLABLE" parameterType="storeEnvVO" resultType="DefaultMap">
         /* StoreManageMapper.updateTouchKeyMng */
         {
             CALL PKG_TOUCH_KEY_MNG.SP_TOUCH_KEY_MNG_U
@@ -6279,7 +6279,7 @@
             AND tmp.USE_YN = 'Y'
             <if test='arrProdClassCd != null and arrProdClassCd != ""'>
                 AND tmpc.PROD_CLASS_CD IN
-                <foreach collection="arrProdClassCd" item="item" open="("  separator="," close=")" >
+                <foreach collection="arrProdClassCd" item="item" open="(" separator="," close=")" >
                     #{item}
                 </foreach>
             </if>
@@ -8233,7 +8233,7 @@
         PARAM    : storeManageVO
         COMMENTS : 특이매장 데이터 처리 프로시저 호출
     -->
-    <select id="unusualStoreRegInfo" statementType="CALLABLE"  parameterType="storeManageVO" resultType="String">
+    <select id="unusualStoreRegInfo" statementType="CALLABLE" parameterType="storeManageVO" resultType="String">
         /* StoreManageMapper.unusualStoreRegInfo */
         {
             CALL PKG_MS_STORE_REG_INFO.SP_STORE_REG_INFO_0001

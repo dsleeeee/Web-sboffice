@@ -175,7 +175,7 @@
         PARAM    : ehgtVO
         COMMENTS : 본사 환율 등록시 매장에도 등록하는 프로시저 호출
     -->
-    <select id="insertHqEgtProc" statementType="CALLABLE"  parameterType="ehgtVO" resultType="DefaultMap">
+    <select id="insertHqEgtProc" statementType="CALLABLE" parameterType="ehgtVO" resultType="DefaultMap">
         /* EhgtMapper.insertHqEgtProc */
         {
             CALL PKG_HQ_CURRENCY.SP_HQ_CURRENCY_I
@@ -200,7 +200,7 @@
         PARAM    : funcStoreVO
         COMMENTS : 본사 환율 수정시 매장에도 수정하는 프로시저 호출
     -->
-    <select id="updateHqEgtProc" statementType="CALLABLE"  parameterType="ehgtVO" resultType="DefaultMap">
+    <select id="updateHqEgtProc" statementType="CALLABLE" parameterType="ehgtVO" resultType="DefaultMap">
         /* EhgtMapper.updateHqEgtProc */
         {
             CALL PKG_HQ_CURRENCY.SP_HQ_CURRENCY_U

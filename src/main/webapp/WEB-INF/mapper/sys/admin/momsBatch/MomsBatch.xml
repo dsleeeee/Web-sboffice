@@ -17,7 +17,7 @@
         PARAM    : momsBatchVO
         COMMENTS : 일괄처리
     -->
-    <select id="batchProc" statementType="CALLABLE"  parameterType="momsBatchVO" resultType="String">
+    <select id="batchProc" statementType="CALLABLE" parameterType="momsBatchVO" resultType="String">
         /* USE : MomsBatchMapper.batchProc */
         {
             CALL PKG_ADMIN_CM_HQ_MS_IUD.SP_ADMIN_IUD_0001

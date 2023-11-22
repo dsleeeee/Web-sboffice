@@ -723,7 +723,7 @@
         AND     tssd.BILL_NO = #{billNo}
     </select>
 
-    <select id="getCashAmt"  parameterType="saleRegistVO" resultType="Integer">
+    <select id="getCashAmt" parameterType="saleRegistVO" resultType="Integer">
         /* SaleRegistMapper.getCashAmt */
         SELECT 	NVL(MAX(PAY_AMT), 0)
         FROM 	TB_SL_SALE_HDR_PAY
@@ -742,7 +742,7 @@
         AND     PAY_CD = '02'
     </select>
 
-    <select id="getSaleFg"  parameterType="saleRegistVO" resultType="String">
+    <select id="getSaleFg" parameterType="saleRegistVO" resultType="String">
         /* SaleRegistMapper.getSaleFg */
         SELECT 	SALE_FG
         FROM 	TB_SL_SALE_HDR

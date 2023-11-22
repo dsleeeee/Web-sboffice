@@ -264,7 +264,7 @@
         PARAM    : prodImgVO
         COMMENTS : 기존 상품이미지 정보가 있는지 확인한다. ( 본사/매장 )
     -->
-    <select id="getProdImgChk"  parameterType="prodImgVO" resultType="String">
+    <select id="getProdImgChk" parameterType="prodImgVO" resultType="String">
         /* ProdImgMapper.getProdImgChk */
         <choose>
             <!-- 본사 -->

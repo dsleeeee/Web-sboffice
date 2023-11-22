@@ -250,7 +250,7 @@
         PARAM    :
         COMMENTS : 매장의 공통코드를 복사한다.
     -->
-    <select id="copyStoreNmcode" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyStoreNmcode" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
         /* USE : ViewMapper.copyStoreNmcode */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_STORE_NNCODE
@@ -273,7 +273,7 @@
         PARAM    :
         COMMENTS : 매장환경을 복사한다.
     -->
-    <select id="copyStoreEnv" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyStoreEnv" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
         /* USE : ViewMapper.copyStoreEnv */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_STORE_ENVST
@@ -297,7 +297,7 @@
         PARAM    :
         COMMENTS : 매장환경을 복사한다.
     -->
-    <select id="copyPosEnv" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyPosEnv" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
         /* USE : ViewMapper.copyPosEnv */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_POS_ENVST
@@ -337,7 +337,7 @@
         PARAM    :
         COMMENTS : 매장 상품과 상품 관련 테이블 정보를 복사한다.
     -->
-    <select id="copyProduct" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyProduct" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
         /* USE : ViewMapper.copyProduct */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT
@@ -360,7 +360,7 @@
         PARAM    :
         COMMENTS : 판매가 테이블 정보를 복사한다.
     -->
-    <select id="copySalePrice" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copySalePrice" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
         /* USE : ViewMapper.copySalePrice */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT_SALE_PRICE
@@ -385,7 +385,7 @@
         PARAM    :
         COMMENTS : 매장 포스기능키와 관련 정보를 복사한다.
     -->
-    <select id="copyPosFnKey" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyPosFnKey" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyPosFnKey */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_POS_FNKEY
@@ -428,7 +428,7 @@
         PARAM    :
         COMMENTS : 매장 포스기능키와 관련 정보를 복사한다.
     -->
-    <select id="copyPosFnKeyXML" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyPosFnKeyXML" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyPosFnKey */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_POS_FNKEY_XML
@@ -453,7 +453,7 @@
         PARAM    :
         COMMENTS : 매장 판매터치키와 관련 정보를 복사한다.
     -->
-    <select id="copyTouchKey" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyTouchKey" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyTouchKey */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_TOUCH_KEY
@@ -495,7 +495,7 @@
         PARAM    :
         COMMENTS : 매장 판매터치키와 관련 정보를 복사한다.
     -->
-    <select id="copyTouchKeyXML" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyTouchKeyXML" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyTouchKeyXML */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_TOUCH_KEY_XML
@@ -519,7 +519,7 @@
         PARAM    :
         COMMENTS : 매장 쿠폰분류를 복사한다.
     -->
-    <select id="copyCouponClass" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyCouponClass" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyCouponClass */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_COUPON_CLASS
@@ -542,7 +542,7 @@
         PARAM    :
         COMMENTS : 매장 상품권과 관련 정보를 복사한다.
     -->
-    <select id="copyGift" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyGift" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyGift */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_GIFT
@@ -565,7 +565,7 @@
         PARAM    :
         COMMENTS : 금전처리의 입금/출금계정 관련 정보를 복사한다.
     -->
-    <select id="copyAccount" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyAccount" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyAccount */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_ACCOUNT
@@ -585,7 +585,7 @@
         PARAM    :
         COMMENTS : 원산지 관련 정보를 복사한다.
     -->
-    <select id="copyRecpOrigin" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyRecpOrigin" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyRecpOrigin */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT_RECP_ORIGIN
@@ -605,7 +605,7 @@
         PARAM    :
         COMMENTS : 식품 알레르기 관련 정보를 복사한다.
     -->
-    <select id="copyFoodAllergy" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyFoodAllergy" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyFoodAllergy */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT_ALGI_INFO
@@ -625,7 +625,7 @@
         PARAM    :
         COMMENTS : 배달상품명칭매핑 관련 정보를 복사한다.
     -->
-    <select id="copyDlvrProd" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyDlvrProd" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyDlvrProd */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_PRODUCT_DLVR_PROD
@@ -744,7 +744,7 @@
         PARAM    :
         COMMENTS : 매장 판매터치키 선택그룹 정보를 복사한다.
     -->
-    <select id="copyTouchKeyGrp" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyTouchKeyGrp" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyTouchKeyGrp */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_TOUCH_KEY_GRP
@@ -769,7 +769,7 @@
         PARAM    :
         COMMENTS : 매장 판매터치키 선택그룹 XML 정보를 복사한다.
     -->
-    <select id="copyTouchKeyGrpXML" statementType="CALLABLE"  parameterType="copyStoreEnvVO" resultType="String">
+    <select id="copyTouchKeyGrpXML" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
           /* USE : ViewMapper.copyTouchKeyGrpXML */
         {
             CALL PKG_MS_STORE_COPY.SP_MS_TOUCH_KEY_GRP_XML

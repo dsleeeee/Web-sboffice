@@ -168,7 +168,7 @@
         TABLE    : TB_MS_STORE
         COMMENTS : 유요한 매장코드인지 체크
     -->
-    <select id="getStoreCdChk"  parameterType="ProdExcelUploadVO" resultType="Integer">
+    <select id="getStoreCdChk" parameterType="ProdExcelUploadVO" resultType="Integer">
         /* StoreBatchChangeMapper.getStoreCdChk */
         SELECT  COUNT(*)
         FROM    TB_MS_STORE
@@ -181,7 +181,7 @@
         TABLE    : TB_HQ_BRANCH_MOMS
         COMMENTS : 유효한 그룹코드인지 체크
     -->
-    <select id="getBranchCdChk"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getBranchCdChk" parameterType="ProdExcelUploadVO" resultType="String">
         /* StoreBatchChangeMapper.getBranchCdChk */
         SELECT  BRANCH_CD
         FROM    TB_HQ_BRANCH_MOMS
@@ -194,7 +194,7 @@
         TABLE    : TB_HQ_NMCODE
         COMMENTS : 유효한 본사공통코드인지 체크
     -->
-    <select id="getHqNmcodeChk"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getHqNmcodeChk" parameterType="ProdExcelUploadVO" resultType="String">
         /* StoreBatchChangeMapper.getHqNmcodeChk */
         SELECT  NMCODE_CD
         FROM    TB_HQ_NMCODE

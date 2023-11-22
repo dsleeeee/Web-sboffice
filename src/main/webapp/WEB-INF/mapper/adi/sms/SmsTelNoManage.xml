@@ -144,7 +144,7 @@
         TABLE    : HCS_CRTLG_T
         COMMENTS :
     -->
-    <select id="getOrdrIdxx"  parameterType="SmsTelNoManageVO" resultType="String">
+    <select id="getOrdrIdxx" parameterType="SmsTelNoManageVO" resultType="String">
         /* SmsTelNoManageMapper.getOrdrIdxx */
         SELECT  OGN_CD
         FROM    HCS_CRTLG_T

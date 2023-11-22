@@ -281,7 +281,7 @@
         COMMENTS : [본사/매장]브랜드코드
         * 매장 브랜드 코드 9자리로 변경될 예정이니 추후에 기본 브랜드코드 변경해야함
     -->
-    <select id="getHqBrandCdCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getHqBrandCdCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getHqBrandCdCheck */
         <choose>
             <!-- 본사 -->
@@ -308,7 +308,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getProdTypeFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getProdTypeFgCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getProdTypeFgCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -322,7 +322,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getSaleProdYnCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getSaleProdYnCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getSaleProdYnCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -336,7 +336,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getPoProdFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getPoProdFgCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getPoProdFgCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -350,7 +350,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getPoUnitFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getPoUnitFgCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getPoUnitFgCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -364,7 +364,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getVatFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getVatFgCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getVatFgCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -378,7 +378,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getStockProdYnCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getStockProdYnCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getStockProdYnCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -469,7 +469,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getPrcCtrlFgCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getPrcCtrlFgCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getPrcCtrlFgCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -483,7 +483,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getPointUseYnCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getPointUseYnCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getPointUseYnCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -497,7 +497,7 @@
         TABLE    : TB_CM_NMCODE
         COMMENTS : [공통]명칭코드
     -->
-    <select id="getDcYnCheck"  parameterType="ProdExcelUploadVO" resultType="String">
+    <select id="getDcYnCheck" parameterType="ProdExcelUploadVO" resultType="String">
         /* ProdExcelUploadMapper.getDcYnCheck */
         SELECT (CASE WHEN COUNT(NMCODE_CD) = '0' THEN '' ELSE NMCODE_CD END) AS NMCODE_CD
         FROM TB_CM_NMCODE
@@ -511,7 +511,7 @@
         TABLE    : TB_TMP_EXCEL_PRODUCT
         COMMENTS : [임시]상품엑셀업로드
     -->
-    <select id="getMasterChk"  parameterType="ProdExcelUploadVO" resultType="DefaultMap">
+    <select id="getMasterChk" parameterType="ProdExcelUploadVO" resultType="DefaultMap">
         /* ProdExcelUploadMapper.getMasterChk */
         SELECT 	PROD_CLASS_CNT,
         VENDR_CNT

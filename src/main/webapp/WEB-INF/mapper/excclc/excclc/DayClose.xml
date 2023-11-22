@@ -79,7 +79,7 @@
         PARAM    : dayCloseVO
         COMMENTS : 마감데이터 조회
     -->
-    <select id="getDayCloseDtl"  parameterType="dayCloseVO" resultType="DefaultMap">
+    <select id="getDayCloseDtl" parameterType="dayCloseVO" resultType="DefaultMap">
         /* DayCloseMapper.getDayCloseDtl */
         SELECT
         A.GROUP_AMT,

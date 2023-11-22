@@ -2434,7 +2434,7 @@
         PARAM    : mediaVO
         COMMENTS : 기존 파일 정보가 있는지 확인한다. (본사/매장)
     -->
-    <select id="getFileChk"  parameterType="mediaVO" resultType="String">
+    <select id="getFileChk" parameterType="mediaVO" resultType="String">
         /* PromotionMapper.getFileChk */
         <choose>
             <!-- 본사 -->

@@ -868,7 +868,7 @@
         AND     tssd.BILL_NO = #{billNo}
     </select>
 
-    <select id="getCashAmt"  parameterType="saleRegistKwuVO" resultType="Integer">
+    <select id="getCashAmt" parameterType="saleRegistKwuVO" resultType="Integer">
         /* SaleRegistKwuMapper.getCashAmt */
         SELECT 	NVL(MAX(PAY_AMT), 0)
         FROM 	TB_SL_SALE_HDR_PAY
@@ -887,7 +887,7 @@
         AND     PAY_CD = '02'
     </select>
 
-    <select id="getHdrInfo"  parameterType="saleRegistKwuVO" resultType="DefaultMap">
+    <select id="getHdrInfo" parameterType="saleRegistKwuVO" resultType="DefaultMap">
         /* SaleRegistKwuMapper.getHdrInfo */
         SELECT  NVL(MAX(MEMBR_NO),'') AS MEMBR_NO,
                 <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
@@ -913,7 +913,7 @@
         AND     BILL_NO = #{billNo}
     </select>
 
-    <select id="getSaleFg"  parameterType="saleRegistKwuVO" resultType="String">
+    <select id="getSaleFg" parameterType="saleRegistKwuVO" resultType="String">
         /* SaleRegistKwuMapper.getSaleFg */
         SELECT 	SALE_FG
         FROM 	TB_SL_SALE_HDR

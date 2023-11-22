@@ -3967,7 +3967,7 @@
         TABLE    : 본사판매가 관리 조회
         COMMENTS : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
     -->
-    <select id="getHqSalePrice"  parameterType="kioskKeyMapVO" resultType="DefaultMap">
+    <select id="getHqSalePrice" parameterType="kioskKeyMapVO" resultType="DefaultMap">
         /* KioskKeyMapMapper.getHqSalePrice */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -4065,7 +4065,7 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE
         COMMENTS :
     -->
-    <select id="getStoreSalePrice"  parameterType="kioskKeyMapVO" resultType="DefaultMap">
+    <select id="getStoreSalePrice" parameterType="kioskKeyMapVO" resultType="DefaultMap">
         /* KioskKeyMapMapper.getStoreSalePrice */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -4221,7 +4221,7 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
         COMMENTS : [매장]상품, [매장]상품_판매금, [본사]상품, [본사]상품_판매금
     -->
-    <select id="getSalePrice"  parameterType="kioskKeyMapVO" resultType="DefaultMap">
+    <select id="getSalePrice" parameterType="kioskKeyMapVO" resultType="DefaultMap">
         /* KioskKeyMapMapper.getSalePrice */
         <choose>
             <!-- 매장 -->

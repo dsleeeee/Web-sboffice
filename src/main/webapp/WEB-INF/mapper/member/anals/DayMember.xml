@@ -158,7 +158,7 @@
         TABLE    : TB_MB_MEMBER
         COMMENTS : [회원]회원
     -->
-    <select id="getDayMembrDetail"  parameterType="dayMembrVO" resultType="DefaultMap">
+    <select id="getDayMembrDetail" parameterType="dayMembrVO" resultType="DefaultMap">
         /* DayMembrMapper.getDayMembrDetail */
         SELECT
         tmm.MEMBR_NO,

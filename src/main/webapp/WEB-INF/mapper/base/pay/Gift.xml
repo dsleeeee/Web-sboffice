@@ -137,7 +137,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
     -->
-    <select id="insertHqGiftClassToStoreGiftClass" statementType="CALLABLE"  parameterType="payMethodClassVO" resultType="String">
+    <select id="insertHqGiftClassToStoreGiftClass" statementType="CALLABLE" parameterType="payMethodClassVO" resultType="String">
         /* USE : GiftMapper.insertHqGiftClassToStoreGiftClass */
         {
             CALL PKG_HQ_PAY_METHOD_CLASS.SP_HQ_PAY_METHOD_CLASS_I
@@ -176,7 +176,7 @@
         PARAM    :
         COMMENTS : 본사 상품권 분류를 매장 상품권 분류에 적용시킨다.
     -->
-    <select id="updateHqGiftClassToStoreGiftClass" statementType="CALLABLE"  parameterType="payMethodClassVO" resultType="String">
+    <select id="updateHqGiftClassToStoreGiftClass" statementType="CALLABLE" parameterType="payMethodClassVO" resultType="String">
         /* USE : GiftMapper.updateHqGiftClassToStoreGiftClass */
         {
             CALL PKG_HQ_PAY_METHOD_CLASS.SP_HQ_PAY_METHOD_CLASS_U
@@ -210,7 +210,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
     -->
-    <select id="deleteHqGiftClassToStoreGiftClass" statementType="CALLABLE"  parameterType="payMethodClassVO" resultType="String">
+    <select id="deleteHqGiftClassToStoreGiftClass" statementType="CALLABLE" parameterType="payMethodClassVO" resultType="String">
         /* USE : GiftMapper.deleteHqGiftClassToStoreGiftClass */
         {
             CALL PKG_HQ_PAY_METHOD_CLASS.SP_HQ_PAY_METHOD_CLASS_D
@@ -408,7 +408,7 @@
         PARAM    :
         COMMENTS : 본사 상품권 등록시 매장에도 등록시킨다.
     -->
-    <select id="insertHqGiftToStoreGift" statementType="CALLABLE"  parameterType="giftVO" resultType="String">
+    <select id="insertHqGiftToStoreGift" statementType="CALLABLE" parameterType="giftVO" resultType="String">
       /* USE : GiftMapper.insertHqGiftToStoreGift */
       {
         CALL PKG_HQ_GIFT.SP_HQ_GIFT_I
@@ -451,7 +451,7 @@
         PARAM    :
         COMMENTS : 본사 상품권을 매장 상품권에 적용시킨다.
     -->
-    <select id="updateHqGiftToStoreGift" statementType="CALLABLE"  parameterType="giftVO" resultType="String">
+    <select id="updateHqGiftToStoreGift" statementType="CALLABLE" parameterType="giftVO" resultType="String">
         /* USE : GiftMapper.updateHqGiftToStoreGift */
         {
             CALL PKG_HQ_GIFT.SP_HQ_GIFT_U
@@ -485,7 +485,7 @@
         PARAM    :
         COMMENTS : 본사 상품권을 매장 상품권에 적용시킨다.
     -->
-    <select id="deleteHqGiftToStoreGift" statementType="CALLABLE"  parameterType="giftVO" resultType="String">
+    <select id="deleteHqGiftToStoreGift" statementType="CALLABLE" parameterType="giftVO" resultType="String">
       /* USE : GiftMapper.deleteHqGiftToStoreGift */
       {
         CALL PKG_HQ_GIFT.SP_HQ_GIFT_D

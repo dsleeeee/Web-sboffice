@@ -122,7 +122,7 @@
         TABLE    : TB_OD_ORDER_HDR, TB_OD_ORDER_DTL
         COMMENTS : 주문취소 기간내 전체취소건수를 조회한다.
     -->
-    <select id="getOrderCancelPeriod"  parameterType="orderStatusVO" resultType="DefaultMap">
+    <select id="getOrderCancelPeriod" parameterType="orderStatusVO" resultType="DefaultMap">
         /* OrderStatus.getOrderCancelPeriod */
         SELECT  #{startDate} ||'' - ''|| #{endDate} AS SALE_DATE
         ,       A.STORE_CD
@@ -153,7 +153,7 @@
         TABLE    : TB_OD_ORDER_HDR, TB_OD_ORDER_DTL
         COMMENTS : 주문취소 일자별 취소건수를 조회한다.
     -->
-    <select id="getOrderCancelByDate"  parameterType="orderStatusVO" resultType="DefaultMap">
+    <select id="getOrderCancelByDate" parameterType="orderStatusVO" resultType="DefaultMap">
         /* OrderStatus.getOrderCancelByDate */
         SELECT  TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,       A.STORE_CD
@@ -186,7 +186,7 @@
         TABLE    : TB_OD_ORDER_HDR, TB_OD_ORDER_DTL
         COMMENTS : 주문취소 캐셔별 취소건수를 조회한다.
     -->
-    <select id="getOrderCancelByCashier"  parameterType="orderStatusVO" resultType="DefaultMap">
+    <select id="getOrderCancelByCashier" parameterType="orderStatusVO" resultType="DefaultMap">
         /* OrderStatus.getOrderCancelByCashier */
         SELECT  A.EMP_NO
         ,       (SELECT EMP_NM FROM TB_MS_EMPLOYEE WHERE STORE_CD = A.STORE_CD AND EMP_NO = A.EMP_NO) AS EMP_NM

@@ -528,7 +528,7 @@
         TABLE    : TB_CM_INSTLL, TB_CM_AGENCY
         COMMENTS : 설치요청 목록 상세
     -->
-    <select id="getInstlRequestDtl"  parameterType="instlManageVO" resultType="DefaultMap">
+    <select id="getInstlRequestDtl" parameterType="instlManageVO" resultType="DefaultMap">
         SELECT   tci.STORE_CD
                , tci.SEQ_NO
                , tci.POS_NO
@@ -572,7 +572,7 @@
         TABLE    : TB_HQ_OFFICE, TB_CM_AGENCY
         COMMENTS : 본사일때 대리점정보
     -->
-    <select id="getAgencyInfo"  parameterType="instlManageVO" resultType="DefaultMap">
+    <select id="getAgencyInfo" parameterType="instlManageVO" resultType="DefaultMap">
         /* USE : InstlManageMapper.getAgencyInfo */
         SELECT 	tho.AGENCY_CD
         ,			tca.AGENCY_NM

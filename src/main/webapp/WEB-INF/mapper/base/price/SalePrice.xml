@@ -16,7 +16,7 @@
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
         COMMENTS : 판매가 관리 대상의 본사 가격정보를 조회한다.
     -->
-    <select id="getProdInfo"  parameterType="salePriceVO" resultType="DefaultMap">
+    <select id="getProdInfo" parameterType="salePriceVO" resultType="DefaultMap">
         /* SalePriceMapper.getProdInfo */
       <![CDATA[
         SELECT thp.HQ_OFFICE_CD,
@@ -179,7 +179,7 @@
         TABLE    : TB_MS_PRODUCT_SALE_PRICE_HISTORY
         COMMENTS : 판매가 변경 히스토리를 등록한다.
     -->
-    <insert id="updateStoreProdSalePriceHistory"  parameterType="salePriceVO" >
+    <insert id="updateStoreProdSalePriceHistory" parameterType="salePriceVO" >
         /* USE : SalePriceMapper.updateStoreProdSalePriceHistory */
         <![CDATA[
         INSERT INTO TB_MS_PRODUCT_SALE_PRICE_HISTORY
@@ -208,7 +208,7 @@
         TABLE    : TB_MS_PRODUCT_SALE_PRICE_HISTORY
         COMMENTS : 판매가 변경 히스토리를 등록한다.
     -->
-    <!--<insert id="insertStoreProdSalePriceHistory"  parameterType="salePriceVO" >-->
+    <!--<insert id="insertStoreProdSalePriceHistory" parameterType="salePriceVO" >-->
     <!--/* USE : SalePriceMapper.insertStoreProdSalePriceHistory */-->
     <!--INSERT INTO TB_MS_PRODUCT_SALE_PRICE_HISTORY-->
     <!--(-->
@@ -241,7 +241,7 @@
         TABLE    : TB_MS_PRODUCT_SALE_PRICE
         COMMENTS : 매장 판매가를 일괄 변경한다.
     -->
-    <insert id="modifyStoreProdSalePrice"  parameterType="salePriceVO" >
+    <insert id="modifyStoreProdSalePrice" parameterType="salePriceVO" >
         /* USE : SalePriceMapper.modifyStoreProdSalePrice */
         MERGE INTO TB_MS_PRODUCT_SALE_PRICE tmpsp
             USING DUAL
@@ -496,7 +496,7 @@
         TABLE    : TB_HQ_PRODUCT_SALE_PRICE_HISTORY
         COMMENTS : 판매가 변경 히스토리를 등록한다.
     -->
-    <insert id="updateHqProdSalePriceHistory"  parameterType="salePriceVO" >
+    <insert id="updateHqProdSalePriceHistory" parameterType="salePriceVO" >
         /* USE : SalePriceMapper.updateHqProdSalePriceHistory */
         <![CDATA[
         INSERT INTO TB_HQ_PRODUCT_SALE_PRICE_HISTORY
@@ -539,7 +539,7 @@
         TABLE    : TB_HQ_PRODUCT_SALE_PRICE
         COMMENTS : 판매가를 일괄 변경한다.
     -->
-    <insert id="modifyHqProdSalePrice"  parameterType="salePriceVO" >
+    <insert id="modifyHqProdSalePrice" parameterType="salePriceVO" >
         /* USE : SalePriceMapper.modifyHqProdSalePrice */
         MERGE INTO TB_HQ_PRODUCT_SALE_PRICE tmpsp
             USING DUAL
@@ -598,7 +598,7 @@
         COMMENTS : 매장 판매가 등록
                    20210914 미사용 -> SalePriceMapper.modifyMsProdSalePrice 로 변경
     -->
-    <select id="saveStoreSalePrice" statementType="CALLABLE"  parameterType="salePriceVO">
+    <select id="saveStoreSalePrice" statementType="CALLABLE" parameterType="salePriceVO">
         /* USE : SalePriceMapper.saveStoreSalePrice */
         {
             CALL PKG_HQ_PRODUCT_SALE_PRICE.SP_HQ_PRODUCT_SALE_PRICE_I
@@ -617,7 +617,7 @@
         TABLE    : TB_MS_PRODUCT_SALE_PRICE
         COMMENTS : 판매가를 일괄 변경한다.
     -->
-    <insert id="modifyMsProdSalePrice"  parameterType="salePriceVO" >
+    <insert id="modifyMsProdSalePrice" parameterType="salePriceVO" >
         /* USE : SalePriceMapper.modifyMsProdSalePrice */
         MERGE INTO TB_MS_PRODUCT_SALE_PRICE A
         USING   (
@@ -1046,7 +1046,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getProdCdChk"  parameterType="salePriceVO" resultType="Integer">
+    <select id="getProdCdChk" parameterType="salePriceVO" resultType="Integer">
         /* SalePriceMapper.getProdCdChk */
         <choose>
             <!-- 본사판매가 -->
@@ -1073,7 +1073,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getStoreCdChk"  parameterType="salePriceVO" resultType="Integer">
+    <select id="getStoreCdChk" parameterType="salePriceVO" resultType="Integer">
         /* SalePriceMapper.getStoreCdChk */
         SELECT COUNT(*)
         FROM TB_MS_STORE

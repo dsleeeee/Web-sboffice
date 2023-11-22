@@ -1594,7 +1594,7 @@
         PARAM    : prodVO
         COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
     -->
-    <select id="insertHqProdToStoreProd" statementType="CALLABLE"  parameterType="prodVO" resultType="String">
+    <select id="insertHqProdToStoreProd" statementType="CALLABLE" parameterType="prodVO" resultType="String">
         /* USE : ProdMapper.insertHqProdToStoreProd */
         {
           CALL PKG_HQ_PRODUCT.SP_HQ_PRODUCT_I
@@ -1614,7 +1614,7 @@
         PARAM    : prodVO
         COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
     -->
-    <select id="updateHqProdToStoreProd" statementType="CALLABLE"  parameterType="prodVO" resultType="String">
+    <select id="updateHqProdToStoreProd" statementType="CALLABLE" parameterType="prodVO" resultType="String">
         /* USE : ProdMapper.updateHqProdToStoreProd */
         {
           CALL PKG_HQ_PRODUCT.SP_HQ_PRODUCT_U
@@ -2105,7 +2105,7 @@
         COMMENTS : 상품판매가 본사통제여부가 본사인 경우, 본사 판매가 등록시 매장 판매가 등록
                    20210914 SP_HQ_PRODUCT_SALE_PRICE_I -> SP_HQ_PRODUCT_SALE_PRICE_I2 변경
     -->
-    <select id="saveStoreSalePrice" statementType="CALLABLE"  parameterType="prodVO">
+    <select id="saveStoreSalePrice" statementType="CALLABLE" parameterType="prodVO">
         /* USE : ProdMapper.saveStoreSalePrice */
         {
           CALL PKG_HQ_PRODUCT_SALE_PRICE.SP_HQ_PRODUCT_SALE_PRICE_I2
@@ -2188,7 +2188,7 @@
         TABLE    : TB_MS_PRODUCT_SALE_PRICE_HISTORY
         COMMENTS : 판매가 변경 히스토리를 등록한다.
     -->
-    <insert id="updateStoreSaleUprcHistory"  parameterType="prodVO" >
+    <insert id="updateStoreSaleUprcHistory" parameterType="prodVO" >
         /* USE : ProdMapper.updateStoreSaleUprcHistory */
         <![CDATA[
         INSERT INTO TB_MS_PRODUCT_SALE_PRICE_HISTORY
@@ -2217,7 +2217,7 @@
         TABLE    : TB_MS_PRODUCT_SALE_PRICE
         COMMENTS : 매장 판매가/내점가/배달가/포장가를 일괄 변경한다.
     -->
-    <insert id="updateStoreSaleUprc"  parameterType="prodVO" >
+    <insert id="updateStoreSaleUprc" parameterType="prodVO" >
         /* USE : ProdMapper.updateStoreSaleUprc */
         MERGE INTO TB_MS_PRODUCT_SALE_PRICE tmpsp
         USING DUAL
@@ -3169,7 +3169,7 @@
         TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
         COMMENTS : [본사]상품 이미지, [매장]상품 이미지
     -->
-    <select id="getProdImageFileSaveCheck"  parameterType="prodVO" resultType="String">
+    <select id="getProdImageFileSaveCheck" parameterType="prodVO" resultType="String">
         /* ProdMapper.getProdImageFileSaveCheck */
         <choose>
             <when test='orgnFg != null and orgnFg != ""'>
@@ -3345,7 +3345,7 @@
         TABLE    : TB_HQ_PRODUCT_IMAGE, TB_MS_PRODUCT_IMAGE
         COMMENTS : [본사]상품 이미지, [매장]상품 이미지
     -->
-    <select id="getProdImageFileSaveImgFileNm"  parameterType="prodVO" resultType="String">
+    <select id="getProdImageFileSaveImgFileNm" parameterType="prodVO" resultType="String">
         /* ProdMapper.getProdImageFileSaveImgFileNm */
         <choose>
             <when test='orgnFg != null and orgnFg != ""'>
@@ -3393,7 +3393,7 @@
                 AND thv.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='chkVendrCd != null and chkVendrCd != ""'>
                     AND thv.VENDR_CD NOT IN
-                    <foreach collection="vendrCdList" item="item" open="("  separator="," close=")" >
+                    <foreach collection="vendrCdList" item="item" open="(" separator="," close=")" >
                         #{item}
                     </foreach>
                 </if>
@@ -3409,7 +3409,7 @@
                 AND tmv.STORE_CD = #{storeCd}
                 <if test='chkVendrCd != null and chkVendrCd != ""'>
                     AND tmv.VENDR_CD NOT IN
-                    <foreach collection="vendrCdList" item="item" open="("  separator="," close=")" >
+                    <foreach collection="vendrCdList" item="item" open="(" separator="," close=")" >
                         #{item}
                     </foreach>
                 </if>
@@ -3543,7 +3543,7 @@
         TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
         COMMENTS : [본사]상품_사이드선택_상품, [매장]상품_사이드선택_상품
     -->
-    <select id="getSideProdChk"  parameterType="prodVO" resultType="DefaultMap">
+    <select id="getSideProdChk" parameterType="prodVO" resultType="DefaultMap">
         /* ProdMapper.getSideProdChk */
         <choose>
             <!-- 본사 -->
@@ -3573,7 +3573,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getHqEnvCodeSide"  parameterType="prodVO" resultType="String">
+    <select id="getHqEnvCodeSide" parameterType="prodVO" resultType="String">
         /* ProdMapper.getHqEnvCodeSide */
         SELECT
         NVL(the.ENVST_VAL, 0) AS ENVST_VAL
@@ -3592,7 +3592,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getHqSdselProd"  parameterType="prodVO" resultType="String">
+    <select id="getHqSdselProd" parameterType="prodVO" resultType="String">
         /* ProdMapper.getHqSdselProd */
         SELECT
         LISTAGG(PROD_CD, ',') WITHIN GROUP (ORDER BY PROD_CD) AS PROD_CD
@@ -5880,7 +5880,7 @@
         PARAM    : prodVO
         COMMENTS : 상품 이미지 영구삭제 관련, 기존 상품이미지 정보 조회
     -->
-    <select id="getProdImgInfo"  parameterType="prodVO" resultType="DefaultMap">
+    <select id="getProdImgInfo" parameterType="prodVO" resultType="DefaultMap">
         /* ProdMapper.getProdImgInfo */
         <choose>
             <!-- 본사 -->
@@ -6384,7 +6384,7 @@
         PARAM    : prodVO
         COMMENTS : 상품 이미지 영구삭제 관련, 기존 상품이미지 정보 조회 (전매장)
     -->
-    <select id="getProdImgInfoAllStore"  parameterType="prodVO" resultType="DefaultMap">
+    <select id="getProdImgInfoAllStore" parameterType="prodVO" resultType="DefaultMap">
         /* ProdMapper.getProdImgInfoAllStore */
          SELECT STORE_CD, IMG_FG, IMG_FILE_NM
            FROM TB_MS_PRODUCT_IMAGE
@@ -6870,7 +6870,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getProdInfoRowCount"  parameterType="prodVO" resultType="String">
+    <select id="getProdInfoRowCount" parameterType="prodVO" resultType="String">
         /* ProdMapper.getProdInfoRowCount */
         <choose>
             <!-- 본사 -->

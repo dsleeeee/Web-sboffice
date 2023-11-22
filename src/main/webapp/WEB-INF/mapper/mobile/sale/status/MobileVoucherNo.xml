@@ -16,7 +16,7 @@
         TABLE    : TB_PS_EXACTCALC
         COMMENTS : 최종교환권번호 조회
     -->
-    <select id="getVoucherNo"  parameterType="mobileVoucherNoVO" resultType="String">
+    <select id="getVoucherNo" parameterType="mobileVoucherNoVO" resultType="String">
         /* MobileVoucherNoMapper.getVoucherNo */
        SELECT MAX(CHG_TICKET_NO)  CHG_TICKET_NO
          FROM (

@@ -405,7 +405,7 @@
         PARAM    : posTemplateVO
         COMMENTS : 출력물템플릿을 저장/수정한다.
     -->
-<!--    <select id="applyToStoreReal" statementType="CALLABLE"  parameterType="posTemplateVO">-->
+<!--    <select id="applyToStoreReal" statementType="CALLABLE" parameterType="posTemplateVO">-->
 <!--        /* USE : PosServiceMapper.applyToStoreReal */-->
 <!--        {-->
 <!--            CALL PKG_HQ_PRINT_TEMPL.SP_STORE_PRINT_FROM_HQ_U-->
@@ -622,7 +622,7 @@
         PARAM    : posTemplateVO
         COMMENTS : 매장 출력물템플릿을 저장/수정한다.
     -->
-    <select id="updatePosTemplateForStoreFromHq" statementType="CALLABLE"  parameterType="posTemplateVO">
+    <select id="updatePosTemplateForStoreFromHq" statementType="CALLABLE" parameterType="posTemplateVO">
         /* USE : PosServiceMapper.updatePosTemplateForStoreFromHq */
         {
           CALL PKG_HQ_PRINT_TEMPL.SP_STORE_PRINT_TEMPL_FROM_HQ_U

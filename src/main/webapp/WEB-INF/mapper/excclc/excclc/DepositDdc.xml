@@ -132,7 +132,7 @@
         PARAM    : depositDdcVO
         COMMENTS : 매장별집계 탭 - 상세내역 리스트의 입금/기타공제 단일건 조회
     -->
-    <select id="getDepositDdc"  parameterType="depositDdcVO" resultType="DefaultMap">
+    <select id="getDepositDdc" parameterType="depositDdcVO" resultType="DefaultMap">
         /* DepositDdcMapper.getDepositDdc */
         SELECT A.MONEY_FG,
                A.MONEY_AMT,

@@ -86,7 +86,7 @@
         TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT, TB_MS_STORE
         COMMENTS : [본사]상품, [매장]상품, [매장]매장 정보
     -->
-    <select id="getProdNmCnt"  parameterType="SimpleProdVO" resultType="Integer">
+    <select id="getProdNmCnt" parameterType="SimpleProdVO" resultType="Integer">
         /* SimpleProdMapper.getProdNmCnt */
         <choose>
             <!-- 본사 -->
@@ -136,7 +136,7 @@
         TABLE    : TB_HQ_PRODUCT_BARCD, TB_MS_PRODUCT_BARCD, TB_MS_STORE
         COMMENTS : [본사]상품_바코드, [매장]상품_바코드, [매장]매장 정보
     -->
-    <select id="getBarCdCnt"  parameterType="SimpleProdVO" resultType="Integer">
+    <select id="getBarCdCnt" parameterType="SimpleProdVO" resultType="Integer">
         /* SimpleProdMapper.getBarCdCnt */
         <choose>
             <!-- 본사 -->
@@ -462,7 +462,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getHqBrandCdChk"  parameterType="SimpleProdVO" resultType="Integer">
+    <select id="getHqBrandCdChk" parameterType="SimpleProdVO" resultType="Integer">
         /* SimpleProdMapper.getHqBrandCdChk */
         SELECT
         COUNT(1) AS CNT

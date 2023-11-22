@@ -1018,7 +1018,7 @@
         PARAM    : storeTypeVO
         COMMENTS : 매장타입 매장적용 시 본사상품 > 매장등록 PKG를 호출한다.
     -->
-    <select id="insertHqProductToStore" statementType="CALLABLE"  parameterType="storeTypeVO" resultType="String">
+    <select id="insertHqProductToStore" statementType="CALLABLE" parameterType="storeTypeVO" resultType="String">
         /* USE : StoreTypeMapper.insertHqProductToStore   */
         {
             CALL PKG_HQ_STORE_TYPE_APP.SP_HQ_STORE_TYPE_APP_IU
@@ -1037,7 +1037,7 @@
         PARAM    : storeTypeVO
         COMMENTS : 매장타입 매장적용 시 본사 상품 > 매장 등록 > 가격 처리 PKG를 호출한다.
     -->
-    <select id="insertHqProductSalePriceToStore" statementType="CALLABLE"  parameterType="storeTypeVO" resultType="String">
+    <select id="insertHqProductSalePriceToStore" statementType="CALLABLE" parameterType="storeTypeVO" resultType="String">
         /* USE : StoreTypeMapper.insertHqProductSalePriceToStore   */
         {
             CALL PKG_HQ_STORE_TYPE_APP.SP_HQ_STORE_TYPE_APP_SALE_PRICE_IU
@@ -1055,7 +1055,7 @@
         PARAM    : storeTypeVO
         COMMENTS : 매장타입적용관리 테이블을 조회하여 본사상품 > 조회된 매장에 등록한다.
     -->
-    <select id="insertHqProductToStoreAll" statementType="CALLABLE"  parameterType="storeTypeVO" resultType="String">
+    <select id="insertHqProductToStoreAll" statementType="CALLABLE" parameterType="storeTypeVO" resultType="String">
         /* USE : StoreTypeMapper.insertHqProductToStoreAll   */
         {
             CALL PKG_HQ_STORE_TYPE_APP_ALL.SP_HQ_STORE_TYPE_APP_ALL_IU
@@ -1070,7 +1070,7 @@
         PARAM    : storeTypeVO
         COMMENTS : 매장타입적용관리 테이블을 조회하여 본사상품 > 조회된 매장에 등록한다.(즉시처리)
     -->
-    <select id="insertHqProductToStoreAll2" statementType="CALLABLE"  parameterType="storeTypeVO" resultType="String">
+    <select id="insertHqProductToStoreAll2" statementType="CALLABLE" parameterType="storeTypeVO" resultType="String">
         /* USE : StoreTypeMapper.insertHqProductToStoreAll2   */
         {
             CALL PKG_HQ_STORE_TYPE_APP_ALL2.SP_HQ_STORE_TYPE_APP_ALL_IU

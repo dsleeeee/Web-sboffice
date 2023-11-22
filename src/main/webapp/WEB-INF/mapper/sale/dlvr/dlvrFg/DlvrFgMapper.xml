@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.sale.dlvr.dlvrFg.service.impl.DlvrFgMapper">
 
@@ -10,7 +9,7 @@
         PARAM    : dlvrFgVO
         COMMENTS : 매출관리 > 배달현황 >
     -->
-    <select id="getDlvrFg"  parameterType="dlvrFgVO" resultType="String">
+    <select id="getDlvrFg" parameterType="dlvrFgVO" resultType="String">
         /* DlvrFgMapper.getDlvrFg */
         <choose>
             <!-- 본사 -->
@@ -36,7 +35,7 @@
         PARAM    : dlvrFgVO
         COMMENTS : 매출관리 > 배달현황 > 배달경로 콤보박스에 들어갈 데이터
     -->
-    <select id="getDlvrFgData"  parameterType="dlvrFgVO" resultType="DefaultMap">
+    <select id="getDlvrFgData" parameterType="dlvrFgVO" resultType="DefaultMap">
         /* DlvrFgMapper.getDlvrFgData */
         <choose>
             <!-- 본사 -->
@@ -63,7 +62,7 @@
         PARAM    : dlvrFgVO
         COMMENTS : 매출관리 > 배달현황 > 내점/배달/포장 현황
     -->
-    <select id="getOrderFg"  parameterType="dlvrFgVO" resultType="DefaultMap">
+    <select id="getOrderFg" parameterType="dlvrFgVO" resultType="DefaultMap">
         /* DlvrFgMapper.getOrderFg */
         <choose>
             <!-- 본사 -->
@@ -184,7 +183,7 @@
         PARAM    : dlvrFgVO
         COMMENTS : 매출관리 > 배달현황 > 내점/배달/포장 현황
     -->
-    <select id="getProd"  parameterType="dlvrFgVO" resultType="DefaultMap">
+    <select id="getProd" parameterType="dlvrFgVO" resultType="DefaultMap">
         /* DlvrFgMapper.getProd */
         <choose>
             <!-- 본사 -->
@@ -320,7 +319,7 @@
         PARAM    : dlvrFgVO
         COMMENTS : 매출관리 > 배달현황 > 내점/배달/포장 현황
     -->
-    <select id="getProdDtl"  parameterType="dlvrFgVO" resultType="DefaultMap">
+    <select id="getProdDtl" parameterType="dlvrFgVO" resultType="DefaultMap">
         /* DlvrFgMapper.getProdDtl */
         <choose>
             <!-- 본사 -->
@@ -457,7 +456,7 @@
         PARAM    : dlvrFgVO
         COMMENTS : 매출관리 > 배달현황 > 내점/배달/포장 현황
     -->
-    <select id="getSaleDtl"  parameterType="dlvrFgVO" resultType="DefaultMap">
+    <select id="getSaleDtl" parameterType="dlvrFgVO" resultType="DefaultMap">
     /* DlvrFgMapper.getSaleDtl */
       SELECT tssd.STORE_CD,
               tms.STORE_NM,

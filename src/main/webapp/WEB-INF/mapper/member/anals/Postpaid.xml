@@ -74,7 +74,7 @@
         TABLE    : TB_SL_SALE_PAY_CREDIT, TB_MB_MEMBER_POSTPAID
         COMMENTS : 후불 외상내역과 입금내역을 조회
     -->
-    <select id="getPostpaidMemberListExcel"  parameterType="postpaidStoreVO" resultType="DefaultMap">
+    <select id="getPostpaidMemberListExcel" parameterType="postpaidStoreVO" resultType="DefaultMap">
         /* PostpaidMapper.getPostpaidMemberListExcel */
         SELECT  b.STORE_CD,
                 b.STORE_NM,

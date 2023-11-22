@@ -263,7 +263,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
     -->
-    <select id="insertHqCouponClassToStore" statementType="CALLABLE"  parameterType="payMethodClassVO" resultType="String">
+    <select id="insertHqCouponClassToStore" statementType="CALLABLE" parameterType="payMethodClassVO" resultType="String">
         /* USE : CouponMapper.insertHqCouponClassToStore */
         {
             CALL PKG_HQ_PAY_METHOD_CLASS.SP_HQ_PAY_METHOD_CLASS_I
@@ -284,7 +284,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
     -->
-    <select id="updateHqCouponClassToStore" statementType="CALLABLE"  parameterType="payMethodClassVO" resultType="String">
+    <select id="updateHqCouponClassToStore" statementType="CALLABLE" parameterType="payMethodClassVO" resultType="String">
         /* USE : CouponMapper.updateHqCouponClassToStore */
         {
             CALL PKG_HQ_PAY_METHOD_CLASS.SP_HQ_PAY_METHOD_CLASS_U
@@ -305,7 +305,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰분류를 매장 쿠폰분류에 적용시킨다.
     -->
-    <select id="deleteHqCouponClassToStore" statementType="CALLABLE"  parameterType="payMethodClassVO" resultType="String">
+    <select id="deleteHqCouponClassToStore" statementType="CALLABLE" parameterType="payMethodClassVO" resultType="String">
         /* USE : CouponMapper.deleteHqCouponClassToStore */
         {
             CALL PKG_HQ_PAY_METHOD_CLASS.SP_HQ_PAY_METHOD_CLASS_D
@@ -502,7 +502,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰을 매장에 등록시킨다.
     -->
-    <select id="insertHqCouponToStore" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
+    <select id="insertHqCouponToStore" statementType="CALLABLE" parameterType="couponStoreVO" resultType="String">
         /* USE : CouponMapper.insertHqCouponToStore */
         {
             CALL PKG_HQ_COUPON.SP_HQ_COUPON_I
@@ -524,7 +524,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰 수정정보를 매장 쿠폰에 적용한다.
     -->
-    <select id="updateHqCouponToStore" statementType="CALLABLE"  parameterType="couponVO" resultType="String">
+    <select id="updateHqCouponToStore" statementType="CALLABLE" parameterType="couponVO" resultType="String">
         /* USE : CouponMapper.updateHqCouponToStore */
         {
             CALL PKG_HQ_COUPON.SP_HQ_COUPON_U
@@ -545,7 +545,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰을 매장 쿠폰에서 삭제한다.
     -->
-    <select id="deleteHqCouponToStore01" statementType="CALLABLE"  parameterType="couponVO" resultType="String">
+    <select id="deleteHqCouponToStore01" statementType="CALLABLE" parameterType="couponVO" resultType="String">
         /* USE : CouponMapper.deleteHqCouponToStore01 */
         {
             CALL PKG_HQ_COUPON.SP_HQ_COUPON_D01
@@ -941,7 +941,7 @@
         TABLE    : TB_HQ_COUPON_PROD
         COMMENTS : 본사 쿠폰을 적용한 상품을 삭제한다.
     -->
-    <delete id="deleteHqCouponProd"  parameterType="couponProdVO">
+    <delete id="deleteHqCouponProd" parameterType="couponProdVO">
         /* USE : CouponMapper.deleteHqCouponProd */
         DELETE
             TB_HQ_COUPON_PROD
@@ -961,7 +961,7 @@
         TABLE    : TB_MS_COUPON_PROD
         COMMENTS : 본사 쿠폰을 적용한 상품을 삭제한다.
     -->
-    <delete id="deleteStoreCouponProd"  parameterType="couponProdVO">
+    <delete id="deleteStoreCouponProd" parameterType="couponProdVO">
         /* USE : CouponMapper.deleteStoreCouponProd */
         DELETE  TB_MS_COUPON_PROD
         WHERE   PAY_CLASS_CD = #{payClassCd}
@@ -985,7 +985,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰적용상품을 매장 쿠폰에 적용시킨다.
     -->
-    <select id="insertHqCouponProdToStore01" statementType="CALLABLE"  parameterType="couponProdVO" resultType="String">
+    <select id="insertHqCouponProdToStore01" statementType="CALLABLE" parameterType="couponProdVO" resultType="String">
         /* USE : CouponMapper.insertHqCouponProdToStore01 */
         {
             CALL PKG_HQ_COUPON_PROD.SP_HQ_COUPON_PROD_I01
@@ -1007,7 +1007,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰적용상품을 매장 쿠폰에 적용시킨다.
     -->
-    <select id="deleteHqCouponProdToStore01" statementType="CALLABLE"  parameterType="couponProdVO" resultType="String">
+    <select id="deleteHqCouponProdToStore01" statementType="CALLABLE" parameterType="couponProdVO" resultType="String">
         /* USE : CouponMapper.deleteHqCouponProdToStore01 */
         {
             CALL PKG_HQ_COUPON_PROD.SP_HQ_COUPON_PROD_D01
@@ -1097,7 +1097,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰적용매장 등록시, 해당 매장의 쿠폰별 적용상품 등록
     -->
-    <select id="insertHqCouponProdToStore02" statementType="CALLABLE"  parameterType="couponStoreVO" resultType="String">
+    <select id="insertHqCouponProdToStore02" statementType="CALLABLE" parameterType="couponStoreVO" resultType="String">
         /* USE : CouponMapper.insertHqCouponProdToStore02 */
         {
             CALL PKG_HQ_COUPON_PROD.SP_HQ_COUPON_PROD_I02
@@ -1139,7 +1139,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰적용상품 삭제시, 해당 매장의 적용상품 삭제
     -->
-    <select id="deleteHqCouponProdToStore02" statementType="CALLABLE"  parameterType="couponVO" resultType="String">
+    <select id="deleteHqCouponProdToStore02" statementType="CALLABLE" parameterType="couponVO" resultType="String">
         /* USE : CouponMapper.deleteHqCouponProdToStore02 */
         {
             CALL PKG_HQ_COUPON_PROD.SP_HQ_COUPON_PROD_D02
@@ -1159,7 +1159,7 @@
         PARAM    :
         COMMENTS : 본사 쿠폰적용상품 삭제시, 해당 매장의 쿠폰 같이 삭제.
     -->
-    <select id="deleteHqCouponToStore02" statementType="CALLABLE"  parameterType="couponVO" resultType="String">
+    <select id="deleteHqCouponToStore02" statementType="CALLABLE" parameterType="couponVO" resultType="String">
         /* USE : CouponMapper.deleteHqCouponToStore02 */
         {
             CALL PKG_HQ_COUPON.SP_HQ_COUPON_D02

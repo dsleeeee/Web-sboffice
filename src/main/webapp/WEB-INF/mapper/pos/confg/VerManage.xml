@@ -337,7 +337,7 @@
         TABLE    : TB_CM_POS_VERSN_STORE
         COMMENTS : 버전 적용 매장 등록한다.
     -->
-    <select id="registStore" statementType="CALLABLE"  parameterType="applcStoreVO" resultType="String">
+    <select id="registStore" statementType="CALLABLE" parameterType="applcStoreVO" resultType="String">
         /* USE : VerManageMapper.registStore */
         {
             CALL PKG_CM_VERSN_STORE.SP_CM_VERSN_STORE_I

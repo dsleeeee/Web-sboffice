@@ -144,7 +144,7 @@
         TABLE    : TB_CM_INSTLL
         COMMENTS : 설치요청을 등록한다.
     -->
-    <insert id="saveInstallRequest"  parameterType="installVO" >
+    <insert id="saveInstallRequest" parameterType="installVO" >
         /* InstallManageMapper.saveInstallRequest */
         INSERT INTO TB_CM_INSTLL
         (
@@ -189,7 +189,7 @@
         TABLE    : TB_MS_POS
         COMMENTS : 설치할 포스의 하드웨어 인증키를 초기화한다.
     -->
-    <update id="initPosHwKey"  parameterType="installVO" >
+    <update id="initPosHwKey" parameterType="installVO" >
         /* InstallManageMapper.initPosHwKey */
         UPDATE TB_MS_POS
            SET HW_AUTH_KEY = null,

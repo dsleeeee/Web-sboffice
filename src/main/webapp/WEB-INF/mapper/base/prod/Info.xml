@@ -342,7 +342,7 @@
         PARAM    : productClassVO
         COMMENTS : 본사 상품분류정보를 매장에 생성한다.
     -->
-    <select id="insertClsToStore" statementType="CALLABLE"  parameterType="productClassVO" resultType="String">
+    <select id="insertClsToStore" statementType="CALLABLE" parameterType="productClassVO" resultType="String">
         /* USE : InfoMapper.insertClsToStore   */
         {
             CALL PKG_HQ_PRODUCT_CLASS.SP_HQ_PRODUCT_CLASS_I
@@ -361,7 +361,7 @@
         PARAM    : productClassVO
         COMMENTS : 본사 상품분류정보를 매장에 수정한다.
     -->
-    <select id="updateClsToStore" statementType="CALLABLE"  parameterType="productClassVO" resultType="String">
+    <select id="updateClsToStore" statementType="CALLABLE" parameterType="productClassVO" resultType="String">
         /* USE : InfoMapper.updateClsToStore   */
         {
             CALL PKG_HQ_PRODUCT_CLASS.SP_HQ_PRODUCT_CLASS_U
@@ -380,7 +380,7 @@
         PARAM    : productClassVO
         COMMENTS : 본사 상품분류정보를 매장에 삭제한다.
     -->
-    <select id="deleteClsToStore" statementType="CALLABLE"  parameterType="productClassVO" resultType="String">
+    <select id="deleteClsToStore" statementType="CALLABLE" parameterType="productClassVO" resultType="String">
         /* USE : InfoMapper.deleteClsToStore   */
         {
             CALL PKG_HQ_PRODUCT_CLASS.SP_HQ_PRODUCT_CLASS_D

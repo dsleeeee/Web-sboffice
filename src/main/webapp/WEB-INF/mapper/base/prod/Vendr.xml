@@ -113,7 +113,7 @@
         TABLE    : TB_HQ_VENDOR
         COMMENTS : [본사]거래처
     -->
-    <select id="getHqVendrCd"  parameterType="vendrVO" resultType="String">
+    <select id="getHqVendrCd" parameterType="vendrVO" resultType="String">
         /* VendrMapper.getHqVendrCd */
         SELECT
         LPAD((NVL(MAX(thv.VENDR_CD), 0) + 1), 10, 0) AS VENDR_CD
@@ -127,7 +127,7 @@
         TABLE    : TB_MS_VENDOR
         COMMENTS : [매장]거래처
     -->
-    <select id="getMsVendrCd"  parameterType="vendrVO" resultType="String">
+    <select id="getMsVendrCd" parameterType="vendrVO" resultType="String">
         /* VendrMapper.getMsVendrCd */
         SELECT
         LPAD((NVL(MAX(tmv.VENDR_CD), 0) + 1), 10, 0) AS VENDR_CD

@@ -403,7 +403,7 @@
         TABLE    : TB_WB_BOARD_READNG_HIST
         COMMENTS : 게시판 열람 이력
     -->
-    <select id="getBoardViewCnt"  parameterType="BoardVO" resultType="String">
+    <select id="getBoardViewCnt" parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardViewCnt */
         SELECT
         COUNT(twbrh.IDX) AS VIEW_CNT
@@ -434,7 +434,7 @@
         TABLE    : TB_WB_BOARD_READNG_HIST
         COMMENTS : 게시판 열람 이력
     -->
-    <select id="getBoardReadingHistIdx"  parameterType="BoardVO" resultType="String">
+    <select id="getBoardReadingHistIdx" parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardReadingHistIdx */
         SELECT
         (NVL(MAX(twbrh.IDX), 0) + 1) AS IDX
@@ -476,7 +476,7 @@
         TABLE    : TB_WB_BOARD_INFO
         COMMENTS : 게시판 정보
     -->
-    <select id="getBoardBoardSeqNo"  parameterType="BoardVO" resultType="String">
+    <select id="getBoardBoardSeqNo" parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardBoardSeqNo */
         SELECT
         (NVL(MAX(twbi.BOARD_SEQ_NO), 0) + 1) AS BOARD_SEQ_NO
@@ -641,7 +641,7 @@
         TABLE    : TB_WB_BOARD_PART_STORE
         COMMENTS : 게시판 일부 매장
     -->
-    <select id="getBoardParStorePartOrgnCd"  parameterType="BoardVO" resultType="String">
+    <select id="getBoardParStorePartOrgnCd" parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardParStorePartOrgnCd */
         SELECT
         COUNT(twbps.PART_ORGN_CD)
@@ -694,7 +694,7 @@
         TABLE    : TB_WB_BOARD_ATCH
         COMMENTS : 게시판 첨부
     -->
-    <select id="getBoardAtchIdx"  parameterType="BoardVO" resultType="String">
+    <select id="getBoardAtchIdx" parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardAtchIdx */
         SELECT
         (NVL(MAX(twba.IDX), 0) + 1) AS IDX
@@ -771,7 +771,7 @@
         TABLE    : TB_WB_USER_INFO_DTL_V01
         COMMENTS : 웹 사용자 정보 veiw
     -->
-    <select id="getBoardUserNm"  parameterType="BoardVO" resultType="String">
+    <select id="getBoardUserNm" parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardUserNm */
         SELECT twuidv01.USER_NM
         FROM TB_WB_USER_INFO_DTL_V01 twuidv01
@@ -784,7 +784,7 @@
         TABLE    : TB_WB_BOARD_ANSWER
         COMMENTS : 게시판 댓글
     -->
-    <select id="getBoardAnswerIdx"  parameterType="BoardVO" resultType="String">
+    <select id="getBoardAnswerIdx" parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardAnswerIdx */
         SELECT
         (NVL(MAX(twba.IDX), 0) + 1) AS IDX
@@ -874,7 +874,7 @@
         TABLE    : TB_WB_BOARD_ANSWER
         COMMENTS : 게시판 댓글
     -->
-    <select id="getBoardAnswerCnt"  parameterType="BoardVO" resultType="String">
+    <select id="getBoardAnswerCnt" parameterType="BoardVO" resultType="String">
         /* BoardMapper.getBoardAnswerCnt */
         SELECT
         COUNT(twba.IDX) AS ANSWER_CNT

@@ -198,7 +198,7 @@
         PARAM    : templateVO
         COMMENTS : 본사 출력물템플릿을 저장/수정한다.
     -->
-    <select id="updateTemplateForHq" statementType="CALLABLE"  parameterType="templateVO" resultType="DefaultMap">
+    <select id="updateTemplateForHq" statementType="CALLABLE" parameterType="templateVO" resultType="DefaultMap">
         /* USE : TemplateMapper.updateTemplateForHq */
         {
           CALL PKG_CM_PRINT_TEMPL.SP_HQ_PRINT_TEMPL_U
@@ -216,7 +216,7 @@
         PARAM    : templateVO
         COMMENTS : 매장 출력물템플릿을 저장/수정한다.
     -->
-    <select id="updateTemplateForStore" statementType="CALLABLE"  parameterType="templateVO" resultType="DefaultMap">
+    <select id="updateTemplateForStore" statementType="CALLABLE" parameterType="templateVO" resultType="DefaultMap">
         /* USE : TemplateMapper.updateTemplateForStore */
         {
           CALL PKG_CM_PRINT_TEMPL.SP_STORE_PRINT_TEMPL_U

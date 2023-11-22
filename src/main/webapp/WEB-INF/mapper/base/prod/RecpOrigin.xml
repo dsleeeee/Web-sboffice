@@ -951,7 +951,7 @@
         TABLE    : TB_HQ_PRODUCT_RECP_PROD, TB_MS_PRODUCT_RECP_PROD
         COMMENTS : [본사]재료-원산지정보, [매장]재료-원산지정보
     -->
-    <select id="getRecpSeq"  parameterType="RecpOriginVO" resultType="String">
+    <select id="getRecpSeq" parameterType="RecpOriginVO" resultType="String">
         /* RecpOriginMapper.getRecpSeq */
         <choose>
             <!-- 본사 -->

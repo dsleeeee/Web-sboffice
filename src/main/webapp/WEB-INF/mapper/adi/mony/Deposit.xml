@@ -173,7 +173,7 @@
         PARAM    : accntVO
         COMMENTS : 본사 부가서비스_금전처리_계정관리 정보를 매장에 생성한다.
     -->
-    <select id="insertAccntToStore" statementType="CALLABLE"  parameterType="accntVO" resultType="String">
+    <select id="insertAccntToStore" statementType="CALLABLE" parameterType="accntVO" resultType="String">
         /* USE : DepositMapper.insertAccntToStore   */
         {
             CALL PKG_HQ_ACCOUNT.SP_HQ_ACCOUNT_I
@@ -192,7 +192,7 @@
         PARAM    : accntVO
         COMMENTS : 본사 부가서비스_금전처리_계정관리 정보를 매장에 수정한다.
     -->
-    <select id="updateAccntToStore" statementType="CALLABLE"  parameterType="accntVO" resultType="String">
+    <select id="updateAccntToStore" statementType="CALLABLE" parameterType="accntVO" resultType="String">
         /* USE : DepositMapper.updateAccntToStore   */
         {
             CALL PKG_HQ_ACCOUNT.SP_HQ_ACCOUNT_U
@@ -211,7 +211,7 @@
         PARAM    : accntVO
         COMMENTS : 본사 부가서비스_금전처리_계정관리 정보를 매장에 삭제한다.
     -->
-    <select id="deleteAccntToStore" statementType="CALLABLE"  parameterType="accntVO" resultType="String">
+    <select id="deleteAccntToStore" statementType="CALLABLE" parameterType="accntVO" resultType="String">
         /* USE : DepositMapper.deleteAccntToStore   */
         {
             CALL PKG_HQ_ACCOUNT.SP_HQ_ACCOUNT_D

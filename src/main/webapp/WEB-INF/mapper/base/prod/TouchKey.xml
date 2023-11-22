@@ -3187,7 +3187,7 @@
         PARAM    : touchKeyVO
         COMMENTS : 본사 판매터치키를 매장적용한다.(PKG 처리)
     -->
-    <select id="saveTouchKeyToStore" statementType="CALLABLE"  parameterType="touchKeyVO" resultType="String">
+    <select id="saveTouchKeyToStore" statementType="CALLABLE" parameterType="touchKeyVO" resultType="String">
         /* USE : TouchkeyMapper.saveTouchKeyToStore */
         {
             CALL PKG_HQ_TOUCH_KEY.SP_HQ_TOUCH_KEY_TO_STORE_I
@@ -3209,7 +3209,7 @@
         PARAM    : touchKeyVO
         COMMENTS : 매장사용터치키를 설정한다.(PKG 처리)
     -->
-    <select id="saveTouchKeyEnv2" statementType="CALLABLE"  parameterType="touchKeyVO" resultType="String">
+    <select id="saveTouchKeyEnv2" statementType="CALLABLE" parameterType="touchKeyVO" resultType="String">
         /* USE : TouchkeyMapper.saveTouchKeyEnv2 */
         {
             CALL PKG_HQ_TOUCH_KEY.SP_MS_TOUCH_KEY_ENV_IU
@@ -3279,7 +3279,7 @@
         TABLE    : 본사판매가 관리 조회
         COMMENTS : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
     -->
-    <select id="getHqSalePrice"  parameterType="touchKeyVO" resultType="DefaultMap">
+    <select id="getHqSalePrice" parameterType="touchKeyVO" resultType="DefaultMap">
         /* TouchkeyMapper.getHqSalePrice */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -3381,7 +3381,7 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_STORE, TB_MS_PRODUCT_SALE_PRICE
         COMMENTS :
     -->
-    <select id="getStoreSalePrice"  parameterType="touchKeyVO" resultType="DefaultMap">
+    <select id="getStoreSalePrice" parameterType="touchKeyVO" resultType="DefaultMap">
         /* TouchkeyMapper.getStoreSalePrice */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
@@ -3541,7 +3541,7 @@
         TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
         COMMENTS : [매장]상품, [매장]상품_판매금, [본사]상품, [본사]상품_판매금
     -->
-    <select id="getSalePrice"  parameterType="touchKeyVO" resultType="DefaultMap">
+    <select id="getSalePrice" parameterType="touchKeyVO" resultType="DefaultMap">
         /* TouchkeyMapper.getSalePrice */
         <choose>
             <!-- 매장 -->

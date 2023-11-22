@@ -83,7 +83,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getUseEmp"  parameterType="empWebMenuVO" resultType="DefaultMap">
+    <select id="getUseEmp" parameterType="empWebMenuVO" resultType="DefaultMap">
         /* EmpWebMenuMapper.getUseEmp */
         SELECT 	the.EMP_NO
         ,		the.EMP_NM
@@ -174,7 +174,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getUnuesdEmp"  parameterType="empWebMenuVO" resultType="DefaultMap">
+    <select id="getUnuesdEmp" parameterType="empWebMenuVO" resultType="DefaultMap">
         /* EmpWebMenuMapper.getUnuesdEmp */
         SELECT  the.EMP_NO
         ,		the.EMP_NM

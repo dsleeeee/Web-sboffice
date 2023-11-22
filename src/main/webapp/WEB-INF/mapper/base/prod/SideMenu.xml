@@ -213,7 +213,7 @@
         PARAM    : sideMenuAttrClassVO
         COMMENTS : 본사 사이드메뉴 속성의 속성분류를 매장에 생성한다.
     -->
-    <select id="insertHqAttrClassListToStore" statementType="CALLABLE"  parameterType="sideMenuAttrClassVO" resultType="String">
+    <select id="insertHqAttrClassListToStore" statementType="CALLABLE" parameterType="sideMenuAttrClassVO" resultType="String">
         /* USE : SideMenuMapper.insertHqAttrClassListToStore   */
         {
             CALL PKG_HQ_PRODUCT_SDATTR_CLASS.SP_HQ_PRODUCT_SDATTR_CLASS_I
@@ -232,7 +232,7 @@
         PARAM    : sideMenuAttrClassVO
         COMMENTS : 본사 사이드메뉴  속성의 속성분류를 매장에 적용시킨다.
     -->
-    <select id="updateHqAttrClassListToStore" statementType="CALLABLE"  parameterType="sideMenuAttrClassVO" resultType="String">
+    <select id="updateHqAttrClassListToStore" statementType="CALLABLE" parameterType="sideMenuAttrClassVO" resultType="String">
         /* USE : SideMenuMapper.updateHqAttrClassListToStore   */
         {
             CALL PKG_HQ_PRODUCT_SDATTR_CLASS.SP_HQ_PRODUCT_SDATTR_CLASS_U
@@ -251,7 +251,7 @@
         PARAM    : sideMenuAttrClassVO
         COMMENTS : 본사 사이드메뉴  속성의 속성분류를 매장에서 제외시킨다.
     -->
-    <select id="deleteHqAttrClassListToStore" statementType="CALLABLE"  parameterType="sideMenuAttrClassVO" resultType="String">
+    <select id="deleteHqAttrClassListToStore" statementType="CALLABLE" parameterType="sideMenuAttrClassVO" resultType="String">
         /* USE : SideMenuMapper.deleteHqAttrClassListToStore   */
         {
              CALL PKG_HQ_PRODUCT_SDATTR_CLASS.SP_HQ_PRODUCT_SDATTR_CLASS_D
@@ -472,7 +472,7 @@
         PARAM    : SideMenuAttrCdVO
         COMMENTS : 본사 사이드메뉴 속성분류의 속성을 매장에 생성한다.
     -->
-    <select id="insertHqAttrCdListToStore" statementType="CALLABLE"  parameterType="SideMenuAttrCdVO" resultType="String">
+    <select id="insertHqAttrCdListToStore" statementType="CALLABLE" parameterType="SideMenuAttrCdVO" resultType="String">
         /* USE : SideMenuMapper.insertHqAttrCdListToStore   */
         {
             CALL PKG_HQ_PRODUCT_SDATTR.SP_HQ_PRODUCT_SDATTR_I
@@ -492,7 +492,7 @@
         PARAM    : SideMenuAttrCdVO
         COMMENTS : 본사 사이드메뉴 속성분류의 속성을 매장에 적용시킨다.
     -->
-    <select id="updateHqAttrCdListToStore" statementType="CALLABLE"  parameterType="SideMenuAttrCdVO" resultType="String">
+    <select id="updateHqAttrCdListToStore" statementType="CALLABLE" parameterType="SideMenuAttrCdVO" resultType="String">
         /* USE : SideMenuMapper.updateHqAttrCdListToStore   */
         {
             CALL PKG_HQ_PRODUCT_SDATTR.SP_HQ_PRODUCT_SDATTR_U
@@ -512,7 +512,7 @@
         PARAM    : SideMenuAttrCdVO
         COMMENTS : 본사 사이드메뉴 속성분류의 속성을 매장에서 제외시킨다.
     -->
-    <select id="deleteHqAttrCdListToStore" statementType="CALLABLE"  parameterType="SideMenuAttrCdVO" resultType="String">
+    <select id="deleteHqAttrCdListToStore" statementType="CALLABLE" parameterType="SideMenuAttrCdVO" resultType="String">
         /* USE : SideMenuMapper.deleteHqAttrCdListToStore   */
         {
             CALL PKG_HQ_PRODUCT_SDATTR.SP_HQ_PRODUCT_SDATTR_D
@@ -810,7 +810,7 @@
         PARAM    : sideMenuSelGroupVO
         COMMENTS : 본사 사이드메뉴 선택그룹을 매장에 적용시킨다.
     -->
-    <select id="insertHqMenuGrpListToStore" statementType="CALLABLE"  parameterType="sideMenuSelGroupVO" resultType="String">
+    <select id="insertHqMenuGrpListToStore" statementType="CALLABLE" parameterType="sideMenuSelGroupVO" resultType="String">
         /* USE : SideMenuMapper.insertHqMenuGrpListToStore */
         {
           CALL PKG_HQ_PRODUCT_SDSEL_GROUP.SP_HQ_PRODUCT_SDSEL_GROUP_I
@@ -829,7 +829,7 @@
         PARAM    : sideMenuSelGroupVO
         COMMENTS : 본사 사이드메뉴 선택그룹을 매장에 적용시킨다.
     -->
-    <select id="updateHqMenuGrpListToStore" statementType="CALLABLE"  parameterType="sideMenuSelGroupVO" resultType="String">
+    <select id="updateHqMenuGrpListToStore" statementType="CALLABLE" parameterType="sideMenuSelGroupVO" resultType="String">
         /* USE : SideMenuMapper.updateHqMenuGrpListToStore */
         {
           CALL PKG_HQ_PRODUCT_SDSEL_GROUP.SP_HQ_PRODUCT_SDSEL_GROUP_U
@@ -848,7 +848,7 @@
         PARAM    : sideMenuSelGroupVO
         COMMENTS : 본사 사이드메뉴 선택상품을 매장에서 제외시킨다.
     -->
-    <select id="deleteHqMenuGrpListToStore" statementType="CALLABLE"  parameterType="sideMenuSelGroupVO" resultType="String">
+    <select id="deleteHqMenuGrpListToStore" statementType="CALLABLE" parameterType="sideMenuSelGroupVO" resultType="String">
         /* USE : SideMenuMapper.deleteHqMenuGrpListToStore */
         {
           CALL PKG_HQ_PRODUCT_SDSEL_GROUP.SP_HQ_PRODUCT_SDSEL_GROUP_D
@@ -1098,7 +1098,7 @@
         PARAM    : sideMenuSelClassVO
         COMMENTS : 본사 사이드메뉴 속성분류를 매장에 생성한다.
     -->
-    <select id="insertHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
+    <select id="insertHqMenuClassListToStore" statementType="CALLABLE" parameterType="sideMenuSelClassVO" resultType="String">
         /* USE : SideMenuMapper.insertHqMenuClassListToStore   */
         {
             CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_I
@@ -1118,7 +1118,7 @@
         PARAM    : sideMenuSelClassVO
         COMMENTS : 본사 사이드메뉴 속성분류를 매장에 적용시킨다.
     -->
-    <select id="saveHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
+    <select id="saveHqMenuClassListToStore" statementType="CALLABLE" parameterType="sideMenuSelClassVO" resultType="String">
         /* USE : SideMenuMapper.saveHqMenuClassListToStore   */
         {
             CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_U
@@ -1138,7 +1138,7 @@
         PARAM    : sideMenuSelClassVO
         COMMENTS : 본사 사이드메뉴 속성분류를 매장에서 제외시킨다.
     -->
-    <select id="deleteHqMenuClassListToStore" statementType="CALLABLE"  parameterType="sideMenuSelClassVO" resultType="String">
+    <select id="deleteHqMenuClassListToStore" statementType="CALLABLE" parameterType="sideMenuSelClassVO" resultType="String">
         /* USE : SideMenuMapper.deleteHqMenuClassListToStore */
         {
           CALL PKG_HQ_PRODUCT_SDSEL_CLASS.SP_HQ_PRODUCT_SDSEL_CLASS_D
@@ -1565,7 +1565,7 @@
         PARAM    : sideMenuSelProdVO
         COMMENTS : 본사 사이드메뉴 선택상품을 매장에 생성한다.
     -->
-    <select id="insertHqMenuProdListToStore" statementType="CALLABLE"  parameterType="sideMenuSelProdVO" resultType="String">
+    <select id="insertHqMenuProdListToStore" statementType="CALLABLE" parameterType="sideMenuSelProdVO" resultType="String">
         /* USE : SideMenuMapper.insertHqMenuProdListToStore */
         {
           CALL PKG_HQ_PRODUCT_SDSEL_PROD.SP_HQ_PRODUCT_SDSEL_PROD_I
@@ -1585,7 +1585,7 @@
         PARAM    : sideMenuSelProdVO
         COMMENTS : 본사 사이드메뉴 선택상품을 매장에 적용시킨다.
     -->
-    <select id="saveHqMenuProdListToStore" statementType="CALLABLE"  parameterType="sideMenuSelProdVO" resultType="String">
+    <select id="saveHqMenuProdListToStore" statementType="CALLABLE" parameterType="sideMenuSelProdVO" resultType="String">
         /* USE : SideMenuMapper.saveHqMenuProdListToStore */
         {
           CALL PKG_HQ_PRODUCT_SDSEL_PROD.SP_HQ_PRODUCT_SDSEL_PROD_U
@@ -1605,7 +1605,7 @@
         PARAM    : sideMenuSelProdVO
         COMMENTS : 본사 사이드메뉴 선택상품을 매장에서 제외시킨다.
     -->
-    <select id="deleteHqMenuProdListToStore" statementType="CALLABLE"  parameterType="sideMenuSelProdVO" resultType="String">
+    <select id="deleteHqMenuProdListToStore" statementType="CALLABLE" parameterType="sideMenuSelProdVO" resultType="String">
         /* USE : SideMenuMapper.deleteHqMenuProdListToStore */
         {
           CALL PKG_HQ_PRODUCT_SDSEL_PROD.SP_HQ_PRODUCT_SDSEL_PROD_D
