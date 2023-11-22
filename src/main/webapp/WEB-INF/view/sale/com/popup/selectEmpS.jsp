@@ -75,14 +75,14 @@
             <td>
               <div class="sb-select">
                 <wj-combo-box
-                        id="srchPopBranchCdComboo"
+                        id="srchPopBranchCdCombo"
                         ng-model="popBranchCd"
                         items-source="_getComboData('popBranchCdCombo')"
                         display-member-path="name"
                         selected-value-path="value"
                         is-editable="false"
                         initialized="_initComboBox(s)"
-                        control="srchPopBranchCdComboo">
+                        control="srchPopBranchCdCombo">
                 </wj-combo-box>
               </div>
             </td>
@@ -218,12 +218,12 @@
             <wj-flex-grid-column header="<s:message code="outstockReqDate.userHqBrand"/>" binding="userHqBrand" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="outstockReqDate.branchCd"/>" binding="branchCd" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
             <c:if test="${momsEnvstVal == '1'}">
-              <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsTeam"/>" binding="momsTeam" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsAcShop"/>" binding="momsAcShop" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsAreaFg"/>" binding="momsAreaFg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsCommercial"/>" binding="momsCommercial" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsShopType"/>" binding="momsShopType" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-              <wj-flex-grid-column header="<s:message code="saleDtlChannelExcel.momsStoreManageType"/>" binding="momsStoreManageType" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="outstockReqDate.momsTeam"/>" binding="momsTeam" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="outstockReqDate.momsAcShop"/>" binding="momsAcShop" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="outstockReqDate.momsAreaFg"/>" binding="momsAreaFg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="outstockReqDate.momsCommercial"/>" binding="momsCommercial" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="outstockReqDate.momsShopType"/>" binding="momsShopType" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="outstockReqDate.momsStoreManageType"/>" binding="momsStoreManageType" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
             </c:if>
           </wj-flex-grid>
         </div>
@@ -303,11 +303,11 @@
           $scope._setComboData("popBranchCdCombo", list);
           // 그룹
           if(list.length <= 1) {
-            $("#srchPopBranchCdComboo").css('background-color', '#F0F0F0');
-            $("#srchPopBranchCdComboo").attr("disabled", true);
+            $("#srchPopBranchCdCombo").css('background-color', '#F0F0F0');
+            $("#srchPopBranchCdCombo").attr("disabled", true);
           } else {
-            $("#srchPopBranchCdComboo").css('background-color', '#FFFFFF');
-            $("#srchPopBranchCdComboo").attr("disabled", false);
+            $("#srchPopBranchCdCombo").css('background-color', '#FFFFFF');
+            $("#srchPopBranchCdCombo").attr("disabled", false);
           }
         }
       });
@@ -434,7 +434,7 @@
           eval('$scope.${param.closeFunc}()');
         }
         $scope.srchPopUserHqBrandCdCombo.selectedIndex = 0;
-        $scope.srchPopBranchCdComboo.selectedIndex = 0;
+        $scope.srchPopBranchCdCombo.selectedIndex = 0;
         if(momsEnvstVal === "1"){
           $scope.srchPopMomsTeamCombo.selectedIndex = 0;
           $scope.srchPopMomsAcShopCombo.selectedIndex = 0;

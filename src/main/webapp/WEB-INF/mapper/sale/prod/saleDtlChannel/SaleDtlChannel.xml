@@ -536,10 +536,10 @@
     ,       MOMS_SHOP_TYPE
     ,       MOMS_STORE_MANAGE_TYPE
     ,       BRANCH_CD
-    ,       '' AS MOMS_STORE_FG_01
     ,       REQ_DATE
     ,       REQ_TIME
     ,       NO_SEQ
+    ,       MOMS_STORE_FG_01
     FROM    TB_HQ_SALE_REPORT_MOMS thsrm
     WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}
     <![CDATA[
@@ -575,7 +575,7 @@
           AND thsrm.BRANCH_CD = #{branchCd}
       </if>
       <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
-        AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        AND thsrm.MOMS_STORE_FG_01 = #{momsStoreFg01}
       </if>
       <if test="prodClassCd != null and prodClassCd != ''">
           AND thsrm.PROD_CLASS_CD = #{prodClassCd}
@@ -640,9 +640,11 @@
       REG_ID,
       MOD_DT,
       MOD_ID,
-      NO_SEQ
+      NO_SEQ,
+      MOMS_STORE_FG_01
     )
-      SELECT 	#{hqOfficeCd},
+      SELECT
+      #{hqOfficeCd},
       '0000000',
       #{reqDate},
       #{reqTime},
@@ -679,7 +681,8 @@
       #{regId},
       #{modDt},
       #{modId},
-      #{noSeq} + ROWNUM
+      #{noSeq} + ROWNUM,
+      #{momsStoreFg01}
       FROM 	TB_CM_DATEM
       WHERE 	YYYYMMDD LIKE #{dataCreateMonth}||'%'
   </insert>
@@ -706,72 +709,72 @@
       TABLE    :
       COMMENTS : 체크로직 사용 안 함 사용할거면 FROM_SALE_DATE, TO_SALE_DATE yyyy-MM-dd로 변경해야함
   -->
-  <select id="getSaleDtlChannelChk" parameterType="SaleDtlChannelVO" resultType="DefaultMap">
-    /* SaleDtlChannelMapper.getSaleDtlChannelChk */
-    SELECT  COUNT(thsrm.REPORT_TYPE) AS CNT
-    FROM    TB_HQ_SALE_REPORT_MOMS thsrm
-    WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}
-    AND     thsrm.NO_SEQ = #{noSeq}
-    AND     thsrm.FROM_SALE_DATE = #{dataCreateMonth}||'01'
-    AND     thsrm.TO_SALE_DATE = #{dataCreateMonth}||#{dataCreateMonthLastDate}
-    AND     thsrm.REPORT_TYPE = '01'
-      <if test='storeCds != null and storeCds != ""'>
-          AND TO_CHAR(thsrm.STORE_CD_LIST) = #{storeCds}
-      </if>
-      <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
-          AND TO_CHAR(thsrm.STORE_HQ_BRAND_CD_LIST) = #{storeHqBrandCd:CLOB} -- 매장브랜드 선택일때
-      </if>
-      <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
-        AND TO_CHAR(thsrm.STORE_HQ_BRAND_CD_LIST) = #{userBrands:CLOB}  -- 매장브랜드 전체일때
-      </if>
-      <if test='momsTeam != null and momsTeam != ""'>
-          AND thsrm.MOMS_TEAM = #{momsTeam}
-      </if>
-      <if test='momsAcShop != null and momsAcShop != ""'>
-          AND thsrm.MOMS_AC_SHOP = #{momsAcShop}
-      </if>
-      <if test='momsAreaFg != null and momsAreaFg != ""'>
-          AND thsrm.MOMS_AREA_FG = #{momsAreaFg}
-      </if>
-      <if test='momsCommercial != null and momsCommercial != ""'>
-          AND thsrm.MOMS_COMMERCIAL = #{momsCommercial}
-      </if>
-      <if test='momsShopType != null and momsShopType != ""'>
-          AND thsrm.MOMS_SHOP_TYPE = #{momsShopType}
-      </if>
-      <if test='momsStoreManageType != null and momsStoreManageType != ""'>
-          AND thsrm.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
-      </if>
-      <if test='branchCd != null and branchCd != ""'>
-          AND thsrm.BRANCH_CD = #{branchCd}
-      </if>
-      <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
-        AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
-      </if>
-      <if test="prodClassCd != null and prodClassCd != ''">
-          AND thsrm.PROD_CLASS_CD = #{prodClassCd}
-      </if>
-      <if test='prodCd != null and prodCd != ""'>
-          AND thsrm.PROD_CD = #{prodCd}
-      </if>
-      <if test='prodNm != null and prodNm != ""'>
-          AND thsrm.PROD_NM = #{prodNm}
-      </if>
-      <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
-          AND thsrm.PROD_HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
-      </if>
-      <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
-          <if test='userBrands != null and userBrands != ""'>
-              -- 상품브랜드 전체일때
-              AND thsrm.PROD_HQ_BRAND_CD IN
-              <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
-                  #{item}
-              </foreach>
-          </if>
-      </if>
-      <if test='prodCds != null and prodCds != ""'>
-          AND TO_CHAR(thsrm.PROD_CD_LIST) = #{prodCds}
-      </if>
-  </select>
+  <!--<select id="getSaleDtlChannelChk" parameterType="SaleDtlChannelVO" resultType="DefaultMap">-->
+    <!--/* SaleDtlChannelMapper.getSaleDtlChannelChk */-->
+    <!--SELECT  COUNT(thsrm.REPORT_TYPE) AS CNT-->
+    <!--FROM    TB_HQ_SALE_REPORT_MOMS thsrm-->
+    <!--WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}-->
+    <!--AND     thsrm.NO_SEQ = #{noSeq}-->
+    <!--AND     thsrm.FROM_SALE_DATE = #{dataCreateMonth}||'01'-->
+    <!--AND     thsrm.TO_SALE_DATE = #{dataCreateMonth}||#{dataCreateMonthLastDate}-->
+    <!--AND     thsrm.REPORT_TYPE = '01'-->
+      <!--<if test='storeCds != null and storeCds != ""'>-->
+          <!--AND TO_CHAR(thsrm.STORE_CD_LIST) = #{storeCds}-->
+      <!--</if>-->
+      <!--<if test='storeHqBrandCd != null and storeHqBrandCd != ""'>-->
+          <!--AND TO_CHAR(thsrm.STORE_HQ_BRAND_CD_LIST) = #{storeHqBrandCd:CLOB} &#45;&#45; 매장브랜드 선택일때-->
+      <!--</if>-->
+      <!--<if test='storeHqBrandCd == null or storeHqBrandCd == ""'>-->
+        <!--AND TO_CHAR(thsrm.STORE_HQ_BRAND_CD_LIST) = #{userBrands:CLOB}  &#45;&#45; 매장브랜드 전체일때-->
+      <!--</if>-->
+      <!--<if test='momsTeam != null and momsTeam != ""'>-->
+          <!--AND thsrm.MOMS_TEAM = #{momsTeam}-->
+      <!--</if>-->
+      <!--<if test='momsAcShop != null and momsAcShop != ""'>-->
+          <!--AND thsrm.MOMS_AC_SHOP = #{momsAcShop}-->
+      <!--</if>-->
+      <!--<if test='momsAreaFg != null and momsAreaFg != ""'>-->
+          <!--AND thsrm.MOMS_AREA_FG = #{momsAreaFg}-->
+      <!--</if>-->
+      <!--<if test='momsCommercial != null and momsCommercial != ""'>-->
+          <!--AND thsrm.MOMS_COMMERCIAL = #{momsCommercial}-->
+      <!--</if>-->
+      <!--<if test='momsShopType != null and momsShopType != ""'>-->
+          <!--AND thsrm.MOMS_SHOP_TYPE = #{momsShopType}-->
+      <!--</if>-->
+      <!--<if test='momsStoreManageType != null and momsStoreManageType != ""'>-->
+          <!--AND thsrm.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}-->
+      <!--</if>-->
+      <!--<if test='branchCd != null and branchCd != ""'>-->
+          <!--AND thsrm.BRANCH_CD = #{branchCd}-->
+      <!--</if>-->
+      <!--<if test='momsStoreFg01 != null and momsStoreFg01 != ""'>-->
+        <!--AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}-->
+      <!--</if>-->
+      <!--<if test="prodClassCd != null and prodClassCd != ''">-->
+          <!--AND thsrm.PROD_CLASS_CD = #{prodClassCd}-->
+      <!--</if>-->
+      <!--<if test='prodCd != null and prodCd != ""'>-->
+          <!--AND thsrm.PROD_CD = #{prodCd}-->
+      <!--</if>-->
+      <!--<if test='prodNm != null and prodNm != ""'>-->
+          <!--AND thsrm.PROD_NM = #{prodNm}-->
+      <!--</if>-->
+      <!--<if test='prodHqBrandCd != null and prodHqBrandCd != ""'>-->
+          <!--AND thsrm.PROD_HQ_BRAND_CD = #{prodHqBrandCd} &#45;&#45; 상품브랜드 선택일때-->
+      <!--</if>-->
+      <!--<if test='prodHqBrandCd == null or prodHqBrandCd == ""'>-->
+          <!--<if test='userBrands != null and userBrands != ""'>-->
+              <!--&#45;&#45; 상품브랜드 전체일때-->
+              <!--AND thsrm.PROD_HQ_BRAND_CD IN-->
+              <!--<foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >-->
+                  <!--#{item}-->
+              <!--</foreach>-->
+          <!--</if>-->
+      <!--</if>-->
+      <!--<if test='prodCds != null and prodCds != ""'>-->
+          <!--AND TO_CHAR(thsrm.PROD_CD_LIST) = #{prodCds}-->
+      <!--</if>-->
+  <!--</select>-->
 
 </mapper>

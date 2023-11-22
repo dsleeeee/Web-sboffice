@@ -47,7 +47,7 @@
             </tr>
 <%--            <tr>--%>
 <%--                &lt;%&ndash; 매장브랜드 &ndash;%&gt;--%>
-<%--                <th><s:message code="dayProd.storeHqBrand"/></th>--%>
+<%--                <th><s:message code="cmm.moms.storeHqBrand"/></th>--%>
 <%--                <td>--%>
 <%--                    <div class="sb-select">--%>
 <%--                        <wj-combo-box--%>
