@@ -65,14 +65,14 @@
             <td>
               <div class="sb-select">
                 <wj-combo-box
-                        id="srchPopBranchCdComboo"
+                        id="srchPopBranchCdCombo"
                         ng-model="popBranchCd"
                         items-source="_getComboData('popBranchCdCombo')"
                         display-member-path="name"
                         selected-value-path="value"
                         is-editable="false"
                         initialized="_initComboBox(s)"
-                        control="srchPopBranchCdComboo">
+                        control="srchPopBranchCdCombo">
                 </wj-combo-box>
               </div>
             </td>
@@ -389,11 +389,11 @@
           $scope._setComboData("popBranchCdCombo", list);
           // 그룹
           if(list.length <= 1) {
-            $("#srchPopBranchCdComboo").css('background-color', '#F0F0F0');
-            $("#srchPopBranchCdComboo").attr("disabled", true);
+            $("#srchPopBranchCdCombo").css('background-color', '#F0F0F0');
+            $("#srchPopBranchCdCombo").attr("disabled", true);
           } else {
-            $("#srchPopBranchCdComboo").css('background-color', '#FFFFFF');
-            $("#srchPopBranchCdComboo").attr("disabled", false);
+            $("#srchPopBranchCdCombo").css('background-color', '#FFFFFF');
+            $("#srchPopBranchCdCombo").attr("disabled", false);
           }
         }
       });
@@ -416,7 +416,7 @@
         $scope.srchPopMomsCommercialCombo.selectedIndex = 0;
         $scope.srchPopMomsShopTypeCombo.selectedIndex = 0;
         $scope.srchPopMomsStoreManageTypeCombo.selectedIndex = 0;
-        $scope.srchPopBranchCdComboo.selectedIndex = 0;
+        $scope.srchPopBranchCdCombo.selectedIndex = 0;
       });
 
       if ($scope.searchFg == "N") {
