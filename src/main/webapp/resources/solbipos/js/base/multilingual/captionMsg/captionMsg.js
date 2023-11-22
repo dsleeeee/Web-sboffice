@@ -327,7 +327,7 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 엑셀업로드
     $scope.excelUpload = function () {
-        var msg = messages["dlvrProd.confmMsg"];  // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+        var msg = messages["captionMsg.excelUpload.confmMsg"];  // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
 
         $scope._popConfirm(msg, function() {
 
@@ -371,7 +371,7 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
                includeColumns : function (column) {
                    return column.visible;
                }
-           }, messages["captionMsg.captionMsg"] + '_엑셀업로드_양식.xlsx');
+           }, messages["captionMsg.captionMsg"] + '_엑셀업로드_양식_' +  getCurDateTime() + '.xlsx');
          }, 10);
     };
 
@@ -450,7 +450,7 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
         var vScope  = agrid.getScope('captionMsgCtrl');
 
         if (rowLength === 0) {
-            $scope._popMsg(messages['empCardInfo.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+            $scope._popMsg(messages['captionMsg.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
             return false;
         }
 

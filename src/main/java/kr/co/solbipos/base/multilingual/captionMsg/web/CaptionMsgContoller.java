@@ -36,7 +36,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : CaptionMsgContoller.java
- * @Description : 기초관리 - 매장관리 - 다국어관리(기능키/메시지)
+ * @Description : 기초관리 - 다국어관리 - 다국어관리(기능키/메시지)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -185,13 +185,6 @@ public class CaptionMsgContoller {
 
         return ReturnUtil.returnListJson(Status.OK, list, captionMsgVO);
     }
-
-
-
-
-
-
-
 
     /**
      * 화면구분등록 탭 리스트 조회

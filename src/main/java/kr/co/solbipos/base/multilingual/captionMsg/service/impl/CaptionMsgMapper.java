@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Class Name : CaptionMsgMapper.java
- * @Description : 기초관리 - 매장관리 - 다국어관리(기능키/메시지)
+ * @Description : 기초관리 - 다국어관리 - 다국어관리(기능키/메시지)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

@@ -140,4 +140,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsg.js?ver=20231120.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsg.js?ver=20231122.01" charset="utf-8"></script>
