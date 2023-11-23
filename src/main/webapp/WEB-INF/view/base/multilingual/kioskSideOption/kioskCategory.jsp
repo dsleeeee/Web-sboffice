@@ -5,7 +5,7 @@
 
 <div class="subCon" ng-controller="kioskCategoryCtrl" id="kioskCategoryView" style="display: none;">
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="kiosk.kioskCategory"/></a>
+        <a href="#" class="open fl"><s:message code="kioskSideOption.kioskCategory"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('kioskCategoryCtrl', 1)">
@@ -23,7 +23,7 @@
         </colgroup>
         <tbody>
         <tr>
-            <th><s:message code="kiosk.keyMapGrp"/></th>
+            <th><s:message code="kioskSideOption.keyMapGrp"/></th>
             <td colspan="3">
                 <div class="sb-select w30">
                     <wj-combo-box
@@ -74,13 +74,13 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kiosk.keyMapGrp"/>" binding="tuClsType" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kiosk.keyMapGrpNm"/>" binding="tuClsTypeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kiosk.categoryCd"/>" binding="tuClsCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>" binding="tuClsNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.en"/>)" binding="tuClsEnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.cn"/>)" binding="tuClsCnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.jp"/>)" binding="tuClsJpNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrp"/>" binding="tuClsType" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrpNm"/>" binding="tuClsTypeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryCd"/>" binding="tuClsCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>" binding="tuClsNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.en"/>)" binding="tuClsEnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.cn"/>)" binding="tuClsCnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.jp"/>)" binding="tuClsJpNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -101,13 +101,13 @@
             is-read-only="true">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="kiosk.keyMapGrp"/>" binding="tuClsType" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.keyMapGrpNm"/>" binding="tuClsTypeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryCd"/>" binding="tuClsCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>" binding="tuClsNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.en"/>)" binding="tuClsEnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.cn"/>)" binding="tuClsCnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.jp"/>)" binding="tuClsJpNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrp"/>" binding="tuClsType" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrpNm"/>" binding="tuClsTypeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryCd"/>" binding="tuClsCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>" binding="tuClsNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.en"/>)" binding="tuClsEnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.cn"/>)" binding="tuClsCnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.jp"/>)" binding="tuClsJpNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
 
         </wj-flex-grid>
     </div>
@@ -130,13 +130,13 @@
             is-read-only="true">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="kiosk.keyMapGrp"/>" binding="tuClsType" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.keyMapGrpNm"/>" binding="tuClsTypeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryCd"/>" binding="tuClsCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>" binding="tuClsNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.en"/>)" binding="tuClsEnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.cn"/>)" binding="tuClsCnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kiosk.categoryNm"/>(<s:message code="kiosk.jp"/>)" binding="tuClsJpNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrp"/>" binding="tuClsType" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrpNm"/>" binding="tuClsTypeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryCd"/>" binding="tuClsCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>" binding="tuClsNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.en"/>)" binding="tuClsEnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.cn"/>)" binding="tuClsCnNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.jp"/>)" binding="tuClsJpNm" align="left" width="150" max-length="16"></wj-flex-grid-column>
 
         </wj-flex-grid>
     </div>
@@ -147,4 +147,4 @@
     var kioskTuClsTypeList = ${kioskTuClsTypeList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kiosk/kioskCategory.js?ver=20231122.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20231123.01" charset="utf-8"></script>

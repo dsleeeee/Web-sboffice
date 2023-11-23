@@ -1,4 +1,4 @@
-package kr.co.solbipos.base.multilingual.kiosk.web;
+package kr.co.solbipos.base.multilingual.kioskSideOption.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
@@ -8,9 +8,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgVO;
-import kr.co.solbipos.base.multilingual.kiosk.service.KioskService;
-import kr.co.solbipos.base.multilingual.kiosk.service.KioskVO;
+import kr.co.solbipos.base.multilingual.kioskSideOption.service.KioskSideOptionService;
+import kr.co.solbipos.base.multilingual.kioskSideOption.service.KioskSideOptionVO;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
- * @Class Name : KioskController.java
+ * @Class Name : KioskSideOptionController.java
  * @Description : 기초관리 - 다국어관리 - 다국어관리(키오스크(카테고리)/사이드/옵션)
  * @Modification Information
  * @
@@ -44,11 +42,11 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping("/base/multilingual/kiosk")
-public class KioskController {
+@RequestMapping("/base/multilingual/kioskSideOption")
+public class KioskSideOptionController {
 
     private final SessionService sessionService;
-    private final KioskService kioskService;
+    private final KioskSideOptionService kioskSideOptionService;
     private final KioskKeyMapService kioskKeyMapService;
     private final CmmCodeUtil cmmCodeUtil;
 
@@ -56,9 +54,9 @@ public class KioskController {
      * Constructor Injection
      */
     @Autowired
-    public KioskController(SessionService sessionService, KioskService kioskService, KioskKeyMapService kioskKeyMapService, CmmCodeUtil cmmCodeUtil){
+    public KioskSideOptionController(SessionService sessionService, KioskSideOptionService kioskSideOptionService, KioskKeyMapService kioskKeyMapService, CmmCodeUtil cmmCodeUtil){
         this.sessionService = sessionService;
-        this.kioskService = kioskService;
+        this.kioskSideOptionService = kioskSideOptionService;
         this.kioskKeyMapService = kioskKeyMapService;
         this.cmmCodeUtil = cmmCodeUtil;
     }
@@ -82,31 +80,31 @@ public class KioskController {
         List<DefaultMap<String>> kioskTuClsTypeList = kioskKeyMapService.getKioskTuClsTypeList(kioskKeyMapVO, sessionInfoVO);
         model.addAttribute("kioskTuClsTypeList", kioskTuClsTypeList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(kioskTuClsTypeList, "name", "value", UseYn.ALL));
 
-        return "base/multilingual/kiosk/kioskTab";
+        return "base/multilingual/kioskSideOption/kioskSideOptionTab";
     }
 
     /**
      *  키오스크(카테고리) 탭 리스트 조회
      *
-     * @param kioskVO
+     * @param kioskSideOptionVO
      * @param request
      * @author  이다솜
      * @since   2023. 11. 20.
      */
     @RequestMapping(value = "/getKioskCategoryList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getKioskCategoryList(KioskVO kioskVO, HttpServletRequest request) {
+    public Result getKioskCategoryList(KioskSideOptionVO kioskSideOptionVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> list = kioskService.getKioskCategoryList(kioskVO, sessionInfoVO);
+        List<DefaultMap<String>> list = kioskSideOptionService.getKioskCategoryList(kioskSideOptionVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, list, kioskVO);
+        return returnListJson(Status.OK, list, kioskSideOptionVO);
     }
 
     /**
      * 키오스크(카테고리) 영문, 중문, 일문 저장
-     * @param kioskVOs
+     * @param kioskSideOptionVOs
      * @param request
      * @param response
      * @param model
@@ -115,12 +113,12 @@ public class KioskController {
      */
     @RequestMapping(value = "/saveKioskCategory.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveKioskCategory(@RequestBody KioskVO[] kioskVOs, HttpServletRequest request,
+    public Result saveKioskCategory(@RequestBody KioskSideOptionVO[] kioskSideOptionVOs, HttpServletRequest request,
                                  HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = kioskService.saveKioskCategory(kioskVOs, sessionInfoVO);
+        int result = kioskSideOptionService.saveKioskCategory(kioskSideOptionVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }

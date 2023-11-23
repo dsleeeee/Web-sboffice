@@ -52,7 +52,7 @@ app.controller('kioskCategoryCtrl', ['$scope', '$http', '$timeout', function ($s
         params.tuClsType = $scope.srchTuClsTypeCombo.selectedValue;
 
         // 키오스크(카테고리) 탭 리스트 조회
-        $scope._inquiryMain("/base/multilingual/kiosk/getKioskCategoryList.sb", params);
+        $scope._inquiryMain("/base/multilingual/kioskSideOption/getKioskCategoryList.sb", params);
     };
 
     // 저장
@@ -68,7 +68,7 @@ app.controller('kioskCategoryCtrl', ['$scope', '$http', '$timeout', function ($s
                 params.push($scope.flex.collectionView.itemsEdited[u]);
             }
 
-            $scope._save("/base/multilingual/kiosk/saveKioskCategory.sb", params, function(result) {
+            $scope._save("/base/multilingual/kioskSideOption/saveKioskCategory.sb", params, function(result) {
                 // 재조회
                 $scope.getKioskCategoryList();
             });
@@ -96,7 +96,7 @@ app.controller('kioskCategoryCtrl', ['$scope', '$http', '$timeout', function ($s
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["kiosk.kioskCategory"]  + '_' +  getCurDateTime() + '.xlsx', function () {
+                }, messages["kioskSideOption.kioskCategory"]  + '_' +  getCurDateTime() + '.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -112,7 +112,7 @@ app.controller('kioskCategoryCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // 엑셀업로드
     $scope.excelUpload = function () {
-        var msg = messages["kiosk.excelUpload.confmMsg"];  // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+        var msg = messages["kioskSideOption.excelUpload.confmMsg"];  // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
 
         $scope._popConfirm(msg, function() {
 
@@ -142,7 +142,7 @@ app.controller('kioskCategoryExcelDownCtrl', ['$scope', '$http', '$timeout', fun
         var params = {};
         params.tuClsType = tuClsType;
 
-        $scope._inquiryMain("/base/multilingual/kiosk/getKioskCategoryList.sb", params, function (){
+        $scope._inquiryMain("/base/multilingual/kioskSideOption/getKioskCategoryList.sb", params, function (){
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
             $timeout(function()	{
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flex,
@@ -153,7 +153,7 @@ app.controller('kioskCategoryExcelDownCtrl', ['$scope', '$http', '$timeout', fun
                             return column.visible;
                         }
                     },
-                    messages["kiosk.kioskCategory"] + '_엑셀업로드_양식_' + getCurDateTime() + '.xlsx',
+                    messages["kioskSideOption.kioskCategory"] + '_엑셀업로드_양식_' + getCurDateTime() + '.xlsx',
                     function () {
                         $timeout(function () {
                             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
@@ -229,7 +229,7 @@ app.controller('kioskCategoryExcelUploadCtrl', ['$scope', '$http', '$timeout', f
                 }, 10);
             } else {
                 $("#excelUpFile").val('');
-                $scope._popMsg(messages['kiosk.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
+                $scope._popMsg(messages['kioskSideOption.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
         }
@@ -242,7 +242,7 @@ app.controller('kioskCategoryExcelUploadCtrl', ['$scope', '$http', '$timeout', f
         var rowLength = $scope.flex.rows.length;
 
         if (rowLength === 0) {
-            $scope._popMsg(messages['kiosk.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+            $scope._popMsg(messages['kioskSideOption.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
             return false;
         }
 
@@ -277,19 +277,19 @@ app.controller('kioskCategoryExcelUploadCtrl', ['$scope', '$http', '$timeout', f
 
             if (nvl(item.tuClsEnNm + '', '').getByteLengthForOracle() > 50) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["kiosk.en"] + " " + messages["kiosk.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                $scope._popMsg(messages["kioskSideOption.en"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
             if (nvl(item.tuClsCnNm + '', '').getByteLengthForOracle() > 50) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["kiosk.cn"] + " " + messages["kiosk.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                $scope._popMsg(messages["kioskSideOption.cn"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
             if (nvl(item.tuClsJpNm + '', '').getByteLengthForOracle() > 50) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                $scope._popMsg(messages["kiosk.jp"] + " " + messages["kiosk.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                $scope._popMsg(messages["kioskSideOption.jp"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
         }
@@ -334,7 +334,7 @@ app.controller('kioskCategoryExcelUploadCtrl', ['$scope', '$http', '$timeout', f
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/base/multilingual/kiosk/saveKioskCategory.sb', /* 통신할 URL */
+            url    : '/base/multilingual/kioskSideOption/saveKioskCategory.sb', /* 통신할 URL */
             data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더

@@ -1,4 +1,4 @@
-package kr.co.solbipos.base.multilingual.kiosk.service;
+package kr.co.solbipos.base.multilingual.kioskSideOption.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -6,7 +6,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import java.util.List;
 
 /**
- * @Class Name : KioskService.java
+ * @Class Name : KioskSideOptionService.java
  * @Description : 기초관리 - 다국어관리 - 다국어관리(키오스크(카테고리)/사이드/옵션)
  * @Modification Information
  * @
@@ -20,11 +20,11 @@ import java.util.List;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public interface KioskService {
+public interface KioskSideOptionService {
 
     /** 키오스크(카테고리) 탭 리스트 조회 */
-    List<DefaultMap<String>> getKioskCategoryList(KioskVO kioskVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getKioskCategoryList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO);
 
     /** 키오스크(카테고리) 영문, 중문, 일문 저장 */
-    int saveKioskCategory(KioskVO[] kioskVOs, SessionInfoVO sessionInfoVO);
+    int saveKioskCategory(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO);
 }

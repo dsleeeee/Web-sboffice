@@ -1,8 +1,8 @@
-package kr.co.solbipos.base.multilingual.kiosk.service;
+package kr.co.solbipos.base.multilingual.kioskSideOption.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
-public class KioskVO extends PageVO {
+public class KioskSideOptionVO extends PageVO {
 
     private static final long serialVersionUID = 7945879495044857803L;
 

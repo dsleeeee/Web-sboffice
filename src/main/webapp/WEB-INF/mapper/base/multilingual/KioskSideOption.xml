@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    Kiosk.xml
+    KioskSideOption.xml
     다국어관리(키오스크(카테고리)/사이드/옵션)
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
@@ -10,16 +10,16 @@
     1       이다솜     2023.11.03     최초작성
 -->
 
-<mapper namespace="kr.co.solbipos.base.multilingual.kiosk.service.impl.KioskMapper">
+<mapper namespace="kr.co.solbipos.base.multilingual.kioskSideOption.service.impl.KioskSideOptionMapper">
 
     <!-- 키오스크(카테고리) 탭 리스트 조회 -->
     <!--
         TABLE    : TB_HQ_KIOSK_CLS
-        PARAM    : kioskVO
+        PARAM    : kioskSideOptionVO
         COMMENTS : 키오스크(카테고리) 탭 리스트를 조회한다.
     -->
-    <select id="getKioskCategoryList" parameterType="kioskVO" resultType="DefaultMap">
-         /* USE : KioskMapper.getKioskCategoryList */
+    <select id="getKioskCategoryList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
+         /* USE : KioskSideOptionMapper.getKioskCategoryList */
          SELECT thkc.HQ_OFFICE_CD
          ,      thkc.TU_CLS_TYPE
          ,      thkg.TU_CLS_TYPE_NM
@@ -61,11 +61,11 @@
     <!-- 키오스크(카테고리) 영문, 중문, 일문 저장 -->
     <!--
         TABLE    : TB_HQ_KIOSK_CLS
-        PARAM    : kioskVO
+        PARAM    : kioskSideOptionVO
         COMMENTS : 키오스크(카테고리) 영문, 중문, 일문을 저장한다.
     -->
-    <update id="saveKioskCategory" parameterType="kioskVO">
-        /* USE : KioskMapper.saveKioskCategory */
+    <update id="saveKioskCategory" parameterType="kioskSideOptionVO">
+        /* USE : KioskSideOptionMapper.saveKioskCategory */
         MERGE INTO TB_HQ_KIOSK_CLS thkc
         USING DUAL
         ON (
