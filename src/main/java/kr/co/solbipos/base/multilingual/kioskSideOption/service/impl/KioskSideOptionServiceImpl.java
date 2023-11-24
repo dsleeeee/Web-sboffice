@@ -16,7 +16,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : KioskSideOptionServiceImpl.java
- * @Description : 기초관리 - 다국어관리 - 다국어관리(키오스크(카테고리)/사이드/옵션)
+ * @Description : 기초관리 - 다국어관리 - 다국어관리(키오스크/사이드/옵션)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -42,7 +42,7 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
         this.messageService = messageService;
     }
 
-    /** 키오스크(카테고리) 탭 리스트 조회 */
+    /** 키오스크(카테고리명) 탭 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getKioskCategoryList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO){
 
@@ -50,7 +50,7 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
         return kioskSideOptionMapper.getKioskCategoryList(kioskSideOptionVO);
     }
 
-    /** 키오스크(카테고리) 영문, 중문, 일문 저장 */
+    /** 키오스크(카테고리명) 영문, 중문, 일문 저장 */
     @Override
     public int saveKioskCategory(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO){
         int result = 0;
@@ -74,5 +74,68 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
         }
     }
 
+    /** 사이드(선택그룹명) 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSideSdselGrpList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO){
+
+        kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return kioskSideOptionMapper.getSideSdselGrpList(kioskSideOptionVO);
+    }
+
+    /** 사이드(선택그룹명) 영문, 중문, 일문 저장 */
+    @Override
+    public int saveSideSdselGrp(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO){
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for (KioskSideOptionVO kioskSideOptionVO : kioskSideOptionVOs) {
+
+            kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskSideOptionVO.setRegDt(dt);
+            kioskSideOptionVO.setRegId(sessionInfoVO.getUserId());
+            kioskSideOptionVO.setModDt(dt);
+            kioskSideOptionVO.setModId(sessionInfoVO.getUserId());
+
+            result += kioskSideOptionMapper.saveSideSdselGrp(kioskSideOptionVO);
+        }
+
+        if (result == kioskSideOptionVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 사이드(선택분류명) 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getSideSdselClassList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO){
+
+        kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return kioskSideOptionMapper.getSideSdselClassList(kioskSideOptionVO);
+    }
+
+    /** 사이드(선택분류명) 영문, 중문, 일문 저장 */
+    @Override
+    public int saveSideSdselClass(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO){
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for (KioskSideOptionVO kioskSideOptionVO : kioskSideOptionVOs) {
+
+            kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskSideOptionVO.setRegDt(dt);
+            kioskSideOptionVO.setRegId(sessionInfoVO.getUserId());
+            kioskSideOptionVO.setModDt(dt);
+            kioskSideOptionVO.setModId(sessionInfoVO.getUserId());
+
+            result += kioskSideOptionMapper.saveSideSdselClass(kioskSideOptionVO);
+        }
+
+        if (result == kioskSideOptionVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
 
 }

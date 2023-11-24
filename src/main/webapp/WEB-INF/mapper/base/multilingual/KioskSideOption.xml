@@ -3,7 +3,7 @@
 
 <!--
     KioskSideOption.xml
-    다국어관리(키오스크(카테고리)/사이드/옵션)
+    다국어관리(키오스크/사이드/옵션)
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
@@ -12,11 +12,11 @@
 
 <mapper namespace="kr.co.solbipos.base.multilingual.kioskSideOption.service.impl.KioskSideOptionMapper">
 
-    <!-- 키오스크(카테고리) 탭 리스트 조회 -->
+    <!-- 키오스크(카테고리명) 탭 리스트 조회 -->
     <!--
         TABLE    : TB_HQ_KIOSK_CLS
         PARAM    : kioskSideOptionVO
-        COMMENTS : 키오스크(카테고리) 탭 리스트를 조회한다.
+        COMMENTS : 키오스크(카테고리명) 탭 리스트를 조회한다.
     -->
     <select id="getKioskCategoryList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
          /* USE : KioskSideOptionMapper.getKioskCategoryList */
@@ -58,11 +58,11 @@
          BY     thkc.TU_CLS_TYPE, thkc.INDEX_NO
     </select>
 
-    <!-- 키오스크(카테고리) 영문, 중문, 일문 저장 -->
+    <!-- 키오스크(카테고리명) 영문, 중문, 일문 저장 -->
     <!--
         TABLE    : TB_HQ_KIOSK_CLS
         PARAM    : kioskSideOptionVO
-        COMMENTS : 키오스크(카테고리) 영문, 중문, 일문을 저장한다.
+        COMMENTS : 키오스크(카테고리명) 영문, 중문, 일문을 저장한다.
     -->
     <update id="saveKioskCategory" parameterType="kioskSideOptionVO">
         /* USE : KioskSideOptionMapper.saveKioskCategory */
@@ -79,6 +79,131 @@
             TU_CLS_EN_NM  = #{tuClsEnNm}
         ,   TU_CLS_CN_NM  = #{tuClsCnNm}
         ,   TU_CLS_JP_NM  = #{tuClsJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+    <!-- 사이드(선택그룹명) 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 사이드(선택그룹명) 탭 리스트를 조회한다.
+    -->
+    <select id="getSideSdselGrpList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
+         /* USE : KioskSideOptionMapper.getSideSdselGrpList */
+        SELECT
+            thpsg.SDSEL_GRP_CD,
+            thpsg.SDSEL_GRP_NM,
+            NVL(thpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG,
+            thpsg.SDSEL_GRP_EN_NM,
+            thpsg.SDSEL_GRP_CN_NM,
+            thpsg.SDSEL_GRP_JP_NM
+        FROM
+            TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+        WHERE
+            thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thpsg.USE_YN = 'Y'
+        <if test='sdselTypeFg != null and sdselTypeFg != ""'>
+            AND thpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
+        </if>
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND thpsg.SDSEL_GRP_CD LIKE '%'|| #{sdselGrpCd} ||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND thpsg.SDSEL_GRP_NM LIKE '%'|| #{sdselGrpNm} ||'%'
+        </if>
+        ORDER BY
+            thpsg.SDSEL_GRP_CD
+    </select>
+
+    <!-- 사이드(선택그룹명) 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 사이드(선택그룹명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveSideSdselGrp" parameterType="kioskSideOptionVO">
+        /* USE : KioskSideOptionMapper.saveSideSdselGrp */
+        MERGE INTO TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_GRP_CD  = #{sdselGrpCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            SDSEL_GRP_EN_NM  = #{sdselGrpEnNm}
+        ,   SDSEL_GRP_CN_NM  = #{sdselGrpCnNm}
+        ,   SDSEL_GRP_JP_NM  = #{sdselGrpJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+    <!-- 사이드(선택분류명) 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 사이드(선택분류명) 탭 리스트를 조회한다.
+    -->
+    <select id="getSideSdselClassList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
+         /* USE : KioskSideOptionMapper.getSideSdselClassList */
+        SELECT
+            thpsc.SDSEL_GRP_CD,
+            thpsg.SDSEL_GRP_NM,
+            thpsc.SDSEL_CLASS_CD,
+            thpsc.SDSEL_CLASS_NM,
+            NVL(thpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG,
+            thpsc.SDSEL_CLASS_EN_NM,
+            thpsc.SDSEL_CLASS_CN_NM,
+            thpsc.SDSEL_CLASS_JP_NM
+        FROM
+            TB_HQ_PRODUCT_SDSEL_CLASS thpsc,
+            TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+        WHERE
+            thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thpsc.USE_YN = 'Y'
+            AND thpsg.HQ_OFFICE_CD (+)= thpsc.HQ_OFFICE_CD
+            AND thpsg.SDSEL_GRP_CD (+)= thpsc.SDSEL_GRP_CD
+        <if test='sdselTypeFg != null and sdselTypeFg != ""'>
+            AND thpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
+        </if>
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND thpsc.SDSEL_GRP_CD LIKE '%'|| #{sdselGrpCd} ||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND thpsg.SDSEL_GRP_NM LIKE '%'|| #{sdselGrpNm} ||'%'
+        </if>
+        <if test='sdselClassCd != null and sdselClassCd != ""'>
+            AND thpsc.SDSEL_CLASS_CD LIKE '%'|| #{sdselClassCd} ||'%'
+        </if>
+        <if test='sdselClassNm != null and sdselClassNm != ""'>
+            AND thpsc.SDSEL_CLASS_NM LIKE '%'|| #{sdselClassNm} ||'%'
+        </if>
+        ORDER BY
+            thpsc.SDSEL_GRP_CD
+    </select>
+
+    <!-- 사이드(선택분류명) 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 사이드(선택분류명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveSideSdselClass" parameterType="kioskSideOptionVO">
+        /* USE : KioskSideOptionMapper.saveSideSdselClass */
+        MERGE INTO TB_HQ_PRODUCT_SDSEL_CLASS thpsg
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD  = #{sdselClassCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            SDSEL_CLASS_EN_NM  = #{sdselClassEnNm}
+        ,   SDSEL_CLASS_CN_NM  = #{sdselClassCnNm}
+        ,   SDSEL_CLASS_JP_NM  = #{sdselClassJpNm}
         ,   MOD_DT        = #{modDt}
         ,   MOD_ID        = #{modId}
     </update>

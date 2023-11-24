@@ -28,7 +28,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : KioskSideOptionController.java
- * @Description : 기초관리 - 다국어관리 - 다국어관리(키오스크(카테고리)/사이드/옵션)
+ * @Description : 기초관리 - 다국어관리 - 다국어관리(키오스크/사이드/옵션)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -84,7 +84,7 @@ public class KioskSideOptionController {
     }
 
     /**
-     *  키오스크(카테고리) 탭 리스트 조회
+     *  키오스크(카테고리명) 탭 리스트 조회
      *
      * @param kioskSideOptionVO
      * @param request
@@ -103,7 +103,7 @@ public class KioskSideOptionController {
     }
 
     /**
-     * 키오스크(카테고리) 영문, 중문, 일문 저장
+     * 키오스크(카테고리명) 영문, 중문, 일문 저장
      * @param kioskSideOptionVOs
      * @param request
      * @param response
@@ -119,6 +119,86 @@ public class KioskSideOptionController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = kioskSideOptionService.saveKioskCategory(kioskSideOptionVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     *  사이드(선택그룹명) 탭 리스트 조회
+     *
+     * @param kioskSideOptionVO
+     * @param request
+     * @author  이다솜
+     * @since   2023. 11. 23.
+     */
+    @RequestMapping(value = "/getSideSdselGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideSdselGrpList(KioskSideOptionVO kioskSideOptionVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskSideOptionService.getSideSdselGrpList(kioskSideOptionVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskSideOptionVO);
+    }
+
+    /**
+     * 사이드(선택그룹명) 영문, 중문, 일문 저장
+     * @param kioskSideOptionVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2023. 11. 23.
+     */
+    @RequestMapping(value = "/saveSideSdselGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveSideSdselGrp(@RequestBody KioskSideOptionVO[] kioskSideOptionVOs, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskSideOptionService.saveSideSdselGrp(kioskSideOptionVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     *  사이드(선택분류명) 탭 리스트 조회
+     *
+     * @param kioskSideOptionVO
+     * @param request
+     * @author  이다솜
+     * @since   2023. 11. 23.
+     */
+    @RequestMapping(value = "/getSideSdselClassList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSideSdselClassList(KioskSideOptionVO kioskSideOptionVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskSideOptionService.getSideSdselClassList(kioskSideOptionVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskSideOptionVO);
+    }
+
+    /**
+     * 사이드(선택분류명) 영문, 중문, 일문 저장
+     * @param kioskSideOptionVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2023. 11. 23.
+     */
+    @RequestMapping(value = "/saveSideSdselClass.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveSideSdselClass(@RequestBody KioskSideOptionVO[] kioskSideOptionVOs, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskSideOptionService.saveSideSdselClass(kioskSideOptionVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }

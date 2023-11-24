@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @Class Name : KioskSideOptionService.java
- * @Description : 기초관리 - 다국어관리 - 다국어관리(키오스크(카테고리)/사이드/옵션)
+ * @Description : 기초관리 - 다국어관리 - 다국어관리(키오스크/사이드/옵션)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -27,4 +27,16 @@ public interface KioskSideOptionService {
 
     /** 키오스크(카테고리) 영문, 중문, 일문 저장 */
     int saveKioskCategory(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO);
+
+    /** 사이드(선택그룹명) 탭 리스트 조회 */
+    List<DefaultMap<String>> getSideSdselGrpList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO);
+
+    /** 사이드(선택그룹명) 영문, 중문, 일문 저장 */
+    int saveSideSdselGrp(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO);
+
+    /** 사이드(선택분류명) 탭 리스트 조회 */
+    List<DefaultMap<String>> getSideSdselClassList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO);
+
+    /** 사이드(선택분류명) 영문, 중문, 일문 저장 */
+    int saveSideSdselClass(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO);
 }

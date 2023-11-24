@@ -284,7 +284,7 @@
     <typeAlias alias="specificDayMemoVO" type="kr.co.solbipos.base.store.specificDayMemo.service.SpecificDayMemoVO"/>
     <!-- 기초관리 다국어관리 다국어관리(기능키/메시지) -->
     <typeAlias alias="captionMsgVO" type="kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgVO"/>
-    <!-- 기초관리 다국어관리 다국어관리(키오스크(카테고리)/사이드/옵션) -->
+    <!-- 기초관리 다국어관리 다국어관리(키오스크/사이드/옵션) -->
     <typeAlias alias="kioskSideOptionVO" type="kr.co.solbipos.base.multilingual.kioskSideOption.service.KioskSideOptionVO" />
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
