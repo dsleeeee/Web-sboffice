@@ -1264,7 +1264,10 @@
                     MOD_DT,
                     MOD_ID,
                     CLS_MEMO,
-                    TU_M_CLS_FG
+                    TU_M_CLS_FG,
+                    TU_CLS_EN_NM,
+                    TU_CLS_CN_NM,
+                    TU_CLS_JP_NM
                 )
                 SELECT HQ_OFFICE_CD,
                         #{tuClsType},
@@ -1282,7 +1285,10 @@
                         #{modDt},
                         #{modId},
                         CLS_MEMO,
-                        TU_M_CLS_FG
+                        TU_M_CLS_FG,
+                        TU_CLS_EN_NM,
+                        TU_CLS_CN_NM,
+                        TU_CLS_JP_NM
                   FROM TB_HQ_KIOSK_CLS
                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                    AND TU_CLS_TYPE = #{orgTuClsType}
@@ -1307,7 +1313,10 @@
                     REG_ID,
                     MOD_DT,
                     MOD_ID,
-                    CLS_MEMO
+                    CLS_MEMO,
+                    TU_CLS_EN_NM,
+                    TU_CLS_CN_NM,
+                    TU_CLS_JP_NM
                 )
                 SELECT STORE_CD,
                         POS_NO,
@@ -1325,7 +1334,10 @@
                         #{regId},
                         #{modDt},
                         #{modId},
-                        CLS_MEMO
+                        CLS_MEMO,
+                        TU_CLS_EN_NM,
+                        TU_CLS_CN_NM,
+                        TU_CLS_JP_NM
                   FROM TB_MS_KIOSK_CLS
                  WHERE STORE_CD = #{storeCd}
                    AND POS_NO = #{posNo}
@@ -1456,7 +1468,10 @@
         REG_DT,
         REG_ID,
         MOD_DT,
-        MOD_ID
+        MOD_ID,
+        TU_CLS_EN_NM,
+        TU_CLS_CN_NM,
+        TU_CLS_JP_NM
         )
         SELECT STORE_CD,
         #{posNo},
@@ -1473,7 +1488,10 @@
         #{regDt},
         #{regId},
         #{modDt},
-        #{modId}
+        #{modId},
+        TU_CLS_EN_NM,
+        TU_CLS_CN_NM,
+        TU_CLS_JP_NM
         FROM TB_MS_KIOSK_CLS
         WHERE STORE_CD = #{storeCd}
         AND POS_NO = #{orgPosNo}
@@ -1741,7 +1759,10 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            TU_M_CLS_FG
+            TU_M_CLS_FG,
+            TU_CLS_EN_NM,
+            TU_CLS_CN_NM,
+            TU_CLS_JP_NM
         )
         SELECT
         #{storeCd},
@@ -1760,7 +1781,10 @@
         #{regId},
         #{modDt},
         #{modId},
-        #{tuMClsFg} -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
+        #{tuMClsFg}, -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
+        TU_CLS_EN_NM,
+        TU_CLS_CN_NM,
+        TU_CLS_JP_NM
         FROM TB_HQ_KIOSK_CLS tmkc
         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
         AND TU_CLS_TYPE = #{tuClsType}
@@ -1792,7 +1816,10 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            TU_M_CLS_FG
+            TU_M_CLS_FG,
+            TU_CLS_EN_NM,
+            TU_CLS_CN_NM,
+            TU_CLS_JP_NM
         )
         SELECT
         #{storeCd},
@@ -1811,7 +1838,10 @@
         #{regId},
         #{modDt},
         #{modId},
-        #{tuMClsFg} -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
+        #{tuMClsFg}, -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
+        TU_CLS_EN_NM,
+        TU_CLS_CN_NM,
+        TU_CLS_JP_NM
         FROM TB_MS_KIOSK_CLS tmkc
         WHERE STORE_CD = #{storeCd}
         AND POS_NO = #{orgPosNo}
@@ -3701,7 +3731,9 @@
             MOD_DT,
             MOD_ID,
             CLS_MEMO,
-            TU_M_CLS_FG
+            TU_CLS_EN_NM,
+            TU_CLS_CN_NM,
+            TU_CLS_JP_NM
         )
         SELECT #{storeCd},
                #{posNo},
@@ -3720,7 +3752,9 @@
                #{modDt},
                #{modId},
                CLS_MEMO,
-               TU_M_CLS_FG
+               TU_CLS_EN_NM,
+               TU_CLS_CN_NM,
+               TU_CLS_JP_NM
           FROM TB_MS_KIOSK_CLS
          WHERE STORE_CD = #{originalStoreCd}
            AND POS_NO = #{orgPosNo}

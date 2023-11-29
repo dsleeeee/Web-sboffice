@@ -3339,7 +3339,10 @@
             #{modId} AS MOD_ID,
             RCVKIND,
             FIX_PROD_FG,
-            SDSEL_TYPE_FG
+            SDSEL_TYPE_FG,
+            SDSEL_GRP_EN_NM,
+            SDSEL_GRP_CN_NM,
+            SDSEL_GRP_JP_NM
             FROM TB_HQ_PRODUCT_SDSEL_GROUP
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3358,7 +3361,10 @@
             MOD_ID = B.MOD_ID,
             RCVKIND = B.RCVKIND,
             FIX_PROD_FG = B.FIX_PROD_FG,
-            SDSEL_TYPE_FG = B.SDSEL_TYPE_FG
+            SDSEL_TYPE_FG = B.SDSEL_TYPE_FG,
+            SDSEL_GRP_EN_NM = B.SDSEL_GRP_EN_NM,
+            SDSEL_GRP_CN_NM = B.SDSEL_GRP_CN_NM,
+            SDSEL_GRP_JP_NM = B.SDSEL_GRP_JP_NM
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3372,7 +3378,10 @@
                 A.MOD_ID,
                 A.RCVKIND,
                 A.FIX_PROD_FG,
-                A.SDSEL_TYPE_FG
+                A.SDSEL_TYPE_FG,
+                A.SDSEL_GRP_EN_NM,
+                A.SDSEL_GRP_CN_NM,
+                A.SDSEL_GRP_JP_NM
             ) VALUES (
                 B.STORE_CD,
                 B.HQ_BRAND_CD,
@@ -3385,7 +3394,10 @@
                 B.MOD_ID,
                 B.RCVKIND,
                 B.FIX_PROD_FG,
-                B.SDSEL_TYPE_FG
+                B.SDSEL_TYPE_FG,
+                B.SDSEL_GRP_EN_NM,
+                B.SDSEL_GRP_CN_NM,
+                B.SDSEL_GRP_JP_NM
             )
     </insert>
 
@@ -3414,7 +3426,10 @@
             #{modId} AS MOD_ID,
             MAP_CLASS_CD,
             RCVKIND,
-            REQUIRE_YN
+            REQUIRE_YN,
+            SDSEL_CLASS_EN_NM,
+            SDSEL_CLASS_CN_NM,
+            SDSEL_CLASS_JP_NM
             FROM TB_HQ_PRODUCT_SDSEL_CLASS
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3435,7 +3450,10 @@
             MOD_ID = B.MOD_ID,
             MAP_CLASS_CD = B.MAP_CLASS_CD,
             RCVKIND = B.RCVKIND,
-            REQUIRE_YN = B.REQUIRE_YN
+            REQUIRE_YN = B.REQUIRE_YN,
+            SDSEL_CLASS_EN_NM = B.SDSEL_CLASS_EN_NM,
+            SDSEL_CLASS_CN_NM = B.SDSEL_CLASS_CN_NM,
+            SDSEL_CLASS_JP_NM = B.SDSEL_CLASS_JP_NM
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3451,7 +3469,10 @@
                 A.MOD_ID,
                 A.MAP_CLASS_CD,
                 A.RCVKIND,
-                A.REQUIRE_YN
+                A.REQUIRE_YN,
+                A.SDSEL_CLASS_EN_NM,
+                A.SDSEL_CLASS_CN_NM,
+                A.SDSEL_CLASS_JP_NM
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3466,7 +3487,10 @@
                 B.MOD_ID,
                 B.MAP_CLASS_CD,
                 B.RCVKIND,
-                B.REQUIRE_YN
+                B.REQUIRE_YN,
+                B.SDSEL_CLASS_EN_NM,
+                B.SDSEL_CLASS_CN_NM,
+                B.SDSEL_CLASS_JP_NM
             )
     </insert>
 
@@ -3574,7 +3598,10 @@
             #{modId} AS MOD_ID,
             RCVKIND,
             FIX_PROD_FG,
-            SDSEL_TYPE_FG
+            SDSEL_TYPE_FG,
+            SDSEL_GRP_EN_NM,
+            SDSEL_GRP_CN_NM,
+            SDSEL_GRP_JP_NM
             FROM TB_MS_PRODUCT_SDSEL_GROUP
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -3593,7 +3620,10 @@
             MOD_ID = B.MOD_ID,
             RCVKIND = B.RCVKIND,
             FIX_PROD_FG = B.FIX_PROD_FG,
-            SDSEL_TYPE_FG = B.SDSEL_TYPE_FG
+            SDSEL_TYPE_FG = B.SDSEL_TYPE_FG,
+            SDSEL_GRP_EN_NM = B.SDSEL_GRP_EN_NM,
+            SDSEL_GRP_CN_NM = B.SDSEL_GRP_CN_NM,
+            SDSEL_GRP_JP_NM = B.SDSEL_GRP_JP_NM
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3607,7 +3637,10 @@
                 A.MOD_ID,
                 A.RCVKIND,
                 A.FIX_PROD_FG,
-                A.SDSEL_TYPE_FG
+                A.SDSEL_TYPE_FG,
+                A.SDSEL_GRP_EN_NM,
+                A.SDSEL_GRP_CN_NM,
+                A.SDSEL_GRP_JP_NM
             ) VALUES (
                 B.STORE_CD,
                 B.MS_BRAND_CD,
@@ -3620,7 +3653,10 @@
                 B.MOD_ID,
                 B.RCVKIND,
                 B.FIX_PROD_FG,
-                B.SDSEL_TYPE_FG
+                B.SDSEL_TYPE_FG,
+                B.SDSEL_GRP_EN_NM,
+                B.SDSEL_GRP_CN_NM,
+                B.SDSEL_GRP_JP_NM
             )
     </insert>
 
@@ -3649,7 +3685,10 @@
             #{modId} AS MOD_ID,
             MAP_CLASS_CD,
             RCVKIND,
-            REQUIRE_YN
+            REQUIRE_YN,
+            SDSEL_CLASS_EN_NM,
+            SDSEL_CLASS_CN_NM,
+            SDSEL_CLASS_JP_NM
             FROM TB_MS_PRODUCT_SDSEL_CLASS
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -3670,7 +3709,10 @@
             MOD_ID = B.MOD_ID,
             MAP_CLASS_CD = B.MAP_CLASS_CD,
             RCVKIND = B.RCVKIND,
-            REQUIRE_YN = B.REQUIRE_YN
+            REQUIRE_YN = B.REQUIRE_YN,
+            SDSEL_CLASS_EN_NM = B.SDSEL_CLASS_EN_NM,
+            SDSEL_CLASS_CN_NM = B.SDSEL_CLASS_CN_NM,
+            SDSEL_CLASS_JP_NM = B.SDSEL_CLASS_JP_NM
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3686,7 +3728,10 @@
                 A.MOD_ID,
                 A.MAP_CLASS_CD,
                 A.RCVKIND,
-                A.REQUIRE_YN
+                A.REQUIRE_YN,
+                A.SDSEL_CLASS_EN_NM,
+                A.SDSEL_CLASS_CN_NM,
+                A.SDSEL_CLASS_JP_NM
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3701,7 +3746,10 @@
                 B.MOD_ID,
                 B.MAP_CLASS_CD,
                 B.RCVKIND,
-                B.REQUIRE_YN
+                B.REQUIRE_YN,
+                B.SDSEL_CLASS_EN_NM,
+                B.SDSEL_CLASS_CN_NM,
+                B.SDSEL_CLASS_JP_NM
             )
     </insert>
 

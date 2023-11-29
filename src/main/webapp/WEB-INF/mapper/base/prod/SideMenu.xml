@@ -2031,7 +2031,10 @@
                     MOD_ID,
                     MAP_CLASS_CD,
                     RCVKIND,
-                    REQUIRE_YN
+                    REQUIRE_YN,
+                    SDSEL_CLASS_EN_NM,
+                    SDSEL_CLASS_CN_NM,
+                    SDSEL_CLASS_JP_NM
                 )
                 SELECT
                 A.HQ_OFFICE_CD,
@@ -2047,7 +2050,10 @@
                 #{modId} AS MOD_ID,
                 A.MAP_CLASS_CD,
                 A.RCVKIND,
-                A.REQUIRE_YN
+                A.REQUIRE_YN,
+                A.SDSEL_CLASS_EN_NM,
+                A.SDSEL_CLASS_CN_NM,
+                A.SDSEL_CLASS_JP_NM
                 FROM TB_HQ_PRODUCT_SDSEL_CLASS A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2071,7 +2077,10 @@
                     MOD_ID,
                     MAP_CLASS_CD,
                     RCVKIND,
-                    REQUIRE_YN
+                    REQUIRE_YN,
+                    SDSEL_CLASS_EN_NM,
+                    SDSEL_CLASS_CN_NM,
+                    SDSEL_CLASS_JP_NM
                 )
                 SELECT
                 A.STORE_CD,
@@ -2087,7 +2096,10 @@
                 #{modId} AS MOD_ID,
                 A.MAP_CLASS_CD,
                 A.RCVKIND,
-                A.REQUIRE_YN
+                A.REQUIRE_YN,
+                A.SDSEL_CLASS_EN_NM,
+                A.SDSEL_CLASS_CN_NM,
+                A.SDSEL_CLASS_JP_NM
                 FROM TB_MS_PRODUCT_SDSEL_CLASS A
                 WHERE 1=1
                 AND A.STORE_CD = #{storeCd}

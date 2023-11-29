@@ -40,11 +40,11 @@ public class CaptionMsgVO extends PageVO {
     private String captionMsgNm;
     /** 기능키, 메시지 구분 */
     private String captionMsgGb;
-    /** 기능키, 메시지명[영어] */
+    /** 기능키, 메시지명[영문] */
     private String captionMsgEnNm;
-    /** 기능키, 메시지명[중국어] */
+    /** 기능키, 메시지명[중문] */
     private String captionMsgCnNm;
-    /** 기능키, 메시지명[일어] */
+    /** 기능키, 메시지명[일문] */
     private String captionMsgJpNm;
     /** 화면이미지 고유번호 */
     private String captionNo;
