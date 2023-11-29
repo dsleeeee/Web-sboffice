@@ -39,4 +39,16 @@ public interface KioskSideOptionService {
 
     /** 사이드(선택분류명) 영문, 중문, 일문 저장 */
     int saveSideSdselClass(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO);
+
+    /** 옵션(그룹명) 탭 리스트 조회 */
+    List<DefaultMap<String>> getOptionGrpList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO);
+
+    /** 옵션(그룹명) 영문, 중문, 일문 저장 */
+    int saveOptionGrp(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO);
+
+    /** 옵션(옵션명) 탭 리스트 조회 */
+    List<DefaultMap<String>> getOptionValList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO);
+
+    /** 옵션(옵션명) 영문, 중문, 일문 저장 */
+    int saveOptionVal(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO);
 }

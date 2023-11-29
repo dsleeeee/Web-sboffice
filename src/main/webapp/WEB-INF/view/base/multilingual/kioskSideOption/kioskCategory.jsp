@@ -147,4 +147,4 @@
     var kioskTuClsTypeList = ${kioskTuClsTypeList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20231124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20231130.01" charset="utf-8"></script>

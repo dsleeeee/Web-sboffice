@@ -43,4 +43,16 @@ public interface KioskSideOptionMapper {
 
     /** 사이드(선택분류명) 영문, 중문, 일문 저장 */
     int saveSideSdselClass(KioskSideOptionVO kioskSideOptionVO);
+
+    /** 옵션(그룹명) 탭 리스트 조회 */
+    List<DefaultMap<String>> getOptionGrpList(KioskSideOptionVO kioskSideOptionVO);
+
+    /** 옵션(그룹명) 영문, 중문, 일문 저장 */
+    int saveOptionGrp(KioskSideOptionVO kioskSideOptionVO);
+
+    /** 옵션(옵션명) 탭 리스트 조회 */
+    List<DefaultMap<String>> getOptionValList(KioskSideOptionVO kioskSideOptionVO);
+
+    /** 옵션(옵션명) 영문, 중문, 일문 저장 */
+    int saveOptionVal(KioskSideOptionVO kioskSideOptionVO);
 }

@@ -138,4 +138,68 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
         }
     }
 
+    /** 옵션(그룹명) 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getOptionGrpList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO){
+
+        kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return kioskSideOptionMapper.getOptionGrpList(kioskSideOptionVO);
+    }
+
+    /** 옵션(그룹명) 영문, 중문, 일문 저장 */
+    @Override
+    public int saveOptionGrp(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO){
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for (KioskSideOptionVO kioskSideOptionVO : kioskSideOptionVOs) {
+
+            kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskSideOptionVO.setRegDt(dt);
+            kioskSideOptionVO.setRegId(sessionInfoVO.getUserId());
+            kioskSideOptionVO.setModDt(dt);
+            kioskSideOptionVO.setModId(sessionInfoVO.getUserId());
+
+            result += kioskSideOptionMapper.saveOptionGrp(kioskSideOptionVO);
+        }
+
+        if (result == kioskSideOptionVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
+    /** 옵션(옵션명) 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getOptionValList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO){
+
+        kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return kioskSideOptionMapper.getOptionValList(kioskSideOptionVO);
+    }
+
+    /** 옵션(옵션명) 영문, 중문, 일문 저장 */
+    @Override
+    public int saveOptionVal(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO){
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for (KioskSideOptionVO kioskSideOptionVO : kioskSideOptionVOs) {
+
+            kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskSideOptionVO.setRegDt(dt);
+            kioskSideOptionVO.setRegId(sessionInfoVO.getUserId());
+            kioskSideOptionVO.setModDt(dt);
+            kioskSideOptionVO.setModId(sessionInfoVO.getUserId());
+
+            result += kioskSideOptionMapper.saveOptionVal(kioskSideOptionVO);
+        }
+
+        if (result == kioskSideOptionVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
+
 }

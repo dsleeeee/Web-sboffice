@@ -19,6 +19,8 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
         $("#kioskCategoryView").show();
         $("#sideSdselGrpView").hide();
         $("#sideSdselClassView").hide();
+        $("#optionGrpView").hide();
+        $("#optionValView").hide();
     };
 
     // 키오스크(카테고리) 탭 보이기
@@ -26,10 +28,14 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
         $("#kioskCategoryTab").addClass("on");
         $("#sideSdselGrpTab").removeClass("on");
         $("#sideSdselClassTab").removeClass("on");
+        $("#optionGrpTab").removeClass("on");
+        $("#optionValTab").removeClass("on");
 
         $("#kioskCategoryView").show();
         $("#sideSdselGrpView").hide();
         $("#sideSdselClassView").hide();
+        $("#optionGrpView").hide();
+        $("#optionValView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("kioskCategoryCtrl");
@@ -41,10 +47,14 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
         $("#kioskCategoryTab").removeClass("on");
         $("#sideSdselGrpTab").addClass("on");
         $("#sideSdselClassTab").removeClass("on");
+        $("#optionGrpTab").removeClass("on");
+        $("#optionValTab").removeClass("on");
 
         $("#kioskCategoryView").hide();
         $("#sideSdselGrpView").show();
         $("#sideSdselClassView").hide();
+        $("#optionGrpView").hide();
+        $("#optionValView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sideSdselGrpCtrl");
@@ -56,14 +66,55 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
         $("#kioskCategoryTab").removeClass("on");
         $("#sideSdselGrpTab").removeClass("on");
         $("#sideSdselClassTab").addClass("on");
+        $("#optionGrpTab").removeClass("on");
+        $("#optionValTab").removeClass("on");
 
         $("#kioskCategoryView").hide();
         $("#sideSdselGrpView").hide();
         $("#sideSdselClassView").show();
+        $("#optionGrpView").hide();
+        $("#optionValView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("sideSdselClassCtrl");
         scope.flex.refresh();
     };
 
+    // 옵션(그룹명) 탭 보이기
+    $scope.optionGrpShow = function () {
+        $("#kioskCategoryTab").removeClass("on");
+        $("#sideSdselGrpTab").removeClass("on");
+        $("#sideSdselClassTab").removeClass("on");
+        $("#optionGrpTab").addClass("on");
+        $("#optionValTab").removeClass("on");
+
+        $("#kioskCategoryView").hide();
+        $("#sideSdselGrpView").hide();
+        $("#sideSdselClassView").hide();
+        $("#optionGrpView").show();
+        $("#optionValView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("optionGrpCtrl");
+        scope.flex.refresh();
+    };
+
+    // 옵션(옵션명) 탭 보이기
+    $scope.optionValShow = function () {
+        $("#kioskCategoryTab").removeClass("on");
+        $("#sideSdselGrpTab").removeClass("on");
+        $("#sideSdselClassTab").removeClass("on");
+        $("#optionGrpTab").removeClass("on");
+        $("#optionValTab").addClass("on");
+
+        $("#kioskCategoryView").hide();
+        $("#sideSdselGrpView").hide();
+        $("#sideSdselClassView").hide();
+        $("#optionGrpView").hide();
+        $("#optionValView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("optionValCtrl");
+        scope.flex.refresh();
+    };
 }]);

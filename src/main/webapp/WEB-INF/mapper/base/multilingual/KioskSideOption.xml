@@ -90,7 +90,7 @@
         COMMENTS : 사이드(선택그룹명) 탭 리스트를 조회한다.
     -->
     <select id="getSideSdselGrpList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
-         /* USE : KioskSideOptionMapper.getSideSdselGrpList */
+        /* USE : KioskSideOptionMapper.getSideSdselGrpList */
         SELECT
             thpsg.SDSEL_GRP_CD,
             thpsg.SDSEL_GRP_NM,
@@ -147,7 +147,7 @@
         COMMENTS : 사이드(선택분류명) 탭 리스트를 조회한다.
     -->
     <select id="getSideSdselClassList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
-         /* USE : KioskSideOptionMapper.getSideSdselClassList */
+        /* USE : KioskSideOptionMapper.getSideSdselClassList */
         SELECT
             thpsc.SDSEL_GRP_CD,
             thpsg.SDSEL_GRP_NM,
@@ -181,7 +181,7 @@
             AND thpsc.SDSEL_CLASS_NM LIKE '%'|| #{sdselClassNm} ||'%'
         </if>
         ORDER BY
-            thpsc.SDSEL_GRP_CD
+            thpsc.SDSEL_GRP_CD, SDSEL_CLASS_CD
     </select>
 
     <!-- 사이드(선택분류명) 영문, 중문, 일문 저장 -->
@@ -207,4 +207,122 @@
         ,   MOD_DT        = #{modDt}
         ,   MOD_ID        = #{modId}
     </update>
+
+    <!-- 옵션(그룹명) 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_GROUP
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 옵션(그룹명) 탭 리스트를 조회한다.
+    -->
+    <select id="getOptionGrpList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
+        /* USE : KioskSideOptionMapper.getOptionGrpList */
+        SELECT
+            thpog.OPTION_GRP_CD,
+            thpog.OPTION_GRP_NM,
+            thpog.OPTION_GRP_EN_NM,
+            thpog.OPTION_GRP_CN_NM,
+            thpog.OPTION_GRP_JP_NM
+        FROM
+            TB_HQ_PRODUCT_OPTION_GROUP thpog
+        WHERE
+            thpog.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thpog.USE_YN = 'Y'
+        <if test='optionGrpCd != null and optionGrpCd != ""'>
+            AND thpog.OPTION_GRP_CD LIKE '%'|| #{optionGrpCd} ||'%'
+        </if>
+        <if test='optionGrpNm != null and optionGrpNm != ""'>
+            AND thpog.OPTION_GRP_NM LIKE '%'|| #{optionGrpNm} ||'%'
+       </if>
+        ORDER BY
+            thpog.OPTION_GRP_CD
+    </select>
+
+    <!-- 옵션(그룹명) 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_GROUP
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 옵션(그룹명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveOptionGrp" parameterType="kioskSideOptionVO">
+        /* USE : KioskSideOptionMapper.saveOptionGrp */
+        MERGE INTO TB_HQ_PRODUCT_OPTION_GROUP thpog
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND OPTION_GRP_CD = #{optionGrpCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            OPTION_GRP_EN_NM  = #{optionGrpEnNm}
+        ,   OPTION_GRP_CN_NM  = #{optionGrpCnNm}
+        ,   OPTION_GRP_JP_NM  = #{optionGrpJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+    <!-- 옵션(옵션명) 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_VAL
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 옵션(옵션명) 탭 리스트를 조회한다.
+    -->
+    <select id="getOptionValList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
+        /* USE : KioskSideOptionMapper.getOptionValList */
+        SELECT
+            thpov.OPTION_GRP_CD,
+            thpog.OPTION_GRP_NM,
+            thpov.OPTION_VAL_CD,
+            thpov.OPTION_VAL_NM,
+            thpov.OPTION_VAL_EN_NM,
+            thpov.OPTION_VAL_CN_NM,
+            thpov.OPTION_VAL_JP_NM
+        FROM
+            TB_HQ_PRODUCT_OPTION_VAL thpov,
+            TB_HQ_PRODUCT_OPTION_GROUP thpog
+        WHERE
+            thpov.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpog.HQ_OFFICE_CD (+)= thpov.HQ_OFFICE_CD
+        AND thpog.OPTION_GRP_CD (+)= thpov.OPTION_GRP_CD
+        <if test='optionGrpCd != null and optionGrpCd != ""'>
+            AND thpov.OPTION_GRP_CD LIKE '%'|| #{optionGrpCd} ||'%'
+        </if>
+        <if test='optionGrpNm != null and optionGrpNm != ""'>
+            AND thpog.OPTION_GRP_NM LIKE '%'|| #{optionGrpNm} ||'%'
+        </if>
+        <if test='optionValCd != null and optionValCd != ""'>
+            AND thpov.OPTION_VAL_CD LIKE '%'|| #{optionValCd} ||'%'
+        </if>
+        <if test='optionValNm != null and optionValNm != ""'>
+            AND thpov.OPTION_VAL_NM LIKE '%'|| #{optionValNm} ||'%'
+        </if>
+        ORDER BY
+            thpov.OPTION_GRP_CD, thpov.OPTION_VAL_CD
+    </select>
+
+    <!-- 옵션(옵션명) 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_OPTION_VAL
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 옵션(옵션명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveOptionVal" parameterType="kioskSideOptionVO">
+        /* USE : KioskSideOptionMapper.saveOptionVal */
+        MERGE INTO TB_HQ_PRODUCT_OPTION_VAL thpov
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND OPTION_GRP_CD = #{optionGrpCd}
+        AND OPTION_VAL_CD = #{optionValCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            OPTION_VAL_EN_NM  = #{optionValEnNm}
+        ,   OPTION_VAL_CN_NM  = #{optionValCnNm}
+        ,   OPTION_VAL_JP_NM  = #{optionValJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
 </mapper>

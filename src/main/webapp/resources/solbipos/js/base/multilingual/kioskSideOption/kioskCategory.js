@@ -125,6 +125,12 @@ app.controller('kioskCategoryCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // 양식다운로드
     $scope.sampleDownload = function () {
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
         var vScope = agrid.getScope('kioskCategoryExcelDownCtrl');
         vScope.sampleDownload($scope.srchTuClsTypeCombo.selectedValue);
     };

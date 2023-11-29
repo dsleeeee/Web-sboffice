@@ -202,4 +202,85 @@ public class KioskSideOptionController {
 
         return returnListJson(Status.OK, result);
     }
+
+    /**
+     *  옵션(그룹명) 탭 리스트 조회
+     *
+     * @param kioskSideOptionVO
+     * @param request
+     * @author  이다솜
+     * @since   2023. 11. 28.
+     */
+    @RequestMapping(value = "/getOptionGrpList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOptionGrpList(KioskSideOptionVO kioskSideOptionVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskSideOptionService.getOptionGrpList(kioskSideOptionVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskSideOptionVO);
+    }
+
+    /**
+     * 옵션(그룹명) 영문, 중문, 일문 저장
+     * @param kioskSideOptionVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2023. 11. 28.
+     */
+    @RequestMapping(value = "/saveOptionGrp.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveOptionGrp(@RequestBody KioskSideOptionVO[] kioskSideOptionVOs, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskSideOptionService.saveOptionGrp(kioskSideOptionVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     *  옵션(옵션명) 탭 리스트 조회
+     *
+     * @param kioskSideOptionVO
+     * @param request
+     * @author  이다솜
+     * @since   2023. 11. 28.
+     */
+    @RequestMapping(value = "/getOptionValList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOptionValList(KioskSideOptionVO kioskSideOptionVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskSideOptionService.getOptionValList(kioskSideOptionVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskSideOptionVO);
+    }
+
+    /**
+     * 옵션(옵션명) 영문, 중문, 일문 저장
+     * @param kioskSideOptionVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2023. 11. 28.
+     */
+    @RequestMapping(value = "/saveOptionVal.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveOptionVal(@RequestBody KioskSideOptionVO[] kioskSideOptionVOs, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskSideOptionService.saveOptionVal(kioskSideOptionVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
 }

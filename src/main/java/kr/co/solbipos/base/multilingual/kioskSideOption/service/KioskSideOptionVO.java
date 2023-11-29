@@ -40,6 +40,26 @@ public class KioskSideOptionVO extends PageVO {
     private String sdselClassCnNm;
     /** 사이드선택분류명[일문] */
     private String sdselClassJpNm;
+    /** 옵션그룹코드 */
+    private String optionGrpCd;
+    /** 옵션그룹명 */
+    private String optionGrpNm;
+    /** 옵션그룹명[영문] */
+    private String optionGrpEnNm;
+    /** 옵션그룹명[중문] */
+    private String optionGrpCnNm;
+    /** 옵션그룹명[일문] */
+    private String optionGrpJpNm;
+    /** 옵션코드 */
+    private String optionValCd;
+    /** 옵션명 */
+    private String optionValNm;
+    /** 옵션명[영문] */
+    private String optionValEnNm;
+    /** 옵션명[중문] */
+    private String optionValCnNm;
+    /** 옵션명[일문] */
+    private String optionValJpNm;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -175,5 +195,85 @@ public class KioskSideOptionVO extends PageVO {
 
     public void setSdselClassJpNm(String sdselClassJpNm) {
         this.sdselClassJpNm = sdselClassJpNm;
+    }
+
+    public String getOptionGrpCd() {
+        return optionGrpCd;
+    }
+
+    public void setOptionGrpCd(String optionGrpCd) {
+        this.optionGrpCd = optionGrpCd;
+    }
+
+    public String getOptionGrpNm() {
+        return optionGrpNm;
+    }
+
+    public void setOptionGrpNm(String optionGrpNm) {
+        this.optionGrpNm = optionGrpNm;
+    }
+
+    public String getOptionGrpEnNm() {
+        return optionGrpEnNm;
+    }
+
+    public void setOptionGrpEnNm(String optionGrpEnNm) {
+        this.optionGrpEnNm = optionGrpEnNm;
+    }
+
+    public String getOptionGrpCnNm() {
+        return optionGrpCnNm;
+    }
+
+    public void setOptionGrpCnNm(String optionGrpCnNm) {
+        this.optionGrpCnNm = optionGrpCnNm;
+    }
+
+    public String getOptionGrpJpNm() {
+        return optionGrpJpNm;
+    }
+
+    public void setOptionGrpJpNm(String optionGrpJpNm) {
+        this.optionGrpJpNm = optionGrpJpNm;
+    }
+
+    public String getOptionValCd() {
+        return optionValCd;
+    }
+
+    public void setOptionValCd(String optionValCd) {
+        this.optionValCd = optionValCd;
+    }
+
+    public String getOptionValNm() {
+        return optionValNm;
+    }
+
+    public void setOptionValNm(String optionValNm) {
+        this.optionValNm = optionValNm;
+    }
+
+    public String getOptionValEnNm() {
+        return optionValEnNm;
+    }
+
+    public void setOptionValEnNm(String optionValEnNm) {
+        this.optionValEnNm = optionValEnNm;
+    }
+
+    public String getOptionValCnNm() {
+        return optionValCnNm;
+    }
+
+    public void setOptionValCnNm(String optionValCnNm) {
+        this.optionValCnNm = optionValCnNm;
+    }
+
+    public String getOptionValJpNm() {
+        return optionValJpNm;
+    }
+
+    public void setOptionValJpNm(String optionValJpNm) {
+        this.optionValJpNm = optionValJpNm;
     }
 }

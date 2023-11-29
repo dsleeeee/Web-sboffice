@@ -141,6 +141,12 @@ app.controller('sideSdselGrpCtrl', ['$scope', '$http', '$timeout', function ($sc
 
     // 양식다운로드
     $scope.sampleDownload = function () {
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
         var vScope = agrid.getScope('sideSdselGrpExcelDownCtrl');
 
         // 파라미터

@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : sideSdselClass.js
- * 설  명 : 다국어관리(키오스크/사이드/옵션) - 사이드(선택분류명) 탭 JavaScript
+ * 파일명 : optionGrp.js
+ * 설  명 : 다국어관리(키오스크/사이드/옵션) - 옵션(그룹명) 탭 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2023.11.23     이다솜      1.0
+ * 2023.11.28     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -14,25 +14,21 @@
 var app = agrid.getApp();
 
 /**
- * 사이드(선택분류명) 조회 그리드 생성
+ * 옵션(그룹명) 조회 그리드 생성
  */
-app.controller('sideSdselClassCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('optionGrpCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sideSdselClassCtrl', $scope, $http, true));
-
-    // 콤보박스 데이터 Set
-    $scope._setComboData("sdselTypeFg2", sdselTypeFgData); // 세트구분
+    angular.extend(this, new RootController('optionGrpCtrl', $scope, $http, true));
 
     //
     $scope.initGrid = function (s, e) {
-        $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
 
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
                 // 값 변경시 체크박스 체크
-                if (col.binding === "sdselClassEnNm" || col.binding === "sdselClassCnNm" || col.binding === "sdselClassJpNm") {
+                if (col.binding === "optionGrpEnNm" || col.binding === "optionGrpCnNm" || col.binding === "optionGrpJpNm") {
                     $scope.checked(item);
                 }
             }
@@ -40,24 +36,21 @@ app.controller('sideSdselClassCtrl', ['$scope', '$http', '$timeout', function ($
         });
     };
 
-    $scope.$on("sideSdselClassCtrl", function (event, data) {
-        $scope.getSideSdselClassList();
+    $scope.$on("optionGrpCtrl", function (event, data) {
+        $scope.getOptionGrpList();
         event.preventDefault();
     });
 
     // 조회
-    $scope.getSideSdselClassList = function () {
+    $scope.getOptionGrpList = function () {
 
         // 파라미터
         var params = {};
-        params.sdselTypeFg = $scope.srchSdselTypeFg2Combo.selectedValue;
-        params.sdselGrpCd = $("#srchSdselGrpCd2").val();
-        params.sdselGrpNm = $("#srchSdselGrpNm2").val();
-        params.sdselClassCd = $("#srchSdselClassCd").val();
-        params.sdselClassNm = $("#srchSdselClassNm").val();
+        params.optionGrpCd = $("#srchOptionGrpCd").val();
+        params.optionGrpNm = $("#srchOptionGrpNm").val();
 
-        // 사이드(선택분류명) 탭 리스트 조회
-        $scope._inquiryMain("/base/multilingual/kioskSideOption/getSideSdselClassList.sb", params);
+        // 옵션명(그룹명) 탭 리스트 조회
+        $scope._inquiryMain("/base/multilingual/kioskSideOption/getOptionGrpList.sb", params);
     };
 
     // 저장
@@ -76,25 +69,25 @@ app.controller('sideSdselClassCtrl', ['$scope', '$http', '$timeout', function ($
             for (var i = 0; i < params.length; i++) {
                 var item = params[i];
 
-                if (nvl(item.sdselClassEnNm + '', '').getByteLengthForOracle() > 50) {
+                if (nvl(item.optionGrpEnNm + '', '').getByteLengthForOracle() > 50) {
                     $scope._popMsg(messages["kioskSideOption.en"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
 
-                if (nvl(item.sdselClassCnNm + '', '').getByteLengthForOracle() > 50) {
+                if (nvl(item.optionGrpCnNm + '', '').getByteLengthForOracle() > 50) {
                     $scope._popMsg(messages["kioskSideOption.cn"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
 
-                if (nvl(item.sdselClassJpNm + '', '').getByteLengthForOracle() > 50) {
+                if (nvl(item.optionGrpJpNm + '', '').getByteLengthForOracle() > 50) {
                     $scope._popMsg(messages["kioskSideOption.jp"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
             }
 
-            $scope._save("/base/multilingual/kioskSideOption/saveSideSdselClass.sb", params, function(result) {
+            $scope._save("/base/multilingual/kioskSideOption/saveOptionGrp.sb", params, function(result) {
                 // 재조회
-                $scope.getSideSdselClassList();
+                $scope.getOptionGrpList();
             });
         });
     };
@@ -120,7 +113,7 @@ app.controller('sideSdselClassCtrl', ['$scope', '$http', '$timeout', function ($
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["kioskSideOption.sideSdselClass"]  + '_' +  getCurDateTime() + '.xlsx', function () {
+                }, messages["kioskSideOption.optionGrp"]  + '_' +  getCurDateTime() + '.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -136,15 +129,12 @@ app.controller('sideSdselClassCtrl', ['$scope', '$http', '$timeout', function ($
             return false;
         }
 
-        var vScope = agrid.getScope('sideSdselClassExcelDownCtrl');
+        var vScope = agrid.getScope('optionGrpExcelDownCtrl');
 
         // 파라미터
         var params = {};
-        params.sdselTypeFg = $scope.srchSdselTypeFg2Combo.selectedValue;
-        params.sdselGrpCd = $("#srchSdselGrpCd2").val();
-        params.sdselGrpNm = $("#srchSdselGrpNm2").val();
-        params.sdselClassCd = $("#srchSdselClassCd").val();
-        params.sdselClassNm = $("#srchSdselClassNm").val();
+        params.optionGrpCd = $("#srchOptionGrpCd").val();
+        params.optionGrpNm = $("#srchOptionGrpNm").val();
 
         vScope.sampleDownload(params);
     };
@@ -155,37 +145,34 @@ app.controller('sideSdselClassCtrl', ['$scope', '$http', '$timeout', function ($
 
         $scope._popConfirm(msg, function() {
 
-            $("#classExcelUpFile").val('');
-            $("#classExcelUpFile").trigger('click');
+            $("#optionGrpExcelUpFile").val('');
+            $("#optionGrpExcelUpFile").trigger('click');
 
         });
     };
+
 }]);
 
 /**
- * 사이드(선택분류명) 양식다운로드 그리드 생성
+ * 옵션(그룹명) 양식다운로드 그리드 생성
  */
-app.controller('sideSdselClassExcelDownCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('optionGrpExcelDownCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sideSdselClassExcelDownCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('optionGrpExcelDownCtrl', $scope, $http, false));
 
     //
     $scope.initGrid = function (s, e) {
-        $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
     };
 
     // 양식 다운로드
     $scope.sampleDownload = function (data) {
 
         var params = {};
-        params.sdselTypeFg = data.sdselTypeFg;
-        params.sdselGrpCd = data.sdselGrpCd;
-        params.sdselGrpNm = data.sdselGrpNm;
-        params.sdselClassCd = data.sdselClassCd;
-        params.sdselClassNm = data.sdselClassNm;
+        params.optionGrpCd = data.optionGrpCd;
+        params.optionGrpNm = data.optionGrpNm;
 
-        $scope._inquiryMain("/base/multilingual/kioskSideOption/getSideSdselClassList.sb", params, function (){
+        $scope._inquiryMain("/base/multilingual/kioskSideOption/getOptionGrpList.sb", params, function (){
 
             if ($scope.flex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
@@ -202,7 +189,7 @@ app.controller('sideSdselClassExcelDownCtrl', ['$scope', '$http', '$timeout', fu
                             return column.visible;
                         }
                     },
-                    messages["kioskSideOption.sideSdselClass"] + '_엑셀업로드_양식_' + getCurDateTime() + '.xlsx',
+                    messages["kioskSideOption.optionGrp"] + '_엑셀업로드_양식_' + getCurDateTime() + '.xlsx',
                     function () {
                         $timeout(function () {
                             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
@@ -215,7 +202,7 @@ app.controller('sideSdselClassExcelDownCtrl', ['$scope', '$http', '$timeout', fu
 
     // 엑셀파일이 변경된 경우
     $scope.excelFileChanged = function () {
-        if ($('#classExcelUpFile')[0].files[0]) {
+        if ($('#optionGrpExcelUpFile')[0].files[0]) {
             // 엑셀업로드 호출
             $scope.excelUpload();
         }
@@ -224,12 +211,12 @@ app.controller('sideSdselClassExcelDownCtrl', ['$scope', '$http', '$timeout', fu
 }]);
 
 /**
- * 사이드(선택그룹명) 엑셀업로드 그리드 생성
+ * 옵션(그룹명) 엑셀업로드 그리드 생성
  */
-app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('optionGrpExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sideSdselClassExcelUploadCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('optionGrpExcelUploadCtrl', $scope, $http, false));
 
     //
     $scope.initGrid = function (s, e) {
@@ -244,7 +231,7 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
 
     // 엑셀파일이 변경된 경우
     $scope.excelFileChanged = function () {
-        if ($('#classExcelUpFile')[0].files[0]) {
+        if ($('#optionGrpExcelUpFile')[0].files[0]) {
             // 엑셀업로드 호출
             $scope.excelUpload();
         }
@@ -257,8 +244,8 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
         $scope.progressCnt = 0; // 처리된 숫자
 
         // 선택한 파일이 있으면
-        if ($('#classExcelUpFile')[0].files[0]) {
-            var file = $('#classExcelUpFile')[0].files[0];
+        if ($('#optionGrpExcelUpFile')[0].files[0]) {
+            var file = $('#optionGrpExcelUpFile')[0].files[0];
             var fileName = file.name;
             var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
@@ -268,7 +255,7 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
 
                 $timeout(function () {
                     var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#classExcelUpFile')[0].files[0], {includeColumnHeaders: true}
+                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#optionGrpExcelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
                             $timeout(function () {
                                 $scope.excelUploadToJsonConvert();
@@ -277,7 +264,7 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
                     );
                 }, 10);
             } else {
-                $("#classExcelUpFile").val('');
+                $("#optionGrpExcelUpFile").val('');
                 $scope._popMsg(messages['kioskSideOption.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
@@ -324,19 +311,19 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
         for (var i = 0; i < $scope.totalRows; i++) {
             var item = jsonData[i];
 
-            if (nvl(item.sdselClassEnNm + '', '').getByteLengthForOracle() > 50) {
+            if (nvl(item.optionGrpEnNm + '', '').getByteLengthForOracle() > 50) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                 $scope._popMsg(messages["kioskSideOption.en"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
-            if (nvl(item.sdselClassCnNm + '', '').getByteLengthForOracle() > 50) {
+            if (nvl(item.optionGrpCnNm + '', '').getByteLengthForOracle() > 50) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                 $scope._popMsg(messages["kioskSideOption.cn"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
-            if (nvl(item.sdselClassJpNm + '', '').getByteLengthForOracle() > 50) {
+            if (nvl(item.optionGrpJpNm + '', '').getByteLengthForOracle() > 50) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                 $scope._popMsg(messages["kioskSideOption.jp"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
@@ -348,7 +335,6 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
             $scope.saveData(jsonData);
         }, 10);
     };
-
 
     // 데이터 저장
     $scope.saveData = function (jsonData) {
@@ -383,7 +369,7 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/base/multilingual/kioskSideOption/saveSideSdselClass.sb', /* 통신할 URL */
+            url    : '/base/multilingual/kioskSideOption/saveOptionGrp.sb', /* 통신할 URL */
             data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
@@ -391,7 +377,7 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
             if ($scope._httpStatusCheck(response, true)) {
                 if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
                     // 재조회
-                    agrid.getScope('sideSdselClassCtrl').getSideSdselClassList();
+                    agrid.getScope('optionGrpCtrl').getOptionGrpList();
                 }
             }
         }, function errorCallback(response) {

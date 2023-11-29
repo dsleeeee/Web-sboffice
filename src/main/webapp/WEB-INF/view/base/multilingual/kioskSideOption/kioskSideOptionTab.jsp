@@ -18,7 +18,13 @@
                 <a id="sideSdselClassTab" href="#" ng-click="sideSdselClassShow()"><s:message code="kioskSideOption.sideSdselClass"/></a>
             </li>
             <%-- 옵션(그룹명) --%>
+            <li>
+                <a id="optionGrpTab" href="#" ng-click="optionGrpShow()"><s:message code="kioskSideOption.optionGrp"/></a>
+            </li>
             <%-- 옵션(옵션명) --%>
+            <li>
+                <a id="optionValTab" href="#" ng-click="optionValShow()"><s:message code="kioskSideOption.optionVal"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -26,7 +32,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskSideOptionTab.js?ver=20231124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskSideOptionTab.js?ver=20231130.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 키오스크(카테고리명) 탭 --%>
@@ -39,6 +45,14 @@
 
 <%-- 사이드(선택분류명) 탭 --%>
 <c:import url="/WEB-INF/view/base/multilingual/kioskSideOption/sideSdselClass.jsp">
+</c:import>
+
+<%-- 옵션(그룹명) --%>
+<c:import url="/WEB-INF/view/base/multilingual/kioskSideOption/optionGrp.jsp">
+</c:import>
+
+<%-- 옵션(옵션명) --%>
+<c:import url="/WEB-INF/view/base/multilingual/kioskSideOption/optionVal.jsp">
 </c:import>
 
 <%-- 탭페이지 레이어 끝 --%>
