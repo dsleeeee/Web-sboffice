@@ -145,7 +145,7 @@
                     * 양식다운로드 문서로 업로드하여 주십시오.<br />
                 </p>
             </th>
-            <th class="oh gr fr w50" style="height: 75px; font-size:15px">
+            <th class="oh gr fr w50" style="height: 90px; font-size:15px">
                 <%-- 엑셀업로드 --%>
                 <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
                     <s:message code="cmm.excel.excelUpload" />
