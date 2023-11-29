@@ -212,15 +212,32 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
             var cnt = response.data.data;
 
             if(strProdCd.split(",").length === cnt){ // 매핑할 상품코드가 상품마스터에 존재할 경우,
-                // 데이터 저장
-                $scope.save(jsonData);
+                // 데이터 저장 체크
+                $scope.saveChk(jsonData);
             }else {
-                var msg = messages["dlvrProd.not.match.prodCd"]
+                var msg = messages["dlvrProd.not.match.prodCd"]; // 등록되지 않은 상품코드가 존재합니다. 상품코드를 확인해주세요.
                 $scope.valueCheckErrPopup(msg);
                 return false;
             }
         });
-    }
+    };
+
+    // 데이터 저장 체크
+    $scope.saveChk = function (jsonData) {
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProd/dlvrProd/getDlvrProdNmMappingChk.sb", jsonData, function (response) {
+            var result = response.data.data;
+
+            if(result === null || result === "") {
+                // 데이터 저장
+                $scope.save(jsonData);
+            } else {
+                $scope._popMsg(result + " 명칭이 중복됩니다.");
+                return false;
+            }
+        });
+    };
 
     // 데이터 저장
     $scope.save = function (jsonData) {

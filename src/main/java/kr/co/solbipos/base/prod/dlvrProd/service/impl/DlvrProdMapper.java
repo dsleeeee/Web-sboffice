@@ -58,4 +58,13 @@ public interface DlvrProdMapper {
 
     /**  배달시스템 상품 명칭 매핑 - 상품목록조회 */
     List<DefaultMap<String>> getDlvrProdNmExcelList(DlvrProdVO dlvrProdVO);
+
+    /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 delete */
+    int getDlvrProdNmMappingChkSaveDeleteAll(DlvrProdVO dlvrProdVO);
+
+    /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 insert */
+    int getDlvrProdNmMappingChkSaveInsert(DlvrProdVO dlvrProdVO);
+
+    /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 */
+    String getDlvrProdNmMappingChk(DlvrProdVO dlvrProdVO);
 }

@@ -80,13 +80,10 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
         $scope._inquiryMain("/base/prod/dlvrProd/dlvrProd/list.sb", params, function(){});
-
     };
 
     // 저장
     $scope.save = function(){
-
-        //
         var arr = dlvrCol.split(",");
 
         // 배달의민족앱[3] 상품명칭 입력값 전체 체크
@@ -126,6 +123,24 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
                 params.push(obj);
             }
         }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProd/dlvrProd/getDlvrProdNmMappingChk.sb", params, function (response) {
+            var result = response.data.data;
+
+            if(result === null || result === "") {
+                // 저장
+                $scope.saveSave(params);
+            } else {
+                $scope._popMsg(result + " 명칭이 중복됩니다.");
+                return false;
+            }
+        });
+    };
+
+    // 저장
+    $scope.saveSave = function(params){
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/dlvrProd/dlvrProd/save.sb", params, function () {
             // 재조회
@@ -165,7 +180,7 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
         $scope.prodClassCdNm = "";
-    }
+    };
 
     // 상품명칭복사 팝업
     $scope.copyDlvrProdNm = function(){

@@ -330,50 +330,50 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 INSERT INTO TB_HQ_PRODUCT_DLVR_PROD_NM
                 (
-                HQ_OFFICE_CD,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                REG_ID,
-                REG_DT,
-                MOD_ID,
-                MOD_DT
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    DLVR_NAME_CD,
+                    DLVR_PROD_NM,
+                    REG_ID,
+                    REG_DT,
+                    MOD_ID,
+                    MOD_DT
                 )
                 VALUES
                 (
-                #{hqOfficeCd},
-                #{prodCd},
-                #{dlvrNameCd},
-                #{dlvrProdNm},
-                #{regId},
-                #{regDt},
-                #{modId},
-                #{modDt}
+                    #{hqOfficeCd},
+                    #{prodCd},
+                    #{dlvrNameCd},
+                    #{dlvrProdNm},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
                 )
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM
                 (
-                STORE_CD,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                REG_ID,
-                REG_DT,
-                MOD_ID,
-                MOD_DT
+                    STORE_CD,
+                    PROD_CD,
+                    DLVR_NAME_CD,
+                    DLVR_PROD_NM,
+                    REG_ID,
+                    REG_DT,
+                    MOD_ID,
+                    MOD_DT
                 )
                 VALUES
                 (
-                #{storeCd},
-                #{prodCd},
-                #{dlvrNameCd},
-                #{dlvrProdNm},
-                #{regId},
-                #{regDt},
-                #{modId},
-                #{modDt}
+                    #{storeCd},
+                    #{prodCd},
+                    #{dlvrNameCd},
+                    #{dlvrProdNm},
+                    #{regId},
+                    #{regDt},
+                    #{modId},
+                    #{modDt}
                 )
             </when>
         </choose>
@@ -558,5 +558,142 @@
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND PROD_CD IN (${selectProdCd})
     </insert>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getDlvrProdNmMappingChkSaveDeleteAll" parameterType="dlvrProdVO" >
+        /* DlvrProdMapper.getDlvrProdNmMappingChkSaveDeleteAll */
+        DELETE
+        FROM TB_TMP_PRODUCT_DLVR_PROD_NM
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCd != null and storeCd != ""'>
+            <![CDATA[
+                AND STORE_CD = #{storeCd}
+            ]]>
+        </if>
+    </delete>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getDlvrProdNmMappingChkSaveInsert" parameterType="dlvrProdVO" >
+        /* DlvrProdMapper.getDlvrProdNmMappingChkSaveInsert */
+        INSERT INTO TB_TMP_PRODUCT_DLVR_PROD_NM
+        (
+            SESSION_ID,
+            SEQ,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            PROD_CD,
+            DLVR_NAME_CD,
+            DLVR_PROD_NM,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{prodCd},
+            #{dlvrNameCd},
+            #{dlvrProdNm},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDlvrProdNmMappingChk" parameterType="dlvrProdVO" resultType="String">
+        /* DlvrProdMapper.getDlvrProdNmMappingChk */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT LISTAGG(DLVR_PROD_NM, ',') WITHIN GROUP (ORDER BY DLVR_PROD_NM) AS DLVR_PROD_NM
+                FROM
+                (
+                    SELECT DLVR_NAME_CD, DLVR_PROD_NM, COUNT(*)
+                    FROM
+                    (
+                        SELECT DLVR_NAME_CD, DLVR_PROD_NM
+                        FROM TB_TMP_PRODUCT_DLVR_PROD_NM
+                        WHERE 1=1
+                        AND SESSION_ID = #{sessionId}
+                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND DLVR_PROD_NM IS NOT NULL
+                        UNION ALL
+                        SELECT A.DLVR_NAME_CD, A.DLVR_PROD_NM
+                        FROM TB_HQ_PRODUCT_DLVR_PROD_NM A
+                        WHERE 1=1
+                        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND A.DLVR_PROD_NM IS NOT NULL
+                        -- 수정할 데이터는 COUNT에서 빼야되서 제거
+                        AND A.PROD_CD ||'/'|| A.DLVR_NAME_CD NOT IN (
+                                                                            SELECT B.PROD_CD ||'/'|| B.DLVR_NAME_CD
+                                                                            FROM TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                                                            WHERE 1=1
+                                                                            AND B.SESSION_ID = #{sessionId}
+                                                                            AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                            AND B.PROD_CD = A.PROD_CD
+                                                                            AND B.DLVR_NAME_CD = A.DLVR_NAME_CD
+                                                                        )
+                    )
+                    GROUP BY DLVR_NAME_CD, DLVR_PROD_NM
+                    HAVING COUNT(*) > 1
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT LISTAGG(DLVR_PROD_NM, ',') WITHIN GROUP (ORDER BY DLVR_PROD_NM) AS DLVR_PROD_NM
+                FROM
+                (
+                    SELECT DLVR_NAME_CD, DLVR_PROD_NM, COUNT(*)
+                    FROM
+                    (
+                        SELECT DLVR_NAME_CD, DLVR_PROD_NM
+                        FROM TB_TMP_PRODUCT_DLVR_PROD_NM
+                        WHERE 1=1
+                        AND SESSION_ID = #{sessionId}
+                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND STORE_CD = #{storeCd}
+                        AND DLVR_PROD_NM IS NOT NULL
+                        UNION ALL
+                        SELECT A.DLVR_NAME_CD, A.DLVR_PROD_NM
+                        FROM TB_MS_PRODUCT_DLVR_PROD_NM A
+                        WHERE 1=1
+                        AND A.STORE_CD = #{storeCd}
+                        AND A.DLVR_PROD_NM IS NOT NULL
+                        -- 수정할 데이터는 COUNT에서 빼야되서 제거
+                        AND A.PROD_CD ||'/'|| A.DLVR_NAME_CD NOT IN (
+                                                                            SELECT B.PROD_CD ||'/'|| B.DLVR_NAME_CD
+                                                                            FROM TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                                                            WHERE 1=1
+                                                                            AND B.SESSION_ID = #{sessionId}
+                                                                            AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                            AND B.STORE_CD = #{storeCd}
+                                                                            AND B.PROD_CD = A.PROD_CD
+                                                                            AND B.DLVR_NAME_CD = A.DLVR_NAME_CD
+                                                                        )
+                    )
+                    GROUP BY DLVR_NAME_CD, DLVR_PROD_NM
+                    HAVING COUNT(*) > 1
+                )
+            </when>
+        </choose>
+    </select>
 
 </mapper>

@@ -47,4 +47,7 @@ public interface DlvrProdService {
 
     /** 배달시스템 상품 명칭 매핑 - 전체 엑셀다운로드 */
     List<DefaultMap<String>> getDlvrProdNmExcelList(DlvrProdVO dlvrProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 */
+    String getDlvrProdNmMappingChk(DlvrProdVO[] dlvrProdVOs, SessionInfoVO sessionInfoVO);
 }

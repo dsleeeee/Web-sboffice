@@ -93,6 +93,12 @@ public class DlvrProdVO extends PageVO {
     /** 배달앱(배달채널) - 상품명(검색용) */
     private String channelProdNm;
 
+    /** 세션ID */
+    private String sessionId;
+
+    /** 순번 */
+    private int seq;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -280,4 +286,12 @@ public class DlvrProdVO extends PageVO {
     public void setChannelProdNm(String channelProdNm) {
         this.channelProdNm = channelProdNm;
     }
+
+    public String getSessionId() { return sessionId; }
+
+    public void setSessionId(String sessionId) { this.sessionId = sessionId; }
+
+    public int getSeq() { return seq; }
+
+    public void setSeq(int seq) { this.seq = seq; }
 }

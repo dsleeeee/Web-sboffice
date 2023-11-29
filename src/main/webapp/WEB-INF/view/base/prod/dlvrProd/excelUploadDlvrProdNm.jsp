@@ -21,12 +21,10 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="dlvrProd.prodCd"/>" binding="prodCd" width="120" align="center" data-type="String" ></wj-flex-grid-column>
-
             <%-- 배달앱 구분코드 컬럼 생성--%>
             <c:forEach var="dlvrCol" items="${dlvrColList}">
                 <wj-flex-grid-column header="${dlvrCol.dlvrNm}[${dlvrCol.dlvrCd}]" binding="dlvrProdNm${dlvrCol.dlvrCd}" width="120" data-type="String"></wj-flex-grid-column>
             </c:forEach>
-
         </wj-flex-grid>
         <!-- 엑셀 다운로드 시 사용 -->
         <input type="hidden" id="hdDlvrCol" value="${dlvrCol}"/>
@@ -35,4 +33,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/excelUploadDlvrProdNm.js?ver=20230915.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/excelUploadDlvrProdNm.js?ver=20231129.01" charset="utf-8"></script>

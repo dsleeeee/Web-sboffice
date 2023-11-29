@@ -237,4 +237,26 @@ public class DlvrProdController {
         return returnListJson(Status.OK, list, dlvrProdVO);
     }
 
+    /**
+     * 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크
+     *
+     * @param dlvrProdVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2023. 11. 23.
+     */
+    @RequestMapping(value = "/dlvrProd/getDlvrProdNmMappingChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrProdNmMappingChk(@RequestBody DlvrProdVO[] dlvrProdVOs, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = dlvrProdService.getDlvrProdNmMappingChk(dlvrProdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

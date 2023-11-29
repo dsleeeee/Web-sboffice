@@ -113,7 +113,6 @@ public class DlvrProdServiceImpl implements DlvrProdService {
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
-
     }
 
     /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 */
@@ -233,5 +232,51 @@ public class DlvrProdServiceImpl implements DlvrProdService {
         dlvrProdVO.setUserId(sessionInfoVO.getUserId());
 
         return dlvrProdMapper.getDlvrProdNmExcelList(dlvrProdVO);
+    }
+
+    /** 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 */
+    @Override
+    public String getDlvrProdNmMappingChk(DlvrProdVO[] dlvrProdVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        int i = 1;
+        String dlvrProdNm = "";
+        String currentDt = currentDateTimeString();
+
+        for(DlvrProdVO dlvrProdVO : dlvrProdVOs) {
+
+            dlvrProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            dlvrProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                dlvrProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            dlvrProdVO.setRegDt(currentDt);
+            dlvrProdVO.setRegId(sessionInfoVO.getUserId());
+            dlvrProdVO.setModDt(currentDt);
+            dlvrProdVO.setModId(sessionInfoVO.getUserId());
+
+            dlvrProdVO.setSessionId(sessionInfoVO.getUserId());
+            dlvrProdVO.setSeq(i);
+
+            // 임시테이블 저장 전
+            if(i == 1) {
+                // 임시테이블 삭제
+                procCnt = dlvrProdMapper.getDlvrProdNmMappingChkSaveDeleteAll(dlvrProdVO);
+            }
+
+            // 임시테이블 저장
+            procCnt = dlvrProdMapper.getDlvrProdNmMappingChkSaveInsert(dlvrProdVO);
+
+            // 임시테이블 저장 끝
+            if(i == dlvrProdVOs.length) {
+                // 명칭 중복 체크
+                dlvrProdNm = dlvrProdMapper.getDlvrProdNmMappingChk(dlvrProdVO);
+            }
+
+            i++;
+        }
+
+        return dlvrProdNm;
     }
 }
