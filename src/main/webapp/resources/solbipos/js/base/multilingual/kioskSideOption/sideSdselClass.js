@@ -76,17 +76,17 @@ app.controller('sideSdselClassCtrl', ['$scope', '$http', '$timeout', function ($
             for (var i = 0; i < params.length; i++) {
                 var item = params[i];
 
-                if (nvl(item.sdselClassEnNm + '', '').getByteLengthForOracle() > 50) {
+                if (nvl(item.sdselClassEnNm + '', '').getByteLengthForOracle() > 100) {
                     $scope._popMsg(messages["kioskSideOption.en"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
 
-                if (nvl(item.sdselClassCnNm + '', '').getByteLengthForOracle() > 50) {
+                if (nvl(item.sdselClassCnNm + '', '').getByteLengthForOracle() > 100) {
                     $scope._popMsg(messages["kioskSideOption.cn"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
 
-                if (nvl(item.sdselClassJpNm + '', '').getByteLengthForOracle() > 50) {
+                if (nvl(item.sdselClassJpNm + '', '').getByteLengthForOracle() > 100) {
                     $scope._popMsg(messages["kioskSideOption.jp"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
@@ -324,19 +324,19 @@ app.controller('sideSdselClassExcelUploadCtrl', ['$scope', '$http', '$timeout', 
         for (var i = 0; i < $scope.totalRows; i++) {
             var item = jsonData[i];
 
-            if (nvl(item.sdselClassEnNm + '', '').getByteLengthForOracle() > 50) {
+            if (nvl(item.sdselClassEnNm + '', '').getByteLengthForOracle() > 100) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                 $scope._popMsg(messages["kioskSideOption.en"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
-            if (nvl(item.sdselClassCnNm + '', '').getByteLengthForOracle() > 50) {
+            if (nvl(item.sdselClassCnNm + '', '').getByteLengthForOracle() > 100) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                 $scope._popMsg(messages["kioskSideOption.cn"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
             }
 
-            if (nvl(item.sdselClassJpNm + '', '').getByteLengthForOracle() > 50) {
+            if (nvl(item.sdselClassJpNm + '', '').getByteLengthForOracle() > 100) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                 $scope._popMsg(messages["kioskSideOption.jp"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                 return false;
