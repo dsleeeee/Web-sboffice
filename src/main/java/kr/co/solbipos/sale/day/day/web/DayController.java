@@ -472,4 +472,27 @@ public class DayController {
 
         return ReturnUtil.returnListJson(Status.OK, result, dayVO);
     }
+
+    /**
+     * 할인구분별(BBQ) 탭 - 조회
+     *
+     * @param dayVO
+     * @param request
+     * @param response
+     * @param model
+     * @return Object
+     * @author  김설아
+     * @since   2023. 11. 29.
+     */
+    @RequestMapping(value = "/dayDc/getDayDcBbqList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayDcBbqList(DayVO dayVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = dayService.getDayDcBbqList(dayVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, dayVO);
+    }
 }

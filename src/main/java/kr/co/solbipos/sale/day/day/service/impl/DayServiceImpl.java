@@ -47,11 +47,16 @@ public class DayServiceImpl implements DayService {
         return dayMapper.getMpayColList(dayVO);
     }
 
-
     /** 일자별 - 할인 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDcColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
         return dayMapper.getDcColList(dayVO);
+    }
+
+    /** 일자별 - 할인 컬럼 리스트 조회 (BBQ용) */
+    @Override
+    public List<DefaultMap<String>> getDcBbqColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        return dayMapper.getDcBbqColList(dayVO);
     }
 
     /** 코너별 탭 - 코너 컬럼 리스트 조회 */
@@ -284,6 +289,7 @@ public class DayServiceImpl implements DayService {
     /** 일자별(할인구분별 탭) - 할인구분 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getDayDcList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
         dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dayVO.setEmpNo(sessionInfoVO.getEmpNo());
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -590,5 +596,44 @@ public class DayServiceImpl implements DayService {
         }
 
         return dayMapper.getDayEmpCardList(dayVO);
+    }
+
+    /** 할인구분별(BBQ) 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDayDcBbqList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+
+        dayVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dayVO.setEmpNo(sessionInfoVO.getEmpNo());
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(!StringUtil.getOrBlank(dayVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayVO.getStoreCd(), 3900));
+            dayVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 할인구분 array 값 세팅
+        dayVO.setArrDcCol(dayVO.getDcCol().split(","));
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotDcCol = "";
+        String arrDcCol[] = dayVO.getDcCol().split(",");
+        for(int i=0; i < arrDcCol.length; i++) {
+            pivotDcCol += (pivotDcCol.equals("") ? "" : ",") + "'"+arrDcCol[i]+"'"+" AS DC"+arrDcCol[i];
+        }
+        dayVO.setPivotDcCol(pivotDcCol);
+
+
+        String sQuery1 = "";
+
+        for(int i=0; i < arrDcCol.length; i++) {
+            if(arrDcCol[i].equals("02")) {
+                sQuery1 += ", ( NVL(DC02, 0) - NVL(DC0213, 0) ) AS DC02" +  "\n";
+            } else {
+                sQuery1 += ", DC" + arrDcCol[i] +  "\n";
+            }
+        }
+        dayVO.setsQuery1(sQuery1);
+
+        return dayMapper.getDayDcBbqList(dayVO);
     }
 }

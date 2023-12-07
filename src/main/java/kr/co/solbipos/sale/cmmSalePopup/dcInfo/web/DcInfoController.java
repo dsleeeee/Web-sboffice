@@ -275,7 +275,7 @@ public class DcInfoController {
 
         return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
     }
-    
+
     /**
      * 당일매출상세현황 - 쿠폰할인(BBQ용) 상세 리스트 조회
      * @param   request
