@@ -17,6 +17,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
         $("#dayTotalView").show();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").hide();
         $("#dayProdClassView").hide();
@@ -31,6 +32,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.dayTotalShow = function () {
         $("#dayTotalTab").addClass("on");
         $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").removeClass("on");
         $("#dayTimeTab").removeClass("on");
         $("#dayProdClassTab").removeClass("on");
@@ -41,6 +43,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").show();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").hide();
         $("#dayProdClassView").hide();
@@ -59,6 +62,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.dcShow = function () {
         $("#dayTotalTab").removeClass("on");
         $("#dayDcTab").addClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").removeClass("on");
         $("#dayTimeTab").removeClass("on");
         $("#dayProdClassTab").removeClass("on");
@@ -69,6 +73,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").hide();
         $("#dayDcView").show();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").hide();
         $("#dayProdClassView").hide();
@@ -83,10 +88,41 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     };
 
 
+    // 할인구분별(BBQ) 탭 보이기
+    $scope.dcBbqShow = function () {
+        $("#dayTotalTab").removeClass("on");
+        $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").addClass("on");
+        $("#dayTaxTab").removeClass("on");
+        $("#dayTimeTab").removeClass("on");
+        $("#dayProdClassTab").removeClass("on");
+        $("#dayCornerTab").removeClass("on");
+        $("#dayTableTab").removeClass("on");
+        $("#dayPosTab").removeClass("on");
+        $("#dayEmpCardTab").removeClass("on");
+
+        $("#dayTotalView").hide();
+        $("#dayDcView").hide();
+        $("#dayDcBbqView").show();
+        $("#dayTaxView").hide();
+        $("#dayTimeView").hide();
+        $("#dayProdClassView").hide();
+        $("#dayCornerView").hide();
+        $("#dayTableView").hide();
+        $("#dayPosView").hide();
+        $("#dayEmpCardView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("dayDcBbqCtrl");
+        scope.flex.refresh();
+    };
+
+
     // 과면세별 탭 보이기
     $scope.taxShow = function () {
         $("#dayTotalTab").removeClass("on");
         $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").addClass("on");
         $("#dayTimeTab").removeClass("on");
         $("#dayProdClassTab").removeClass("on");
@@ -97,6 +133,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").show();
         $("#dayTimeView").hide();
         $("#dayProdClassView").hide();
@@ -115,6 +152,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.timeShow = function () {
         $("#dayTotalTab").removeClass("on");
         $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").removeClass("on");
         $("#dayTimeTab").addClass("on");
         $("#dayProdClassTab").removeClass("on");
@@ -125,6 +163,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").show();
         $("#dayProdClassView").hide();
@@ -143,6 +182,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.prodClassShow = function () {
         $("#dayTotalTab").removeClass("on");
         $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").removeClass("on");
         $("#dayTimeTab").removeClass("on");
         $("#dayProdClassTab").addClass("on");
@@ -153,6 +193,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").hide();
         $("#dayProdClassView").show();
@@ -171,6 +212,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.cornerShow = function () {
         $("#dayTotalTab").removeClass("on");
         $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").removeClass("on");
         $("#dayTimeTab").removeClass("on");
         $("#dayProdClassTab").removeClass("on");
@@ -181,6 +223,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").hide();
         $("#dayProdClassView").hide();
@@ -198,6 +241,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.tableShow = function () {
         $("#dayTotalTab").removeClass("on");
         $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").removeClass("on");
         $("#dayTimeTab").removeClass("on");
         $("#dayProdClassTab").removeClass("on");
@@ -208,6 +252,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").hide();
         $("#dayProdClassView").hide();
@@ -225,6 +270,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.posShow = function () {
         $("#dayTotalTab").removeClass("on");
         $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").removeClass("on");
         $("#dayTimeTab").removeClass("on");
         $("#dayProdClassTab").removeClass("on");
@@ -235,6 +281,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").hide();
         $("#dayProdClassView").hide();
@@ -252,6 +299,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
     $scope.empCardShow = function () {
         $("#dayTotalTab").removeClass("on");
         $("#dayDcTab").removeClass("on");
+        $("#dayDcBbqTab").removeClass("on");
         $("#dayTaxTab").removeClass("on");
         $("#dayTimeTab").removeClass("on");
         $("#dayProdClassTab").removeClass("on");
@@ -262,6 +310,7 @@ app.controller('daySaleCtrl', ['$scope', function ($scope) {
 
         $("#dayTotalView").hide();
         $("#dayDcView").hide();
+        $("#dayDcBbqView").hide();
         $("#dayTaxView").hide();
         $("#dayTimeView").hide();
         $("#dayProdClassView").hide();

@@ -17,6 +17,9 @@ public interface DayService {
     /** 일자별 - 할인 컬럼 리스트 조회 */
     List<DefaultMap<String>> getDcColList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
+    /** 일자별 - 할인 컬럼 리스트 조회 (BBQ용) */
+    List<DefaultMap<String>> getDcBbqColList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
     /** 코너별 탭 - 코너 컬럼 리스트 조회 */
     List<DefaultMap<String>> getCornerColList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 
@@ -84,4 +87,7 @@ public interface DayService {
 
     /** 사원카드별탭 - 사원카드별 매출조회 */
     List<DefaultMap<Object>> getDayEmpCardList(DayVO dayVO, SessionInfoVO sessionInfoVO);
+
+    /** 할인구분별(BBQ) 탭 - 조회 */
+    List<DefaultMap<Object>> getDayDcBbqList(DayVO dayVO, SessionInfoVO sessionInfoVO);
 }

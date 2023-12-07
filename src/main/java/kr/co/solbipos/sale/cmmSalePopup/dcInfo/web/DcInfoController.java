@@ -275,4 +275,48 @@ public class DcInfoController {
 
         return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
     }
+
+    /**
+     * 당일매출상세현황 - 쿠폰할인(BBQ용) 상세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dcInfoVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 11. 30.
+     */
+    @RequestMapping(value = "/coupnBbqDc/getCoupnBbqDcList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCoupnBbqDcList(HttpServletRequest request, HttpServletResponse response,
+                                    Model model, DcInfoVO dcInfoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dcInfoService.getCoupnBbqDcList(dcInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
+    }
+
+    /**
+     * 당일매출상세현황 - 땡겨요정산할인 상세 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   dcInfoVO
+     * @return  String
+     * @author  김설아
+     * @since   2023. 11. 30.
+     */
+    @RequestMapping(value = "/ddangyoBbqDc/getDdangyoBbqDcList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDdangyoBbqDcList(HttpServletRequest request, HttpServletResponse response,
+                                    Model model, DcInfoVO dcInfoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dcInfoService.getDdangyoBbqDcList(dcInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
+    }
 }

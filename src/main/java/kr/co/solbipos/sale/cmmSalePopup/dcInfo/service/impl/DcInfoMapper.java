@@ -40,4 +40,9 @@ public interface DcInfoMapper {
     /** 매출공통팝업 - 스마트오더 할인 상세 리스트 조회 */
     List<DefaultMap<String>> getSmartorderDcList(DcInfoVO dcInfoVO);
 
+    /** 매출공통팝업 - 쿠폰할인(BBQ용) 상세 리스트 조회 */
+    List<DefaultMap<String>> getCoupnBbqDcList(DcInfoVO dcInfoVO);
+
+    /** 매출공통팝업 - 땡겨요정산할인 상세 리스트 조회 */
+    List<DefaultMap<String>> getDdangyoBbqDcList(DcInfoVO dcInfoVO);
 }

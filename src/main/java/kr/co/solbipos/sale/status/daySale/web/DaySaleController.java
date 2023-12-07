@@ -63,6 +63,18 @@ public class DaySaleController {
         model.addAttribute("dcCol", dcCol);
 
 
+        // 할인구분 조회 (BBQ용)
+        List<DefaultMap<String>> dcBbqColList = dayService.getDcBbqColList(dayVO, sessionInfoVO);
+
+        // 할인구분 코드를 , 로 연결하는 문자열 생성
+        String dcBbqCol = "";
+        for(int i=0; i < dcBbqColList.size(); i++) {
+            dcBbqCol += (dcBbqCol.equals("") ? "" : ",") + dcBbqColList.get(i).getStr("dcCd");
+        }
+        model.addAttribute("dcBbqColList", dcBbqColList);
+        model.addAttribute("dcBbqCol", dcBbqCol);
+
+
         // 코너 조회
         List<DefaultMap<String>> cornerColList = dayService.getCornerColList(dayVO, sessionInfoVO);
 

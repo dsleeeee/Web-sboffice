@@ -21,6 +21,9 @@ public interface DayMapper {
     /** 일자별 - 할인 컬럼 리스트 조회 */
     List<DefaultMap<String>> getDcColList(DayVO dayVO);
 
+    /** 일자별 - 할인 컬럼 리스트 조회 (BBQ용) */
+    List<DefaultMap<String>> getDcBbqColList(DayVO dayVO);
+
     /** 코너별 탭 - 코너 컬럼 리스트 조회 */
     List<DefaultMap<String>> getCornerColList(DayVO dayVO);
 
@@ -87,4 +90,7 @@ public interface DayMapper {
 
     /** 사원카드별탭 - 사원카드별 매출조회 */
     List<DefaultMap<Object>> getDayEmpCardList(DayVO dayVO);
+
+    /** 할인구분별(BBQ) 탭 - 조회 */
+    List<DefaultMap<Object>> getDayDcBbqList(DayVO dayVO);
 }

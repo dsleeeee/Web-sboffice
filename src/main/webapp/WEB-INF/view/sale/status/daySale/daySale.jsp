@@ -5,6 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="baseUrl" value="/sale/day/daySale/daySale"/>
 
 <div class="con">
@@ -18,6 +19,12 @@
             <li>
                 <a id="dayDcTab" href="#" ng-click="dcShow()"><s:message code="day.dc"/></a>
             </li>
+            <c:if test="${orgnCd == 'DS011' or orgnCd == 'DS024' or orgnCd == 'H0360'}">
+                <%-- 할인구분별(BBQ) 탭 --%>
+                <li>
+                    <a id="dayDcBbqTab" href="#" ng-click="dcBbqShow()"><s:message code="day.dcBbq"/></a>
+                </li>
+            </c:if>
             <%-- 과면세별 탭 --%>
             <li>
                 <a id="dayTaxTab" href="#" ng-click="taxShow()"><s:message code="day.tax"/></a>
@@ -80,6 +87,20 @@
 
     var dcCol    = '${dcCol}';
     var arrDcCol = dcCol.split(',');
+
+
+    // 할인 (BBQ용)
+    var dcBbqColList = [];
+    <%--javascript에서 사용할 할인 json 데이터 생성--%>
+    <c:forEach var="dcBbqCol" items="${dcBbqColList}">
+    var dcBbqParam      = {};
+    dcBbqParam.dcCd     = "${dcBbqCol.dcCd}";
+    dcBbqParam.dcMethod = "${dcBbqCol.dcMethod}";
+    dcBbqColList.push(dcBbqParam);
+    </c:forEach>
+
+    var dcBbqCol    = '${dcBbqCol}';
+    var arrDcBbqCol = dcBbqCol.split(',');
 
 
     // 코너
@@ -146,7 +167,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/daySale/daySale.js?ver=20210322.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/daySale/daySale.js?ver=20231129.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 일별종합 레이어 --%>
@@ -157,6 +178,12 @@
 
 <%-- 할인구분별 레이어 --%>
 <c:import url="/WEB-INF/view/sale/day/day/dayDc.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 할인구분별 레이어 --%>
+<c:import url="/WEB-INF/view/sale/day/day/dayDcBbq.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
@@ -363,6 +390,18 @@
 
 <%-- 쿠폰할인 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/coupnDc.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 쿠폰할인(BBQ용) 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/coupnBbqDc.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 땡겨요정산할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/ddangyoBbqDc.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

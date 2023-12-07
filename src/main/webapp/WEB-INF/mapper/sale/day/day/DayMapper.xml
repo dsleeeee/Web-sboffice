@@ -87,6 +87,28 @@
         ]]>
     </select>
 
+    <!-- 일자별 - 할인 컬럼 리스트 조회 (BBQ용) -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : dayVO
+        COMMENTS : 일자별 - 할인 컬럼 리스트를 조회한다.
+    -->
+    <select id="getDcBbqColList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDcBbqColList */
+        SELECT  tcn.NMCODE_CD AS DC_CD
+        ,        tcn.NMCODE_NM AS DC_NM
+        ,        (CASE WHEN tcn.NMCODE_CD = '02' THEN 'COUPN_BBQ' ELSE tcn.NMCODE_ITEM_1 END) AS DC_METHOD
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '041'
+        UNION ALL
+        SELECT '0213' AS DC_CD
+        ,       '땡겨요정산할인' AS DC_NM
+        ,       'DDANGYO_BBQ' AS DC_METHOD
+        FROM dual
+        ORDER
+        BY      DC_CD
+    </select>
+
     <!-- 코너별 탭 - 코너 컬럼 리스트 조회-->
     <!--
         TABLE    : TB_MS_CORNER, TB_MS_STORE
@@ -685,30 +707,24 @@
     -->
     <select id="getDayDcList" parameterType="dayVO" resultType="DefaultMap">
         /* USE : DayMapper.getDayDcList */
-        <![CDATA[
         SELECT  TO_CHAR(TO_DATE(tsshd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,       TO_CHAR(TO_DATE(tsshd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
         ,       tsshd.STORE_CNT
-        ]]>
         ,       <foreach collection="arrDcCol" item="item" separator="+">
                     NVL(tsshd.DC${item}, 0)
                 </foreach> AS TOT_DC_AMT
         ,       <foreach collection="arrDcCol" item="item" separator=",">
                     tsshd.DC${item} AS DC${item}
                 </foreach>
-        <![CDATA[
         FROM    (   SELECT  SALE_DATE
                     ,       COUNT(STORE_CD) AS STORE_CNT
-        ]]>
                     ,       <foreach collection="arrDcCol" item="item" separator=",">
                                 SUM(DC${item}) AS DC${item}
                             </foreach>
-        <![CDATA[
                     FROM    (   SELECT  tsshd.SALE_DATE, tsshd.STORE_CD, tsshd.DC_CD, tsshd.DC_AMT
                                 FROM    TB_SL_SALE_HDR_DC tsshd
                                 WHERE   tsshd.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     tsshd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        ]]>
                                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                                     AND tsshd.STORE_CD IN (${storeCdQuery})
                                 </if>
@@ -718,7 +734,6 @@
                                     OR  tsshd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                                     )
                                 </if>
-        <![CDATA[
                             )
                     PIVOT   (
                                 SUM(DC_AMT)
@@ -729,7 +744,6 @@
                 ) tsshd
         ORDER
         BY      tsshd.SALE_DATE DESC
-        ]]>
     </select>
 
 
@@ -1953,6 +1967,73 @@
         ,		teec.DIV_NM
         ,		teec.DEPT_NM
         ,		teec.POSITION_NM
+    </select>
+
+    <!-- 할인구분별(BBQ) 탭 - 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getDayDcBbqList" parameterType="dayVO" resultType="DefaultMap">
+        /* USE : DayMapper.getDayDcBbqList */
+        SELECT TO_CHAR(TO_DATE(tsshd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       TO_CHAR(TO_DATE(tsshd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       tsshd.STORE_CNT
+        ,       <foreach collection="arrDcCol" item="item" separator="+">
+                    NVL(tsshd.DC${item}, 0)
+                </foreach> AS TOT_DC_AMT
+        ,       <foreach collection="arrDcCol" item="item" separator=",">
+                    tsshd.DC${item} AS DC${item}
+                </foreach>
+        FROM    (  SELECT  SALE_DATE
+                    ,       STORE_CNT
+                            ${sQuery1}
+                    FROM    (  SELECT  SALE_DATE
+                            ,       COUNT(STORE_CD) AS STORE_CNT
+                            ,       <foreach collection="arrDcCol" item="item" separator=",">
+                                        SUM(DC${item}) AS DC${item}
+                                    </foreach>
+                            FROM    (  SELECT  tsshd.SALE_DATE, tsshd.STORE_CD, tsshd.DC_CD, SUM(tsshd.DC_AMT) AS DC_AMT
+                                        FROM    TB_SL_SALE_HDR_DC tsshd
+                                        WHERE   tsshd.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        AND     tsshd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND tsshd.STORE_CD IN (${storeCdQuery})
+                                        </if>
+                                        <if test='orgnFg != null and orgnFg == "H"'>
+                                            AND (
+                                                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                                    OR  tsshd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                                )
+                                        </if>
+                                        GROUP BY tsshd.SALE_DATE, tsshd.STORE_CD, tsshd.DC_CD
+                                        UNION ALL
+                                        SELECT  tsdto.SALE_DATE, tsdto.STORE_CD, '0213' AS DC_CD, tsdto.DC_AMT_02 AS DC_AMT
+                                        FROM    TB_SL_DAILY_TOTAL_ORDAPP tsdto
+                                        WHERE   tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+                                        AND     tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                            AND tsdto.STORE_CD IN (${storeCdQuery})
+                                        </if>
+                                        <if test='orgnFg != null and orgnFg == "H"'>
+                                            AND (
+                                                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                                                    OR  tsdto.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                                )
+                                        </if>
+                                        AND tsdto.DLVR_IN_FG = '13'
+                                    )
+                            PIVOT   (
+                                        SUM(DC_AMT)
+                                        FOR DC_CD
+                                        IN (${pivotDcCol})
+                                    )
+                            GROUP BY SALE_DATE
+                      )
+                ) tsshd
+        ORDER
+        BY      tsshd.SALE_DATE DESC
     </select>
 
 </mapper>

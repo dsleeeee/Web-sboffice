@@ -151,4 +151,44 @@ public class DcInfoServiceImpl implements DcInfoService {
         return dcInfoMapper.getSmartorderDcList(dcInfoVO);
     }
 
+
+    /** 매출공통팝업 - 쿠폰할인(BBQ용) 상세 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getCoupnBbqDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcInfoVO.getStoreCd(), 3900));
+            dcInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return dcInfoMapper.getCoupnBbqDcList(dcInfoVO);
+    }
+
+    /** 매출공통팝업 - 땡겨요정산할인 상세 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getDdangyoBbqDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcInfoVO.getStoreCd(), 3900));
+            dcInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return dcInfoMapper.getDdangyoBbqDcList(dcInfoVO);
+    }
 }
