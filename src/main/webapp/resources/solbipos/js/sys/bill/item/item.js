@@ -26,6 +26,19 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
     var contentColumn = s.columns.getColumn("content");
     contentColumn.multiLine = true;
     contentColumn.wordWrap = true;
+
+    var contentEnColumn = s.columns.getColumn("contentEn");
+    contentEnColumn.multiLine = true;
+    contentEnColumn.wordWrap = true;
+
+    var contentCnColumn = s.columns.getColumn("contentCn");
+    contentCnColumn.multiLine = true;
+    contentCnColumn.wordWrap = true;
+
+    var contentJpColumn = s.columns.getColumn("contentJp");
+    contentJpColumn.multiLine = true;
+    contentJpColumn.wordWrap = true;
+
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
@@ -37,7 +50,7 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
           } else {
             wijmo.removeClass(e.cell, 'wj-custom-readonly');
           }
-        } else if ( col.binding === "content") {
+        } else if ( col.binding === "content" || col.binding === "contentEn" || col.binding === "contentCn" || col.binding === "contentJp") {
           wijmo.addClass(e.cell, 'wj-grid-multi-editor');
         }
       }
@@ -57,7 +70,7 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
       var rowNum = s.selection.row;
       var colNum = s.selection.col;
       var col = s.columns[colNum];
-      if (col.binding === "content") {
+      if (col.binding === "content" || col.binding === "contentEn" || col.binding === "contentCn" || col.binding === "contentJp") {
         if (e.altKey) {
           if (e.keyCode === wijmo.Key.Enter) {
             s.finishEditing(false);
@@ -71,7 +84,7 @@ app.controller('printCodeCtrl', ['$scope', '$http', function ($scope, $http) {
     // cell 에디트 종료시 42글자 포멧팅. 예제 필드에만.
     s.cellEditEnded.addHandler(function (s, e) {
       var col = s.columns[e.col];
-      if(col.binding === "content") {
+      if(col.binding === "content" || col.binding === "contentEn" || col.binding === "contentCn" || col.binding === "contentJp") {
         var val = s.getCellData(e.row, e.col);
         var lines = val.split("\n");
         if ( lines != null ) {

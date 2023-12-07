@@ -29,6 +29,12 @@ public class ItemVO extends CmmVO {
     private Boolean samplYn;
     /** 예제 */
     private String content;
+    /** 예제(영문) */
+    private String contentEn;
+    /** 예제(중문) */
+    private String contentCn;
+    /** 예제(일문) */
+    private String contentJp;
     
     
     /**
@@ -79,5 +85,28 @@ public class ItemVO extends CmmVO {
     public void setContent(String content) {
         this.content = content;
     }
-    
+
+    public String getContentEn() {
+        return contentEn;
+    }
+
+    public void setContentEn(String contentEn) {
+        this.contentEn = contentEn;
+    }
+
+    public String getContentCn() {
+        return contentCn;
+    }
+
+    public void setContentCn(String contentCn) {
+        this.contentCn = contentCn;
+    }
+
+    public String getContentJp() {
+        return contentJp;
+    }
+
+    public void setContentJp(String contentJp) {
+        this.contentJp = contentJp;
+    }
 }

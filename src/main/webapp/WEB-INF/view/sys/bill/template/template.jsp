@@ -9,7 +9,7 @@
 
 <div class="subCon" ng-controller="templateCtrl">
 
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -64,13 +64,13 @@
       <div id="gridTemplate" class="wj-TblWrapBr pd10" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.gridNm' /></span>
-          <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
+          <button class="btn_skyblue" id="btnAddTemplate" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelTemplate" style="display: none;" ng-click="delete()">
+          <button class="btn_skyblue" id="btnDelTemplate" ng-click="delete()">
             <s:message code="cmm.delete" />
           </button>
-          <button class="btn_skyblue" id="btnSaveTemplate" style="display: none;" ng-click="save()">
+          <button class="btn_skyblue" id="btnSaveTemplate" ng-click="save()">
             <s:message code="cmm.save" />
           </button>
         </div>
@@ -91,6 +91,9 @@
             <wj-flex-grid-column header="<s:message code="template.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="template.templtNm"/>" binding="templtNm" width="*"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="template.prtForm"/>" binding="prtForm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="template.prtForm"/>" binding="prtEnForm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="template.prtForm"/>" binding="prtCnForm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="template.prtForm"/>" binding="prtJpForm" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
 
@@ -115,12 +118,26 @@
       <div class="wj-TblWrapBr ml10 pd10 templateEdit" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.editNm' /></span>
+
+          <div class="sb-select w70px ml5" id="divLangType" style="float: left;display:none;">
+            <wj-combo-box
+                id="langType"
+                ng-model="langType"
+                items-source="_getComboData('langType')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                control="langTypeCombo"
+                selected-index-changed="setPrtForm(s)">
+            </wj-combo-box>
+          </div>
+
           <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
             <s:message code="cmm.save" />
           </button>
         </div>
         <div>
-          <textarea id="editTextArea" class="w100" cols="42" style="height:410px;"></textarea>
+          <textarea id="editTextArea" class="w100" cols="42" style="height:410px;display: none;"></textarea>
         </div>
       </div>
     </div>
@@ -130,7 +147,7 @@
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.viewNm' /></span>
         </div>
-        <div id="preview" class="s12 lh15" style="height:410px;">
+        <div id="preview" class="s12 lh15" style="height:410px;display: none;">
         </div>
       </div>
     </div>
@@ -140,7 +157,7 @@
 <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=2018111205" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20231207.01" charset="utf-8"></script>
 
   <%-- 레이어 팝업 --%>
   <c:import url="/WEB-INF/view/sys/bill/template/popUpTemplate.jsp">

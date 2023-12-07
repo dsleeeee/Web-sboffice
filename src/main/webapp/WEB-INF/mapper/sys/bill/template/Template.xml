@@ -62,7 +62,10 @@
             tcpt.PRT_CLASS_CD,
             tcpt.TEMPLT_CD,
             tcpt.TEMPLT_NM,
-            tcpt.PRT_FORM
+            tcpt.PRT_FORM,
+            tcpt.PRT_EN_FORM,
+            tcpt.PRT_CN_FORM,
+            tcpt.PRT_JP_FORM
         FROM
             TB_CM_PRINT_TEMPL tcpt
         WHERE
@@ -84,6 +87,9 @@
             TEMPLT_CD,
             TEMPLT_NM,
             PRT_FORM,
+            PRT_EN_FORM,
+            PRT_CN_FORM,
+            PRT_JP_FORM,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -100,6 +106,9 @@
             ),
             #{templtNm},
             #{prtForm, jdbcType=VARCHAR},
+            #{prtEnForm, jdbcType=VARCHAR},
+            #{prtCnForm, jdbcType=VARCHAR},
+            #{prtJpForm, jdbcType=VARCHAR},
             #{regDt},
             #{regId},
             #{modDt},
@@ -159,7 +168,18 @@
             UPDATE
             SET
                 tcpt.TEMPLT_NM = #{templtNm},
-                tcpt.PRT_FORM = #{prtForm},
+                <if test='langType != null and langType == "ko"'>
+                    tcpt.PRT_FORM = #{prtForm},
+                </if>
+                <if test='langType != null and langType == "en"'>
+                    tcpt.PRT_EN_FORM = #{prtEnForm},
+                </if>
+                <if test='langType != null and langType == "cn"'>
+                    tcpt.PRT_CN_FORM = #{prtCnForm},
+                </if>
+                <if test='langType != null and langType == "jp"'>
+                    tcpt.PRT_JP_FORM = #{prtJpForm},
+                </if>
                 tcpt.MOD_DT = #{modDt},
                 tcpt.MOD_ID = #{modId}
         WHEN NOT MATCHED THEN
@@ -168,7 +188,18 @@
                 PRT_CLASS_CD,
                 TEMPLT_CD,
                 TEMPLT_NM,
+        <if test='langType != null and langType == "ko"'>
                 PRT_FORM,
+        </if>
+        <if test='langType != null and langType == "en"'>
+                PRT_EN_FORM,
+        </if>
+        <if test='langType != null and langType == "cn"'>
+                PRT_CN_FORM,
+        </if>
+        <if test='langType != null and langType == "jp"'>
+                PRT_JP_FORM,
+        </if>
                 REG_DT,
                 REG_ID,
                 MOD_DT,
@@ -184,7 +215,18 @@
                         PRT_CLASS_CD = #{prtClassCd}
                 ),
                 #{templtNm},
+        <if test='langType != null and langType == "ko"'>
                 #{prtForm},
+        </if>
+        <if test='langType != null and langType == "en"'>
+                #{prtEnForm},
+        </if>
+        <if test='langType != null and langType == "cn"'>
+                #{prtCnForm},
+        </if>
+        <if test='langType != null and langType == "jp"'>
+                #{prtJpForm},
+        </if>
                 #{regDt},
                 #{regId},
                 #{modDt},

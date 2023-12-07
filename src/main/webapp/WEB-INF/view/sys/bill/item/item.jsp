@@ -49,10 +49,13 @@
 
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="item.prtCd"/>" binding="prtCd" width="200"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="item.prtNm"/>" binding="prtNm" width="200"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="item.samplYn"/>" binding="samplYn" width="80"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="item.content"/>" binding="content" width="*"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="item.prtCd"/>" binding="prtCd" width="150"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="item.prtNm"/>" binding="prtNm" width="150"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="item.samplYn"/>" binding="samplYn" width="70"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="item.content"/>" binding="content" width="350"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="item.contentEn"/>" binding="contentEn" width="350"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="item.contentCn"/>" binding="contentCn" width="350"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="item.contentJp"/>" binding="contentJp" width="350"></wj-flex-grid-column>
 
         </wj-flex-grid>
       </div>
@@ -62,4 +65,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20220722.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/item/item.js?ver=20231201.01" charset="utf-8"></script>

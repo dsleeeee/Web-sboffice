@@ -32,6 +32,9 @@
             tcpc.SAMPL_YN,
         <![CDATA[
             tcpc.CONTENT,
+            tcpc.CONTENT_EN,
+            tcpc.CONTENT_CN,
+            tcpc.CONTENT_JP,
         ]]>
             tcpc.REG_DT,
             tcpc.REG_ID,
@@ -71,6 +74,9 @@
             SAMPL_YN = #{samplYn},
         <![CDATA[
             CONTENT = #{content},
+            CONTENT_EN = #{contentEn},
+            CONTENT_CN = #{contentCn},
+            CONTENT_JP = #{contentJp},
         ]]>
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
@@ -94,6 +100,9 @@
             PRT_NM,
             SAMPL_YN,
             CONTENT,
+            CONTENT_EN,
+            CONTENT_CN,
+            CONTENT_JP,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -106,6 +115,9 @@
             #{samplYn},
         <![CDATA[
             #{content},
+            #{contentEn},
+            #{contentCn},
+            #{contentJp},
         ]]>
             #{regDt},
             #{regId},
