@@ -358,6 +358,14 @@
 		     , G.NONSALE_AMT_4
 		     , G.NONSALE_CNT_5
 		     , G.NONSALE_AMT_5
+		     , NVL((SELECT SUM(TPEF.FUND_AMT)
+                      FROM TB_PS_EXACTCALC_FUND TPEF
+                     WHERE TPEF.HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND TPEF.STORE_CD = #{storeCd}
+                       AND TPEF.SALE_DATE = REPLACE(#{saleDate},'-','')
+                       AND TPEF.POS_NO = #{posNo}
+                       AND TPEF.REG_SEQ = #{regSeq}
+                    ), 0) AS TOT_FUND_AMT
 		  FROM (
 		      SELECT TPE.STORE_CD
 		           , TO_CHAR(TO_DATE(TPE.OPEN_DT,'YYYYMMDDHH24MISS'),'YYYY-MM-DD HH24:MI:SS') AS OPEN_DT     
