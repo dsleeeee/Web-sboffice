@@ -22,7 +22,6 @@
         SELECT
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
             TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-            TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
         </if>
         <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
             TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
@@ -30,7 +29,6 @@
         </if>
         tsdp.STORE_CD,
         tms.STORE_NM,
-        tsdp.PROD_CD,
         tmp.PROD_NM,
         SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
         SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
@@ -141,7 +139,6 @@
         SELECT
         <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
             TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-            TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
         </if>
         <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
             TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
@@ -149,7 +146,6 @@
         </if>
         tsdp.STORE_CD,
         tms.STORE_NM,
-        tsdp.PROD_CD,
         tmp.PROD_NM,
         SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
         SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
