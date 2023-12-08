@@ -258,8 +258,6 @@ public class ProdSaleDayStoreMomsController {
 
         List<DefaultMap<Object>> result = prodSaleDayStoreMomsService.getProdSaleDayStoreMomsExcelList(prodSaleDayStoreMomsVO, sessionInfoVO);
 
-        System.out.println("test1111");
-
         return ReturnUtil.returnListJson(Status.OK, result, prodSaleDayStoreMomsVO);
     }
 }
