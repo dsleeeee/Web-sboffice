@@ -298,7 +298,7 @@
             </table>
         </c:if>
         <div class="mt10 oh sb-select dkbr">
-            <c:if test="${userId == 'ds021' or userId == 'h0393'}">
+            <c:if test="${userId == 'ds021' or userId == 'ds034' or userId == 'h0393'}">
                 <%-- 일괄다운로드 --%>
                 <button class="btn_skyblue ml5 fr" id="btnDel" ng-click="allDownload()">
                     <s:message code="saleDtlChannelExcel.allDownload" />
