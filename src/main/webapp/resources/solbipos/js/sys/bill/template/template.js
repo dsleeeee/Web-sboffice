@@ -45,6 +45,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.prtClassCdComboFocus = function(s,e) {
     $scope.isCombo = true;
   };
+
+  $("#btnSaveEditTemplate").hide();
+  theTarget.disabled = true;
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정
@@ -91,10 +95,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
           }
 
           // 템플릿 클릭시, 템플릿 편집이 가능
-          $("#btnSaveEditTemplate").show();
           $("#divLangType").css("display", "");
-          $("#editTextArea").css("display", "");
-          $("#preview").css("display", "");
+          $("#btnSaveEditTemplate").show();
+          theTarget.disabled = false;
+
         }
       }
     });
@@ -115,6 +119,14 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   });
   // 템플릿 그리드 행 추가
   $scope.addRow = function() {
+    // 편집/미리보기 폼 초기화
+    theTarget.value = "";
+    thePreview.innerHTML = "";
+    ht = null;
+    $("#divLangType").css("display", "none");
+    $("#btnSaveEditTemplate").hide();
+    theTarget.disabled = true;
+
     // 파라미터 설정
     var params = {};
     params.status = "I";
@@ -217,6 +229,9 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
             scopeLayer.flexLayer.collectionView.itemsEdited[i].templtCd = scopeLayer.srchTempltCdCombo.templtCd;
             scopeLayer.flexLayer.collectionView.itemsEdited[i].templtNm = scopeLayer.srchTempltCdCombo.templtNm;
             scopeLayer.flexLayer.collectionView.itemsEdited[i].prtForm = scopeLayer.srchTempltCdCombo.prtForm;
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtEnForm = scopeLayer.srchTempltCdCombo.prtEnForm;
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtCnForm = scopeLayer.srchTempltCdCombo.prtCnForm;
+            scopeLayer.flexLayer.collectionView.itemsEdited[i].prtJpForm = scopeLayer.srchTempltCdCombo.prtJpForm;
             paramArr.push(scopeLayer.flexLayer.collectionView.itemsEdited[i]);
           }
 
@@ -325,16 +340,17 @@ function searchPrintCodeList(params) {
           listBoxCodeList.itemsSource = list;
         }
 
+        $("#btnAddTemplate").show();
+        $("#btnDelTemplate").show();
+        $("#btnSaveTemplate").show();
+
         // 편집/미리보기 폼 초기화
         theTarget.value = "";
         thePreview.innerHTML = "";
         ht = null;
-
-        // 템플릿 클릭시, 템플릿 편집이 가능
-        $("#btnSaveEditTemplate").hide();
         $("#divLangType").css("display", "none");
-        $("#editTextArea").css("display", "none");
-        $("#preview").css("display", "none");
+        $("#btnSaveEditTemplate").hide();
+        theTarget.disabled = true;
 
       }
       else if(result.status === "FAIL") {

@@ -64,13 +64,13 @@
       <div id="gridTemplate" class="wj-TblWrapBr pd10" style="height:485px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.gridNm' /></span>
-          <button class="btn_skyblue" id="btnAddTemplate" ng-click="addRow()">
+          <button class="btn_skyblue" id="btnAddTemplate" style="display: none;" ng-click="addRow()">
             <s:message code="cmm.add" />
           </button>
-          <button class="btn_skyblue" id="btnDelTemplate" ng-click="delete()">
+          <button class="btn_skyblue" id="btnDelTemplate" style="display: none;" ng-click="delete()">
             <s:message code="cmm.delete" />
           </button>
-          <button class="btn_skyblue" id="btnSaveTemplate" ng-click="save()">
+          <button class="btn_skyblue" id="btnSaveTemplate" style="display: none;" ng-click="save()">
             <s:message code="cmm.save" />
           </button>
         </div>
@@ -132,12 +132,12 @@
             </wj-combo-box>
           </div>
 
-          <button class="btn_skyblue" id="btnSaveEditTemplate" style="display: none;" ng-click="$broadcast('saveEditTemplate')">
+          <button class="btn_skyblue" id="btnSaveEditTemplate" ng-click="$broadcast('saveEditTemplate')">
             <s:message code="cmm.save" />
           </button>
         </div>
         <div>
-          <textarea id="editTextArea" class="w100" cols="42" style="height:410px;display: none;"></textarea>
+          <textarea id="editTextArea" class="w100" cols="42" style="height:410px;"></textarea>
         </div>
       </div>
     </div>
@@ -147,7 +147,7 @@
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='template.viewNm' /></span>
         </div>
-        <div id="preview" class="s12 lh15" style="height:410px;display: none;">
+        <div id="preview" class="s12 lh15" style="height:410px;">
         </div>
       </div>
     </div>
@@ -157,7 +157,7 @@
 <script type="text/javascript">
   var prtClassComboData = ${listPrintType};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20231207.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/bill/template/template.js?ver=20231208.01" charset="utf-8"></script>
 
   <%-- 레이어 팝업 --%>
   <c:import url="/WEB-INF/view/sys/bill/template/popUpTemplate.jsp">
