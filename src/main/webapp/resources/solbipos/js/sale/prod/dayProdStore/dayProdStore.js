@@ -288,8 +288,8 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
         params.saleAmtFg = $scope.saleAmtFg;
-        params.excelType = excelType;
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.excelType = excelType;
 
         // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
         $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
