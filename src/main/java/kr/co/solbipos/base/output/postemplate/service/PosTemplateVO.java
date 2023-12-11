@@ -96,6 +96,18 @@ public class PosTemplateVO extends CmmVO {
     /** 매장그룹 */
     private String momsStoreFg01;
 
+    /** 출력물폼(영문) */
+    private String prtEnForm;
+
+    /** 출력물폼(중문) */
+    private String prtCnForm;
+
+    /** 출력물폼(일문 */
+    private String prtJpForm;
+
+    /** 언어타입 */
+    private String langType;
+
     /**
      * @return the orgnFg
      */
@@ -399,4 +411,36 @@ public class PosTemplateVO extends CmmVO {
     public String getMomsStoreFg01() { return momsStoreFg01; }
 
     public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
+
+    public String getPrtEnForm() {
+        return prtEnForm;
+    }
+
+    public void setPrtEnForm(String prtEnForm) {
+        this.prtEnForm = prtEnForm;
+    }
+
+    public String getPrtCnForm() {
+        return prtCnForm;
+    }
+
+    public void setPrtCnForm(String prtCnForm) {
+        this.prtCnForm = prtCnForm;
+    }
+
+    public String getPrtJpForm() {
+        return prtJpForm;
+    }
+
+    public void setPrtJpForm(String prtJpForm) {
+        this.prtJpForm = prtJpForm;
+    }
+
+    public String getLangType() {
+        return langType;
+    }
+
+    public void setLangType(String langType) {
+        this.langType = langType;
+    }
 }

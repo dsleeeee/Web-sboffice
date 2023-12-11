@@ -67,6 +67,9 @@
                     thpt.TEMPLT_CD,
                     thpt.TEMPLT_NM,
                     thpt.PRT_FORM,
+                    thpt.PRT_EN_FORM,
+                    thpt.PRT_CN_FORM,
+                    thpt.PRT_JP_FORM,
                     thpt.TEMPLT_CD AS APPLY_TEMPLT_CD,
                     thpt.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
                 FROM
@@ -85,6 +88,9 @@
                     sub.TEMPLT_CD,
                     sub.TEMPLT_NM,
                     sub.PRT_FORM,
+                    sub.PRT_EN_FORM,
+                    sub.PRT_CN_FORM,
+                    sub.PRT_JP_FORM,
                     sub.APPLY_TEMPLT_CD,
                     sub.APPLY_TEMPLT_REG_FG
                 FROM
@@ -95,6 +101,9 @@
                         '000' AS TEMPLT_CD,
                         '실제출력물' AS TEMPLT_NM,
                         tmp.PRT_FORM,
+                        tmp.PRT_EN_FORM,
+                        tmp.PRT_CN_FORM,
+                        tmp.PRT_JP_FORM,
                         tmp.TEMPLT_CD AS APPLY_TEMPLT_CD,
                         tmp.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
                     FROM
@@ -109,6 +118,9 @@
                         tmpt.TEMPLT_CD,
                         tmpt.TEMPLT_NM,
                         tmpt.PRT_FORM,
+                        tmpt.PRT_EN_FORM,
+                        tmpt.PRT_CN_FORM,
+                        tmpt.PRT_JP_FORM,
                         tmpt.TEMPLT_CD AS APPLY_TEMPLT_CD,
                         tmpt.TEMPLT_REG_FG AS APPLY_TEMPLT_REG_FG
                     FROM
@@ -142,6 +154,9 @@
                     TEMPLT_CD,
                     TEMPLT_NM,
                     PRT_FORM,
+                    PRT_EN_FORM,
+                    PRT_CN_FORM,
+                    PRT_JP_FORM,
                     REG_DT,
                     REG_ID,
                     MOD_DT,
@@ -162,6 +177,9 @@
                     ),
                     #{templtNm},
                     #{prtForm, jdbcType=VARCHAR},
+                    #{prtEnForm, jdbcType=VARCHAR},
+                    #{prtCnForm, jdbcType=VARCHAR},
+                    #{prtJpForm, jdbcType=VARCHAR},
                     #{regDt},
                     #{regId},
                     #{modDt},
@@ -178,6 +196,9 @@
                     TEMPLT_CD,
                     TEMPLT_NM,
                     PRT_FORM,
+                    PRT_EN_FORM,
+                    PRT_CN_FORM,
+                    PRT_JP_FORM,
                     REG_DT,
                     REG_ID,
                     MOD_DT,
@@ -198,6 +219,9 @@
                     ),
                     #{templtNm},
                     #{prtForm, jdbcType=VARCHAR},
+                    #{prtEnForm, jdbcType=VARCHAR},
+                    #{prtCnForm, jdbcType=VARCHAR},
+                    #{prtJpForm, jdbcType=VARCHAR},
                     #{regDt},
                     #{regId},
                     #{modDt},
@@ -305,7 +329,18 @@
                     UPDATE
                     SET
                         thpt.TEMPLT_NM = #{templtNm},
-                        thpt.PRT_FORM = #{prtForm},
+                      <if test='langType != null and langType == "ko"'>
+                          thpt.PRT_FORM = #{prtForm},
+                      </if>
+                      <if test='langType != null and langType == "en"'>
+                          thpt.PRT_EN_FORM = #{prtEnForm},
+                      </if>
+                      <if test='langType != null and langType == "cn"'>
+                          thpt.PRT_CN_FORM = #{prtCnForm},
+                      </if>
+                      <if test='langType != null and langType == "jp"'>
+                          thpt.PRT_JP_FORM = #{prtJpForm},
+                      </if>
                         thpt.MOD_DT = #{modDt},
                         thpt.MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
@@ -316,7 +351,18 @@
                         TEMPLT_REG_FG,
                         TEMPLT_CD,
                         TEMPLT_NM,
+                <if test='langType != null and langType == "ko"'>
                         PRT_FORM,
+                </if>
+                <if test='langType != null and langType == "en"'>
+                        PRT_EN_FORM,
+                </if>
+                <if test='langType != null and langType == "cn"'>
+                        PRT_CN_FORM,
+                </if>
+                <if test='langType != null and langType == "jp"'>
+                        PRT_JP_FORM,
+                </if>
                         REG_DT,
                         REG_ID,
                         MOD_DT,
@@ -336,7 +382,18 @@
                                 AND thpt.TEMPLT_REG_FG = 'H'
                         ),
                         #{templtNm},
+                <if test='langType != null and langType == "ko"'>
                         #{prtForm},
+                </if>
+                <if test='langType != null and langType == "en"'>
+                        #{prtEnForm},
+                </if>
+                <if test='langType != null and langType == "cn"'>
+                        #{prtCnForm},
+                </if>
+                <if test='langType != null and langType == "jp"'>
+                        #{prtJpForm},
+                </if>
                         #{regDt},
                         #{regId},
                         #{modDt},
@@ -357,7 +414,18 @@
                     UPDATE
                     SET
                         tmpt.TEMPLT_NM = #{templtNm},
+                    <if test='langType != null and langType == "ko"'>
                         tmpt.PRT_FORM = #{prtForm},
+                    </if>
+                    <if test='langType != null and langType == "en"'>
+                        tmpt.PRT_EN_FORM = #{prtEnForm},
+                    </if>
+                    <if test='langType != null and langType == "cn"'>
+                        tmpt.PRT_CN_FORM = #{prtCnForm},
+                    </if>
+                    <if test='langType != null and langType == "jp"'>
+                        tmpt.PRT_JP_FORM = #{prtJpForm},
+                    </if>
                         tmpt.MOD_DT = #{modDt},
                         tmpt.MOD_ID = #{modId}
                 WHEN NOT MATCHED THEN
@@ -368,7 +436,18 @@
                         TEMPLT_REG_FG,
                         TEMPLT_CD,
                         TEMPLT_NM,
+                <if test='langType != null and langType == "ko"'>
                         PRT_FORM,
+                </if>
+                <if test='langType != null and langType == "en"'>
+                        PRT_EN_FORM,
+                </if>
+                <if test='langType != null and langType == "cn"'>
+                        PRT_CN_FORM,
+                </if>
+                <if test='langType != null and langType == "jp"'>
+                        PRT_JP_FORM,
+                </if>
                         REG_DT,
                         REG_ID,
                         MOD_DT,
@@ -388,7 +467,18 @@
                                 AND tmpt.TEMPLT_REG_FG = 'S'
                         ),
                         #{templtNm},
+                <if test='langType != null and langType == "ko"'>
                         #{prtForm},
+                </if>
+                <if test='langType != null and langType == "en"'>
+                        #{prtEnForm},
+                </if>
+                <if test='langType != null and langType == "cn"'>
+                        #{prtCnForm},
+                </if>
+                <if test='langType != null and langType == "jp"'>
+                        #{prtJpForm},
+                </if>
                         #{regDt},
                         #{regId},
                         #{modDt},
@@ -421,52 +511,68 @@
 <!--    </select>-->
     <update id="applyToStoreReal" parameterType="posTemplateVO">
         MERGE INTO TB_MS_PRINT tmp
-            USING DUAL
-            ON (
-                    tmp.STORE_CD = #{storeCd}
-                    AND tmp.PRT_CLASS_CD = #{prtClassCd}
-                )
+            USING (
+                      SELECT #{storeCd} AS STORE_CD,
+                             #{prtClassCd} AS PRT_CLASS_CD,
+                             #{templtRegFg} AS TEMPLT_REG_FG,
+                             #{templtCd} AS TEMPLT_CD,
+                             PRT_FORM,
+                             PRT_EN_FORM,
+                             PRT_CN_FORM,
+                             PRT_JP_FORM,
+                             #{modDt} AS REG_DT,
+                             #{modId} AS REG_ID,
+                             #{modDt} AS MOD_DT,
+                             #{modId} AS MOD_ID
+                        FROM TB_HQ_PRINT_TEMPL
+                       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                         AND PRT_CLASS_CD = #{prtClassCd}
+                         AND TEMPLT_CD = #{templtCd}
+                         AND TEMPLT_REG_FG = 'H'
+                  ) B
+               ON (
+                        tmp.STORE_CD = #{storeCd}
+                        AND tmp.PRT_CLASS_CD = #{prtClassCd}
+                  )
             WHEN NOT MATCHED THEN
                 INSERT(
-                       STORE_CD,
-                       PRT_CLASS_CD,
-                       TEMPLT_REG_FG,
-                       TEMPLT_CD,
-                       PRT_FORM,
-                       REG_DT,
-                       REG_ID,
-                       MOD_DT,
-                       MOD_ID
-                    ) VALUES (
-                                 #{storeCd},
-                                 #{prtClassCd},
-                                 #{templtRegFg},
-                                 #{templtCd},
-                                 (SELECT PRT_FORM
-                                  FROM TB_hq_PRINT_TEMPL
-                                  WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                                    AND PRT_CLASS_CD = #{prtClassCd}
-                                    AND TEMPLT_CD = #{templtCd}
-                                    AND TEMPLT_REG_FG='H'),
-                                 #{modDt},
-                                 #{modId},
-                                 #{modDt},
-                                 #{modId}
-                             )
+                           tmp.STORE_CD,
+                           tmp.PRT_CLASS_CD,
+                           tmp.TEMPLT_REG_FG,
+                           tmp.TEMPLT_CD,
+                           tmp.PRT_FORM,
+                           tmp.PRT_EN_FORM,
+                           tmp.PRT_CN_FORM,
+                           tmp.PRT_JP_FORM,
+                           tmp.REG_DT,
+                           tmp.REG_ID,
+                           tmp.MOD_DT,
+                           tmp.MOD_ID
+                       )
+                VALUES (
+                           B.STORE_CD,
+                           B.PRT_CLASS_CD,
+                           B.TEMPLT_REG_FG,
+                           B.TEMPLT_CD,
+                           B.PRT_FORM,
+                           B.PRT_EN_FORM,
+                           B.PRT_CN_FORM,
+                           B.PRT_JP_FORM,
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                       )
             WHEN MATCHED THEN
-                UPDATE
-                    SET TEMPLT_REG_FG = #{templtRegFg},
-                        TEMPLT_CD = #{templtCd},
-                        PRT_FORM = (SELECT PRT_FORM
-                                    FROM TB_hq_PRINT_TEMPL
-                                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                                      AND PRT_CLASS_CD = #{prtClassCd}
-                                      AND TEMPLT_CD = #{templtCd}
-                                      AND TEMPLT_REG_FG='H'),
-                        MOD_DT = #{modDt},
-                        MOD_ID = #{modId}
-            WHERE STORE_CD = #{storeCd}
-            AND PRT_CLASS_CD = #{prtClassCd}
+                 UPDATE
+                    SET tmp.TEMPLT_REG_FG = B.TEMPLT_REG_FG,
+                        tmp.TEMPLT_CD     = B.TEMPLT_CD,
+                        tmp.PRT_FORM      = B.PRT_FORM,
+                        tmp.PRT_EN_FORM   = B.PRT_EN_FORM,
+                        tmp.PRT_CN_FORM   = B.PRT_CN_FORM,
+                        tmp.PRT_JP_FORM   = B.PRT_JP_FORM,
+                        tmp.MOD_DT        = B.MOD_DT,
+                        tmp.MOD_ID        = B.MOD_ID
     </update>
 
 
@@ -492,6 +598,9 @@
                 TEMPLT_REG_FG,
                 TEMPLT_CD,
                 PRT_FORM,
+                PRT_EN_FORM,
+                PRT_CN_FORM,
+                PRT_JP_FORM,
                 REG_DT,
                 REG_ID,
                 MOD_DT,
@@ -501,6 +610,9 @@
                 #{prtClassCd},
                 #{templtRegFg},
                 #{templtCd},
+                '',
+                '',
+                '',
                 '',
                 #{regDt},
                 #{regId},
@@ -513,7 +625,7 @@
     <!--
         TABLE    : TB_HQ_PRINT, TB_MS_PRINT
         PARAM    : posTemplateVO
-        COMMENTS : 실제출력물 템플릿을 수정한다.
+        COMMENTS : 실제출력물 템플릿을 수정한다.(본사는 실제출력물이 없어 사용하지 않는다.)
     -->
     <update id="updatePosTemplatePrint" parameterType="posTemplateVO">
         /* USE : PosServiceMapper.updatePosTemplatePrint */
@@ -543,7 +655,18 @@
                     TEMPLT_REG_FG = #{templtRegFg},
                     TEMPLT_CD = #{templtCd},
                 </if>
+                <if test='langType != null and langType == "ko"'>
                     PRT_FORM = #{prtForm},
+                </if>
+                <if test='langType != null and langType == "en"'>
+                    PRT_EN_FORM = #{prtEnForm},
+                </if>
+                <if test='langType != null and langType == "cn"'>
+                    PRT_CN_FORM = #{prtCnForm},
+                </if>
+                <if test='langType != null and langType == "jp"'>
+                    PRT_JP_FORM = #{prtJpForm},
+                </if>
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId}
                 WHERE

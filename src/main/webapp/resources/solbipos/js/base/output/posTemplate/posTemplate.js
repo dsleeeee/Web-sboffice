@@ -13,6 +13,17 @@
  */
 var app = agrid.getApp();
 
+// 언어타입 콤보박스
+var langTypeData = [
+    {"name":"한글","value":"ko"},
+    {"name":"영문","value":"en"},
+    {"name":"중문","value":"cn"},
+    {"name":"일문","value":"jp"}
+];
+
+// 선택한 템플릿 관련 정보
+var ht;
+
 /**
  * 템플릿 그리드 생성
  */
@@ -30,9 +41,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   } else {
     $scope.showBtnApplyStore = false;
   }
-  $scope.showBtnSaveEdit = false;
+  $("#btnSaveEditTemplate").hide();
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("srchPrtClassCdCombo", prtClassComboData);
+  $scope._setComboData("langType", langTypeData);
   $scope.isCombo = false;
   // 조회조건 콤보박스 change event
   $scope.setPrtClassCdCombo = function(s) {
@@ -44,6 +56,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.prtClassCdComboFocus = function(s,e) {
     $scope.isCombo = true;
   };
+  theTarget.disabled = true;
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // ReadOnly 효과설정
@@ -80,11 +93,15 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     });
     // 템플릿 그리드 선택 이벤트
     s.hostElement.addEventListener('mousedown', function(e) {
-      var ht = s.hitTest(e);
+      ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var selectedRow = s.rows[ht.row].dataItem;
         var col = ht.panel.columns[ht.col];
         if (col.binding === "templtNm" && selectedRow.status !== "I") {
+
+          // 템플릿 선택시, 기본 한글 템플릿 부터 보이도록 set
+          $scope.langTypeCombo.selectedIndex = 0;
+
           if (selectedRow.prtForm != null) {
             theTarget.value = selectedRow.prtForm;
             makePreview();
@@ -92,8 +109,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
             theTarget.value = "";
             thePreview.innerHTML = "";
           }
-          // 그리드 저장버튼 show
-          $("#btnSaveTemplate").show();
+
+          // 템플릿 클릭시, 템플릿 편집이 가능
+          $("#divLangType").css("display", "");
+          $("#btnSaveEditTemplate").show();
 
           $scope.$apply(function() {
             if (selectedRow.templtRegFg === "C") {
@@ -123,13 +142,13 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
               $scope.templtEditableTxt = "수정가능";
               theTarget.disabled = false;
               if ( "H" === gvOrgnFg ) {
-                $scope.showBtnSaveEdit = true;
+                  $("#btnSaveEditTemplate").show();
               }
             } else {
               $scope.templtEditableTxt = "수정불가";
               theTarget.disabled = true;
               if ( "H" === gvOrgnFg ) {
-                $scope.showBtnSaveEdit = false;
+                  $("#btnSaveEditTemplate").hide();
               }
             }
           });
@@ -159,65 +178,34 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
         // 코드리스트 조회
         $scope._postJSONQuery.withOutPopUp("/base/output/posTemplate/code/list.sb", params,
           function(response) {
-            var list = response.data.data.list;
-            $scope.listBoxCodeList.itemsSource = list;
-            if (list.length === undefined || list.length === 0) {
-              // 코드리스트 초기화
-              $scope.listBoxCodeList.itemsSource = new wijmo.collections.CollectionView([]);
-              // 편집/미리보기 폼 초기화
-              theTarget.value = "";
-              thePreview.innerHTML = "";
-            } else {
+
+              var list = response.data.data.list;
+
+              if (list.length === undefined || list.length === 0) {
+                // 코드리스트 초기화
+                  $scope.listBoxCodeList.itemsSource = new wijmo.collections.CollectionView([]);
+              } else {
+                // 코드리스트 셋팅
+                $scope.listBoxCodeList.itemsSource = list;
+              }
+
               $("#btnAddTemplate").show();
               $("#btnDelTemplate").show();
               $("#btnSaveTemplate").show();
 
-              if ($scope.flex.rows.length > 0) {
-                $scope.flex.select(0,1);
-                var selectedRow = $scope.flex.rows[0].dataItem;
-                if (selectedRow.templtRegFg === "C") {
-                  $scope.templtRegFgNm = "시스템";
-                } else if (selectedRow.templtRegFg === "H") {
-                  $scope.templtRegFgNm = "본사";
-                  // 매장적용 버튼은 본사만
-                  $scope.showBtnApplyStore = true;
-                } else {
-                  $scope.templtRegFgNm = "매장";
-                }
-                // 편집영역의 '저장' 버튼 명칭 변경
-                if("S" === gvOrgnFg){
-                  if (selectedRow.templtRegFg === "C") {
-                    $("#btnSaveEditTemplate").text("실제출력물적용");
-                  } else if (selectedRow.templtRegFg === "H") {
-                    $("#btnSaveEditTemplate").text("실제출력물적용");
-                  } else {
-                    if(selectedRow.templtCd === "000"){
-                      $("#btnSaveEditTemplate").text("저장");
-                    }else{
-                      $("#btnSaveEditTemplate").text("저장 및 실제출력물적용");
-                    }
-                  }
-                }
-                $scope.showTempltRegFgNm = true;
-                // 자신이 등록한것만 수정 가능
-                if ( gvOrgnFg === selectedRow.templtRegFg ) {
-                  $scope.templtEditableTxt = "수정가능";
-                  $scope.showBtnSaveEdit = true;
-                  theTarget.disabled = false;
-                } else {
-                  $scope.templtEditableTxt = "수정불가";
-                  $scope.showBtnSaveEdit = false;
-                  theTarget.disabled = true;
-                }
-                theTarget.value = nvl($scope.flex.rows[0]._data.prtForm, '');
-                makePreview();
-              } else {
-                $scope.showTempltRegFgNm = false;
-                // 편집/미리보기 폼 초기화
-                theTarget.value = "";
-                thePreview.innerHTML = "";
-              }
-            }
+              // 편집/미리보기 폼 초기화
+              $scope.showTempltRegFgNm = false;
+              $scope.templtRegFgNm = "";
+              $scope.templtEditableTxt = "";
+
+              // 편집/미리보기 폼 초기화
+              theTarget.value = "";
+              thePreview.innerHTML = "";
+              ht = null;
+              $("#divLangType").css("display", "none");
+              $("#btnSaveEditTemplate").hide();
+              theTarget.disabled = true;
+
           }
         );
     });
@@ -227,8 +215,18 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   // 템플릿 그리드 행 추가
   $scope.addRow = function() {
     // 편집/미리보기 폼 초기화
+    $scope.showTempltRegFgNm = false;
+    $scope.templtRegFgNm = "";
+    $scope.templtEditableTxt = "";
+
+    // 편집/미리보기 폼 초기화
     theTarget.value = "";
     thePreview.innerHTML = "";
+    ht = null;
+    $("#divLangType").css("display", "none");
+    $("#btnSaveEditTemplate").hide();
+    theTarget.disabled = true;
+
     // 파라미터 설정
     var params = {};
     params.status = "I";
@@ -252,12 +250,10 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = [];
     for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
       $scope.flex.collectionView.itemsEdited[u].status = "U";
-      $scope.flex.collectionView.itemsEdited[u].prtForm = theTarget.value;
       params.push($scope.flex.collectionView.itemsEdited[u]);
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
-      $scope.flex.collectionView.itemsAdded[i].prtForm = theTarget.value;
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
     for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
@@ -278,7 +274,16 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     params.templtRegFg = selectedRow.templtRegFg;
     params.templtCd = selectedRow.templtCd;
     params.templtNm = selectedRow.templtNm;
-    params.prtForm = theTarget.value;
+    params.langType = $scope.langTypeCombo.selectedValue;
+    if(params.langType === "ko"){
+        params.prtForm = theTarget.value;
+    }else if(params.langType === "en"){
+        params.prtEnForm = theTarget.value;
+    }else if(params.langType === "cn"){
+        params.prtCnForm = theTarget.value;
+    }else if(param.langType === "jp"){
+        params.prtJpForm = theTarget.value;
+    }
 
     // 자신이 등록한것만 수정 가능하므로 분기처리
     if ( gvOrgnFg === selectedRow.templtRegFg ) {
@@ -290,10 +295,19 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
                   $scope._popConfirm(messages['cmm.saveSucc'] + "<br><br>해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",
                       function () {
                         var nParams = {};
-                        nParams.prtClassCd = params.prtClassCd;
-                        nParams.templtRegFg = params.templtRegFg;
-                        nParams.templtCd = params.templtCd;
-                        nParams.prtForm = params.prtForm;
+                            nParams.prtClassCd = params.prtClassCd;
+                            nParams.templtRegFg = params.templtRegFg;
+                            nParams.templtCd = params.templtCd;
+                            nParams.langType = params.langType;
+                            if(nParams.langType === "ko"){
+                                nParams.prtForm = params.prtForm;
+                            }else if(nParams.langType === "en"){
+                                nParams.prtEnForm = params.prtEnForm;
+                            }else if(nParams.langType === "cn"){
+                                nParams.prtCnForm = params.prtCnForm;
+                            }else if(nParams.langType === "jp") {
+                                nParams.prtJpForm = params.prtJpForm;
+                            }
 
                         $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", nParams,
                             function (response) {
@@ -320,7 +334,16 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
           nParams.prtClassCd = params.prtClassCd;
           nParams.templtRegFg = params.templtRegFg;
           nParams.templtCd = params.templtCd;
-          nParams.prtForm = params.prtForm;
+          nParams.langType = params.langType;
+          if(nParams.langType === "ko"){
+              nParams.prtForm = params.prtForm;
+          }else if(nParams.langType === "en"){
+              nParams.prtEnForm = params.prtEnForm;
+          }else if(nParams.langType === "cn"){
+              nParams.prtCnForm = params.prtCnForm;
+          }else if(nParams.langType === "jp") {
+              nParams.prtJpForm = params.prtJpForm;
+          }
 
           $scope._postJSONSave.withPopUp("/base/output/posTemplate/template/applyToPrint.sb", nParams,
             function (response) {
@@ -452,6 +475,49 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     function(result){
         s_alert.pop(result.message);
     });
+  };
+
+  // 언어타입 변경에 따른 양식 셋팅
+  $scope.setPrtForm = function (s) {
+      if ($scope.flex.rows.length > 0) {
+          if (s.selectedValue === "ko") { // 한글
+              if ($scope.flex.rows[ht.row]._data.prtForm != null) {
+                  theTarget.value = $scope.flex.rows[ht.row]._data.prtForm;
+                  makePreview();
+              } else {
+                  theTarget.value = "";
+                  thePreview.innerHTML = "";
+              }
+
+          } else if (s.selectedValue === "en") { // 영문
+
+              if ($scope.flex.rows[ht.row]._data.prtEnForm != null) {
+                  theTarget.value = $scope.flex.rows[ht.row]._data.prtEnForm;
+                  makePreview();
+              } else {
+                  theTarget.value = "";
+                  thePreview.innerHTML = "";
+              }
+
+          } else if (s.selectedValue === "cn") { // 중문
+              if ($scope.flex.rows[ht.row]._data.prtCnForm != null) {
+                  theTarget.value = $scope.flex.rows[ht.row]._data.prtCnForm;
+                  makePreview();
+              } else {
+                  theTarget.value = "";
+                  thePreview.innerHTML = "";
+              }
+
+          } else if (s.selectedValue === "jp") { // 일문
+              if ($scope.flex.rows[ht.row]._data.prtJpForm != null) {
+                  theTarget.value = $scope.flex.rows[ht.row]._data.prtJpForm;
+                  makePreview();
+              } else {
+                  theTarget.value = "";
+                  thePreview.innerHTML = "";
+              }
+          }
+      }
   };
 
 }]);

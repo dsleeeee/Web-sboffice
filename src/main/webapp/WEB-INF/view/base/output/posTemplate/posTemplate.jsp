@@ -91,6 +91,9 @@
             <wj-flex-grid-column header="<s:message code="posTemplate.templtCd"/>" binding="templtCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.applyTempltCd"/>" binding="applyTempltCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="posTemplate.applyTempltRegFg"/>" binding="applyTempltRegFg" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtEnForm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtCnForm" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="posTemplate.prtForm"/>" binding="prtJpForm" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
 
@@ -102,7 +105,7 @@
     <%-- 코드리스트 --%>
     <div class="fl mt10 mr10" style="width: 160px;">
       <div class="wj-TblWrapBr pd5" style="height:485px;">
-        <div class="updownSet oh mb5">
+        <div class="updownSet oh">
           <span class="fl bk lh30"><s:message code='posTemplate.listNm' /></span>
         </div>
         <%-- 코드리스트 정보표시 영역 --%>
@@ -111,7 +114,7 @@
         </div>
         <div class="app-input-group">
           <wj-list-box
-            style="width: 100%;height: 370px;"
+            style="width: 100%;height: 400px;"
             control="listBoxCodeList"
             initialized="initListBox(s,e)"
             display-member-path="prtCd"
@@ -126,12 +129,26 @@
     <%-- 편집 영역 --%>
     <div class="fl mt10 mr10" style="width: 325px;">
       <div class="wj-TblWrapBr pd5 templateEdit" style="height:485px;">
-        <div class="updownSet oh mb5">
+        <div class="updownSet oh">
           <span class="fl bk lh30"><s:message code='posTemplate.editNm' /></span>
           <span class="fl bk lh30 s12" ng-if="showTempltRegFgNm">&nbsp;- {{templtRegFgNm}}등록 > {{templtEditableTxt}}</span>
-          <button class="btn_skyblue" id="btnSaveEditTemplate" ng-if="showBtnSaveEdit" ng-click="saveEditTemplate()">
+          <button class="btn_skyblue" id="btnSaveEditTemplate" ng-click="saveEditTemplate()">
             <s:message code="cmm.save" />
           </button>
+        </div>
+        <div class="mb5" style="height: 25px;">
+            <div class="sb-select w70px" id="divLangType" style="display:none;">
+                <wj-combo-box
+                id="langType"
+                ng-model="langType"
+                items-source="_getComboData('langType')"
+                display-member-path="name"
+                selected-value-path="value"
+                is-editable="false"
+                control="langTypeCombo"
+                selected-index-changed="setPrtForm(s)">
+                </wj-combo-box>
+            </div>
         </div>
         <div>
           <textarea id="editTextArea" class="w100" cols="42" style="height:410px;"></textarea>
@@ -142,7 +159,7 @@
     <%-- 미리보기 영역 --%>
     <div class="fl mt10" style="width: 330px;">
       <div class="wj-TblWrapBr pd5 templateEdit" style="height:485px;">
-        <div class="updownSet oh mb5">
+        <div class="updownSet oh mb30">
           <span class="fl bk lh30"><s:message code='posTemplate.viewNm' /></span>
           <c:if test="${orgnFg == 'HQ'}">
             <button class="btn_skyblue" id="btnApplyStoreTemplate" ng-if="showBtnApplyStore" ng-click="applyToStoreReal()" style="font-size:0.7em; padding:0 5px;">
@@ -207,7 +224,7 @@
   }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20230619.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20231211.02" charset="utf-8"></script>
 <%-- 레이어 팝업 : 적용매장 선택 팝업 --%>
 <c:import url="/WEB-INF/view/base/output/posTemplate/storePosTemplate.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
