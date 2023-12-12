@@ -697,6 +697,9 @@
             TEMPLT_CD,
             TEMPLT_NM,
             PRT_FORM,
+            PRT_EN_FORM,
+            PRT_CN_FORM,
+            PRT_JP_FORM,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -708,6 +711,9 @@
                TEMPLT_CD,
                TEMPLT_NM,
                PRT_FORM,
+               PRT_EN_FORM,
+               PRT_CN_FORM,
+               PRT_JP_FORM,
                #{regDt},
                #{regId},
                #{modDt},
@@ -730,6 +736,9 @@
             TEMPLT_REG_FG,
             TEMPLT_CD,
             PRT_FORM,
+            PRT_EN_FORM,
+            PRT_CN_FORM,
+            PRT_JP_FORM,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -740,6 +749,9 @@
                'C' AS TEMPLT_REG_FG,
                TEMPLT_CD,
                PRT_FORM,
+               PRT_EN_FORM,
+               PRT_CN_FORM,
+               PRT_JP_FORM,
                #{regDt},
                #{regId},
                #{modDt},
@@ -764,6 +776,9 @@
             TEMPLT_CD,
             TEMPLT_NM,
             PRT_FORM,
+            PRT_EN_FORM,
+            PRT_CN_FORM,
+            PRT_JP_FORM,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -775,6 +790,9 @@
                TEMPLT_CD,
                TEMPLT_NM,
                PRT_FORM,
+               PRT_EN_FORM,
+               PRT_CN_FORM,
+               PRT_JP_FORM,
                #{regDt},
                #{regId},
                #{modDt},
@@ -798,6 +816,9 @@
             TEMPLT_REG_FG,
             TEMPLT_CD,
             PRT_FORM,
+            PRT_EN_FORM,
+            PRT_CN_FORM,
+            PRT_JP_FORM,
             REG_DT,
             REG_ID,
             MOD_DT,
@@ -808,6 +829,9 @@
                TEMPLT_REG_FG,
                TEMPLT_CD,
                PRT_FORM,
+               PRT_EN_FORM,
+               PRT_CN_FORM,
+               PRT_JP_FORM,
                #{regDt},
                #{regId},
                #{modDt},
@@ -4784,6 +4808,9 @@
                 ,       TEMPLT_REG_FG
                 ,       TEMPLT_CD
                 ,       PRT_FORM
+                ,       PRT_EN_FORM
+                ,       PRT_CN_FORM
+                ,       PRT_JP_FORM
                 ,       #{regDt} AS REG_DT
                 ,       #{regId} AS REG_ID
                 ,       #{modDt} AS MOD_DT
@@ -4800,6 +4827,9 @@
                         A.TEMPLT_REG_FG =   B.TEMPLT_REG_FG
                 ,       A.TEMPLT_CD     =   B.TEMPLT_CD
                 ,       A.PRT_FORM      =   B.PRT_FORM
+                ,       A.PRT_EN_FORM   =   B.PRT_EN_FORM
+                ,       A.PRT_CN_FORM   =   B.PRT_CN_FORM
+                ,       A.PRT_JP_FORM   =   B.PRT_JP_FORM
                 ,       A.MOD_DT        =   B.MOD_DT
                 ,       A.MOD_ID        =   B.MOD_ID
             WHEN NOT MATCHED THEN
@@ -4810,6 +4840,9 @@
                 ,       A.TEMPLT_REG_FG
                 ,       A.TEMPLT_CD
                 ,       A.PRT_FORM
+                ,       A.PRT_EN_FORM
+                ,       A.PRT_CN_FORM
+                ,       A.PRT_JP_FORM
                 ,       A.REG_DT
                 ,       A.REG_ID
                 ,       A.MOD_DT
@@ -4822,6 +4855,9 @@
                 ,       B.TEMPLT_REG_FG
                 ,       B.TEMPLT_CD
                 ,       B.PRT_FORM
+                ,       B.PRT_EN_FORM
+                ,       B.PRT_CN_FORM
+                ,       B.PRT_JP_FORM
                 ,       B.REG_DT
                 ,       B.REG_ID
                 ,       B.MOD_DT
