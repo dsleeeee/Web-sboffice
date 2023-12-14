@@ -180,6 +180,15 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
         $scope.prodClassNm = "";
     };
 
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
+    };
+
     // 조회조건/분할 엑셀다운로드
     $scope.excelDownload = function (excelType) {
         var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
@@ -280,15 +289,6 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
         }, 10);
     };
 
-    // 확장조회 숨김/보임
-    $scope.searchAddShowChange = function(){
-        if( $("#tblSearchAddShow").css("display") === 'none') {
-            $("#tblSearchAddShow").show();
-        } else {
-            $("#tblSearchAddShow").hide();
-        }
-    };
-
 }]);
 
 
@@ -386,10 +386,11 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
         // 전체 데이터 수 조회
         params.limit = 1;
         params.offset = 1;
+
         $scope._postJSONQuery.withOutPopUp( "/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getProdSaleDayStoreMomsList.sb", params, function(response){
 
             listSize = response.data.data.list[0].totCnt;
-            totFileCnt = Math.ceil(listSize/150000); // 하나의 엑셀파일에 150000개씩 다운로드
+            totFileCnt = Math.ceil(listSize/50000); // 하나의 엑셀파일에 50000개씩 다운로드
 
             if(listSize === 0 || totFileCnt === 0){
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -403,18 +404,16 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
             // 엑셀 분할 다운로드
             function delay(x){
                 return new Promise(function(resolve, reject){
-                    //setTimeout(function() {
                     console.log("setTimeout  > i=" + x + " x=" + x);
 
                     // 다운로드 진행중인 파일 숫자 변경
                     $("#progressCnt").html(x + 1);
 
-                    // 페이징 150000개씩 지정해 분할 다운로드 진행
-                    params.limit = 150000 * (x + 1);
-                    params.offset = (150000 * (x + 1)) - 149999;
-                    // params.offset = (35000 * (x + 1)) - 34999;
-                    // 가상로그인 대응한 session id 설정
+                    // 페이징 50000개씩 지정해 분할 다운로드 진행
+                    params.limit = 50000 * (x + 1);
+                    params.offset = (50000 * (x + 1)) - 49999;
 
+                    // 가상로그인 대응한 session id 설정
                     if (document.getElementsByName('sessionId')[0]) {
                         params['sid'] = document.getElementsByName('sessionId')[0].value;
                     }
@@ -493,7 +492,7 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
                                 includeColumns: function (column) {
                                     return column.visible;
                                 }
-                            }, "상품매출일별(매장별)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
+                            }, "상품매출일별(매장)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
                                 $timeout(function () {
                                     console.log("Export complete start. _" + (x + 1));
                                     getExcelFile(x + 1);
@@ -503,10 +502,10 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
                                 console.log('The reason of save failure is ' + reason + "_" + (x + 1));
                                 $scope.excelUploadingPopup(false);
                             });
+
                         }, 1000);
                     });
                     resolve(x);
-                    //}, 3000*x);
                 });
             };
 

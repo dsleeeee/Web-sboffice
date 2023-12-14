@@ -83,11 +83,12 @@ button {outline:none; border:0; font-family:'NotoR', Malgun Gothic, '맑은 고�
 /* **************************************** *
  * COMMON
  * **************************************** */
-.w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11%;} .w12 {width:12%;} .w13 {width:13%;} .w14 {width:14%;} .w15 {width:15%;} .w16 {width:16%;} .w17 {width:17%;} .w20 {width:20%;} .w25 {width:25%;} .w26 {width:26%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w38 {width:38%;} .w40 {width:40%;} .w45 {width:45%;} .w50 {width:50%;} .w55 {width:55%;} .w60 {width:60%;} .w65 {width:65%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;}
+.w4 {width:4%;} .w5 {width:5%;} .w7 {width:7%;} .w8 {width:8%;} .w10 {width:10%;} .w11 {width:11%;} .w12 {width:12%;} .w13 {width:13%;} .w14 {width:14%;} .w15 {width:15%;} .w16 {width:16%;} .w17 {width:17%;} .w20 {width:20%;} .w25 {width:25%;} .w26 {width:26%;} .w28 {width:28%;} .w30 {width:30%;} .w33 {width:33.333333%;} .w35 {width:35%;} .w38 {width:38%;} .w40 {width:40%;} .w45 {width:45%;}
+.w50 {width:50%;} .w55 {width:55%;} .w60 {width:60%;} .w65 {width:65%;} .w70 {width:70%;} .w75 {width:75%;} .w80 {width:80%;} .w85 {width:85%;} .w90 {width:90%;} .w100 {width:100%;}
 
 .w50px {width:50px;} .w60px {width:60px;} .w70px {width:70px;} .w75px {width:75px;} .w80px {width:80px;} .w85px {width:85px;} .w90px {width:90px;} .w98px {width:98px;} .w100px {width:100px;}
-
-.w105px {width:105px;} .w110px {width:110px;} .w115px {width:115px;} .w120px {width:120px;} .w130px {width:130px;} .w150px {width:150px;} .w180px {width:180px;} .w200px {width:200px;} .w210px {width:210px;} .w300px {width:300px;} w400px {width:400px;} .w500px {width:500px;} .w600px {width:600px;} .w700px {width:700px;} .w800px {width:800px;} .w870px {width:870px;}
+.w105px {width:105px;} .w110px {width:110px;} .w115px {width:115px;} .w120px {width:120px;} .w130px {width:130px;} .w150px {width:150px;} .w180px {width:180px;} .w200px {width:200px;} .w210px {width:210px;}
+.w300px {width:300px;} w400px {width:400px;} .w500px {width:500px;} .w600px {width:600px;} .w700px {width:700px;} .w800px {width:800px;} .w870px {width:870px;}
 
 .h100 {height:100px;} .h200 {height:200px;} .h300 {height:300px;} .h365 {height:365px;} .h400 {height:400px;} .h500 {height:500px;} .h600 {height:600px;} .h700 {height:700px;} .h800 {height:800px;} .h900 {height:900px;}
 
