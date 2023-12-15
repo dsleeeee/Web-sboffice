@@ -286,6 +286,8 @@
     <typeAlias alias="captionMsgVO" type="kr.co.solbipos.base.multilingual.captionMsg.service.CaptionMsgVO"/>
     <!-- 기초관리 다국어관리 다국어관리(키오스크/사이드/옵션) -->
     <typeAlias alias="kioskSideOptionVO" type="kr.co.solbipos.base.multilingual.kioskSideOption.service.KioskSideOptionVO" />
+    <!-- 기초관리 다국어관리 다국어관리(기능키/공통코드) -->
+    <typeAlias alias="fnkeyCmNmcdVO" type="kr.co.solbipos.base.multilingual.fnkeyCmNmcd.service.FnkeyCmNmcdVO" />
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="empBrandVO" type="kr.co.solbipos.base.store.empbrand.service.EmpBrandVO"/>

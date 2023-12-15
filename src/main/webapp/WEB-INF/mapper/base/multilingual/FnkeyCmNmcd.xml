@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    FnkeyCmNmcd.xml
+    다국어관리(기능키/공통코드)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2023.12.12     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.multilingual.fnkeyCmNmcd.service.impl.FnkeyCmNmcdMapper">
+
+    <!-- 기능키(공통) 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY
+        PARAM    : fnkeyCmNmcdVO
+        COMMENTS : 기능키(공통) 탭 리스트를 조회한다.
+    -->
+    <select id="getCmPosFnkeyList" parameterType="fnkeyCmNmcdVO" resultType="DefaultMap">
+         /* USE : FnkeyCmNmcdMapper.getCmPosFnkeyList */
+         SELECT  tcpf.FNKEY_NO
+         ,       tcpf.FNKEY_NM
+         ,       tcpf.FNKEY_FG
+         ,       tcn.NMCODE_NM AS FNKEY_FG_NM
+         ,       tcpf.FNKEY_EN_NM
+         ,       tcpf.FNKEY_CN_NM
+         ,       tcpf.FNKEY_JP_NM
+         FROM   TB_CM_POS_FNKEY tcpf
+         ,      TB_CM_NMCODE tcn
+         WHERE  1=1
+         AND tcn.NMCODE_GRP_CD = '026'
+         AND tcpf.FNKEY_FG = tcn.NMCODE_CD
+         <if test="fnkeyFg != null and fnkeyFg != ''">
+         AND    tcpf.FNKEY_FG = #{fnkeyFg}
+         </if>
+         <if test='fnkeyNo != null and fnkeyNo != ""'>
+         AND    tcpf.FNKEY_NO LIKE '%'|| #{fnkeyNo} ||'%'
+         </if>
+         <if test='fnkeyNm != null and fnkeyNm != ""'>
+         AND    tcpf.FNKEY_NM LIKE '%'|| #{fnkeyNm} ||'%'
+         </if>
+         ORDER
+         BY     tcpf.FNKEY_FG, tcpf.FNKEY_NO
+    </select>
+
+    <!-- 기능키(공통) 탭 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY
+        PARAM    : fnkeyCmNmcdVO
+        COMMENTS : 기능키(공통) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveCmPosFnkey" parameterType="fnkeyCmNmcdVO">
+        /* USE : FnkeyCmNmcdMapper.saveCmPosFnkey */
+        MERGE INTO TB_CM_POS_FNKEY
+        USING DUAL
+        ON (
+            FNKEY_NO = #{fnkeyNo}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            FNKEY_EN_NM  = #{fnkeyEnNm}
+        ,   FNKEY_CN_NM  = #{fnkeyCnNm}
+        ,   FNKEY_JP_NM  = #{fnkeyJpNm}
+        ,   MOD_DT       = #{modDt}
+        ,   MOD_ID       = #{modId}
+    </update>
+
+    <!-- 기능키(매장) 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY
+        PARAM    : fnkeyCmNmcdVO
+        COMMENTS : 기능키(매장) 탭 리스트를 조회한다.
+    -->
+    <select id="getStoreFnkeyList" parameterType="fnkeyCmNmcdVO" resultType="DefaultMap">
+         /* USE : FnkeyCmNmcdMapper.getStoreFnkeyList */
+         SELECT  tms.HQ_OFFICE_CD
+         ,       tmsf.STORE_CD
+         ,       tms.STORE_NM
+         ,       tmsf.FNKEY_NO
+         ,       tmsf.FNKEY_NM
+         ,       tmsf.FNKEY_FG
+         ,       tcn.NMCODE_NM AS FNKEY_FG_NM
+         ,       tmsf.FNKEY_EN_NM
+         ,       tmsf.FNKEY_CN_NM
+         ,       tmsf.FNKEY_JP_NM
+         FROM   TB_MS_STORE_FNKEY tmsf
+         ,      TB_CM_NMCODE tcn
+         ,      TB_MS_STORE tms
+         WHERE  1=1
+         AND tcn.NMCODE_GRP_CD = '026'
+         AND tmsf.FNKEY_FG = tcn.NMCODE_CD
+         AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+         AND tmsf.STORE_CD = tms.STORE_CD
+         <if test='storeCdQuery != null and storeCdQuery != ""'>
+         AND tmsf.STORE_CD IN (${storeCdQuery})
+         </if>
+         <if test="fnkeyFg != null and fnkeyFg != ''">
+         AND tmsf.FNKEY_FG = #{fnkeyFg}
+         </if>
+         <if test='fnkeyNo != null and fnkeyNo != ""'>
+         AND tmsf.FNKEY_NO LIKE '%'|| #{fnkeyNo} ||'%'
+         </if>
+         <if test='fnkeyNm != null and fnkeyNm != ""'>
+         AND tmsf.FNKEY_NM LIKE '%'|| #{fnkeyNm} ||'%'
+         </if>
+         ORDER
+            BY  tms.STORE_CD, tmsf.FNKEY_FG, tmsf.FNKEY_NO
+    </select>
+
+    <!-- 기능키(매장) 탭 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY
+        PARAM    : fnkeyCmNmcdVO
+        COMMENTS : 기능키(매장) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveStoreFnkey" parameterType="fnkeyCmNmcdVO">
+        /* USE : FnkeyCmNmcdMapper.saveStoreFnkey */
+        MERGE INTO TB_MS_STORE_FNKEY
+        USING DUAL
+        ON (
+              STORE_CD = #{storeCd}
+        AND   FNKEY_NO = #{fnkeyNo}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            FNKEY_EN_NM  = #{fnkeyEnNm}
+        ,   FNKEY_CN_NM  = #{fnkeyCnNm}
+        ,   FNKEY_JP_NM  = #{fnkeyJpNm}
+        ,   MOD_DT       = #{modDt}
+        ,   MOD_ID       = #{modId}
+    </update>
+
+    <!-- 공통코드 탭 공통코드 그룹코드 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : fnkeyCmNmcdVO
+        COMMENTS : 공통코드 그룹코드를 조회한다.
+    -->
+    <select id="getNmcodeGrpCdList" resultType="DefaultMap">
+        /* USE : FnkeyCmNmcdMapper.getNmcodeGrpCdList */
+        SELECT  A.NMCODE_GRP_CD AS VALUE
+        ,       NVL((SELECT '[' || NMCODE_CD || '] ' || NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '000' AND NMCODE_CD = A.NMCODE_GRP_CD), '[' || A.NMCODE_GRP_CD || ']') AS NAME
+        FROM    TB_CM_NMCODE A
+        GROUP
+        BY    A.NMCODE_GRP_CD
+        ORDER
+        BY      VALUE ASC
+    </select>
+
+    <!-- 공통코드 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : fnkeyCmNmcdVO
+        COMMENTS : 공통코드 탭 리스트를 조회한다.
+    -->
+    <select id="getCmNmcdList" parameterType="fnkeyCmNmcdVO" resultType="DefaultMap">
+         /* USE : FnkeyCmNmcdMapper.getCmNmcdList */
+         SELECT A.NMCODE_GRP_CD
+         ,      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '000' AND NMCODE_CD = A.NMCODE_GRP_CD) AS NMCODE_GRP_NM
+         ,      A.NMCODE_CD
+         ,      A.NMCODE_NM
+         ,      A.NMCODE_EN_NM
+         ,      A.NMCODE_CN_NM
+         ,      A.NMCODE_JP_NM
+         FROM   TB_CM_NMCODE A
+         WHERE  1=1
+         <if test="nmcodeGrpCd != null and nmcodeGrpCd != ''">
+         AND    A.NMCODE_GRP_CD = #{nmcodeGrpCd}
+         </if>
+         <if test='nmcodeCd != null and nmcodeCd != ""'>
+         AND    A.NMCODE_CD LIKE '%'|| #{nmcodeCd} ||'%'
+         </if>
+         <if test='nmcodeNm != null and nmcodeNm != ""'>
+         AND    A.NMCODE_NM LIKE '%'|| #{nmcodeNm} ||'%'
+         </if>
+         ORDER
+         BY     A.NMCODE_GRP_CD, A.NMCODE_CD
+    </select>
+
+    <!-- 공통코드 탭 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : fnkeyCmNmcdVO
+        COMMENTS : 공통코드 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveCmNmcd" parameterType="fnkeyCmNmcdVO">
+        /* USE : FnkeyCmNmcdMapper.saveCmNmcd */
+        MERGE INTO TB_CM_NMCODE
+        USING DUAL
+        ON (
+                NMCODE_GRP_CD = #{nmcodeGrpCd}
+            AND NMCODE_CD = #{nmcodeCd}
+            AND PARENT_CD = #{nmcodeGrpCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            NMCODE_EN_NM  = #{nmcodeEnNm}
+        ,   NMCODE_CN_NM  = #{nmcodeCnNm}
+        ,   NMCODE_JP_NM  = #{nmcodeJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+</mapper>

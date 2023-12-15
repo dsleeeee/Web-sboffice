@@ -17,11 +17,11 @@
             <li>
                 <a id="sideSdselClassTab" href="#" ng-click="sideSdselClassShow()"><s:message code="kioskSideOption.sideSdselClass"/></a>
             </li>
-            <%-- 옵션(그룹명) --%>
+            <%-- 옵션(그룹명) 탭 --%>
             <li>
                 <a id="optionGrpTab" href="#" ng-click="optionGrpShow()"><s:message code="kioskSideOption.optionGrp"/></a>
             </li>
-            <%-- 옵션(옵션명) --%>
+            <%-- 옵션(옵션명) 탭 --%>
             <li>
                 <a id="optionValTab" href="#" ng-click="optionValShow()"><s:message code="kioskSideOption.optionVal"/></a>
             </li>
@@ -47,11 +47,11 @@
 <c:import url="/WEB-INF/view/base/multilingual/kioskSideOption/sideSdselClass.jsp">
 </c:import>
 
-<%-- 옵션(그룹명) --%>
+<%-- 옵션(그룹명) 탭 --%>
 <c:import url="/WEB-INF/view/base/multilingual/kioskSideOption/optionGrp.jsp">
 </c:import>
 
-<%-- 옵션(옵션명) --%>
+<%-- 옵션(옵션명) 탭 --%>
 <c:import url="/WEB-INF/view/base/multilingual/kioskSideOption/optionVal.jsp">
 </c:import>
 
