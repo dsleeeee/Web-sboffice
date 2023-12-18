@@ -102,10 +102,6 @@ public class ProdSaleDayBillMomsVO extends PageVO {
     /** 일/월 구분 */
     private String dayGubun;
 
-    /** 조회월 */
-    private String startMonth;
-    private String endMonth;
-
     /** 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
     private String sQuery2;
@@ -287,22 +283,6 @@ public class ProdSaleDayBillMomsVO extends PageVO {
     public String getDayGubun() { return dayGubun; }
 
     public void setDayGubun(String dayGubun) { this.dayGubun = dayGubun; }
-
-    public String getStartMonth() {
-        return startMonth;
-    }
-
-    public void setStartMonth(String startMonth) {
-        this.startMonth = startMonth;
-    }
-
-    public String getEndMonth() {
-        return endMonth;
-    }
-
-    public void setEndMonth(String endMonth) {
-        this.endMonth = endMonth;
-    }
 
     public String getsQuery1() {
         return sQuery1;
