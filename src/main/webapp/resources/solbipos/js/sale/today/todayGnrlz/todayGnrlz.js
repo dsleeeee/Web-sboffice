@@ -13,18 +13,18 @@ app.controller('storeCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 }]);
 
 /** 당일매출종합현황 그리드 controller */
-app.controller('todayGnrlzCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-  // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('todayGnrlzCtrl', $scope, $http, true));
+  app.controller('todayGnrlzCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('todayGnrlzCtrl', $scope, $http, true));
 
-  $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+    $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
 
-  // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {
-    // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("todayGnrlzCtrl");
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+      // picker 사용시 호출 : 미사용시 호출안함
+      $scope._makePickColumns("todayGnrlzCtrl");
 
-  };
+    };
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("todayGnrlzCtrl", function (event, data) {

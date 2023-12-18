@@ -26,19 +26,18 @@ import static kr.co.common.utils.DateUtil.currentDateString;
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
+ * @author 솔비포스 김지은
+ * @version 1.0
+ * <p>
+ * Copyright (C) by SOLBIPOS CORP. All right reserved.
  * @Class Name : SalePriceServiceImpl.java
  * @Description : 기초관리 - 가격관리 - 판매가격관리
  * @Modification Information
  * @
- * @  수정일      수정자              수정내용
+ * @ 수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
  * @ 2018.12.20  김지은       최초생성
- *
- * @author 솔비포스 김지은
  * @since 2018. 12.20
- * @version 1.0
- *
- *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Service("salePriceService")
 public class SalePriceServiceImpl implements SalePriceService {
@@ -50,7 +49,9 @@ public class SalePriceServiceImpl implements SalePriceService {
     private final PopupMapper popupMapper;
     private final CmmEnvUtil cmmEnvUtil;
 
-    /** Constructor Injection */
+    /**
+     * Constructor Injection
+     */
     @Autowired
     public SalePriceServiceImpl(SalePriceMapper salePriceMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService, PopupMapper popupMapper) {
         this.salePriceMapper = salePriceMapper;
@@ -59,7 +60,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         this.popupMapper = popupMapper;
     }
 
-    /** 상품별 가격정보 조회 */
+    /**
+     * 상품별 가격정보 조회
+     */
     @Override
     public DefaultMap<String> getProdInfo(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
@@ -68,13 +71,15 @@ public class SalePriceServiceImpl implements SalePriceService {
         return salePriceMapper.getProdInfo(salePriceVO);
     }
 
-    /** 상품별 매장 판매가 조회 */
+    /**
+     * 상품별 매장 판매가 조회
+     */
     @Override
     public List<DefaultMap<String>> getProdSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        if(!StringUtil.getOrBlank(salePriceVO.getStoreCd()).equals("")) {
+        if (!StringUtil.getOrBlank(salePriceVO.getStoreCd()).equals("")) {
             StoreVO storeVO = new StoreVO();
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceVO.getStoreCd(), 3900));
             salePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
@@ -106,7 +111,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return salePriceMapper.getProdSalePriceList(salePriceVO);
     }
 
-    /** 상품별 매장 판매가 저장 */
+    /**
+     * 상품별 매장 판매가 저장
+     */
     @Override
     public int saveProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 
@@ -121,7 +128,7 @@ public class SalePriceServiceImpl implements SalePriceService {
 //            return result;
 //        }
 
-        for(SalePriceVO salePriceVO : salePriceVOs) {
+        for (SalePriceVO salePriceVO : salePriceVOs) {
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 //            salePriceVO.setPrcCtrlFg("1"); // 본사에서 등록
@@ -135,9 +142,9 @@ public class SalePriceServiceImpl implements SalePriceService {
             // 판매가 변경 히스토리 등록
             int prodCnt = salePriceMapper.getRegistProdCount(salePriceVO);
 
-            if(prodCnt > 0){
+            if (prodCnt > 0) {
                 result = salePriceMapper.updateStoreProdSalePriceHistory(salePriceVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
             // todo 추후 최초 판매가도 히스토리 등록할 경우에 이 주석 해제하여 사용
 //            else {
@@ -153,7 +160,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return result;
     }
 
-    /** 매장별 판매가 목록 조회 */
+    /**
+     * 매장별 판매가 목록 조회
+     */
     @Override
     public List<DefaultMap<String>> getStoreSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
@@ -163,7 +172,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return salePriceMapper.getStoreSalePriceList(salePriceVO);
     }
 
-    /** 본사 가격정보 조회 */
+    /**
+     * 본사 가격정보 조회
+     */
     @Override
     public List<DefaultMap<String>> getHqSalePriceList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
@@ -186,7 +197,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return salePriceMapper.getHqSalePriceList(salePriceVO);
     }
 
-    /** 본사 판매가 저장 */
+    /**
+     * 본사 판매가 저장
+     */
     @Override
     public int saveHqProdSalePrice(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 
@@ -195,7 +208,7 @@ public class SalePriceServiceImpl implements SalePriceService {
         String currentDate = currentDateString();
         String currentDt = currentDateTimeString();
 
-        for(SalePriceVO salePriceVO : salePriceVOs) {
+        for (SalePriceVO salePriceVO : salePriceVOs) {
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             salePriceVO.setStartDate(currentDate);
@@ -208,9 +221,9 @@ public class SalePriceServiceImpl implements SalePriceService {
             // 판매가 변경 히스토리 등록
             int prodCnt = salePriceMapper.getRegistHqProdCount(salePriceVO);
 
-            if(prodCnt > 0){
+            if (prodCnt > 0) {
                 result = salePriceMapper.updateHqProdSalePriceHistory(salePriceVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
             }
             // todo 추후 최초 판매가도 히스토리 등록할 경우에 이 주석 해제하여 사용
 
@@ -220,13 +233,13 @@ public class SalePriceServiceImpl implements SalePriceService {
             // none - 미적용
             // tot - 전매장적용(판매가변경제한매장 포함)
             // choice - 선택한 매장만 적용
-            if(salePriceVO.getApplyFg().equals("all") || salePriceVO.getApplyFg().equals("tot") || salePriceVO.getApplyFg().equals("choice")){
+            if (salePriceVO.getApplyFg().equals("all") || salePriceVO.getApplyFg().equals("tot") || salePriceVO.getApplyFg().equals("choice")) {
                 salePriceVO.setWorkMode(WorkModeFg.MOD_PROD);
                 //전매장 적용, 상품이 있으면 머지 업데이트 처리
                 //String storeSalePriceReulst = salePriceMapper.saveStoreSalePrice(salePriceVO);
 
-                if (salePriceVO.getApplyFg().equals("choice")){
-                    if(!StringUtil.getOrBlank(salePriceVO.getSaveStoreCds()).equals("")) {
+                if (salePriceVO.getApplyFg().equals("choice")) {
+                    if (!StringUtil.getOrBlank(salePriceVO.getSaveStoreCds()).equals("")) {
                         StoreVO storeVO = new StoreVO();
                         storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceVO.getSaveStoreCds(), 3900));
                         salePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
@@ -239,16 +252,18 @@ public class SalePriceServiceImpl implements SalePriceService {
         return result;
     }
 
-    /** 엑셀업로드 탭 - 엑셀 양식다운로드 조회 */
+    /**
+     * 엑셀업로드 탭 - 엑셀 양식다운로드 조회
+     */
     @Override
     public List<DefaultMap<String>> getSalePriceExcelUploadSampleList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
         salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         salePriceVO.setUserId(sessionInfoVO.getUserId());
 
-        if(salePriceVO.getSalePriceOrgnFg().equals("S")) {
+        if (salePriceVO.getSalePriceOrgnFg().equals("S")) {
             // 매장 array 값 세팅
-            if(!StringUtil.getOrBlank(salePriceVO.getStoreCds()).equals("")) {
+            if (!StringUtil.getOrBlank(salePriceVO.getStoreCds()).equals("")) {
                 StoreVO storeVO = new StoreVO();
                 storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceVO.getStoreCds(), 3900));
                 salePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
@@ -258,7 +273,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return salePriceMapper.getSalePriceExcelUploadSampleList(salePriceVO);
     }
 
-    /** 검증결과 조회 */
+    /**
+     * 검증결과 조회
+     */
     @Override
     public List<DefaultMap<String>> getSalePriceExcelUploadCheckList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
@@ -268,7 +285,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return salePriceMapper.getSalePriceExcelUploadCheckList(salePriceVO);
     }
 
-    /** 검증결과 전체 삭제 */
+    /**
+     * 검증결과 전체 삭제
+     */
     @Override
     public int getSalePriceExcelUploadCheckDeleteAll(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO) {
 
@@ -281,13 +300,15 @@ public class SalePriceServiceImpl implements SalePriceService {
         return procCnt;
     }
 
-    /** 검증결과 삭제 */
+    /**
+     * 검증결과 삭제
+     */
     @Override
     public int getSalePriceExcelUploadCheckDelete(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 
         int procCnt = 0;
 
-        for(SalePriceVO salePriceVO : salePriceVOs) {
+        for (SalePriceVO salePriceVO : salePriceVOs) {
             salePriceVO.setSessionId(sessionInfoVO.getSessionId());
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
@@ -297,7 +318,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return procCnt;
     }
 
-    /** 업로드시 임시테이블 저장 */
+    /**
+     * 업로드시 임시테이블 저장
+     */
     @Override
     public int getSalePriceExcelUploadCheckSave(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 
@@ -305,7 +328,7 @@ public class SalePriceServiceImpl implements SalePriceService {
         int i = 1;
         String currentDt = currentDateTimeString();
 
-        for(SalePriceVO salePriceVO : salePriceVOs) {
+        for (SalePriceVO salePriceVO : salePriceVOs) {
             salePriceVO.setRegDt(currentDt);
             salePriceVO.setRegId(sessionInfoVO.getUserId());
             salePriceVO.setModDt(currentDt);
@@ -324,7 +347,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return procCnt;
     }
 
-    /** 검증결과 저장 */
+    /**
+     * 검증결과 저장
+     */
     @Override
     public int getSalePriceExcelUploadCheckSaveAdd(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 
@@ -333,7 +358,7 @@ public class SalePriceServiceImpl implements SalePriceService {
         String currentDt = currentDateTimeString();
         String pattern = "^[0-9]*$"; //숫자만
 
-        for(SalePriceVO salePriceVO : salePriceVOs) {
+        for (SalePriceVO salePriceVO : salePriceVOs) {
             salePriceVO.setRegDt(currentDt);
             salePriceVO.setRegId(sessionInfoVO.getUserId());
             salePriceVO.setModDt(currentDt);
@@ -345,8 +370,8 @@ public class SalePriceServiceImpl implements SalePriceService {
 
             // 숫자가 입력되어야 하는 컬럼에 문자가 입력되면 null처리
             // 판매가
-            if(salePriceVO.getSaleUprc() != null && !"".equals(salePriceVO.getSaleUprc())) {
-                if(Pattern.matches(pattern, salePriceVO.getSaleUprc())) {
+            if (salePriceVO.getSaleUprc() != null && !"".equals(salePriceVO.getSaleUprc())) {
+                if (Pattern.matches(pattern, salePriceVO.getSaleUprc())) {
                     salePriceVO.setSaleUprc(salePriceVO.getSaleUprc());
                 } else {
                     salePriceVO.setResult("판매가는 숫자만 입력가능합니다.");
@@ -356,8 +381,8 @@ public class SalePriceServiceImpl implements SalePriceService {
             }
 
             // 내점판매가
-            if(salePriceVO.getStinSaleUprc() != null && !"".equals(salePriceVO.getStinSaleUprc())) {
-                if(Pattern.matches(pattern, salePriceVO.getStinSaleUprc())) {
+            if (salePriceVO.getStinSaleUprc() != null && !"".equals(salePriceVO.getStinSaleUprc())) {
+                if (Pattern.matches(pattern, salePriceVO.getStinSaleUprc())) {
                     salePriceVO.setStinSaleUprc(salePriceVO.getStinSaleUprc());
                 } else {
                     salePriceVO.setResult("내점판매가는 숫자만 입력가능합니다.");
@@ -365,8 +390,8 @@ public class SalePriceServiceImpl implements SalePriceService {
             }
 
             // 배달판매가
-            if(salePriceVO.getDlvrSaleUprc() != null && !"".equals(salePriceVO.getDlvrSaleUprc())) {
-                if(Pattern.matches(pattern, salePriceVO.getDlvrSaleUprc())) {
+            if (salePriceVO.getDlvrSaleUprc() != null && !"".equals(salePriceVO.getDlvrSaleUprc())) {
+                if (Pattern.matches(pattern, salePriceVO.getDlvrSaleUprc())) {
                     salePriceVO.setDlvrSaleUprc(salePriceVO.getDlvrSaleUprc());
                 } else {
                     salePriceVO.setResult("배달판매가는 숫자만 입력가능합니다.");
@@ -374,8 +399,8 @@ public class SalePriceServiceImpl implements SalePriceService {
             }
 
             // 포장판매가
-            if(salePriceVO.getPackSaleUprc() != null && !"".equals(salePriceVO.getPackSaleUprc())) {
-                if(Pattern.matches(pattern, salePriceVO.getPackSaleUprc())) {
+            if (salePriceVO.getPackSaleUprc() != null && !"".equals(salePriceVO.getPackSaleUprc())) {
+                if (Pattern.matches(pattern, salePriceVO.getPackSaleUprc())) {
                     salePriceVO.setPackSaleUprc(salePriceVO.getPackSaleUprc());
                 } else {
                     salePriceVO.setResult("포장판매가는 숫자만 입력가능합니다.");
@@ -383,13 +408,13 @@ public class SalePriceServiceImpl implements SalePriceService {
             }
 
             // 본사판매가
-            if(("H").equals(salePriceVO.getSalePriceOrgnFg())) {
+            if (("H").equals(salePriceVO.getSalePriceOrgnFg())) {
                 // 상품코드 존재여부 체크
-                if(salePriceMapper.getProdCdChk(salePriceVO) > 0) {
+                if (salePriceMapper.getProdCdChk(salePriceVO) > 0) {
                     // 가격관리구분
-                    if(salePriceVO.getPrcCtrlFg() != null && !"".equals(salePriceVO.getPrcCtrlFg())) {
+                    if (salePriceVO.getPrcCtrlFg() != null && !"".equals(salePriceVO.getPrcCtrlFg())) {
                         // 가격관리구분이 본사인 경우만 수정
-                        if(("H").equals(salePriceVO.getPrcCtrlFg())) {
+                        if (("H").equals(salePriceVO.getPrcCtrlFg())) {
                         } else {
                             salePriceVO.setResult("가격관리구분이 본사인 상품만 수정 가능합니다.");
                         }
@@ -399,13 +424,13 @@ public class SalePriceServiceImpl implements SalePriceService {
                 }
 
                 // 매장판매가
-            } else if(("S").equals(salePriceVO.getSalePriceOrgnFg())) {
+            } else if (("S").equals(salePriceVO.getSalePriceOrgnFg())) {
                 // 상품코드 존재여부 체크
-                if(salePriceMapper.getProdCdChk(salePriceVO) > 0) {
+                if (salePriceMapper.getProdCdChk(salePriceVO) > 0) {
                     // 가격관리구분
-                    if(salePriceVO.getPrcCtrlFg() != null && !"".equals(salePriceVO.getPrcCtrlFg())) {
+                    if (salePriceVO.getPrcCtrlFg() != null && !"".equals(salePriceVO.getPrcCtrlFg())) {
                         // 가격관리구분이 본사인 경우만 수정(20230613)
-                        if(("H").equals(salePriceVO.getPrcCtrlFg())) {
+                        if (("H").equals(salePriceVO.getPrcCtrlFg())) {
                         } else {
                             salePriceVO.setResult("가격관리구분이 본사인 상품만 수정 가능합니다.");
                         }
@@ -415,9 +440,9 @@ public class SalePriceServiceImpl implements SalePriceService {
                 }
 
                 // 매장코드
-                if(salePriceVO.getStoreCd() != null && !"".equals(salePriceVO.getStoreCd())) {
+                if (salePriceVO.getStoreCd() != null && !"".equals(salePriceVO.getStoreCd())) {
                     // 매장코드 존재여부 체크
-                    if(salePriceMapper.getStoreCdChk(salePriceVO) > 0) {
+                    if (salePriceMapper.getStoreCdChk(salePriceVO) > 0) {
                     } else {
                         salePriceVO.setResult("존재하지 않는 매장코드입니다");
                     }
@@ -437,7 +462,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return procCnt;
     }
 
-    /** 본사판매가관리 엑셀업로드 탭 - 판매가 저장 */
+    /**
+     * 본사판매가관리 엑셀업로드 탭 - 판매가 저장
+     */
     @Override
     public int getHqSalePriceExcelUploadSave(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 
@@ -446,7 +473,7 @@ public class SalePriceServiceImpl implements SalePriceService {
         String currentDt = currentDateTimeString();
         String currentDate = currentDateString();
 
-        for(SalePriceVO salePriceVO : salePriceVOs) {
+        for (SalePriceVO salePriceVO : salePriceVOs) {
             salePriceVO.setRegDt(currentDt);
             salePriceVO.setRegId(sessionInfoVO.getUserId());
             salePriceVO.setModDt(currentDt);
@@ -457,16 +484,16 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
 
-            if(("검증성공").equals(salePriceVO.getResult())) {
+            if (("검증성공").equals(salePriceVO.getResult())) {
                 // 가격관리구분이 본사인 경우만 수정
-                if(("H").equals(salePriceVO.getPrcCtrlFg())) {
+                if (("H").equals(salePriceVO.getPrcCtrlFg())) {
 
                     // 판매가 변경 히스토리 등록
                     int prodCnt = salePriceMapper.getRegistHqProdCount(salePriceVO);
 
-                    if(prodCnt > 0){
+                    if (prodCnt > 0) {
                         result = salePriceMapper.updateHqProdSalePriceHistory(salePriceVO);
-                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                     }
 
                     // 본사 판매가 변경
@@ -479,14 +506,14 @@ public class SalePriceServiceImpl implements SalePriceService {
                     // none - 미적용
                     // tot - 전매장적용(판매가변경제한매장 포함)
                     // choice - 선택한 매장만 적용
-                    if(salePriceVO.getApplyFg().equals("all") || salePriceVO.getApplyFg().equals("tot") || salePriceVO.getApplyFg().equals("choice")){
+                    if (salePriceVO.getApplyFg().equals("all") || salePriceVO.getApplyFg().equals("tot") || salePriceVO.getApplyFg().equals("choice")) {
 
                         salePriceVO.setWorkMode(WorkModeFg.MOD_PROD);
                         //전매장 적용, 상품이 있으면 머지 업데이트 처리
                         //기존 전매장적용(판매가변경제한매장)은 제외하고 처리
 
-                        if (salePriceVO.getApplyFg().equals("choice")){
-                            if(!StringUtil.getOrBlank(salePriceVO.getSaveStoreCds()).equals("")) {
+                        if (salePriceVO.getApplyFg().equals("choice")) {
+                            if (!StringUtil.getOrBlank(salePriceVO.getSaveStoreCds()).equals("")) {
                                 StoreVO storeVO = new StoreVO();
                                 storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceVO.getSaveStoreCds(), 3900));
                                 salePriceVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
@@ -505,7 +532,9 @@ public class SalePriceServiceImpl implements SalePriceService {
         return result;
     }
 
-    /** 매장판매가관리 엑셀업로드 탭 - 판매가 저장 */
+    /**
+     * 매장판매가관리 엑셀업로드 탭 - 판매가 저장
+     */
     @Override
     public int getStoreSalePriceExcelUploadSave(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO) {
 
@@ -513,7 +542,7 @@ public class SalePriceServiceImpl implements SalePriceService {
         String currentDt = currentDateTimeString();
         String currentDate = currentDateString();
 
-        for(SalePriceVO salePriceVO : salePriceVOs) {
+        for (SalePriceVO salePriceVO : salePriceVOs) {
             salePriceVO.setRegDt(currentDt);
             salePriceVO.setRegId(sessionInfoVO.getUserId());
             salePriceVO.setModDt(currentDt);
@@ -524,16 +553,16 @@ public class SalePriceServiceImpl implements SalePriceService {
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");
 
-            if(("검증성공").equals(salePriceVO.getResult())) {
+            if (("검증성공").equals(salePriceVO.getResult())) {
                 // 가격관리구분이 본사인 경우만 수정
-                if(("H").equals(salePriceVO.getPrcCtrlFg())) {
+                if (("H").equals(salePriceVO.getPrcCtrlFg())) {
 
                     // 판매가 변경 히스토리 등록
                     int prodCnt = salePriceMapper.getRegistProdCount(salePriceVO);
 
-                    if(prodCnt > 0){
+                    if (prodCnt > 0) {
                         result = salePriceMapper.updateStoreProdSalePriceHistory(salePriceVO);
-                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                     }
 
                     // 매장 판매가 변경
