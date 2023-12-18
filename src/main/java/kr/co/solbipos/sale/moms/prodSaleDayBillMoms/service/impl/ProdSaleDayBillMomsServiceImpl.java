@@ -86,14 +86,6 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
         String sQuery1 = "";
         String sQuery2 = "";
 
-        // 영수건수 계산을 위한 쿼리문 생성
-        sQuery1 = ", SUM(";
-        for(int j = 1; j <= 20; j++) {
-            sQuery1 += "A.PAY_CNT_"  + (j < 10 ? "0" + j : j);
-            sQuery1 += (j < 20 ? " + ":"");
-        }
-        sQuery1 += ") AS BILL_CNT";
-
         // 기간선택 두 날짜 사이 모든날짜 구하기
         List<HashMap<String, String>> dateArr = getDateDiff(prodSaleDayBillMomsVO);
 
@@ -108,14 +100,22 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
                 prodSaleDayBillMomsVO.setEndDate(dateArr.get(i).get("eDate"));
             }
 
-            sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS BILL_CNT_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS BILL_CNT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
-        sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS TOT_BILL_CNT" + "\n";
-        sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
-        sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS TOT_SALE_AMT" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS TOT_BILL_CNT" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS TOT_SALE_AMT" + "\n";
+
+        // 영수건수 계산을 위한 쿼리문 생성
+        sQuery2 = ", SUM(";
+        for(int j = 1; j <= 20; j++) {
+            sQuery2 += "A.PAY_CNT_"  + (j < 10 ? "0" + j : j);
+            sQuery2 += (j < 20 ? " + ":"");
+        }
+        sQuery2 += ") AS BILL_CNT";
 
         prodSaleDayBillMomsVO.setsQuery1(sQuery1);
         prodSaleDayBillMomsVO.setsQuery2(sQuery2);
@@ -158,14 +158,6 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
         String sQuery1 = "";
         String sQuery2 = "";
 
-        // 영수건수 계산을 위한 쿼리문 생성
-        sQuery1 = ", SUM(";
-        for(int j = 1; j <= 20; j++) {
-            sQuery1 += "A.PAY_CNT_"  + (j < 10 ? "0" + j : j);
-            sQuery1 += (j < 20 ? " + ":"");
-        }
-        sQuery1 += ") AS BILL_CNT";
-
         // 기간선택 두 날짜 사이 모든날짜 구하기
         List<HashMap<String, String>> dateArr = getDateDiff(prodSaleDayBillMomsVO);
 
@@ -180,14 +172,22 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
                 prodSaleDayBillMomsVO.setEndDate(dateArr.get(i).get("eDate"));
             }
 
-            sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS BILL_CNT_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS BILL_CNT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
-        sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS TOT_BILL_CNT" + "\n";
-        sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
-        sQuery2 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS TOT_SALE_AMT" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS TOT_BILL_CNT" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS TOT_SALE_AMT" + "\n";
+
+        // 영수건수 계산을 위한 쿼리문 생성
+        sQuery2 = ", SUM(";
+        for(int j = 1; j <= 20; j++) {
+            sQuery2 += "A.PAY_CNT_"  + (j < 10 ? "0" + j : j);
+            sQuery2 += (j < 20 ? " + ":"");
+        }
+        sQuery2 += ") AS BILL_CNT";
 
         prodSaleDayBillMomsVO.setsQuery1(sQuery1);
         prodSaleDayBillMomsVO.setsQuery2(sQuery2);
@@ -205,8 +205,6 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
             datePattrn = "yyyyMMdd";
         }else if("month".equals(prodSaleDayBillMomsVO.getDayGubun())){
             datePattrn = "yyyyMM";
-        }else if("year".equals(prodSaleDayBillMomsVO.getDayGubun())){
-            datePattrn = "yyyy";
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(datePattrn);
@@ -232,13 +230,10 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
                 dateArr.add(m);
             }else if("month".equals(prodSaleDayBillMomsVO.getDayGubun())){
                 m.put("sOrgDate", dateFormat.format(currentDate));
-                m.put("sDate", dateFormat.format(currentDate) + "01");
-                m.put("eDate", dateFormat.format(currentDate) + "31");
-                dateArr.add(m);
-            }else if("year".equals(prodSaleDayBillMomsVO.getDayGubun())){
-                m.put("sOrgDate", dateFormat.format(currentDate));
-                m.put("sDate", dateFormat.format(currentDate) + "0101");
-                m.put("eDate", dateFormat.format(currentDate) + "1231");
+                m.put("sDate", dateFormat.format(currentDate));
+                m.put("eDate", dateFormat.format(currentDate));
+//                m.put("sDate", dateFormat.format(currentDate) + "01");
+//                m.put("eDate", dateFormat.format(currentDate) + "31");
                 dateArr.add(m);
             }
 
@@ -249,8 +244,6 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
                 c.add(Calendar.DATE, 1);
             }else if("month".equals(prodSaleDayBillMomsVO.getDayGubun())){
                 c.add(Calendar.MONTH, 1);
-            }else if("year".equals(prodSaleDayBillMomsVO.getDayGubun())){
-                c.add(Calendar.YEAR, 1);
             }
 
             currentDate = c.getTime();
