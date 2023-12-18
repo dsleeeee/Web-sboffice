@@ -7,6 +7,7 @@ import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupService;
 import kr.co.solbipos.sale.com.popup.service.SaleComPopupVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,11 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
     @Override
     public List<DefaultMap<String>> getApprPopList(SaleComPopupVO saleComPopupVO, SessionInfoVO sessionInfoVO) {
 
+		saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     	saleComPopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-    	saleComPopupVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+		if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+			saleComPopupVO.setStoreCd(sessionInfoVO.getStoreCd());
+		}
 
         if(!StringUtil.getOrBlank(saleComPopupVO.getCornrCd()).equals("")) {
         	saleComPopupVO.setArrStoreCornr(saleComPopupVO.getCornrCd().split(","));
