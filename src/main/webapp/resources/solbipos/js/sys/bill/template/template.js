@@ -21,9 +21,6 @@ var langTypeData = [
     {"name":"일문","value":"jp"}
 ];
 
-// 선택한 템플릿 관련 정보
-var selectedTemplate;
-
 /**
  * 템플릿 그리드 생성
  */
@@ -82,9 +79,6 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
         var selectedRow = s.rows[ht.row].dataItem;
         var col = ht.panel.columns[ht.col];
         if (col.binding === "templtNm" && selectedRow.status !== "I") {
-
-          // 선택한 템플릿 값 갖고 있기
-          selectedTemplate = selectedRow;
 
           // 템플릿 선택시, 기본 한글 템플릿 부터 보이도록 set
           $scope.langTypeCombo.selectedIndex = 0;
@@ -265,8 +259,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setPrtForm = function (s) {
       if ($scope.flex.rows.length > 0) {
           if (s.selectedValue === "ko") { // 한글
-              if (selectedTemplate.prtForm != null) {
-                  theTarget.value = selectedTemplate.prtForm;
+              if ($scope.flex.selectedRows[0]._data.prtForm != null) {
+                  theTarget.value = $scope.flex.selectedRows[0]._data.prtForm;
                   makePreview();
               } else {
                   theTarget.value = "";
@@ -275,8 +269,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
 
           } else if (s.selectedValue === "en") { // 영문
 
-              if (selectedTemplate.prtEnForm != null) {
-                  theTarget.value = selectedTemplate.prtEnForm;
+              if ($scope.flex.selectedRows[0]._data.prtEnForm != null) {
+                  theTarget.value = $scope.flex.selectedRows[0]._data.prtEnForm;
                   makePreview();
               } else {
                   theTarget.value = "";
@@ -284,8 +278,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
               }
 
           } else if (s.selectedValue === "cn") { // 중문
-              if (selectedTemplate.prtCnForm != null) {
-                  theTarget.value = selectedTemplate.prtCnForm;
+              if ($scope.flex.selectedRows[0]._data.prtCnForm != null) {
+                  theTarget.value = $scope.flex.selectedRows[0]._data.prtCnForm;
                   makePreview();
               } else {
                   theTarget.value = "";
@@ -293,8 +287,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
               }
 
           } else if (s.selectedValue === "jp") { // 일문
-              if (selectedTemplate.prtJpForm != null) {
-                  theTarget.value = selectedTemplate.prtJpForm;
+              if ($scope.flex.selectedRows[0]._data.prtJpForm != null) {
+                  theTarget.value = $scope.flex.selectedRows[0]._data.prtJpForm;
                   makePreview();
               } else {
                   theTarget.value = "";
@@ -349,7 +343,7 @@ function searchPrintCodeList(params) {
         $("#btnSaveTemplate").show();
 
         // 가장 첫번째 템플릿 값 갖고 있기(조회 클릭시, 바로 편집내용과 미리보기 셋팅을 하기 위해)
-        selectedTemplate = scope.flex.selectedRows[0]._data;
+        var selectedTemplate = scope.flex.selectedRows[0]._data;
 
         // 템플릿 선택시, 기본 한글 템플릿 부터 보이도록 set
         scope.langTypeCombo.selectedIndex = 0;
