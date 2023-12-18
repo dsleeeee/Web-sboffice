@@ -22,7 +22,7 @@ var langTypeData = [
 ];
 
 // 선택한 템플릿 관련 정보
-var ht;
+var selectedTemplate;
 
 /**
  * 템플릿 그리드 생성
@@ -93,11 +93,14 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     });
     // 템플릿 그리드 선택 이벤트
     s.hostElement.addEventListener('mousedown', function(e) {
-      ht = s.hitTest(e);
+      var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var selectedRow = s.rows[ht.row].dataItem;
         var col = ht.panel.columns[ht.col];
         if (col.binding === "templtNm" && selectedRow.status !== "I") {
+
+          // 선택한 템플릿 값 갖고 있기
+          selectedTemplate = selectedRow;
 
           // 템플릿 선택시, 기본 한글 템플릿 부터 보이도록 set
           $scope.langTypeCombo.selectedIndex = 0;
@@ -189,23 +192,65 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.listBoxCodeList.itemsSource = list;
               }
 
+              // 템플릿 추가/삭제/저장 버튼 show
               $("#btnAddTemplate").show();
               $("#btnDelTemplate").show();
               $("#btnSaveTemplate").show();
 
-              // 편집/미리보기 폼 초기화
-              $scope.showTempltRegFgNm = false;
-              $scope.templtRegFgNm = "";
-              $scope.templtEditableTxt = "";
+              // 가장 첫번째 템플릿 값 갖고 있기(조회 클릭시, 바로 편집내용과 미리보기 셋팅을 하기 위해)
+              selectedTemplate = $scope.flex.selectedRows[0]._data;
 
-              // 편집/미리보기 폼 초기화
-              theTarget.value = "";
-              thePreview.innerHTML = "";
-              ht = null;
-              $("#divLangType").css("display", "none");
-              $("#btnSaveEditTemplate").hide();
-              theTarget.disabled = true;
+              // 템플릿 선택시, 기본 한글 템플릿 부터 보이도록 set
+              $scope.langTypeCombo.selectedIndex = 0;
 
+              if (selectedTemplate.prtForm != null) {
+                theTarget.value = selectedTemplate.prtForm;
+                makePreview();
+              } else {
+                theTarget.value = "";
+                thePreview.innerHTML = "";
+              }
+
+              // 템플릿 클릭시, 템플릿 편집이 가능
+              $("#divLangType").css("display", "");
+              $("#btnSaveEditTemplate").show();
+
+              if (selectedTemplate.templtRegFg === "C") {
+                $scope.templtRegFgNm = "시스템";
+              } else if (selectedTemplate.templtRegFg === "H") {
+                $scope.templtRegFgNm = "본사";
+              } else {
+                $scope.templtRegFgNm = "매장";
+              }
+              // 편집영역의 '저장' 버튼 명칭 변경
+              if("S" === gvOrgnFg){
+                if (selectedTemplate.templtRegFg === "C") {
+                  $("#btnSaveEditTemplate").text("실제출력물적용");
+                } else if (selectedTemplate.templtRegFg === "H") {
+                  $("#btnSaveEditTemplate").text("실제출력물적용");
+                } else {
+                  if(selectedTemplate.templtCd === "000"){
+                    $("#btnSaveEditTemplate").text("저장");
+                  }else{
+                    $("#btnSaveEditTemplate").text("저장 및 실제출력물적용");
+                  }
+                }
+              }
+              $scope.showTempltRegFgNm = true;
+              // 본사는 상위에서 내려준걸 수정 하지 못한다.
+              if ( gvOrgnFg === selectedTemplate.templtRegFg ) {
+                $scope.templtEditableTxt = "수정가능";
+                theTarget.disabled = false;
+                if ( "H" === gvOrgnFg ) {
+                    $("#btnSaveEditTemplate").show();
+                }
+              } else {
+                $scope.templtEditableTxt = "수정불가";
+                theTarget.disabled = true;
+                if ( "H" === gvOrgnFg ) {
+                    $("#btnSaveEditTemplate").hide();
+                }
+              }
           }
         );
     });
@@ -222,7 +267,6 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     // 편집/미리보기 폼 초기화
     theTarget.value = "";
     thePreview.innerHTML = "";
-    ht = null;
     $("#divLangType").css("display", "none");
     $("#btnSaveEditTemplate").hide();
     theTarget.disabled = true;
@@ -281,7 +325,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
         params.prtEnForm = theTarget.value;
     }else if(params.langType === "cn"){
         params.prtCnForm = theTarget.value;
-    }else if(param.langType === "jp"){
+    }else if(params.langType === "jp"){
         params.prtJpForm = theTarget.value;
     }
 
@@ -294,7 +338,7 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
                 if ("H" !== gvOrgnFg && selectedRow.templtCd !== "000") {
                   $scope._popConfirm(messages['cmm.saveSucc'] + "<br><br>해당 템플릿을 실제출력물에 업데이트 하시겠습니까?",
                       function () {
-                        var nParams = {};
+                            var nParams = {};
                             nParams.prtClassCd = params.prtClassCd;
                             nParams.templtRegFg = params.templtRegFg;
                             nParams.templtCd = params.templtCd;
@@ -481,8 +525,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setPrtForm = function (s) {
       if ($scope.flex.rows.length > 0) {
           if (s.selectedValue === "ko") { // 한글
-              if ($scope.flex.rows[ht.row]._data.prtForm != null) {
-                  theTarget.value = $scope.flex.rows[ht.row]._data.prtForm;
+              if (selectedTemplate.prtForm != null) {
+                  theTarget.value = selectedTemplate.prtForm;
                   makePreview();
               } else {
                   theTarget.value = "";
@@ -491,8 +535,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
 
           } else if (s.selectedValue === "en") { // 영문
 
-              if ($scope.flex.rows[ht.row]._data.prtEnForm != null) {
-                  theTarget.value = $scope.flex.rows[ht.row]._data.prtEnForm;
+              if (selectedTemplate.prtEnForm != null) {
+                  theTarget.value = selectedTemplate.prtEnForm;
                   makePreview();
               } else {
                   theTarget.value = "";
@@ -500,8 +544,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
               }
 
           } else if (s.selectedValue === "cn") { // 중문
-              if ($scope.flex.rows[ht.row]._data.prtCnForm != null) {
-                  theTarget.value = $scope.flex.rows[ht.row]._data.prtCnForm;
+              if (selectedTemplate.prtCnForm != null) {
+                  theTarget.value = selectedTemplate.prtCnForm;
                   makePreview();
               } else {
                   theTarget.value = "";
@@ -509,8 +553,8 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
               }
 
           } else if (s.selectedValue === "jp") { // 일문
-              if ($scope.flex.rows[ht.row]._data.prtJpForm != null) {
-                  theTarget.value = $scope.flex.rows[ht.row]._data.prtJpForm;
+              if (selectedTemplate.prtJpForm != null) {
+                  theTarget.value = selectedTemplate.prtJpForm;
                   makePreview();
               } else {
                   theTarget.value = "";
