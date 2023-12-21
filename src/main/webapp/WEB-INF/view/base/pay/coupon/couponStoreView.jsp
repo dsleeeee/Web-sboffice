@@ -49,7 +49,7 @@
               <span class="fl bk lh20 s14"><s:message code="coupon.regStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
             </div>
-            <div id="regStoreGrid" style="height: 370px; overflow-y: hidden;">
+            <div id="regStoreGrid" style="height: 360px; overflow-y: hidden;">
               <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
@@ -76,7 +76,7 @@
               <span class="fl bk lh20 s14"><s:message code="coupon.noRegStore"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="coupon.regist"/></a></span>
             </div>
-            <div id="noRegStoreGrid" style="height: 370px; overflow-y: hidden;">
+            <div id="noRegStoreGrid" style="height: 360px; overflow-y: hidden;">
               <wj-flex-grid
                 autoGenerateColumns="false"
                 control="flex"
