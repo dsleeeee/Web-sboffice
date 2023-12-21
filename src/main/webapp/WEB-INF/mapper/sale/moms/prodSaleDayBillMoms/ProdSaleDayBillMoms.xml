@@ -35,7 +35,7 @@
                 A.STORE_CD,
                 A.PROD_CD,
                 SUM(A.TOT_SALE_QTY) AS SALE_QTY,
-                SUM(A.TOT_SALE_AMT) AS SALE_AMT
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
                 ${sQuery2}
                 FROM TB_SL_DAILY_PROD A
                 WHERE 1=1
@@ -52,7 +52,7 @@
                 A.STORE_CD,
                 A.PROD_CD,
                 SUM(A.TOT_SALE_QTY) AS SALE_QTY,
-                SUM(A.TOT_SALE_AMT) AS SALE_AMT
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
                 ${sQuery2}
                 FROM TB_SL_MONTHLY_PROD A
                 WHERE 1=1
@@ -169,7 +169,7 @@
                 A.STORE_CD,
                 A.PROD_CD,
                 SUM(A.TOT_SALE_QTY) AS SALE_QTY,
-                SUM(A.TOT_SALE_AMT) AS SALE_AMT
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
                 ${sQuery2}
                 FROM TB_SL_DAILY_PROD A
                 WHERE 1=1
@@ -186,7 +186,7 @@
                 A.STORE_CD,
                 A.PROD_CD,
                 SUM(A.TOT_SALE_QTY) AS SALE_QTY,
-                SUM(A.TOT_SALE_AMT) AS SALE_AMT
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
                 ${sQuery2}
                 FROM TB_SL_MONTHLY_PROD A
                 WHERE 1=1

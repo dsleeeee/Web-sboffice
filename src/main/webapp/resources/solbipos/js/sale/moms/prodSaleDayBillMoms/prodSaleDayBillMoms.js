@@ -213,7 +213,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
                                 binding: "billCnt" +  dateArr[i].sOrgDate,
                                 width: 90,
-                                align: "center",
+                                align: "right",
                                 isReadOnly: "true"
                             }));
                         }
@@ -221,7 +221,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                             header: messages["prodSaleDayBillMoms.total"],
                             binding: "totBillCnt",
                             width: 90,
-                            align: "center",
+                            align: "right",
                             isReadOnly: "true"
                         }));
 
@@ -231,7 +231,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
                                 binding: "saleQty" +  dateArr[i].sOrgDate,
                                 width: 90,
-                                align: "center",
+                                align: "right",
                                 isReadOnly: "true"
                             }));
                         }
@@ -239,25 +239,25 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                             header: messages["prodSaleDayBillMoms.total"],
                             binding: "totSaleQty",
                             width: 90,
-                            align: "center",
+                            align: "right",
                             isReadOnly: "true"
                         }));
 
-                        // 총매출액
+                        // 실매출액
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "saleAmt" + dateArr[i].sOrgDate,
+                                binding: "realSaleAmt" + dateArr[i].sOrgDate,
                                 width: 90,
-                                align: "center",
+                                align: "right",
                                 isReadOnly: "true"
                             }));
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totSaleAmt",
+                            binding: "totRealSaleAmt",
                             width: 90,
-                            align: "center",
+                            align: "right",
                             isReadOnly: "true"
                         }));
 
@@ -294,9 +294,9 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                         dataItem.totSaleQty = "판매수량";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.saleAmt' + dateArr[i].sOrgDate + '= "총매출액"');
+                            eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
                         }
-                        dataItem.totSaleAmt = "총매출액";
+                        dataItem.totRealSaleAmt = "실매출액";
 
                         grid.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -416,11 +416,9 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
         if (s.selectedValue === "day") {
             $("#spanDay").css("display", "");
             $("#spanMonth").css("display", "none");
-            $("#spanYear").css("display", "none");
         } else if (s.selectedValue === "month") {
             $("#spanDay").css("display", "none");
             $("#spanMonth").css("display", "");
-            $("#spanYear").css("display", "none");
         }
     };
 
@@ -659,7 +657,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
                                 binding: "billCnt" +  dateArr[i].sOrgDate,
                                 width: 90,
-                                align: "center",
+                                align: "right",
                                 isReadOnly: "true"
                             }));
                         }
@@ -667,7 +665,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                             header: messages["prodSaleDayBillMoms.total"],
                             binding: "totBillCnt",
                             width: 90,
-                            align: "center",
+                            align: "right",
                             isReadOnly: "true"
                         }));
 
@@ -677,7 +675,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
                                 binding: "saleQty" +  dateArr[i].sOrgDate,
                                 width: 90,
-                                align: "center",
+                                align: "right",
                                 isReadOnly: "true"
                             }));
                         }
@@ -685,25 +683,25 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                             header: messages["prodSaleDayBillMoms.total"],
                             binding: "totSaleQty",
                             width: 90,
-                            align: "center",
+                            align: "right",
                             isReadOnly: "true"
                         }));
 
-                        // 총매출액
+                        // 실매출액
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "saleAmt" + dateArr[i].sOrgDate,
+                                binding: "realSaleAmt" + dateArr[i].sOrgDate,
                                 width: 90,
-                                align: "center",
+                                align: "right",
                                 isReadOnly: "true"
                             }));
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totSaleAmt",
+                            binding: "totRealSaleAmt",
                             width: 90,
-                            align: "center",
+                            align: "right",
                             isReadOnly: "true"
                         }));
 
@@ -740,9 +738,9 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                         dataItem.totSaleQty = "판매수량";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.saleAmt' + dateArr[i].sOrgDate + '= "총매출액"');
+                            eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
                         }
-                        dataItem.totSaleAmt = "총매출액";
+                        dataItem.totRealSaleAmt = "실매출액";
 
                         grid.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -930,7 +928,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
                                                 binding: "billCnt" +  dateArr[i].sOrgDate,
                                                 width: 90,
-                                                align: "center",
+                                                align: "right",
                                                 isReadOnly: "true"
                                             }));
                                         }
@@ -938,7 +936,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                             header: messages["prodSaleDayBillMoms.total"],
                                             binding: "totBillCnt",
                                             width: 90,
-                                            align: "center",
+                                            align: "right",
                                             isReadOnly: "true"
                                         }));
 
@@ -948,7 +946,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
                                                 binding: "saleQty" +  dateArr[i].sOrgDate,
                                                 width: 90,
-                                                align: "center",
+                                                align: "right",
                                                 isReadOnly: "true"
                                             }));
                                         }
@@ -956,25 +954,25 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                             header: messages["prodSaleDayBillMoms.total"],
                                             binding: "totSaleQty",
                                             width: 90,
-                                            align: "center",
+                                            align: "right",
                                             isReadOnly: "true"
                                         }));
 
-                                        // 총매출액
+                                        // 실매출액
                                         for (var i = 0; i < dateArr.length; i++) {
                                             grid.columns.push(new wijmo.grid.Column({
                                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                                binding: "saleAmt" + dateArr[i].sOrgDate,
+                                                binding: "realSaleAmt" + dateArr[i].sOrgDate,
                                                 width: 90,
-                                                align: "center",
+                                                align: "right",
                                                 isReadOnly: "true"
                                             }));
                                         }
                                         grid.columns.push(new wijmo.grid.Column({
                                             header: messages["prodSaleDayBillMoms.total"],
-                                            binding: "totSaleAmt",
+                                            binding: "totRealSaleAmt",
                                             width: 90,
-                                            align: "center",
+                                            align: "right",
                                             isReadOnly: "true"
                                         }));
 
@@ -1011,9 +1009,9 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                         dataItem.totSaleQty = "판매수량";
 
                                         for (var i = 0; i < dateArr.length; i++) {
-                                            eval('dataItem.saleAmt' + dateArr[i].sOrgDate + '= "총매출액"');
+                                            eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
                                         }
-                                        dataItem.totSaleAmt = "총매출액";
+                                        dataItem.totRealSaleAmt = "실매출액";
 
                                         grid.columnHeaders.rows[0].dataItem = dataItem;
 

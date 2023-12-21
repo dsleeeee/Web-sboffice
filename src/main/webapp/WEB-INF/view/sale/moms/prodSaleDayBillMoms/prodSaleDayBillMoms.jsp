@@ -339,7 +339,7 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodClassNm"/>" binding="prodClassNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodNm"/>" binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -370,7 +370,7 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodClassNm"/>" binding="prodClassNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodNm"/>" binding="prodNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.moms.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -397,4 +397,4 @@
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms.js?ver=20231214.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms.js?ver=20231220.01" charset="utf-8"></script>

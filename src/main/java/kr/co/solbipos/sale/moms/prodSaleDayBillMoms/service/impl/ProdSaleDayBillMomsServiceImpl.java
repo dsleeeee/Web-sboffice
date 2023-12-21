@@ -102,12 +102,12 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
 
             sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS BILL_CNT_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
         sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS TOT_BILL_CNT" + "\n";
         sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
-        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS TOT_SALE_AMT" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS TOT_REAL_SALE_AMT" + "\n";
 
         // 영수건수 계산을 위한 쿼리문 생성
         sQuery2 = ", SUM(";
@@ -174,12 +174,12 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
 
             sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS BILL_CNT_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
         sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS TOT_BILL_CNT" + "\n";
         sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
-        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_AMT ELSE 0 END) AS TOT_SALE_AMT" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS TOT_REAL_SALE_AMT" + "\n";
 
         // 영수건수 계산을 위한 쿼리문 생성
         sQuery2 = ", SUM(";
