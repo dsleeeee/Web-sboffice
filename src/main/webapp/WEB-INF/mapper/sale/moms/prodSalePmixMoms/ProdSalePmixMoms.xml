@@ -16,7 +16,7 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getProdSalePmixMomsList" parameterType="ProdSaleDayBillMomsVO" resultType="DefaultMap">
+    <select id="getProdSalePmixMomsList" parameterType="ProdSalePmixMomsVO" resultType="DefaultMap">
         /* ProdSalePmixMomsMapper.getProdSalePmixMomsList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
