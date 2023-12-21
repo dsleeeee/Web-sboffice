@@ -547,6 +547,9 @@
                         SELECT TCPFS.STORE_CD        AS STORE_CD
                         ,       TCPFS.FNKEY_NO        AS FNKEY_NO
                         ,       TCPF.FNKEY_NM         AS FNKEY_NM
+                        ,       TCPF.FNKEY_EN_NM      AS FNKEY_EN_NM
+                        ,       TCPF.FNKEY_CN_NM      AS FNKEY_CN_NM
+                        ,       TCPF.FNKEY_JP_NM      AS FNKEY_JP_NM
                         ,       TCPF.FNKEY_FG         AS FNKEY_FG
                         ,       TCPF.POS_FG           AS POS_FG
                         ,       'N'                   AS AUTH_YN     <!-- 인증여부는 우선 'N' 기본값으로 -->
@@ -573,6 +576,9 @@
                 STORE_CD,
                 FNKEY_NO,
                 FNKEY_NM,
+                FNKEY_EN_NM,
+                FNKEY_CN_NM,
+                FNKEY_JP_NM,
                 FNKEY_FG,
                 POS_FG,
                 AUTH_YN,
@@ -589,6 +595,9 @@
                 B.STORE_CD,
                 B.FNKEY_NO,
                 B.FNKEY_NM,
+                B.FNKEY_EN_NM,
+                B.FNKEY_CN_NM,
+                B.FNKEY_JP_NM,
                 B.FNKEY_FG,
                 B.POS_FG,
                 B.AUTH_YN,
