@@ -9,14 +9,14 @@
 
 <div class="subCon">
 
-    <div ng-controller="prodSaleDayBillMomsCtrl">
+    <div ng-controller="prodSalePmixMomsCtrl">
         <%--<div class="searchBar flddUnfld">--%>
         <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <c:if test="${sessionScope.sessionInfo.userId == 'h0393'}">
                 <%-- 조회 --%>
                 <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodSaleDayBillMomsCtrl', 1)">
+                    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodSalePmixMomsCtrl', 1)">
                         <s:message code="cmm.search"/>
                     </button>
                     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -38,7 +38,7 @@
             <tbody>
             <tr>
                 <%-- 기간선택 --%>
-                <th><s:message code="prodSaleDayBillMoms.period"/></th>
+                <th><s:message code="prodSalePmixMoms.period"/></th>
                 <td>
                     <div class="sb-select">
                         <%-- 일/월 구분 --%>
@@ -81,12 +81,12 @@
             </tr>
             <tr>
                 <%-- 상품코드 --%>
-                <th><s:message code="prodSaleDayBillMoms.prodCd" /></th>
+                <th><s:message code="prodSalePmixMoms.prodCd" /></th>
                 <td>
                     <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
                 <%-- 상품명 --%>
-                <th><s:message code="prodSaleDayBillMoms.prodNm" /></th>
+                <th><s:message code="prodSalePmixMoms.prodNm" /></th>
                 <td>
                     <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
@@ -114,14 +114,14 @@
                         <%-- 매장선택 모듈 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
                             <jsp:param name="targetTypeFg" value="M"/>
-                            <jsp:param name="targetId" value="prodSaleDayBillMomsStore"/>
+                            <jsp:param name="targetId" value="prodSalePmixMomsStore"/>
                         </jsp:include>
                         <%--// 매장선택 모듈 사용시 include --%>
                     </td>
                 </tr>
             </c:if>
             <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                <input type="hidden" id="prodSaleDayBillMomsStoreCd" value="${sessionInfo.storeCd}"/>
+                <input type="hidden" id="prodSalePmixMomsStoreCd" value="${sessionInfo.storeCd}"/>
             </c:if>
             <tr>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -150,7 +150,7 @@
                                      modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                                      closeFunc - 팝업 닫기시 호출할 함수--%>
                     <jsp:include page="/WEB-INF/view/sale/com/popup/selectProdMMoms.jsp" flush="true">
-                        <jsp:param name="targetId" value="prodSaleDayBillMomsSelect"/>
+                        <jsp:param name="targetId" value="prodSalePmixMomsSelect"/>
                     </jsp:include>
                     <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
                 </td>
@@ -317,9 +317,7 @@
         <c:if test="${sessionScope.sessionInfo.userId == 'h0393'}">
             <div class="mt10 oh sb-select dkbr">
                 <%-- 조회조건 엑셀다운로드 --%>
-                <%--<button class="btn_skyblue ml5 fr" ng-click="excelDownload('1')"><s:message code="cmm.excel.downCondition"/></button>--%>
-                <%-- 분할 엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
+                <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
                 <%-- 현재화면 엑셀다운로드 --%>
                 <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
             </div>
@@ -338,25 +336,22 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodClassNm"/>" binding="prodClassNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSalePmixMoms.prodClassNm"/>" binding="prodClassNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSalePmixMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
         <%-- 페이지 리스트 --%>
         <div class="pageNum mt20">
             <%-- id --%>
-            <ul id="prodSaleDayBillMomsCtrlPager" data-size="10">
+            <ul id="prodSalePmixMomsCtrlPager" data-size="10">
             </ul>
         </div>
         <%-- //페이지 리스트 --%>
     </div>
 
     <%-- 엑셀 리스트 --%>
-    <div class="w100 mt10" style="display:none;" ng-controller="prodSaleDayBillMomsExcelCtrl">
+    <div class="w100 mt10" style="display:none;" ng-controller="prodSalePmixMomsExcelCtrl">
         <div class="wj-gridWrap" style="height: 370px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     id="wjGridExcelList"
@@ -369,11 +364,8 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodClassNm"/>" binding="prodClassNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayBillMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.moms.momsAreaFg"/>" binding="momsAreaFg" data-map="momsAreaFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSalePmixMoms.prodClassNm"/>" binding="prodClassNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSalePmixMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -397,4 +389,4 @@
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms.js?ver=20231220.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSalePmixMoms/prodSalePmixMoms.js?ver=20231220.01" charset="utf-8"></script>

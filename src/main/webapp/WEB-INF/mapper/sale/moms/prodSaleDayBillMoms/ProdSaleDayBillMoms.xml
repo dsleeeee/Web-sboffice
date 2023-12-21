@@ -25,25 +25,44 @@
         tsdp.STORE_CD,
         tms.STORE_NM,
         tmsi.MOMS_AREA_FG
-        ${sQuery2}
+        ${sQuery1}
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
-            SELECT
-            A.SALE_DATE,
-            A.STORE_CD,
-            A.PROD_CD,
-            SUM(A.TOT_SALE_QTY) AS SALE_QTY,
-            SUM(A.TOT_SALE_AMT) AS SALE_AMT
-            ${sQuery1}
-            FROM TB_SL_DAILY_PROD A
-            WHERE 1=1
-            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            <if test='storeCdQuery != null and storeCdQuery != ""'>
-                AND A.STORE_CD IN (${storeCdQuery})
+            <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
+                SELECT
+                A.SALE_DATE,
+                A.STORE_CD,
+                A.PROD_CD,
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
+                ${sQuery2}
+                FROM TB_SL_DAILY_PROD A
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
             </if>
-            GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
+            <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
+                SELECT
+                A.SALE_YM AS SALE_DATE,
+                A.STORE_CD,
+                A.PROD_CD,
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
+                ${sQuery2}
+                FROM TB_SL_MONTHLY_PROD A
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND A.SALE_YM BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                GROUP BY A.SALE_YM, A.STORE_CD, A.PROD_CD
+            </if>
         ) tsdp,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
@@ -141,24 +160,43 @@
         tsdp.STORE_CD,
         tms.STORE_NM,
         tmsi.MOMS_AREA_FG
-        ${sQuery2}
+        ${sQuery1}
         FROM
         (
-            SELECT
-            A.SALE_DATE,
-            A.STORE_CD,
-            A.PROD_CD,
-            SUM(A.TOT_SALE_QTY) AS SALE_QTY,
-            SUM(A.TOT_SALE_AMT) AS SALE_AMT
-            ${sQuery1}
-            FROM TB_SL_DAILY_PROD A
-            WHERE 1=1
-            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            <if test='storeCdQuery != null and storeCdQuery != ""'>
-                AND A.STORE_CD IN (${storeCdQuery})
+            <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
+                SELECT
+                A.SALE_DATE,
+                A.STORE_CD,
+                A.PROD_CD,
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
+                ${sQuery2}
+                FROM TB_SL_DAILY_PROD A
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
             </if>
-            GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
+            <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
+                SELECT
+                A.SALE_YM AS SALE_DATE,
+                A.STORE_CD,
+                A.PROD_CD,
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT
+                ${sQuery2}
+                FROM TB_SL_MONTHLY_PROD A
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND A.SALE_YM BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                GROUP BY A.SALE_YM, A.STORE_CD, A.PROD_CD
+            </if>
         ) tsdp,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
