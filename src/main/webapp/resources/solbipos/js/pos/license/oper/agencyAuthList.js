@@ -23,7 +23,7 @@ var agencyFgData = [
 /**
  *  대리점인증현황 그리드 생성
  */
-app.controller('agencyAuthListCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('agencyAuthListCtrl', ['$scope', '$http','$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('agencyAuthListCtrl', $scope, $http, true));
@@ -85,6 +85,32 @@ app.controller('agencyAuthListCtrl', ['$scope', '$http', function ($scope, $http
                 }
             });
         });
+    };
+
+    // 엑셀 다운로드
+    $scope.excelDownloadInfo = function () {
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,  //20220427 false 엑섹속도 cell 스타일 확인중
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            }, '대리점인증현황_매출일자(' + wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd') +'_' + wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd') + ')'+'_'+ getCurDateTime() +'.xlsx', function () {
+                $timeout(function () {
+                    console.log('시작시간'+ startDate.value)
+                    console.log('종료시간'+ endDate.value)
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
     };
 
 }]);

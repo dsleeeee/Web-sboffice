@@ -89,6 +89,11 @@
         </tbody>
     </table>
 
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>
+    </div>
+
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -132,4 +137,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/agencyAuthList.js?ver=20201116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/agencyAuthList.js?ver=20231221.01" charset="utf-8"></script>
