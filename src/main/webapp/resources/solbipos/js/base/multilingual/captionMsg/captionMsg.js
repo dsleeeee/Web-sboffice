@@ -350,6 +350,20 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
     //
     $scope.initGrid = function (s, e) {
 
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "captionMsgCnNm") { // 중문
+                    wijmo.addClass(e.cell, 'chinese-excel-form');
+                }
+
+                if (col.binding === "captionMsgJpNm") { // 일문
+                    wijmo.addClass(e.cell, 'japanese-excel-form');
+                }
+            }
+        });
+
         // 컬럼헤더:바인딩명 형태의 JSON 데이터 생성.
         $scope.colHeaderBind = {};
         for (var i = 0; i < $scope.flex.columns.length; i++) {

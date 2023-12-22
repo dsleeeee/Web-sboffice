@@ -128,7 +128,6 @@
             is-read-only="true">
 
             <!-- define columns -->
-           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
            <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgId"/>" binding="captionMsgId" align="left" width="200" max-length="33"></wj-flex-grid-column>
            <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgGb"/>" binding="captionMsgGb" data-map="captionMsgGbDataMap" align="center" width="100"></wj-flex-grid-column>
            <wj-flex-grid-column header="<s:message code="captionMsg.captionMsgNm"/>" binding="captionMsgNm" align="left" width="200" max-length="160"></wj-flex-grid-column>
@@ -140,4 +139,15 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsg.js?ver=20231122.01" charset="utf-8"></script>
+<style>
+    /* 중문, 일문 엑셀업로드 font */
+    .chinese-excel-form {
+        font-family: "Microsoft YaHei";
+    }
+
+    .japanese-excel-form {
+        font-family: "Meiryo";
+    }
+</style>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsg.js?ver=20231222.01" charset="utf-8"></script>

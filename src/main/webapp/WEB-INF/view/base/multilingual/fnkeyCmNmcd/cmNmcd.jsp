@@ -146,7 +146,18 @@
     </div>
 </div>
 
+<style>
+    /* 중문, 일문 엑셀업로드 font */
+    .chinese-excel-form {
+        font-family: "Microsoft YaHei";
+    }
+
+    .japanese-excel-form {
+        font-family: "Meiryo";
+    }
+</style>
+
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/cmNmcd.js?ver=20231215.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/cmNmcd.js?ver=20231222.01" charset="utf-8"></script>
