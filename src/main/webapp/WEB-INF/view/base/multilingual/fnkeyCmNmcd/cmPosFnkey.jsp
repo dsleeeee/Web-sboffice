@@ -146,6 +146,17 @@
     </div>
 </div>
 
+<style>
+    /* 중문, 일문 엑셀업로드 font */
+    .chinese-excel-form {
+        font-family: "Microsoft YaHei";
+    }
+
+    .japanese-excel-form {
+        font-family: "Meiryo";
+    }
+</style>
+
 <script type="text/javascript">
 
     // 기능구분 콤보박스 셋팅
@@ -156,4 +167,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/cmPosFnkey.js?ver=20231215.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/cmPosFnkey.js?ver=20231222.01" charset="utf-8"></script>
