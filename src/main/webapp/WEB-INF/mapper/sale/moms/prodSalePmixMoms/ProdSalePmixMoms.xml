@@ -175,7 +175,7 @@
             AND tmsi.STORE_CD (+)= tms.STORE_CD
             AND tmp.STORE_CD = tsdp.STORE_CD
             AND tmp.PROD_CD = tsdp.PROD_CD
-            GROUP BY tmp.PROD_CLASS_CD, tsdp.STORE_CD, tmp.PROD_NM
+            GROUP BY tsdp.STORE_CD, tmp.PROD_CLASS_CD, tmp.PROD_NM
         )
         GROUP BY PROD_CLASS_NM, PROD_NM
         ORDER BY PROD_CLASS_NM, PROD_NM
@@ -344,7 +344,7 @@
             AND tmsi.STORE_CD (+)= tms.STORE_CD
             AND tmp.STORE_CD = tsdp.STORE_CD
             AND tmp.PROD_CD = tsdp.PROD_CD
-            GROUP BY tmp.PROD_CLASS_CD, tsdp.STORE_CD, tmp.PROD_NM
+            GROUP BY tsdp.STORE_CD, tmp.PROD_CLASS_CD, tmp.PROD_NM
         )
         GROUP BY PROD_CLASS_NM, PROD_NM
         ORDER BY PROD_CLASS_NM, PROD_NM
