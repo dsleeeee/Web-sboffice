@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PosUtilLog.xml
+    포스유틸사용로그
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2023.12.21      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.admin.posUtilLog.service.impl.PosUtilLogMapper">
+
+    <!-- 포스유틸사용로그 - 조회 -->
+    <!--
+        TABLE    : TTB_PS_POS_UTIL_LOG ,TB_HQ_OFFICE, TB_MS_STORE
+        PARAM    : posUtilLogVO
+        COMMENTS : 포스유틸사용로그를 조회한다.
+    -->
+    <select id="getPosUtilLogList" parameterType="posUtilLogVO" resultType="DefaultMap">
+        /* USE : PosUtilLogMapper.getPosUtilLogList */
+        SELECT TO_CHAR(TO_DATE(tppul.UTIL_INS_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS Srch_Date
+        ,      tms.HQ_OFFICE_CD
+        ,      tho.HQ_OFFICE_NM
+        ,      tms.STORE_CD
+        ,      tms.STORE_NM
+        ,      tppul.USER_NAME
+        ,      TO_CHAR(TO_DATE(tppul.UTIL_INS_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS UTIL_INS_DT
+        ,      tppul.UTIL_INS_MSG
+        FROM TB_PS_POS_UTIL_LOG tppul
+        ,    TB_HQ_OFFICE tho
+        ,    TB_MS_STORE tms
+        WHERE 1=1
+        AND tppul.UTIL_INS_DT BETWEEN #{startDate} AND #{endDate}
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND tms.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND tho.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        AND tppul.STORE_CD = tms.STORE_CD
+        AND tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        ORDER
+        BY tppul.UTIL_INS_DT
+    </select>
+
+</mapper>
