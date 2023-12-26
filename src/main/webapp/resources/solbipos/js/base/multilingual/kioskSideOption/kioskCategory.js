@@ -159,6 +159,20 @@ app.controller('kioskCategoryExcelDownCtrl', ['$scope', '$http', '$timeout', fun
 
     //
     $scope.initGrid = function (s, e) {
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "tuClsCnNm") { // 중문
+                    wijmo.addClass(e.cell, 'chinese-excel-form');
+                }
+
+                if (col.binding === "tuClsJpNm") { // 일문
+                    wijmo.addClass(e.cell, 'japanese-excel-form');
+                }
+            }
+        });
     };
 
     // 양식 다운로드
@@ -179,7 +193,7 @@ app.controller('kioskCategoryExcelDownCtrl', ['$scope', '$http', '$timeout', fun
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flex,
                     {
                         includeColumnHeaders: 	true,
-                        includeCellStyles	: 	false,
+                        includeCellStyles	: 	true,
                         includeColumns      :	function (column) {
                             return column.visible;
                         }

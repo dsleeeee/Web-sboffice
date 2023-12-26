@@ -182,6 +182,20 @@ app.controller('sideSdselGrpExcelDownCtrl', ['$scope', '$http', '$timeout', func
     //
     $scope.initGrid = function (s, e) {
         $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "sdselGrpCnNm") { // 중문
+                    wijmo.addClass(e.cell, 'chinese-excel-form');
+                }
+
+                if (col.binding === "sdselGrpJpNm") { // 일문
+                    wijmo.addClass(e.cell, 'japanese-excel-form');
+                }
+            }
+        });
     };
 
     // 양식 다운로드
@@ -204,7 +218,7 @@ app.controller('sideSdselGrpExcelDownCtrl', ['$scope', '$http', '$timeout', func
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flex,
                     {
                         includeColumnHeaders: 	true,
-                        includeCellStyles	: 	false,
+                        includeCellStyles	: 	true,
                         includeColumns      :	function (column) {
                             return column.visible;
                         }

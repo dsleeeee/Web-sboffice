@@ -1,23 +1,23 @@
-package kr.co.solbipos.sale.moms.prodSaleDayBillMoms.service;
+package kr.co.solbipos.sale.moms.prodSalePmixMoms.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : ProdSaleDayBillMomsVO.java
- * @Description : 맘스터치 > 간소화화면 > 상품매출일별(영수)
+ * @Class Name : ProdSalePmixMomsVO.java
+ * @Description : 맘스터치 > 간소화화면 > 상품매출(P.MIX)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2023.12.13  김설아      최초생성
+ * @ 2023.12.19  김설아      최초생성
  *
  * @author 솔비포스 개발본부 WEB개발팀 김설아
- * @since 2023.12.13
+ * @since 2023.12.19
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class ProdSaleDayBillMomsVO extends PageVO {
+public class ProdSalePmixMomsVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 

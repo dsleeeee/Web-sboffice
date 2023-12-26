@@ -142,9 +142,20 @@
     </div>
 </div>
 
+<style>
+    /* 중문, 일문 엑셀업로드 font */
+    .chinese-excel-form {
+        font-family: "Microsoft YaHei";
+    }
+
+    .japanese-excel-form {
+        font-family: "Meiryo";
+    }
+</style>
+
 <script type="text/javascript">
     // 키오스크 키맵그룹 목록
     var kioskTuClsTypeList = ${kioskTuClsTypeList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20231130.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20231222.01" charset="utf-8"></script>

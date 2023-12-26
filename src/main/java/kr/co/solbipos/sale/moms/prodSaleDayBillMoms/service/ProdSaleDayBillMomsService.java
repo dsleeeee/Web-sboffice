@@ -2,7 +2,6 @@ package kr.co.solbipos.sale.moms.prodSaleDayBillMoms.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.sale.anals.saleAnalsMomsBst.service.SaleAnalsMomsBstVO;
 
 import java.util.HashMap;
 import java.util.List;

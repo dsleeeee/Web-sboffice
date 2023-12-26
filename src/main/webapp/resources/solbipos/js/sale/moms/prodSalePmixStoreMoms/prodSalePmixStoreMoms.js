@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : prodSaleDayBillMoms.js
- * 설  명 : 맘스터치 > 간소화화면 > 상품매출일별(영수) JavaScript
+ * 파일명 : prodSalePmixStoreMoms.js
+ * 설  명 : 맘스터치 > 간소화화면 > 상품매출(P.MIX 매장) JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2023.12.13     김설아      1.0
+ * 2023.12.21     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -20,12 +20,12 @@ var dayGubunComboData = [
 ];
 
 /**
- *  상품매출일별(영수) 그리드 생성
+ *  상품매출(P.MIX 매장) 그리드 생성
  */
-app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('prodSalePmixStoreMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('prodSaleDayBillMomsCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('prodSalePmixStoreMomsCtrl', $scope, $http, false));
 
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
@@ -61,12 +61,12 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("prodSaleDayBillMomsCtrl", function (event, data) {
-        $scope.searchProdSaleDayBillMomsList();
+    $scope.$on("prodSalePmixStoreMomsCtrl", function (event, data) {
+        $scope.searchProdSalePmixStoreMomsList();
         event.preventDefault();
     });
 
-    $scope.searchProdSaleDayBillMomsList = function () {
+    $scope.searchProdSalePmixStoreMomsList = function () {
         // 기간제한 체크
         if($scope.srchDayGubunCombo.selectedValue === "day") {
 
@@ -119,8 +119,8 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#prodSaleDayBillMomsStoreCd").val();
-        params.prodCds = $("#prodSaleDayBillMomsSelectCd").val();
+        params.storeCds = $("#prodSalePmixStoreMomsStoreCd").val();
+        params.prodCds = $("#prodSalePmixStoreMomsSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
@@ -150,7 +150,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms/getProdSaleDayBillMomsList.sb", params, function (response) {
+        $scope._postJSONQuery.withPopUp("/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsList.sb", params, function (response) {
             // <-- 그리드 생성 -->
             var list = response.data.data.list;
             var length = response.data.data.list.length;
@@ -189,7 +189,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                 // ajax 통신 설정
                 $http({
                     method : 'POST', //방식
-                    url    : "/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms/getDateDiff.sb", /* 통신할 URL */
+                    url    : "/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getDateDiff.sb", /* 통신할 URL */
                     params : params, /* 파라메터로 보낼 데이터 */
                     headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
                 }).then(function successCallback(response) {
@@ -207,24 +207,6 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                             regex[1] = '$1-$2';
                         }
 
-                        // 영수건수
-                        for (var i = 0; i < dateArr.length; i++) {
-                            grid.columns.push(new wijmo.grid.Column({
-                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "billCnt" +  dateArr[i].sOrgDate,
-                                width: 90,
-                                align: "right",
-                                isReadOnly: "true"
-                            }));
-                        }
-                        grid.columns.push(new wijmo.grid.Column({
-                            header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totBillCnt",
-                            width: 90,
-                            align: "right",
-                            isReadOnly: "true"
-                        }));
-
                         // 판매수량
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
@@ -236,7 +218,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                             }));
                         }
                         grid.columns.push(new wijmo.grid.Column({
-                            header: messages["prodSaleDayBillMoms.total"],
+                            header: messages["prodSalePmixStoreMoms.total"],
                             binding: "totSaleQty",
                             width: 90,
                             align: "right",
@@ -254,8 +236,26 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                             }));
                         }
                         grid.columns.push(new wijmo.grid.Column({
-                            header: messages["prodSaleDayBillMoms.total"],
+                            header: messages["prodSalePmixStoreMoms.total"],
                             binding: "totRealSaleAmt",
+                            width: 90,
+                            align: "right",
+                            isReadOnly: "true"
+                        }));
+
+                        // P.MIX
+                        for (var i = 0; i < dateArr.length; i++) {
+                            grid.columns.push(new wijmo.grid.Column({
+                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
+                                binding: "pMix" + dateArr[i].sOrgDate,
+                                width: 90,
+                                align: "right",
+                                isReadOnly: "true"
+                            }));
+                        }
+                        grid.columns.push(new wijmo.grid.Column({
+                            header: messages["prodSalePmixStoreMoms.total"],
+                            binding: "totPMix",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -277,16 +277,11 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
 
                         // 첫째줄 헤더 생성
                         var dataItem = {};
-                        dataItem.prodClassNm = messages["prodSaleDayBillMoms.prodClassNm"];
-                        dataItem.prodNm = messages["prodSaleDayBillMoms.prodNm"];
-                        dataItem.storeCd = messages["prodSaleDayBillMoms.storeCd"];
-                        dataItem.storeNm = messages["prodSaleDayBillMoms.storeNm"];
+                        dataItem.storeCd = messages["prodSalePmixStoreMoms.storeCd"];
+                        dataItem.storeNm = messages["prodSalePmixStoreMoms.storeNm"];
                         dataItem.momsAreaFg = messages["cmm.moms.momsAreaFg"];
-
-                        for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.billCnt' + dateArr[i].sOrgDate + '= "영수건수"');
-                        }
-                        dataItem.totBillCnt = "영수건수";
+                        dataItem.prodClassNm = messages["prodSalePmixStoreMoms.prodClassNm"];
+                        dataItem.prodNm = messages["prodSalePmixStoreMoms.prodNm"];
 
                         for (var i = 0; i < dateArr.length; i++) {
                             eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
@@ -297,6 +292,11 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                             eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
                         }
                         dataItem.totRealSaleAmt = "실매출액";
+
+                        for (var i = 0; i < dateArr.length; i++) {
+                            eval('dataItem.pMix' + dateArr[i].sOrgDate + '= "P.MIX"');
+                        }
+                        dataItem.totPMix = "P.MIX";
 
                         grid.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -373,15 +373,15 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.prodSaleDayBillMomsStoreShow = function () {
-        $scope._broadcast('prodSaleDayBillMomsStoreCtrl');
+    $scope.prodSalePmixStoreMomsStoreShow = function () {
+        $scope._broadcast('prodSalePmixStoreMomsStoreCtrl');
     };
 
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.prodSaleDayBillMomsSelectShow = function () {
-        $scope._broadcast('prodSaleDayBillMomsSelectCtrl');
+    $scope.prodSalePmixStoreMomsSelectShow = function () {
+        $scope._broadcast('prodSalePmixStoreMomsSelectCtrl');
     };
 
     // 상품분류정보 팝업
@@ -484,8 +484,8 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#prodSaleDayBillMomsStoreCd").val();
-        params.prodCds = $("#prodSaleDayBillMomsSelectCd").val();
+        params.storeCds = $("#prodSalePmixStoreMomsStoreCd").val();
+        params.prodCds = $("#prodSalePmixStoreMomsSelectCd").val();
         params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
@@ -509,7 +509,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
 
         // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
         $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
-            $scope._broadcast('prodSaleDayBillMomsExcelCtrl', params);
+            $scope._broadcast('prodSalePmixStoreMomsExcelCtrl', params);
         });
     };
 
@@ -567,7 +567,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                     return column.visible;
                 }
             },
-                "상품매출일별(영수)" + '_' +  wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
+                "상품매출(P.MIX 매장)" + '_' +  wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -581,10 +581,10 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
 /**
  *  엑셀다운로드 그리드 생성
  */
-app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('prodSalePmixStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('prodSaleDayBillMomsExcelCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('prodSalePmixStoreMomsExcelCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -593,7 +593,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("prodSaleDayBillMomsExcelCtrl", function (event, data) {
+    $scope.$on("prodSalePmixStoreMomsExcelCtrl", function (event, data) {
         if(data.excelType === '1') {
             $scope.searchExcelList(data);
         }else{
@@ -605,7 +605,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
     // 엑셀 리스트 조회
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms/getProdSaleDayBillMomsExcelList.sb", params, function (response) {
+        $scope._postJSONQuery.withPopUp("/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsExcelList.sb", params, function (response) {
             if (response.data.data.list.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
@@ -633,7 +633,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                 // ajax 통신 설정
                 $http({
                     method : 'POST', //방식
-                    url    : "/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms/getDateDiff.sb", /* 통신할 URL */
+                    url    : "/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getDateDiff.sb", /* 통신할 URL */
                     params : params, /* 파라메터로 보낼 데이터 */
                     headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
                 }).then(function successCallback(response) {
@@ -651,24 +651,6 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                             regex[1] = '$1-$2';
                         }
 
-                        // 영수건수
-                        for (var i = 0; i < dateArr.length; i++) {
-                            grid.columns.push(new wijmo.grid.Column({
-                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "billCnt" +  dateArr[i].sOrgDate,
-                                width: 90,
-                                align: "right",
-                                isReadOnly: "true"
-                            }));
-                        }
-                        grid.columns.push(new wijmo.grid.Column({
-                            header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totBillCnt",
-                            width: 90,
-                            align: "right",
-                            isReadOnly: "true"
-                        }));
-
                         // 판매수량
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
@@ -680,7 +662,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                             }));
                         }
                         grid.columns.push(new wijmo.grid.Column({
-                            header: messages["prodSaleDayBillMoms.total"],
+                            header: messages["prodSalePmixStoreMoms.total"],
                             binding: "totSaleQty",
                             width: 90,
                             align: "right",
@@ -698,8 +680,26 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                             }));
                         }
                         grid.columns.push(new wijmo.grid.Column({
-                            header: messages["prodSaleDayBillMoms.total"],
+                            header: messages["prodSalePmixStoreMoms.total"],
                             binding: "totRealSaleAmt",
+                            width: 90,
+                            align: "right",
+                            isReadOnly: "true"
+                        }));
+
+                        // P.MIX
+                        for (var i = 0; i < dateArr.length; i++) {
+                            grid.columns.push(new wijmo.grid.Column({
+                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
+                                binding: "pMix" + dateArr[i].sOrgDate,
+                                width: 90,
+                                align: "right",
+                                isReadOnly: "true"
+                            }));
+                        }
+                        grid.columns.push(new wijmo.grid.Column({
+                            header: messages["prodSalePmixStoreMoms.total"],
+                            binding: "totPMix",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -721,16 +721,11 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
 
                         // 첫째줄 헤더 생성
                         var dataItem = {};
-                        dataItem.prodClassNm = messages["prodSaleDayBillMoms.prodClassNm"];
-                        dataItem.prodNm = messages["prodSaleDayBillMoms.prodNm"];
-                        dataItem.storeCd = messages["prodSaleDayBillMoms.storeCd"];
-                        dataItem.storeNm = messages["prodSaleDayBillMoms.storeNm"];
+                        dataItem.storeCd = messages["prodSalePmixStoreMoms.storeCd"];
+                        dataItem.storeNm = messages["prodSalePmixStoreMoms.storeNm"];
                         dataItem.momsAreaFg = messages["cmm.moms.momsAreaFg"];
-
-                        for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.billCnt' + dateArr[i].sOrgDate + '= "영수건수"');
-                        }
-                        dataItem.totBillCnt = "영수건수";
+                        dataItem.prodClassNm = messages["prodSalePmixStoreMoms.prodClassNm"];
+                        dataItem.prodNm = messages["prodSalePmixStoreMoms.prodNm"];
 
                         for (var i = 0; i < dateArr.length; i++) {
                             eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
@@ -741,6 +736,11 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                             eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
                         }
                         dataItem.totRealSaleAmt = "실매출액";
+
+                        for (var i = 0; i < dateArr.length; i++) {
+                            eval('dataItem.pMix' + dateArr[i].sOrgDate + '= "P.MIX"');
+                        }
+                        dataItem.totPMix = "P.MIX";
 
                         grid.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -795,7 +795,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                 includeColumns      : function (column) {
                                     return column.visible;
                                 }
-                            }, "상품매출일별(영수)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime()+'.xlsx', function () {
+                            }, "상품매출(P.MIX 매장)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime()+'.xlsx', function () {
                                 $timeout(function () {
                                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                                 }, 10);
@@ -834,7 +834,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
         params.limit = 1;
         params.offset = 1;
 
-        $scope._postJSONQuery.withOutPopUp( "/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms/getProdSaleDayBillMomsList.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp( "/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsList.sb", params, function(response){
 
             listSize = response.data.data.list[0].totCnt;
             totFileCnt = Math.ceil(listSize/7500); // 하나의 엑셀파일에 7500개씩 다운로드
@@ -868,7 +868,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                     // ajax 통신 설정
                     $http({
                         method: 'POST', //방식
-                        url: '/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms/getProdSaleDayBillMomsList.sb', /* 통신할 URL */
+                        url: '/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsList.sb', /* 통신할 URL */
                         params: params, /* 파라메터로 보낼 데이터 */
                         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
                     }).then(function successCallback(response) {
@@ -904,7 +904,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                 // ajax 통신 설정
                                 $http({
                                     method : 'POST', //방식
-                                    url    : "/sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms/getDateDiff.sb", /* 통신할 URL */
+                                    url    : "/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getDateDiff.sb", /* 통신할 URL */
                                     params : params, /* 파라메터로 보낼 데이터 */
                                     headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
                                 }).then(function successCallback(response) {
@@ -922,24 +922,6 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                             regex[1] = '$1-$2';
                                         }
 
-                                        // 영수건수
-                                        for (var i = 0; i < dateArr.length; i++) {
-                                            grid.columns.push(new wijmo.grid.Column({
-                                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                                binding: "billCnt" +  dateArr[i].sOrgDate,
-                                                width: 90,
-                                                align: "right",
-                                                isReadOnly: "true"
-                                            }));
-                                        }
-                                        grid.columns.push(new wijmo.grid.Column({
-                                            header: messages["prodSaleDayBillMoms.total"],
-                                            binding: "totBillCnt",
-                                            width: 90,
-                                            align: "right",
-                                            isReadOnly: "true"
-                                        }));
-
                                         // 판매수량
                                         for (var i = 0; i < dateArr.length; i++) {
                                             grid.columns.push(new wijmo.grid.Column({
@@ -951,7 +933,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                             }));
                                         }
                                         grid.columns.push(new wijmo.grid.Column({
-                                            header: messages["prodSaleDayBillMoms.total"],
+                                            header: messages["prodSalePmixStoreMoms.total"],
                                             binding: "totSaleQty",
                                             width: 90,
                                             align: "right",
@@ -969,8 +951,26 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                             }));
                                         }
                                         grid.columns.push(new wijmo.grid.Column({
-                                            header: messages["prodSaleDayBillMoms.total"],
+                                            header: messages["prodSalePmixStoreMoms.total"],
                                             binding: "totRealSaleAmt",
+                                            width: 90,
+                                            align: "right",
+                                            isReadOnly: "true"
+                                        }));
+
+                                        // P.MIX
+                                        for (var i = 0; i < dateArr.length; i++) {
+                                            grid.columns.push(new wijmo.grid.Column({
+                                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
+                                                binding: "pMix" + dateArr[i].sOrgDate,
+                                                width: 90,
+                                                align: "right",
+                                                isReadOnly: "true"
+                                            }));
+                                        }
+                                        grid.columns.push(new wijmo.grid.Column({
+                                            header: messages["prodSalePmixStoreMoms.total"],
+                                            binding: "totPMix",
                                             width: 90,
                                             align: "right",
                                             isReadOnly: "true"
@@ -992,16 +992,11 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
 
                                         // 첫째줄 헤더 생성
                                         var dataItem = {};
-                                        dataItem.prodClassNm = messages["prodSaleDayBillMoms.prodClassNm"];
-                                        dataItem.prodNm = messages["prodSaleDayBillMoms.prodNm"];
-                                        dataItem.storeCd = messages["prodSaleDayBillMoms.storeCd"];
-                                        dataItem.storeNm = messages["prodSaleDayBillMoms.storeNm"];
+                                        dataItem.storeCd = messages["prodSalePmixStoreMoms.storeCd"];
+                                        dataItem.storeNm = messages["prodSalePmixStoreMoms.storeNm"];
                                         dataItem.momsAreaFg = messages["cmm.moms.momsAreaFg"];
-
-                                        for (var i = 0; i < dateArr.length; i++) {
-                                            eval('dataItem.billCnt' + dateArr[i].sOrgDate + '= "영수건수"');
-                                        }
-                                        dataItem.totBillCnt = "영수건수";
+                                        dataItem.prodClassNm = messages["prodSalePmixStoreMoms.prodClassNm"];
+                                        dataItem.prodNm = messages["prodSalePmixStoreMoms.prodNm"];
 
                                         for (var i = 0; i < dateArr.length; i++) {
                                             eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
@@ -1012,6 +1007,11 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                             eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
                                         }
                                         dataItem.totRealSaleAmt = "실매출액";
+
+                                        for (var i = 0; i < dateArr.length; i++) {
+                                            eval('dataItem.pMix' + dateArr[i].sOrgDate + '= "P.MIX"');
+                                        }
+                                        dataItem.totPMix = "P.MIX";
 
                                         grid.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -1098,7 +1098,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                 includeColumns: function (column) {
                                     return column.visible;
                                 }
-                            }, "상품매출일별(영수)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
+                            }, "상품매출(P.MIX 매장)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
                                 $timeout(function () {
                                     console.log("Export complete start. _" + (x + 1));
                                     getExcelFile(x + 1);

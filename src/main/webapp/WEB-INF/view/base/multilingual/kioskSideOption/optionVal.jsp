@@ -136,4 +136,15 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/optionVal.js?ver=20231130.02" charset="utf-8"></script>
+<style>
+    /* 중문, 일문 엑셀업로드 font */
+    .chinese-excel-form {
+        font-family: "Microsoft YaHei";
+    }
+
+    .japanese-excel-form {
+        font-family: "Meiryo";
+    }
+</style>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/optionVal.js?ver=20231222.01" charset="utf-8"></script>
