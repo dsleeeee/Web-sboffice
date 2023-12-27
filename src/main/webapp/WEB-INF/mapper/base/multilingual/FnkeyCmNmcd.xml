@@ -68,6 +68,41 @@
         ,   MOD_ID       = #{modId}
     </update>
 
+    <!-- 기능키(공통) 탭 영문, 중문, 일문 저장 후, 매장적용 -->
+    <!--
+        TABLE    : TB_MS_STORE_FNKEY
+        PARAM    : fnkeyCmNmcdVO
+        COMMENTS : 기능키(공통) 영문, 중문, 일문을 저장 후, 바뀐 정보를 매장적용 한다.
+    -->
+    <update id="applyToStoreFnkey" parameterType="fnkeyCmNmcdVO">
+        /* USE : FnkeyCmNmcdMapper.applyToStoreFnkey */
+        MERGE INTO TB_MS_STORE_FNKEY A
+        USING (
+                  SELECT FNKEY_NO
+                  ,      FNKEY_EN_NM
+                  ,      FNKEY_CN_NM
+                  ,      FNKEY_JP_NM
+                  ,      #{modDt} AS MOD_DT
+                  ,      #{modId} AS MOD_ID
+                  FROM TB_CM_POS_FNKEY
+                  WHERE FNKEY_NO IN
+                <foreach collection="arrFnkeyNo" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+              ) B
+        ON (      A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD IN ('DS021', 'DS034', 'H0393')) <!-- 매장적용([H0393] 맘스터치 만 적용 -->
+                  AND A.FNKEY_NO = B.FNKEY_NO
+           )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            A.FNKEY_EN_NM = B.FNKEY_EN_NM
+        ,   A.FNKEY_CN_NM = B.FNKEY_CN_NM
+        ,   A.FNKEY_JP_NM = B.FNKEY_JP_NM
+        ,   A.MOD_DT      = B.MOD_DT
+        ,   A.MOD_ID      = B.MOD_ID
+    </update>
+
     <!-- 기능키(매장) 탭 리스트 조회 -->
     <!--
         TABLE    : TB_MS_STORE_FNKEY

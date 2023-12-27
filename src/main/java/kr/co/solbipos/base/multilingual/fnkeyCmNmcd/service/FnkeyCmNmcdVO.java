@@ -51,6 +51,8 @@ public class FnkeyCmNmcdVO extends PageVO {
     private String nmcodeJpNm;
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+    /** 수정한 기능키 번호 array*/
+    private String arrFnkeyNo[];
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -170,5 +172,13 @@ public class FnkeyCmNmcdVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String[] getArrFnkeyNo() {
+        return arrFnkeyNo;
+    }
+
+    public void setArrFnkeyNo(String[] arrFnkeyNo) {
+        this.arrFnkeyNo = arrFnkeyNo;
     }
 }
