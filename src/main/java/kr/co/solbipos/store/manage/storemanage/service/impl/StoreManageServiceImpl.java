@@ -1652,4 +1652,15 @@ public class StoreManageServiceImpl implements StoreManageService{
         return mapper.getPosEnvVal(storeManageVO);
     }
 
+    /** 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경 */
+    @Override
+    public int updateToSmartOrder(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        storePosEnvVO.setModDt(dt);
+        storePosEnvVO.setModId(sessionInfoVO.getUserId());
+
+        return mapper.updateToSmartOrder(storePosEnvVO);
+    }
 }

@@ -172,4 +172,7 @@ public interface StoreManageService {
 
     /** 매장포스 환경설정값 조회 */
     String getPosEnvVal(StoreManageVO storeManageVO);
+
+    /** 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경 */
+    int updateToSmartOrder(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO);
 }

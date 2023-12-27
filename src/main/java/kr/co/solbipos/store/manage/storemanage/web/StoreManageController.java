@@ -1085,4 +1085,24 @@ public class StoreManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경
+     * @param storePosEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "storeManage/updateToSmartOrder.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateToSmartOrder(@RequestBody StorePosEnvVO storePosEnvVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.updateToSmartOrder(storePosEnvVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

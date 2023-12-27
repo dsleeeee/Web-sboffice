@@ -16,6 +16,9 @@ var vEnv1221 = "";
 var mainPosList;
 var mainPosNo = "";
 
+// 메인포스여부
+var env4021 = "";
+
 app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 상위 객체 상속 : T/F 는 picker
@@ -203,7 +206,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
-    var env4021 = $("#env4021").val() === undefined ? orgEnv4021 : $("#env4021").val(); // 포스-메인여부
+    env4021 = $("#env4021").val() === undefined ? orgEnv4021 : $("#env4021").val(); // 포스-메인여부
 
     if (vEnv1221 !== "" && vEnv1221 !== null && vEnv1221 !== undefined) {
       // DB구성방법 [1221:통합DB]환경 사용시 메인포스가 반드시 존재해야 합니다.
@@ -321,32 +324,49 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope._postJSONSave.withOutPopUp("/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
 
-          // 나머지는 모두 서브포스로 강제 업데이트
-          if (vEnv1221 !== "" && vEnv1221 !== null && vEnv1221 !== undefined) {
-              if (vEnv1221 === "0") {
-                  if (env4021 === "1") {
-                      $scope.updateToSubPos();
-                  }
-              }
-          }
-
-          if (vEnv1221 === "" || vEnv1221 === null || vEnv1221 === undefined || !(vEnv1221 === "0" && env4021 === "1")) {
-              console.log("(재조회) DB구성요소:" + vEnv1221 + " 포스-메인여부:" + env4021);
-              // DB구성요소[1221] 값 재조회
-              $scope.getEnv1221();
-              // 메인포스 재조회
-              $scope.getMainPosList();
-          }
-
-          $scope.$broadcast('loadingPopupInactive');
-          $scope._popMsg(messages["cmm.saveSucc"]);
-          // 재조회 - 포스명칭 selectBox까지 초기화되어, 그부분 없이 바로 포스 환경설정 값 조회 (2020.04.03_이다솜)
-          //var envScope = agrid.getScope('storeEnvCtrl');
-          //$scope.changeEnvGroup(envScope.getEnvGroupCd());
-          $scope.searchPosEnv();
+          // 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경
+          $scope.updateToSmartOrder();
       });
     });
     event.preventDefault();
+  };
+  
+  // 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경
+  $scope.updateToSmartOrder = function(){
+
+      var storeScope    = agrid.getScope('storeManageCtrl');
+      var params = {};
+
+      params.storeCd = storeScope.getSelectedStore().storeCd;
+      params.envstCd = "4048";
+      params.posNo = $scope.getSelectedPosNo();
+
+      $scope._postJSONSave.withOutPopUp( "/store/manage/storeManage/storeManage/updateToSmartOrder.sb", params, function () {
+
+            // 나머지는 모두 서브포스로 강제 업데이트
+            if (vEnv1221 !== "" && vEnv1221 !== null && vEnv1221 !== undefined) {
+                if (vEnv1221 === "0") {
+                    if (env4021 === "1") {
+                        $scope.updateToSubPos();
+                    }
+                }
+            }
+
+            if (vEnv1221 === "" || vEnv1221 === null || vEnv1221 === undefined || !(vEnv1221 === "0" && env4021 === "1")) {
+                console.log("(재조회) DB구성요소:" + vEnv1221 + " 포스-메인여부:" + env4021);
+                // DB구성요소[1221] 값 재조회
+                $scope.getEnv1221();
+                // 메인포스 재조회
+                $scope.getMainPosList();
+            }
+
+            $scope.$broadcast('loadingPopupInactive');
+            $scope._popMsg(messages["cmm.saveSucc"]);
+            // 재조회 - 포스명칭 selectBox까지 초기화되어, 그부분 없이 바로 포스 환경설정 값 조회 (2020.04.03_이다솜)
+            //var envScope = agrid.getScope('storeEnvCtrl');
+            //$scope.changeEnvGroup(envScope.getEnvGroupCd());
+            $scope.searchPosEnv();
+      });
   };
 
   // 서브포스로 변경

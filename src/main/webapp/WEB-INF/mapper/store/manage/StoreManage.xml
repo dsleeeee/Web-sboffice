@@ -8685,4 +8685,22 @@
            AND USE_YN = 'Y'
     </select>
 
+    <!-- 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        PARAM    : storePosEnvVO
+        COMMENTS : 나머지 포스의 스마트오더사용여부를 미사용으로 일괄 변경한다.
+    -->
+    <update id="updateToSmartOrder" parameterType="storePosEnvVO">
+        /* USE : StoreManageMapper.updateToSmartOrder */
+        UPDATE TB_MS_POS_ENVST
+           SET ENVST_VAL = '0',
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId},
+               POS_FG  = 'W'
+         WHERE STORE_CD = #{storeCd}
+           AND ENVST_CD = #{envstCd}
+           AND POS_NO != #{posNo}
+    </update>
+
 </mapper>
