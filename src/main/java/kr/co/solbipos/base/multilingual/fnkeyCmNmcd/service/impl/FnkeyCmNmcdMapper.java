@@ -32,6 +32,9 @@ public interface FnkeyCmNmcdMapper {
     /** 기능키(공통) 탭 영문, 중문, 일문 저장 */
     int saveCmPosFnkey(FnkeyCmNmcdVO fnkeyCmNmcdVO);
 
+    /** 기능키(공통) 탭 영문, 중문, 일문 저장 후, 매장적용 */
+    int applyToStoreFnkey(FnkeyCmNmcdVO fnkeyCmNmcdVO);
+
     /** 기능키(매장) 탭 리스트 조회 */
     List<DefaultMap<String>> getStoreFnkeyList(FnkeyCmNmcdVO fnkeyCmNmcdVO);
 

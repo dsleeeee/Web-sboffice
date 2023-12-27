@@ -61,6 +61,9 @@
     </table>
 
     <div class="updownSet oh mt10">
+        <p class="fl s13 bk mt10 lh20">
+            * 맘스터치 전매장 처리: 관리자화면 [기초관리] - [다국어관리] - [다국어관리(기능키/공통코드)] 에서 변경하여 주십시오.
+        </p>
         <%-- 저장 --%>
         <button class="btn_skyblue" ng-click="saveRow()" >
             <s:message code="cmm.save" />

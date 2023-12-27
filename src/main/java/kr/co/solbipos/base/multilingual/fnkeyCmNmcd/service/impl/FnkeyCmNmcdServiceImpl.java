@@ -60,6 +60,7 @@ public class FnkeyCmNmcdServiceImpl implements FnkeyCmNmcdService {
     public int saveCmPosFnkey(FnkeyCmNmcdVO[] fnkeyCmNmcdVOs, SessionInfoVO sessionInfoVO){
         int result = 0;
         String dt = currentDateTimeString();
+        String strFnkeyNo = "";
 
         for (FnkeyCmNmcdVO fnkeyCmNmcdVO : fnkeyCmNmcdVOs) {
 
@@ -69,9 +70,24 @@ public class FnkeyCmNmcdServiceImpl implements FnkeyCmNmcdService {
             fnkeyCmNmcdVO.setModId(sessionInfoVO.getUserId());
 
             result += fnkeyCmNmcdMapper.saveCmPosFnkey(fnkeyCmNmcdVO);
+
+            // 수정한 기능키 번호 갖고 있기
+            strFnkeyNo += "," + fnkeyCmNmcdVO.getFnkeyNo();
         }
 
         if (result == fnkeyCmNmcdVOs.length) {
+
+            if(!StringUtil.getOrBlank(strFnkeyNo).equals("")) {
+
+                FnkeyCmNmcdVO fnkeyCmNmcdVO = new FnkeyCmNmcdVO();
+                fnkeyCmNmcdVO.setArrFnkeyNo(strFnkeyNo.substring(1).split(","));
+                fnkeyCmNmcdVO.setModDt(dt);
+                fnkeyCmNmcdVO.setModId(sessionInfoVO.getUserId());
+
+                // 매장적용([H0393] 맘스터치 만 적용
+                fnkeyCmNmcdMapper.applyToStoreFnkey(fnkeyCmNmcdVO);
+            }
+
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
