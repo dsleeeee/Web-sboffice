@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : posUtilLog.js
- * 설  명 : 매출점검 JavaScript
+ * 설  명 : 포스유틸사용로그 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -13,6 +13,9 @@
  */
 var app = agrid.getApp();
 
+/**
+ *  포스유틸사용로그 그리드 생성
+ */
 app.controller('posUtilLogCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     angular.extend(this, new RootController('posUtilLogCtrl', $scope, $http, false));
@@ -45,7 +48,7 @@ app.controller('posUtilLogCtrl', ['$scope', '$http', '$timeout', function ($scop
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sys/admin/posUtilLog/posUtilLog/getPosUtilLogList.sb", params, function() {});
-    }
+    };
 
     // 엑셀다운로드 -->
     $scope.excelDownload = function(){
@@ -61,10 +64,9 @@ app.controller('posUtilLogCtrl', ['$scope', '$http', '$timeout', function ($scop
                     includeColumnHeaders: 	true,
                     includeCellStyles	: 	false,
                     includeColumns      :	function (column) {
-                        // return column.visible;
-                        return column.binding != 'gChk';
+                        return column.visible;
                     }
-                },messages["posUtilLog.posUtilLog"]+ '_'+ messages["cmm.search.date"] + wijmo.Globalize.format($scope.startDate.value, 'yyyy-MM-dd') +'_' + wijmo.Globalize.format($scope.endDate.value, 'yyyy-MM-dd') + ')'+'_'+ getCurDateTime() +'.xlsx',
+                },messages["posUtilLog.posUtilLog"]+ '_' + getCurDateTime() +'.xlsx',
                 function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기

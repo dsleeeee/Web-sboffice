@@ -3,7 +3,7 @@ package kr.co.solbipos.sys.admin.posUtilLog.service;
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : PosUtilLogVo.java
+ * @Class Name : PosUtilLogVO.java
  * @Description : 시스템관리 > 관리자기능 > 포스유틸사용로그
  * @Modification Information
  * @
@@ -18,6 +18,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  * @Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 public class PosUtilLogVO extends PageVO {
+
     private static final long serialVersionUID = 2097268746718714031L;
 
     /** 일자,로그전송일시 */
@@ -30,9 +31,9 @@ public class PosUtilLogVO extends PageVO {
     private String storeCd;
     /** 매장명 */
     private String storeNm;
-    /** 처리유저명*/
+    /** 처리유저명 */
     private String userNm;
-    /** 로그내용*/
+    /** 로그내용 */
     private String logMsg;
 
     public String getSaleDate() { return srchDate; }
@@ -59,8 +60,7 @@ public class PosUtilLogVO extends PageVO {
 
     public void setUserNm(String userNm) { this.userNm = userNm; }
 
-    public String getUTIL_INS_MSG() { return logMsg; }
+    public String getLogMsg() { return logMsg; }
 
-    public void setUTIL_INS_MSG(String UTIL_INS_MSG) { this.logMsg = UTIL_INS_MSG; }
-
+    public void setLogMsg(String logMsg) { this.logMsg = logMsg; }
 }

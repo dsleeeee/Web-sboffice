@@ -93,14 +93,6 @@
         </div>
     </div>
 
-    <%-- 페이지 리스트 --%>
-    <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="posUtilLogCtrlPager" data-size="10">
-        </ul>
-    </div>
-    <%--//페이지 리스트--%>
-
 </div>
 
 <script type="text/javascript" src="/resource/solbipos/js/sys/admin/posUtilLog/posUtilLog.js?ver=20231221.01" charset="utf-8"></script>
