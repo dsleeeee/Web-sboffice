@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DaySaleMoms.xml
+    일별매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.12.27     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.moms.daySaleMoms.service.impl.DaySaleMomsMapper">
+
+    <!-- 일별매출 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDaySaleMomsList" parameterType="DaySaleMomsVO" resultType="DefaultMap">
+        /* DaySaleMomsMapper.getDaySaleMomsList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        COUNT(DISTINCT tsdtd.STORE_CD) AS STORE_CNT,
+        SUM(tsdtd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tsdtd.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+        SUM(tsdtd.REAL_SALE_CNT) AS TOT_BILL_CNT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS STIN_TOT_SALE_AMT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS STIN_REAL_SALE_AMT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS STIN_BILL_CNT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS DLVR_TOT_SALE_AMT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS DLVR_BILL_CNT,
+        SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
+        SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
+        SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS PACK_BILL_CNT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_SL_DAILY_TOTAL_DLVR tsdtd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdtd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        AND tms.STORE_CD = tsdtd.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        GROUP BY tsdtd.SALE_DATE
+        ORDER BY tsdtd.SALE_DATE
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 일별매출 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDaySaleMomsExcelList" parameterType="DaySaleMomsVO" resultType="DefaultMap">
+        /* DaySaleMomsMapper.getDaySaleMomsExcelList */
+        SELECT
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        COUNT(DISTINCT tsdtd.STORE_CD) AS STORE_CNT,
+        SUM(tsdtd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tsdtd.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+        SUM(tsdtd.REAL_SALE_CNT) AS TOT_BILL_CNT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS STIN_TOT_SALE_AMT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS STIN_REAL_SALE_AMT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS STIN_BILL_CNT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS DLVR_TOT_SALE_AMT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+        SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS DLVR_BILL_CNT,
+        SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
+        SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
+        SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS PACK_BILL_CNT
+        FROM TB_SL_DAILY_TOTAL_DLVR tsdtd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdtd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        AND tms.STORE_CD = tsdtd.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        GROUP BY tsdtd.SALE_DATE
+        ORDER BY tsdtd.SALE_DATE
+    </select>
+
+</mapper>

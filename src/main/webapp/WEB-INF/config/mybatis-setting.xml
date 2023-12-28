@@ -1064,6 +1064,8 @@
     <typeAlias alias="prodSalePmixMomsVO" type="kr.co.solbipos.sale.moms.prodSalePmixMoms.service.ProdSalePmixMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 상품매출(P.MIX 매장) -->
     <typeAlias alias="prodSalePmixStoreMomsVO" type="kr.co.solbipos.sale.moms.prodSalePmixStoreMoms.service.ProdSalePmixStoreMomsVO"/>
+    <!-- 맘스터치 > 간소화화면 > 일별매출 -->
+    <typeAlias alias="daySaleMomsVO" type="kr.co.solbipos.sale.moms.daySaleMoms.service.DaySaleMomsVO"/>
 
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
