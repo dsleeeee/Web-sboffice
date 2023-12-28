@@ -3,7 +3,7 @@ package kr.co.solbipos.sale.moms.prodSaleDayStoreMoms.service;
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : ProdSaleDayStoreMomsController.java
+ * @Class Name : ProdSaleDayStoreMomsVO.java
  * @Description : 맘스터치 > 간소화화면 > 상품매출일별(매장)
  * @Modification Information
  * @

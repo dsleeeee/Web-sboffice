@@ -12,13 +12,8 @@ import kr.co.solbipos.sale.moms.prodSaleDayStoreMoms.service.ProdSaleDayStoreMom
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static kr.co.common.utils.DateUtil.currentDateString;
 
 /**
  * @Class Name : ProdSaleDayStoreMomsServiceImpl.java
