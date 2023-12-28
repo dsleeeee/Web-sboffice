@@ -12,14 +12,10 @@ import kr.co.solbipos.sale.moms.prodSalePmixStoreMoms.service.ProdSalePmixStoreM
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
-import static kr.co.common.utils.DateUtil.currentDateString;
 
 /**
  * @Class Name : ProdSalePmixStoreMomsServiceImpl.java

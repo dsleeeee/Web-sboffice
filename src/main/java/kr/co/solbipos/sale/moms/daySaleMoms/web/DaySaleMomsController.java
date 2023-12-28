@@ -1,4 +1,4 @@
-package kr.co.solbipos.sale.moms.prodSaleDayBillMoms.web;
+package kr.co.solbipos.sale.moms.daySaleMoms.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
@@ -11,8 +11,8 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
-import kr.co.solbipos.sale.moms.prodSaleDayBillMoms.service.ProdSaleDayBillMomsService;
-import kr.co.solbipos.sale.moms.prodSaleDayBillMoms.service.ProdSaleDayBillMomsVO;
+import kr.co.solbipos.sale.moms.daySaleMoms.service.DaySaleMomsService;
+import kr.co.solbipos.sale.moms.daySaleMoms.service.DaySaleMomsVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,26 +31,26 @@ import java.util.List;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
- * @Class Name : ProdSaleDayBillMomsController.java
- * @Description : 맘스터치 > 간소화화면 > 상품매출일별(영수)
+ * @Class Name : DaySaleMomsController.java
+ * @Description : 맘스터치 > 간소화화면 > 일별매출
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2023.12.13  김설아      최초생성
+ * @ 2023.12.27  김설아      최초생성
  *
  * @author 솔비포스 개발본부 WEB개발팀 김설아
- * @since 2023.12.13
+ * @since 2023.12.27
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping("/sale/moms/prodSaleDayBillMoms")
-public class ProdSaleDayBillMomsController {
+@RequestMapping("/sale/moms/daySaleMoms")
+public class DaySaleMomsController {
 
     private final SessionService sessionService;
-    private final ProdSaleDayBillMomsService prodSaleDayBillMomsService;
+    private final DaySaleMomsService daySaleMomsService;
     private final CmmCodeUtil cmmCodeUtil;
     private final DayProdService dayProdService;
     private final CmmEnvUtil cmmEnvUtil;
@@ -59,9 +59,9 @@ public class ProdSaleDayBillMomsController {
      * Constructor Injection
      */
     @Autowired
-    public ProdSaleDayBillMomsController(SessionService sessionService, ProdSaleDayBillMomsService prodSaleDayBillMomsService, CmmCodeUtil cmmCodeUtil, DayProdService dayProdService, CmmEnvUtil cmmEnvUtil) {
+    public DaySaleMomsController(SessionService sessionService, DaySaleMomsService daySaleMomsService, CmmCodeUtil cmmCodeUtil, DayProdService dayProdService, CmmEnvUtil cmmEnvUtil) {
         this.sessionService = sessionService;
-        this.prodSaleDayBillMomsService = prodSaleDayBillMomsService;
+        this.daySaleMomsService = daySaleMomsService;
         this.cmmCodeUtil = cmmCodeUtil;
         this.dayProdService = dayProdService;
         this.cmmEnvUtil = cmmEnvUtil;
@@ -74,8 +74,8 @@ public class ProdSaleDayBillMomsController {
      * @param response
      * @param model
      */
-    @RequestMapping(value = "/prodSaleDayBillMoms/list.sb", method = RequestMethod.GET)
-    public String prodSaleDayBillMomsView(HttpServletRequest request, HttpServletResponse response, Model model) {
+    @RequestMapping(value = "/daySaleMoms/list.sb", method = RequestMethod.GET)
+    public String daySaleMomsView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -210,69 +210,52 @@ public class ProdSaleDayBillMomsController {
         }
         model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
 
-        return "sale/moms/prodSaleDayBillMoms/prodSaleDayBillMoms";
+        return "sale/moms/daySaleMoms/daySaleMoms";
     }
 
     /**
-     * 상품매출일별(영수) - 조회
+     * 일별매출 - 조회
      *
-     * @param prodSaleDayBillMomsVO
+     * @param daySaleMomsVO
      * @param request
      * @param response
      * @param model
      * @return  Object
      * @author  김설아
-     * @since   2023. 12. 13.
+     * @since   2023. 12. 27.
      */
-    @RequestMapping(value = "/prodSaleDayBillMoms/getProdSaleDayBillMomsList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/daySaleMoms/getDaySaleMomsList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdSaleDayBillMomsList(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO, HttpServletRequest request,
+    public Result getDaySaleMomsList(DaySaleMomsVO daySaleMomsVO, HttpServletRequest request,
                                               HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = prodSaleDayBillMomsService.getProdSaleDayBillMomsList(prodSaleDayBillMomsVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = daySaleMomsService.getDaySaleMomsList(daySaleMomsVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, result, prodSaleDayBillMomsVO);
+        return ReturnUtil.returnListJson(Status.OK, result, daySaleMomsVO);
     }
 
     /**
-     * 상품매출일별(영수) - 엑셀다운로드 조회
+     * 일별매출 - 엑셀다운로드 조회
      *
-     * @param prodSaleDayBillMomsVO
+     * @param daySaleMomsVO
      * @param request
      * @param response
      * @param model
      * @return  Object
      * @author  김설아
-     * @since   2023. 12. 13.
+     * @since   2023. 12. 27.
      */
-    @RequestMapping(value = "/prodSaleDayBillMoms/getProdSaleDayBillMomsExcelList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/daySaleMoms/getDaySaleMomsExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdSaleDayBillMomsExcelList(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO, HttpServletRequest request,
+    public Result getDaySaleMomsExcelList(DaySaleMomsVO daySaleMomsVO, HttpServletRequest request,
                                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<Object>> result = prodSaleDayBillMomsService.getProdSaleDayBillMomsExcelList(prodSaleDayBillMomsVO, sessionInfoVO);
+        List<DefaultMap<Object>> result = daySaleMomsService.getDaySaleMomsExcelList(daySaleMomsVO, sessionInfoVO);
 
-        return ReturnUtil.returnListJson(Status.OK, result, prodSaleDayBillMomsVO);
-    }
-
-    /**
-     * 기간선택 두 날짜 사이 모든날짜 구하기
-     * @param request
-     * @param response
-     * @param model
-     * @param prodSaleDayBillMomsVO
-     * @return
-     */
-    @RequestMapping(value = "/prodSaleDayBillMoms/getDateDiff.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getDateDiff(HttpServletRequest request, HttpServletResponse response, Model model, ProdSaleDayBillMomsVO prodSaleDayBillMomsVO) {
-
-        List<HashMap<String, String>> list = prodSaleDayBillMomsService.getDateDiff(prodSaleDayBillMomsVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list);
+        return ReturnUtil.returnListJson(Status.OK, result, daySaleMomsVO);
     }
 }

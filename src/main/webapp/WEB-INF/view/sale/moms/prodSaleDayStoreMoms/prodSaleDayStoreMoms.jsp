@@ -13,20 +13,18 @@
         <%--<div class="searchBar flddUnfld">--%>
         <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
-            <c:if test="${sessionScope.sessionInfo.userId == 'h0393'}">
-                <%-- 조회 --%>
-                <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                    <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodSaleDayStoreMomsCtrl', 1)">
-                        <s:message code="cmm.search"/>
+            <%-- 조회 --%>
+            <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodSaleDayStoreMomsCtrl', 1)">
+                    <s:message code="cmm.search"/>
+                </button>
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                    <%-- 확장조회 --%>
+                    <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                        <s:message code="cmm.search.addShow" />
                     </button>
-                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                        <%-- 확장조회 --%>
-                        <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
-                            <s:message code="cmm.search.addShow" />
-                        </button>
-                    </c:if>
-                </div>
-            </c:if>
+                </c:if>
+            </div>
         </div>
         <table class="searchTbl">
             <colgroup>
@@ -50,7 +48,7 @@
                 <th><s:message code="cmm.prodClass" /></th>
                 <td>
                     <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left;"
-                           placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                           placeholder="<s:message code="cmm.prodClass" /> 선택" readonly/>
                     <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                     <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                 </td>
@@ -309,16 +307,14 @@
             </tbody>
         </table>
 
-        <c:if test="${sessionScope.sessionInfo.userId == 'h0393'}">
-            <div class="mt10 oh sb-select dkbr">
-                <%-- 조회조건 엑셀다운로드 --%>
-                <%--<button class="btn_skyblue ml5 fr" ng-click="excelDownload('1')"><s:message code="cmm.excel.downCondition"/></button>--%>
-                <%-- 분할 엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
-                <%-- 현재화면 엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
-            </div>
-        </c:if>
+        <div class="mt10 oh sb-select dkbr">
+            <%-- 조회조건 엑셀다운로드 --%>
+            <%--<button class="btn_skyblue ml5 fr" ng-click="excelDownload('1')"><s:message code="cmm.excel.downCondition"/></button>--%>
+            <%-- 분할 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
+            <%-- 현재화면 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload2()"><s:message code="cmm.excel.downCurrent"/></button>
+        </div>
 
         <div class="w100 mt10">
             <div class="wj-gridWrap" style="height: 370px; overflow-x: hidden; overflow-y: hidden;">
@@ -339,9 +335,9 @@
                     <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleQty"/>" binding="saleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleQty"/>" binding="saleQty" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.totSaleAmt"/>" binding="totSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.realSaleAmt"/>" binding="realSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -374,9 +370,9 @@
                 <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleQty"/>" binding="saleQty" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.totSaleAmt"/>" binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleQty"/>" binding="saleQty" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.totSaleAmt"/>" binding="totSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.realSaleAmt"/>" binding="realSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>

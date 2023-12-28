@@ -567,7 +567,7 @@ app.controller('prodSalePmixStoreMomsCtrl', ['$scope', '$http', '$timeout', func
                     return column.visible;
                 }
             },
-                "상품매출(P.MIX 매장)" + '_' +  wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
+                "상품매출(P.MIX 매장)_" + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

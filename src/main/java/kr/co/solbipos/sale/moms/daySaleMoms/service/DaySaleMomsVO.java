@@ -1,23 +1,23 @@
-package kr.co.solbipos.sale.moms.prodSaleDayStoreMoms.service;
+package kr.co.solbipos.sale.moms.daySaleMoms.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : ProdSaleDayStoreMomsVO.java
- * @Description : 맘스터치 > 간소화화면 > 상품매출일별(매장)
+ * @Class Name : DaySaleMomsVO.java
+ * @Description : 맘스터치 > 간소화화면 > 일별매출
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2023.12.07  김설아      최초생성
+ * @ 2023.12.27  김설아      최초생성
  *
  * @author 솔비포스 개발본부 WEB개발팀 김설아
- * @since 2023.12.07
+ * @since 2023.12.27
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class ProdSaleDayStoreMomsVO extends PageVO {
+public class DaySaleMomsVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
@@ -78,29 +78,8 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     /** 매장브랜드코드 */
     private String storeHqBrandCd;
 
-    /** 상품코드 */
-    private String prodCd;
-
-    /** 상품명 */
-    private String prodNm;
-
-    /** 상품분류 */
-    private String prodClassCd;
-
     /** 사용자 아이디 */
     private String userId;
-
-    /** 상품브랜드코드 */
-    private String prodHqBrandCd;
-
-    /** 상품코드 */
-    private String[] prodCdList;
-
-    /** 상품코드 */
-    private String prodCds;
-
-    /** 일자표시옵션 */
-    private String dayOption;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -226,59 +205,9 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
         this.storeHqBrandCd = storeHqBrandCd;
     }
 
-    public String getProdCd() {
-        return prodCd;
-    }
-
-    public void setProdCd(String prodCd) {
-        this.prodCd = prodCd;
-    }
-
-    public String getProdNm() {
-        return prodNm;
-    }
-
-    public void setProdNm(String prodNm) {
-        this.prodNm = prodNm;
-    }
-
-    public String getProdClassCd() {
-        return prodClassCd;
-    }
-
-    public void setProdClassCd(String prodClassCd) {
-        this.prodClassCd = prodClassCd;
-    }
-
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) { this.userId = userId; }
-
-    public String getProdHqBrandCd() {
-        return prodHqBrandCd;
-    }
-
-    public void setProdHqBrandCd(String prodHqBrandCd) { this.prodHqBrandCd = prodHqBrandCd; }
-
-    public String[] getProdCdList() {
-        return prodCdList;
-    }
-
-    public void setProdCdList(String[] prodCdList) {
-        this.prodCdList = prodCdList;
-    }
-
-    public String getProdCds() {
-        return prodCds;
-    }
-
-    public void setProdCds(String prodCds) { this.prodCds = prodCds; }
-
-    public String getDayOption() {
-        return dayOption;
-    }
-
-    public void setDayOption(String dayOption) { this.dayOption = dayOption; }
 }
