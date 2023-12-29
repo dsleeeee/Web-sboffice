@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -585,4 +586,67 @@ public class SalePriceController {
 
         return returnJson(Status.OK, result);
     }
+    /**
+     * 상품별 판매가관리 탭 - 엑셀조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   salePriceVO
+     * @return  Object
+     * @author  김유승
+     * @since   2023.12.27
+     */
+    @RequestMapping(value = "/salePrice/getProdSaleExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSaleExcelList(HttpServletRequest request, HttpServletResponse response, Model model, SalePriceVO salePriceVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = salePriceService.getProdSaleExcelList(salePriceVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, salePriceVO);
+    }
+
+    /**
+     * 매장별 판매가관리 탭 - 엑셀조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   salePriceVO
+     * @return  String
+     * @author  김유승
+     * @since   2023.12.27
+     */
+    @RequestMapping(value = "/salePrice/getStoreSaleExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreSaleExcelList(HttpServletRequest request, HttpServletResponse response, Model model, SalePriceVO salePriceVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = salePriceService.getStoreSaleExcelList(salePriceVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, salePriceVO);
+    }
+
+    /***
+     * 본사 판매가관리
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   salePriceVO
+     * @return  String
+     * @author  김유승
+     * @since   2023. 12. 29.
+     */
+    @RequestMapping(value = "/hqSalePrice/getHqSaleExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSaleExcelList(SalePriceVO salePriceVO, HttpServletResponse response, Model model, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = salePriceService.getHqSaleExcelList(salePriceVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, salePriceVO);
+    }
+
 }
