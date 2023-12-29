@@ -12,6 +12,11 @@
             <h3 class="" style="line-height:50px;"><s:message code="kioskKeyMap.tuClsTypeNm"/></h3>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
+        <div class="mt10 mr30 tr">
+            <button class="btn_blue" ng-click="excelDownload()">
+                <s:message code="cmm.excel.down" />
+            </button>
+        </div>
         <div class="wj-dialog-body">
             <div class="wj-gridWrap" style="height:400px;">
                 <wj-flex-grid
@@ -35,4 +40,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.js?ver=20221108.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.js?ver=20221228.01" charset="utf-8"></script>

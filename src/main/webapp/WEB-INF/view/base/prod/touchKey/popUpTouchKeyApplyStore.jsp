@@ -251,6 +251,9 @@
                 <button class="btn_blue" id="btnSrchApplyStore" ng-click="_broadcast('popUpApplyStoreCtrl')">
                     <s:message code="touchKey.layer.srchBtn" />
                 </button>
+                <button class="btn_blue" ng-click="excelDownload()">
+                    <s:message code="cmm.excel.down" />
+                </button>
             </div>
 
             <div class="wj-dialog-content" style="height:393px;">
@@ -315,4 +318,4 @@
   var clsFgComboData = ${ccu.getCommCode("001")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyApplyStore.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyApplyStore.js?ver=20231228.01" charset="utf-8"></script>

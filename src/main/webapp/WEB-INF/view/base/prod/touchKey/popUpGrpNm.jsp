@@ -12,8 +12,13 @@
             <h3 class="" style="line-height:50px;"><s:message code="touchKey.grpNm"/></h3>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
+        <div class="mt10 mr30 tr">
+            <button class="btn_blue" ng-click="excelDownload()">
+                <s:message code="cmm.excel.down" />
+            </button>
+        </div>
         <div class="wj-dialog-body">
-            <div class="wj-gridWrap" style="height:400px;">
+            <div class="wj-gridWrap" style="height:400px; padding-top:10px;">
                 <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"
@@ -34,4 +39,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpGrpNm.js?ver=20221107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpGrpNm.js?ver=20231228.01" charset="utf-8"></script>

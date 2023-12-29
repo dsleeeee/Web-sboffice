@@ -11,7 +11,12 @@
         </div>
         <div class="wj-dialog-body" ng-controller="popUpNoTouchKeyCtrl">
             <span class="s14 lh20 fl mb5"><s:message code="touchKey.noTouchKeyMsg"/></span>
-            <div class="wj-dialog-content" style="height:400px;">
+            <div class="mt10 tr">
+                <button class="btn_blue" ng-click="excelDownload()">
+                    <s:message code="cmm.excel.down" />
+                </button>
+            </div>
+            <div class="wj-dialog-content mt10" style="height:400px;">
                 <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"
@@ -38,4 +43,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpNoTouchKey.js?ver=20190114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpNoTouchKey.js?ver=20231228.01" charset="utf-8"></script>

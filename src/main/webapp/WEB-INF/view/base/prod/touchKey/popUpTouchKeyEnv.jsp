@@ -255,7 +255,12 @@
                         <s:message code="cmm.search.addShow" />
                     </button>
                 </c:if>
-                <button class="btn_blue" id="btnSearchPos" ng-click="searchPos()"><s:message code="cmm.search" /></button>
+                <button class="btn_blue mr5" id="btnSearchPos" ng-click="searchPos()">
+                    <s:message code="cmm.search" />
+                </button>
+                <button class="btn_blue" ng-click="excelDownload()">
+                    <s:message code="cmm.excel.down" />
+                </button>
             </div>
 
             <%-- 그리드 영역 --%>
@@ -330,4 +335,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20231228.01" charset="utf-8"></script>
