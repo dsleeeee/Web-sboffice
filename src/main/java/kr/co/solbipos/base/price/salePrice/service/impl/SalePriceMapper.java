@@ -85,4 +85,14 @@ public interface SalePriceMapper {
 
     /** 매장코드 존재여부 체크 */
     int getStoreCdChk(SalePriceVO salePriceVO);
+
+    /** 매장판매가관리 상품별 판매가관리 탭 - 엑셀조회 */
+    List<DefaultMap<Object>> getProdSaleExcelList(SalePriceVO salePriceVO);
+
+    /** 매장판매가관리 매장별 판매가관리 탭 - 엑셀조회 */
+    List<DefaultMap<String>> getStoreSaleExcelList(SalePriceVO salePriceVO);
+
+    /** 본사판매가관리 본사판매가관리 탭 - 엑셀조회 */
+    List<DefaultMap<String>> getHqSaleExcelList(SalePriceVO salePriceVO);
+
 }

@@ -65,4 +65,14 @@ public interface SalePriceService {
     /** 매장판매가관리 엑셀업로드 탭 - 판매가 저장 */
     int getStoreSalePriceExcelUploadSave(SalePriceVO[] salePriceVOs, SessionInfoVO sessionInfoVO);
 
+    /** 매장판매가관리 상품별 판매가관리 탭 - 엑셀조회 */
+    List<DefaultMap<Object>> getProdSaleExcelList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장판매가관리 매장별 판매가관리 탭 - 엑셀조회 */
+    List<DefaultMap<String>> getStoreSaleExcelList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
+
+    /** 본사판매가관리 본사판매가관리 탭 - 엑셀조회 */
+    List<DefaultMap<String>> getHqSaleExcelList(SalePriceVO salePriceVO, SessionInfoVO sessionInfoVO);
+
+
 }

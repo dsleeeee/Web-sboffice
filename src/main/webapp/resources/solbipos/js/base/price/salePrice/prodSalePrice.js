@@ -42,20 +42,25 @@ var packSaleAmtOptionFg = [
  */
 app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http) {
 
-  // 상품정보
-  $scope.prodInfo;
-  $scope.setProdInfo = function(data){
-    $scope.prodInfo = data;
-  };
-  $scope.getProdInfo = function(){
-    return $scope.prodInfo;
-  };
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('prodSalePriceCtrl', $scope, $http, false));
 
-  // 조회조건 콤보박스 데이터 Set
-  $scope._setComboData("saleAmtOption", saleAmtOptionFg);
-  $scope._setComboData("stinSaleUprcOption", stinSaleAmtOptionFg);
-  $scope._setComboData("dlvrSaleUprcOption", dlvrSaleAmtOptionFg);
-  $scope._setComboData("packSaleUprcOption", packSaleAmtOptionFg);
+    // 상품정보
+    $scope.prodInfo;
+    $scope.setProdInfo = function(data){
+        $scope.prodInfo = data;
+    };
+    $scope.getProdInfo = function(){
+        return $scope.prodInfo;
+    };
+
+
+    // 조회조건 콤보박스 데이터 Set
+    $scope._setComboData("saleAmtOption", saleAmtOptionFg);
+    $scope._setComboData("stinSaleUprcOption", stinSaleAmtOptionFg);
+    $scope._setComboData("dlvrSaleUprcOption", dlvrSaleAmtOptionFg);
+    $scope._setComboData("packSaleUprcOption", packSaleAmtOptionFg);
+
 
     // 브랜드 콤보박스 셋팅
     $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
@@ -734,4 +739,112 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
             $("#tblSearchAddShow").hide();
         }
     };
+
+    // 조회조건 엑셀다운로드
+    $scope.excelDownload = function () {
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        // 파라미터
+        var params = {};
+        params.prodCd = $("#prodCd").val();
+        params.storeCd = $("#storeCd").val();
+        params.momsTeam = $scope.momsTeam;
+        params.momsAcShop = $scope.momsAcShop;
+        params.momsAreaFg = $scope.momsAreaFg;
+        params.momsCommercial = $scope.momsCommercial;
+        params.momsShopType = $scope.momsShopType;
+        params.momsStoreManageType = $scope.momsStoreManageType;
+        params.branchCd = $scope.branchCd;
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+            // 선택한 매장브랜드가 있을 때
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+            // 선택한 매장브랜드가 없을 때('전체' 일때)
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+            params.momsStoreFg01 = $scope.momsStoreFg01;
+        }
+
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('prodSalePriceExcelCtrl', params);
+        });
+    };
+
+}]);
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('prodSalePriceExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('prodSalePriceExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // add the new GroupRow to the grid's 'columnFooters' panel
+        s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+        // add a sigma to the header to show that this is a summary row
+        s.bottomLeftCells.setCellData(0, 0, '합계');
+    };
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("prodSalePriceExcelCtrl", function (event, data) {
+        $scope.searchExcelList(data);
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/base/price/salePrice/salePrice/getProdSaleExcelList.sb", params, function() {
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            // <-- 그리드 visible -->
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridExcelList");
+            var columns = grid.columns;
+
+            // 컬럼 총갯수
+            var columnsCnt = columns.length;
+
+            for (var i = 0; i < columnsCnt; i++) {
+                columns[i].visible = true;
+            }
+
+            // <-- //그리드 visible -->
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        //return column.visible;
+                        return column.binding != 'gChk';
+                    }
+                }, messages["salePrice.prodSalePrice"] + '_' + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
+
 }]);
