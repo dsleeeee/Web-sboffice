@@ -87,7 +87,7 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
         dataItem.yogiyoRealSaleAmt = messages["daySaleStoreMoms.yogiyo"];
         dataItem.yogiyoBillCnt = messages["daySaleStoreMoms.yogiyo"];
         dataItem.coupangeatsTotSaleAmt = messages["daySaleStoreMoms.coupangeats"];
-        dataItem.coupangeatsRrealSaleAmt = messages["daySaleStoreMoms.coupangeats"];
+        dataItem.coupangeatsRealSaleAmt = messages["daySaleStoreMoms.coupangeats"];
         dataItem.coupangeatsBillCnt = messages["daySaleStoreMoms.coupangeats"];
         dataItem.etcTotSaleAmt = messages["daySaleStoreMoms.etc"];
         dataItem.etcRealSaleAmt = messages["daySaleStoreMoms.etc"];
@@ -361,7 +361,7 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
         dataItem.yogiyoRealSaleAmt = messages["daySaleStoreMoms.yogiyo"];
         dataItem.yogiyoBillCnt = messages["daySaleStoreMoms.yogiyo"];
         dataItem.coupangeatsTotSaleAmt = messages["daySaleStoreMoms.coupangeats"];
-        dataItem.coupangeatsRrealSaleAmt = messages["daySaleStoreMoms.coupangeats"];
+        dataItem.coupangeatsRealSaleAmt = messages["daySaleStoreMoms.coupangeats"];
         dataItem.coupangeatsBillCnt = messages["daySaleStoreMoms.coupangeats"];
         dataItem.etcTotSaleAmt = messages["daySaleStoreMoms.etc"];
         dataItem.etcRealSaleAmt = messages["daySaleStoreMoms.etc"];

@@ -45,7 +45,7 @@
         tsdto.REAL_SALE_AMT5 AS COUPANGEATS_REAL_SALE_AMT,
         tsdto.BILL_CNT5 AS COUPANGEATS_BILL_CNT,
         tsdto.TOT_SALE_AMT0 AS ETC_TOT_SALE_AMT,
-        tsdto.REAL_SALE_AMT0 AS REAL_SALE_AMT,
+        tsdto.REAL_SALE_AMT0 AS ETC_REAL_SALE_AMT,
         tsdto.BILL_CNT0 AS ETC_BILL_CNT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
@@ -176,7 +176,7 @@
         tsdto.REAL_SALE_AMT5 AS COUPANGEATS_REAL_SALE_AMT,
         tsdto.BILL_CNT5 AS COUPANGEATS_BILL_CNT,
         tsdto.TOT_SALE_AMT0 AS ETC_TOT_SALE_AMT,
-        tsdto.REAL_SALE_AMT0 AS REAL_SALE_AMT,
+        tsdto.REAL_SALE_AMT0 AS ETC_REAL_SALE_AMT,
         tsdto.BILL_CNT0 AS ETC_BILL_CNT
         FROM
         (

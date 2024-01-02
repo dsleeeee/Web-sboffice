@@ -236,7 +236,7 @@
 
         <div class="mt10 oh sb-select dkbr">
             <%-- 조회조건 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownload('1')"><s:message code="cmm.excel.downCondition"/></button>
+            <!--<button class="btn_skyblue ml5 fr" ng-click="excelDownload('1')"><s:message code="cmm.excel.downCondition"/></button>-->
             <%-- 분할 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload('2')"><s:message code="cmm.excel.downDivision"/></button>
             <%-- 현재화면 엑셀다운로드 --%>
@@ -278,7 +278,7 @@
                     <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.realSaleAmt"/>" binding="yogiyoRealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.billCnt"/>" binding="yogiyoBillCnt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.totSaleAmt"/>" binding="coupangeatsTotSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.realSaleAmt"/>" binding="coupangeatsRrealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.realSaleAmt"/>" binding="coupangeatsRealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.billCnt"/>" binding="coupangeatsBillCnt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.totSaleAmt"/>" binding="etcTotSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.realSaleAmt"/>" binding="etcRealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -331,7 +331,7 @@
                 <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.realSaleAmt"/>" binding="yogiyoRealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.billCnt"/>" binding="yogiyoBillCnt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.totSaleAmt"/>" binding="coupangeatsTotSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.realSaleAmt"/>" binding="coupangeatsRrealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.realSaleAmt"/>" binding="coupangeatsRealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.billCnt"/>" binding="coupangeatsBillCnt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.totSaleAmt"/>" binding="etcTotSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="daySaleStoreMoms.realSaleAmt"/>" binding="etcRealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -359,4 +359,4 @@
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/daySaleStoreMoms/daySaleStoreMoms.js?ver=20231229.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/daySaleStoreMoms/daySaleStoreMoms.js?ver=20240102.01" charset="utf-8"></script>
