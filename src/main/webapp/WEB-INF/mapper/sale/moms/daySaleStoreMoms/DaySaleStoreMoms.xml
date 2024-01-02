@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DaySaleStoreMoms.xml
+    일별매출(매장)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2023.12.29     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.moms.daySaleStoreMoms.service.impl.DaySaleStoreMomsMapper">
+
+    <!-- 일별매출(매장) - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDaySaleStoreMomsList" parameterType="DaySaleStoreMomsVO" resultType="DefaultMap">
+        /* DaySaleStoreMomsMapper.getDaySaleStoreMomsList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdtd.STORE_CD,
+        tms.STORE_NM,
+        tsdtd.TOT_SALE_AMT,
+        tsdtd.TOT_REAL_SALE_AMT,
+        tsdtd.TOT_BILL_CNT,
+        tsdtd.STIN_TOT_SALE_AMT,
+        tsdtd.STIN_REAL_SALE_AMT,
+        tsdtd.STIN_BILL_CNT,
+        tsdtd.DLVR_TOT_SALE_AMT,
+        tsdtd.DLVR_REAL_SALE_AMT,
+        tsdtd.DLVR_BILL_CNT,
+        tsdtd.PACK_TOT_SALE_AMT,
+        tsdtd.PACK_REAL_SALE_AMT,
+        tsdtd.PACK_BILL_CNT,
+        tsdto.TOT_SALE_AMT3 AS BAEMIN_TOT_SALE_AMT,
+        tsdto.REAL_SALE_AMT3 AS BAEMIN_REAL_SALE_AMT,
+        tsdto.BILL_CNT3 AS BAEMIN_BILL_CNT,
+        tsdto.TOT_SALE_AMT4 AS YOGIYO_TOT_SALE_AMT,
+        tsdto.REAL_SALE_AMT4 AS YOGIYO_REAL_SALE_AMT,
+        tsdto.BILL_CNT4 AS YOGIYO_BILL_CNT,
+        tsdto.TOT_SALE_AMT5 AS COUPANGEATS_TOT_SALE_AMT,
+        tsdto.REAL_SALE_AMT5 AS COUPANGEATS_REAL_SALE_AMT,
+        tsdto.BILL_CNT5 AS COUPANGEATS_BILL_CNT,
+        tsdto.TOT_SALE_AMT0 AS ETC_TOT_SALE_AMT,
+        tsdto.REAL_SALE_AMT0 AS REAL_SALE_AMT,
+        tsdto.BILL_CNT0 AS ETC_BILL_CNT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+            SELECT
+            tsdtd.SALE_DATE,
+            tsdtd.STORE_CD,
+            SUM(tsdtd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+            SUM(tsdtd.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+            SUM(tsdtd.REAL_SALE_CNT) AS TOT_BILL_CNT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS STIN_TOT_SALE_AMT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS STIN_REAL_SALE_AMT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS STIN_BILL_CNT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS DLVR_TOT_SALE_AMT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS DLVR_BILL_CNT,
+            SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
+            SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
+            SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS PACK_BILL_CNT
+            FROM TB_SL_DAILY_TOTAL_DLVR tsdtd
+            WHERE 1=1
+            AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdtd.SALE_DATE, tsdtd.STORE_CD
+        ) tsdtd,
+        (
+            SELECT
+            tsdto.SALE_DATE,
+            tsdto.STORE_CD,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '3' THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT3,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '3' THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT3,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '3' THEN tsdto.SALE_CNT ELSE 0 END) AS BILL_CNT3,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '4' THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT4,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '4' THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT4,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '4' THEN tsdto.SALE_CNT ELSE 0 END) AS BILL_CNT4,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '5' THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT5,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '5' THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT5,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '5' THEN tsdto.SALE_CNT ELSE 0 END) AS BILL_CNT5,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG NOT IN ('3', '4', '5') THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT0,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG NOT IN ('3', '4', '5') THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT0,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG NOT IN ('3', '4', '5') THEN tsdto.SALE_CNT ELSE 0 END) AS BILL_CNT0
+            FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto
+            WHERE 1=1
+            AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdto.SALE_DATE, tsdto.STORE_CD
+        ) tsdto,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdtd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        AND tsdto.SALE_DATE = tsdtd.SALE_DATE
+        AND tsdto.STORE_CD = tsdtd.STORE_CD
+        AND tms.STORE_CD = tsdtd.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        ORDER BY tsdtd.SALE_DATE, tsdtd.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 일별매출(매장) - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDaySaleStoreMomsExcelList" parameterType="DaySaleStoreMomsVO" resultType="DefaultMap">
+        /* DaySaleStoreMomsMapper.getDaySaleStoreMomsExcelList */
+        SELECT
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdtd.STORE_CD,
+        tms.STORE_NM,
+        tsdtd.TOT_SALE_AMT,
+        tsdtd.TOT_REAL_SALE_AMT,
+        tsdtd.TOT_BILL_CNT,
+        tsdtd.STIN_TOT_SALE_AMT,
+        tsdtd.STIN_REAL_SALE_AMT,
+        tsdtd.STIN_BILL_CNT,
+        tsdtd.DLVR_TOT_SALE_AMT,
+        tsdtd.DLVR_REAL_SALE_AMT,
+        tsdtd.DLVR_BILL_CNT,
+        tsdtd.PACK_TOT_SALE_AMT,
+        tsdtd.PACK_REAL_SALE_AMT,
+        tsdtd.PACK_BILL_CNT,
+        tsdto.TOT_SALE_AMT3 AS BAEMIN_TOT_SALE_AMT,
+        tsdto.REAL_SALE_AMT3 AS BAEMIN_REAL_SALE_AMT,
+        tsdto.BILL_CNT3 AS BAEMIN_BILL_CNT,
+        tsdto.TOT_SALE_AMT4 AS YOGIYO_TOT_SALE_AMT,
+        tsdto.REAL_SALE_AMT4 AS YOGIYO_REAL_SALE_AMT,
+        tsdto.BILL_CNT4 AS YOGIYO_BILL_CNT,
+        tsdto.TOT_SALE_AMT5 AS COUPANGEATS_TOT_SALE_AMT,
+        tsdto.REAL_SALE_AMT5 AS COUPANGEATS_REAL_SALE_AMT,
+        tsdto.BILL_CNT5 AS COUPANGEATS_BILL_CNT,
+        tsdto.TOT_SALE_AMT0 AS ETC_TOT_SALE_AMT,
+        tsdto.REAL_SALE_AMT0 AS REAL_SALE_AMT,
+        tsdto.BILL_CNT0 AS ETC_BILL_CNT
+        FROM
+        (
+            SELECT
+            tsdtd.SALE_DATE,
+            tsdtd.STORE_CD,
+            SUM(tsdtd.TOT_SALE_AMT) AS TOT_SALE_AMT,
+            SUM(tsdtd.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT,
+            SUM(tsdtd.REAL_SALE_CNT) AS TOT_BILL_CNT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS STIN_TOT_SALE_AMT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS STIN_REAL_SALE_AMT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '1' THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS STIN_BILL_CNT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS DLVR_TOT_SALE_AMT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+            SUM(CASE WHEN tsdtd.DLVR_ORDER_FG = '2' THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS DLVR_BILL_CNT,
+            SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
+            SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
+            SUM(CASE WHEN (tsdtd.DLVR_ORDER_FG = '3' OR tsdtd.DLVR_ORDER_FG = '4') THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS PACK_BILL_CNT
+            FROM TB_SL_DAILY_TOTAL_DLVR tsdtd
+            WHERE 1=1
+            AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdtd.SALE_DATE, tsdtd.STORE_CD
+        ) tsdtd,
+        (
+            SELECT
+            tsdto.SALE_DATE,
+            tsdto.STORE_CD,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '3' THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT3,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '3' THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT3,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '3' THEN tsdto.SALE_CNT ELSE 0 END) AS BILL_CNT3,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '4' THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT4,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '4' THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT4,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '4' THEN tsdto.SALE_CNT ELSE 0 END) AS BILL_CNT4,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '5' THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT5,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '5' THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT5,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG = '5' THEN tsdto.SALE_CNT ELSE 0 END) AS BILL_CNT5,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG NOT IN ('3', '4', '5') THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT0,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG NOT IN ('3', '4', '5') THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT0,
+            SUM(CASE WHEN tsdto.DLVR_IN_FG NOT IN ('3', '4', '5') THEN tsdto.SALE_CNT ELSE 0 END) AS BILL_CNT0
+            FROM TB_SL_DAILY_TOTAL_ORDAPP tsdto
+            WHERE 1=1
+            AND tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            GROUP BY tsdto.SALE_DATE, tsdto.STORE_CD
+        ) tsdto,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdtd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        AND tsdto.SALE_DATE = tsdtd.SALE_DATE
+        AND tsdto.STORE_CD = tsdtd.STORE_CD
+        AND tms.STORE_CD = tsdtd.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        ORDER BY tsdtd.SALE_DATE, tsdtd.STORE_CD
+    </select>
+
+</mapper>
