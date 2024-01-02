@@ -791,12 +791,75 @@ app.controller('prodSalePriceExcelCtrl', ['$scope', '$http', '$timeout', functio
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('prodSalePriceExcelCtrl', $scope, $http, false));
 
+
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        s.allowMerging = 'ColumnHeaders';
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+        // 첫째줄 헤더 생성
+        var dataItem                  = {};
+        dataItem.gChk                 = messages["cmm.chk"];
+        dataItem.storeCd              = messages["salePrice.storeCd"];
+        dataItem.storeNm              = messages["salePrice.storeNm"];
+        dataItem.hqSaleUprc           = messages["salePrice.salePrice"];
+        dataItem.saleUprcP            = messages["salePrice.salePrice"];
+        dataItem.saleUprc             = messages["salePrice.salePrice"];
+        dataItem.hqStinSaleUprc       = messages["salePrice.stinSaleUprc"];
+        dataItem.stinSaleUprcP        = messages["salePrice.stinSaleUprc"];
+        dataItem.stinSaleUprc         = messages["salePrice.stinSaleUprc"];
+        dataItem.hqDlvrSaleUprc       = messages["salePrice.dlvrSaleUprc"];
+        dataItem.dlvrSaleUprcP        = messages["salePrice.dlvrSaleUprc"];
+        dataItem.dlvrSaleUprc         = messages["salePrice.dlvrSaleUprc"];
+        dataItem.hqPackSaleUprc       = messages["salePrice.packSaleUprc"];
+        dataItem.packSaleUprcP        = messages["salePrice.packSaleUprc"];
+        dataItem.packSaleUprc         = messages["salePrice.packSaleUprc"];
+        dataItem.prcCtrlFg            = messages["salePrice.prcCtrlFg"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
     };
 
     // 다른 컨트롤러의 broadcast 받기
@@ -823,9 +886,9 @@ app.controller('prodSalePriceExcelCtrl', ['$scope', '$http', '$timeout', functio
             // 컬럼 총갯수
             var columnsCnt = columns.length;
 
-            for (var i = 0; i < columnsCnt; i++) {
-                columns[i].visible = true;
-            }
+            // for (var i = 0; i < columnsCnt; i++) {
+            //     columns[i].visible = true;
+            // }
 
             // <-- //그리드 visible -->
 
@@ -833,7 +896,7 @@ app.controller('prodSalePriceExcelCtrl', ['$scope', '$http', '$timeout', functio
             $timeout(function () {
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
                     includeColumnHeaders: true,
-                    includeCellStyles   : false,
+                    includeCellStyles   : true,
                     includeColumns      : function (column) {
                         //return column.visible;
                         return column.binding != 'gChk';
