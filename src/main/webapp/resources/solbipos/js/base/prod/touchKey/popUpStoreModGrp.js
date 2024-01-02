@@ -79,7 +79,7 @@ app.controller('popUpStoreModGrpCtrl', ['$scope', '$http', '$timeout', function 
               // return column.visible;
               return column.binding != 'gChk';
             }
-          },messages["touchKey.layer.storeModYn"]+ '_'+ getCurDateTime() +'.xlsx',
+          },messages["touchKey.touchKey"] + '_' + messages["touchKey.layer.storeModYn"]+ '_'+ getCurDateTime() +'.xlsx',
           function () {
             $timeout(function () {
               $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기

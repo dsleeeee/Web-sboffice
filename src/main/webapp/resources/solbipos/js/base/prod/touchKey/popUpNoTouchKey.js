@@ -106,7 +106,7 @@ app.controller('popUpNoTouchKeyCtrl', ['$scope', '$http', '$timeout', function (
               // return column.visible;
               return column.binding != 'gChk';
             }
-          },messages["touchKey.noTouchKey"]+ '_'+ getCurDateTime() +'.xlsx',
+          },messages["touchKey.touchKey"]  + '_' + messages["touchKey.noTouchKey"]+ '_'+ getCurDateTime() +'.xlsx',
           function () {
             $timeout(function () {
               $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기

@@ -268,7 +268,7 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
                         // return column.visible;
                         return column.binding != 'gChk';
                     }
-                },messages["touchKey.storeUseTouchKey"]+ '_'+ getCurDateTime() +'.xlsx',
+                },messages["touchKey.touchKey"] + '_' + messages["touchKey.storeUseTouchKey"]+ '_'+ getCurDateTime() +'.xlsx',
                 function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기

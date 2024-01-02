@@ -244,7 +244,7 @@ app.controller('popUpApplyStoreCtrl', ['$scope', '$http', '$timeout', function (
                         // return column.visible;
                         return column.binding != 'gChk';
                     }
-                },messages["touchKey.storeList"]+ '_'+ getCurDateTime() +'.xlsx',
+                },messages["touchKey.applyStore"]+ '_'+ getCurDateTime() +'.xlsx',
                 function () {
                     console.log($scope.storeHqBrandCd);
                     $timeout(function () {
