@@ -769,6 +769,7 @@ app.controller('storeSalePriceExcelCtrl', ['$scope', '$http', '$timeout', functi
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
@@ -860,12 +861,6 @@ app.controller('storeSalePriceExcelCtrl', ['$scope', '$http', '$timeout', functi
 
             // 컬럼 총갯수
             var columnsCnt = columns.length;
-
-            for (var i = 0; i < columnsCnt; i++) {
-                columns[i].visible = true;
-            }
-
-            // <-- //그리드 visible -->
 
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
             $timeout(function () {
