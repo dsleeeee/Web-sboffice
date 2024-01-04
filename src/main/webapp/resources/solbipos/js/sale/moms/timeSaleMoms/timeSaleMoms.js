@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : daySaleStoreMoms.js
- * 설  명 : 맘스터치 > 간소화화면 > 일별매출(매장) JavaScript
+ * 파일명 : timeSaleMoms.js
+ * 설  명 : 맘스터치 > 간소화화면 > 시간대매출 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2023.12.29     김설아      1.0
+ * 2024.01.03     김설아      1.0
  *
  * **************************************************************/
 /**
@@ -14,12 +14,12 @@
 var app = agrid.getApp();
 
 /**
- *  일별매출(매장) 그리드 생성
+ *  시간대매출 그리드 생성
  */
-app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('timeSaleMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('daySaleStoreMomsCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('timeSaleMomsCtrl', $scope, $http, false));
 
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
@@ -27,6 +27,7 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
 
     // 콤보박스 셋팅
     $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+    $scope._setComboData("prodHqBrandCdCombo", momsHqBrandCdComboList); // 상품브랜드
     $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
     $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
     $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
@@ -42,91 +43,15 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
-
-        // <-- 그리드 헤더2줄 -->
-        // 헤더머지
-        s.allowMerging = 2;
-        s.columnHeaders.rows.push(new wijmo.grid.Row());
-
-        // 첫째줄 헤더 생성
-        var dataItem = {};
-        dataItem.saleDate = messages["daySaleStoreMoms.saleDate"];
-        dataItem.storeCd = messages["daySaleStoreMoms.storeCd"];
-        dataItem.storeNm = messages["daySaleStoreMoms.storeNm"];
-        dataItem.totSaleAmt = messages["daySaleStoreMoms.tot"];
-        dataItem.totRealSaleAmt = messages["daySaleStoreMoms.tot"];
-        dataItem.totBillCnt = messages["daySaleStoreMoms.tot"];
-        dataItem.stinTotSaleAmt = messages["daySaleStoreMoms.stin"];
-        dataItem.stinRealSaleAmt = messages["daySaleStoreMoms.stin"];
-        dataItem.stinBillCnt = messages["daySaleStoreMoms.stin"];
-        dataItem.dlvrTotSaleAmt = messages["daySaleStoreMoms.dlvr"];
-        dataItem.dlvrRealSaleAmt = messages["daySaleStoreMoms.dlvr"];
-        dataItem.dlvrBillCnt = messages["daySaleStoreMoms.dlvr"];
-        dataItem.packTotSaleAmt = messages["daySaleStoreMoms.pack"];
-        dataItem.packRealSaleAmt = messages["daySaleStoreMoms.pack"];
-        dataItem.packBillCnt = messages["daySaleStoreMoms.pack"];
-        dataItem.baeminTotSaleAmt = messages["daySaleStoreMoms.baemin"];
-        dataItem.baeminRealSaleAmt = messages["daySaleStoreMoms.baemin"];
-        dataItem.baeminBillCnt = messages["daySaleStoreMoms.baemin"];
-        dataItem.yogiyoTotSaleAmt = messages["daySaleStoreMoms.yogiyo"];
-        dataItem.yogiyoRealSaleAmt = messages["daySaleStoreMoms.yogiyo"];
-        dataItem.yogiyoBillCnt = messages["daySaleStoreMoms.yogiyo"];
-        dataItem.coupangeatsTotSaleAmt = messages["daySaleStoreMoms.coupangeats"];
-        dataItem.coupangeatsRealSaleAmt = messages["daySaleStoreMoms.coupangeats"];
-        dataItem.coupangeatsBillCnt = messages["daySaleStoreMoms.coupangeats"];
-        dataItem.etcTotSaleAmt = messages["daySaleStoreMoms.etc"];
-        dataItem.etcRealSaleAmt = messages["daySaleStoreMoms.etc"];
-        dataItem.etcBillCnt = messages["daySaleStoreMoms.etc"];
-
-        s.columnHeaders.rows[0].dataItem = dataItem;
-
-        s.itemFormatter = function (panel, r, c, cell) {
-            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-                //align in center horizontally and vertically
-                panel.rows[r].allowMerging    = true;
-                panel.columns[c].allowMerging = true;
-                wijmo.setCss(cell, {
-                    display    : 'table',
-                    tableLayout: 'fixed'
-                });
-                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-                wijmo.setCss(cell.children[0], {
-                    display      : 'table-cell',
-                    verticalAlign: 'middle',
-                    textAlign    : 'center'
-                });
-            }
-            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-                // GroupRow 인 경우에는 표시하지 않는다.
-                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-                    cell.textContent = '';
-                } else {
-                    if (!isEmpty(panel._rows[r]._data.rnum)) {
-                        cell.textContent = (panel._rows[r]._data.rnum).toString();
-                    } else {
-                        cell.textContent = (r + 1).toString();
-                    }
-                }
-            }
-            // readOnly 배경색 표시
-            else if (panel.cellType === wijmo.grid.CellType.Cell) {
-                var col = panel.columns[c];
-                if (col.isReadOnly) {
-                    wijmo.addClass(cell, 'wj-custom-readonly');
-                }
-            }
-        }
-        // <-- //그리드 헤더2줄 -->
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("daySaleStoreMomsCtrl", function (event, data) {
-        $scope.searchDaySaleStoreMomsList();
+    $scope.$on("timeSaleMomsCtrl", function (event, data) {
+        $scope.searchTimeSaleMomsList();
         event.preventDefault();
     });
 
-    $scope.searchDaySaleStoreMomsList = function () {
+    $scope.searchTimeSaleMomsList = function () {
         var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
         var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
         var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
@@ -147,8 +72,13 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        params.prodClassCd = $scope.prodClassCd;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#daySaleStoreMomsStoreCd").val();
+        params.storeCds = $("#timeSaleMomsStoreCd").val();
+        params.prodCds = $("#timeSaleMomsSelectCd").val();
+        params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
         params.momsAreaFg = $scope.momsAreaFg;
@@ -157,7 +87,7 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
         params.momsStoreManageType = $scope.momsStoreManageType;
         params.branchCd = $scope.branchCd;
         // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
             var momsHqBrandCd = "";
             for(var i=0; i < momsHqBrandCdComboList.length; i++){
                 if(momsHqBrandCdComboList[i].value !== null) {
@@ -170,15 +100,48 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
         params.listScale = 500;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/moms/daySaleStoreMoms/daySaleStoreMoms/getDaySaleStoreMomsList.sb", params, function (){});
+        $scope._inquiryMain("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsList.sb", params, function (){});
     };
     // <-- //검색 호출 -->
 
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.daySaleStoreMomsStoreShow = function () {
-        $scope._broadcast('daySaleStoreMomsStoreCtrl');
+    $scope.timeSaleMomsStoreShow = function () {
+        $scope._broadcast('timeSaleMomsStoreCtrl');
+    };
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.timeSaleMomsSelectShow = function () {
+        $scope._broadcast('timeSaleMomsSelectCtrl');
+    };
+
+    $scope.popUpProdClass = function() {
+        var popUp = $scope.prodClassPopUpLayer;
+        popUp.show(true, function (s) {
+            // 선택 버튼 눌렀을때만
+            if (s.dialogResult === "wj-hide-apply") {
+                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var prodClassCd = scope.getSelectedClass();
+                var params = {};
+                params.prodClassCd = prodClassCd;
+                // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                    function(response){
+                        $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassNm = response.data.data;
+                    }
+                );
+            }
+        });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delProdClass = function(){
+        $scope.prodClassCd = "";
+        $scope.prodClassNm = "";
     };
 
     // 확장조회 숨김/보임
@@ -216,8 +179,13 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        params.prodClassCd = $scope.prodClassCd;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
-        params.storeCds = $("#daySaleStoreMomsStoreCd").val();
+        params.storeCds = $("#timeSaleMomsStoreCd").val();
+        params.prodCds = $("#timeSaleMomsSelectCd").val();
+        params.prodHqBrandCd = $scope.prodHqBrandCd;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
         params.momsAreaFg = $scope.momsAreaFg;
@@ -226,7 +194,7 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
         params.momsStoreManageType = $scope.momsStoreManageType;
         params.branchCd = $scope.branchCd;
         // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
             var momsHqBrandCd = "";
             for(var i=0; i < momsHqBrandCdComboList.length; i++){
                 if(momsHqBrandCdComboList[i].value !== null) {
@@ -240,7 +208,7 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
 
         // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
         $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
-            $scope._broadcast('daySaleStoreMomsExcelCtrl', params);
+            $scope._broadcast('timeSaleMomsExcelCtrl', params);
         });
     };
 
@@ -276,7 +244,7 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
                     return column.visible;
                 }
             },
-                "일별매출(매장)_" + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
+                "시간대매출_" + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -290,10 +258,10 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
 /**
  *  엑셀다운로드 그리드 생성
  */
-app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('timeSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('daySaleStoreMomsExcelCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('timeSaleMomsExcelCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -301,86 +269,10 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
-
-        // <-- 그리드 헤더2줄 -->
-        // 헤더머지
-        s.allowMerging = 2;
-        s.columnHeaders.rows.push(new wijmo.grid.Row());
-
-        // 첫째줄 헤더 생성
-        var dataItem = {};
-        dataItem.saleDate = messages["daySaleStoreMoms.saleDate"];
-        dataItem.storeCd = messages["daySaleStoreMoms.storeCd"];
-        dataItem.storeNm = messages["daySaleStoreMoms.storeNm"];
-        dataItem.totSaleAmt = messages["daySaleStoreMoms.tot"];
-        dataItem.totRealSaleAmt = messages["daySaleStoreMoms.tot"];
-        dataItem.totBillCnt = messages["daySaleStoreMoms.tot"];
-        dataItem.stinTotSaleAmt = messages["daySaleStoreMoms.stin"];
-        dataItem.stinRealSaleAmt = messages["daySaleStoreMoms.stin"];
-        dataItem.stinBillCnt = messages["daySaleStoreMoms.stin"];
-        dataItem.dlvrTotSaleAmt = messages["daySaleStoreMoms.dlvr"];
-        dataItem.dlvrRealSaleAmt = messages["daySaleStoreMoms.dlvr"];
-        dataItem.dlvrBillCnt = messages["daySaleStoreMoms.dlvr"];
-        dataItem.packTotSaleAmt = messages["daySaleStoreMoms.pack"];
-        dataItem.packRealSaleAmt = messages["daySaleStoreMoms.pack"];
-        dataItem.packBillCnt = messages["daySaleStoreMoms.pack"];
-        dataItem.baeminTotSaleAmt = messages["daySaleStoreMoms.baemin"];
-        dataItem.baeminRealSaleAmt = messages["daySaleStoreMoms.baemin"];
-        dataItem.baeminBillCnt = messages["daySaleStoreMoms.baemin"];
-        dataItem.yogiyoTotSaleAmt = messages["daySaleStoreMoms.yogiyo"];
-        dataItem.yogiyoRealSaleAmt = messages["daySaleStoreMoms.yogiyo"];
-        dataItem.yogiyoBillCnt = messages["daySaleStoreMoms.yogiyo"];
-        dataItem.coupangeatsTotSaleAmt = messages["daySaleStoreMoms.coupangeats"];
-        dataItem.coupangeatsRealSaleAmt = messages["daySaleStoreMoms.coupangeats"];
-        dataItem.coupangeatsBillCnt = messages["daySaleStoreMoms.coupangeats"];
-        dataItem.etcTotSaleAmt = messages["daySaleStoreMoms.etc"];
-        dataItem.etcRealSaleAmt = messages["daySaleStoreMoms.etc"];
-        dataItem.etcBillCnt = messages["daySaleStoreMoms.etc"];
-
-        s.columnHeaders.rows[0].dataItem = dataItem;
-
-        s.itemFormatter = function (panel, r, c, cell) {
-            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-                //align in center horizontally and vertically
-                panel.rows[r].allowMerging    = true;
-                panel.columns[c].allowMerging = true;
-                wijmo.setCss(cell, {
-                    display    : 'table',
-                    tableLayout: 'fixed'
-                });
-                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-                wijmo.setCss(cell.children[0], {
-                    display      : 'table-cell',
-                    verticalAlign: 'middle',
-                    textAlign    : 'center'
-                });
-            }
-            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-                // GroupRow 인 경우에는 표시하지 않는다.
-                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-                    cell.textContent = '';
-                } else {
-                    if (!isEmpty(panel._rows[r]._data.rnum)) {
-                        cell.textContent = (panel._rows[r]._data.rnum).toString();
-                    } else {
-                        cell.textContent = (r + 1).toString();
-                    }
-                }
-            }
-            // readOnly 배경색 표시
-            else if (panel.cellType === wijmo.grid.CellType.Cell) {
-                var col = panel.columns[c];
-                if (col.isReadOnly) {
-                    wijmo.addClass(cell, 'wj-custom-readonly');
-                }
-            }
-        }
-        // <-- //그리드 헤더2줄 -->
     };
 
     // <-- 검색 호출 -->
-    $scope.$on("daySaleStoreMomsExcelCtrl", function (event, data) {
+    $scope.$on("timeSaleMomsExcelCtrl", function (event, data) {
         if(data.excelType === '1') {
             $scope.searchExcelList(data);
         }else{
@@ -392,7 +284,7 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
     // 엑셀 리스트 조회
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/moms/daySaleStoreMoms/daySaleStoreMoms/getDaySaleStoreMomsExcelList.sb", params, function() {
+        $scope._inquiryMain("/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsExcelList.sb", params, function() {
             if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
@@ -406,7 +298,7 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, "일별매출(매장)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime()+'.xlsx', function () {
+                }, "시간대매출_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -431,10 +323,10 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
         params.limit = 1;
         params.offset = 1;
 
-        $scope._postJSONQuery.withOutPopUp( "/sale/moms/daySaleStoreMoms/daySaleStoreMoms/getDaySaleStoreMomsList.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp( "/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsList.sb", params, function(response){
 
             listSize = response.data.data.list[0].totCnt;
-            totFileCnt = Math.ceil(listSize/15000); // 하나의 엑셀파일에 15000개씩 다운로드
+            totFileCnt = Math.ceil(listSize/50000); // 하나의 엑셀파일에 50000개씩 다운로드
 
             if(listSize === 0 || totFileCnt === 0){
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -453,9 +345,9 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                     // 다운로드 진행중인 파일 숫자 변경
                     $("#progressCnt").html(x + 1);
 
-                    // 페이징 15000개씩 지정해 분할 다운로드 진행
-                    params.limit = 15000 * (x + 1);
-                    params.offset = (15000 * (x + 1)) - 14999;
+                    // 페이징 50000개씩 지정해 분할 다운로드 진행
+                    params.limit = 50000 * (x + 1);
+                    params.offset = (50000 * (x + 1)) - 49999;
 
                     // 가상로그인 대응한 session id 설정
                     if (document.getElementsByName('sessionId')[0]) {
@@ -465,7 +357,7 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                     // ajax 통신 설정
                     $http({
                         method: 'POST', //방식
-                        url: '/sale/moms/daySaleStoreMoms/daySaleStoreMoms/getDaySaleStoreMomsList.sb', /* 통신할 URL */
+                        url: '/sale/moms/timeSaleMoms/timeSaleMoms/getTimeSaleMomsList.sb', /* 통신할 URL */
                         params: params, /* 파라메터로 보낼 데이터 */
                         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
                     }).then(function successCallback(response) {
@@ -509,7 +401,7 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                                 includeColumns: function (column) {
                                     return column.visible;
                                 }
-                            }, "일별매출(매장)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
+                            }, "시간대매출_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
                                 $timeout(function () {
                                     console.log("Export complete start. _" + (x + 1));
                                     getExcelFile(x + 1);
