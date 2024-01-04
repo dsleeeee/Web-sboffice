@@ -320,12 +320,46 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
           params.push(obj);
       }
 
+      // 4048 스마트오더 사용여부 환경설정 변경여부 체크
+      var chgEnv4048 = "N";
+      for (var i = 0; i < params.length; i++) {
+        if(params[i].envstCd === "4048"){
+            chgEnv4048 = "Y";
+        }
+      }
+
       $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
 
       $scope._postJSONSave.withOutPopUp("/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
 
-          // 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경
-          $scope.updateToSmartOrder();
+          if(chgEnv4048 === "Y"){
+              // 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경
+              $scope.updateToSmartOrder();
+          }else{
+              // 나머지는 모두 서브포스로 강제 업데이트
+              if (vEnv1221 !== "" && vEnv1221 !== null && vEnv1221 !== undefined) {
+                  if (vEnv1221 === "0") {
+                      if (env4021 === "1") {
+                          $scope.updateToSubPos();
+                      }
+                  }
+              }
+
+              if (vEnv1221 === "" || vEnv1221 === null || vEnv1221 === undefined || !(vEnv1221 === "0" && env4021 === "1")) {
+                  console.log("(재조회) DB구성요소:" + vEnv1221 + " 포스-메인여부:" + env4021);
+                  // DB구성요소[1221] 값 재조회
+                  $scope.getEnv1221();
+                  // 메인포스 재조회
+                  $scope.getMainPosList();
+              }
+
+              $scope.$broadcast('loadingPopupInactive');
+              $scope._popMsg(messages["cmm.saveSucc"]);
+              // 재조회 - 포스명칭 selectBox까지 초기화되어, 그부분 없이 바로 포스 환경설정 값 조회 (2020.04.03_이다솜)
+              //var envScope = agrid.getScope('storeEnvCtrl');
+              //$scope.changeEnvGroup(envScope.getEnvGroupCd());
+              $scope.searchPosEnv();
+          }
       });
     });
     event.preventDefault();
