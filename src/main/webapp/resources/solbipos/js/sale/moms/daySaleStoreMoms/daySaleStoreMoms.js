@@ -38,21 +38,6 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        // 그리드 링크 효과
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel == s.cells) {
-                var col = s.columns[e.col];
-                var item = s.rows[e.row].dataItem;
-                if (col.binding === "yoil") {
-                    if(item.yoil === "토") {
-                        wijmo.addClass(e.cell, 'blue');
-                    } else if(item.yoil === "일") {
-                        wijmo.addClass(e.cell, 'red');
-                    }
-                }
-            }
-        });
-
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
@@ -312,21 +297,6 @@ app.controller('daySaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', func
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        // 그리드 링크 효과
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel == s.cells) {
-                var col = s.columns[e.col];
-                var item = s.rows[e.row].dataItem;
-                if (col.binding === "yoil") {
-                    if(item.yoil === "토") {
-                        wijmo.addClass(e.cell, 'blue');
-                    } else if(item.yoil === "일") {
-                        wijmo.addClass(e.cell, 'red');
-                    }
-                }
-            }
-        });
-
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
