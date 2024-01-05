@@ -295,7 +295,8 @@
                 tmsf.FNKEY_NM
             END FNKEY_NM,
             tmsf.DISP_SEQ,
-            tmsf.IMG_FILE_NM
+            tmsf.IMG_FILE_NM,
+            (SELECT FNKEY_NO_VERSION FROM TB_CM_POS_FNKEY_INFO WHERE FNKEY_NO = tmsf.FNKEY_NO) AS FNKEY_NO_VERSION
         FROM
             TB_MS_STORE_FNKEY tmsf
         LEFT OUTER JOIN

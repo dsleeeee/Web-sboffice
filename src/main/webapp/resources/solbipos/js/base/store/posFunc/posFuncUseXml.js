@@ -79,6 +79,12 @@ app.controller('posFuncUseXmlCtrl', ['$scope', '$http', 'saveInfo', function ($s
         var params = {};
         params.storeCd = selectedRow.storeCd;
         params.fnkeyFg = selectedRow.fnkeyFg;
+
+        var grid = agrid.getScope("posFuncUseXmlCtrl").flex;
+        var columns = grid.columns;
+        if(params.fnkeyFg == '6020')    columns[2].visible = true;
+        else                            columns[2].visible = false;
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
         $scope._inquirySub("/base/store/posfunc/use/getPosFuncKeyList.sb", params, function() {
             // 조회내용 없을 경우 팝업메시지 별도 처리

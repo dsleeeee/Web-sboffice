@@ -35,6 +35,7 @@
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="posFunc.grid.fnkeyNo"/>" binding="fnkeyNo" width="100" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="posFunc.grid.fnkeyNm"/>" binding="fnkeyNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="posFunc.grid.fnkeyNoVersion"/>" binding="fnkeyNoVersion" width="100" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="posFunc.grid.imgFileNm"/>" binding="imgFileNm" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="posFunc.grid.useYn"/>" binding="fnkeyUsed" width="70" is-read-only="true" visible="false"></wj-flex-grid-column>
 
