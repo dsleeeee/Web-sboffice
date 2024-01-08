@@ -1069,6 +1069,8 @@
     <typeAlias alias="daySaleStoreMomsVO" type="kr.co.solbipos.sale.moms.daySaleStoreMoms.service.DaySaleStoreMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 시간대매출 -->
     <typeAlias alias="timeSaleMomsVO" type="kr.co.solbipos.sale.moms.timeSaleMoms.service.TimeSaleMomsVO"/>
+    <!-- 맘스터치 > 간소화화면 > 시간대매출(매장) -->
+    <typeAlias alias="timeSaleStoreMomsVO" type="kr.co.solbipos.sale.moms.timeSaleStoreMoms.service.TimeSaleStoreMomsVO"/>
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
