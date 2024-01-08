@@ -43,6 +43,9 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
         if (col.binding === "promotionCd" || col.binding === "promotionNm") {
           wijmo.addClass(e.cell, 'wijLink');
         }
+        // else if(col.binding ==="realSaleQtyPromoCd"){ //판매량 팝업
+        //   wijmo.addClass(e.cell, 'wijLink');
+        // }
       }
     });
 
@@ -61,6 +64,13 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
                 $scope.promotionReportDtlLayer.show(true);
                 $scope._broadcast('promotionReportDtlCtrl', params);
             }
+            // else if (col.binding === "realSaleQtyPromoCd") { //판매량 팝업
+            //   var params = {};
+            //   params.promotionCd = selectedRow.promotionCd;
+            //   params.promoType = selectedRow.promoType;
+            //   $scope.promotionSelectProdLayer.show(true);
+            //   $scope._broadcast('promotionSelectProdGridCtrl', params);
+            // }
         }
     });
 
