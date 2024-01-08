@@ -279,6 +279,7 @@
           item-formatter="_itemFormatter">
 
           <!-- define columns -->
+          <wj-flex-grid-column header="" binding="promoType" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="promotionReport.promotionCd"/>" binding="promotionCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="promotionReport.promotionNm"/>" binding="promotionNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="promotionReport.startYmd"/>" binding="startYmd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -399,8 +400,12 @@
   var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotionReport/promotionReport.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotionReport/promotionReport.js?ver=20240103.02" charset="utf-8"></script>
 
 <%-- 프로모션정산 상세 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotionReport/promotionReportDtl.jsp">
+</c:import>
+
+<%-- 프로모션정산 적용상품 상세 --%>
+<c:import url="/WEB-INF/view/base/promotion/promotionReport/promotionSelectProd.jsp">
 </c:import>

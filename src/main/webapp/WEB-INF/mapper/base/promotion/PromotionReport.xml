@@ -8,6 +8,7 @@
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       권지현     2023.02.06     최초작성
+
 -->
 <mapper namespace="kr.co.solbipos.base.promotion.promotionReport.service.impl.PromotionReportMapper">
 
@@ -22,7 +23,8 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
-                    SELECT 	thph.PROMOTION_NM
+                    SELECT  thph.PROMO_TYPE
+                    ,       thph.PROMOTION_NM
                     ,		tsdp.PROMOTION_CD
                     ,		TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD
                     ,		TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
@@ -131,6 +133,7 @@
                 ,		thpc.HQ_CHARGE_UPRC
                 ,		thpc.MS_CHARGE_UPRC
                 ,		thpc.PARTNER_CHARGE_UPRC
+                ,       thph.PROMO_TYPE
                 ORDER BY tsdp.PROMOTION_CD, tsdp.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>

@@ -611,14 +611,17 @@ app.controller('dailyTableReportKwuCtrl', ['$scope', '$http', function ($scope, 
             // null표시
             var item = $scope.dailyTableKwuCtrl_paymentStatus3[i];
             var content = nvl(item.content,'');
+
+            var st = '</br>';
+            var str = content.replace(/\n/g,'</br>');
             if(i === 0) {
-                paymentStatus2ListHtml += '<tr class="h25">'
+                paymentStatus2ListHtml += '<tr>'
                     + '<td class="tc" rowspan="6" style="background-color: lightgrey;">비고</td>'
-                    + '<td class="tl" colspan="4" style="font-size: 13px; line-height: 18px;">' + content + '</td>'
+                    + '<td class="tl" colspan="4" style="font-size: 13px;">' + str + '</td>'
                     + '</tr>';
             } else {
-                paymentStatus2ListHtml += '<tr class="h25">'
-                    + '<td class="tl" colspan="4" style="font-size: 13px; line-height: 18px;">' + content + '</td>'
+                paymentStatus2ListHtml += '<tr>'
+                    + '<td class="tl" colspan="4" style="font-size: 13px;">' + str + '</td>'
                     + '</tr>';
             }
         }
