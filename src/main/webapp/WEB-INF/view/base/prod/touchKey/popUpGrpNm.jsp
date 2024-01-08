@@ -39,4 +39,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpGrpNm.js?ver=20231228.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpGrpNm.js?ver=20240105.01" charset="utf-8"></script>
