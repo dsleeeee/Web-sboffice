@@ -362,8 +362,8 @@
                   SALE_YN,
                   SALE_FG,
                   CASE
-                      WHEN #{payCd} = '01' THEN ROUND(REAL_SALE_AMT * #{cardPer}) * SALE_FG
-                      WHEN #{payCd} = '02' THEN ROUND(REAL_SALE_AMT * #{cashPer}) * SALE_FG
+                      WHEN #{payCd} = '01' THEN ROUND(REAL_SALE_AMT * #{cardPer})
+                      WHEN #{payCd} = '02' THEN ROUND(REAL_SALE_AMT * #{cashPer})
                   END,
                   DLVR_PACK_FG,
                   CORNR_CD,
