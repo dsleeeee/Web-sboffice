@@ -429,7 +429,7 @@
               control="excelFlex"
               initialized="initGrid(s,e)"
               is-read-only="true"
-              item-formatter="_itemFormattesr">
+              item-formatter="_itemFormatter">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
