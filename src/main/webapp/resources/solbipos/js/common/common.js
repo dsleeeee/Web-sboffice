@@ -524,3 +524,9 @@ function getfileSize(x) {
         return (x / Math.pow(1024, e)).toFixed(2) + " " + s[e];
     }
 }
+
+// json key명 변경
+function renameKey(obj, oldKey, newKey) {
+    obj[newKey] = obj[oldKey];
+    delete obj[oldKey]
+}

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdLang.xml
+    다국어관리(상품)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2023.12.28     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.multilingual.prodLang.service.impl.ProdLangMapper">
+
+    <!-- 상품명 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : prodLangVO
+        COMMENTS : 상품명 탭 리스트를 조회한다.
+    -->
+    <select id="getProdNmList" parameterType="prodLangVO" resultType="DefaultMap">
+        /* ProdLangMapper.getProdNmList */
+        SELECT thp.HQ_OFFICE_CD
+        ,      thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD
+        ,      (SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL) AS PROD_CLASS_NM
+        ,      thp.PROD_EN_NM
+        ,      thp.PROD_CN_NM
+        ,      thp.PROD_JP_NM
+        FROM   TB_HQ_PRODUCT thp
+        WHERE  1=1
+        AND    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="prodCd != null and prodCd != ''">
+        AND    thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+        AND    thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+        AND    thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test='userProdBrands != null and userProdBrands != ""'>
+            -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+            AND thp.HQ_BRAND_CD IN
+            <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND     (
+                  ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                  OR
+                  ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+        ORDER
+        BY      thp.PROD_CD ASC
+    </select>
+
+    <!-- 상품명 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : prodLangVO
+        COMMENTS : 상품명 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveProdNm" parameterType="prodLangVO">
+        /* USE : ProdLangMapper.saveProdNm */
+        MERGE INTO TB_HQ_PRODUCT
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD      = #{prodCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            PROD_EN_NM = #{prodEnNm}
+        ,   PROD_CN_NM = #{prodCnNm}
+        ,   PROD_JP_NM = #{prodJpNm}
+        ,   MOD_DT     = #{modDt}
+        ,   MOD_ID     = #{modId}
+    </update>
+
+    <!-- 상품설명 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_INFO
+        PARAM    : prodLangVO
+        COMMENTS : 상품설명 탭 리스트를 조회한다.
+    -->
+    <select id="getProdInfoList" parameterType="prodLangVO" resultType="DefaultMap">
+        /* ProdLangMapper.getProdInfoList */
+        SELECT thp.HQ_OFFICE_CD
+        ,      thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD
+        ,      (SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL) AS PROD_CLASS_NM
+        ,      thpi.PROD_INFO
+        ,      thpi.PROD_EN_INFO
+        ,      thpi.PROD_CN_INFO
+        ,      thpi.PROD_JP_INFO
+        FROM   TB_HQ_PRODUCT thp
+        ,      TB_HQ_PRODUCT_INFO thpi
+        WHERE  1=1
+        AND    thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
+        AND    thp.PROD_CD      = thpi.PROD_CD
+        <if test="prodCd != null and prodCd != ''">
+        AND    thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+        AND    thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+        AND    thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test='userProdBrands != null and userProdBrands != ""'>
+            -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+            AND thp.HQ_BRAND_CD IN
+            <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        AND     (
+                  ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                  OR
+                  ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+        ORDER
+        BY      thp.PROD_CD ASC
+    </select>
+
+    <!-- 상품설명 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_INFO
+        PARAM    : prodLangVO
+        COMMENTS : 상품설명 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveProdInfo" parameterType="prodLangVO">
+        /* USE : ProdLangMapper.saveProdInfo */
+        MERGE INTO TB_HQ_PRODUCT_INFO
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD      = #{prodCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            PROD_EN_INFO = #{prodEnInfo}
+        ,   PROD_CN_INFO = #{prodCnInfo}
+        ,   PROD_JP_INFO = #{prodJpInfo}
+        ,   MOD_DT       = #{modDt}
+        ,   MOD_ID       = #{modId}
+    </update>
+
+</mapper>
