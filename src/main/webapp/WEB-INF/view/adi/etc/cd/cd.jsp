@@ -62,6 +62,26 @@
         <td>
         </td>
       </tr>
+      <tr style='display:none;'>
+        <%-- 코드항목2 --%>
+        <th><s:message code="cd.nmcodeItem2Cd" /></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchUseYnCi"
+                    ng-model="useYnCi"
+                    items-source="_getComboData('srchUseYnCi')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+          </div>
+        </td>
+        <th></th>
+        <td>
+        </td>
+      </tr>
     </tbody>
   </table>
 
@@ -155,7 +175,7 @@
           <wj-flex-grid-column header="<s:message code="cd.nmcodeCd"/>" binding="nmcodeCd" width="50" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cd.nmcodeNm"/>" binding="nmcodeNm" width="150"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cd.nmcodeItem1"/>" binding="nmcodeItem1" width="100"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="cd.nmcodeItem2"/>" binding="nmcodeItem2" width="100"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="cd.nmcodeItem2"/>" binding="nmcodeItem2" data-map="useYnCiDataMap" width="100" ></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cd.useYnFg"/>" binding="useYn" data-map="useYnFgDataMap" width="100"></wj-flex-grid-column>
 
         </wj-flex-grid>
@@ -170,4 +190,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20210106.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20240108.02" charset="utf-8"></script>

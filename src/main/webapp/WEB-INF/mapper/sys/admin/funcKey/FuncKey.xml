@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    FuncKey.xml
+    기능키적용버전등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.01.09      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.admin.funcKey.service.impl.FuncKeyMapper">
+
+    <!-- 기능구분 그룹코드 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : funcKeyVO
+        COMMENTS : 공통코드 그룹코드를 조회한다.
+    -->
+    <select id="getNmcodeGrpCdList" resultType="DefaultMap">
+        /* USE : FuncKeyMapper.getNmcodeGrpCdList */
+        SELECT  A.NMCODE_GRP_CD AS VALUE
+        ,       NVL((SELECT '[' || NMCODE_CD || '] ' || NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '000' AND NMCODE_CD = A.NMCODE_GRP_CD), '[' || A.NMCODE_GRP_CD || ']') AS NAME
+        FROM    TB_CM_NMCODE A
+        GROUP
+            BY    A.NMCODE_GRP_CD
+        ORDER
+            BY      VALUE ASC
+    </select>
+
+    <!-- 기능키적용버전등록 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY_INFO
+        PARAM    : funcKeyVO
+        COMMENTS : 기능키적용버전등록 리스트를 조회한다.
+    -->
+    <select id="getFuncKeyList" resultType="DefaultMap">
+        /* USE : FuncKeyMapper.getFuncKeyList */
+        SELECT  tcpf.FNKEY_FG
+        ,       tcn.NMCODE_NM
+        ,       tcpf.FNKEY_NO
+        ,       tcpf.FNKEY_NM
+        ,       tcpfi.FNKEY_NO_VERSION
+        FROM    TB_CM_POS_FNKEY tcpf
+        ,       TB_CM_POS_FNKEY_INFO tcpfi
+        ,       TB_CM_NMCODE tcn
+        WHERE   1=1
+        AND     tcn.NMCODE_GRP_CD = '026'
+        AND     tcpf.FNKEY_NO = tcpfi.FNKEY_NO(+)
+        AND     tcpf.FNKEY_FG = tcn.NMCODE_CD
+        <if test='fnkeyNo !=null and fnkeyNo != ""'>
+            AND tcpf.FNKEY_NO LIKE '%'|| #{fnkeyNo} ||'%'
+        </if>
+        <if test='fnkeyNm !=null and fnkeyNm != ""'>
+            AND tcpf.FNKEY_NM LIKE '%'|| #{fnkeyNm} ||'%'
+        </if>
+        <if test='fnkeyFg !=null and fnkeyFg != ""'>
+            AND tcpf.FNKEY_FG = #{fnkeyFg}
+        </if>
+        ORDER
+            BY  tcpf.FNKEY_FG ASC
+            ,   tcpf.FNKEY_NO ASC
+    </select>
+
+    <!-- 기능키적용버전 저장 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY_INFO
+        PARAM    : funcKeyVO
+        COMMENTS : 기능키적용버전을 저장한다.
+    -->
+    <update id="saveFuncKey" parameterType="funcKeyVO">
+        /* USE : FuncKeyMapper.saveFuncKey */
+        MERGE INTO TB_CM_POS_FNKEY_INFO A
+            USING dual
+            ON (A.FNKEY_NO = #{fnkeyNo})
+            WHEN MATCHED THEN
+                UPDATE
+                    SET A.FNKEY_NO_VERSION = #{fnkeyNoVersion},
+                        A.MOD_DT = #{modDt},
+                        A.MOD_ID = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT
+                (       FNKEY_NO,
+                        FNKEY_NO_VERSION,
+                        REG_ID,
+                        REG_DT,
+                        MOD_ID,
+                        MOD_DT
+                )
+                VALUES
+                (       #{fnkeyNo},
+                        #{fnkeyNoVersion},
+                        #{regId},
+                        #{regDt},
+                        #{modId},
+                        #{modDt}
+                )
+    </update>
+
+    <!-- 기능키적용버전 삭제 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY_INFO
+        PARAM    : funcKeyVO
+        COMMENTS : 기능키적용버전을 삭제한다
+    -->
+    <delete id="deleteFuncKey" parameterType="funcKeyVO">
+        /* USE : FuncKeyMapper.deleteFuncKey */
+        DELETE
+        FROM TB_CM_POS_FNKEY_INFO
+        WHERE FNKEY_NO = #{fnkeyNo}
+    </delete>
+
+</mapper>

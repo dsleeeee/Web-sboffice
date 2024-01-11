@@ -229,6 +229,8 @@
     <typeAlias alias="posSmartOrderConVO" type="kr.co.solbipos.sys.admin.posSmartOrderCon.service.PosSmartOrderConVO"/>
     <!-- 시스템관리 > 관리자기능 > 포스유틸사용로그 -->
     <typeAlias alias="posUtilLogVO" type="kr.co.solbipos.sys.admin.posUtilLog.service.PosUtilLogVO"/>
+    <!-- 시스템관리 > 관리자기능 > 기능키적용버전등록 -->
+    <typeAlias alias="funcKeyVO" type="kr.co.solbipos.sys.admin.funcKey.service.FuncKeyVO"/>
     <!-- 시스템관리 > 기타관리 > 샘플용 화면_임시-->
     <!--<typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>-->
 <!--
