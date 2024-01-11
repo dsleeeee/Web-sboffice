@@ -24,6 +24,12 @@ var useYnFgDataMap = new wijmo.grid.DataMap([
   {id: "N", name: "사용안함"}
   ], 'id', 'name');
 
+// 코드 = '146' 이면 코드항목2 YN
+var useYnCiDataMap = new wijmo.grid.DataMap([
+  {id: "Y", name: "Y"},
+  {id: "N", name: "N"}
+], 'id', 'name');
+
 /**
  * 대표명칭 그리드 생성
  */
@@ -32,6 +38,7 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
   angular.extend(this, new RootController('representCtrl', $scope, $http, true));
   // 조회조건 콤보박스 데이터 Set
   $scope._setComboData("srchUseYnFg", useYnFg);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // picker 사용시 호출 : 미사용시 호출안함
@@ -172,6 +179,11 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
           }
         }
         var itemChk = s.rows[e.row].dataItem;
+        if(itemChk.nmcodeGrpCd === "146"){
+          $scope.useYnCiDataMap = useYnCiDataMap;
+        }else{
+          $scope.useYnCiDataMap = "";
+        }
         if (itemChk.nmcodeGrpCd == "093" && (itemChk.nmcodeCd == "1" || itemChk.nmcodeCd == "2"))
         {
             if (col.binding === "gChk" || col.binding === "nmcodeNm" || col.binding === "nmcodeItem1" || col.binding === "nmcodeItem2")
@@ -209,7 +221,7 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.nmcodeGrpCd = data.nmcodeCd;
     params.nmcodeItem1 = data.nmcodeItem1;
-    params.nmcodeItem2 = data.nmcodeItem2;
+    // params.nmcodeItem2 = data.nmcodeItem2;
     // 조회URL, 파라미터, 콜백함수 형태로 조회함수 호출
     $scope._inquirySub("/adi/etc/cd/cd/list.sb", params, function() {
       // 세부명칭 그리드 버튼 show
@@ -279,6 +291,9 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.nmcodeGrpCd = selectedRow.nmcodeCd;
     params.useYn = "Y";
+    if(selectedRow.nmcodeCd === "146"){
+      params.nmcodeItem2 = "Y";
+    }
     params.gChk = false;
 
     $scope._addRow(params, 1);
@@ -287,6 +302,7 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.save = function() {
     // 파라미터 설정
     var params = new Array();
+
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[i]);
@@ -328,6 +344,13 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
 
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
+
+      if(item.nmcodeGrpCd === "146"){
+        if(item.nmcodeItem2 === ""){
+          item.nmcodeItem2 = "Y";
+        }
+      }
+
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
       $scope.flex.collectionView.itemsRemoved[i].status = "D";
