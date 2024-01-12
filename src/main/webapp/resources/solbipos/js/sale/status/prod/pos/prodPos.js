@@ -125,7 +125,11 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	$scope.searchPosProdList = function () {
 		// 파라미터
 		var params = {};
-		params.storeCd = $("#posProdSelectStoreCd").val();
+
+		if(orgnFg === "STORE") {
+			params.storeCd = $("#posProdSelectStoreCd").val();
+		}
+		// params.storeCd = $("#posProdSelectStoreCd").val();
 		params.posNo = $("#posProdSelectPosCd").val();
 		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간

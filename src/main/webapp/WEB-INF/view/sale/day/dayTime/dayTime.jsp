@@ -310,7 +310,7 @@
 
     <div class="mt10 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.downCondition"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.downCurrent"/></button>
     </div>
 
     <div class="w100 mt10">

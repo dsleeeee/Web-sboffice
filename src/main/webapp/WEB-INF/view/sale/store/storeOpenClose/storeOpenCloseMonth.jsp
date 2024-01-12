@@ -236,7 +236,7 @@
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='storeOpenClose.dayTime' /></span>
                 <%-- 엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownloadMonth()"><s:message code="cmm.excel.downCondition"/></button>
+                <button class="btn_skyblue ml5 fr" ng-click="excelDownloadMonth()"><s:message code="cmm.excel.downCurrent"/></button>
             </div>
             <div class="wj-TblWrapBr">
                 <%--위즈모 테이블--%>
@@ -275,7 +275,7 @@
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='storeOpenClose.storeDtlList' /></span>
                 <%-- 엑셀다운로드 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="excelDownloadMonth()"><s:message code="cmm.excel.downCondition"/></button>
+                <button class="btn_skyblue ml5 fr" ng-click="excelDownloadMonth()"><s:message code="cmm.excel.downCurrent"/></button>
             </div>
             <div class="wj-TblWrapBr">
                 <%--위즈모 테이블--%>
