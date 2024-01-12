@@ -147,7 +147,7 @@ app.controller('sideSdselGrpCtrl', ['$scope', '$http', '$timeout', function ($sc
             return false;
         }
 
-        var vScope = agrid.getScope('sideSdselGrpExcelDownCtrl');
+        var vScope = agrid.getScope('sideSdselGrpExcelCtrl');
 
         // 파라미터
         var params = {};
@@ -174,28 +174,15 @@ app.controller('sideSdselGrpCtrl', ['$scope', '$http', '$timeout', function ($sc
 /**
  * 사이드(선택그룹명) 양식다운로드 그리드 생성
  */
-app.controller('sideSdselGrpExcelDownCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('sideSdselGrpExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sideSdselGrpExcelDownCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('sideSdselGrpExcelCtrl', $scope, $http, false));
 
     //
     $scope.initGrid = function (s, e) {
+
         $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
-
-        // 그리드 링크 효과
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-                if (col.binding === "sdselGrpCnNm") { // 중문
-                    wijmo.addClass(e.cell, 'chinese-excel-form');
-                }
-
-                if (col.binding === "sdselGrpJpNm") { // 일문
-                    wijmo.addClass(e.cell, 'japanese-excel-form');
-                }
-            }
-        });
     };
 
     // 양식 다운로드
@@ -242,35 +229,6 @@ app.controller('sideSdselGrpExcelDownCtrl', ['$scope', '$http', '$timeout', func
         }
     };
 
-}]);
-
-/**
- * 사이드(선택그룹명) 엑셀업로드 그리드 생성
- */
-app.controller('sideSdselGrpExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-
-    // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sideSdselGrpExcelUploadCtrl', $scope, $http, false));
-
-    //
-    $scope.initGrid = function (s, e) {
-
-        // 컬럼헤더:바인딩명 형태의 JSON 데이터 생성.
-        $scope.colHeaderBind = {};
-        for (var i = 0; i < $scope.flex.columns.length; i++) {
-            var col = $scope.flex.columns[i];
-            $scope.colHeaderBind[col.header] = col.binding;
-        }
-    };
-
-    // 엑셀파일이 변경된 경우
-    $scope.excelFileChanged = function () {
-        if ($('#grpExcelUpFile')[0].files[0]) {
-            // 엑셀업로드 호출
-            $scope.excelUpload();
-        }
-    };
-
     // 엑셀 업로드
     $scope.excelUpload = function () {
 
@@ -286,8 +244,7 @@ app.controller('sideSdselGrpExcelUploadCtrl', ['$scope', '$http', '$timeout', fu
             // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-
-                $timeout(function () {
+                /*$timeout(function () {
                     var flex = $scope.flex;
                     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#grpExcelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
@@ -296,7 +253,55 @@ app.controller('sideSdselGrpExcelUploadCtrl', ['$scope', '$http', '$timeout', fu
                             }, 10);
                         }
                     );
+                }, 10);*/
+
+                // excel file read
+                var reader = new FileReader();
+                var arr = [];
+                reader.onload = function(){
+                    var fileData = reader.result;
+                    var wb = XLSX.read(fileData, {type : 'binary'});
+                    wb.SheetNames.forEach(function(sheetName) {
+                        arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                        // key명 변경
+                        arr.forEach(function(item){
+                            renameKey(item, '세트구분', 'sdselTypeFg');
+                            renameKey(item, '선택그룹코드', 'sdselGrpCd');
+                            renameKey(item, '선택그룹명', 'sdselGrpNm');
+                            renameKey(item, '선택그룹명(영문)', 'sdselGrpEnNm');
+                            renameKey(item, '선택그룹명(중문)', 'sdselGrpCnNm');
+                            renameKey(item, '선택그룹명(일문)', 'sdselGrpJpNm');
+                        });
+
+                        // 엔터값 제거
+                        arr.forEach(function(item){
+                            if (item.sdselGrpEnNm !== null && item.sdselGrpEnNm !== undefined && item.sdselGrpEnNm !== "") {
+                                item.sdselGrpEnNm = item.sdselGrpEnNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+
+                            if (item.sdselGrpCnNm !== null && item.sdselGrpCnNm !== undefined && item.sdselGrpCnNm !== "") {
+                                item.sdselGrpCnNm = item.sdselGrpCnNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+
+                            if (item.sdselGrpJpNm !== null && item.sdselGrpJpNm !== undefined && item.sdselGrpJpNm !== "") {
+                                item.sdselGrpJpNm = item.sdselGrpJpNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+                        });
+                        console.log(arr);
+                        //console.log(JSON.stringify(arr, null, 2));
+                    })
+                };
+                reader.readAsBinaryString(file);
+
+                $timeout(function () {
+                    setTimeout(function() {
+                        // 저장 전 입력값 체크
+                        $scope.saveRow(arr);
+                    }, 500);
+
                 }, 10);
+
             } else {
                 $("#grpExcelUpFile").val('');
                 $scope._popMsg(messages['kioskSideOption.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)

@@ -21,7 +21,10 @@
     var captionMsgGrpList = ${captionMsgGrpList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsgTab.js?ver=20231120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsgTab.js?ver=20240111.01" charset="utf-8"></script>
+
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 기능키/메시지 탭 --%>

@@ -32,7 +32,10 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskSideOptionTab.js?ver=20231130.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskSideOptionTab.js?ver=20240111.01" charset="utf-8"></script>
+
+<%-- excelfile read js --%>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 키오스크(카테고리명) 탭 --%>

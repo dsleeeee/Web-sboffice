@@ -95,8 +95,8 @@
     </div>
 </div>
 
-<%-- 양식다운로드 관련 --%>
-<div style="display: none;" ng-controller="cmPosFnkeyExcelDownCtrl">
+<%-- 양식다운로드/엑셀업로드 관련 --%>
+<div style="display: none;" ng-controller="cmPosFnkeyExcelCtrl">
 
     <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
@@ -118,47 +118,12 @@
 
         </wj-flex-grid>
     </div>
-</div>
 
-<%-- 엑셀 업로드 관련 --%>
-<div style="display: none;" ng-controller="cmPosFnkeyExcelUploadCtrl">
     <input type="file" class="form-control" id="cmPosFnkeyExcelUpFile"
-            ng-model="excelUpFile"
-            onchange="angular.element(this).scope().excelFileChanged()"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
-
-    <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
-        <wj-flex-grid
-            autoGenerateColumns="false"
-            selection-mode="Row"
-            items-source="data"
-            control="flex"
-            initialized="initGrid(s,e)"
-            is-read-only="true">
-
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="fnkeyCmNmcd.cd"/>" binding="fnkeyFg" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="fnkeyCmNmcd.fnkeyFg"/>" binding="fnkeyFgNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="fnkeyCmNmcd.fnkeyNo"/>" binding="fnkeyNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="fnkeyCmNmcd.fnkeyNm"/>" binding="fnkeyNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="fnkeyCmNmcd.fnkeyNm"/>(<s:message code="fnkeyCmNmcd.en"/>)" binding="fnkeyEnNm" align="left" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="fnkeyCmNmcd.fnkeyNm"/>(<s:message code="fnkeyCmNmcd.cn"/>)" binding="fnkeyCnNm" align="left" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="fnkeyCmNmcd.fnkeyNm"/>(<s:message code="fnkeyCmNmcd.jp"/>)" binding="fnkeyJpNm" align="left" width="150"></wj-flex-grid-column>
-
-        </wj-flex-grid>
-    </div>
+                ng-model="excelUpFile"
+                onchange="angular.element(this).scope().excelFileChanged()"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 </div>
-
-<style>
-    /* 중문, 일문 엑셀업로드 font */
-    .chinese-excel-form {
-        font-family: "Microsoft YaHei";
-    }
-
-    .japanese-excel-form {
-        font-family: "Meiryo";
-    }
-</style>
 
 <script type="text/javascript">
 
@@ -170,4 +135,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/cmPosFnkey.js?ver=20231222.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/cmPosFnkey.js?ver=20240111.01" charset="utf-8"></script>

@@ -88,8 +88,8 @@
 
 </div>
 
-<%-- 양식다운로드 관련 --%>
-<div style="display: none;" ng-controller="kioskCategoryExcelDownCtrl">
+<%-- 양식다운로드/엑셀업로드 관련 --%>
+<div style="display: none;" ng-controller="kioskCategoryExcelCtrl">
 
     <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
@@ -111,51 +111,16 @@
 
         </wj-flex-grid>
     </div>
-</div>
 
-<%-- 엑셀 업로드 관련 --%>
-<div style="display: none;" ng-controller="kioskCategoryExcelUploadCtrl">
     <input type="file" class="form-control" id="excelUpFile"
-            ng-model="excelUpFile"
-            onchange="angular.element(this).scope().excelFileChanged()"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
-
-    <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
-        <wj-flex-grid
-            autoGenerateColumns="false"
-            selection-mode="Row"
-            items-source="data"
-            control="flex"
-            initialized="initGrid(s,e)"
-            is-read-only="true">
-
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrpCd"/>" binding="tuClsType" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrpNm"/>" binding="tuClsTypeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryCd"/>" binding="tuClsCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>" binding="tuClsNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.en"/>)" binding="tuClsEnNm" align="left" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.cn"/>)" binding="tuClsCnNm" align="left" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryNm"/>(<s:message code="kioskSideOption.jp"/>)" binding="tuClsJpNm" align="left" width="150"></wj-flex-grid-column>
-
-        </wj-flex-grid>
-    </div>
+                ng-model="excelUpFile"
+                onchange="angular.element(this).scope().excelFileChanged()"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 </div>
-
-<style>
-    /* 중문, 일문 엑셀업로드 font */
-    .chinese-excel-form {
-        font-family: "Microsoft YaHei";
-    }
-
-    .japanese-excel-form {
-        font-family: "Meiryo";
-    }
-</style>
 
 <script type="text/javascript">
     // 키오스크 키맵그룹 목록
     var kioskTuClsTypeList = ${kioskTuClsTypeList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20231222.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskCategory.js?ver=20240111.01" charset="utf-8"></script>

@@ -136,7 +136,7 @@ app.controller('storeFnkeyCtrl', ['$scope', '$http', '$timeout', function ($scop
             return false;
         }
 
-        var vScope = agrid.getScope('storeFnkeyExcelDownCtrl');
+        var vScope = agrid.getScope('storeFnkeyExcelCtrl');
 
         // 파라미터
         var params = {};
@@ -172,26 +172,14 @@ app.controller('storeFnkeyCtrl', ['$scope', '$http', '$timeout', function ($scop
 /**
  * 기능키(매장) 양식다운로드 그리드 생성
  */
-app.controller('storeFnkeyExcelDownCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('storeFnkeyExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('storeFnkeyExcelDownCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('storeFnkeyExcelCtrl', $scope, $http, false));
 
     //
     $scope.initGrid = function (s, e) {
-        // 그리드 링크 효과
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-                if (col.binding === "fnkeyCnNm") { // 중문
-                    wijmo.addClass(e.cell, 'chinese-excel-form');
-                }
 
-                if (col.binding === "fnkeyJpNm") { // 일문
-                    wijmo.addClass(e.cell, 'japanese-excel-form');
-                }
-            }
-        });
     };
 
     // 양식 다운로드
@@ -239,35 +227,6 @@ app.controller('storeFnkeyExcelDownCtrl', ['$scope', '$http', '$timeout', functi
         }
     };
 
-}]);
-
-/**
- * 기능키(매장) 엑셀업로드 그리드 생성
- */
-app.controller('storeFnkeyExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-
-    // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('storeFnkeyExcelUploadCtrl', $scope, $http, false));
-
-    //
-    $scope.initGrid = function (s, e) {
-
-        // 컬럼헤더:바인딩명 형태의 JSON 데이터 생성.
-        $scope.colHeaderBind = {};
-        for (var i = 0; i < $scope.flex.columns.length; i++) {
-            var col = $scope.flex.columns[i];
-            $scope.colHeaderBind[col.header] = col.binding;
-        }
-    };
-
-    // 엑셀파일이 변경된 경우
-    $scope.excelFileChanged = function () {
-        if ($('#storeFnkeyExcelUpFile')[0].files[0]) {
-            // 엑셀업로드 호출
-            $scope.excelUpload();
-        }
-    };
-
     // 엑셀 업로드
     $scope.excelUpload = function () {
 
@@ -283,8 +242,7 @@ app.controller('storeFnkeyExcelUploadCtrl', ['$scope', '$http', '$timeout', func
             // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-
-                $timeout(function () {
+                /*$timeout(function () {
                     var flex = $scope.flex;
                     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#storeFnkeyExcelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
@@ -293,7 +251,58 @@ app.controller('storeFnkeyExcelUploadCtrl', ['$scope', '$http', '$timeout', func
                             }, 10);
                         }
                     );
+                }, 10);*/
+
+                // excel file read
+                var reader = new FileReader();
+                var arr = [];
+                reader.onload = function(){
+                    var fileData = reader.result;
+                    var wb = XLSX.read(fileData, {type : 'binary'});
+                    wb.SheetNames.forEach(function(sheetName) {
+                        arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                        // key명 변경
+                        arr.forEach(function(item){
+                            renameKey(item, '매장코드', 'storeCd');
+                            renameKey(item, '매장명', 'storeNm');
+                            renameKey(item, '코드', 'fnkeyFg');
+                            renameKey(item, '기능구분', 'fnkeyFgNm');
+                            renameKey(item, '기능키번호', 'fnkeyNo');
+                            renameKey(item, '기능키명', 'fnkeyNm');
+                            renameKey(item, '기능키명(영문)', 'fnkeyEnNm');
+                            renameKey(item, '기능키명(중문)', 'fnkeyCnNm');
+                            renameKey(item, '기능키명(일문)', 'fnkeyJpNm');
+                        });
+
+                        // 엔터값 제거
+                        arr.forEach(function(item){
+                            if (item.fnkeyEnNm !== null && item.fnkeyEnNm !== undefined && item.fnkeyEnNm !== "") {
+                                item.fnkeyEnNm = item.fnkeyEnNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+
+                            if (item.fnkeyCnNm !== null && item.fnkeyCnNm !== undefined && item.fnkeyCnNm !== "") {
+                                item.fnkeyCnNm = item.fnkeyCnNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+
+                            if (item.fnkeyJpNm !== null && item.fnkeyJpNm !== undefined && item.fnkeyJpNm !== "") {
+                                item.fnkeyJpNm = item.fnkeyJpNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+                        });
+                        console.log(arr);
+                        //console.log(JSON.stringify(arr, null, 2));
+                    })
+                };
+                reader.readAsBinaryString(file);
+
+                $timeout(function () {
+                    setTimeout(function() {
+                        // 저장 전 입력값 체크
+                        $scope.saveRow(arr);
+                    }, 500);
+
                 }, 10);
+
             } else {
                 $("#storeFnkeyExcelUpFile").val('');
                 $scope._popMsg(messages['fnkeyCmNmcd.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
