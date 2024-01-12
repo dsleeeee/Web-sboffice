@@ -321,7 +321,7 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 양식다운로드
     $scope.sampleDownload = function () {
-        var vScope = agrid.getScope('captionMsgExcelUploadCtrl');
+        var vScope = agrid.getScope('captionMsgExcelCtrl');
         vScope.sampleDownload();
     };
 
@@ -342,27 +342,13 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
 /**
  * 기능키/메시지 엑셀업로드 그리드 생성
  */
-app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('captionMsgExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('captionMsgExcelUploadCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('captionMsgExcelCtrl', $scope, $http, false));
 
     //
     $scope.initGrid = function (s, e) {
-
-        // 그리드 링크 효과
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-                if (col.binding === "captionMsgCnNm") { // 중문
-                    wijmo.addClass(e.cell, 'chinese-excel-form');
-                }
-
-                if (col.binding === "captionMsgJpNm") { // 일문
-                    wijmo.addClass(e.cell, 'japanese-excel-form');
-                }
-            }
-        });
 
         // 컬럼헤더:바인딩명 형태의 JSON 데이터 생성.
         $scope.colHeaderBind = {};
@@ -425,6 +411,8 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
     // 엑셀 업로드
     $scope.excelUpload = function () {
 
+        var vScope  = agrid.getScope('captionMsgCtrl');
+
         $scope.stepCnt = 100; // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
 
@@ -437,8 +425,7 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
             // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-
-                $timeout(function () {
+                /*$timeout(function () {
                     var flex = $scope.flex;
                     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
@@ -447,7 +434,72 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
                             }, 10);
                         }
                     );
+                }, 10);*/
+
+                // excel file read
+                var reader = new FileReader();
+                var arr = [];
+                reader.onload = function(){
+                    var fileData = reader.result;
+                    var wb = XLSX.read(fileData, {type : 'binary'});
+                    wb.SheetNames.forEach(function(sheetName) {
+                        arr = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
+
+                        // key명 변경
+                        arr.forEach(function(item){
+                            renameKey(item, '기능키 or 메시지코드', 'captionMsgId');
+                            renameKey(item, '구분', 'captionMsgGb');
+                            renameKey(item, '기능키 or 메시지명', 'captionMsgNm');
+                            renameKey(item, '영문', 'captionMsgEnNm');
+                            renameKey(item, '중문', 'captionMsgCnNm');
+                            renameKey(item, '일문', 'captionMsgJpNm');
+                        });
+
+                        // 엔터값 제거
+                        arr.forEach(function(item){
+
+                            if (item.captionMsgId !== null && item.captionMsgId !== undefined && item.captionMsgId !== "") {
+                                item.captionMsgId = item.captionMsgId.replace(/\r\n|\r|\n|\s/g, '');
+                            }
+
+                            if (item.captionMsgGb !== null && item.captionMsgGb !== undefined && item.captionMsgGb !== "") {
+                                item.captionMsgGb = $scope.getCaptionMsgGbCode(item.captionMsgGb); // 구분 코드값으로 변환
+                            }
+
+                            if (item.captionMsgNm !== null && item.captionMsgNm !== undefined && item.captionMsgNm !== "") {
+                                item.captionMsgNm = item.captionMsgNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+
+                            if (item.captionMsgEnNm !== null && item.captionMsgEnNm !== undefined && item.captionMsgEnNm !== "") {
+                                item.captionMsgEnNm = item.captionMsgEnNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+
+                            if (item.captionMsgCnNm !== null && item.captionMsgCnNm !== undefined && item.captionMsgCnNm !== "") {
+                                item.captionMsgCnNm = item.captionMsgCnNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+
+                            if (item.captionMsgJpNm !== null && item.captionMsgJpNm !== undefined && item.captionMsgJpNm !== "") {
+                                item.captionMsgJpNm = item.captionMsgJpNm.replace(/\r\n|\r|\n/g, ' ');
+                            }
+                            
+                            // 화면구분 추가
+                            item.captionImgCd = vScope.srchCaptionMsgGrpCombo.selectedValue;
+
+                        });
+                        console.log(arr);
+                        //console.log(JSON.stringify(arr, null, 2));
+                    })
+                };
+                reader.readAsBinaryString(file);
+
+                $timeout(function () {
+                    setTimeout(function() {
+                        // 저장 전 입력값 체크
+                        $scope.saveRow(arr);
+                    }, 500);
+
                 }, 10);
+
             } else {
                 $("#excelUpFile").val('');
                 $scope._popMsg(messages['captionMsg.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
@@ -482,7 +534,6 @@ app.controller('captionMsgExcelUploadCtrl', ['$scope', '$http', '$timeout', func
                         item[colBinding] = cellValue.replaceAll('\'', '');
                     }
 
-                    item["status"] = "I";
                     item["captionImgCd"] = vScope.srchCaptionMsgGrpCombo.selectedValue;
                 }
             }

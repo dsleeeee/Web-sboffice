@@ -75,8 +75,8 @@
 
 </div>
 
-<%-- 양식다운로드 관련 --%>
-<div style="display: none;" ng-controller="optionGrpExcelDownCtrl">
+<%-- 양식다운로드/엑셀업로드 관련 --%>
+<div style="display: none;" ng-controller="optionGrpExcelCtrl">
 
     <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
@@ -96,47 +96,14 @@
 
         </wj-flex-grid>
     </div>
-</div>
 
-<%-- 엑셀 업로드 관련 --%>
-<div style="display: none;" ng-controller="optionGrpExcelUploadCtrl">
     <input type="file" class="form-control" id="optionGrpExcelUpFile"
-            ng-model="excelUpFile"
-            onchange="angular.element(this).scope().excelFileChanged()"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
-
-    <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
-        <wj-flex-grid
-            autoGenerateColumns="false"
-            selection-mode="Row"
-            items-source="data"
-            control="flex"
-            initialized="initGrid(s,e)"
-            is-read-only="true">
-
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.optionGrpCd"/>" binding="optionGrpCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.optionGrpNm"/>" binding="optionGrpNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.optionGrpNm"/>(<s:message code="kioskSideOption.en"/>)" binding="optionGrpEnNm" align="left" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.optionGrpNm"/>(<s:message code="kioskSideOption.cn"/>)" binding="optionGrpCnNm" align="left" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.optionGrpNm"/>(<s:message code="kioskSideOption.jp"/>)" binding="optionGrpJpNm" align="left" width="150"></wj-flex-grid-column>
-
-        </wj-flex-grid>
-    </div>
+                ng-model="excelUpFile"
+                onchange="angular.element(this).scope().excelFileChanged()"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 </div>
-
-<style>
-    /* 중문, 일문 엑셀업로드 font */
-    .chinese-excel-form {
-        font-family: "Microsoft YaHei";
-    }
-
-    .japanese-excel-form {
-        font-family: "Meiryo";
-    }
-</style>
 
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/optionGrp.js?ver=20231222.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/optionGrp.js?ver=20240111.01" charset="utf-8"></script>

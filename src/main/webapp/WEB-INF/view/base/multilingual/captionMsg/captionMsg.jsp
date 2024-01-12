@@ -111,12 +111,8 @@
     </div>
 </div>
 
-<%-- 양식다운로드, 엑셀 업로드 관련 --%>
-<div style="display: none;" ng-controller="captionMsgExcelUploadCtrl">
-    <input type="file" class="form-control" id="excelUpFile"
-            ng-model="excelUpFile"
-            onchange="angular.element(this).scope().excelFileChanged()"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
+<%-- 양식다운로드/엑셀업로드 관련 --%>
+<div style="display: none;" ng-controller="captionMsgExcelCtrl">
 
     <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
@@ -137,17 +133,11 @@
 
         </wj-flex-grid>
     </div>
+
+    <input type="file" class="form-control" id="excelUpFile"
+            ng-model="excelUpFile"
+            onchange="angular.element(this).scope().excelFileChanged()"
+            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 </div>
 
-<style>
-    /* 중문, 일문 엑셀업로드 font */
-    .chinese-excel-form {
-        font-family: "Microsoft YaHei";
-    }
-
-    .japanese-excel-form {
-        font-family: "Meiryo";
-    }
-</style>
-
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsg.js?ver=20231222.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/captionMsg/captionMsg.js?ver=20240111.01" charset="utf-8"></script>

@@ -100,8 +100,8 @@
 
 </div>
 
-<%-- 양식다운로드 관련 --%>
-<div style="display: none;" ng-controller="sideSdselClassExcelDownCtrl">
+<%-- 양식다운로드/엑셀업로드 관련 --%>
+<div style="display: none;" ng-controller="sideSdselClassExcelCtrl">
 
     <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
         <wj-flex-grid
@@ -124,50 +124,14 @@
 
         </wj-flex-grid>
     </div>
-</div>
 
-<%-- 엑셀 업로드 관련 --%>
-<div style="display: none;" ng-controller="sideSdselClassExcelUploadCtrl">
     <input type="file" class="form-control" id="classExcelUpFile"
-            ng-model="excelUpFile"
-            onchange="angular.element(this).scope().excelFileChanged()"
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
-
-    <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
-        <wj-flex-grid
-            autoGenerateColumns="false"
-            selection-mode="Row"
-            items-source="data"
-            control="flex"
-            initialized="initGrid(s,e)"
-            is-read-only="true">
-
-            <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" align="left" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.sdselGrpCd"/>" binding="sdselGrpCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.sdselGrpNm"/>" binding="sdselGrpNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.sdselClassCd"/>" binding="sdselClassCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.sdselClassNm"/>" binding="sdselClassNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.sdselClassNm"/>(<s:message code="kioskSideOption.en"/>)" binding="sdselClassEnNm" align="left" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.sdselClassNm"/>(<s:message code="kioskSideOption.cn"/>)" binding="sdselClassCnNm" align="left" width="150"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="kioskSideOption.sdselClassNm"/>(<s:message code="kioskSideOption.jp"/>)" binding="sdselClassJpNm" align="left" width="150"></wj-flex-grid-column>
-
-        </wj-flex-grid>
-    </div>
+                ng-model="excelUpFile"
+                onchange="angular.element(this).scope().excelFileChanged()"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 </div>
-
-<style>
-    /* 중문, 일문 엑셀업로드 font */
-    .chinese-excel-form {
-        font-family: "Microsoft YaHei";
-    }
-
-    .japanese-excel-form {
-        font-family: "Meiryo";
-    }
-</style>
 
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/sideSdselClass.js?ver=20231222.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/sideSdselClass.js?ver=20240111.01" charset="utf-8"></script>
