@@ -99,9 +99,6 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     /** 상품코드 */
     private String prodCds;
 
-    /** 일자표시옵션 */
-    private String dayOption;
-
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -275,10 +272,4 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     }
 
     public void setProdCds(String prodCds) { this.prodCds = prodCds; }
-
-    public String getDayOption() {
-        return dayOption;
-    }
-
-    public void setDayOption(String dayOption) { this.dayOption = dayOption; }
 }

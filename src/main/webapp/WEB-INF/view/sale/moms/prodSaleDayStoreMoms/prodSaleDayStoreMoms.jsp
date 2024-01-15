@@ -54,25 +54,6 @@
                 </td>
             </tr>
             <tr>
-                <%-- 일자표시옵션 --%>
-                <th><s:message code="prodSaleDayStoreMoms.dayOption"/></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchDayOptionCombo"
-                                ng-model="dayOption"
-                                items-source="_getComboData('dayOptionCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                control="srchDayOptionCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
                 <%-- 상품코드 --%>
                 <th><s:message code="prodSaleDayStoreMoms.prodCd" /></th>
                 <td>
@@ -330,8 +311,6 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.dayFrom"/>" binding="dayFrom" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.dayTo"/>" binding="dayTo" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -365,8 +344,6 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.dayFrom"/>" binding="dayFrom" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.dayTo"/>" binding="dayTo" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -396,4 +373,4 @@
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms.js?ver=20231212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms.js?ver=20240115.01" charset="utf-8"></script>

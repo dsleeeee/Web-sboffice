@@ -13,12 +13,6 @@
  */
 var app = agrid.getApp();
 
-// 일자표시옵션
-var dayOptionComboData = [
-    {"name":"일자별","value":"1"},
-    {"name":"기간합","value":"2"}
-];
-
 /**
  *  상품매출일별(매장) 그리드 생성
  */
@@ -32,7 +26,6 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
     var endDate = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
     // 콤보박스 셋팅
-    $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
     $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
     $scope._setComboData("prodHqBrandCdCombo", momsHqBrandCdComboList); // 상품브랜드
     $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
@@ -103,39 +96,11 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
             }
             params.userBrands = momsHqBrandCd;
         }
-        params.dayOption = $scope.dayOption;
         params.momsStoreFg01 = $scope.momsStoreFg01;
         params.listScale = 500;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getProdSaleDayStoreMomsList.sb", params, function (){
-            // <-- 그리드 visible -->
-            // 선택한 테이블에 따른 리스트 항목 visible
-            var grid = wijmo.Control.getControl("#wjGridList");
-            var columns = grid.columns;
-
-            // 컬럼 총갯수
-            var columnsCnt = columns.length;
-
-            for (var i = 0; i < columnsCnt; i++) {
-                columns[i].visible = true;
-            }
-
-            // 합계가 0이면 해당 컬럼 숨기기
-            for (var j = 0; j < columnsCnt; j++) {
-                // 일자표시옵션
-                if(params.dayOption === "1"){  // 일자별
-                    if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
-                        columns[j].visible = false;
-                    }
-                } else if(params.dayOption === "2"){  // 기간합
-                    if(columns[j].binding == "saleDate") {
-                        columns[j].visible = false;
-                    }
-                }
-            }
-            // <-- //그리드 visible -->
-        });
+        $scope._inquiryMain("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getProdSaleDayStoreMomsList.sb", params, function (){});
     };
     // <-- //검색 호출 -->
 
@@ -239,7 +204,6 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
             }
             params.userBrands = momsHqBrandCd;
         }
-        params.dayOption = $scope.dayOption;
         params.momsStoreFg01 = $scope.momsStoreFg01;
         params.excelType = excelType;
 
@@ -326,33 +290,6 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
             }
-
-            // <-- 그리드 visible -->
-            // 선택한 테이블에 따른 리스트 항목 visible
-            var grid = wijmo.Control.getControl("#wjGridExcelList");
-            var columns = grid.columns;
-
-            // 컬럼 총갯수
-            var columnsCnt = columns.length;
-
-            for (var i = 0; i < columnsCnt; i++) {
-                columns[i].visible = true;
-            }
-
-            // 합계가 0이면 해당 컬럼 숨기기
-            for (var j = 0; j < columnsCnt; j++) {
-                // 일자표시옵션
-                if(params.dayOption === "1"){  // 일자별
-                    if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
-                        columns[j].visible = false;
-                    }
-                } else if(params.dayOption === "2"){  // 기간합
-                    if(columns[j].binding == "saleDate") {
-                        columns[j].visible = false;
-                    }
-                }
-            }
-            // <-- //그리드 visible -->
 
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
             $timeout(function () {
@@ -458,33 +395,6 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
                                 $scope.excelUploadingPopup(false);
                                 return false;
                             }
-
-                            // <-- 그리드 visible -->
-                            // 선택한 테이블에 따른 리스트 항목 visible
-                            var grid = wijmo.Control.getControl("#wjGridExcelList");
-                            var columns = grid.columns;
-
-                            // 컬럼 총갯수
-                            var columnsCnt = columns.length;
-
-                            for (var i = 0; i < columnsCnt; i++) {
-                                columns[i].visible = true;
-                            }
-
-                            // 합계가 0이면 해당 컬럼 숨기기
-                            for (var j = 0; j < columnsCnt; j++) {
-                                // 일자표시옵션
-                                if (params.dayOption === "1") {  // 일자별
-                                    if (columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
-                                        columns[j].visible = false;
-                                    }
-                                } else if (params.dayOption === "2") {  // 기간합
-                                    if (columns[j].binding == "saleDate") {
-                                        columns[j].visible = false;
-                                    }
-                                }
-                            }
-                            // <-- //그리드 visible -->
 
                             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
                                 includeColumnHeaders: true,
