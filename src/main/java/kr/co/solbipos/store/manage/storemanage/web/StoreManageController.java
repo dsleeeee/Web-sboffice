@@ -1105,4 +1105,22 @@ public class StoreManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 포스별 4048 스마트오더 사용여부 조회
+     * @param storePosEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/storeManage/getEnv4048PosList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEnv4048PosList(StorePosEnvVO storePosEnvVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        List<DefaultMap<Object>> result = service.getEnv4048PosList(storePosEnvVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storePosEnvVO);
+    }
 }

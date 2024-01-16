@@ -8703,4 +8703,21 @@
            AND POS_NO != #{posNo}
     </update>
 
+    <!-- 포스별 4048 스마트오더 사용여부 조회 -->
+    <!--
+        TABLE    : TB_MS_POS_ENVST
+        PARAM    : storePosEnvVO
+        COMMENTS : 포스별 4048 스마트오더 사용여부를 조회한다.
+    -->
+    <select id="getEnv4048PosList" parameterType="storePosEnvVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.getEnv4048PosList */
+        SELECT POS_NO
+        ,      ENVST_VAL
+        FROM   TB_MS_POS_ENVST
+        WHERE  STORE_CD = #{storeCd}
+        AND    ENVST_CD = '4048'
+        ORDER
+        BY     POS_NO
+    </select>
+
 </mapper>

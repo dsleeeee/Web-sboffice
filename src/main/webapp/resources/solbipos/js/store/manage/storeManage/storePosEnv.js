@@ -322,20 +322,107 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 4048 스마트오더 사용여부 환경설정 변경여부 체크
       var chgEnv4048 = "N";
+      var env4048 = "";
       for (var i = 0; i < params.length; i++) {
         if(params[i].envstCd === "4048"){
             chgEnv4048 = "Y";
+            env4048 = params[i].envstVal;
         }
       }
+
+      // 포스별 4048 스마트오더 사용여부 조회
+      var params2 = {};
+      params2.storeCd = storeScope.getSelectedStore().storeCd;
+
+      $scope._postJSONQuery.withOutPopUp("/store/manage/storeManage/storeManage/getEnv4048PosList.sb", params2, function(response) {
+
+        var list = response.data.data.list;
+        var cnt = 0;
+        var str = "";
+        var chkEmpty = "";
+
+        if(list.length > 0) {
+            for(var i=0; i<list.length; i++){
+                if(list[i].envstVal === '1') { // 4048 스마트오더 사용중인 포스수 파악
+                    cnt++;
+                }
+                
+                // 각 포스별 4048 스마트오더 사용여부 안내
+                if(list[i].posNo === $scope.getSelectedPosNo() && chgEnv4048 === "Y" && env4048 !== ""){
+                    if((list[i].envstVal === "1" ? "사용" : "미사용") === (env4048 === "1" ? "사용" : "미사용")){
+                        str += "[" + list[i].posNo + "] POS" + list[i].posNo + " - " + (list[i].envstVal === "1" ? "사용" : "미사용") + "</br>";
+                    }else{
+                        str += "[" + list[i].posNo + "] POS" + list[i].posNo + " - " + (list[i].envstVal === "1" ? "사용" : "미사용")  + " → " + (env4048 === "1" ? "사용" : "미사용") + " 으로 변경</br>";
+                    }
+
+                    // 현재 선택한 포스가 4048 스마트오더 사용여부가 없었던 POS면, 체크
+                    if(list[i].envstVal === "*"){
+                        chkEmpty = "*";
+                    }
+                }else{
+                    str += "[" + list[i].posNo + "] POS" + list[i].posNo + " - " + (list[i].envstVal === "1" ? "사용" : "미사용") + "</br>";
+                }
+            }
+        }
+
+        // 기존 사용중인 포스수에 변경포스의 사용여부까지 포함하여 다시 계산
+        if(chgEnv4048 === "Y" && env4048 !== ""){
+            // '사용'으로 변경시
+            if(env4048 === "1") {
+                cnt++;
+            }
+
+            // '미사용'으로 변경시
+            if(env4048 === "0"){
+                if(chkEmpty === "*"){ // 원래 값이 없었다면, '미사용'으로 변경해도 cnt-- 제외(미사용 -> 미사용 변경 같은것이기 때문에)
+                }else{
+                    cnt--;
+                }
+            }
+        }
+
+        if(0 > cnt){cnt = 0;}
+
+        // 각 포스별 4048 스마트오더 사용여부 안내
+        str = "저장 시 [4048]스마트오더 사용여부를 설정한 포스가</br>'" + cnt + "'대가 됩니다. </br> [4048]스마트오더 사용여부는 1대의 포스에만 설정 바랍니다.</br></br>" + str ;
+
+        // 맘스터치 별도 처리
+        if(storeScope.getSelectedStore().hqOfficeCd === "DS034" || storeScope.getSelectedStore().hqOfficeCd === "H0393" || storeScope.getSelectedStore().hqOfficeCd === "DS021"){
+
+            if(cnt !== 1){ // 4048 스마트오더 사용중인 포스수가 1개가 아니면 안내
+                $scope._popConfirm(str, function() {
+                    $scope.saveStorePosEnv(params);
+                });
+            }else{
+                $scope.saveStorePosEnv(params);
+            }
+
+        }else{
+            if(cnt > 1){ // 4048 스마트오더 사용중인 포스수가 2개 이상이면 안내
+                $scope._popConfirm(str, function() {
+                    $scope.saveStorePosEnv(params);
+                });
+            }else{
+                $scope.saveStorePosEnv(params);
+            }
+        }
+      }, false);
+
+    });
+    event.preventDefault();
+  };
+
+  // 포스 환경설정값 저장
+  $scope.saveStorePosEnv = function(params){
 
       $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]);
 
       $scope._postJSONSave.withOutPopUp("/store/manage/storeManage/storeManage/savePosConfig.sb", params, function () {
 
-          if(chgEnv4048 === "Y"){
-              // 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경
-              $scope.updateToSmartOrder();
-          }else{
+          //if(chgEnv4048 === "Y"){
+              // 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경(미사용)
+              //$scope.updateToSmartOrder();
+          //}else{
               // 나머지는 모두 서브포스로 강제 업데이트
               if (vEnv1221 !== "" && vEnv1221 !== null && vEnv1221 !== undefined) {
                   if (vEnv1221 === "0") {
@@ -359,13 +446,11 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
               //var envScope = agrid.getScope('storeEnvCtrl');
               //$scope.changeEnvGroup(envScope.getEnvGroupCd());
               $scope.searchPosEnv();
-          }
+          //}
       });
-    });
-    event.preventDefault();
   };
   
-  // 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경
+  // 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경(미사용)
   $scope.updateToSmartOrder = function(){
 
       var storeScope    = agrid.getScope('storeManageCtrl');
