@@ -8713,7 +8713,7 @@
         /* USE : StoreManageMapper.getEnv4048PosList */
         SELECT  A.POS_NO AS POS_NO
         ,      '['||A.POS_NO||'] '||A.POS_NM AS POS_NM
-        ,       B.ENVST_VAL AS ENVST_VAL_C
+        ,       NVL(B.ENVST_VAL, '*') AS ENVST_VAL_C
         ,       DECODE(B.ENVST_VAL, '0', '미사용', '1', '사용', NULL, '미등록', '미등록') AS ENVST_VAL
         -- ,       SUM(DECODE(A.POS_NO, '03', 0, NVL(B.ENVST_VAL, 0))) OVER() AS ENVST_VAL_CNT
         FROM    TB_MS_POS A
