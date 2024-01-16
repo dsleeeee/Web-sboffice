@@ -343,24 +343,21 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if(list.length > 0) {
             for(var i=0; i<list.length; i++){
-                if(list[i].envstVal === '1') { // 4048 스마트오더 사용중인 포스수 파악
+                if(list[i].envstValC === '1') { // 4048 스마트오더 사용중인 포스수 파악
                     cnt++;
                 }
                 
                 // 각 포스별 4048 스마트오더 사용여부 안내
                 if(list[i].posNo === $scope.getSelectedPosNo() && chgEnv4048 === "Y" && env4048 !== ""){
-                    if((list[i].envstVal === "1" ? "사용" : "미사용") === (env4048 === "1" ? "사용" : "미사용")){
-                        str += "[" + list[i].posNo + "] POS" + list[i].posNo + " - " + (list[i].envstVal === "1" ? "사용" : "미사용") + "</br>";
-                    }else{
-                        str += "[" + list[i].posNo + "] POS" + list[i].posNo + " - " + (list[i].envstVal === "1" ? "사용" : "미사용")  + " → " + (env4048 === "1" ? "사용" : "미사용") + " 으로 변경</br>";
-                    }
 
-                    // 현재 선택한 포스가 4048 스마트오더 사용여부가 없었던 POS면, 체크
-                    if(list[i].envstVal === "*"){
+                    str += list[i].posNm + " - " + list[i].envstVal   + " → " + (env4048 === "1" ? "사용" : "미사용") + " 으로 변경</br>";
+
+                    // 현재 선택한 포스의 4048 스마트오더 사용여부가 미등록이면, 체크
+                    if(list[i].envstValC === "*"){
                         chkEmpty = "*";
                     }
                 }else{
-                    str += "[" + list[i].posNo + "] POS" + list[i].posNo + " - " + (list[i].envstVal === "1" ? "사용" : "미사용") + "</br>";
+                    str += list[i].posNm + " - " + list[i].envstVal  + "</br>";
                 }
             }
         }
@@ -374,7 +371,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
             // '미사용'으로 변경시
             if(env4048 === "0"){
-                if(chkEmpty === "*"){ // 원래 값이 없었다면, '미사용'으로 변경해도 cnt-- 제외(미사용 -> 미사용 변경 같은것이기 때문에)
+                if(chkEmpty === "*"){ // 미등록 -> 미사용으로 변경시, cnt-- 제외(미사용 -> 미사용 변경 같은 것이기에)
                 }else{
                     cnt--;
                 }

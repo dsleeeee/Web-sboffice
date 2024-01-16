@@ -8711,13 +8711,19 @@
     -->
     <select id="getEnv4048PosList" parameterType="storePosEnvVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getEnv4048PosList */
-        SELECT POS_NO
-        ,      ENVST_VAL
-        FROM   TB_MS_POS_ENVST
-        WHERE  STORE_CD = #{storeCd}
-        AND    ENVST_CD = '4048'
+        SELECT  A.POS_NO AS POS_NO
+        ,      '['||A.POS_NO||'] '||A.POS_NM AS POS_NM
+        ,       B.ENVST_VAL AS ENVST_VAL_C
+        ,       DECODE(B.ENVST_VAL, '0', '미사용', '1', '사용', NULL, '미등록', '미등록') AS ENVST_VAL
+        -- ,       SUM(DECODE(A.POS_NO, '03', 0, NVL(B.ENVST_VAL, 0))) OVER() AS ENVST_VAL_CNT
+        FROM    TB_MS_POS A
+        ,       TB_MS_POS_ENVST B
+        WHERE   A.STORE_CD = #{storeCd}
+        AND     B.STORE_CD (+)= A.STORE_CD
+        AND     B.POS_NO   (+)= A.POS_NO
+        AND     B.ENVST_CD (+)= '4048'
         ORDER
-        BY     POS_NO
+        BY      A.POS_NO
     </select>
 
 </mapper>
