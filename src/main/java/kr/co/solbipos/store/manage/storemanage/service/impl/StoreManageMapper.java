@@ -532,4 +532,7 @@ public interface StoreManageMapper {
 
     /** 나머지 포스 스마트오더사용여부 미사용으로 일괄 변경 */
     int updateToSmartOrder(StorePosEnvVO storePosEnvVO);
+
+    /** 포스별 4048 스마트오더 사용여부 조회 */
+    List<DefaultMap<Object>> getEnv4048PosList(StorePosEnvVO storePosEnvVO);
 }

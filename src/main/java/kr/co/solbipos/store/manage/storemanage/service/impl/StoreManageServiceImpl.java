@@ -1663,4 +1663,11 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         return mapper.updateToSmartOrder(storePosEnvVO);
     }
+
+    /** 포스별 4048 스마트오더 사용여부 조회 */
+    @Override
+    public List<DefaultMap<Object>> getEnv4048PosList(StorePosEnvVO storePosEnvVO) {
+
+        return mapper.getEnv4048PosList(storePosEnvVO);
+    }
 }
