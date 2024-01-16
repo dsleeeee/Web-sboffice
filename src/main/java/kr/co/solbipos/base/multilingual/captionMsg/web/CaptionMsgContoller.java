@@ -7,6 +7,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -84,7 +85,8 @@ public class CaptionMsgContoller {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 화면구분 콤보박스 조회
-        model.addAttribute("captionMsgGrpList", cmmCodeUtil.assmblObj(captionMsgService.getCaptionMsgGrpComboList(captionMsgVO, sessionInfoVO), "name", "value", UseYn.N));
+        List<DefaultMap<String>> captionMsgGrpList = captionMsgService.getCaptionMsgGrpComboList(captionMsgVO, sessionInfoVO);
+        model.addAttribute("captionMsgGrpList", captionMsgGrpList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(captionMsgGrpList, "name", "value", UseYn.N));
 
         return "base/multilingual/captionMsg/captionMsgTab";
     }
