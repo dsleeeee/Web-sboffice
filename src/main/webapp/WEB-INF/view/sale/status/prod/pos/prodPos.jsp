@@ -57,11 +57,8 @@
 							<jsp:param name="closeFunc" value="getPosNmList"/>
 						</jsp:include>
 					</td>
-					<input type="hidden" id="posProdSelectStoreCd" value=""/>
 				</c:if>
-				<c:if test="${sessionInfo.orgnFg == 'STORE'}">
-					<input type="hidden" id="posProdSelectStoreCd" value="${sessionInfo.storeCd}"/>
-				</c:if>
+				<input type="hidden" id="posProdSelectStoreCd" value=""/>
 				<input type="hidden" id="posProdSelectPosCd" value=""/>
 				<input type="hidden" id="posProdSelectPosName" value=""/>
 				<%-- 포스선택 --%>
@@ -180,4 +177,4 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/pos/prodPos.js?ver=20240105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/pos/prodPos.js?ver=20240116.01" charset="utf-8"></script>

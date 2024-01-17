@@ -190,4 +190,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20240108.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20240116.01" charset="utf-8"></script>

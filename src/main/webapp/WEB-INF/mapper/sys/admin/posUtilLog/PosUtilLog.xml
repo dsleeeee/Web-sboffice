@@ -31,7 +31,7 @@
         ,       TB_HQ_OFFICE tho
         ,       TB_MS_STORE tms
         WHERE   1=1
-        AND     tppul.UTIL_INS_DT BETWEEN #{startDate} AND #{endDate}
+        AND     tppul.UTIL_INS_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
             AND tms.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
         </if>

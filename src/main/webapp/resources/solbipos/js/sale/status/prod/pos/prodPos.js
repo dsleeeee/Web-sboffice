@@ -26,11 +26,15 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 	
 	//조회조건 콤보박스 데이터 Set
 	$scope._setComboData("posProdListScaleBox", gvListScaleBoxData);
-
+	
 	// grid 초기화 : 생성되기전 초기화되면서 생성된다
 	$scope.initGrid = function (s, e) {
 		// picker 사용시 호출 : 미사용시 호출안함
 		$scope._makePickColumns("prodPosCtrl");
+
+		if(orgnFg === 'STORE'){
+			$("#posProdSelectStoreCd").val(storeCd);
+		}
 
 		// add the new GroupRow to the grid's 'columnFooters' panel
 		s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -109,7 +113,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
 	// 다른 컨트롤러의 broadcast 받기
 	$scope.$on("prodPosCtrl", function (event, data) {
-		if( $("#posProdSelectStoreCd").val() === ''){
+		if ($("#posProdSelectStoreCd").val() === '') {
 			$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 			return false;
 		}
@@ -127,9 +131,10 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 		var params = {};
 
 		if(orgnFg === "STORE") {
+			params.storeCd = storeCd;
+		}else if(orgnFg === "HQ") {
 			params.storeCd = $("#posProdSelectStoreCd").val();
 		}
-		// params.storeCd = $("#posProdSelectStoreCd").val();
 		params.posNo = $("#posProdSelectPosCd").val();
 		params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
 		params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
