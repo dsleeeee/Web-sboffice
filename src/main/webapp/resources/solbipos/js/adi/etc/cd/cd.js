@@ -304,9 +304,26 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = new Array();
 
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      var item = $scope.flex.collectionView.itemsEdited[i];
+      if(item.nmcodeNm === undefined || item.nmcodeNm.length === 0){
+        $scope._popMsg(messages["cd.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
+        return false;
+      }
+      if(item.nmcodeGrpCd == "146"){
+        if(item.nmcodeItem2 === undefined || item.nmcodeItem2 === ''){
+          $scope._popMsg(messages["cd.detail.require.nmcodeItem2"]); // 세부명칭의 코드항목2를 선택해주세요
+          return false;
+        }
+      }
+      if(item.useYn === undefined || item.useYn.length === 0){
+        $scope._popMsg(messages["cd.detail.require.useYn"]); // 세부명칭의 사용여부를 선택해주세요
+        return false;
+      }
+
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
+
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       var item = $scope.flex.collectionView.itemsAdded[i];
       if(item.nmcodeCd === undefined || item.nmcodeCd.length === 0){
@@ -318,6 +335,17 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(messages["cd.detail.require.nmcodeNm"]); // 세부명칭의 코드명을 입력해주세요
         return false;
       }
+      if(item.nmcodeGrpCd === "146"){
+        if(item.nmcodeItem2 === undefined || item.nmcodeItem2.length === 0){
+          $scope._popMsg(messages["cd.detail.require.nmcodeItem2"]); // 세부명칭의 코드항목2를 선택해주세요
+          return false;
+        }
+      }
+      if(item.useYn === undefined || item.useYn.length === 0){
+        $scope._popMsg(messages["cd.detail.require.useYn"]); // 세부명칭의 사용여부를 선택해주세요
+        return false;
+      }
+
 
       if(item.nmcodeGrpCd === "160"){
         if(item.nmcodeCd.length > $("#s_nmcodeItem2").val()){
@@ -345,11 +373,7 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.collectionView.itemsAdded[i].status = "I";
       params.push($scope.flex.collectionView.itemsAdded[i]);
 
-      if(item.nmcodeGrpCd === "146"){
-        if(item.nmcodeItem2 === ""){
-          item.nmcodeItem2 = "Y";
-        }
-      }
+      
 
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {

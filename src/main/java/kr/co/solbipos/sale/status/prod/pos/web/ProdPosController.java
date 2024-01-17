@@ -3,8 +3,12 @@ package kr.co.solbipos.sale.status.prod.pos.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.status.prod.pos.service.ProdPosService;
 import kr.co.solbipos.sale.status.prod.pos.service.ProdPosVO;
@@ -18,8 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static kr.co.common.utils.spring.StringUtil.toCamelCaseName;
 
 import java.util.List;
 
@@ -45,11 +47,13 @@ import java.util.List;
 public class ProdPosController {
     private final SessionService sessionService;
     private final ProdPosService prodPosService;
+    private final PopupMapper popupMapper;
 
     @Autowired
-    public ProdPosController(SessionService sessionService, ProdPosService prodPosService) {
+    public ProdPosController(SessionService sessionService, ProdPosService prodPosService, PopupMapper popupMapper) {
         this.sessionService = sessionService;
         this.prodPosService = prodPosService;
+        this.popupMapper = popupMapper;
     }
 
 
@@ -90,13 +94,19 @@ public class ProdPosController {
         	 prodPosVO.setArrPosNo(arrPosNo);
         	 prodPosVO.setArrStorePos(arrPosNo);
         } else {
-        	String[] arrStoreCd = prodPosVO.getStoreCd().split(",");
+//        	String[] arrStoreCd = prodPosVO.getStoreCd().split(",");
+//
+//        	if (arrStoreCd.length > 0) {
+//        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
+//        			prodPosVO.setArrStoreCd(arrStoreCd);
+//        		}
+//        	}
 
-        	if (arrStoreCd.length > 0) {
-        		if (arrStoreCd[0] != null && !"".equals(arrStoreCd[0])) {
-        			prodPosVO.setArrStoreCd(arrStoreCd);
-        		}
-        	}
+            if(!StringUtil.getOrBlank(prodPosVO.getStoreCd()).equals("")) {
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodPosVO.getStoreCd(), 3900));
+                prodPosVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+            }
 
             List<DefaultMap<String>> list = prodPosService.getPosNmList(prodPosVO, sessionInfoVO);
 
