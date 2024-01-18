@@ -80,7 +80,6 @@ public class ProdSalePmixMomsServiceImpl implements ProdSalePmixMomsService {
 
         // 동적 컬럼 생성을 위한 쿼리 변수
         String sQuery1 = "";
-        String sQuery2 = "";
 
         // 기간선택 두 날짜 사이 모든날짜 구하기
         List<HashMap<String, String>> dateArr = getDateDiff(prodSalePmixMomsVO);
@@ -90,31 +89,22 @@ public class ProdSalePmixMomsServiceImpl implements ProdSalePmixMomsService {
 
             // 검색기간의 첫날짜와 끝날짜 다시 셋팅
             if (i == 0) {
-                prodSalePmixMomsVO.setStartDate(dateArr.get(i).get("sDate"));
+                prodSalePmixMomsVO.setStartDate(dateArr.get(i).get("sOrgDate"));
             }
             if (i == dateArr.size() - 1) {
-                prodSalePmixMomsVO.setEndDate(dateArr.get(i).get("eDate"));
+                prodSalePmixMomsVO.setEndDate(dateArr.get(i).get("sOrgDate"));
             }
 
-            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp2.P_REAL_SALE_AMT ELSE 0 END) AS P_REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
-
-            sQuery2 += ", SUM(SALE_QTY_" + dateArr.get(i).get("sOrgDate") + ") AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery2 += ", SUM(REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + ") AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery2 += ", NVL(SUM(REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + ") / DECODE(SUM(P_REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "), 0, NULL, " + "SUM(P_REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + ")), 0) AS P_MIX_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.SALE_QTY, 0)) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT, 0) )) AS P_MIX_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
-        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
-        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS TOT_REAL_SALE_AMT" + "\n";
-        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp2.P_REAL_SALE_AMT ELSE 0 END) AS TOT_P_REAL_SALE_AMT" + "\n";
-
-        sQuery2 += ", SUM(TOT_SALE_QTY) AS TOT_SALE_QTY" + "\n";
-        sQuery2 += ", SUM(TOT_REAL_SALE_AMT) AS TOT_REAL_SALE_AMT" + "\n";
-        sQuery2 += ", NVL(SUM(TOT_REAL_SALE_AMT) / DECODE(SUM(TOT_P_REAL_SALE_AMT), 0, NULL, SUM(TOT_P_REAL_SALE_AMT)), 0) AS TOT_P_MIX" + "\n";
+        sQuery1 += ", SUM(B.SALE_QTY) AS TOT_SALE_QTY" + "\n";
+        sQuery1 += ", SUM(B.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT" + "\n";
+        sQuery1 += ", SUM(B.REAL_SALE_AMT) / SUM(B.P_REAL_SALE_AMT) AS TOT_P_MIX" + "\n";
 
         prodSalePmixMomsVO.setsQuery1(sQuery1);
-        prodSalePmixMomsVO.setsQuery2(sQuery2);
 
         return prodSalePmixMomsMapper.getProdSalePmixMomsList(prodSalePmixMomsVO);
     }
@@ -152,7 +142,6 @@ public class ProdSalePmixMomsServiceImpl implements ProdSalePmixMomsService {
 
         // 동적 컬럼 생성을 위한 쿼리 변수
         String sQuery1 = "";
-        String sQuery2 = "";
 
         // 기간선택 두 날짜 사이 모든날짜 구하기
         List<HashMap<String, String>> dateArr = getDateDiff(prodSalePmixMomsVO);
@@ -162,31 +151,22 @@ public class ProdSalePmixMomsServiceImpl implements ProdSalePmixMomsService {
 
             // 검색기간의 첫날짜와 끝날짜 다시 셋팅
             if (i == 0) {
-                prodSalePmixMomsVO.setStartDate(dateArr.get(i).get("sDate"));
+                prodSalePmixMomsVO.setStartDate(dateArr.get(i).get("sOrgDate"));
             }
             if (i == dateArr.size() - 1) {
-                prodSalePmixMomsVO.setEndDate(dateArr.get(i).get("eDate"));
+                prodSalePmixMomsVO.setEndDate(dateArr.get(i).get("sOrgDate"));
             }
 
-            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp2.P_REAL_SALE_AMT ELSE 0 END) AS P_REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
-
-            sQuery2 += ", SUM(SALE_QTY_" + dateArr.get(i).get("sOrgDate") + ") AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery2 += ", SUM(REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + ") AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery2 += ", NVL(SUM(REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + ") / DECODE(SUM(P_REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "), 0, NULL, " + "SUM(P_REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + ")), 0) AS P_MIX_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.SALE_QTY, 0)) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT, 0)) AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT, 0) )) AS P_MIX_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
-        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
-        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS TOT_REAL_SALE_AMT" + "\n";
-        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp2.P_REAL_SALE_AMT ELSE 0 END) AS TOT_P_REAL_SALE_AMT" + "\n";
-
-        sQuery2 += ", SUM(TOT_SALE_QTY) AS TOT_SALE_QTY" + "\n";
-        sQuery2 += ", SUM(TOT_REAL_SALE_AMT) AS TOT_REAL_SALE_AMT" + "\n";
-        sQuery2 += ", NVL(SUM(TOT_REAL_SALE_AMT) / DECODE(SUM(TOT_P_REAL_SALE_AMT), 0, NULL, SUM(TOT_P_REAL_SALE_AMT)), 0) AS TOT_P_MIX" + "\n";
+        sQuery1 += ", SUM(B.SALE_QTY) AS TOT_SALE_QTY" + "\n";
+        sQuery1 += ", SUM(B.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT" + "\n";
+        sQuery1 += ", SUM(B.REAL_SALE_AMT) / SUM(B.P_REAL_SALE_AMT) AS TOT_P_MIX" + "\n";
 
         prodSalePmixMomsVO.setsQuery1(sQuery1);
-        prodSalePmixMomsVO.setsQuery2(sQuery2);
 
         return prodSalePmixMomsMapper.getProdSalePmixMomsExcelList(prodSalePmixMomsVO);
     }
@@ -221,13 +201,11 @@ public class ProdSalePmixMomsServiceImpl implements ProdSalePmixMomsService {
             HashMap<String, String> m = new HashMap<>();
             if("day".equals(prodSalePmixMomsVO.getDayGubun())){
                 m.put("sOrgDate", dateFormat.format(currentDate));
-                m.put("sDate", dateFormat.format(currentDate));
-                m.put("eDate", dateFormat.format(currentDate));
+//                m.put("sDate", dateFormat.format(currentDate));
+//                m.put("eDate", dateFormat.format(currentDate));
                 dateArr.add(m);
             }else if("month".equals(prodSalePmixMomsVO.getDayGubun())){
                 m.put("sOrgDate", dateFormat.format(currentDate));
-                m.put("sDate", dateFormat.format(currentDate));
-                m.put("eDate", dateFormat.format(currentDate));
 //                m.put("sDate", dateFormat.format(currentDate) + "01");
 //                m.put("eDate", dateFormat.format(currentDate) + "31");
                 dateArr.add(m);
@@ -245,9 +223,9 @@ public class ProdSalePmixMomsServiceImpl implements ProdSalePmixMomsService {
             currentDate = c.getTime();
         }
 
-        for (HashMap<String, String> date : dateArr) {
-            System.out.println(date.get("sDate")  + "/" + date.get("eDate"));
-        }
+//        for (HashMap<String, String> date : dateArr) {
+//            System.out.println(date.get("sDate")  + "/" + date.get("eDate"));
+//        }
 
         return dateArr;
     }
