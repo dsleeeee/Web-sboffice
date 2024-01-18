@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    UserWebHist.xml
+    사용자웹사용이력
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.01.15     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.stats.userWebHist.service.impl.UserWebHistMapper">
+
+    <!-- 사용자웹사용이력 - 조회 -->
+    <!--
+        TABLE    : TB_WB_MENU_USE_HIST ,TB_WB_LOGIN_HIST
+        PARAM    : userWebHistVO
+        COMMENTS : 사용자웹사용이력을 조회한다.
+    -->
+    <select id="getUserWebHistList" parameterType="userWebHistVO" resultType="DefaultMap">
+        /* UserWebHistMapper.getUserWebHistList */
+        SELECT  A.H_DATE
+             ,  A.H_DT
+             ,  A.USER_ID
+             ,  B.USER_NM
+             ,  B.HQ_OFFICE_CD
+             ,  B.HQ_OFFICE_NM
+             ,  B.STORE_CD
+             ,  B.STORE_NM
+             ,  (CASE WHEN A.LM_FG = 'L' THEN '로그인'
+                      WHEN A.LM_FG = 'M' THEN '메뉴'
+                      ELSE null END
+                ) AS LM_FG
+             ,  A.STAT_CD
+             ,  A.LOGIN_ORGN
+             ,  A.V_USER_ID
+             ,  A.RESRCE_CD
+             ,  REPLACE(SUBSTR(C.PATH, 0, 7) ,'/','') AS LEVEL1
+             ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 0, 7) ,'/',''))) AS LEVEL1_NM
+             ,  REPLACE(SUBSTR(C.PATH, 8, 7) ,'/','') AS LEVEL2
+             ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 8, 7) ,'/',''))) AS LEVEL2_NM
+             ,  REPLACE(SUBSTR(C.PATH, 15, 7) ,'/','') AS LEVEL3
+             ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM
+        FROM
+            (
+                (
+                    SELECT LOGIN_DATE AS H_DATE,
+                           TO_CHAR(TO_DATE(LOGIN_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
+                           USER_ID,
+                           'L' AS LM_FG,
+                           STAT_CD AS STAT_CD,
+                           LOGIN_ORGN AS LOGIN_ORGN,
+                           V_USER_ID AS V_USER_ID,
+                           '' AS RESRCE_CD
+                    FROM TB_WB_LOGIN_HIST
+                    WHERE LOGIN_DATE BETWEEN #{startDate} AND #{endDate}
+                )
+                UNION ALL
+                (
+                    SELECT USE_DATE AS H_DATE,
+                           TO_CHAR(TO_DATE(USE_DATE || SUBSTR(USE_DT,0,6), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
+                           USER_ID,
+                           'M' AS LM_FG,
+                           '' AS STAT_CD,
+                           '' AS LOGIN_ORGN,
+                           '' AS V_USER_ID,
+                           RESRCE_CD AS RESRCE_CD
+                    FROM TB_WB_MENU_USE_HIST
+                    WHERE USE_DATE BETWEEN #{startDate} AND #{endDate}
+                )
+            ) A
+           ,    TB_WB_USER_INFO_DTL_V01 B
+           ,    (
+                    SELECT  RESRCE_CD,
+                            SYS_CONNECT_BY_PATH (RESRCE_CD, '/') PATH
+                    FROM    TB_WB_RESRCE_INFO
+                    WHERE 1=1
+                    START WITH P_RESRCE = '000000'
+                    CONNECT BY P_RESRCE = PRIOR RESRCE_CD
+                ) C
+        WHERE   A.H_DATE BETWEEN #{startDate} AND #{endDate}
+        AND 	B.USER_ID   (+) =   A.USER_ID
+        AND     C.RESRCE_CD (+) =   A.RESRCE_CD
+        <if test='userId != null and userId != ""'>
+            AND B.USER_ID LIKE '%'||#{userId}||'%'
+        </if>
+        <if test='userNm != null and userNm != ""'>
+            AND B.USER_NM LIKE '%'||#{userNm}||'%'
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND B.HQ_OFFICE_CD LIKE '%'||UPPER(#{hqOfficeCd})||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND B.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND B.STORE_CD LIKE '%'||UPPER(#{storeCd})||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY A.H_DATE asc
+           ,     A.H_DT asc
+    </select>
+
+</mapper>

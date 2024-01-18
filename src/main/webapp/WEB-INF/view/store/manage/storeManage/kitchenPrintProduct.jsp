@@ -10,6 +10,15 @@
   <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfoTab.jsp">
   </c:import>
 
+  <div class="tl oh">
+    <th><s:message code="storeManage.prodNm" /> :</th>
+    <input type="text" class="sb-input w200px" id="srchProdNm"/>
+    <%-- 조회버튼 --%>
+    <button type="button" class="btn_skyblue ml5" ng-click="searchProdNm()">
+      <s:message code="cmm.search"/>
+    </button>
+  </div>
+
   <div class="wj-TblWrap mt20 mb40">
     <%-- 주방프린터 --%>
     <div class="w25 fl">
@@ -86,4 +95,4 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=2018110702" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrintProduct.js?ver=20240118.01" charset="utf-8"></script>
