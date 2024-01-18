@@ -524,7 +524,10 @@
                 thpi.SALE_CHN_YN_YGE,
                 thpi.SALE_CHN_YN_CPN,
                 thpi.SALE_CHN_YN_TNG,
-                thpi.SALE_CHN_YN_DDN
+                thpi.SALE_CHN_YN_DDN,
+                thpi.PROD_EN_INFO,
+                thpi.PROD_CN_INFO,
+                thpi.PROD_JP_INFO
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
@@ -673,7 +676,10 @@
                 tmpi.SALE_CHN_YN_YGE,
                 tmpi.SALE_CHN_YN_CPN,
                 tmpi.SALE_CHN_YN_TNG,
-                tmpi.SALE_CHN_YN_DDN
+                tmpi.SALE_CHN_YN_DDN,
+                tmpi.PROD_EN_INFO,
+                tmpi.PROD_CN_INFO,
+                tmpi.PROD_JP_INFO
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_BRAND tmb ON
@@ -1929,7 +1935,10 @@
                     thp.DISCON_YN,
                     thp.GROUP_PROD_CD,
                     thp.DEPOSIT_PROD_CD,
-                    thp.ADD_GRP_CD
+                    thp.ADD_GRP_CD,
+                    thp.PROD_EN_NM,
+                    thp.PROD_CN_NM,
+                    thp.PROD_JP_NM
                 FROM
                    TB_HQ_PRODUCT thp
                WHERE
@@ -1985,7 +1994,10 @@
                tmp.DISCON_YN           = thp.DISCON_YN,
                tmp.GROUP_PROD_CD       = thp.GROUP_PROD_CD,
                tmp.DEPOSIT_PROD_CD     = thp.DEPOSIT_PROD_CD,
-               tmp.ADD_GRP_CD          = thp.ADD_GRP_CD
+               tmp.ADD_GRP_CD          = thp.ADD_GRP_CD,
+               tmp.PROD_EN_NM          = thp.PROD_EN_NM,
+               tmp.PROD_CN_NM          = thp.PROD_CN_NM,
+               tmp.PROD_JP_NM          = thp.PROD_JP_NM
         WHEN NOT MATCHED THEN
             INSERT
             (
@@ -2039,7 +2051,10 @@
                 tmp.DISCON_YN,
                 tmp.GROUP_PROD_CD,
                 tmp.DEPOSIT_PROD_CD,
-                tmp.ADD_GRP_CD
+                tmp.ADD_GRP_CD,
+                tmp.PROD_EN_NM,
+                tmp.PROD_CN_NM,
+                tmp.PROD_JP_NM
             )
             VALUES
             (
@@ -2094,7 +2109,10 @@
                 thp.DISCON_YN,
                 thp.GROUP_PROD_CD,
                 thp.DEPOSIT_PROD_CD,
-                thp.ADD_GRP_CD
+                thp.ADD_GRP_CD,
+                thp.PROD_EN_NM,
+                thp.PROD_CN_NM,
+                thp.PROD_JP_NM
             )
     </insert>
 
@@ -3770,7 +3788,10 @@
             MAP_PROD_CD,
             thp.DEPOSIT_CUP_FG,
             thp.POINT_USE_YN,
-            thp.DC_YN
+            thp.DC_YN,
+            thp.PROD_EN_NM,
+            thp.PROD_CN_NM,
+            thp.PROD_JP_NM
             FROM
             (
                   SELECT *
@@ -3827,7 +3848,10 @@
             MOD_ID = B.MOD_ID,
             DEPOSIT_CUP_FG = B.DEPOSIT_CUP_FG,
             POINT_USE_YN = B.POINT_USE_YN,
-            DC_YN = B.DC_YN
+            DC_YN = B.DC_YN,
+            PROD_EN_NM = B.PROD_EN_NM,
+            PROD_CN_NM = B.PROD_CN_NM,
+            PROD_JP_NM = B.PROD_JP_NM
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3872,7 +3896,10 @@
                 A.MAP_PROD_CD,
                 A.DEPOSIT_CUP_FG,
                 A.POINT_USE_YN,
-                A.DC_YN
+                A.DC_YN,
+                A.PROD_EN_NM,
+                A.PROD_CN_NM,
+                A.PROD_JP_NM
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -3916,7 +3943,10 @@
                 B.MAP_PROD_CD,
                 B.DEPOSIT_CUP_FG,
                 B.POINT_USE_YN,
-                B.DC_YN
+                B.DC_YN,
+                B.PROD_EN_NM,
+                B.PROD_CN_NM,
+                B.PROD_JP_NM
             )
     </insert>
 
