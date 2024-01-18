@@ -116,6 +116,14 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
     }
   };
 
+  // 상품명 조회
+  $scope.searchProdNm = function(){
+    $scope.getKitchenPrintList();
+    if($("#srchProdNm").val() != ''){
+      $scope.getProductList();
+    }
+  };
+
   /*********************************************************
    * 주방프린터 목록 조회
    * *******************************************************/
@@ -141,6 +149,7 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
     var params      = {};
     params.storeCd  = $scope.getSelectedPrter().storeCd;
     params.prterNo  = $scope.getSelectedPrter().prterNo;
+    params.prodNm   = $("#srchProdNm").val();
 
     // console.log(params);
 

@@ -219,6 +219,8 @@
     <typeAlias alias="userBaseVO" type="kr.co.solbipos.sys.stats.userBase.service.UserBaseVO"/>
     <!-- 시스템관리 > 통계 > 웹로그인 현황 -->
     <typeAlias alias="webLoginVO" type="kr.co.solbipos.sys.stats.webLogin.service.WebLoginVO"/>
+    <!-- 시스템관리 > 통계 > 사용자웹사용이력 -->
+    <typeAlias alias="userWebHistVO" type="kr.co.solbipos.sys.stats.userWebHist.service.UserWebHistVO"/>
     <!-- 시스템관리 > 관리자기능 > POS 시스템 로그 송신-->
     <typeAlias alias="logSendVO" type="kr.co.solbipos.sys.admin.logSend.service.LogSendVO"/>
     <!-- 시스템관리 > 관리자기능 > 매출점검 -->
