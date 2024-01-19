@@ -100,4 +100,32 @@ public class DaySaleStoreMomsServiceImpl implements DaySaleStoreMomsService {
 
         return daySaleStoreMomsMapper.getDaySaleStoreMomsExcelList(daySaleStoreMomsVO);
     }
+
+    /** 일별매출(매장) - 분할 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDaySaleStoreMomsExcelDivisionList(DaySaleStoreMomsVO daySaleStoreMomsVO, SessionInfoVO sessionInfoVO) {
+
+        daySaleStoreMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            daySaleStoreMomsVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(daySaleStoreMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(daySaleStoreMomsVO.getStoreCds(), 3900));
+            daySaleStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드가 '전체' 일때
+            if (daySaleStoreMomsVO.getStoreHqBrandCd() == "" || daySaleStoreMomsVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = daySaleStoreMomsVO.getUserBrands().split(",");
+                daySaleStoreMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return daySaleStoreMomsMapper.getDaySaleStoreMomsExcelDivisionList(daySaleStoreMomsVO);
+    }
 }

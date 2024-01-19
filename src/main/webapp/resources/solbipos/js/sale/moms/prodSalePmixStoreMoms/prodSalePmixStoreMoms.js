@@ -868,7 +868,8 @@ app.controller('prodSalePmixStoreMomsExcelCtrl', ['$scope', '$http', '$timeout',
                     // ajax 통신 설정
                     $http({
                         method: 'POST', //방식
-                        url: '/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsList.sb', /* 통신할 URL */
+                        // url: '/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsList.sb', /* 통신할 URL */
+                        url: '/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsExcelDivisionList.sb', /* 통신할 URL */
                         params: params, /* 파라메터로 보낼 데이터 */
                         headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
                     }).then(function successCallback(response) {

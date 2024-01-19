@@ -27,4 +27,7 @@ public interface TimeSaleMomsService {
 
     /** 시간대매출 - 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getTimeSaleMomsExcelList(TimeSaleMomsVO timeSaleMomsVO, SessionInfoVO sessionInfoVO);
+
+    /** 시간대매출 - 분할 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getTimeSaleMomsExcelDivisionList(TimeSaleMomsVO timeSaleMomsVO, SessionInfoVO sessionInfoVO);
 }

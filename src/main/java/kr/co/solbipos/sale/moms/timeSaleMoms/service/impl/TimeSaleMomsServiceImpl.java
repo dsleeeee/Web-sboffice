@@ -112,4 +112,38 @@ public class TimeSaleMomsServiceImpl implements TimeSaleMomsService {
 
         return timeSaleMomsMapper.getTimeSaleMomsExcelList(timeSaleMomsVO);
     }
+
+    /** 시간대매출 - 분할 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getTimeSaleMomsExcelDivisionList(TimeSaleMomsVO timeSaleMomsVO, SessionInfoVO sessionInfoVO) {
+
+        timeSaleMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            timeSaleMomsVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(timeSaleMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(timeSaleMomsVO.getStoreCds(), 3900));
+            timeSaleMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 상품 array 값 세팅
+        if (timeSaleMomsVO.getProdCds() != null && !"".equals(timeSaleMomsVO.getProdCds())) {
+            String[] prodCdList = timeSaleMomsVO.getProdCds().split(",");
+            timeSaleMomsVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (timeSaleMomsVO.getStoreHqBrandCd() == "" || timeSaleMomsVO.getStoreHqBrandCd() == null || timeSaleMomsVO.getProdHqBrandCd() == "" || timeSaleMomsVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = timeSaleMomsVO.getUserBrands().split(",");
+                timeSaleMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return timeSaleMomsMapper.getTimeSaleMomsExcelDivisionList(timeSaleMomsVO);
+    }
 }

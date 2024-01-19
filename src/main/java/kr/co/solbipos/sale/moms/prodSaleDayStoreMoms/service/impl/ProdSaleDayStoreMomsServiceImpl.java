@@ -112,4 +112,38 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
 
         return prodSaleDayStoreMomsMapper.getProdSaleDayStoreMomsExcelList(prodSaleDayStoreMomsVO);
     }
+
+    /** 상품매출일별(매장) - 분할 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDayStoreMomsExcelDivisionList(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO) {
+
+        prodSaleDayStoreMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodSaleDayStoreMomsVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(prodSaleDayStoreMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleDayStoreMomsVO.getStoreCds(), 3900));
+            prodSaleDayStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 상품 array 값 세팅
+        if (prodSaleDayStoreMomsVO.getProdCds() != null && !"".equals(prodSaleDayStoreMomsVO.getProdCds())) {
+            String[] prodCdList = prodSaleDayStoreMomsVO.getProdCds().split(",");
+            prodSaleDayStoreMomsVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (prodSaleDayStoreMomsVO.getStoreHqBrandCd() == "" || prodSaleDayStoreMomsVO.getStoreHqBrandCd() == null || prodSaleDayStoreMomsVO.getProdHqBrandCd() == "" || prodSaleDayStoreMomsVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prodSaleDayStoreMomsVO.getUserBrands().split(",");
+                prodSaleDayStoreMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return prodSaleDayStoreMomsMapper.getProdSaleDayStoreMomsExcelDivisionList(prodSaleDayStoreMomsVO);
+    }
 }

@@ -31,4 +31,7 @@ public interface ProdSalePmixStoreMomsMapper {
 
     /** 상품매출(P.MIX 매장) - 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getProdSalePmixStoreMomsExcelList(ProdSalePmixStoreMomsVO prodSalePmixStoreMomsVO);
+
+    /** 상품매출(P.MIX 매장) - 분할 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getProdSalePmixStoreMomsExcelDivisionList(ProdSalePmixStoreMomsVO prodSalePmixStoreMomsVO);
 }

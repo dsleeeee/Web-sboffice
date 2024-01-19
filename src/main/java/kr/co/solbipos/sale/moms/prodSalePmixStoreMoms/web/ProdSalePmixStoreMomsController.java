@@ -260,6 +260,29 @@ public class ProdSalePmixStoreMomsController {
     }
 
     /**
+     * 상품매출(P.MIX 매장) - 분할 엑셀다운로드 조회
+     *
+     * @param prodSalePmixStoreMomsVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 01. 19.
+     */
+    @RequestMapping(value = "/prodSalePmixStoreMoms/getProdSalePmixStoreMomsExcelDivisionList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSalePmixStoreMomsExcelDivisionList(ProdSalePmixStoreMomsVO prodSalePmixStoreMomsVO, HttpServletRequest request,
+                                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodSalePmixStoreMomsService.getProdSalePmixStoreMomsExcelDivisionList(prodSalePmixStoreMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodSalePmixStoreMomsVO);
+    }
+
+    /**
      * 기간선택 두 날짜 사이 모든날짜 구하기
      * @param request
      * @param response

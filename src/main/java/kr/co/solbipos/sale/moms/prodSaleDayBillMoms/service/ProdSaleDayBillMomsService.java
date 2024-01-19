@@ -29,6 +29,9 @@ public interface ProdSaleDayBillMomsService {
     /** 상품매출일별(영수) - 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getProdSaleDayBillMomsExcelList(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO, SessionInfoVO sessionInfoVO);
 
+    /** 상품매출일별(영수) - 분할 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getProdSaleDayBillMomsExcelDivisionList(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO, SessionInfoVO sessionInfoVO);
+
     /** 기간선택 두 날짜 사이 모든날짜 구하기 */
     List<HashMap<String, String>> getDateDiff(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO);
 }

@@ -258,4 +258,27 @@ public class TimeSaleMomsController {
 
         return ReturnUtil.returnListJson(Status.OK, result, timeSaleMomsVO);
     }
+
+    /**
+     * 시간대매출 - 분할 엑셀다운로드 조회
+     *
+     * @param timeSaleMomsVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 01. 19.
+     */
+    @RequestMapping(value = "/timeSaleMoms/getTimeSaleMomsExcelDivisionList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTimeSaleMomsExcelDivisionList(TimeSaleMomsVO timeSaleMomsVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = timeSaleMomsService.getTimeSaleMomsExcelDivisionList(timeSaleMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, timeSaleMomsVO);
+    }
 }

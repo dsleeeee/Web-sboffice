@@ -31,4 +31,7 @@ public interface BillSaleMomsMapper {
 
     /** 영수건별매출 - 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getBillSaleMomsExcelList(BillSaleMomsVO billSaleMomsVO);
+
+    /** 영수건별매출 - 분할 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getBillSaleMomsExcelDivisionList(BillSaleMomsVO billSaleMomsVO);
 }
