@@ -94,10 +94,22 @@ app.controller('saleMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
             return false;
         }
 
-        // 조회일자 최대 1달(31일) 제한
-        if (diffDay > 31) {
-            $scope._popMsg(messages['cmm.dateOver.1month.error']);
-            return false;
+        // 매장 1년, 본사(매장외) 31일
+        if(orgnFg != null && orgnFg == 'STORE')
+        {
+            // 조회일자 최대 1년(365일) 제한
+            if (diffDay > 365) {
+                $scope._popMsg(messages['cmm.dateOver.1year.error']);
+                return false;
+            }
+        }
+        else
+        {
+            // 조회일자 최대 1달(31일) 제한
+            if (diffDay > 31) {
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
+                return false;
+            }
         }
 
         // 파라미터

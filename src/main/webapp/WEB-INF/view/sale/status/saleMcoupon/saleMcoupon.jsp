@@ -336,7 +336,7 @@
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/saleMcoupon/saleMcoupon.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/saleMcoupon/saleMcoupon.js?ver=20240119.01" charset="utf-8"></script>
 
 <%-- 모바일쿠폰 현황 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/saleMcoupon/saleMcouponDtl.jsp">
