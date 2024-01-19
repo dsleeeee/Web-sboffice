@@ -29,6 +29,9 @@ public interface ProdSalePmixStoreMomsService {
     /** 상품매출(P.MIX 매장) - 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getProdSalePmixStoreMomsExcelList(ProdSalePmixStoreMomsVO prodSalePmixStoreMomsVO, SessionInfoVO sessionInfoVO);
 
+    /** 상품매출(P.MIX 매장) - 분할 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getProdSalePmixStoreMomsExcelDivisionList(ProdSalePmixStoreMomsVO prodSalePmixStoreMomsVO, SessionInfoVO sessionInfoVO);
+
     /** 기간선택 두 날짜 사이 모든날짜 구하기 */
     List<HashMap<String, String>> getDateDiff(ProdSalePmixStoreMomsVO prodSalePmixStoreMomsVO);
 }

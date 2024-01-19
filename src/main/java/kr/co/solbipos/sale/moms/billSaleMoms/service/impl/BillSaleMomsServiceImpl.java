@@ -112,4 +112,38 @@ public class BillSaleMomsServiceImpl implements BillSaleMomsService {
 
         return billSaleMomsMapper.getBillSaleMomsExcelList(billSaleMomsVO);
     }
+
+    /** 영수건별매출 - 분할 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getBillSaleMomsExcelDivisionList(BillSaleMomsVO billSaleMomsVO, SessionInfoVO sessionInfoVO) {
+
+        billSaleMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            billSaleMomsVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(billSaleMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(billSaleMomsVO.getStoreCds(), 3900));
+            billSaleMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 상품 array 값 세팅
+        if (billSaleMomsVO.getProdCds() != null && !"".equals(billSaleMomsVO.getProdCds())) {
+            String[] prodCdList = billSaleMomsVO.getProdCds().split(",");
+            billSaleMomsVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (billSaleMomsVO.getStoreHqBrandCd() == "" || billSaleMomsVO.getStoreHqBrandCd() == null || billSaleMomsVO.getProdHqBrandCd() == "" || billSaleMomsVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = billSaleMomsVO.getUserBrands().split(",");
+                billSaleMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        return billSaleMomsMapper.getBillSaleMomsExcelDivisionList(billSaleMomsVO);
+    }
 }

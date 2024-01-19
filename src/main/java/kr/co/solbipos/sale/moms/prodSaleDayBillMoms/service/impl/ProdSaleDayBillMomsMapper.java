@@ -31,4 +31,7 @@ public interface ProdSaleDayBillMomsMapper {
 
     /** 상품매출일별(영수) - 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getProdSaleDayBillMomsExcelList(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO);
+
+    /** 상품매출일별(영수) - 분할 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getProdSaleDayBillMomsExcelDivisionList(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO);
 }

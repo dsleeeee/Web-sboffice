@@ -250,11 +250,34 @@ public class ProdSaleDayStoreMomsController {
     @RequestMapping(value = "/prodSaleDayStoreMoms/getProdSaleDayStoreMomsExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdSaleDayStoreMomsExcelList(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, HttpServletRequest request,
-                                              HttpServletResponse response, Model model) {
+                                                   HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = prodSaleDayStoreMomsService.getProdSaleDayStoreMomsExcelList(prodSaleDayStoreMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodSaleDayStoreMomsVO);
+    }
+
+    /**
+     * 상품매출일별(매장) - 분할 엑셀다운로드 조회
+     *
+     * @param prodSaleDayStoreMomsVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 01. 19.
+     */
+    @RequestMapping(value = "/prodSaleDayStoreMoms/getProdSaleDayStoreMomsExcelDivisionList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSaleDayStoreMomsExcelDivisionList(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, HttpServletRequest request,
+                                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodSaleDayStoreMomsService.getProdSaleDayStoreMomsExcelDivisionList(prodSaleDayStoreMomsVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, prodSaleDayStoreMomsVO);
     }

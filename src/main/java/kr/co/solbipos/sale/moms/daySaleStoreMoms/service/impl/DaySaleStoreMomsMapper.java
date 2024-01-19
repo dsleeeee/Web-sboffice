@@ -31,4 +31,7 @@ public interface DaySaleStoreMomsMapper {
 
     /** 일별매출(매장) - 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getDaySaleStoreMomsExcelList(DaySaleStoreMomsVO daySaleStoreMomsVO);
+
+    /** 일별매출(매장) - 분할 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getDaySaleStoreMomsExcelDivisionList(DaySaleStoreMomsVO daySaleStoreMomsVO);
 }

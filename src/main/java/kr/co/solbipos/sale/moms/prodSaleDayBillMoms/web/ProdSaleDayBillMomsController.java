@@ -260,6 +260,29 @@ public class ProdSaleDayBillMomsController {
     }
 
     /**
+     * 상품매출일별(영수) - 분할 엑셀다운로드 조회
+     *
+     * @param prodSaleDayBillMomsVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 01. 19.
+     */
+    @RequestMapping(value = "/prodSaleDayBillMoms/getProdSaleDayBillMomsExcelDivisionList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSaleDayBillMomsExcelDivisionList(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO, HttpServletRequest request,
+                                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodSaleDayBillMomsService.getProdSaleDayBillMomsExcelDivisionList(prodSaleDayBillMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodSaleDayBillMomsVO);
+    }
+
+    /**
      * 기간선택 두 날짜 사이 모든날짜 구하기
      * @param request
      * @param response

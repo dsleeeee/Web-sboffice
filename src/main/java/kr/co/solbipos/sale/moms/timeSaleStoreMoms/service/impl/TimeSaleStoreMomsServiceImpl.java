@@ -142,4 +142,53 @@ public class TimeSaleStoreMomsServiceImpl implements TimeSaleStoreMomsService {
 
         return timeSaleStoreMomsMapper.getTimeSaleStoreMomsExcelList(timeSaleStoreMomsVO);
     }
+
+    /** 시간대매출(매장) - 분할 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getTimeSaleStoreMomsExcelDivisionList(TimeSaleStoreMomsVO timeSaleStoreMomsVO, SessionInfoVO sessionInfoVO) {
+
+        timeSaleStoreMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            timeSaleStoreMomsVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(timeSaleStoreMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(timeSaleStoreMomsVO.getStoreCds(), 3900));
+            timeSaleStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드가 '전체' 일때
+            if (timeSaleStoreMomsVO.getStoreHqBrandCd() == "" || timeSaleStoreMomsVO.getStoreHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = timeSaleStoreMomsVO.getUserBrands().split(",");
+                timeSaleStoreMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 시간대
+        String timeCol = "";
+        for(int i = 0; i <= 23; i++) {
+            timeCol += (i < 10 ? "0" + i : i);
+            if(i != 23){
+                timeCol += ",";
+            }
+        }
+        String[] arrTimeCol = timeCol.split(",");
+
+        if(arrTimeCol.length > 0){
+            if(arrTimeCol[0] != null && !"".equals(arrTimeCol[0])){
+                timeSaleStoreMomsVO.setArrTimeCol(arrTimeCol);
+            }
+        }
+
+        // 조회옵션 array 값 세팅
+        if (timeSaleStoreMomsVO.getDlvrOrderFg() != null && !"".equals(timeSaleStoreMomsVO.getDlvrOrderFg())) {
+            timeSaleStoreMomsVO.setDlvrOrderFgList(timeSaleStoreMomsVO.getDlvrOrderFg().split(","));
+        }
+
+        return timeSaleStoreMomsMapper.getTimeSaleStoreMomsExcelDivisionList(timeSaleStoreMomsVO);
+    }
 }

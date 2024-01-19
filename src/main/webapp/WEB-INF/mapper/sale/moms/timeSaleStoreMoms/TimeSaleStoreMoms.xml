@@ -160,4 +160,79 @@
         ORDER BY tsdtd.SALE_DATE, tsdtd.STORE_CD
     </select>
 
+    <!-- 시간대매출(매장) - 분할 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleStoreMomsExcelDivisionList" parameterType="TimeSaleStoreMomsVO" resultType="DefaultMap">
+        /* TimeSaleStoreMomsMapper.getTimeSaleStoreMomsExcelDivisionList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        TO_CHAR(TO_DATE(tsdtd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdtd.STORE_CD,
+        tms.STORE_NM,
+        <foreach collection="arrTimeCol" item="item" separator=",">
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT${item},
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT${item},
+            SUM(CASE WHEN tsdtd.SALE_HOUR = #{item} THEN tsdtd.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT${item}
+        </foreach>
+        FROM TB_SL_DAILY_TIME_DLVR tsdtd,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsdtd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdtd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+            AND tsdtd.DLVR_ORDER_FG IN
+            <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdtd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        AND tms.STORE_CD = tsdtd.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        GROUP BY tsdtd.SALE_DATE, tsdtd.STORE_CD, tms.STORE_NM
+        ORDER BY tsdtd.SALE_DATE, tsdtd.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
 </mapper>

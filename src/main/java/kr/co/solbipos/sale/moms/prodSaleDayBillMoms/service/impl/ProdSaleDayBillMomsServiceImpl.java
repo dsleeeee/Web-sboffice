@@ -191,6 +191,78 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
         return prodSaleDayBillMomsMapper.getProdSaleDayBillMomsExcelList(prodSaleDayBillMomsVO);
     }
 
+    /** 상품매출일별(영수) - 분할 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDayBillMomsExcelDivisionList(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO, SessionInfoVO sessionInfoVO) {
+
+        prodSaleDayBillMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            prodSaleDayBillMomsVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(prodSaleDayBillMomsVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleDayBillMomsVO.getStoreCds(), 3900));
+            prodSaleDayBillMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 상품 array 값 세팅
+        if (prodSaleDayBillMomsVO.getProdCds() != null && !"".equals(prodSaleDayBillMomsVO.getProdCds())) {
+            String[] prodCdList = prodSaleDayBillMomsVO.getProdCds().split(",");
+            prodSaleDayBillMomsVO.setProdCdList(prodCdList);
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (prodSaleDayBillMomsVO.getStoreHqBrandCd() == "" || prodSaleDayBillMomsVO.getStoreHqBrandCd() == null || prodSaleDayBillMomsVO.getProdHqBrandCd() == "" || prodSaleDayBillMomsVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                String[] userBrandList = prodSaleDayBillMomsVO.getUserBrands().split(",");
+                prodSaleDayBillMomsVO.setUserBrandList(userBrandList);
+            }
+        }
+
+        // 동적 컬럼 생성을 위한 쿼리 변수
+        String sQuery1 = "";
+        String sQuery2 = "";
+
+        // 기간선택 두 날짜 사이 모든날짜 구하기
+        List<HashMap<String, String>> dateArr = getDateDiff(prodSaleDayBillMomsVO);
+
+        // 집계쿼리 생성
+        for (int i = 0; i < dateArr.size(); i++) {
+
+            // 검색기간의 첫날짜와 끝날짜 다시 셋팅
+            if (i == 0) {
+                prodSaleDayBillMomsVO.setStartDate(dateArr.get(i).get("sDate"));
+            }
+            if (i == dateArr.size() - 1) {
+                prodSaleDayBillMomsVO.setEndDate(dateArr.get(i).get("eDate"));
+            }
+
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS BILL_CNT_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS SALE_QTY_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(i).get("sDate") + "' AND '" + dateArr.get(i).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT_" + dateArr.get(i).get("sOrgDate") + "\n";
+        }
+
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.BILL_CNT ELSE 0 END) AS TOT_BILL_CNT" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.SALE_QTY ELSE 0 END) AS TOT_SALE_QTY" + "\n";
+        sQuery1 += ", SUM(CASE WHEN tsdp.SALE_DATE BETWEEN '" + dateArr.get(0).get("sDate") + "' AND '" + dateArr.get(dateArr.size() - 1).get("eDate") + "' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS TOT_REAL_SALE_AMT" + "\n";
+
+        // 영수건수 계산을 위한 쿼리문 생성
+        sQuery2 = ", SUM(";
+        for(int j = 1; j <= 20; j++) {
+            sQuery2 += "A.PAY_CNT_"  + (j < 10 ? "0" + j : j);
+            sQuery2 += (j < 20 ? " + ":"");
+        }
+        sQuery2 += ") AS BILL_CNT";
+
+        prodSaleDayBillMomsVO.setsQuery1(sQuery1);
+        prodSaleDayBillMomsVO.setsQuery2(sQuery2);
+
+        return prodSaleDayBillMomsMapper.getProdSaleDayBillMomsExcelDivisionList(prodSaleDayBillMomsVO);
+    }
+
     /** 기간선택 두 날짜 사이 모든날짜 구하기 */
     @Override
     public List<HashMap<String, String>> getDateDiff(ProdSaleDayBillMomsVO prodSaleDayBillMomsVO) {
@@ -245,9 +317,9 @@ public class ProdSaleDayBillMomsServiceImpl implements ProdSaleDayBillMomsServic
             currentDate = c.getTime();
         }
 
-        for (HashMap<String, String> date : dateArr) {
-            System.out.println(date.get("sDate")  + "/" + date.get("eDate"));
-        }
+//        for (HashMap<String, String> date : dateArr) {
+//            System.out.println(date.get("sDate")  + "/" + date.get("eDate"));
+//        }
 
         return dateArr;
     }

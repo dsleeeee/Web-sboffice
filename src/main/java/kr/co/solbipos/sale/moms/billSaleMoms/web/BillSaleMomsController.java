@@ -258,4 +258,27 @@ public class BillSaleMomsController {
 
         return ReturnUtil.returnListJson(Status.OK, result, billSaleMomsVO);
     }
+
+    /**
+     * 영수건별매출 - 분할 엑셀다운로드 조회
+     *
+     * @param billSaleMomsVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 01. 19.
+     */
+    @RequestMapping(value = "/billSaleMoms/getBillSaleMomsExcelDivisionList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getBillSaleMomsExcelDivisionList(BillSaleMomsVO billSaleMomsVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = billSaleMomsService.getBillSaleMomsExcelDivisionList(billSaleMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, billSaleMomsVO);
+    }
 }
