@@ -210,7 +210,7 @@ app.controller('cmNmcdExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // 엑셀파일이 변경된 경우
     $scope.excelFileChanged = function () {
-        if ($('#cmPosFnkeyExcelUpFile')[0].files[0]) {
+        if ($('#cmNmcdExcelUpFile')[0].files[0]) {
             // 엑셀업로드 호출
             $scope.excelUpload();
         }

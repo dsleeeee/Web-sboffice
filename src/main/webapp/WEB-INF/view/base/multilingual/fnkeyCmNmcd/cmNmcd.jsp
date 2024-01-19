@@ -125,4 +125,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/cmNmcd.js?ver=20240111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/fnkeyCmNmcd/cmNmcd.js?ver=20240119.01" charset="utf-8"></script>
