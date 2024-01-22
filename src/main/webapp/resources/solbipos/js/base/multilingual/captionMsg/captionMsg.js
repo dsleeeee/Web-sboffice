@@ -94,8 +94,12 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             var fileInfo = response.data.data;
 
-            // 이미지 셋팅
-            $("#imgCaptionMsgGrpView").attr("src", "http://" + window.location.host + "/Media/" + fileInfo.fileNm);
+            // 이미지 파일이 있는경우만 이미지 셋팅
+            if(fileInfo !== null && fileInfo !== undefined && fileInfo !== ""){
+                $("#imgCaptionMsgGrpView").attr("src", "http://" + window.location.host + "/Media/" + fileInfo.fileNm);
+            }else{
+                $("#imgCaptionMsgGrpView").attr("src", "");
+            }
 
             // 화면구분 선택에 따른 기능키/메시지 탭 리스트 조회
             $scope._inquiryMain("/base/multilingual/captionMsg/getCaptionMsgList.sb", params);
@@ -275,11 +279,17 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
                     var comboArray = [];
                     var comboData  = {};
 
-                    for (var i = 0; i < list.length; i++) {
-                        comboData = {};
-                        comboData.name  = list[i].name;
-                        comboData.value = list[i].value;
+                    if(list.length === undefined || list.length === 0 || list.length === null) {
+                        comboData.name  = "전체";
+                        comboData.value = "";
                         comboArray.push(comboData);
+                    }else{
+                        for (var i = 0; i < list.length; i++) {
+                            comboData = {};
+                            comboData.name  = list[i].name;
+                            comboData.value = list[i].value;
+                            comboArray.push(comboData);
+                        }
                     }
 
                     // 화면구분 검색조건 콤보박스 셋팅
