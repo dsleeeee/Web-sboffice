@@ -8,7 +8,7 @@
         <a href="#" class="open fl"><s:message code="captionMsg.captionMsgGrp"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('captionMsgGrpCtrl', 1)">
+            <button class="btn_blue fr" id="nxBtnSearch" ng-click="_pageView('captionMsgGrpCtrl', 1)">
                 <s:message code="cmm.search"/>
             </button>
         </div>
