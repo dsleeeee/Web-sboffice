@@ -55,7 +55,7 @@
         </if>
          AND    thkc.TU_CLS_TYPE NOT IN ('00')
          ORDER
-         BY     thkc.TU_CLS_TYPE, thkc.INDEX_NO
+         BY     thkc.TU_CLS_TYPE, thkc.TU_CLS_CD
     </select>
 
     <!-- 키오스크(카테고리명) 영문, 중문, 일문 저장 -->
