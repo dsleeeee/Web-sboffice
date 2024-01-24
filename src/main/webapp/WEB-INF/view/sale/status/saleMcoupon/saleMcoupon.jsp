@@ -272,6 +272,8 @@
                     <wj-flex-grid-column header="<s:message code="saleMcoupon.apprAmt"/>" binding="apprAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleMcoupon.cancelCnt"/>" binding="cancelCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="saleMcoupon.cancelAmt"/>" binding="cancelAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleMcoupon.cashAmt"/>" binding="cashAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleMcoupon.exCashAmt"/>" binding="exCashAmt" width="120" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -314,6 +316,8 @@
                 <wj-flex-grid-column header="<s:message code="saleMcoupon.apprAmt"/>" binding="apprAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleMcoupon.cancelCnt"/>" binding="cancelCnt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleMcoupon.cancelAmt"/>" binding="cancelAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleMcoupon.cashAmt"/>" binding="cashAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleMcoupon.exCashAmt"/>" binding="exCashAmt" width="120" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
    </div>
