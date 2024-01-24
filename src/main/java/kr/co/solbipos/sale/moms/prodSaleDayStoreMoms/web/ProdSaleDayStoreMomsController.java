@@ -281,4 +281,27 @@ public class ProdSaleDayStoreMomsController {
 
         return ReturnUtil.returnListJson(Status.OK, result, prodSaleDayStoreMomsVO);
     }
+
+    /**
+     * 상품매출일별(매장) - 분할 엑셀다운로드 사용자 제한
+     *
+     * @param prodSaleDayStoreMomsVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024.01.24
+     */
+    @RequestMapping(value = "/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDivisionExcelDownloadUserIdChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodSaleDayStoreMomsService.getDivisionExcelDownloadUserIdChk(prodSaleDayStoreMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
 }
