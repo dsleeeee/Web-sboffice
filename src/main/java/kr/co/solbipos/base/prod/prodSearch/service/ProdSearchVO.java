@@ -403,6 +403,51 @@ public class ProdSearchVO extends PageVO {
     /** 상품분류코드 */
     private String sdselClassCd;
 
+    /** 판매터치키 등록여부 */
+    private String tuKey;
+
+    /** 키오스크 등록여부 */
+    private String kiosk;
+
+    /** 사이드-선택상품구성내역 등록여부 */
+    private String sdsel;
+
+    /** 상품이미지 등록여부 */
+    private String bsImg;
+
+    /** 키오스크이미지 등록여부 */
+    private String kioskImg;
+
+    /** DID이미지 등록여부 */
+    private String didImg;
+
+    /** #2이미지 등록여부 */
+    private String proImg;
+
+    /** 테이블오더이미지 등록여부 */
+    private String toImg;
+
+    /** 배달시스템상품명칭매핑 등록여부 */
+    private String dlvrNm;
+
+    /** 상품-매장주방프린터연결 등록여부 */
+    private String prtCnt;
+
+    /** 원산지정보 등록여부 */
+    private String orgNm;
+
+    /** 알레르기정보 등록여부 */
+    private String algiNm;
+
+    /** 품절매장수 */
+    private String sdyNm;
+
+    /** 비노출매장수 */
+    private String disNm;
+
+    /** 프로모션정보 등록여부 */
+    private String proNm;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1748,5 +1793,125 @@ public class ProdSearchVO extends PageVO {
 
     public void setSdselClassCd(String sdselClassCd) {
         this.sdselClassCd = sdselClassCd;
+    }
+
+    public String getTuKey() {
+        return tuKey;
+    }
+
+    public void setTuKey(String tuKey) {
+        this.tuKey = tuKey;
+    }
+
+    public String getKiosk() {
+        return kiosk;
+    }
+
+    public void setKiosk(String kiosk) {
+        this.kiosk = kiosk;
+    }
+
+    public String getSdsel() {
+        return sdsel;
+    }
+
+    public void setSdsel(String sdsel) {
+        this.sdsel = sdsel;
+    }
+
+    public String getBsImg() {
+        return bsImg;
+    }
+
+    public void setBsImg(String bsImg) {
+        this.bsImg = bsImg;
+    }
+
+    public String getKioskImg() {
+        return kioskImg;
+    }
+
+    public void setKioskImg(String kioskImg) {
+        this.kioskImg = kioskImg;
+    }
+
+    public String getDidImg() {
+        return didImg;
+    }
+
+    public void setDidImg(String didImg) {
+        this.didImg = didImg;
+    }
+
+    public String getProImg() {
+        return proImg;
+    }
+
+    public void setProImg(String proImg) {
+        this.proImg = proImg;
+    }
+
+    public String getToImg() {
+        return toImg;
+    }
+
+    public void setToImg(String toImg) {
+        this.toImg = toImg;
+    }
+
+    public String getDlvrNm() {
+        return dlvrNm;
+    }
+
+    public void setDlvrNm(String dlvrNm) {
+        this.dlvrNm = dlvrNm;
+    }
+
+    public String getPrtCnt() {
+        return prtCnt;
+    }
+
+    public void setPrtCnt(String prtCnt) {
+        this.prtCnt = prtCnt;
+    }
+
+    public String getOrgNm() {
+        return orgNm;
+    }
+
+    public void setOrgNm(String orgNm) {
+        this.orgNm = orgNm;
+    }
+
+    public String getAlgiNm() {
+        return algiNm;
+    }
+
+    public void setAlgiNm(String algiNm) {
+        this.algiNm = algiNm;
+    }
+
+    public String getSdyNm() {
+        return sdyNm;
+    }
+
+    public void setSdyNm(String sdyNm) {
+        this.sdyNm = sdyNm;
+    }
+
+    public String getDisNm() {
+        return disNm;
+    }
+
+    public void setDisNm(String disNm) {
+        this.disNm = disNm;
+    }
+
+    public String getProNm() {
+        return proNm;
+    }
+
+    public void setProNm(String proNm) {
+        this.proNm = proNm;
     }
 }

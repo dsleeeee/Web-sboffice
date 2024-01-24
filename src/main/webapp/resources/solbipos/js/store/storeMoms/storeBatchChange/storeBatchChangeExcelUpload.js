@@ -175,8 +175,16 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
         // 파라미터 설정
         var params = new Array();
 
-        $scope._postJSONSave.withOutPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getSimpleSave.sb", params, function() {
+        $scope._postJSONSave.withPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getSimpleSave.sb", params, function(response) {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            var result = response.data.data;
+            if(result < 1){
+                $scope._popMsg(messages["cmm.registFail"]);
+            }else{
+                $scope._popMsg(messages["cmm.saveSucc"]);
+                // 팝업 닫기
+                $scope.close();
+            }
             // 검증결과 조회
             $scope.searchStoreExcelUploadProd();
         });

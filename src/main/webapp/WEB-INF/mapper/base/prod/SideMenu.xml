@@ -1955,7 +1955,7 @@
                   FROM DUAL
                  UNION
                 SELECT thpsg.SDSEL_GRP_CD AS VALUE,
-                        thpsg.SDSEL_GRP_NM AS NAME
+                       '['|| thpsg.SDSEL_GRP_CD||'] ' || thpsg.SDSEL_GRP_NM AS NAME
                   FROM TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                  WHERE thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
                    AND thpsg.USE_YN = 'Y'

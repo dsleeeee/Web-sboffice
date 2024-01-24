@@ -75,7 +75,7 @@
                     <%-- 회사단축번호 --%>
                     <th><s:message code="regist.membr.stortNo"/></th>
                     <td>
-                        <input type="text" id="basicStortNo" class="sb-input w100" ng-model="member.shortNo" maxlength="15"/>
+                        <input type="text" id="basicStortNo" class="sb-input w100" ng-model="member.shortNo" maxlength="4"/>
                     </td>
                     <%-- 등록매장 --%>
                     <th><s:message code="regist.reg.store.cd"/><em class="imp">*</em></th>
@@ -716,4 +716,4 @@
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20231005.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20240117.01" charset="utf-8"></script>
