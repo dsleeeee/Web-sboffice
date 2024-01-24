@@ -439,6 +439,13 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
+        // 단축번호 최대길이 체크
+        if (nvl($scope.member.shortNo, '') !== '' && nvl($scope.member.shortNo + '', '').getByteLengthForOracle() > 4) {
+            msg = messages["member.excel.shortNo"] + messages["excelUpload.overLength"] + " 4 ";
+            $scope._popMsg(msg);
+            return false;
+        }
+
         // 연락처(전화번호) 를 입력하세요.
         var msg = messages["regist.tel"] + messages["cmm.require.text"];
         if (isNull($scope.member.telNo)) {
@@ -677,6 +684,8 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.$emit("responseGet", result.data.data, $scope.saveMode);
                     $scope.memberRegistLayer.hide();
                     scope.getMemberList();
+                    // 데이터 초기화 (수정, 저장 후 다시 팝업 호출 시, 예전 정보가 남아있는 경우가 있어서)
+                    $scope.resetForm();
                 });
             }
         } else {
@@ -695,12 +704,13 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 데이터 초기화 (수정, 저장 후 다시 팝업 호출 시, 예전 정보가 남아있는 경우가 있어서)
-        $scope.member = {};
+        // $scope.member = {};
     };
 
     // 닫기
     $scope.close = function () {
         $scope.member = {};
+        $scope.resetForm();
         $scope.memberRegistLayer.hide();
     };
 

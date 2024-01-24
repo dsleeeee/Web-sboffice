@@ -35,4 +35,18 @@ public interface ProdSearchService {
      * @return XML_String
      */
     List<DefaultMap<String>> getProdExcelList(ProdSearchVO prodSearchVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 세션의 가맹점코드로 해당 가맹점의 상품정보 조회2
+     * @param prodSearchVO 세션정보
+     * @return XML_String
+     */
+    List<DefaultMap<String>> getProdList2(ProdSearchVO prodSearchVO, SessionInfoVO sessionInfoVO);
+
+    /**
+     * 세션의 가맹점코드로 해당 가맹점의 상품정보 조회2(엑셀다운로드용)
+     * @param prodSearchVO 세션정보
+     * @return XML_String
+     */
+    List<DefaultMap<String>> getProdExcelList2(ProdSearchVO prodSearchVO, SessionInfoVO sessionInfoVO);
 }

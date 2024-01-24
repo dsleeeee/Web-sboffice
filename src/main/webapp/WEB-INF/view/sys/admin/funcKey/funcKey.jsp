@@ -36,7 +36,7 @@
                     <input type="text" class="sb-input w100" id="srchFnkeyNm" onkeyup="fnNxBtnSearch();" />
                 </td>
             </tr>
-            <tr style="display: none">
+            <tr>
                 <%-- 기능구분 --%>
                 <th><s:message code="funcKey.keyFg"/></th>
                 <td>

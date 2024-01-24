@@ -117,4 +117,93 @@ public class ProdSearchServiceImpl implements ProdSearchService {
         return prodSearchMapper.getProdExcelList(prodSearchVO);
     }
 
+    @Override
+    public List<DefaultMap<String>> getProdList2(ProdSearchVO prodSearchVO, SessionInfoVO sessionInfoVO) {
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+
+        // 소속구분 설정
+        prodSearchVO.setOrgnFg(orgnFg);
+        prodSearchVO.setHqOfficeCd(hqOfficeCd);
+        prodSearchVO.setStoreCd(storeCd);
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodSearchVO.getProdHqBrandCd() == "" || prodSearchVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodSearchVO.getUserProdBrands() != null && !"".equals(prodSearchVO.getUserProdBrands())) {
+                    String[] userBrandList = prodSearchVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodSearchVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
+        prodSearchVO.setUserId(sessionInfoVO.getUserId());
+
+        return prodSearchMapper.getProdList2(prodSearchVO);
+    }
+
+    /** 상품목록 조회(엑셀다운로드용) */
+    @Override
+    public List<DefaultMap<String>> getProdExcelList2(@RequestBody ProdSearchVO prodSearchVO, SessionInfoVO sessionInfoVO) {
+
+        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
+        String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
+        String storeCd = sessionInfoVO.getStoreCd();
+
+        // 소속구분 설정
+        prodSearchVO.setOrgnFg(orgnFg);
+        prodSearchVO.setHqOfficeCd(hqOfficeCd);
+        prodSearchVO.setStoreCd(storeCd);
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
+            if (prodSearchVO.getProdHqBrandCd() == "" || prodSearchVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (prodSearchVO.getUserProdBrands() != null && !"".equals(prodSearchVO.getUserProdBrands())) {
+                    String[] userBrandList = prodSearchVO.getUserProdBrands().split(",");
+                    if (userBrandList.length > 0) {
+                        prodSearchVO.setUserProdBrandList(userBrandList);
+                    }
+                }
+            }
+        }
+
+        if (prodSearchVO.getExcelGubun().equals("T")) { // 전체 엑셀다운로드시(T) 조회조건 날림
+            prodSearchVO.setProdCd(null);
+            prodSearchVO.setProdNm(null);
+            prodSearchVO.setProdClassCd(null);
+            prodSearchVO.setBarCd(null);
+            prodSearchVO.setUseYn(null);
+            prodSearchVO.setHqBrandNm(null);
+            prodSearchVO.setProdHqBrandCd(null);
+            prodSearchVO.setUserProdBrands(null);
+            prodSearchVO.setUserProdBrandList(null);
+            prodSearchVO.setVatFg(null);
+            prodSearchVO.setProdTypeFg(null);
+            prodSearchVO.setPrcCtrlFg(null);
+            prodSearchVO.setTuKey(null);
+            prodSearchVO.setKiosk(null);
+            prodSearchVO.setSdsel(null);
+            prodSearchVO.setBsImg(null);
+            prodSearchVO.setKioskImg(null);
+            prodSearchVO.setDidImg(null);
+            prodSearchVO.setProImg(null);
+            prodSearchVO.setToImg(null);
+            prodSearchVO.setDlvrNm(null);
+            prodSearchVO.setPrtCnt(null);
+            prodSearchVO.setOrgNm(null);
+            prodSearchVO.setAlgiNm(null);
+            prodSearchVO.setSdyNm(null);
+            prodSearchVO.setDisNm(null);
+            prodSearchVO.setProNm(null);
+        }
+        prodSearchVO.setUserId(sessionInfoVO.getUserId());
+
+        return prodSearchMapper.getProdList2(prodSearchVO);
+    }
+
 }
