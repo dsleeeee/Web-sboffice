@@ -253,15 +253,15 @@ app.controller('kioskCategoryExcelCtrl', ['$scope', '$http', '$timeout', functio
                         // 엔터값 제거
                         arr.forEach(function(item){
                             if (item.tuClsEnNm !== null && item.tuClsEnNm !== undefined && item.tuClsEnNm !== "") {
-                                item.tuClsEnNm = item.tuClsEnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.tuClsEnNm = item.tuClsEnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.tuClsCnNm !== null && item.tuClsCnNm !== undefined && item.tuClsCnNm !== "") {
-                                item.tuClsCnNm = item.tuClsCnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.tuClsCnNm = item.tuClsCnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.tuClsJpNm !== null && item.tuClsJpNm !== undefined && item.tuClsJpNm !== "") {
-                                item.tuClsJpNm = item.tuClsJpNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.tuClsJpNm = item.tuClsJpNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
                         });
                         console.log(arr);

@@ -106,4 +106,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/optionGrp.js?ver=20240111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/optionGrp.js?ver=20240124.01" charset="utf-8"></script>

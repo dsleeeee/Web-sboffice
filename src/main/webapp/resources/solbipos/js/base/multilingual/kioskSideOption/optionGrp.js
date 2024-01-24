@@ -256,15 +256,15 @@ app.controller('optionGrpExcelCtrl', ['$scope', '$http', '$timeout', function ($
                         // 엔터값 제거
                         arr.forEach(function(item){
                             if (item.optionGrpEnNm !== null && item.optionGrpEnNm !== undefined && item.optionGrpEnNm !== "") {
-                                item.optionGrpEnNm = item.optionGrpEnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.optionGrpEnNm = item.optionGrpEnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.optionGrpCnNm !== null && item.optionGrpCnNm !== undefined && item.optionGrpCnNm !== "") {
-                                item.optionGrpCnNm = item.optionGrpCnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.optionGrpCnNm = item.optionGrpCnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.optionGrpJpNm !== null && item.optionGrpJpNm !== undefined && item.optionGrpJpNm !== "") {
-                                item.optionGrpJpNm = item.optionGrpJpNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.optionGrpJpNm = item.optionGrpJpNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
                         });
                         console.log(arr);

@@ -272,15 +272,15 @@ app.controller('sideSdselClassExcelCtrl', ['$scope', '$http', '$timeout', functi
                         // 엔터값 제거
                         arr.forEach(function(item){
                             if (item.sdselClassEnNm !== null && item.sdselClassEnNm !== undefined && item.sdselClassEnNm !== "") {
-                                item.sdselClassEnNm = item.sdselClassEnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.sdselClassEnNm = item.sdselClassEnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.sdselClassCnNm !== null && item.sdselClassCnNm !== undefined && item.sdselClassCnNm !== "") {
-                                item.sdselClassCnNm = item.sdselClassCnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.sdselClassCnNm = item.sdselClassCnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.sdselClassJpNm !== null && item.sdselClassJpNm !== undefined && item.sdselClassJpNm !== "") {
-                                item.sdselClassJpNm = item.sdselClassJpNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.sdselClassJpNm = item.sdselClassJpNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
                         });
                         console.log(arr);

@@ -412,6 +412,21 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
                             renameKey(item, '상품설명(중문)', 'prodCnInfo');
                             renameKey(item, '상품설명(일문)', 'prodJpInfo');
                         });
+                        
+                        // 숫자만 입력시, script 오류 발생하기 때문에 toString() 변환
+                        arr.forEach(function(item){
+                            if (item.prodEnInfo !== null && item.prodEnInfo !== undefined && item.prodEnInfo !== "") {
+                                item.prodEnInfo = item.prodEnInfo.toString();
+                            }
+
+                            if (item.prodCnInfo !== null && item.prodCnInfo !== undefined && item.prodCnInfo !== "") {
+                                item.prodCnInfo = item.prodCnInfo.toString();
+                            }
+
+                            if (item.prodJpInfo !== null && item.prodJpInfo !== undefined && item.prodJpInfo !== "") {
+                                item.prodJpInfo = item.prodJpInfo.toString();
+                            }
+                        });
                         console.log(arr);
                     })
                 };

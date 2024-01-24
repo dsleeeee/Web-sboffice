@@ -266,15 +266,15 @@ app.controller('cmPosFnkeyExcelCtrl', ['$scope', '$http', '$timeout', function (
                         // 엔터값 제거
                         arr.forEach(function(item){
                             if (item.fnkeyEnNm !== null && item.fnkeyEnNm !== undefined && item.fnkeyEnNm !== "") {
-                                item.fnkeyEnNm = item.fnkeyEnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.fnkeyEnNm = item.fnkeyEnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.fnkeyCnNm !== null && item.fnkeyCnNm !== undefined && item.fnkeyCnNm !== "") {
-                                item.fnkeyCnNm = item.fnkeyCnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.fnkeyCnNm = item.fnkeyCnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.fnkeyJpNm !== null && item.fnkeyJpNm !== undefined && item.fnkeyJpNm !== "") {
-                                item.fnkeyJpNm = item.fnkeyJpNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.fnkeyJpNm = item.fnkeyJpNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
                         });
                         console.log(arr);

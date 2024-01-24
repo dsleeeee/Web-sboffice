@@ -264,15 +264,15 @@ app.controller('optionValExcelCtrl', ['$scope', '$http', '$timeout', function ($
                         // 엔터값 제거
                         arr.forEach(function(item){
                             if (item.optionValEnNm !== null && item.optionValEnNm !== undefined && item.optionValEnNm !== "") {
-                                item.optionValEnNm = item.optionValEnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.optionValEnNm = item.optionValEnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.optionValCnNm !== null && item.optionValCnNm !== undefined && item.optionValCnNm !== "") {
-                                item.optionValCnNm = item.optionValCnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.optionValCnNm = item.optionValCnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.optionValJpNm !== null && item.optionValJpNm !== undefined && item.optionValJpNm !== "") {
-                                item.optionValJpNm = item.optionValJpNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.optionValJpNm = item.optionValJpNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
                         });
                         console.log(arr);

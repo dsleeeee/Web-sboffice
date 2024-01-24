@@ -277,15 +277,15 @@ app.controller('sideSdselGrpExcelCtrl', ['$scope', '$http', '$timeout', function
                         // 엔터값 제거
                         arr.forEach(function(item){
                             if (item.sdselGrpEnNm !== null && item.sdselGrpEnNm !== undefined && item.sdselGrpEnNm !== "") {
-                                item.sdselGrpEnNm = item.sdselGrpEnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.sdselGrpEnNm = item.sdselGrpEnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.sdselGrpCnNm !== null && item.sdselGrpCnNm !== undefined && item.sdselGrpCnNm !== "") {
-                                item.sdselGrpCnNm = item.sdselGrpCnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.sdselGrpCnNm = item.sdselGrpCnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.sdselGrpJpNm !== null && item.sdselGrpJpNm !== undefined && item.sdselGrpJpNm !== "") {
-                                item.sdselGrpJpNm = item.sdselGrpJpNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.sdselGrpJpNm = item.sdselGrpJpNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
                         });
                         console.log(arr);

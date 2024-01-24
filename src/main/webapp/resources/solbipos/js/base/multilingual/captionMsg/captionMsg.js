@@ -468,8 +468,11 @@ app.controller('captionMsgExcelCtrl', ['$scope', '$http', '$timeout', function (
                         // 엔터값 제거
                         arr.forEach(function(item){
 
+                            // 화면구분 추가
+                            item.captionImgCd = vScope.srchCaptionMsgGrpCombo.selectedValue;
+
                             if (item.captionMsgId !== null && item.captionMsgId !== undefined && item.captionMsgId !== "") {
-                                item.captionMsgId = item.captionMsgId.replace(/\r\n|\r|\n|\s/g, '');
+                                item.captionMsgId = item.captionMsgId.toString().replace(/\r\n|\r|\n|\s/g, '');
                             }
 
                             if (item.captionMsgGb !== null && item.captionMsgGb !== undefined && item.captionMsgGb !== "") {
@@ -477,23 +480,20 @@ app.controller('captionMsgExcelCtrl', ['$scope', '$http', '$timeout', function (
                             }
 
                             if (item.captionMsgNm !== null && item.captionMsgNm !== undefined && item.captionMsgNm !== "") {
-                                item.captionMsgNm = item.captionMsgNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.captionMsgNm = item.captionMsgNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.captionMsgEnNm !== null && item.captionMsgEnNm !== undefined && item.captionMsgEnNm !== "") {
-                                item.captionMsgEnNm = item.captionMsgEnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.captionMsgEnNm = item.captionMsgEnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.captionMsgCnNm !== null && item.captionMsgCnNm !== undefined && item.captionMsgCnNm !== "") {
-                                item.captionMsgCnNm = item.captionMsgCnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.captionMsgCnNm = item.captionMsgCnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.captionMsgJpNm !== null && item.captionMsgJpNm !== undefined && item.captionMsgJpNm !== "") {
-                                item.captionMsgJpNm = item.captionMsgJpNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.captionMsgJpNm = item.captionMsgJpNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
-                            
-                            // 화면구분 추가
-                            item.captionImgCd = vScope.srchCaptionMsgGrpCombo.selectedValue;
 
                         });
                         console.log(arr);

@@ -137,4 +137,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/prodLang/prodInfo.js?ver=20240110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/prodLang/prodInfo.js?ver=20240124.01" charset="utf-8"></script>

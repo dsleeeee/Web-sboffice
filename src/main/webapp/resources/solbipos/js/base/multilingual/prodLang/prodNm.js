@@ -306,15 +306,15 @@ app.controller('prodNmExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                         // 엔터값 제거
                         arr.forEach(function(item){
                             if (item.prodEnNm !== null && item.prodEnNm !== undefined && item.prodEnNm !== "") {
-                                item.prodEnNm = item.prodEnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.prodEnNm = item.prodEnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.prodCnNm !== null && item.prodCnNm !== undefined && item.prodCnNm !== "") {
-                                item.prodCnNm = item.prodCnNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.prodCnNm = item.prodCnNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
 
                             if (item.prodJpNm !== null && item.prodJpNm !== undefined && item.prodJpNm !== "") {
-                                item.prodJpNm = item.prodJpNm.replace(/\r\n|\r|\n/g, ' ');
+                                item.prodJpNm = item.prodJpNm.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
                         });
                         console.log(arr);
