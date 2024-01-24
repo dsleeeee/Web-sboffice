@@ -507,10 +507,7 @@ app.controller('prodSalePmixStoreMomsCtrl', ['$scope', '$http', '$timeout', func
         params.momsStoreFg01 = $scope.momsStoreFg01;
         params.excelType = excelType;
 
-        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
-        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
-            $scope._broadcast('prodSalePmixStoreMomsExcelCtrl', params);
-        });
+        $scope._broadcast('prodSalePmixStoreMomsExcelCtrl', params);
     };
 
     // 현재화면 엑셀다운로드
@@ -595,9 +592,24 @@ app.controller('prodSalePmixStoreMomsExcelCtrl', ['$scope', '$http', '$timeout',
     // <-- 검색 호출 -->
     $scope.$on("prodSalePmixStoreMomsExcelCtrl", function (event, data) {
         if(data.excelType === '1') {
-            $scope.searchExcelList(data);
+            // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+            $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+                $scope.searchExcelList(data);
+            });
         }else{
-            $scope.searchExcelDivisionList(data);
+            // 분할 엑셀다운로드 사용자 제한
+            var params = {};
+            $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
+                if (response.data.data.list === 0) {
+                    $scope._popMsg(messages["prodSaleDayStoreMoms.userIdChkAlert"]); // 사용권한이 없습니다.
+                    return;
+                } else {
+                    // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+                    $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+                        $scope.searchExcelDivisionList(data);
+                    });
+                }
+            });
         }
         event.preventDefault();
     });

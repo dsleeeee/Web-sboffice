@@ -30,4 +30,7 @@ public interface ProdSaleDayStoreMomsService {
 
     /** 상품매출일별(매장) - 분할 엑셀다운로드 조회 */
     List<DefaultMap<Object>> getProdSaleDayStoreMomsExcelDivisionList(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품매출일별(매장) - 분할 엑셀다운로드 사용자 제한 */
+    int getDivisionExcelDownloadUserIdChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO);
 }

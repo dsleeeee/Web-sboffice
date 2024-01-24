@@ -325,4 +325,19 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 상품매출일별(매장) - 분할 엑셀다운로드 사용자 제한 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDivisionExcelDownloadUserIdChk" parameterType="ProdSaleDayStoreMomsVO" resultType="Integer">
+        /* ProdSaleDayStoreMomsMapper.getDivisionExcelDownloadUserIdChk */
+        SELECT COUNT(*)
+        FROM TB_HQ_NMCODE thn
+        WHERE 1=1
+        AND thn.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thn.NMCODE_GRP_CD = '168'
+        AND thn.NMCODE_NM = #{userId}
+    </select>
+
 </mapper>

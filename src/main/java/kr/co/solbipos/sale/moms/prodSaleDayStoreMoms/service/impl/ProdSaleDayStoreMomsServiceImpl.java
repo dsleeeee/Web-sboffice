@@ -146,4 +146,14 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
 
         return prodSaleDayStoreMomsMapper.getProdSaleDayStoreMomsExcelDivisionList(prodSaleDayStoreMomsVO);
     }
+
+    /** 상품매출일별(매장) - 분할 엑셀다운로드 사용자 제한 */
+    @Override
+    public int getDivisionExcelDownloadUserIdChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO) {
+
+        prodSaleDayStoreMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodSaleDayStoreMomsVO.setUserId(sessionInfoVO.getUserId());
+
+        return prodSaleDayStoreMomsMapper.getDivisionExcelDownloadUserIdChk(prodSaleDayStoreMomsVO);
+    }
 }
