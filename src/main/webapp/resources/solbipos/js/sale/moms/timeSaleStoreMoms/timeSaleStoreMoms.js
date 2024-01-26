@@ -235,7 +235,25 @@ app.controller('timeSaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function
         params.momsStoreFg01 = $scope.momsStoreFg01;
         params.excelType = excelType;
 
-        $scope._broadcast('timeSaleStoreMomsExcelCtrl', params);
+        if(params.excelType === '1') {
+            // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+            $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+                $scope._broadcast('timeSaleStoreMomsExcelCtrl', params);
+            });
+        }else{
+            // 분할 엑셀다운로드 사용자 제한
+            $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
+                if (response.data.data.list === 0) {
+                    $scope._popMsg(messages["prodSaleDayStoreMoms.userIdChkAlert"]); // 사용권한이 없습니다.
+                    return;
+                } else {
+                    // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+                    $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+                        $scope._broadcast('timeSaleStoreMomsExcelCtrl', params);
+                    });
+                }
+            });
+        }
     };
 
     // 현재화면 엑셀다운로드
@@ -363,24 +381,9 @@ app.controller('timeSaleStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', fun
     // <-- 검색 호출 -->
     $scope.$on("timeSaleStoreMomsExcelCtrl", function (event, data) {
         if(data.excelType === '1') {
-            // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
-            $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
-                $scope.searchExcelList(data);
-            });
+            $scope.searchExcelList(data);
         }else{
-            // 분할 엑셀다운로드 사용자 제한
-            var params = {};
-            $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
-                if (response.data.data.list === 0) {
-                    $scope._popMsg(messages["prodSaleDayStoreMoms.userIdChkAlert"]); // 사용권한이 없습니다.
-                    return;
-                } else {
-                    // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
-                    $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
-                        $scope.searchExcelDivisionList(data);
-                    });
-                }
-            });
+            $scope.searchExcelDivisionList(data);
         }
         event.preventDefault();
     });

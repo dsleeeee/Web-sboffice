@@ -99,6 +99,30 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     /** 상품코드 */
     private String prodCds;
 
+    /** 메뉴 리소스 코드 */
+    private String resrceCd;
+
+    /** 메뉴 리소스 명 */
+    private String resrceNm;
+
+    /** 다운로드 구분 (0:간소화화면, 1:상품매출분석) */
+    private String downloadFg;
+
+    /** 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드) */
+    private String downloadUseFg;
+
+    /** 다운로드 파일수 */
+    private int downloadFileCount;
+
+    /** 다운로드 예상종료시간 */
+    private String downloadExpectedEndDt;
+
+    /** 화면별 건당 다운로드 예상시간(초) */
+    private String expectedTimeSecond;
+
+    /** 다운로드 화면구분번호 */
+    private String downloadNo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -272,4 +296,44 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     }
 
     public void setProdCds(String prodCds) { this.prodCds = prodCds; }
+
+    public String getResrceCd() {
+        return resrceCd;
+    }
+
+    public void setResrceCd(String resrceCd) {
+        this.resrceCd = resrceCd;
+    }
+
+    public String getResrceNm() {
+        return resrceNm;
+    }
+
+    public void setResrceNm(String resrceNm) {
+        this.resrceNm = resrceNm;
+    }
+
+    public String getDownloadFg() { return downloadFg; }
+
+    public void setDownloadFg(String downloadFg) { this.downloadFg = downloadFg; }
+
+    public String getDownloadUseFg() { return downloadUseFg; }
+
+    public void setDownloadUseFg(String downloadUseFg) { this.downloadUseFg = downloadUseFg; }
+
+    public int getDownloadFileCount() { return downloadFileCount; }
+
+    public void setDownloadFileCount(int downloadFileCount) { this.downloadFileCount = downloadFileCount; }
+
+    public String getDownloadExpectedEndDt() { return downloadExpectedEndDt; }
+
+    public void setDownloadExpectedEndDt(String downloadExpectedEndDt) { this.downloadExpectedEndDt = downloadExpectedEndDt; }
+
+    public String getExpectedTimeSecond() { return expectedTimeSecond; }
+
+    public void setExpectedTimeSecond(String expectedTimeSecond) { this.expectedTimeSecond = expectedTimeSecond; }
+
+    public String getDownloadNo() { return downloadNo; }
+
+    public void setDownloadNo(String downloadNo) { this.downloadNo = downloadNo; }
 }
