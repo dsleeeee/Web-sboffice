@@ -283,7 +283,7 @@ public class ProdSaleDayStoreMomsController {
     }
 
     /**
-     * 상품매출일별(매장) - 분할 엑셀다운로드 사용자 제한
+     * 상품매출일별(매장) - 분할 엑셀다운로드 사용자 제한 체크
      *
      * @param prodSaleDayStoreMomsVO
      * @param request
@@ -291,16 +291,62 @@ public class ProdSaleDayStoreMomsController {
      * @param model
      * @return  Object
      * @author  김설아
-     * @since   2024.01.24
+     * @since   2024. 01. 24.
      */
     @RequestMapping(value = "/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getDivisionExcelDownloadUserIdChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, HttpServletRequest request,
-                               HttpServletResponse response, Model model) {
+                                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = prodSaleDayStoreMomsService.getDivisionExcelDownloadUserIdChk(prodSaleDayStoreMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 상품매출일별(매장) - 엑셀다운로드 기능 사용자 저장
+     *
+     * @param prodSaleDayStoreMomsVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 01. 24.
+     */
+    @RequestMapping(value = "/prodSaleDayStoreMoms/getDivisionExcelDownloadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDivisionExcelDownloadSave(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, HttpServletRequest request,
+                                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodSaleDayStoreMomsService.getDivisionExcelDownloadSave(prodSaleDayStoreMomsVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 상품매출일별(매장) - 엑셀다운로드 진행 사용자 현재 인원수 체크
+     *
+     * @param prodSaleDayStoreMomsVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 01. 24.
+     */
+    @RequestMapping(value = "/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDivisionExcelDownloadCntChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, HttpServletRequest request,
+                                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = prodSaleDayStoreMomsService.getDivisionExcelDownloadCntChk(prodSaleDayStoreMomsVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }
