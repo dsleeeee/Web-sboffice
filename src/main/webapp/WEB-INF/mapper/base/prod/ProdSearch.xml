@@ -766,7 +766,7 @@
                 ,       prsdy.SDY_NM -- 품절매장수
                 ,       prdis.DIS_NM -- 비노출매장수
                 ,       prpro.PRO_NM -- 프로모션정보
-                ,       (SELECT LISTAGG(VENDR_NM , ',') WITHIN GROUP (ORDER BY thv.VENDR_NM ) AS VENDR_NM FROM TB_HQ_VENDOR_PROD thvp, TB_HQ_VENDOR thv WHERE thvp.HQ_OFFICE_CD = #{hqOfficeCd} AND thvp.HQ_OFFICE_CD = thv.HQ_OFFICE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
+                ,       (SELECT SUBSTR(XMLAGG(XMLELEMENT(VENDR_NM, ', ', VENDR_NM) ORDER BY thv.VENDR_NM ).EXTRACT ('//text()'),2) AS VENDR_NM FROM TB_HQ_VENDOR_PROD thvp, TB_HQ_VENDOR thv WHERE thvp.HQ_OFFICE_CD = #{hqOfficeCd} AND thvp.HQ_OFFICE_CD = thv.HQ_OFFICE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
                 ,       thp.SALE_PROD_YN -- 판매상품여부
                 ,       NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
                 ,       thp.PROD_TIP_YN -- 봉사료포함여부
@@ -858,7 +858,7 @@
                         ) thpsp
                 ,       (
                             SELECT  thtk.PROD_CD
-                            ,       LISTAGG('['|| thtkg.TUKEY_GRP_CD ||'] ' ||thtkg.TUKEY_GRP_NM ,', ') WITHIN GROUP (ORDER BY NULL) AS TUK_NM
+                            ,		SUBSTR(XMLAGG(XMLELEMENT(TUK_NM, ', ', '['|| thtkg.TUKEY_GRP_CD ||'] ' ||thtkg.TUKEY_GRP_NM) ORDER BY thtkg.TUKEY_GRP_CD ).EXTRACT ('//text()'),2) AS TUK_NM
                             FROM	TB_HQ_TOUCH_KEY_GROUP thtkg
                             ,       (SELECT DISTINCT TUKEY_GRP_CD, PROD_CD  FROM TB_HQ_TOUCH_KEY WHERE HQ_OFFICE_CD =#{hqOfficeCd}) thtk
                             WHERE   thtkg.HQ_OFFICE_CD   =   #{hqOfficeCd}
@@ -868,7 +868,7 @@
                         ) prtuk
                 ,       (
                             SELECT  thkk.prod_CD
-                            ,       LISTAGG('['|| thkg.TU_CLS_TYPE ||'] ' ||thkg.TU_CLS_TYPE_NM ,', ') WITHIN GROUP (ORDER BY NULL) AS KIO_NM
+                            ,		SUBSTR(XMLAGG(XMLELEMENT(KIO_NM, ', ', '['|| thkg.TU_CLS_TYPE ||'] ' ||thkg.TU_CLS_TYPE_NM) ORDER BY thkg.TU_CLS_TYPE ).EXTRACT ('//text()'),2) AS KIO_NM
                             FROM    TB_HQ_KIOSK_GROUP thkg
                             ,       (SELECT DISTINCT TU_CLS_TYPE, PROD_CD FROM TB_HQ_KIOSK_KEY WHERE HQ_OFFICE_CD = #{hqOfficeCd}) thkk
                             WHERE   thkg.HQ_OFFICE_CD   =   #{hqOfficeCd}
@@ -878,7 +878,7 @@
                         ) prkio
                 ,       (
                             SELECT  thpsp.PROD_CD
-                            ,       LISTAGG('['|| thpsg.SDSEL_GRP_CD ||'] ' ||thpsg.SDSEL_GRP_NM || ' - ' || '['|| thpsc.SDSEL_CLASS_CD ||'] ' ||thpsc.SDSEL_CLASS_NM ,', ') WITHIN GROUP (ORDER BY NULL) AS SDSEL_NM
+                            ,		SUBSTR(XMLAGG(XMLELEMENT(SDSEL_NM, ', ', '['|| thpsg.SDSEL_GRP_CD ||'] ' ||thpsg.SDSEL_GRP_NM || ' - ' || '['|| thpsc.SDSEL_CLASS_CD ||'] ' ||thpsc.SDSEL_CLASS_NM ) ORDER BY thpsg.SDSEL_GRP_CD ).EXTRACT ('//text()'),2) AS SDSEL_NM
                             FROM    TB_HQ_PRODUCT_SDSEL_PROD thpsp
                             ,       TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                             ,       TB_HQ_PRODUCT_SDSEL_GROUP thpsg
@@ -895,27 +895,25 @@
                         ) prsdsel
                 ,       (
                             SELECT  PROD_CD
-                            ,       DECODE('001', 0, NULL, '001') BS_IMG
-                            ,       DECODE('002', 0, NULL, '002') KIO_IMG
-                            ,       DECODE('003', 0, NULL, '003') DID_IMG
-                            ,       DECODE('004', 0, NULL, '004') PRO_IMG
-                            ,       DECODE('005', 0, NULL, '005') TO_IMG
-                            FROM
-                            (
-                                SELECT  PROD_CD
-                                ,       IMG_FG
-                                FROM    TB_HQ_PRODUCT_IMAGE
-                                WHERE   hq_office_cd = #{hqOfficeCd}
+                            ,       DECODE(BS_IMG, 0, NULL, BS_IMG) AS BS_IMG
+                            ,       DECODE(KIO_IMG, 0, NULL, KIO_IMG) AS KIO_IMG
+                            ,       DECODE(DID_IMG, 0, NULL, DID_IMG) AS DID_IMG
+                            ,       DECODE(PRO_IMG, 0, NULL, PRO_IMG) AS PRO_IMG
+                            ,       DECODE(TO_IMG, 0, NULL, TO_IMG ) AS TO_IMG
+                            FROM (
+                            SELECT  PROD_CD
+                            ,       IMG_FG
+                            FROM    TB_HQ_PRODUCT_IMAGE
+                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                             )
-                            pivot
-                            (
+                            pivot(
                                 count(*)
-                                FOR  IMG_FG IN ('001','002','003','004','005')
+                                FOR  IMG_FG IN ('001' AS BS_IMG,'002' AS KIO_IMG,'003' AS DID_IMG,'004' AS PRO_IMG,'005' AS TO_IMG)
                             )
                         ) primg
                 ,       (
                             SELECT  thpdpn.PROD_CD
-                            ,       LISTAGG( tcn.NMCODE_NM ,', ') WITHIN GROUP (ORDER BY TO_NUMBER(thpdpn.DLVR_NAME_CD)) AS DLVR_NM
+                            ,		SUBSTR(XMLAGG(XMLELEMENT(DLVR_NM, ', ',tcn.NMCODE_NM) ORDER BY TO_NUMBER(thpdpn.DLVR_NAME_CD)).EXTRACT ('//text()'),2) AS DLVR_NM
                             FROM    TB_HQ_PRODUCT_DLVR_PROD_NM thpdpn, TB_CM_NMCODE tcn
                             WHERE   thpdpn.HQ_OFFICE_CD  =   #{hqOfficeCd}
                             AND     tcn.NMCODE_CD        =   thpdpn.DLVR_NAME_CD
@@ -938,7 +936,7 @@
                         ) prprt
                 ,       (
                             SELECT  thprp.PROD_CD
-                            ,       LISTAGG('['|| thprp.RECIPES_CD ||'] ' ||thpro.RECIPES_NM || ' - ' || thpro.ORGPLCE_NM ,',') WITHIN GROUP (ORDER BY NULL) AS ORG_NM
+                            ,       SUBSTR(XMLAGG(XMLELEMENT(ORG_NM, ', ', '['|| thprp.RECIPES_CD ||'] ' ||thpro.RECIPES_NM || ' - ' || thpro.ORGPLCE_NM) ORDER BY thprp.RECIPES_CD).EXTRACT ('//text()'),2) AS ORG_NM
                             FROM    TB_HQ_PRODUCT_RECP_PROD thprp
                             ,       TB_HQ_PRODUCT_RECP_ORIGIN thpro
                             WHERE   thprp.HQ_OFFICE_CD  =   #{hqOfficeCd}
@@ -949,7 +947,7 @@
                         ) prorg
                 ,       (
                             SELECT  thpap.PROD_CD
-                            ,       LISTAGG('['|| thpai.RECIPES_CD ||'] ' ||thpai.RECIPES_NM || ' - ' || thpai.ALLERGIE_NM ,',') WITHIN GROUP (ORDER BY NULL) AS ALGI_NM
+                            ,		SUBSTR(XMLAGG(XMLELEMENT(ALGI_NM, ', ', '['|| thpai.RECIPES_CD ||'] ' ||thpai.RECIPES_NM || ' - ' || thpai.ALLERGIE_NM) ORDER BY thpai.RECIPES_CD).EXTRACT ('//text()'),2) AS ALGI_NM
                             FROM    TB_HQ_PRODUCT_ALGI_PROD thpap, TB_HQ_PRODUCT_ALGI_INFO thpai
                             WHERE   thpap.HQ_OFFICE_CD  =   #{hqOfficeCd}
                             AND     thpai.HQ_OFFICE_CD  =   thpap.HQ_OFFICE_CD
@@ -978,7 +976,7 @@
                         ) prdis
                 ,       (
                             SELECT  thpcp.PROD_CD
-                            ,       LISTAGG('[' || thph.PROMOTION_CD ||'](기간: ' ||TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ||') ' ||thph.PROMOTION_NM ,', ') WITHIN GROUP (ORDER BY NULL) AS PRO_NM
+                            ,		SUBSTR(XMLAGG(XMLELEMENT(PRO_NM, ', ', '[' || thph.PROMOTION_CD ||'](기간: ' ||TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ||') ' ||thph.PROMOTION_NM) ORDER BY thph.PROMOTION_CD).EXTRACT ('//text()'),2) AS PRO_NM
                             FROM    TB_HQ_PROMO_CONDI_PROD thpcp
                             ,       TB_HQ_PROMO_H thph
                             ,       TB_HQ_PROMO_CONDI thpc
@@ -1259,7 +1257,7 @@
             ,       prsdy.SDY_NM -- 품절매장수
             ,       prdis.DIS_NM -- 비노출매장수
             ,       prpro.PRO_NM -- 프로모션정보
-            ,	    (SELECT LISTAGG(VENDR_NM , ',') WITHIN GROUP (ORDER BY thv.VENDR_NM ) AS VENDR_NM FROM TB_MS_VENDOR_PROD thvp, TB_MS_VENDOR thv WHERE thvp.STORE_CD = #{storeCd} AND thvp.STORE_CD = thv.STORE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
+            ,       (SELECT SUBSTR(XMLAGG(XMLELEMENT(VENDR_NM, ', ', VENDR_NM) ORDER BY thv.VENDR_NM ).EXTRACT ('//text()'),2) AS VENDR_NM FROM TB_MS_VENDOR_PROD thvp, TB_MS_VENDOR thv WHERE thvp.STORE_CD = #{storeCd} AND thvp.STORE_CD = thv.STORE_CD AND thvp.VENDR_CD = thv.VENDR_CD AND thvp.PROD_CD = thp.PROD_CD) AS VENDR
             ,		thp.SALE_PROD_YN -- 판매상품여부
             ,		NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
             ,		thp.PROD_TIP_YN -- 봉사료포함여부
@@ -1350,7 +1348,7 @@
                     ) thpsp
             ,       (
                         SELECT  tmtk.PROD_CD
-                        ,       LISTAGG('['|| tmtkg.TUKEY_GRP_CD ||'] ' ||tmtkg.TUKEY_GRP_NM ,', ') WITHIN GROUP (ORDER BY NULL) AS TUK_NM
+                        ,		SUBSTR(XMLAGG(XMLELEMENT(TUK_NM, ', ', '['|| tmtkg.TUKEY_GRP_CD ||'] ' ||tmtkg.TUKEY_GRP_NM) ORDER BY tmtkg.TUKEY_GRP_CD ).EXTRACT ('//text()'),2) AS TUK_NM
                         FROM	TB_MS_TOUCH_KEY_GROUP tmtkg
                         ,       (SELECT DISTINCT TUKEY_GRP_CD, PROD_CD  FROM TB_MS_TOUCH_KEY WHERE STORE_CD = #{storeCd}) tmtk
                         WHERE   tmtkg.STORE_CD      =   #{storeCd}
@@ -1360,7 +1358,7 @@
                     ) prtuk
             ,       (
                         SELECT  tmkk.prod_CD
-                        ,       LISTAGG('['|| tmkg.TU_CLS_TYPE ||'] ' ||tmkg.TU_CLS_TYPE_NM ,', ') WITHIN GROUP (ORDER BY NULL) AS KIO_NM
+                        ,		SUBSTR(XMLAGG(XMLELEMENT(KIO_NM, ', ', '['|| tmkg.TU_CLS_TYPE ||'] ' ||tmkg.TU_CLS_TYPE_NM) ORDER BY tmkg.TU_CLS_TYPE ).EXTRACT ('//text()'),2) AS KIO_NM
                         FROM    TB_MS_KIOSK_GROUP tmkg
                         ,       (SELECT DISTINCT TU_CLS_TYPE, PROD_CD FROM TB_MS_KIOSK_KEY WHERE STORE_CD = #{storeCd}) tmkk
                         WHERE   tmkg.STORE_CD       =   #{storeCd}
@@ -1370,7 +1368,7 @@
                     ) prkio
             ,       (
                         SELECT  tmpsp.PROD_CD
-                        ,       LISTAGG('['|| tmpsg.SDSEL_GRP_CD ||'] ' ||tmpsg.SDSEL_GRP_NM || ' - ' || '['|| tmpsc.SDSEL_CLASS_CD ||'] ' ||tmpsc.SDSEL_CLASS_NM ,', ') WITHIN GROUP (ORDER BY NULL) AS SDSEL_NM
+                        ,		SUBSTR(XMLAGG(XMLELEMENT(SDSEL_NM, ', ', '['|| tmpsg.SDSEL_GRP_CD ||'] ' ||tmpsg.SDSEL_GRP_NM || ' - ' || '['|| tmpsc.SDSEL_CLASS_CD ||'] ' ||tmpsc.SDSEL_CLASS_NM ) ORDER BY tmpsg.SDSEL_GRP_CD ).EXTRACT ('//text()'),2) AS SDSEL_NM
                         FROM    TB_MS_PRODUCT_SDSEL_PROD tmpsp
                         ,       TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                         ,       TB_MS_PRODUCT_SDSEL_GROUP tmpsg
@@ -1387,11 +1385,11 @@
                     ) prsdsel
             ,       (
                         SELECT  PROD_CD
-                        ,       DECODE('001', 0, NULL, '001') BS_IMG
-                        ,       DECODE('002', 0, NULL, '002') KIO_IMG
-                        ,       DECODE('003', 0, NULL, '003') DID_IMG
-                        ,       DECODE('004', 0, NULL, '004') PRO_IMG
-                        ,       DECODE('005', 0, NULL, '005') TO_IMG
+                        ,       DECODE(BS_IMG, 0, NULL, BS_IMG) AS BS_IMG
+                        ,       DECODE(KIO_IMG, 0, NULL, KIO_IMG) AS KIO_IMG
+                        ,       DECODE(DID_IMG, 0, NULL, DID_IMG) AS DID_IMG
+                        ,       DECODE(PRO_IMG, 0, NULL, PRO_IMG) AS PRO_IMG
+                        ,       DECODE(TO_IMG, 0, NULL, TO_IMG ) AS TO_IMG
                         FROM (
                                 SELECT  PROD_CD
                                 ,       IMG_FG
@@ -1400,12 +1398,12 @@
                             )
                         pivot(
                                 count(*)
-                                FOR  IMG_FG IN ('001','002','003','004','005')
+                                FOR  IMG_FG IN ('001' AS BS_IMG,'002' AS KIO_IMG,'003' AS DID_IMG,'004' AS PRO_IMG,'005' AS TO_IMG)
                             )
                     ) primg
             ,       (
                         SELECT  tmpdpn.PROD_CD
-                        ,       LISTAGG( tcn.NMCODE_NM ,', ') WITHIN GROUP (ORDER BY TO_NUMBER(tmpdpn.DLVR_NAME_CD)) AS DLVR_NM
+                        ,		SUBSTR(XMLAGG(XMLELEMENT(DLVR_NM, ', ',tcn.NMCODE_NM) ORDER BY TO_NUMBER(tmpdpn.DLVR_NAME_CD)).EXTRACT ('//text()'),2) AS DLVR_NM
                         FROM    TB_MS_PRODUCT_DLVR_PROD_NM tmpdpn
                         ,       TB_CM_NMCODE tcn
                         WHERE 	tmpdpn.STORE_CD     =   #{storeCd}
@@ -1427,7 +1425,7 @@
                     ) prprt
             ,       (
                         SELECT  tmprp.PROD_CD
-                        ,       LISTAGG('['|| tmprp.RECIPES_CD ||'] ' ||tmpro.RECIPES_NM || ' - ' || tmpro.ORGPLCE_NM ,',') WITHIN GROUP (ORDER BY NULL) AS ORG_NM
+                        ,		SUBSTR(XMLAGG(XMLELEMENT(ORG_NM, ', ', '['|| tmprp.RECIPES_CD ||'] ' ||tmpro.RECIPES_NM || ' - ' || tmpro.ORGPLCE_NM) ORDER BY tmprp.RECIPES_CD).EXTRACT ('//text()'),2) AS ORG_NM
                         FROM    TB_MS_PRODUCT_RECP_PROD tmprp
                         ,       TB_MS_PRODUCT_RECP_ORIGIN tmpro
                         WHERE   tmprp.STORE_CD      =   #{storeCd}
@@ -1438,7 +1436,7 @@
                     ) prorg
             ,       (
                         SELECT  tmpap.PROD_CD
-                        ,       LISTAGG('['|| tmpai.RECIPES_CD ||'] ' ||tmpai.RECIPES_NM || ' - ' || tmpai.ALLERGIE_NM ,',') WITHIN GROUP (ORDER BY NULL) AS ALGI_NM
+                        ,		SUBSTR(XMLAGG(XMLELEMENT(ALGI_NM, ', ', '['|| tmpai.RECIPES_CD ||'] ' ||tmpai.RECIPES_NM || ' - ' || tmpai.ALLERGIE_NM) ORDER BY tmpai.RECIPES_CD).EXTRACT ('//text()'),2) AS ALGI_NM
                         FROM    TB_MS_PRODUCT_ALGI_PROD tmpap
                         ,       TB_MS_PRODUCT_ALGI_INFO  tmpai
                         WHERE   tmpap.STORE_CD      =   #{storeCd}
@@ -1469,7 +1467,7 @@
                     ) prdis
             ,       (
                         SELECT  tmpcp.PROD_CD
-                        ,       LISTAGG('[' || tmph.PROMOTION_CD ||'](기간: ' ||TO_CHAR(TO_DATE(tmpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(tmpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ||') ' ||tmph.PROMOTION_NM ,', ') WITHIN GROUP (ORDER BY NULL) AS PRO_NM
+                        ,		SUBSTR(XMLAGG(XMLELEMENT(PRO_NM, ', ', '[' || tmph.PROMOTION_CD ||'](기간: ' ||TO_CHAR(TO_DATE(tmpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(tmpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') ||') ' ||tmph.PROMOTION_NM) ORDER BY tmph.PROMOTION_CD).EXTRACT ('//text()'),2) AS PRO_NM
                         FROM    TB_MS_PROMO_CONDI_PROD tmpcp, TB_MS_PROMO_H tmph, TB_MS_PROMO_CONDI tmpc
                         WHERE   tmpcp.STORE_CD = #{storeCd}
                         <![CDATA[
