@@ -1969,7 +1969,7 @@
                   FROM DUAL
                  UNION
                 SELECT tmpsg.SDSEL_GRP_CD AS VALUE,
-                        tmpsg.SDSEL_GRP_NM AS NAME
+                       '['|| tmpsg.SDSEL_GRP_CD||'] ' || tmpsg.SDSEL_GRP_NM AS NAME
                   FROM TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                  WHERE tmpsg.STORE_CD = #{storeCd}
                    AND tmpsg.USE_YN = 'Y'
