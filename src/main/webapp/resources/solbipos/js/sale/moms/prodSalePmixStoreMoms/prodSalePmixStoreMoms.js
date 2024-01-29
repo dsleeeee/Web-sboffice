@@ -513,7 +513,7 @@ app.controller('prodSalePmixStoreMomsCtrl', ['$scope', '$http', '$timeout', func
                 $scope._broadcast('prodSalePmixStoreMomsExcelCtrl', params);
             });
         }else{
-            // 분할 엑셀다운로드 사용자 제한
+            // 분할 엑셀다운로드 사용자 제한 체크
             $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
                 if (response.data.data.list === 0) {
                     $scope._popMsg(messages["prodSaleDayStoreMoms.userIdChkAlert"]); // 사용권한이 없습니다.
@@ -612,7 +612,20 @@ app.controller('prodSalePmixStoreMomsExcelCtrl', ['$scope', '$http', '$timeout',
         if(data.excelType === '1') {
             $scope.searchExcelList(data);
         }else{
-            $scope.searchExcelDivisionList(data);
+            // 엑셀다운로드 진행 사용자 현재 인원수 체크
+            data.downloadFg = "0"; // 다운로드 구분 (0:간소화화면, 1:상품매출분석)
+            $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', data, function (response) {
+                if (response.data.data.list === 0) {
+                } else {
+                    var msgCntChk = response.data.data.list; // 00:0명의 사용자 다운로드 중
+                    if(msgCntChk.substr(0, 2) === "00") {
+                        $scope.searchExcelDivisionList(data);
+                    } else {
+                        $scope._popMsg(msgCntChk); // 다운로드 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
+                        return;
+                    }
+                }
+            });
         }
         event.preventDefault();
     });
@@ -863,285 +876,295 @@ app.controller('prodSalePmixStoreMomsExcelCtrl', ['$scope', '$http', '$timeout',
             // 다운로드 될 전체 파일 갯수 셋팅
             $("#totalRows").html(totFileCnt);
 
-            // 엑셀 분할 다운로드
-            function delay(x){
-                return new Promise(function(resolve, reject){
-                    console.log("setTimeout  > i=" + x + " x=" + x);
+            // 엑셀다운로드 진행 사용자 저장
+            params.resrceCd = menuCd;
+            params.resrceNm = menuNm;
+            params.downloadUseFg = "2"; // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
+            params.downloadFileCount = totFileCnt; // 다운로드 파일수
+            params.downloadNo = "5"; // 다운로드 화면구분번호
 
-                    // 다운로드 진행중인 파일 숫자 변경
-                    $("#progressCnt").html(x + 1);
+            $scope._postJSONQuery.withOutPopUp( "/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params, function(response){
 
-                    // 페이징 7500개씩 지정해 분할 다운로드 진행
-                    params.limit = 7500 * (x + 1);
-                    params.offset = (7500 * (x + 1)) - 7499;
+                // 엑셀 분할 다운로드
+                function delay(x){
+                    return new Promise(function(resolve, reject){
+                        console.log("setTimeout  > i=" + x + " x=" + x);
 
-                    // 가상로그인 대응한 session id 설정
-                    if (document.getElementsByName('sessionId')[0]) {
-                        params['sid'] = document.getElementsByName('sessionId')[0].value;
-                    }
+                        // 다운로드 진행중인 파일 숫자 변경
+                        $("#progressCnt").html(x + 1);
 
-                    // ajax 통신 설정
-                    $http({
-                        method: 'POST', //방식
-                        // url: '/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsList.sb', /* 통신할 URL */
-                        url: '/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsExcelDivisionList.sb', /* 통신할 URL */
-                        params: params, /* 파라메터로 보낼 데이터 */
-                        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-                    }).then(function successCallback(response) {
-                        if ($scope._httpStatusCheck(response, true)) {
-                            // this callback will be called asynchronously
-                            // when the response is available
-                            var list = response.data.data.list;
-                            if (list.length === undefined || list.length === 0) {
-                                $scope.data = new wijmo.collections.CollectionView([]);
-                                $scope.excelUploadingPopup(false);
-                                return false;
-                            }
+                        // 페이징 7500개씩 지정해 분할 다운로드 진행
+                        params.limit = 7500 * (x + 1);
+                        params.offset = (7500 * (x + 1)) - 7499;
 
-                            // <-- 그리드 생성 -->
-                            var list = response.data.data.list;
-                            var length = response.data.data.list.length;
-                            var grid = wijmo.Control.getControl("#wjGridExcelList");
+                        // 가상로그인 대응한 session id 설정
+                        if (document.getElementsByName('sessionId')[0]) {
+                            params['sid'] = document.getElementsByName('sessionId')[0].value;
+                        }
 
-                            // rows, footer 초기화
-                            grid.rows.clear();
-                            grid.columnFooters.rows.clear();
-
-                            if(length > 0){
-
-                                // 동적 컬럼 초기화
-                                if (length != "" || length != null) {
-                                    while (grid.columns.length > 5) {
-                                        grid.columns.removeAt(grid.columns.length - 1);
-                                    }
+                        // ajax 통신 설정
+                        $http({
+                            method: 'POST', //방식
+                            // url: '/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsList.sb', /* 통신할 URL */
+                            url: '/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getProdSalePmixStoreMomsExcelDivisionList.sb', /* 통신할 URL */
+                            params: params, /* 파라메터로 보낼 데이터 */
+                            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+                        }).then(function successCallback(response) {
+                            if ($scope._httpStatusCheck(response, true)) {
+                                // this callback will be called asynchronously
+                                // when the response is available
+                                var list = response.data.data.list;
+                                if (list.length === undefined || list.length === 0) {
+                                    $scope.data = new wijmo.collections.CollectionView([]);
+                                    $scope.excelUploadingPopup(false);
+                                    return false;
                                 }
 
-                                // 기간선택 두 날짜 사이 모든날짜 구하기
-                                // ajax 통신 설정
-                                $http({
-                                    method : 'POST', //방식
-                                    url    : "/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getDateDiff.sb", /* 통신할 URL */
-                                    params : params, /* 파라메터로 보낼 데이터 */
-                                    headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-                                }).then(function successCallback(response) {
-                                    if ($scope._httpStatusCheck(response, true)) {
+                                // <-- 그리드 생성 -->
+                                var list = response.data.data.list;
+                                var length = response.data.data.list.length;
+                                var grid = wijmo.Control.getControl("#wjGridExcelList");
 
-                                        var dateArr = response.data.data.list;
+                                // rows, footer 초기화
+                                grid.rows.clear();
+                                grid.columnFooters.rows.clear();
 
-                                        // 날짜 형태 정규식
-                                        var regex = {};
-                                        if(params.dayGubun === "day"){
-                                            regex[0] = /(\d{4})(\d{2})(\d{2})/g;
-                                            regex[1] = '$1-$2-$3';
-                                        }else if(params.dayGubun === "month"){
-                                            regex[0] = /(\d{4})(\d{2})/g;
-                                            regex[1] = '$1-$2';
+                                if(length > 0){
+
+                                    // 동적 컬럼 초기화
+                                    if (length != "" || length != null) {
+                                        while (grid.columns.length > 5) {
+                                            grid.columns.removeAt(grid.columns.length - 1);
                                         }
+                                    }
 
-                                        // 판매수량
-                                        for (var i = 0; i < dateArr.length; i++) {
-                                            grid.columns.push(new wijmo.grid.Column({
-                                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                                binding: "saleQty" +  dateArr[i].sOrgDate,
-                                                width: 90,
-                                                align: "right",
-                                                isReadOnly: "true"
-                                            }));
-                                        }
-                                        grid.columns.push(new wijmo.grid.Column({
-                                            header: messages["prodSalePmixStoreMoms.total"],
-                                            binding: "totSaleQty",
-                                            width: 90,
-                                            align: "right",
-                                            isReadOnly: "true"
-                                        }));
+                                    // 기간선택 두 날짜 사이 모든날짜 구하기
+                                    // ajax 통신 설정
+                                    $http({
+                                        method : 'POST', //방식
+                                        url    : "/sale/moms/prodSalePmixStoreMoms/prodSalePmixStoreMoms/getDateDiff.sb", /* 통신할 URL */
+                                        params : params, /* 파라메터로 보낼 데이터 */
+                                        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+                                    }).then(function successCallback(response) {
+                                        if ($scope._httpStatusCheck(response, true)) {
 
-                                        // 실매출액
-                                        for (var i = 0; i < dateArr.length; i++) {
-                                            grid.columns.push(new wijmo.grid.Column({
-                                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                                binding: "realSaleAmt" + dateArr[i].sOrgDate,
-                                                width: 90,
-                                                align: "right",
-                                                isReadOnly: "true"
-                                            }));
-                                        }
-                                        grid.columns.push(new wijmo.grid.Column({
-                                            header: messages["prodSalePmixStoreMoms.total"],
-                                            binding: "totRealSaleAmt",
-                                            width: 90,
-                                            align: "right",
-                                            isReadOnly: "true"
-                                        }));
+                                            var dateArr = response.data.data.list;
 
-                                        // P.MIX
-                                        for (var i = 0; i < dateArr.length; i++) {
-                                            grid.columns.push(new wijmo.grid.Column({
-                                                header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                                binding: "pMix" + dateArr[i].sOrgDate,
-                                                width: 90,
-                                                align: "right",
-                                                isReadOnly: "true"
-                                            }));
-                                        }
-                                        grid.columns.push(new wijmo.grid.Column({
-                                            header: messages["prodSalePmixStoreMoms.total"],
-                                            binding: "totPMix",
-                                            width: 90,
-                                            align: "right",
-                                            isReadOnly: "true"
-                                        }));
-
-                                        // 데이터 뿌리기
-                                        var data = new wijmo.collections.CollectionView(list);
-                                        data.trackChanges = true;
-                                        $scope.data = data;
-
-                                        // grid merge 가능 영역
-                                        // All:= 7 (Merge all areas), AllHeaders:= 6(Merge column and row headers), Cells:= 1(Merge scrollable cells),
-                                        // ColumnHeaders:= 2(Merge column headers), None:= 0(No merging), RowHeaders:= 4(Merge row headers)
-                                        grid.allowMerging = 'ColumnHeaders';
-                                        // grid header 라인 기본 2줄 유지
-                                        if(2 > grid.columnHeaders.rows.length){
-                                            grid.columnHeaders.rows.push(new wijmo.grid.Row());
-                                        }
-
-                                        // 첫째줄 헤더 생성
-                                        var dataItem = {};
-                                        dataItem.storeCd = messages["prodSalePmixStoreMoms.storeCd"];
-                                        dataItem.storeNm = messages["prodSalePmixStoreMoms.storeNm"];
-                                        dataItem.momsAreaFg = messages["cmm.moms.momsAreaFg"];
-                                        dataItem.prodClassNm = messages["prodSalePmixStoreMoms.prodClassNm"];
-                                        dataItem.prodNm = messages["prodSalePmixStoreMoms.prodNm"];
-
-                                        for (var i = 0; i < dateArr.length; i++) {
-                                            eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
-                                        }
-                                        dataItem.totSaleQty = "판매수량";
-
-                                        for (var i = 0; i < dateArr.length; i++) {
-                                            eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
-                                        }
-                                        dataItem.totRealSaleAmt = "실매출액";
-
-                                        for (var i = 0; i < dateArr.length; i++) {
-                                            eval('dataItem.pMix' + dateArr[i].sOrgDate + '= "P.MIX"');
-                                        }
-                                        dataItem.totPMix = "P.MIX";
-
-                                        grid.columnHeaders.rows[0].dataItem = dataItem;
-
-                                        grid.itemFormatter = function (panel, r, c, cell) {
-
-                                            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-                                                //align in center horizontally and vertically
-                                                panel.rows[r].allowMerging    = true;
-                                                panel.columns[c].allowMerging = true;
-                                                wijmo.setCss(cell, {
-                                                    display    : 'table',
-                                                    tableLayout: 'fixed'
-                                                });
-                                                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-                                                wijmo.setCss(cell.children[0], {
-                                                    display      : 'table-cell',
-                                                    verticalAlign: 'middle',
-                                                    textAlign    : 'center'
-                                                });
+                                            // 날짜 형태 정규식
+                                            var regex = {};
+                                            if(params.dayGubun === "day"){
+                                                regex[0] = /(\d{4})(\d{2})(\d{2})/g;
+                                                regex[1] = '$1-$2-$3';
+                                            }else if(params.dayGubun === "month"){
+                                                regex[0] = /(\d{4})(\d{2})/g;
+                                                regex[1] = '$1-$2';
                                             }
 
-                                            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-                                            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-                                                // GroupRow 인 경우에는 표시하지 않는다.
-                                                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-                                                    cell.textContent = '';
-                                                } else {
-                                                    if (!isEmpty(panel._rows[r]._data.rnum)) {
-                                                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                                            // 판매수량
+                                            for (var i = 0; i < dateArr.length; i++) {
+                                                grid.columns.push(new wijmo.grid.Column({
+                                                    header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
+                                                    binding: "saleQty" +  dateArr[i].sOrgDate,
+                                                    width: 90,
+                                                    align: "right",
+                                                    isReadOnly: "true"
+                                                }));
+                                            }
+                                            grid.columns.push(new wijmo.grid.Column({
+                                                header: messages["prodSalePmixStoreMoms.total"],
+                                                binding: "totSaleQty",
+                                                width: 90,
+                                                align: "right",
+                                                isReadOnly: "true"
+                                            }));
+
+                                            // 실매출액
+                                            for (var i = 0; i < dateArr.length; i++) {
+                                                grid.columns.push(new wijmo.grid.Column({
+                                                    header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
+                                                    binding: "realSaleAmt" + dateArr[i].sOrgDate,
+                                                    width: 90,
+                                                    align: "right",
+                                                    isReadOnly: "true"
+                                                }));
+                                            }
+                                            grid.columns.push(new wijmo.grid.Column({
+                                                header: messages["prodSalePmixStoreMoms.total"],
+                                                binding: "totRealSaleAmt",
+                                                width: 90,
+                                                align: "right",
+                                                isReadOnly: "true"
+                                            }));
+
+                                            // P.MIX
+                                            for (var i = 0; i < dateArr.length; i++) {
+                                                grid.columns.push(new wijmo.grid.Column({
+                                                    header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
+                                                    binding: "pMix" + dateArr[i].sOrgDate,
+                                                    width: 90,
+                                                    align: "right",
+                                                    isReadOnly: "true"
+                                                }));
+                                            }
+                                            grid.columns.push(new wijmo.grid.Column({
+                                                header: messages["prodSalePmixStoreMoms.total"],
+                                                binding: "totPMix",
+                                                width: 90,
+                                                align: "right",
+                                                isReadOnly: "true"
+                                            }));
+
+                                            // 데이터 뿌리기
+                                            var data = new wijmo.collections.CollectionView(list);
+                                            data.trackChanges = true;
+                                            $scope.data = data;
+
+                                            // grid merge 가능 영역
+                                            // All:= 7 (Merge all areas), AllHeaders:= 6(Merge column and row headers), Cells:= 1(Merge scrollable cells),
+                                            // ColumnHeaders:= 2(Merge column headers), None:= 0(No merging), RowHeaders:= 4(Merge row headers)
+                                            grid.allowMerging = 'ColumnHeaders';
+                                            // grid header 라인 기본 2줄 유지
+                                            if(2 > grid.columnHeaders.rows.length){
+                                                grid.columnHeaders.rows.push(new wijmo.grid.Row());
+                                            }
+
+                                            // 첫째줄 헤더 생성
+                                            var dataItem = {};
+                                            dataItem.storeCd = messages["prodSalePmixStoreMoms.storeCd"];
+                                            dataItem.storeNm = messages["prodSalePmixStoreMoms.storeNm"];
+                                            dataItem.momsAreaFg = messages["cmm.moms.momsAreaFg"];
+                                            dataItem.prodClassNm = messages["prodSalePmixStoreMoms.prodClassNm"];
+                                            dataItem.prodNm = messages["prodSalePmixStoreMoms.prodNm"];
+
+                                            for (var i = 0; i < dateArr.length; i++) {
+                                                eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
+                                            }
+                                            dataItem.totSaleQty = "판매수량";
+
+                                            for (var i = 0; i < dateArr.length; i++) {
+                                                eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
+                                            }
+                                            dataItem.totRealSaleAmt = "실매출액";
+
+                                            for (var i = 0; i < dateArr.length; i++) {
+                                                eval('dataItem.pMix' + dateArr[i].sOrgDate + '= "P.MIX"');
+                                            }
+                                            dataItem.totPMix = "P.MIX";
+
+                                            grid.columnHeaders.rows[0].dataItem = dataItem;
+
+                                            grid.itemFormatter = function (panel, r, c, cell) {
+
+                                                if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                                                    //align in center horizontally and vertically
+                                                    panel.rows[r].allowMerging    = true;
+                                                    panel.columns[c].allowMerging = true;
+                                                    wijmo.setCss(cell, {
+                                                        display    : 'table',
+                                                        tableLayout: 'fixed'
+                                                    });
+                                                    cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                                                    wijmo.setCss(cell.children[0], {
+                                                        display      : 'table-cell',
+                                                        verticalAlign: 'middle',
+                                                        textAlign    : 'center'
+                                                    });
+                                                }
+
+                                                // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+                                                else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                                                    // GroupRow 인 경우에는 표시하지 않는다.
+                                                    if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                                                        cell.textContent = '';
                                                     } else {
-                                                        cell.textContent = (r + 1).toString();
+                                                        if (!isEmpty(panel._rows[r]._data.rnum)) {
+                                                            cell.textContent = (panel._rows[r]._data.rnum).toString();
+                                                        } else {
+                                                            cell.textContent = (r + 1).toString();
+                                                        }
                                                     }
                                                 }
-                                            }
 
-                                            // readOnly 배경색 표시
-                                            else if (panel.cellType === wijmo.grid.CellType.Cell) {
-                                                var col = panel.columns[c];
-                                                var rows = panel.rows[r];
+                                                // readOnly 배경색 표시
+                                                else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                                                    var col = panel.columns[c];
+                                                    var rows = panel.rows[r];
 
-                                                if (col.isReadOnly) {
-                                                    wijmo.addClass(cell, 'wj-custom-readonly');
+                                                    if (col.isReadOnly) {
+                                                        wijmo.addClass(cell, 'wj-custom-readonly');
+                                                    }
                                                 }
-                                            }
-                                        };
+                                            };
 
-                                    }
-                                }, function errorCallback(response) {
-                                    $scope._popMsg(messages["cmm.error"]);
-                                    return false;
-                                }).then(function () {
-                                    if (typeof callback === 'function') {
-                                        $timeout(function () {
-                                            callback();
-                                        }, 10);
-                                    }
-                                });
-                            }
-                            //<-- //그리드 생성 -->
-                        }
-                    }, function errorCallback(response) {
-                        // 로딩팝업 hide
-                        $scope.excelUploadingPopup(false);
-                        // called asynchronously if an error occurs
-                        // or server returns response with an error status.
-                        if (response.data.message) {
-                            $scope._popMsg(response.data.message);
-                        } else {
-                            $scope._popMsg(messages['cmm.error']);
-                        }
-                        return false;
-                    }).then(function () {
-                        // 'complete' code here
-                        setTimeout(function() {
-                            if ($scope.excelFlex.rows.length <= 0) {
-                                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-                                $scope.excelUploadingPopup(false);
-                                return false;
-                            }
-
-                            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
-                                includeColumnHeaders: true,
-                                includeCellStyles: false,
-                                includeColumns: function (column) {
-                                    return column.visible;
+                                        }
+                                    }, function errorCallback(response) {
+                                        $scope._popMsg(messages["cmm.error"]);
+                                        return false;
+                                    }).then(function () {
+                                        if (typeof callback === 'function') {
+                                            $timeout(function () {
+                                                callback();
+                                            }, 10);
+                                        }
+                                    });
                                 }
-                            }, "상품매출(P.MIX 매장)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
-                                $timeout(function () {
-                                    console.log("Export complete start. _" + (x + 1));
-                                    getExcelFile(x + 1);
-                                }, 500);
-                            }, function (reason) { // onError
-                                // User can catch the failure reason in this callback.
-                                console.log('The reason of save failure is ' + reason + "_" + (x + 1));
-                                $scope.excelUploadingPopup(false);
-                            });
+                                //<-- //그리드 생성 -->
+                            }
+                        }, function errorCallback(response) {
+                            // 로딩팝업 hide
+                            $scope.excelUploadingPopup(false);
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                            if (response.data.message) {
+                                $scope._popMsg(response.data.message);
+                            } else {
+                                $scope._popMsg(messages['cmm.error']);
+                            }
+                            return false;
+                        }).then(function () {
+                            // 'complete' code here
+                            setTimeout(function() {
+                                if ($scope.excelFlex.rows.length <= 0) {
+                                    $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                                    $scope.excelUploadingPopup(false);
+                                    return false;
+                                }
 
-                        }, 1000);
+                                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                                    includeColumnHeaders: true,
+                                    includeCellStyles: false,
+                                    includeColumns: function (column) {
+                                        return column.visible;
+                                    }
+                                }, "상품매출(P.MIX 매장)_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
+                                    $timeout(function () {
+                                        console.log("Export complete start. _" + (x + 1));
+                                        getExcelFile(x + 1);
+                                    }, 500);
+                                }, function (reason) { // onError
+                                    // User can catch the failure reason in this callback.
+                                    console.log('The reason of save failure is ' + reason + "_" + (x + 1));
+                                    $scope.excelUploadingPopup(false);
+                                });
+
+                            }, 1000);
+                        });
+                        resolve(x);
                     });
-                    resolve(x);
-                });
-            };
+                };
 
-            async function getExcelFile(x) {
-                if(totFileCnt > x){
-                    await delay(x);
-                }else{
-                    $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                }
-            };
+                async function getExcelFile(x) {
+                    if(totFileCnt > x){
+                        await delay(x);
+                    }else{
+                        $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                    }
+                };
 
-            // 엑셀 분할 다운로드 시작
-            getExcelFile(0);
+                // 엑셀 분할 다운로드 시작
+                getExcelFile(0);
 
+            });
         });
     };
 

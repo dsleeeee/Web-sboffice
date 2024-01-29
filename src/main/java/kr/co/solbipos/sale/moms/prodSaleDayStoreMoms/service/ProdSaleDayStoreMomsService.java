@@ -34,8 +34,8 @@ public interface ProdSaleDayStoreMomsService {
     /** 상품매출일별(매장) - 분할 엑셀다운로드 사용자 제한 체크 */
     int getDivisionExcelDownloadUserIdChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO);
 
-    /** 상품매출일별(매장) - 엑셀다운로드 기능 사용자 저장 */
-    int getDivisionExcelDownloadSave(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO);
+    /** 상품매출일별(매장) - 엑셀다운로드 기능 사용자 저장 isnert */
+    int getDivisionExcelDownloadSaveInsert(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO);
 
     /** 상품매출일별(매장) - 엑셀다운로드 진행 사용자 현재 인원수 체크 */
     String getDivisionExcelDownloadCntChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO);

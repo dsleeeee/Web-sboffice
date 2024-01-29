@@ -306,7 +306,7 @@ public class ProdSaleDayStoreMomsController {
     }
 
     /**
-     * 상품매출일별(매장) - 엑셀다운로드 기능 사용자 저장
+     * 상품매출일별(매장) - 엑셀다운로드 기능 사용자 저장 insert
      *
      * @param prodSaleDayStoreMomsVO
      * @param request
@@ -316,14 +316,14 @@ public class ProdSaleDayStoreMomsController {
      * @author  김설아
      * @since   2024. 01. 24.
      */
-    @RequestMapping(value = "/prodSaleDayStoreMoms/getDivisionExcelDownloadSave.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getDivisionExcelDownloadSave(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, HttpServletRequest request,
+    public Result getDivisionExcelDownloadSaveInsert(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, HttpServletRequest request,
                                                     HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = prodSaleDayStoreMomsService.getDivisionExcelDownloadSave(prodSaleDayStoreMomsVO, sessionInfoVO);
+        int result = prodSaleDayStoreMomsService.getDivisionExcelDownloadSaveInsert(prodSaleDayStoreMomsVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }

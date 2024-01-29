@@ -212,7 +212,7 @@ app.controller('billSaleMomsCtrl', ['$scope', '$http', '$timeout', function ($sc
                 $scope._broadcast('billSaleMomsExcelCtrl', params);
             });
         }else{
-            // 분할 엑셀다운로드 사용자 제한
+            // 분할 엑셀다운로드 사용자 제한 체크
             $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
                 if (response.data.data.list === 0) {
                     $scope._popMsg(messages["prodSaleDayStoreMoms.userIdChkAlert"]); // 사용권한이 없습니다.
@@ -291,7 +291,20 @@ app.controller('billSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
         if(data.excelType === '1') {
             $scope.searchExcelList(data);
         }else{
-            $scope.searchExcelDivisionList(data);
+            // 엑셀다운로드 진행 사용자 현재 인원수 체크
+            data.downloadFg = "0"; // 다운로드 구분 (0:간소화화면, 1:상품매출분석)
+            $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', data, function (response) {
+                if (response.data.data.list === 0) {
+                } else {
+                    var msgCntChk = response.data.data.list; // 00:0명의 사용자 다운로드 중
+                    if(msgCntChk.substr(0, 2) === "00") {
+                        $scope.searchExcelDivisionList(data);
+                    } else {
+                        $scope._popMsg(msgCntChk); // 다운로드 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
+                        return;
+                    }
+                }
+            });
         }
         event.preventDefault();
     });
@@ -352,99 +365,109 @@ app.controller('billSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
             // 다운로드 될 전체 파일 갯수 셋팅
             $("#totalRows").html(totFileCnt);
 
-            // 엑셀 분할 다운로드
-            function delay(x){
-                return new Promise(function(resolve, reject){
-                    console.log("setTimeout  > i=" + x + " x=" + x);
+            // 엑셀다운로드 진행 사용자 저장
+            params.resrceCd = menuCd;
+            params.resrceNm = menuNm;
+            params.downloadUseFg = "2"; // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
+            params.downloadFileCount = totFileCnt; // 다운로드 파일수
+            params.downloadNo = "10"; // 다운로드 화면구분번호
 
-                    // 다운로드 진행중인 파일 숫자 변경
-                    $("#progressCnt").html(x + 1);
+            $scope._postJSONQuery.withOutPopUp( "/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params, function(response){
 
-                    // 페이징 100000개씩 지정해 분할 다운로드 진행
-                    params.limit = 100000 * (x + 1);
-                    params.offset = (100000 * (x + 1)) - 99999;
+                // 엑셀 분할 다운로드
+                function delay(x){
+                    return new Promise(function(resolve, reject){
+                        console.log("setTimeout  > i=" + x + " x=" + x);
 
-                    // 가상로그인 대응한 session id 설정
-                    if (document.getElementsByName('sessionId')[0]) {
-                        params['sid'] = document.getElementsByName('sessionId')[0].value;
-                    }
+                        // 다운로드 진행중인 파일 숫자 변경
+                        $("#progressCnt").html(x + 1);
 
-                    // ajax 통신 설정
-                    $http({
-                        method: 'POST', //방식
-                        // url: '/sale/moms/billSaleMoms/billSaleMoms/getBillSaleMomsList.sb', /* 통신할 URL */
-                        url: '/sale/moms/billSaleMoms/billSaleMoms/getBillSaleMomsExcelDivisionList.sb', /* 통신할 URL */
-                        params: params, /* 파라메터로 보낼 데이터 */
-                        headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-                    }).then(function successCallback(response) {
-                        if ($scope._httpStatusCheck(response, true)) {
-                            // this callback will be called asynchronously
-                            // when the response is available
-                            var list = response.data.data.list;
-                            if (list.length === undefined || list.length === 0) {
-                                $scope.data = new wijmo.collections.CollectionView([]);
-                                $scope.excelUploadingPopup(false);
-                                return false;
-                            }
+                        // 페이징 100000개씩 지정해 분할 다운로드 진행
+                        params.limit = 100000 * (x + 1);
+                        params.offset = (100000 * (x + 1)) - 99999;
 
-                            var data = new wijmo.collections.CollectionView(list);
-                            data.trackChanges = true;
-                            $scope.data = data;
+                        // 가상로그인 대응한 session id 설정
+                        if (document.getElementsByName('sessionId')[0]) {
+                            params['sid'] = document.getElementsByName('sessionId')[0].value;
                         }
-                    }, function errorCallback(response) {
-                        // 로딩팝업 hide
-                        $scope.excelUploadingPopup(false);
-                        // called asynchronously if an error occurs
-                        // or server returns response with an error status.
-                        if (response.data.message) {
-                            $scope._popMsg(response.data.message);
-                        } else {
-                            $scope._popMsg(messages['cmm.error']);
-                        }
-                        return false;
-                    }).then(function () {
-                        // 'complete' code here
-                        setTimeout(function() {
-                            if ($scope.excelFlex.rows.length <= 0) {
-                                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-                                $scope.excelUploadingPopup(false);
-                                return false;
-                            }
 
-                            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
-                                includeColumnHeaders: true,
-                                includeCellStyles: false,
-                                includeColumns: function (column) {
-                                    return column.visible;
+                        // ajax 통신 설정
+                        $http({
+                            method: 'POST', //방식
+                            // url: '/sale/moms/billSaleMoms/billSaleMoms/getBillSaleMomsList.sb', /* 통신할 URL */
+                            url: '/sale/moms/billSaleMoms/billSaleMoms/getBillSaleMomsExcelDivisionList.sb', /* 통신할 URL */
+                            params: params, /* 파라메터로 보낼 데이터 */
+                            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+                        }).then(function successCallback(response) {
+                            if ($scope._httpStatusCheck(response, true)) {
+                                // this callback will be called asynchronously
+                                // when the response is available
+                                var list = response.data.data.list;
+                                if (list.length === undefined || list.length === 0) {
+                                    $scope.data = new wijmo.collections.CollectionView([]);
+                                    $scope.excelUploadingPopup(false);
+                                    return false;
                                 }
-                            }, "영수건별매출_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
-                                $timeout(function () {
-                                    console.log("Export complete start. _" + (x + 1));
-                                    getExcelFile(x + 1);
-                                }, 500);
-                            }, function (reason) { // onError
-                                // User can catch the failure reason in this callback.
-                                console.log('The reason of save failure is ' + reason + "_" + (x + 1));
-                                $scope.excelUploadingPopup(false);
-                            });
 
-                        }, 1000);
+                                var data = new wijmo.collections.CollectionView(list);
+                                data.trackChanges = true;
+                                $scope.data = data;
+                            }
+                        }, function errorCallback(response) {
+                            // 로딩팝업 hide
+                            $scope.excelUploadingPopup(false);
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                            if (response.data.message) {
+                                $scope._popMsg(response.data.message);
+                            } else {
+                                $scope._popMsg(messages['cmm.error']);
+                            }
+                            return false;
+                        }).then(function () {
+                            // 'complete' code here
+                            setTimeout(function() {
+                                if ($scope.excelFlex.rows.length <= 0) {
+                                    $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                                    $scope.excelUploadingPopup(false);
+                                    return false;
+                                }
+
+                                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                                    includeColumnHeaders: true,
+                                    includeCellStyles: false,
+                                    includeColumns: function (column) {
+                                        return column.visible;
+                                    }
+                                }, "영수건별매출_" + params.startDate + "_" + params.endDate + "_" + getCurDateTime() + '_' + (x + 1) + '.xlsx', function () {
+                                    $timeout(function () {
+                                        console.log("Export complete start. _" + (x + 1));
+                                        getExcelFile(x + 1);
+                                    }, 500);
+                                }, function (reason) { // onError
+                                    // User can catch the failure reason in this callback.
+                                    console.log('The reason of save failure is ' + reason + "_" + (x + 1));
+                                    $scope.excelUploadingPopup(false);
+                                });
+
+                            }, 1000);
+                        });
+                        resolve(x);
                     });
-                    resolve(x);
-                });
-            };
+                };
 
-            async function getExcelFile(x) {
-                if(totFileCnt > x){
-                    await delay(x);
-                }else{
-                    $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-                }
-            };
+                async function getExcelFile(x) {
+                    if(totFileCnt > x){
+                        await delay(x);
+                    }else{
+                        $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                    }
+                };
 
-            // 엑셀 분할 다운로드 시작
-            getExcelFile(0);
+                // 엑셀 분할 다운로드 시작
+                getExcelFile(0);
 
+            });
         });
     };
 

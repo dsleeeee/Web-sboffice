@@ -163,9 +163,9 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
         return prodSaleDayStoreMomsMapper.getDivisionExcelDownloadUserIdChk(prodSaleDayStoreMomsVO);
     }
 
-    /** 상품매출일별(매장) - 엑셀다운로드 기능 사용자 저장 */
+    /** 상품매출일별(매장) - 엑셀다운로드 기능 사용자 저장 isnert */
     @Override
-    public int getDivisionExcelDownloadSave(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO) {
+    public int getDivisionExcelDownloadSaveInsert(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO) {
 
         String currentDt = currentDateTimeString();
 
@@ -174,9 +174,8 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
         prodSaleDayStoreMomsVO.setModDt(currentDt);
         prodSaleDayStoreMomsVO.setModId(sessionInfoVO.getUserId());
 
-        prodSaleDayStoreMomsVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodSaleDayStoreMomsVO.setOrgnCd(sessionInfoVO.getOrgnCd());
         prodSaleDayStoreMomsVO.setUserId(sessionInfoVO.getUserId());
-        prodSaleDayStoreMomsVO.setDownloadUseFg("2"); // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
 
         // 화면별 건당 다운로드 예상시간(초)
         String expectedTimeSecond = prodSaleDayStoreMomsMapper.getExpectedTimeSecond(prodSaleDayStoreMomsVO);

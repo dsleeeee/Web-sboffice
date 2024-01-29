@@ -213,7 +213,7 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
                 $scope._broadcast('prodSaleDayStoreMomsExcelCtrl', params);
             });
         }else{
-            // 분할 엑셀다운로드 사용자 제한
+            // 분할 엑셀다운로드 사용자 제한 체크
             $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
                 if (response.data.data.list === 0) {
                     $scope._popMsg(messages["prodSaleDayStoreMoms.userIdChkAlert"]); // 사용권한이 없습니다.
@@ -369,10 +369,11 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
             // 엑셀다운로드 진행 사용자 저장
             params.resrceCd = menuCd;
             params.resrceNm = menuNm;
+            params.downloadUseFg = "2"; // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
             params.downloadFileCount = totFileCnt; // 다운로드 파일수
             params.downloadNo = "2"; // 다운로드 화면구분번호
 
-            $scope._postJSONQuery.withOutPopUp( "/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSave.sb", params, function(response){
+            $scope._postJSONQuery.withOutPopUp( "/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params, function(response){
 
                 // 엑셀 분할 다운로드
                 function delay(x){

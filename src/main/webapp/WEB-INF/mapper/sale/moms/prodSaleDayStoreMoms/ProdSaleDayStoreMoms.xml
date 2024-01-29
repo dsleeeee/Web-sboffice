@@ -365,7 +365,7 @@
             MOD_DT,
             MOD_ID
         ) VALUES (
-            #{hqOfficeCd},
+            #{orgnCd},
             SQ_TB_CM_DOWNLOAD_LIMIT_CHECK.NEXTVAL,
             #{regDt},
             #{userId},

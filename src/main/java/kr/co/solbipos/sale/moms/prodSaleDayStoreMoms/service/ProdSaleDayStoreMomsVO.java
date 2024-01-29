@@ -30,6 +30,9 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
      */
     private String orgnFg;
 
+    /** 소속코드 */
+    private String orgnCd;
+
     /** 본사코드 */
     private String hqOfficeCd;
 
@@ -126,6 +129,10 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
+
+    public String getOrgnCd() { return orgnCd; }
+
+    public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
