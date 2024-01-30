@@ -35,6 +35,8 @@ public class PosUtilLogVO extends PageVO {
     private String userNm;
     /** 로그내용 */
     private String logMsg;
+    /** 처리유저명 */
+    private String userName;
 
     public String getSaleDate() { return srchDate; }
 
@@ -63,4 +65,12 @@ public class PosUtilLogVO extends PageVO {
     public String getLogMsg() { return logMsg; }
 
     public void setLogMsg(String logMsg) { this.logMsg = logMsg; }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 }

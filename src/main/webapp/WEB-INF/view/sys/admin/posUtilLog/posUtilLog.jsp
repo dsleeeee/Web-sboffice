@@ -59,6 +59,25 @@
                 <input type="text" class="sb-input w100" id="storeNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();" />
             </td>
         </tr>
+        <tr>
+            <%-- 처리유저명 --%>
+            <th><s:message code="posUtilLog.userNm" /></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                        id="srchUserName"
+                        ng-model="userName"
+                        items-source="_getComboData('userName')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="srchUserNameCombo">
+                    </wj-combo-box>
+                </div>
+            </td>
+            <th></th>
+            <td></td>
+        </tr>
         </tbody>
     </table>
 
@@ -95,4 +114,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posUtilLog/posUtilLog.js?ver=20231221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/posUtilLog/posUtilLog.js?ver=20240130.01" charset="utf-8"></script>
