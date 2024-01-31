@@ -126,6 +126,9 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     /** 다운로드 화면구분번호 */
     private String downloadNo;
 
+    /** 순번 */
+    private String seq;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -343,4 +346,8 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     public String getDownloadNo() { return downloadNo; }
 
     public void setDownloadNo(String downloadNo) { this.downloadNo = downloadNo; }
+
+    public String getSeq() { return seq; }
+
+    public void setSeq(String seq) { this.seq = seq; }
 }

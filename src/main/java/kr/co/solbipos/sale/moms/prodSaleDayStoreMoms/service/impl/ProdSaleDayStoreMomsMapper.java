@@ -41,9 +41,15 @@ public interface ProdSaleDayStoreMomsMapper {
     /** 상품매출일별(매장) - 엑셀다운로드 진행 사용자 저장 insert */
     int getDivisionExcelDownloadSaveInsert(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO);
 
+    /** 상품매출일별(매장) - 순번(자동채번) */
+    String getDownloadSeq(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO);
+
     /** 상품매출일별(매장) - 화면별 건당 다운로드 예상시간(초) */
     String getExpectedTimeSecond(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO);
 
     /** 상품매출일별(매장) - 엑셀다운로드 진행 사용자 현재 인원수 체크 */
     String getDivisionExcelDownloadCntChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO);
+
+    /** 상품매출일별(매장) - 엑셀다운로드 진행 사용자 저장 update */
+    int getDivisionExcelDownloadSaveUpdate(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO);
 }

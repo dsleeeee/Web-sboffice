@@ -163,9 +163,9 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
         return prodSaleDayStoreMomsMapper.getDivisionExcelDownloadUserIdChk(prodSaleDayStoreMomsVO);
     }
 
-    /** 상품매출일별(매장) - 엑셀다운로드 기능 사용자 저장 isnert */
+    /** 상품매출일별(매장) - 엑셀다운로드 진행 사용자 저장 isnert */
     @Override
-    public int getDivisionExcelDownloadSaveInsert(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO) {
+    public String getDivisionExcelDownloadSaveInsert(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO) {
 
         String currentDt = currentDateTimeString();
 
@@ -177,6 +177,10 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
         prodSaleDayStoreMomsVO.setOrgnCd(sessionInfoVO.getOrgnCd());
         prodSaleDayStoreMomsVO.setUserId(sessionInfoVO.getUserId());
 
+        // 순번(자동채번)
+        String seq = prodSaleDayStoreMomsMapper.getDownloadSeq(prodSaleDayStoreMomsVO);
+        prodSaleDayStoreMomsVO.setSeq(seq);
+
         // 화면별 건당 다운로드 예상시간(초)
         String expectedTimeSecond = prodSaleDayStoreMomsMapper.getExpectedTimeSecond(prodSaleDayStoreMomsVO);
 
@@ -186,7 +190,10 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
         Date downloadExpectedEndDt = DateUtils.addSeconds(downloadStartDt, seconds); // 다운로드 사용시작 + 예상시간(초)
         prodSaleDayStoreMomsVO.setDownloadExpectedEndDt(DateFormatUtils.format(downloadExpectedEndDt, "yyyyMMddHHmmss"));
 
-        return prodSaleDayStoreMomsMapper.getDivisionExcelDownloadSaveInsert(prodSaleDayStoreMomsVO);
+        // 엑셀다운로드 진행 사용자 저장 isnert
+        prodSaleDayStoreMomsMapper.getDivisionExcelDownloadSaveInsert(prodSaleDayStoreMomsVO);
+
+        return seq;
     }
 
     /** 상품매출일별(매장) - 엑셀다운로드 진행 사용자 현재 인원수 체크 */
@@ -194,5 +201,20 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
     public String getDivisionExcelDownloadCntChk(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO) {
 
         return prodSaleDayStoreMomsMapper.getDivisionExcelDownloadCntChk(prodSaleDayStoreMomsVO);
+    }
+
+    /** 상품매출일별(매장) - 엑셀다운로드 진행 사용자 저장 update */
+    @Override
+    public int getDivisionExcelDownloadSaveUpdate(ProdSaleDayStoreMomsVO prodSaleDayStoreMomsVO, SessionInfoVO sessionInfoVO) {
+
+        String currentDt = currentDateTimeString();
+
+        prodSaleDayStoreMomsVO.setModDt(currentDt);
+        prodSaleDayStoreMomsVO.setModId(sessionInfoVO.getUserId());
+
+        prodSaleDayStoreMomsVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        prodSaleDayStoreMomsVO.setUserId(sessionInfoVO.getUserId());
+
+        return prodSaleDayStoreMomsMapper.getDivisionExcelDownloadSaveUpdate(prodSaleDayStoreMomsVO);
     }
 }

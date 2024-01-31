@@ -363,10 +363,11 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            DOWNLOAD_DT
         ) VALUES (
             #{orgnCd},
-            SQ_TB_CM_DOWNLOAD_LIMIT_CHECK.NEXTVAL,
+            #{seq},
             #{regDt},
             #{userId},
             #{downloadFg},
@@ -379,9 +380,21 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{regDt}
         )
     </insert>
+
+    <!-- 상품매출일별(매장) - 화면별 건당 다운로드 예상시간(초) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDownloadSeq" parameterType="ProdSaleDayStoreMomsVO" resultType="String">
+        /* ProdSaleDayStoreMomsMapper.getDownloadSeq */
+        SELECT SQ_TB_CM_DOWNLOAD_LIMIT_CHECK.NEXTVAL AS SEQ
+        FROM dual
+    </select>
 
     <!-- 상품매출일별(매장) - 화면별 건당 다운로드 예상시간(초) -->
     <!--
@@ -404,5 +417,23 @@
         SELECT FN_GET_TB_CM_DOWNLOAD_LIMIT_CHECK(#{downloadFg}) AS MSG_CNT_CHK
         FROM dual
     </select>
+
+    <!-- 상품매출일별(매장) - 엑셀다운로드 진행 사용자 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getDivisionExcelDownloadSaveUpdate" parameterType="ProdSaleDayStoreMomsVO">
+        /* ProdSaleDayStoreMomsMapper.getDivisionExcelDownloadSaveUpdate */
+        UPDATE
+        TB_CM_DOWNLOAD_LIMIT_CHECK
+        SET
+        DOWNLOAD_DT = #{modDt},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND ORGN_CD = #{orgnCd}
+        AND SEQ = #{seq}
+    </update>
 
 </mapper>
