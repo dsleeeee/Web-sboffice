@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+var userName = [
+  {"name": "전체", "value": ""},
+  {"name": "SaleToReturn", "value": "SaleToReturn"},
+  {"name": "SaleToReturn 외", "value": "N"}
+];
+
 /**
  *  포스유틸사용로그 그리드 생성
  */
@@ -23,6 +29,9 @@ app.controller('posUtilLogCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 조회일자 셋팅
     $scope.startDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
     $scope.endDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
+    
+    // 콤보박스 데이터 Set
+    $scope._setComboData("userName", userName); // 처리유저명
 
     // 사용로그 그리드 조회
     $scope.$on("posUtilLogCtrl", function(event, data) {
@@ -45,6 +54,7 @@ app.controller('posUtilLogCtrl', ['$scope', '$http', '$timeout', function ($scop
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.endDate.value, 'yyyyMMdd');
+        params.userName = $scope.srchUserNameCombo.selectedValue;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sys/admin/posUtilLog/posUtilLog/getPosUtilLogList.sb", params, function() {});

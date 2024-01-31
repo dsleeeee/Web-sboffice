@@ -44,6 +44,16 @@
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
+        <if test='userName != null and userName != ""'>
+            <choose>
+                <when test='userName == "SaleToReturn"'>
+                    AND tppul.USER_NAME = #{userName}
+                </when>
+                <otherwise>
+                    AND tppul.USER_NAME != 'SaleToReturn'
+                </otherwise>
+            </choose>
+        </if>
         AND     tppul.STORE_CD = tms.STORE_CD
         AND     tms.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
         ORDER

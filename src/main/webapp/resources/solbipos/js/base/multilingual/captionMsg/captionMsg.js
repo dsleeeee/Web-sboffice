@@ -144,6 +144,10 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope._save('/base/multilingual/captionMsg/deleteCaptionMsg.sb', params, function(){
                 // 재조회
                 $scope.getCaptionMsgList();
+
+                // 화면구분등록 리스트 재조회
+                var scope = agrid.getScope("captionMsgGrpCtrl");
+                scope.getCaptionMsgGrpList();
             });
         });
     };
@@ -247,6 +251,11 @@ app.controller('captionMsgCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope._save("/base/multilingual/captionMsg/saveCaptionMsg.sb", params, function(result) {
             // 재조회
             $scope.getCaptionMsgList();
+
+            // 화면구분등록 리스트 재조회
+            var scope = agrid.getScope("captionMsgGrpCtrl");
+            scope.getCaptionMsgGrpList();
+
         });
     };
     
