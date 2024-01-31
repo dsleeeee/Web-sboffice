@@ -137,9 +137,9 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
             return false;
         }
 
-        // 조회일자 최대 한달(31일) 제한
-        if (diffDay > 31) {
-            $scope._popMsg(messages['cmm.dateOver.1month.error']);
+        // 조회일자 최대 3달(93일) 제한
+        if (diffDay > 93) {
+            $scope._popMsg(messages['cmm.dateOver.3month.error']);
             return false;
         }
 
@@ -202,9 +202,9 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
             return false;
         }
 
-        // 조회일자 최대 한달(31일) 제한
-        if (diffDay > 31) {
-            $scope._popMsg(messages['cmm.dateOver.1month.error']);
+        // 조회일자 최대 3달(93일) 제한
+        if (diffDay > 93) {
+            $scope._popMsg(messages['cmm.dateOver.3month.error']);
             return false;
         }
 
@@ -271,9 +271,9 @@ app.controller('daySaleStoreMomsCtrl', ['$scope', '$http', '$timeout', function 
             return false;
         }
 
-        // 조회일자 최대 한달(31일) 제한
-        if (diffDay > 31) {
-            $scope._popMsg(messages['cmm.dateOver.1month.error']);
+        // 조회일자 최대 3달(93일) 제한
+        if (diffDay > 93) {
+            $scope._popMsg(messages['cmm.dateOver.3month.error']);
             return false;
         }
 
