@@ -156,8 +156,9 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
+
         // 조회일자 최대 3달 제한
-        if (diffMonth > 2) {
+        if (diffMonth > 3) {
             $scope._popMsg(messages['cmm.dateOver.3month.error']);
             return false;
         }

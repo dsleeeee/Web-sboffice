@@ -346,25 +346,26 @@ app.controller('monthProdSaleRateMomsCtrl', ['$scope', '$http', '$timeout', func
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
+
         // 조회일자 최대 3달 제한
-        if (diffMonth > 2) {
+        if (diffMonth > 3) {
             $scope._popMsg(messages['cmm.dateOver.3month.error']);
             return false;
         }
 
-       // 파라미터
-       var params = {};
+        // 파라미터
+        var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
-       params.prodClassCd = $scope.prodClassCd;
-       params.dayOption = $scope.srchDayOptionCombo.selectedValue;
-       params.prodOption = $scope.srchProdOptionCombo.selectedValue;
-       params.prodCd = $("#srchProdCd").val();
-       params.prodNm = $("#srchProdNm").val();
-       params.storeCds = $("#monthProdSaleRateMomsStoreCd").val();
-       params.prodCds = $("#monthProdSaleRateMomsSelectCd").val();
-       params.dlvrInFgCol = dlvrInFgCol;
-       params.listScale = 500; //-페이지 스케일 갯수
+        params.prodClassCd = $scope.prodClassCd;
+        params.dayOption = $scope.srchDayOptionCombo.selectedValue;
+        params.prodOption = $scope.srchProdOptionCombo.selectedValue;
+        params.prodCd = $("#srchProdCd").val();
+        params.prodNm = $("#srchProdNm").val();
+        params.storeCds = $("#monthProdSaleRateMomsStoreCd").val();
+        params.prodCds = $("#monthProdSaleRateMomsSelectCd").val();
+        params.dlvrInFgCol = dlvrInFgCol;
+        params.listScale = 500; //-페이지 스케일 갯수
 
        if(orgnFg === "HQ"){
            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
@@ -477,8 +478,9 @@ app.controller('monthProdSaleRateMomsCtrl', ['$scope', '$http', '$timeout', func
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
+
         // 조회일자 최대 3달 제한
-        if (diffMonth > 2) {
+        if (diffMonth > 3) {
             $scope._popMsg(messages['cmm.dateOver.3month.error']);
             return false;
         }
@@ -545,8 +547,9 @@ app.controller('monthProdSaleRateMomsCtrl', ['$scope', '$http', '$timeout', func
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
+
         // 조회일자 최대 3달 제한
-        if (diffMonth > 2) {
+        if (diffMonth > 3) {
             $scope._popMsg(messages['cmm.dateOver.3month.error']);
             return false;
         }
