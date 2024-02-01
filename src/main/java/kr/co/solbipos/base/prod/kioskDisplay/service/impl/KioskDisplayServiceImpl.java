@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -128,12 +129,73 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
 
     // 엑셀 업로드 전 매장코드, 상품코드 유효여부 체크
     @Override
-    public int chkCd(KioskDisplayVO kioskDisplayVO, SessionInfoVO sessionInfoVO) {
-        kioskDisplayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        // 상품코드 array 값 세팅
-        kioskDisplayVO.setArrProdCdCol(kioskDisplayVO.getProdCdCol().split(","));
+    public List<DefaultMap<String>> chkCd(KioskDisplayVO[] kioskDisplayVOs, SessionInfoVO sessionInfoVO) {
 
-        return kioskDisplayMapper.chkCd(kioskDisplayVO);
+        List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
+
+        // 1000개씩 나눠 체크하기 위해 loop 계산
+        int loop = (int) Math.ceil((double) kioskDisplayVOs.length / 1000);
+
+        // 매장코드, 상품코드 체크 변수
+        String strCd = "";
+
+        // 시작과 끝 배열 계산 변수
+        int start = 0;
+        int end = 0;
+
+        for(int i = 0; i < loop; i++){
+
+            strCd = "";
+
+            // 1000개씩 나눠 체크하기 위해, 시작과 끝 배열 계산
+            start = i * 1000;
+            end = (i * 1000) + 1000;
+
+            // 마지막 loop의 끝 배열은 데이터 전체 길이로 셋팅
+            if(i == (loop - 1)){
+                end = kioskDisplayVOs.length;
+            }
+
+            // 매장코드, 상품코드 유효여부 체크를 위한 데이터 만들기
+            for(int j = start; j < end; j++){
+                strCd += (strCd.equals("") ? "" : ",") + kioskDisplayVOs[j].getStoreCd() + "_" + kioskDisplayVOs[j].getProdCd();
+            }
+
+            KioskDisplayVO kioskDisplayVO2 = new KioskDisplayVO();
+            kioskDisplayVO2.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskDisplayVO2.setProdCdCol(strCd);
+
+            if(!"".equals(kioskDisplayVO2.getProdCdCol())){
+
+                StoreVO storeVO = new StoreVO();
+                storeVO.setArrSplitStoreCd(CmmUtil.splitText(kioskDisplayVO2.getProdCdCol(), 3900));
+
+                for(int k = 0; k < storeVO.getArrSplitStoreCd().length; k++){
+                    System.out.println("splitData_" + k + " : " + storeVO.getArrSplitStoreCd()[k]);
+                }
+
+                String storeCdQuery = popupMapper.getSearchMultiStoreRtn(storeVO);
+
+                if(storeCdQuery.indexOf("SELECT") != -1){
+                    kioskDisplayVO2.setStoreCdQuery(storeCdQuery);
+                }else{
+                    storeCdQuery = storeCdQuery.replaceAll("','", "|");
+                    String sQuery1 = "SELECT REGEXP_SUBSTR(A.VALUE_01, '[^|]+', 1, LEVEL) AS VALUE_01" + "\n";
+                    sQuery1 += "FROM (" + "\n";
+                    sQuery1 += "SELECT " + storeCdQuery + " AS VALUE_01 FROM DUAL" + "\n";
+                    sQuery1 += ") A" + "\n";
+                    sQuery1 += "CONNECT BY LEVEL <= LENGTH(REGEXP_REPLACE(A.VALUE_01, '[^|]+','')) + 1";
+
+                    kioskDisplayVO2.setStoreCdQuery(sQuery1);
+                }
+            }else{
+                kioskDisplayVO2.setStoreCdQuery("SELECT '' AS VALUE_01 FROM DUAL"); // 쿼리 오류 방지를 위해 빈쿼리 셋팅
+            }
+
+            list.addAll(kioskDisplayMapper.chkCd(kioskDisplayVO2));
+        }
+
+        return list;
     }
 
     // 엑셀 업로드

@@ -23,8 +23,7 @@
                 initialized="initGrid(s,e)"
                 sticky-headers="true"
                 selection-mode="Row"
-                items-source="data"
-                item-formatter="_itemFormatter">
+                items-source="data">
 
                 <wj-flex-grid-column header="<s:message code="prod.storeCd"/>" binding="storeCd" width="*" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="*" is-read-only="true" format="d"></wj-flex-grid-column>
@@ -34,4 +33,4 @@
     </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/excelUploadKioskDisplay.js?ver=20230830.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/excelUploadKioskDisplay.js?ver=20240201.01" charset="utf-8"></script>

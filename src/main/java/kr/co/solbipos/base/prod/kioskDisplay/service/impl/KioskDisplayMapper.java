@@ -63,7 +63,7 @@ public interface KioskDisplayMapper {
     int getSideMenuKioskDisplaySave(KioskDisplayVO kioskDisplayVO);
 
     // 엑셀 업로드 전 매장코드, 상품코드 유효여부 체크
-    int chkCd(KioskDisplayVO kioskDisplayVO);
+    List<DefaultMap<String>> chkCd(KioskDisplayVO kioskDisplayVO);
 
     // 엑셀 업로드
     int getExcelUploadSave(KioskDisplayVO kioskDisplayVO);
