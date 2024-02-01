@@ -57,7 +57,6 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
             if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
                 $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
                 $timeout(function () {
-                    // var flex = $scope.flex;
                     wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync($scope.flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function (workbook) {
                             $timeout(function () {
@@ -91,7 +90,7 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
             item = {};
             for (var c = 0; c < $scope.flex.columns.length; c++) {
                 if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
-                    var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
+                    var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header.replaceAll('\'', '')];
                     var cellValue  = $scope.flex.getCellData(r, c, false) + '';
                     item[colBinding] = cellValue;
                 }
@@ -99,6 +98,22 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
             jsonData.push(item);
         }
         $timeout(function () {
+
+            // 업로드 갯수 5000개 제한
+            if(jsonData.length > 5000){
+                var msg = messages["kioskDisplay.max.upload.5000"]; // 최대 5000개까지 업로드 할 수 있습니다.
+                $scope.valueCheckErrPopup(msg);
+                return false;
+            }
+
+            for(var i=0; i < jsonData.length; i++){
+                if(jsonData[i].kioskDisplayYn!=="비노출" && jsonData[i].kioskDisplayYn!=="노출"){
+                    var msg = messages["kioskDisplay.not.match.kioskUseYn"];
+                    $scope.valueCheckErrPopup(msg);
+                    return false;
+                }
+            }
+
             // 유효한 매장코드, 상품코드인지 체크
             $scope.chkCd(jsonData);
         }, 10);
@@ -106,36 +121,56 @@ app.controller('excelUploadKioskDisplayCtrl', ['$scope', '$http', '$timeout', fu
 
     // 유효한 코드인지 체크
     $scope.chkCd = function(jsonData){
-        var strCd = ""; // Cd 유효성 검사 확인용
-
-        for(var i=0; i < jsonData.length; i++){
-            if(jsonData[i].kioskDisplayYn!=="비노출" && jsonData[i].kioskDisplayYn!=="노출"){
-                var msg = messages["kioskDisplay.not.match.kioskUseYn"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-            strCd += (strCd === '' ? '' : ',') + jsonData[i].storeCd + jsonData[i].prodCd;
-        }
 
         $scope.stepCnt = 100; // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
 
         // 파라미터
-        var params = {};
-        params.prodCdCol = strCd;
+        var params = jsonData;
 
-        $scope._postJSONQuery.withOutPopUp( "/base/prod/kioskDisplay/kioskDisplay/chkCd.sb", params, function(response){
+        //가상로그인 session 설정
+        var sParam = {};
+        if(document.getElementsByName('sessionId')[0]){
+            sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
 
-            var cnt = response.data.data;
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : '/base/prod/kioskDisplay/kioskDisplay/chkCd.sb', /* 통신할 URL */
+            data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+            params : sParam,
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
 
-            if(strCd.split(",").length === cnt){ // 상품이 상품마스터에 존재할 경우,
-                // 데이터 저장
-                $scope.save(jsonData);
-            }else {
-                var msg = messages["dlvrProd.not.match.cd"];
-                $scope.valueCheckErrPopup(msg);
-                return false;
+                var list = response.data.data.list;
+
+                if(list.length > 0){
+                    var strErr = "";
+                    for(var i = 0; i < list.length; i++){
+                        strErr += "<br/>매장코드 : " + list[i].value01.split('_')[0]  + " 상품코드 : " + list[i].value01.split('_')[1];
+                    }
+
+                    var msg = messages["dlvrProd.not.match.cd"];
+                    $scope.valueCheckErrPopup(msg + "</br>" + strErr);
+                    return false;
+
+                } else { // 상품이 상품마스터에 존재할 경우,
+                    // 데이터 저장
+                    $scope.save(jsonData);
+                }
             }
+        }, function errorCallback(response) {
+            $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.saveFail']);
+            }
+            return false;
+        }).then(function () {
+
         });
     };
 

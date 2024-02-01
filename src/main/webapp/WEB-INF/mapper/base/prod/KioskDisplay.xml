@@ -417,15 +417,21 @@
         PARAM    : kioskDisplayVO
         COMMENTS : 엑셀 업로드 전 유효한 코드인지 체크한다.
     -->
-    <select id="chkCd" parameterType="kioskDisplayVO" resultType="integer">
+    <select id="chkCd" parameterType="kioskDisplayVO" resultType="DefaultMap">
         /* USE : KioskDisplayMapper.chkCd */
-        SELECT  COUNT(*)
-        FROM    TB_MS_PRODUCT
-        WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-        AND     STORE_CD || PROD_CD IN
-        <foreach collection="arrProdCdCol" item="item" open="(" close=")" separator=",">
-            #{item}
-        </foreach>
+        SELECT B.VALUE_01
+        FROM
+        (
+            SELECT STORE_CD || '_' || PROD_CD AS VALUE_01
+            FROM   TB_MS_PRODUCT
+            WHERE  STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        ) A,
+        (
+            ${storeCdQuery}
+        ) B
+        WHERE A.VALUE_01 (+)= B.VALUE_01
+        AND   A.VALUE_01 IS NULL
+        AND   B.VALUE_01 IS NOT NULL
     </select>
 
     <!-- 엑셀 업로드 -->

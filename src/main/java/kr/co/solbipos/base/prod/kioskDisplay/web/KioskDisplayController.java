@@ -205,7 +205,7 @@ public class KioskDisplayController {
     /**
      * 엑셀 업로드 전 매장코드, 상품코드 유효여부 체크
      *
-     * @param kioskDisplayVO
+     * @param kioskDisplayVOs
      * @param request
      * @author 권지현
      * @since 2023.08.17
@@ -213,13 +213,13 @@ public class KioskDisplayController {
      */
     @RequestMapping(value = "/kioskDisplay/chkCd.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result chkCd(KioskDisplayVO kioskDisplayVO, HttpServletRequest request) {
+    public Result chkCd(@RequestBody KioskDisplayVO[] kioskDisplayVOs, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int getCnt = kioskDisplayService.chkCd(kioskDisplayVO, sessionInfoVO);
+        List<DefaultMap<String>> list = kioskDisplayService.chkCd(kioskDisplayVOs, sessionInfoVO);
 
-        return returnJson(Status.OK, getCnt);
+        return returnListJson(Status.OK, list, kioskDisplayVOs);
     }
 
     /**
