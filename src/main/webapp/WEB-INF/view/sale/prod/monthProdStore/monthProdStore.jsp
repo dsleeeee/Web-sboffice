@@ -450,6 +450,8 @@
 </div>
 
 <script type="text/javascript">
+    var menuCd = "${menuCd}";
+    var menuNm = "${menuNm}";
     var orgnFg = "${orgnFg}";
     var storeCd = "${storeCd}";
 

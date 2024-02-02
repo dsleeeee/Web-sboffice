@@ -453,27 +453,30 @@
 </div>
 
 <script type="text/javascript">
-  var orgnFg = "${orgnFg}";
-  var storeCd = "${storeCd}";
+    var menuCd = "${menuCd}";
+    var menuNm = "${menuNm}";
+    var orgnFg = "${orgnFg}";
+    var storeCd = "${storeCd}";
 
-  // List 형식("" 안붙임)
-  var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
-  var branchCdComboList = ${branchCdComboList};
-  var momsTeamComboList = ${momsTeamComboList};
-  var momsAcShopComboList = ${momsAcShopComboList};
-  var momsAreaFgComboList = ${momsAreaFgComboList};
-  var momsCommercialComboList = ${momsCommercialComboList};
-  var momsShopTypeComboList = ${momsShopTypeComboList};
-  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-  var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    // List 형식("" 안붙임)
+    var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+    var branchCdComboList = ${branchCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20240201.01" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
 <c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark3.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>

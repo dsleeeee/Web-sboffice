@@ -24,6 +24,8 @@
 </div>
 
 <script type="text/javascript">
+    var menuCd = "${menuCd}";
+    var menuNm = "${menuNm}";
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
     var storeCd = "${storeCd}";
@@ -61,7 +63,7 @@
     var orgnFg = '${orgnFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelTab.js?ver=20230106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleDtlChannel/saleDtlChannelTab.js?ver=20240201.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 엑셀다운로드 레이어 --%>

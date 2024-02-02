@@ -552,35 +552,37 @@
 </div>
 
 <script type="text/javascript">
-  var orgnFg = "${orgnFg}";
-  var storeCd = "${storeCd}";
+    var menuCd = "${menuCd}";
+    var menuNm = "${menuNm}";
+    var orgnFg = "${orgnFg}";
+    var storeCd = "${storeCd}";
 
-  // List 형식("" 안붙임)
-  var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
-  var branchCdComboList = ${branchCdComboList};
-  var momsTeamComboList = ${momsTeamComboList};
-  var momsAcShopComboList = ${momsAcShopComboList};
-  var momsAreaFgComboList = ${momsAreaFgComboList};
-  var momsCommercialComboList = ${momsCommercialComboList};
-  var momsShopTypeComboList = ${momsShopTypeComboList};
-  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-  var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    // List 형식("" 안붙임)
+    var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+    var branchCdComboList = ${branchCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 
-  // 시간대분류
-  var timeSlotColList = [];
-  <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
-  <c:forEach var="timeSlotCol" items="${timeSlotColList}">
-  var timeSlotParam   = {};
-  timeSlotParam.name  = "${timeSlotCol.name}";
-  timeSlotParam.value = "${timeSlotCol.value}";
-  timeSlotColList.push(timeSlotParam);
-  </c:forEach>
+    // 시간대분류
+    var timeSlotColList = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+    var timeSlotParam   = {};
+    timeSlotParam.name  = "${timeSlotCol.name}";
+    timeSlotParam.value = "${timeSlotCol.value}";
+    timeSlotColList.push(timeSlotParam);
+    </c:forEach>
 
-  var timeSlotCol    = '${timeSlotCol}';
-  var arrTimeSlotCol = timeSlotCol.split(',');
+    var timeSlotCol    = '${timeSlotCol}';
+    var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProd/timeProd.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/time/timeProd/timeProd.js?ver=20240201.01" charset="utf-8"></script>
 
 <%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
 <%-- 상품분류 팝업 --%>

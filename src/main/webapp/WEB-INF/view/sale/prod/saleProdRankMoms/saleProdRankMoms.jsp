@@ -413,20 +413,22 @@
 </div>
 
 <script type="text/javascript">
-  var orgnFg = "${orgnFg}";
-  var hqOfficeCd = "${hqOfficeCd}";
-  var storeCd = "${storeCd}";
+    var menuCd = "${menuCd}";
+    var menuNm = "${menuNm}";
+    var orgnFg = "${orgnFg}";
+    var hqOfficeCd = "${hqOfficeCd}";
+    var storeCd = "${storeCd}";
 
-  // 콤보박스 데이터
-  var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
-  var branchCdComboList = ${branchCdComboList};
-  var momsTeamComboList = ${momsTeamComboList};
-  var momsAcShopComboList = ${momsAcShopComboList};
-  var momsAreaFgComboList = ${momsAreaFgComboList};
-  var momsCommercialComboList = ${momsCommercialComboList};
-  var momsShopTypeComboList = ${momsShopTypeComboList};
-  var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-  var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    // 콤보박스 데이터
+    var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+    var branchCdComboList = ${branchCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleProdRankMoms/saleProdRankMoms.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/saleProdRankMoms/saleProdRankMoms.js?ver=20240201.01" charset="utf-8"></script>
