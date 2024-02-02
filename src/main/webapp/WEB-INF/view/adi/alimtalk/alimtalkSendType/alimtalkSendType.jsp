@@ -163,7 +163,10 @@
                 <div ng-controller="templateListCtrl">
                     <%-- 템플릿 양식 --%>
                     <div class="w100 fl" style="height:550px;">
-                        <div style="height:520px; overflow-x: hidden; overflow-y: auto;">
+                        <div style="height:20px;" class="red">
+                            ※ '선택' 후에 '저장' 버튼을 눌러야 저장됩니다.
+                        </div>
+                        <div style="height:500px; overflow-x: hidden; overflow-y: auto;">
                             <div id="divTemplateCommentList"></div>
                         </div>
                     </div>
@@ -194,7 +197,7 @@
     var alkIdEnvstVal1228 = "${alkIdEnvstVal1228}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20220510.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendType/alimtalkSendType.js?ver=20240202.01" charset="utf-8"></script>
 
 <%-- 알림톡 계정등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendType/alimtalkIdRegister.jsp">

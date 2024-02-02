@@ -534,7 +534,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){});
+        // $scope._postJSONSave.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplateSave.sb", params, function(){});
     };
 }]);
 
@@ -592,10 +592,10 @@ app.controller('templateListCtrl', ['$scope', '$http', function ($scope, $http) 
                     innerHtml += "<tbody>";
                     innerHtml += "<table>";
                     if($("#lblTemplateCd").text().toString() == list[i].templateCd.toString()) {
-                        innerHtml += "<tr><td onmouseup=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\"><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral; cursor:pointer;\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ '선택' +"\" disabled/></td></tr>";
+                        innerHtml += "<tr><td onmouseover=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\"><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral; cursor:pointer;\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ '선택' +"\" disabled/></td></tr>";
                         // innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
                     } else {
-                        innerHtml += "<tr><td onmouseup=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\"><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:white; cursor:pointer;\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ '선택' +"\" disabled/></td></tr>";
+                        innerHtml += "<tr><td onmouseover=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\"><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:white; cursor:pointer;\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ '선택' +"\" disabled/></td></tr>";
                         // innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
                     }
                     innerHtml += "<tr style=\"height: 10px\"></tr>";
