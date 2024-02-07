@@ -679,6 +679,7 @@
             var flex       = agrid.getScope(targetId + 'Ctrl').data.sourceCollection;
             // var flex = $scope.storeGridM;
             var arrStoreCd = [];
+            var arrStoreCdNm = [];
             var strStoreCd = "";
             var strStoreNm = "";
             var cnt        = 0;
@@ -687,15 +688,16 @@
                 if (flex[i].gChk) {
                     if (cnt == 0) {
                         strStoreCd = flex[i].storeCd;
-                        // strStoreNm = "["+flex[i].storeCd+"] "+flex[i].storeNm;
                         strStoreNm = flex[i].storeNm;
                     }
                     arrStoreCd.push(flex[i].storeCd);
+                    arrStoreCdNm.push("["+flex[i].storeCd+"] "+flex[i].storeNm);
                     cnt++;
                 }
             }
 
             $("#" + targetId + "Cd").val(arrStoreCd.join());
+            $("#" + targetId + "CdNm").val(arrStoreCdNm.join());
             // $("#" + targetCornerId + "Cd").val("");
             // $("#" + targetCornerId + "Name").val(messages["cmm.all"]);
             // $("#" + targetTableId + "Cd").val("");
