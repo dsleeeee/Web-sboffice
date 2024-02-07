@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,19 +144,18 @@ public class TerminalManageController {
         List<DefaultMap<String>> posList = null;
         List<DefaultMap<String>> cornerList = null;
 
-//        TerminalEnvFg envstVal = TerminalEnvFg.getEnum(service.getTerminalEnv(storeEnvVO));
-        TerminalEnvFg envstVal = TerminalEnvFg.getEnum("3");
+        // 환경설정값 코너사용설정[2028] 조회
+        TerminalEnvFg envstVal = TerminalEnvFg.getEnum(service.getTerminalEnv(storeEnvVO));
+        //TerminalEnvFg envstVal = TerminalEnvFg.getEnum("3");
 
         // 포스 목록 조회
         StorePosVO storePosVO = new StorePosVO();
         storePosVO.setStoreCd(storeEnvVO.getStoreCd());
-
         posList  = service.getPosList(storePosVO);
 
         // 코너 목록 조회
         StoreCornerVO storeCornerVO = new StoreCornerVO();
         storeCornerVO.setStoreCd(storeEnvVO.getStoreCd());
-
         cornerList  = service.getCornerList(storeCornerVO);
 
         resultMap.put("envstVal", envstVal);
@@ -258,8 +256,26 @@ public class TerminalManageController {
     }
 
     /**
-     * 코너 저장
+     * 코너 목록 조회
      * @param storeCornerVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "corner/getCornerDtlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCornerDtlList(StoreCornerVO storeCornerVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> result = service.getCornerDtlList(storeCornerVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, storeCornerVO);
+    }
+
+    /**
+     * 코너 저장
+     * @param storeCornerVOs
      * @param request
      * @param response
      * @param model
@@ -267,7 +283,7 @@ public class TerminalManageController {
      */
     @RequestMapping(value = "corner/insertCorner.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result insertCorner(StoreCornerVO storeCornerVO, HttpServletRequest request,
+    public Result insertCorner(@RequestBody StoreCornerVO[] storeCornerVOs, HttpServletRequest request,
                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
@@ -276,7 +292,7 @@ public class TerminalManageController {
 
         try{
             // 코너 저장
-            result = service.insertCorner(storeCornerVO, sessionInfoVO);
+            result = service.insertCorner(storeCornerVOs, sessionInfoVO);
 
         }catch(Exception ex){
             ex.printStackTrace();
@@ -332,5 +348,25 @@ public class TerminalManageController {
             ex.printStackTrace();
         }
         return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 터미널 환경변수 값 저장
+     * @param storeEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "terminalManage/updateTerminalEnvst.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateTerminalEnvst(@RequestBody StoreEnvVO storeEnvVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

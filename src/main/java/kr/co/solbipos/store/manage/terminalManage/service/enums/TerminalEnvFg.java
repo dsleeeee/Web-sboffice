@@ -27,11 +27,13 @@ import java.util.List;
 
 public enum TerminalEnvFg implements CodeEnum {
 
-    /** 코너 미사용 */
+    /** 코너-미사용 */
     NO_CORNER("0"),
-    /** 코너 사용 */
+    /** 매장단위승인*/
+    USE_STORE("1"),
+    /** 코너개별승인 */
     USE_CORNER("2"),
-    /** 포스별 */
+    /** 포스별승인 */
     USE_POS("3");
 
     private String code;

@@ -12,7 +12,7 @@
 
 <div class="subCon">
   <%-- 터미널 사용 설정 --%>
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -125,16 +125,17 @@
         </div>
       </div>
       <%-- 선택한 매장정보 --%>
-      <div class="mt10 mb10 oh sb-select dkbr">
+      <div class="mt10 mb5 oh sb-select dkbr">
         <label id="lblStoreInfo"></label>
         <label id="lblStoreCd" style="display: none"></label>
         <label id="lblStoreNm" style="display: none"></label>
         <label id="lblHqOfficeCd" style="display: none"></label>
+        <input type="hidden" id="orgTerminalEnvVal"/>
       </div>
       <%-- 터미널 선택 --%>
-      <div class="updownSet oh mb10" style="height:45px;">
+      <div class="updownSet oh" style="height:35px;">
         <%-- 터미널 선택 --%>
-        <div class="sb-select w20 fl">
+        <div class="sb-select w20 fl" id="terminalListArea" style="display: none;">
           <wj-combo-box
                   id="sTerminalFg"
                   ng-model="terminalFg"
@@ -190,9 +191,9 @@
           <%-- 삭제 --%>
           <button class="btn_skyblue" ng-click="posDel()"><s:message code="cmm.del"/></button>
         </div>
-        <div class="fr mb10" id="cornerBtnArea" style="display:none">-
+        <div class="fr mb10" id="cornerBtnArea" style="display:none">
           <%-- 터미널정보복사 --%>
-          <button class="btn_skyblue" ng-click="copyTerminalInfo()"><s:message code="terminalManage.copy.terminal"/></button>
+          <%--<button class="btn_skyblue" ng-click="copyTerminalInfo()"><s:message code="terminalManage.copy.terminal"/></button>--%>
           <%-- 코너추가 --%>
           <button class="btn_skyblue" ng-click="cornerAdd()"><s:message code="terminalManage.cornrAdd"/></button>
           <%-- 추가 --%>
@@ -244,11 +245,11 @@
               beginning-edit="changeVendorFg(s,e)"
               ime-enabled="true">
         <!-- define columns -->
-        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorFgNm"/>" binding="vendorFgNm" visible="false" width="*"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorNm" data-map="vanCdDataMap" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorNm" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
@@ -269,7 +270,7 @@
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20230616.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20240207.02" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <%--<c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">--%>

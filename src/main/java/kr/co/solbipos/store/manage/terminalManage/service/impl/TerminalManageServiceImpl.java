@@ -185,20 +185,37 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         return result;
     }
 
+    /** 코너 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getCornerDtlList(StoreCornerVO storeCornerVO) {
+        return mapper.getCornerDtlList(storeCornerVO);
+    }
+
     /** 코너 저장 */
     @Override
-    public int insertCorner(StoreCornerVO storeCornerVO, SessionInfoVO sessionInfoVO) {
+    public int insertCorner(StoreCornerVO[] storeCornerVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
         String dt = currentDateTimeString();
 
-        storeCornerVO.setUseYn(UseYn.Y.getCode());
-        storeCornerVO.setRegDt(dt);
-        storeCornerVO.setRegId(sessionInfoVO.getUserId());
-        storeCornerVO.setModDt(dt);
-        storeCornerVO.setModId(sessionInfoVO.getUserId());
+        for(StoreCornerVO storeCornerVO : storeCornerVOs) {
 
-        result += mapper.insertCorner(storeCornerVO);
+            storeCornerVO.setUseYn(UseYn.Y.getCode());
+            storeCornerVO.setRegDt(dt);
+            storeCornerVO.setRegId(sessionInfoVO.getUserId());
+            storeCornerVO.setModDt(dt);
+            storeCornerVO.setModId(sessionInfoVO.getUserId());
+
+            if(storeCornerVO.getStatus() == GridDataFg.INSERT) {
+                result += mapper.insertCorner(storeCornerVO); // 등록
+
+            } else if (storeCornerVO.getStatus() == GridDataFg.UPDATE) {
+                result += mapper.updateCorner(storeCornerVO); // 수정
+
+            } else if(storeCornerVO.getStatus() == GridDataFg.DELETE) {
+                result += mapper.deleteCorner(storeCornerVO); // 삭제
+            }
+        }
 
         return result;
     }

@@ -76,7 +76,7 @@ public class CornerController {
         StoreCornerVO storeCornerVO = new StoreCornerVO();
         storeCornerVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        List<DefaultMap<String>> cornerList =  terminalManageService.getCornerList(storeCornerVO);;
+        List<DefaultMap<String>> cornerList =  terminalManageService.getCornerList(storeCornerVO);
 
         model.addAttribute("cornerList", convertToJson(cornerList) );
 

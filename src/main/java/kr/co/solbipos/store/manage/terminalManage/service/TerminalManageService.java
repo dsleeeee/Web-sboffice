@@ -55,12 +55,14 @@ public interface TerminalManageService {
     /** 코너 터미널 정보 저장 */
     int saveCornerTerminalInfo(StoreTerminalVO[] storeTerminalVOs, SessionInfoVO sessionInfoVO);
 
+    /** 코너 목록 조회 */
+    List<DefaultMap<String>> getCornerDtlList(StoreCornerVO storeCornerVO);
+
     /** 코너 저장 */
-    int insertCorner(StoreCornerVO storeCornerVO, SessionInfoVO sessionInfoVO);
+    int insertCorner(StoreCornerVO[] storeCornerVOs, SessionInfoVO sessionInfoVO);
 
     /** 매장터미널관리 조회 */
     List<DefaultMap<Object>> getTerminalManageList(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO);
-
 
     /** 터미널 정보 복사 */
     int copyTerminalInfo(StoreTerminalVO storeTerminalVO, SessionInfoVO sessionInfoVO);

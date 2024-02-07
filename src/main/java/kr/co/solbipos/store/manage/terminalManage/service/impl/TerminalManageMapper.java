@@ -72,8 +72,17 @@ public interface TerminalManageMapper {
     /** 코너 터미널 정보 삭제 */
     int deleteCornerTerminalInfo(StoreTerminalVO storeTerminalVO);
 
+    /** 코너 목록 조회 */
+    List<DefaultMap<String>> getCornerDtlList(StoreCornerVO storeCornerVO);
+
     /** 코너 저장 */
     int insertCorner(StoreCornerVO storeCornerVO);
+
+    /** 코너 수정 */
+    int updateCorner(StoreCornerVO storeCornerVO);
+
+    /** 코너 삭제 */
+    int deleteCorner(StoreCornerVO storeCornerVO);
 
     /** 매장터미널관리 조회 */
     List<DefaultMap<Object>> getTerminalManageList(StoreTerminalVO storeTerminalVO);

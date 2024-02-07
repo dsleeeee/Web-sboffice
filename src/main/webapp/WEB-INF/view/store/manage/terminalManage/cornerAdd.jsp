@@ -3,117 +3,60 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup id="cornerAddLayer" control="cornerAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:650px;height:500px;">
+<wj-popup id="cornerAddLayer" control="cornerAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:800px;height:400px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="cornerAddCtrl">
-        <form name="myform">
-            <div class="wj-dialog-header wj-dialog-header-font">
-                <s:message code="terminalManage.cornrAdd" />
-                <span id="storePosAddTitle" class="ml20"></span>
-                <a href="#" class="wj-hide btn_close"></a>
-            </div>
 
-            <div class="wj-dialog-body sc2" style="overflow-y: hidden;">
+        <div class="wj-dialog-header wj-dialog-header-font">
+            <s:message code="terminalManage.cornrAdd" />
+            <span id="storePosAddTitle" class="ml20"></span>
+            <a href="#" class="wj-hide btn_close"></a>
+        </div>
+
+        <div class="wj-dialog-body">
+
+            <div class="oh sb-select dkbr">
                 <%--매장정보--%>
-                <h2 class="h2_tit mt5">
-                    [<label id="cnr_storeCd"></label>]
-                    <label id="cnr_storeNm"></label>
-                </h2>
+                [<label id="cnr_storeCd"></label>]
+                <label id="cnr_storeNm"></label>
 
-                <%-- 상세 --%>
-                <div id="dtlArea" style="height: 266px; overflow-y: auto;">
-
-                    <table class="tblType01">
-                        <colgroup>
-                            <col class="w20" />
-                            <col class="w30" />
-                            <col class="w20" />
-                            <col class="w30" />
-                        </colgroup>
-                        <tbody>
-                        <tr>
-                            <%-- 코너명 --%>
-                            <th>
-                                <div class="impWrap" align="center"><s:message code="terminalManage.cornrNm" /></div>
-                            </th>
-                            <td align="center">
-                                <input type="text" id="cornrNm" name="cornrNm" class="sb-input w100" maxlength="20"
-                                       ng-model="cornrNm"
-                                       required
-                                       popover-enable="myform.cornrNm.$invalid"
-                                       popover-placement="bottom-left"
-                                       popover-trigger="'mouseenter'"
-                                       uib-popover="<s:message code="terminalManage.cornrNm" />은(는) 필수 입력항목 입니다."/>
-                            </td>
-                            <%-- 대표자 --%>
-                            <th>
-                                <div class="impWrap" align="center"><s:message code="terminalManage.owner" /></div>
-                            </th>
-                            <td align="center">
-                                <input type="text" id="ownerNm" name="ownerNm" ng-model="ownerNm" class="sb-input w100" maxlength="20">
-                            </td>
-                        </tr>
-                        <tr>
-                            <%-- 사업자번호 --%>
-                            <th>
-                                <div class="impWrap" align="center"><s:message code="terminalManage.bizNo" /></div>
-                            </th>
-                            <td align="center">
-                                <input type="text" id="bizNo" name="bizNo" class="sb-input w100" maxlength="10"
-                                       ng-model="bizNo"
-                                       required
-                                       popover-enable="myform.bizNo.$invalid"
-                                       popover-placement="bottom-left"
-                                       popover-trigger="'mouseenter'"
-                                       uib-popover="<s:message code="terminalManage.bizNo" />은(는) 필수 입력항목 입니다."/>
-                            </td>
-                            <%-- 전화번호 --%>
-                            <th>
-                                <div class="impWrap" align="center"><s:message code="terminalManage.telNo" /></div>
-                            </th>
-                            <td align="center">
-                                <input type="text" id="telNo" name="telNo" ng-model="telNo" class="sb-input w100" maxlength="15">
-                            </td>
-                        </tr>
-                        <tr>
-                            <%-- VAN사 코드 --%>
-                            <th>
-                                <div class="impWrap" align="center"><s:message code="terminalManage.vanCd" /></div>
-                            </th>
-                            <td align="center">
-                                <input type="text" id="vanCd" name="vanCd" ng-model="vanCd" class="sb-input w100" maxlength="3">
-                            </td>
-                            <%-- VAN 터미널 번호--%>
-                            <th>
-                                <div class="impWrap" align="center"><s:message code="terminalManage.vanTermnlNo" /></div>
-                            </th>
-                            <td align="center">
-                                <input type="text" id="vanTermnlNo" name="vanTermnlNo" ng-model="vanTermnlNo" class="sb-input w100" maxlength="20">
-                            </td>
-                        </tr>
-                        <tr>
-                            <%-- VAN 일련번호--%>
-                            <th>
-                                <div class="impWrap" align="center"><s:message code="terminalManage.vanSerNo" /></div>
-                            </th>
-                            <td align="center">
-                                <input type="text" id="vanSerNo" name="vanSerNo" ng-model="vanSerNo" class="sb-input w100" maxlength="20">
-                            </td>
-                            <th></th>
-                            <td></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div class="updownSet oh">
+                    <%-- 삭제 --%>
+                    <button class="btn_skyblue fr ml5" ng-click="cornerDel()"><s:message code="cmm.del"/></button>
+                    <%-- 저장 --%>
+                    <button class="btn_skyblue fr ml5" ng-click="cornerSave()"><s:message code="cmm.save"/></button>
+                    <%-- 추가 --%>
+                    <button class="btn_skyblue fr" ng-click="cornerAdd()"><s:message code="cmm.add"/></button>
                 </div>
             </div>
 
-            <div class="wj-dialog-footer">
-                <%-- 저장--%>
-                <button class="btn btn_blue" ng-click="myform.$valid && saveCorner()"><s:message code="cmm.save"/></button>
-                <%-- 닫기 --%>
-                <button class="btn btn_blue" ng-click="close()"><s:message code="cmm.close"/></button>
+            <%--위즈모 테이블--%>
+            <div class="wj-gridWrap" style="height:250px; overflow-x: hidden; overflow-y: hidden;">
+                <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter"
+                    beginning-edit="changeVendorFg(s,e)"
+                    ime-enabled="true">
+
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="100"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.cornrNm"/>" binding="cornrNm" width="100" max-length="15"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.owner"/>" binding="ownerNm" width="100" max-length="15"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.bizNo"/>" binding="bizNo" width="150" max-length="10"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.telNo"/>" binding="telNo" width="150" max-length="14"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.vanCd"/>" binding="vanCd" width="150" max-length="3"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.vanTermnlNo"/>" binding="vanTermnlNo" width="150" max-length="20"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.vanSerNo"/>" binding="vanSerNo" width="150" max-length="20"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="" binding="termnlCnt" width="100" visible="false"></wj-flex-grid-column>
+                </wj-flex-grid>
             </div>
-        </form>
+        </div>
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/cornerAdd.js?ver=20200303" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/cornerAdd.js?ver=20240207.02" charset="utf-8"></script>
