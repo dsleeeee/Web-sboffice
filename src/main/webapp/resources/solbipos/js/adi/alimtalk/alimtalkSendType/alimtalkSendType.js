@@ -120,7 +120,7 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.alimtalkIdRegisterChk = function(alertPopupYn){
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp( "/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkIdRegisterChk.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkIdRegisterChk.sb", params, function(response){
             var alimtalkIdInfo = response.data.data.result;
             $scope.alimtalkIdInfo = alimtalkIdInfo;
 
@@ -146,7 +146,7 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.alimtalkIdRegisterChkStop = function(selectedRow){
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp( "/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkIdRegisterChk.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkIdRegisterChk.sb", params, function(response){
             var alimtalkIdInfo = response.data.data.result;
             $scope.alimtalkIdInfo = alimtalkIdInfo;
 
@@ -165,7 +165,7 @@ app.controller('alimtalkSendTypeCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.restSmsAmt = function() {
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp('/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSmsAmtList.sb', params, function (response) {
+        $scope._postJSONQuery.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSmsAmtList.sb", params, function (response) {
             var smsAmtList = response.data.data.result;
             $scope.smsAmtList = smsAmtList;
 
@@ -368,7 +368,7 @@ app.controller('alimtalkSendTypeTemplateCtrl', ['$scope', '$http', function ($sc
         params.sendTypeCd = $scope.selectedSendTypeTemplate.sendTypeCd;
         params.sendTypeDtlCd = $scope.selectedSendTypeTemplate.sendTypeDtlCd;
 
-        $scope._postJSONQuery.withOutPopUp( "/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplate.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkSendTypeDetailTemplate.sb", params, function(response){
             var templateInfo = response.data.data.result;
             $scope.templateInfo = templateInfo;
 

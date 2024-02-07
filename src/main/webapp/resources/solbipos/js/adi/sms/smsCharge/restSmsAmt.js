@@ -34,7 +34,7 @@ app.controller('restSmsAmtCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.searchRestSmsAmt = function() {
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp( "/adi/sms/smsCharge/msgOneAmtGuide/getMsgOneAmtGuideList.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp("/adi/sms/smsCharge/msgOneAmtGuide/getMsgOneAmtGuideList.sb", params, function(response){
             var msgOneAmtGuide = response.data.data.result;
             $scope.msgOneAmtGuide = msgOneAmtGuide;
 

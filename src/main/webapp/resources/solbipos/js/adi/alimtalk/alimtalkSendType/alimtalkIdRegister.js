@@ -59,7 +59,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         params.gubun = gubun;
         params.categoryCode = value;
 
-        $scope._postJSONQuery.withOutPopUp('/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getCategoryCodeComboList.sb', params, function (response) {
+        $scope._postJSONQuery.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkIdRegister/getCategoryCodeComboList.sb", params, function (response) {
             if (response.data.data.list.length > 0) {
                 var categoryCodeList = response.data.data.list;
                 if(gubun == "L") {
@@ -122,7 +122,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
         params.phoneNo = $scope.phoneNo;
 
         // 알림톡 계정등록 체크
-        $scope._postJSONQuery.withOutPopUp( "/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkIdRegisterAllChk.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkIdRegisterAllChk.sb", params, function(response){
             var alimtalkIdInfo = response.data.data.result;
             $scope.alimtalkIdInfo = alimtalkIdInfo;
 
@@ -269,7 +269,7 @@ app.controller('alimtalkIdRegisterCtrl', ['$scope', '$http', function ($scope, $
 
     // 그룹-계정등록 체크
     $scope.registerGroupChk = function(params) {
-        $scope._postJSONQuery.withOutPopUp( "/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkRegisterGroupChk.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp("/adi/alimtalk/alimtalkSendType/alimtalkSendType/getAlimtalkRegisterGroupChk.sb", params, function(response){
             var alimtalkGroupInfo = response.data.data.result;
             $scope.alimtalkGroupInfo = alimtalkGroupInfo;
 

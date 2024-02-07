@@ -34,7 +34,7 @@ app.controller('restSmsAmtAlimSettingCtrl', ['$scope', '$http', function ($scope
     $scope.searchRestSmsAmtAlimSetting = function() {
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp( "/adi/sms/smsCharge/restSmsAmtAlimSetting/getRestSmsAmtAlimSettingList.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp("/adi/sms/smsCharge/restSmsAmtAlimSetting/getRestSmsAmtAlimSettingList.sb", params, function(response){
             var restSmsAmtAlimSetting = response.data.data.result;
             $scope.restSmsAmtAlimSetting = restSmsAmtAlimSetting;
 
