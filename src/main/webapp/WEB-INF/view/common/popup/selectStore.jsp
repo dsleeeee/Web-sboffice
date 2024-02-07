@@ -344,9 +344,9 @@
     app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
 
         var targetId = '${param.targetId}';
-        var targetCornerId = '${param.targetCornerId}';
-        var targetTableId = '${param.targetTableId}';
-        var targetPosId = '${param.targetPosId}';
+        <%--var targetCornerId = '${param.targetCornerId}';--%>
+        <%--var targetTableId = '${param.targetTableId}';--%>
+        <%--var targetPosId = '${param.targetPosId}';--%>
         var targetTypeFg = '${param.targetTypeFg}'; // 매장선택 (S:싱글, M:멀티)
 
         // 상위 객체 상속 : T/F 는 picker
@@ -696,35 +696,33 @@
             }
 
             $("#" + targetId + "Cd").val(arrStoreCd.join());
-            $("#" + targetPosId + "Cd").val("");
-            $("#" + targetPosId + "Name").val(messages["cmm.all"]);
-
-            $("#" + targetCornerId + "Cd").val("");
-            $("#" + targetCornerId + "Name").val(messages["cmm.all"]);
-
-            $("#" + targetTableId + "Cd").val("");
-            $("#" + targetTableId + "Name").val(messages["cmm.all"]);
+            // $("#" + targetCornerId + "Cd").val("");
+            // $("#" + targetCornerId + "Name").val(messages["cmm.all"]);
+            // $("#" + targetTableId + "Cd").val("");
+            // $("#" + targetTableId + "Name").val(messages["cmm.all"]);
+            // $("#" + targetPosId + "Cd").val("");
+            // $("#" + targetPosId + "Name").val(messages["cmm.all"]);
 
             if (cnt == 0) {
                 $("#" + targetId + "Nm").val(messages["cmm.all"]);
-                $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
-                $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
-                $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
+                // $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
+                // $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
+                // $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
                 $("#" + targetId +"StoreNum").val("");
             }
             else if (cnt == 1) {
                 $("#" + targetId + "Nm").val("[" + strStoreCd + "] " + strStoreNm);
-                $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
-                $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
-                $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
                 $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
+                // $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
+                // $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
+                // $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
             }
             else if (cnt > 1) {
                 $("#" + targetId + "Nm").val(strStoreNm + " "+messages["cmm.except"]+" " + (cnt - 1) + messages["cmm.cntStore"]);
-                $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
-                $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
-                $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
                 $("#" + targetId +"StoreNum").val(" 영업매장 : "+cnt+" 개");
+                // $("#" + targetCornerId + "Nm").val(messages["cmm.all"]);
+                // $("#" + targetTableId + "Nm").val(messages["cmm.all"]);
+                // $("#" + targetPosId + "Nm").val(messages["cmm.all"]);
             }
             eval('$scope.wj' + targetId + 'Layer.hide(true)');
         };
