@@ -106,7 +106,7 @@ app.controller('msgOneAmtSettingCtrl', ['$scope', '$http', '$timeout', function 
     $scope.searchMsgOneAmtBase = function() {
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp( "/adi/sms/smsCharge/msgOneAmtSetting/getMsgOneAmtBaseList.sb", params, function(response){
+        $scope._postJSONQuery.withOutPopUp("/adi/sms/smsCharge/msgOneAmtSetting/getMsgOneAmtBaseList.sb", params, function(response){
             var msgOneAmtSetting = response.data.data.result;
             $scope.msgOneAmtSetting = msgOneAmtSetting;
 
