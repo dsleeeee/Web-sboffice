@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ServiceTimeAvg.xml
+    서비스타임(평균시간)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2024.02.06     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.serviceTimeAvg.service.impl.ServiceTimeAvgMapper">
+
+    <!-- 서비스타임(평균시간) - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getServiceTimeAvgList" parameterType="ServiceTimeAvgVO" resultType="DefaultMap">
+        /* ServiceTimeAvgMapper.getServiceTimeAvgList */
+        SELECT
+        (CASE WHEN SALE_TIME IN ('07') THEN '00시~07시' ELSE (SALE_TIME || '시') END) AS SALE_TIME,
+        <foreach collection="arrStoreCol" item="item" separator=",">
+            SUM(STORE_${item}_TC) AS STORE_${item}_TC
+        </foreach> ,
+        <foreach collection="arrStoreCol" item="item" separator=",">
+            TO_CHAR(TO_DATE(SUM(STORE_${item}_SERVICE_TIME), 'SSSSS'), 'HH24:MI:SS') AS STORE_${item}_SERVICE_TIME
+        </foreach>
+        FROM
+        (
+            SELECT
+            SALE_TIME,
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                SUM(STORE_${item}_TC) AS STORE_${item}_TC
+            </foreach> ,
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                SUM(STORE_${item}_SERVICE_TIME) AS STORE_${item}_SERVICE_TIME
+            </foreach>
+    --         SUM(STORE_E01085_TC) AS STORE_E01085_TC,
+    --         SUM(STORE_E01085_SERVICE_TIME) AS STORE_E01085_SERVICE_TIME,
+            FROM
+            (
+                SELECT
+                tpotdt.STORE_CD,
+                (CASE WHEN tpotdt.SALE_HH IN ('00', '01', '02', '03', '04', '05', '06', '07') THEN '07' ELSE tpotdt.SALE_HH END) AS SALE_TIME,
+                SUM(tpotdt.ORDER_CNT) AS TC,
+                SUM(tpotdt.AVG_SVC_TIME) AS SERVICE_TIME
+                FROM TB_PS_ORDER_TRACKING_DAILY_TIME tpotdt,
+                TB_MS_STORE tms,
+                TB_MS_STORE_INFO tmsi
+                WHERE 1=1
+                AND tpotdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tpotdt.STORE_CD IN (${storeCdQuery})
+                </if>
+                AND tpotdt.SALE_DATE = #{startDate}
+                AND tms.HQ_OFFICE_CD = tpotdt.HQ_OFFICE_CD
+                AND tms.STORE_CD = tpotdt.STORE_CD
+                AND tmsi.STORE_CD (+)= tms.STORE_CD
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                </if>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                </if>
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                </if>
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                </if>
+                GROUP BY tpotdt.STORE_CD, tpotdt.SALE_HH
+            )
+            PIVOT
+            (
+                SUM(TC) AS TC,
+                SUM(SERVICE_TIME) AS SERVICE_TIME
+                FOR STORE_CD
+                IN (${pivotStoreCol})
+    --             IN ('E01085' AS STORE_E01085,
+    --             'E01095' AS STORE_E01095)
+            )
+            GROUP BY SALE_TIME
+            UNION ALL
+            <![CDATA[
+                SELECT
+                (CASE WHEN (level+6) < 10 THEN '0'||TO_CHAR(level+6) ELSE TO_CHAR(level+6) END) AS SALE_TIME,
+            ]]>
+            <foreach collection="arrStoreCol" item="item" separator=",">
+                0 AS STORE_${item}_TC, 0 AS STORE_${item}_SERVICE_TIME
+            </foreach>
+            <![CDATA[
+                FROM dual
+                CONNECT BY LEVEL <= 17
+            ]]>
+        )
+        GROUP BY SALE_TIME
+        ORDER BY SALE_TIME
+    </select>
+
+</mapper>
