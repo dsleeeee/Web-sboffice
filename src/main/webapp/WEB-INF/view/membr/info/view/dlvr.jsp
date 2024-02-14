@@ -328,4 +328,4 @@
     <%--var memberDlvrMzone = ${memberDlvrMzone};--%>
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/dlvr.js?ver=20210802.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/dlvr.js?ver=20240213.01" charset="utf-8"></script>

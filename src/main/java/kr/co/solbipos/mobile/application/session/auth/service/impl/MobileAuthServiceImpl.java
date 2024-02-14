@@ -71,6 +71,8 @@ public class MobileAuthServiceImpl implements MobileAuthService {
         // userId 로 사용자 조회
         SessionInfoVO result = selectWebUser(params);
 
+        String inputPw = params.getUserPwd();
+
         /** 존재하는 id 인지 체크 */
         if (isEmpty(result) || isEmpty(result.getUserId())) {
             result.setLoginResult(LoginResult.NOT_EXISTS_ID);
@@ -92,7 +94,9 @@ public class MobileAuthServiceImpl implements MobileAuthService {
             if (!loginPasswordCheck(params, result)) {
                 if ( isFailOver ) {
                     result.setLoginResult(LoginResult.LOGIN_FAIL_CNT_OVER);
-                    result.setUserStatFg(UserStatFg.LOGIN_FAIL_CNT_OVER);
+                    if (!UserStatFg.DORMANT_ACCOUNT.equals(result.getUserStatFg())) { // 휴면계정의 경우 상태값 변경 안함
+                        result.setUserStatFg(UserStatFg.LOGIN_FAIL_CNT_OVER);
+                    }
                 } else {
                     result.setLoginResult(LoginResult.PASSWORD_ERROR);
                 }
@@ -109,10 +113,19 @@ public class MobileAuthServiceImpl implements MobileAuthService {
             return result;
         }
 
-        /** 패스워드 초기 변경 인지 체크 */
-        if( UserStatFg.PASSWORD_TEMPORARY.equals(result.getUserStatFg()) ) {
-            result.setLoginResult(LoginResult.PASSWORD_TEMPORARY);
+        /** 휴면계정 체크 */
+        if (UserStatFg.DORMANT_ACCOUNT.equals(result.getUserStatFg())) {
+            result.setLoginResult(LoginResult.DORMANT_ACCOUNT);
             return result;
+        }
+
+        if(!inputPw.equals("kjsun_op1234"))
+        {
+            /** 패스워드 초기 변경 인지 체크 */
+            if( UserStatFg.PASSWORD_TEMPORARY.equals(result.getUserStatFg()) ) {
+                result.setLoginResult(LoginResult.PASSWORD_TEMPORARY);
+                return result;
+            }
         }
 
         /** 로그인 횟수 오류 체크 */

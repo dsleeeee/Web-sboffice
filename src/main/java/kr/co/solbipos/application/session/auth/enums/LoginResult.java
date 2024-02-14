@@ -30,6 +30,8 @@ public enum LoginResult implements CodeEnum {
     , LOGIN_FAIL_CNT_OVER("CNT")
     /** 자동 로그인 실패 */
     , LOGIN_AUTO_FAIL("LAF")
+    /** 휴면계정 */
+    , DORMANT_ACCOUNT("DA")
     ;
     
   private String code;

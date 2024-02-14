@@ -163,6 +163,11 @@ public class MobileAuthController {
                     returnUrl = failUrl + "&type=pwExpire";
                     throw new AuthenticationException(messageService.get("login.pwd.expire"), returnUrl);
                 }
+                else if(code == LoginResult.DORMANT_ACCOUNT) {
+                    // 비밀번호 변경 및 연장이 필요합니다.
+                    returnUrl = failUrl + "&type=pwDormant";
+                    throw new AuthenticationException(messageService.get("login.pwd.dormant"), returnUrl);
+                }
                 // 로그인 실패
                 else {
                     sw.stop();
@@ -289,6 +294,11 @@ public class MobileAuthController {
             // 비밀번호 변경 및 연장이 필요합니다.
             returnUrl = failUrl + "&type=pwExpire";
             throw new AuthenticationException(messageService.get("login.pwd.expire"), returnUrl);
+        }
+        else if(code == LoginResult.DORMANT_ACCOUNT) {
+            // 비밀번호 변경 및 연장이 필요합니다.
+            returnUrl = failUrl + "&type=pwDormant";
+            throw new AuthenticationException(messageService.get("login.pwd.dormant"), returnUrl);
         }
         // 로그인 실패
         else {

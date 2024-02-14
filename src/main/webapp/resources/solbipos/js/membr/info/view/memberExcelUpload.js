@@ -184,6 +184,15 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
             }, '회원엑셀업로드_' + getToday() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "회원관리-회원정보-회원엑셀업로드";
+                    actParams.contents = "[편집화면 엑셀 다운로드] 버튼 클릭 시";
+                    
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
                 }, 10);
             });
         }, 10);
@@ -368,6 +377,13 @@ app.controller('memberExcelUploadCtrl', ['$scope', '$http', '$timeout', function
                         }
                     }
 
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "회원관리-회원정보-회원엑셀업로드";
+                    actParams.contents = "양식검증 완료 후 [저장] 버튼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
                 }
             }
         }, function errorCallback(response) {
