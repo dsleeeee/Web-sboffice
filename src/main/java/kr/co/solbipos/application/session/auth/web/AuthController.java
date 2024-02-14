@@ -47,9 +47,9 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @Controller
 @RequestMapping(value = "/auth")
 public class AuthController {
-    
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     AuthService authService;
     @Autowired
@@ -209,6 +209,11 @@ public class AuthController {
             // 비밀번호 변경 및 연장이 필요합니다.
             returnUrl = failUrl + "&type=pwExpire";
             throw new AuthenticationException(messageService.get("login.pwd.expire"), returnUrl);
+        }
+        else if(code == LoginResult.DORMANT_ACCOUNT) {
+            // 비밀번호 변경 및 연장이 필요합니다.
+            returnUrl = failUrl + "&type=pwDormant";
+            throw new AuthenticationException(messageService.get("login.pwd.dormant"), returnUrl);
         }
         // 로그인 실패
         else {
