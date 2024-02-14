@@ -436,7 +436,16 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         //     params.storeMembr = true;
         // }
 
-        $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function () {});
+        $scope._inquiryMain("/membr/info/view/view/getMemberlist.sb", params, function () {
+
+            // 사용자 행위 기록
+            var actParams = {};
+            actParams.resrceCd = menuCd;
+            actParams.pathNm = "회원관리-회원정보-회원정보관리";
+            actParams.contents = "[조회] 버튼 클릭 시";
+
+            $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+        });
     };
 
     // 매장선택 모듈 팝업 사용시 정의
@@ -922,6 +931,20 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                     function () {
                         $timeout(function () {
                             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+
+                            // 사용자 행위 기록
+                            var actParams = {};
+                            actParams.resrceCd = menuCd;
+                            actParams.pathNm = "회원관리-회원정보-회원정보관리";
+
+                            if(data.excelGubun == 'C'){
+                                actParams.contents = "[엑셀다운로드] 버튼 클릭 시";
+                            } else if (data.excelGubun == 'T'){
+                                actParams.contents = "[전체 엑셀다운로드] 버튼 클릭 시";
+                            }
+
+                            $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
                         }, 10);
                     }
                 );

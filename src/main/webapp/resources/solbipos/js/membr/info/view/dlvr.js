@@ -86,7 +86,16 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         params.telNo = $scope.telNo;
         params.dlvrTelUseYn = $scope.dlvrTelUseYn;
         params.listScale = $scope.listScale;
-        $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrList.sb", params, function () {}, false);
+        $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrList.sb", params, function () {
+            
+            // 사용자 행위 기록
+            var actParams = {};
+            actParams.resrceCd = menuCd;
+            actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+            actParams.contents = "[조회] 버튼 클릭 시 배달주소지 리스트 조회";
+
+            $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+        });
         scope._broadcast('dlvrTelList', params);
     };
 
@@ -265,6 +274,15 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
             }, '배달주소지_' + getToday() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+                    actParams.contents = "배달주소지 [엑셀다운로드] 버튼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
                 }, 10);
             });
         }, 10);
@@ -284,6 +302,15 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
                 $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
                 $scope.searchDlvrList();
                 $scope.$broadcast('loadingPopupInactive');
+
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+                actParams.contents = "배달주소지 [저장] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+                
             } else {
                 $scope.$broadcast('loadingPopupInactive');
                 $scope._popMsg(result.status);
@@ -322,6 +349,14 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
                 $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
                 $scope.searchDlvrList();
                 $scope.$broadcast('loadingPopupInactive');
+                
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+                actParams.contents = "배달주소지 [삭제] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
             } else {
                 $scope.$broadcast('loadingPopupInactive');
                 $scope._popMsg(result.status);
@@ -392,7 +427,16 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.telNo = data.telNo;
         params.useYn = data.dlvrTelUseYn;
         params.listScale = data.listScale;
-        $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrTelList.sb", params, function () {}, false);
+        $scope._inquiryMain("/membr/info/dlvr/dlvr/getDlvrTelList.sb", params, function () {
+
+            // 사용자 행위 기록
+            var actParams = {};
+            actParams.resrceCd = menuCd;
+            actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+            actParams.contents = "[조회] 버튼 클릭 시 배달전화번호 리스트 조회";
+
+            $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+        });
     };
 
     // 엑셀 다운로드
@@ -413,6 +457,15 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             }, '배달전화번호_' + getToday() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+                    actParams.contents = "배달전화번호 [엑셀다운로드] 버튼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
                 }, 10);
             });
         }, 10);
@@ -439,6 +492,14 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
                 $scope.searchDlvrTelList($scope.telData);
                 $scope.$broadcast('loadingPopupInactive');
+                
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+                actParams.contents = "배달전화번호 [저장] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
             } else {
                 $scope.$broadcast('loadingPopupInactive');
                 $scope._popMsg(result.status);
@@ -477,6 +538,14 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 $scope._popMsg(messages["cmm.saveSucc"]); // 저장 되었습니다.
                 $scope.searchDlvrTelList($scope.telData);
                 $scope.$broadcast('loadingPopupInactive');
+
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "배달관리-배달정보-배달지조회및변경";
+                actParams.contents = "배달전화번호 [삭제] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
             } else {
                 $scope.$broadcast('loadingPopupInactive');
                 $scope._popMsg(result.status);

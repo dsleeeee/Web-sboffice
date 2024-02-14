@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CommonMethod.xml
+    (공통) 화면 공통 사용 메소드 모음
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.02.13     최초작성
+-->
+<mapper namespace="kr.co.solbipos.common.method.service.impl.CommonMethodMapper">
+
+
+    <!-- 사용자 행위 기록 -->
+    <!--
+        TABLE    : TB_CM_USER_ACT_LOG
+        PARAM    : commonMethodVO
+        COMMENTS : 웹에서  사용자 행위를 기록한다.
+    -->
+    <insert id="saveUserAct" parameterType="commonMethodVO">
+    /* CommonMethodMapper.saveUserAct */
+    INSERT INTO TB_CM_USER_ACT_LOG
+    (
+        PROC_DT
+    ,   HQ_OFFICE_CD
+    ,   STORE_CD
+    ,   USER_ID
+    ,   RESRCE_CD
+    ,   PATH_NM
+    ,   CONTENTS
+    ,   LOGIN_IP
+    )
+    VALUES
+    (
+        #{regDt}
+    ,   #{hqOfficeCd}
+    ,   #{storeCd}
+    ,   #{userId}
+    ,   #{resrceCd}
+    ,   #{pathNm}
+    ,   #{contents}
+    ,   #{loginIp}
+    )
+    </insert>
+</mapper>

@@ -511,6 +511,9 @@
     <!-- (공통) 테이블 팝업 -->
     <typeAlias alias="selectTableVO" type="kr.co.solbipos.common.popup.selectTable.service.SelectTableVO"/>
 
+    <!-- (공통) 화면 공통 사용 메소드 모음 -->
+    <typeAlias alias="commonMethodVO" type="kr.co.solbipos.common.method.service.CommonMethodVO"/>
+
     <!--
         <typeAlias alias="gradeVO" type="kr.co.solbipos.membr.info.grade.service.GradeVO"/>
         <typeAlias alias="uploadVO" type="kr.co.solbipos.membr.info.upload.service.UploadVO"/>

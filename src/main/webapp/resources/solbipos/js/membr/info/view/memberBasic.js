@@ -686,6 +686,14 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                     scope.getMemberList();
                     // 데이터 초기화 (수정, 저장 후 다시 팝업 호출 시, 예전 정보가 남아있는 경우가 있어서)
                     $scope.resetForm();
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "회원관리-회원정보-회원정보관리";
+                    actParams.contents = "[신규등록] 버튼 클릭하여 회원정보 등록 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
                 });
             }
         } else {
@@ -699,6 +707,14 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
                     scope.getMemberList();
                     $scope.$broadcast("memberChgBatchCtrl");
                     // $scope.memberInfoDetailLayer.hide();
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "회원관리-회원정보-회원정보관리";
+                    actParams.contents = "회원명 클릭하여 회원정보 수정 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
                 });
             }
         }

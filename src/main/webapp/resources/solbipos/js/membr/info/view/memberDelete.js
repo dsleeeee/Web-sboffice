@@ -86,6 +86,14 @@ app.controller('memberDeleteCtrl', ['$scope', '$http', function ($scope, $http) 
                 scope.getMemberList();
                 $scope.wjMemberDeleteLayer.hide(true);
                 $scope.closeMemberDelete();
+
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "회원관리-회원정보-회원정보관리";
+                actParams.contents = "[회원삭제] - [선택회원삭제] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
             });
         });
     };
@@ -123,6 +131,14 @@ app.controller('memberDeleteCtrl', ['$scope', '$http', function ($scope, $http) 
                 scope.getMemberList();
                 $scope.wjMemberDeleteLayer.hide(true);
                 $scope.closeMemberDelete();
+
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "회원관리-회원정보-회원정보관리";
+                actParams.contents = "[회원삭제] - [전체회원삭제] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
             });
         });
     };
