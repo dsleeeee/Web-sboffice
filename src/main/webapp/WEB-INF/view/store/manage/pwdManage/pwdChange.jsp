@@ -81,7 +81,8 @@
         <button class="btn_skyblue" id="btnModify" ng-click="modifyPwd()"><s:message code="pwdManage.layer.modifyBtn" /></button>
       </div>
     </div>
+
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdChange.js?ver=20181211.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdChange.js?ver=20240214.01" charset="utf-8"></script>

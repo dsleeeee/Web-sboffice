@@ -110,12 +110,15 @@
   </div>
   <%--//페이지 리스트--%>
 </div>
+
 <script>
   var serviceFg   = ${ccu.getCommCode("007")};
   var webUseYn    = ${ccu.getCommCode("067")};
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmpPwdManage.js?ver=20181212.01" charset="utf-8"></script>
 
+<%-- (20240214 화면못찾음) --%>
 <%-- 레이어 팝업 : 비밀번호 변경 --%>
 <c:import url="/WEB-INF/view/base/store/emp/systemEmpPwdChange.jsp">
   <c:param name="menuCd" value="${menuCd}"/>

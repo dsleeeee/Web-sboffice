@@ -29,7 +29,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
 /**
  * @Class Name : SystemEmpPwdManageController.java
- * @Description : 시스템관리 > 사원관리 > 비밀번호 임의변경
+ * @Description : 시스템관리 > 사원관리 > 비밀번호 임의변경 (20240214 화면못찾음)
  * @Modification Information
  * @
  * @  수정일      수정자      수정내용

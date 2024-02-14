@@ -18,7 +18,7 @@ public enum PwChgResult implements CodeEnum  {
     PASSWORD_NEW_OLD_MATH("PASSWORD_NEW_OLD_MATH"),
     /** 패스워드 정책이 맞지 않음 */
     PASSWORD_REGEXP("PASSWORD_REGEXP"),
-    /** 비밀번호는 최소 6자 이상 20자 이하만 가능 합니다. */
+    /** 비밀번호는 최소 10자 이상 20자 이하만 가능 합니다. */
     PASSWORD_NOT_MATCH_LENGTH("PASSWORD_NOT_MATCH_LENGTH"),
     /** 비밀번호는 숫자와 영문, 특수문자(!,@,$,~)만 사용 가능합니다 */
     PASSWORD_NOT_MATCH_CHAR("PASSWORD_NOT_MATCH_CHAR"),

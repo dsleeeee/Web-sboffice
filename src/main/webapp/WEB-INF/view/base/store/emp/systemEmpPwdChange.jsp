@@ -52,7 +52,7 @@
         </table>
         <%--
         <p class="mt20 s12">
-          <s:message code="login.layer.pwchg.policy" arguments="6,20" />
+          <s:message code="login.layer.pwchg.policy" arguments="10,20" />
           <br>
           <br>
           <s:message code="systemEmpPwdManage.msg" />

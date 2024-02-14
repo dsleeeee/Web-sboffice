@@ -396,7 +396,7 @@ public class MobileUserController {
 
         if(pwdChk != PwChgResult.CHECK_OK) {
             if(pwdChk == PwChgResult.PASSWORD_NOT_MATCH_LENGTH){
-                // 비밀번호는 최소 6자 이상 20자 이하만 가능 합니다.
+                // 비밀번호는 최소 10자 이상 20자 이하만 가능 합니다.
                 throw new JsonException(Status.FAIL, messageService.get("login.pw.not.match.length"));
 
             }else if(pwdChk == PwChgResult.PASSWORD_NOT_MATCH_CHAR){
@@ -500,7 +500,7 @@ public class MobileUserController {
             throw new JsonException(Status.FAIL, messageService.get("login.layer.pwchg.current"));
         } else if (result == PwChgResult.PASSWORD_NOT_MATCH_LENGTH) {
             /**
-             * 비밀번호는 최소 6자 이상 20자 이하만 가능
+             * 비밀번호는 최소 10자 이상 20자 이하만 가능
              */
             throw new JsonException(Status.FAIL, messageService.get("login.pw.not.match.length"));
         } else if (result == PwChgResult.PASSWORD_NOT_MATCH_CHAR) {

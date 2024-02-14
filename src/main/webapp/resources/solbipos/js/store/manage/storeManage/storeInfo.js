@@ -659,9 +659,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           return false;
         }
 
-        // 비밀번호는 8자 이상 16자 이하로 입력해주세요.
+        // 비밀번호는 10자 이상 16자 이하로 입력해주세요.
         var msg = messages["storeManage.userPwdLengthRegexp.msg"];
-        if (8 > $scope.store.userPwd.length || $scope.store.userPwd.length > 16) {
+        if (10 > $scope.store.userPwd.length || $scope.store.userPwd.length > 16) {
           $scope._popMsg(msg);
           return false;
         }

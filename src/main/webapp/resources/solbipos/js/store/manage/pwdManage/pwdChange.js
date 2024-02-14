@@ -106,7 +106,7 @@ app.controller('pwdChangeCtrl', ['$scope', '$http', function ($scope, $http) {
       } else if(result === 'PASSWORD_NEW_OLD_MATH') { // 변경 패스워드가 기존 비밀번호가 같은지 체크
         $scope._popMsg(messages["login.layer.pwchg.current"]);
         return false;
-      } else if(result === 'PASSWORD_NOT_MATCH_LENGTH') { // 비밀번호는 최소 6자 이상 20자 이하만 가능
+      } else if(result === 'PASSWORD_NOT_MATCH_LENGTH') { // 비밀번호는 최소 10자 이상 20자 이하만 가능
         $scope._popMsg(messages["login.pw.not.match.length"]);
         return false;
       } else if(result === 'PASSWORD_NOT_MATCH_CHAR') { // 비밀번호는 숫자와 영문, 특수문자(!,@,$,~)만 사용 가능

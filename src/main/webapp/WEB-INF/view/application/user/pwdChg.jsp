@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
+<<%-- (20240214 화면못찾음) --%>
 
 <div class="loginArea">
   <h2 class="sTit">
@@ -55,7 +55,7 @@ genEvent($("#newPwConf"), $("#newPwConfError"));
       return false;
     }
 
-    if(!isEmptyObject($("#newPw").val()) && (6 > $("#newPw").val().length || $("#newPw").val().length > 20)){
+    if(!isEmptyObject($("#newPw").val()) && (10 > $("#newPw").val().length || $("#newPw").val().length > 20)){
       $("#newPwError").text(messages["login.pw.not.match.length"]);
       $("#newPwError").show();
       return false;
@@ -67,7 +67,7 @@ genEvent($("#newPwConf"), $("#newPwConfError"));
       return false;
     }
 
-    if(!isEmptyObject($("#newPwConf").val()) && (6 > $("#newPwConf").val().length || $("#newPwConf").val().length > 20)){
+    if(!isEmptyObject($("#newPwConf").val()) && (10 > $("#newPwConf").val().length || $("#newPwConf").val().length > 20)){
       $("#newPwConfError").text(messages["login.pw.not.match.length"]);
       $("#newPwConfError").show();
       return false;

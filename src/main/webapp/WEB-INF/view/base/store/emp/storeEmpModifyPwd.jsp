@@ -1,6 +1,8 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
+<%-- (20240214 화면못찾음) --%>
+
 <%-- 매장사원 비밀번호 변경 레이어 --%>
 
 <div id="pwdModifyTent" class="fullDimmed" style="display: none;"></div>
@@ -53,7 +55,7 @@
             </tbody>
           </table>
           <p class="mt20 s12">
-            <s:message code="login.layer.pwchg.policy" arguments="6,20" />
+            <s:message code="login.layer.pwchg.policy" arguments="10,20" />
             <br>
             <br>
             <s:message code="pwdManage.layer.msg" />

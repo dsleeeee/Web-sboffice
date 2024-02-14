@@ -191,7 +191,7 @@ public class CmmUtil {
         boolean flag1 = Pattern.matches(".*[0-9]+.*", value);
         boolean flag2 = Pattern.matches(".*[a-zA-Z]+.*", value);
 
-        if(len < 6 || len > 20) {
+        if(len < 10 || len > 20) {
             return PwChgResult.PASSWORD_NOT_MATCH_LENGTH;
         } else if (flag == false) {
             return PwChgResult.PASSWORD_NOT_MATCH_CHAR;
