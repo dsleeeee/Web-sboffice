@@ -65,6 +65,26 @@
                 <td></td>
             </c:if>
         </tr>
+        <tr style="display: none;">
+            <%-- 서비스구분 --%>
+            <th><s:message code="serviceTimeAvg.serviceType"/></th>
+            <td>
+                <div class="sb-select w100">
+                    <wj-combo-box
+                            id="srchServiceTypeCombo"
+                            ng-model="serviceType"
+                            items-source="_getComboData('serviceTypeCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchServiceTypeCombo">
+                    </wj-combo-box>
+                </div>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
         </tbody>
     </table>
     <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
@@ -220,6 +240,11 @@
         </tbody>
     </table>
 
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.downCondition"/></button>
+    </div>
+
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -256,4 +281,4 @@
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/serviceTimeAvg/serviceTimeAvg.js?ver=20240206.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/serviceTimeAvg/serviceTimeAvg.js?ver=20240214.01" charset="utf-8"></script>

@@ -13,6 +13,15 @@
  */
 var app = agrid.getApp();
 
+// 서비스구분
+var serviceTypeComboData = [
+    {"name":"전체","value":""},
+    {"name":"DELIVERY","value":"DELIVERY"},
+    {"name":"PICKUP","value":"PICKUP"},
+    {"name":"RESERVATION","value":"RESERVATION"},
+    {"name":"EAT_IN","value":"EAT_IN"}
+];
+
 /**
  *  서비스타임(평균시간) 그리드 생성
  */
@@ -23,6 +32,9 @@ app.controller('serviceTimeAvgCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+
+    // 콤보박스 셋팅
+    $scope._setComboData("serviceTypeCombo", serviceTypeComboData); // 서비스구분
 
     // 브랜드 콤보박스 셋팅
     $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
@@ -59,6 +71,7 @@ app.controller('serviceTimeAvgCtrl', ['$scope', '$http', '$timeout', function ($
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.storeCds = $("#serviceTimeAvgStoreCd").val();
+        params.serviceType = $scope.serviceType;
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
         params.momsAreaFg = $scope.momsAreaFg;
@@ -184,6 +197,29 @@ app.controller('serviceTimeAvgCtrl', ['$scope', '$http', '$timeout', function ($
         } else {
             $("#tblSearchAddShow").hide();
         }
+    };
+
+    // 엑셀 다운로드
+    $scope.excelDownloadInfo = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },  '서비스타임(평균시간)' + '_' + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + getCurDateTime() +'.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
     };
 
 }]);

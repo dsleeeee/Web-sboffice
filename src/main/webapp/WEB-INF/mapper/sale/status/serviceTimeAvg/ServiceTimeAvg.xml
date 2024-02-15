@@ -44,7 +44,7 @@
                 tpotdt.STORE_CD,
                 (CASE WHEN tpotdt.SALE_HH IN ('00', '01', '02', '03', '04', '05', '06', '07') THEN '07' ELSE tpotdt.SALE_HH END) AS SALE_TIME,
                 SUM(tpotdt.ORDER_CNT) AS TC,
-                SUM(tpotdt.AVG_SVC_TIME) AS SERVICE_TIME
+                DECODE(SUM(tpotdt.ORDER_CNT), 0, 0, ROUND(SUM(tpotdt.TOT_SVC_TIME)/SUM(tpotdt.ORDER_CNT))) AS SERVICE_TIME
                 FROM TB_PS_ORDER_TRACKING_DAILY_TIME tpotdt,
                 TB_MS_STORE tms,
                 TB_MS_STORE_INFO tmsi
@@ -54,9 +54,9 @@
                     AND tpotdt.STORE_CD IN (${storeCdQuery})
                 </if>
                 AND tpotdt.SALE_DATE = #{startDate}
-                AND tms.HQ_OFFICE_CD = tpotdt.HQ_OFFICE_CD
-                AND tms.STORE_CD = tpotdt.STORE_CD
-                AND tmsi.STORE_CD (+)= tms.STORE_CD
+                <if test='serviceType != null and serviceType != ""'>
+                    AND tpotdt.SERVICE_TYPE = #{serviceType}
+                </if>
                 <if test='momsTeam != null and momsTeam != ""'>
                     AND tmsi.MOMS_TEAM = #{momsTeam}
                 </if>
@@ -81,6 +81,9 @@
                 <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                     AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                 </if>
+                AND tms.HQ_OFFICE_CD = tpotdt.HQ_OFFICE_CD
+                AND tms.STORE_CD = tpotdt.STORE_CD
+                AND tmsi.STORE_CD (+)= tms.STORE_CD
                 GROUP BY tpotdt.STORE_CD, tpotdt.SALE_HH
             )
             PIVOT

@@ -84,6 +84,9 @@ public class ServiceTimeAvgVO extends PageVO {
     /** 쿼리문의 PIVOT IN에 사용할 매장 컬럼 문자열 */
     private String pivotStoreCol;
 
+    /** 서비스구분 */
+    private String serviceType;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -219,4 +222,12 @@ public class ServiceTimeAvgVO extends PageVO {
     public String getPivotStoreCol() { return pivotStoreCol; }
 
     public void setPivotStoreCol(String pivotStoreCol) { this.pivotStoreCol = pivotStoreCol; }
+
+    public String getServiceType() {
+        return serviceType;
+    }
+
+    public void setServiceType(String serviceType) {
+        this.serviceType = serviceType;
+    }
 }
