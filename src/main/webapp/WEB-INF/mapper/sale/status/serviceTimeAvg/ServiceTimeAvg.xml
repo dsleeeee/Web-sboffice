@@ -21,30 +21,30 @@
         SELECT
         (CASE WHEN SALE_TIME IN ('07') THEN '00시~07시' ELSE (SALE_TIME || '시') END) AS SALE_TIME,
         <foreach collection="arrStoreCol" item="item" separator=",">
-            SUM(STORE_${item}_TC) AS STORE_${item}_TC
+            SUM(STORE_${item}_ORDER_CNT) AS STORE_${item}_TC
         </foreach> ,
         <foreach collection="arrStoreCol" item="item" separator=",">
-            TO_CHAR(TO_DATE(SUM(STORE_${item}_SERVICE_TIME), 'SSSSS'), 'HH24:MI:SS') AS STORE_${item}_SERVICE_TIME
+            TO_CHAR(TO_DATE(  DECODE(SUM(STORE_${item}_ORDER_CNT), 0, 0, ROUND(SUM(STORE_${item}_TOT_SVC_TIME)/SUM(STORE_${item}_ORDER_CNT)))  , 'SSSSS'), 'HH24:MI:SS') AS STORE_${item}_SERVICE_TIME
         </foreach>
         FROM
         (
             SELECT
             SALE_TIME,
             <foreach collection="arrStoreCol" item="item" separator=",">
-                SUM(STORE_${item}_TC) AS STORE_${item}_TC
+                SUM(STORE_${item}_ORDER_CNT) AS STORE_${item}_ORDER_CNT
             </foreach> ,
             <foreach collection="arrStoreCol" item="item" separator=",">
-                SUM(STORE_${item}_SERVICE_TIME) AS STORE_${item}_SERVICE_TIME
+                SUM(STORE_${item}_TOT_SVC_TIME) AS STORE_${item}_TOT_SVC_TIME
             </foreach>
     --         SUM(STORE_E01085_TC) AS STORE_E01085_TC,
-    --         SUM(STORE_E01085_SERVICE_TIME) AS STORE_E01085_SERVICE_TIME,
+    --         SUM(STORE_E01085_TOT_SVC_TIME) AS STORE_E01085_TOT_SVC_TIME,
             FROM
             (
                 SELECT
                 tpotdt.STORE_CD,
                 (CASE WHEN tpotdt.SALE_HH IN ('00', '01', '02', '03', '04', '05', '06', '07') THEN '07' ELSE tpotdt.SALE_HH END) AS SALE_TIME,
-                SUM(tpotdt.ORDER_CNT) AS TC,
-                DECODE(SUM(tpotdt.ORDER_CNT), 0, 0, ROUND(SUM(tpotdt.TOT_SVC_TIME)/SUM(tpotdt.ORDER_CNT))) AS SERVICE_TIME
+                SUM(tpotdt.ORDER_CNT) AS ORDER_CNT,
+                SUM(tpotdt.TOT_SVC_TIME) AS TOT_SVC_TIME
                 FROM TB_PS_ORDER_TRACKING_DAILY_TIME tpotdt,
                 TB_MS_STORE tms,
                 TB_MS_STORE_INFO tmsi
@@ -88,8 +88,8 @@
             )
             PIVOT
             (
-                SUM(TC) AS TC,
-                SUM(SERVICE_TIME) AS SERVICE_TIME
+                SUM(ORDER_CNT) AS ORDER_CNT,
+                SUM(TOT_SVC_TIME) AS TOT_SVC_TIME
                 FOR STORE_CD
                 IN (${pivotStoreCol})
     --             IN ('E01085' AS STORE_E01085,
@@ -102,7 +102,7 @@
                 (CASE WHEN (level+6) < 10 THEN '0'||TO_CHAR(level+6) ELSE TO_CHAR(level+6) END) AS SALE_TIME,
             ]]>
             <foreach collection="arrStoreCol" item="item" separator=",">
-                0 AS STORE_${item}_TC, 0 AS STORE_${item}_SERVICE_TIME
+                0 AS STORE_${item}_ORDER_CNT, 0 AS STORE_${item}_TOT_SVC_TIME
             </foreach>
             <![CDATA[
                 FROM dual
