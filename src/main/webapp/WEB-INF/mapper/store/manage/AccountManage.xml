@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    AccountManage.xml
+    계정관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.02.14      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.manage.accountManage.service.impl.AccountManageMapper">
+
+    <!-- 계정관리 - 장기미사용 계정리스트 조회 -->
+    <!--
+        TABLE    : TB_WB_USER_INFO_DTL_V01, TB_SL_MONTHLY_TOTAL
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 계정리스트를 조회한다.
+    -->
+    <select id="getLongTermUnusedList" parameterType="accountManageVO" resultType="DefaultMap">
+        /* AccountManageMapper.getLongTermUnusedList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT A.HQ_OFFICE_CD
+        , 	   A.HQ_OFFICE_NM
+        ,      A.HQ_SYS_STAT_FG
+        ,      A.STORE_CD
+        , 	   A.STORE_NM
+        ,      A.STORE_SYS_STAT_FG
+        , 	   A.USER_ID
+        , 	   A.USER_NM
+        ,      A.WEB_USE_YN
+        ,      A.SERVICE_FG
+        ,      A.USE_YN
+        ,      A.WEB_USER_USE_YN
+        , 	   A.LAST_LOGIN_DT
+        ,      A.ORGN_FG
+        ,      A.ORGN_FG2
+        ,      A.ORGN_CD
+        ,      A.ORGN_NM
+        ,      A.EMP_NO
+        ,      TO_CHAR(TO_DATE(NVL(B.SALE_YM, ''), 'yyyymm'), 'yyyy-mm') SALE_YM
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM   (
+
+                    <if test='loginPeriod == null or loginPeriod == ""'>
+                        SELECT *
+                        FROM   TB_WB_USER_INFO_DTL_V01 A
+                        WHERE  1=1
+                    </if>
+
+                    <if test='loginPeriod != null and loginPeriod != ""'>
+                        <choose>
+                            <when test='orgnFg2 == "A" or orgnFg2 == "P" or orgnFg2 == "C"'>
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.ORGN_FG2 IN
+                                <foreach collection="orgnFg2List" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </when>
+                            <when test='orgnFg2 == "H"'>
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.HQ_OFFICE_CD NOT IN (                                                                                      <!-- 웹접속은 없지만 매출이 있는 경우 사용중으로 체크 -->
+                                                                SELECT B.HQ_OFFICE_CD
+                                                                FROM   TB_SL_MONTHLY_TOTAL B
+                                                                WHERE  B.SALE_YM <![CDATA[ > ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMM')
+                                                                GROUP
+                                                                BY      B.HQ_OFFICE_CD
+                                                          )
+                                AND A.ORGN_FG2 IN
+                                <foreach collection="orgnFg2List" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </when>
+                            <when test='orgnFg2 == "S" or orgnFg2 == "I"'>
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.STORE_CD NOT IN (                                                                                          <!-- 웹접속은 없지만 매출이 있는 경우 사용중으로 체크 -->
+                                                              SELECT B.STORE_CD
+                                                              FROM   TB_SL_MONTHLY_TOTAL B
+                                                              WHERE  B.SALE_YM <![CDATA[ > ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMM')
+                                                              GROUP
+                                                              BY     B.STORE_CD
+                                                      )
+                                AND A.ORGN_FG2 IN
+                                <foreach collection="orgnFg2List" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </when>
+                            <when test='orgnFg2 == "H,S,I"'>
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.HQ_OFFICE_CD NOT IN (                                                                                      <!-- 웹접속은 없지만 매출이 있는 경우 사용중으로 체크 -->
+                                                                SELECT B.HQ_OFFICE_CD
+                                                                FROM   TB_SL_MONTHLY_TOTAL B
+                                                                WHERE  B.SALE_YM <![CDATA[ > ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMM')
+                                                                GROUP
+                                                                BY      B.HQ_OFFICE_CD
+                                                          )
+                                AND A.ORGN_FG2 IN ('H')
+                                UNION ALL
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.STORE_CD NOT IN (                                                                                          <!-- 웹접속은 없지만 매출이 있는 경우 사용중으로 체크 -->
+                                                              SELECT B.STORE_CD
+                                                              FROM   TB_SL_MONTHLY_TOTAL B
+                                                              WHERE  B.SALE_YM <![CDATA[ > ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMM')
+                                                              GROUP
+                                                              BY     B.STORE_CD
+                                                      )
+                                AND A.ORGN_FG2 IN ('S', 'I')
+                            </when>
+                            <otherwise>
+                            </otherwise>
+                        </choose>
+                    </if>
+               ) A
+        ,      (
+        			SELECT STORE_CD
+        			,      NVL(MAX(SALE_YM),'') AS SALE_YM
+        			FROM   TB_SL_MONTHLY_TOTAL
+        		    GROUP
+        		    BY     STORE_CD
+        		) B
+        WHERE   B.STORE_CD (+)= A.STORE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND A.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND A.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND A.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND A.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='userId != null and userId != ""'>
+            AND A.USER_ID LIKE '%'||#{userId}||'%'
+        </if>
+        <if test='userNm != null and userNm != ""'>
+            AND A.USER_NM LIKE '%'||#{userNm}||'%'
+        </if>
+        <if test='webUseYn != null and webUseYn != ""'>
+            AND A.WEB_USE_YN = #{webUseYn}
+        </if>
+        <if test='loginPeriod == null or loginPeriod == ""'>
+            AND A.ORGN_FG2 IN
+            <foreach collection="orgnFg2List" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER
+        BY      A.HQ_OFFICE_CD
+        ,       A.STORE_CD
+        ,       A.USER_ID
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 계정관리 - 장기미사용 계정리스트 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_WB_USER_INFO_DTL_V01, TB_SL_MONTHLY_TOTAL
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 계정리스트 엑셀다운로드를 조회한다.
+    -->
+    <select id="getLongTermUnusedExcelList" parameterType="accountManageVO" resultType="DefaultMap">
+        /* AccountManageMapper.getLongTermUnusedExcelList */
+        SELECT A.HQ_OFFICE_CD
+        , 	   A.HQ_OFFICE_NM
+        ,      A.HQ_SYS_STAT_FG
+        ,      A.STORE_CD
+        , 	   A.STORE_NM
+        ,      A.STORE_SYS_STAT_FG
+        , 	   A.USER_ID
+        , 	   A.USER_NM
+        ,      A.WEB_USE_YN
+        ,      A.SERVICE_FG
+        ,      A.USE_YN
+        ,      A.WEB_USER_USE_YN
+        , 	   A.LAST_LOGIN_DT
+        ,      A.ORGN_FG
+        ,      A.ORGN_FG2
+        ,      A.ORGN_CD
+        ,      A.ORGN_NM
+        ,      A.EMP_NO
+        ,      TO_CHAR(TO_DATE(NVL(B.SALE_YM, ''), 'yyyymm'), 'yyyy-mm') SALE_YM
+        FROM   (
+
+                    <if test='loginPeriod == null or loginPeriod == ""'>
+                        SELECT *
+                        FROM   TB_WB_USER_INFO_DTL_V01 A
+                        WHERE  1=1
+                    </if>
+
+                    <if test='loginPeriod != null and loginPeriod != ""'>
+                        <choose>
+                            <when test='orgnFg2 == "A" or orgnFg2 == "P" or orgnFg2 == "C"'>
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.ORGN_FG2 IN
+                                <foreach collection="orgnFg2List" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </when>
+                            <when test='orgnFg2 == "H"'>
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.HQ_OFFICE_CD NOT IN (                                                                                      <!-- 웹접속은 없지만 매출이 있는 경우 사용중으로 체크 -->
+                                                                SELECT B.HQ_OFFICE_CD
+                                                                FROM   TB_SL_MONTHLY_TOTAL B
+                                                                WHERE  B.SALE_YM <![CDATA[ > ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMM')
+                                                                GROUP
+                                                                BY      B.HQ_OFFICE_CD
+                                                          )
+                                AND A.ORGN_FG2 IN
+                                <foreach collection="orgnFg2List" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </when>
+                            <when test='orgnFg2 == "S" or orgnFg2 == "I"'>
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.STORE_CD NOT IN (                                                                                          <!-- 웹접속은 없지만 매출이 있는 경우 사용중으로 체크 -->
+                                                              SELECT B.STORE_CD
+                                                              FROM   TB_SL_MONTHLY_TOTAL B
+                                                              WHERE  B.SALE_YM <![CDATA[ > ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMM')
+                                                              GROUP
+                                                              BY     B.STORE_CD
+                                                      )
+                                AND A.ORGN_FG2 IN
+                                <foreach collection="orgnFg2List" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </when>
+                            <when test='orgnFg2 == "H,S,I"'>
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.HQ_OFFICE_CD NOT IN (                                                                                      <!-- 웹접속은 없지만 매출이 있는 경우 사용중으로 체크 -->
+                                                                SELECT B.HQ_OFFICE_CD
+                                                                FROM   TB_SL_MONTHLY_TOTAL B
+                                                                WHERE  B.SALE_YM <![CDATA[ > ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMM')
+                                                                GROUP
+                                                                BY      B.HQ_OFFICE_CD
+                                                          )
+                                AND A.ORGN_FG2 IN ('H')
+                                UNION ALL
+                                SELECT *
+                                FROM   TB_WB_USER_INFO_DTL_V01 A
+                                WHERE  1=1
+                                AND NVL(A.LAST_LOGIN_DT, '0') <![CDATA[ < ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMMDDHH24MISS')    <!-- 최종접속 이 3개월이 지난 회원 -->
+                                AND A.STORE_CD NOT IN (                                                                                          <!-- 웹접속은 없지만 매출이 있는 경우 사용중으로 체크 -->
+                                                              SELECT B.STORE_CD
+                                                              FROM   TB_SL_MONTHLY_TOTAL B
+                                                              WHERE  B.SALE_YM <![CDATA[ > ]]> TO_CHAR(SYSDATE - TO_NUMBER(#{loginPeriod}),'YYYYMM')
+                                                              GROUP
+                                                              BY     B.STORE_CD
+                                                      )
+                                AND A.ORGN_FG2 IN ('S', 'I')
+                            </when>
+                            <otherwise>
+                            </otherwise>
+                        </choose>
+                    </if>
+               ) A
+        ,      (
+                    SELECT STORE_CD
+                    ,      NVL(MAX(SALE_YM),'') AS SALE_YM
+                    FROM   TB_SL_MONTHLY_TOTAL
+                    GROUP
+                    BY     STORE_CD
+                ) B
+        WHERE   B.STORE_CD (+)= A.STORE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND A.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND A.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND A.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND A.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='userId != null and userId != ""'>
+            AND A.USER_ID LIKE '%'||#{userId}||'%'
+        </if>
+        <if test='userNm != null and userNm != ""'>
+            AND A.USER_NM LIKE '%'||#{userNm}||'%'
+        </if>
+        <if test='webUseYn != null and webUseYn != ""'>
+            AND A.WEB_USE_YN = #{webUseYn}
+        </if>
+        <if test='loginPeriod == null or loginPeriod == ""'>
+            AND A.ORGN_FG2 IN
+            <foreach collection="orgnFg2List" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        ORDER
+        BY      A.HQ_OFFICE_CD
+        ,       A.STORE_CD
+        ,       A.USER_ID
+    </select>
+
+    <!-- 계정관리 - 장기미사용 계정 상태 변경 -->
+    <!--
+        TABLE    : TB_WB_USER_INFO
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 계정 상태를 변경한다.
+    -->
+    <update id="updateStatusWebUser" parameterType="accountManageVO">
+        /* AccountManageMapper.updateStatusWebUser */
+        UPDATE TB_WB_USER_INFO
+        SET    USER_STAT_FG = #{userStatFg}
+        ,      MOD_DT = #{modDt}
+        ,      MOD_ID = #{modId}
+        WHERE  USER_ID = #{userId}
+    </update>
+
+    <!-- 계정관리 - 장기미사용 계정 사용여부 변경 -->
+    <!--
+        TABLE    : TB_WB_USER_INFO
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 계정 사용여부를 변경한다.
+    -->
+    <update id="updateUseYnWebUser" parameterType="accountManageVO">
+        /* AccountManageMapper.updateUseYnWebUser */
+        UPDATE TB_WB_USER_INFO
+        SET    USE_YN = #{useYn}
+        ,      MOD_DT = #{modDt}
+        ,      MOD_ID = #{modId}
+        WHERE  USER_ID = #{userId}
+        AND    USE_YN != #{useYn}
+    </update>
+
+    <!-- 계정관리 - 장기미사용 시스템/대리점사원 웹사용여부 변경 -->
+    <!--
+        TABLE    : TB_CM_EMPLOYEE
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 시스템/대리점사원 웹사용여부를 변경한다.
+    -->
+    <update id="updateWebUseYnCmEmp" parameterType="accountManageVO">
+       /* AccountManageMapper.updateWebUseYnCmEmp */
+       UPDATE TB_CM_EMPLOYEE
+       SET    WEB_USE_YN = #{webUseYn}
+       ,      MOD_DT = #{modDt}
+       ,      MOD_ID = #{modId}
+       WHERE  1=1
+       AND    AGENCY_CD = #{orgnCd}
+       AND    EMP_NO = #{empNo}
+       AND    USER_ID = #{userId}
+       AND    WEB_USE_YN != #{webUseYn}
+    </update>
+
+    <!-- 계정관리 - 장기미사용 본사사원 웹사용여부 변경 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 본사사원 웹사용여부를 변경한다.
+    -->
+    <update id="updateWebUseYnHqEmp" parameterType="accountManageVO">
+       /* AccountManageMapper.updateWebUseYnHqEmp */
+       UPDATE TB_HQ_EMPLOYEE
+       SET    WEB_USE_YN = #{webUseYn}
+       ,      MOD_DT = #{modDt}
+       ,      MOD_ID = #{modId}
+       WHERE  1=1
+       AND    HQ_OFFICE_CD = #{hqOfficeCd}
+       AND    EMP_NO = #{empNo}
+       AND    USER_ID = #{userId}
+       AND    WEB_USE_YN != #{webUseYn}
+    </update>
+
+    <!-- 계정관리 - 장기미사용 매장사원 웹사용여부 변경 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 매장사원 웹사용여부를 변경한다.
+    -->
+    <update id="updateWebUseYnStoreEmp" parameterType="accountManageVO">
+        /* AccountManageMapper.updateWebUseYnStoreEmp */
+        UPDATE TB_MS_EMPLOYEE
+        SET    WEB_USE_YN = #{webUseYn}
+        ,      MOD_DT = #{modDt}
+        ,      MOD_ID = #{modId}
+        WHERE  1=1
+        AND    STORE_CD = #{storeCd}
+        AND    EMP_NO = #{empNo}
+        AND    USER_ID = #{userId}
+        AND    WEB_USE_YN != #{webUseYn}
+    </update>
+
+    <!-- 계정관리 - 장기미사용 시스템/대리점사원 사용여부 변경 -->
+    <!--
+        TABLE    : TB_CM_EMPLOYEE
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 시스템/대리점사원 사용여부를 변경한다.
+    -->
+    <update id="updateUseYnCmEmp" parameterType="accountManageVO">
+       /* AccountManageMapper.updateUseYnCmEmp */
+       UPDATE TB_CM_EMPLOYEE
+       SET    USE_YN = #{useYn}
+       ,      MOD_DT = #{modDt}
+       ,      MOD_ID = #{modId}
+       WHERE  1=1
+       AND    AGENCY_CD = #{orgnCd}
+       AND    EMP_NO = #{empNo}
+       AND    USER_ID = #{userId}
+       AND    USE_YN != #{useYn}
+    </update>
+
+    <!-- 계정관리 - 장기미사용 본사사원 사용여부 변경 -->
+    <!--
+        TABLE    : TB_HQ_EMPLOYEE
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 본사사원 사용여부를 변경한다.
+    -->
+    <update id="updateUseYnHqEmp" parameterType="accountManageVO">
+       /* AccountManageMapper.updateUseYnHqEmp */
+       UPDATE TB_HQ_EMPLOYEE
+       SET    USE_YN = #{useYn}
+       ,      MOD_DT = #{modDt}
+       ,      MOD_ID = #{modId}
+       WHERE  1=1
+       AND    HQ_OFFICE_CD = #{hqOfficeCd}
+       AND    EMP_NO = #{empNo}
+       AND    USER_ID = #{userId}
+       AND    USE_YN != #{useYn}
+    </update>
+
+    <!-- 계정관리 - 장기미사용 매장사원 사용여부 변경 -->
+    <!--
+        TABLE    : TB_MS_EMPLOYEE
+        PARAM    : accountManageVO
+        COMMENTS : 장기미사용 매장사원 사용여부를 변경한다.
+    -->
+    <update id="updateUseYnStoreEmp" parameterType="accountManageVO">
+        /* AccountManageMapper.updateUseYnStoreEmp */
+        UPDATE TB_MS_EMPLOYEE
+        SET    USE_YN = #{useYn}
+        ,      MOD_DT = #{modDt}
+        ,      MOD_ID = #{modId}
+        WHERE  1=1
+        AND    STORE_CD = #{storeCd}
+        AND    EMP_NO = #{empNo}
+        AND    USER_ID = #{userId}
+        AND    USE_YN != #{useYn}
+    </update>
+
+</mapper>
