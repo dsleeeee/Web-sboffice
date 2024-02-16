@@ -328,4 +328,10 @@ public class ContentServiceImpl implements ContentService {
     public String getMainSaleFg(SessionInfoVO sessionInfoVO) {
         return contentMapper.getMainSaleFg(sessionInfoVO);
     }
+
+    /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+    @Override
+    public String getLastPwdChgDtChk(SessionInfoVO sessionInfoVO) {
+        return contentMapper.getLastPwdChgDtChk(sessionInfoVO);
+    }
 }

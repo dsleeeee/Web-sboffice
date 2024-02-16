@@ -8,6 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="sessionId" value="${param.sid}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
 
 <div ng-controller="mobileMrhstMainCtrl">
 
@@ -68,12 +69,36 @@
     </div>
     <!--//매출 상위 상품-->
 
+    <!--팝업-->
+    <div>
+        <%-- 6개월이상 비밀번호 미수정시 팝업 알림 --%>
+        <div id="divDimmedLastPwd" class="fullDimmed" style="display: none;"></div>
+        <div id="divPopupLastPwd" class="layer" style="display: none;">
+            <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">
+                <!--layerContent-->
+                <div class="title" style="width:430px;">
+                    <div class="con">
+                        <s:message code="login.pw.chg.lastPwd"/>
+                    </div>
+                    <div class="btnSet">
+                        <span><a href="#" class="btn_blue" id="btnPwdChg"><s:message code="login.pw.chg"/></a></span>
+                        <span><a href="#" class="btn_blue" id="btnPwdClose"><s:message code="login.pw.chg.next"/></a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--팝업-->
+
 </div>
 <!--//메인컨텐츠-->
 
 </div>
 
 <script type="text/javascript">
+    // 6개월이상 비밀번호 미수정시 팝업 알림
+    var lastPwdChgDtChk = "${lastPwdChgDtChk}";
+
     // 오늘의 매출건수
     var daySaleCntList = [];
     <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
@@ -209,6 +234,30 @@
         chart2.endUpdate();
     });
     <%-- // wijmo flexChart --%>
+
+    // 6개월이상 비밀번호 미수정시 팝업 알림
+    if(lastPwdChgDtChk === "Y") {
+        $("#divDimmedLastPwd").css('display', 'block');
+        $("#divPopupLastPwd").css('display', 'block');
+    } else {
+        $("#divDimmedLastPwd").css('display', 'none');
+        $("#divPopupLastPwd").css('display', 'none');
+    }
+    $("#btnPwdChg").click(function(){
+        // 비밀번호 변경 레이어 팝업 가져오기 (pwChgPop.jsp)
+        var id = "${userId}";
+        $("#labelUserId").text(id);
+        $("#pwdUserId").val(id);
+        $("#fullDimmedPw").show();
+        $("#layerpw").show();
+
+        $("#divDimmedLastPwd").css('display', 'none');
+        $("#divPopupLastPwd").css('display', 'none');
+    });
+    $("#btnPwdClose").click(function(){
+        $("#divDimmedLastPwd").css('display', 'none');
+        $("#divPopupLastPwd").css('display', 'none');
+    });
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/mobileMrhstMain.js?ver=20210531.01" charset="utf-8"></script>

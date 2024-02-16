@@ -91,6 +91,10 @@ public class MobileContentController {
         List<DefaultMap<String>> weekPosInstTopList = mobileContentService.getMobileWeekPosInstTopList(sessionInfoVO);
         model.addAttribute("weekPosInstTopList", weekPosInstTopList);
 
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
+
         return "mobile/application/main/mobileSystemMain";
     }
 
@@ -133,6 +137,9 @@ public class MobileContentController {
         List<DefaultMap<String>> weekSaleAgencyTopList = mobileContentService.getMobileWeekSaleAgencyTopList(sessionInfoVO);
         model.addAttribute("weekSaleAgencyTopList", weekSaleAgencyTopList);
 
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
@@ -182,6 +189,9 @@ public class MobileContentController {
 
         /** 날씨 */
 
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
@@ -227,6 +237,9 @@ public class MobileContentController {
 
         /** 날씨 */
 
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {

@@ -119,6 +119,10 @@ public class ContentController {
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
 
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
+
 //        String pUserPwd = EncUtil.setEncSHA256("ckp" + "0000");  // 포스 패스워드
 
         return "application/main/systemMain";
@@ -192,6 +196,9 @@ public class ContentController {
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
 
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         return "application/main/agencyMain";
     }
@@ -302,6 +309,10 @@ public class ContentController {
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
 
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
+
        return "application/main/hedofcMain"; // 그래프
 //        return "application/main/hedofcMain_test"; // 이미지
     }
@@ -399,6 +410,10 @@ public class ContentController {
         /** 팝업 공고 조회 */
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
+
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         return "application/main/mrhstMain"; // 그래프
 //        return "application/main/mrhstMain_test"; // 이미지

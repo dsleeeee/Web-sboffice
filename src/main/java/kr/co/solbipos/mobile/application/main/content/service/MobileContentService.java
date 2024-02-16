@@ -60,4 +60,7 @@ public interface MobileContentService {
 
     /** 오늘의 매출금액 */
     List<DefaultMap<String>> getMobileDaySaleAmtList(SessionInfoVO sessionInfoVO);
+
+    /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+    String getMobileLastPwdChgDtChk(SessionInfoVO sessionInfoVO);
 }
