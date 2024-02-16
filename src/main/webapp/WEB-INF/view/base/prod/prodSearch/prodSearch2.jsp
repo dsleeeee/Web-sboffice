@@ -496,21 +496,21 @@
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modDt"/>" binding="modDt" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modId"/>" binding="modId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modNm"/>" binding="modNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.tuKey"/>" binding="tukNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.kiosk"/>" binding="kioNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.sdsel"/>" binding="sdselNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.tuKey"/>" binding="prodTukNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.kiosk"/>" binding="prodKioNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.sdsel"/>" binding="prodSdselNm" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.bsImg"/>" binding="bsImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.kioskImg"/>" binding="kioImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.didImg"/>" binding="didImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.proImg"/>" binding="proImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.toImg"/>" binding="toImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.dlvrNm"/>" binding="dlvrNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.dlvrNm"/>" binding="prodDlvrNm" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.prtCnt"/>" binding="prtCnt" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.orgNm"/>" binding="orgNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.algiNm"/>" binding="algiNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.sdyNm"/>" binding="sdyNm" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.disNm"/>" binding="disNm" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.proNm"/>" binding="proNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.orgNm"/>" binding="prodOrgNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.algiNm"/>" binding="prodAlgiNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.sdyNm"/>" binding="prodSdyNm" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.disNm"/>" binding="prodDisNm" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.proNm"/>" binding="prodProNm" width="150" is-read-only="true"></wj-flex-grid-column>
 
 
 
@@ -644,23 +644,23 @@
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modDt"/>" binding="modDt" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modId"/>" binding="modId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modNm"/>" binding="modNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.tuKey"/>" binding="tukNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.kiosk"/>" binding="kioNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.sdsel"/>" binding="sdselNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.tuKey"/>" binding="prodTukNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.kiosk"/>" binding="prodKioNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.sdsel"/>" binding="prodSdselNm" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.bsImg"/>" binding="bsImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.kioskImg"/>" binding="kioImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.didImg"/>" binding="didImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.proImg"/>" binding="proImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.toImg"/>" binding="toImg" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.dlvrNm"/>" binding="dlvrNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.dlvrNm"/>" binding="prodDlvrNm" width="150" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.prtCnt"/>" binding="prtCnt" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.orgNm"/>" binding="orgNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.algiNm"/>" binding="algiNm" width="150" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.sdyNm"/>" binding="sdyNm" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.disNm"/>" binding="disNm" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.proNm"/>" binding="proNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.orgNm"/>" binding="prodOrgNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.algiNm"/>" binding="prodAlgiNm" width="150" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.sdyNm"/>" binding="prodSdyNm" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.disNm"/>" binding="prodDisNm" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.proNm"/>" binding="prodProNm" width="150" is-read-only="true"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prod.vendr"/>" binding="vendr" width="100" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.vendr"/>" binding="prodVendr" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.saleProdYn"/>" binding="saleProdYn" width="100" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodTipYn"/>" binding="prodTipYn" width="100" is-read-only="true" align="center" data-map="prodTipYnDataMap"></wj-flex-grid-column>

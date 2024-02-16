@@ -4,7 +4,7 @@ import kr.co.solbipos.application.common.service.PageVO;
 
 /**
  * @Class Name : DlvrProdMultiVO.java
- * @Description : 기초관리 - 상품관리 - 배달시스템 상품 명칭 맵핑2
+ * @Description : 기초관리 - 상품관리 - 배달시스템 상품 명칭 매핑2
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용

@@ -3,7 +3,7 @@
 
 <!--
     DlvrProdMulti.xml
-    배달 시스템 상품 명칭 맵핑
+    배달 시스템 상품 명칭 매핑2
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
@@ -14,14 +14,14 @@
 
     <!-- 배달시스템 상품 명칭 매핑2 - 배달앱구분코드 -->
     <!--
-        TABLE    : TB_CM_NMCODE
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 배달앱 구분코드를 조회한다.
+        TABLE    :  TB_CM_NMCODE
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  배달앱 구분코드 조회
     -->
     <select id="getDlvrColList" parameterType="dlvrProdMultiVO" resultType="DefaultMap">
         /* USE : DlvrProdMultiMapper.getDlvrColList */
-        SELECT  tcn.NMCODE_CD AS DLVR_CD,
-                tcn.NMCODE_NM AS DLVR_NM
+        SELECT  tcn.NMCODE_CD AS DLVR_CD
+        ,       tcn.NMCODE_NM AS DLVR_NM
         FROM    TB_CM_NMCODE tcn
         WHERE   tcn.NMCODE_GRP_CD = '112'
         AND     tcn.NMCODE_CD NOT IN ('1') /* 코드 1(포스앱)은 포스에서 사용하는 코드이므로 나오지 않도록 함 */
@@ -32,10 +32,10 @@
 
     <!-- 배달시스템 상품 명칭 매핑2 - 상품목록조회 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                   TB_MS_PRODUCT, TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 상품 목록을 조회한다. ( 본사/매장 )
+        TABLE    :  TB_HQ_PRODUCT, TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                    TB_MS_PRODUCT, TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  상품 목록 조회 ( 본사/매장 )
     -->
 
     <select id="getProdList" parameterType="dlvrProdMultiVO" resultType="DefaultMap">
@@ -44,36 +44,36 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
-                SELECT  thpdpnm.SEQ,
-                        thp.PROD_CD,
-                        thp.PROD_NM,
-                <foreach collection="arrDlvrCol" item="item" separator=",">
-                    thpdpnm.DLVR_PROD_NM_${item}
-                </foreach>
+                SELECT  thpdpnm.SEQ
+                ,       thp.PROD_CD
+                ,       thp.PROD_NM
+                ,       <foreach collection="arrDlvrCol" item="item" separator=",">
+                            thpdpnm.DLVR_PROD_NM_${item}
+                        </foreach>
                 <include refid="CmmSQL.PagingTemplateCount"/>
-                FROM    TB_HQ_PRODUCT thp,
-                (
-                    SELECT *
-                    FROM (
-                            SELECT  SEQ,
-                                    HQ_OFFICE_CD,
-                                    PROD_CD,
-                                    DLVR_NAME_CD,
-                                    DLVR_PROD_NM
-                            <if test="chkDt == false">
-                                , REG_DT
-                            </if>
-                            FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                        )
-                PIVOT   (
-                            MIN(DLVR_PROD_NM)
-                            FOR DLVR_NAME_CD
-                            IN (${pivotDlvrCol})
-                        )
-                ) thpdpnm
+                FROM    TB_HQ_PRODUCT thp
+                ,       (
+                            SELECT *
+                            FROM (
+                                    SELECT  SEQ
+                                    ,       HQ_OFFICE_CD
+                                    ,       PROD_CD
+                                    ,       DLVR_NAME_CD
+                                    ,       DLVR_PROD_NM
+                                    <if test="chkDt == false">
+                                    ,       REG_DT
+                                    </if>
+                                    FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                                )
+                            PIVOT   (
+                                        MIN(DLVR_PROD_NM)
+                                        FOR DLVR_NAME_CD
+                                        IN (${pivotDlvrCol})
+                                    )
+                        ) thpdpnm
                 WHERE   thpdpnm.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
-                AND     thpdpnm.PROD_CD (+)= thp.PROD_CD
-                AND     thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     thpdpnm.PROD_CD (+)     = thp.PROD_CD
+                AND     thp.HQ_OFFICE_CD        = #{hqOfficeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <if test="regDtType != null and regDtType == 'prod'">
@@ -96,11 +96,11 @@
                 </if>
                 <if test="barCd != null and barCd != ''">
                     AND EXISTS  (
-                                    SELECT 1
-                                    FROM TB_HQ_PRODUCT_BARCD
-                                    WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                                    AND PROD_CD = thp.PROD_CD
-                                    AND BARCD_CD = #{barCd}
+                                    SELECT  1
+                                    FROM    TB_HQ_PRODUCT_BARCD
+                                    WHERE   HQ_OFFICE_CD    = thp.HQ_OFFICE_CD
+                                    AND     PROD_CD         = thp.PROD_CD
+                                    AND     BARCD_CD        = #{barCd}
                                 ) --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
@@ -110,7 +110,7 @@
                                                     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                                                     START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
                                                     CONNECT BY
-                                                    PRIOR   PROD_CLASS_CD = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    PRIOR   PROD_CLASS_CD    = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
                                                  )
                 </if>
                 <if test="useYn != null and useYn != ''">
@@ -129,38 +129,41 @@
                 OR
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                 )
-                ORDER BY thp.PROD_CD, thpdpnm.SEQ ASC
+                ORDER
+                BY          thp.PROD_CD
+                ,           thpdpnm.SEQ ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
-                SELECT  tmpdpnm.SEQ,
-                        tmp.PROD_CD,
-                        tmp.PROD_NM,
-                <foreach collection="arrDlvrCol" item="item" separator=",">
-                    tmpdpnm.DLVR_PROD_NM_${item}
-                </foreach>
+                SELECT  tmpdpnm.SEQ
+                ,       tmp.PROD_CD
+                ,       tmp.PROD_NM
+                ,       <foreach collection="arrDlvrCol" item="item" separator=",">
+                            tmpdpnm.DLVR_PROD_NM_${item}
+                        </foreach>
                 <include refid="CmmSQL.PagingTemplateCount"/>
-                FROM TB_MS_PRODUCT tmp,
-                (   SELECT *
-                    FROM (
-                            SELECT  SEQ,
-                                    STORE_CD,
-                                    PROD_CD,
-                                    DLVR_NAME_CD,
-                                    DLVR_PROD_NM
-                            FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-                         )
-                PIVOT   (
-                            MIN (DLVR_PROD_NM)
-                            FOR DLVR_NAME_CD
-                            IN  (${pivotDlvrCol})
-                        )
-                ) tmpdpnm
-                WHERE   tmpdpnm.STORE_CD (+)=   tmp.STORE_CD
-                AND     tmpdpnm.PROD_CD (+) =   tmp.PROD_CD
-                AND     tmp.STORE_CD        =   #{storeCd}
+                FROM    TB_MS_PRODUCT tmp
+                ,       (
+                            SELECT *
+                            FROM (
+                                    SELECT  SEQ
+                                    ,       STORE_CD
+                                    ,       PROD_CD
+                                    ,       DLVR_NAME_CD
+                                    ,       DLVR_PROD_NM
+                                    FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+                                 )
+                            PIVOT   (
+                                        MIN (DLVR_PROD_NM)
+                                        FOR DLVR_NAME_CD
+                                        IN  (${pivotDlvrCol})
+                                    )
+                        ) tmpdpnm
+                WHERE   tmpdpnm.STORE_CD (+)    =  tmp.STORE_CD
+                AND     tmpdpnm.PROD_CD (+)     =  tmp.PROD_CD
+                AND     tmp.STORE_CD            =  #{storeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -178,9 +181,9 @@
                     AND EXISTS  (
                                     SELECT  1
                                     FROM    TB_MS_PRODUCT_BARCD
-                                    WHERE   STORE_CD = tmp.STORE_CD
-                                    AND     PROD_CD = tmp.PROD_CD
-                                    AND     BARCD_CD = #{barCd}
+                                    WHERE   STORE_CD    = tmp.STORE_CD
+                                    AND     PROD_CD     = tmp.PROD_CD
+                                    AND     BARCD_CD    = #{barCd}
                                 ) --바코드
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
@@ -209,7 +212,9 @@
                 OR
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                 )
-                ORDER BY tmp.PROD_CD, tmpdpnm.SEQ ASC
+                ORDER
+                BY      tmp.PROD_CD
+                ,       tmpdpnm.SEQ ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -217,232 +222,140 @@
 
     <!-- 배달시스템 상품 명칭 매핑 - 전체 엑셀다운로드 -->
     <!--
-        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                   TB_MS_PRODUCT, TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 전체 엑셀다운로드 ( 본사/매장 )
+        TABLE    :  TB_HQ_PRODUCT, TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                    TB_MS_PRODUCT, TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  전체 엑셀다운로드 ( 본사/매장 )
     -->
     <select id="getDlvrProdMultiExcelList" parameterType="dlvrProdMultiVO" resultType="DefaultMap">
         /* USE : DlvrProdMultiMapper.getDlvrProdMultiNmExcelList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  thpdpnm.SEQ,
-                        thp.PROD_CD,
-                        thp.PROD_NM,
-                        thp.USE_YN,
-                <foreach collection="arrDlvrCol" item="item" separator=",">
-                    thpdpnm.DLVR_PROD_NM_${item}
-                </foreach>
-                FROM TB_HQ_PRODUCT thp,
-                (   SELECT *
-                    FROM (
-                            SELECT  SEQ,
-                                    HQ_OFFICE_CD,
-                                    PROD_CD,
-                                    DLVR_NAME_CD,
-                                    DLVR_PROD_NM
-                            FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                         )
-                PIVOT    (
-                            MIN(DLVR_PROD_NM)
-                            FOR DLVR_NAME_CD
-                            IN (${pivotDlvrCol})
-                         )
-                ) thpdpnm
-                WHERE   thpdpnm.HQ_OFFICE_CD (+)=   thp.HQ_OFFICE_CD
-                AND     thpdpnm.PROD_CD (+)     =   thp.PROD_CD
-                AND     thp.HQ_OFFICE_CD        =   #{hqOfficeCd}
+                SELECT  thpdpnm.SEQ
+                ,       thp.PROD_CD
+                ,       thp.PROD_NM
+                ,       thp.USE_YN
+                ,       <foreach collection="arrDlvrCol" item="item" separator=",">
+                            thpdpnm.DLVR_PROD_NM_${item}
+                        </foreach>
+                FROM    TB_HQ_PRODUCT thp
+                ,       (
+                            SELECT *
+                            FROM (
+                                    SELECT  SEQ
+                                    ,       HQ_OFFICE_CD
+                                    ,       PROD_CD
+                                    ,       DLVR_NAME_CD
+                                    ,       DLVR_PROD_NM
+                                    FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                                 )
+                            PIVOT    (
+                                        MIN(DLVR_PROD_NM)
+                                        FOR DLVR_NAME_CD
+                                        IN (${pivotDlvrCol})
+                                     )
+                        ) thpdpnm
+                WHERE   thpdpnm.HQ_OFFICE_CD (+)    =   thp.HQ_OFFICE_CD
+                AND     thpdpnm.PROD_CD (+)         =   thp.PROD_CD
+                AND     thp.HQ_OFFICE_CD            =   #{hqOfficeCd}
                 AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                 )
-                ORDER BY thp.PROD_CD ASC
+                ORDER
+                BY      thp.PROD_CD
+                ,       thpdpnm.SEQ ASC
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT  tmpdpnm.SEQ,
-                        tmp.PROD_CD,
-                        tmp.PROD_NM,
-                        tmp.USE_YN,
-                <foreach collection="arrDlvrCol" item="item" separator=",">
-                    tmpdpnm.DLVR_PROD_NM_${item}
-                </foreach>
-                FROM    TB_MS_PRODUCT tmp,
-                (  SELECT *
-                FROM    (
-                            SELECT SEQ,
-                            STORE_CD,
-                            PROD_CD,
-                            DLVR_NAME_CD,
-                            DLVR_PROD_NM
-                            FROM TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-                        )
-                PIVOT   (
-                            MIN(DLVR_PROD_NM)
-                            FOR DLVR_NAME_CD
-                            IN (${pivotDlvrCol})
-                        )
-                ) tmpdpnm
-                WHERE   tmpdpnm.STORE_CD (+)=   tmp.STORE_CD
-                AND     tmpdpnm.PROD_CD (+) =   tmp.PROD_CD
-                AND     tmp.STORE_CD        =   #{storeCd}
+                SELECT  tmpdpnm.SEQ
+                ,       tmp.PROD_CD
+                ,       tmp.PROD_NM
+                ,       tmp.USE_YN
+                ,       <foreach collection="arrDlvrCol" item="item" separator=",">
+                            tmpdpnm.DLVR_PROD_NM_${item}
+                        </foreach>
+                FROM    TB_MS_PRODUCT tmp
+                ,       (
+                            SELECT *
+                            FROM    (
+                                        SELECT  SEQ
+                                        ,       STORE_CD
+                                        ,       PROD_CD
+                                        ,       DLVR_NAME_CD
+                                        ,       DLVR_PROD_NM
+                                        FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+                                    )
+                            PIVOT   (
+                                        MIN(DLVR_PROD_NM)
+                                        FOR DLVR_NAME_CD
+                                        IN (${pivotDlvrCol})
+                                    )
+                        ) tmpdpnm
+                WHERE   tmpdpnm.STORE_CD (+)    =   tmp.STORE_CD
+                AND     tmpdpnm.PROD_CD (+)     =   tmp.PROD_CD
+                AND     tmp.STORE_CD            =   #{storeCd}
                 AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                 )
-                ORDER BY tmp.PROD_CD ASC
+                ORDER
+                BY      tmp.PROD_CD
+                ,       tmpdpnm.SEQ ASC
             </when>
         </choose>
     </select>
 
-    <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 중복 체크 delete -->
-    <!--
-        TABLE    : TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                   TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 기존 배달상품명칭을 삭제한다. ( 본사/매장 )
-    -->
-    <delete id="deleteDlvrProdMultiNm" parameterType="dlvrProdMultiVO">
-        /* DlvrProdMultiMapper.deleteDlvrProdMultiNm */
-        <choose>
-            <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                DELETE
-                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     PROD_CD = #{prodCd}
-                AND     DLVR_NAME_CD = #{dlvrNameCd}
-                AND     SEQ = #{seq}
-            </when>
-            <!-- 가맹점 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                DELETE
-                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE   STORE_CD = #{storeCd}
-                AND     PROD_CD = #{prodCd}
-                AND     DLVR_NAME_CD = #{dlvrNameCd}
-                AND     SEQ = #{seq}
-            </when>
-        </choose>
-    </delete>
-
-    <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 저장 -->
-    <!--
-        TABLE    : TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                   TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 배달상품명칭을 등록한다. ( 본사/매장 )
-    -->
-    <insert id="insertDlvrProdMultiNm" parameterType="dlvrProdMultiVO">
-        /* DlvrProdMultiMapper.insertDlvrProdMultiNm */
-        <choose>
-            <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                (
-                    HQ_OFFICE_CD,
-                    SEQ,
-                    PROD_CD,
-                    DLVR_NAME_CD,
-                    DLVR_PROD_NM,
-                    REG_ID,
-                    REG_DT,
-                    MOD_ID,
-                    MOD_DT
-                )
-                VALUES
-                (
-                    #{hqOfficeCd},
-                    #{seq},
-                    #{prodCd},
-                    #{dlvrNameCd},
-                    #{dlvrProdNm},
-                    #{regId},
-                    #{regDt},
-                    #{modId},
-                    #{modDt}
-                )
-            </when>
-            <!-- 가맹점 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-                (
-                    STORE_CD,
-                    SEQ,
-                    PROD_CD,
-                    DLVR_NAME_CD,
-                    DLVR_PROD_NM,
-                    REG_ID,
-                    REG_DT,
-                    MOD_ID,
-                    MOD_DT
-                )
-                VALUES
-                (
-                    #{storeCd},
-                    #{seq},
-                    #{prodCd},
-                    #{dlvrNameCd},
-                    #{dlvrProdNm},
-                    #{regId},
-                    #{regDt},
-                    #{modId},
-                    #{modDt}
-                )
-            </when>
-        </choose>
-    </insert>
-
     <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 전 기존데이터 삭제 -->
     <!--
-        TABLE    : TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 기준매장의 배달상품명칭을 복사하기 전 적용대상매장의 배달상품명칭을 삭제한다.
+        TABLE    :  TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  기준매장의 배달상품명칭을 복사하기 전 적용대상매장의 배달상품명칭 삭제
     -->
     <delete id="deleteStoreDlvrProdMultiNm" parameterType="dlvrProdMultiVO">
         /* DlvrProdMultiMapper.deleteStoreDlvrProdMultiNm */
         DELETE
-        FROM TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        WHERE STORE_CD = #{targetStoreCd}
+        FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        WHERE   STORE_CD = #{targetStoreCd}
     </delete>
 
     <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 복사 -->
     <!--
-        TABLE    : TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 기준매장의 배달상품명칭을 복사하여 적용대상매장에 등록한다.
+        TABLE    :  TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  기준매장의 배달상품명칭을 복사하여 적용대상매장에 등록
     -->
     <insert id="copyStoreDlvrProdMultiNm" parameterType="dlvrProdMultiVO">
         /* USE : DlvrProdMultiMapper.copyStoreDlvrProdMultiNm */
         INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
         (
-            SEQ,
-            STORE_CD,
-            PROD_CD,
-            DLVR_NAME_CD,
-            DLVR_PROD_NM,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
-            DLVR_MAPPING_FG
+            SEQ
+        ,   STORE_CD
+        ,   PROD_CD
+        ,   DLVR_NAME_CD
+        ,   DLVR_PROD_NM
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ,   DLVR_MAPPING_FG
         )
         <choose>
             <!-- 기준매장이 본사인 경우 -->
             <when test='originalStoreFg != null and originalStoreFg == "H"'>
-                SELECT  SEQ,
-                        #{targetStoreCd} AS STORE_CD,
-                        PROD_CD,
-                        DLVR_NAME_CD,
-                        DLVR_PROD_NM,
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId},
-                        DLVR_MAPPING_FG
+                SELECT  SEQ
+                ,       #{targetStoreCd} AS STORE_CD
+                ,       PROD_CD
+                ,       DLVR_NAME_CD
+                ,       DLVR_PROD_NM
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                ,       DLVR_MAPPING_FG
                 FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
                 WHERE   HQ_OFFICE_CD = #{originalStoreCd}
                 AND     DLVR_NAME_CD IN (
@@ -454,16 +367,16 @@
             </when>
             <!-- 기준매장이 매장인 경우 -->
             <when test='originalStoreFg != null and originalStoreFg == "S"'>
-                SELECT  SEQ,
-                        #{targetStoreCd} AS STORE_CD,
-                        PROD_CD,
-                        DLVR_NAME_CD,
-                        DLVR_PROD_NM,
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId},
-                        DLVR_MAPPING_FG
+                SELECT  SEQ
+                ,       #{targetStoreCd} AS STORE_CD
+                ,       PROD_CD
+                ,       DLVR_NAME_CD
+                ,       DLVR_PROD_NM
+                ,       #{regDt}
+                ,       #{regId}
+                ,       #{modDt}
+                ,       #{modId}
+                ,       DLVR_MAPPING_FG
                 FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
                 WHERE   STORE_CD = #{originalStoreCd}
                 AND     DLVR_NAME_CD IN (
@@ -478,15 +391,15 @@
 
     <!-- 상품명칭 매장적용 팝업 - 조회 -->
     <!--
-        TABLE    : TB_MS_STORE
-        COMMENTS : [매장]매장 정보
+        TABLE    :  TB_MS_STORE
+        COMMENTS :  [매장]매장 정보
     -->
     <select id="getDlvrProdMultiNmStoreRegistList" parameterType="dlvrProdMultiVO" resultType="DefaultMap">
         /* DlvrProdMapper.getDlvrProdMultiNmStoreRegistList */
-        SELECT  tms.HQ_OFFICE_CD,
-                tms.STORE_CD,
-                tms.STORE_NM,
-                tms.SYS_STAT_FG
+        SELECT  tms.HQ_OFFICE_CD
+        ,       tms.STORE_CD
+        ,       tms.STORE_NM
+        ,       tms.SYS_STAT_FG
         FROM    TB_MS_STORE tms
         WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
@@ -513,8 +426,8 @@
         DELETE
         FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
         WHERE   1=1
-          AND   STORE_CD = #{storeCd}
-          AND   PROD_CD IN (${selectProdCd})
+        AND     STORE_CD = #{storeCd}
+        AND     PROD_CD IN (${selectProdCd})
     </delete>
 
     <!-- 상품명칭 매장적용 팝업 - 저장 insert -->
@@ -527,216 +440,129 @@
         /* DlvrProdMapper.getDlvrProdMultiNmStoreRegistSaveInsert */
         INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
         (
-            SEQ,
-            STORE_CD,
-            PROD_CD,
-            DLVR_NAME_CD,
-            DLVR_PROD_NM,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
-            DLVR_MAPPING_FG
+            SEQ
+        ,   STORE_CD
+        ,   PROD_CD
+        ,   DLVR_NAME_CD
+        ,   DLVR_PROD_NM
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ,   DLVR_MAPPING_FG
         )
-        SELECT  SEQ,
-                #{storeCd} AS STORE_CD,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                #{regDt} AS REG_DT,
-                #{regId} AS REG_ID,
-                #{modDt} AS MOD_DT,
-                #{modId} AS MOD_ID,
-                DLVR_MAPPING_FG
+        SELECT  SEQ
+        ,       #{storeCd} AS STORE_CD
+        ,       PROD_CD
+        ,       DLVR_NAME_CD
+        ,       DLVR_PROD_NM
+        ,       #{regDt} AS REG_DT
+        ,       #{regId} AS REG_ID
+        ,       #{modDt} AS MOD_DT
+        ,       #{modId} AS MOD_ID
+        ,       DLVR_MAPPING_FG
         FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
         WHERE   1=1
           AND   HQ_OFFICE_CD = #{hqOfficeCd}
           AND   PROD_CD IN (${selectProdCd})
     </insert>
 
-    <!-- 배달시스템 상품 명칭 매핑 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크  -->
-    <!--
-        TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 상품명칭 엑셀 업로드 전 유효한 상품코드인지 체크한다.
-    -->
-    <select id="chkDlvrProdMulti" parameterType="dlvrProdMultiVO" resultType="integer">
-        /* USE : DlvrProdMultiMapper.chkDlvrProdMulti */
-        <choose>
-            <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  COUNT(PROD_CD)
-                FROM    TB_HQ_PRODUCT
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     PROD_CD IN
-                <foreach collection="arrProdCdCol" item="item" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
-            </when>
-            <!-- 가맹점 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT  COUNT(PROD_CD)
-                FROM    TB_MS_PRODUCT
-                WHERE   STORE_CD = #{storeCd}
-                AND     PROD_CD IN
-                <foreach collection="arrProdCdCol" item="item" open="(" close=")" separator=",">
-                    #{item}
-                </foreach>
-            </when>
-        </choose>
-    </select>
-
-    <!-- 배달시스템 상품 명칭 매핑 - 데이터 임시 저장
-        TABLE    : TB_TMP_PRODUCT_DLVR_PROD_NM
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 데이터를 임시테이블에 저장한다.
-    -->
-    <insert id="getChkProdCdInsert" parameterType="dlvrProdMultiVO">
-        /* USE : DlvrProdMultiMapper.getChkProdCdInsert */
-        <choose>
-            <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_TMP_PRODUCT_DLVR_PROD_NM
-                (
-                SESSION_ID,
-                SEQ,
-                HQ_OFFICE_CD,
-                STORE_CD,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
-                ) SELECT  #{sessionId},
-                SEQ,
-                #{hqOfficeCd},
-                #{storeCd},
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
-                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                AND		DLVR_NAME_CD = '3'
-                AND 	PROD_CD = #{prodCd}
-                <if test ='mappFg != null and mappFg =="S"'>
-                    AND SEQ NOT IN  (
-                                        SELECT  SEQ
-                                        FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
-                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                                        AND     PROD_CD = #{prodCd}
-                                        AND 	SEQ IS NOT NULL
-                                    )
-                </if>
-            </when>
-            <!-- 가맹점 -->
-            <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_TMP_PRODUCT_DLVR_PROD_NM
-                (
-                SESSION_ID,
-                SEQ,
-                HQ_OFFICE_CD,
-                STORE_CD,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
-                ) SELECT  #{sessionId},
-                SEQ,
-                #{hqOfficeCd},
-                #{storeCd},
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
-                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE 	STORE_CD = #{storeCd}
-                AND		DLVR_NAME_CD = '3'
-                AND 	PROD_CD = #{prodCd}
-                <if test ='mappFg != null and mappFg =="S"'>
-                    AND SEQ NOT IN  (
-                                        SELECT  SEQ
-                                        FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
-                                        WHERE   STORE_CD = #{storeCd}
-                                        AND     PROD_CD = #{prodCd}
-                                        AND 	SEQ IS NOT NULL
-                                    )
-                </if>
-            </when>
-        </choose>
-    </insert>
-
-    <!-- 배달시스템 상품 명칭 매핑2 - 배달상품명칭 중복 체크 delete -->
+    <!-- 배달시스템 상품 명칭 매핑2 - 배달상품명칭 임시 데이터 delete -->
     <!--
         TABLE    :  TB_TMP_PRODUCT_DLVR_PROD_NM
         PARAM    :  dlvrProdMultiVO
-        COMMENTS :  배달상품명칭 중복체크(삭제)
+        COMMENTS :  배달상품명칭 임시데이터 삭제
     -->
     <delete id="getDlvrProdMultiNmMappingChkSaveDeleteAll" parameterType="dlvrProdMultiVO" >
         /* DlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveDeleteAll */
         DELETE
         FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
         WHERE   1=1
-        AND     SESSION_ID = #{sessionId}
-        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     SESSION_ID      = #{sessionId}
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
         <if test='storeCd != null and storeCd != ""'>
             <![CDATA[
-                AND STORE_CD = #{storeCd}
+                AND STORE_CD    = #{storeCd}
             ]]>
         </if>
     </delete>
 
-    <!-- 배달시스템 상품 명칭 매핑2 - 배달상품명칭 중복 체크 insert -->
+    <!-- 배달시스템 상품 명칭 매핑2 - 배달상품명칭 임시 데이터 insert -->
     <!--
         TABLE    :  TB_TMP_PRODUCT_DLVR_PROD_NM
         PARAM    :  dlvrProdMultiVO
-        COMMENTS :  배달상품명칭 중복체크(등록)
+        COMMENTS :  배달상품명칭 임시 데이터 등록
     -->
     <insert id="getDlvrProdMultiNmMappingChkSaveInsert" parameterType="dlvrProdMultiVO" >
         /* DlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveInsert */
         INSERT INTO TB_TMP_PRODUCT_DLVR_PROD_NM
         (
-        SESSION_ID,
-        <if test="seq != null and seq != ''">
-            SEQ,
-        </if>
-        HQ_OFFICE_CD,
-        STORE_CD,
-        PROD_CD,
-        DLVR_NAME_CD,
-        DLVR_PROD_NM,
-        REG_DT,
-        REG_ID,
-        MOD_DT,
-        MOD_ID
-        ) VALUES
+            SESSION_ID
+            <if test="seq != null and seq != ''">
+        ,       SEQ
+            </if>
+        ,   HQ_OFFICE_CD
+        ,   STORE_CD
+        ,   PROD_CD
+        ,   DLVR_NAME_CD
+        ,   DLVR_PROD_NM
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
         (
-        #{sessionId},
-        <if test="seq != null and seq != ''">
-            #{seq},
-        </if>
-        #{hqOfficeCd},
-        #{storeCd},
-        #{prodCd},
-        #{dlvrNameCd},
-        #{dlvrProdNm},
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId}
+            #{sessionId}
+            <if test="seq != null and seq != ''">
+        ,       #{seq}
+            </if>
+        ,   #{hqOfficeCd}
+        ,   #{storeCd}
+        ,   #{prodCd}
+        ,   #{dlvrNameCd}
+        ,   #{dlvrProdNm}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
         )
     </insert>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크  -->
+    <!--
+        TABLE    :  TB_HQ_PRODUCT
+                    TB_MS_PRODUCT
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  상품명칭 엑셀 업로드 전 유효한 상품코드인지 체크한다.
+    -->
+    <select id="chkDlvrProdMulti" parameterType="dlvrProdMultiVO" resultType="integer">
+        /* USE : DlvrProdMultiMapper.chkDlvrProdMulti */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  COUNT(*)
+                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM A
+                ,       TB_HQ_PRODUCT B
+                WHERE   A.SESSION_ID        = #{sessionId}
+                AND     A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                AND     B.HQ_OFFICE_CD  (+) = A.HQ_OFFICE_CD
+                AND     B.PROD_CD       (+) = A.PROD_CD
+                AND     B.PROD_CD IS NULL
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  COUNT(*)
+                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM A
+                ,       TB_MS_PRODUCT B
+                WHERE   A.SESSION_ID    = #{sessionId}
+                AND     A.STORE_CD      = #{storeCd}
+                AND     B.STORE_CD  (+) = A.STORE_CD
+                AND     B.PROD_CD   (+) = A.PROD_CD
+                AND     B.PROD_CD IS NULL
+            </when>
+        </choose>
+    </select>
 
     <!-- 배달시스템 상품 명칭 매핑2 - 배달상품명칭 중복 체크 -->
     <!--
@@ -754,40 +580,43 @@
                 SELECT  LISTAGG(DLVR_PROD_NM, ',') WITHIN GROUP (ORDER BY DLVR_PROD_NM) AS DLVR_PROD_NM
                 FROM
                 (
-                SELECT  DLVR_NAME_CD, DLVR_PROD_NM, COUNT(*)
-                FROM
-                (
-                SELECT  DLVR_NAME_CD, DLVR_PROD_NM
-                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
-                WHERE   1=1
-                AND     SESSION_ID = #{sessionId}
-                AND     HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     DLVR_PROD_NM IS NOT NULL
-                UNION ALL
-                SELECT  A.DLVR_NAME_CD, A.DLVR_PROD_NM
-                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI A
-                WHERE   1=1
-                AND     A.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     A.DLVR_PROD_NM IS NOT NULL
-                -- 수정할 데이터는 COUNT에서 빼야되서 제거
-                AND     <if test = "seq != null and seq !=''">
-                A.SEQ || '/' ||
-            </if>
-                A.PROD_CD ||'/'|| A.DLVR_NAME_CD NOT IN (
-                SELECT    <if test = "seq != null and seq !=''">
-                B.SEQ || '/' ||
-            </if>
-                B.PROD_CD ||'/'|| B.DLVR_NAME_CD
-                FROM      TB_TMP_PRODUCT_DLVR_PROD_NM B
-                WHERE     1=1
-                AND       B.SESSION_ID = #{sessionId}
-                AND       B.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND       B.PROD_CD = A.PROD_CD
-                AND       B.DLVR_NAME_CD = A.DLVR_NAME_CD
-                )
-                )
+                    SELECT  DLVR_NAME_CD, DLVR_PROD_NM, COUNT(*)
+                    FROM
+                    (
+                        SELECT  DLVR_NAME_CD
+                        ,       DLVR_PROD_NM
+                        FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
+                        WHERE   1=1
+                        AND     SESSION_ID      = #{sessionId}
+                        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+                        AND     DLVR_PROD_NM IS NOT NULL
+                        UNION ALL
+                        SELECT  A.DLVR_NAME_CD
+                        ,       A.DLVR_PROD_NM
+                        FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI A
+                        WHERE   1=1
+                        AND     A.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND     A.DLVR_PROD_NM IS NOT NULL
+                        -- 수정할 데이터는 COUNT에서 빼야되서 제거
+                            AND     <if test='mappFg != null and mappFg == "S"'>
+                                        A.SEQ || '/' ||
+                                    </if>
+                                    A.PROD_CD ||'/'|| A.DLVR_NAME_CD NOT IN (
+                                                                                SELECT  <if test='mappFg != null and mappFg == "S"'>
+                                                                                            B.SEQ || '/' ||
+                                                                                        </if>
+                                                                                        B.PROD_CD ||'/'|| B.DLVR_NAME_CD
+                                                                                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                                                                WHERE   1=1
+                                                                                AND     B.SESSION_ID    = #{sessionId}
+                                                                                AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                                                AND     B.PROD_CD       = A.PROD_CD
+                                                                                AND     B.DLVR_NAME_CD  = A.DLVR_NAME_CD
+                                                                            )
+                    )
                 GROUP
-                BY      DLVR_NAME_CD, DLVR_PROD_NM
+                BY      DLVR_NAME_CD
+                ,       DLVR_PROD_NM
                 HAVING  COUNT(*) > 1
                 )
             </when>
@@ -796,81 +625,246 @@
                 SELECT  LISTAGG(DLVR_PROD_NM, ',') WITHIN GROUP (ORDER BY DLVR_PROD_NM) AS DLVR_PROD_NM
                 FROM
                 (
-                SELECT  DLVR_NAME_CD, DLVR_PROD_NM, COUNT(*)
-                FROM
-                (
-                SELECT  DLVR_NAME_CD, DLVR_PROD_NM
-                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
-                WHERE   1=1
-                AND     SESSION_ID = #{sessionId}
-                AND     HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     STORE_CD = #{storeCd}
-                AND     DLVR_PROD_NM IS NOT NULL
-                UNION ALL
-                SELECT  A.DLVR_NAME_CD, A.DLVR_PROD_NM
-                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
-                WHERE   1=1
-                AND     A.STORE_CD = #{storeCd}
-                AND     A.DLVR_PROD_NM IS NOT NULL
-                -- 수정할 데이터는 COUNT에서 빼야되서 제거
-                AND     <if test = "seq != null and seq !=''">
-                A.SEQ || '/' ||
-            </if>
-                A.PROD_CD ||'/'|| A.DLVR_NAME_CD NOT IN (
-                SELECT    <if test = "seq != null and seq !=''">
-                B.SEQ || '/' ||
-            </if>
-                B.PROD_CD ||'/'|| B.DLVR_NAME_CD
-                FROM      TB_TMP_PRODUCT_DLVR_PROD_NM B
-                WHERE     1=1
-                AND       B.SESSION_ID = #{sessionId}
-                AND       B.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND       B.STORE_CD = #{storeCd}
-                AND       B.PROD_CD = A.PROD_CD
-                AND       B.DLVR_NAME_CD = A.DLVR_NAME_CD
-                )
-                )
-                GROUP
-                BY      DLVR_NAME_CD, DLVR_PROD_NM
-                HAVING COUNT(*) > 1
+                    SELECT  DLVR_NAME_CD
+                    ,       DLVR_PROD_NM
+                    ,       COUNT(*)
+                    FROM
+                    (
+                    SELECT  DLVR_NAME_CD
+                    ,       DLVR_PROD_NM
+                    FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
+                    WHERE   1=1
+                    AND     SESSION_ID      = #{sessionId}
+                    AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND     STORE_CD        = #{storeCd}
+                    AND     DLVR_PROD_NM IS NOT NULL
+                    UNION ALL
+                    SELECT  A.DLVR_NAME_CD
+                    ,       A.DLVR_PROD_NM
+                    FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
+                    WHERE   1=1
+                    AND     A.STORE_CD = #{storeCd}
+                    AND     A.DLVR_PROD_NM IS NOT NULL
+                        -- 수정할 데이터는 COUNT에서 빼야되서 제거
+                        AND     <if test='mappFg != null and mappFg == "S"'>
+                                    A.SEQ || '/' ||
+                                </if>
+                                A.PROD_CD ||'/'|| A.DLVR_NAME_CD NOT IN (
+                                                                            SELECT  <if test='mappFg != null and mappFg == "S"'>
+                                                                                        B.SEQ || '/' ||
+                                                                                    </if>
+                                                                                    B.PROD_CD ||'/'|| B.DLVR_NAME_CD
+                                                                            FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                                                            WHERE   1=1
+                                                                            AND     B.SESSION_ID    = #{sessionId}
+                                                                            AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                                            AND     B.STORE_CD      = #{storeCd}
+                                                                            AND     B.PROD_CD       = A.PROD_CD
+                                                                            AND     B.DLVR_NAME_CD  = A.DLVR_NAME_CD
+                                                                        )
+                    )
+                    GROUP
+                    BY      DLVR_NAME_CD
+                    ,       DLVR_PROD_NM
+                    HAVING COUNT(*) > 1
                 )
             </when>
         </choose>
     </select>
 
-    <!-- 배달시스템 상품 명칭 매핑 - 입력값 확인
+    <!-- 배달시스템 상품 명칭 매핑 - 엑셀 업로드(적용) 배민 입력 확인
         TABLE    : TB_TMP_PRODUCT_DLVR_PROD_NM
         PARAM    : dlvrProdMultiVO
-        COMMENTS : 입력값을 확인한다.
+        COMMENTS : 엑셀 업로드(적용) 배민 입력 확인
     -->
-    <select id="getChkProdCdChk" parameterType="dlvrProdMultiVO" resultType="integer">
-        /* USE : DlvrProdMultiMapper.getChkProdCdChk */
+    <select id="getProdApplyChk" parameterType="dlvrProdMultiVO" resultType="integer">
+        /* USE : DlvrProdMultiMapper.getProdApplyChk */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT  COUNT(DLVR_PROD_NM)
-                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     PROD_CD = #{prodCd}
-                AND     DLVR_NAME_CD = '3'
+                SELECT  COUNT(*) AS CHK_CNT
+                FROM    (
+                            SELECT  A.PROD_CD
+                            ,       SUM(DECODE(A.DLVR_NAME_CD, '3', 1, 0)) AS CHK_CNT
+                            FROM    TB_TMP_PRODUCT_DLVR_PROD_NM A
+                            WHERE   A.SESSION_ID    = #{sessionId}
+                            AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                            AND 	A.DLVR_PROD_NM  IS NOT NULL
+                            GROUP
+                            BY      A.PROD_CD
+                        )
+                WHERE   CHK_CNT = 0
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT  COUNT(DLVR_PROD_NM)
-                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM
-                WHERE   STORE_CD = #{storeCd}
-                AND     PROD_CD = #{prodCd}
-                AND     DLVR_NAME_CD = '3'
+                SELECT  COUNT(*) AS CHK_CNT
+                FROM    (
+                            SELECT  A.PROD_CD
+                            ,       SUM(DECODE(A.DLVR_NAME_CD, '3', 1, 0)) AS CHK_CNT
+                            FROM    TB_TMP_PRODUCT_DLVR_PROD_NM A
+                            WHERE   A.SESSION_ID    = #{sessionId}
+                            AND     A.STORE_CD      = #{storeCd}
+                            AND 	A.DLVR_PROD_NM IS NOT NULL
+                            GROUP
+                            BY      A.PROD_CD
+                        )
+                WHERE   CHK_CNT = 0
             </when>
         </choose>
     </select>
 
-    <!-- 배달시스템 상품 명칭 매핑 - 엑셀업로드(삭제) -->
+    <!-- 배달시스템 상품 명칭 매핑 - 엑셀 업로드(추가) 배민 입력 확인
+        TABLE    :  TB_TMP_PRODUCT_DLVR_PROD_NM
+                    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  엑셀 업로드(추가) 배민 입력 확인
+    -->
+    <select id="getProdAddChk" parameterType="dlvrProdMultiVO" resultType="integer">
+        /* USE : DlvrProdMultiMapper.getProdAddChk */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  COUNT(*) AS CHK_CNT
+                FROM    (
+                            SELECT  A.PROD_CD
+                            ,       SUM(DECODE(A.DLVR_NAME_CD, '3', 1, 0)) AS CHK_CNT
+                            FROM    (
+                                        SELECT  A.PROD_CD
+                                        ,       A.DLVR_NAME_CD
+                                        ,       A.DLVR_PROD_NM
+                                        FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI A
+                                        WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                        UNION ALL
+                                        SELECT  B.PROD_CD
+                                        ,       B.DLVR_NAME_CD
+                                        ,       B.DLVR_PROD_NM
+                                        FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                        WHERE   B.SESSION_ID    = #{sessionId}
+                                        AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                        AND		B.DLVR_PROD_NM  IS NOT NULL
+                                    ) A
+                            GROUP
+                            BY      A.PROD_CD
+                        )
+                WHERE   CHK_CNT = 0
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  COUNT(*) AS CHK_CNT
+                FROM    (
+                            SELECT  A.PROD_CD
+                            ,       SUM(DECODE(A.DLVR_NAME_CD, '3', 1, 0)) AS CHK_CNT
+                            FROM    (
+                                        SELECT  A.PROD_CD
+                                        ,       A.DLVR_NAME_CD
+                                        ,       A.DLVR_PROD_NM
+                                        FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
+                                        WHERE   A.STORE_CD      = #{storeCd}
+                                        UNION ALL
+                                        SELECT  B.PROD_CD
+                                        ,       B.DLVR_NAME_CD
+                                        ,       B.DLVR_PROD_NM
+                                        FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                        WHERE   B.SESSION_ID    = #{sessionId}
+                                        AND     B.STORE_CD      = #{storeCd}
+                                        AND		B.DLVR_PROD_NM  IS NOT NULL
+                                    ) A
+                            GROUP
+                            BY      A.PROD_CD
+                        )
+                WHERE   CHK_CNT = 0
+            </when>
+        </choose>
+    </select>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 배달상품명칭 저장 배민 입력 확인
+        TABLE    :  TB_TMP_PRODUCT_DLVR_PROD_NM
+                    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  배당상품명칭 저장 배민 입력 확인
+    -->
+    <select id="getProdSaveChk" parameterType="dlvrProdMultiVO" resultType="integer">
+        /* USE : DlvrProdMultiMapper.getProdSaveChk */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  COUNT(*) AS CHK_CNT
+                FROM    (
+                            SELECT  A.PROD_CD
+                            ,       SUM(DECODE(A.DLVR_NAME_CD, '3', 1, 0)) AS CHK_CNT
+                            FROM    (
+                                        SELECT  A.PROD_CD
+                                        ,       A.DLVR_NAME_CD
+                                        ,       A.DLVR_PROD_NM
+                                        FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI A
+                                        WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                        AND     (A.PROD_CD, A.SEQ, A.DLVR_NAME_CD) NOT IN   (
+                                                                                                SELECT  B.PROD_CD
+                                                                                                ,       B.SEQ
+                                                                                                ,       B.DLVR_NAME_CD
+                                                                                                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                                                                                WHERE   B.SESSION_ID    = #{sessionId}
+                                                                                                AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                                                            )
+                                        UNION ALL
+                                        SELECT  B.PROD_CD
+                                        ,       B.DLVR_NAME_CD
+                                        ,       B.DLVR_PROD_NM
+                                        FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                        WHERE   B.SESSION_ID    = #{sessionId}
+                                        AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                        AND 	B.DLVR_PROD_NM IS NOT NULL
+                                    ) A
+                            GROUP
+                            BY      A.PROD_CD
+                        )
+                WHERE   CHK_CNT = 0
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  COUNT(*) AS CHK_CNT
+                FROM    (
+                            SELECT  A.PROD_CD
+                            ,       SUM(DECODE(A.DLVR_NAME_CD, '3', 1, 0)) AS CHK_CNT
+                            FROM    (
+                                        SELECT  A.PROD_CD
+                                        ,       A.DLVR_NAME_CD
+                                        ,       A.DLVR_PROD_NM
+                                        FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
+                                        WHERE   A.STORE_CD  = #{storeCd}
+                                        AND     (A.PROD_CD, A.SEQ, A.DLVR_NAME_CD) NOT IN   (
+                                                                                                SELECT  B.PROD_CD
+                                                                                                ,       B.SEQ
+                                                                                                ,       B.DLVR_NAME_CD
+                                                                                                FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                                                                                WHERE   B.SESSION_ID    = #{sessionId}
+                                                                                                AND     B.STORE_CD      = #{storeCd}
+                                                                                            )
+                                        UNION ALL
+                                        SELECT  B.PROD_CD
+                                        ,       B.DLVR_NAME_CD
+                                        ,       B.DLVR_PROD_NM
+                                        FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                        WHERE   B.SESSION_ID    = #{sessionId}
+                                        AND     B.STORE_CD      = #{storeCd}
+                                        AND 	B.DLVR_PROD_NM  IS NOT NULL
+                                    ) A
+                            GROUP
+                            BY      A.PROD_CD
+                        )
+                WHERE   CHK_CNT = 0
+            </when>
+        </choose>
+    </select>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 삭제(엑셀업로드 적용, 화면 저장) -->
     <!--
-        TABLE    : TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                   TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 엑셀업로드 매핑값을 삭제한다.
+        TABLE    :  TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  매핑값 삭제
     -->
     <delete id="excelDeleteDlvrProdNm" parameterType="dlvrProdMultiVO">
         /* DlvrProdMultiMapper.excelDeleteDlvrProdNm */
@@ -878,114 +872,327 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 DELETE
-                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     PROD_CD = #{prodCd}
-                AND     DLVR_NAME_CD = #{dlvrNameCd}
+                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI A
+                WHERE   (
+                            A.HQ_OFFICE_CD
+                        ,   A.PROD_CD
+                        <if test='mappFg != null and mappFg == "S"'>
+                        ,   A.SEQ
+                        ,   A.DLVR_NAME_CD
+                        </if>
+                        )   IN  (
+                                    SELECT  DISTINCT B.HQ_OFFICE_CD
+                                    ,       B.PROD_CD
+                                        <if test='mappFg != null and mappFg == "S"'>
+                                    ,       B.SEQ
+                                    ,       B.DLVR_NAME_CD
+                                        </if>
+                                    FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                    WHERE   B.SESSION_ID        = #{sessionId}
+                                    AND     B.HQ_OFFICE_CD      = #{hqOfficeCd}
+                                )
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
-                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE   STORE_CD = #{storeCd}
-                AND     PROD_CD = #{prodCd}
-                AND     DLVR_NAME_CD = #{dlvrNameCd}
+                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
+                WHERE   (
+                            A.STORE_CD
+                        ,   A.PROD_CD
+                        <if test='mappFg != null and mappFg == "S"'>
+                        ,   A.SEQ
+                        ,   A.DLVR_NAME_CD
+                        </if>
+                        )   IN  (
+                                    SELECT  DISTINCT B.STORE_CD
+                                    ,       B.PROD_CD
+                                    <if test='mappFg != null and mappFg == "S"'>
+                                    ,       B.SEQ
+                                    ,       B.DLVR_NAME_CD
+                                    </if>
+                                    FROM    TB_TMP_PRODUCT_DLVR_PROD_NM B
+                                    WHERE   B.SESSION_ID        = #{sessionId}
+                                    AND     B.STORE_CD          = #{storeCd}
+                                )
             </when>
         </choose>
     </delete>
 
-    <!-- 배달시스템 상품 명칭 매핑 - 엑셀업로드(저장) -->
+    <!-- 배달시스템 상품 명칭 매핑 - 등록(엑셀업로드 적용, 화면 저장) -->
     <!--
-        TABLE    : TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                   TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-        PARAM    : dlvrProdMultiVO
-        COMMENTS : 엑셀업로드 매핑값을 저장한다.
+        TABLE    :  TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  엑셀업로드(적용), 화면 저장
     -->
     <insert id="excelInsertDlvrProdNm" parameterType="dlvrProdMultiVO">
         /* DlvrProdMultiMapper.excelInsertDlvrProdNm */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                MERGE INTO TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI A
+                USING   (
+                            SELECT  C.HQ_OFFICE_CD                          AS HQ_OFFICE_CD
+                                <if test='mappFg != null and mappFg == "S"'>
+                            ,       NVL(C.SEQ,1)                                   AS SEQ
+                                </if>
+                                <if test='mappFg != null and mappFg == "D"'>
+                            ,       RANK() OVER(PARTITION BY C.HQ_OFFICE_CD, C.PROD_CD, C.DLVR_NAME_CD ORDER BY C.HQ_OFFICE_CD,C.PROD_CD, C.DLVR_NAME_CD, ROWNUM) AS SEQ
+                                </if>
+                            ,       C.PROD_CD                               AS PROD_CD
+                            ,       C.DLVR_NAME_CD                          AS DLVR_NAME_CD
+                            ,       C.DLVR_PROD_NM                          AS DLVR_PROD_NM
+                            ,       #{regDt}                                AS REG_DT
+                            ,       #{regId}                                AS REG_ID
+                            ,       #{modDt}                                AS MOD_DT
+                            ,       #{modId}                                AS MOD_ID
+                            ,       C.DLVR_MAPPING_FG                       AS DLVR_MAPPING_FG
+                            FROM    TB_TMP_PRODUCT_DLVR_PROD_NM C
+                            WHERE   C.SESSION_ID        = #{sessionId}
+                            AND     C.HQ_OFFICE_CD      = #{hqOfficeCd}
+                            AND     C.DLVR_PROD_NM      IS NOT NULL
+                        ) B
+                ON      (           A.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                        AND         A.SEQ           =   B.SEQ
+                        AND         A.PROD_CD       =   B.PROD_CD
+                        AND         A.DLVR_NAME_CD  =   B.DLVR_NAME_CD
+                        )
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
-                HQ_OFFICE_CD,
-                SEQ,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
+                        A.HQ_OFFICE_CD
+                ,       A.SEQ
+                ,       A.PROD_CD
+                ,       A.DLVR_NAME_CD
+                ,       A.DLVR_PROD_NM
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                ,       A.DLVR_MAPPING_FG
                 )
-                SELECT  #{hqOfficeCd},
+                VALUES
                 (
-                SELECT  NVL(MAX(SEQ),0)+1
-                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE	HQ_OFFICE_CD    =   #{hqOfficeCd}
-                AND     PROD_CD         =   #{prodCd}
-                AND	    DLVR_NAME_CD    =   #{dlvrNameCd}
-                ),
-                #{prodCd},
-                #{dlvrNameCd},
-                #{dlvrProdNm},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
-                FROM    DUAL
-                WHERE NOT EXISTS
-                (
-                SELECT  HQ_OFFICE_CD,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM
-                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE   HQ_OFFICE_CD  =     #{hqOfficeCd}
-                AND     DLVR_NAME_CD  =     #{dlvrNameCd}
-                AND     DLVR_PROD_NM  =     #{dlvrProdNm}
+                        B.HQ_OFFICE_CD
+                ,       B.SEQ
+                ,       B.PROD_CD
+                ,       B.DLVR_NAME_CD
+                ,       B.DLVR_PROD_NM
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.DLVR_MAPPING_FG
                 )
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+                MERGE INTO TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
+                USING   (
+                            SELECT  C.STORE_CD                              AS STORE_CD
+                            <if test='mappFg != null and mappFg == "S"'>
+                            ,       NVL(C.SEQ,1)                                   AS SEQ
+                            </if>
+                            <if test='mappFg != null and mappFg == "D"'>
+                            ,       RANK() OVER(PARTITION BY C.STORE_CD, C.PROD_CD, C.DLVR_NAME_CD ORDER BY C.STORE_CD,C.PROD_CD, C.DLVR_NAME_CD, ROWNUM) AS SEQ
+                            </if>
+                            ,       C.PROD_CD                               AS PROD_CD
+                            ,       C.DLVR_NAME_CD                          AS DLVR_NAME_CD
+                            ,       C.DLVR_PROD_NM                          AS DLVR_PROD_NM
+                            ,       #{regDt}                                AS REG_DT
+                            ,       #{regId}                                AS REG_ID
+                            ,       #{modDt}                                AS MOD_DT
+                            ,       #{modId}                                AS MOD_ID
+                            ,       C.DLVR_MAPPING_FG                       AS DLVR_MAPPING_FG
+                            FROM    TB_TMP_PRODUCT_DLVR_PROD_NM C
+                            WHERE   C.SESSION_ID        = #{sessionId}
+                            AND     C.STORE_CD          = #{storeCd}
+                            AND     C.DLVR_PROD_NM      IS NOT NULL
+                        ) B
+                ON      (           A.STORE_CD      =   B.STORE_CD
+                        AND         A.SEQ           =   B.SEQ
+                        AND         A.PROD_CD       =   B.PROD_CD
+                        AND         A.DLVR_NAME_CD  =   B.DLVR_NAME_CD
+                        )
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
-                STORE_CD,
-                SEQ,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
+                        A.STORE_CD
+                ,       A.SEQ
+                ,       A.PROD_CD
+                ,       A.DLVR_NAME_CD
+                ,       A.DLVR_PROD_NM
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                ,       A.DLVR_MAPPING_FG
                 )
-                SELECT  #{storeCd},
+                VALUES
                 (
-                SELECT  NVL(MAX(SEQ),0)+1
-                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE	STORE_CD        =   #{storeCd}
-                AND     PROD_CD         =   #{prodCd}
-                AND	    DLVR_NAME_CD    =   #{dlvrNameCd}
-                ),
-                #{prodCd},
-                #{dlvrNameCd},
-                #{dlvrProdNm},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
-                FROM    DUAL
-                WHERE NOT EXISTS
+                        B.STORE_CD
+                ,       B.SEQ
+                ,       B.PROD_CD
+                ,       B.DLVR_NAME_CD
+                ,       B.DLVR_PROD_NM
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.DLVR_MAPPING_FG
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 배달시스템 상품 명칭 매핑 - 등록(엑셀업로드 추가) -->
+    <!--
+        TABLE    :  TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+        PARAM    :  dlvrProdMultiVO
+        COMMENTS :  엑셀업로드(추가) 저장
+    -->
+    <insert id="excelInsertDlvrProdAdd" parameterType="dlvrProdMultiVO">
+        /* DlvrProdMultiMapper.excelInsertDlvrProdAdd */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI A
+                USING   (
+                            SELECT  C.HQ_OFFICE_CD                                              AS HQ_OFFICE_CD
+                            ,       RANK() OVER(PARTITION BY C.HQ_OFFICE_CD, C.PROD_CD, C.DLVR_NAME_CD ORDER BY C.HQ_OFFICE_CD,C.PROD_CD, C.DLVR_NAME_CD, ROWNUM)
+                            +
+                            (
+                                SELECT  NVL(MAX(D.SEQ),0)
+                                FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI D
+                                WHERE   D.HQ_OFFICE_CD      =   C.HQ_OFFICE_CD
+                                AND     D.PROD_CD           =   C.PROD_CD
+                                AND     D.DLVR_NAME_CD      =   C.DLVR_NAME_CD
+                            )                                                                   AS SEQ
+                            ,       C.PROD_CD                                                   AS PROD_CD
+                            ,       C.DLVR_NAME_CD                                              AS DLVR_NAME_CD
+                            ,       C.DLVR_PROD_NM                                              AS DLVR_PROD_NM
+                            ,       #{regDt}                                                    AS REG_DT
+                            ,       #{regId}                                                    AS REG_ID
+                            ,       #{modDt}                                                    AS MOD_DT
+                            ,       #{modId}                                                    AS MOD_ID
+                            ,       C.DLVR_MAPPING_FG                                           AS DLVR_MAPPING_FG
+                            FROM    TB_TMP_PRODUCT_DLVR_PROD_NM C
+                            WHERE   C.SESSION_ID        = #{sessionId}
+                            AND     C.HQ_OFFICE_CD      = #{hqOfficeCd}
+                            AND     C.DLVR_PROD_NM      IS NOT NULL
+                            AND     (
+                                        C.HQ_OFFICE_CD
+                                    ,   C.DLVR_NAME_CD
+                                    ,   C.DLVR_PROD_NM) NOT IN (
+                                                                    SELECT  HQ_OFFICE_CD
+                                                                    ,       DLVR_NAME_CD
+                                                                    ,       DLVR_PROD_NM
+                                                                    FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                                                                    WHERE   HQ_OFFICE_CD  =     #{hqOfficeCd}
+                                                                )
+                        ) B
+                ON      (           A.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                        AND         A.SEQ           =   B.SEQ
+                        AND         A.PROD_CD       =   B.PROD_CD
+                        AND         A.DLVR_NAME_CD  =   B.DLVR_NAME_CD
+                        )
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
-                SELECT  STORE_CD,
-                PROD_CD,
-                DLVR_NAME_CD,
-                DLVR_PROD_NM
-                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
-                WHERE   STORE_CD      =     #{storeCd}
-                AND     DLVR_NAME_CD  =     #{dlvrNameCd}
-                AND     DLVR_PROD_NM  =     #{dlvrProdNm}
+                        A.HQ_OFFICE_CD
+                ,       A.SEQ
+                ,       A.PROD_CD
+                ,       A.DLVR_NAME_CD
+                ,       A.DLVR_PROD_NM
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                ,       A.DLVR_MAPPING_FG
+                )
+                VALUES
+                (
+                        B.HQ_OFFICE_CD
+                ,       B.SEQ
+                ,       B.PROD_CD
+                ,       B.DLVR_NAME_CD
+                ,       B.DLVR_PROD_NM
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.DLVR_MAPPING_FG
+                )
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
+                USING   (
+                            SELECT  C.STORE_CD                                              AS STORE_CD
+                            ,       RANK() OVER(PARTITION BY C.STORE_CD, C.PROD_CD, C.DLVR_NAME_CD ORDER BY C.STORE_CD,C.PROD_CD, C.DLVR_NAME_CD, ROWNUM)
+                            +
+                            (
+                                SELECT  NVL(MAX(D.SEQ),0)
+                                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI D
+                                WHERE   D.STORE_CD          =   C.STORE_CD
+                                AND     D.PROD_CD           =   C.PROD_CD
+                                AND     D.DLVR_NAME_CD      =   C.DLVR_NAME_CD
+                            )                                                                   AS SEQ
+                            ,       C.PROD_CD                                                   AS PROD_CD
+                            ,       C.DLVR_NAME_CD                                              AS DLVR_NAME_CD
+                            ,       C.DLVR_PROD_NM                                              AS DLVR_PROD_NM
+                            ,       #{regDt}                                                    AS REG_DT
+                            ,       #{regId}                                                    AS REG_ID
+                            ,       #{modDt}                                                    AS MOD_DT
+                            ,       #{modId}                                                    AS MOD_ID
+                            ,       C.DLVR_MAPPING_FG                                           AS DLVR_MAPPING_FG
+                            FROM    TB_TMP_PRODUCT_DLVR_PROD_NM C
+                            WHERE   C.SESSION_ID        = #{sessionId}
+                            AND     C.STORE_CD          = #{storeCd}
+                            AND     C.DLVR_PROD_NM      IS NOT NULL
+                            AND     (
+                                        C.STORE_CD
+                                    ,   C.DLVR_NAME_CD
+                                    ,   C.DLVR_PROD_NM) NOT IN (
+                                                                    SELECT  STORE_CD
+                                                                    ,       DLVR_NAME_CD
+                                                                    ,       DLVR_PROD_NM
+                                                                    FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+                                                                    WHERE   STORE_CD  =     #{storeCd}
+                                                                )
+                        ) B
+                ON      (           A.STORE_CD      =   B.STORE_CD
+                        AND         A.SEQ           =   B.SEQ
+                        AND         A.PROD_CD       =   B.PROD_CD
+                        AND         A.DLVR_NAME_CD  =   B.DLVR_NAME_CD
+                        )
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.STORE_CD
+                ,       A.SEQ
+                ,       A.PROD_CD
+                ,       A.DLVR_NAME_CD
+                ,       A.DLVR_PROD_NM
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                ,       A.DLVR_MAPPING_FG
+                )
+                VALUES
+                (
+                        B.STORE_CD
+                ,       B.SEQ
+                ,       B.PROD_CD
+                ,       B.DLVR_NAME_CD
+                ,       B.DLVR_PROD_NM
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.DLVR_MAPPING_FG
                 )
             </when>
         </choose>

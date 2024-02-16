@@ -28,7 +28,8 @@
         tmmp.PREPAID_FG,
         tmmp.PREPAID_AMT,
         tmmp.PREPAID_PAY_FG,
-        tcn.NMCODE_NM AS PREPAID_PAY_FG_NM
+        tcn.NMCODE_NM AS PREPAID_PAY_FG_NM,
+        TO_CHAR(TO_DATE(tmmp.PREPAID_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS PREPAID_DT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MB_MEMBER_PREPAID tmmp,
         TB_MB_MEMBER tmm,
@@ -56,7 +57,7 @@
               AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
             ]]>
         </if>
-        ORDER BY tmmp.SALE_DATE DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
+        ORDER BY tmmp.SALE_DATE DESC, PREPAID_DT DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 </mapper>

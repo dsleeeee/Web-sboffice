@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @Class Name : DlvrProdMultiService.java
- * @Description : 기초관리 - 상품관리 - 배달시스템 상품 명칭 맵핑2
+ * @Description : 기초관리 - 상품관리 - 배달시스템 상품 명칭 매핑2
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -31,9 +31,6 @@ public interface DlvrProdMultiService {
     /** 배달시스템 상품 명칭 매핑2  - 전체 엑셀다운로드 */
     List<DefaultMap<String>> getDlvrProdMultiExcelList(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
 
-    /** 배달시스템 상품 명칭 매핑2 - 배달상품명칭 저장 */
-    int saveDlvrProdMultiNm(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO);
-
     /** 배달시스템 상품 명칭 매핑2 - 상품명칭 복사 */
     int copyDlvrProdMultiNm(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
 
@@ -43,21 +40,18 @@ public interface DlvrProdMultiService {
     /** 배달시스템 상품 명칭 매핑2 - 상품명칭 매장적용 저장 */
     int getDlvrProdMultiNmStoreRegistSave(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO);
 
+    /** 배달시스템 상품 명칭 매핑2 - 데이터 임시 저장 */
+    int getDlvrProdMultiTempInsert(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO);
+
     /** 배달시스템 상품 명칭 매핑2 - 엑셀 업로드 전 상품코드 유효여부 체크 */
     int chkDlvrProdMulti(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
 
-    /** 배달시스템 상품 명칭 매핑2 - 데이터 임시 저장 */
-    int getDlvrProdCdSaveInsert(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO);
-
     /** 배달시스템 상품 명칭 매핑2 - 배달상품명칭 중복 체크 */
-    String getDlvrProdMultiNmMappingChk(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO);
+    String getDlvrProdMultiNmMappingChk(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
 
-    /** 배달시스템 상품 명칭 매핑2 - 입력값 확인 */
-    int getChkProdCdChk(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
+    /** 배달시스템 상품 명칭 매핑2 - 배민 입력 확인 */
+    int getProdCdNullChk(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
 
-    /** 배달시스템 상품 명칭 매핑2 - 엑셀 업로드(기존값 삭제) */
-    int excelDeleteDlvrProdNm(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO);
-
-    /** 배달시스템 상품 명칭 매핑2 - 엑셀 업로드(저장) */
-    int excelUploadsave(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO);
+    /** 배달시스템 상품 명칭 매핑2 - 상품명칭저장 */
+    int saveDlvrProdMultiNm(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO);
 }

@@ -29,7 +29,8 @@
         tmmp.POSTPAID_AMT,
         tmmp.DEPOSIT_AMT,
         tmmp.POSTPAID_PAY_FG,
-        tcn.NMCODE_NM AS POSTPAID_PAY_FG_NM
+        tcn.NMCODE_NM AS POSTPAID_PAY_FG_NM,
+        TO_CHAR(TO_DATE(tmmp.POSTPAID_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS POSTPAID_DT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MB_MEMBER_POSTPAID tmmp,
         TB_MB_MEMBER tmm,
@@ -57,7 +58,7 @@
            AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
            ]]>
         </if>
-        ORDER BY tmmp.SALE_DATE DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
+        ORDER BY tmmp.SALE_DATE DESC, POSTPAID_DT DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -78,7 +79,8 @@
         tmmp.POSTPAID_AMT,
         tmmp.DEPOSIT_AMT,
         tmmp.POSTPAID_PAY_FG,
-        tcn.NMCODE_NM AS POSTPAID_PAY_FG_NM
+        tcn.NMCODE_NM AS POSTPAID_PAY_FG_NM,
+        TO_CHAR(TO_DATE(tmmp.POSTPAID_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS POSTPAID_DT
         FROM TB_MB_MEMBER_POSTPAID tmmp,
         TB_MB_MEMBER tmm,
         TB_MS_STORE tms,
@@ -105,7 +107,7 @@
                 AND SBPENC.D(tmm.MEMBR_NM) LIKE '%'|| #{membrNm} ||'%'
             ]]>
         </if>
-        ORDER BY tmmp.SALE_DATE DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
+        ORDER BY tmmp.SALE_DATE DESC, POSTPAID_DT DESC, tms.STORE_CD, tmmp.MEMBR_NO ASC
     </select>
 
 </mapper>
