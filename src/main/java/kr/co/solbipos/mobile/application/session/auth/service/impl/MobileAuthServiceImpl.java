@@ -1,5 +1,6 @@
 package kr.co.solbipos.mobile.application.session.auth.service.impl;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
@@ -145,6 +146,12 @@ public class MobileAuthServiceImpl implements MobileAuthService {
             }
 
             result.setLoginResult(LoginResult.PASSWORD_EXPIRE);
+            return result;
+        }
+
+        /** 계정사용중지 여부 체크 */
+        if(UseYn.N.getCode().equals(result.getWebUseYn())){
+            result.setLoginResult(LoginResult.NOT_WEB_USE_ID);
             return result;
         }
 

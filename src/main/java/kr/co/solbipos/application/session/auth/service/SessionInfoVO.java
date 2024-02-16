@@ -172,6 +172,9 @@ public class SessionInfoVO extends CmmVO {
     /** 리소스 코드 */
     private String optResrceCd;
 
+    /** 웹사용여부 */
+    private String webUseYn;
+
 	/**
      * @return the sessionId
      */
@@ -686,5 +689,13 @@ public class SessionInfoVO extends CmmVO {
 
     public void setOptResrceCd(String optResrceCd) {
         this.optResrceCd = optResrceCd;
+    }
+
+    public String getWebUseYn() {
+        return webUseYn;
+    }
+
+    public void setWebUseYn(String webUseYn) {
+        this.webUseYn = webUseYn;
     }
 }

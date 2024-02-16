@@ -215,6 +215,12 @@ public class AuthController {
             returnUrl = failUrl + "&type=pwDormant";
             throw new AuthenticationException(messageService.get("login.pwd.dormant"), returnUrl);
         }
+        else if (code == LoginResult.NOT_WEB_USE_ID) {
+            // 계정 사용 중지
+            // 계정사용이 중지되었습니다. 고객센터에 문의 해주세요.
+            returnUrl = failUrl;
+            throw new AuthenticationException(messageService.get("login.pw.find.not.web.use"), returnUrl);
+        }
         // 로그인 실패
         else {
             sw.stop();

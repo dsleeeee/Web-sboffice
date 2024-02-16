@@ -32,6 +32,8 @@ public enum LoginResult implements CodeEnum {
     , LOGIN_AUTO_FAIL("LAF")
     /** 휴면계정 */
     , DORMANT_ACCOUNT("DA")
+    /** 계정 사용 중지 */
+    , NOT_WEB_USE_ID("NWUI")
     ;
     
   private String code;
