@@ -86,6 +86,7 @@ public class MobileContentController {
         model.addAttribute("weekPosInstList", weekPosInstList);
 
         /** 날씨 */
+        
 
         /** 주간 POS 설치 상위 대리점 */
         List<DefaultMap<String>> weekPosInstTopList = mobileContentService.getMobileWeekPosInstTopList(sessionInfoVO);
@@ -133,18 +134,19 @@ public class MobileContentController {
 
         /** 날씨 */
 
+
         /** 주간 매출 상위 가맹점 */
         List<DefaultMap<String>> weekSaleAgencyTopList = mobileContentService.getMobileWeekSaleAgencyTopList(sessionInfoVO);
         model.addAttribute("weekSaleAgencyTopList", weekSaleAgencyTopList);
-
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
-        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
-        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             model.addAttribute("sid", request.getParameter("sid"));
         }
+
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         return "mobile/application/main/mobileAgencyMain";
     }
@@ -189,14 +191,15 @@ public class MobileContentController {
 
         /** 날씨 */
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
-        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
-        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             model.addAttribute("sid", request.getParameter("sid"));
         }
+
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         return "mobile/application/main/mobileHedofcMain"; // 그래프
     }
@@ -237,14 +240,15 @@ public class MobileContentController {
 
         /** 날씨 */
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
-        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
-        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         /** 가상로그인시 세션ID 설정 */
         if ( request.getParameter("sid") != null && request.getParameter("sid").length() > 0 ) {
             model.addAttribute("sid", request.getParameter("sid"));
         }
+
+        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
+        model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
         return "mobile/application/main/mobileMrhstMain"; // 그래프
     }

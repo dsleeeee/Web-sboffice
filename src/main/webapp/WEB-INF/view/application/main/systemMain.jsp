@@ -448,6 +448,11 @@
         $("#divDimmedLastPwd").css('display', 'none');
         $("#divPopupLastPwd").css('display', 'none');
     });
+
+
+    // 최근접속이력 팝업
+    $("#fullDimmedLastLoginHistPop").show();
+    $("#layerLastLoginHistPop").show();
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/application/main/systemMain.js?ver=20210218.06" charset="utf-8"></script>

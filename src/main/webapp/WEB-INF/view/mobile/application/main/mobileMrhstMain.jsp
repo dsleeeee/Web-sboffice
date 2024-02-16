@@ -258,6 +258,11 @@
         $("#divDimmedLastPwd").css('display', 'none');
         $("#divPopupLastPwd").css('display', 'none');
     });
+
+
+    // 최근접속이력 팝업
+    $("#fullDimmedMobileLastLoginHistPop").show();
+    $("#layerMobileLastLoginHistPop").show();
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/mobileMrhstMain.js?ver=20210531.01" charset="utf-8"></script>

@@ -14,6 +14,7 @@ import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.ObjectUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.validate.*;
 import kr.co.solbipos.application.session.auth.service.AuthService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -587,6 +588,29 @@ public class UserController {
         result.put("url", "/auth/logout.sb");
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 최근접속이력 조회
+     *
+     * @param userVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 02. 16.
+     */
+    @RequestMapping(value = "/getLastLoginHistList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getLastLoginHistList(UserVO userVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = userService.getLastLoginHistList(sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, userVO);
     }
 }
 

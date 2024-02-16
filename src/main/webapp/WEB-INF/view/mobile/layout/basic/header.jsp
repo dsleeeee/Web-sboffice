@@ -43,6 +43,7 @@
       </p>
       <ul>
         <li><a href="#" id="termsOfUse">이용약관</a></li>
+        <li><a href="#" id="lastLoginHist">최근접속이력</a></li>
         <%--<li><a href="#">내 정보 변경</a></li>--%>
         <li><a href="#" id="pwchg">비밀번호 변경</a></li>
         <li><a href="/mobile/auth/logout.sb">로그아웃</a></li>
@@ -59,6 +60,10 @@
 
 <%-- 이용약관 레이어 팝업 가져오기 --%>
 <c:import url="/WEB-INF/view/mobile/application/layer/mobileTermsOfUsePop.jsp">
+</c:import>
+
+<%-- 최근접속이력 레이어 팝업 가져오기 --%>
+<c:import url="/WEB-INF/view/mobile/application/layer/mobileLastLoginHistPop.jsp">
 </c:import>
 
 <script type="text/javascript" src="/resource/solbipos/js/mobile/layout/basic/header.js?ver=20220429.01" charset="utf-8"></script>
