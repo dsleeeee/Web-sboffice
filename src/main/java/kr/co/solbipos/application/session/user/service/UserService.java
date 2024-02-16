@@ -3,6 +3,7 @@ package kr.co.solbipos.application.session.user.service;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.application.session.user.enums.PwFindResult;
+import kr.co.common.data.structure.DefaultMap;
 
 import java.util.List;
 
@@ -102,4 +103,7 @@ public interface UserService {
 
     /** SMS 전송 저장 */
     int getSmsSendSave(OtpAuthVO otpAuthVO);
+
+    /** 최근접속이력 조회 */
+    List<DefaultMap<Object>> getLastLoginHistList(SessionInfoVO sessionInfoVO);
 }

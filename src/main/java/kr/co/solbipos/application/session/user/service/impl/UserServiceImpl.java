@@ -382,4 +382,11 @@ public class UserServiceImpl implements UserService {
 
         return procCnt;
     }
+
+    /** 최근접속이력 조회 */
+    @Override
+    public List<DefaultMap<Object>> getLastLoginHistList(SessionInfoVO sessionInfoVO) {
+
+        return userMapper.getLastLoginHistList(sessionInfoVO);
+    }
 }

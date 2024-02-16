@@ -497,8 +497,9 @@ nav.menuClose + .topWrap {position:fixed; width:100%; min-width:350px; padding-l
 .userLayer li a {display:block; padding:0 30px 0 60px; transition:all 0.3s;}
 .userLayer li a:hover {color:#222; transition:all 0.3s; background:RGBA(0,0,0,0.02);}
 .userLayer li:nth-child(1) {background:url(../img/ic_userlayer_my.png) 30px center no-repeat;}
-.userLayer li:nth-child(2) {background:url(../img/ic_userlayer_pw.png) 30px center no-repeat;}
-.userLayer li:nth-child(3) {background:url(../img/ic_userlayer_logout.png) 30px center no-repeat;}
+.userLayer li:nth-child(2) {background:url(../img/ic_userlayer_my.png) 30px center no-repeat;}
+.userLayer li:nth-child(3) {background:url(../img/ic_userlayer_pw.png) 30px center no-repeat;}
+.userLayer li:nth-child(4) {background:url(../img/ic_userlayer_logout.png) 30px center no-repeat;}
 
 @keyframes flip {
     from {

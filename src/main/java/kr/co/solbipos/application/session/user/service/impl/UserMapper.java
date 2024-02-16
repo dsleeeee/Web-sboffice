@@ -7,6 +7,7 @@ import kr.co.solbipos.application.session.user.service.PwdChgVO;
 import kr.co.solbipos.application.session.user.service.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+import kr.co.common.data.structure.DefaultMap;
 
 import java.util.List;
 
@@ -76,4 +77,7 @@ public interface UserMapper {
      * @return
      */
     int updateUserPwd(SessionInfoVO sessionInfoVO);
+
+    /** 최근접속이력 조회 */
+    List<DefaultMap<Object>> getLastLoginHistList(SessionInfoVO sessionInfoVO);
 }

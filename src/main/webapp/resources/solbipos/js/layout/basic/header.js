@@ -181,3 +181,13 @@ $("#termsOfUse").bind("click", function () {
     $(".userLayer").toggle();
     return false;
 });
+
+
+// 최근접속이력
+$("#lastLoginHist").bind("click", function () {
+    $("#fullDimmedLastLoginHistPop").show();
+    $("#layerLastLoginHistPop").show();
+
+    $(".userLayer").toggle();
+    return false;
+});

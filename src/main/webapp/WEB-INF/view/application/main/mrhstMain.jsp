@@ -681,6 +681,11 @@
             $("#divPopupLastPwd").css('display', 'none');
         });
     }]);
+
+
+    // 최근접속이력 팝업
+    $("#fullDimmedLastLoginHistPop").show();
+    $("#layerLastLoginHistPop").show();
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/application/main/mrhstMain.js?ver=20210223.01" charset="utf-8"></script>
