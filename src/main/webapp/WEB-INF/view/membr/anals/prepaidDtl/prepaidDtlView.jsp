@@ -114,6 +114,7 @@
           <wj-flex-grid-column header="<s:message code="prepaidDtl.prepaidFg"/>" binding="prepaidFg" data-map="prepaidFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaidDtl.prepaidAmt"/>" binding="prepaidAmt" width="100" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prepaidDtl.prepaidPayFg"/>" binding="prepaidPayFgNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prepaidDtl.prepaidDt"/>" binding="prepaidDt" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
 
           <wj-flex-grid-column header="<s:message code="prepaidDtl.hqOfficeCd"/>" binding="hqOfficeCd" width="100" visible="false"></wj-flex-grid-column>
 

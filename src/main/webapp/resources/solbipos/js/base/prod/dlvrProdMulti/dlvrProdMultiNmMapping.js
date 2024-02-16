@@ -22,8 +22,8 @@ var useYnAllComboData = [
 
 // 매핑값 구분
 var mappFgComboData = [
-    {"name": "매핑값 적용", "value": "D"},
-    {"name": "매핑값 추가", "value": "I"}
+    {"name": "매핑값 추가", "value": "I"},
+    {"name": "매핑값 적용", "value": "D"}
 ];
 
 // 등록일자 검색기준 콤보박스
@@ -95,46 +95,9 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
     $scope.save = function(){
         var arr = dlvrCol.split(",");
 
-        // 배달의민족앱[3] 상품명칭 입력값 전체 체크
-        // var str = "";
-        // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-        //
-        //     str = "";
-        //     for(var j = 0; j < arr.length; j++) {
-        //         if(eval('$scope.flex.collectionView.items[i].dlvrProdNm' + arr[j]) !== null &&
-        //             eval('$scope.flex.collectionView.items[i].dlvrProdNm' + arr[j]) !== undefined &&
-        //             eval('$scope.flex.collectionView.items[i].dlvrProdNm' + arr[j]) !== ""){
-        //             str +=  "[채널사: (dlvrProdNm"+ arr[j] + ")/" + eval('$scope.flex.collectionView.items[i].dlvrProdNm' + arr[j]) + "]";
-        //         }
-        //     }
-        //
-        //     if(str != null && str != undefined && str != ""){
-        //         if(str.indexOf("[채널사: (dlvrProdNm3)/") === -1 ){
-        //             // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
-        //             $scope._popMsg(messages["dlvrProdMulti.baemin.chk.msg"]);
-        //             return false;
-        //         }
-        //     }
-        // }
-
-
-        // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-        //
-        //         if($scope.flex.collectionView.items[i].prodCd != null &&
-        //             $scope.flex.collectionView.items[i].prodCd != undefined &&
-        //             $scope.flex.collectionView.items[i].prodCd != ""){
-        //
-        //             if(strProdCd.indexOf($scope.flex.collectionView.items[i].prodCd) === -1)
-        //             strProdCd += (strProdCd === '' ? '' : ',') + $scope.flex.collectionView.items[i].prodCd;
-        //         }
-        // }
-
         // 파라미터 설정
 
         var params = new Array();
-        var strProdCd = "";
-        var str = "";
-        var strProdNm = "";
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             for(var j = 0; j < arr.length; j++) {
 
@@ -152,19 +115,7 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
                     prodNmVal = eval('$scope.flex.collectionView.itemsEdited[i].dlvrProdNm' + arr[j]);
                     obj.dlvrProdNm = prodNmVal;
                 }
-                if(prodNmVal != null && prodNmVal != ''){
-                    str += prodNmVal
-                }
                 params.push(obj);
-            }
-            // 배달시스템 값 전체가 null인 값 제외
-            if(str != null && str != ''){
-                if(strProdNm.indexOf($scope.flex.collectionView.itemsEdited[i].prodCd) === -1) {
-                    strProdNm += (strProdNm === '' ? '' : ',') + $scope.flex.collectionView.itemsEdited[i].prodCd;
-                }
-            }
-            if (strProdCd.indexOf($scope.flex.collectionView.itemsEdited[i].prodCd) === -1) {
-                strProdCd += (strProdCd === '' ? '' : ',') + $scope.flex.collectionView.itemsEdited[i].prodCd;
             }
 
         }
@@ -172,28 +123,12 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         $timeout(function () {
             // 데이터 임시 저장
-            $scope.dupChk(strProdNm, params);
+            $scope.tempInsert(params);
         }, 10);
     };
 
     // 데이터 임시 저장
-    // $scope.prodCdSave = function(strProdCd, params){
-    //
-    //     if(params.length == 0){
-    //         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-    //         $scope._popMsg("변경사항이 없습니다.");
-    //         return false;
-    //     }
-    //
-    //     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-    //     $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getDlvrProdCdSaveInsert.sb", params, function (response) {
-    //         // 입력값 확인
-    //         $scope.chkNull(strProdCd, params);
-    //     });
-    // }
-
-    // 데이터 중복 체크
-    $scope.dupChk = function(strProdNm, params){
+    $scope.tempInsert = function (params) {
 
         if(params.length == 0){
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
@@ -202,12 +137,25 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getDlvrProdMultiTempInsert.sb", params, function (response) {
+            // 중복 체크
+            $scope.dupChk();
+        });
+    };
+
+    // 데이터 중복 체크
+    $scope.dupChk = function(){
+
+        var params = {};
+        params.mappFg = "S";
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getDlvrProdMultiNmMappingChk.sb", params, function (response) {
             var result = response.data.data;
 
             if(result === null || result === "") {
-                // 저장
-                $scope.chkNull(strProdNm, params);
+                // 배민 입력 확인
+                $scope.chkNull();
             } else {
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 $scope._popMsg(result + " 명칭이 중복됩니다.");
@@ -216,34 +164,37 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
         });
     }
 
-    // 입력값 확인
-    $scope.chkNull = function(strProdNm, params){
+    // 배민 입력 확인
+    $scope.chkNull = function(){
 
         var chkParams = {};
-        chkParams.prodCdCol = strProdNm;
         chkParams.mappFg = "S";
 
-        $scope._postJSONQuery.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getChkProdCdChk.sb", chkParams, function(response) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._postJSONQuery.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getProdCdNullChk.sb", chkParams, function(response) {
             var cnt = response.data.data;
 
-            if (cnt == 0) {
+            if (cnt != 0) {
                 $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
                 $scope._popMsg(messages["dlvrProdMulti.baemin.chk.msg"]);
                 return false;
             }else{
-                // 데이터 중복 체크
-                $scope.saveSave(params);
+                //데이터 저장
+                $scope.saveSave();
             }
         });
     }
 
 
     // 저장
-    $scope.saveSave = function(params){
+    $scope.saveSave = function(){
+
+        var chkParams = {};
+        chkParams.mappFg = "S";
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/dlvrProdMulti/dlvrProdMulti/save.sb", params, function () {
+        $scope._save("/base/prod/dlvrProdMulti/dlvrProdMulti/save.sb", chkParams, function () {
             // 재조회
             $scope.searchProdList();
         });
@@ -424,7 +375,7 @@ app.controller('dlvrProdMultiNmMappingExcelCtrl', ['$scope', '$http', '$timeout'
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, "상품매핑명칭" + '_' + getCurDateTime()+'.xlsx', function () {
+                }, "상품명칭매핑" + '_' + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

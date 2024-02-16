@@ -27,105 +27,105 @@
             <col class="w35" />
         </colgroup>
         <tbody>
-        <%-- 등록일자 --%>
-        <tr>
-            <th><s:message code="dlvrProdMulti.regDate" /></th>
-            <td colspan="3" style="text-align: left;">
-                <div class="sb-select">
-                    <span class="txtIn w100px">
+            <%-- 등록일자 --%>
+            <tr>
+                <th><s:message code="dlvrProdMulti.regDate" /></th>
+                <td colspan="3" style="text-align: left;">
+                    <div class="sb-select">
+                        <span class="txtIn w100px">
+                            <wj-combo-box
+                                    id="regDtType"
+                                    ng-model="regDtType"
+                                    control="regDtTypeCombo"
+                                    items-source="_getComboData('regDtType')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </span>
+                        <span class="txtIn w110px">
+                          <wj-input-date
+                                  id="srchTimeStartDate"
+                                  value="startDate"
+                                  ng-model="startDate"
+                                  control="startDateCombo"
+                                  min="2000-01-01"
+                                  max="2099-12-31"
+                                  initialized="_initDateBox(s)">
+                          </wj-input-date>
+                        </span>
+                        <span class="rg">~</span>
+                        <span class="txtIn w110px">
+                          <wj-input-date
+                                  id="srchTimeEndDate"
+                                  value="endDate"
+                                  ng-model="endDate"
+                                  control="endDateCombo"
+                                  min="2000-01-01"
+                                  max="2099-12-31"
+                                  initialized="_initDateBox(s)">
+                          </wj-input-date>
+                        </span>
+                        <span class="chk ml10">
+                          <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
+                          <label for="chkDt">
+                            <s:message code="cmm.all.day" />
+                          </label>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <%-- 상품코드 --%>
+                <th><s:message code="dlvrProdMulti.prodCd" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"/>
+                </td>
+                <%-- 상품명 --%>
+                <th><s:message code="dlvrProdMulti.prodNm" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
+                </td>
+            </tr>
+            <tr>
+                <%-- 분류조회 --%>
+                <th><s:message code="dlvrProdMulti.prodClass" /></th>
+                <td>
+                    <input type="text" class="sb-input w80" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
+                           placeholder="<s:message code="dlvrProdMulti.prodClass" /> 선택" readonly/>
+                    <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                    <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                </td>
+                <%-- 바코드 --%>
+                <th><s:message code="dlvrProdMulti.barCd" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch();"/>
+                </td>
+            </tr>
+            <tr>
+                <%-- 사용여부 --%>
+                <th><s:message code="dlvrProdMulti.useYn" /></th>
+                <td>
+                    <div class="sb-select">
                         <wj-combo-box
-                                id="regDtType"
-                                ng-model="regDtType"
-                                control="regDtTypeCombo"
-                                items-source="_getComboData('regDtType')"
+                                id="srchUseYn"
+                                ng-model="useYn"
+                                control="useYnAllCombo"
+                                items-source="_getComboData('useYnAllComboData')"
                                 display-member-path="name"
                                 selected-value-path="value"
                                 is-editable="false"
                                 initialized="_initComboBox(s)">
                         </wj-combo-box>
-                    </span>
-                    <span class="txtIn w110px">
-                      <wj-input-date
-                              id="srchTimeStartDate"
-                              value="startDate"
-                              ng-model="startDate"
-                              control="startDateCombo"
-                              min="2000-01-01"
-                              max="2099-12-31"
-                              initialized="_initDateBox(s)">
-                      </wj-input-date>
-                    </span>
-                    <span class="rg">~</span>
-                    <span class="txtIn w110px">
-                      <wj-input-date
-                              id="srchTimeEndDate"
-                              value="endDate"
-                              ng-model="endDate"
-                              control="endDateCombo"
-                              min="2000-01-01"
-                              max="2099-12-31"
-                              initialized="_initDateBox(s)">
-                      </wj-input-date>
-                    </span>
-                    <span class="chk ml10">
-                      <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
-                      <label for="chkDt">
-                        <s:message code="cmm.all.day" />
-                      </label>
-                    </span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <%-- 상품코드 --%>
-            <th><s:message code="dlvrProdMulti.prodCd" /></th>
-            <td>
-                <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"/>
-            </td>
-            <%-- 상품명 --%>
-            <th><s:message code="dlvrProdMulti.prodNm" /></th>
-            <td>
-                <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
-            </td>
-        </tr>
-        <tr>
-            <%-- 분류조회 --%>
-            <th><s:message code="dlvrProdMulti.prodClass" /></th>
-            <td>
-                <input type="text" class="sb-input w80" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
-                       placeholder="<s:message code="dlvrProdMulti.prodClass" /> 선택" readonly/>
-                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
-                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
-            </td>
-            <%-- 바코드 --%>
-            <th><s:message code="dlvrProdMulti.barCd" /></th>
-            <td>
-                <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch();"/>
-            </td>
-        </tr>
-        <tr>
-            <%-- 사용여부 --%>
-            <th><s:message code="dlvrProdMulti.useYn" /></th>
-            <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="srchUseYn"
-                            ng-model="useYn"
-                            control="useYnAllCombo"
-                            items-source="_getComboData('useYnAllComboData')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </td>
-            <%-- 채널사상품명 --%>
-            <th><s:message code="dlvrProdMulti.channel.prodNm" /></th>
-            <td>
-                <input type="text" class="sb-input w100" id="srchChannelProdNm" ng-model="channelProdNm" onkeyup="fnNxBtnSearch();"/>
-            </td>
-        </tr>
+                    </div>
+                </td>
+                <%-- 채널사상품명 --%>
+                <th><s:message code="dlvrProdMulti.channel.prodNm" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchChannelProdNm" ng-model="channelProdNm" onkeyup="fnNxBtnSearch();"/>
+                </td>
+            </tr>
         </tbody>
     </table>
     <%--//searchTbl--%>
@@ -136,40 +136,40 @@
             <col class="w100" />
         </colgroup>
         <tbody>
-        <tr class="brt">
-            <th class="oh gr fl w70" style="height: 90px;">
-                <p class="s12 bk lh20">
-                    * 상품코드와 정상 매핑된 명칭만 저장됩니다.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    * 상품코드에 공백이 들어가지 않도록 주의하세요.<br />
-                    * 매핑명칭은 최대 30자 입니다.(30자 이상 인 경우, 잘라서 저장됩니다.) <br />
-                    * 양식다운로드 문서로 업로드하여 주십시오.<br />
-                    * 매핑값 적용: 업로드한 값 적용(기존데이터 삭제) &nbsp;
-                    * 매핑값 추가: 업로드 하는 값이 새로운 값이 있으면 차수를 추가해서 등록
-                </p>
-            </th>
-            <th class="oh gr fr w30" style="height: 90px; font-size:15px">
-                <%-- 엑셀업로드 --%>
-                <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
-                    <s:message code="cmm.excel.excelUpload" />
-                </button>
-                <div class="sb-select w120px ml5 fr">
-                    <wj-combo-box
-                            id="mappFgBox"
-                            ng-model="mappFg"
-                            control="mappFgCombo"
-                            items-source="_getComboData('mappFgBox')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-                <%-- 양식다운로드 --%>
-                <button class="btn_skyblue ml5 fr" id="btnExcelDownload" ng-click="excelDownload()">
-                    <s:message code="cmm.excel.sampleDown" />
-                </button>
-            </th>
-        </tr>
+            <tr class="brt">
+                <th class="oh gr fl w70" style="height: 90px;">
+                    <p class="s12 bk lh20">
+                        * 상품코드와 정상 매핑된 명칭만 저장됩니다.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        * 상품코드에 공백이 들어가지 않도록 주의하세요.<br />
+                        * 매핑명칭은 최대 30자 입니다.(30자 이상 인 경우, 잘라서 저장됩니다.) <br />
+                        * 양식다운로드 문서로 업로드하여 주십시오.<br />
+                        * 매핑값 적용: 업로드한 값 적용(기존데이터 삭제) &nbsp;
+                        * 매핑값 추가: 업로드 하는 값에 새로운 값이 있으면 차수를 추가해서 등록
+                    </p>
+                </th>
+                <th class="oh gr fr w30" style="height: 90px; font-size:15px">
+                    <%-- 엑셀업로드 --%>
+                    <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
+                        <s:message code="cmm.excel.excelUpload" />
+                    </button>
+                    <div class="sb-select w120px ml5 fr">
+                        <wj-combo-box
+                                id="mappFgBox"
+                                ng-model="mappFg"
+                                control="mappFgCombo"
+                                items-source="_getComboData('mappFgBox')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                    <%-- 양식다운로드 --%>
+                    <button class="btn_skyblue ml5 fr" id="btnExcelDownload" ng-click="excelDownload()">
+                        <s:message code="cmm.excel.sampleDown" />
+                    </button>
+                </th>
+            </tr>
         </tbody>
     </table>
 
@@ -179,19 +179,19 @@
                 <col class="w100" />
             </colgroup>
             <tbody>
-            <tr class="brt">
-                <th class="oh gr fl w50" style="height: 40px;">
-                    <p class="s12 bk lh20">
-                        * 상품 체크 후, '상품명칭 매장적용'을 클릭해주세요.<br />
-                    </p>
-                </th>
-                <th class="oh gr fr w50" style="height: 40px; font-size:15px">
-                        <%-- 상품명칭 매장적용 --%>
-                    <button class="btn_skyblue ml5 fr" id="btnStoreApply" ng-click="storeApply()">
-                        <s:message code="dlvrProdMulti.dlvrProdNmStoreRegist" />
-                    </button>
-                </th>
-            </tr>
+                <tr class="brt">
+                    <th class="oh gr fl w50" style="height: 40px;">
+                        <p class="s12 bk lh20">
+                            * 상품 체크 후, '상품명칭 매장적용'을 클릭해주세요. 선택된 상품 전체 차수가 매장적용됩니다.<br />
+                        </p>
+                    </th>
+                    <th class="oh gr fr w50" style="height: 40px; font-size:15px">
+                            <%-- 상품명칭 매장적용 --%>
+                        <button class="btn_skyblue ml5 fr" id="btnStoreApply" ng-click="storeApply()">
+                            <s:message code="dlvrProdMulti.dlvrProdNmStoreRegist" />
+                        </button>
+                    </th>
+                </tr>
             </tbody>
         </table>
     </c:if>
@@ -295,7 +295,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProdMulti/dlvrProdMultiNmMapping.js?ver=20240125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProdMulti/dlvrProdMultiNmMapping.js?ver=20240213.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

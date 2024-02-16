@@ -44,7 +44,7 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
                 includeColumns : function (column) {
                     return column.visible;
                 }
-            }, '상품명칭양식.xlsx');
+            }, '상품명칭양식_'+getCurDateTime()+'.xlsx');
         }, 10);
     };
 
@@ -134,36 +134,7 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
             return false;
         }
 
-        // 배달의민족앱[3] 상품명칭 입력값 전체 체크
-        // var str = "";
-        // for (var r = 0; r < rowLength; r++) {
-        //     str = "";
-        //     for (var c = 0; c < $scope.flex.columns.length; c++) {
-        //         if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
-        //             var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header];
-        //             var cellValue  = $scope.flex.getCellData(r, c, false);
-        //
-        //             if(colBinding !== "prodCd" && cellValue !== null && cellValue !== undefined && cellValue != ""){
-        //                 str +=  "[채널사: ("+ colBinding + ")/" + cellValue + "]";
-        //             }
-        //
-        //         }
-        //     }
-        //
-        //     if(str != null && str != undefined && str != ""){
-        //         if(str.indexOf("[채널사: (dlvrProdNm3)/") === -1 ){
-        //             $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
-        //
-        //             // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
-        //             $scope._popMsg(messages["dlvrProdMulti.baemin.chk.msg"]);
-        //             return false;
-        //         }
-        //     }
-        //  }
-
         var str = ""
-        var strProdNm = ""; // prodCd 유효성 검사 확인용
-        var strProdCd = ""
         // 업로드 된 데이터 JSON 형태로 생성
         for (var r = 0; r < rowLength; r++) {
             vProdCd = "";
@@ -177,9 +148,6 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
                     if(colBinding === "prodCd"){
                         if(cellValue !== null && cellValue !== "") {
                             vProdCd = cellValue.toString().replaceAll("'", "").replaceAll(" ", "");
-                            // if(strProdCd.indexOf(vProdCd) === -1) {
-                            //     strProdCd += (strProdCd === '' ? '' : ',') + vProdCd;
-                            // }
                         }else{ continue; }
                     }else{
                         if(vProdCd !== null && vProdCd !== "") {
@@ -194,48 +162,47 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
                                 item["dlvrProdNm"] = prodNmVal;
                             }
                             jsonData.push(item);
-                            if(prodNmVal != null && prodNmVal != ''){
-                                str += prodNmVal
-                            }
                         }
                     }
                 }
             }
-            // 배달시스템 값 전체가 null인 값 제외
-            if(str != null && str != ''){
-                if(strProdNm.indexOf(vProdCd) === -1) {
-                    strProdNm += (strProdNm === '' ? '' : ',') + vProdCd;
-                }
-            }
-            if(strProdCd.indexOf(vProdCd) === -1) {
-                strProdCd += (strProdCd === '' ? '' : ',') + vProdCd;
-            }
         }
 
+        $scope.totalRows = jsonData.length;
+
         $timeout(function () {
-            // 유효한 상품코드인지 체크
-            $scope.chkProdCd(strProdCd,strProdNm, jsonData);
+            // 데이터 임시 저장
+            $scope.tempInsert(jsonData);
         }, 10);
     };
 
+    // 데이터 임시 저장
+    $scope.tempInsert = function (jsonData) {
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getDlvrProdMultiTempInsert.sb", jsonData, function (response) {
+            // 유효한 상품코드인지 체크
+            $scope.chkProdCd();
+        });
+    };
+
     // 유효한 상품코드인지 체크
-    $scope.chkProdCd = function(strProdCd, strProdNm, jsonData){
+    $scope.chkProdCd = function(){
         // 파라미터
         var params = {};
-        params.prodCdCol = strProdCd;
 
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._postJSONQuery.withOutPopUp( "/base/prod/dlvrProdMulti/dlvrProdMulti/chkDlvrProdMulti.sb", params, function(response){
 
             var cnt = response.data.data;
 
-            if(strProdCd.split(",").length === cnt){ // 매핑할 상품코드가 상품마스터에 존재할 경우,
-                // 데이터 임시 저장
-                $scope.dupChk(strProdNm, jsonData);
-
-            }else {
+            if(cnt > 1){ // 상품코드가 존재하지 않을 경우
                 var msg = messages["dlvrProdMulti.not.match.prodCd"]; // 등록되지 않은 상품코드가 존재합니다. 상품코드를 확인해주세요.
                 $scope.valueCheckErrPopup(msg);
                 return false;
+            }else {
+                // 데이터 중복체크
+                $scope.dupChk();
             }
         });
     };
@@ -251,15 +218,18 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
     // }
 
     // 데이터 중복 체크
-    $scope.dupChk = function (strProdNm, jsonData) {
+    $scope.dupChk = function () {
+
+        var params = {};
+        params.mappFg = $("#mappFg").val();
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getDlvrProdMultiNmMappingChk.sb", jsonData, function (response) {
+        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getDlvrProdMultiNmMappingChk.sb", params, function (response) {
             var result = response.data.data;
 
             if(result === null || result === "") {
-                // 데이터 삭제
-                $scope.chkNull(strProdNm, jsonData);
+                // 배민 입력 확인
+                $scope.chkNull();
             } else {
                 $scope._popMsg(result + " 명칭이 중복됩니다.");
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
@@ -268,79 +238,35 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
         });
     };
 
-    // 입력값 확인
-    $scope.chkNull = function(strProdNm, jsonData){
+    // 배민 입력 확인
+    $scope.chkNull = function(){
 
         var params = {};
-        params.prodCdCol = strProdNm;
         params.mappFg = $("#mappFg").val();
 
-        $scope._postJSONQuery.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getChkProdCdChk.sb", params, function(response) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._postJSONQuery.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/getProdCdNullChk.sb", params, function(response) {
             var cnt = response.data.data;
 
-            if (cnt == 0) {
+            if (cnt != 0) {
                 $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
 
                 // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
                 $scope._popMsg(messages["dlvrProdMulti.baemin.chk.msg"]);
                 return false;
             }else{
-                //데이터 중복 체크
-                $scope.delete(jsonData);
+                // 데이터 저장
+                $scope.save();
             }
-        });
-    }
-
-    // 데이터 삭제
-    $scope.delete = function (jsonData){
-
-        $scope.totalRows = jsonData.length;
-        var params = [];
-        var msg = '';
-
-        // 저장 시작이면 업로드 중 팝업 오픈
-        if ($scope.progressCnt === 0) {
-            $timeout(function () {
-                $scope.excelUploadingPopup(true);
-                $("#progressCnt").html($scope.progressCnt);
-                $("#totalRows").html($scope.totalRows);
-            }, 10);
-        }
-
-        // stepCnt 만큼 데이터 DB에 저장
-        var loopCnt = (parseInt($scope.progressCnt) + parseInt($scope.stepCnt) > parseInt($scope.totalRows) ? parseInt($scope.totalRows) : parseInt($scope.progressCnt) + parseInt($scope.stepCnt));
-        for (var i = $scope.progressCnt; i < $scope.totalRows; i++) {
-            var item = jsonData[i];
-
-            // 필수값 및 길이 체크
-            // 상품코드
-            if (nvl(item.prodCd, '') === '') {
-                msg = messages["dlvrProdMulti.prodCd"] + messages["dlvrProdMulti.require.data"]; // 상품코드/바코드(이)가 없는 데이터가 존재합니다.
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 배달앱별 상품명칭 길이 체크하여 30자 이상이면 문자 자르기
-            // if(nvl(item.dlvrProdNm, '') !== '' && nvl(item.dlvrProdNm.toString(), '').getByteLengthForOracle() > 100) {
-            //     item.dlvrProdNm = item.dlvrProdNm.substr(0, 30);
-            // }
-            item.mappFg = $("#mappFg").val();
-
-            params.push(item);
-        }
-
-        $scope._postJSONSave.withOutPopUp("/base/prod/dlvrProdMulti/dlvrProdMulti/excelDeleteDlvrProdNm.sb", params, function (response) {
-            // 데이터 저장
-            $scope.save(jsonData);
         });
     }
 
     // 데이터 저장
-    $scope.save = function (jsonData) {
+    $scope.save = function () {
 
-        $scope.totalRows = jsonData.length;
-        var params = [];
-        var msg = '';
+        //$scope.totalRows = jsonData.length;
+        // var params = [];
+        // var msg = '';
 
         // 저장 시작이면 업로드 중 팝업 오픈
         if ($scope.progressCnt === 0) {
@@ -351,28 +277,8 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
             }, 10);
         }
 
-        // stepCnt 만큼 데이터 DB에 저장
-        var loopCnt = (parseInt($scope.progressCnt) + parseInt($scope.stepCnt) > parseInt($scope.totalRows) ? parseInt($scope.totalRows) : parseInt($scope.progressCnt) + parseInt($scope.stepCnt));
-        for (var i = $scope.progressCnt; i < loopCnt; i++) {
-            var item = jsonData[i];
-
-            // 필수값 및 길이 체크
-            // 상품코드
-            if (nvl(item.prodCd, '') === '') {
-                msg = messages["dlvrProdMulti.prodCd"] + messages["dlvrProdMulti.require.data"]; // 상품코드/바코드(이)가 없는 데이터가 존재합니다.
-                $scope.valueCheckErrPopup(msg);
-                return false;
-            }
-
-            // 배달앱별 상품명칭 길이 체크하여 30자 이상이면 문자 자르기
-            // if(nvl(item.dlvrProdNm, '') !== '' && nvl(item.dlvrProdNm.toString(), '').getByteLengthForOracle() > 100) {
-            //     item.dlvrProdNm = item.dlvrProdNm.substr(0, 30);
-            // }
-
-            item.mappFg = $("#mappFg").val();
-
-            params.push(item);
-        }
+        var chkParams = {};
+        chkParams.mappFg = $("#mappFg").val();
 
         //가상로그인 session 설정
         var sParam = {};
@@ -383,12 +289,14 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/base/prod/dlvrProdMulti/dlvrProdMulti/excelUploadsave.sb', /* 통신할 URL */
-            data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+            url    : '/base/prod/dlvrProdMulti/dlvrProdMulti/save.sb', /* 통신할 URL */
+            data   : chkParams, /* 파라메터로 보낼 데이터 : @requestBody */
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
+
+                $scope._popMsg(messages['cmm.saveSucc']);
                 if (nvl($scope.parentCtrl, '') !== '') {
                     var parentScope = agrid.getScope($scope.parentCtrl);
                     parentScope.uploadCallBack();
@@ -402,18 +310,7 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
                 $scope._popMsg(messages['cmm.saveFail']);
             }
             return false;
-        }).then(function () {
-            // 'complete' code here
-            // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
-            if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
-                // 처리된 숫자 변경
-                $scope.progressCnt = loopCnt;
-                // 팝업의 progressCnt 값 변경
-                $("#progressCnt").html($scope.progressCnt);
-                $scope.save(jsonData);
-            }
-        });
-
+        })
     };
 
     // 엑셀업로딩 팝업 열기

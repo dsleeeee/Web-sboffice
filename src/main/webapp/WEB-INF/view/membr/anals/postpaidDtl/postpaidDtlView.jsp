@@ -112,6 +112,7 @@
             <wj-flex-grid-column header="<s:message code="postpaidDtl.postpaidAmt"/>" binding="postpaidAmt" width="80" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="postpaidDtl.depositAmt"/>" binding="depositAmt" width="80" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="postpaidDtl.postpaidPayFg"/>" binding="postpaidPayFgNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="postpaidDtl.postpaidDt"/>" binding="postpaidDt" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
 
             <wj-flex-grid-column header="<s:message code="postpaidDtl.hqOfficeCd"/>" binding="hqOfficeCd" width="100" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="postpaidDtl.postpaidPayFg"/>" binding="postpaidPayFg" width="100" visible="false"></wj-flex-grid-column>
@@ -152,6 +153,7 @@
           <wj-flex-grid-column header="<s:message code="postpaidDtl.postpaidAmt"/>" binding="postpaidAmt" width="80" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaidDtl.depositAmt"/>" binding="depositAmt" width="80" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaidDtl.postpaidPayFg"/>" binding="postpaidPayFgNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="postpaidDtl.postpaidDt"/>" binding="postpaidDt" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
 
           <wj-flex-grid-column header="<s:message code="postpaidDtl.hqOfficeCd"/>" binding="hqOfficeCd" width="100" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="postpaidDtl.postpaidPayFg"/>" binding="postpaidPayFg" width="100" visible="false"></wj-flex-grid-column>

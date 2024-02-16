@@ -19,7 +19,7 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : DlvrProdMultiServiceImpl.java
- * @Description : 기초관리 - 상품관리 - 배달시스템 상품 명칭 맵핑2
+ * @Description : 기초관리 - 상품관리 - 배달시스템 상품 명칭 매핑2
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -108,55 +108,6 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
 
     }
 
-    /** 배달시스템 상품 명칭 매핑2 - 배달상품명칭 저장 */
-    @Override
-    public int saveDlvrProdMultiNm(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO) {
-        int result = 0;
-        int procCnt = 0;
-        String currentDt = currentDateTimeString();
-
-        for ( DlvrProdMultiVO dlvrProdMultiVO : dlvrProdMultiVOs ) {
-
-            dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-                dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-            } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-                dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
-            }
-            dlvrProdMultiVO.setRegDt(currentDt);
-            dlvrProdMultiVO.setRegId(sessionInfoVO.getUserId());
-            dlvrProdMultiVO.setModDt(currentDt);
-            dlvrProdMultiVO.setModId(sessionInfoVO.getUserId());
-
-            if ( dlvrProdMultiVO.getStatus() == GridDataFg.UPDATE ) {
-
-                // 1. 기존 배달상품명칭 삭제
-                dlvrProdMultiMapper.deleteDlvrProdMultiNm(dlvrProdMultiVO);
-
-
-                // 2. 값이 있는 경우, 배달상품명칭 INSERT
-                if(dlvrProdMultiVO.getDlvrProdNm() != null && dlvrProdMultiVO.getDlvrProdNm() != "" && dlvrProdMultiVO.getDlvrProdNm().length() > 0){
-
-                    if(dlvrProdMultiVO.getSeq() == null || dlvrProdMultiVO.getSeq().toString() == ""){
-                        dlvrProdMultiVO.setSeq(1);
-                    }
-
-                    result = dlvrProdMultiMapper.insertDlvrProdMultiNm(dlvrProdMultiVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                }
-
-                procCnt ++;
-            }
-
-        }
-
-        if ( procCnt == dlvrProdMultiVOs.length) {
-            return result;
-        } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
-    }
-
     /** 배달시스템 상품 명칭 매핑2 - 배달상품명칭 복사 */
     @Override
     public int copyDlvrProdMultiNm(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO) {
@@ -229,69 +180,13 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
         return procCnt;
     }
 
-    /** 배달시스템 상품 명칭 매핑2 - 엑셀 업로드 전 상품코드 유효여부 체크 */
-    @Override
-    public int chkDlvrProdMulti(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO) {
-
-        // 소속구분 설정
-        dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-        } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
-        }
-
-        // 상품코드 array 값 세팅
-        dlvrProdMultiVO.setArrProdCdCol(dlvrProdMultiVO.getProdCdCol().split(","));
-
-        return dlvrProdMultiMapper.chkDlvrProdMulti(dlvrProdMultiVO);
-    }
-
     /** 배달시스템 상품 명칭 매핑2 - 데이터 임시 저장 */
     @Override
-    public int getDlvrProdCdSaveInsert(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO) {
+    public int getDlvrProdMultiTempInsert(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
         String currentDt = currentDateTimeString();
         int i = 1;
-
-        for(DlvrProdMultiVO dlvrProdMultiVO : dlvrProdMultiVOs) {
-
-            dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-                dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-            } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-                dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
-            }
-
-            dlvrProdMultiVO.setRegDt(currentDt);
-            dlvrProdMultiVO.setRegId(sessionInfoVO.getUserId());
-            dlvrProdMultiVO.setModDt(currentDt);
-            dlvrProdMultiVO.setModId(sessionInfoVO.getUserId());
-            dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
-
-            // 임시테이블 저장 전
-            if(i == 1) {
-                result = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveDeleteAll(dlvrProdMultiVO);
-            }
-
-            if(dlvrProdMultiVO.getDlvrProdNm() != null && dlvrProdMultiVO.getDlvrProdNm() != "") {
-                result = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveInsert(dlvrProdMultiVO);
-            }
-
-            i++;
-        }
-
-        return result;
-    }
-
-    /** 배달시스템 상품 명칭 매핑2 - 배달상품명칭 중복 체크 */
-    @Override
-    public String getDlvrProdMultiNmMappingChk(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO) {
-        int procCnt = 0;
-        int i = 1;
-        String dlvrProdMultiNm = "";
-        String currentDt = currentDateTimeString();
 
         for(DlvrProdMultiVO dlvrProdMultiVO : dlvrProdMultiVOs) {
 
@@ -309,118 +204,121 @@ public class DlvrProdMultiServiceImpl implements DlvrProdMultiService {
 
             // 임시테이블 저장 전
             if(i == 1) {
-                // 임시테이블 삭제
-                procCnt = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveDeleteAll(dlvrProdMultiVO);
+                result = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveDeleteAll(dlvrProdMultiVO);
             }
-
-            if( dlvrProdMultiVO.getStatus() == GridDataFg.UPDATE ){
-                procCnt = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveInsert(dlvrProdMultiVO);
-            }else {
-                // 임시테이블 저장
-                if (dlvrProdMultiVO.getDlvrProdNm() != null && dlvrProdMultiVO.getDlvrProdNm() != "") {
-                    procCnt = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveInsert(dlvrProdMultiVO);
-                }
-            }
-
-
-            // 임시테이블 저장 끝
-            if(i == dlvrProdMultiVOs.length) {
-                // 명칭 중복 체크
-                dlvrProdMultiNm = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChk(dlvrProdMultiVO);
-            }
+                result = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChkSaveInsert(dlvrProdMultiVO);
 
             i++;
         }
 
+        return result;
+    }
+
+    /** 배달시스템 상품 명칭 매핑2 - 엑셀 업로드 전 상품코드 유효여부 체크 */
+    @Override
+    public int chkDlvrProdMulti(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+        } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
+
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
+
+        return dlvrProdMultiMapper.chkDlvrProdMulti(dlvrProdMultiVO);
+    }
+
+
+
+    /** 배달시스템 상품 명칭 매핑2 - 배달상품명칭 중복 체크 */
+    @Override
+    public String getDlvrProdMultiNmMappingChk(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String dlvrProdMultiNm = "";
+        String currentDt = currentDateTimeString();
+
+
+        dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dlvrProdMultiVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        dlvrProdMultiVO.setRegDt(currentDt);
+        dlvrProdMultiVO.setRegId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setModDt(currentDt);
+        dlvrProdMultiVO.setModId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
+
+        // 명칭 중복 체크
+        dlvrProdMultiNm = dlvrProdMultiMapper.getDlvrProdMultiNmMappingChk(dlvrProdMultiVO);
+
         return dlvrProdMultiNm;
     }
 
-    /** 배달시스템 상품 명칭 매핑2 - 입력값 확인 */
+    /** 배달시스템 상품 명칭 매핑2 - 배민 입력 확인 */
     @Override
-    public int getChkProdCdChk(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO) {
+    public int getProdCdNullChk(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
 
         // 소속구분 설정
         dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-         if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
         }
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
 
-        String[] str = dlvrProdMultiVO.getProdCdCol().split(",");
-        int result = 1;
-
-        if(dlvrProdMultiVO.getMappFg() != null &&
-                (dlvrProdMultiVO.getMappFg().equals("I") || dlvrProdMultiVO.getMappFg().equals("S"))) {
-
-            // 상품코드 array 값 세팅
-            for(int i=0; i<str.length; i++) {
-                dlvrProdMultiVO.setProdCd(str[i]);
-                dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
-                dlvrProdMultiMapper.getChkProdCdInsert(dlvrProdMultiVO);
+        // D = 매핑값 적용 I = 매핑값 추가 S = 화면 저장
+        if(dlvrProdMultiVO.getMappFg() != null){
+            if(dlvrProdMultiVO.getMappFg().equals("D")){
+                result = dlvrProdMultiMapper.getProdApplyChk(dlvrProdMultiVO);
+            }else if(dlvrProdMultiVO.getMappFg().equals("I")){
+                result = dlvrProdMultiMapper.getProdAddChk(dlvrProdMultiVO);
+            }else if(dlvrProdMultiVO.getMappFg().equals("S")){
+                result = dlvrProdMultiMapper.getProdSaveChk(dlvrProdMultiVO);
             }
         }
 
-        for(int i=0; i< str.length; i++){
-            if(str[i] != null && str[i] != "") {
-                dlvrProdMultiVO.setProdCd(str[i]);
-                result = dlvrProdMultiMapper.getChkProdCdChk(dlvrProdMultiVO);
-            }
-            if (result == 0) {
-                return result;
-            }
-        }
         return result;
     }
 
-    /** 배달시스템 상품 명칭 매핑2 - 엑셀업로드(기존값 삭제) */
+    /** 배달시스템 상품 명칭 매핑2 - 상품명칭저장 */
     @Override
-    public int excelDeleteDlvrProdNm(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO) {
-
-        int result = 0;
-
-        for ( DlvrProdMultiVO dlvrProdMultiVO : dlvrProdMultiVOs ) {
-
-            dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-                dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-            } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-                dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
-            }
-
-            if (dlvrProdMultiVO.getMappFg() != null && dlvrProdMultiVO.getMappFg().equals("D")) {
-                result = dlvrProdMultiMapper.excelDeleteDlvrProdNm(dlvrProdMultiVO);
-            }
-
-        }
-        return result;
-    }
-
-    /** 배달시스템 상품 명칭 매핑2 - 엑셀업로드(저장) */
-    @Override
-    public int excelUploadsave(DlvrProdMultiVO[] dlvrProdMultiVOs, SessionInfoVO sessionInfoVO) {
+    public int saveDlvrProdMultiNm(DlvrProdMultiVO dlvrProdMultiVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        for ( DlvrProdMultiVO dlvrProdMultiVO : dlvrProdMultiVOs ) {
+        dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
+        } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
+        }
 
-            dlvrProdMultiVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-                dlvrProdMultiVO.setHqOfficeCd(sessionInfoVO.getOrgnCd());
-            } else if ( sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-                dlvrProdMultiVO.setStoreCd(sessionInfoVO.getOrgnCd());
-            }
-            dlvrProdMultiVO.setRegDt(currentDt);
-            dlvrProdMultiVO.setRegId(sessionInfoVO.getUserId());
-            dlvrProdMultiVO.setModDt(currentDt);
-            dlvrProdMultiVO.setModId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setRegDt(currentDt);
+        dlvrProdMultiVO.setRegId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setModDt(currentDt);
+        dlvrProdMultiVO.setModId(sessionInfoVO.getUserId());
+        dlvrProdMultiVO.setSessionId(sessionInfoVO.getUserId());
 
-            if(dlvrProdMultiVO.getProdCd() != null && dlvrProdMultiVO.getProdCd() != ""
-                    && dlvrProdMultiVO.getDlvrProdNm() !=null && dlvrProdMultiVO.getDlvrProdNm() != "") {
-                if (dlvrProdMultiVO.getMappFg() != null ) {
-                    result = dlvrProdMultiMapper.excelInsertDlvrProdNm(dlvrProdMultiVO);
-                }
+        // D = 매핑값 적용 I = 매핑값 추가 S = 화면 저장
+        if(dlvrProdMultiVO.getMappFg() != null){
+            if(dlvrProdMultiVO.getMappFg().equals("D") || dlvrProdMultiVO.getMappFg().equals("S")){
+                dlvrProdMultiMapper.excelDeleteDlvrProdNm(dlvrProdMultiVO);
+
+                result = dlvrProdMultiMapper.excelInsertDlvrProdNm(dlvrProdMultiVO);
+            }else if (dlvrProdMultiVO.getMappFg().equals("I")){
+                result = dlvrProdMultiMapper.excelInsertDlvrProdAdd(dlvrProdMultiVO);
             }
         }
+
+
         return result;
     }
 }

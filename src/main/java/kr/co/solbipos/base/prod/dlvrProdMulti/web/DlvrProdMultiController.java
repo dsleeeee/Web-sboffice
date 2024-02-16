@@ -23,7 +23,7 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : DlvrProdMultiController.java
- * @Description : 기초관리 - 상품관리 - 배달시스템 상품 명칭 맵핑2
+ * @Description : 기초관리 - 상품관리 - 배달시스템 상품 명칭 매핑2
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -119,27 +119,6 @@ public class DlvrProdMultiController {
     }
 
     /**
-     * 배달시스템 상품 명칭 매핑2 - 배달상품명칭 저장
-     *
-     * @param dlvrProdMultiVOs
-     * @param request
-     * @author 김유승
-     * @since 2024.01.26
-     * @return
-     */
-    @RequestMapping(value = "/dlvrProdMulti/save.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result save(@RequestBody DlvrProdMultiVO[] dlvrProdMultiVOs, HttpServletRequest request,
-                       HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int regCnt = dlvrProdMultiService.saveDlvrProdMultiNm(dlvrProdMultiVOs, sessionInfoVO);
-
-        return returnListJson(Status.OK, regCnt);
-    }
-
-    /**
      * 배달시스템 상품 명칭 매핑2 - 배달상품명칭 복사
      *
      * @param dlvrProdMultiVO
@@ -207,6 +186,27 @@ public class DlvrProdMultiController {
     }
 
     /**
+     * 배달시스템 상품 명칭 매핑2 - 데이터 임시 저장
+     *
+     * @param dlvrProdMultiVOs
+     * @param request
+     * @author 김유승
+     * @since 2024.02.02
+     * @return
+     */
+    @RequestMapping(value = "/dlvrProdMulti/getDlvrProdMultiTempInsert.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrProdMultiTempInsert(@RequestBody DlvrProdMultiVO[] dlvrProdMultiVOs, HttpServletRequest request,
+                                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dlvrProdMultiService.getDlvrProdMultiTempInsert(dlvrProdMultiVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
      * 배달시스템 상품 명칭 매핑2 - 상품명칭 엑셀 업로드 전 상품코드 유효여부 체크
      *
      * @param dlvrProdMultiVO
@@ -227,30 +227,9 @@ public class DlvrProdMultiController {
     }
 
     /**
-     * 배달시스템 상품 명칭 매핑2 - 데이터 임시 저장
-     *
-     * @param dlvrProdMultiVOs
-     * @param request
-     * @author 김유승
-     * @since 2024.02.02
-     * @return
-     */
-    @RequestMapping(value = "/dlvrProdMulti/getDlvrProdCdSaveInsert.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getDlvrProdNmMappingChk(@RequestBody DlvrProdMultiVO[] dlvrProdMultiVOs, HttpServletRequest request,
-                                          HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = dlvrProdMultiService.getDlvrProdCdSaveInsert(dlvrProdMultiVOs, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
-    }
-
-    /**
      * 배달시스템 상품 명칭 매핑2 - 배달상품명칭 중복 체크
      *
-     * @param dlvrProdMultiVOs
+     * @param dlvrProdMultiVO
      * @param request
      * @param response
      * @param model
@@ -260,18 +239,18 @@ public class DlvrProdMultiController {
      */
     @RequestMapping(value = "/dlvrProdMulti/getDlvrProdMultiNmMappingChk.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getDlvrProdMultiNmMappingChk(@RequestBody DlvrProdMultiVO[] dlvrProdMultiVOs, HttpServletRequest request,
+    public Result getDlvrProdMultiNmMappingChk(@RequestBody DlvrProdMultiVO dlvrProdMultiVO, HttpServletRequest request,
                                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String result = dlvrProdMultiService.getDlvrProdMultiNmMappingChk(dlvrProdMultiVOs, sessionInfoVO);
+        String result = dlvrProdMultiService.getDlvrProdMultiNmMappingChk(dlvrProdMultiVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /**
-     * 배달시스템 상품 명칭 매핑2 - 입력값 확인
+     * 배달시스템 상품 명칭 매핑2 - 배민 입력 확인
      *
      * @param dlvrProdMultiVO
      * @param request
@@ -279,55 +258,33 @@ public class DlvrProdMultiController {
      * @since 2024.02.02
      * @return
      */
-    @RequestMapping(value = "/dlvrProdMulti/getChkProdCdChk.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/dlvrProdMulti/getProdCdNullChk.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getChkProdCdChk(DlvrProdMultiVO dlvrProdMultiVO, HttpServletRequest request) {
+    public Result getProdCdNullChk(DlvrProdMultiVO dlvrProdMultiVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int getCnt = dlvrProdMultiService.getChkProdCdChk(dlvrProdMultiVO, sessionInfoVO);
+        int getCnt = dlvrProdMultiService.getProdCdNullChk(dlvrProdMultiVO, sessionInfoVO);
 
         return returnJson(Status.OK, getCnt);
     }
 
     /**
-     * 배달시스템 상품 명칭 매핑2 - 엑셀 업로드(기존값 삭제)
+     * 배달시스템 상품 명칭 매핑2 - 상품명칭저장
      *
-     * @param dlvrProdMultiVOs
+     * @param dlvrProdMultiVO
      * @param request
      * @author 김유승
      * @since 2024.02.05
      * @return
      */
-    @RequestMapping(value = "/dlvrProdMulti/excelDeleteDlvrProdNm.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/dlvrProdMulti/save.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result excelDeleteDlvrProdNm(@RequestBody DlvrProdMultiVO[] dlvrProdMultiVOs, HttpServletRequest request,
-                                  HttpServletResponse response, Model model) {
+    public Result save(@RequestBody DlvrProdMultiVO dlvrProdMultiVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int regCnt = dlvrProdMultiService.excelDeleteDlvrProdNm(dlvrProdMultiVOs, sessionInfoVO);
-
-        return returnListJson(Status.OK, regCnt);
-    }
-
-    /**
-     * 배달시스템 상품 명칭 매핑2 - 엑셀업로드(저장)
-     *
-     * @param dlvrProdMultiVOs
-     * @param request
-     * @author 김유승
-     * @since 2024.02.05
-     * @return
-     */
-    @RequestMapping(value = "/dlvrProdMulti/excelUploadsave.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result excelUploadsave(@RequestBody DlvrProdMultiVO[] dlvrProdMultiVOs, HttpServletRequest request,
-                                  HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int regCnt = dlvrProdMultiService.excelUploadsave(dlvrProdMultiVOs, sessionInfoVO);
+        int regCnt = dlvrProdMultiService.saveDlvrProdMultiNm(dlvrProdMultiVO, sessionInfoVO);
 
         return returnListJson(Status.OK, regCnt);
     }
