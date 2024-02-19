@@ -145,15 +145,15 @@
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
         <%-- 계정복구 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="accountStatChg('recovery')"><s:message code="accountManage.account"/><s:message code="accountManage.recovery"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="accountStatChg('recovery')" style="display:none;"><s:message code="accountManage.account"/><s:message code="accountManage.recovery"/></button>
         <%-- 계정삭제 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="accountStatChg('delete')"><s:message code="accountManage.account"/><s:message code="accountManage.delete"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="accountStatChg('delete')" style="display:none;"><s:message code="accountManage.account"/><s:message code="accountManage.delete"/></button>
         <%-- 계정사용허용 --%>
         <button class="btn_skyblue ml5 fr" ng-click="accountStatChg('allowedUse')"><s:message code="accountManage.account"/><s:message code="accountManage.allowedUse"/></button>
         <%-- 계정사용중지 --%>
         <button class="btn_skyblue ml5 fr" ng-click="accountStatChg('stopUsing')"><s:message code="accountManage.account"/><s:message code="accountManage.stopUsing"/></button>
         <%-- 계정휴면 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="accountStatChg('dormancy')"><s:message code="accountManage.account"/><s:message code="accountManage.dormancy"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="accountStatChg('dormancy')" style="display:none;"><s:message code="accountManage.account"/><s:message code="accountManage.dormancy"/></button>
     </div>
 
     <%-- 그리드 --%>
