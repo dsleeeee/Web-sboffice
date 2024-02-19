@@ -9,10 +9,10 @@
  *
  * **************************************************************/
 
-$(".btn_close").click(function() {
-    $("#fullDimmedLastLoginHistPop").hide();
-    $("#layerLastLoginHistPop").hide();
-});
+// $(".btn_close").click(function() {
+//     $("#fullDimmedLastLoginHistPop").hide();
+//     $("#layerLastLoginHistPop").hide();
+// });
 
 /**
  *  최근접속이력 그리드 생성
@@ -40,5 +40,11 @@ app.controller('lastLoginHistCtrl', ['$scope', '$http', function ($scope, $http)
         $scope._inquirySub("/user/getLastLoginHistList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
+
+    // 닫기
+    $scope.close = function(){
+        $("#fullDimmedLastLoginHistPop").hide();
+        $("#layerLastLoginHistPop").hide();
+    };
 
 }]);

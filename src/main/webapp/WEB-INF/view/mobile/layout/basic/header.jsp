@@ -62,6 +62,10 @@
 <c:import url="/WEB-INF/view/mobile/application/layer/mobileTermsOfUsePop.jsp">
 </c:import>
 
+<%-- 6개월이상 비밀번호 미수정시 레이어 팝업 가져오기 --%>
+<c:import url="/WEB-INF/view/mobile/application/layer/mobileLastPwdChgDtChkPop.jsp">
+</c:import>
+
 <%-- 최근접속이력 레이어 팝업 가져오기 --%>
 <c:import url="/WEB-INF/view/mobile/application/layer/mobileLastLoginHistPop.jsp">
 </c:import>
