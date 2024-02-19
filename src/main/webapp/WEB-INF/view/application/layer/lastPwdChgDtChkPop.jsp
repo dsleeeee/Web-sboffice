@@ -12,7 +12,7 @@
             <div class="con">
                 <s:message code="login.pw.chg.lastPwd"/>
             </div>
-            <a href="#" class="btn_close"></a>
+            <%--<a href="#" class="btn_close"></a>--%>
             <div class="btnSet">
                 <span><a href="#" class="btn_blue" id="btnPwdChg"><s:message code="login.pw.chg"/></a></span>
                 <span><a href="#" class="btn_blue" id="btn_close"><s:message code="login.pw.chg.next"/></a></span>
