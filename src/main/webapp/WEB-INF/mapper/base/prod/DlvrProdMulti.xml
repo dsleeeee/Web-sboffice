@@ -597,6 +597,7 @@
                         WHERE   1=1
                         AND     A.HQ_OFFICE_CD = #{hqOfficeCd}
                         AND     A.DLVR_PROD_NM IS NOT NULL
+                        <if test='mappFg != null and mappFg != "I"'>
                         -- 수정할 데이터는 COUNT에서 빼야되서 제거
                             AND     <if test='mappFg != null and mappFg == "S"'>
                                         A.SEQ || '/' ||
@@ -613,6 +614,7 @@
                                                                                 AND     B.PROD_CD       = A.PROD_CD
                                                                                 AND     B.DLVR_NAME_CD  = A.DLVR_NAME_CD
                                                                             )
+                        </if>
                     )
                 GROUP
                 BY      DLVR_NAME_CD
@@ -645,6 +647,7 @@
                     WHERE   1=1
                     AND     A.STORE_CD = #{storeCd}
                     AND     A.DLVR_PROD_NM IS NOT NULL
+                    <if test='mappFg != null and mappFg != "I"'>
                         -- 수정할 데이터는 COUNT에서 빼야되서 제거
                         AND     <if test='mappFg != null and mappFg == "S"'>
                                     A.SEQ || '/' ||
@@ -662,11 +665,12 @@
                                                                             AND     B.PROD_CD       = A.PROD_CD
                                                                             AND     B.DLVR_NAME_CD  = A.DLVR_NAME_CD
                                                                         )
+                    </if>
                     )
                     GROUP
                     BY      DLVR_NAME_CD
                     ,       DLVR_PROD_NM
-                    HAVING COUNT(*) > 1
+                    HAVING  COUNT(*) > 1
                 )
             </when>
         </choose>
@@ -1083,9 +1087,11 @@
                             AND     C.DLVR_PROD_NM      IS NOT NULL
                             AND     (
                                         C.HQ_OFFICE_CD
+                                    ,   C.PROD_CD
                                     ,   C.DLVR_NAME_CD
                                     ,   C.DLVR_PROD_NM) NOT IN (
                                                                     SELECT  HQ_OFFICE_CD
+                                                                    ,       PROD_CD
                                                                     ,       DLVR_NAME_CD
                                                                     ,       DLVR_PROD_NM
                                                                     FROM    TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
@@ -1153,9 +1159,11 @@
                             AND     C.DLVR_PROD_NM      IS NOT NULL
                             AND     (
                                         C.STORE_CD
+                                    ,   C.PROD_CD
                                     ,   C.DLVR_NAME_CD
                                     ,   C.DLVR_PROD_NM) NOT IN (
                                                                     SELECT  STORE_CD
+                                                                    ,       PROD_CD
                                                                     ,       DLVR_NAME_CD
                                                                     ,       DLVR_PROD_NM
                                                                     FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
