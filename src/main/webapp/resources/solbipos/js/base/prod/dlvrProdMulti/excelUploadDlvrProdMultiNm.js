@@ -148,6 +148,11 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
                     if(colBinding === "prodCd"){
                         if(cellValue !== null && cellValue !== "") {
                             vProdCd = cellValue.toString().replaceAll("'", "").replaceAll(" ", "");
+                            if(vProdCd.length >13){
+                                $scope._popMsg(messages["dlvrProdMulti.not.match.prodCd"]);
+                                $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                                return false;
+                            }
                         }else{ continue; }
                     }else{
                         if(vProdCd !== null && vProdCd !== "") {
