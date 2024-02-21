@@ -121,7 +121,11 @@
         the.MOMS_COMMERCIAL,
         the.MOMS_SHOP_TYPE,
         the.MOMS_STORE_MANAGE_TYPE,
-        the.MOMS_STORE_FG_01
+        the.MOMS_STORE_FG_01,
+        the.MOMS_STORE_FG_02,
+        the.MOMS_STORE_FG_03,
+        the.MOMS_STORE_FG_04,
+        the.MOMS_STORE_FG_05
         FROM TB_HQ_EMPLOYEE the,
         (
             SELECT
@@ -199,7 +203,11 @@
             MOMS_COMMERCIAL,
             MOMS_SHOP_TYPE,
             MOMS_STORE_MANAGE_TYPE,
-            MOMS_STORE_FG_01
+            MOMS_STORE_FG_01,
+            MOMS_STORE_FG_02,
+            MOMS_STORE_FG_03,
+            MOMS_STORE_FG_04,
+            MOMS_STORE_FG_05
         )
         VALUES
         (
@@ -226,7 +234,11 @@
             #{momsCommercial},
             #{momsShopType},
             #{momsStoreManageType},
-            #{momsStoreFg01}
+            #{momsStoreFg01},
+            #{momsStoreFg02},
+            #{momsStoreFg03},
+            #{momsStoreFg04},
+            #{momsStoreFg05}
         )
     </insert>
 
@@ -289,27 +301,31 @@
     <update id="updateHqEmpInfo" parameterType="hqEmpVO">
         /* USE : HqEmpMapper.updateHqEmpInfo */
         UPDATE TB_HQ_EMPLOYEE the
-           SET the.EMP_NM = #{empNm},
-               the.WEB_USE_YN = #{webUseYn},
-               the.USER_ID = #{userId},
-               the.MP_NO = #{mpNo},
-               the.SERVICE_FG = #{serviceFg},
-               the.SMS_RECV_YN = #{smsRecvYn},
-               the.USE_YN = #{useYn},
-               the.MAIN_SALE_FG = #{mainSaleFg},
-               the.MOD_DT = #{modDt},
-               the.MOD_ID = #{modId},
-               the.VENDR_CD = #{vendrCd},
-               the.BRANCH_CD = #{branchCd},
-               the.MOMS_TEAM = #{momsTeam},
-               the.MOMS_AC_SHOP = #{momsAcShop},
-               the.MOMS_AREA_FG = #{momsAreaFg},
-               the.MOMS_COMMERCIAL = #{momsCommercial},
-               the.MOMS_SHOP_TYPE = #{momsShopType},
-               the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
-               the.MOMS_STORE_FG_01 = #{momsStoreFg01}
-         WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND the.EMP_NO = #{empNo}
+            SET the.EMP_NM = #{empNm},
+                the.WEB_USE_YN = #{webUseYn},
+                the.USER_ID = #{userId},
+                the.MP_NO = #{mpNo},
+                the.SERVICE_FG = #{serviceFg},
+                the.SMS_RECV_YN = #{smsRecvYn},
+                the.USE_YN = #{useYn},
+                the.MAIN_SALE_FG = #{mainSaleFg},
+                the.MOD_DT = #{modDt},
+                the.MOD_ID = #{modId},
+                the.VENDR_CD = #{vendrCd},
+                the.BRANCH_CD = #{branchCd},
+                the.MOMS_TEAM = #{momsTeam},
+                the.MOMS_AC_SHOP = #{momsAcShop},
+                the.MOMS_AREA_FG = #{momsAreaFg},
+                the.MOMS_COMMERCIAL = #{momsCommercial},
+                the.MOMS_SHOP_TYPE = #{momsShopType},
+                the.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
+                the.MOMS_STORE_FG_01 = #{momsStoreFg01},
+                the.MOMS_STORE_FG_02 = #{momsStoreFg02},
+                the.MOMS_STORE_FG_03 = #{momsStoreFg03},
+                the.MOMS_STORE_FG_04 = #{momsStoreFg04},
+                the.MOMS_STORE_FG_05 = #{momsStoreFg05}
+            WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND the.EMP_NO = #{empNo}
     </update>
 
     <!-- 본사 웹사용자 정보 수정 -->

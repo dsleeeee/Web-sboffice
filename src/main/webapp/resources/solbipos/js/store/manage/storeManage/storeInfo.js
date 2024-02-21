@@ -33,6 +33,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
   $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
   $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
+  $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
+  $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
+  $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
+  $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
 
   // 관리자의 경우, 모든 본사(데모까지) 나오고, 총판의 경우, 자기가 관리하는 본사만 나오도록
   if(orgnFg === "AGENCY") {
@@ -327,6 +331,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
     $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
     $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
+    $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
   };
 
   /*********************************************************
@@ -358,6 +366,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       var vMomsStoreManageType = nvl(storeDetailInfo.momsStoreManageType, "");
       var vHqBrandCd = nvl(storeDetailInfo.hqBrandCd, "");
       var vMomsStoreFg01 = nvl(storeDetailInfo.momsStoreFg01, "");
+      var vMomsStoreFg02 = nvl(storeDetailInfo.momsStoreFg02, "");
+      var vMomsStoreFg03 = nvl(storeDetailInfo.momsStoreFg03, "");
+      var vMomsStoreFg04 = nvl(storeDetailInfo.momsStoreFg04, "");
+      var vMomsStoreFg05 = nvl(storeDetailInfo.momsStoreFg05, "");
 
       console.log('storeDetailInfo',storeDetailInfo);
 
@@ -445,7 +457,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.hqNmcodeComboList("154");
         $scope.hqNmcodeComboList("155");
         $scope.hqNmcodeComboList("156");
-        $scope.hqNmcodeComboList("167");
+        $scope.hqNmcodeComboList("167"); // momsStoreFg01
+        $scope.hqNmcodeComboList("169"); // momsStoreFg02
+        $scope.hqNmcodeComboList("170"); // momsStoreFg03
+        $scope.hqNmcodeComboList("171"); // momsStoreFg04
+        $scope.hqNmcodeComboList("172"); // momsStoreFg05
         // [1250 맘스터치] 브랜드 콤보박스 조회
         $scope.hqBrandCdComboList();
 
@@ -469,6 +485,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           bHdHqBrandCd = vHqBrandCd;
         }
         $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
+        $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
+        $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
+        $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
+        $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
 
         $("#trMomsEnvst").css("display", "none");
         $("#divMomsEnvst").css("display", "none");
@@ -488,10 +508,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.srchMomsStoreManageTypeCombo.selectedValue = vMomsStoreManageType;
           $scope.srchHqBrandCdCombo.selectedValue = vHqBrandCd;
           $scope.srchMomsStoreFg01Combo.selectedValue = vMomsStoreFg01;
+          $scope.srchMomsStoreFg02Combo.selectedValue = vMomsStoreFg02;
+          $scope.srchMomsStoreFg03Combo.selectedValue = vMomsStoreFg03;
+          $scope.srchMomsStoreFg04Combo.selectedValue = vMomsStoreFg04;
+          $scope.srchMomsStoreFg05Combo.selectedValue = vMomsStoreFg05;
         } else if($("#envst1114").val() === "1") {
           $scope.srchHqBrandCdCombo.selectedValue = vHqBrandCd;
         }
-      }, 500);
+      }, 1000);
 
     });
 
@@ -1045,7 +1069,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.hqNmcodeComboList("154");
             $scope.hqNmcodeComboList("155");
             $scope.hqNmcodeComboList("156");
-            $scope.hqNmcodeComboList("167");
+            $scope.hqNmcodeComboList("167"); // momsStoreFg01
+            $scope.hqNmcodeComboList("169"); // momsStoreFg02
+            $scope.hqNmcodeComboList("170"); // momsStoreFg03
+            $scope.hqNmcodeComboList("171"); // momsStoreFg04
+            $scope.hqNmcodeComboList("172"); // momsStoreFg05
             // [1250 맘스터치] 브랜드 콤보박스 조회
             $scope.hqBrandCdComboList();
 
@@ -1059,6 +1087,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
             $scope.srchHqBrandCdCombo.selectedIndex = 0;
             $scope.srchMomsStoreFg01Combo.selectedIndex = 0;
+            $scope.srchMomsStoreFg02Combo.selectedIndex = 0;
+            $scope.srchMomsStoreFg03Combo.selectedIndex = 0;
+            $scope.srchMomsStoreFg04Combo.selectedIndex = 0;
+            $scope.srchMomsStoreFg05Combo.selectedIndex = 0;
           } else if($("#envst1114").val() === "1") {
             // [1250 맘스터치] 브랜드 콤보박스 조회
             $scope.hqBrandCdComboList();
@@ -1075,6 +1107,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
             bHdHqBrandCd = "";
             $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
+            $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
+            $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
+            $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
+            $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
 
             $("#trMomsEnvst").css("display", "none");
             $("#divMomsEnvst").css("display", "none");
@@ -1518,7 +1554,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqNmcodeComboList("154");
       $scope.hqNmcodeComboList("155");
       $scope.hqNmcodeComboList("156");
-      $scope.hqNmcodeComboList("167");
+      $scope.hqNmcodeComboList("167"); // momsStoreFg01
+      $scope.hqNmcodeComboList("169"); // momsStoreFg02
+      $scope.hqNmcodeComboList("170"); // momsStoreFg03
+      $scope.hqNmcodeComboList("171"); // momsStoreFg04
+      $scope.hqNmcodeComboList("172"); // momsStoreFg05
       // [1250 맘스터치] 브랜드 콤보박스 조회
       $scope.hqBrandCdComboList();
 
@@ -1532,6 +1572,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
       $scope.srchHqBrandCdCombo.selectedIndex = 0;
       $scope.srchMomsStoreFg01Combo.selectedIndex = 0;
+      $scope.srchMomsStoreFg02Combo.selectedIndex = 0;
+      $scope.srchMomsStoreFg03Combo.selectedIndex = 0;
+      $scope.srchMomsStoreFg04Combo.selectedIndex = 0;
+      $scope.srchMomsStoreFg05Combo.selectedIndex = 0;
     } else if($("#envst1114").val() === "1") {
       // [1250 맘스터치] 브랜드 콤보박스 조회
       $scope.hqBrandCdComboList();
@@ -1548,7 +1592,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._setComboData("hqBrandCdCombo", [{"name": "기본브랜드", "value": "0000000"}]); // 브랜드
       bHdHqBrandCd = "";
       $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
-
+      $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
+      $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
+      $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
+      $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
       $("#trMomsEnvst").css("display", "none");
       $("#divMomsEnvst").css("display", "none");
     }
@@ -1887,6 +1934,18 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         } else if(nmcodeGrpCd === "167") {
           $scope._setComboData("momsStoreFg01Combo", dataList); // 추가정보-매장그룹
           dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "169") {
+            $scope._setComboData("momsStoreFg02Combo", dataList); // 추가정보-매장그룹2
+            dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "170") {
+            $scope._setComboData("momsStoreFg03Combo", dataList); // 추가정보-매장그룹3
+            dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "171") {
+            $scope._setComboData("momsStoreFg04Combo", dataList); // 추가정보-매장그룹4
+            dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "172") {
+            $scope._setComboData("momsStoreFg05Combo", dataList); // 추가정보-매장그룹5
+            dataList.unshift({name: "선택", value: ""});
         }
 
       } else {
@@ -1904,6 +1963,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
         } else if(nmcodeGrpCd === "167") {
           $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
+        } else if(nmcodeGrpCd === "169") {
+            $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
+        } else if(nmcodeGrpCd === "170") {
+            $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
+        } else if(nmcodeGrpCd === "171") {
+            $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
+        } else if(nmcodeGrpCd === "172") {
+            $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
         }
       }
     });

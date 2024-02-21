@@ -425,6 +425,74 @@
                     </wj-combo-box>
                   </div>
                 </td>
+                <%-- 매장그룹2 --%>
+                <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                            id="srchMomsStoreFg02Combo"
+                            ng-model="hqEmpRegistInfo.momsStoreFg02"
+                            items-source="_getComboData('momsStoreFg02Combo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchMomsStoreFg02Combo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <%-- 매장그룹3 --%>
+                <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                            id="srchMomsStoreFg03Combo"
+                            ng-model="hqEmpRegistInfo.momsStoreFg03"
+                            items-source="_getComboData('momsStoreFg03Combo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchMomsStoreFg03Combo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                <%-- 매장그룹4 --%>
+                <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                            id="srchMomsStoreFg04Combo"
+                            ng-model="hqEmpRegistInfo.momsStoreFg04"
+                            items-source="_getComboData('momsStoreFg04Combo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchMomsStoreFg04Combo">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <%-- 매장그룹5 --%>
+                <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                            id="srchMomsStoreFg05Combo"
+                            ng-model="hqEmpRegistInfo.momsStoreFg05"
+                            items-source="_getComboData('momsStoreFg05Combo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="srchMomsStoreFg05Combo">
+                    </wj-combo-box>
+                  </div>
+                </td>
                 <td></td>
                 <td></td>
               </tr>
@@ -447,7 +515,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpSave.js?ver=20240221.01" charset="utf-8"></script>
 
 <%-- 관리브랜드 조회 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/searchUserHqBrand.jsp">
