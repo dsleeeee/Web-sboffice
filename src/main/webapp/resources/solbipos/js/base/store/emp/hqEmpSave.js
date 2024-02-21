@@ -54,6 +54,10 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 추가정보-점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 추가정보-매장관리타입
   $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 추가정보-매장그룹
+  $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 추가정보-매장그룹2
+  $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 추가정보-매장그룹3
+  $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 추가정보-매장그룹4
+  $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 추가정보-매장그룹5
 
   // 선택 사원 (사원 수정시)
   $scope.selectedHqEmp;
@@ -104,6 +108,10 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.srchMomsShopTypeCombo.selectedIndex = 0;
         $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
         $scope.srchMomsStoreFg01Combo.selectedIndex = 0;
+        $scope.srchMomsStoreFg02Combo.selectedIndex = 0;
+        $scope.srchMomsStoreFg03Combo.selectedIndex = 0;
+        $scope.srchMomsStoreFg04Combo.selectedIndex = 0;
+        $scope.srchMomsStoreFg05Combo.selectedIndex = 0;
       }
 
     } else {
@@ -133,6 +141,10 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmpRegistInfo.momsShopType = nvl(response.data.data.momsShopType, "");
       $scope.hqEmpRegistInfo.momsStoreManageType = nvl(response.data.data.momsStoreManageType, "");
       $scope.hqEmpRegistInfo.momsStoreFg01 = nvl(response.data.data.momsStoreFg01, "");
+      $scope.hqEmpRegistInfo.momsStoreFg02 = nvl(response.data.data.momsStoreFg02, "");
+      $scope.hqEmpRegistInfo.momsStoreFg03 = nvl(response.data.data.momsStoreFg03, "");
+      $scope.hqEmpRegistInfo.momsStoreFg04 = nvl(response.data.data.momsStoreFg04, "");
+      $scope.hqEmpRegistInfo.momsStoreFg05 = nvl(response.data.data.momsStoreFg05, "");
     });
   };
 

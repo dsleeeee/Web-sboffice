@@ -39,6 +39,10 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("momsShopTypeDtlCombo", momsShopTypeComboList); // 추가정보-점포유형
   $scope._setComboData("momsStoreManageTypeDtlCombo", momsStoreManageTypeComboList); // 추가정보-매장관리타입
   $scope._setComboData("momsStoreFg01DtlCombo", momsStoreFg01ComboList); // 추가정보-매장그룹
+  $scope._setComboData("momsStoreFg02DtlCombo", momsStoreFg02ComboList); // 추가정보-매장그룹2
+  $scope._setComboData("momsStoreFg03DtlCombo", momsStoreFg03ComboList); // 추가정보-매장그룹3
+  $scope._setComboData("momsStoreFg04DtlCombo", momsStoreFg04ComboList); // 추가정보-매장그룹4
+  $scope._setComboData("momsStoreFg05DtlCombo", momsStoreFg05ComboList); // 추가정보-매장그룹5
 
   // _broadcast
   $scope.$on("hqEmpDetailCtrl", function(event, data) {
@@ -75,6 +79,10 @@ app.controller('hqEmpDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmp.momsShopType = nvl(data.momsShopType, "");
       $scope.hqEmp.momsStoreManageType = nvl(data.momsStoreManageType, "");
       $scope.hqEmp.momsStoreFg01 = nvl(data.momsStoreFg01, "");
+      $scope.hqEmp.momsStoreFg02 = nvl(data.momsStoreFg02, "");
+      $scope.hqEmp.momsStoreFg03 = nvl(data.momsStoreFg03, "");
+      $scope.hqEmp.momsStoreFg04 = nvl(data.momsStoreFg04, "");
+      $scope.hqEmp.momsStoreFg05 = nvl(data.momsStoreFg05, "");
     });
   };
 

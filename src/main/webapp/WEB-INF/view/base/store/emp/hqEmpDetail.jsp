@@ -237,6 +237,62 @@
                   </wj-combo-box>
                   {{_momsStoreFg01}}
                 </td>
+                <%-- 매장그룹2 --%>
+                <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                <td>
+                  <wj-combo-box
+                          ng-model="hqEmp.momsStoreFg02"
+                          ng-hide="true"
+                          text="_momsStoreFg02"
+                          items-source="_getComboData('momsStoreFg02DtlCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false">
+                  </wj-combo-box>
+                  {{_momsStoreFg02}}
+              </tr>
+              <tr>
+                <%-- 매장그룹3 --%>
+                <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                <td>
+                  <wj-combo-box
+                          ng-model="hqEmp.momsStoreFg03"
+                          ng-hide="true"
+                          text="_momsStoreFg03"
+                          items-source="_getComboData('momsStoreFg03DtlCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false">
+                  </wj-combo-box>
+                  {{_momsStoreFg03}}
+                  <%-- 매장그룹4 --%>
+                  <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                  <td>
+                    <wj-combo-box
+                            ng-model="hqEmp.momsStoreFg04"
+                            ng-hide="true"
+                            text="_momsStoreFg04"
+                            items-source="_getComboData('momsStoreFg04DtlCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false">
+                    </wj-combo-box>
+                    {{_momsStoreFg04}}
+              </tr>
+              <tr>
+                <%-- 매장그룹5 --%>
+                <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                <td>
+                  <wj-combo-box
+                          ng-model="hqEmp.momsStoreFg05"
+                          ng-hide="true"
+                          text="_momsStoreFg05"
+                          items-source="_getComboData('momsStoreFg05DtlCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false">
+                  </wj-combo-box>
+                  {{_momsStoreFg05}}
                 <td></td>
                 <td></td>
               </tr>
@@ -259,4 +315,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpDetail.js?ver=20240221.01" charset="utf-8"></script>

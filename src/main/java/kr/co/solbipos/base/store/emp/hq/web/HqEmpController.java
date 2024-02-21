@@ -119,6 +119,7 @@ public class HqEmpController {
             momsTeamComboListAll = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsTeamComboList", momsTeamComboListAll);
+
         // 추가정보-AC점포별
         List momsAcShopComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "152");
         String momsAcShopComboListAll = "";
@@ -133,6 +134,7 @@ public class HqEmpController {
             momsAcShopComboListAll = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsAcShopComboList", momsAcShopComboListAll);
+
         // 추가정보-지역구분
         List momsAreaFgComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "153");
         String momsAreaFgComboListAll = "";
@@ -147,6 +149,7 @@ public class HqEmpController {
             momsAreaFgComboListAll = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsAreaFgComboList", momsAreaFgComboListAll);
+
         // 추가정보-상권
         List momsCommercialComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "154");
         String momsCommercialComboListAll = "";
@@ -161,6 +164,7 @@ public class HqEmpController {
             momsCommercialComboListAll = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsCommercialComboList", momsCommercialComboListAll);
+
         // 추가정보-점포유형
         List momsShopTypeComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "155");
         String momsShopTypeComboListAll = "";
@@ -175,6 +179,7 @@ public class HqEmpController {
             momsShopTypeComboListAll = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsShopTypeComboList", momsShopTypeComboListAll);
+
         // 추가정보-매장관리타입
         List momsStoreManageTypeComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "156");
         String momsStoreManageTypeComboListAll = "";
@@ -189,6 +194,7 @@ public class HqEmpController {
             momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
+
         // 추가정보-매장그룹
         List momsStoreFg01ComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "167");
         String momsStoreFg01ComboListAll = "";
@@ -203,6 +209,66 @@ public class HqEmpController {
             momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.SELECT);
         }
         model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
+
+        // 추가정보-매장그룹2
+        List momsStoreFg02ComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "169");
+        String momsStoreFg02ComboListAll = "";
+        if (momsStoreFg02ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg02ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg02ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg02ComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsStoreFg02ComboList", momsStoreFg02ComboListAll);
+
+        // 추가정보-매장그룹3
+        List momsStoreFg03ComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "170");
+        String momsStoreFg03ComboListAll = "";
+        if (momsStoreFg03ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg03ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg03ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg03ComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsStoreFg03ComboList", momsStoreFg03ComboListAll);
+
+        // 추가정보-매장그룹4
+        List momsStoreFg04ComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "171");
+        String momsStoreFg04ComboListAll = "";
+        if (momsStoreFg04ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg04ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg04ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg04ComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsStoreFg04ComboList", momsStoreFg04ComboListAll);
+
+        // 추가정보-매장그룹5
+        List momsStoreFg05ComboList = hqEmpService.getHqNmcodeComboList(sessionInfoVO, "172");
+        String momsStoreFg05ComboListAll = "";
+        if (momsStoreFg05ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg05ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg05ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.SELECT);
+        }
+        model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboListAll);
         /** //맘스터치 */
 
         return "base/store/emp/hqEmp";
