@@ -106,6 +106,8 @@ public class MediaVO extends PageVO {
     private String orginlFileNm;
     /** 언어구분 */
     private String langFg;
+    /** 매장등록구분 */
+    private String storeSelectExceptFg;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -526,5 +528,13 @@ public class MediaVO extends PageVO {
 
     public void setLangFg(String langFg) {
         this.langFg = langFg;
+    }
+
+    public String getStoreSelectExceptFg() {
+        return storeSelectExceptFg;
+    }
+
+    public void setStoreSelectExceptFg(String storeSelectExceptFg) {
+        this.storeSelectExceptFg = storeSelectExceptFg;
     }
 }

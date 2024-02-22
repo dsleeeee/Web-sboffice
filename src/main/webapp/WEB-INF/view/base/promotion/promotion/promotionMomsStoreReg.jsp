@@ -209,4 +209,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionMomsStoreReg.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionMomsStoreReg.js?ver=20240222.02" charset="utf-8"></script>

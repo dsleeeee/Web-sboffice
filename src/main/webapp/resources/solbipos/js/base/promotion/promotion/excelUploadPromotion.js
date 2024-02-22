@@ -130,6 +130,7 @@ app.controller('excelUploadPromotionCtrl', ['$scope', '$http', '$timeout', funct
                     item["status"] = "I";
                     item["promotionCd"] = $("#hdPromotionCd").val();
                     item["verSerNo"] = $("#hdFileNo").val();
+                    item["storeSelectExceptFg"] = $("#hdStoreSelectExceptFg").val(); // 매장등록구분
                 }
             }
             jsonData.push(item);
@@ -151,7 +152,7 @@ app.controller('excelUploadPromotionCtrl', ['$scope', '$http', '$timeout', funct
         }, 10);
     };
 
-    // 데이터 저장
+    // 데이터 저장 (본사 프로모션 매장사용 등록)
     $scope.save = function (jsonData) {
         $scope.totalRows = jsonData.length;
         var params = [];
@@ -194,10 +195,8 @@ app.controller('excelUploadPromotionCtrl', ['$scope', '$http', '$timeout', funct
             if ($scope._httpStatusCheck(response, true)) {
                 if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
 
-                    //var parentScope = agrid.getScope($scope.parentCtrl);
-                    //parentScope.uploadCallBack();
-
-                    $scope._pageView('promotionSelectStoreGridCtrl', 1);
+                    // 데이터 저장(본사 프로모션 매장사용 등록 후, 본사 프로모션 배너파일 매장사용 등록)
+                    $scope.save2();
                 }
             }
         }, function errorCallback(response) {
@@ -220,6 +219,28 @@ app.controller('excelUploadPromotionCtrl', ['$scope', '$http', '$timeout', funct
             }
         });
 
+    };
+
+    // 데이터 저장(본사 프로모션 매장사용 등록 후, 본사 프로모션 배너파일 매장사용 등록)
+    $scope.save2 = function(){
+
+        if($("#hdFileNo").val() !== "" && $("#hdFileNo").val() !== null && $("#hdFileNo").val() !== undefined){ // 배너 파일이 있는 경우에만 매장 사용 등록 가능
+
+            var params = {};
+            params.promotionCd = $("#hdPromotionCd").val();
+            params.verSerNo = $("#hdFileNo").val();
+            params.storeSelectExceptFg = $("#hdStoreSelectExceptFg").val(); // 매장등록구분
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._postJSONSave.withOutPopUp("/base/promotion/promotion/excelUploadPromotionStore2.sb", params, function () {
+                // 재조회
+                $scope._pageView('promotionSelectStoreGridCtrl', 1);
+            });
+            
+        }else{
+            // 재조회
+            $scope._pageView('promotionSelectStoreGridCtrl', 1);
+        }
     };
 
     // 엑셀업로딩 팝업 열기

@@ -120,4 +120,4 @@
 <script>
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionStoreReg.js?ver=20221202.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotionStoreReg.js?ver=20240222.02" charset="utf-8"></script>

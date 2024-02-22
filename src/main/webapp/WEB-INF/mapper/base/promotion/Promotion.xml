@@ -2563,13 +2563,24 @@
                     ,       #{modId} AS MOD_ID
                     FROM    TB_MS_STORE
                     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                <if test='storeCd != null and storeCd != ""'>
-                    AND     STORE_CD = #{storeCd}
-                </if>
-                <if test='orgnFg != null and orgnFg == "HQ"'>
-                    AND     STORE_CD IN (SELECT STORE_CD FROM TB_HQ_PROMO_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
-                </if>
-
+                    <choose>
+                        <when test='storeCd != null and storeCd != ""'>
+                            AND     STORE_CD = #{storeCd}
+                        </when>
+                        <when test='storeCd == null or storeCd == ""'>
+                            <if test='orgnFg != null and (orgnFg == "HQ" or orgnFg == "H")'>
+                                <if test='storeSelectExceptFg != null and storeSelectExceptFg != ""'>
+                                    <if test='storeSelectExceptFg == "0"'>
+                                        AND     STORE_CD IN (SELECT STORE_CD FROM TB_HQ_PROMO_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+                                    </if>
+                                    <if test='storeSelectExceptFg == "1"'>
+                                        AND     STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_PROMO_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+                                    </if>
+                                </if>
+                            </if>
+                        </when>
+                        <otherwise></otherwise>
+                    </choose>
               ) B
            ON (
                         A.HQ_OFFICE_CD = B.HQ_OFFICE_CD

@@ -680,6 +680,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                 if(orgnFg === "HQ"){
                     if(info.storeSelectExceptFg !== "" && info.storeSelectExceptFg !== null) {
                         $scope.storeSelectExceptFgCombo.selectedValue = info.storeSelectExceptFg; // 매장등록구분
+                        $("#hdStoreSelectExceptFg").val(info.storeSelectExceptFg);
                     }else{
                         $scope.storeSelectExceptFgCombo.selectedIndex = 0;
                     }
@@ -926,6 +927,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                         formData.append("modId", userId);
                         formData.append("verSerNo", $("#hdFileNo").val()); // 기존 파일이 있는지 확인하여, 등록 or 수정
 
+                        if(orgnFg === "HQ") {
+                            formData.append("storeSelectExceptFg", params.storeSelectExceptFg); // 매장등록구분
+                        }
+
                         $.ajax({
                             url: "/base/promotion/promotion/savePromotionBanner.sb",
                             type: "POST",
@@ -987,6 +992,10 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
                             params3.sunYn = params.sunYn;
                             params3.promotionCd = $("#hdPromotionCd").val();
                             params3.verSerNo = $("#hdFileNo").val();
+
+                            if(orgnFg === "HQ") {
+                                params3.storeSelectExceptFg = params.storeSelectExceptFg; // 매장등록구분
+                            }
 
                             $scope._postJSONSave.withPopUp("/base/promotion/promotion/modPromotionBanner.sb", params3, function () {});
                         }
@@ -1347,6 +1356,7 @@ app.controller('promotionRegCtrl', ['$scope', '$http','$timeout', function ($sco
 
         // ------------ 적용매장 ------------
         $scope.storeSelectExceptFgCombo.selectedIndex = 0; // 매장등록구분
+        $("#hdStoreSelectExceptFg").val("");
         
         // ------------ 적용혜택 ------------
         $scope.typeCdCombo.selectedIndex = 0; // 혜택유형
@@ -2483,6 +2493,11 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
     // 적용매장 추가 팝업
     $scope.storeAdd = function () {
 
+        if($scope.storeSelectExceptFgCombo.selectedValue !== $("#hdStoreSelectExceptFg").val()){
+            $scope._popMsg(messages["promotion.chk.change.StoreSelectExceptFg"]); // 적용매장의 '매장등록구분' 선택값이 바뀌었습니다. </br> '저장' 버튼을 눌러 변경한 매장등록구분 먼저 저장 후 진행하세요.
+            return false;
+        }
+
         if(momsEnvstVal === '1') { // [1250 맘스터치] 환경설정값 '사용'인 경우, 맘스터치용 적용매장 추가 팝업 호출
             $scope.promotionMomsStoreRegLayer.show(true);
             $scope._broadcast('promotionMomsStoreRegCtrl');
@@ -2497,6 +2512,11 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
 
         // 파라미터 설정
         var params = new Array();
+
+        if($scope.storeSelectExceptFgCombo.selectedValue !== $("#hdStoreSelectExceptFg").val()){
+            $scope._popMsg(messages["promotion.chk.change.StoreSelectExceptFg"]); // 적용매장의 '매장등록구분' 선택값이 바뀌었습니다. </br> '저장' 버튼을 눌러 변경한 매장등록구분 먼저 저장 후 진행하세요.
+            return false;
+        }
 
         // 선택한 매장이 있는지 체크
         var chkCount = 0;
@@ -2520,6 +2540,7 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
                 obj.promotionCd = $("#hdPromotionCd").val();
                 obj.storeCd = item.storeCd;
                 obj.verSerNo = $("#hdFileNo").val();
+                obj.storeSelectExceptFg = $scope.storeSelectExceptFgCombo.selectedValue; // 매장등록구분
 
                 params.push(obj);
             }
@@ -2553,6 +2574,11 @@ app.controller('promotionSelectStoreGridCtrl', ['$scope', '$http','$timeout', fu
 
     // 엑셀업로드
     $scope.storeExcelUpload = function () {
+
+        if($scope.storeSelectExceptFgCombo.selectedValue !== $("#hdStoreSelectExceptFg").val()){
+            $scope._popMsg(messages["promotion.chk.change.StoreSelectExceptFg"]); // 적용매장의 '매장등록구분' 선택값이 바뀌었습니다. </br> '저장' 버튼을 눌러 변경한 매장등록구분 먼저 저장 후 진행하세요.
+            return false;
+        }
 
        var vScope = agrid.getScope('excelUploadPromotionCtrl');
        var msg = messages["promotion.excelUpload.confmMsg"];  // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?

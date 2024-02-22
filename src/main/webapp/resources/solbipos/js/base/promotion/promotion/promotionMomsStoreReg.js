@@ -78,6 +78,8 @@ app.controller('promotionMomsStoreRegCtrl', ['$scope', '$http', function ($scope
     // 추가
     $scope.btnMomsInsertStore = function () {
 
+        var storeSelectExceptFg = agrid.getScope("promotionRegCtrl").storeSelectExceptFgCombo.selectedValue; // 매장등록구분
+
         // 파라미터 설정
         var params = new Array();
 
@@ -103,6 +105,7 @@ app.controller('promotionMomsStoreRegCtrl', ['$scope', '$http', function ($scope
                 obj.promotionCd = $("#hdPromotionCd").val();
                 obj.storeCd = item.storeCd;
                 obj.verSerNo = $("#hdFileNo").val();
+                obj.storeSelectExceptFg = storeSelectExceptFg;
 
                 params.push(obj);
             }
@@ -121,11 +124,18 @@ app.controller('promotionMomsStoreRegCtrl', ['$scope', '$http', function ($scope
     // 전매장적용
     $scope.btnMomsInsertStoreAll = function () {
 
-        // 해당 프로모션을 전매장에 적용하시겠습니까?
-        $scope._popConfirm(messages["promotion.chk.setAllStore"], function() {
+        var storeSelectExceptFg = agrid.getScope("promotionRegCtrl").storeSelectExceptFgCombo.selectedValue; // 매장등록구분
+        var msg = messages["promotion.chk.setAllStore"]; // 해당 프로모션을 전매장에 적용하시겠습니까?
+
+        if(storeSelectExceptFg === "1"){
+            msg = messages["promotion.chk.setAllStoreExcept"]; // 해당 프로모션을 전매장에서 제외하시겠습니까?
+        }
+
+        $scope._popConfirm(msg, function() {
             var params = {};
             params.promotionCd = $("#hdPromotionCd").val();
             params.verSerNo = $("#hdFileNo").val();
+            params.storeSelectExceptFg = storeSelectExceptFg;
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save("/base/promotion/promotion/insertPromotionStoreAll.sb", params, function () {

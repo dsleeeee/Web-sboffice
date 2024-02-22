@@ -75,8 +75,11 @@ public interface PromotionService {
     /** 프로모션 적용매장 전체삭제 */
     int deletePromotionStoreAll(PromotionVO promotionVO, SessionInfoVO sessionInfoVO);
 
-    /** 프로모션 적용매장 매장 엑셀업로드 */
+    /** 프로모션 적용매장 매장 엑셀업로드(본사 프로모션 매장사용 등록) */
     int excelUploadPromotionStore(PromotionVO[] promotionVOs, SessionInfoVO sessionInfoVO);
+
+    /** 프로모션 적용매장 매장 엑셀업로드2(본사 프로모션 매장사용 등록 후, 본사 프로모션 배너파일 매장사용 등록) */
+    int excelUploadPromotionStore2(PromotionVO promotionVO, SessionInfoVO sessionInfoVO);
 
     /** 프로모션 키오스크 배너 조회 */
     List<DefaultMap<String>> getPromotionBanner(MediaVO mediaVO, SessionInfoVO sessionInfoVO);

@@ -521,7 +521,7 @@ public class PromotionController {
     }
 
     /**
-     * 프로모션 적용매장 매장 엑셀업로드
+     * 프로모션 적용매장 매장 엑셀업로드(본사 프로모션 매장사용 등록)
      * @param promotionVOs
      * @param request
      * @param response
@@ -540,6 +540,26 @@ public class PromotionController {
         int result = promotionService.excelUploadPromotionStore(promotionVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 프로모션 적용매장 매장 엑셀업로드2(본사 프로모션 매장사용 등록 후, 본사 프로모션 배너파일 매장사용 등록)
+     * @param promotionVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/excelUploadPromotionStore2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result excelUploadPromotionStore2(@RequestBody PromotionVO promotionVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result= promotionService.excelUploadPromotionStore2(promotionVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
     }
 
     /**

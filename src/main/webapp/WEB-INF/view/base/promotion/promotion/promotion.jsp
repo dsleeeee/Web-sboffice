@@ -647,6 +647,7 @@
                                     selected-index-changed="setStoreRegBtn(s)">
                             </wj-combo-box>
                         </div>
+                        <input type="hidden" id="hdStoreSelectExceptFg"/>
                     </td>
                     <td></td>
                     <td></td>
@@ -899,7 +900,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20230824.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotion/promotion.js?ver=20240222.02" charset="utf-8"></script>
 
 <%-- 적용상품 상품추가 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotion/promotionProdReg.jsp">
