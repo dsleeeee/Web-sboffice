@@ -39,6 +39,9 @@
         SELECT
             tcpd.PRT_CD,
             tcpc.CONTENT,
+            tcpc.CONTENT_EN,
+			tcpc.CONTENT_CN,
+			tcpc.CONTENT_JP,
             tcpc.SAMPL_YN
         FROM
             TB_CM_PRINT_DTL tcpd

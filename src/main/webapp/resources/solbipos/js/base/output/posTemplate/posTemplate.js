@@ -490,9 +490,22 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
     });
     // 드래그 시작이벤트
     s.hostElement.addEventListener('dragstart', function (e) {
+
+      // 언어타입에 따른 다국어 예제문구 셋팅
+      var content = "";
+      if($scope.langTypeCombo.selectedValue === "ko"){
+          content = s.itemsSource[s.selectedIndex].content;
+      }else if($scope.langTypeCombo.selectedValue === "en"){
+          content = s.itemsSource[s.selectedIndex].contentEn;
+      }else if($scope.langTypeCombo.selectedValue === "cn"){
+          content = s.itemsSource[s.selectedIndex].contentCn;
+      }else if($scope.langTypeCombo.selectedValue === "jp"){
+          content = s.itemsSource[s.selectedIndex].contentJp;
+      }
+
       var mData = {
         prtCd: s.selectedValue,
-        content: s.itemsSource[s.selectedIndex].content
+        content: content
       };
       var dragRow = JSON.stringify(mData);
       // 드래그 데이터 set
@@ -630,9 +643,21 @@ function makePreview() {
     // 정규식처리된 문자 처리
     for (var k = 0; k < matches.length; k++) {
       for (var l = 0; l < listBoxData.length; l++) {
-        if (listBoxData[l].prtCd === matches[k] && listBoxData[l].content != null) {
-          // 코드값을 listBox 데이터에서 찾아서 예제 문구로 치환
-          value = value.replace(matches[k], listBoxData[l].content);
+        // 언어타입에 따른 다국어 예제문구 셋팅
+        if (listBoxData[l].prtCd === matches[k]){
+            if(scope.langTypeCombo.selectedValue === "ko" && listBoxData[l].content != null){
+                // 코드값을 listBox 데이터에서 찾아서 예제 문구로 치환
+                value = value.replace(matches[k], listBoxData[l].content);
+            }else if(scope.langTypeCombo.selectedValue === "en" && listBoxData[l].contentEn != null){
+                // 코드값을 listBox 데이터에서 찾아서 예제 문구로 치환
+                value = value.replace(matches[k], listBoxData[l].contentEn);
+            }else if(scope.langTypeCombo.selectedValue === "cn" && listBoxData[l].contentCn != null){
+                // 코드값을 listBox 데이터에서 찾아서 예제 문구로 치환
+                value = value.replace(matches[k], listBoxData[l].contentCn);
+            }else if(scope.langTypeCombo.selectedValue === "jp" && listBoxData[l].contentJp != null){
+                // 코드값을 listBox 데이터에서 찾아서 예제 문구로 치환
+                value = value.replace(matches[k], listBoxData[l].contentJp);
+            }
         }
       }
     }
