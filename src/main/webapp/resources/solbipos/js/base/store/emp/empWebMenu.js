@@ -15,6 +15,7 @@ var app = agrid.getApp();
 
 // 그룹관리-그룹등록
 app.controller('empWebMenuCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('empWebMenuCtrl', $scope, $http, true));
 
@@ -79,8 +80,18 @@ app.controller('empWebMenuCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#lblMenu").text("");
 
         });
-    }
+    };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
+    };
 }]);
+
 
 // 사용사원
 app.controller('useEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -165,6 +176,7 @@ app.controller('useEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         }, 10);
     };
 }]);
+
 
 // 미사용사원
 app.controller('unusedEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
