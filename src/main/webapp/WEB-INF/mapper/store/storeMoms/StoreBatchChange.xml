@@ -33,6 +33,10 @@
         ,		tmsi.MOMS_SHOP_TYPE
         ,		tmsi.MOMS_STORE_MANAGE_TYPE
         ,		tmsi.MOMS_STORE_FG_01
+        ,		tmsi.MOMS_STORE_FG_02
+        ,		tmsi.MOMS_STORE_FG_03
+        ,		tmsi.MOMS_STORE_FG_04
+        ,		tmsi.MOMS_STORE_FG_05
     <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
@@ -80,6 +84,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         ORDER
         BY tms.STORE_CD
     <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -120,7 +136,11 @@
                     MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
-                    MOMS_STORE_FG_01 = #{momsStoreFg01}
+                    MOMS_STORE_FG_01 = #{momsStoreFg01},
+                    MOMS_STORE_FG_02 = #{momsStoreFg02},
+                    MOMS_STORE_FG_03 = #{momsStoreFg03},
+                    MOMS_STORE_FG_04 = #{momsStoreFg04},
+                    MOMS_STORE_FG_05 = #{momsStoreFg05}
             WHEN NOT MATCHED THEN
                 INSERT (
                     STORE_CD,
@@ -134,7 +154,11 @@
                     REG_ID,
                     MOD_DT,
                     MOD_ID,
-                    MOMS_STORE_FG_01
+                    MOMS_STORE_FG_01,
+                    MOMS_STORE_FG_02,
+                    MOMS_STORE_FG_03,
+                    MOMS_STORE_FG_04,
+                    MOMS_STORE_FG_05
                 ) VALUES (
                     #{storeCd},
                     #{momsTeam},
@@ -147,7 +171,11 @@
                     #{regId},
                     #{modDt},
                     #{modId},
-                    #{momsStoreFg01}
+                    #{momsStoreFg01},
+                    #{momsStoreFg02},
+                    #{momsStoreFg03},
+                    #{momsStoreFg04},
+                    #{momsStoreFg05}
                 )
     </update>
 
@@ -221,6 +249,18 @@
         <if test='nmcodeGrpCd != null and nmcodeGrpCd == "167"'>
             AND     NMCODE_NM = #{momsStoreFg01}
         </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "169"'>
+            AND     NMCODE_NM = #{momsStoreFg02}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "170"'>
+            AND     NMCODE_NM = #{momsStoreFg03}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "171"'>
+            AND     NMCODE_NM = #{momsStoreFg04}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "172"'>
+            AND     NMCODE_NM = #{momsStoreFg05}
+        </if>
     </select>
 
     <!-- 검증결과 저장 -->
@@ -244,7 +284,11 @@
             MOMS_SHOP_TYPE,
             MOMS_STORE_MANAGE_TYPE,
             RESULT,
-            MOMS_STORE_FG_01
+            MOMS_STORE_FG_01,
+            MOMS_STORE_FG_02,
+            MOMS_STORE_FG_03,
+            MOMS_STORE_FG_04,
+            MOMS_STORE_FG_05
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -258,7 +302,11 @@
             #{momsShopType},
             #{momsStoreManageType},
             #{result},
-            #{momsStoreFg01}
+            #{momsStoreFg01},
+            #{momsStoreFg02},
+            #{momsStoreFg03},
+            #{momsStoreFg04},
+            #{momsStoreFg05}
          )
     </insert>
 
@@ -284,7 +332,11 @@
         A.MOMS_SHOP_TYPE,
         A.MOMS_STORE_MANAGE_TYPE,
         A.RESULT,
-        A.MOMS_STORE_FG_01
+        A.MOMS_STORE_FG_01,
+        A.MOMS_STORE_FG_02,
+        A.MOMS_STORE_FG_03,
+        A.MOMS_STORE_FG_04,
+        A.MOMS_STORE_FG_05
         FROM TB_TMP_EXCEL_STORE_INFO A,
         TB_MS_STORE B
         WHERE 1=1
@@ -342,7 +394,11 @@
                 #{regId} AS REG_ID,
                 #{modDt} AS MOD_DT,
                 #{modId} AS MOD_ID,
-               (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_NM = C.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_NM = C.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '169' AND NMCODE_NM = C.MOMS_STORE_FG_02) AS MOMS_STORE_FG_02,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '170' AND NMCODE_NM = C.MOMS_STORE_FG_03) AS MOMS_STORE_FG_03,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '171' AND NMCODE_NM = C.MOMS_STORE_FG_04) AS MOMS_STORE_FG_04,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '172' AND NMCODE_NM = C.MOMS_STORE_FG_05) AS MOMS_STORE_FG_05
                 FROM TB_TMP_EXCEL_STORE_INFO C
                 WHERE 1=1
                 AND C.SESSION_ID = #{sessionId}
@@ -362,7 +418,11 @@
             A.MOMS_STORE_MANAGE_TYPE = B.MOMS_STORE_MANAGE_TYPE,
             A.MOD_DT = B.MOD_DT,
             A.MOD_ID = B.MOD_ID,
-            A.MOMS_STORE_FG_01 = B.MOMS_STORE_FG_01
+            A.MOMS_STORE_FG_01 = B.MOMS_STORE_FG_01,
+            A.MOMS_STORE_FG_02 = B.MOMS_STORE_FG_02,
+            A.MOMS_STORE_FG_03 = B.MOMS_STORE_FG_03,
+            A.MOMS_STORE_FG_04 = B.MOMS_STORE_FG_04,
+            A.MOMS_STORE_FG_05 = B.MOMS_STORE_FG_05
          WHEN NOT MATCHED THEN
             INSERT
             (
@@ -377,7 +437,11 @@
                 A.REG_ID,
                 A.MOD_DT,
                 A.MOD_ID,
-                A.MOMS_STORE_FG_01
+                A.MOMS_STORE_FG_01,
+                A.MOMS_STORE_FG_02,
+                A.MOMS_STORE_FG_03,
+                A.MOMS_STORE_FG_04,
+                A.MOMS_STORE_FG_05
             ) VALUES (
                 B.STORE_CD,
                 B.MOMS_TEAM,
@@ -390,7 +454,11 @@
                 B.REG_ID,
                 B.MOD_DT,
                 B.MOD_ID,
-                B.MOMS_STORE_FG_01
+                B.MOMS_STORE_FG_01,
+                B.MOMS_STORE_FG_02,
+                B.MOMS_STORE_FG_03,
+                B.MOMS_STORE_FG_04,
+                B.MOMS_STORE_FG_05
             )
     </update>
 

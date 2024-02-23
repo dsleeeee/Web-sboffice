@@ -98,6 +98,10 @@
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_CD = the.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_CD = the.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_CD = the.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '169' AND NMCODE_CD = the.MOMS_STORE_FG_02) AS MOMS_STORE_FG_02
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '170' AND NMCODE_CD = the.MOMS_STORE_FG_03) AS MOMS_STORE_FG_03
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '171' AND NMCODE_CD = the.MOMS_STORE_FG_04) AS MOMS_STORE_FG_04
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '172' AND NMCODE_CD = the.MOMS_STORE_FG_05) AS MOMS_STORE_FG_05
         FROM 	TB_HQ_EMPLOYEE the
         ,        (
                 SELECT  twub.USER_ID
@@ -166,6 +170,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND the.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND the.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND the.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND the.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND the.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         ORDER BY the.EMP_NO
     </select>
 
@@ -189,6 +205,10 @@
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_CD = the.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_CD = the.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_CD = the.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '169' AND NMCODE_CD = the.MOMS_STORE_FG_02) AS MOMS_STORE_FG_02
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '170' AND NMCODE_CD = the.MOMS_STORE_FG_03) AS MOMS_STORE_FG_03
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '171' AND NMCODE_CD = the.MOMS_STORE_FG_04) AS MOMS_STORE_FG_04
+        ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '172' AND NMCODE_CD = the.MOMS_STORE_FG_05) AS MOMS_STORE_FG_05
         FROM    (
                 SELECT  DISTINCT the.EMP_NO
                 ,		the.EMP_NM
@@ -202,6 +222,10 @@
                 ,       the.MOMS_SHOP_TYPE
                 ,       the.MOMS_STORE_MANAGE_TYPE
                 ,       the.MOMS_STORE_FG_01
+                ,       the.MOMS_STORE_FG_02
+                ,       the.MOMS_STORE_FG_03
+                ,       the.MOMS_STORE_FG_04
+                ,       the.MOMS_STORE_FG_05
                 FROM    TB_HQ_EMPLOYEE the
                 ,       TB_WB_USER_INFO twu
                 ,       TB_WB_AUTHOR_EXCEPT_V01 twa
@@ -263,6 +287,18 @@
         </if>
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND the.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND the.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND the.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND the.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND the.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
         ORDER BY the.EMP_NO
     </select>

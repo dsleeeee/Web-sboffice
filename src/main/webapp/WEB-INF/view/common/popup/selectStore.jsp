@@ -226,6 +226,74 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
+                            <%-- 매장그룹2 --%>
+                            <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsStoreFg02Combo"
+                                            ng-model="popMomsStoreFg02"
+                                            items-source="_getComboData('popMomsStoreFg02Combo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsStoreFg02Combo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 매장그룹3 --%>
+                            <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsStoreFg03Combo"
+                                            ng-model="popMomsStoreFg03"
+                                            items-source="_getComboData('popMomsStoreFg03Combo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsStoreFg03Combo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                            <%-- 매장그룹4 --%>
+                            <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsStoreFg04Combo"
+                                            ng-model="popMomsStoreFg04"
+                                            items-source="_getComboData('popMomsStoreFg04Combo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsStoreFg04Combo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%-- 매장그룹5 --%>
+                            <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchPopMomsStoreFg05Combo"
+                                            ng-model="popMomsStoreFg05"
+                                            items-source="_getComboData('popMomsStoreFg05Combo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchPopMomsStoreFg05Combo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -572,13 +640,80 @@
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsStoreFg01Combo", list);
-                    // 매장그룹
                     if(list.length <= 1) {
                         $("#srchPopMomsStoreFg01Combo").css('background-color', '#F0F0F0');
                         $("#srchPopMomsStoreFg01Combo").attr("disabled", true);
                     } else {
                         $("#srchPopMomsStoreFg01Combo").css('background-color', '#FFFFFF');
                         $("#srchPopMomsStoreFg01Combo").attr("disabled", false);
+                    }
+                }
+            });
+
+            // 매장그룹2
+            var params = {};
+            params.nmcodeGrpCd = "169";
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
+                if (response.data.data.list.length > 0) {
+                    var list = response.data.data.list;
+                    $scope._setComboData("popMomsStoreFg02Combo", list);
+                    if(list.length <= 1) {
+                        $("#srchPopMomsStoreFg02Combo").css('background-color', '#F0F0F0');
+                        $("#srchPopMomsStoreFg02Combo").attr("disabled", true);
+                    } else {
+                        $("#srchPopMomsStoreFg02Combo").css('background-color', '#FFFFFF');
+                        $("#srchPopMomsStoreFg02Combo").attr("disabled", false);
+                    }
+                }
+            });
+
+            // 매장그룹3
+            var params = {};
+            params.nmcodeGrpCd = "170";
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
+                if (response.data.data.list.length > 0) {
+                    var list = response.data.data.list;
+                    $scope._setComboData("popMomsStoreFg03Combo", list);
+                    if(list.length <= 1) {
+                        $("#srchPopMomsStoreFg03Combo").css('background-color', '#F0F0F0');
+                        $("#srchPopMomsStoreFg03Combo").attr("disabled", true);
+                    } else {
+                        $("#srchPopMomsStoreFg03Combo").css('background-color', '#FFFFFF');
+                        $("#srchPopMomsStoreFg03Combo").attr("disabled", false);
+                    }
+                }
+            });
+
+            // 매장그룹4
+            var params = {};
+            params.nmcodeGrpCd = "171";
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
+                if (response.data.data.list.length > 0) {
+                    var list = response.data.data.list;
+                    $scope._setComboData("popMomsStoreFg04Combo", list);
+                    if(list.length <= 1) {
+                        $("#srchPopMomsStoreFg04Combo").css('background-color', '#F0F0F0');
+                        $("#srchPopMomsStoreFg04Combo").attr("disabled", true);
+                    } else {
+                        $("#srchPopMomsStoreFg04Combo").css('background-color', '#FFFFFF');
+                        $("#srchPopMomsStoreFg04Combo").attr("disabled", false);
+                    }
+                }
+            });
+
+            // 매장그룹5
+            var params = {};
+            params.nmcodeGrpCd = "172";
+            $scope._postJSONQuery.withOutPopUp('/common/popup/selectStore/getSelectHqNmcodeMomsList.sb', params, function (response) {
+                if (response.data.data.list.length > 0) {
+                    var list = response.data.data.list;
+                    $scope._setComboData("popMomsStoreFg05Combo", list);
+                    if(list.length <= 1) {
+                        $("#srchPopMomsStoreFg05Combo").css('background-color', '#F0F0F0');
+                        $("#srchPopMomsStoreFg05Combo").attr("disabled", true);
+                    } else {
+                        $("#srchPopMomsStoreFg05Combo").css('background-color', '#FFFFFF');
+                        $("#srchPopMomsStoreFg05Combo").attr("disabled", false);
                     }
                 }
             });
@@ -613,6 +748,10 @@
                 $scope.srchPopBranchCdCombo.selectedIndex = 0;
                 $scope.srchPopStoreChgNotCombo.selectedIndex = 0;
                 $scope.srchPopMomsStoreFg01Combo.selectedIndex = 0;
+                $scope.srchPopMomsStoreFg02Combo.selectedIndex = 0;
+                $scope.srchPopMomsStoreFg03Combo.selectedIndex = 0;
+                $scope.srchPopMomsStoreFg04Combo.selectedIndex = 0;
+                $scope.srchPopMomsStoreFg05Combo.selectedIndex = 0;
             });
 
             // 업로드매장 텍스트박스 조회
@@ -669,6 +808,10 @@
             }
             params.storeChgNot = $scope.popStoreChgNot;
             params.momsStoreFg01 = $scope.popMomsStoreFg01;
+            params.momsStoreFg02 = $scope.popMomsStoreFg02;
+            params.momsStoreFg03 = $scope.popMomsStoreFg03;
+            params.momsStoreFg04 = $scope.popMomsStoreFg04;
+            params.momsStoreFg05 = $scope.popMomsStoreFg05;
 
             $scope._inquirySub("/common/popup/selectStore/getSelectStoreList.sb", params, function () {
                 $scope.searchFg = "Y";

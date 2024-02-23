@@ -23,6 +23,10 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 사원관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -35,6 +39,10 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList2, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList2, 'value', 'name'); // 매장관리타입
         $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList2, 'value', 'name'); // 매장그룹
+        $scope.momsStoreFg02DataMap = new wijmo.grid.DataMap(momsStoreFg02ComboList2, 'value', 'name'); // 매장그룹2
+        $scope.momsStoreFg03DataMap = new wijmo.grid.DataMap(momsStoreFg03ComboList2, 'value', 'name'); // 매장그룹3
+        $scope.momsStoreFg04DataMap = new wijmo.grid.DataMap(momsStoreFg04ComboList2, 'value', 'name'); // 매장그룹4
+        $scope.momsStoreFg05DataMap = new wijmo.grid.DataMap(momsStoreFg05ComboList2, 'value', 'name'); // 매장그룹5
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -105,6 +113,10 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
         //     params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
         // }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquirySub("/base/store/empBatchChange/copyAuthorExcept/getEmpList2.sb", params, function (){
@@ -128,6 +140,7 @@ app.controller('copyAuthorExceptCtrl', ['$scope', '$http', function ($scope, $ht
     };
 }]);
 
+
 app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $http) {
 
     angular.extend(this, new RootController('copyAuthorExcept2Ctrl', $scope, $http, false));
@@ -142,6 +155,10 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
     $scope._setComboData("momsStoreManageTypeCombo2", momsStoreManageTypeComboList); // 사원관리타입
     $scope._setComboData("branchCdCombo2", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo2", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo2", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo2", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo2", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo2", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -154,6 +171,10 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList2, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList2, 'value', 'name'); // 매장관리타입
         $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList2, 'value', 'name'); // 매장그룹
+        $scope.momsStoreFg02DataMap = new wijmo.grid.DataMap(momsStoreFg02ComboList2, 'value', 'name'); // 매장그룹2
+        $scope.momsStoreFg03DataMap = new wijmo.grid.DataMap(momsStoreFg03ComboList2, 'value', 'name'); // 매장그룹3
+        $scope.momsStoreFg04DataMap = new wijmo.grid.DataMap(momsStoreFg04ComboList2, 'value', 'name'); // 매장그룹4
+        $scope.momsStoreFg05DataMap = new wijmo.grid.DataMap(momsStoreFg05ComboList2, 'value', 'name'); // 매장그룹5
     };
 
     $scope.$on("copyAuthorExcept2Ctrl", function (event, data) {
@@ -192,6 +213,10 @@ app.controller('copyAuthorExcept2Ctrl', ['$scope', '$http', function ($scope, $h
         //     params.userBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
         // }
         params.momsStoreFg01 = $scope.momsStoreFg012;
+        params.momsStoreFg02 = $scope.momsStoreFg022;
+        params.momsStoreFg03 = $scope.momsStoreFg032;
+        params.momsStoreFg04 = $scope.momsStoreFg042;
+        params.momsStoreFg05 = $scope.momsStoreFg052;
         console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수

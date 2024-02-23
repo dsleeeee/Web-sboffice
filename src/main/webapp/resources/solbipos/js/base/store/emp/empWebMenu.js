@@ -15,6 +15,7 @@ var app = agrid.getApp();
 
 // 그룹관리-그룹등록
 app.controller('empWebMenuCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('empWebMenuCtrl', $scope, $http, true));
 
@@ -28,6 +29,10 @@ app.controller('empWebMenuCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     $scope.initGrid = function (s, e) {
         // ReadOnly 효과설정
@@ -79,8 +84,18 @@ app.controller('empWebMenuCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#lblMenu").text("");
 
         });
-    }
+    };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function(){
+        if( $("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
+    };
 }]);
+
 
 // 사용사원
 app.controller('useEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -115,6 +130,10 @@ app.controller('useEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         params.momsStoreManageType = scope.momsStoreManageType;
         params.branchCd = scope.branchCd;
         params.momsStoreFg01 = scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
 
         $scope._inquirySub("/base/store/emp/empWebMenu/getUseEmp.sb", params, function() {
 
@@ -166,6 +185,7 @@ app.controller('useEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $
     };
 }]);
 
+
 // 미사용사원
 app.controller('unusedEmpCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
@@ -198,6 +218,10 @@ app.controller('unusedEmpCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.momsStoreManageType = scope.momsStoreManageType;
         params.branchCd = scope.branchCd;
         params.momsStoreFg01 = scope.momsStoreFg01;
+        params.momsStoreFg02 = scope.momsStoreFg02;
+        params.momsStoreFg03 = scope.momsStoreFg03;
+        params.momsStoreFg04 = scope.momsStoreFg04;
+        params.momsStoreFg05 = scope.momsStoreFg05;
 
         $scope._inquirySub("/base/store/emp/empWebMenu/getUnuesdEmp.sb", params);
     };

@@ -621,6 +621,34 @@
                 WHERE 1=1
                 AND the.USER_ID = #{userId}
             </if>
+            <if test='nmcodeGrpCd == "169"'>
+                SELECT
+                the.MOMS_STORE_FG_02
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "170"'>
+                SELECT
+                the.MOMS_STORE_FG_03
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "171"'>
+                SELECT
+                the.MOMS_STORE_FG_04
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "172"'>
+                SELECT
+                the.MOMS_STORE_FG_05
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
         </if>
     </select>
 
