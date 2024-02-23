@@ -54,6 +54,10 @@ public class AccountManageVO extends PageVO {
     private String orgnFg2;
     /** 사용자구분(배열) */
     private String[] orgnFg2List;
+    /** 본사상태구분 */
+    private String hqSysStatFg;
+    /** 매장상태구분 */
+    private String storeSysStatFg;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -181,5 +185,21 @@ public class AccountManageVO extends PageVO {
 
     public void setOrgnFg2List(String[] orgnFg2List) {
         this.orgnFg2List = orgnFg2List;
+    }
+
+    public String getHqSysStatFg() {
+        return hqSysStatFg;
+    }
+
+    public void setHqSysStatFg(String hqSysStatFg) {
+        this.hqSysStatFg = hqSysStatFg;
+    }
+
+    public String getStoreSysStatFg() {
+        return storeSysStatFg;
+    }
+
+    public void setStoreSysStatFg(String storeSysStatFg) {
+        this.storeSysStatFg = storeSysStatFg;
     }
 }

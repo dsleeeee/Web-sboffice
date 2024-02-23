@@ -49,6 +49,8 @@ app.controller('longTermUnusedCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    $scope._setComboData("hqSysStatFg", sysStatFg);                 // 본사상태구분
+    $scope._setComboData("StoreSysStatFg", sysStatFg);              // 매장상태구분
     $scope._setComboData("loginPeriod", loginPeriodData);           // 접속기간
     $scope._setComboData("webUseYn", webUseYnData);                 // 계정사용여부    
     $scope._setComboData("orgnFg2", orgnFg2Data);                   // 사용자구분
@@ -79,6 +81,8 @@ app.controller('longTermUnusedCtrl', ['$scope', '$http', '$timeout', function ($
         params.hqOfficeNm = $scope.hqOfficeNm;
         params.storeCd = $scope.storeCd;
         params.storeNm = $scope.storeNm;
+        params.hqSysStatFg = $scope.hqSysStatFg;
+        params.storeSysStatFg = $scope.storeSysStatFg;
         params.userId = $scope.userId;
         params.userNm = $scope.userNm;
         params.loginPeriod = $scope.loginPeriodCombo.selectedValue;

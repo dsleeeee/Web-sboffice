@@ -54,6 +54,43 @@
                     <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
+
+            <tr>
+                <%-- 본사상태 --%>
+                <th><s:message code="accountManage.hqSysStatFg" /></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchHqSysStatFg"
+                                ng-model="hqSysStatFg"
+                                items-source="_getComboData('hqSysStatFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="hqSysStatFgCombo"
+                                selected-index="0">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 매장상태 --%>
+                <th><s:message code="accountManage.storeSysStatFg" /></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchStoreSysStatFg"
+                                ng-model="storeSysStatFg"
+                                items-source="_getComboData('StoreSysStatFg')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="storeSysStatFgCombo"
+                                selected-index="0">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
             <tr>
                 <%-- 사용자 ID --%>
                 <th><s:message code="accountManage.userId" /></th>
@@ -175,17 +212,18 @@
                 <wj-flex-grid-column header="<s:message code="accountManage.orgnNm"/>" binding="orgnNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.hqOfficeCd"/>" binding="hqOfficeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.hqOfficeNm"/>" binding="hqOfficeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="accountManage.hqSysStatFg"/>" binding="hqSysStatFg" data-map="sysStatFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="accountManage.hqSysStatFg"/>" binding="hqSysStatFg" data-map="sysStatFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="accountManage.storeSysStatFg"/>" binding="storeSysStatFg" data-map="sysStatFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="accountManage.userId"/>" binding="userId" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="accountManage.storeSysStatFg"/>" binding="storeSysStatFg" data-map="sysStatFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="accountManage.userId"/>" binding="userId" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.userNm"/>" binding="userNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.webUseYn"/>" binding="webUseYn" data-map="useYnDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.useYn"/>" binding="useYn" data-map="useYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.webUserUseYn"/>" binding="webUserUseYn" data-map="useYnDataMap" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.lastSaleYm"/>" binding="saleYm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="accountManage.lastLoginDt"/>" binding="lastLoginDt" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgnFg" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="empNo" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
@@ -218,17 +256,18 @@
                 <wj-flex-grid-column header="<s:message code="accountManage.orgnNm"/>" binding="orgnNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.hqOfficeCd"/>" binding="hqOfficeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.hqOfficeNm"/>" binding="hqOfficeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="accountManage.hqSysStatFg"/>" binding="hqSysStatFg" data-map="sysStatFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="accountManage.hqSysStatFg"/>" binding="hqSysStatFg" data-map="sysStatFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="accountManage.storeSysStatFg"/>" binding="storeSysStatFg" data-map="sysStatFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="accountManage.userId"/>" binding="userId" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="accountManage.storeSysStatFg"/>" binding="storeSysStatFg" data-map="sysStatFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="accountManage.userId"/>" binding="userId" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.userNm"/>" binding="userNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.webUseYn"/>" binding="webUseYn" data-map="useYnDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.useYn"/>" binding="useYn" data-map="useYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.webUserUseYn"/>" binding="webUserUseYn" data-map="useYnDataMap" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="accountManage.lastSaleYm"/>" binding="saleYm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="accountManage.lastLoginDt"/>" binding="lastLoginDt" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgnFg" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="empNo" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
@@ -240,4 +279,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/accountManage/longTermUnused.js?ver=20240216.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/accountManage/longTermUnused.js?ver=20240223.02" charset="utf-8"></script>
