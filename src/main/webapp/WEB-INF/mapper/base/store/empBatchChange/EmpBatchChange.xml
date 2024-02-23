@@ -31,6 +31,10 @@
         ,		the.MOMS_SHOP_TYPE
         ,		the.MOMS_STORE_MANAGE_TYPE
         ,       the.MOMS_STORE_FG_01
+        ,		the.MOMS_STORE_FG_02
+        ,		the.MOMS_STORE_FG_03
+        ,		the.MOMS_STORE_FG_04
+        ,		the.MOMS_STORE_FG_05
     <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_HQ_EMPLOYEE the
         WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -76,6 +80,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND the.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND the.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND the.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND the.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND the.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         ORDER
         BY the.EMP_NO
     <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -100,6 +116,10 @@
         ,		the.MOMS_SHOP_TYPE
         ,		the.MOMS_STORE_MANAGE_TYPE
         ,       the.MOMS_STORE_FG_01
+        ,       the.MOMS_STORE_FG_02
+        ,       the.MOMS_STORE_FG_03
+        ,       the.MOMS_STORE_FG_04
+        ,       the.MOMS_STORE_FG_05
         FROM    TB_HQ_EMPLOYEE the
         WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     the.WEB_USE_YN = 'Y'
@@ -148,6 +168,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND the.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND the.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND the.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND the.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND the.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         ORDER
         BY the.EMP_NO
     </select>
@@ -169,7 +201,11 @@
                 MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId},
-                MOMS_STORE_FG_01 = #{momsStoreFg01}
+                MOMS_STORE_FG_01 = #{momsStoreFg01},
+                MOMS_STORE_FG_02 = #{momsStoreFg02},
+                MOMS_STORE_FG_03 = #{momsStoreFg03},
+                MOMS_STORE_FG_04 = #{momsStoreFg04},
+                MOMS_STORE_FG_05 = #{momsStoreFg05}
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
         AND     EMP_NO = #{empNo}
     </update>
@@ -195,7 +231,11 @@
                 (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_NM = C.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE,
                 #{modDt} AS MOD_DT,
                 #{modId} AS MOD_ID,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_NM = C.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_NM = C.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '169' AND NMCODE_NM = C.MOMS_STORE_FG_02) AS MOMS_STORE_FG_02,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '170' AND NMCODE_NM = C.MOMS_STORE_FG_03) AS MOMS_STORE_FG_03,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '171' AND NMCODE_NM = C.MOMS_STORE_FG_04) AS MOMS_STORE_FG_04,
+                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '172' AND NMCODE_NM = C.MOMS_STORE_FG_05) AS MOMS_STORE_FG_05
                 FROM TB_TMP_EXCEL_EMPLOYEE C
                 WHERE 1=1
                 AND C.SESSION_ID = #{sessionId}
@@ -216,7 +256,11 @@
             A.MOMS_STORE_MANAGE_TYPE = B.MOMS_STORE_MANAGE_TYPE,
             A.MOD_DT = B.MOD_DT,
             A.MOD_ID = B.MOD_ID,
-            A.MOMS_STORE_FG_01 = B.MOMS_STORE_FG_01
+            A.MOMS_STORE_FG_01 = B.MOMS_STORE_FG_01,
+            A.MOMS_STORE_FG_02 = B.MOMS_STORE_FG_02,
+            A.MOMS_STORE_FG_03 = B.MOMS_STORE_FG_03,
+            A.MOMS_STORE_FG_04 = B.MOMS_STORE_FG_04,
+            A.MOMS_STORE_FG_05 = B.MOMS_STORE_FG_05
     </update>
 
     <!-- 검증결과 전체 삭제 -->
@@ -312,7 +356,11 @@
             MOMS_SHOP_TYPE,
             MOMS_STORE_MANAGE_TYPE,
             RESULT,
-            MOMS_STORE_FG_01
+            MOMS_STORE_FG_01,
+            MOMS_STORE_FG_02,
+            MOMS_STORE_FG_03,
+            MOMS_STORE_FG_04,
+            MOMS_STORE_FG_05
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -326,7 +374,11 @@
             #{momsShopType},
             #{momsStoreManageType},
             #{result},
-            #{momsStoreFg01}
+            #{momsStoreFg01},
+            #{momsStoreFg02},
+            #{momsStoreFg03},
+            #{momsStoreFg04},
+            #{momsStoreFg05}
          )
     </insert>
 
@@ -352,7 +404,11 @@
         A.MOMS_SHOP_TYPE,
         A.MOMS_STORE_MANAGE_TYPE,
         A.RESULT,
-        A.MOMS_STORE_FG_01
+        A.MOMS_STORE_FG_01,
+        A.MOMS_STORE_FG_02,
+        A.MOMS_STORE_FG_03,
+        A.MOMS_STORE_FG_04,
+        A.MOMS_STORE_FG_05
         FROM TB_TMP_EXCEL_EMPLOYEE A,
         TB_HQ_EMPLOYEE B
         WHERE 1=1

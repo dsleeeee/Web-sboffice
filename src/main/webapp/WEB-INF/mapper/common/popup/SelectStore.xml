@@ -90,6 +90,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         AND (
                 ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) != 0) AND (tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId})) )
                 OR
@@ -230,6 +242,34 @@
             <if test='nmcodeGrpCd == "167"'>
                 SELECT
                 the.MOMS_STORE_FG_01
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "169"'>
+                SELECT
+                the.MOMS_STORE_FG_02
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "170"'>
+                SELECT
+                the.MOMS_STORE_FG_03
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "171"'>
+                SELECT
+                the.MOMS_STORE_FG_04
+                FROM TB_HQ_EMPLOYEE the
+                WHERE 1=1
+                AND the.USER_ID = #{userId}
+            </if>
+            <if test='nmcodeGrpCd == "172"'>
+                SELECT
+                the.MOMS_STORE_FG_05
                 FROM TB_HQ_EMPLOYEE the
                 WHERE 1=1
                 AND the.USER_ID = #{userId}

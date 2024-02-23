@@ -97,6 +97,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND D.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND D.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND D.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND D.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND D.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         ORDER
         BY A.STORE_CD, A.POS_NO
     </select>

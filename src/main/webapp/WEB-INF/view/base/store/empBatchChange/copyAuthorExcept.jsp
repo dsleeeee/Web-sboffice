@@ -21,13 +21,13 @@
         </div>
         <%-- 기준사원 조회 조건 --%>
         <table class="searchTbl">
-                <colgroup>
-                    <col class="w15"/>
-                    <col class="w35"/>
-                    <col class="w15"/>
-                    <col class="w35"/>
-                </colgroup>
-                <tbody>
+            <colgroup>
+                <col class="w15"/>
+                <col class="w35"/>
+                <col class="w15"/>
+                <col class="w35"/>
+            </colgroup>
+            <tbody>
 <%--                <tr>--%>
 <%--                    <th><s:message code="touchKey.layer.brand" /></th>--%>
 <%--                    <td>--%>
@@ -208,6 +208,76 @@
                     <td></td>
                 </c:if>
             </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                <tr>
+                    <%-- 매장그룹2 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg02Combo"
+                                    ng-model="momsStoreFg02"
+                                    items-source="_getComboData('momsStoreFg02Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg02Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장그룹3 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg03Combo"
+                                    ng-model="momsStoreFg03"
+                                    items-source="_getComboData('momsStoreFg03Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg03Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 매장그룹4 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg04Combo"
+                                    ng-model="momsStoreFg04"
+                                    items-source="_getComboData('momsStoreFg04Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg04Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장그룹5 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg05Combo"
+                                    ng-model="momsStoreFg05"
+                                    items-source="_getComboData('momsStoreFg05Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg05Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+            </c:if>
             </tbody>
         </table>
 
@@ -235,6 +305,10 @@
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" width="100" is-read-only="true" align="center" data-map="momsStoreManageTypeDataMap"></wj-flex-grid-column>
                     <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                         <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" width="100" is-read-only="true" align="center" data-map="momsStoreFg01DataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="momsStoreFg02" width="100" align="left" is-read-only="true" data-map="momsStoreFg02DataMap" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg03"/>" binding="momsStoreFg03" width="100" align="left" is-read-only="true" data-map="momsStoreFg03DataMap" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg04"/>" binding="momsStoreFg04" width="100" align="left" is-read-only="true" data-map="momsStoreFg04DataMap" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg05"/>" binding="momsStoreFg05" width="100" align="left" is-read-only="true" data-map="momsStoreFg05DataMap" ></wj-flex-grid-column>
                     </c:if>
                 </wj-flex-grid>
             </div>
@@ -439,6 +513,76 @@
                     <td></td>
                 </c:if>
             </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                <tr>
+                    <%-- 매장그룹2 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg02Combo2"
+                                    ng-model="momsStoreFg022"
+                                    items-source="_getComboData('momsStoreFg02Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg02Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장그룹3 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg03Combo2"
+                                    ng-model="momsStoreFg032"
+                                    items-source="_getComboData('momsStoreFg03Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg03Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 매장그룹4 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg04Combo2"
+                                    ng-model="momsStoreFg042"
+                                    items-source="_getComboData('momsStoreFg04Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg04Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장그룹5 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg05Combo2"
+                                    ng-model="momsStoreFg052"
+                                    items-source="_getComboData('momsStoreFg05Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg05Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+            </c:if>
             </tbody>
         </table>
 
@@ -467,6 +611,10 @@
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" width="100" is-read-only="true" align="center" data-map="momsStoreManageTypeDataMap"></wj-flex-grid-column>
                     <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                         <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" width="100" is-read-only="true" align="center" data-map="momsStoreFg01DataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="momsStoreFg02" width="100" align="left" is-read-only="true" data-map="momsStoreFg02DataMap" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg03"/>" binding="momsStoreFg03" width="100" align="left" is-read-only="true" data-map="momsStoreFg03DataMap" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg04"/>" binding="momsStoreFg04" width="100" align="left" is-read-only="true" data-map="momsStoreFg04DataMap" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg05"/>" binding="momsStoreFg05" width="100" align="left" is-read-only="true" data-map="momsStoreFg05DataMap" ></wj-flex-grid-column>
                     </c:if>
                 </wj-flex-grid>
             </div>
@@ -481,4 +629,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/copyAuthorExcept.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/copyAuthorExcept.js?ver=20240221.01" charset="utf-8"></script>

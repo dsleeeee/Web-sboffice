@@ -26,7 +26,7 @@
             <p class="tl s14 mt5 lh15 red">- 아래 해당 정보를 수정하신 후에 엑셀다운로드 하여 다시 업로드 해주세요.</p>
             <p class="tl s14 mt5 lh15 red">※ 업로드시 '매장코드, 그룹, 팀별, AC점포별, 지역구분, 상권, 정포유형, 매장관리타입
             <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                , 매장그룹
+                , 매장그룹, 매장그룹2, 매장그룹3, 매장그룹4, 매장그룹5
             </c:if>
             ' 기준으로 처리됩니다.</p>
 
@@ -63,6 +63,10 @@
                 <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center"></wj-flex-grid-column>
                 <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="momsStoreFg02" data-map="momsStoreFg02DataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg03"/>" binding="momsStoreFg03" data-map="momsStoreFg03DataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg04"/>" binding="momsStoreFg04" data-map="momsStoreFg04DataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg05"/>" binding="momsStoreFg05" data-map="momsStoreFg05DataMap" width="90" align="center"></wj-flex-grid-column>
                 </c:if>
             </wj-flex-grid>
         </div>
@@ -112,6 +116,10 @@
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center"></wj-flex-grid-column>
                     <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                         <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="momsStoreFg02" data-map="momsStoreFg02DataMap" width="90" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg03"/>" binding="momsStoreFg03" data-map="momsStoreFg03DataMap" width="90" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg04"/>" binding="momsStoreFg04" data-map="momsStoreFg04DataMap" width="90" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg05"/>" binding="momsStoreFg05" data-map="momsStoreFg05DataMap" width="90" align="center"></wj-flex-grid-column>
                     </c:if>
                 </wj-flex-grid>
             </div>
@@ -119,7 +127,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUpload.js?ver=20240124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUpload.js?ver=20240221.01" charset="utf-8"></script>
 
 <%-- 상품엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/storeBatchChange/storeBatchChangeExcelUploadAdd.jsp">

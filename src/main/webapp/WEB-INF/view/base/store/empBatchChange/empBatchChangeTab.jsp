@@ -36,6 +36,10 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    var momsStoreFg02ComboList = ${momsStoreFg02ComboList};
+    var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
+    var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
+    var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 
     // 콤보박스 데이터
     var branchCdComboList2 = ${branchCdComboList2};
@@ -46,6 +50,10 @@
     var momsShopTypeComboList2 = ${momsShopTypeComboList2};
     var momsStoreManageTypeComboList2 = ${momsStoreManageTypeComboList2};
     var momsStoreFg01ComboList2 = ${momsStoreFg01ComboList2};
+    var momsStoreFg02ComboList2 = ${momsStoreFg02ComboList2};
+    var momsStoreFg03ComboList2 = ${momsStoreFg03ComboList2};
+    var momsStoreFg04ComboList2 = ${momsStoreFg04ComboList2};
+    var momsStoreFg05ComboList2 = ${momsStoreFg05ComboList2};
 
     // 콤보박스 데이터(선택)
     var branchCdComboList3 = ${branchCdComboList3};
@@ -56,6 +64,10 @@
     var momsShopTypeComboList3 = ${momsShopTypeComboList3};
     var momsStoreManageTypeComboList3 = ${momsStoreManageTypeComboList3};
     var momsStoreFg01ComboList3 = ${momsStoreFg01ComboList3};
+    var momsStoreFg02ComboList3 = ${momsStoreFg02ComboList3};
+    var momsStoreFg03ComboList3 = ${momsStoreFg03ComboList3};
+    var momsStoreFg04ComboList3 = ${momsStoreFg04ComboList3};
+    var momsStoreFg05ComboList3 = ${momsStoreFg05ComboList3};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/empBatchChange/empBatchChangeTab.js?ver=20230216.02" charset="utf-8"></script>
@@ -68,7 +80,7 @@
 </c:import>
 
 <%-- 엑셀업로드 레이어 --%>
-    <c:import url="/WEB-INF/view/base/store/empBatchChange/empBatchChangeExcelUpload.jsp">
+<c:import url="/WEB-INF/view/base/store/empBatchChange/empBatchChangeExcelUpload.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -31,6 +31,10 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     $scope._setComboData("momsTeamChgCombo", momsTeamComboList3); // 팀별
     $scope._setComboData("momsAcShopChgCombo", momsAcShopComboList3); // AC점포별
@@ -40,6 +44,10 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
     $scope._setComboData("momsStoreManageTypeChgCombo", momsStoreManageTypeComboList3); // 매장관리타입
     $scope._setComboData("branchCdChgCombo", branchCdComboList3); // 그룹
     $scope._setComboData("momsStoreFg01ChgCombo", momsStoreFg01ComboList3); // 매장그룹
+    $scope._setComboData("momsStoreFg02ChgCombo", momsStoreFg02ComboList3); // 매장그룹2
+    $scope._setComboData("momsStoreFg03ChgCombo", momsStoreFg03ComboList3); // 매장그룹3
+    $scope._setComboData("momsStoreFg04ChgCombo", momsStoreFg04ComboList3); // 매장그룹4
+    $scope._setComboData("momsStoreFg05ChgCombo", momsStoreFg05ComboList3); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -52,6 +60,10 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList2, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList2, 'value', 'name'); // 매장관리타입
         $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList2, 'value', 'name'); // 매장그룹
+        $scope.momsStoreFg02DataMap = new wijmo.grid.DataMap(momsStoreFg02ComboList2, 'value', 'name'); // 매장그룹2
+        $scope.momsStoreFg03DataMap = new wijmo.grid.DataMap(momsStoreFg03ComboList2, 'value', 'name'); // 매장그룹3
+        $scope.momsStoreFg04DataMap = new wijmo.grid.DataMap(momsStoreFg04ComboList2, 'value', 'name'); // 매장그룹4
+        $scope.momsStoreFg05DataMap = new wijmo.grid.DataMap(momsStoreFg05ComboList2, 'value', 'name'); // 매장그룹5
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -66,7 +78,8 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
                 // 가격 변경시 체크박스 체크
                 if (col.binding === "branchCd" || col.binding === "momsTeam" || col.binding === "momsAcShop"
                     || col.binding === "momsAreaFg" || col.binding === "momsCommercial" || col.binding === "momsShopType"
-                    || col.binding === "momsStoreManageType" || col.binding === "momsStoreFg01") {
+                    || col.binding === "momsStoreManageType" || col.binding === "momsStoreFg01"
+                    || col.binding === "momsStoreFg02" || col.binding === "momsStoreFg03" || col.binding === "momsStoreFg04" || col.binding === "momsStoreFg05") {
                     $scope.checked(item);
                 }
             }
@@ -117,6 +130,10 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
         //     params.userBrands = momsHqBrandCd;
         // }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
         console.log(params);
 
@@ -175,6 +192,22 @@ app.controller('empBatchChangeCtrl', ['$scope', '$http', function ($scope, $http
                 // 매장그룹
                 else if(chgGubun == "momsStoreFg01Chg") {
                     $scope.flex.collectionView.items[i].momsStoreFg01 = $scope.momsStoreFg01Chg;
+                }
+                // 매장그룹2
+                else if(chgGubun == "momsStoreFg02Chg") {
+                    $scope.flex.collectionView.items[i].momsStoreFg02 = $scope.momsStoreFg02Chg;
+                }
+                // 매장그룹3
+                else if(chgGubun == "momsStoreFg03Chg") {
+                    $scope.flex.collectionView.items[i].momsStoreFg03 = $scope.momsStoreFg03Chg;
+                }
+                // 매장그룹4
+                else if(chgGubun == "momsStoreFg04Chg") {
+                    $scope.flex.collectionView.items[i].momsStoreFg04 = $scope.momsStoreFg04Chg;
+                }
+                // 매장그룹5
+                else if(chgGubun == "momsStoreFg05Chg") {
+                    $scope.flex.collectionView.items[i].momsStoreFg05 = $scope.momsStoreFg05Chg;
                 }
             }
         }
