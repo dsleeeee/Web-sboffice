@@ -268,6 +268,7 @@
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.cookedDt"/>" binding="cookedDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.finishedDt"/>" binding="finishedDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.calledDt"/>" binding="calledDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="orderTimeTracking.lastCalledDt"/>" binding="lastCalledDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.assignedDt"/>" binding="assignedDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.pickedUpDt"/>" binding="pickedUpDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="orderTimeTracking.completedFg"/>" binding="completedFg" data-map="completedFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -327,6 +328,7 @@
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.cookedDt"/>" binding="cookedDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.finishedDt"/>" binding="finishedDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.calledDt"/>" binding="calledDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderTimeTracking.lastCalledDt"/>" binding="lastCalledDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.assignedDt"/>" binding="assignedDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.pickedUpDt"/>" binding="pickedUpDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.completedFg"/>" binding="completedFg" data-map="completedFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
