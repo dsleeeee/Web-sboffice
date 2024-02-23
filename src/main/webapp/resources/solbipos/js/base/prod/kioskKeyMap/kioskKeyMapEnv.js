@@ -114,7 +114,7 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', '$timeout', function ($
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreKioskPosList.sb", params, function () {
 
-            var grid = wijmo.Control.getControl("#wjGridList");
+            var grid = wijmo.Control.getControl("#wjGridKioskKeyMapEnvList");
             var columns = grid.columns;
             var rows = grid.rows;
 
