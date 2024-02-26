@@ -8,14 +8,14 @@
 <div id="layerMobileLastPwdChgDtChkPop" class="layer" style="display: none;">
     <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">
         <!--layerContent-->
-        <div class="title" style="width:375px;">
-            <div class="con s14">
+        <div class="title" style="width:355px;">
+            <div class="con s13">
                 <s:message code="login.pw.chg.lastPwd"/>
             </div>
             <%--<a href="#" class="btn_close"></a>--%>
             <div class="btnSet">
-                <span><a href="#" class="btn_blue" id="btnPwdChg"><s:message code="login.pw.chg"/></a></span>
-                <span><a href="#" class="btn_blue" id="btn_close"><s:message code="login.pw.chg.next"/></a></span>
+                <span><a href="#" class="btn_blue s13" id="btnPwdChg"><s:message code="login.pw.chg"/></a></span>
+                <span><a href="#" class="btn_blue s13" id="btn_close"><s:message code="login.pw.chg.next"/></a></span>
             </div>
         </div>
     </div>

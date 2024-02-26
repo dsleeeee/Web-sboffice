@@ -7,7 +7,7 @@
 <div id="layerMobileLastLoginHistPop" class="layer" style="display: none;">
     <div class="layer_inner">
         <!--layerContent-->
-        <div class="title" style="width: 410px; height: 450px;">
+        <div class="title" style="width: 355px; height: 450px;">
             <%-- 타이틀 --%>
             <p class="tit">
                 <s:message code="login.layer.lastLoginHist.title" />
@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="btnSet">
-                    <span><a href="#" class="btn_blue" ng-click="close()"><s:message code="cmm.close" /></a></span>
+                    <span><a href="#" class="btn_blue s13" ng-click="close()"><s:message code="cmm.close" /></a></span>
                 </div>
             </div>
             <%-- //내용 --%>
