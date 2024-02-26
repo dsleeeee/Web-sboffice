@@ -31,9 +31,11 @@
 
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="login.layer.lastLoginHist.userId"/>" binding="userId" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="login.layer.lastLoginHist.loginOrgn"/>" binding="loginOrgn" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="login.layer.lastLoginHist.loginOrgn"/>" binding="loginOrgn" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="login.layer.lastLoginHist.loginIp"/>" binding="loginIp" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="login.layer.lastLoginHist.loginDt"/>" binding="loginDt" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="login.layer.lastLoginHist.loginDt"/>" binding="loginDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="login.layer.lastLoginHist.statCd"/>" binding="statCd" width="50" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="login.layer.lastLoginHist.remark"/>" binding="remark" data-map="remarkDataMap" width="160" is-read-only="true" align="center"></wj-flex-grid-column>
                         </wj-flex-grid>
                     </div>
                 </div>
@@ -47,4 +49,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/application/layer/mobileLastLoginHistPop.js?ver=20240219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/application/layer/mobileLastLoginHistPop.js?ver=20240226.01" charset="utf-8"></script>

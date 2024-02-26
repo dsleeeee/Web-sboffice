@@ -14,6 +14,21 @@
 //     $("#layerMobileLastLoginHistPop").hide();
 // });
 
+// 비고
+var remarkDataMapData = [
+    {"name":"로그인 성공","value":"SUCC"},
+    {"name":"로그인 실패","value":"FAIL"},
+    {"name":"사용여부","value":"USE"},
+    {"name":"존재하지 않는 유져","value":"NID"},
+    {"name":"패스워드 틀림","value":"ERR"},
+    {"name":"패스워드 변경 필요한 상태","value":"CHG"},
+    {"name":"패스워드 유효 기간 지남","value":"EXP"},
+    {"name":"로그인횟수 초과","value":"CNT"},
+    {"name":"자동 로그인 실패","value":"LAF"},
+    {"name":"휴면계정","value":"DA"},
+    {"name":"계정 사용 중지","value":"NWUI"}
+];
+
 /**
  *  최근접속이력 그리드 생성
  */
@@ -24,6 +39,9 @@ app.controller('mobileLastLoginHistCtrl', ['$scope', '$http', function ($scope, 
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
+        $scope.remarkDataMap = new wijmo.grid.DataMap(remarkDataMapData, 'value', 'name'); // 비고
+
         // 조회
         $scope.searchMobileLastLoginHist();
     };
