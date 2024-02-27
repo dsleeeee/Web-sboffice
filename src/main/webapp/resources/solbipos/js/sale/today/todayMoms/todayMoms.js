@@ -1,3 +1,14 @@
+/****************************************************************
+ *
+ * 파일명 : todayMoms.js
+ * 설  명 : 당일 매출 현황 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2022.10.06     권지현      1.0
+ *
+ * **************************************************************/
+
 /**
  * get application
  */
@@ -5,84 +16,89 @@ var app = agrid.getApp();
 
 /** 승인 controller */
 app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-  // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('todayMomsCtrl', $scope, $http, true));
 
-  $scope.srchStartDate  = wcombo.genDateVal("#srchStartDate", gvStartDate);
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('todayMomsCtrl', $scope, $http, false));
 
-  // 브랜드 콤보박스 셋팅
-  $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
-  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
-  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
-  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
-  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
-  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
-  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-  $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
-  $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope.srchStartDate  = wcombo.genDateVal("#srchStartDate", gvStartDate);
 
-  // // 팀별
-  // if(momsTeamComboList.length <= 1) {
-  //   $("#srchMomsTeamCombo").css('background-color', '#F0F0F0');
-  //   $("#srchMomsTeamCombo").attr("disabled", true);
-  // } else {
-  //   $("#srchMomsTeamCombo").css('background-color', '#FFFFFF');
-  //   $("#srchMomsTeamCombo").attr("disabled", false);
-  // }
-  // // AC점포별
-  // if(momsAcShopComboList.length <= 1) {
-  //   $("#srchMomsAcShopCombo").css('background-color', '#F0F0F0');
-  //   $("#srchMomsAcShopCombo").attr("disabled", true);
-  // } else {
-  //   $("#srchMomsAcShopCombo").css('background-color', '#FFFFFF');
-  //   $("#srchMomsAcShopCombo").attr("disabled", false);
-  // }
-  // // 지역구분
-  // if(momsAreaFgComboList.length <= 1) {
-  //   $("#srchMomsAreaFgCombo").css('background-color', '#F0F0F0');
-  //   $("#srchMomsAreaFgCombo").attr("disabled", true);
-  // } else {
-  //   $("#srchMomsAreaFgCombo").css('background-color', '#FFFFFF');
-  //   $("#srchMomsAreaFgCombo").attr("disabled", false);
-  // }
-  // // 상권
-  // if(momsCommercialComboList.length <= 1) {
-  //   $("#srchMomsCommercialCombo").css('background-color', '#F0F0F0');
-  //   $("#srchMomsCommercialCombo").attr("disabled", true);
-  // } else {
-  //   $("#srchMomsCommercialCombo").css('background-color', '#FFFFFF');
-  //   $("#srchMomsCommercialCombo").attr("disabled", false);
-  // }
-  // // 점포유형
-  // if(momsShopTypeComboList.length <= 1) {
-  //   $("#srchMomsShopTypeCombo").css('background-color', '#F0F0F0');
-  //   $("#srchMomsShopTypeCombo").attr("disabled", true);
-  // } else {
-  //   $("#srchMomsShopTypeCombo").css('background-color', '#FFFFFF');
-  //   $("#srchMomsShopTypeCombo").attr("disabled", false);
-  // }
-  // // 매장관리타입
-  // if(momsStoreManageTypeComboList.length <= 1) {
-  //   $("#srchMomsStoreManageTypeCombo").css('background-color', '#F0F0F0');
-  //   $("#srchMomsStoreManageTypeCombo").attr("disabled", true);
-  // } else {
-  //   $("#srchMomsStoreManageTypeCombo").css('background-color', '#FFFFFF');
-  //   $("#srchMomsStoreManageTypeCombo").attr("disabled", false);
-  // }
-  // // 그룹
-  // if(branchCdComboList.length <= 1) {
-  //   $("#srchBranchCdCombo").css('background-color', '#F0F0F0');
-  //   $("#srchBranchCdCombo").attr("disabled", true);
-  // } else {
-  //   $("#srchBranchCdCombo").css('background-color', '#FFFFFF');
-  //   $("#srchBranchCdCombo").attr("disabled", false);
-  // }
+    // 브랜드 콤보박스 셋팅
+    $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
-  // 그리드 매출구분
-  $scope.saleYnMap = new wijmo.grid.DataMap([
+    // // 팀별
+    // if(momsTeamComboList.length <= 1) {
+    //   $("#srchMomsTeamCombo").css('background-color', '#F0F0F0');
+    //   $("#srchMomsTeamCombo").attr("disabled", true);
+    // } else {
+    //   $("#srchMomsTeamCombo").css('background-color', '#FFFFFF');
+    //   $("#srchMomsTeamCombo").attr("disabled", false);
+    // }
+    // // AC점포별
+    // if(momsAcShopComboList.length <= 1) {
+    //   $("#srchMomsAcShopCombo").css('background-color', '#F0F0F0');
+    //   $("#srchMomsAcShopCombo").attr("disabled", true);
+    // } else {
+    //   $("#srchMomsAcShopCombo").css('background-color', '#FFFFFF');
+    //   $("#srchMomsAcShopCombo").attr("disabled", false);
+    // }
+    // // 지역구분
+    // if(momsAreaFgComboList.length <= 1) {
+    //   $("#srchMomsAreaFgCombo").css('background-color', '#F0F0F0');
+    //   $("#srchMomsAreaFgCombo").attr("disabled", true);
+    // } else {
+    //   $("#srchMomsAreaFgCombo").css('background-color', '#FFFFFF');
+    //   $("#srchMomsAreaFgCombo").attr("disabled", false);
+    // }
+    // // 상권
+    // if(momsCommercialComboList.length <= 1) {
+    //   $("#srchMomsCommercialCombo").css('background-color', '#F0F0F0');
+    //   $("#srchMomsCommercialCombo").attr("disabled", true);
+    // } else {
+    //   $("#srchMomsCommercialCombo").css('background-color', '#FFFFFF');
+    //   $("#srchMomsCommercialCombo").attr("disabled", false);
+    // }
+    // // 점포유형
+    // if(momsShopTypeComboList.length <= 1) {
+    //   $("#srchMomsShopTypeCombo").css('background-color', '#F0F0F0');
+    //   $("#srchMomsShopTypeCombo").attr("disabled", true);
+    // } else {
+    //   $("#srchMomsShopTypeCombo").css('background-color', '#FFFFFF');
+    //   $("#srchMomsShopTypeCombo").attr("disabled", false);
+    // }
+    // // 매장관리타입
+    // if(momsStoreManageTypeComboList.length <= 1) {
+    //   $("#srchMomsStoreManageTypeCombo").css('background-color', '#F0F0F0');
+    //   $("#srchMomsStoreManageTypeCombo").attr("disabled", true);
+    // } else {
+    //   $("#srchMomsStoreManageTypeCombo").css('background-color', '#FFFFFF');
+    //   $("#srchMomsStoreManageTypeCombo").attr("disabled", false);
+    // }
+    // // 그룹
+    // if(branchCdComboList.length <= 1) {
+    //   $("#srchBranchCdCombo").css('background-color', '#F0F0F0');
+    //   $("#srchBranchCdCombo").attr("disabled", true);
+    // } else {
+    //   $("#srchBranchCdCombo").css('background-color', '#FFFFFF');
+    //   $("#srchBranchCdCombo").attr("disabled", false);
+    // }
+
+    // 그리드 매출구분
+    $scope.saleYnMap = new wijmo.grid.DataMap([
     {id: "Y", name: messages["todayDtl.saleY"]},
     {id: "N", name: messages["todayDtl.saleN"]}
-  ], 'id', 'name');
+    ], 'id', 'name');
 
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -212,6 +228,10 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
       params.userBrands = momsHqBrandCd;
     }
     params.momsStoreFg01 = $scope.momsStoreFg01;
+    params.momsStoreFg02 = $scope.momsStoreFg02;
+    params.momsStoreFg03 = $scope.momsStoreFg03;
+    params.momsStoreFg04 = $scope.momsStoreFg04;
+    params.momsStoreFg05 = $scope.momsStoreFg05;
     params.listScale = 500;
 
     console.log(params);
@@ -263,6 +283,10 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
       params.userBrands = momsHqBrandCd;
     }
     params.momsStoreFg01 = $scope.momsStoreFg01;
+    params.momsStoreFg02 = $scope.momsStoreFg02;
+    params.momsStoreFg03 = $scope.momsStoreFg03;
+    params.momsStoreFg04 = $scope.momsStoreFg04;
+    params.momsStoreFg05 = $scope.momsStoreFg05;
 
     $scope._broadcast('todayMomsExcelCtrl',params);
   }
@@ -271,14 +295,14 @@ app.controller('todayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 app.controller('todayMomsExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
-  // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('todayMomsExcelCtrl', $scope, $http, true));
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('todayMomsExcelCtrl', $scope, $http, false));
 
-  // 그리드 매출구분
-  $scope.saleYnMap = new wijmo.grid.DataMap([
+    // 그리드 매출구분
+    $scope.saleYnMap = new wijmo.grid.DataMap([
     {id: "Y", name: messages["todayDtl.saleY"]},
     {id: "N", name: messages["todayDtl.saleN"]}
-  ], 'id', 'name');
+    ], 'id', 'name');
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {

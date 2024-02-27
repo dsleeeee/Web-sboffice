@@ -194,7 +194,6 @@ public class StorePosVersionController {
             branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
-
         // 매장그룹
         List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
         String momsStoreFg01ComboListAll = "";
@@ -209,7 +208,6 @@ public class StorePosVersionController {
             momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
-
         // 매장그룹2
         List momsStoreFg02ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "169");
         String momsStoreFg02ComboListAll = "";
@@ -224,7 +222,6 @@ public class StorePosVersionController {
             momsStoreFg02ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg02ComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsStoreFg02ComboList", momsStoreFg02ComboListAll);
-
         // 매장그룹3
         List momsStoreFg03ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "170");
         String momsStoreFg03ComboListAll = "";
@@ -239,7 +236,6 @@ public class StorePosVersionController {
             momsStoreFg03ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg03ComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsStoreFg03ComboList", momsStoreFg03ComboListAll);
-
         // 매장그룹4
         List momsStoreFg04ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "171");
         String momsStoreFg04ComboListAll = "";
@@ -254,7 +250,6 @@ public class StorePosVersionController {
             momsStoreFg04ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg04ComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsStoreFg04ComboList", momsStoreFg04ComboListAll);
-
         // 매장그룹5
         List momsStoreFg05ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "172");
         String momsStoreFg05ComboListAll = "";

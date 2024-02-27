@@ -1,3 +1,14 @@
+/****************************************************************
+ *
+ * 파일명 : dayTime.js
+ * 설  명 : 일별시간대 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2022.11.23     권지현      1.0
+ *
+ * **************************************************************/
+
 /**
  * get application
  */
@@ -20,6 +31,7 @@ for(i =0 ; i < 24; i++){
 
 /** 과세면별 controller */
 app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dayTimeCtrl', $scope, $http, true));
 
@@ -56,6 +68,10 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -225,6 +241,10 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수

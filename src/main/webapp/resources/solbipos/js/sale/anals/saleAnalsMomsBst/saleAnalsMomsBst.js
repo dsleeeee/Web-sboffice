@@ -41,6 +41,7 @@ var dayGubunComboData = [
 
 /** controller */
 app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('saleAnalsMomsBstCtrl', $scope, $http, true));
 
@@ -91,6 +92,10 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd", branchCdComboList);                       // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // // 팀별
     // if (momsTeamComboList.length <= 1) {
@@ -286,6 +291,10 @@ app.controller('saleAnalsMomsBstCtrl', ['$scope', '$http', '$timeout', function 
                 params.userBrands = momsHqBrandCd;
             }
             params.momsStoreFg01 = $scope.momsStoreFg01;
+            params.momsStoreFg02 = $scope.momsStoreFg02;
+            params.momsStoreFg03 = $scope.momsStoreFg03;
+            params.momsStoreFg04 = $scope.momsStoreFg04;
+            params.momsStoreFg05 = $scope.momsStoreFg05;
         }
 
         // 화면출력과 상품,매장 조회조건 입력에 따른 리스트 타입 셋팅
