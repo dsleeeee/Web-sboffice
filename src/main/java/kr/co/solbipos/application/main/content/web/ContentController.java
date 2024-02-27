@@ -119,7 +119,7 @@ public class ContentController {
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
@@ -196,7 +196,7 @@ public class ContentController {
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
@@ -309,7 +309,7 @@ public class ContentController {
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
@@ -411,7 +411,7 @@ public class ContentController {
         List<DefaultMap<String>> boardList = boardService.getPopUpBoardList(sessionInfoVO);
         model.addAttribute("boardList", boardList);
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 

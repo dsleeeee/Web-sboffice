@@ -92,7 +92,7 @@ public class MobileContentController {
         List<DefaultMap<String>> weekPosInstTopList = mobileContentService.getMobileWeekPosInstTopList(sessionInfoVO);
         model.addAttribute("weekPosInstTopList", weekPosInstTopList);
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
@@ -144,7 +144,7 @@ public class MobileContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
@@ -197,7 +197,7 @@ public class MobileContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
@@ -246,7 +246,7 @@ public class MobileContentController {
             model.addAttribute("sid", request.getParameter("sid"));
         }
 
-        /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+        /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 

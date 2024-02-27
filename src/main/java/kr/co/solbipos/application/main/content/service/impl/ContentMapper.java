@@ -142,6 +142,6 @@ public interface ContentMapper {
     /** 메인화면매출표시 */
     String getMainSaleFg(SessionInfoVO sessionInfoVO);
 
-    /** 6개월이상 비밀번호 미수정시 팝업 알림 */
+    /** 6개월이상 비밀번호 미수정시 알림 팝업 */
     String getLastPwdChgDtChk(SessionInfoVO sessionInfoVO);
 }

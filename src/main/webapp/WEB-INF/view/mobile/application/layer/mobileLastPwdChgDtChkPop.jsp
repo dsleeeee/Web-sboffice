@@ -23,6 +23,9 @@
 
 <script type="text/javascript">
     var userId = "${userId}";
+
+    // 6개월이상 비밀번호 미수정시 알림 팝업
+    var lastPwdChgDtChk = "${lastPwdChgDtChk}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/application/layer/mobileLastPwdChgDtChkPop.js?ver=20240216.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/application/layer/mobileLastPwdChgDtChkPop.js?ver=20240227.01" charset="utf-8"></script>

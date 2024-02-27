@@ -41,6 +41,7 @@
                 </div>
                 <div class="btnSet">
                     <span><a href="#" class="btn_blue" ng-click="close()"><s:message code="cmm.close" /></a></span>
+                    <span><a href="#" class="btn_blue" ng-click="dayRemove()"><s:message code="login.layer.lastLoginHist.dayRemove" /></a></span>
                 </div>
             </div>
             <%-- //내용 --%>
@@ -49,4 +50,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/lastLoginHistPop.js?ver=20240226.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/lastLoginHistPop.js?ver=20240227.01" charset="utf-8"></script>

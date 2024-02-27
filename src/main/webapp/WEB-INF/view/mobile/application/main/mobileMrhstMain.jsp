@@ -74,9 +74,6 @@
 </div>
 
 <script type="text/javascript">
-    // 6개월이상 비밀번호 미수정시 팝업 알림
-    var lastPwdChgDtChk = "${lastPwdChgDtChk}";
-
     // 오늘의 매출건수
     var daySaleCntList = [];
     <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
@@ -212,18 +209,6 @@
         chart2.endUpdate();
     });
     <%-- // wijmo flexChart --%>
-
-
-    // 6개월이상 비밀번호 미수정시 팝업 알림
-    if(lastPwdChgDtChk === "Y") {
-        $("#fullDimmedMobileLastPwdChgDtChkPop").show();
-        $("#layerMobileLastPwdChgDtChkPop").show();
-    }
-
-
-    // 최근접속이력 팝업
-    $("#fullDimmedMobileLastLoginHistPop").show();
-    $("#layerMobileLastLoginHistPop").show();
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/mobile/application/main/mobileMrhstMain.js?ver=20210531.01" charset="utf-8"></script>

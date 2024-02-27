@@ -213,9 +213,6 @@
 </div>
 
 <script type="text/javascript">
-    // 6개월이상 비밀번호 미수정시 팝업 알림
-    var lastPwdChgDtChk = "${lastPwdChgDtChk}";
-
     // 공지사항 more 페이지 이동시 권한체크
     var board_auth = "${board_auth}";
 
@@ -467,18 +464,6 @@
         //     $("#divDimmed").css('display', 'none');
         //     $("#divPopup").css('display', 'none');
         // }
-
-
-        // 6개월이상 비밀번호 미수정시 팝업 알림
-        if(lastPwdChgDtChk === "Y") {
-            $("#fullDimmedLastPwdChgDtChkPop").show();
-            $("#layerLastPwdChgDtChkPop").show();
-        }
-
-
-        // 최근접속이력 팝업
-        $("#fullDimmedLastLoginHistPop").show();
-        $("#layerLastLoginHistPop").show();
     }]);
 </script>
 
