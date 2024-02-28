@@ -617,7 +617,11 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
             data.resrceCd = menuCd;
             data.resrceNm = menuNm;
             data.downloadUseFg = "2"; // 다운로드 사용기능 (0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드)
-            data.downloadNo = "3"; // 다운로드 화면구분번호
+            if (data.dayGubun === "day") {
+                data.downloadNo = "3-1"; // 다운로드 화면구분번호
+            } else if (data.dayGubun === "month") {
+                data.downloadNo = "3-2"; // 다운로드 화면구분번호
+            }
 
             $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', data, function (response) {
                 if (response.data.data.list === 0) {
