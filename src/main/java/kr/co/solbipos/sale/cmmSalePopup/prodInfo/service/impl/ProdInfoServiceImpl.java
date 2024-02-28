@@ -152,4 +152,24 @@ public class ProdInfoServiceImpl implements ProdInfoService {
 
         return prodInfoMapper.getProdSaleDtlMonthProdClassList(prodInfoVO);
     }
+
+    /** 매출공통팝업 - 상품매출 상세내역 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdSaleDtlDayOfWeekList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+        prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(prodInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodInfoVO.getStoreCds(), 3900));
+            prodInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return prodInfoMapper.getProdSaleDtlDayOfWeekList(prodInfoVO);
+    }
 }

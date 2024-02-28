@@ -53,25 +53,28 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 			}
 
       if (ht.cellType === wijmo.grid.CellType.Cell) {
-        var col         = ht.panel.columns[ht.col];
-        var selectedRow = s.rows[ht.row].dataItem;
+        var col          = ht.panel.columns[ht.col];
+        var selectedRow  = s.rows[ht.row].dataItem;
         var params       = {};
-	    params.chkPop   = "cornerDayProdPop"; // 매출관리>매출현황>코너별>일자별탭
+	    params.chkPop    = "cornerDayProdPop"; // 매출관리>매출현황>코너별>일자별탭
 	    params.startDate = selectedRow.saleDate.replaceAll("-","");
 	    params.endDate   = selectedRow.saleDate.replaceAll("-","");
-	    params.storeCd = $("#cornerDaySelectStoreCd").val();
-		var storeCornr   = $("#cornerDaySelectCornerCd").val().split(",");
+
+		var storeCornr   = $scope.searchCornrCd.split(",");
 		var arrStoreCornr     = [];
 		for(var i=0; i < storeCornr.length; i++) {
 			var temp = storeCornr[i];
 			arrStoreCornr.push(temp);
 		}
 
-		if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
+		if (col.binding.substring(0, 10) === "totSaleQty") { // 수량합계
 			params.arrStoreCornr	 = arrStoreCornr;
+			params.storeCd = $scope.searchStoreCd;
 			$scope._broadcast('saleComProdCtrl', params);
 		}else if(col.binding.substring(0, 7) === "saleQty") {
 			params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
+			var len = params.arrStoreCornr.indexOf("||");
+			params.storeCd 	 = arrStoreCornr[Math.floor(ht.col/2)-2].substring(0,len);
 			$scope._broadcast('saleComProdCtrl', params);
 		}
       }
@@ -153,13 +156,23 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     	 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
     	 return false;
     }
-		
-    $scope.searchCornerDayList(false);
 
-	var storeCd = $("#cornerDaySelectStoreCd").val();
-	var cornrCd = $("#cornerDaySelectCornerCd").val();
+	if($("#cornerDaySelectStoreCd").val().split(",").length > 10) {
+	  $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 10개 선택 가능합니다.
+	  return false;
+	}
+
+	  var storeCd = $("#cornerDaySelectStoreCd").val();
+	  var cornrCd = $("#cornerDaySelectCornerCd").val();
+
+	if($("#cornerDaySelectCornerCd").val() === ''){
+		$scope.getReCornerNmList(storeCd, "" , true, true);
+	}else {
+		$scope.searchCornerDayList(false);
+		$scope.getReCornerNmList(storeCd, cornrCd, true);
+	}
 	
-	$scope.getReCornerNmList(storeCd, cornrCd, true);
+	// $scope.getReCornerNmList(storeCd, cornrCd, true);
 
   });
 
@@ -172,7 +185,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     params.cornrCd   = $("#cornerDaySelectCornerCd").val();
     params.isPageChk = isPageChk;
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-    
+
     $scope.searchStoreCd = params.storeCd;
     $scope.searchCornrCd = params.cornrCd;
     $scope.searchChecked = $scope.isChecked;
@@ -267,7 +280,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 	};	
 
 	//매장의 코너 리스트 재생성
-	$scope.getReCornerNmList = function (storeCd, cornrCd, gridSet) {
+	$scope.getReCornerNmList = function (storeCd, cornrCd, gridSet, cornrSet) {
 		var url = "/sale/status/corner/corner/cornerNmList.sb";
 	    var params = {};
 	    params.storeCd = storeCd;
@@ -305,6 +318,10 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 	    			if(gridSet){
 	    				$scope.makeDataGrid();
 	    			}
+	    			if(cornrSet){
+						var vScope = agrid.getScope('cornerDayCtrl');
+						vScope.searchCornerDayList(false);
+					}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -326,6 +343,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 
 		  var arrCornrCd = storeCornrCd.split(',');
 		  var arrCornrNm = storeCornrNm.split(',');
+		  var storeCd = $scope.searchStoreCd.split(',');
 
 		  if (arrCornrCd != "") {
 			  for(var i = 1; i < arrCornrCd.length + 1; i++) {
@@ -333,6 +351,7 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 				  var colValue = arrCornrCd[i-1];
 				  var colName = arrCornrNm[i-1];
 				  var colSplit = colName.split('||');
+				  var colValSplit = colValue.split('||');
 //				  if(colSplit[0] == null || colSplit[0] == "" || colSplit[0] == "null"){
 //					  colSplit[0] = "테스트 매장"+i;
 //				  }
@@ -340,11 +359,11 @@ app.controller('cornerDayCtrl', ['$scope', '$http', '$timeout', function ($scope
 				  grid.columns.push(new wijmo.grid.Column({header: messages["corner.realSaleAmt"], binding: 'realSaleAmt'+(i-1), width: 100, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
 		          grid.columns.push(new wijmo.grid.Column({header: messages["corner.saleQty"], binding: 'saleQty'+(i-1), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
-		          grid.columnHeaders.setCellData(0, 'realSaleAmt'+(i-1), colSplit[0]);
-		          grid.columnHeaders.setCellData(0, 'saleQty'+(i-1), colSplit[0]);
+		          grid.columnHeaders.setCellData(0, 'realSaleAmt'+(i-1), "[" + colValSplit[0] + "]" + colSplit[0]);
+		          grid.columnHeaders.setCellData(0, 'saleQty'+(i-1), "[" + colValSplit[0] + "]" + colSplit[0]);
 
-				  grid.columnHeaders.setCellData(1, 'realSaleAmt'+(i-1), colSplit[1]);
-		          grid.columnHeaders.setCellData(1, 'saleQty'+(i-1), colSplit[1]);
+				  grid.columnHeaders.setCellData(1, 'realSaleAmt'+(i-1), "[" + colValSplit[1] + "]" + colSplit[1]);
+				  grid.columnHeaders.setCellData(1, 'saleQty'+(i-1), "[" + colValSplit[1] + "]"  + colSplit[1]);
 			  }
 		  }
 
@@ -609,15 +628,16 @@ app.controller('cornerDayExcelCtrl', ['$scope', '$http', '$timeout', function ($
 				  var colValue = arrCornrCd[i-1];
 				  var colName = arrCornrNm[i-1];
 				  var colSplit = colName.split('||');
+				  var colValSplit = colValue.split('||');
 
 				  grid.columns.push(new wijmo.grid.Column({header: messages["corner.realSaleAmt"], binding: 'realSaleAmt'+(i-1), width: 100, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
 		          grid.columns.push(new wijmo.grid.Column({header: messages["corner.saleQty"], binding: 'saleQty'+(i-1), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
-		          grid.columnHeaders.setCellData(0, 'realSaleAmt'+(i-1), colSplit[0]);
-		          grid.columnHeaders.setCellData(0, 'saleQty'+(i-1), colSplit[0]);
+				  grid.columnHeaders.setCellData(0, 'realSaleAmt'+(i-1), "[" + colValSplit[0] + "]" + colSplit[0]);
+				  grid.columnHeaders.setCellData(0, 'saleQty'+(i-1), "[" + colValSplit[0] + "]" + colSplit[0]);
 
-				  grid.columnHeaders.setCellData(1, 'realSaleAmt'+(i-1), colSplit[1]);
-		          grid.columnHeaders.setCellData(1, 'saleQty'+(i-1), colSplit[1]);
+				  grid.columnHeaders.setCellData(1, 'realSaleAmt'+(i-1), "[" + colValSplit[1] + "]" + colSplit[1]);
+				  grid.columnHeaders.setCellData(1, 'saleQty'+(i-1), "[" + colValSplit[1] + "]"  + colSplit[1]);
 			  }
 		  }
 

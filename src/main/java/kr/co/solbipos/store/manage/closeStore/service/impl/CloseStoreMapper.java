@@ -2,6 +2,7 @@ package kr.co.solbipos.store.manage.closeStore.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.store.manage.closeStore.service.CloseStoreVO;
+import kr.co.solbipos.store.manage.storeCloseExcept.service.StoreCloseExceptVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -27,9 +28,24 @@ import java.util.List;
 @Repository
 public interface CloseStoreMapper {
 
+    /** 밴 콤보박스 조회 */
+    List<DefaultMap<String>> getVanComboList();
+
     /** 폐점예정매장 조회 */
     List<DefaultMap<String>> getCloseStoreList(CloseStoreVO closeStoreVO);
 
     /** 매장 폐점 */
     int saveCloseStore(CloseStoreVO closeStoreVO);
+
+    /** 매장 조회 */
+    List<DefaultMap<String>> getStoreList(CloseStoreVO closeStoreVO);
+
+    /** 폐점제외매장 조회 */
+    List<DefaultMap<String>> getStoreCloseExceptList(CloseStoreVO closeStoreVO);
+
+    /** 폐점제외매장 등록 */
+    int saveStoreCloseExcept(CloseStoreVO closeStoreVO);
+
+    /** 폐점제외매장 삭제 */
+    int deleteStoreCloseExcept(CloseStoreVO closeStoreVO);
 }

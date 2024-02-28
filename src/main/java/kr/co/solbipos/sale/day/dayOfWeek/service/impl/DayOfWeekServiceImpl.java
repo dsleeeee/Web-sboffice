@@ -247,6 +247,7 @@ public class DayOfWeekServiceImpl implements DayOfWeekService {
 
         dayOfWeekVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         dayOfWeekVO.setArrCornerCol(dayOfWeekVO.getStoreCornerCd().split(",")); // 코너구분 array 값 세팅
+        dayOfWeekVO.setStoreCdList(dayOfWeekVO.getStoreCd().split(","));
 
         // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
         String pivotCornerCol = "";

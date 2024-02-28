@@ -9,6 +9,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.closeStore.service.CloseStoreService;
 import kr.co.solbipos.store.manage.closeStore.service.CloseStoreVO;
 import kr.co.solbipos.store.manage.storeCloseExcept.service.StoreCloseExceptService;
+import kr.co.solbipos.store.manage.storeCloseExcept.service.StoreCloseExceptVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +52,12 @@ public class CloseStoreController {
     /** service */
     private final CloseStoreService closeStoreService;
     private final SessionService sessionService;
-    private final StoreCloseExceptService storeCloseExceptService;
 
     /** Constructor Injection */
     @Autowired
-    public CloseStoreController(CloseStoreService closeStoreService, SessionService sessionService, StoreCloseExceptService storeCloseExceptService) {
+    public CloseStoreController(CloseStoreService closeStoreService, SessionService sessionService) {
         this.closeStoreService = closeStoreService;
         this.sessionService = sessionService;
-        this.storeCloseExceptService = storeCloseExceptService;
     }
 
     /**
@@ -70,12 +69,13 @@ public class CloseStoreController {
      * @author  권지현
      * @since   2022.04.22
      */
-    @RequestMapping(value = "/closeStore/view.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/closeStoreView/view.sb", method = RequestMethod.GET)
     public String virtualLoginView(HttpServletRequest request, HttpServletResponse response,
             Model model) {
-        model.addAttribute("vanComboList", convertToJson(storeCloseExceptService.getVanComboList()));
 
-        return "store/manage/closeStore/closeStore";
+        model.addAttribute("vanComboList", convertToJson(closeStoreService.getVanComboList()));
+
+        return "store/manage/closeStore/closeStoreView";
     }
 
     /**
@@ -120,6 +120,96 @@ public class CloseStoreController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = closeStoreService.saveCloseStore(closeStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 폐점제외매장 - 매장 조회
+     * @param   request
+     * @param   response
+     * @param   closeStoreVO
+     * @param   model
+     * @return  Result
+     * @author  권지현
+     * @since   2023.04.07
+     */
+    @RequestMapping(value = "/storeCloseExcept/getStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreList(HttpServletRequest request, HttpServletResponse response,
+                               CloseStoreVO closeStoreVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = closeStoreService.getStoreList(closeStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, closeStoreVO);
+
+    }
+
+    /**
+     * 폐점제외매장 - 폐점제외매장 조회
+     * @param   request
+     * @param   response
+     * @param   closeStoreVO
+     * @param   model
+     * @return  Result
+     * @author  권지현
+     * @since   2023.04.07
+     */
+    @RequestMapping(value = "/storeCloseExcept/getStoreCloseExceptList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreCloseExceptList(HttpServletRequest request, HttpServletResponse response,
+                                          CloseStoreVO closeStoreVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> list = closeStoreService.getStoreCloseExceptList(closeStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, closeStoreVO);
+
+    }
+
+    /**
+     * 폐점제외매장 - 폐점제외매장 등록
+     * @param closeStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  권지현
+     * @since   2023.04.07
+     */
+    @RequestMapping(value = "/storeCloseExcept/saveStoreCloseExcept.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveStoreCloseExcept(@RequestBody CloseStoreVO[] closeStoreVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = closeStoreService.saveStoreCloseExcept(closeStoreVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 폐점제외매장 - 폐점제외매장 삭제
+     * @param closeStoreVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  권지현
+     * @since   2023.04.07
+     */
+    @RequestMapping(value = "/storeCloseExcept/deleteStoreCloseExcept.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteStoreCloseExcept(@RequestBody CloseStoreVO[] closeStoreVOs, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = closeStoreService.deleteStoreCloseExcept(closeStoreVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

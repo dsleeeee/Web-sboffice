@@ -42,6 +42,7 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
 
+
         // 첫째줄 헤더 생성
         var dataItem         = {};
         dataItem.saleDate    = messages["day.corner.saleDate"];
@@ -49,10 +50,13 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
         dataItem.totRealSaleAmt    = messages["day.corner.totRealSaleAmt"];
         dataItem.totSaleQty    = messages["day.corner.totSaleQty"];
 
+
+        var larr = {};
         // 코너구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrCornerCol.length; i++) {
-            dataItem['cornr' + arrCornerCol[i] + 'RealSaleAmt'] = cornerColList[i].storeNm;
-            dataItem['cornr' + arrCornerCol[i] + 'SaleQty'] = cornerColList[i].storeNm;
+            larr[i] = arrCornerCol[i].substring(0,1) + arrCornerCol[i].substring(1, arrCornerCol[i].length).toLowerCase();
+            dataItem['cornr' + larr[i] + 'RealSaleAmt'] = "[" + cornerColList[i].storeCd + "]" + cornerColList[i].storeNm;
+            dataItem['cornr' + larr[i] + 'SaleQty'] = "[" + cornerColList[i].storeCd + "]" + cornerColList[i].storeNm;
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
@@ -68,8 +72,9 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         // 코너구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrCornerCol.length; i++) {
-            dataItem1['cornr' + arrCornerCol[i] + 'RealSaleAmt'] = cornerColList[i].cornrNm;
-            dataItem1['cornr' + arrCornerCol[i] + 'SaleQty'] = cornerColList[i].cornrNm;
+            larr[i] = arrCornerCol[i].substring(0,1) + arrCornerCol[i].substring(1, arrCornerCol[i].length).toLowerCase();
+            dataItem1['cornr' + larr[i] + 'RealSaleAmt'] = "[" + cornerColList[i].cornrCd + "]" + cornerColList[i].cornrNm;
+            dataItem1['cornr' + larr[i] + 'SaleQty'] = "[" + cornerColList[i].cornrCd + "]" + cornerColList[i].cornrNm;
         }
 
         s.columnHeaders.rows[1].dataItem = dataItem1;
@@ -125,11 +130,12 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
 
                 // 수량
                 for (var i = 0; i < cornerColList.length; i++) {
-                    if (col.binding === ("cornr" + cornerColList[i].storeCornrCd + "SaleQty")) {
+                    larr[i] = cornerColList[i].storeCornrCd.substring(0,1) + cornerColList[i].storeCornrCd.substring(1, cornerColList[i].storeCornrCd.length).toLowerCase();
+                    if (col.binding === ("cornr" + larr[i] + "SaleQty")) {
                         var item = s.rows[e.row].dataItem;
 
                         // 값이 있으면 링크 효과
-                        if (nvl(item[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') !== '') {
+                        if (nvl(item[("cornr" + larr[i] + "SaleQty")], '') !== '') {
                             wijmo.addClass(e.cell, 'wijLink');
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                         }
@@ -154,7 +160,7 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.saleDate  = selectedRow.saleDate.replaceAll("-","");
-                    params.storeCd = $("#dayCornerStoreCd").val();
+                    params.storeCd = $scope.searchStoreCd;
                     params.gubun = "dayCorner";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
@@ -162,16 +168,18 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
 
                 // 수량 클릭시 상세정보 조회
                 for (var i = 0; i < cornerColList.length; i++) {
-                    if (col.binding === ("cornr" + cornerColList[i].storeCornrCd + "SaleQty")) {
+                    larr[i] = cornerColList[i].storeCornrCd.substring(0,1) + cornerColList[i].storeCornrCd.substring(1, cornerColList[i].storeCornrCd.length).toLowerCase();
+                    if (col.binding === ("cornr" + larr[i] + "SaleQty")) {
 
                         var selectedRow = s.rows[ht.row].dataItem;
                         var params      = {};
                         params.saleDate  = selectedRow.saleDate.replaceAll("-","");
                         params.storeCd = cornerColList[i].storeCd;
+                        params.cornrCd = cornerColList[i].cornrCd;
                         params.gubun = "dayCorner";
 
                         // 값이 있으면 링크
-                        if (nvl(selectedRow[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') !== '') {
+                        if (nvl(selectedRow[("cornr" + larr[i] + "SaleQty")], '') !== '') {
                             $scope._broadcast('prodSaleDtlCtrl', params);
                         }
                     }
@@ -187,6 +195,11 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
     });
 
     $scope.searchDayCorner = function() {
+
+        if($("#dayCornerStoreCd").val().split(",").length > 10) {
+            $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 10개 선택 가능합니다.
+            return false;
+        }
 
         //조회할 코너 Key값 셋팅을 위해
         var storeCornerCd = "";
@@ -209,11 +222,14 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
                 s_alert.pop("매장을 선택해주세요.");
                 return;
             }
+            var arr = $("#dayCornerStoreCd").val().split(",");
 
             // 해당 본사의 전체 코너에서 조회할 매장의 코너만 추려내기
             for (var i = 0; i < cornerColList.length; i++) {
-                if (cornerColList[i].storeCd === $("#dayCornerStoreCd").val()) {
-                    storeCornerCd += "," + arrCornerCol[i];
+                for(var j = 0; j < arr.length; j++) {
+                    if (cornerColList[i].storeCd === arr[j]) {
+                        storeCornerCd += "," + arrCornerCol[i];
+                    }
                 }
             }
 
@@ -238,17 +254,20 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
         // 코너별 실매출, 수량 컬럼 생성
         if(arr.length > 0 && storeCornerCd !== "") {
             for (var i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].substring(0,1) + arr[i].substring(1, arr[i].length).toLowerCase();
                 columns.push(new wijmo.grid.Column({ header: messages["day.corner.realSaleAmt"], binding : 'cornr' + arr[i] + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
                 columns.push(new wijmo.grid.Column({ header: messages["day.corner.saleQty"], binding : 'cornr' + arr[i] + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
             }
         }
-        
+
         // 코너별 매출 조회
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.storeCd = $("#dayCornerStoreCd").val();
         params.storeCornerCd = storeCornerCd;
+
+        $scope.searchStoreCd = params.storeCd;
 
         $scope._inquiryMain("/sale/day/day/day/getDayCornerList.sb", params, function() {}, false);
 

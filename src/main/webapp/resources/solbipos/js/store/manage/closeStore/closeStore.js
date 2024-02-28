@@ -48,6 +48,7 @@ app.controller('closeStoreCtrl',  ['$scope', '$http', function ($scope, $http) {
   });
 
   $scope.closeStoreList = function (){
+
     // 파라미터
     var params = {};
     params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');

@@ -3,6 +3,7 @@ package kr.co.solbipos.base.prod.corner.service;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
 
 import java.util.List;
 
@@ -28,4 +29,10 @@ public interface CornerService {
 
     /** 상품별 코너 이동 */
     int changeProdCorner(CornerVO[] cornerVOs, SessionInfoVO sessionInfoVO);
+
+    /** 코너 목록 조회 */
+    List<DefaultMap<String>> getCornerList(StoreCornerVO storeCornerVO);
+
+    /** 상품별 코너변경 - 전체 엑셀다운로드 */
+    List<DefaultMap<String>> getexcelList(CornerVO cornerVO, SessionInfoVO sessionInfoVO);
 }

@@ -51,14 +51,13 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 	  }
 
       if (ht.cellType === wijmo.grid.CellType.Cell) {
-        var col         = ht.panel.columns[ht.col];
-        var selectedRow = s.rows[ht.row].dataItem;
+        var col          = ht.panel.columns[ht.col];
+        var selectedRow  = s.rows[ht.row].dataItem;
         var params       = {};
-		params.chkPop   = "cornerDayProdPop"; // 매출관리>매출현황>코너별>월별탭
+		params.chkPop    = "cornerDayProdPop"; // 매출관리>매출현황>코너별>월별탭
 		params.startDate = selectedRow.saleYm.replace("-", "") + "01";
 		params.endDate   = selectedRow.saleYm.replace("-", "") + "31";
-		params.storeCd	 = $("#cornerMonthSelectStoreCd").val();
-		var storeCornr   = $("#cornerMonthSelectCornerCd").val().split(",");
+		var storeCornr   = $scope.cornrCdForExcel.split(",");
 		var arrStoreCornr     = [];
 		for(var i=0; i < storeCornr.length; i++) {
 			var temp = storeCornr[i];
@@ -67,9 +66,12 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         if (col.binding.substring(0, 10) === "totSaleQty") { // 수량
 			params.arrStoreCornr	 = arrStoreCornr;
+			params.storeCd = $scope.storeCdForExcel;
         	$scope._broadcast('saleComProdCtrl', params);
         }else if(col.binding.substring(0, 7) === "saleQty") {
         	params.arrStoreCornr   = arrStoreCornr[Math.floor(ht.col/2) - 2];
+			var len = params.arrStoreCornr.indexOf("||");
+			params.storeCd 	 = arrStoreCornr[Math.floor(ht.col/2)-2].substring(0,len);
         	$scope._broadcast('saleComProdCtrl', params);
         }
 
@@ -151,13 +153,20 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
     	 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
     	 return false;
     }
-	
-    $scope.searchCornerMonthList(false);
+	  if($("#cornerMonthSelectStoreCd").val().split(",").length > 10) {
+		  $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 10개 선택 가능합니다.
+		  return false;
+	  }
 
-    var storeCd = $("#cornerMonthSelectStoreCd").val();
-	var cornrCd = $("#cornerMonthSelectCornerCd").val();
+	  var storeCd = $("#cornerMonthSelectStoreCd").val();
+	  var cornrCd = $("#cornerMonthSelectCornerCd").val();
 
-	$scope.getReCornerNmList(storeCd, cornrCd, true);
+	  if($("#cornerMonthSelectCornerCd").val() === ''){
+		  $scope.getReCornerNmList(storeCd, "" , true, true);
+	  }else {
+		  $scope.searchCornerMonthList(false);
+		  $scope.getReCornerNmList(storeCd, cornrCd, true);
+	  }
   });
 
   //전체기간 체크박스 클릭이벤트
@@ -271,7 +280,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 	};
 	
 	//매장의 코너 리스트 재생성
-	$scope.getReCornerNmList = function (storeCd, cornrCd, gridSet) {
+	$scope.getReCornerNmList = function (storeCd, cornrCd, gridSet, cornrSet) {
 		var url = "/sale/status/corner/corner/cornerNmList.sb";
 	    var params = {};
 	    params.storeCd = storeCd;
@@ -305,6 +314,10 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 	    			if(gridSet){
 	    				$scope.makeDataGrid();
 	    			}
+					if(cornrSet){
+						var vScope = agrid.getScope('cornerMonthCtrl');
+						vScope.searchCornerMonthList(false);
+					}
 	    		}
 	    	}
 	    }, function errorCallback(response) {
@@ -334,6 +347,7 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 				  var colValue = arrCornrCd[i-1];
 				  var colName = arrCornrNm[i-1];
 				  var colSplit = colName.split('||');
+				  var colValSplit = colValue.split('||');
 //				  if(colSplit[0] == null || colSplit[0] == "" || colSplit[0] == "null"){
 //					  colSplit[0] = "테스트 매장"+i;
 //				  }
@@ -341,11 +355,11 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
 				  grid.columns.push(new wijmo.grid.Column({header: messages["corner.realSaleAmt"], binding: 'realSaleAmt'+(i-1), width: 100, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
 		          grid.columns.push(new wijmo.grid.Column({header: messages["corner.saleQty"], binding: 'saleQty'+(i-1), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
-		          grid.columnHeaders.setCellData(0, 3+((i-1)*2), colSplit[0]);
-		          grid.columnHeaders.setCellData(0, 4+((i-1)*2), colSplit[0]);
+		          grid.columnHeaders.setCellData(0, 3+((i-1)*2), "[" + colValSplit[0] + "]" + colSplit[0]);
+		          grid.columnHeaders.setCellData(0, 4+((i-1)*2), "[" + colValSplit[0] + "]" + colSplit[0]);
 
-				  grid.columnHeaders.setCellData(1, 3+((i-1)*2), colSplit[1]);
-		          grid.columnHeaders.setCellData(1, 4+((i-1)*2), colSplit[1]);
+				  grid.columnHeaders.setCellData(1, 3+((i-1)*2), "[" + colValSplit[1] + "]"  + colSplit[1]);
+		          grid.columnHeaders.setCellData(1, 4+((i-1)*2), "[" + colValSplit[1] + "]"  + colSplit[1]);
 			  }
 		  }
 
@@ -601,6 +615,7 @@ app.controller('cornerMonthExcelCtrl', ['$scope', '$http', '$timeout', function 
 				  var colValue = arrCornrCd[i-1];
 				  var colName = arrCornrNm[i-1];
 				  var colSplit = colName.split('||');
+				  var colValSplit = colValue.split('||');
 //				  if(colSplit[0] == null || colSplit[0] == "" || colSplit[0] == "null"){
 //					  colSplit[0] = "테스트 매장"+i;
 //				  }
@@ -608,11 +623,11 @@ app.controller('cornerMonthExcelCtrl', ['$scope', '$http', '$timeout', function 
 				  grid.columns.push(new wijmo.grid.Column({header: messages["corner.realSaleAmt"], binding: 'realSaleAmt'+(i-1), width: 100, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
 		          grid.columns.push(new wijmo.grid.Column({header: messages["corner.saleQty"], binding: 'saleQty'+(i-1), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
-		          grid.columnHeaders.setCellData(0, 3+((i-1)*2), colSplit[0]);
-		          grid.columnHeaders.setCellData(0, 4+((i-1)*2), colSplit[0]);
+				  grid.columnHeaders.setCellData(0, 3+((i-1)*2), "[" + colValSplit[0] + "]" + colSplit[0]);
+				  grid.columnHeaders.setCellData(0, 4+((i-1)*2), "[" + colValSplit[0] + "]" + colSplit[0]);
 
-				  grid.columnHeaders.setCellData(1, 3+((i-1)*2), colSplit[1]);
-		          grid.columnHeaders.setCellData(1, 4+((i-1)*2), colSplit[1]);
+				  grid.columnHeaders.setCellData(1, 3+((i-1)*2), "[" + colValSplit[1] + "]"  + colSplit[1]);
+				  grid.columnHeaders.setCellData(1, 4+((i-1)*2), "[" + colValSplit[1] + "]"  + colSplit[1]);
 			  }
 		  }
 

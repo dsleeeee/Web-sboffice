@@ -68,6 +68,7 @@ public class ProdInfoVO extends PageVO {
 
     /** 상품분류 LEVEL */
     private String level;
+
     /** 상품분류코드*/
     private String prodClassCd;
 
@@ -81,6 +82,12 @@ public class ProdInfoVO extends PageVO {
 
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+
+    /** 코드번호 */
+    private String cornrCd;
+
+    /** 요일 */
+    private String yoil;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -188,5 +195,21 @@ public class ProdInfoVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getCornrCd() {
+        return cornrCd;
+    }
+
+    public void setCornrCd(String cornrCd) {
+        this.cornrCd = cornrCd;
+    }
+
+    public String getYoil() {
+        return yoil;
+    }
+
+    public void setYoil(String yoil) {
+        this.yoil = yoil;
     }
 }

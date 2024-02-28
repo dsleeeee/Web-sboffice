@@ -2,6 +2,7 @@ package kr.co.solbipos.store.manage.closeStore.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.manage.storeCloseExcept.service.StoreCloseExceptVO;
 
 import java.util.List;
 
@@ -23,9 +24,24 @@ import java.util.List;
  */
 public interface CloseStoreService {
 
+    /** 밴 콤보박스 조회 */
+    List<DefaultMap<String>> getVanComboList();
+
     /** 목록 조회 */
     List<DefaultMap<String>> getCloseStoreList(CloseStoreVO closeStoreVO, SessionInfoVO sessionInfoVO);
 
     /** 매장 폐점 */
     int saveCloseStore(CloseStoreVO[] closeStoreVOs, SessionInfoVO sessionInfoVO);
+
+    /** 매장 조회 */
+    List<DefaultMap<String>> getStoreList(CloseStoreVO closeStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 폐점제외매장 조회 */
+    List<DefaultMap<String>> getStoreCloseExceptList(CloseStoreVO closeStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 폐점제외매장 등록 */
+    int saveStoreCloseExcept(CloseStoreVO[] closeStoreVOs, SessionInfoVO sessionInfoVO);
+
+    /** 폐점제외매장 삭제 */
+    int deleteStoreCloseExcept(CloseStoreVO[] closeStoreVOs, SessionInfoVO sessionInfoVO);
 }

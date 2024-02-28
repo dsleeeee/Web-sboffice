@@ -1,13 +1,14 @@
 package kr.co.solbipos.base.prod.corner.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.corner.service.CornerService;
 import kr.co.solbipos.base.prod.corner.service.CornerVO;
-import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
 import kr.co.solbipos.store.manage.terminalManage.service.TerminalManageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,15 +47,17 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 public class CornerController {
 
     private final SessionService sessionService;
-    private final TerminalManageService terminalManageService;
     private final CornerService cornerService;
+    private final TerminalManageService terminalManageService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public CornerController(SessionService sessionService, TerminalManageService terminalManageService, CornerService cornerService) {
+    public CornerController(SessionService sessionService, CornerService cornerService, TerminalManageService terminalManageService, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
-        this.terminalManageService = terminalManageService;
         this.cornerService = cornerService;
+        this.terminalManageService = terminalManageService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -76,9 +79,10 @@ public class CornerController {
         StoreCornerVO storeCornerVO = new StoreCornerVO();
         storeCornerVO.setStoreCd(sessionInfoVO.getStoreCd());
 
-        List<DefaultMap<String>> cornerList =  terminalManageService.getCornerList(storeCornerVO);
+        List<DefaultMap<String>> cornerList2 =  terminalManageService.getCornerList(storeCornerVO);
 
-        model.addAttribute("cornerList", convertToJson(cornerList) );
+        model.addAttribute("cornerList2", convertToJson(cornerList2) );
+        model.addAttribute("cornerList", cmmCodeUtil.assmblObj(cornerService.getCornerList(storeCornerVO), "name", "value", UseYn.ALL));
 
         return "base/prod/corner/prodCorner";
     }
@@ -122,5 +126,26 @@ public class CornerController {
         int result = cornerService.changeProdCorner(cornerVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 상품별 코너변경 전체 엑셀다운로드
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @author 김유승
+     * @since 2024.02.21
+     * @return
+     */
+    @RequestMapping(value = "/excelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getexcelList(CornerVO cornerVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = cornerService.getexcelList(cornerVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, cornerVO);
     }
 }

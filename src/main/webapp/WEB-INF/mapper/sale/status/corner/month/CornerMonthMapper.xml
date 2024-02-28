@@ -18,7 +18,7 @@
               ,SUM(TSDCP.TOT_SALE_QTY) TOT_SALE_QTY
               ${sQuery1}       
        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_MONTHLY_CORNR_PROD TSDCP
+        FROM TB_SL_MONTHLY_CORNR TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND TSDCP.STORE_CD IN (${storeCdQuery})
@@ -52,7 +52,7 @@
               ,SUM(TSDCP.REAL_SALE_AMT) TOT_REAL_SALE_AMT
               ,SUM(TSDCP.TOT_SALE_QTY) TOT_SALE_QTY
               ${sQuery1}       
-        FROM TB_SL_MONTHLY_CORNR_PROD TSDCP
+        FROM TB_SL_MONTHLY_CORNR TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND TSDCP.STORE_CD IN (${storeCdQuery})

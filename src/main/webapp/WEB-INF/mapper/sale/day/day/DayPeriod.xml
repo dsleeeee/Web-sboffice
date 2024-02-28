@@ -290,32 +290,32 @@
     <select id="getDayPeriodCornerList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodCornerList */
         SELECT
-        tssd.STORE_CD,
-        tssd.CORNR_CD,
-        (tms.STORE_NM || '-' || tmc.CORNR_NM) AS STORE_CORNR_NM,
-        SUM(tssd.SALE_QTY) AS SALE_QTY,
-        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM TB_SL_SALE_DTL tssd,
+        tsdcp.STORE_CD,
+        tsdcp.CORNR_CD,
+        ('[' || tms.STORE_CD || ']' ||tms.STORE_NM || '-[' || tmc.CORNR_CD || ']' || tmc.CORNR_NM) AS STORE_CORNR_NM,
+        SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
+        SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_DAILY_CORNR tsdcp,
         TB_MS_STORE tms,
         TB_MS_CORNER tmc
         WHERE 1=1
-        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND tsdcp.HQ_OFFICE_CD = #{membrOrgnCd}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tssd.STORE_CD IN (${storeCdQuery})
+            AND tsdcp.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='orgnFg != null and orgnFg == "H"'>
             AND (
                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                OR   tssd.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                OR   tsdcp.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
-        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND tms.HQ_OFFICE_CD (+)= tssd.HQ_OFFICE_CD
-        AND tms.STORE_CD (+)= tssd.STORE_CD
-        AND tmc.STORE_CD (+)= tssd.STORE_CD
-        AND tmc.CORNR_CD (+)= tssd.CORNR_CD
-        GROUP BY tssd.STORE_CD, tssd.CORNR_CD, tms.STORE_NM, tmc.CORNR_NM
-        ORDER BY tssd.STORE_CD, tssd.CORNR_CD
+        AND tsdcp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tms.HQ_OFFICE_CD (+)= tsdcp.HQ_OFFICE_CD
+        AND tms.STORE_CD (+)= tsdcp.STORE_CD
+        AND tmc.STORE_CD (+)= tsdcp.STORE_CD
+        AND tmc.CORNR_CD (+)= tsdcp.CORNR_CD
+        GROUP BY tsdcp.STORE_CD, tsdcp.CORNR_CD, tms.STORE_CD, tms.STORE_NM, tmc.CORNR_NM, tmc.CORNR_CD
+        ORDER BY tsdcp.STORE_CD, tsdcp.CORNR_CD
     </select>
 
     <!-- 코너별탭 - 코너별 매출상세조회 -->
@@ -326,21 +326,21 @@
     <select id="getDayPeriodCornerDetailList" parameterType="DayPeriodVO" resultType="DefaultMap">
         /* DayPeriodMapper.getDayPeriodCornerDetailList */
         SELECT
-        tssd.PROD_CD,
+            tsdcp.PROD_CD,
         tmp.PROD_NM,
-        SUM(tssd.SALE_QTY) AS SALE_QTY,
-        SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM TB_SL_SALE_DTL tssd,
+        SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
+        SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM TB_SL_DAILY_CORNR_PROD tsdcp,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
-        AND tssd.STORE_CD = #{storeCd}
-        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND tssd.CORNR_CD = #{cornrCd}
-        AND tmp.STORE_CD (+)= tssd.STORE_CD
-        AND tmp.PROD_CD (+)= tssd.PROD_CD
-        GROUP BY tssd.PROD_CD, tmp.PROD_NM
-        ORDER BY tssd.PROD_CD
+        AND tsdcp.HQ_OFFICE_CD = #{membrOrgnCd}
+        AND tsdcp.STORE_CD = #{storeCd}
+        AND tsdcp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdcp.CORNR_CD = #{cornrCd}
+        AND tmp.STORE_CD (+)= tsdcp.STORE_CD
+        AND tmp.PROD_CD (+)= tsdcp.PROD_CD
+        GROUP BY tsdcp.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdcp.PROD_CD
     </select>
 
     <!-- 상품권별탭 - 상품권별 매출조회 -->

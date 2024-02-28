@@ -78,6 +78,21 @@ app.controller('dayPeriodCornerCtrl', ['$scope', '$http', '$timeout', function (
     });
 
     $scope.searchDayPeriodCorner = function() {
+
+        // 본사권한 로그인 시
+        if(orgnFg !== null && orgnFg === 'HQ') {
+            // 매장코드 값 필수
+            if ($("#dayPeriodCornerStoreCd").val() === "") {
+                s_alert.pop("매장을 선택해주세요.");
+                return;
+            }
+        }
+
+        if($("#dayPeriodCornerStoreCd").val().split(",").length > 10) {
+            $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 5개 선택 가능합니다.
+            return false;
+        }
+
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간

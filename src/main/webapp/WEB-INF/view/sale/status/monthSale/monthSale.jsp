@@ -91,6 +91,7 @@
     cornerParam.storeNm     = "${cornerCol.storeNm}";
     cornerParam.storeCd     = "${cornerCol.storeCd}";
     cornerParam.cornrNm     = "${cornerCol.cornrNm}";
+    cornerParam.cornrCd     = "${cornerCol.cornrCd}";
     cornerColList.push(cornerParam);
     </c:forEach>
 

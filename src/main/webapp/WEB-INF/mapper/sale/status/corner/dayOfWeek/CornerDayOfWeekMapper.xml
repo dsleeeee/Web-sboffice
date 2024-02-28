@@ -4,18 +4,17 @@
 
 <mapper namespace="kr.co.solbipos.sale.status.corner.dayOfWeek.service.impl.CornerDayOfWeekMapper">
 
-    <!-- 영수증별매출상세현황 - 영수증별매출상세 리스트 조회 -->
+    <!--  -->
     <!--
-        TABLE    : TB_SL_SALE_HDR, TB_SL_SALE_DTL, TB_MS_TABLE, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
-        PARAM    : todayBillSaleDtlVO
-        COMMENTS : 영수증별매출상세현황 - 영수증별매출상세 리스트를 조회한다.
+        TABLE    :
+        PARAM    :
+        COMMENTS :
     -->
     <select id="getCornerDayOfWeekList" parameterType="cornerDayOfWeekVO" resultType="DefaultMap">
        /* USE : CornerDayOfWeekMapper.getCornerDayOfWeekList */
        <include refid="CmmSQL.PagingTemplateHeader"/>
        <![CDATA[
-       SELECT TSDCP.STORE_CD
-       		  ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') yoil
+       SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') yoil
               ,CASE TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
                                     WHEN '일' THEN 1
                                     WHEN '월' THEN 2
@@ -31,7 +30,7 @@
        ]]>
        <include refid="CmmSQL.PagingTemplateCount"/>
        <![CDATA[
-        FROM TB_SL_DAILY_CORNR_PROD TSDCP
+        FROM TB_SL_DAILY_CORNR TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
        ]]>
         <if test='storeCdQuery != null and storeCdQuery != ""'>
@@ -50,7 +49,7 @@
            AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
         <![CDATA[
-        GROUP BY TSDCP.STORE_CD, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+        GROUP BY TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
         ORDER BY DAY_ORDER 
         ]]>
         <include refid="CmmSQL.PagingTemplateBottom"/>

@@ -87,6 +87,7 @@
     cornerParam.storeNm     = "${cornerCol.storeNm}";
     cornerParam.storeCd     = "${cornerCol.storeCd}";
     cornerParam.cornrNm     = "${cornerCol.cornrNm}";
+    cornerParam.cornrCd     = "${cornerCol.cornrCd}";
     cornerColList.push(cornerParam);
     </c:forEach>
 
@@ -197,6 +198,12 @@
 <%-- //탭페이지 레이어 --%>
 
 <%-- 팝업 레이어 시작 --%>
+<%-- 상품매출 상세 팝업 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/prodInfo/prodSaleDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>

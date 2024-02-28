@@ -263,6 +263,7 @@ public class MonthServiceImpl implements MonthService {
 
         monthVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
         monthVO.setArrCornerCol(monthVO.getStoreCornerCd().split(",")); // 코너구분 array 값 세팅
+        monthVO.setStoreCdList(monthVO.getStoreCd().split(","));
 
         // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
         String pivotCornerCol = "";
