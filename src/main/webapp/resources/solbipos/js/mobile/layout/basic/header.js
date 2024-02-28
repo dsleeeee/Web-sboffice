@@ -99,7 +99,7 @@ $("#lastLoginHist").bind("click", function () {
   $("#layerMobileLastLoginHistPop").show();
 
   // 조회
-  var scope = agrid.getScope("lastLoginHistCtrl");
+  var scope = agrid.getScope("mobileLastLoginHistCtrl");
   scope.searchLastLoginHist();
 
   $(".userLayer").toggle();
