@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<<%-- (20240214 화면못찾음) --%>
+<%-- 로그인화면 비밀번호찾기 --%>
 
 <div class="loginArea">
   <h2 class="sTit">

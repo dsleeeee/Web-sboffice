@@ -411,13 +411,13 @@ public class MobileUserController {
                 // 비밀번호는 비밀번호는 반드시 영문자가 포함되어야 합니다.
                 throw new JsonException(Status.FAIL, messageService.get("login.pw.not.contain.char"));
 
-            }else if(pwdChk == PwChgResult.PASSWORD_CONTINUED_CHAR){
+//            }else if(pwdChk == PwChgResult.PASSWORD_CONTINUED_CHAR){
                 // 숫자 또는 알파벳 순서대로 3자이상 사용하는 비밀번호는 사용할 수 없습니다.
-                throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.continued.char"));
+//                throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.continued.char"));
 
-            }else if(pwdChk == PwChgResult.PASSWORD_SAME_CHAR){
+//            }else if(pwdChk == PwChgResult.PASSWORD_SAME_CHAR){
                 // 동일한 문자 또는 숫자를 3자 이상 사용할 수 없습니다.
-                throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.same.char"));
+//                throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.same.char"));
 
             }else {
                 throw new JsonException(Status.FAIL, messageService.get("login.pwchg.error"));
@@ -518,16 +518,16 @@ public class MobileUserController {
              * 비밀번호는 영문자가 반드시 포함
              */
             throw new JsonException(Status.FAIL, messageService.get("login.pw.not.contain.char"));
-        } else if (result == PwChgResult.PASSWORD_CONTINUED_CHAR) {
+//        } else if (result == PwChgResult.PASSWORD_CONTINUED_CHAR) {
             /**
              * 숫자 또는 알파벳 순서대로 3자이상 사용하는 비밀번호는 사용할 수 없습니다.
              */
-            throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.continued.char"));
-        } else if (result == PwChgResult.PASSWORD_SAME_CHAR) {
+//            throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.continued.char"));
+//        } else if (result == PwChgResult.PASSWORD_SAME_CHAR) {
             /**
              * 동일한 문자 또는 숫자를 3자 이상 사용할 수 없습니다.
              */
-            throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.same.char"));
+//            throw new JsonException(Status.FAIL, messageService.get("login.pw.cannot.be.used.same.char"));
         }
 
         HashMap<String, String> returnData = new HashMap<>();

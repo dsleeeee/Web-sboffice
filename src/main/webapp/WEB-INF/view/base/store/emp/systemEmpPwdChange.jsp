@@ -67,4 +67,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmpPwdChange.js?ver=20181212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmpPwdChange.js?ver=20240228.01" charset="utf-8"></script>

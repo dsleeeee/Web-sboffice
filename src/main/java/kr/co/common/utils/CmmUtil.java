@@ -199,10 +199,10 @@ public class CmmUtil {
             return PwChgResult.PASSWORD_NOT_CONTAIN_NUMBER;
         } else if(flag2 == false) {
             return PwChgResult.PASSWORD_NOT_CONTAIN_ENG_CHAR;
-        } else if(checkContinuous3Character(value)) {
-            return PwChgResult.PASSWORD_CONTINUED_CHAR;
-        } else if (checkDuplicateCharacter(value, 3)){
-            return PwChgResult.PASSWORD_SAME_CHAR;
+//        } else if(checkContinuous3Character(value)) {
+//            return PwChgResult.PASSWORD_CONTINUED_CHAR; // 숫자 또는 알파벳 순서대로 3자이상 사용하는 비밀번호는 사용할 수 없습니다.
+//        } else if (checkDuplicateCharacter(value, 3)){
+//            return PwChgResult.PASSWORD_SAME_CHAR; // 동일한 문자 또는 숫자를 3자 이상 사용할 수 없습니다.
         } else {
             return PwChgResult.CHECK_OK;
         }
