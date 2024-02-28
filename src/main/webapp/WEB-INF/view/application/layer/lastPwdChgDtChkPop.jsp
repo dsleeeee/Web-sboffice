@@ -26,6 +26,9 @@
 
     // 6개월이상 비밀번호 미수정시 알림 팝업
     var lastPwdChgDtChk = "${lastPwdChgDtChk}";
+
+    // 메인화면 진입인지 체크
+    var mainYn = "${mainYn}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/lastPwdChgDtChkPop.js?ver=20240227.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/lastPwdChgDtChkPop.js?ver=20240228.01" charset="utf-8"></script>

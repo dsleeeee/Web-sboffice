@@ -96,6 +96,9 @@ public class MobileContentController {
         String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
+        /** 메인화면 진입인지 체크 */
+        model.addAttribute("mainYn", "Y");
+
         return "mobile/application/main/mobileSystemMain";
     }
 
@@ -147,6 +150,9 @@ public class MobileContentController {
         /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
+
+        /** 메인화면 진입인지 체크 */
+        model.addAttribute("mainYn", "Y");
 
         return "mobile/application/main/mobileAgencyMain";
     }
@@ -201,6 +207,9 @@ public class MobileContentController {
         String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
+        /** 메인화면 진입인지 체크 */
+        model.addAttribute("mainYn", "Y");
+
         return "mobile/application/main/mobileHedofcMain"; // 그래프
     }
 
@@ -249,6 +258,9 @@ public class MobileContentController {
         /** 6개월이상 비밀번호 미수정시 알림 팝업 */
         String lastPwdChgDtChk = mobileContentService.getMobileLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
+
+        /** 메인화면 진입인지 체크 */
+        model.addAttribute("mainYn", "Y");
 
         return "mobile/application/main/mobileMrhstMain"; // 그래프
     }
