@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/com/popup/"/>
 
-<wj-popup id="prodLayer" control="prodLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:860px;">
+<wj-popup id="prodLayer" control="prodLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:860px;height:450px; ">
   <div id="cardLayer" class="wj-dialog wj-dialog-columns" ng-controller="saleComProdCtrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="saleComPopup.prod"/>
@@ -14,6 +14,12 @@
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 360px;">
+      <div class="mt20 oh sb-select dkbr">
+        <%-- 엑셀 다운로드 --%>
+        <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
+          <s:message code="cmm.excel.down" />
+        </button>
+      </div>
 
       <div class="w100 mt10">
         <%--위즈모 테이블--%>
@@ -47,4 +53,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/com/prod.js?ver=20200121.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/com/prod.js?ver=20240226.01" charset="utf-8"></script>

@@ -53,10 +53,10 @@ public class ProdInfoController {
     /**
      * 매출공통팝업 - 상품매출 상세내역 조회
      *
-     * @param prodInfoVO
-     * @param request
-     * @param response
-     * @param model
+     * @param   prodInfoVO
+     * @param   request
+     * @param   response
+     * @param   model
      * @return  Object
      * @author  김설아
      * @since   2019. 12. 11.
@@ -76,10 +76,10 @@ public class ProdInfoController {
     /**
      * 매출공통팝업 - 상품매출 상세내역 조회
      *
-     * @param prodInfoVO
-     * @param request
-     * @param response
-     * @param model
+     * @param   prodInfoVO
+     * @param   request
+     * @param   response
+     * @param   model
      * @return  Object
      * @author  김설아
      * @since   2021. 03. 24.
@@ -99,10 +99,10 @@ public class ProdInfoController {
     /**
      * 매출공통팝업 - 상품매출 상세내역 조회
      *
-     * @param prodInfoVO
-     * @param request
-     * @param response
-     * @param model
+     * @param   prodInfoVO
+     * @param   request
+     * @param   response
+     * @param   model
      * @return  Object
      * @author  김설아
      * @since   2021. 03. 24.
@@ -122,10 +122,10 @@ public class ProdInfoController {
     /**
      * 매출공통팝업 - 상품매출 상세내역 조회
      *
-     * @param prodInfoVO
-     * @param request
-     * @param response
-     * @param model
+     * @param   prodInfoVO
+     * @param   request
+     * @param   response
+     * @param   model
      * @return  Object
      * @author  김설아
      * @since   2021. 03. 24.
@@ -145,10 +145,10 @@ public class ProdInfoController {
     /**
      * 매출공통팝업 - 상품매출 상세내역 조회
      *
-     * @param prodInfoVO
-     * @param request
-     * @param response
-     * @param model
+     * @param   prodInfoVO
+     * @param   request
+     * @param   response
+     * @param   model
      * @return  Object
      * @author  김설아
      * @since   2021. 03. 24.
@@ -161,6 +161,29 @@ public class ProdInfoController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlMonthProdClassList(prodInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
+    }
+
+    /**
+     * 매출공통팝업 - 상품매출 상세내역 조회
+     *
+     * @param   prodInfoVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 02. 28.
+     */
+    @RequestMapping(value = "/prodSaleDtl/getProdSaleDtlDayOfWeekList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdSaleDtlDayOfWeekList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodInfoService.getProdSaleDtlDayOfWeekList(prodInfoVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
     }

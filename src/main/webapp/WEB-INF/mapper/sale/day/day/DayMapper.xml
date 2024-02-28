@@ -1470,21 +1470,20 @@
             FROM
             (
                 SELECT
-                TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-                tssd.STORE_CD,
-                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                SUM(tssd.SALE_QTY) AS SALE_QTY,
-                (tssd.STORE_CD || tssd.CORNR_CD) AS STORE_CORNR_CD
-                FROM TB_SL_SALE_DTL tssd
+                TO_CHAR(TO_DATE(tsdcp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                tsdcp.STORE_CD,
+                SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
+                (tsdcp.STORE_CD || tsdcp.CORNR_CD) AS STORE_CORNR_CD
+                FROM TB_SL_DAILY_CORNR tsdcp
                 WHERE 1=1
-                AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                <if test='storeCd != null and storeCd != ""'>
-                    <![CDATA[
-                        AND tssd.STORE_CD = #{storeCd}
-                    ]]>
-                </if>
-                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.CORNR_CD
+                AND tsdcp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdcp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND tsdcp.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+                GROUP BY tsdcp.SALE_DATE, tsdcp.STORE_CD, tsdcp.CORNR_CD
             )
             PIVOT
             (

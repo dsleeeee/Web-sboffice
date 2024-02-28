@@ -442,7 +442,12 @@
 			TB_MS_PRODUCT tmp
 			WHERE 1=1
 			AND tsdcp.HQ_OFFICE_CD = #{hqOfficeCd}
-			AND tsdcp.STORE_CD = #{storeCd}
+			<if test='arrStoreCd != null and arrStoreCd != ""'>
+				AND tsdcp.STORE_CD IN
+				<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
 			AND tsdcp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
 			AND tmp.STORE_CD = tsdcp.STORE_CD
 			AND tmp.PROD_CD = tsdcp.PROD_CD

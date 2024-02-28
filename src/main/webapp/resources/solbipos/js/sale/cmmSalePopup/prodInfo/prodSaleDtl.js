@@ -40,23 +40,35 @@ app.controller('prodSaleDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     $scope.searchProdSaleDtlList = function(data){
         var params = {};
-        params.storeCds  = data.storeCd;
-        params.gubun  = data.gubun;
+        params.storeCds = data.storeCd;
+        params.gubun    = data.gubun;
 
         // 기간별매출 > 일자별 탭 > 과면세별,포스별,코너별 탭
         if(data.gubun == "day" ||  data.gubun == "dayCorner") {
             params.saleDate = data.saleDate;
+            if(data.gubun == "dayCorner"){
+                params.cornrCd = data.cornrCd;
+            }
             $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlDayList.sb", params, function() {}, false);
         }
         // 기간별매출 > 일자별 탭 > 포스별 탭
         else if(data.gubun == "dayPos") {
             params.saleDate = data.saleDate;
-            params.posNo  = data.posNo;
+            params.posNo    = data.posNo;
             $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlDayList.sb", params, function() {}, false);
+        }
+        // 기간별매출 > 요일별 탭 > 코너별 탭
+        else if(data.gubun == "dayOfWeekCorner") {
+            params.yoil     = data.yoil;
+            params.cornrCd  = data.cornrCd;
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlDayOfWeekList.sb", params, function() {}, false);
         }
         // 기간별매출 > 월별 탭 > 과면세별,포스별,코너별 탭
         else if(data.gubun == "month" ||  data.gubun == "monthCorner") {
             params.yearMonth = data.yearMonth;
+            if(data.gubun == "monthCorner"){
+                params.cornrCd = data.cornrCd;
+            }
             $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlMonthList.sb", params, function() {}, false);
         }
         // 기간별매출 > 월별 탭 > 포스별 탭

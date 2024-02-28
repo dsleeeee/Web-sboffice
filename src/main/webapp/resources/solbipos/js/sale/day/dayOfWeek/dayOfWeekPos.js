@@ -51,12 +51,14 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
         dataItem.totRealSaleAmt    = messages["dayofweek.totRealSaleAmt"];
         dataItem.totSaleQty    = messages["dayofweek.totSaleQty"];
 
+        var larr = {};
         // 포스구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrPosCol.length; i++) {
-            dataItem['pos' + arrPosCol[i] + 'SaleAmt'] = posColList[i].storeNm;
-            dataItem['pos' + arrPosCol[i] + 'DcAmt'] = posColList[i].storeNm;
-            dataItem['pos' + arrPosCol[i] + 'RealSaleAmt'] = posColList[i].storeNm;
-            dataItem['pos' + arrPosCol[i] + 'SaleQty'] = posColList[i].storeNm;
+            larr[i] = arrPosCol[i].substring(0,1) + arrPosCol[i].substring(1, arrPosCol[i].length).toLowerCase();
+            dataItem['pos' + larr[i] + 'SaleAmt'] = posColList[i].storeNm;
+            dataItem['pos' + larr[i] + 'DcAmt'] = posColList[i].storeNm;
+            dataItem['pos' + larr[i] + 'RealSaleAmt'] = posColList[i].storeNm;
+            dataItem['pos' + larr[i] + 'SaleQty'] = posColList[i].storeNm;
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
@@ -74,10 +76,11 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
 
         // 포스구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrPosCol.length; i++) {
-            dataItem1['pos' + arrPosCol[i] + 'SaleAmt'] = posColList[i].posNm;
-            dataItem1['pos' + arrPosCol[i] + 'DcAmt'] = posColList[i].posNm;
-            dataItem1['pos' + arrPosCol[i] + 'RealSaleAmt'] = posColList[i].posNm;
-            dataItem1['pos' + arrPosCol[i] + 'SaleQty'] = posColList[i].posNm;
+            larr[i] = arrPosCol[i].substring(0,1) + arrPosCol[i].substring(1, arrPosCol[i].length).toLowerCase();
+            dataItem1['pos' + larr[i] + 'SaleAmt'] = posColList[i].posNm;
+            dataItem1['pos' + larr[i] + 'DcAmt'] = posColList[i].posNm;
+            dataItem1['pos' + larr[i] + 'RealSaleAmt'] = posColList[i].posNm;
+            dataItem1['pos' + larr[i] + 'SaleQty'] = posColList[i].posNm;
         }
 
         s.columnHeaders.rows[1].dataItem = dataItem1;
@@ -130,6 +133,11 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
 
     $scope.searchDayOfWeekPos = function() {
 
+        if($("#dayofweekPosStoreCd").val().split(",").length > 10) {
+            $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 10개 선택 가능합니다.
+            return false;
+        }
+
         //조회할 POS Key값 셋팅을 위해
         var storePosCd = "";
 
@@ -180,6 +188,7 @@ app.controller('dayOfWeekPosCtrl', ['$scope', '$http', '$timeout', function ($sc
         // 포스별 총매출, 총할인, 실매출, 수량 컬럼 생성
         if(arr.length > 0 && storePosCd !== "") {
             for (var i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].substring(0,1) + arr[i].substring(1, arr[i].length).toLowerCase();
                 columns.push(new wijmo.grid.Column({ header: messages["dayofweek.saleAmt"], binding : 'pos' + arr[i] + 'SaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
                 columns.push(new wijmo.grid.Column({ header: messages["dayofweek.dcAmt"], binding : 'pos' + arr[i] + 'DcAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
                 columns.push(new wijmo.grid.Column({ header: messages["dayofweek.realSaleAmt"], binding : 'pos' + arr[i] + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));

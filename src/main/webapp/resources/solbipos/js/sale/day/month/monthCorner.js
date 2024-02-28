@@ -55,10 +55,12 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
         dataItem.totRealSaleAmt    = messages["month.totRealSaleAmt"];
         dataItem.totSaleQty    = messages["month.totSaleQty"];
 
+        var larr = {};
         // 코너구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrCornerCol.length; i++) {
-            dataItem['cornr' + arrCornerCol[i] + 'RealSaleAmt'] = cornerColList[i].storeNm;
-            dataItem['cornr' + arrCornerCol[i] + 'SaleQty'] = cornerColList[i].storeNm;
+            larr[i] = arrCornerCol[i].substring(0,1) + arrCornerCol[i].substring(1, arrCornerCol[i].length).toLowerCase();
+            dataItem['cornr' + larr[i] + 'RealSaleAmt'] = "[" + cornerColList[i].storeCd + "]" + cornerColList[i].storeNm;
+            dataItem['cornr' + larr[i] + 'SaleQty'] = "[" + cornerColList[i].storeCd + "]" + cornerColList[i].storeNm;
         }
 
         s.columnHeaders.rows[0].dataItem = dataItem;
@@ -74,8 +76,9 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         // 코너구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrCornerCol.length; i++) {
-            dataItem1['cornr' + arrCornerCol[i] + 'RealSaleAmt'] = cornerColList[i].cornrNm;
-            dataItem1['cornr' + arrCornerCol[i] + 'SaleQty'] = cornerColList[i].cornrNm;
+            larr[i] = arrCornerCol[i].substring(0,1) + arrCornerCol[i].substring(1, arrCornerCol[i].length).toLowerCase();
+            dataItem1['cornr' + larr[i] + 'RealSaleAmt'] = "[" + cornerColList[i].cornrCd + "]" + cornerColList[i].cornrNm;
+            dataItem1['cornr' + larr[i] + 'SaleQty'] = "[" + cornerColList[i].cornrCd + "]" + cornerColList[i].cornrNm;
         }
 
         s.columnHeaders.rows[1].dataItem = dataItem1;
@@ -131,12 +134,13 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
 
                 // 수량
                 for (var i = 0; i < cornerColList.length; i++) {
-                    if (col.binding === ("cornr" + cornerColList[i].storeCornrCd + "SaleQty")) {
+                    larr[i] = cornerColList[i].storeCornrCd.substring(0,1) + cornerColList[i].storeCornrCd.substring(1, cornerColList[i].storeCornrCd.length).toLowerCase();
+                    if (col.binding === ("cornr" + larr[i] + "SaleQty")) {
                         var item = s.rows[e.row].dataItem;
 
                         // 값이 있으면 링크 효과
                         // if (nvl(item[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') !== '' && nvl(item[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') != "0") {
-                        if (nvl(item[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') !== '') {
+                        if (nvl(item[("cornr" + larr[i] + "SaleQty")], '') !== '') {
                             wijmo.addClass(e.cell, 'wijLink');
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                         }
@@ -156,7 +160,7 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.yearMonth = selectedRow.yearMonth.replace("-", "");
-                    params.storeCd = $("#monthCornerStoreCd").val();
+                    params.storeCd = $scope.searchStoreCd;
                     params.gubun = "monthCorner";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
@@ -164,17 +168,19 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
 
                 // 수량 클릭시 상세정보 조회
                 for (var i = 0; i < cornerColList.length; i++) {
-                    if (col.binding === ("cornr" + cornerColList[i].storeCornrCd + "SaleQty")) {
+                    larr[i] = cornerColList[i].storeCornrCd.substring(0,1) + cornerColList[i].storeCornrCd.substring(1, cornerColList[i].storeCornrCd.length).toLowerCase();
+                    if (col.binding === ("cornr" + larr[i] + "SaleQty")) {
 
                         var selectedRow = s.rows[ht.row].dataItem;
                         var params      = {};
                         params.yearMonth = selectedRow.yearMonth.replace("-", "");
                         params.storeCd = cornerColList[i].storeCd;
+                        params.cornrCd = cornerColList[i].cornrCd;
                         params.gubun = "monthCorner";
 
                         // 값이 있으면 링크
                         // if (nvl(selectedRow[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') !== '' && nvl(selectedRow[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') != "0") {
-                        if (nvl(selectedRow[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') !== '') {
+                        if (nvl(selectedRow[("cornr" + larr[i] + "SaleQty")], '') !== '') {
                             $scope._broadcast('prodSaleDtlCtrl', params);
                         }
                     }
@@ -190,6 +196,11 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
     });
 
     $scope.searchMonthCorner = function() {
+
+        if($("#monthCornerStoreCd").val().split(",").length > 10) {
+            $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 10개 선택 가능합니다.
+            return false;
+        }
 
         //조회할 코너 Key값 셋팅을 위해
         var storeCornerCd = "";
@@ -213,10 +224,14 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
                 return;
             }
 
+            var arr = $("#monthCornerStoreCd").val().split(",");
+
             // 해당 본사의 전체 코너에서 조회할 매장의 코너만 추려내기
             for (var i = 0; i < cornerColList.length; i++) {
-                if (cornerColList[i].storeCd === $("#monthCornerStoreCd").val()) {
-                    storeCornerCd += "," + arrCornerCol[i];
+                for(var j = 0; j < arr.length; j++) {
+                    if (cornerColList[i].storeCd === arr[j]) {
+                        storeCornerCd += "," + arrCornerCol[i];
+                    }
                 }
             }
 
@@ -241,6 +256,7 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
         // 코너별 실매출, 수량 컬럼 생성
         if(arr.length > 0 && storeCornerCd !== "") {
             for (var i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].substring(0,1) + arr[i].substring(1, arr[i].length).toLowerCase();
                 columns.push(new wijmo.grid.Column({ header: messages["month.realSaleAmt"], binding : 'cornr' + arr[i] + 'RealSaleAmt', align: "right", isReadOnly: "true", aggregate: "Sum"}));
                 columns.push(new wijmo.grid.Column({ header: messages["month.saleQty"], binding : 'cornr' + arr[i] + 'SaleQty', align: "right", isReadOnly: "true", aggregate: "Sum"}));
             }
@@ -252,6 +268,8 @@ app.controller('monthCornerCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.storeCd = $("#monthCornerStoreCd").val();
         params.storeCornerCd = storeCornerCd;
+
+        $scope.searchStoreCd = params.storeCd;
 
         $scope._inquiryMain("/sale/day/month/month/getMonthCornerList.sb", params, function() {}, false);
 

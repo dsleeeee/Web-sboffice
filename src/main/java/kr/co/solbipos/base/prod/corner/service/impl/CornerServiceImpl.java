@@ -12,6 +12,7 @@ import kr.co.solbipos.base.prod.corner.service.CornerVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import kr.co.solbipos.base.prod.prod.service.impl.ProdMapper;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +70,22 @@ public class CornerServiceImpl implements CornerService {
 
         return cornerMapper.changeProdCorner(cornerVO);
 
+    }
+
+    /** 코너 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getCornerList(StoreCornerVO storeCornerVO) {
+        return cornerMapper.getCornerList(storeCornerVO);
+    }
+
+    /** 상품별 코너변경 - 전체 엑셀다운로드 */
+    @Override
+    public List<DefaultMap<String>> getexcelList(CornerVO cornerVO, SessionInfoVO sessionInfoVO) {
+        // 소속구분 설정
+        cornerVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        cornerVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        cornerVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return cornerMapper.getexcelList(cornerVO);
     }
 }

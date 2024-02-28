@@ -453,6 +453,7 @@ public class DayServiceImpl implements DayService {
 
         dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dayVO.setArrCornerCol(dayVO.getStoreCornerCd().split(",")); // 코너구분 array 값 세팅
+        dayVO.setStoreCdList(dayVO.getStoreCd().split(","));
 
         // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
         String pivotCornerCol = "";

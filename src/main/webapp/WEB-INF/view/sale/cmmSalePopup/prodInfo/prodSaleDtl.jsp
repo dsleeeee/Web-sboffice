@@ -6,7 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/cmmSalePopup/prodInfo/prodSaleDtl/"/>
 
-<wj-popup control="wjProdSaleDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1100px;height:480px;" fade-in="false" fade-out="false">
+<wj-popup control="wjProdSaleDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:800px;height:550px;" fade-in="false" fade-out="false">
     <div ng-controller="prodSaleDtlCtrl">
 
         <%-- header --%>
@@ -39,16 +39,11 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodClassNm"/>" binding="pathNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>" binding="saleQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.totDcAmt"/>" binding="totDcAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.taxSaleAmt"/>" binding="taxSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.gaAmt"/>" binding="gaAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.vatAmt"/>" binding="vatAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.noTaxSaleAmt"/>" binding="noTaxSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.netSaleAmt"/>" binding="netSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -58,4 +53,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/prodInfo/prodSaleDtl.js?ver=20210201.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/prodInfo/prodSaleDtl.js?ver=20240223.01" charset="utf-8"></script>

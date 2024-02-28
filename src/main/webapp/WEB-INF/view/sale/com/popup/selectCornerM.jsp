@@ -37,7 +37,9 @@
 
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="status.store.cd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="status.store.nm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="storeManage.cornrCd"/>" binding="cornrCd2" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeManage.cornrNm"/>" binding="cornrNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="" binding="cornrCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
           </wj-flex-grid>

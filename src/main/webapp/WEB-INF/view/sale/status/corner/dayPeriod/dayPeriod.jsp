@@ -63,9 +63,9 @@
 							   displayNm - 로딩시 input 창에 보여질 명칭(변수 없을 경우 기본값 선택으로 표시)
 							   modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
 							   closeFunc - 팝업 닫기시 호출할 함수            --%>
-						   <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreS.jsp" flush="true">
+						   <jsp:include page="/WEB-INF/view/sale/com/popup/selectStoreM.jsp" flush="true">
 							<jsp:param name="targetId" value="cornerDayPeriodSelectStore" />
-							<jsp:param name="subTargetId" value="cornerDayPeriodSelectCorner" />
+							<jsp:param name="targetCornerId" value="cornerDayPeriodSelectCorner" />
 							<jsp:param name="closeFunc" value="closeSelectStore" />
 						</jsp:include> <%--// 매장선택 모듈 멀티 선택 사용시 include --%>
 					</td>
@@ -267,4 +267,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayPeriod/dayPeriod.js?ver=20210114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayPeriod/dayPeriod.js?ver=20240221.01" charset="utf-8"></script>

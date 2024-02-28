@@ -48,8 +48,21 @@
                 <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
-            <th></th>
-            <td></td>
+            <%-- 코너 --%>
+            <th><s:message code="prodCorner.corner" /></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchCornrCd"
+                            ng-model="srchCornrCd"
+                            items-source="_getComboData('srchCornrCd')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="srchCornrCdCombo">
+                    </wj-combo-box>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>
@@ -63,23 +76,23 @@
             <tr class="brt">
                 <th class="oh gr">
                     <%-- 조회할 코너 선택 --%>
-                    <div class="sb-select fl w5px mr5 mt10">
-                        <span>조회할 코너 : </span>
-                    </div>
-                    <div class="sb-select w10 fl">
-                        <wj-combo-box
-                                id="srchCornrCd"
-                                ng-model="srchCornrCd"
-                                items-source="_getComboData('srchCornrCd')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)">
-                        </wj-combo-box>
-                    </div>
+<%--                    <div class="sb-select fl w5px mr5 mt10">--%>
+<%--                        <span>조회할 코너 : </span>--%>
+<%--                    </div>--%>
+<%--                    <div class="sb-select w10 fl">--%>
+<%--                        <wj-combo-box--%>
+<%--                                id="srchCornrCd"--%>
+<%--                                ng-model="srchCornrCd"--%>
+<%--                                items-source="_getComboData('srchCornrCd')"--%>
+<%--                                display-member-path="name"--%>
+<%--                                selected-value-path="value"--%>
+<%--                                is-editable="false"--%>
+<%--                                initialized="_initComboBox(s)">--%>
+<%--                        </wj-combo-box>--%>
+<%--                    </div>--%>
                     <%-- 이동할 코너 선택 --%>
                     <div class="sb-select fl w5px mr5 mt10">
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;이동할 코너 : </span>
+                        <span>이동할 코너 : </span>
                     </div>
                     <div class="sb-select w10 fl">
                         <wj-combo-box
@@ -98,20 +111,25 @@
             </tbody>
         </table>
 
-    <div class="mt10 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                control="listScaleCombo"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-        </wj-combo-box>
-    </div>
+        <div class="mt10 oh sb-select dkbr">
+            <%-- 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()"><s:message code="cmm.excel.downTotal"/></button>
+        </div>
+
+<%--    <div class="mt10 oh sb-select dkbr">--%>
+<%--        &lt;%&ndash; 페이지 스케일  &ndash;%&gt;--%>
+<%--        <wj-combo-box--%>
+<%--                class="w100px fl"--%>
+<%--                id="listScaleBox"--%>
+<%--                ng-model="listScale"--%>
+<%--                control="listScaleCombo"--%>
+<%--                items-source="_getComboData('listScaleBox')"--%>
+<%--                display-member-path="name"--%>
+<%--                selected-value-path="value"--%>
+<%--                is-editable="false"--%>
+<%--                initialized="_initComboBox(s)">--%>
+<%--        </wj-combo-box>--%>
+<%--    </div>--%>
 
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mt10">
@@ -132,13 +150,13 @@
                     <wj-flex-grid-column header="" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="" binding="storeCd" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="" binding="prodClassCd" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="" binding="cornrCd" width="150" visible="false" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodCorner.prodClassLNm"/>" binding="prodClassNm" width="200" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodCorner.prodClassMNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodCorner.prodClassSNm"/>" binding="prodClassNm" width="300" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodCorner.corner"/>" binding="cornrNm" width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodCorner.prodCd"/>" binding="prodCd" width="200" align="center" is-read-only="true" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodCorner.prodNm"/>" binding="prodNm" width="350" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodCorner.prodClassLNm"/>" binding="prodClassNm" width="120" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodCorner.prodClassMNm"/>" binding="prodClassNm" width="120" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodCorner.prodClassSNm"/>" binding="prodClassNm" width="120" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodCorner.cornerCd"/>" binding="cornrCd" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodCorner.corner"/>" binding="cornrNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodCorner.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodCorner.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
 
                 </wj-flex-grid>
                 <%-- ColumnPicker 사용시 include --%>
@@ -157,12 +175,40 @@
     </div>
     <%--//페이지 리스트--%>
 
+    <%--엑셀 리스트--%>
+    <div class="wj-TblWrapBr mt10" ng-controller="totalExcelCtrl" style="display: none;">
+        <div class="wj-gridWrap" id="qn">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="excelFlex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter"
+                    is-read-only="true">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="prodCorner.prodClassLNm"/>" binding="prodClassNm" width="120" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodCorner.prodClassMNm"/>" binding="prodClassNm" width="120" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodCorner.prodClassSNm"/>" binding="prodClassNm" width="120" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodCorner.cornerCd"/>" binding="cornrCd" width="80" is-read-only="true" align="center" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodCorner.corner"/>" binding="cornrNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodCorner.prodCd"/>" binding="prodCd" width="120" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodCorner.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
+
+            </wj-flex-grid>
+        </div>
+    <%--//엑셀 리스트--%>
+    </div>
+
 </div>
 <script type="text/javascript">
     var cornerList = ${cornerList};
+    var cornerList2 = ${cornerList2};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/corner/prodCorner.js?ver=20200228" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/corner/prodCorner.js?ver=20240228.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

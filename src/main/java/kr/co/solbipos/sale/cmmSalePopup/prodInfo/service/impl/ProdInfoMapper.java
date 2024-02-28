@@ -25,4 +25,7 @@ public interface ProdInfoMapper {
 
     /** 매출공통팝업 - 상품매출 상세내역 조회 */
     List<DefaultMap<Object>> getProdSaleDtlMonthProdClassList(ProdInfoVO prodInfoVO);
+
+    /** 매출공통팝업 - 상품매출 상세내역 조회 */
+    List<DefaultMap<Object>> getProdSaleDtlDayOfWeekList(ProdInfoVO prodInfoVO);
 }

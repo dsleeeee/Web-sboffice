@@ -830,15 +830,14 @@
                 SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT,
                 SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
                 (tsdcp.STORE_CD || tsdcp.CORNR_CD) AS STORE_CORNR_CD
-                FROM TB_SL_DAILY_CORNR_PROD tsdcp
+                FROM TB_SL_DAILY_CORNR tsdcp
                 WHERE 1=1
                 AND tsdcp.HQ_OFFICE_CD = #{membrOrgnCd}
                 AND tsdcp.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
-                <if test='storeCd != null and storeCd != ""'>
-                    <![CDATA[
-                        AND tsdcp.STORE_CD = #{storeCd}
-                    ]]>
-                </if>
+                AND tsdcp.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
                 GROUP BY tsdcp.SALE_DATE, tsdcp.STORE_CD, tsdcp.CORNR_CD
             )
             PIVOT

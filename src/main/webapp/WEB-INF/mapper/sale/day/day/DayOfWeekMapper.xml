@@ -739,26 +739,26 @@
             <foreach collection="arrCornerCol" item="item" separator=",">
                 SUM(CORNR_${item}_SALE_QTY) AS CORNR_${item}_SALE_QTY
             </foreach>
---             SUM(CORNR_A00000101_REAL_SALE_AMT) AS CORNR_A00000101_REAL_SALE_AMT,
+--             SUM(CORNR_A00000101_REAL_SALE_AMT) AS CORNR_
+--             A00000101_REAL_SALE_AMT,
 --             SUM(CORNR_A00000101_SALE_QTY) AS CORNR_A00000101_SALE_QTY,
             FROM
             (
                 SELECT
-                TO_CHAR(TO_DATE(tssd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-                tssd.STORE_CD,
-                SUM(tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
-                SUM(tssd.SALE_QTY) AS SALE_QTY,
-                (tssd.STORE_CD || tssd.CORNR_CD) AS STORE_CORNR_CD
-                FROM TB_SL_SALE_DTL tssd
+                TO_CHAR(TO_DATE(tsdcp.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+                tsdcp.STORE_CD,
+                SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
+                (tsdcp.STORE_CD || tsdcp.CORNR_CD) AS STORE_CORNR_CD
+                FROM TB_SL_DAILY_CORNR tsdcp
                 WHERE 1=1
-                AND tssd.HQ_OFFICE_CD = #{membrOrgnCd}
-                AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                <if test='storeCd != null and storeCd != ""'>
-                    <![CDATA[
-                        AND tssd.STORE_CD = #{storeCd}
-                    ]]>
-                </if>
-                GROUP BY tssd.SALE_DATE, tssd.STORE_CD, tssd.CORNR_CD
+                AND tsdcp.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND tsdcp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND tsdcp.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+                GROUP BY tsdcp.SALE_DATE, tsdcp.STORE_CD, tsdcp.CORNR_CD
             )
             PIVOT
             (
@@ -772,7 +772,15 @@
             )
             GROUP BY YOIL
         )
-        ORDER BY YOIL
+        ORDER BY    CASE YOIL
+                                WHEN '월' THEN 1
+                                WHEN '화' THEN 2
+                                WHEN '수' THEN 3
+                                WHEN '목' THEN 4
+                                WHEN '금' THEN 5
+                                WHEN '토' THEN 6
+                                WHEN '일' THEN 7
+                    END
     </select>
 
     <!-- 외식테이블별탭 - 외식테이블별 매출조회-->

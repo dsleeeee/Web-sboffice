@@ -86,4 +86,73 @@
                 #{item}
             </foreach>
     </update>
+
+    <!-- 매장 코너 목록 조회 -->
+    <!--
+        TABLE    : TB_MS_CORNER
+        COMMENTS : 매장에 등록된 코너를 조회한다.
+    -->
+    <select id="getCornerList" parameterType="storeCornerVO" resultType="DefaultMap">
+        /* CornerMapper.getCornerList */
+        SELECT CORNR_CD AS VALUE,
+               '[' || CORNR_CD || '] ' || CORNR_NM AS NAME
+        FROM TB_MS_CORNER
+        WHERE STORE_CD = #{storeCd}
+          AND USE_YN = 'Y'
+        ORDER BY CORNR_CD
+    </select>
+
+    <!-- 상품별코너변경 - 전체 엑셀다운로드 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_MS_PRODUCT, TB_MS_CORNER
+        PARAM    : cornerVO
+        COMMENTS : 전체 엑셀다운로드. (매장)
+    -->
+    <select id="getexcelList" parameterType="cornerVO" resultType="DefaultMap">
+        /* USE : CornerMapper.getexcelList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tms.HQ_OFFICE_CD,
+                tmp.STORE_CD,
+                tmp.PROD_CLASS_CD,
+                ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                tmp.CORNR_CD,
+                tmc.CORNR_NM,
+                tmp.PROD_CD,
+                tmp.PROD_NM
+                FROM   TB_MS_STORE tms,
+                TB_MS_PRODUCT tmp,
+                TB_MS_CORNER tmc
+                WHERE tmp.STORE_CD = #{storeCd}
+                AND tms.STORE_CD = tmp.STORE_CD
+                AND tmc.STORE_CD (+)= tms.STORE_CD
+                AND tmc.CORNR_CD (+)= tmp.CORNR_CD
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                    SELECT PROD_CLASS_CD
+                    FROM TB_MS_PRODUCT_CLASS
+                    WHERE STORE_CD = #{storeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD  AND STORE_CD = #{storeCd}
+                    )
+                </if>
+                <if test="srchCornrCd != null and srchCornrCd != ''">
+                    AND tmp.CORNR_CD = #{srchCornrCd}
+                </if>
+                ORDER BY tmp.PROD_CD ASC
+            </when>
+        </choose>
+    </select>
 </mapper>

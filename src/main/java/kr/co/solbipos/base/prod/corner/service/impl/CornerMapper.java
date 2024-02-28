@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.corner.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.corner.service.CornerVO;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -31,4 +32,10 @@ public interface CornerMapper {
 
     /** 상품별 코너 이동 */
     int changeProdCorner(CornerVO cornerVO);
+
+    /** 코너 목록 조회 */
+    List<DefaultMap<String>> getCornerList(StoreCornerVO storeCornerVO);
+
+    /** 상품별 코너변경 - 전체 엑셀다운로드 */
+    List<DefaultMap<String>> getexcelList(CornerVO cornerVO);
 }

@@ -47,7 +47,7 @@
             <td colspan="3">
                 <%-- 매장선택 모듈 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                    <jsp:param name="targetTypeFg" value="S"/>
+                    <jsp:param name="targetTypeFg" value="M"/>
                     <jsp:param name="targetId" value="dayofweekCornerStore"/>
                 </jsp:include>
                 <%--// 매장선택 모듈 사용시 include --%>
@@ -101,4 +101,5 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekCorner.js?ver=20220114.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekCorner.js?ver=20240223.02" charset="utf-8"></script>
+
