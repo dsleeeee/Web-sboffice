@@ -49,10 +49,10 @@ function getCookie(name){
     return "";
 }
 
-// alert(getCookie("notLastPwdChgDtChkPop"));
+// alert(getCookie("notLastPwdChgDtChkPop" + userId));
 
 // 쿠키체크 후 팝업 띄우기
-if(getCookie("notLastPwdChgDtChkPop")!="Y") {
+if(getCookie("notLastPwdChgDtChkPop" + userId)!="Y") {
     // 메인화면 진입인지 체크
     if(mainYn == "Y") {
         // 6개월이상 비밀번호 미수정시 알림 팝업
@@ -65,7 +65,7 @@ if(getCookie("notLastPwdChgDtChkPop")!="Y") {
 
 // 다음에 변경하기(90일)
 $("#btn_close").click(function(){
-    setCookie('notLastPwdChgDtChkPop','Y', 90);
+    setCookie("notLastPwdChgDtChkPop" + userId,'Y', 90);
     $("#fullDimmedMobileLastPwdChgDtChkPop").css('display', 'none');
     $("#layerMobileLastPwdChgDtChkPop").css('display', 'none');
 });

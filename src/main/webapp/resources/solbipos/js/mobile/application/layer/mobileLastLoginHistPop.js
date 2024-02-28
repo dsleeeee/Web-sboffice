@@ -92,10 +92,10 @@ app.controller('mobileLastLoginHistCtrl', ['$scope', '$http', function ($scope, 
         return "";
     }
 
-    // alert(getCookie("notLastLoginHistPop"));
+    // alert(getCookie("notLastLoginHistPop" + userId));
 
     // 쿠키체크 후 팝업 띄우기
-    if(getCookie("notLastLoginHistPop")!="Y") {
+    if(getCookie("notLastLoginHistPop" + userId)!="Y") {
         // 메인화면 진입인지 체크
         if(mainYn == "Y") {
             $("#fullDimmedMobileLastLoginHistPop").show();
@@ -105,7 +105,7 @@ app.controller('mobileLastLoginHistCtrl', ['$scope', '$http', function ($scope, 
 
     // 7일간 제외
     $scope.dayRemove = function(){
-        setCookie('notLastLoginHistPop','Y', 7);
+        setCookie("notLastLoginHistPop" + userId,'Y', 7);
         $("#fullDimmedMobileLastLoginHistPop").hide();
         $("#layerMobileLastLoginHistPop").hide();
     };

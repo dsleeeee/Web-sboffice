@@ -188,6 +188,10 @@ $("#lastLoginHist").bind("click", function () {
     $("#fullDimmedLastLoginHistPop").show();
     $("#layerLastLoginHistPop").show();
 
+    // 조회
+    var scope = agrid.getScope("lastLoginHistCtrl");
+    scope.searchLastLoginHist();
+
     $(".userLayer").toggle();
     return false;
 });
