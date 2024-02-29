@@ -2,22 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    MonthPos2.xml
-    월별 매출 현황(포스별)2
+    MonthPos.xml
+    월별 매출 현황(포스별)
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
-    1       권지현     2023.07.04     최초작성
+    1       권지현     2023.03.14     최초작성
 -->
-<mapper namespace="kr.co.solbipos.sale.month.monthPos2.service.impl.MonthPos2Mapper">
+<mapper namespace="kr.co.solbipos.sale.month.monthPos.service.impl.MonthPosMapper">
 
     <!-- 조회 -->
     <!--
         TABLE    :
         COMMENTS :
     -->
-    <select id="getMonthPos2List" parameterType="monthPos2VO" resultType="DefaultMap">
-        /* MonthPos2Mapper.getMonthPos2List */
+    <select id="getMonthPosList" parameterType="monthPosVO" resultType="DefaultMap">
+        /* MonthPosMapper.getMonthPosList */
         SELECT  TO_CHAR(TO_DATE(tsdt.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
                 tsdt.STORE_CNT,
                 tsdt.SALE_CNT,
@@ -41,17 +41,13 @@
                 tsdt.PAY_AMT_021 AS PAY021,
                 tsdt.TOT_PAY_AMT,
                 tsdt.GEN_REAL_SALE_AMT,
-                tsdt.GEN_REAL_SALE_CNT,
                 DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.GEN_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE,
                 tsdt.DLVR_REAL_SALE_AMT,
-                tsdt.DLVR_REAL_SALE_CNT,
                 DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.DLVR_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE,
                 tsdt.PACK_REAL_SALE_AMT,
-                tsdt.PACK_REAL_SALE_CNT,
                 DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
         ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                    tsdto.REAL_SALE_CNT${item} AS REAL_SALE_CNT${item}
-        ,           tsdto.SALE_QTY${item} AS SALE_QTY${item}
+                    tsdto.SALE_QTY${item} AS SALE_QTY${item}
         ,           tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
                 </foreach>
         ,       GEN_REAL_SALE_CNT_POS
@@ -98,12 +94,8 @@
                     SUM(NVL(NON_CASH_AMT, 0)) AS PAY_AMT_02,
                     SUM(NVL(APPR_CASH_AMT, 0)) AS PAY_AMT_021,
                     SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
-                    SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_CNT ELSE 0 END) AS GEN_REAL_SALE_CNT,
-                           -- DLVR_ORDER_FG = '1' AND tmpe.ENVST_VAL != '6' AND DLVR_IN_FG IN ('0', '1')
                     SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-                    SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_CNT ELSE 0 END) AS DLVR_REAL_SALE_CNT,
-                    SUM(CASE WHEN (DLVR_ORDER_FG = '3' OR DLVR_ORDER_FG = '4') THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT,
-                    SUM(CASE WHEN (DLVR_ORDER_FG = '3' OR DLVR_ORDER_FG = '4') THEN REAL_SALE_CNT ELSE 0 END) AS PACK_REAL_SALE_CNT
+                    SUM(CASE WHEN (DLVR_ORDER_FG = '3' OR DLVR_ORDER_FG = '4') THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
                     FROM    TB_SL_DAILY_TOTAL_DLVR tsdtd
                     ,       TB_MS_STORE tms
                     ,       TB_MS_STORE_INFO tmsi
@@ -151,15 +143,26 @@
                     <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                         AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                     </if>
+                    <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                        AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                    </if>
+                    <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                        AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                    </if>
+                    <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                        AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                    </if>
+                    <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                        AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+                    </if>
                     GROUP BY    SUBSTR(SALE_DATE,0,6)
                 ) tsdt
         ,       (
                     SELECT  tsdto.SALE_YM
                     ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                            SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_CNT END) AS REAL_SALE_CNT${item}
-                    ,       SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                            SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
                     ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
-                    </foreach>
+                        </foreach>
                     FROM    TB_SL_MONTHLY_TOTAL_ORDAPP tsdto
                     ,       TB_MS_STORE tms
                     ,       TB_MS_STORE_INFO tmsi
@@ -205,6 +208,18 @@
                     </if>
                     <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                         AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                    </if>
+                    <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                        AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                    </if>
+                    <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                        AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                    </if>
+                    <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                        AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                    </if>
+                    <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                        AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                     </if>
                     AND     tsdto.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                     GROUP BY tsdto.SALE_YM
@@ -279,9 +294,21 @@
                     <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                         AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                     </if>
+                    <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                        AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                    </if>
+                    <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                        AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                    </if>
+                    <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                        AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                    </if>
+                    <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                        AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+                    </if>
                     AND     tsmpd.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                     GROUP BY tsmpd.SALE_YM
-        ) tsmpd
+                ) tsmpd
         WHERE   tsdt.SALE_YM = tsdto.SALE_YM (+)
         AND     tsdt.SALE_YM = tsmpd.SALE_YM (+)
     </select>

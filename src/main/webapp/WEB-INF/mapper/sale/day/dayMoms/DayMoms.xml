@@ -139,8 +139,8 @@
                 ) tsshp
         ,       (   SELECT  SALE_DATE
                     ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                    		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
-                    ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                        ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                             </foreach>
                     FROM    TB_SL_DAILY_TOTAL_ORDAPP tsdto
                     ,       TB_MS_STORE tms
@@ -149,7 +149,7 @@
                     AND     tsdto.STORE_CD = tms.STORE_CD
                     AND     tsdto.STORE_CD = tmsi.STORE_CD (+)
                     AND     tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
-                   <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
                         AND tsdto.STORE_CD IN (${storeCdQuery})
                     </if>
                     AND     tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
