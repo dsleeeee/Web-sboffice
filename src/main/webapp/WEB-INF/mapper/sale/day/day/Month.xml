@@ -791,7 +791,7 @@
         COMMENTS : [매출]상세
     -->
     <select id="getMonthCornerList" parameterType="MonthVO" resultType="DefaultMap">
-        /* DayOfWeekMapper.getMonthCornerList */
+        /* MonthMapper.getMonthCornerList */
         SELECT
         YEAR_MONTH,
         STORE_CNT,
@@ -861,7 +861,7 @@
         COMMENTS : [매출]헤더
     -->
     <select id="getMonthTableList" parameterType="MonthVO" resultType="DefaultMap">
-        /* DayOfWeekMapper.getMonthTableList */
+        /* MonthMapper.getMonthTableList */
         SELECT
         YEAR_MONTH,
         <foreach collection="arrTableCol" item="item" separator="+">
