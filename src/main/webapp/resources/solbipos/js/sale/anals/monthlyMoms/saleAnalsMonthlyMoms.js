@@ -1,3 +1,13 @@
+/****************************************************************
+ *
+ * 파일명 : saleAnalsMonthlyMoms.js
+ * 설  명 : 월력판매분석 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2023.04.13     권지현      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -26,6 +36,10 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 	$scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
 	$scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
 	$scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+	$scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+	$scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+	$scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+	$scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
 	//초기화
 	$scope.init = function () {
@@ -108,6 +122,10 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 			params.userBrands = momsHqBrandCd;
 		}
 		params.momsStoreFg01 = $scope.momsStoreFg01;
+		params.momsStoreFg02 = $scope.momsStoreFg02;
+		params.momsStoreFg03 = $scope.momsStoreFg03;
+		params.momsStoreFg04 = $scope.momsStoreFg04;
+		params.momsStoreFg05 = $scope.momsStoreFg05;
 
 		// $scope.init() 호출때문에 오류
 		if($scope.storeHqBrandCd === undefined) {
