@@ -3764,4 +3764,44 @@
         </choose>
     </select>
 
+    <!-- 알림 문자 발송 -->
+    <!--
+        TABLE    :
+        PARAM    : touchKeyVO
+        COMMENTS : 알림 문자를 발송한다.
+    -->
+    <select id="notiSmsSend" statementType="CALLABLE" parameterType="touchKeyVO" resultType="String">
+        /* USE : TouchKeyMapper.notiSmsSend */
+        {
+            CALL PKG_SDK_SMS_SYSTEM_SEND.SP_SDK_SMS_SEND_ENC_S01
+            (
+                #{gubun},
+                #{userId},
+                #{scheduleType},
+                #{subject},
+                #{smsMsg},
+                #{nowDate},
+                #{sendDate},
+                #{callback},
+                #{destCount},
+                #{destInfo},
+                #{msgFg}
+            )
+        }
+    </select>
+
+    <!--  알림 문자 발송 번호 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : touchKeyVO
+        COMMENTS : 알림 문자 발송 번호를 조회한다.
+    -->
+    <select id="getNotiSmsNoList" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* TouchKeyMapper.getNotiSmsNoList */
+        SELECT NMCODE_NM AS PHONE_NO
+        FROM   TB_CM_NMCODE
+        WHERE  NMCODE_GRP_CD = '232'
+        AND    NMCODE_ITEM_1 = #{nmcodeItem1}
+    </select>
+
 </mapper>

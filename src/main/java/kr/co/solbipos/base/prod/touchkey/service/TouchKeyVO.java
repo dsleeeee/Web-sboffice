@@ -173,6 +173,36 @@ public class TouchKeyVO extends PageVO {
     /** 매장그룹 */
     private String momsStoreFg01;
 
+    /** 0:즉시 / 1:예약 */
+    private String scheduleType;
+
+    /** 제목 */
+    private String subject;
+
+    /** 내용 */
+    private String smsMsg;
+
+    /** 현재날짜 */
+    private String nowDate;
+
+    /** 보낸날짜 */
+    private String sendDate;
+
+    /** 회신번호 */
+    private String callback;
+
+    /** 수신자목록 개수 (1 고정) */
+    private String destCount;
+
+    /** 착신자 정보 이름과 번호 저장(이름^받는사람번호) [PHONE_NUMBER] , 받는번호*/
+    private String destInfo;
+
+    /** 전송구분 */
+    private String msgFg;
+
+    /** 명칭코드항목1 */
+    private String nmcodeItem1;
+
     /**
      * @return the orgnFg
      */
@@ -714,4 +744,84 @@ public class TouchKeyVO extends PageVO {
     public String getMomsStoreFg01() { return momsStoreFg01; }
 
     public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
+
+    public String getScheduleType() {
+        return scheduleType;
+    }
+
+    public void setScheduleType(String scheduleType) {
+        this.scheduleType = scheduleType;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getSmsMsg() {
+        return smsMsg;
+    }
+
+    public void setSmsMsg(String smsMsg) {
+        this.smsMsg = smsMsg;
+    }
+
+    public String getNowDate() {
+        return nowDate;
+    }
+
+    public void setNowDate(String nowDate) {
+        this.nowDate = nowDate;
+    }
+
+    public String getSendDate() {
+        return sendDate;
+    }
+
+    public void setSendDate(String sendDate) {
+        this.sendDate = sendDate;
+    }
+
+    public String getCallback() {
+        return callback;
+    }
+
+    public void setCallback(String callback) {
+        this.callback = callback;
+    }
+
+    public String getDestCount() {
+        return destCount;
+    }
+
+    public void setDestCount(String destCount) {
+        this.destCount = destCount;
+    }
+
+    public String getDestInfo() {
+        return destInfo;
+    }
+
+    public void setDestInfo(String destInfo) {
+        this.destInfo = destInfo;
+    }
+
+    public String getMsgFg() {
+        return msgFg;
+    }
+
+    public void setMsgFg(String msgFg) {
+        this.msgFg = msgFg;
+    }
+
+    public String getNmcodeItem1() {
+        return nmcodeItem1;
+    }
+
+    public void setNmcodeItem1(String nmcodeItem1) {
+        this.nmcodeItem1 = nmcodeItem1;
+    }
 }

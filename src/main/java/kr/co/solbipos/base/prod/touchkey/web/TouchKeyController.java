@@ -838,4 +838,26 @@ public class TouchKeyController {
         return ReturnUtil.returnListJson(Status.OK, list, touchKeyVO);
 
     }
+
+    /**
+     * 알림 문자 발송
+     * @param touchKeyVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2024.02.27
+     */
+    @RequestMapping(value = "/notiSmsSend.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result notiSmsSend(@RequestBody TouchKeyVO touchKeyVO, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        touchkeyService.notiSmsSend(touchKeyVO, sessionInfoVO);
+
+        return returnJson(Status.OK);
+    }
 }

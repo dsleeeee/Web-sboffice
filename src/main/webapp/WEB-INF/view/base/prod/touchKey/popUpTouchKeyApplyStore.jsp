@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+
 <%-- 팝업 부분 설정 - width 는 강제 해주어야함.. 해결방법? 확인 필요 : 20180829 노현수 --%>
 <wj-popup control="popUpApplyStoreLayer" show-trigger="Click" hide-trigger="Click" style="display: none;width:700px;">
     <div class="wj-dialog wj-dialog-columns">
@@ -316,6 +318,7 @@
 <script type="text/javascript">
   var sysStatFgComboData = ${ccu.getCommCode("005")};
   var clsFgComboData = ${ccu.getCommCode("001")};
+  var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyApplyStore.js?ver=20240105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyApplyStore.js?ver=20240304.02" charset="utf-8"></script>

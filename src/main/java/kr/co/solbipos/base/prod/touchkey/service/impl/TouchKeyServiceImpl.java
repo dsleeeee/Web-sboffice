@@ -15,7 +15,6 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.common.enums.ConfgFg;
@@ -1292,5 +1291,29 @@ public class TouchKeyServiceImpl implements TouchKeyService {
         touchKeyVO.setUserId(sessionInfoVO.getUserId());
 
         return keyMapper.getSalePrice(touchKeyVO);
+    }
+
+    /** 알림 문자 발송  */
+    public void notiSmsSend(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO) {
+
+        String currentDt = currentDateTimeString();
+
+        touchKeyVO.setGubun("");
+        touchKeyVO.setUserId("00001");
+        touchKeyVO.setScheduleType("0"); // 즉시
+        touchKeyVO.setNowDate(currentDt);
+        touchKeyVO.setSendDate(currentDt);
+        touchKeyVO.setCallback("16445195");
+        touchKeyVO.setDestCount("1");
+
+        // 발신 전화번호 조회
+        List<DefaultMap<Object>> list = keyMapper.getNotiSmsNoList(touchKeyVO);
+
+        for(int i=0; i < list.size(); i++) {
+            touchKeyVO.setDestInfo(list.get(i).getStr("phoneNo"));
+
+            // 알림 문자 발송
+            keyMapper.notiSmsSend(touchKeyVO);
+        }
     }
 }

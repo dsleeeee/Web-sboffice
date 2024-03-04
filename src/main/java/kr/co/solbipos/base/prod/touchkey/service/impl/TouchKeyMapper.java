@@ -194,4 +194,11 @@ public interface TouchKeyMapper {
 
     /** 판매가관리 팝업 - 조회 */
     List<DefaultMap<Object>> getSalePrice(TouchKeyVO touchKeyVO);
+
+    /** 알림 문자 발송 */
+    void notiSmsSend(TouchKeyVO touchKeyVO);
+
+    /** 알림 문자 발송 번호 조회 */
+    List<DefaultMap<Object>> getNotiSmsNoList(TouchKeyVO touchKeyVO);
+
 }

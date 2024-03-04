@@ -99,4 +99,7 @@ public interface TouchKeyService {
 
     /** 판매가관리 팝업 - 조회 */
     List<DefaultMap<Object>> getSalePrice(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
+
+    /** 알림 문자 발송 */
+    void notiSmsSend(TouchKeyVO touchKeyVO, SessionInfoVO sessionInfoVO);
 }

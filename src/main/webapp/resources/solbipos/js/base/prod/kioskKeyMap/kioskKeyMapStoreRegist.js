@@ -164,21 +164,67 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
                     }
                 }
             }
-            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            /*$scope._save("/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMapStore.sb", params, function () {
 
-                $scope.kioskKeyMapStoreRegLayer.hide(true);
+            // 매장적용 500개 이상 적용시
+            if (params.length >= 500) {
 
-            });*/
-            
-            $timeout(function () {
-                setTimeout(function () {
-                    // 키오스크키맵 매장적용
-                    $scope.save(params);
-                }, 500);
-            }, 10);
+                // 대량 적용 알림 문자 발송
+                var smsParams = {};
+                smsParams.subject = "[대량적용알림]키맵매장적용";
+                smsParams.smsMsg = "키맵매장적용을 시작하였습니다. 본사코드 : " + hqOfficeCd + ", 적용매장수 : " + params.length;
+                smsParams.msgFg = "S01_0002"; // [전송구분] S01_0001:테스트용, S01_0002:터치키/키오스크 매장적용 시
+                smsParams.nmcodeItem1 = "터치키/키오스크 매장적용";
+                $scope._postJSONSave.withOutPopUp("/base/prod/touchKey/touchKey/notiSmsSend.sb", smsParams, function () {
+
+                    // 사용자 현재 인원수 체크
+                    var data = {};
+                    data.downloadFg = "2";    // [다운로드 구분] 0:간소화화면, 1:상품매출분석 2: 터치키/키오스크 매장적용
+                    data.resrceCd = menuCd;
+                    data.resrceNm = menuNm;
+                    data.downloadUseFg = "3"; // [다운로드 사용기능] 0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드 3:터치키/키오스크 매장적용
+                    data.downloadNo = "0";    // 다운로드 화면구분번호
+
+                    $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', data, function (response) {
+                        if (response.data.data.list === 0) {
+                        } else {
+                            var msgCntChk = response.data.data.list; // '00:0건의 대량 적용 진행중' 메시지면 작업가능
+                            var params2 = data;
+
+                            if (msgCntChk.substr(0, 2) === "00") { // 작업가능 시
+
+                                // 대량 적용 진행 사용자 저장 insert
+                                params2.downloadFileCount = params.length; // 대량 적용 매장수
+                                $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function (response) {
+                                    var seq = response.data.data.list; // 순번
+                                    // 매장사용터치키 설정 저장(500개 이상 매장용)
+                                    $scope.save2(params, seq);
+                                });
+
+                            } else { // 작업불가 시
+
+                                // 대량 적용 진행 사용자 저장 insert
+                                params2.resrceNm = "실패:" + menuNm;
+                                params2.downloadFileCount = 0; // 대량 적용 매장수
+                                $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function (response) {
+                                });
+
+                                $scope._popMsg(msgCntChk); // 매장적용 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
+                                return;
+                            }
+                        }
+                    });
+
+                });
+
+            } else {
+                $timeout(function () {
+                    setTimeout(function () {
+                        // 키오스크키맵 매장적용
+                        $scope.save(params);
+                    }, 500);
+                }, 10);
+            }
         });
-
     };
 
     // 키오스크키맵 매장적용 저장
@@ -248,6 +294,82 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
                 $("#progressCnt").html($scope.progressCnt);
                 $scope.save(orgParams);
             }
+        });
+    };
+
+    // 키오스크키맵 매장적용 저장(500개 이상 매장용)
+    $scope.save2 = function(orgParams, seq){
+
+        $scope.totalRows = orgParams.length;    // 체크 매장수
+        var params = [];
+
+        // 저장 시작이면 작업내역 로딩 팝업 오픈
+        if ($scope.progressCnt === 0) {
+            $timeout(function () {
+                $scope.excelUploadingPopup(true);
+                $("#progressCnt").html($scope.progressCnt);
+                $("#totalRows").html($scope.totalRows);
+            }, 10);
+        }
+
+        // stepCnt 만큼 데이터 DB에 저장
+        var loopCnt = (parseInt($scope.progressCnt) + parseInt($scope.stepCnt) > parseInt($scope.totalRows) ? parseInt($scope.totalRows) : parseInt($scope.progressCnt) + parseInt($scope.stepCnt));
+        for (var i = $scope.progressCnt; i < loopCnt; i++) {
+            params.push(orgParams[i]);
+        }
+
+        console.log("총 갯수 :" + $scope.totalRows);
+        console.log("진행 갯수 :" + $scope.progressCnt + "~" + (loopCnt - 1));
+        console.log("---------------------------------------------------------------------");
+
+        // 진행 시간 저장
+        var params2 = {};
+        params2.seq = seq;
+        $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveUpdate.sb", params2, function(response) {
+
+            //가상로그인 session 설정
+            var sParam = {};
+            if (document.getElementsByName('sessionId')[0]) {
+                sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+            }
+
+            // ajax 통신 설정
+            $http({
+                method: 'POST', //방식
+                url: '/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMapStore.sb', /* 통신할 URL */
+                data: params, /* 파라메터로 보낼 데이터 : @requestBody */
+                params: sParam,
+                headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+            }).then(function successCallback(response) {
+                if ($scope._httpStatusCheck(response, true)) {
+                    if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
+                        // 작업내역 로딩 팝업 닫기
+                        $scope.excelUploadingPopup(false);
+                        // 키오스크키맵 매장적용 팝업 닫기
+                        $scope.kioskKeyMapStoreRegLayer.hide(true);
+                        // 저장되었습니다.
+                        $scope._popMsg(messages["cmm.saveSucc"]);
+                    }
+                }
+            }, function errorCallback(response) {
+                $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
+                if (response.data.message) {
+                    $scope._popMsg(response.data.message);
+                } else {
+                    $scope._popMsg(messages['cmm.saveFail']);
+                }
+                return false;
+            }).then(function () {
+                // 'complete' code here
+                // 처리 된 숫자가 총 업로드할 수보다 작은 경우 다시 save 함수 호출
+                if (parseInt($scope.progressCnt) < parseInt($scope.totalRows)) {
+                    // 처리된 숫자 변경
+                    $scope.progressCnt = loopCnt;
+                    // 팝업의 progressCnt 값 변경
+                    $("#progressCnt").html($scope.progressCnt);
+                    $scope.save2(orgParams, seq);
+                }
+            });
         });
     };
 
