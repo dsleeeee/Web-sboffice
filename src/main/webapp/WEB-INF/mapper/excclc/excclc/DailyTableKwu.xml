@@ -474,7 +474,7 @@
             B.MONTH_UNPAID_AMT, --당월미수
             C.COMMISSION_AMT, --수수료
             D.INTEREST_AMT, -- 결산이자
-            (E.CARD_AMT + 0 + A.B_MONTH_UNPAID_AMT + D.INTEREST_AMT) - (B.MONTH_UNPAID_AMT + C.COMMISSION_AMT) AS CARD_IN_AMT --(신용카드+신용단말기+전월미수+결산이자) - (당월미수+수수료)
+            (NVL(E.CARD_AMT,0) + 0 + NVL(A.B_MONTH_UNPAID_AMT,0) + NVL(D.INTEREST_AMT,0)) - (NVL(B.MONTH_UNPAID_AMT,0) + NVL(C.COMMISSION_AMT,0)) AS CARD_IN_AMT --(신용카드+신용단말기+전월미수+결산이자) - (당월미수+수수료)
             FROM
             (
                 SELECT
@@ -558,7 +558,7 @@
             B.MONTH_UNPAID_AMT, --당월미수
             C.COMMISSION_AMT, --수수료
             D.INTEREST_AMT, -- 결산이자
-            (E.CARD_AMT + 0 + A.B_MONTH_UNPAID_AMT + D.INTEREST_AMT) - (B.MONTH_UNPAID_AMT + C.COMMISSION_AMT) AS CARD_IN_AMT --(신용카드+신용단말기+전월미수+결산이자) - (당월미수+수수료)
+            (NVL(E.CARD_AMT,0) + 0 + NVL(A.B_MONTH_UNPAID_AMT,0) + NVL(D.INTEREST_AMT,0)) - (NVL(B.MONTH_UNPAID_AMT,0) + NVL(C.COMMISSION_AMT,0)) AS CARD_IN_AMT --(신용카드+신용단말기+전월미수+결산이자) - (당월미수+수수료)
             FROM
             (
                 SELECT
