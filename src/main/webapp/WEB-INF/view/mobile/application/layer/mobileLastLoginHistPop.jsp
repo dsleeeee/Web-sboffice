@@ -57,4 +57,4 @@
     var mainYn = "${mainYn}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/application/layer/mobileLastLoginHistPop.js?ver=20240228.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/application/layer/mobileLastLoginHistPop.js?ver=20240306.01" charset="utf-8"></script>

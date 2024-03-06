@@ -57,8 +57,8 @@ if(getCookie("notLastPwdChgDtChkPop" + userId)!="Y") {
     if(mainYn == "Y") {
         // 6개월이상 비밀번호 미수정시 알림 팝업
         if (lastPwdChgDtChk === "Y") {
-            $("#fullDimmedMobileLastPwdChgDtChkPop").show();
-            $("#layerMobileLastPwdChgDtChkPop").show();
+            // $("#fullDimmedMobileLastPwdChgDtChkPop").show();
+            // $("#layerMobileLastPwdChgDtChkPop").show();
         }
     }
 }

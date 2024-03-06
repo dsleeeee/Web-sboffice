@@ -100,7 +100,7 @@ $("#lastLoginHist").bind("click", function () {
 
   // 조회
   var scope = agrid.getScope("mobileLastLoginHistCtrl");
-  scope.searchLastLoginHist();
+  scope.searchMobileLastLoginHist();
 
   $(".userLayer").toggle();
   return false;
