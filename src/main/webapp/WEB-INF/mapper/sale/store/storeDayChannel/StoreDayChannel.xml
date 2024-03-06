@@ -25,11 +25,11 @@
         ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tsshp.BRANCH_CD) AS BRANCH_NM
         ,       tsshp.STORE_CNT
         <if test='option != null and option != "" and option == "store"'>
-            ,       tsshp.STORE_CD
-            ,       (SELECT STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsshp.STORE_CD) AS STORE_NM
-            ,       tsshp.HQ_BRAND_CD AS BRAND
-            ,       tsshp.MOMS_TEAM
-            ,       tsshp.MOMS_AC_SHOP
+        ,       tsshp.STORE_CD
+        ,       (SELECT STORE_NM FROM TB_MS_STORE tms WHERE tms.STORE_CD = tsshp.STORE_CD) AS STORE_NM
+        ,       tsshp.HQ_BRAND_CD AS BRAND
+        ,       tsshp.MOMS_TEAM
+        ,       tsshp.MOMS_AC_SHOP
         </if>
         ,       tsshp.YOIL
         ,       tsshp.TOT_SALE_AMT
@@ -67,7 +67,7 @@
         ,       tsshp.PAY021 AS PAY021 -- 현금영수증
         ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
                     tsdto.SALE_QTY${item} AS SALE_QTY${item}
-                    ,       tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
+                ,       tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
                 </foreach>
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    (
@@ -171,15 +171,15 @@
                         ,       tmsi.MOMS_TEAM
                         ,       tmsi.MOMS_AC_SHOP
                     </if>
-        ) tsshp
+                ) tsshp
         ,       (   SELECT  NVL(tms.BRANCH_CD, ' ') AS BRANCH_CD
                     ,       tsdto.SALE_DATE
                     <if test='option != null and option != "" and option == "store"'>
-                        ,       tsdto.STORE_CD
+                    ,       tsdto.STORE_CD
                     </if>
                     ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
                                 SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
-                                ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                        ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                             </foreach>
                     FROM    TB_SL_DAILY_TOTAL_ORDAPP tsdto
                     ,       TB_MS_STORE tms
@@ -244,7 +244,7 @@
                     <if test='option != null and option != "" and option == "store"'>
                         ,       tsdto.STORE_CD
                     </if>
-        ) tsdto
+                ) tsdto
         WHERE   tsdto.SALE_DATE  (+) = tsshp.SALE_DATE
         AND     tsdto.BRANCH_CD  (+) = tsshp.BRANCH_CD
         <if test='option != null and option != "" and option == "store"'>
@@ -310,9 +310,9 @@
         ,       tsshp.PAY02 AS PAY02 -- 현금
         ,       tsshp.PAY021 AS PAY021 -- 현금영수증
         ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                    tsdto.SALE_QTY${item} AS SALE_QTY${item}
-                    ,       tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
-                </foreach>
+                tsdto.SALE_QTY${item} AS SALE_QTY${item}
+        ,       tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
+            </foreach>
         FROM    (
                     SELECT  tsdt.SALE_DATE
                     ,       TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
@@ -414,16 +414,16 @@
                         ,       tmsi.MOMS_TEAM
                         ,       tmsi.MOMS_AC_SHOP
                     </if>
-        ) tsshp
+                ) tsshp
         ,       (   SELECT  NVL(tms.BRANCH_CD, ' ') AS BRANCH_CD
                     ,       tsdto.SALE_DATE
                     <if test='option != null and option != "" and option == "store"'>
-                        ,       tsdto.STORE_CD
+                    ,       tsdto.STORE_CD
                     </if>
-                    ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
-                                ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
-                            </foreach>
+            ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                        SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                    </foreach>
                     FROM    TB_SL_DAILY_TOTAL_ORDAPP tsdto
                     ,       TB_MS_STORE tms
                     ,       TB_MS_STORE_INFO tmsi
@@ -487,7 +487,7 @@
                     <if test='option != null and option != "" and option == "store"'>
                         ,       tsdto.STORE_CD
                     </if>
-        ) tsdto
+                ) tsdto
         WHERE   tsdto.SALE_DATE  (+) = tsshp.SALE_DATE
         AND     tsdto.BRANCH_CD  (+) = tsshp.BRANCH_CD
         <if test='option != null and option != "" and option == "store"'>

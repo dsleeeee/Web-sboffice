@@ -30,7 +30,7 @@
         ,       #{startDate} AS START_DATE
         ,       #{endDate} AS END_DATE
         <if test='orgnFg != null and orgnFg == "S"'>
-        ,       TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,       TO_CHAR(TO_DATE(tsspt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         </if>
         ,		SUM(CASE WHEN tsspt.SALE_YN = 'Y' THEN 1 WHEN tsspt.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_CNT
         ,		SUM(tsspt.SALE_AMT) AS SALE_AMT
@@ -103,9 +103,9 @@
         ,       tmsi.MOMS_TEAM
         ,       tmsi.MOMS_AC_SHOP
         <if test='orgnFg != null and orgnFg == "S"'>
-        ,       tsspt.SALE_DATE
+            ,       tsspt.SALE_DATE
         </if>
-    <include refid="CmmSQL.PagingTemplateBottom"/>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 가승인-상품권결제차액 탭 - 엑셀다운로드 조회 -->
@@ -195,7 +195,7 @@
         ,       tmsi.MOMS_TEAM
         ,       tmsi.MOMS_AC_SHOP
         <if test='orgnFg != null and orgnFg == "S"'>
-        ,       tsspt.SALE_DATE
+            ,       tsspt.SALE_DATE
         </if>
     </select>
 
