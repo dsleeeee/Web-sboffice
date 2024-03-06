@@ -32,6 +32,10 @@ app.controller('storeOpenCloseDayTimeCtrl', ['$scope', '$http', '$timeout', func
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
@@ -77,6 +81,10 @@ app.controller('storeOpenCloseDayTimeCtrl', ['$scope', '$http', '$timeout', func
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
 
         var scope = agrid.getScope("storeOpenCloseDayCtrl");
         // 일별 조회
@@ -146,6 +154,10 @@ app.controller('storeOpenCloseDayCtrl', ['$scope', '$http', '$timeout', function
                         params.userBrands = momsHqBrandCd;
                     }
                     params.momsStoreFg01 = scope.momsStoreFg01;
+                    params.momsStoreFg02 = scope.momsStoreFg02;
+                    params.momsStoreFg03 = scope.momsStoreFg03;
+                    params.momsStoreFg04 = scope.momsStoreFg04;
+                    params.momsStoreFg05 = scope.momsStoreFg05;
 
                     $scope._broadcast('storeOpenCloseDayDtlCtrl', params);
                 }
@@ -241,6 +253,10 @@ app.controller('storeOpenCloseDayCtrl', ['$scope', '$http', '$timeout', function
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = data.momsStoreFg01;
+        params.momsStoreFg02 = data.momsStoreFg02;
+        params.momsStoreFg03 = data.momsStoreFg03;
+        params.momsStoreFg04 = data.momsStoreFg04;
+        params.momsStoreFg05 = data.momsStoreFg05;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseDayList.sb", params, function () {
@@ -435,6 +451,10 @@ app.controller('storeOpenCloseDayDtlCtrl', ['$scope', '$http', '$timeout', funct
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = data.momsStoreFg01;
+        params.momsStoreFg02 = data.momsStoreFg02;
+        params.momsStoreFg03 = data.momsStoreFg03;
+        params.momsStoreFg04 = data.momsStoreFg04;
+        params.momsStoreFg05 = data.momsStoreFg05;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseDayDtlList.sb", params, function () {

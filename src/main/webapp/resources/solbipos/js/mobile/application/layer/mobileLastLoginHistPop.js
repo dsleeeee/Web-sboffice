@@ -98,8 +98,8 @@ app.controller('mobileLastLoginHistCtrl', ['$scope', '$http', function ($scope, 
     if(getCookie("notLastLoginHistPop" + userId)!="Y") {
         // 메인화면 진입인지 체크
         if(mainYn == "Y") {
-            $("#fullDimmedMobileLastLoginHistPop").show();
-            $("#layerMobileLastLoginHistPop").show();
+            // $("#fullDimmedMobileLastLoginHistPop").show();
+            // $("#layerMobileLastLoginHistPop").show();
         }
     }
 

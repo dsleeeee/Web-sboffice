@@ -205,6 +205,18 @@ public class StoreMonthPosVO extends PageVO {
     /** 매장그룹 */
     private String momsStoreFg01;
 
+    /** 매장그룹2 */
+    private String momsStoreFg02;
+
+    /** 매장그룹3 */
+    private String momsStoreFg03;
+
+    /** 매장그룹4 */
+    private String momsStoreFg04;
+
+    /** 매장그룹5 */
+    private String momsStoreFg05;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -814,4 +826,20 @@ public class StoreMonthPosVO extends PageVO {
     public String getMomsStoreFg01() { return momsStoreFg01; }
 
     public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
+
+    public String getMomsStoreFg02() { return momsStoreFg02; }
+
+    public void setMomsStoreFg02(String momsStoreFg02) { this.momsStoreFg02 = momsStoreFg02; }
+
+    public String getMomsStoreFg03() { return momsStoreFg03; }
+
+    public void setMomsStoreFg03(String momsStoreFg03) { this.momsStoreFg03 = momsStoreFg03; }
+
+    public String getMomsStoreFg04() { return momsStoreFg04; }
+
+    public void setMomsStoreFg04(String momsStoreFg04) { this.momsStoreFg04 = momsStoreFg04; }
+
+    public String getMomsStoreFg05() { return momsStoreFg05; }
+
+    public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
 }
