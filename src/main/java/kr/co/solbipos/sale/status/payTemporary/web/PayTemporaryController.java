@@ -185,7 +185,6 @@ public class PayTemporaryController {
             branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
-
         // 매장그룹
         List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
         String momsStoreFg01ComboListAll = "";
@@ -200,6 +199,62 @@ public class PayTemporaryController {
             momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
+        // 매장그룹2
+        List momsStoreFg02ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "169");
+        String momsStoreFg02ComboListAll = "";
+        if (momsStoreFg02ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg02ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg02ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg02ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg02ComboList", momsStoreFg02ComboListAll);
+        // 매장그룹3
+        List momsStoreFg03ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "170");
+        String momsStoreFg03ComboListAll = "";
+        if (momsStoreFg03ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg03ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg03ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg03ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg03ComboList", momsStoreFg03ComboListAll);
+        // 매장그룹4
+        List momsStoreFg04ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "171");
+        String momsStoreFg04ComboListAll = "";
+        if (momsStoreFg04ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg04ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg04ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg04ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg04ComboList", momsStoreFg04ComboListAll);
+        // 매장그룹5
+        List momsStoreFg05ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "172");
+        String momsStoreFg05ComboListAll = "";
+        if (momsStoreFg05ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg05ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg05ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboListAll);
 
 
         // 전체 없는 콤보박스 데이터
@@ -262,13 +317,45 @@ public class PayTemporaryController {
         } else {
             model.addAttribute("branchCdComboList2", branchCdComboListAll);
         }
-        // 매장관리타입
+        // 매장그룹
         if(momsStoreFg01ComboList.size() > 1) {
             momsStoreFg01ComboList.remove(0);
             String momsStoreFg01ComboListAll2 = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
             model.addAttribute("momsStoreFg01ComboList2", momsStoreFg01ComboListAll2);
         } else {
             model.addAttribute("momsStoreFg01ComboList2", momsStoreFg01ComboListAll);
+        }
+        // 매장그룹2
+        if(momsStoreFg02ComboList.size() > 1) {
+            momsStoreFg02ComboList.remove(0);
+            String momsStoreFg02ComboListAll2 = cmmCodeUtil.assmblObj(momsStoreFg02ComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsStoreFg02ComboList2", momsStoreFg02ComboListAll2);
+        } else {
+            model.addAttribute("momsStoreFg02ComboList2", momsStoreFg02ComboListAll);
+        }
+        // 매장그룹3
+        if(momsStoreFg03ComboList.size() > 1) {
+            momsStoreFg03ComboList.remove(0);
+            String momsStoreFg03ComboListAll2 = cmmCodeUtil.assmblObj(momsStoreFg03ComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsStoreFg03ComboList2", momsStoreFg03ComboListAll2);
+        } else {
+            model.addAttribute("momsStoreFg03ComboList2", momsStoreFg03ComboListAll);
+        }
+        // 매장그룹4
+        if(momsStoreFg04ComboList.size() > 1) {
+            momsStoreFg04ComboList.remove(0);
+            String momsStoreFg04ComboListAll2 = cmmCodeUtil.assmblObj(momsStoreFg04ComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsStoreFg04ComboList2", momsStoreFg04ComboListAll2);
+        } else {
+            model.addAttribute("momsStoreFg04ComboList2", momsStoreFg04ComboListAll);
+        }
+        // 매장그룹5
+        if(momsStoreFg05ComboList.size() > 1) {
+            momsStoreFg05ComboList.remove(0);
+            String momsStoreFg05ComboListAll2 = cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.N);
+            model.addAttribute("momsStoreFg05ComboList2", momsStoreFg05ComboListAll2);
+        } else {
+            model.addAttribute("momsStoreFg05ComboList2", momsStoreFg05ComboListAll);
         }
 
 

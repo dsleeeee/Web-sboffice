@@ -34,6 +34,10 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    var momsStoreFg02ComboList = ${momsStoreFg02ComboList};
+    var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
+    var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
+    var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 
     // 콤보박스 데이터
     var branchCdComboList2 = ${branchCdComboList2};
@@ -44,6 +48,10 @@
     var momsShopTypeComboList2 = ${momsShopTypeComboList2};
     var momsStoreManageTypeComboList2 = ${momsStoreManageTypeComboList2};
     var momsStoreFg01ComboList2 = ${momsStoreFg01ComboList2};
+    var momsStoreFg02ComboList2 = ${momsStoreFg02ComboList2};
+    var momsStoreFg03ComboList2 = ${momsStoreFg03ComboList2};
+    var momsStoreFg04ComboList2 = ${momsStoreFg04ComboList2};
+    var momsStoreFg05ComboList2 = ${momsStoreFg05ComboList2};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/payTemporary/payTemporaryTab.js?ver=20230508.01" charset="utf-8"></script>

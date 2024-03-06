@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    StoreOpenClose.xml
+    매장 오픈/마감 현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2022.11.11     최초작성
+-->
 <mapper namespace="kr.co.solbipos.sale.store.storeOpenClose.service.impl.StoreOpenCloseMapper">
 
     <!-- 매맘스터치 > 점포매출 > 매장 오픈/마감 현황 - 일별 탭 조회 -->
@@ -64,6 +72,18 @@
                         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                         </if>
+                        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                        </if>
+                        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                        </if>
+                        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                        </if>
+                        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+                        </if>
                         AND		EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.OPEN_DT, 'YYYYMMDDHH24MISS')) BETWEEN A.MIN AND A.MAX) AS OPEN_CNT
             ,		(	SELECT	COUNT(DISTINCT tpe.STORE_CD)
                         FROM	TB_PS_EXACTCALC tpe
@@ -114,6 +134,18 @@
                         </if>
                         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                        </if>
+                        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                        </if>
+                        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                        </if>
+                        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                        </if>
+                        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                         </if>
                         AND		EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.CLOSE_DT, 'YYYYMMDDHH24MISS')) BETWEEN A.MIN AND A.MAX) AS CLOSE_CNT
             FROM 	(
@@ -356,6 +388,18 @@
                         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                         </if>
+                        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                        </if>
+                        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                        </if>
+                        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                        </if>
+                        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+                        </if>
                         <if test='gubun != null and gubun != "" and gubun.toString() == "open"'>
                             AND EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.OPEN_DT, 'YYYYMMDDHH24MISS')) BETWEEN #{min} AND #{max}
                         </if>
@@ -423,6 +467,18 @@
                         </if>
                         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                        </if>
+                        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                        </if>
+                        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                        </if>
+                        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                        </if>
+                        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                         </if>
                         <if test='gubun != null and gubun != "" and gubun.toString() == "close"'>
                             AND EXTRACT(HOUR FROM TO_TIMESTAMP(tpe.CLOSE_DT, 'YYYYMMDDHH24MISS')) BETWEEN #{min} AND #{max}
@@ -510,6 +566,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
     </select>
 
     <!-- 맘스터치 > 점포매출 > 매장 오픈/마감 현황 - 월별 탭 조회 -->
@@ -578,6 +646,18 @@
                         </if>
                         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                        </if>
+                        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                        </if>
+                        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                        </if>
+                        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                        </if>
+                        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                         </if>
                         ) B
                         ,       TB_PS_EXACTCALC C
@@ -778,6 +858,18 @@
         </if>
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
         ORDER BY tms.STORE_CD
     </select>

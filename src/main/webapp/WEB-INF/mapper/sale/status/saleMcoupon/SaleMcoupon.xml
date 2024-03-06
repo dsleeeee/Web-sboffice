@@ -87,6 +87,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         GROUP BY tms.BRANCH_CD, tsspm.STORE_CD, tms.STORE_NM, tms.HQ_BRAND_CD, tmsi.MOMS_TEAM, tmsi.MOMS_AC_SHOP
         <if test='orgnFg != null and orgnFg == "S"'>
             , tsspm.SALE_DATE
@@ -171,6 +183,18 @@
         </if>
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
         GROUP BY tms.BRANCH_CD, tsspm.STORE_CD, tms.STORE_NM, tms.HQ_BRAND_CD, tmsi.MOMS_TEAM, tmsi.MOMS_AC_SHOP
         <if test='orgnFg != null and orgnFg == "S"'>

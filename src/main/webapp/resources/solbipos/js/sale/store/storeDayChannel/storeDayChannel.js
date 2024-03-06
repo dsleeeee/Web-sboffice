@@ -1,3 +1,13 @@
+/****************************************************************
+ *
+ * 파일명 : storeDayChannel.js
+ * 설  명 : 매장-일별매출현황(채널별) JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2022.11.18     권지현      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -9,6 +19,7 @@ var optionData = [
 ];
 
 app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeDayChannelCtrl', $scope, $http, true));
 
@@ -27,10 +38,13 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
   $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
   $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+  $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+  $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+  $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+  $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
     $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
     $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
     $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
@@ -250,7 +264,6 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
 
   // 일별종합 리스트 조회
   $scope.searchDayList = function () {
-
     var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
     var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
     var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
@@ -301,6 +314,10 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
       params.userBrands = momsHqBrandCd;
     }
     params.momsStoreFg01 = $scope.momsStoreFg01;
+    params.momsStoreFg02 = $scope.momsStoreFg02;
+    params.momsStoreFg03 = $scope.momsStoreFg03;
+    params.momsStoreFg04 = $scope.momsStoreFg04;
+    params.momsStoreFg05 = $scope.momsStoreFg05;
     params.listScale = 500; //-페이지 스케일 갯수
     console.log(params);
 
@@ -349,7 +366,7 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
     } else if(s.selectedValue === "store"){
       $(".dayStore").show();
     }
-  }
+  };
 
   // 매장선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -360,7 +377,6 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
 
   // 엑셀 다운로드
   $scope.excelDownloadInfo = function () {
-
     var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
     var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
     var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
@@ -411,12 +427,16 @@ app.controller('storeDayChannelCtrl', ['$scope', '$http', '$timeout', function (
       params.userBrands = momsHqBrandCd;
     }
     params.momsStoreFg01 = $scope.momsStoreFg01;
+    params.momsStoreFg02 = $scope.momsStoreFg02;
+    params.momsStoreFg03 = $scope.momsStoreFg03;
+    params.momsStoreFg04 = $scope.momsStoreFg04;
+    params.momsStoreFg05 = $scope.momsStoreFg05;
 
     $scope._broadcast('storeDayChannelExcelCtrl', params);
-
   };
 
 }]);
+
 
 /**
  *  엑셀다운로드 그리드 생성
@@ -428,7 +448,6 @@ app.controller('storeDayChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
       $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
       $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
       $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
@@ -537,19 +556,15 @@ app.controller('storeDayChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeDayChannelExcelCtrl", function (event, data) {
-
         $scope.searchExcelList(data);
-
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
 
     // 엑셀 리스트 조회
     $scope.searchExcelList = function (params) {
-
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeDayChannel/storeDayChannel/getDayExcelList.sb", params, function (){
-
             if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
@@ -595,7 +610,6 @@ app.controller('storeDayChannelExcelCtrl', ['$scope', '$http', '$timeout', funct
                 });
           }, 10);
         });
-
     };
 
 }]);

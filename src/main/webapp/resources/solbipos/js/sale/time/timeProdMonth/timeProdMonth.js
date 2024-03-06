@@ -97,6 +97,10 @@ app.controller('timeProdMonthCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // 콤보박스 셋팅
     $scope._setComboData("prodOptionCombo", prodOptionComboData); // 상품표시옵션
@@ -368,6 +372,10 @@ app.controller('timeProdMonthCtrl', ['$scope', '$http', '$timeout', function ($s
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
         params.dayGubun = $scope.dayGubun;
@@ -652,6 +660,10 @@ app.controller('timeProdMonthCtrl', ['$scope', '$http', '$timeout', function ($s
           params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         params.prodOption = $scope.prodOption;
         params.dayOption = $scope.dayOption;
         params.dayGubun = $scope.dayGubun;

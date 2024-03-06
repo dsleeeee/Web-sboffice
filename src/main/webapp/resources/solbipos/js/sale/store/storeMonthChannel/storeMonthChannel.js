@@ -44,10 +44,13 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
         $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
         $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
@@ -264,7 +267,6 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
     });
 
     $scope.searchMonthTotal = function() {
-
         var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
         var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
         var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
@@ -311,6 +313,10 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500; //-페이지 스케일 갯수
         console.log(params);
 
@@ -359,7 +365,7 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
         } else if(s.selectedValue === "store"){
             $(".monthStore").show();
         }
-    }
+    };
 
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -368,10 +374,8 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
         $scope._broadcast('monthStoreCtrl');
     };
 
-
-// 엑셀 다운로드
+    // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {
-
         var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
         var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
         var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
@@ -418,10 +422,14 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
 
         $scope._broadcast('storeMonthChannelExcelCtrl', params);
-
     };
+
 }]);
 
 
@@ -435,7 +443,6 @@ app.controller('storeMonthChannelExcelCtrl', ['$scope', '$http', '$timeout', fun
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         $scope.brandDataMap = new wijmo.grid.DataMap(momsHqBrandCdComboList, 'value', 'name');
         $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
         $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
@@ -545,24 +552,19 @@ app.controller('storeMonthChannelExcelCtrl', ['$scope', '$http', '$timeout', fun
             }
         }
         // <-- //그리드 헤더2줄 -->
-
     };
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeMonthChannelExcelCtrl", function (event, data) {
-
         $scope.searchExcelList(data);
-
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
 
     // 엑셀 리스트 조회
     $scope.searchExcelList = function (params) {
-
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeMonthChannel/storeMonthChannel/getMonthExcelList.sb", params, function (){
-
             if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
@@ -608,7 +610,6 @@ app.controller('storeMonthChannelExcelCtrl', ['$scope', '$http', '$timeout', fun
                     });
             }, 10);
         });
-
     };
 
 }]);

@@ -59,6 +59,10 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope._setComboData("dayOptionCombo", dayOptionComboData); // 일자표시옵션
     $scope._setComboData("saleAmtFgCombo", saleAmtFgComboData); // 금액보정
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // 그리드 매출구분
     $scope.saleFgMap = new wijmo.grid.DataMap([
@@ -145,6 +149,10 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.dayOption = $scope.dayOption;
         params.saleAmtFg = $scope.saleAmtFg;
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
 
         console.log(params);
@@ -289,6 +297,10 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.dayOption = $scope.dayOption;
         params.saleAmtFg = $scope.saleAmtFg;
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         params.excelType = excelType;
 
         // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.

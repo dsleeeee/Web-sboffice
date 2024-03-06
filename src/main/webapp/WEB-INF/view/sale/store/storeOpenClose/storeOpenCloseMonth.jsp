@@ -5,75 +5,74 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div id="storeOpenCloseMonthView" class="subCon" style="display: none;padding: 10px 20px 40px;">
-    <div ng-controller="storeOpenCloseMonthTimeCtrl">
-    <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="storeOpenClose.month"/></a>
-        <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <%-- 조회 --%>
-            <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeOpenCloseMonthTimeCtrl')"><s:message code="cmm.search"/></button>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                <%-- 확장조회 --%>
-                <button class="btn_blue mr5 fl" id="btnSearchAddShow2" ng-click="searchAddShowChange2()">
-                    <s:message code="cmm.search.addShow" />
-                </button>
-            </c:if>
-        </div>
-    </div>
 
-    <table class="searchTbl">
-        <colgroup>
-            <col class="w15"/>
-            <col class="w35"/>
-            <col class="w15"/>
-            <col class="w35"/>
-        </colgroup>
-        <tbody>
-        <tr>
-            <%-- 조회월 --%>
-            <th><s:message code="cmm.search.month"/></th>
-            <td>
-                <div class="sb-select">
-                    <span class="txtIn"><input id="monthStartDate" name="monthStartDate" class="w110px" /></span>
-                    <span class="rg">~</span>
-                    <span class="txtIn"><input id="monthEndDate" name="monthEndDate" class="w110px" /></span>
-                </div>
-            </td>
-        </tr>
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+    <div ng-controller="storeOpenCloseMonthTimeCtrl">
+        <div class="searchBar">
+            <a href="#" class="open fl"><s:message code="storeOpenClose.month"/></a>
+            <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
+                <%-- 조회 --%>
+                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeOpenCloseMonthTimeCtrl')"><s:message code="cmm.search"/></button>
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                    <%-- 확장조회 --%>
+                    <button class="btn_blue mr5 fl" id="btnSearchAddShow2" ng-click="searchAddShowChange2()">
+                        <s:message code="cmm.search.addShow" />
+                    </button>
+                </c:if>
+            </div>
+        </div>
+        <table class="searchTbl">
+            <colgroup>
+                <col class="w15"/>
+                <col class="w35"/>
+                <col class="w15"/>
+                <col class="w35"/>
+            </colgroup>
+            <tbody>
             <tr>
-                <%-- 매장브랜드 --%>
-                <th><s:message code="cmm.moms.storeHqBrand"/></th>
+                <%-- 조회월 --%>
+                <th><s:message code="cmm.search.month"/></th>
                 <td>
                     <div class="sb-select">
-                        <wj-combo-box
-                                id="srchStoreHqBrandCdCombo2"
-                                ng-model="storeHqBrandCd2"
-                                items-source="_getComboData('storeHqBrandCdCombo2')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                control="srchStoreHqBrandCdCombo">
-                        </wj-combo-box>
+                        <span class="txtIn"><input id="monthStartDate" name="monthStartDate" class="w110px" /></span>
+                        <span class="rg">~</span>
+                        <span class="txtIn"><input id="monthEndDate" name="monthEndDate" class="w110px" /></span>
                     </div>
                 </td>
-                <%-- 매장선택 --%>
-                <th><s:message code="cmm.store.select"/></th>
-                <td>
-                    <%-- 매장선택 모듈 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                        <jsp:param name="targetTypeFg" value="M"/>
-                        <jsp:param name="targetId" value="storeOpenCloseMonthStore"/>
-                    </jsp:include>
-                    <%--// 매장선택 모듈 사용시 include --%>
-                </td>
             </tr>
-        </c:if>
-        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-            <input type="hidden" id="dayMomsStoreCd" value="${sessionInfo.storeCd}"/>
-        </c:if>
-        </tbody>
-    </table>
-    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <tr>
+                    <%-- 매장브랜드 --%>
+                    <th><s:message code="cmm.moms.storeHqBrand"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchStoreHqBrandCdCombo2"
+                                    ng-model="storeHqBrandCd2"
+                                    items-source="_getComboData('storeHqBrandCdCombo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchStoreHqBrandCdCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
+                    <td>
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="M"/>
+                            <jsp:param name="targetId" value="storeOpenCloseMonthStore"/>
+                        </jsp:include>
+                        <%--// 매장선택 모듈 사용시 include --%>
+                    </td>
+                </tr>
+            </c:if>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                <input type="hidden" id="dayMomsStoreCd" value="${sessionInfo.storeCd}"/>
+            </c:if>
+            </tbody>
+        </table>
         <table class="searchTbl" id="tblSearchAddShow2" style="display: none;">
             <colgroup>
                 <col class="w15"/>
@@ -184,51 +183,118 @@
                     </div>
                 </td>
             </tr>
-            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                <tr>
-                    <%-- 그룹 --%>
-                    <th><s:message code="cmm.moms.branch"/></th>
+            <tr>
+                <%-- 그룹 --%>
+                <th><s:message code="cmm.moms.branch"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchBranchCdCombo2"
+                                ng-model="branchCd2"
+                                items-source="_getComboData('branchCdCombo2')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="srchBranchCdCombo2">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <%-- 매장그룹 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg01"/></th>
                     <td>
                         <div class="sb-select">
                             <wj-combo-box
-                                    id="srchBranchCdCombo2"
-                                    ng-model="branchCd2"
-                                    items-source="_getComboData('branchCdCombo2')"
+                                    id="srchMomsStoreFg01Combo2"
+                                    ng-model="momsStoreFg012"
+                                    items-source="_getComboData('momsStoreFg01Combo2')"
                                     display-member-path="name"
                                     selected-value-path="value"
                                     is-editable="false"
                                     initialized="_initComboBox(s)"
-                                    control="srchBranchCdCombo2">
+                                    control="srchMomsStoreFg01Combo2">
                             </wj-combo-box>
                         </div>
                     </td>
-                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                        <%-- 매장그룹 --%>
-                        <th><s:message code="cmm.moms.momsStoreFg01"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchMomsStoreFg01Combo2"
-                                        ng-model="momsStoreFg012"
-                                        items-source="_getComboData('momsStoreFg01Combo2')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchMomsStoreFg01Combo2">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </c:if>
-                    <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
-                        <td></td>
-                        <td></td>
-                    </c:if>
+                </c:if>
+                <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                    <td></td>
+                    <td></td>
+                </c:if>
+            </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                <tr>
+                    <%-- 매장그룹2 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg02Combo2"
+                                    ng-model="momsStoreFg022"
+                                    items-source="_getComboData('momsStoreFg02Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg02Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장그룹3 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg03Combo2"
+                                    ng-model="momsStoreFg032"
+                                    items-source="_getComboData('momsStoreFg03Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg03Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 매장그룹4 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg04Combo2"
+                                    ng-model="momsStoreFg042"
+                                    items-source="_getComboData('momsStoreFg04Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg04Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장그룹5 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg05Combo2"
+                                    ng-model="momsStoreFg052"
+                                    items-source="_getComboData('momsStoreFg05Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg05Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
                 </tr>
             </c:if>
             </tbody>
         </table>
-    </c:if>
     </div>
 
     <div class="w50 mt10 fl" ng-controller="storeOpenCloseMonthCtrl">
@@ -332,4 +398,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseMonth.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeOpenClose/storeOpenCloseMonth.js?ver=20240221.01" charset="utf-8"></script>

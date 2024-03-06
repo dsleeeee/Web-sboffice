@@ -39,6 +39,10 @@ app.controller('storeOpenCloseMonthTimeCtrl', ['$scope', '$http', '$timeout', fu
     $scope._setComboData("momsStoreManageTypeCombo2", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo2", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo2", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo2", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo2", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo2", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo2", momsStoreFg05ComboList); // 매장그룹5
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeOpenCloseMonthTimeCtrl", function (event, data) {
@@ -71,6 +75,10 @@ app.controller('storeOpenCloseMonthTimeCtrl', ['$scope', '$http', '$timeout', fu
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg012;
+        params.momsStoreFg02 = $scope.momsStoreFg022;
+        params.momsStoreFg03 = $scope.momsStoreFg032;
+        params.momsStoreFg04 = $scope.momsStoreFg042;
+        params.momsStoreFg05 = $scope.momsStoreFg052;
 
         var scope = agrid.getScope("storeOpenCloseMonthCtrl");
         // 월별 조회
@@ -150,6 +158,10 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
                         params.userBrands = momsHqBrandCd;
                     }
                     params.momsStoreFg01 = scope.momsStoreFg01;
+                    params.momsStoreFg02 = scope.momsStoreFg02;
+                    params.momsStoreFg03 = scope.momsStoreFg03;
+                    params.momsStoreFg04 = scope.momsStoreFg04;
+                    params.momsStoreFg05 = scope.momsStoreFg05;
 
                     $scope._broadcast('storeOpenCloseMonthDtlCtrl', params);
                 }
@@ -191,6 +203,10 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = data.momsStoreFg01;
+        params.momsStoreFg02 = data.momsStoreFg02;
+        params.momsStoreFg03 = data.momsStoreFg03;
+        params.momsStoreFg04 = data.momsStoreFg04;
+        params.momsStoreFg05 = data.momsStoreFg05;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthList.sb", params, function () {
@@ -390,6 +406,10 @@ app.controller('storeOpenCloseMonthDtlCtrl', ['$scope', '$http', '$timeout', fun
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = data.momsStoreFg01;
+        params.momsStoreFg02 = data.momsStoreFg02;
+        params.momsStoreFg03 = data.momsStoreFg03;
+        params.momsStoreFg04 = data.momsStoreFg04;
+        params.momsStoreFg05 = data.momsStoreFg05;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthDtlList.sb", params, function () {});

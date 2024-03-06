@@ -83,6 +83,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         GROUP
         BY      tms.BRANCH_CD
         ,		tsspt.STORE_CD
@@ -162,6 +174,18 @@
         </if>
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
         GROUP
         BY      tms.BRANCH_CD
@@ -253,7 +277,11 @@
         tmsi.MOMS_SHOP_TYPE,
         tmsi.MOMS_STORE_MANAGE_TYPE,
         tms.BRANCH_CD,
-        tmsi.MOMS_STORE_FG_01
+        tmsi.MOMS_STORE_FG_01,
+        tmsi.MOMS_STORE_FG_02,
+        tmsi.MOMS_STORE_FG_03,
+        tmsi.MOMS_STORE_FG_04,
+        tmsi.MOMS_STORE_FG_05
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
         TB_MS_STORE tms,
@@ -304,6 +332,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         ORDER BY tsspt.STORE_CD, tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -333,7 +373,11 @@
         tmsi.MOMS_SHOP_TYPE,
         tmsi.MOMS_STORE_MANAGE_TYPE,
         tms.BRANCH_CD,
-        tmsi.MOMS_STORE_FG_01
+        tmsi.MOMS_STORE_FG_01,
+        tmsi.MOMS_STORE_FG_02,
+        tmsi.MOMS_STORE_FG_03,
+        tmsi.MOMS_STORE_FG_04,
+        tmsi.MOMS_STORE_FG_05
         FROM TB_SL_SALE_PAY_TEMPORARY tsspt,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi
@@ -382,6 +426,18 @@
         </if>
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
         ORDER BY tsspt.STORE_CD, tsspt.SALE_DATE, tsspt.POS_NO, tsspt.BILL_NO, tsspt.LINE_NO, tsspt.LINE_SEQ_NO
     </select>
