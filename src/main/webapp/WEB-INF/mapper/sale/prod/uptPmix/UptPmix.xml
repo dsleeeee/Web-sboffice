@@ -112,8 +112,8 @@
             AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCdQuery != null and storeCdQuery != ""'>
-        		AND tsdps.STORE_CD IN (${storeCdQuery})
-        	</if>
+                AND tsdps.STORE_CD IN (${storeCdQuery})
+            </if>
             <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                 AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
             </if>
@@ -241,8 +241,8 @@
             AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCdQuery != null and storeCdQuery != ""'>
-        		AND tsdps.STORE_CD IN (${storeCdQuery})
-        	</if>
+                AND tsdps.STORE_CD IN (${storeCdQuery})
+            </if>
             <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                 AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
             </if>
@@ -582,8 +582,8 @@
             AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
             <if test='storeCdQuery != null and storeCdQuery != ""'>
-        		AND tsdps.STORE_CD IN (${storeCdQuery})
-        	</if>
+                AND tsdps.STORE_CD IN (${storeCdQuery})
+            </if>
             <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                 AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
             </if>
