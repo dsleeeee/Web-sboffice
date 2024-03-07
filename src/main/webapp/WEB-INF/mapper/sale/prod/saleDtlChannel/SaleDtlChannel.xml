@@ -201,7 +201,19 @@
             AND tms.BRANCH_CD = #{branchCd}
         </if>
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
-          AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
         ) tsdpsd
         , 	   TB_MS_PRODUCT tmp
@@ -540,6 +552,10 @@
     ,       REQ_TIME
     ,       NO_SEQ
     ,       MOMS_STORE_FG_01
+    ,       MOMS_STORE_FG_02
+    ,       MOMS_STORE_FG_03
+    ,       MOMS_STORE_FG_04
+    ,       MOMS_STORE_FG_05
     FROM    TB_HQ_SALE_REPORT_MOMS thsrm
     WHERE   thsrm.HQ_OFFICE_CD = #{hqOfficeCd}
     <![CDATA[
@@ -576,6 +592,18 @@
       </if>
       <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
         AND thsrm.MOMS_STORE_FG_01 = #{momsStoreFg01}
+      </if>
+      <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+          AND thsrm.MOMS_STORE_FG_02 = #{momsStoreFg02}
+      </if>
+      <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+          AND thsrm.MOMS_STORE_FG_03 = #{momsStoreFg03}
+      </if>
+      <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+          AND thsrm.MOMS_STORE_FG_04 = #{momsStoreFg04}
+      </if>
+      <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+          AND thsrm.MOMS_STORE_FG_05 = #{momsStoreFg05}
       </if>
       <if test="prodClassCd != null and prodClassCd != ''">
           AND thsrm.PROD_CLASS_CD = #{prodClassCd}
@@ -641,7 +669,11 @@
       MOD_DT,
       MOD_ID,
       NO_SEQ,
-      MOMS_STORE_FG_01
+      MOMS_STORE_FG_01,
+      MOMS_STORE_FG_02,
+      MOMS_STORE_FG_03,
+      MOMS_STORE_FG_04,
+      MOMS_STORE_FG_05
     )
       SELECT
       #{hqOfficeCd},
@@ -682,7 +714,11 @@
       #{modDt},
       #{modId},
       #{noSeq} + ROWNUM,
-      #{momsStoreFg01}
+      #{momsStoreFg01},
+      #{momsStoreFg02},
+      #{momsStoreFg03},
+      #{momsStoreFg04},
+      #{momsStoreFg05}
       FROM 	TB_CM_DATEM
       WHERE 	YYYYMMDD LIKE #{dataCreateMonth}||'%'
   </insert>

@@ -65,6 +65,10 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd", branchCdComboList);
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // // 팀별
     // if(momsTeamComboList.length <= 1) {
@@ -136,6 +140,10 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
         $scope.momsShopTypeDataMap = new wijmo.grid.DataMap(momsShopTypeComboList, 'value', 'name'); // 점포유형
         $scope.momsStoreManageTypeDataMap = new wijmo.grid.DataMap(momsStoreManageTypeComboList, 'value', 'name'); // 매장관리타입
         $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList, 'value', 'name'); // 매장그룹
+        $scope.momsStoreFg02DataMap = new wijmo.grid.DataMap(momsStoreFg02ComboList, 'value', 'name'); // 매장그룹2
+        $scope.momsStoreFg03DataMap = new wijmo.grid.DataMap(momsStoreFg03ComboList, 'value', 'name'); // 매장그룹3
+        $scope.momsStoreFg04DataMap = new wijmo.grid.DataMap(momsStoreFg04ComboList, 'value', 'name'); // 매장그룹4
+        $scope.momsStoreFg05DataMap = new wijmo.grid.DataMap(momsStoreFg05ComboList, 'value', 'name'); // 매장그룹5
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -229,6 +237,10 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
             params.momsStoreFg01 = $scope.momsStoreFg01;
+            params.momsStoreFg02 = $scope.momsStoreFg02;
+            params.momsStoreFg03 = $scope.momsStoreFg03;
+            params.momsStoreFg04 = $scope.momsStoreFg04;
+            params.momsStoreFg05 = $scope.momsStoreFg05;
 
             // '전체' 일때
             if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
@@ -277,6 +289,10 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
             params.momsStoreFg01 = $scope.momsStoreFg01;
+            params.momsStoreFg02 = $scope.momsStoreFg02;
+            params.momsStoreFg03 = $scope.momsStoreFg03;
+            params.momsStoreFg04 = $scope.momsStoreFg04;
+            params.momsStoreFg05 = $scope.momsStoreFg05;
 
             // '전체' 일때
             // if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
