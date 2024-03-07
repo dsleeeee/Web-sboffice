@@ -13,7 +13,9 @@
  */
 var app = agrid.getApp();
 
-/** 승인 controller */
+/**
+ *  월별매출현황(포스별-영수건수) 그리드 생성
+ */
 app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   // 상위 객체 상속 : T/F 는 picker

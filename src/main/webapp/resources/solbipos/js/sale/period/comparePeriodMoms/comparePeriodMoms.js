@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : comparePeriodMoms.js
- * 설  명 : 가상로그인 JavaScript
+ * 설  명 : 대비기간별매출 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -14,7 +14,9 @@
  */
 var app = agrid.getApp();
 
-/** controller */
+/**
+ *  대비기간별매출 그리드 생성
+ */
 app.controller('comparePeriodMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker

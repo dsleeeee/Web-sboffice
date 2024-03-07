@@ -14,7 +14,9 @@
  */
 var app = agrid.getApp();
 
-/** 승인 controller */
+/**
+ *  월별 매출 현황(채널별) 그리드 생성
+ */
 app.controller('monthMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   // 상위 객체 상속 : T/F 는 picker
