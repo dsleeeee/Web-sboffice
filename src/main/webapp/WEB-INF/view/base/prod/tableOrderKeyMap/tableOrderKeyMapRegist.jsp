@@ -93,6 +93,9 @@
                 <button class="btn_skyblue" id="btnSaveKeyMap" ng-click="saveKeyMap()">
                     <s:message code="cmm.save" />
                 </button>
+                <button class="btn_skyblue" ng-click="excelDownload()">
+                    <s:message code="cmm.excel.downCurrent"/>
+                </button>
             </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:422px; overflow-x: hidden; overflow-y: hidden;">
@@ -256,6 +259,9 @@
                             <button class="btn_skyblue" id="btnRegProd" ng-click="regProd()">
                                 <s:message code="tableOrderKeyMap.prodReg" />
                             </button>
+                            <button class="btn_skyblue" ng-click="excelDownload()">
+                                <s:message code="cmm.excel.downCurrent"/>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -308,7 +314,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/tableOrderKeyMap/tableOrderKeyMapRegist.js?ver=20230731.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/tableOrderKeyMap/tableOrderKeyMapRegist.js?ver=20240304.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

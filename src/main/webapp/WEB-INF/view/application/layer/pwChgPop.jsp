@@ -118,4 +118,4 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/pwChgPop.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/pwChgPop.js?ver=20240229.01" charset="utf-8"></script>

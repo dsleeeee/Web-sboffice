@@ -27,6 +27,7 @@
         <button class="btn_skyblue" id="btnOptionGrpAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnOptionGrpDel" ng-click="del()"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnOptionGrpSave" ng-click="save()"><s:message code='cmm.save' /></button>
+        <button class="btn_skyblue" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
       </div>
       <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -63,6 +64,7 @@
         <button class="btn_skyblue" id="btnOptionValAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnOptionValDel" ng-click="del()"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnOptionValSave" ng-click="save()"><s:message code='cmm.save' /></button>
+        <button class="btn_skyblue" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
       </div>
       <div class="w100 mt10 mb20">
         <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
@@ -105,7 +107,7 @@
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20230627.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20240229.01" charset="utf-8"></script>
 
 <%-- 추가(상품포함) 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prodOption/prodOptionAddWithProd.jsp">

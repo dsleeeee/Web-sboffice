@@ -86,6 +86,7 @@
       <div id="gridPrint" class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="sideMenuSoldOutCtrl">
         <div class="updownSet oh mb5">
           <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselGrp' /></span>
+          <button class="btn_skyblue ml5 fr" ng-click="excelDownloadGrp()"><s:message code="cmm.excel.downCurrent"/></button>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -117,6 +118,7 @@
         <div class="updownSet oh mb10" style="height:60px;">
           <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupTitle"></span> </span>
             </button>
+          <button class="btn_skyblue ml5 fr" ng-click="excelDownloadCls()"><s:message code="cmm.excel.downCurrent"/></button>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -151,6 +153,7 @@
       <div id="gridMapng" class="wj-TblWrapBr ml10 pd5" style="height: 480px;" ng-controller="sideMenuSelectProdCtrl">
         <div class="updownSet oh mb10" style="height:60px;">
           <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselProd' /><span id="sideClassTitle"></span> </span>
+          <button class="btn_skyblue ml5 fr" ng-click="excelDownloadProd()"><s:message code="cmm.excel.downCurrent"/></button>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -187,7 +190,7 @@
 <script>
     var orgnFg = "${orgnFg}";
 </script>
-  <script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/sideMenuSoldOut.js?ver=20220228.01" charset="utf-8"></script>
+  <script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/sideMenuSoldOut.js?ver=20240229.01" charset="utf-8"></script>
 
   <%-- 레이어 팝업 : 상품선택 --%>
   <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">

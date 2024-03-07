@@ -186,6 +186,11 @@
       </tbody>
   </table>
 
+  <div class="mt10 oh sb-select dkbr">
+      <%-- 엑셀다운로드 --%>
+      <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
+  </div>
+
   <%--//searchTbl--%>
     <div class="wj-TblWrapBr mt10">
       <%--위즈모 테이블--%>
@@ -230,4 +235,4 @@
     <%-- //페이지 리스트 --%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/sideMenuProdSoldOut.js?ver=20230524.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/sideMenuProdSoldOut.js?ver=20240229.01" charset="utf-8"></script>

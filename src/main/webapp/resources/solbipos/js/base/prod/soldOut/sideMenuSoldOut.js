@@ -24,7 +24,7 @@ var soldOutYnData = [
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
-app.controller('sideMenuSoldOutCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('sideMenuSoldOutCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuSoldOutCtrl', $scope, $http, false));
 
@@ -108,12 +108,38 @@ app.controller('sideMenuSoldOutCtrl', ['$scope', '$http', function ($scope, $htt
     event.preventDefault();
   });
 
+  // 엑셀다운로드
+  $scope.excelDownloadGrp = function(){
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles   : true,
+        includeColumns      : function (column) {
+          // return column.visible;
+          return column.binding != 'gChk';
+        }
+      }, '품절관리_사이드메뉴(선택그룹)_' + getCurDateTime() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+
+  }
+
 }]);
 
 /**
  * 사이드메뉴 선택분류 그리드 생성
  */
-app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', function ($scope, $http, sdselGrpCd) {
+app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', '$timeout', 'sdselGrpCd', function ($scope, $http, $timeout, sdselGrpCd) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuSelectClassCtrl', $scope, $http, false));
 
@@ -197,6 +223,33 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     event.preventDefault();
   });
 
+  // 엑셀다운로드
+  $scope.excelDownloadCls = function(){
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles   : true,
+        includeColumns      : function (column) {
+          // return column.visible;
+          return column.binding != 'gChk';
+        }
+      }, '품절관리_사이드메뉴(선택분류)_' + getCurDateTime() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+
+  }
+
+
 }]).factory('sdselGrpCd', function () {
   // 사이드메뉴 선택분류 그리드 의 변수 값 영역
   var sdselGrpCd = {};
@@ -212,7 +265,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
 /**
  * 사이드메뉴 선택상품 그리드 생성
  */
-app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', function ($scope, $http, sdselClassCd) {
+app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', '$timeout', 'sdselClassCd', function ($scope, $http, $timeout, sdselClassCd) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('sideMenuSelectProdCtrl', $scope, $http, false));
 
@@ -346,6 +399,32 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     }
     $scope.flex.refresh();
   };
+
+  // 엑셀다운로드
+  $scope.excelDownloadProd = function(){
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles   : true,
+        includeColumns      : function (column) {
+          // return column.visible;
+          return column.binding != 'gChk';
+        }
+      }, '품절관리_사이드메뉴(선택상품)_' + getCurDateTime() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+
+  }
 
 }]).factory('sdselClassCd', function () {
   // 사이드메뉴 선택상품 그리드 의 변수 값 영역

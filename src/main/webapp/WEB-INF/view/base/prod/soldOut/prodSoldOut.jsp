@@ -390,6 +390,11 @@
         </tbody>
     </table>
 
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
+    </div>
+
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mt10">
         <%-- 개발시 높이 조절해서 사용--%>
@@ -463,4 +468,4 @@
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/prodSoldOut.js?ver=20240229.01" charset="utf-8"></script>

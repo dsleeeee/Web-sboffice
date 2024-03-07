@@ -364,6 +364,7 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
             <button class="btn_skyblue fr" ng-click="add()"><s:message code="soldOutResve.resve" /></button>
             <button class="btn_skyblue fr mr5" ng-click="save()"><s:message code="cmm.edit" /></button>
             <button class="btn_skyblue fr mr5" ng-click="del()"><s:message code="cmm.del" /></button>
@@ -442,7 +443,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/soldOutResve.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/soldOutResve.js?ver=20240229.01" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/soldOutResve/soldOutResveAdd.jsp">
