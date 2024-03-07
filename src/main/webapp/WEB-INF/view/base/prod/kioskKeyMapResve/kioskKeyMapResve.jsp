@@ -343,6 +343,7 @@
     </table>
 
     <div class="mt10 oh sb-select dkbr">
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
         <button class="btn_skyblue fr" ng-click="add('4069')"><s:message code="kioskKeyMapResve.storeEnv4069" /></button>
         <button class="btn_skyblue fr mr5" ng-click="add('4068')"><s:message code="kioskKeyMapResve.storeEnv4068" /></button>
         <button class="btn_skyblue fr mr5" ng-click="save()"><s:message code="cmm.edit" /></button>
@@ -434,7 +435,7 @@
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20231101.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMapResve/kioskKeyMapResve.js?ver=20240229.01" charset="utf-8"></script>
 
 <%-- 예약 추가 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMapResve/kioskKeyMapResveAdd.jsp">

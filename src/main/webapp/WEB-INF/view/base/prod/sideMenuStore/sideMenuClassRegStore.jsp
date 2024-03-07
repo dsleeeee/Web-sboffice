@@ -78,6 +78,8 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
+            <%-- 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
             <%-- 저장 --%>
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()"><s:message code="cmm.save" /></button>
         </div>
@@ -155,4 +157,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClassRegStore.js?ver=20230706.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClassRegStore.js?ver=20240229.01" charset="utf-8"></script>

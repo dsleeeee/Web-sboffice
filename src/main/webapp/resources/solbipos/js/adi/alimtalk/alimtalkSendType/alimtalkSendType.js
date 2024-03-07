@@ -592,10 +592,12 @@ app.controller('templateListCtrl', ['$scope', '$http', function ($scope, $http) 
                     innerHtml += "<tbody>";
                     innerHtml += "<table>";
                     if($("#lblTemplateCd").text().toString() == list[i].templateCd.toString()) {
-                        innerHtml += "<tr><td onmouseover=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\"><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral; cursor:pointer;\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ '선택' +"\" disabled/></td></tr>";
+                        innerHtml += "<tr><td onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\">" +
+                            "<button id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral; cursor:pointer; padding:0px; color:#000b12; font-weight:bold; font-size:0.8em; height:25px; border-radius:4px; border:1px solid #000b12;\" class=\"w100\" >선택</button></td></tr>";
                         // innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:lightcoral\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
                     } else {
-                        innerHtml += "<tr><td onmouseover=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\"><input id=\"txt_commonFgNm"+i+"\" style=\"background-color:white; cursor:pointer;\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ '선택' +"\" disabled/></td></tr>";
+                        innerHtml += "<tr><td onclick=\"templateChoice(\'"+ list[i].templateGrpFg + "\', \'"+ list[i].templateCd + "\', \'"+ list[i].templateNm + "\', \'"+ templateContent.replaceAll("\n", "\\n") + "\', \'"+ i + "\', \'"+ list.length +"\')\">" +
+                            "<button id=\"txt_commonFgNm"+i+"\" style=\"background-color:white; cursor:pointer; padding:0px; color:#000b12; font-weight:bold; font-size:0.8em; height:25px; border-radius:4px; border:1px solid #000b12;\" class=\"w100\" >선택</button></td></tr>";
                         // innerHtml += "<tr><td><input id=\"txt_commonFgNm"+i+"\" type=\"text\" class=\"sb-input-alk-top w100\" value=\""+ list[i].commonFgNm +"\" disabled/></td></tr>";
                     }
                     innerHtml += "<tr style=\"height: 10px\"></tr>";

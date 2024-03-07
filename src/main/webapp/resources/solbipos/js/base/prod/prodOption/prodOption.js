@@ -22,7 +22,7 @@ var printYnData = [
 /**
  * 사이드메뉴 속성분류 그리드 생성
  */
-app.controller('prodOptionCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('prodOptionCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodOptionCtrl', $scope, $http, false));
@@ -234,12 +234,37 @@ app.controller('prodOptionCtrl', ['$scope', '$http', function ($scope, $http) {
     }
     return true;
   };
+
+  // 엑셀다운로드
+  $scope.excelDownload = function(){
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles   : true,
+        includeColumns      : function (column) {
+          // return column.visible;
+          return column.binding != 'gChk';
+        }
+      }, '옵션관리(옵션그룹)_' + getCurDateTime() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+  }
 }]);
 
 /**
  * 옵션 속성 그리드 생성
  */
-app.controller('prodOptionValCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('prodOptionValCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodOptionValCtrl', $scope, $http, false));
 
@@ -435,6 +460,31 @@ app.controller('prodOptionValCtrl', ['$scope', '$http', function ($scope, $http)
          }, 50);
        });
      });
+  }
+
+  // 엑셀다운로드
+  $scope.excelDownload = function(){
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles   : true,
+        includeColumns      : function (column) {
+          // return column.visible;
+          return column.binding != 'gChk';
+        }
+      }, '옵션관리(옵션)_' + getCurDateTime() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
   }
 
 }]);
