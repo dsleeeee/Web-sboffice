@@ -165,7 +165,7 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.saleDate = selectedRow.saleDate.replaceAll("-","");
-                    params.storeCd = $("#dayPosStoreCd").val();
+                    params.storeCd = $scope.srchStoreCd;
                     params.gubun = "day";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
@@ -269,6 +269,8 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.storeCd = $("#dayPosStoreCd").val();
         params.posCol = posCol;
+
+        $scope.srchStoreCd = params.storeCd;
 
         $scope._inquiryMain("/sale/day/day/day/getDayPosList.sb", params, function() {}, false);
 

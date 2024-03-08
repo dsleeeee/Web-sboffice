@@ -13,6 +13,34 @@
  */
 var app = agrid.getApp();
 
+// 적용매장구분
+var regStoreFgAllData = [
+  {"name":"전체","value":""},
+  {"name":"적용등록매장","value":"Y"},
+  {"name":"적용미등록매장","value":"N"}
+];
+
+// 최종매출일
+var dateAllData = [
+  {"name":"전체","value":""},
+  {"name":"7일이내","value":"7"},
+  {"name":"31일이내","value":"31"}
+];
+
+// 포스메인여부
+var mainValAllData = [
+  {"name":"전체","value":""},
+  {"name":"메인포스","value":"메인포스"},
+  {"name":"서브포스","value":"서브포스"}
+];
+
+// 버전체크
+var verChkAllData = [
+  {"name":"전체","value":""},
+  {"name":"버전같음","value":"Y"},
+  {"name":"버전다름","value":"N"}
+];
+
 app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   // 상위 객체 상속 : T/F 는 picker
@@ -32,6 +60,14 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
   $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
   $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
   $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
+  $scope._setComboData("registFgCombo", regStoreFgAllData); // 적용매장구분
+  $scope._setComboData("selectVerCombo", selectVerComboList); // 버전체크
+  $scope._setComboData("lastSaleCombo", dateAllData); // 최종매출일
+  $scope._setComboData("mainValCombo", mainValAllData); // 포스메인여부
+  $scope._setComboData("subValCombo", selectSubPos); // 포스용도
+  $scope._setComboData("verChkCombo", verChkAllData); // 버전체크
+  $scope._setComboData("posLogDtCombo", dateAllData); // 포스로그인일자
+  
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -45,6 +81,9 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name'); // 용도
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name'); // 상태
     $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 그룹
+
+    $scope.lastSale = "7";
+
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -73,15 +112,26 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
 
     // 파라미터
     var params       = {};
-    params.prodHqBrandCd = $scope.prodHqBrandCd;
-    params.momsTeam = $scope.momsTeam;
-    params.momsAcShop = $scope.momsAcShop;
-    params.momsAreaFg = $scope.momsAreaFg;
-    params.momsCommercial = $scope.momsCommercial;
-    params.momsShopType = $scope.momsShopType;
-    params.momsStoreManageType = $scope.momsStoreManageType;
-    params.branchCd = $scope.branchCd;
-    params.storeHqBrandCd = $scope.storeHqBrandCd;
+    params.prodHqBrandCd        = $scope.prodHqBrandCd;
+    params.momsTeam             = $scope.momsTeam;
+    params.momsAcShop           = $scope.momsAcShop;
+    params.momsAreaFg           = $scope.momsAreaFg;
+    params.momsCommercial       = $scope.momsCommercial;
+    params.momsShopType         = $scope.momsShopType;
+    params.momsStoreManageType  = $scope.momsStoreManageType;
+    params.branchCd             = $scope.branchCd;
+    params.storeHqBrandCd       = $scope.storeHqBrandCd;
+    params.registFg             = $scope.registFg;
+    params.selectVer            = $scope.selectVer;
+    params.lastSale             = $scope.lastSale;
+    params.mainVal              = $scope.mainVal;
+    params.subVal               = $scope.subVal;
+    params.verChk               = $scope.verChk;
+    params.posLogDt             = $scope.posLogDt;
+
+    var verCd =params.selectVer.indexOf("]");
+    params.selectVerCd = params.selectVer.substring(1,verCd);
+
     // '전체' 일때
     if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
       var momsHqBrandCd = "";

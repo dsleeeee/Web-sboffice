@@ -27,6 +27,20 @@
         ,		A.VER_TYPE_FG
         ,		B.MAX_VER_SER_NO
         ,       E.MAX_SALE_DATE
+        ,       #{selectVer}    AS VER_SER_ALL
+        ,       (CASE
+                    WHEN A.STORE_CD IN(     SELECT  STORE_CD
+                                            FROM    TB_CM_POS_VERSN_STORE
+                                            WHERE   VER_SER_NO = #{selectVerCd}) THEN '적용등록매장'
+                    WHEN A.STORE_CD NOT IN( SELECT  STORE_CD
+                                            FROM    TB_CM_POS_VERSN_STORE
+                                            WHERE   VER_SER_NO = #{selectVerCd}) THEN '적용미등록매장'
+                END
+                ) AS REGIST_FG
+        ,       F.MAIN_VAL
+        ,       G.SUB_VAL
+        ,		DECODE(A.POS_VER_NO, #{selectVerCd}, '버전같음', '버전다름') AS VER_CHK
+        ,       A.LAST_LOGIN_DT
         FROM    TB_MS_POS A
         ,       (
         SELECT  PROG_FG
@@ -43,17 +57,47 @@
                 ,       POS_NO
                 ,       TO_CHAR(TO_DATE(MAX(SALE_DATE), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE
                 FROM    TB_SL_DAILY_POS
-                WHERE   SALE_DATE BETWEEN TO_CHAR(SYSDATE - 31, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')
+                WHERE   1=1
                 AND     HQ_OFFICE_CD = #{hqOfficeCd}
                 GROUP
                 BY      STORE_CD
                 ,       POS_NO
                 ) E
+        ,       (
+                SELECT 	TMPE.STORE_CD
+                ,       TMPE.POS_NO
+                ,       TCED.ENVST_VAL_NM AS MAIN_VAL
+                FROM 	TB_MS_POS_ENVST tmpe
+                ,       TB_CM_ENVST_DTL tced
+                WHERE	TMPE.ENVST_CD 	= TCED.ENVST_CD
+                AND 	TMPE.ENVST_VAL 	= TCED.ENVST_VAL_CD
+                AND		TCED.ENVST_CD 	= '4021'
+                <if test='mainVal != null and mainVal !=""'>
+                    AND TCED.ENVST_VAL_NM = #{mainVal}
+                </if>
+                ) F
+        ,       (
+                SELECT 	TMPE.STORE_CD
+                ,       TMPE.POS_NO
+                ,       TCED.ENVST_VAL_NM AS SUB_VAL
+                FROM 	TB_MS_POS_ENVST tmpe
+                ,       TB_CM_ENVST_DTL tced
+                WHERE	TMPE.ENVST_CD 	= TCED.ENVST_CD
+                AND 	TMPE.ENVST_VAL 	= TCED.ENVST_VAL_CD
+                AND 	TCED.ENVST_CD 	= '4019'
+                <if test='subVal != null and subVal !=""'>
+                    AND TCED.ENVST_VAL_CD = #{subVal}
+                </if>
+                ) G
         WHERE   B.PROG_FG   (+) =   A.VER_TYPE_FG
         AND   	C.STORE_CD      =   A.STORE_CD
         AND   	D.STORE_CD  (+) =   A.STORE_CD
         AND     E.STORE_CD  (+) =   A.STORE_CD
         AND     E.POS_NO    (+) =   A.POS_NO
+        AND     F.STORE_CD      =   A.STORE_CD
+        AND     F.POS_NO        =   A.POS_NO
+        AND     G.STORE_CD      =   A.STORE_CD
+        AND     G.POS_NO        =   A.POS_NO
         AND 	C.HQ_OFFICE_CD  = #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
             AND C.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
@@ -109,8 +153,62 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND D.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
+        <choose>
+            <when test='registFg != null and registFg == "Y"'>
+                AND A.STORE_CD IN ( SELECT STORE_CD
+                                    FROM TB_CM_POS_VERSN_STORE
+                                    WHERE VER_SER_NO = #{selectVerCd})
+            </when>
+            <when test='registFg != null and registFg == "N"'>
+                AND A.STORE_CD NOT IN ( SELECT STORE_CD
+                                        FROM TB_CM_POS_VERSN_STORE
+                                        WHERE VER_SER_NO = #{selectVerCd})
+            </when>
+        </choose>
+        <choose>
+            <when test='verChk != null and verChk == "Y"'>
+                AND NVL(A.POS_VER_NO,0) = #{selectVerCd}
+            </when>
+            <when test='verChk != null and verChk == "N"'>
+                AND NVL(A.POS_VER_NO,0) != #{selectVerCd}
+            </when>
+        </choose>
+        <if test='posLogDt != null and posLogDt != ""'>
+            AND A.LAST_LOGIN_DT BETWEEN TO_CHAR(SYSDATE - #{posLogDt}, 'YYYYMMDD') ||'000000' AND TO_CHAR(SYSDATE, 'YYYYMMDD') ||'235959'
+        </if>
+        <if test='lastSale != null and lastSale != ""'>
+            AND E.MAX_SALE_DATE BETWEEN TO_CHAR(SYSDATE - #{lastSale}, 'yyyy-mm-dd') AND TO_CHAR(SYSDATE, 'yyyy-mm-dd')
+        </if>
         ORDER
         BY A.STORE_CD, A.POS_NO
+    </select>
+
+    <!-- 포스버전 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN
+        PARAM    : storePosVersionVO
+        COMMENTS : 포스버전을 조회한다.
+    -->
+    <select id="getSelectVerList" parameterType="storePosVersionVO" resultType="DefaultMap">
+        SELECT  '[' || VER_SER_NO || '] ' || FILE_DESC AS NAME
+        ,       '[' || VER_SER_NO || '] ' || FILE_DESC AS VALUE
+        FROM    TB_CM_POS_VERSN
+        WHERE   PROG_FG = '2'
+        ORDER
+        BY      REG_DT DESC
+    </select>
+
+    <!-- 포스용도 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN
+        PARAM    : storePosVersionVO
+        COMMENTS : 포스용도을 조회한다.
+    -->
+    <select id="getSelectSubPos" parameterType="storePosVersionVO" resultType="DefaultMap">
+        SELECT  ENVST_VAL_CD    AS VALUE
+        ,       ENVST_VAL_NM    AS NAME
+        FROM    TB_CM_ENVST_DTL
+        WHERE   ENVST_CD = '4019'
     </select>
 
 </mapper>

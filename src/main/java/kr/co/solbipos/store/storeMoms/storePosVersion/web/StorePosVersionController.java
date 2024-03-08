@@ -265,6 +265,19 @@ public class StorePosVersionController {
         }
         model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboListAll);
 
+        // 버전선택
+        List selectVerComboList = storePosVersionService.getSelectVerList();
+
+        String selectVerComboListAll = cmmCodeUtil.assmblObj(selectVerComboList, "name", "value", UseYn.N);
+
+        model.addAttribute("selectVerComboList", selectVerComboListAll);
+
+        List selectSubPos = storePosVersionService.getSelectSubPos();
+
+        String selectSubPosAll = cmmCodeUtil.assmblObj(selectSubPos, "name", "value", UseYn.ALL);
+
+        model.addAttribute("selectSubPos", selectSubPosAll);
+
         return "store/storeMoms/storePosVersion/storePosVersion";
     }
 

@@ -86,6 +86,30 @@ public class StorePosVersionVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 적용매장 */
+    private String registFg;
+
+    /** 버전선택 */
+    private String selectVer;
+
+    /** 버전선택 */
+    private String selectVerCd;
+
+    /** 최종매출일 */
+    private String lastSale;
+
+    /** 포스메인여부 */
+    private String mainVal;
+
+    /** 포스용도 */
+    private String subVal;
+
+    /** 버전체크 */
+    private String verChk;
+
+    /** 포스로그인일자 */
+    private String posLogDt;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -233,4 +257,68 @@ public class StorePosVersionVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getRegistFg() {
+        return registFg;
+    }
+
+    public void setRegistFg(String registFg) {
+        this.registFg = registFg;
+    }
+
+    public String getSelectVer() {
+        return selectVer;
+    }
+
+    public void setSelectVer(String selectVer) {
+        this.selectVer = selectVer;
+    }
+
+    public String getSelectVerCd() {
+        return selectVerCd;
+    }
+
+    public void setSelectVerCd(String selectVerCd) {
+        this.selectVerCd = selectVerCd;
+    }
+
+    public String getLastSale() {
+        return lastSale;
+    }
+
+    public void setLastSale(String lastSale) {
+        this.lastSale = lastSale;
+    }
+
+    public String getMainVal() {
+        return mainVal;
+    }
+
+    public void setMainVal(String mainVal) {
+        this.mainVal = mainVal;
+    }
+
+    public String getSubVal() {
+        return subVal;
+    }
+
+    public void setSubVal(String subVal) {
+        this.subVal = subVal;
+    }
+
+    public String getVerChk() {
+        return verChk;
+    }
+
+    public void setVerChk(String verChk) {
+        this.verChk = verChk;
+    }
+
+    public String getPosLogDt() {
+        return posLogDt;
+    }
+
+    public void setPosLogDt(String posLogDt) {
+        this.posLogDt = posLogDt;
+    }
 }

@@ -31,4 +31,9 @@ public interface StorePosVersionMapper {
     /** 조회 */
     List<DefaultMap<String>> getStorePosVersionList(StorePosVersionVO storePosVersionVO);
 
+    /** 포스버전 조회*/
+    List<DefaultMap<String>> getSelectVerList();
+
+    /** 포스버전 조회*/
+    List<DefaultMap<String>> getSelectSubPos();
 }

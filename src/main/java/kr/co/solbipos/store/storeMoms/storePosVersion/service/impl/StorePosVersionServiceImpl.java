@@ -56,4 +56,14 @@ public class StorePosVersionServiceImpl implements StorePosVersionService {
         return storePosVersionMapper.getStorePosVersionList(storePosVersionVO);
     }
 
+    @Override
+    public List<DefaultMap<String>> getSelectVerList() {
+        return storePosVersionMapper.getSelectVerList();
+    }
+
+    @Override
+    public List<DefaultMap<String>> getSelectSubPos() {
+        return storePosVersionMapper.getSelectSubPos();
+    }
+
 }
