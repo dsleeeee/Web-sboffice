@@ -19,7 +19,9 @@ var optionData = [
   {"name":"매장별","value":"store"}
 ];
 
-/** controller */
+/**
+ *  결제수단별 일 매출현황 그리드 생성
+ */
 app.controller('payFgCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   // 상위 객체 상속 : T/F 는 picker

@@ -22,7 +22,9 @@ var prodOptionComboData = [
     {"name":"모두표시","value":"4"}
 ];
 
-/** controller */
+/**
+ *  매출상세현황(채널별) 그리드 생성
+ */
 app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('saleDtlChannelCtrl', $scope, $http, true));

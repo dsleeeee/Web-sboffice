@@ -33,7 +33,9 @@ for(i =0 ; i < 24; i++){
     Hh[i] = {"name":timeVal,"value":timeVal}
 }
 
-/** controller */
+/**
+ *  매장-일별시간대 그리드 생성
+ */
 app.controller('storeDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
