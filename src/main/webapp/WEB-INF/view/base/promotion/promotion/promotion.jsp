@@ -874,6 +874,10 @@
     var momsShopType = ${momsShopType};
     var momsStoreManageType = ${momsStoreManageType};
     var momsStoreFg01 = ${momsStoreFg01};
+    var momsStoreFg02 = ${momsStoreFg02};
+    var momsStoreFg03 = ${momsStoreFg03};
+    var momsStoreFg04 = ${momsStoreFg04};
+    var momsStoreFg05 = ${momsStoreFg05};
 
     // 회원등급
     var memberClassCdFgData = ${memberClassList};

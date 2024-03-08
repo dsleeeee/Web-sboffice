@@ -116,6 +116,18 @@
                 <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                     AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
                 </if>
+                <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                    AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                </if>
+                <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                    AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                </if>
+                <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                    AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                </if>
+                <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                    AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+                </if>
                 GROUP BY    SUBSTR(tsdt.SALE_DATE,0,6), tms.BRANCH_CD
                 <if test='option != null and option != "" and option == "store"'>
                     , tsdt.STORE_CD, tms.STORE_NM
@@ -231,6 +243,18 @@
                 </if>
                 <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                     AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                </if>
+                <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                    AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                </if>
+                <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                    AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                </if>
+                <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                    AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                </if>
+                <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                    AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                 </if>
                 GROUP BY    SUBSTR(tsdt.SALE_DATE,0,6), tms.BRANCH_CD
                 <if test='option != null and option != "" and option == "store"'>

@@ -285,6 +285,76 @@
                     <td></td>
                 </c:if>
             </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                <tr>
+                    <%-- 매장그룹2 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg02Combo"
+                                    ng-model="momsStoreFg02"
+                                    items-source="_getComboData('momsStoreFg02Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg02Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장그룹3 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg03Combo"
+                                    ng-model="momsStoreFg03"
+                                    items-source="_getComboData('momsStoreFg03Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg03Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 매장그룹4 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg04Combo"
+                                    ng-model="momsStoreFg04"
+                                    items-source="_getComboData('momsStoreFg04Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg04Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 매장그룹5 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg05Combo"
+                                    ng-model="momsStoreFg05"
+                                    items-source="_getComboData('momsStoreFg05Combo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg05Combo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+            </c:if>
             </tbody>
         </table>
 
@@ -374,6 +444,10 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    var momsStoreFg02ComboList = ${momsStoreFg02ComboList};
+    var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
+    var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
+    var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms.js?ver=20240131.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms.js?ver=20240221.01" charset="utf-8"></script>
