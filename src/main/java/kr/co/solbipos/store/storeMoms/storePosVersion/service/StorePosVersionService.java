@@ -26,4 +26,10 @@ public interface StorePosVersionService {
 
     /** 조회 */
     List<DefaultMap<String>> getStorePosVersionList(StorePosVersionVO storePosVersionVO, SessionInfoVO sessionInfoVO);
+
+    /** 포스버전 조회 */
+    List<DefaultMap<String>> getSelectVerList();
+
+    /** 포스용도 조회 */
+    List<DefaultMap<String>> getSelectSubPos();
 }

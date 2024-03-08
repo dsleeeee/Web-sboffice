@@ -164,7 +164,7 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.yearMonth = selectedRow.yearMonth.replace("-", "");
-                    params.storeCd = $("#monthPosStoreCd").val();
+                    params.storeCd = $scope.srchStoreCd;
                     params.gubun = "month";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
@@ -268,6 +268,8 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.storeCds = $("#monthPosStoreCd").val();
         params.posCol    = posCol;
+
+        $scope.srchStoreCd = params.storeCds;
 
         $scope._inquiryMain("/sale/day/month/month/getMonthPosList.sb", params, function() {}, false);
 
