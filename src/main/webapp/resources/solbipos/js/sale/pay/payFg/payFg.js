@@ -228,6 +228,9 @@ app.controller('payFgCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 }]);
 
 
+/**
+ *  엑셀다운로드 그리드 생성
+ */
 app.controller('payFgExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   // 상위 객체 상속 : T/F 는 picker
@@ -252,9 +255,7 @@ app.controller('payFgExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
   });
 
   // 엑셀 리스트 조회
-  $scope.searchExcelList = function (data) {
-    var params = data;
-
+  $scope.searchExcelList = function (params) {
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/pay/payFg/payFg/getPayFgExcelList.sb", params, function() {
       if ($scope.flex.rows.length <= 0) {
