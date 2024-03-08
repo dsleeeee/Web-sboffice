@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 /**
- *  월별종합 조회 그리드 생성
+ *  월별결제수단매출 그리드 생성
  */
 app.controller('payMonthCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -41,6 +41,10 @@ app.controller('payMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -172,6 +176,10 @@ app.controller('payMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
 
         $scope._inquiryMain("/sale/pay/payMonth/payMonth/getPayMonthList.sb", params, function() {}, false);
     };

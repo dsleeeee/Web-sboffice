@@ -19,7 +19,7 @@ var optionData = [
 ];
 
 /**
- *  월별종합 조회 그리드 생성
+ *  매장-월별결제수단매출 그리드 생성
  */
 app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -47,6 +47,10 @@ app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -187,6 +191,10 @@ app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($s
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
         
         $scope._inquiryMain("/sale/pay/storePayMonth/storePayMonth/getStorePayMonthList.sb", params, function() {
@@ -225,7 +233,7 @@ app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($s
         } else if(s.selectedValue === "store"){
             $(".storePayMonth").show();
         }
-    }
+    };
 
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
@@ -291,12 +299,19 @@ app.controller('storePayMonthCtrl', ['$scope', '$http', '$timeout', function ($s
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
 
         $scope._broadcast('storePayMonthExcelCtrl',params);
     };
 }]);
 
 
+/**
+ *  엑셀다운로드 그리드 생성
+ */
 app.controller('storePayMonthExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -319,39 +334,7 @@ app.controller('storePayMonthExcelCtrl', ['$scope', '$http', '$timeout', functio
     });
 
     // 엑셀 리스트 조회
-    $scope.searchExcelList = function (data) {
-        // 파라미터
-        var params       = {};
-        params.startMonth = data.startMonth;
-        params.endMonth = data.endMonth;
-        if(data.option === "store"){
-            params.storeCds   = $("#storePayMonthStoreCd").val();
-        } else {
-            params.storeCds = '';
-        }
-        params.payCol = data.payCol;
-        params.option = data.option;
-        params.prodHqBrandCd = data.prodHqBrandCd;
-        params.momsTeam = data.momsTeam;
-        params.momsAcShop = data.momsAcShop;
-        params.momsAreaFg = data.momsAreaFg;
-        params.momsCommercial = data.momsCommercial;
-        params.momsShopType = data.momsShopType;
-        params.momsStoreManageType = data.momsStoreManageType;
-        params.branchCd = data.branchCd;
-        params.storeHqBrandCd = data.storeHqBrandCd;
-        // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
-            var momsHqBrandCd = "";
-            for(var i=0; i < momsHqBrandCdComboList.length; i++){
-                if(momsHqBrandCdComboList[i].value !== null) {
-                    momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
-                }
-            }
-            params.userBrands = momsHqBrandCd;
-        }
-        params.momsStoreFg01 = $scope.momsStoreFg01;
-
+    $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/pay/storePayMonth/storePayMonth/getStorePayMonthExcelList.sb", params, function() {
             if ($scope.excelFlex.rows.length <= 0) {

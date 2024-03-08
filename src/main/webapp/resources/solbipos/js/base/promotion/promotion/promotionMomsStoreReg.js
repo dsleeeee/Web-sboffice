@@ -24,6 +24,10 @@ app.controller('promotionMomsStoreRegCtrl', ['$scope', '$http', function ($scope
     $scope._setComboData("srchMomsShopType", momsShopType);               // 점포유형
     $scope._setComboData("srchMomsStoreManageType", momsStoreManageType); // 매장관리타입
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05); // 매장그룹5
 
     $scope.initGrid = function (s, e) {
 
@@ -65,6 +69,10 @@ app.controller('promotionMomsStoreRegCtrl', ['$scope', '$http', function ($scope
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
 
         $scope._inquirySub("/base/promotion/promotion/getMomsStoreList.sb", params, function () {});
     };
@@ -162,6 +170,10 @@ app.controller('promotionMomsStoreRegCtrl', ['$scope', '$http', function ($scope
         $scope.srchMomsShopTypeCombo.selectedIndex = 0;
         $scope.srchMomsStoreManageTypeCombo.selectedIndex = 0;
         $scope.srchMomsStoreFg01Combo.selectedIndex = 0;
+        $scope.srchMomsStoreFg02Combo.selectedIndex = 0;
+        $scope.srchMomsStoreFg03Combo.selectedIndex = 0;
+        $scope.srchMomsStoreFg04Combo.selectedIndex = 0;
+        $scope.srchMomsStoreFg05Combo.selectedIndex = 0;
     };
 
 }]);

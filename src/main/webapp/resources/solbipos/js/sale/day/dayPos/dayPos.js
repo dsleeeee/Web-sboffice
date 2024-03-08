@@ -13,7 +13,9 @@
  */
 var app = agrid.getApp();
 
-/** 승인 controller */
+/**
+ *  일별 매출 현황(포스별) 그리드 생성
+ */
 app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   // 상위 객체 상속 : T/F 는 picker

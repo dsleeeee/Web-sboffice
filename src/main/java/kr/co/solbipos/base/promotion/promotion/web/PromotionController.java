@@ -146,6 +146,19 @@ public class PromotionController {
         iostockCmmVO.setNmcodeGrpCd("167");
         model.addAttribute("momsStoreFg01", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));    // 매장그룹
 
+        iostockCmmVO.setNmcodeGrpCd("169");
+        model.addAttribute("momsStoreFg02", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));    // 매장그룹2
+
+        iostockCmmVO.setNmcodeGrpCd("170");
+        model.addAttribute("momsStoreFg03", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));    // 매장그룹3
+
+        iostockCmmVO.setNmcodeGrpCd("171");
+        model.addAttribute("momsStoreFg04", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));    // 매장그룹4
+
+        iostockCmmVO.setNmcodeGrpCd("172");
+        model.addAttribute("momsStoreFg05", convertToJson(iostockCmmService.selectHqNmcodeMomsList(iostockCmmVO, sessionInfoVO)));    // 매장그룹5
+
+
 
         StoreTypeVO storeTypeVO = new StoreTypeVO();
 
