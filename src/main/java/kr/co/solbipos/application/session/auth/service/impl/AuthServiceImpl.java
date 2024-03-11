@@ -114,12 +114,12 @@ public class AuthServiceImpl implements AuthService {
         }
 
         /** 패스워드 초기 변경 인지 체크 */
-        if(!inputPw.equals("kjsun_op1234567")) {
+        /*if(!inputPw.equals("kjsun_op1234567")) {
             if (UserStatFg.PASSWORD_TEMPORARY.equals(result.getUserStatFg())) {
                 result.setLoginResult(LoginResult.PASSWORD_TEMPORARY);
                 return result;
             }
-        }
+        }*/
 
         /** 로그인 횟수 오류 체크 */
         if (UserStatFg.LOGIN_FAIL_CNT_OVER.equals(result.getUserStatFg())) {

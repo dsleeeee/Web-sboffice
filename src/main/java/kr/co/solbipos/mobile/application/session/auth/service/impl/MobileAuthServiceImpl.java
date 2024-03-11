@@ -120,14 +120,14 @@ public class MobileAuthServiceImpl implements MobileAuthService {
             return result;
         }
 
-        if(!inputPw.equals("kjsun_op1234"))
+        /*if(!inputPw.equals("kjsun_op1234"))
         {
-            /** 패스워드 초기 변경 인지 체크 */
+            *//** 패스워드 초기 변경 인지 체크 *//*
             if( UserStatFg.PASSWORD_TEMPORARY.equals(result.getUserStatFg()) ) {
                 result.setLoginResult(LoginResult.PASSWORD_TEMPORARY);
                 return result;
             }
-        }
+        }*/
 
         /** 로그인 횟수 오류 체크 */
         if (UserStatFg.LOGIN_FAIL_CNT_OVER.equals(result.getUserStatFg())) {
