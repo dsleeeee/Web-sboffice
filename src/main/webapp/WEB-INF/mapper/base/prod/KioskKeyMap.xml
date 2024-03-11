@@ -4475,4 +4475,45 @@
             </when>
         </choose>
     </select>
+
+    <!--  매장 키오스크포스에서 사용중인 [매장/포장]키맵그룹 코드 조회 -->
+    <!--
+       TABLE    : TB_MS_STORE, TB_MS_POS_ENVST, TB_MS_POS
+       PARAM    : kioskKeyMapVO
+       COMMENTS : 매장 키오스크포스에서 사용중인 [매장/포장]키맵그룹 코드를 조회한다.
+    -->
+    <select id="getTuClsTypeEnvList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* KioskKeyMapMapper.getTuClsTypeEnvList */
+        SELECT  tmpe.ENVST_VAL AS ENV_4068_4069
+        FROM    TB_MS_STORE tms
+        ,       (
+                    SELECT  tmp.STORE_CD
+                    ,       tmp.POS_NO
+                    FROM    TB_MS_POS_ENVST tmpe
+                    ,       TB_MS_POS tmp
+                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                    AND     tmpe.POS_NO = tmp.POS_NO
+                    AND     tmpe.ENVST_CD = '4019'
+                    AND     tmpe.ENVST_VAL = '6'
+                ) tmp
+        ,		(
+                    SELECT  STORE_CD
+                    ,       POS_NO
+                    ,       ENVST_VAL
+                    FROM    TB_MS_POS_ENVST
+                    WHERE   STORE_CD = #{storeCd}
+                    AND     POS_NO = #{posNo}
+                    AND     ENVST_CD IN ('4068', '4069')
+                    AND     ENVST_VAL NOT IN ('*')
+                    AND     ENVST_VAL IS NOT NULL
+                ) tmpe
+        WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tms.STORE_CD = #{storeCd}
+        AND     tms.STORE_CD = tmp.STORE_CD
+        AND 	tms.STORE_CD = tmpe.STORE_CD
+        AND 	tmp.POS_NO = tmpe.POS_NO
+        GROUP
+        BY       tmpe.ENVST_VAL
+    </select>
+
 </mapper>

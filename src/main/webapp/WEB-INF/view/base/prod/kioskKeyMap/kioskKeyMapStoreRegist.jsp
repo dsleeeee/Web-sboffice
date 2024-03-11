@@ -26,11 +26,11 @@
                 <tr>
                     <th><s:message code="kioskKeyMap.storeCd" /></th>
                     <td>
-                        <input type="text" id="srchStoreCd"/>
+                        <input type="text" id="srchStoreCd" ng-model="srchStoreCd"/>
                     </td>
                     <th><s:message code="kioskKeyMap.storeNm" /></th>
                     <td>
-                        <input type="text" id="srchStoreNm"/>
+                        <input type="text" id="srchStoreNm" ng-model="srchStoreNm"/>
                     </td>
                 </tr>
                 <tr>
@@ -294,7 +294,7 @@
                         <tr>
                             <th><s:message code="kioskKeyMap.tuClsType" /></th>
                             <td colspan="3">
-                                <div class="sb-select" style="width:150px; float:left;">
+                                <div class="sb-select" style="width:250px; float:left;">
                                     <wj-combo-box
                                             id="applyTuClsType"
                                             ng-model="applyTuClsType"
@@ -306,12 +306,12 @@
                                             selected-index-changed="setApplyTuClsTypeCombo(s)">
                                     </wj-combo-box>
                                 </div>
-                                <div class="sb-select" style="width:170px; float:left; padding-top:7px;">
+                                <div class="sb-select" style="width:150px; float:left; padding-top:7px;">
                                     <%-- KIOSK중분류사용 --%>
                                     <label id="lblTuMClsFgStoreRegist"></label>
                                     <input type="hidden" id="hdTuMClsFgStoreRegist" />
                                 </div>
-                               <button class="btn_blue ml10 fl" id="btnInsertStore" ng-click="btnInsertStore()"><s:message code="cmm.apply"/></button>
+                               <button class="btn_blue ml5 fl" id="btnInsertStore" ng-click="btnInsertStore()"><s:message code="cmm.apply"/></button>
                            </td>
                         </tr>
                         <tr>
@@ -331,4 +331,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapStoreRegist.js?ver=20240304.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapStoreRegist.js?ver=20240311.01" charset="utf-8"></script>

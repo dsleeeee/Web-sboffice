@@ -657,27 +657,50 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             // 매장에 터치키 XML 정보 업데이트
             //keyMapper.saveStoreConfgXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
             touchKeyVO.setOrgnFg("S");
-            // 기적용된 터치키 그룹 정보 삭제
-            keyMapper.deleteTouchkeyGrp(touchKeyVO);
-            // 기적용된 터치키 정보 삭제
-            keyMapper.deleteTouchKeyClassToStore(touchKeyVO);
-            // 1248이 0/1이면 전체 삭제
-            // 1248이 2이면 228 Y 제외 삭제
-            if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                keyMapper.deleteTouchKeyToStore(touchKeyVO);
-            } else if(envstVal1248.equals("2")){
-                keyMapper.deleteTouchKeyToStore2(touchKeyVO);
+
+            // 매장적용할 터치키그룹 코드를 담을 list 형태의 변수
+            List<DefaultMap<Object>> touchKeyEnvList;
+
+            if("00".equals(touchKeyVO.getTukeyGrpCd())) { // [00]사용중인터치키매장적용을 선택한 경우
+                // 매장 포스들에서 사용중인 터치키그룹 코드 조회
+                touchKeyEnvList = keyMapper.getTouchKeyEnvList(touchKeyVO);
+            } else {
+                // 선택한 터치키그룹을 list 변수에 담기
+                List<DefaultMap<Object>> list = new ArrayList<DefaultMap<Object>>();
+                DefaultMap<Object> m = new DefaultMap<>();
+                m.put("env4038", touchKeyVO.getTukeyGrpCd());
+                list.add(m);
+
+                touchKeyEnvList = list;
             }
-            // 터치키 매장적용
-            result  = keyMapper.mergeStoreEnvst(touchKeyVO);
-            result  = keyMapper.insertTouchKeyGroupToStore(touchKeyVO);
-            result += keyMapper.insertTouchKeyClassToStore(touchKeyVO);
-            // 1248이 0/1이면 전체 삽입
-            // 1248이 2이면 228 Y 제외 삽입
-            if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                result += keyMapper.insertTouchKeyToStore(touchKeyVO);
-            } else if(envstVal1248.equals("2")){
-                result += keyMapper.insertTouchKeyToStore2(touchKeyVO);
+
+            for(int i=0; i < touchKeyEnvList.size(); i++) {
+
+                // 터치키그룹 코드 셋팅
+                touchKeyVO.setTukeyGrpCd(touchKeyEnvList.get(i).getStr("env4038"));
+
+                // 기적용된 터치키 그룹 정보 삭제
+                keyMapper.deleteTouchkeyGrp(touchKeyVO);
+                // 기적용된 터치키 정보 삭제
+                keyMapper.deleteTouchKeyClassToStore(touchKeyVO);
+                // 1248이 0/1이면 전체 삭제
+                // 1248이 2이면 228 Y 제외 삭제
+                if (envstVal1248.equals("0") || envstVal1248.equals("1")) {
+                    keyMapper.deleteTouchKeyToStore(touchKeyVO);
+                } else if (envstVal1248.equals("2")) {
+                    keyMapper.deleteTouchKeyToStore2(touchKeyVO);
+                }
+                // 터치키 매장적용
+                result = keyMapper.mergeStoreEnvst(touchKeyVO);
+                result = keyMapper.insertTouchKeyGroupToStore(touchKeyVO);
+                result += keyMapper.insertTouchKeyClassToStore(touchKeyVO);
+                // 1248이 0/1이면 전체 삽입
+                // 1248이 2이면 228 Y 제외 삽입
+                if (envstVal1248.equals("0") || envstVal1248.equals("1")) {
+                    result += keyMapper.insertTouchKeyToStore(touchKeyVO);
+                } else if (envstVal1248.equals("2")) {
+                    result += keyMapper.insertTouchKeyToStore2(touchKeyVO);
+                }
             }
         }
 

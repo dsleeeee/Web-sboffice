@@ -65,6 +65,17 @@ app.controller('popUpApplyStoreCtrl', ['$scope', '$http', '$timeout', function (
     };
     // 팝업 그리드 조회
     $scope.$on("popUpApplyStoreCtrl", function (event, data) {
+
+        // 맘스터치는 터치키그룹 '[00]사용중인터치키매장적용' 으로 고정
+        if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
+            $scope.applyTouchKeyGrpCombo.selectedIndex = 0;
+            //$("#applyTouchKeyGrpCombo").css('background-color', '#F0F0F0');
+            $("#applyTouchKeyGrpCombo").attr("disabled", true);
+        }else{
+            //$("#applyTouchKeyGrpCombo").css('background-color', '#FFFFFF');
+            $("#applyTouchKeyGrpCombo").attr("disabled", false);
+        }
+
         // 파라미터
         var params = {};
         params.momsEnvstVal = momsEnvstVal;

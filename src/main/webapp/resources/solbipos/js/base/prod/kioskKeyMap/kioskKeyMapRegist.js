@@ -629,9 +629,11 @@ console.log(params);
                     var list = response.data.data.list;
                     var comboArray = [];
                     var comboArrayAll = [];
+                    var comboArray00 = [];
                     var comboData  = {};
 
                     comboArrayAll.unshift({name: "전체", value: ""});
+                    comboArray00.unshift({name: "[00]사용중인키맵매장적용", value: "00"});
 
                     for (var i = 0; i < list.length; i++) {
                         comboData = {};
@@ -639,6 +641,7 @@ console.log(params);
                         comboData.value = list[i].value;
                         comboArray.push(comboData);
                         comboArrayAll.push(comboData);
+                        comboArray00.push(comboData);
                     // }
                     //
                     // if(type === "L"){
@@ -648,7 +651,7 @@ console.log(params);
                     $scope._setComboData("tuClsType", comboArray);
                     $scope._setComboData("tuClsTypeView", comboArray);
                     if(orgnFg === "HQ") {
-                        $scope._setComboData("applyTuClsType", comboArray);
+                        $scope._setComboData("applyTuClsType", comboArray00);
                         $scope._setComboData("envTuClsType", comboArray);
                     }
                     if(orgnFg === "STORE"){

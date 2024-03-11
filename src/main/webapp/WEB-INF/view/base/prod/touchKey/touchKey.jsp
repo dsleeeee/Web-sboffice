@@ -439,9 +439,17 @@
 
     // 브랜드
     var brandList = ${brandList};
+
+    // 터치키그룹
     var touchKeyGrpData = ${touchKeyGrp};
+
+    // 터치키그룹('전체' 포함)
     var tukeyGrpData = ${touchKeyGrp};
     tukeyGrpData.unshift({name: "전체", value: ""});
+
+    // 터치키그룹('[00]사용중인터치키매장적용' 포함)
+    var touchKeyGrpData00 = ${touchKeyGrp};
+    touchKeyGrpData00.unshift({name: "[00]사용중인터치키매장적용", value: "00"});
 
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
 
@@ -555,7 +563,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20230907.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20240311.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>

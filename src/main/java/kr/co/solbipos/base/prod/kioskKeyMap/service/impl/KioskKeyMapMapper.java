@@ -241,4 +241,7 @@ public interface KioskKeyMapMapper {
 
     /** 판매가관리 팝업 - 조회 */
     List<DefaultMap<Object>> getSalePrice(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 매장 키오스크포스에서 사용중인 [매장/포장]키맵그룹 코드 조회 */
+    List<DefaultMap<Object>> getTuClsTypeEnvList(KioskKeyMapVO kioskKeyMapVO);
 }

@@ -23,7 +23,7 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
     angular.extend(this, new RootController('kioskKeyMapStoreRegCtrl', $scope, $http, false));
 
     $scope._setComboData("srchSysStatFg", sysStatFg);
-    $scope._setComboData("applyTuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
+    $scope._setComboData("applyTuClsType", kioskTuClsTypeList00); // 키오스크용 키맵그룹 목록
     $scope._setComboData("tuMClsFgStoreRegist", tuMClsFgStoreRegistComboData); // KIOSK중분류사용
     $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
 
@@ -53,6 +53,16 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
     // 팝업 오픈 시, 매장리스트 조회
     $scope.$on("kioskKeyMapStoreRegCtrl", function(event, data) {
 
+        // 맘스터치는 터치키그룹 '[00]사용중인키맵매장적용' 으로 고정
+        if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
+            $scope.applyTuClsTypeCombo.selectedIndex = 0;
+            //$("#applyTuClsType").css('background-color', '#F0F0F0');
+            $("#applyTuClsType").attr("disabled", true);
+        }else{
+            //$("#applyTuClsType").css('background-color', '#FFFFFF');
+            $("#applyTuClsType").attr("disabled", false);
+        }
+
         // 매장조회
         $scope.searchStore();
         event.preventDefault();
@@ -63,8 +73,8 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
     $scope.searchStore = function () {
 
         var params = {};
-        params.storeCd = $("#srchStoreCd").val();
-        params.storeNm = $("#srchStoreNm").val();
+        params.storeCd = $scope.srchStoreCd;
+        params.storeNm = $scope.srchStoreNm;
         params.sysStatFg = $scope.srchSysStatFgCombo.selectedValue;
         params.tuMClsFg = $scope.tuMClsFgStoreRegistCombo.selectedValue;
         params.momsTeam = $scope.momsTeam;
@@ -391,20 +401,25 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
 
     // 닫기
     $scope.close = function () {
-
-        $("#srchStoreCd").val("");
-        $("#srchStoreNm").val("");
+        $scope.srchStoreCd = "";
+        $scope.srchStoreNm = "";
         $scope.srchSysStatFgCombo.selectedIndex = 0;
         $scope.applyTuClsTypeCombo.selectedIndex = 0;
     };
 
     // 적용할 키맵그룹 선택 이벤트
     $scope.setApplyTuClsTypeCombo = function (s){
-        var params = {};
-        params.tuClsType = s.selectedValue;
 
-        // 키맵그룹에 KIOSK중분류사용 조회
-        $scope.kioskKeyMapGroupTuMClsFg(params);
+        if(s.selectedValue === "00"){ // '[00]사용중인키맵매장적용' 선택시 빈값으로 셋팅
+            $("#lblTuMClsFgStoreRegist").text("");
+            $("#hdTuMClsFgStoreRegist").val(0);
+        }else {
+            var params = {};
+            params.tuClsType = s.selectedValue;
+
+            // 키맵그룹에 KIOSK중분류사용 조회
+            $scope.kioskKeyMapGroupTuMClsFg(params);
+        }
     };
 
     // 키맵그룹에 KIOSK중분류사용 조회

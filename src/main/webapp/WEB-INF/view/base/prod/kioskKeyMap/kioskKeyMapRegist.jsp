@@ -481,8 +481,13 @@
     // 키오스크 키맵그룹 목록
     var kioskTuClsTypeList = ${kioskTuClsTypeList};
 
+    // 키오스크 키맵그룹 목록('전체' 포함)
     var kioskTuClsTypeListAll = ${kioskTuClsTypeList};
     kioskTuClsTypeListAll.unshift({name: "전체", value: ""});
+
+    // 키오스크 키맵그룹 목록('[00]사용중인키맵매장적용' 포함)
+    var kioskTuClsTypeList00 = ${kioskTuClsTypeList};
+    kioskTuClsTypeList00.unshift({name: "[00]사용중인키맵매장적용", value: "00"});
 
     // 상품유형구분
     var prodTypeFg = ${ccu.getCommCode("008")};
@@ -494,7 +499,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20230727.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20240311.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

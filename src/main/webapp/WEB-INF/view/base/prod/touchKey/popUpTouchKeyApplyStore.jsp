@@ -291,7 +291,7 @@
                     <tr>
                         <th><s:message code="touchKey.grp" /></th>
                         <td colspan="3">
-                            <div class="sb-select" style="width:120px; float:left;">
+                            <div class="sb-select" style="width:300px; float:left;">
                                 <wj-combo-box
                                         id="applyTouchKeyGrpCombo"
                                         ng-model="applyTouchKeyGrp"
@@ -299,7 +299,9 @@
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        initialized="_initComboBox(s)">
+                                        initialized="_initComboBox(s)"
+                                        selected-index="0"
+                                        control="applyTouchKeyGrpCombo">
                                 </wj-combo-box>
                             </div>
                         </td>
@@ -321,4 +323,4 @@
   var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyApplyStore.js?ver=20240304.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyApplyStore.js?ver=20240311.01" charset="utf-8"></script>

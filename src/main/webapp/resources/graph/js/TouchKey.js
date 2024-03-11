@@ -117,7 +117,7 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   //터치키 그룹코드 콤보
   $scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
   //터치키 그룹코드 콤보(터치키 매장적용 팝업)
-  $scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
+  $scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData00);
   //터치키 그룹코드 콤보(터치키 복사 팝업)
   $scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
   // 버튼사용여부 필터 콤보
@@ -286,9 +286,11 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
                 var list = data.data.list;
                 var comboArray = [];
                 var comboArrayAll = [];
+                var comboArray00 = [];
                 var comboData  = {};
 
                 comboArrayAll.unshift({name: "전체", value: ""});
+                comboArray00.unshift({name: "[00]사용중인터치키매장적용", value: "00"});
 
                 for (var i = 0; i < list.length; i++) {
                   comboData       = {};
@@ -296,12 +298,14 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
                   comboData.value = list[i].value;
                   comboArray.push(comboData);
                   comboArrayAll.push(comboData);
+                  comboArray00.push(comboData);
                 }
 
                 touchKeyGrpData = comboArray;
                 tukeyGrpData = comboArrayAll;
+                touchKeyGrpData00 = comboArray00;
                 scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
-                scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
+                scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData00);
                 scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
               }
             });
@@ -2548,9 +2552,11 @@ Format.prototype.save = function () {
               var list = data.data.list;
               var comboArray = [];
               var comboArrayAll = [];
+              var comboArray00 = [];
               var comboData  = {};
 
               comboArrayAll.unshift({name: "전체", value: ""});
+              comboArray00.unshift({name: "[00]사용중인터치키매장적용", value: "00"});
 
               for (var i = 0; i < list.length; i++) {
                 comboData       = {};
@@ -2558,12 +2564,14 @@ Format.prototype.save = function () {
                 comboData.value = list[i].value;
                 comboArray.push(comboData);
                 comboArrayAll.push(comboData);
+                comboArray00.push(comboData);
               }
 
               touchKeyGrpData = comboArray;
               tukeyGrpData = comboArrayAll;
+              touchKeyGrpData00 = comboArray00;
               scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
-              scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
+              scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData00);
               scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
             }
           });

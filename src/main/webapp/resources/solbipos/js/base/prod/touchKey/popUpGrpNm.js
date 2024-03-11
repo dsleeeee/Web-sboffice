@@ -66,9 +66,11 @@ app.controller('popUpGrpNmCtrl', ['$scope', '$http', '$timeout', function ($scop
             var list = data.data.list;
             var comboArray = [];
             var comboArrayAll = [];
+            var comboArray00 = [];
             var comboData  = {};
 
             comboArrayAll.unshift({name: "전체", value: ""});
+            comboArray00.unshift({name: "[00]사용중인터치키매장적용", value: "00"});
 
             for (var i = 0; i < list.length; i++) {
               comboData       = {};
@@ -76,12 +78,14 @@ app.controller('popUpGrpNmCtrl', ['$scope', '$http', '$timeout', function ($scop
               comboData.value = list[i].value;
               comboArray.push(comboData);
               comboArrayAll.push(comboData);
+              comboArray00.push(comboData);
             }
 
             touchKeyGrpData = comboArray;
             tukeyGrpData = comboArrayAll;
+            touchKeyGrpData00 = comboArray00;
             scope._setComboData("touchKeyGrpCombo", touchKeyGrpData);
-            scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData);
+            scope._setComboData("applyTouchKeyGrpCombo", touchKeyGrpData00);
             scope._setComboData("copyTouchKeyGrpCombo", touchKeyGrpData);
 
           }

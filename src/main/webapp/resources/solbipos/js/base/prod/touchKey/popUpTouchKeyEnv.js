@@ -116,97 +116,198 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
             return false;
         }
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            var item = $scope.flex.collectionView.items[i];
-            if (item.gChk === true) {
-                if(item.posNo !== null && item.posNo !== "") {
-                    item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
+        // 본사 또는 단독매장에서 매장사용터치키설정 사용시
+        if(orgnFg === "HQ" || (orgnFg === "STORE" && hqOfficeCd === "00000")) {
 
-                    // 키맵매장적용 여부
-                    if($("#chkApplyStore").is(":checked") && orgnFg === "HQ"){
-                        item.chkApplyStore = "Y";
-                        item.tukeyGrpCd = $scope.touchKeyEnvCombo.selectedValue;
-                    }else{
-                        item.chkApplyStore = "N";
+            // 매장사용터치키 설정을 하시겠습니까?<br/>(선택매장이 많은경우, 오래걸릴 수 있습니다.)
+            $scope._popConfirm(messages["touchKey.touchKeyEnvToStore.msg"], function () {
+
+                for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                    var item = $scope.flex.collectionView.items[i];
+                    if (item.gChk === true) {
+                        if (item.posNo !== null && item.posNo !== "") {
+                            item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
+
+                            // 본사 터치키 매장적용 여부
+                            if ($("#chkApplyStore").is(":checked") && orgnFg === "HQ") {
+                                item.chkApplyStore = "Y";
+                                item.tukeyGrpCd = $scope.touchKeyEnvCombo.selectedValue;
+                            } else {
+                                item.chkApplyStore = "N";
+                            }
+                            params.push(item);
+                        }
                     }
-                    params.push(item);
                 }
-            }
+                console.log(params);
+
+                // 적용할 대상이 없습니다.
+                if (params.length <= 0) {
+                    s_alert.pop(messages["touchKey.msg.select"]);
+                    return false;
+                }
+
+                // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
+                $scope.applyDataChk(params);
+            });
         }
-        console.log(params);
 
-        // 적용할 대상이 없습니다.
-        if (params.length <= 0) {
-            s_alert.pop(messages["touchKey.msg.select"]);
-            return false;
-        }
+        // 프랜차이즈 매장에서 매장사용터치키설정 사용시
+        if (orgnFg === "STORE" && hqOfficeCd !== "00000") {
 
-        // 사용터치키 설정을 하시겠습니까?(선택매장이 많은경우, 오래걸릴수 있습니다.)
-        $scope._popConfirm(messages["touchKey.touchKeyEnvToStore.msg"], function() {
+            // 매장사용터치키 설정을 하시겠습니까?<br/>(선택매장이 많은경우, 오래걸릴 수 있습니다.)
+            $scope._popConfirm(messages["touchKey.touchKeyEnvToStore.msg"], function () {
 
-            // 매장적용 500개 이상 적용시
-            if (params.length >= 500) {
+                // 본사의 터치키그룹 정보도 수신하시겠습니까?
+                var id = s_alert.randomString(5);
+                var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
 
-                // 대량 적용 알림 문자 발송
-                var smsParams = {};
-                smsParams.subject = "[대량적용알림]매장사용터치키설정";
-                smsParams.smsMsg = "매장사용터치키설정을 시작하였습니다. 본사코드 : " + hqOfficeCd + ", 적용매장수 : " + params.length;
-                smsParams.msgFg = "S01_0002"; // [전송구분] S01_0001:테스트용, S01_0002:터치키/키오스크 매장적용 시
-                smsParams.nmcodeItem1 = "터치키/키오스크 매장적용";
-                $scope._postJSONSave.withOutPopUp("/base/prod/touchKey/touchKey/notiSmsSend.sb", smsParams, function () {
+                pop.find("p").html(messages["touchKey.touchKeyEnvToStore2.msg"] + "<br/>"
+                                              + "[확인] 클릭시, 터치키설정 적용 & 본사 터치키그룹 '" + $scope.touchKeyEnvCombo.text + "' 매장 적용<br/>"
+                                              + "[취소] 클릭시, 터치키설정만 적용");
 
-                    // 사용자 현재 인원수 체크
-                    var data = {};
-                    data.downloadFg = "2";    // [다운로드 구분] 0:간소화화면, 1:상품매출분석 2: 터치키/키오스크 매장적용
-                    data.resrceCd = menuCd;
-                    data.resrceNm = menuNm;
-                    data.downloadUseFg = "3"; // [다운로드 사용기능] 0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드 3:터치키/키오스크 매장적용
-                    data.downloadNo = "0";    // 다운로드 화면구분번호
+                // 팝업 띄우기
+                $("#_alertTent").show();
+                pop.show();
 
-                    $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', data, function (response) {
-                        if (response.data.data.list === 0) {
-                        } else {
-                            var msgCntChk = response.data.data.list; // '00:0건의 대량 적용 진행중' 메시지면 작업가능
-                            var params2 = data;
+                // 확인 버튼 클릭시, 매장사용터치키 환경설정값 & 본사 터치키 정보 매장적용 UPDATE
+                pop.find("a.btn_blue.conf").bind("click", function () {
+                    $("#_alertTent").hide();
+                    pop.remove();
 
-                            if (msgCntChk.substr(0, 2) === "00") { // 작업가능 시
+                    setTimeout(function () {
+                        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                            var item = $scope.flex.collectionView.items[i];
+                            if (item.gChk === true) {
+                                if (item.posNo !== null && item.posNo !== "") {
+                                    item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
 
-                                // 대량 적용 진행 사용자 저장 insert
-                                params2.downloadFileCount = params.length; // 대량 적용 매장수
-                                $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function (response) {
-                                    var seq = response.data.data.list; // 순번
-                                    // 매장사용터치키 설정 저장(500개 이상 매장용)
-                                    $scope.save2(params, seq);
-                                });
-
-                            } else { // 작업불가 시
-
-                                // 대량 적용 진행 사용자 저장 insert
-                                params2.resrceNm = "실패:" + menuNm;
-                                params2.downloadFileCount = 0; // 대량 적용 매장수
-                                $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function (response) {
-                                });
-
-                                $scope._popMsg(msgCntChk); // 매장적용 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
-                                return;
+                                    // 본사 터치키 매장적용 여부
+                                    item.chkApplyStore = "Y";
+                                    item.tukeyGrpCd = $scope.touchKeyEnvCombo.selectedValue;
+                                    params.push(item);
+                                }
                             }
                         }
-                    });
+                        console.log(params);
 
+                        // 적용할 대상이 없습니다.
+                        if (params.length <= 0) {
+                            s_alert.pop(messages["touchKey.msg.select"]);
+                            return false;
+                        }
+
+                        // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
+                        $scope.applyDataChk(params);
+
+                    }, 50);
+
+                    return false;
                 });
 
-            } else {
-                $timeout(function () {
+                // 취소 버튼 클릭시, 매장사용터치키 환경설정값만 UPDATE
+                pop.find("a.btn_gray.conf").bind("click", function () {
+                    $("#_alertTent").hide();
+                    pop.remove();
+
                     setTimeout(function () {
-                        // 매장사용터치키 설정 저장
-                        $scope.save(params);
-                    }, 500);
-                }, 10);
-            }
-        });
+                        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                            var item = $scope.flex.collectionView.items[i];
+                            if (item.gChk === true) {
+                                if (item.posNo !== null && item.posNo !== "") {
+                                    item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
+
+                                    // 본사 터치키 매장적용 여부
+                                    item.chkApplyStore = "N";
+                                    params.push(item);
+                                }
+                            }
+                        }
+                        console.log(params);
+
+                        // 적용할 대상이 없습니다.
+                        if (params.length <= 0) {
+                            s_alert.pop(messages["touchKey.msg.select"]);
+                            return false;
+                        }
+
+                        // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
+                        $scope.applyDataChk(params);
+
+                    }, 50);
+
+                     return false;
+                });
+            });
+        }
+
     };
 
-    // 매장사용터치키 설정 저장
+    // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
+    $scope.applyDataChk = function(params){
+
+        // 매장적용 500개 이상 적용시
+        if (params.length >= 500) {
+
+            // 대량 적용 알림 문자 발송
+            var smsParams = {};
+            smsParams.subject = "[대량적용알림]매장사용터치키설정";
+            smsParams.smsMsg = "매장사용터치키설정을 시작하였습니다. 본사코드 : " + hqOfficeCd + ", 적용매장수 : " + params.length;
+            smsParams.msgFg = "S01_0002"; // [전송구분] S01_0001:테스트용, S01_0002:터치키/키오스크 매장적용 시
+            smsParams.nmcodeItem1 = "터치키/키오스크 매장적용";
+            $scope._postJSONSave.withOutPopUp("/base/prod/touchKey/touchKey/notiSmsSend.sb", smsParams, function () {
+
+                // 사용자 현재 인원수 체크
+                var data = {};
+                data.downloadFg = "2";    // [다운로드 구분] 0:간소화화면, 1:상품매출분석 2: 터치키/키오스크 매장적용
+                data.resrceCd = menuCd;
+                data.resrceNm = menuNm;
+                data.downloadUseFg = "3"; // [다운로드 사용기능] 0:전체다운로드, 1:조회조건다운로드, 2:분할다운로드 3:터치키/키오스크 매장적용
+                data.downloadNo = "0";    // 다운로드 화면구분번호
+
+                $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadCntChk.sb', data, function (response) {
+                    if (response.data.data.list === 0) {
+                    } else {
+                        var msgCntChk = response.data.data.list; // '00:0건의 대량 적용 진행중' 메시지면 작업가능
+                        var params2 = data;
+
+                        if (msgCntChk.substr(0, 2) === "00") { // 작업가능 시
+
+                            // 대량 적용 진행 사용자 저장 insert
+                            params2.downloadFileCount = params.length; // 대량 적용 매장수
+                            $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function (response) {
+                                var seq = response.data.data.list; // 순번
+                                // 매장사용터치키 설정 저장(500개 이상 매장용)
+                                $scope.save2(params, seq);
+                            });
+
+                        } else { // 작업불가 시
+
+                            // 대량 적용 진행 사용자 저장 insert
+                            params2.resrceNm = "실패:" + menuNm;
+                            params2.downloadFileCount = 0; // 대량 적용 매장수
+                            $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function (response) {
+                            });
+
+                            $scope._popMsg(msgCntChk); // 매장적용 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
+                            return;
+                        }
+                    }
+                });
+
+            });
+
+        } else {
+            $timeout(function () {
+                setTimeout(function () {
+                    // 매장사용터치키 설정 저장
+                    $scope.save(params);
+                }, 500);
+            }, 10);
+        }
+    };
+
+    // 매장사용터치키설정 저장
     $scope.save = function(orgParams){
 
         $scope.totalRows = orgParams.length;    // 체크 매장수
@@ -253,6 +354,8 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
                     $scope.popUpTouchKeyEnvLayer.hide(true);
                     // 저장되었습니다.
                     $scope._popMsg(messages["cmm.saveSucc"]);
+                    // 터치키 재조회
+                    document.getElementById('btnSrchTouchKey').click();
                 }
             }
         }, function errorCallback(response) {
@@ -276,7 +379,7 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
         });
     };
 
-    // 매장사용터치키 설정 저장(500개 이상 매장용)
+    // 매장사용터치키설정 저장(500개 이상 매장용)
     $scope.save2 = function (orgParams, seq) {
 
         $scope.totalRows = orgParams.length;    // 체크 매장수
@@ -328,6 +431,8 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
                         $scope.popUpTouchKeyEnvLayer.hide(true);
                         // 저장되었습니다.
                         $scope._popMsg(messages["cmm.saveSucc"]);
+                        // 터치키 재조회
+                        document.getElementById('btnSrchTouchKey').click();
                     }
                 }
             }, function errorCallback(response) {

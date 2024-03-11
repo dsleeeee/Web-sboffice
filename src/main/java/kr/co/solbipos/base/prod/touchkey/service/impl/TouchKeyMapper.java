@@ -201,4 +201,7 @@ public interface TouchKeyMapper {
     /** 알림 문자 발송 번호 조회 */
     List<DefaultMap<Object>> getNotiSmsNoList(TouchKeyVO touchKeyVO);
 
+    /** 매장 포스들에서 사용중인 터치키그룹 코드 조회 */
+    List<DefaultMap<Object>> getTouchKeyEnvList(TouchKeyVO touchKeyVO);
+
 }

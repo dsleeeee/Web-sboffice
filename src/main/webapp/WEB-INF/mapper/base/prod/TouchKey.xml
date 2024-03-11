@@ -3804,4 +3804,37 @@
         AND    NMCODE_ITEM_1 = #{nmcodeItem1}
     </select>
 
+    <!--  매장 포스들에서 사용중인 터치키그룹 코드 조회 -->
+    <!--
+       TABLE    : TB_MS_STORE, TB_MS_POS_ENVST, TB_MS_POS
+       PARAM    : touchKeyVO
+       COMMENTS : 매장 포스들에서 사용중인 터치키그룹 코드를 조회한다.
+    -->
+    <select id="getTouchKeyEnvList" parameterType="touchKeyVO" resultType="DefaultMap">
+        /* TouchKeyMapper.getTouchKeyEnvList */
+        SELECT  tmpe.ENVST_VAL AS ENV_4038
+        FROM    TB_MS_STORE tms
+        ,       (
+                    SELECT  tmp.STORE_CD
+                    ,       tmp.POS_NO
+                    FROM    TB_MS_POS_ENVST tmpe
+                    ,       TB_MS_POS tmp
+                    WHERE   tmpe.STORE_CD = tmp.STORE_CD
+                    AND     tmpe.POS_NO = tmp.POS_NO
+                    AND     tmpe.ENVST_CD = '4019'
+                    AND     tmpe.ENVST_VAL IN ('1', '2', '3')
+                ) tmp
+        ,		TB_MS_POS_ENVST tmpe
+        WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tms.STORE_CD = #{storeCd}
+        AND     tms.STORE_CD = tmp.STORE_CD
+        AND 	tms.STORE_CD = tmpe.STORE_CD
+        AND 	tmp.POS_NO = tmpe.POS_NO
+        AND 	tmpe.ENVST_CD = '4038'
+        AND     tmpe.ENVST_VAL NOT IN ('*')
+        AND     tmpe.ENVST_VAL IS NOT NULL
+        GROUP
+        BY       tmpe.ENVST_VAL
+    </select>
+
 </mapper>
