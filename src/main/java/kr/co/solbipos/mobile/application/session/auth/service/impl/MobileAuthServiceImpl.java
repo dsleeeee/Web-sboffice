@@ -120,9 +120,9 @@ public class MobileAuthServiceImpl implements MobileAuthService {
             return result;
         }
 
+        /** 패스워드 초기 변경 인지 체크 */
         /*if(!inputPw.equals("kjsun_op1234"))
         {
-            *//** 패스워드 초기 변경 인지 체크 *//*
             if( UserStatFg.PASSWORD_TEMPORARY.equals(result.getUserStatFg()) ) {
                 result.setLoginResult(LoginResult.PASSWORD_TEMPORARY);
                 return result;
