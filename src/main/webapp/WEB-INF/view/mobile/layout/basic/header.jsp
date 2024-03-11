@@ -16,6 +16,11 @@
       <span></span>
     </a>
   </div>
+  <div class="reConnControl" style="float:left;">
+    <a href="/mobile/auth/login.sb" id="_loginMain" class="loginMain">
+      <span></span>
+    </a>
+  </div>
   <div class="userNm">
      <span>
        <em>[${sessionScope.sessionInfo.orgnCd}]</em>
