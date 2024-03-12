@@ -58,6 +58,13 @@ public class VerManageServiceImpl implements VerManageService {
         this.messageService = messageService;
     }
 
+    /** 프로그램 상세구분 코드 조회(콤보박스용) */
+    @Override
+    public List<DefaultMap<String>> getNmcodeCdList(){
+
+        return verManageMapper.getNmcodeCdList();
+    }
+
     /** 포스버전 목록 조회 */
     @Override
     public List<DefaultMap<String>> list(VerInfoVO verInfo) {
@@ -113,6 +120,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setDbYn((String)multi.getParameter("dbYn"));
             verInfo.setDbYn((String)multi.getParameter("dbYn"));
             verInfo.setOrgnCds((String)multi.getParameter("orgnCds"));
+            verInfo.setProgDetailFg((String)multi.getParameter("progDetailFg"));
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
@@ -173,6 +181,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setImgYn((String)multi.getParameter("imgYn"));
             verInfo.setDbYn((String)multi.getParameter("dbYn"));
             verInfo.setOrgnCds((String)multi.getParameter("orgnCds"));
+            verInfo.setProgDetailFg((String)multi.getParameter("progDetailFg"));
             verInfo.setDelYn("N");
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){

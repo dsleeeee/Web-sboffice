@@ -101,7 +101,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.verSerNo"/>" binding="verSerNo" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.fileDesc"/>" binding="fileDesc" align="left" width="*" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.fileDesc"/>" binding="fileDesc" align="left" width="160" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.progFg"/>" binding="progFg" data-map="progFgDataMap" width="120" align="center" is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.contain.pgm"/>" binding="pgmYn" data-map="containYnDataMap"  align="center" width="90" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.contain.db"/>" binding="dbYn" data-map="containYnDataMap" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
@@ -111,6 +111,7 @@
         <wj-flex-grid-column header="<s:message code="verManage.recvCnt"/>" binding="recvCnt" align="center" width="90"  is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="90"  is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.orgnCds"/>" binding="orgnCds" align="center" width="150" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.progDetailFg"/>" binding="progDetailFg" align="center" width="120" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
@@ -132,9 +133,10 @@
   var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
   var hqList = ${ccu.getHqOfficeList()};
   var hqOfficeCd = "${hqOfficeCd}";
+  var nmcodeCdList = ${nmcodeCdList}
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20231026.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManage.js?ver=20240308.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/pos/confg/vermanage/verInfoDtl.jsp">

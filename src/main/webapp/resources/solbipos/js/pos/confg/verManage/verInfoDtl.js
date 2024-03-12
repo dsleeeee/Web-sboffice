@@ -69,6 +69,7 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
 
       var data = response.data.data;
       $scope.version = data;
+      
 
       console.log('data.pgmYn', data.pgmYn);
       console.log('data.dbYn', data.dbYn);
@@ -92,6 +93,11 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
       $scope.version.incldDtls = incldDtlsStr;
+
+      if(data.progDetailFg == "1")          $scope.version.progDetailFg = "POS&KIOSK";
+      else if(data.progDetailFg == "2")     $scope.version.progDetailFg = "KDS";
+      else if(data.progDetailFg == "3")     $scope.version.progDetailFg = "DID";
+      else if(data.progDetailFg == "4")     $scope.version.progDetailFg = "T-오더";
 
       // 파일사이즈 변환하여 표기
       $scope.version.fileSize = getfileSize($scope.version.fileSize);
@@ -120,6 +126,7 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
   // 탭변경
   $scope.changeTab = function(){
     $scope.versionInfoDetailLayer.hide();
+
     $scope.storeAddLayer.show(true, function(){
       // 탭 닫을때 그리드 초기화
       var sScope = agrid.getScope("addStoreCtrl");
@@ -132,6 +139,8 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#srchStoreCd").val("");
       $("#srchStoreNm").val("");
     });
+    var scope = agrid.getScope("allStoreCtrl")
+    scope.progDetailFg = $scope.version.progDetailFg;
   };
 
 }]);

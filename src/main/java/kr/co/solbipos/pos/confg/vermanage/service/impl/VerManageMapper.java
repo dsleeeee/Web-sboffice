@@ -26,6 +26,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VerManageMapper {
 
+    /** 프로그램 상세구분 코드 조회(콤보박스용) */
+    List<DefaultMap<String>> getNmcodeCdList();
+
     /** 포스버전 목록 조회 */
     List<DefaultMap<String>> getList(VerInfoVO verInfo);
 

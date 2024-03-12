@@ -24,6 +24,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 콤보박스 데이터
   $scope._setComboData("progFgCombo", progFg);
   $scope._setComboData("useYnCombo", useYn);
+  $scope._setComboData("progDetailFgCombo", nmcodeCdList); // 프로그램 상세구분
 
   // 버전정보
   $scope.version;
@@ -146,6 +147,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("imgYn", $("#img").is(":checked") === true ? 'Y' : 'N');
     formData.append("useYn", $scope.versionUseYnCombo.selectedValue);
     formData.append("orgnCds", $("#orgnCdsCd").val());
+    formData.append("progDetailFg", $scope.version.progDetailFg);
     var url = '';
 
     if( isEmptyObject($scope.getSelectVersion()) ) {
@@ -236,6 +238,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#orgnCdsCd").val(data.orgnCds);
         $("#orgnCdsNm").val(data.orgnCds);
       }
+
+      $scope.version.progDetailFg = data.progDetailFg;
 
       // 파일사이즈 변환하여 표기
       $scope.version.fileSize = getfileSize($scope.version.fileSize);

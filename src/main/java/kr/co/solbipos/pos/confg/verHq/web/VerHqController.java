@@ -1,7 +1,9 @@
 package kr.co.solbipos.pos.confg.verHq.web;
 
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -37,13 +39,15 @@ public class VerHqController {
     private final VerManageService verManageService;
     private final SessionService sessionService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public VerHqController(VerManageService verManageService, SessionService sessionService, CmmEnvUtil cmmEnvUtil) {
+    public VerHqController(VerManageService verManageService, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
         this.verManageService = verManageService;
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -68,6 +72,9 @@ public class VerHqController {
             model.addAttribute("posVerEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1014"), "1"));
             System.out.println("posVerEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1014"), "1"));
         }
+
+        // 프로그램 상세구분 코드 조회(콤보박스용)
+        model.addAttribute("nmcodeCdList", cmmCodeUtil.assmblObj(verManageService.getNmcodeCdList(), "name", "value", UseYn.N));
 
         return "pos/confg/varhq/verHq";
     }

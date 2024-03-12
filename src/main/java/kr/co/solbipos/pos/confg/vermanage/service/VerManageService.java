@@ -23,6 +23,9 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 */
 public interface VerManageService {
 
+    /** 프로그램상세구분 코드 조회(콤보박스용) */
+    List<DefaultMap<String>> getNmcodeCdList();
+
     /** 포스버전 목록 조회 */
     List<DefaultMap<String>> list(VerInfoVO verInfo);
 
