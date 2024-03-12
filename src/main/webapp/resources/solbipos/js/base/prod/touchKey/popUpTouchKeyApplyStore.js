@@ -67,14 +67,14 @@ app.controller('popUpApplyStoreCtrl', ['$scope', '$http', '$timeout', function (
     $scope.$on("popUpApplyStoreCtrl", function (event, data) {
 
         // 맘스터치는 터치키그룹 '[00]사용중인터치키매장적용' 으로 고정
-        if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
+        /*if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
             $scope.applyTouchKeyGrpCombo.selectedIndex = 0;
             //$("#applyTouchKeyGrpCombo").css('background-color', '#F0F0F0');
             $("#applyTouchKeyGrpCombo").attr("disabled", true);
         }else{
             //$("#applyTouchKeyGrpCombo").css('background-color', '#FFFFFF');
             $("#applyTouchKeyGrpCombo").attr("disabled", false);
-        }
+        }*/
 
         // 파라미터
         var params = {};
@@ -133,7 +133,11 @@ app.controller('popUpApplyStoreCtrl', ['$scope', '$http', '$timeout', function (
         }
 
         // 터치키 매장적용을 하시겠습니까?(선택매장이 많은경우, 오래걸릴수 있습니다.)
-        $scope._popConfirm(messages["touchKey.touchKeyApplyStore.msg"], function () {
+        var msg = messages["touchKey.touchKeyApplyStore.msg"];
+        // '[00]사용중인터치키매장적용'으로 선택하시면 자동으로 각 매장에 설정된 터치키 키 값이 적용됩니다.
+        msg += "<br><br><p style='color:red;'>'[00]사용중인터치키매장적용'</p>으로 선택하시면 자동으로 각 매장에 설정된 터치키 키 값이 적용됩니다.";
+
+        $scope._popConfirm(msg , function () {
 
             // 매장적용 500개 이상 적용시
             if (params.length >= 500) {

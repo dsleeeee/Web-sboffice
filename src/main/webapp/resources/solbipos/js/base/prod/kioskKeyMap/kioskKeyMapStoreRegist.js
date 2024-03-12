@@ -54,14 +54,14 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
     $scope.$on("kioskKeyMapStoreRegCtrl", function(event, data) {
 
         // 맘스터치는 터치키그룹 '[00]사용중인키맵매장적용' 으로 고정
-        if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
+        /*if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
             $scope.applyTuClsTypeCombo.selectedIndex = 0;
             //$("#applyTuClsType").css('background-color', '#F0F0F0');
             $("#applyTuClsType").attr("disabled", true);
         }else{
             //$("#applyTuClsType").css('background-color', '#FFFFFF');
             $("#applyTuClsType").attr("disabled", false);
-        }
+        }*/
 
         // 매장조회
         $scope.searchStore();
@@ -154,7 +154,11 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
 
         // '01' 키맵그룹을 매장에 적용하시겠습니까?
         // <br/> (중분류 사용 키맵그룹은 중분류 사용 키오스크에만 적용됩니다.)
-        $scope._popConfirm("'" + $scope.applyTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreReg.msg"] + messages["kioskKeyMap.kioskTuMClsFg.msg"], function() {
+        var msg = "'" + $scope.applyTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreReg.msg"] + messages["kioskKeyMap.kioskTuMClsFg.msg"];
+        // '[00]사용중인키맵매장적용'으로 선택하시면 자동으로 각 매장에 설정된 키맵 키 값이 적용됩니다.
+        msg += "<br><br><p style='color:red;'>'[00]사용중인키맵매장적용'</p>으로 선택하시면 자동으로 각 매장에 설정된 키맵 키 값이 적용됩니다.";
+
+        $scope._popConfirm(msg, function() {
 
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
 
