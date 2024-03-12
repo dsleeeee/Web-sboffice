@@ -37,16 +37,35 @@
 
     }
 </script>
+
 <script>
+    var orgnFg = "${orgnFg}";
+
     // (상품관리)브랜드사용여부
     var brandUseFg = "${brandUseFg}";
+
     // 브랜드
     var brandList = ${brandList};
-    var orgnFg = "${orgnFg}";
+
+    // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
-    // 브랜드
+
+    // List 형식("" 안붙임)
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
+    var momsTeamComboList = ${momsTeamComboList};
+    var momsAcShopComboList = ${momsAcShopComboList};
+    var momsAreaFgComboList = ${momsAreaFgComboList};
+    var momsCommercialComboList = ${momsCommercialComboList};
+    var momsShopTypeComboList = ${momsShopTypeComboList};
+    var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
+    var branchCdComboList = ${branchCdComboList};
+    var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    var momsStoreFg02ComboList = ${momsStoreFg02ComboList};
+    var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
+    var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
+    var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOut/soldOutTab.js?ver=20220225.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
