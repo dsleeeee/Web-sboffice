@@ -1,9 +1,11 @@
 package kr.co.solbipos.pos.confg.vermanage.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO;
 import kr.co.solbipos.pos.confg.vermanage.service.VerInfoVO;
@@ -46,12 +48,14 @@ public class VerManageController {
 
     private final VerManageService verManageService;
     private final SessionService sessionService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public VerManageController(VerManageService verManageService, SessionService sessionService) {
+    public VerManageController(VerManageService verManageService, SessionService sessionService, CmmCodeUtil cmmCodeUtil) {
         this.verManageService = verManageService;
         this.sessionService = sessionService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -65,6 +69,10 @@ public class VerManageController {
     @RequestMapping(value = "/verInfo/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        // 프로그램 상세구분 코드 조회(콤보박스용)
+        model.addAttribute("nmcodeCdList", cmmCodeUtil.assmblObj(verManageService.getNmcodeCdList(), "name", "value", UseYn.N));
+
         return "pos/confg/vermanage/verManage";
     }
 
@@ -79,6 +87,10 @@ public class VerManageController {
     @RequestMapping(value = "/verInfoV2/view.sb", method = RequestMethod.GET)
     public String viewV2(HttpServletRequest request, HttpServletResponse response,
             Model model) {
+
+        // 프로그램 상세구분 코드 조회(콤보박스용)
+        model.addAttribute("nmcodeCdList", cmmCodeUtil.assmblObj(verManageService.getNmcodeCdList(), "name", "value", UseYn.N));
+
         return "pos/confg/vermanage/verManageV2";
     }
 

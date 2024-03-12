@@ -99,11 +99,26 @@
               <tr>
                   <%-- 버전체크정보(참고용) --%>
                 <th><s:message code="verManage.orgnCds" /></th>
-                <td colspan="3">
+                <td>
                   <jsp:include page="/WEB-INF/view/iostock/cmm/selectHqM.jsp" flush="true">
                     <jsp:param name="targetId" value="orgnCds"/>
                   </jsp:include>
                 </td>
+                  <%-- 프로그램상세구분 --%>
+                  <th><s:message code="verManage.progDetailFg" /></th>
+                  <td>
+                    <div class="sb-select">
+                      <wj-combo-box
+                              id="progDetailFg"
+                              ng-model="version.progDetailFg"
+                              control="versionProgDetailFgCombo"
+                              items-source="_getComboData('progDetailFgCombo')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false">
+                      </wj-combo-box>
+                    </div>
+                  </td>
               </tr>
               </tbody>
             </table>
@@ -121,6 +136,7 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20231026.01" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20240308.01" charset="utf-8"></script>
 
 

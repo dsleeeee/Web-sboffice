@@ -58,6 +58,8 @@ public class VerInfoVO extends PageVO {
     private String sysStatFg;
     /**  버전체크정보(참고용) */
     private String orgnCds;
+    /** 프로그램상세구분 */
+    private String progDetailFg;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -294,5 +296,13 @@ public class VerInfoVO extends PageVO {
 
     public void setOrgnCds(String orgnCds) {
         this.orgnCds = orgnCds;
+    }
+
+    public String getProgDetailFg() {
+        return progDetailFg;
+    }
+
+    public void setProgDetailFg(String progDetailFg) {
+        this.progDetailFg = progDetailFg;
     }
 }

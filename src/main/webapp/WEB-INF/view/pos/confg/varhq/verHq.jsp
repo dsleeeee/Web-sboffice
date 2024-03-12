@@ -36,6 +36,7 @@
 <script>
     // [1014 포스프로그램구분] 환경설정값
     var posVerEnvstVal = "${posVerEnvstVal}";
+    var nmcodeCdList = ${nmcodeCdList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/pos/confg/verhq/verHq.js?ver=20231025.01" charset="utf-8"></script>

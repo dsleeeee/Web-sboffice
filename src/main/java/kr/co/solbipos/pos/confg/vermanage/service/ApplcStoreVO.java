@@ -72,6 +72,8 @@ public class ApplcStoreVO extends PageVO {
     private String progFg;
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+    /** 프로그램 상세구분 */
+    private String progDetailFg;
 
     public OrgnFg getOrgnFg() {
         return orgnFg;
@@ -319,5 +321,13 @@ public class ApplcStoreVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getProgDetailFg() {
+        return progDetailFg;
+    }
+
+    public void setProgDetailFg(String progDetailFg) {
+        this.progDetailFg = progDetailFg;
     }
 }
