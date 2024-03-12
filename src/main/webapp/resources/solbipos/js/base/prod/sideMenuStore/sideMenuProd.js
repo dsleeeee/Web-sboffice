@@ -39,6 +39,10 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("gubunCombo", gubunComboData); // 구분
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

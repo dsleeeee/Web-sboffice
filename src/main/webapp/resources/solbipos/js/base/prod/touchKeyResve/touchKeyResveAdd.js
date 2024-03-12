@@ -187,6 +187,10 @@ app.controller('touchKeyResveAddCtrl', ['$scope', '$http', function ($scope, $ht
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
 
         $scope._inquirySub('/base/prod/touchKeyResve/touchKeyResve/getTouchKeyResveAddList.sb', params, function() {}, false);
     };
@@ -196,7 +200,7 @@ app.controller('touchKeyResveAddCtrl', ['$scope', '$http', function ($scope, $ht
         if(item.touchKeyGrp != undefined && item.touchKeyGrp != null && item.touchKeyGrp != ""){
             item.gChk = true;
         }
-    }
+    };
 
     // 저장
     $scope.saveProdPrice2 = function(){

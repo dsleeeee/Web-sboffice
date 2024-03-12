@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    TouchKeyResve.xml
+    판매터치키설정(예약)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       권지현     2023.03.27     최초작성
+-->
 <mapper namespace="kr.co.solbipos.base.prod.touchKeyResve.service.impl.TouchKeyResveMapper">
 
     <!-- 리스트 조회 -->
@@ -86,6 +94,18 @@
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
         </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
         ORDER
         BY      tmtkgr.STORE_CD, tmtkgr.POS_NO, tmtkgr.START_DATE
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -165,6 +185,18 @@
         </if>
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
         ORDER
         BY      tms.STORE_CD, tmpe.POS_NO

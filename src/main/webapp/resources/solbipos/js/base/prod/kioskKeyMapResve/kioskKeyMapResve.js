@@ -61,6 +61,10 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
     // 오늘날짜
     var date = new Date();
@@ -161,6 +165,10 @@ app.controller('kioskKeyMapResveCtrl', ['$scope', '$http', '$timeout', function 
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
         params.listScale = 500;
 

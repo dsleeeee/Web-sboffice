@@ -169,6 +169,18 @@
             <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                 AND E.MOMS_STORE_FG_01 = #{momsStoreFg01}
             </if>
+            <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                AND E.MOMS_STORE_FG_02 = #{momsStoreFg02}
+            </if>
+            <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                AND E.MOMS_STORE_FG_03 = #{momsStoreFg03}
+            </if>
+            <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                AND E.MOMS_STORE_FG_04 = #{momsStoreFg04}
+            </if>
+            <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                AND E.MOMS_STORE_FG_05 = #{momsStoreFg05}
+            </if>
             AND A.USE_YN = 'Y'
             AND B.USE_YN = 'Y'
             AND NVL(B.REG_STORE_FG, '0') IN ('1', '2')
@@ -372,6 +384,18 @@
             </if>
             <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                 AND G.MOMS_STORE_FG_01 = #{momsStoreFg01}
+            </if>
+            <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                AND G.MOMS_STORE_FG_02 = #{momsStoreFg02}
+            </if>
+            <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                AND G.MOMS_STORE_FG_03 = #{momsStoreFg03}
+            </if>
+            <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                AND G.MOMS_STORE_FG_04 = #{momsStoreFg04}
+            </if>
+            <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                AND G.MOMS_STORE_FG_05 = #{momsStoreFg05}
             </if>
             AND A.USE_YN = 'Y'
             AND B.USE_YN = 'Y'

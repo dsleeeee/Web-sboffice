@@ -14,7 +14,7 @@
 var app = agrid.getApp();
 
 /**
- *  상품삭제 팝업생성
+ *  판매터치키설정(예약) 추가 팝업 그리드 생성
  */
 app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, $http) {
 
@@ -208,6 +208,10 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
             params.userBrands = momsHqBrandCd;
         }
         params.momsStoreFg01 = $scope.momsStoreFg01;
+        params.momsStoreFg02 = $scope.momsStoreFg02;
+        params.momsStoreFg03 = $scope.momsStoreFg03;
+        params.momsStoreFg04 = $scope.momsStoreFg04;
+        params.momsStoreFg05 = $scope.momsStoreFg05;
         if(orgnFg === "STORE") {params.posNo = $scope.posNoAddCombo.selectedValue;}
 
         $scope._inquirySub('/base/prod/kioskKeyMapResve/kioskKeyMapResve/getKioskKeyMapResveAddList.sb', params, function() {}, false);
@@ -218,7 +222,7 @@ app.controller('kioskKeyMapResveAddCtrl', ['$scope', '$http', function ($scope, 
         if(item.tuClsType != undefined && item.tuClsType != null && item.tuClsType != ""){
             item.gChk = true;
         }
-    }
+    };
 
     // 저장
     $scope.saveProdPrice2 = function(){
