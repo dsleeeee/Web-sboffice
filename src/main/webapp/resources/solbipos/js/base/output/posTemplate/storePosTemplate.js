@@ -13,8 +13,10 @@
  *  상품적용매장 그리드 생성
  */
 app.controller('storePosTemplateCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storePosTemplateCtrl', $scope, $http, true));
+
   // 브랜드 콤보박스 셋팅
   $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
   $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
@@ -24,7 +26,11 @@ app.controller('storePosTemplateCtrl', ['$scope', '$http', function ($scope, $ht
   $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
   $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
   $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
-    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+  $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+  $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+  $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+  $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+  $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -103,7 +109,11 @@ app.controller('storePosTemplateCtrl', ['$scope', '$http', function ($scope, $ht
         }
         params.userBrands = momsHqBrandCd;
       }
-        params.momsStoreFg01 = $scope.momsStoreFg01;
+      params.momsStoreFg01 = $scope.momsStoreFg01;
+      params.momsStoreFg02 = $scope.momsStoreFg02;
+      params.momsStoreFg03 = $scope.momsStoreFg03;
+      params.momsStoreFg04 = $scope.momsStoreFg04;
+      params.momsStoreFg05 = $scope.momsStoreFg05;
     }
 
     $scope._inquirySub("/base/output/posTemplate/template/getRegStoreList.sb", params, function() {}, false);
