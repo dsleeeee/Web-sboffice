@@ -659,22 +659,42 @@ console.log(params);
                     }
 
                     if(type === "F"){
-                        newGrp = 0;
+
+                        // 현재 선택한 POS에서 사용중인 키맵그룹 셋팅을 위한 키오스크 환경설정 값((매장)키맵) 가져오기
+                        var params = {};
+                        params.posNo = $scope.posNoCombo.selectedValue;
+                        params.envstCd = '4068';
+
+                        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                        $scope._postJSONQuery.withPopUp("/base/prod/kioskKeyMap/kioskKeyMap/getKioskEnv.sb", params, function(response){
+
+                            if(response.data.data !== null && response.data.data !== ""){
+                                for(var i=0; i< comboArray.length; i++){
+                                    if(comboArray[i].value === response.data.data){
+                                        newGrp = i;
+                                    }
+                                }
+                            }
+
+                            $timeout(function () {
+                                // 신규그룹추가 후, 새 그룹으로 dropdownLIst 와 grid 셋팅
+                                $scope.setNewTuClsType(newGrp);
+                            }, 10);
+                        });
+
                     }else if (type === "L"){
                         newGrp = list.length - 1;
+
+                        $timeout(function () {
+                            // 신규그룹추가 후, 새 그룹으로 dropdownLIst 와 grid 셋팅
+                            $scope.setNewTuClsType(newGrp);
+                        }, 10);
                     }
                 }
             }
         }, function errorCallback(response) {
             $scope._popMsg(messages["cmm.error"]);
             return false;
-        }).then(function () {
-            $timeout(function () {
-
-                // 신규그룹추가 후, 새 그룹으로 dropdownLIst 와 grid 셋팅
-                $scope.setNewTuClsType(newGrp);
-
-            }, 10);
         });
     };
 
