@@ -303,6 +303,10 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    var momsStoreFg02ComboList = ${momsStoreFg02ComboList};
+    var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
+    var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
+    var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 
     // 사용자 매장브랜드(조회용)
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
@@ -338,12 +342,14 @@
 </c:import>
 
 <%-- 레이어 팝업 : 상품별 적용매장 선택 팝업 --%>
+<%-- 그리드에 등록매장수 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodStoreRegistView.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
 <%-- 레이어 팝업 : 매장 리스트 팝업 --%>
+<%-- 매장상품일괄등록 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/storeProdBatchList.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>

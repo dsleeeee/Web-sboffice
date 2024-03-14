@@ -115,6 +115,10 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
         }
     }
     params.momsStoreFg01 = $("#hdSrchPsrMomsStoreFg01").val();
+    params.momsStoreFg02 = $("#hdSrchPsrMomsStoreFg02").val();
+    params.momsStoreFg03 = $("#hdSrchPsrMomsStoreFg03").val();
+    params.momsStoreFg04 = $("#hdSrchPsrMomsStoreFg04").val();
+    params.momsStoreFg05 = $("#hdSrchPsrMomsStoreFg05").val();
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);
   };
@@ -279,6 +283,18 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setPsrMomsStoreFg01 = function(s) {
     $('#hdSrchPsrMomsStoreFg01').val(s.selectedValue);
   };
+  $scope.setPsrMomsStoreFg02 = function(s) {
+    $('#hdSrchPsrMomsStoreFg02').val(s.selectedValue);
+  };
+  $scope.setPsrMomsStoreFg03 = function(s) {
+    $('#hdSrchPsrMomsStoreFg03').val(s.selectedValue);
+  };
+  $scope.setPsrMomsStoreFg04 = function(s) {
+    $('#hdSrchPsrMomsStoreFg04').val(s.selectedValue);
+  };
+  $scope.setPsrMomsStoreFg05 = function(s) {
+    $('#hdSrchPsrMomsStoreFg05').val(s.selectedValue);
+  };
 
   // 확장조회 숨김/보임
   $scope.searchAddShowChangeReg = function(){
@@ -347,6 +363,10 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
     params.momsStoreFg01 = $("#hdSrchPsrMomsStoreFg01").val();
+    params.momsStoreFg02 = $("#hdSrchPsrMomsStoreFg02").val();
+    params.momsStoreFg03 = $("#hdSrchPsrMomsStoreFg03").val();
+    params.momsStoreFg04 = $("#hdSrchPsrMomsStoreFg04").val();
+    params.momsStoreFg05 = $("#hdSrchPsrMomsStoreFg05").val();
     console.log(params);
 
     $scope._inquirySub("/base/prod/prod/prod/getRegStoreList.sb", params, function() {}, false);

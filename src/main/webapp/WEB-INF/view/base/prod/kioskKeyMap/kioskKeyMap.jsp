@@ -37,6 +37,10 @@
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    var momsStoreFg02ComboList = ${momsStoreFg02ComboList};
+    var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
+    var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
+    var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 
     // 본사권한 [기초관리] - [매장관리] - [매장정보조회]의 판매터치키변경을 클릭하여 접속한 경우, 왼쪽 메뉴영역은 접어두기.
     var referrer = document.referrer;
@@ -55,10 +59,10 @@
     if("${posLoginReconnect}" === "Y"){ // 직접입력한경우
         $(".menuControl").trigger("click");
     }
-
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMap.js?ver=20230406.01" charset="utf-8"></script>
+
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 키오스크키맵등록 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapRegist.jsp">

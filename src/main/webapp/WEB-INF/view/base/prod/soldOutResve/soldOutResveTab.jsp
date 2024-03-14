@@ -58,6 +58,10 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
     var branchCdComboList = ${branchCdComboList};
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
+    var momsStoreFg02ComboList = ${momsStoreFg02ComboList};
+    var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
+    var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
+    var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/soldOutResveTab.js?ver=20230530.01" charset="utf-8"></script>

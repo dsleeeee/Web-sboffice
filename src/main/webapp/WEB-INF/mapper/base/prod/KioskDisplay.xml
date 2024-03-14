@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
     KioskDisplay.xml
@@ -195,6 +194,18 @@
                 </if>
                 <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
                     AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                </if>
+                <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                    AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                </if>
+                <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                    AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                </if>
+                <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                    AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                </if>
+                <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                    AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                 </if>
                 AND (
                         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
