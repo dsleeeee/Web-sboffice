@@ -64,6 +64,11 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
         $scope.acceptedFgDataMap = new wijmo.grid.DataMap(acceptedFg, 'value', 'name');   // 수락구분
         $scope.completedFgDataMap = new wijmo.grid.DataMap(completedFg, 'value', 'name'); // 완료구분
         $scope.canceledFgDataMap = new wijmo.grid.DataMap(canceledFg, 'value', 'name');   // 취소구분
+        $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList, 'value', 'name'); // 매장그룹
+        $scope.momsStoreFg02DataMap = new wijmo.grid.DataMap(momsStoreFg02ComboList, 'value', 'name'); // 매장그룹2
+        $scope.momsStoreFg03DataMap = new wijmo.grid.DataMap(momsStoreFg03ComboList, 'value', 'name'); // 매장그룹3
+        $scope.momsStoreFg04DataMap = new wijmo.grid.DataMap(momsStoreFg04ComboList, 'value', 'name'); // 매장그룹4
+        $scope.momsStoreFg05DataMap = new wijmo.grid.DataMap(momsStoreFg05ComboList, 'value', 'name'); // 매장그룹5
     };
     
     // 다른 컨트롤러의 broadcast 받기
@@ -187,6 +192,11 @@ app.controller('orderTimeTrackingExcelCtrl', ['$scope', '$http', '$timeout', fun
         $scope.acceptedFgDataMap = new wijmo.grid.DataMap(acceptedFg, 'value', 'name');   // 수락구분
         $scope.completedFgDataMap = new wijmo.grid.DataMap(completedFg, 'value', 'name'); // 완료구분
         $scope.canceledFgDataMap = new wijmo.grid.DataMap(canceledFg, 'value', 'name');   // 취소구분
+        $scope.momsStoreFg01DataMap = new wijmo.grid.DataMap(momsStoreFg01ComboList, 'value', 'name'); // 매장그룹
+        $scope.momsStoreFg02DataMap = new wijmo.grid.DataMap(momsStoreFg02ComboList, 'value', 'name'); // 매장그룹2
+        $scope.momsStoreFg03DataMap = new wijmo.grid.DataMap(momsStoreFg03ComboList, 'value', 'name'); // 매장그룹3
+        $scope.momsStoreFg04DataMap = new wijmo.grid.DataMap(momsStoreFg04ComboList, 'value', 'name'); // 매장그룹4
+        $scope.momsStoreFg05DataMap = new wijmo.grid.DataMap(momsStoreFg05ComboList, 'value', 'name'); // 매장그룹5
     };
     
     // 다른 컨트롤러의 orderTimeTrackingExcelCtrl 받기
