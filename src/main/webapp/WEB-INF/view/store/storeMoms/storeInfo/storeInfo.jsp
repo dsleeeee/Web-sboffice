@@ -348,11 +348,11 @@
             <wj-flex-grid-column header="<s:message code="cmm.moms.momsShopType"/>" binding="momsShopType" width="80" align="left" is-read-only="true" data-map="momsShopTypeDataMap" ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="momsStoreManageType" width="80" align="left" is-read-only="true" data-map="momsStoreManageTypeDataMap" ></wj-flex-grid-column>
             <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" width="80" align="left" is-read-only="true" data-map="momsStoreFg01DataMap" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="momsStoreFg02" width="80" align="left" is-read-only="true" data-map="momsStoreFg02DataMap" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg03"/>" binding="momsStoreFg03" width="80" align="left" is-read-only="true" data-map="momsStoreFg03DataMap" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg04"/>" binding="momsStoreFg04" width="80" align="left" is-read-only="true" data-map="momsStoreFg04DataMap" ></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg05"/>" binding="momsStoreFg05" width="80" align="left" is-read-only="true" data-map="momsStoreFg05DataMap" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="momsStoreFg02" data-map="momsStoreFg02DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg03"/>" binding="momsStoreFg03" data-map="momsStoreFg03DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg04"/>" binding="momsStoreFg04" data-map="momsStoreFg04DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg05"/>" binding="momsStoreFg05" data-map="momsStoreFg05DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
             </c:if>
             <wj-flex-grid-column header="<s:message code="storeManage.storeLocation"/>" binding="storeLocation" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
           </wj-flex-grid>
