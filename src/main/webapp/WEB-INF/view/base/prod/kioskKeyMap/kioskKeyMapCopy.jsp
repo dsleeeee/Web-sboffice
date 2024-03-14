@@ -216,6 +216,76 @@
                         <td></td>
                     </c:if>
                 </tr>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <tr>
+                        <%-- 매장그룹2 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg02Combo1"
+                                        ng-model="momsStoreFg021"
+                                        items-source="_getComboData('momsStoreFg02Combo1')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg02Combo1">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 매장그룹3 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg03Combo1"
+                                        ng-model="momsStoreFg031"
+                                        items-source="_getComboData('momsStoreFg03Combo1')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg03Combo1">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 매장그룹4 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg04Combo1"
+                                        ng-model="momsStoreFg041"
+                                        items-source="_getComboData('momsStoreFg04Combo1')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg04Combo1">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 매장그룹5 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg05Combo1"
+                                        ng-model="momsStoreFg051"
+                                        items-source="_getComboData('momsStoreFg05Combo1')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg05Combo1">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                </c:if>
                 </tbody>
             </table>
         </c:if>
@@ -507,6 +577,76 @@
                         <td></td>
                     </c:if>
                 </tr>
+                <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
+                    <tr>
+                        <%-- 매장그룹2 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg02"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg02Combo2"
+                                        ng-model="momsStoreFg022"
+                                        items-source="_getComboData('momsStoreFg02Combo2')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg02Combo2">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 매장그룹3 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg03"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg03Combo2"
+                                        ng-model="momsStoreFg032"
+                                        items-source="_getComboData('momsStoreFg03Combo2')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg03Combo2">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <%-- 매장그룹4 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg04"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg04Combo2"
+                                        ng-model="momsStoreFg042"
+                                        items-source="_getComboData('momsStoreFg04Combo2')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg04Combo2">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <%-- 매장그룹5 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg05"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMomsStoreFg05Combo2"
+                                        ng-model="momsStoreFg052"
+                                        items-source="_getComboData('momsStoreFg05Combo2')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMomsStoreFg05Combo2">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                </c:if>
                 </tbody>
             </table>
         </c:if>
@@ -551,4 +691,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapCopy.js?ver=20231114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapCopy.js?ver=20240221.01" charset="utf-8"></script>
