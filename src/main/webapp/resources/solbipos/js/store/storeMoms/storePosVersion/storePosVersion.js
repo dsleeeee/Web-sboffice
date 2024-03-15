@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : storePosVersion.js
- * 설  명 : 매장포스버전현황 JavaScript
+ * 설  명 : 매장포스버전현황 > 매장포스버전현황탭 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -16,8 +16,8 @@ var app = agrid.getApp();
 // 적용매장구분
 var regStoreFgAllData = [
   {"name":"전체","value":""},
-  {"name":"적용등록매장","value":"Y"},
-  {"name":"적용미등록매장","value":"N"}
+  {"name":"등록","value":"Y"},
+  {"name":"미등록","value":"N"}
 ];
 
 // 최종매출일
@@ -30,8 +30,8 @@ var dateAllData = [
 // 포스메인여부
 var mainValAllData = [
   {"name":"전체","value":""},
-  {"name":"메인포스","value":"메인포스"},
-  {"name":"서브포스","value":"서브포스"}
+  {"name":"메인포스","value":"1"},
+  {"name":"서브포스","value":"2"}
 ];
 
 // 버전체크
@@ -39,6 +39,13 @@ var verChkAllData = [
   {"name":"전체","value":""},
   {"name":"버전같음","value":"Y"},
   {"name":"버전다름","value":"N"}
+];
+
+// 패치여부
+var patchFgData = [
+  {"name":"전체","value":""},
+  {"name":"정상","value":"Y"},
+  {"name":"오류","value":"N"}
 ];
 
 app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -67,7 +74,8 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
   $scope._setComboData("subValCombo", selectSubPos); // 포스용도
   $scope._setComboData("verChkCombo", verChkAllData); // 버전체크
   $scope._setComboData("posLogDtCombo", dateAllData); // 포스로그인일자
-  
+  $scope._setComboData("patchFgCombo", patchFgData); // 패치여부
+
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
@@ -81,21 +89,98 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name'); // 용도
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name'); // 상태
     $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 그룹
-
     $scope.lastSale = "7";
 
+    if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
+      var grid = wijmo.Control.getControl("#wjGridPosVersionList");
+      var columns = grid.columns;
+      columns[11].visible = true;
+      columns[15].visible = true;
+      columns[16].visible = true;
+      columns[17].visible = true;
+      columns[18].visible = true;
+      columns[19].visible = true;
+      columns[20].visible = true;
+
+      document.getElementById('patchFgTh').style.display = '';
+      document.getElementById('patchFgTd').style.display = '';
+
+    }
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
-        if(col.binding === "posVerNo" || col.binding === "maxVerSerNo"){
-          if(item.posVerNo != item.maxVerSerNo){
+        if(col.binding === "posVerNo1" || col.binding === "verSerAll"){
+          if(item.posVerNo1 != $scope.selectVerCd){
             wijmo.addClass(e.cell, 'red');
           }
         }
+        if(col.binding === "patchFg"){
+          if(item.patchFg != null && item.patchFg !='') {
+            wijmo.addClass(e.cell, 'wijLink');
+            wijmo.addClass(e.cell, 'blue');
+          }
+        }
+        if(col.binding === "registFgStore"){
+          if(item.registFgStore == '[등록]'){
+            wijmo.addClass(e.cell, 'wijLink');
+            wijmo.addClass(e.cell, 'blue');
+          }
+        }
+        if(col.binding === "registFg"){
+          if(item.registFg == '미등록'){
+            wijmo.addClass(e.cell, 'red');
+          }
+        }
+        if(col.binding === "verChk"){
+          if(item.posVerNo1 != $scope.selectVerCd){
+            wijmo.addClass(e.cell, 'red');
+          }
+        }
+      }
+    });
 
+    // 그리드 클릭 이벤트
+    s.addEventListener(s.hostElement, 'mousedown', function (e) {
+      var ht = s.hitTest(e);
+      if (ht.cellType === wijmo.grid.CellType.Cell) {
+        var col         = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
+        if (col.binding === "patchFg") { // 패치여부
+          if(selectedRow.patchFg != null && selectedRow.patchFg != '') {
+            var params = {};
+            params.storeCd      = selectedRow.storeCd;
+            params.posNo        = selectedRow.posNo;
+            params.selectVerCd  = $scope.selectVerCd;
+            $scope._broadcast('patchDtlCtrl', params);
+          }
+        }
+        if(col.binding === "registFgStore"){
+          if(selectedRow.registFgStore == '[등록]') {
+
+            // 적용매장을 등록하시겠습니까?
+            $scope._popConfirm(messages["storePosVersion.storeRegist.msg"], function () {
+
+              var params = {};
+              params.selectVerCd = $scope.selectVerCd;
+              params.storeCd = selectedRow.storeCd;
+
+              $scope._postJSONSave.withPopUp("/store/storeMoms/storePosVersion/storePosVersion/regist.sb", params, function (response) {
+                var result = response.data.data;
+
+                if(result === 0){
+                  $scope._popMsg(messages["cmm.saveSucc"]);
+                }else{
+                  $scope._popMsg(messages["storePosVersion.dupStore.msg"]);
+                }
+                // 재조회
+                $scope.searchStorePosVersionList();
+              });
+            });
+          }
+        }
       }
     });
   };
@@ -128,10 +213,11 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
     params.subVal               = $scope.subVal;
     params.verChk               = $scope.verChk;
     params.posLogDt             = $scope.posLogDt;
+    params.patchFg              = $scope.patchFg;
 
     var verCd =params.selectVer.indexOf("]");
     params.selectVerCd = params.selectVer.substring(1,verCd);
-
+    $scope.selectVerCd = params.selectVerCd;
     // '전체' 일때
     if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
       var momsHqBrandCd = "";

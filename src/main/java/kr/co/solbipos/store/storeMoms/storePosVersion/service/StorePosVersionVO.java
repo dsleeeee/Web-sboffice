@@ -1,6 +1,7 @@
 package kr.co.solbipos.store.storeMoms.storePosVersion.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.pos.confg.verrecv.enums.VerRecvFg;
 
 /**
  * @Class Name : StorePosVersionVO.java
@@ -109,6 +110,21 @@ public class StorePosVersionVO extends PageVO {
 
     /** 포스로그인일자 */
     private String posLogDt;
+
+    /** 패치여부 */
+    private String patchFg;
+
+    /** 포스번호 */
+    private String posNo;
+
+    /** 버전수신구분 */
+    private VerRecvFg verRecvFg;
+
+    /** 버전수신일시 */
+    private String verRecvDt;
+
+    /** 프로시져 결과 */
+    private String result;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -320,5 +336,45 @@ public class StorePosVersionVO extends PageVO {
 
     public void setPosLogDt(String posLogDt) {
         this.posLogDt = posLogDt;
+    }
+
+    public String getPatchFg() {
+        return patchFg;
+    }
+
+    public void setPatchFg(String patchFg) {
+        this.patchFg = patchFg;
+    }
+
+    public String getPosNo() {
+        return posNo;
+    }
+
+    public void setPosNo(String posNo) {
+        this.posNo = posNo;
+    }
+
+    public VerRecvFg getVerRecvFg() {
+        return verRecvFg;
+    }
+
+    public void setVerRecvFg(VerRecvFg verRecvFg) {
+        this.verRecvFg = verRecvFg;
+    }
+
+    public String getVerRecvDt() {
+        return verRecvDt;
+    }
+
+    public void setVerRecvDt(String verRecvDt) {
+        this.verRecvDt = verRecvDt;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

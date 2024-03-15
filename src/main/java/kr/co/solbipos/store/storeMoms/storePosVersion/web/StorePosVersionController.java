@@ -11,6 +11,8 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.pos.confg.vermanage.service.ApplcStoreVO;
+import kr.co.solbipos.pos.confg.vermanage.service.VerManageService;
 import kr.co.solbipos.store.storeMoms.storePosVersion.service.StorePosVersionService;
 import kr.co.solbipos.store.storeMoms.storePosVersion.service.StorePosVersionVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
@@ -18,6 +20,7 @@ import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
@@ -266,19 +270,21 @@ public class StorePosVersionController {
         model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboListAll);
 
         // 버전선택
-        List selectVerComboList = storePosVersionService.getSelectVerList();
+        List selectVerComboList = storePosVersionService.getSelectVerList(sessionInfoVO);
 
         String selectVerComboListAll = cmmCodeUtil.assmblObj(selectVerComboList, "name", "value", UseYn.N);
 
         model.addAttribute("selectVerComboList", selectVerComboListAll);
 
+        // 포스용도
         List selectSubPos = storePosVersionService.getSelectSubPos();
 
         String selectSubPosAll = cmmCodeUtil.assmblObj(selectSubPos, "name", "value", UseYn.ALL);
 
         model.addAttribute("selectSubPos", selectSubPosAll);
 
-        return "store/storeMoms/storePosVersion/storePosVersion";
+
+        return "store/storeMoms/storePosVersion/storePosVersionTab";
     }
 
     /**
@@ -299,6 +305,73 @@ public class StorePosVersionController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = storePosVersionService.getStorePosVersionList(storePosVersionVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storePosVersionVO);
+    }
+
+    /**
+     * 패치정보 상세 팝업
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storePosVersionVO
+     * @return  String
+     * @author  김유승
+     * @since   2024.03.12
+     */
+    @RequestMapping(value = "/patchDtl/patchDtlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result posDtlList(HttpServletRequest request, HttpServletResponse response,
+                                         Model model, StorePosVersionVO storePosVersionVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storePosVersionService.getPatchDtlList(storePosVersionVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storePosVersionVO);
+    }
+
+    /**
+     * 버전 적용 매장 등록
+     *
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storePosVersionVO
+     * @return
+     * @author  김유승
+     * @since   2024.03.12
+     */
+    @RequestMapping(value = "/storePosVersion/regist.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registStore(@RequestBody StorePosVersionVO storePosVersionVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = storePosVersionService.registStore(storePosVersionVO, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 포스패치로그 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   storePosVersionVO
+     * @return
+     * @author  김유승
+     * @since   2024.03.13
+     */
+    @RequestMapping(value = "/posPatchLog/posPatchLogList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result posPatchLogList(HttpServletRequest request, HttpServletResponse response,
+                             Model model, StorePosVersionVO storePosVersionVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storePosVersionService.getPosPatchLogList(storePosVersionVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, storePosVersionVO);
     }
