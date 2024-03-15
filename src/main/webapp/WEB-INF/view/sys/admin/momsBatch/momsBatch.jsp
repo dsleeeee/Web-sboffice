@@ -76,7 +76,7 @@
     var momsBatchType = ${ccu.getCommCodeExcpAll("162")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/momsBatch/momsBatch.js?ver=20230223.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/momsBatch/momsBatch.js?ver=20240314.02" charset="utf-8"></script>
 
 <%-- 본사 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchHq.jsp">

@@ -25,7 +25,7 @@ app.controller('momsBatchCtrl',  ['$scope', '$http', function ($scope, $http) {
 
     // 일괄처리
     $scope.$on("momsBatchCtrl", function(event, data) {
-
+/*
         // 본사코드를 선택하세요.
         if($("#hqOfficeCd").val() === ""){
             $scope._popMsg(messages["momsBatch.chk.hqOfficeCd"]);
@@ -43,7 +43,7 @@ app.controller('momsBatchCtrl',  ['$scope', '$http', function ($scope, $http) {
             $scope._popMsg(messages["momsBatch.chk.datas"]);
             return false;
         }
-
+*/
         var params = {};
         params.hqOfficeCd = $("#hqOfficeCd").val();
         params.storeCds = $("#momsBatchStoreCd").val();
