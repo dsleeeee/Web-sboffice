@@ -70,9 +70,3 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 <%-- //탭페이지 레이어 --%>
-
-<%-- 패치정보 상세 팝업 --%>
-<c:import url="/WEB-INF/view/store/storeMoms/storePosVersion/patchDtl.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>

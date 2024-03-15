@@ -7,9 +7,9 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <div class="subCon" id ="storePosVersionView" style="display: none;padding: 10px 20px 40px;">
-    <div class="subCon" ng-controller="storePosVersionCtrl">
+    <div ng-controller="storePosVersionCtrl">
         <div class="searchBar">
-            <a href="#" class="open fl">${menuNm}</a>
+            <a href="#" class="open fl"><s:message code="storePosVersion.storePosVersion" /></a>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <%-- 조회 --%>
                 <button class="btn_blue fr" id="nxBtnSearch1" ng-click="_broadcast('storePosVersionCtrl')">
@@ -467,4 +467,9 @@
 
 <script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20240312.01" charset="utf-8"></script>
 
+<%-- 패치정보 상세 팝업 --%>
+<c:import url="/WEB-INF/view/store/storeMoms/storePosVersion/patchDtl.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
 

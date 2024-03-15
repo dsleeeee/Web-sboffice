@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <div class="subCon" id ="posPatchLogView" style="display: none;padding: 10px 20px 40px;">
-    <div class="subCon" ng-controller="posPatchLogCtrl">
+    <div ng-controller="posPatchLogCtrl">
         <div class="searchBar">
             <a href="#" class="open fl"><s:message code="storePosVersion.posPatchLog" /></a>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
