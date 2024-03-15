@@ -35,6 +35,10 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData("srchMomsStoreManageType1", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd1", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo1", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo1", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo1", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo1", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo1", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -107,6 +111,10 @@ app.controller('kioskKeyMapCopyCtrl', ['$scope', '$http', function ($scope, $htt
             params.momsStoreManageType = $scope.srchMomsStoreManageType1Combo.selectedValue;
             params.branchCd = $scope.srchBranchCd1Combo.selectedValue;
             params.momsStoreFg01 = $scope.momsStoreFg011;
+            params.momsStoreFg02 = $scope.momsStoreFg021;
+            params.momsStoreFg03 = $scope.momsStoreFg031;
+            params.momsStoreFg04 = $scope.momsStoreFg041;
+            params.momsStoreFg05 = $scope.momsStoreFg051;
         }
 
         if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능
@@ -157,6 +165,10 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("srchMomsStoreManageType2", momsStoreManageTypeComboList); // 매장관리타입
     $scope._setComboData("srchBranchCd2", branchCdComboList); // 그룹
     $scope._setComboData("momsStoreFg01Combo2", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo2", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo2", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo2", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo2", momsStoreFg05ComboList); // 매장그룹5
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -196,6 +208,10 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function 
             params.momsStoreManageType = $scope.srchMomsStoreManageType2Combo.selectedValue;
             params.branchCd = $scope.srchBranchCd2Combo.selectedValue;
             params.momsStoreFg01 = $scope.momsStoreFg012;
+            params.momsStoreFg02 = $scope.momsStoreFg022;
+            params.momsStoreFg03 = $scope.momsStoreFg032;
+            params.momsStoreFg04 = $scope.momsStoreFg042;
+            params.momsStoreFg05 = $scope.momsStoreFg052;
         }
 
         if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능

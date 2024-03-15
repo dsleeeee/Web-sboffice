@@ -208,24 +208,24 @@
                             </td>
                         </tr>
                     </c:if>
-                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                        <tr>
-                            <%-- 매장그룹 --%>
-                            <th><s:message code="cmm.moms.momsStoreFg01"/></th>
-                            <td>
-                                <div class="sb-select">
-                                    <wj-combo-box
-                                            id="srchPopMomsStoreFg01Combo"
-                                            ng-model="popMomsStoreFg01"
-                                            items-source="_getComboData('popMomsStoreFg01Combo')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false"
-                                            initialized="_initComboBox(s)"
-                                            control="srchPopMomsStoreFg01Combo">
-                                    </wj-combo-box>
-                                </div>
-                            </td>
+                    <tr>
+                        <%-- 매장그룹 --%>
+                        <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPopMomsStoreFg01Combo"
+                                        ng-model="popMomsStoreFg01"
+                                        items-source="_getComboData('popMomsStoreFg01Combo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchPopMomsStoreFg01Combo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                        <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                             <%-- 매장그룹2 --%>
                             <th><s:message code="cmm.moms.momsStoreFg02"/></th>
                             <td>
@@ -242,7 +242,13 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                        </tr>
+                        </c:if>
+                        <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                            <td></td>
+                            <td></td>
+                        </c:if>
+                    </tr>
+                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                         <tr>
                             <%-- 매장그룹3 --%>
                             <th><s:message code="cmm.moms.momsStoreFg03"/></th>

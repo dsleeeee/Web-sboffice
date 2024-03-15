@@ -28,8 +28,17 @@ public interface StorePosVersionService {
     List<DefaultMap<String>> getStorePosVersionList(StorePosVersionVO storePosVersionVO, SessionInfoVO sessionInfoVO);
 
     /** 포스버전 조회 */
-    List<DefaultMap<String>> getSelectVerList();
+    List<DefaultMap<String>> getSelectVerList(SessionInfoVO sessionInfoVO);
 
     /** 포스용도 조회 */
     List<DefaultMap<String>> getSelectSubPos();
+
+    /** 패치정보 상세 팝업 */
+    List<DefaultMap<String>> getPatchDtlList(StorePosVersionVO storePosVersionVO);
+
+    /** 버전 적용 매장 등록 */
+    int registStore(StorePosVersionVO storePosVersionVO, SessionInfoVO sessionInfo);
+
+    /** 포스패치로그 조회 */
+    List<DefaultMap<String>> getPosPatchLogList(StorePosVersionVO storePosVersionVO, SessionInfoVO sessionInfoVO);
 }

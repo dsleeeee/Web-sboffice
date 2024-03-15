@@ -24,6 +24,12 @@
       SELECT tpot.HQ_OFFICE_CD
       ,      tpot.HQ_BRAND_CD
       ,      tpot.STORE_CD
+      ,      tms.STORE_NM
+      ,      tmsi.MOMS_STORE_FG_01
+      ,      tmsi.MOMS_STORE_FG_02
+      ,      tmsi.MOMS_STORE_FG_03
+      ,      tmsi.MOMS_STORE_FG_04
+      ,      tmsi.MOMS_STORE_FG_05
       ,      TO_CHAR(TO_DATE(tpot.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
       ,      tpot.SERVICE_TYPE
       ,      tpot.CHANNEL_ORDER_NO
@@ -122,6 +128,12 @@
       SELECT tpot.HQ_OFFICE_CD
       ,      tpot.HQ_BRAND_CD
       ,      tpot.STORE_CD
+      ,      tms.STORE_NM
+      ,      tmsi.MOMS_STORE_FG_01
+      ,      tmsi.MOMS_STORE_FG_02
+      ,      tmsi.MOMS_STORE_FG_03
+      ,      tmsi.MOMS_STORE_FG_04
+      ,      tmsi.MOMS_STORE_FG_05
       ,      TO_CHAR(TO_DATE(tpot.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
       ,      tpot.SERVICE_TYPE
       ,      tpot.CHANNEL_ORDER_NO

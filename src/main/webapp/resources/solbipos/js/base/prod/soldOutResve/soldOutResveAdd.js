@@ -182,6 +182,10 @@ app.controller('soldOutResveAddCtrl', ['$scope', '$http', function ($scope, $htt
             params.momsStoreManageType = $scope.momsStoreManageType;
             params.branchCd = $scope.branchCd;
             params.momsStoreFg01 = $scope.momsStoreFg01;
+            params.momsStoreFg02 = $scope.momsStoreFg02;
+            params.momsStoreFg03 = $scope.momsStoreFg03;
+            params.momsStoreFg04 = $scope.momsStoreFg04;
+            params.momsStoreFg05 = $scope.momsStoreFg05;
         }
 
         if(brandUseFg === "1" && orgnFg === "HQ"){ // 본사이면서 브랜드사용시만 검색가능
