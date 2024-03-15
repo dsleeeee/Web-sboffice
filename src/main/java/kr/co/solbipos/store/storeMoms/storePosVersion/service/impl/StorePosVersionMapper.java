@@ -31,9 +31,21 @@ public interface StorePosVersionMapper {
     /** 조회 */
     List<DefaultMap<String>> getStorePosVersionList(StorePosVersionVO storePosVersionVO);
 
-    /** 포스버전 조회*/
-    List<DefaultMap<String>> getSelectVerList();
+    /** 포스버전 조회 */
+    List<DefaultMap<String>> getSelectVerList(StorePosVersionVO storePosVersionVO);
 
-    /** 포스버전 조회*/
+    /** 포스버전 조회 */
     List<DefaultMap<String>> getSelectSubPos();
+
+    /** 패치정보 상세 팝업 */
+    List<DefaultMap<String>> getPatchDtlList(StorePosVersionVO storePosVersionVO);
+
+    /** 버전 적용 매장 등록 */
+    String registStore(StorePosVersionVO storePosVersionVO);
+
+    /** 버전 적용 여부 체크 */
+    int registChk(StorePosVersionVO storePosVersionVO);
+
+    /** 포스패치로그 조회 */
+    List<DefaultMap<String>> getPosPatchLogList(StorePosVersionVO storePosVersionVO);
 }

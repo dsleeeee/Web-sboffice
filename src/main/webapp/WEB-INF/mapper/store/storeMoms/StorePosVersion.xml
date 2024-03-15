@@ -23,33 +23,48 @@
         ,		C.STORE_NM
         ,		A.POS_NO
         ,		A.POS_NM
-        ,		A.POS_VER_NO
+        ,		A.POS_VER_NO    AS POS_VER_NO1
         ,		A.VER_TYPE_FG
         ,		B.MAX_VER_SER_NO
         ,       E.MAX_SALE_DATE
         ,       #{selectVer}    AS VER_SER_ALL
-        ,       (CASE
-                    WHEN A.STORE_CD IN(     SELECT  STORE_CD
-                                            FROM    TB_CM_POS_VERSN_STORE
-                                            WHERE   VER_SER_NO = #{selectVerCd}) THEN '적용등록매장'
+        ,       (
+                CASE
+                    WHEN A.STORE_CD IN( SELECT  STORE_CD
+                                        FROM    TB_CM_POS_VERSN_STORE
+                                        WHERE   VER_SER_NO = #{selectVerCd}) THEN '등록'
                     WHEN A.STORE_CD NOT IN( SELECT  STORE_CD
                                             FROM    TB_CM_POS_VERSN_STORE
-                                            WHERE   VER_SER_NO = #{selectVerCd}) THEN '적용미등록매장'
+                                            WHERE   VER_SER_NO = #{selectVerCd}) THEN '미등록'
                 END
                 ) AS REGIST_FG
         ,       F.MAIN_VAL
-        ,       G.SUB_VAL
+        ,       F.SUB_VAL
         ,		DECODE(A.POS_VER_NO, #{selectVerCd}, '버전같음', '버전다름') AS VER_CHK
         ,       A.LAST_LOGIN_DT
+        ,       G.PATCH_DATE
+        ,       G.PATCH_FG
+        ,       G.POS_VER_NO    AS POS_VER_NO2
+        ,       G.PATCH_VER_NO
+        ,       G.SCRIPT_NM
+        ,       G.PATCH_ERR_MSG
+        ,       (
+                CASE
+                    WHEN A.STORE_CD NOT IN( SELECT  STORE_CD
+                                            FROM    TB_CM_POS_VERSN_STORE
+                                            WHERE   VER_SER_NO = #{selectVerCd}) THEN '[등록]'
+                    ELSE NULL
+                END
+                ) AS REGIST_FG_STORE
         FROM    TB_MS_POS A
         ,       (
-        SELECT  PROG_FG
-        ,       NVL(MAX(VER_SER_NO), '-')   AS MAX_VER_SER_NO
-        FROM    TB_CM_POS_VERSN
-        WHERE   ORGN_CDS    LIKE '%'|| #{hqOfficeCd} || '%'
-        GROUP
-        BY      PROG_FG
-        ) B
+                SELECT  PROG_FG
+                ,       NVL(MAX(VER_SER_NO), '-')   AS MAX_VER_SER_NO
+                FROM    TB_CM_POS_VERSN
+                WHERE   ORGN_CDS    LIKE '%'|| #{hqOfficeCd} || '%'
+                GROUP
+                BY      PROG_FG
+                ) B
         ,		TB_MS_STORE C
         ,		TB_MS_STORE_INFO D
         ,       (
@@ -67,27 +82,59 @@
                 SELECT 	TMPE.STORE_CD
                 ,       TMPE.POS_NO
                 ,       TCED.ENVST_VAL_NM AS MAIN_VAL
+                ,		C.SUB_VAL
                 FROM 	TB_MS_POS_ENVST tmpe
                 ,       TB_CM_ENVST_DTL tced
+                ,		(
+                        SELECT 	TMPE2.STORE_CD
+                        ,		TMPE2.POS_NO
+                        ,		TCED2.ENVST_VAL_NM AS SUB_VAL
+                        FROM	TB_MS_POS_ENVST tmpe2
+                        ,		TB_CM_ENVST_DTL tced2
+                        WHERE	TMPE2.ENVST_CD 	= TCED2.ENVST_CD
+                        AND 	TMPE2.ENVST_VAL = TCED2.ENVST_VAL_CD
+                        AND 	TCED2.ENVST_CD 	= '4019'
+                        <if test='subVal != null and subVal !=""'>
+                            AND TCED2.ENVST_VAL_CD = #{subVal}
+                        </if>
+                        ) C
                 WHERE	TMPE.ENVST_CD 	= TCED.ENVST_CD
                 AND 	TMPE.ENVST_VAL 	= TCED.ENVST_VAL_CD
+                AND 	tmpe.STORE_CD   = C.STORE_CD
+                AND		tmpe.POS_NO 	= C.POS_NO
                 AND		TCED.ENVST_CD 	= '4021'
                 <if test='mainVal != null and mainVal !=""'>
-                    AND TCED.ENVST_VAL_NM = #{mainVal}
+                    AND TCED.ENVST_VAL_CD = #{mainVal}
                 </if>
                 ) F
         ,       (
-                SELECT 	TMPE.STORE_CD
-                ,       TMPE.POS_NO
-                ,       TCED.ENVST_VAL_NM AS SUB_VAL
-                FROM 	TB_MS_POS_ENVST tmpe
-                ,       TB_CM_ENVST_DTL tced
-                WHERE	TMPE.ENVST_CD 	= TCED.ENVST_CD
-                AND 	TMPE.ENVST_VAL 	= TCED.ENVST_VAL_CD
-                AND 	TCED.ENVST_CD 	= '4019'
-                <if test='subVal != null and subVal !=""'>
-                    AND TCED.ENVST_VAL_CD = #{subVal}
-                </if>
+                SELECT	B.STORE_CD
+                ,       B.POS_NO
+                ,       A.PATCH_DATE
+                ,       (
+                        CASE
+                            WHEN A.PATCH_CD = '0000' THEN '정상'
+                            WHEN A.PATCH_CD != '0000' THEN '오류'
+                            ELSE NULL
+                        END
+                        ) AS PATCH_FG
+                ,       A.POS_VER_NO
+                ,       A.PATCH_VER_NO
+                ,       A.SCRIPT_NM
+                ,       A.PATCH_ERR_MSG
+                ,       A.PATCH_CD
+                ,		B.PATCH_SEQ
+                FROM 	TB_PS_PATCH_LOG A
+                ,		(
+                        SELECT 	STORE_CD, POS_NO, MAX(PATCH_SEQ) AS PATCH_SEQ
+                        FROM	TB_PS_PATCH_LOG
+                        WHERE 	PATCH_VER_NO = #{selectVerCd}
+                        GROUP
+                        BY		STORE_CD, POS_NO
+                        ) B
+                WHERE 	A.STORE_CD 	= B.STORE_CD
+                AND 	A.POS_NO  	= B.POS_NO
+                AND		A.PATCH_SEQ = B.PATCH_SEQ
                 ) G
         WHERE   B.PROG_FG   (+) =   A.VER_TYPE_FG
         AND   	C.STORE_CD      =   A.STORE_CD
@@ -96,8 +143,8 @@
         AND     E.POS_NO    (+) =   A.POS_NO
         AND     F.STORE_CD      =   A.STORE_CD
         AND     F.POS_NO        =   A.POS_NO
-        AND     G.STORE_CD      =   A.STORE_CD
-        AND     G.POS_NO        =   A.POS_NO
+        AND     G.STORE_CD  (+) =   A.STORE_CD
+        AND     G.POS_NO    (+) =   A.POS_NO
         AND 	C.HQ_OFFICE_CD  = #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
             AND C.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
@@ -155,14 +202,14 @@
         </if>
         <choose>
             <when test='registFg != null and registFg == "Y"'>
-                AND A.STORE_CD IN ( SELECT STORE_CD
-                                    FROM TB_CM_POS_VERSN_STORE
-                                    WHERE VER_SER_NO = #{selectVerCd})
+                AND A.STORE_CD IN ( SELECT  STORE_CD
+                                    FROM    TB_CM_POS_VERSN_STORE
+                                    WHERE   VER_SER_NO = #{selectVerCd})
             </when>
             <when test='registFg != null and registFg == "N"'>
-                AND A.STORE_CD NOT IN ( SELECT STORE_CD
-                                        FROM TB_CM_POS_VERSN_STORE
-                                        WHERE VER_SER_NO = #{selectVerCd})
+                AND A.STORE_CD NOT IN ( SELECT  STORE_CD
+                                        FROM    TB_CM_POS_VERSN_STORE
+                                        WHERE   VER_SER_NO = #{selectVerCd})
             </when>
         </choose>
         <choose>
@@ -179,8 +226,16 @@
         <if test='lastSale != null and lastSale != ""'>
             AND E.MAX_SALE_DATE BETWEEN TO_CHAR(SYSDATE - #{lastSale}, 'yyyy-mm-dd') AND TO_CHAR(SYSDATE, 'yyyy-mm-dd')
         </if>
+        <choose>
+            <when test='patchFg != null and patchFg == "Y"'>
+                AND G.PATCH_CD  = '0000'
+            </when>
+            <when test='patchFg != null and patchFg == "N"'>
+                AND G.PATCH_CD != '0000'
+            </when>
+        </choose>
         ORDER
-        BY A.STORE_CD, A.POS_NO
+        BY      A.STORE_CD, A.POS_NO
     </select>
 
     <!-- 포스버전 조회 -->
@@ -190,25 +245,277 @@
         COMMENTS : 포스버전을 조회한다.
     -->
     <select id="getSelectVerList" parameterType="storePosVersionVO" resultType="DefaultMap">
-        SELECT  '[' || VER_SER_NO || '] ' || FILE_DESC AS NAME
-        ,       '[' || VER_SER_NO || '] ' || FILE_DESC AS VALUE
-        FROM    TB_CM_POS_VERSN
-        WHERE   PROG_FG = '2'
+        /* USE : StorePosVersionMapper.getSelectVerList */
+        SELECT  '[' || A.VER_SER_NO || '] ' || A.FILE_DESC AS NAME
+        ,       '[' || A.VER_SER_NO || '] ' || A.FILE_DESC AS VALUE
+        FROM    TB_CM_POS_VERSN A
+        ,       (
+                SELECT 	NVL(MAX(ENVST_VAL),1) ENVST_VAL
+                FROM	TB_HQ_ENVST
+                WHERE	HQ_OFFICE_CD = #{hqOfficeCd}
+                AND 	ENVST_CD = '1014'
+                ) B
+        WHERE   A.PROG_FG = B.ENVST_VAL
         ORDER
-        BY      REG_DT DESC
+        BY      A.REG_DT DESC
     </select>
 
     <!-- 포스용도 조회 -->
     <!--
         TABLE    : TB_CM_POS_VERSN
         PARAM    : storePosVersionVO
-        COMMENTS : 포스용도을 조회한다.
+        COMMENTS : 포스용도를 조회한다.
     -->
     <select id="getSelectSubPos" parameterType="storePosVersionVO" resultType="DefaultMap">
+        /* USE : StorePosVersionMapper.getSelectSubPos */
         SELECT  ENVST_VAL_CD    AS VALUE
         ,       ENVST_VAL_NM    AS NAME
         FROM    TB_CM_ENVST_DTL
         WHERE   ENVST_CD = '4019'
+    </select>
+
+    <!-- 패치정보 상세 팝업 -->
+    <!--
+        TABLE    : TB_PS_PATCH_LOG
+        PARAM    : storePosVersionVO
+        COMMENTS : 패치정보 상세 팝업.
+    -->
+    <select id="getPatchDtlList" parameterType="storePosVersionVO" resultType="DefaultMap">
+        /* USE : StorePosVersionMapper.getPatchDtlList */
+        SELECT  A.HQ_OFFICE_CD
+        ,       A.HQ_BRAND_CD
+        ,       A.STORE_CD
+        ,       A.POS_NO
+        ,       A.PATCH_DATE
+        ,       A.PATCH_SEQ
+        ,       A.PATCH_DT
+        ,       A.PATCH_CD
+        ,       A.POS_VER_NO
+        ,       A.PATCH_VER_NO
+        ,       A.SCRIPT_NM
+        ,       A.PATCH_ERR_MSG
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.POS_DEF1
+        ,       A.POS_DEF2
+        ,       A.POS_DEF3
+        ,       B.STORE_NM
+        ,       C.HQ_OFFICE_NM
+        ,       D.FILE_DESC
+        FROM 	TB_PS_PATCH_LOG A
+        ,		TB_MS_STORE B
+        ,		TB_HQ_OFFICE C
+        ,		TB_CM_POS_VERSN D
+        WHERE 	A.HQ_OFFICE_CD  = C.HQ_OFFICE_CD
+        AND	    A.STORE_CD 	    = B.STORE_CD
+        AND 	A.PATCH_VER_NO  = D.VER_SER_NO
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.POS_NO        = #{posNo}
+        AND     A.PATCH_VER_NO  = #{selectVerCd}
+        ORDER
+        BY      A.PATCH_SEQ
+    </select>
+
+    <!-- 버전 적용 매장 등록   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_STORE
+        COMMENTS : 버전 적용 매장 등록한다.
+    -->
+    <select id="registStore" statementType="CALLABLE" parameterType="storePosVersionVO" resultType="String">
+        /* USE : VerManageMapper.registStore */
+        {
+            CALL PKG_CM_VERSN_STORE.SP_CM_VERSN_STORE_I
+            (
+                #{selectVerCd},
+                #{storeCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 버전 적용 여부 체크 -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_STORE
+        COMMENTS : 버전 적용여부를 체크한다.
+    -->
+    <select id="registChk" parameterType="storePosVersionVO" resultType="Integer">
+        /* USE : VerManageMapper.registChk */
+        SELECT 	count(VER_SER_NO)
+        FROM 	TB_CM_POS_VERSN_STORE
+        WHERE 	STORE_CD    = #{storeCd}
+        AND 	VER_RECV_FG = '1'
+        AND 	VER_SER_NO  = #{selectVerCd}
+    </select>
+
+    <!-- 포스패치로그 조회 -->
+    <!--
+        TABLE    : TB_PS_PATCH_LOG
+        PARAM    : storePosVersionVO
+        COMMENTS : 포스패치로그를 조회한다.
+    -->
+    <select id="getPosPatchLogList" parameterType="storePosVersionVO" resultType="DefaultMap">
+        /* USE : StorePosVersionMapper.getPosPatchLogList */
+        SELECT  A.HQ_OFFICE_CD
+        ,       A.HQ_BRAND_CD
+        ,       A.STORE_CD
+        ,       A.POS_NO
+        ,       A.PATCH_DATE
+        ,       A.PATCH_SEQ
+        ,       A.PATCH_DT
+        ,       A.PATCH_CD
+        ,       A.POS_VER_NO
+        ,       A.PATCH_VER_NO
+        ,       A.SCRIPT_NM
+        ,       A.PATCH_ERR_MSG
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.POS_DEF1
+        ,       A.POS_DEF2
+        ,       A.POS_DEF3
+        ,       B.STORE_NM
+        ,       C.HQ_OFFICE_NM
+        ,       D.FILE_DESC
+        FROM 	TB_PS_PATCH_LOG A
+        ,		TB_MS_STORE B
+        ,		TB_HQ_OFFICE C
+        ,		TB_CM_POS_VERSN D
+        ,		TB_MS_STORE_INFO E
+        ,       TB_MS_POS F
+        ,		(
+                SELECT 	TMPE.STORE_CD
+                ,       TMPE.POS_NO
+                FROM 	TB_MS_POS_ENVST tmpe
+                ,       TB_CM_ENVST_DTL tced
+                ,		(
+                        SELECT 	TMPE2.STORE_CD
+                        ,		TMPE2.POS_NO
+                        ,		TCED2.ENVST_VAL_NM AS SUB_VAL
+                        FROM	TB_MS_POS_ENVST tmpe2
+                        ,		TB_CM_ENVST_DTL tced2
+                        WHERE	TMPE2.ENVST_CD 	= TCED2.ENVST_CD
+                        AND 	TMPE2.ENVST_VAL = TCED2.ENVST_VAL_CD
+                        AND 	TCED2.ENVST_CD 	= '4019'
+                        <if test='subVal != null and subVal !=""'>
+                            AND TCED2.ENVST_VAL_CD = #{subVal}
+                        </if>
+                        ) C
+                WHERE	TMPE.ENVST_CD 	= TCED.ENVST_CD
+                AND 	TMPE.ENVST_VAL 	= TCED.ENVST_VAL_CD
+                AND 	tmpe.STORE_CD   = C.STORE_CD
+                AND		tmpe.POS_NO 	= C.POS_NO
+                AND		TCED.ENVST_CD 	= '4021'
+                <if test='mainVal != null and mainVal !=""'>
+                    AND TCED.ENVST_VAL_CD = #{mainVal}
+                </if>
+                ) G
+        ,       (
+                SELECT  STORE_CD
+                ,       POS_NO
+                ,       TO_CHAR(TO_DATE(MAX(SALE_DATE), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE
+                FROM    TB_SL_DAILY_POS
+                WHERE   1=1
+                AND     HQ_OFFICE_CD = #{hqOfficeCd}
+                GROUP
+                BY      STORE_CD
+                ,       POS_NO
+                ) H
+        WHERE 	B.STORE_CD		= A.STORE_CD
+        AND	    C.HQ_OFFICE_CD	= A.HQ_OFFICE_CD
+        AND 	D.VER_SER_NO 	= A.PATCH_VER_NO
+        AND 	E.STORE_CD  (+)	= A.STORE_CD
+        AND     F.STORE_CD  (+) = A.STORE_CD
+        AND     F.POS_NO    (+) = A.POS_NO
+        AND     G.STORE_CD      = A.STORE_CD
+        AND     G.POS_NO        = A.POS_NO
+        AND     H.STORE_CD  (+) = A.STORE_CD
+        AND     H.POS_NO    (+) = A.POS_NO
+        AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
+        <if test="selectVerCd != null and selectVerCd != ''">
+            AND A.PATCH_VER_NO = #{selectVerCd}
+        </if>
+
+        <if test="storeCd != null and storeCd != ''">
+            AND B.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND B.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND B.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND B.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND E.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND E.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND E.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND E.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND E.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND E.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND B.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND E.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND E.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND E.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND E.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND E.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        <choose>
+            <when test='registFg != null and registFg == "Y"'>
+                AND A.STORE_CD IN ( SELECT  STORE_CD
+                                    FROM    TB_CM_POS_VERSN_STORE
+                                    WHERE   VER_SER_NO = #{selectVerCd})
+            </when>
+            <when test='registFg != null and registFg == "N"'>
+                AND A.STORE_CD NOT IN ( SELECT  STORE_CD
+                                        FROM    TB_CM_POS_VERSN_STORE
+                                        WHERE   VER_SER_NO = #{selectVerCd})
+            </when>
+        </choose>
+        <if test='posLogDt != null and posLogDt != ""'>
+            AND F.LAST_LOGIN_DT BETWEEN TO_CHAR(SYSDATE - #{posLogDt}, 'YYYYMMDD') ||'000000' AND TO_CHAR(SYSDATE, 'YYYYMMDD') ||'235959'
+        </if>
+        <if test='lastSale != null and lastSale != ""'>
+            AND H.MAX_SALE_DATE BETWEEN TO_CHAR(SYSDATE - #{lastSale}, 'yyyy-mm-dd') AND TO_CHAR(SYSDATE, 'yyyy-mm-dd')
+        </if>
+        ORDER
+        BY      A.STORE_CD, A.POS_NO, A.PATCH_SEQ
     </select>
 
 </mapper>
