@@ -221,22 +221,22 @@
                 {{_momsStoreManageType}}
               </td>
             </tr>
-            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-              <tr>
-                <%-- 매장그룹 --%>
-                <th><s:message code="cmm.moms.momsStoreFg01"/></th>
-                <td>
-                  <wj-combo-box
-                          ng-model="hqEmp.momsStoreFg01"
-                          ng-hide="true"
-                          text="_momsStoreFg01"
-                          items-source="_getComboData('momsStoreFg01DtlCombo')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false">
-                  </wj-combo-box>
-                  {{_momsStoreFg01}}
-                </td>
+            <tr>
+              <%-- 매장그룹 --%>
+              <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+              <td>
+                <wj-combo-box
+                        ng-model="hqEmp.momsStoreFg01"
+                        ng-hide="true"
+                        text="_momsStoreFg01"
+                        items-source="_getComboData('momsStoreFg01DtlCombo')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false">
+                </wj-combo-box>
+                {{_momsStoreFg01}}
+              </td>
+              <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                 <%-- 매장그룹2 --%>
                 <th><s:message code="cmm.moms.momsStoreFg02"/></th>
                 <td>
@@ -250,7 +250,13 @@
                           is-editable="false">
                   </wj-combo-box>
                   {{_momsStoreFg02}}
-              </tr>
+                </c:if>
+                <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+                  <td></td>
+                  <td></td>
+                </c:if>
+            </tr>
+            <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
               <tr>
                 <%-- 매장그룹3 --%>
                 <th><s:message code="cmm.moms.momsStoreFg03"/></th>
