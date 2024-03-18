@@ -7,6 +7,8 @@ import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.multilingual.kioskSideOption.service.KioskSideOptionService;
 import kr.co.solbipos.base.multilingual.kioskSideOption.service.KioskSideOptionVO;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.impl.KioskKeyMapMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,12 +36,14 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
 
     private final KioskSideOptionMapper kioskSideOptionMapper;
     private final MessageService messageService;
+    private final KioskKeyMapMapper kioskKeyMapMapper;
 
     @Autowired
-    public KioskSideOptionServiceImpl(KioskSideOptionMapper kioskSideOptionMapper, MessageService messageService) {
+    public KioskSideOptionServiceImpl(KioskSideOptionMapper kioskSideOptionMapper, MessageService messageService, KioskKeyMapMapper kioskKeyMapMapper) {
 
         this.kioskSideOptionMapper = kioskSideOptionMapper;
         this.messageService = messageService;
+        this.kioskKeyMapMapper = kioskKeyMapMapper;
     }
 
     /** 키오스크(카테고리명) 탭 리스트 조회 */
@@ -66,6 +70,14 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
 
             result += kioskSideOptionMapper.saveKioskCategory(kioskSideOptionVO);
         }
+
+        // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
+        KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        kioskKeyMapVO.setStoreCd("");
+        kioskKeyMapVO.setTuClsType("");
+        kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+        kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
 
         if (result == kioskSideOptionVOs.length) {
             return result;
