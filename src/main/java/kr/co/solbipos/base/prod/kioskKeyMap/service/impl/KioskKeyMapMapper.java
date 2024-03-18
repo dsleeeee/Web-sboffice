@@ -1,7 +1,6 @@
 package kr.co.solbipos.base.prod.kioskKeyMap.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -244,4 +243,7 @@ public interface KioskKeyMapMapper {
 
     /** 매장 키오스크포스에서 사용중인 [매장/포장]키맵그룹 코드 조회 */
     List<DefaultMap<Object>> getTuClsTypeEnvList(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치) */
+    String updateKioskClsMomsLsm(KioskKeyMapVO kioskKeyMapVO);
 }

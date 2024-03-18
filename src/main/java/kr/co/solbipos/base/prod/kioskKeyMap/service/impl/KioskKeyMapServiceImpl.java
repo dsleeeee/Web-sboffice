@@ -214,6 +214,16 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             }
         }
 
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
+            KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kioskKeyMapVO.setTuClsType("");
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
+        }
+
         if ( result == kioskKeyMapVOs.length) {
             return result;
         } else {
@@ -262,6 +272,16 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             } else if ( kioskKeyMapVO.getStatus() == GridDataFg.DELETE ) { // 삭제
                 result += kioskKeyMapMapper.deleteKioskKeyMap(kioskKeyMapVO);
             }
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
+            KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kioskKeyMapVO.setTuClsType("");
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
         }
 
         if ( result == kioskKeyMapVOs.length) {
@@ -331,6 +351,16 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
             int result = kioskKeyMapMapper.saveKioskKeyMap(kioskKeyMapVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
+            KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kioskKeyMapVO.setTuClsType("");
+            kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
+            kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
         }
 
         return procCnt;
@@ -582,6 +612,10 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                     }
                 }
             }
+
+            // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
+            kioskKeyMapVO.setTuClsType("");
+            kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
         }
 
         return result;
@@ -652,7 +686,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
             // 키맵매장적용
             if("Y".equals(kioskKeyMapVO.getChkTuClsTypeStore())) {
-                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+                /*if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){*/
 
                     sessionInfoVO.setStoreCd(kioskKeyMapVO.getStoreCd());
 
@@ -715,7 +749,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                             if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                         }
                     }
-                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+                /*} else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
 
                     // 기존 카테고리(분류) 삭제
                     kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
@@ -745,7 +779,11 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                         result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
                         if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                     }
-                }
+                }*/
+
+                // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
+                kioskKeyMapVO.setTuClsType("");
+                kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
             }
 
         }
@@ -1232,6 +1270,10 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                     }
                 }
             }
+
+            // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
+            kioskKeyMapVO.setTuClsType("");
+            kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
 
         }
         return result;

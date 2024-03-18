@@ -4516,4 +4516,23 @@
         BY       tmpe.ENVST_VAL
     </select>
 
+    <!-- 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치) -->
+    <!--
+        TABLE    : TB_TX_KIOSK_CLS, TB_MS_KIOSK_CLS, TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 카테고리에 맵핑된 상품이 없는경우(맘스 LSM 카테고리), 키오스크에 분류가 보이지 않도록 하기위해 TX 데이터를 변경처리한다.
+    -->
+    <select id="updateKioskClsMomsLsm" statementType="CALLABLE" parameterType="kioskKeyMapVO" resultType="String">
+        /* KioskKeyMapMapper.updateKioskClsMomsLsm */
+        {
+            CALL PKG_TB_MS_KIOSK_CLS_MOMS_LSM.SP_TB_TX_KIOSK_CLS_IU
+            (
+                #{hqOfficeCd},
+                #{storeCd},
+                #{tuClsType},
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
 </mapper>
