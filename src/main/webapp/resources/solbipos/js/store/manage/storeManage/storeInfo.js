@@ -812,9 +812,27 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     // 주소를 입력해주세요.
-    var msg = messages["storeManage.addr"]+messages["cmm.require.text"];
-    if($("#postNo").val() === "" || $("#addr").val() === "" || $("#addrDtl").val() === "") {
-      $scope._popMsg(msg);
+    // var msg = messages["storeManage.addr"]+messages["cmm.require.text"];
+    // if($("#postNo").val() === "") {
+    //   $scope._popMsg(msg);
+    //   return false;
+    // }
+
+    // [주소검색] 기능으로 주소를 입력하여 주십시오.
+    var msg = messages["storeManage.require.addr"]
+    if($("#addr").val() === "") {
+      $scope._popMsg(msg, function() {
+        $("#addr").focus();
+      });
+      return false;
+    }
+
+    // 주소2(주소상세)를 입력하여 주십시오.
+    var msg = messages["storeManage.require.addrDtl"]
+    if($("#addrDtl").val() === "") {
+      $scope._popMsg(msg, function() {
+        $("#addrDtl").focus();
+      });
       return false;
     }
 

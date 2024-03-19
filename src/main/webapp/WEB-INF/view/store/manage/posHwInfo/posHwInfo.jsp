@@ -115,20 +115,10 @@
   <div id="grid" class="w100">
 
     <div class="mt10 oh sb-select dkbr">
-      <%-- 페이지 스케일  --%>
-      <wj-combo-box
-        class="w100px fl"
-        id="listScaleBox"
-        ng-model="listScale"
-        control="listScaleCombo"
-        items-source="_getComboData('listScaleBox')"
-        display-member-path="name"
-        selected-value-path="value"
-        is-editable="false"
-        initialized="_initComboBox(s)">
-      </wj-combo-box>
-      <%-- 엑셀 다운로드 //TODO --%>
-      <%--<button id="btnExcel" class="btn_skyblue fr"><s:message code="cmm.excel.down" /></button>--%>
+      <%-- 엑셀 다운로드 --%>
+      <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
+        <s:message code="cmm.excel.down" />
+      </button>
     </div>
 
     <div class="wj-gridWrap mt10" style="height:450px; overflow-y: hidden;">
@@ -174,14 +164,6 @@
     </div>
   </div>
 
-  <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <%-- id --%>
-    <ul id="posHwInfoCtrlPager" data-size="10">
-    </ul>
-  </div>
-  <%--//페이지 리스트--%>
-
 </div>
 
 <script type="text/javascript">
@@ -194,4 +176,4 @@
   // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/posHwInfo/posHwInfo.js?ver=2018120601.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/posHwInfo/posHwInfo.js?ver=20240315.01" charset="utf-8"></script>

@@ -25,7 +25,14 @@ import java.util.List;
 
 public interface LsmStoreService {
 
-    /** 조회 */
+    /** 터치키 리스트 조회 */
     List<DefaultMap<String>> getLsmStoreList(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO);
+    /** 터치키 엑셀 조회 */
     List<DefaultMap<String>> getLsmStoreExcelList(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 리스트 조회 */
+    List<DefaultMap<String>> getLsmKioskStoreList(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크 엑셀 조회 */
+    List<DefaultMap<String>> getLsmKioskStoreExcelList(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO);
 }
