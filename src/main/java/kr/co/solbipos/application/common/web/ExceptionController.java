@@ -9,9 +9,11 @@ import kr.co.common.exception.BizException;
 import kr.co.common.exception.CodeException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.system.BaseEnv;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.mobile.application.session.auth.enums.LoginFg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -132,7 +139,24 @@ public class ExceptionController {
             return new ResponseEntity<Result>(result, HttpStatus.OK);
         }
 
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                        .getRequest();
+
+        String ROOT_PATH = "";
+        if(sessionInfoVO != null){
+          if(sessionInfoVO.getLoginFg() != null && sessionInfoVO.getLoginFg().equals(LoginFg.MOBILE.getCode())){
+              ROOT_PATH = "mobile/";
+          }
+        }else if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG) != null){
+          if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
+              ROOT_PATH = "mobile/";
+          }
+        }else if (request.getRequestURI().substring(0, 8).equals("/mobile/")){
+          ROOT_PATH = "mobile/";
+        }
+
         // 에러 페이지 이동
-        return "error/403";
+        return ROOT_PATH + "error/403";
     }
 }
