@@ -19,7 +19,6 @@
     -->
     <select id="getPosHwInfo" parameterType="posHwInfoVO" resultType="DefaultMap">
         /* USE : PosHwInfoMapper.getPosHwInfo */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
             SELECT
             tms.HQ_OFFICE_CD,
             tms.HQ_OFFICE_NM,
@@ -41,7 +40,6 @@
             tpphoi.MAC_ADDRESS,
             tpphoi.CPU_INFO,
             tpphoi.MEM_INFO
-            <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
             (
                 SELECT A.HQ_OFFICE_CD
@@ -113,7 +111,6 @@
             </if>
         </if>
         ORDER BY tms.HQ_OFFICE_CD ASC, tms.STORE_CD ASC, tca.AGENCY_CD ASC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 </mapper>

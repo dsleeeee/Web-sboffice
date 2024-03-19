@@ -80,8 +80,8 @@
                 </tr>
                 <tr>
                     <%-- 버전선택 --%>
-                    <th><s:message code="storePosVersion.selectVer"/></th>
-                    <td colspan="3">
+                    <th id="selectVerTh" style="display:none"><s:message code="storePosVersion.selectVer"/></th>
+                    <td id="selectVerTd" style="display:none" colspan="3">
                         <div class="sb-select">
                             <wj-combo-box
                               id="srchSelectVer"
@@ -443,10 +443,10 @@
                     <wj-flex-grid-column header="<s:message code="storePosVersion.verTypeFg"/>" binding="verTypeFg" data-map="verTypeFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.posVerNo1"/>" binding="posVerNo1" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.maxVerSerNo"/>" binding="maxVerSerNo" width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storePosVersion.verSerAll"/>" binding="verSerAll" width="180" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storePosVersion.verChk"/>" binding="verChk" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storePosVersion.verSerAll"/>" binding="verSerAll" width="180" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storePosVersion.verChk"/>" binding="verChk" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.maxSaleDate"/>" binding="maxSaleDate" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storePosVersion.registFg"/>" binding="registFg" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storePosVersion.registFg"/>" binding="registFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.registFgStore"/>" binding="registFgStore" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.mainVal"/>" binding="mainVal" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.subVal"/>" binding="subVal" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -465,7 +465,7 @@
 </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20240312.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20240319.01" charset="utf-8"></script>
 
 <%-- 패치정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/storePosVersion/patchDtl.jsp">

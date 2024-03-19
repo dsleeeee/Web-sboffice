@@ -28,8 +28,15 @@ import java.util.List;
 @Repository
 public interface LsmStoreMapper {
 
-    /** 조회 */
+    /** 터치키 리스트 조회 */
     List<DefaultMap<String>> getLsmStoreList(LsmStoreVO lsmStoreVO);
+
+    /** 터치키 엑셀 조회 */
     List<DefaultMap<String>> getLsmStoreExcelList(LsmStoreVO lsmStoreVO);
 
+    /** 키오스크 리스트 조회 */
+    List<DefaultMap<String>> getLsmKioskStoreList(LsmStoreVO lsmStoreVO);
+    
+    /** 키오스크 엑셀 조회 */
+    List<DefaultMap<String>> getLsmKioskStoreExcelList(LsmStoreVO lsmStoreVO);
 }

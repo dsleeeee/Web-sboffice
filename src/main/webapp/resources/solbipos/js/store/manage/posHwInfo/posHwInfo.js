@@ -16,7 +16,7 @@ var app = agrid.getApp();
 /**
  * 가상로그인 그리드 생성
  */
-app.controller('posHwInfoCtrl',  ['$scope', '$http', function ($scope, $http) {
+app.controller('posHwInfoCtrl',  ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('posHwInfoCtrl', $scope, $http, true));
   // 가상로그인 개수
@@ -64,5 +64,29 @@ app.controller('posHwInfoCtrl',  ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+
+    // 엑셀다운로드
+    $scope.excelDownload = function(){
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles   : false,
+                includeColumns      : function (column) {
+                    return column.visible;
+                }
+            }, '포스H/W정보현황' + getCurDateTime() + '.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
+    }
 
 }]);

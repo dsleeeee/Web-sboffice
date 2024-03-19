@@ -92,8 +92,47 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
     $scope.lastSale = "7";
 
     if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
+
+      // ReadOnly 효과설정
+      s.formatItem.addHandler(function (s, e) {
+        if (e.panel === s.cells) {
+          var col = s.columns[e.col];
+          var item = s.rows[e.row].dataItem;
+          if (col.binding === "posVerNo1" || col.binding === "verSerAll") {
+            if (item.posVerNo1 != $scope.selectVerCd) {
+              wijmo.addClass(e.cell, 'red');
+            }
+          }
+          if (col.binding === "patchFg") {
+            if (item.patchFg != null && item.patchFg != '') {
+              wijmo.addClass(e.cell, 'wijLink');
+              wijmo.addClass(e.cell, 'blue');
+            }
+          }
+          if (col.binding === "registFgStore") {
+            if (item.registFgStore == '[등록]') {
+              wijmo.addClass(e.cell, 'wijLink');
+              wijmo.addClass(e.cell, 'blue');
+            }
+          }
+          if (col.binding === "registFg") {
+            if (item.registFg == '미등록') {
+              wijmo.addClass(e.cell, 'red');
+            }
+          }
+          if (col.binding === "verChk") {
+            if (item.posVerNo1 != $scope.selectVerCd) {
+              wijmo.addClass(e.cell, 'red');
+            }
+          }
+        }
+      });
+
       var grid = wijmo.Control.getControl("#wjGridPosVersionList");
       var columns = grid.columns;
+      columns[7].visible  = true;
+      columns[8].visible  = true;
+      columns[10].visible = true;
       columns[11].visible = true;
       columns[15].visible = true;
       columns[16].visible = true;
@@ -105,42 +144,10 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
       document.getElementById('patchFgTh').style.display = '';
       document.getElementById('patchFgTd').style.display = '';
 
-    }
+      document.getElementById('selectVerTh').style.display = '';
+      document.getElementById('selectVerTd').style.display = '';
 
-    // ReadOnly 효과설정
-    s.formatItem.addHandler(function (s, e) {
-      if (e.panel === s.cells) {
-        var col = s.columns[e.col];
-        var item = s.rows[e.row].dataItem;
-        if(col.binding === "posVerNo1" || col.binding === "verSerAll"){
-          if(item.posVerNo1 != $scope.selectVerCd){
-            wijmo.addClass(e.cell, 'red');
-          }
-        }
-        if(col.binding === "patchFg"){
-          if(item.patchFg != null && item.patchFg !='') {
-            wijmo.addClass(e.cell, 'wijLink');
-            wijmo.addClass(e.cell, 'blue');
-          }
-        }
-        if(col.binding === "registFgStore"){
-          if(item.registFgStore == '[등록]'){
-            wijmo.addClass(e.cell, 'wijLink');
-            wijmo.addClass(e.cell, 'blue');
-          }
-        }
-        if(col.binding === "registFg"){
-          if(item.registFg == '미등록'){
-            wijmo.addClass(e.cell, 'red');
-          }
-        }
-        if(col.binding === "verChk"){
-          if(item.posVerNo1 != $scope.selectVerCd){
-            wijmo.addClass(e.cell, 'red');
-          }
-        }
-      }
-    });
+    }
 
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {

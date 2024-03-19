@@ -39,18 +39,32 @@ public class LsmStoreServiceImpl implements LsmStoreService {
         this.messageService = messageService;
     }
 
-    /** 조회 */
+    /** 터치키 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getLsmStoreList(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return lsmStoreMapper.getLsmStoreList(lsmStoreVO);
     }
 
-    /** 조회 */
+    /** 터치키 엑셀 조회 */
     @Override
     public List<DefaultMap<String>> getLsmStoreExcelList(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
         lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return lsmStoreMapper.getLsmStoreExcelList(lsmStoreVO);
+    }
+
+    /** 키오스크 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getLsmKioskStoreList(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
+        lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return lsmStoreMapper.getLsmKioskStoreList(lsmStoreVO);
+    }
+
+    /** 키오스크 엑셀 조회 */
+    @Override
+    public List<DefaultMap<String>> getLsmKioskStoreExcelList(LsmStoreVO lsmStoreVO, SessionInfoVO sessionInfoVO) {
+        lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return lsmStoreMapper.getLsmKioskStoreExcelList(lsmStoreVO);
     }
 
 }

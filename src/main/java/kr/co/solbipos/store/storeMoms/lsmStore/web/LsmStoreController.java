@@ -75,11 +75,11 @@ public class LsmStoreController {
     @RequestMapping(value = "/lsmStore/view.sb", method = RequestMethod.GET)
     public String empMonthView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        return "store/storeMoms/lsmStore/lsmStore";
+        return "store/storeMoms/lsmStore/lsmStoreTab";
     }
 
     /**
-     * 리스트 조회
+     * 터치키 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -101,7 +101,7 @@ public class LsmStoreController {
     }
 
     /**
-     * 리스트 조회 엑셀다운로드
+     * 터치키 엑셀 조회
      * @param   request
      * @param   response
      * @param   model
@@ -118,6 +118,50 @@ public class LsmStoreController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<String>> list = lsmStoreService.getLsmStoreExcelList(lsmStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, lsmStoreVO);
+    }
+
+    /**
+     * 키오스크 리스트 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   lsmStoreVO
+     * @return  String
+     * @author  김유승
+     * @since   2024.03.18
+     */
+    @RequestMapping(value = "/lsmStore/getLsmKioskStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getLsmKioskStoreList(HttpServletRequest request, HttpServletResponse response,
+                                  Model model, LsmStoreVO lsmStoreVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = lsmStoreService.getLsmKioskStoreList(lsmStoreVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, lsmStoreVO);
+    }
+
+    /**
+     * 키오스크 엑셀 조회
+     * @param   request
+     * @param   response
+     * @param   model
+     * @param   lsmStoreVO
+     * @return  String
+     * @author  김유승
+     * @since   2024.03.18
+     */
+    @RequestMapping(value = "/lsmStore/getLsmKioskStoreExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getLsmKioskStoreExcelList(HttpServletRequest request, HttpServletResponse response,
+                                       Model model, LsmStoreVO lsmStoreVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = lsmStoreService.getLsmKioskStoreExcelList(lsmStoreVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, lsmStoreVO);
     }
