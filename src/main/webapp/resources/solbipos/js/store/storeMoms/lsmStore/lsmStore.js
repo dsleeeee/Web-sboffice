@@ -79,7 +79,7 @@ app.controller('lsmStoreExcelCtrl', ['$scope', '$http', '$timeout', function ($s
           includeColumns      : function (column) {
             return column.visible;
           }
-        }, messages["lsmStore.lsmStore"] + '_' + getCurDateTime() +'.xlsx', function () {
+        }, messages["lsmStore.lsmStore"] + '(' + messages["lsmStore.tukey"]  +')_' + getCurDateTime() +'.xlsx', function () {
           $timeout(function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
           }, 10);

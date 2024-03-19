@@ -136,16 +136,17 @@
                 AND 	A.POS_NO  	= B.POS_NO
                 AND		A.PATCH_SEQ = B.PATCH_SEQ
                 ) G
-        WHERE   B.PROG_FG   (+) =   A.VER_TYPE_FG
-        AND   	C.STORE_CD      =   A.STORE_CD
-        AND   	D.STORE_CD  (+) =   A.STORE_CD
-        AND     E.STORE_CD  (+) =   A.STORE_CD
-        AND     E.POS_NO    (+) =   A.POS_NO
-        AND     F.STORE_CD      =   A.STORE_CD
-        AND     F.POS_NO        =   A.POS_NO
-        AND     G.STORE_CD  (+) =   A.STORE_CD
-        AND     G.POS_NO    (+) =   A.POS_NO
-        AND 	C.HQ_OFFICE_CD  = #{hqOfficeCd}
+        WHERE   B.PROG_FG      (+)  =   A.VER_TYPE_FG
+        AND   	C.STORE_CD          =   A.STORE_CD
+        AND   	D.STORE_CD     (+)  =   A.STORE_CD
+        AND     E.STORE_CD     (+)  =   A.STORE_CD
+        AND     E.POS_NO       (+)  =   A.POS_NO
+        AND     F.STORE_CD          =   A.STORE_CD
+        AND     F.POS_NO            =   A.POS_NO
+        AND     G.STORE_CD     (+)  =   A.STORE_CD
+        AND     G.POS_NO       (+)  =   A.POS_NO
+        AND 	G.PATCH_VER_NO (+)  =   #{selectVerCd}
+        AND 	C.HQ_OFFICE_CD      =   #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
             AND C.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
         </if>
