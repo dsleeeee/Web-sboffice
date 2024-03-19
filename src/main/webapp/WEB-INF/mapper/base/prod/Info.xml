@@ -437,7 +437,7 @@
       <choose>
           <!-- 본사 -->
           <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
-              SELECT thpc.PROD_CLASS_CD,
+              <!-- SELECT thpc.PROD_CLASS_CD,
                       thpc.PROD_CLASS_NM,
                       (SELECT COUNT(1) FROM TB_HQ_PRODUCT_CLASS WHERE HQ_OFFICE_CD = thpc.HQ_OFFICE_CD AND P_PROD_CLASS_CD = thpc.PROD_CLASS_CD) AS HQ_CHILD_CLASS_CNT,
                       (SELECT COUNT(1) FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = thpc.HQ_OFFICE_CD) AND P_PROD_CLASS_CD = thpc.PROD_CLASS_CD) AS MS_CHILD_CLASS_CNT,
@@ -453,11 +453,121 @@
                  AND thpc.P_PROD_CLASS_CD = #{pProdClassCd}
              </if>
                ORDER
-                  BY thpc.PROD_CLASS_CD ASC
+                  BY thpc.PROD_CLASS_CD ASC -->
+              SELECT  thpc.PROD_CLASS_CD
+              ,       thpc.PROD_CLASS_NM
+              ,       NVL(A.HQ_CHILD_CLASS_CNT,0) AS HQ_CHILD_CLASS_CNT
+              ,       NVL(B.MS_CHILD_CLASS_CNT,0) AS MS_CHILD_CLASS_CNT
+              ,       NVL(C.HQ_PROD_CNT,0) AS HQ_PROD_CNT
+              ,       NVL(D.MS_PROD_CNT,0) AS MS_PROD_CNT
+              FROM    TB_HQ_PRODUCT_CLASS thpc
+              ,       (
+                            SELECT P_PROD_CLASS_CD
+                            ,      COUNT(P_PROD_CLASS_CD) AS HQ_CHILD_CLASS_CNT
+                            FROM   TB_HQ_PRODUCT_CLASS
+                            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND    P_PROD_CLASS_CD IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM   TB_HQ_PRODUCT_CLASS
+                                                                WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                AND    CLS_LEVEL_CD = #{clsLevelCd}
+                                                            <if test='clsLevelCd != null and clsLevelCd == "1"'>
+                                                                AND    P_PROD_CLASS_CD = '00000'
+                                                            </if>
+                                                            <if test='clsLevelCd != null and clsLevelCd != "1"'>
+                                                                AND    P_PROD_CLASS_CD = #{pProdClassCd}
+                                                            </if>
+                                                      )
+                            GROUP
+                               BY  P_PROD_CLASS_CD
+                      ) A
+              ,       (
+                            SELECT P_PROD_CLASS_CD
+                            ,      COUNT(P_PROD_CLASS_CD) AS MS_CHILD_CLASS_CNT
+                            FROM   TB_MS_PRODUCT_CLASS
+                            WHERE  STORE_CD IN        (
+                                                                SELECT STORE_CD
+                                                                FROM   TB_MS_STORE
+                                                                WHERE  HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                      )
+                            AND    P_PROD_CLASS_CD IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM   TB_HQ_PRODUCT_CLASS
+                                                                WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                AND    CLS_LEVEL_CD = #{clsLevelCd}
+                                                            <if test='clsLevelCd != null and clsLevelCd == "1"'>
+                                                                AND    P_PROD_CLASS_CD = '00000'
+                                                            </if>
+                                                            <if test='clsLevelCd != null and clsLevelCd != "1"'>
+                                                                AND    P_PROD_CLASS_CD = #{pProdClassCd}
+                                                            </if>
+                                                      )
+                            GROUP
+                               BY  P_PROD_CLASS_CD
+                      ) B
+              ,       (
+
+                            SELECT PROD_CLASS_CD
+                            ,      COUNT(PROD_CLASS_CD) AS HQ_PROD_CNT
+                            FROM   TB_HQ_PRODUCT
+                            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND    PROD_CLASS_CD  IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM   TB_HQ_PRODUCT_CLASS
+                                                                WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                AND    CLS_LEVEL_CD = #{clsLevelCd}
+                                                            <if test='clsLevelCd != null and clsLevelCd == "1"'>
+                                                                AND    P_PROD_CLASS_CD = '00000'
+                                                            </if>
+                                                            <if test='clsLevelCd != null and clsLevelCd != "1"'>
+                                                                AND    P_PROD_CLASS_CD = #{pProdClassCd}
+                                                            </if>
+                                                     )
+                            GROUP
+                              BY  PROD_CLASS_CD
+                      ) C
+              ,       (
+                            SELECT PROD_CLASS_CD
+                            ,      COUNT(PROD_CLASS_CD) AS MS_PROD_CNT
+                            FROM   TB_MS_PRODUCT
+                            WHERE  STORE_CD IN       (
+                                                                SELECT STORE_CD
+                                                                FROM   TB_MS_STORE
+                                                                WHERE  HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                     )
+                            AND    PROD_CLASS_CD  IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM   TB_HQ_PRODUCT_CLASS
+                                                                WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                AND    CLS_LEVEL_CD = #{clsLevelCd}
+                                                            <if test='clsLevelCd != null and clsLevelCd == "1"'>
+                                                                AND    P_PROD_CLASS_CD = '00000'
+                                                            </if>
+                                                            <if test='clsLevelCd != null and clsLevelCd != "1"'>
+                                                                AND    P_PROD_CLASS_CD = #{pProdClassCd}
+                                                            </if>
+                                                     )
+                            GROUP
+                               BY PROD_CLASS_CD
+                    ) D
+              WHERE thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+              AND   thpc.CLS_LEVEL_CD = #{clsLevelCd}
+          <if test='clsLevelCd != null and clsLevelCd == "1"'>
+              AND   thpc.P_PROD_CLASS_CD = '00000'
+          </if>
+          <if test='clsLevelCd != null and clsLevelCd != "1"'>
+              AND   thpc.P_PROD_CLASS_CD = #{pProdClassCd}
+          </if>
+              AND   A.P_PROD_CLASS_CD (+)= thpc.PROD_CLASS_CD
+              AND   B.P_PROD_CLASS_CD (+)= thpc.PROD_CLASS_CD
+              AND   C.PROD_CLASS_CD   (+)= thpc.PROD_CLASS_CD
+              AND   D.PROD_CLASS_CD   (+)= thpc.PROD_CLASS_CD
+              ORDER
+              BY    thpc.PROD_CLASS_CD ASC
           </when>
           <!-- 매장 -->
           <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
-              SELECT tmpc.PROD_CLASS_CD,
+              <!-- SELECT tmpc.PROD_CLASS_CD,
                       tmpc.PROD_CLASS_NM,
                       '0' AS HQ_CHILD_CLASS_CNT,
                       (SELECT COUNT(1) FROM TB_MS_PRODUCT_CLASS WHERE STORE_CD = tmpc.STORE_CD AND P_PROD_CLASS_CD = tmpc.PROD_CLASS_CD) AS MS_CHILD_CLASS_CNT,
@@ -473,7 +583,66 @@
                  AND tmpc.P_PROD_CLASS_CD = #{pProdClassCd}
              </if>
                ORDER
-                  BY tmpc.PROD_CLASS_CD ASC
+                  BY tmpc.PROD_CLASS_CD ASC -->
+              SELECT  tmpc.PROD_CLASS_CD
+              ,       tmpc.PROD_CLASS_NM
+              ,       '0' AS HQ_CHILD_CLASS_CNT
+              ,       NVL(B.MS_CHILD_CLASS_CNT,0) AS MS_CHILD_CLASS_CNT
+              ,       '0' AS HQ_PROD_CNT
+              ,       NVL(D.MS_PROD_CNT,0) AS MS_PROD_CNT
+              FROM    TB_MS_PRODUCT_CLASS tmpc
+              ,       (
+                            SELECT P_PROD_CLASS_CD
+                            ,      COUNT(P_PROD_CLASS_CD) AS MS_CHILD_CLASS_CNT
+                            FROM   TB_MS_PRODUCT_CLASS
+                            WHERE  STORE_CD = #{storeCd}
+                            AND    P_PROD_CLASS_CD IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM   TB_MS_PRODUCT_CLASS
+                                                                WHERE  STORE_CD = #{storeCd}
+                                                                AND    CLS_LEVEL_CD = #{clsLevelCd}
+                                                            <if test='clsLevelCd != null and clsLevelCd == "1"'>
+                                                                AND    P_PROD_CLASS_CD = '00000'
+                                                            </if>
+                                                            <if test='clsLevelCd != null and clsLevelCd != "1"'>
+                                                                AND    P_PROD_CLASS_CD = #{pProdClassCd}
+                                                            </if>
+                                                      )
+                            GROUP
+                               BY  P_PROD_CLASS_CD
+                      ) B
+              ,       (
+                            SELECT PROD_CLASS_CD
+                            ,      COUNT(PROD_CLASS_CD) AS MS_PROD_CNT
+                            FROM   TB_MS_PRODUCT
+                            WHERE  STORE_CD = #{storeCd}
+                            AND    PROD_CLASS_CD  IN (
+                                                                SELECT PROD_CLASS_CD
+                                                                FROM   TB_MS_PRODUCT_CLASS
+                                                                WHERE  STORE_CD = #{storeCd}
+                                                                AND    CLS_LEVEL_CD = #{clsLevelCd}
+                                                            <if test='clsLevelCd != null and clsLevelCd == "1"'>
+                                                                AND    P_PROD_CLASS_CD = '00000'
+                                                            </if>
+                                                            <if test='clsLevelCd != null and clsLevelCd != "1"'>
+                                                                AND    P_PROD_CLASS_CD = #{pProdClassCd}
+                                                            </if>
+                                                     )
+                            GROUP
+                               BY PROD_CLASS_CD
+                    ) D
+              WHERE tmpc.STORE_CD = #{storeCd}
+              AND   tmpc.CLS_LEVEL_CD = #{clsLevelCd}
+           <if test='clsLevelCd != null and clsLevelCd == "1"'>
+              AND   tmpc.P_PROD_CLASS_CD = '00000'
+           </if>
+           <if test='clsLevelCd != null and clsLevelCd != "1"'>
+              AND   tmpc.P_PROD_CLASS_CD = #{pProdClassCd}
+           </if>
+              AND   B.P_PROD_CLASS_CD (+)= tmpc.PROD_CLASS_CD
+              AND   D.PROD_CLASS_CD   (+)= tmpc.PROD_CLASS_CD
+              ORDER
+              BY    tmpc.PROD_CLASS_CD ASC
           </when>
       </choose>
     </select>
