@@ -51,6 +51,7 @@ app.controller('momsBatchCtrl',  ['$scope', '$http', function ($scope, $http) {
         params.datas = $("#datas").val();
 
         $scope._postJSONSave.withPopUp("/sys/admin/momsBatch/momsBatch/batchProc.sb", params, function (response) {
+            alert(response.data.data);
             console.log(response.data.data);
         });
     });
