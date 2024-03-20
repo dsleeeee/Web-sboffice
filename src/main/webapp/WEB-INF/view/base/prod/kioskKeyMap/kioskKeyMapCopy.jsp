@@ -193,28 +193,22 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                        <%-- 매장그룹 --%>
-                        <th><s:message code="cmm.moms.momsStoreFg01"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchMomsStoreFg01Combo1"
-                                        ng-model="momsStoreFg011"
-                                        items-source="_getComboData('momsStoreFg01Combo1')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchMomsStoreFg01Combo1">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </c:if>
-                    <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
-                        <td></td>
-                        <td></td>
-                    </c:if>
+                    <%-- 매장그룹 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg01Combo1"
+                                    ng-model="momsStoreFg011"
+                                    items-source="_getComboData('momsStoreFg01Combo1')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg01Combo1">
+                            </wj-combo-box>
+                        </div>
+                    </td>
                 </tr>
                 <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                     <tr>
@@ -554,28 +548,22 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                        <%-- 매장그룹 --%>
-                        <th><s:message code="cmm.moms.momsStoreFg01"/></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchMomsStoreFg01Combo2"
-                                        ng-model="momsStoreFg012"
-                                        items-source="_getComboData('momsStoreFg01Combo2')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        control="srchMomsStoreFg01Combo2">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </c:if>
-                    <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
-                        <td></td>
-                        <td></td>
-                    </c:if>
+                    <%-- 매장그룹 --%>
+                    <th><s:message code="cmm.moms.momsStoreFg01"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMomsStoreFg01Combo2"
+                                    ng-model="momsStoreFg012"
+                                    items-source="_getComboData('momsStoreFg01Combo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMomsStoreFg01Combo2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
                 </tr>
                 <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                     <tr>
