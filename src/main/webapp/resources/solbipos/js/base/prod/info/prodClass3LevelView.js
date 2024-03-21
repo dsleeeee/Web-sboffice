@@ -106,7 +106,7 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
         });
 
         // 대분류 조회
-        $scope.searchLevel1();
+        //$scope.searchLevel1();
     };
 
     $scope.$on("prodClassLevel1Ctrl", function(event, data) {
