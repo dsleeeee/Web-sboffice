@@ -204,4 +204,7 @@ public interface TouchKeyMapper {
     /** 매장 포스들에서 사용중인 터치키그룹 코드 조회 */
     List<DefaultMap<Object>> getTouchKeyEnvList(TouchKeyVO touchKeyVO);
 
+    /** 본사 그룹명 변경 시 매장 그룹명 추가 및 수정 */
+    int updateStoreGrpNm(TouchKeyVO touchKeyVO);
+
 }

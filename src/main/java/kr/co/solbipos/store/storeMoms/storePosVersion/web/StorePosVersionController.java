@@ -342,7 +342,7 @@ public class StorePosVersionController {
      * @author  김유승
      * @since   2024.03.12
      */
-    @RequestMapping(value = "/storePosVersion/regist.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/storePosVersion/registStore.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result registStore(@RequestBody StorePosVersionVO storePosVersionVO, HttpServletRequest request,
                               HttpServletResponse response, Model model) {

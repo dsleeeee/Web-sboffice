@@ -3860,4 +3860,67 @@
         BY       tmpe.ENVST_VAL
     </select>
 
+    <!-- 본사 그룹명 변경 시 매장 그룹명 추가 및 수정 -->
+    <!--
+       TABLE    : TB_MS_TOUCH_KEY_GROUP
+       PARAM    : touchKeyVO
+       COMMENTS : 본사 그룹명 변경 시 적용매장도 추가 및 수정한다.
+    -->
+    <update id="updateStoreGrpNm" parameterType="touchKeyVO">
+        /* TouchKeyMapper.updateStoreGrpNm */
+        MERGE INTO TB_MS_TOUCH_KEY_GROUP A
+            USING
+                (
+                    SELECT  A.STORE_CD     AS STORE_CD
+                    ,       A.TUKEY_GRP_CD AS TUKEY_GRP_CD
+                    ,       #{tukeyGrpNm}  AS TUKEY_GRP_NM
+                    ,       #{regDt}       AS REG_DT
+                    ,       #{regId}       AS REG_ID
+                    ,       #{modDt}       AS MOD_DT
+                    ,       #{modId}       AS MOD_ID
+                    FROM    (
+                                SELECT  DISTINCT TUKEY_GRP_CD
+                                ,       STORE_CD
+                                FROM    TB_MS_TOUCH_KEY_CLASS
+                                WHERE   STORE_CD IN (   SELECT  STORE_CD
+                                                        FROM    TB_MS_STORE
+                                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd})
+                            ) A
+                    ,       TB_HQ_TOUCH_KEY_GROUP B
+                    WHERE   A.TUKEY_GRP_CD = B.TUKEY_GRP_CD
+                      AND   B.HQ_OFFICE_CD = #{hqOfficeCd}
+                      AND   A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                ) B
+            ON (
+                        A.STORE_CD      = B.STORE_CD
+                    AND A.TUKEY_GRP_CD  = #{tukeyGrpCd}
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                SET A.TUKEY_GRP_NM  = #{tukeyGrpNm}
+                ,   A.MOD_DT        = #{modDt}
+                ,   A.MOD_ID        = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                        A.STORE_CD
+                    ,   A.TUKEY_GRP_CD
+                    ,   A.TUKEY_GRP_NM
+                    ,   A.REG_DT
+                    ,   A.REG_ID
+                    ,   A.MOD_DT
+                    ,   A.MOD_ID
+                    )
+                VALUES
+                    (
+                        B.STORE_CD
+                    ,   B.TUKEY_GRP_CD
+                    ,   B.TUKEY_GRP_NM
+                    ,   B.REG_DT
+                    ,   B.REG_ID
+                    ,   B.MOD_DT
+                    ,   B.MOD_ID
+                    )
+    </update>
+
 </mapper>

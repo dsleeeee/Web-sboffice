@@ -434,7 +434,7 @@ public class MemberClassServiceImpl implements MemberClassService {
                     membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
                 } else {
                     membrClassPointVO.setMembrOrgnFg(sessionInfoVO.getOrgnFg());
-                    membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getOrgnCd());
+                    membrClassPointVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
                 }
             }
 

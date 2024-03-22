@@ -4571,4 +4571,126 @@
             )
         }
     </select>
+
+    <!-- 본사 그룹명 변경 시 매장 그룹명 추가 및 수정 -->
+    <!--
+       TABLE    : TB_MS_TOUCH_KEY_GROUP
+       PARAM    : touchKeyVO
+       COMMENTS : 본사 그룹명 변경 시 적용매장도 추가 및 수정한다.
+    -->
+    <update id="updateStoreGrpNm" parameterType="kioskKeyMapVO">
+        /* KioskKeyMapMapper.updateStoreGrpNm */
+        MERGE INTO TB_MS_KIOSK_GROUP A
+            USING 	(
+                        SELECT  A.STORE_CD			AS STORE_CD
+                        , 		A.POS_NO			AS POS_NO
+                        ,		A.TU_CLS_TYPE		AS TU_CLS_TYPE
+                        ,		#{tuClsTypeNm}		AS TU_CLS_TYPE_NM
+                        ,		#{regDt}	        AS REG_DT
+                        ,		#{regId}	        AS REG_ID
+                        ,		#{modDt}	        AS MOD_DT
+                        ,		#{modId}	        AS MOD_ID
+                        FROM 	(
+                                    SELECT 	DISTINCT STORE_CD
+                                    ,       POS_NO
+                                    ,       TU_CLS_TYPE
+                                    FROM    TB_MS_KIOSK_CLS
+                                    WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                ) A
+                        , 	    TB_HQ_KIOSK_GROUP B
+                        WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                        AND 	A.TU_CLS_TYPE 	= B.TU_CLS_TYPE
+                        AND 	B.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                        AND 	A.TU_CLS_TYPE   = #{tuClsType}
+                    ) B
+            ON	(
+                        A.STORE_CD 		= B.STORE_CD
+                    AND A.TU_CLS_TYPE   = #{tuClsType}
+                    AND A.POS_NO 	    = B.POS_NO
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                SET 	A.TU_CLS_TYPE_NM  = #{tuClsTypeNm}
+                ,   	A.MOD_DT          = #{modDt}
+                ,   	A.MOD_ID          = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                         A.STORE_CD
+                    ,	 A.POS_NO
+                    ,    A.TU_CLS_TYPE
+                    ,    A.TU_CLS_TYPE_NM
+                    ,    A.REG_DT
+                    ,    A.REG_ID
+                    ,    A.MOD_DT
+                    ,    A.MOD_ID
+                        )
+                    VALUES
+                    (
+                         B.STORE_CD
+                    ,	 B.POS_NO
+                    ,    B.TU_CLS_TYPE
+                    ,    B.TU_CLS_TYPE_NM
+                    ,    B.REG_DT
+                    ,    B.REG_ID
+                    ,    B.MOD_DT
+                    ,    B.MOD_ID
+                    )
+    </update>
+
+    <!-- 키오스크 매장적용(매장/포장) - 매장 그룹명 수정 -->
+    <!--
+       TABLE    : TB_MS_KIOSK_GROUP
+       PARAM    : kioskKeyMapVO
+    -->
+    <update id="insertStoreGrpNmReg" parameterType="kioskKeyMapVO">
+        /* KioskKeyMapper.insertStoreGrpNmReg */
+        MERGE INTO TB_MS_KIOSK_GROUP
+        USING	DUAL
+        ON	(
+                    STORE_CD    = #{storeCd}
+                AND POS_NO 	    = #{posNo}
+                AND TU_CLS_TYPE = #{tuClsType}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+                SET
+
+                    TU_CLS_TYPE_NM  =   (
+                                            SELECT  TU_CLS_TYPE_NM
+                                            FROM    TB_HQ_KIOSK_GROUP
+                                            WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                            AND     TU_CLS_TYPE     = #{tuClsType}
+                                        )
+                ,   MOD_DT          = #{modDt}
+                ,   MOD_ID          = #{modId}
+        WHEN NOT MATCHED  THEN
+            INSERT
+            (
+                STORE_CD
+            ,   POS_NO
+            ,   TU_CLS_TYPE
+            ,   TU_CLS_TYPE_NM
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
+            VALUES
+            (
+                #{storeCd}
+            ,   #{posNo}
+            ,   #{tuClsType}
+            ,    (
+                            SELECT TU_CLS_TYPE_NM
+                            FROM TB_HQ_KIOSK_GROUP
+                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND TU_CLS_TYPE = #{tuClsType}
+                 )
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
+    </update>
 </mapper>

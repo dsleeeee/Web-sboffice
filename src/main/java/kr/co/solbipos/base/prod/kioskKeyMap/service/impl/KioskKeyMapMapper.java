@@ -246,4 +246,10 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치) */
     String updateKioskClsMomsLsm(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 본사 그룹명 변경 시 매장 그룹명 추가 및 수정 */
+    int updateStoreGrpNm(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 매장적용(매장/포장) - 매장 그룹명 수정 */
+    int insertStoreGrpNmReg(KioskKeyMapVO kioskKeyMapVO);
 }
