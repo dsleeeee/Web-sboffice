@@ -161,13 +161,22 @@ public class SystemEmpServiceImpl implements SystemEmpService {
                 } else {
                     systemEmpVO.setAuthGrpCd("000002");
                 }
+
+                // 한번도 웹 사용한적 없는경우, 웹사용여부 미사용->사용 변경시 비번체크 필요
+                if(systemEmpVO.getPriorPwd() == null || systemEmpVO.getPriorPwd() ==""){
+                    // 비밀번호 정책 체크
+                    EmpResult pwdChgResult = passwordPolicy(systemEmpVO);
+                    if( EmpResult.SUCCESS != pwdChgResult ) {
+                        return pwdChgResult;
+                    }
+                }
             }
 
             if( systemEmpMapper.updateSystemEmpInfo(systemEmpVO) <= 0 ) {
                 return EmpResult.FAIL;
             }
             else{
-                if( "Y".equals(systemEmpDtlInfo.getStr("webUseYn")) || "Y".equals(systemEmpVO.getWebUseYn())) {
+                if( "Y".equals(systemEmpDtlInfo.getStr("webUseYn")) || systemEmpVO.getWebUseYn() == UseYn.Y) {
                     if( systemEmpMapper.saveWbUserInfo(systemEmpVO) <= 0 ) {
                         return EmpResult.FAIL;
                     }

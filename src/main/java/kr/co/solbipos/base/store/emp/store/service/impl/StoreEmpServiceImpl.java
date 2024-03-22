@@ -211,13 +211,22 @@ public class StoreEmpServiceImpl implements StoreEmpService {
             } else {
                 storeEmpVO.setAuthGrpCd(STORE_AUTH_GRP_CD); //todo 매장권한코드 추후 수정 필요 // 000008
             }
+
+            // 한번도 웹 사용한적 없는경우, 웹사용여부 미사용->사용 변경시 비번체크 필요
+            if(storeEmpVO.getPriorPwd() == null || storeEmpVO.getPriorPwd() ==""){
+                // 비밀번호 정책 체크
+                EmpResult pwdChgResult = passwordPolicy(storeEmpVO);
+                if( EmpResult.SUCCESS != pwdChgResult ) {
+                    return pwdChgResult;
+                }
+            }
         }
 
         if( storeEmpMapper.updateStoreEmpInfo(storeEmpVO) != 1 ) {
             return EmpResult.FAIL;
         }
         else{
-            if( "Y".equals(storeEmpDtlInfo.getStr("webUseYn")) || "Y".equals(storeEmpVO.getWebUseYn())) {
+            if( "Y".equals(storeEmpDtlInfo.getStr("webUseYn")) || storeEmpVO.getWebUseYn() == UseYn.Y) {
                 if( storeEmpMapper.saveWbUserInfo(storeEmpVO) != 1 ) {
                     return EmpResult.FAIL;
                 }

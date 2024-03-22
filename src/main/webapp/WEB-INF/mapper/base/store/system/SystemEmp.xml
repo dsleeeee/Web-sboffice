@@ -99,7 +99,7 @@
                tce.EMP_NM,
                tce.WEB_USE_YN,
                wtcn.NMCODE_NM AS WEB_USE_YN_NM,
-               tce.USER_ID,
+               twui.USER_ID,
                tce.MP_NO,
                tce.SMS_RECV_YN,
                stcn.NMCODE_NM AS SMS_RECV_YN_NM,
@@ -119,7 +119,8 @@
                TB_CM_NMCODE vtcn,
                TB_CM_NMCODE atcn,
                TB_CM_NMCODE utcn,
-               TB_CM_AGENCY tca
+               TB_CM_AGENCY tca,
+               TB_WB_USER_INFO twui
          WHERE tce.EMP_NO = #{empNo}
            AND wtcn.NMCODE_GRP_CD = '067'
            AND wtcn.NMCODE_CD  = tce.WEB_USE_YN
@@ -132,6 +133,7 @@
            AND utcn.NMCODE_GRP_CD = '067'
            AND utcn.NMCODE_CD  = tce.USE_YN
            AND tca.AGENCY_CD (+)= tce.AGENCY_CD
+           AND twui.USER_ID (+)= tce.USER_ID
     </select>
 
     <!-- 사원 웹 사용자 조회 -->
@@ -143,8 +145,15 @@
     <select id="getSystemUserIdCnt" parameterType="systemEmpVO" resultType="Integer">
         /* USE : SystemEmpMapper.getSystemUserIdCnt */
         SELECT COUNT(1) AS CNT
-          FROM TB_WB_USER_INFO
-         WHERE USER_ID = #{userId}
+          FROM (
+                      SELECT USER_ID
+                      FROM   TB_WB_USER_INFO
+                      WHERE  USER_ID = #{userId}
+                      UNION
+                      SELECT USER_ID
+                      FROM   TB_CM_EMPLOYEE
+                      WHERE  USER_ID = #{userId}
+                 )
     </select>
 
 

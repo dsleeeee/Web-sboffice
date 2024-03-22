@@ -94,7 +94,7 @@
                        maxlength="20"
                        ng-model="storeEmpRegistInfo.userId"
                        required
-                       ng-readonly="newEmpYn == false"
+                       ng-readonly="newEmpYn == 2"
                        popover-enable="empForm.userId.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
@@ -114,8 +114,8 @@
               <td colspan="3">
                 <input type="password" id="_userPwd" name="userPwd" class="sb-input w30" style="width: 30%"
                        ng-model="storeEmpRegistInfo.userPwd"
-                       ng-show="newEmpYn == true"
-                       ng-required="newEmpYn == true"
+                       ng-show="newEmpYn == 1 || newEmpYn == 3"
+                       ng-required="newEmpYn == 1 || newEmpYn == 3"
                        maxlength="12"
                        popover-enable="empForm.userPwd.$invalid"
                        popover-placement="bottom-left"
@@ -124,15 +124,15 @@
                        uib-popover="<s:message code="storeEmp.pwd" />은(는) 필수 입력항목 입니다."/>
                 <input type="password" id="_userPwdCfm" name="userPwdCfm" class="sb-input ml10 w30" style="width: 30%"
                        ng-model="storeEmpRegistInfo.userPwdCfm"
-                       ng-show="newEmpYn == true"
-                       ng-required="newEmpYn == true"
+                       ng-show="newEmpYn == 1 || newEmpYn == 3"
+                       ng-required="newEmpYn == 1 || newEmpYn == 3"
                        maxlength="12"
                        popover-enable="empForm.userPwd.$invalid"
                        popover-placement="bottom-left"
                        popover-trigger="'mouseenter'"
                        placeholder="<s:message code="storeEmp.pwd.confirm" />"
                        uib-popover="<s:message code="storeEmp.pwd.confirm" />은(는) 필수 입력항목 입니다."/>
-                <a href="#" class="btn_grayS" ng-show="newEmpYn == false" ng-click="changePassword()"><s:message code="storeEmp.change.pwd" /></a>
+                <a href="#" class="btn_grayS" ng-show="newEmpYn == 2" ng-click="changePassword()"><s:message code="storeEmp.change.pwd" /></a>
               </td>
             </tr>
             <tr>
@@ -246,9 +246,9 @@
 
       <div class="wj-dialog-footer">
         <%-- 등록 regist() --%>
-        <button class="btn btn_blue" ng-click="empForm.$valid && regist()" ng-show="newEmpYn == true"><s:message code="cmm.new.add"/></button>
+        <button class="btn btn_blue" ng-click="empForm.$valid && regist()" ng-show="newEmpYn == 1"><s:message code="cmm.new.add"/></button>
         <%-- 저장 --%>
-        <button class="btn btn_blue" ng-click="empForm.$valid && save()" ng-show="newEmpYn == false"><s:message code="cmm.save"/></button>
+        <button class="btn btn_blue" ng-click="empForm.$valid && save()" ng-show="newEmpYn == 2 || newEmpYn == 3"><s:message code="cmm.save"/></button>
         <%-- 닫기 --%>
         <button class="btn btn_gray" ng-click="close()"><s:message code="cmm.close"/></button>
       </div>
@@ -256,5 +256,5 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpSave.js?ver=20181121.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmpSave.js?ver=20240322.02" charset="utf-8"></script>
 

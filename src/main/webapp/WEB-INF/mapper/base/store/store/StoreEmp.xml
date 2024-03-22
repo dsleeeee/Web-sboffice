@@ -102,7 +102,7 @@
                tme.EMP_PWD,
                tme.WEB_USE_YN,
                tcn_web_use_yn.NMCODE_NM AS WEB_USE_YN_NM,
-               tme.USER_ID,
+               twui.USER_ID,
                tme.MP_NO,
                tme.SERVICE_FG,
                tcn_service_fg.NMCODE_NM AS SERVICE_FG_NM,
@@ -120,6 +120,8 @@
           LEFT OUTER JOIN TB_CM_NMCODE tcn_sms_recv_yn ON
             tme.SMS_RECV_YN = tcn_sms_recv_yn.NMCODE_CD
             AND tcn_sms_recv_yn.NMCODE_GRP_CD = '072'
+          LEFT OUTER JOIN TB_WB_USER_INFO twui ON
+            tme.USER_ID = twui.USER_ID
           WHERE tme.STORE_CD = #{storeCd}
             AND tme.EMP_NO = #{empNo}
     </select>
@@ -133,8 +135,15 @@
     <select id="getStoreUserIdCnt" parameterType="storeEmpVO" resultType="Integer">
         /* USE : StoreEmpMapper.getStoreUserIdCnt */
         SELECT COUNT(1) AS CNT
-          FROM TB_WB_USER_INFO
-         WHERE USER_ID = #{userId}
+          FROM (
+                    SELECT USER_ID
+                    FROM   TB_WB_USER_INFO
+                    WHERE  USER_ID = #{userId}
+                    UNION
+                    SELECT USER_ID
+                    FROM   TB_MS_EMPLOYEE
+                    WHERE  USER_ID = #{userId}
+               )
     </select>
 
 

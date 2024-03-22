@@ -150,13 +150,22 @@ public class HqEmpServiceImpl implements HqEmpService {
 
         if( hqEmpVO.getWebUseYn() == UseYn.Y) {
             hqEmpVO.setAuthGrpCd(HQ_AUTH_GRP_CD);
+
+            // 한번도 웹 사용한적 없는경우, 웹사용여부 미사용->사용 변경시 비번체크 필요
+            if(hqEmpVO.getPriorPwd() == null || hqEmpVO.getPriorPwd() ==""){
+                // 비밀번호 정책 체크
+                EmpResult pwdChgResult = passwordPolicy(hqEmpVO);
+                if( EmpResult.SUCCESS != pwdChgResult ) {
+                    return pwdChgResult;
+                }
+            }
         }
 
         if( hqEmpMapper.updateHqEmpInfo(hqEmpVO) != 1 ) {
             return EmpResult.FAIL;
         }
         else{
-            if( "Y".equals(hqEmpDtlInfo.getStr("webUseYn")) || "Y".equals(hqEmpVO.getWebUseYn())) {
+            if( "Y".equals(hqEmpDtlInfo.getStr("webUseYn")) || hqEmpVO.getWebUseYn() == UseYn.Y) {
                 if( hqEmpMapper.saveWbUserInfo(hqEmpVO) != 1 ) {
                     return EmpResult.FAIL;
                 }

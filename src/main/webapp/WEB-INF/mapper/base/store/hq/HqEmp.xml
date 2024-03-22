@@ -101,7 +101,7 @@
         the.EMP_NM,
         the.SMS_RECV_YN,
         (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='072' AND tcn.NMCODE_CD = the.SMS_RECV_YN ) AS SMS_RECV_YN_NM,
-        the.USER_ID,
+        twui.USER_ID,
         the.WEB_USE_YN,
         (SELECT tcn.NMCODE_NM FROM TB_CM_NMCODE tcn WHERE tcn.NMCODE_GRP_CD ='067' AND tcn.NMCODE_CD = the.WEB_USE_YN ) AS WEB_USE_YN_NM,
         the.SERVICE_FG,
@@ -139,9 +139,11 @@
             AND thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
             GROUP BY twub.USER_ID
         ) twub
+        , TB_WB_USER_INFO twui
         WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
         AND the.EMP_NO = #{empNo}
         AND twub.USER_ID (+)= the.USER_ID
+        AND twui.USER_ID (+)= the.USER_ID
     </select>
 
     <!-- 본사 사원 웹 사용자 조회 -->
@@ -153,8 +155,15 @@
     <select id="getHqUserIdCnt" parameterType="hqEmpVO" resultType="Integer">
         /* USE : HqEmpMapper.getHqUserIdCnt */
         SELECT COUNT(1) AS CNT
-          FROM TB_WB_USER_INFO
-         WHERE USER_ID = #{userId}
+          FROM (
+                    SELECT USER_ID
+                    FROM   TB_WB_USER_INFO
+                    WHERE  USER_ID = #{userId}
+                    UNION
+                    SELECT USER_ID
+                    FROM   TB_HQ_EMPLOYEE
+                    WHERE  USER_ID = #{userId}
+               )
     </select>
 
     <!-- 신규사원번호 조회 -->
