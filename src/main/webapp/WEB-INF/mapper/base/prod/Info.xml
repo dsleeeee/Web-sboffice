@@ -459,7 +459,8 @@
               ,       NVL(A.HQ_CHILD_CLASS_CNT,0) AS HQ_CHILD_CLASS_CNT
               ,       NVL(B.MS_CHILD_CLASS_CNT,0) AS MS_CHILD_CLASS_CNT
               ,       NVL(C.HQ_PROD_CNT,0) AS HQ_PROD_CNT
-              ,       NVL(D.MS_PROD_CNT,0) AS MS_PROD_CNT
+              <!-- ,       NVL(D.MS_PROD_CNT,0) AS MS_PROD_CNT -->
+              ,       NVL2(D.PROD_CLASS_CD, 1, 0) AS MS_PROD_CNT
               FROM    TB_HQ_PRODUCT_CLASS thpc
               ,       (
                             SELECT P_PROD_CLASS_CD
@@ -527,7 +528,7 @@
                               BY  PROD_CLASS_CD
                       ) C
               ,       (
-                            SELECT PROD_CLASS_CD
+                           <!-- SELECT PROD_CLASS_CD
                             ,      COUNT(PROD_CLASS_CD) AS MS_PROD_CNT
                             FROM   TB_MS_PRODUCT
                             WHERE  STORE_CD IN       (
@@ -548,7 +549,16 @@
                                                             </if>
                                                      )
                             GROUP
-                               BY PROD_CLASS_CD
+                               BY PROD_CLASS_CD -->
+
+                            SELECT DISTINCT PROD_CLASS_CD
+                            FROM   TB_MS_PRODUCT
+                            WHERE  STORE_CD IN      (
+                                                                 SELECT STORE_CD
+                                                                 FROM   TB_MS_STORE
+                                                                 WHERE  HQ_OFFICE_CD  = #{hqOfficeCd}
+                                                     )
+
                     ) D
               WHERE thpc.HQ_OFFICE_CD = #{hqOfficeCd}
               AND   thpc.CLS_LEVEL_CD = #{clsLevelCd}
@@ -589,7 +599,8 @@
               ,       '0' AS HQ_CHILD_CLASS_CNT
               ,       NVL(B.MS_CHILD_CLASS_CNT,0) AS MS_CHILD_CLASS_CNT
               ,       '0' AS HQ_PROD_CNT
-              ,       NVL(D.MS_PROD_CNT,0) AS MS_PROD_CNT
+              <!-- ,       NVL(D.MS_PROD_CNT,0) AS MS_PROD_CNT -->
+              ,       NVL2(D.PROD_CLASS_CD, 1, 0) AS MS_PROD_CNT
               FROM    TB_MS_PRODUCT_CLASS tmpc
               ,       (
                             SELECT P_PROD_CLASS_CD
@@ -612,7 +623,7 @@
                                BY  P_PROD_CLASS_CD
                       ) B
               ,       (
-                            SELECT PROD_CLASS_CD
+                            <!--SELECT PROD_CLASS_CD
                             ,      COUNT(PROD_CLASS_CD) AS MS_PROD_CNT
                             FROM   TB_MS_PRODUCT
                             WHERE  STORE_CD = #{storeCd}
@@ -629,7 +640,11 @@
                                                             </if>
                                                      )
                             GROUP
-                               BY PROD_CLASS_CD
+                               BY PROD_CLASS_CD-->
+
+                              SELECT DISTINCT PROD_CLASS_CD
+                              FROM   TB_MS_PRODUCT
+                              WHERE  STORE_CD = #{storeCd}
                     ) D
               WHERE tmpc.STORE_CD = #{storeCd}
               AND   tmpc.CLS_LEVEL_CD = #{clsLevelCd}
