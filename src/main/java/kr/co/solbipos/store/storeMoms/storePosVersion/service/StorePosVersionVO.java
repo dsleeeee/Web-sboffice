@@ -126,6 +126,9 @@ public class StorePosVersionVO extends PageVO {
     /** 프로시져 결과 */
     private String result;
 
+    /** 버전등록 범위 선택여부 */
+    private String confFg;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -376,5 +379,13 @@ public class StorePosVersionVO extends PageVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getConfFg() {
+        return confFg;
+    }
+
+    public void setConfFg(String confFg) {
+        this.confFg = confFg;
     }
 }

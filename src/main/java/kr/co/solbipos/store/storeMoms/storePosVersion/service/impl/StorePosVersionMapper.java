@@ -41,10 +41,7 @@ public interface StorePosVersionMapper {
     List<DefaultMap<String>> getPatchDtlList(StorePosVersionVO storePosVersionVO);
 
     /** 버전 적용 매장 등록 */
-    String registStore(StorePosVersionVO storePosVersionVO);
-
-    /** 버전 적용 여부 체크 */
-    int registChk(StorePosVersionVO storePosVersionVO);
+    int registStore(StorePosVersionVO storePosVersionVO);
 
     /** 포스패치로그 조회 */
     List<DefaultMap<String>> getPosPatchLogList(StorePosVersionVO storePosVersionVO);

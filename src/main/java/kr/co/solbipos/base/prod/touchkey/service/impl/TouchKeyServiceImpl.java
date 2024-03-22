@@ -561,6 +561,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             // 소속구분 설정
             touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            System.out.println("본사"+sessionInfoVO.getHqOfficeCd());
             touchKeyVO.setStoreCd(sessionInfoVO.getStoreCd());
             // 기본입력정보 설정
             touchKeyVO.setRegDt(currentDt);
@@ -570,6 +571,11 @@ public class TouchKeyServiceImpl implements TouchKeyService {
 
             // 매장에 터치키 XML 정보 업데이트
             keyMapper.saveGrpNm(touchKeyVO);
+
+            // 그룹명 추가 및 수정
+            if(sessionInfoVO.getOrgnFg().getCode() != null && sessionInfoVO.getOrgnFg().getCode() == "H"){
+                result = keyMapper.updateStoreGrpNm(touchKeyVO);
+            }
 
         }
 

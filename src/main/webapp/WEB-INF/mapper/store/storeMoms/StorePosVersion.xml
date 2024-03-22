@@ -30,12 +30,12 @@
         ,       #{selectVer}    AS VER_SER_ALL
         ,       (
                 CASE
-                    WHEN A.STORE_CD IN( SELECT  STORE_CD
-                                        FROM    TB_CM_POS_VERSN_STORE
-                                        WHERE   VER_SER_NO = #{selectVerCd}) THEN '등록'
-                    WHEN A.STORE_CD NOT IN( SELECT  STORE_CD
-                                            FROM    TB_CM_POS_VERSN_STORE
-                                            WHERE   VER_SER_NO = #{selectVerCd}) THEN '미등록'
+                    WHEN A.STORE_CD || A.POS_NO IN ( SELECT  STORE_CD || POS_NO
+                                                     FROM    TB_CM_POS_VERSN_STORE
+                                                     WHERE   VER_SER_NO = #{selectVerCd})      THEN '등록'
+                    WHEN A.STORE_CD || A.POS_NO  NOT IN ( SELECT  STORE_CD || POS_NO
+                                                          FROM    TB_CM_POS_VERSN_STORE
+                                                          WHERE   VER_SER_NO = #{selectVerCd}) THEN '미등록'
                 END
                 ) AS REGIST_FG
         ,       F.MAIN_VAL
@@ -50,9 +50,9 @@
         ,       G.PATCH_ERR_MSG
         ,       (
                 CASE
-                    WHEN A.STORE_CD NOT IN( SELECT  STORE_CD
-                                            FROM    TB_CM_POS_VERSN_STORE
-                                            WHERE   VER_SER_NO = #{selectVerCd}) THEN '[등록]'
+                    WHEN A.STORE_CD || A.POS_NO NOT IN (    SELECT  STORE_CD || POS_NO
+                                                            FROM    TB_CM_POS_VERSN_STORE
+                                                            WHERE   VER_SER_NO = #{selectVerCd})   THEN '[등록]'
                     ELSE NULL
                 END
                 ) AS REGIST_FG_STORE
@@ -203,14 +203,14 @@
         </if>
         <choose>
             <when test='registFg != null and registFg == "Y"'>
-                AND A.STORE_CD IN ( SELECT  STORE_CD
-                                    FROM    TB_CM_POS_VERSN_STORE
-                                    WHERE   VER_SER_NO = #{selectVerCd})
+                AND A.STORE_CD || A.POS_NO IN ( SELECT  STORE_CD || POS_NO
+                                                FROM    TB_CM_POS_VERSN_STORE
+                                                WHERE   VER_SER_NO = #{selectVerCd})
             </when>
             <when test='registFg != null and registFg == "N"'>
-                AND A.STORE_CD NOT IN ( SELECT  STORE_CD
-                                        FROM    TB_CM_POS_VERSN_STORE
-                                        WHERE   VER_SER_NO = #{selectVerCd})
+                AND A.STORE_CD || A.POS_NO  NOT IN ( SELECT  STORE_CD || POS_NO
+                                                     FROM    TB_CM_POS_VERSN_STORE
+                                                     WHERE   VER_SER_NO = #{selectVerCd})
             </when>
         </choose>
         <choose>
@@ -324,35 +324,61 @@
         TABLE    : TB_CM_POS_VERSN_STORE
         COMMENTS : 버전 적용 매장 등록한다.
     -->
-    <select id="registStore" statementType="CALLABLE" parameterType="storePosVersionVO" resultType="String">
+    <insert id="registStore" parameterType="storePosVersionVO">
         /* USE : VerManageMapper.registStore */
-        {
-            CALL PKG_CM_VERSN_STORE.SP_CM_VERSN_STORE_I
-            (
-                #{selectVerCd},
-                #{storeCd},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId},
-                #{result, mode=OUT, jdbcType=VARCHAR}
-            )
-        }
-    </select>
-
-    <!-- 버전 적용 여부 체크 -->
-    <!--
-        TABLE    : TB_CM_POS_VERSN_STORE
-        COMMENTS : 버전 적용여부를 체크한다.
-    -->
-    <select id="registChk" parameterType="storePosVersionVO" resultType="Integer">
-        /* USE : VerManageMapper.registChk */
-        SELECT 	count(VER_SER_NO)
-        FROM 	TB_CM_POS_VERSN_STORE
-        WHERE 	STORE_CD    = #{storeCd}
-        AND 	VER_RECV_FG = '1'
-        AND 	VER_SER_NO  = #{selectVerCd}
-    </select>
+        MERGE INTO TB_CM_POS_VERSN_STORE A
+            USING
+                (
+                    SELECT  #{selectVerCd}        AS VER_SER_NO
+                    ,       C.STORE_CD            AS STORE_CD
+                    ,       C.POS_NO              AS POS_NO
+                    ,       #{verRecvFg}          AS VER_RECV_FG
+                    ,       ''                    AS VER_RECV_DT
+                    ,       ''                    AS POS_IP
+                    ,       #{regDt}              AS REG_DT
+                    ,       #{regId}              AS REG_ID
+                    ,       #{modDt}              AS MOD_DT
+                    ,       #{modId}              AS MOD_ID
+                    FROM    TB_MS_POS C
+                    WHERE   C.STORE_CD          =   #{storeCd}      -- 확인/취소
+                    <if test='confFg != null and confFg == "N"'>
+                      AND   C.POS_NO            =   #{posNo}        -- 취소
+                    </if>
+                ) B
+            ON
+                (
+                            A.VER_SER_NO        =   B.VER_SER_NO
+                    AND     A.STORE_CD          =   B.STORE_CD
+                    AND     A.POS_NO            =   B.POS_NO
+                )
+            WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                            A.VER_SER_NO
+                    ,       A.STORE_CD
+                    ,       A.POS_NO
+                    ,       A.VER_RECV_FG
+                    ,       A.VER_RECV_DT
+                    ,       A.POS_IP
+                    ,       A.REG_DT
+                    ,       A.REG_ID
+                    ,       A.MOD_DT
+                    ,       A.MOD_ID
+                    )
+                    VALUES
+                    (
+                            B.VER_SER_NO
+                    ,       B.STORE_CD
+                    ,       B.POS_NO
+                    ,       B.VER_RECV_FG
+                    ,       B.VER_RECV_DT
+                    ,       B.POS_IP
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    )
+    </insert>
 
     <!-- 포스패치로그 조회 -->
     <!--

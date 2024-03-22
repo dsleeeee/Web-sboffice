@@ -91,21 +91,16 @@ public class StorePosVersionServiceImpl implements StorePosVersionService {
 
         int cnt = 0;
 
-        cnt = storePosVersionMapper.registChk(storePosVersionVO);
+        String dt = currentDateTimeString();
 
-        if(cnt == 0) {
-            String dt = currentDateTimeString();
+        storePosVersionVO.setRegDt(dt);
+        storePosVersionVO.setModDt(dt);
+        storePosVersionVO.setRegId(sessionInfo.getUserId());
+        storePosVersionVO.setModId(sessionInfo.getUserId());
+        storePosVersionVO.setVerRecvFg(VerRecvFg.REG);
+        storePosVersionVO.setVerRecvDt(dt);
 
-            storePosVersionVO.setRegDt(dt);
-            storePosVersionVO.setModDt(dt);
-            storePosVersionVO.setRegId(sessionInfo.getUserId());
-            storePosVersionVO.setModId(sessionInfo.getUserId());
-            storePosVersionVO.setVerRecvFg(VerRecvFg.REG);
-            storePosVersionVO.setVerRecvDt(dt);
-
-            String result = storePosVersionMapper.registStore(storePosVersionVO);
-
-        }
+        cnt = storePosVersionMapper.registStore(storePosVersionVO);
 
         return cnt;
     }

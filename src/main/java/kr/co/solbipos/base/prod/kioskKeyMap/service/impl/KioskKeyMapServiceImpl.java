@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.tools.StandardLocation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,6 +150,12 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
             // 매장에 터치키 XML 정보 업데이트
             result += kioskKeyMapMapper.saveClsType(kioskKeyMapVO);
+
+            System.out.println("본사"+sessionInfoVO.getOrgnFg().getCode());
+            // 그룹명 추가 및 수정
+            if(sessionInfoVO.getOrgnFg().getCode() != null && sessionInfoVO.getOrgnFg().getCode() == "H"){
+                result = kioskKeyMapMapper.updateStoreGrpNm(kioskKeyMapVO);
+            }
 
         }
 
@@ -710,6 +717,15 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                         // 기존 카테고리(중분류) 삭제
                         kioskKeyMapMapper.deleteStoreTuClsTypeM2(kioskKeyMapVO);
                     }
+
+                    if(sessionInfoVO.getOrgnFg().getCode() != null && sessionInfoVO.getOrgnFg().getCode() == "H") {
+                        System.out.println("본사"+sessionInfoVO.getOrgnFg().getCode());
+                        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                        // 매장그룹명 INSERT
+                        result = kioskKeyMapMapper.insertStoreGrpNmReg(kioskKeyMapVO);
+                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    }
+
                     // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                     result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
                     if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

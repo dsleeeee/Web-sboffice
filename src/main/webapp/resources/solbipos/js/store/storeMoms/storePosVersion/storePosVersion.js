@@ -171,26 +171,59 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
             $scope._popConfirm(messages["storePosVersion.storeRegist.msg"], function () {
 
               var params = {};
-              params.selectVerCd = $scope.selectVerCd;
-              params.storeCd = selectedRow.storeCd;
+              params.selectVerCd  = $scope.selectVerCd;
+              params.storeCd      = selectedRow.storeCd;
+              params.posNo        = selectedRow.posNo;
 
-              $scope._postJSONSave.withPopUp("/store/storeMoms/storePosVersion/storePosVersion/regist.sb", params, function (response) {
-                var result = response.data.data;
+              // 포스 등록 범위 체크
+              var id = s_alert.randomString(5);
+              var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
 
-                if(result === 0){
-                  $scope._popMsg(messages["cmm.saveSucc"]);
-                }else{
-                  $scope._popMsg(messages["storePosVersion.dupStore.msg"]);
-                }
-                // 재조회
-                $scope.searchStorePosVersionList();
+              pop.find("p").html(messages["storePosVersion.storeRegistChk.msg"]);
+
+              // 팝업 띄우기
+              $("#_alertTent").show();
+              pop.show();
+
+              // 확인 버튼 클릭시, 선택한 매장 전체 포스 등록
+              pop.find("a.btn_blue.conf").bind("click", function () {
+                $("#_alertTent").hide();
+                pop.remove();
+
+                setTimeout(function () {
+                  $scope.save(params);
+                }, 50);
+
+                return false;
               });
+
+              // 취소 버튼 클릭시, 선택한 포스만 등록
+              pop.find("a.btn_gray.conf").bind("click", function () {
+                $("#_alertTent").hide();
+                pop.remove();
+
+                setTimeout(function () {
+                  params.confFg = 'N';
+                  $scope.save(params);
+                }, 50);
+
+                return false;
+              });
+
             });
           }
         }
       }
     });
   };
+
+  $scope.save = function (params){
+
+    $scope._postJSONSave.withPopUp("/store/storeMoms/storePosVersion/storePosVersion/registStore.sb", params, function (response) {
+      // 재조회
+      $scope.searchStorePosVersionList();
+    });
+  }
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("storePosVersionCtrl", function (event, data) {
