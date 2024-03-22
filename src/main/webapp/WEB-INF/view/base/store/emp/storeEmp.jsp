@@ -211,12 +211,16 @@
 
 </div>
 <script>
-  var serviceFg  = ${ccu.getCommCode("007")};
-  var webUseYn   = ${ccu.getCommCode("067")};
-  var smsRecvYn  = ${ccu.getCommCode("072")};
+  var serviceFg  = ${ccu.getCommCode("007")}; // 재직여부
+  var webUseYn   = ${ccu.getCommCode("067")}; // 사용여부
+  var smsRecvYn  = ${ccu.getCommCode("072")}; // SMS수신여부
+
+  //'전체' 제외
+  var serviceFg2  = ${ccu.getCommCodeExcpAll("007")}; // 재직여부
+  var smsRecvYn2  = ${ccu.getCommCodeExcpAll("072")}; // SMS수신여부
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=2018082901.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=20240322.02" charset="utf-8"></script>
 
 <%-- 매장사원 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/emp/storeEmpDetail.jsp">

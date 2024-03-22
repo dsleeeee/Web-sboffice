@@ -63,7 +63,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.selectedHqEmp;
 
   // 신규 수정 여부
-  $scope.newEmpYn = true;
+  $scope.newEmpYn = 1; // 1: 신규등록, 2: 수정(WEB 사용), 3: 수정(WEB 미사용)
 
   // 웹사용자 아이디 중복체크 여부
   $scope.duplicationChkFg = false;
@@ -96,7 +96,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmpRegistInfo.smsRecvYn  = 'N';
       $scope.hqEmpRegistInfo.serviceFg  = '1';
       $scope.hqEmpRegistInfo.useYn      = 'Y';
-      $scope.newEmpYn                   = true;
+      $scope.newEmpYn                   = 1;
       $scope.hqEmpRegistInfo.mainSaleFg = '0';
 
       // [1250 맘스터치]
@@ -117,7 +117,6 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     } else {
 
       $scope.getHqEmpList();
-      $scope.newEmpYn = false;
     }
 
     event.preventDefault();
@@ -132,6 +131,12 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmpRegistInfo                    = response.data.data;
       $scope.hqEmpRegistInfo.empInfo            = ' [' + response.data.data.empNo + ']' + response.data.data.empNm;
       $scope.hqEmpRegistInfo.originalWebUserId  = response.data.data.userId;
+
+      if (response.data.data.userId != null && response.data.data.userId != undefined && response.data.data.userId != "") {
+          $scope.newEmpYn = 2; // 수정(WEB 사용)
+      } else {
+          $scope.newEmpYn = 3; // 수정(WEB 미사용)
+      }
 
       // [1250 맘스터치]
       $scope.hqEmpRegistInfo.momsTeam = nvl(response.data.data.momsTeam, "");
@@ -205,6 +210,10 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(messages["hqEmp.passwordNotMatch.msg"] );
         return false;
       }
+    } else {
+        $scope.hqEmpRegistInfo.userId = "";
+        $scope.hqEmpRegistInfo.userPwd = "";
+        $scope.hqEmpRegistInfo.userPwdCfm = "";
     }
 
     var params      = $scope.hqEmpRegistInfo;
@@ -232,17 +241,30 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   // 저장
   $scope.save = function(){
 
-    // 원래 웹 사용여부 'N'이었는데, 사용여부 'Y'로 변경한 경우
-    if(($scope.hqEmpRegistInfo.originalWebUserId == '' || $scope.hqEmpRegistInfo.originalWebUserId == undefined)
-       && $scope.hqEmpRegistInfo.webUseYn === 'Y') {
-      // 웹 사용자 아이디 중복체크
-      if(!$scope.duplicationChkFg) {
-        $scope._popMsg(messages["hqEmp.require.chk.userId"] );
-        return false;
-      }
+    // 한번도 웹 사용한적 없는경우
+    if($scope.hqEmpRegistInfo.originalWebUserId == '' || $scope.hqEmpRegistInfo.originalWebUserId == undefined || $scope.hqEmpRegistInfo.originalWebUserId == null){
+        // 웹 사용여부 'Y'로 변경시
+        if($scope.hqEmpRegistInfo.webUseYn === 'Y') {
+            // 웹 사용자 아이디 중복체크
+            if (!$scope.duplicationChkFg) {
+                $scope._popMsg(messages["hqEmp.require.chk.userId"]);
+                return false;
+            }
+
+            // 비밀번호, 비밀번호 확인 체크
+            if ($scope.hqEmpRegistInfo.userPwd !== $scope.hqEmpRegistInfo.userPwdCfm) {
+                $scope._popMsg(messages["hqEmp.passwordNotMatch.msg"]);
+                return false;
+            }
+        } else { // 웹 사용여부 'N'로 변경시
+            $scope.hqEmpRegistInfo.userId = "";
+            $scope.hqEmpRegistInfo.userPwd = "";
+            $scope.hqEmpRegistInfo.userPwdCfm = "";
+        }
     }
 
     var params = $scope.hqEmpRegistInfo;
+    params.pwdChgFg = false; // 비밀번호 변경여부
     params.chkHqBrandCd = $scope.hqEmpRegistInfo.hqBrandCd;
 
     $scope._postJSONSave.withOutPopUp( "/base/store/emp/hq/save.sb", params, function(response){

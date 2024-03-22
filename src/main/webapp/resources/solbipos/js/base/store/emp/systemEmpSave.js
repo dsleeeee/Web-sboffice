@@ -41,7 +41,7 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
   $scope.selectedSystemEmp;
 
   // 신규 수정 여부
-  $scope.newEmpYn = true;
+  $scope.newEmpYn = 1; // 1: 신규등록, 2: 수정(WEB 사용), 3: 수정(WEB 미사용)
 
   // 웹사용자 아이디 중복체크 여부
   $scope.duplicationChkFg = false;
@@ -71,7 +71,7 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.systemEmpRegistInfo.serviceFg  = '1';
       $scope.systemEmpRegistInfo.useYn      = 'Y';
       $scope.systemEmpRegistInfo.adminFg    = 'A';
-      $scope.newEmpYn                       = true;
+      $scope.newEmpYn                       = 1;
 
       // 총판/대리점 계정으로 접속한 경우, 관리업체는 본인업체로 고정
       // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
@@ -97,7 +97,6 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
     } else {
 
       $scope.getSystemEmpList();
-      $scope.newEmpYn = false;
 
       // 총판/대리점 계정으로 접속한 경우, 관리업체는 본인업체로 고정
       if(orgnFg === "AGENCY"){
@@ -126,6 +125,13 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
       $scope.systemEmpRegistInfo.empInfo            = ' [' + response.data.data.empNo + ']' + response.data.data.empNm;
       $scope.pwdChgFg                               = false;
       $scope.systemEmpRegistInfo.originalWebUserId  = response.data.data.userId;
+
+      if (response.data.data.userId != null && response.data.data.userId != undefined && response.data.data.userId != "") {
+        $scope.newEmpYn = 2; // 수정(WEB 사용)
+      } else {
+        $scope.newEmpYn = 3; // 수정(WEB 미사용)
+      }
+
       $("#_agencyNm").val(response.data.data.agencyNm);
       $("#_agencyCd").val(response.data.data.agencyCd);
     });
@@ -208,6 +214,10 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
         $scope._popMsg(messages["systemEmp.passwordNotMatch.msg"] );
         return false;
       }
+    } else {
+        $scope.systemEmpRegistInfo.userId = "";
+        $scope.systemEmpRegistInfo.userPwd = "";
+        $scope.systemEmpRegistInfo.userPwdCfm = "";
     }
 
     // 대리점(관리업체) 선택 필수
@@ -243,27 +253,39 @@ app.controller('systemEmpRegistCtrl', ['$scope', '$http', function ($scope, $htt
   // 저장
   $scope.save = function(){
 
-    // 원래 웹 사용여부 'N'이었는데, 사용여부 'Y'로 변경한 경우
-    if(($scope.systemEmpRegistInfo.originalWebUserId == '' || $scope.systemEmpRegistInfo.originalWebUserId == undefined)
-        && $scope.systemEmpRegistInfo.webUseYn === 'Y') {
-      // 웹 사용자 아이디 중복체크
-      if(!$scope.duplicationChkFg) {
-        $scope._popMsg(messages["systemEmp.require.chk.userId"] );
-        return false;
-      }
+      // 한번도 웹 사용한적 없는경우
+    if($scope.systemEmpRegistInfo.originalWebUserId == '' || $scope.systemEmpRegistInfo.originalWebUserId == undefined || $scope.systemEmpRegistInfo.originalWebUserId == null){
+        // 웹 사용여부 'Y'로 변경시
+        if($scope.systemEmpRegistInfo.webUseYn === 'Y') {
+            // 웹 사용자 아이디 중복체크
+            if (!$scope.duplicationChkFg) {
+                $scope._popMsg(messages["systemEmp.require.chk.userId"]);
+                return false;
+            }
+
+            // 비밀번호, 비밀번호 확인 체크
+            if ($scope.systemEmpRegistInfo.userPwd !== $scope.systemEmpRegistInfo.userPwdCfm) {
+                $scope._popMsg(messages["hqEmp.passwordNotMatch.msg"]);
+                return false;
+            }
+        } else {
+            $scope.systemEmpRegistInfo.userId = "";
+            $scope.systemEmpRegistInfo.userPwd = "";
+            $scope.systemEmpRegistInfo.userPwdCfm = "";
+        }
     }
 
     // 웹사용여부 'Y'면서 비밀번호 변경시
-    if($scope.systemEmpRegistInfo.webUseYn === 'Y' &&  !isEmptyObject($scope.systemEmpRegistInfo.userPwd)) {
+    /*if($scope.systemEmpRegistInfo.webUseYn === 'Y' &&  !isEmptyObject($scope.systemEmpRegistInfo.userPwd)) {
 
       $scope.pwdChgFg = true;
       if($scope.systemEmpRegistInfo.userPwd !== $scope.systemEmpRegistInfo.userPwdCfm) { // 비밀번호, 비밀번호 확인 체크
         $scope._popMsg(messages["systemEmp.passwordNotMatch.msg"] );
         return false;
       }
-    } else {
+    } else {*/
       $scope.pwdChgFg = false;
-    }
+    /*}*/
 
     // 대리점(관리업체) 선택 필수
     //if(isEmptyObject($scope.systemEmpRegistInfo.agencyNm)){
