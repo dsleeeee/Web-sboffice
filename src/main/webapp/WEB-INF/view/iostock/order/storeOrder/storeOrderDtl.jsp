@@ -8,10 +8,14 @@
 
 <wj-popup id="wjStoreOrderDtlLayer" control="wjStoreOrderDtlLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;height:750px;">
   <div id="storeOrderDtlLayer" class="wj-dialog wj-dialog-columns" ng-controller="storeOrderDtlCtrl">
+
+    <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
+
+    <%-- body --%>
     <div class="wj-dialog-body sc2" style="height: 700px;">
       <table class="tblType01">
         <colgroup>
@@ -38,14 +42,15 @@
         <%-- 저장 --%>
         <button type="button" id="btnDtlSave" class="btn_skyblue ml5" ng-click="storeCloseCheck('','')" ng-if="btnDtlSave">
           <s:message code="cmm.save"/></button>
-        <%-- 확정 --%>
+        <%-- 주문확정 --%>
         <button type="button" id="btnConfirm" class="btn_skyblue ml5" ng-click="storeCloseCheck('confirm', '0')" ng-if="btnConfirm">
           <s:message code="storeOrder.dtl.confirm"/></button>
       </div>
 
-		<div class="mt20 oh sb-select dkbr">
-			<button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>	<%-- 엑셀 다운로드 --%>
-		</div>
+      <div class="mt20 oh sb-select dkbr">
+          <%-- 엑셀다운로드 --%>
+          <button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
+      </div>
 
       <div style="clear: both;"></div>
 
@@ -81,14 +86,15 @@
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.poMinQty"/>" binding="poMinQty" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.vatFg"/>" binding="vatFg01" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="storeOrder.dtl.envst0011"/>" binding="envst0011" width="0" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
-
           </wj-flex-grid>
         </div>
         <%--//위즈모 테이블--%>
-
       </div>
+
     </div>
+    <%-- //body --%>
+
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderDtl.js?ver=20220805.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrderDtl.js?ver=20240325.01" charset="utf-8"></script>

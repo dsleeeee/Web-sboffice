@@ -1,5 +1,21 @@
+/****************************************************************
+ *
+ * 파일명 : storeOrderDtl.js
+ * 설  명 : 주문등록 상품 상세 팝업 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2019.01.04     ㅇㅇㅇ      1.0
+ *
+ * **************************************************************/
+/**
+ * get application
+ */
+var app = agrid.getApp();
+
 /** 주문등록 상세 그리드 controller */
 app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeOrderDtlCtrl', $scope, $http, true));
 
@@ -131,25 +147,36 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope.vendrCd     = data.vendrCd;
 
     $scope.wjStoreOrderDtlLayer.show(true);
-    if ($scope.procFg === "00") {
-      $scope.btnAddProd      = true;
-      $scope.btnDtlSave      = true;
-      $scope.flex.isReadOnly = false;
 
-      if (gEnvst1042 === "1" || gEnvst1042 === "2") {
-        $scope.btnConfirm = true;
-      } else {
-        $scope.btnConfirm = false;
-      }
+    // 당일보다 이전일자 요청등록 불가
+    var today = getCurDate();
+    if (parseInt(today) > parseInt($scope.reqDate)) {
+      $scope._popMsg(messages["storeOrder.dtl.not.prevDateOrder"]); // 당일보다 이전일자로 요청등록을 하실 수 없습니다.
+      $scope.btnAddProd = false;
+      $scope.btnDtlSave = false;
+      $scope.btnConfirm = false;
     } else {
-      $scope.btnAddProd      = false;
-      $scope.btnDtlSave      = false;
-      $scope.btnConfirm      = false;
-      $scope.flex.isReadOnly = true;
+      if ($scope.procFg === "00") {
+        $scope.btnAddProd      = true;
+        $scope.btnDtlSave      = true;
+        $scope.flex.isReadOnly = false;
+
+        if (gEnvst1042 === "1" || gEnvst1042 === "2") {
+          $scope.btnConfirm = true;
+        } else {
+          $scope.btnConfirm = false;
+        }
+      } else {
+        $scope.btnAddProd      = false;
+        $scope.btnDtlSave      = false;
+        $scope.btnConfirm      = false;
+        $scope.flex.isReadOnly = true;
+      }
     }
 
     $("#spanDtlTitle").html(messages["storeOrder.reqDate"] + ' : ' + getFormatDate($scope.reqDate, '-'));
     $scope.searchStoreLoan("Y");
+
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
