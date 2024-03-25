@@ -80,7 +80,7 @@ public interface StoreOrderMapper {
     DefaultMap<String> storeLoanCheck(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 주문등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력 */
-    int insertStoreOrderToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
+    int mergeStoreOrderToExcelUploadData(ExcelUploadMPSVO excelUploadMPSVO);
 
     /** 주문등록 엑셀업로드 - 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제 */
     int deleteExcelUploadCompleteData(ExcelUploadMPSVO excelUploadMPSVO);

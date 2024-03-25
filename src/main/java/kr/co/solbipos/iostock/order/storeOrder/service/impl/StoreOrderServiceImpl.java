@@ -473,7 +473,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         }
 
         //엑셀업로드 한 수량을 주문수량으로 입력
-        result = storeOrderMapper.insertStoreOrderToExcelUploadData(excelUploadMPSVO);
+        result = storeOrderMapper.mergeStoreOrderToExcelUploadData(excelUploadMPSVO);
 
         //주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
         result = storeOrderMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
