@@ -1043,85 +1043,137 @@
         PARAM    : excelUploadMPSVO
         COMMENTS : 주문등록 엑셀업로드 - 엑셀업로드 한 수량을 주문수량으로 입력한다.
     -->
-    <insert id="insertStoreOrderToExcelUploadData" parameterType="excelUploadMPSVO">
-        /* USE : storeOrderMapper.insertStoreOrderToExcelUploadData */
-        INSERT INTO TB_PO_HQ_STORE_ORDER_DTL
-        (   REQ_DATE            ,   STORE_CD        ,   SLIP_FG
-        ,   HQ_BRAND_CD         ,   PROD_CD         ,   PO_UNIT_FG     ,   PO_UNIT_QTY
-        ,   ORDER_SPLY_UPRC
-        ,   ORDER_UNIT_QTY
-        ,   ORDER_ETC_QTY
-        ,   ORDER_TOT_QTY
-        ,   ORDER_AMT
-        ,   ORDER_VAT
-        ,   ORDER_TOT
-        ,   REMARK
-        ,   REG_DT
-        ,   REG_ID
-        ,   MOD_DT
-        ,   MOD_ID
+    <insert id="mergeStoreOrderToExcelUploadData" parameterType="excelUploadMPSVO">
+        /* USE : storeOrderMapper.mergeStoreOrderToExcelUploadData */
+        MERGE INTO TB_PO_HQ_STORE_ORDER_DTL A
+        USING
+        (
+            SELECT  #{date} AS REQ_DATE     ,   #{storeCd} AS STORE_CD      ,   #{slipFg} AS SLIP_FG
+            ,       '00' AS HQ_BRAND_CD      ,   tmp.PROD_CD                  ,   tmp.PO_UNIT_FG          ,   tmp.PO_UNIT_QTY
+            ,       tmp.SPLY_UPRC AS ORDER_SPLY_UPRC
+            ,       tpte.UNIT_QTY * ${slipFg} AS ORDER_UNIT_QTY
+            ,       tpte.ETC_QTY * ${slipFg} AS ORDER_ETC_QTY
+            ,       tpte.QTY * ${slipFg} AS ORDER_TOT_QTY
+            ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+                - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)) * ${slipFg} AS ORDER_AMT
+            ,       (ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_VAT
+            ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
+                - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)
+                + ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_TOT
+            ,       tpte.REMARK
+            ,       #{regDt} AS REG_DT
+            ,       #{regId} AS REG_ID
+            ,       #{modDt} AS MOD_DT
+            ,       #{modId} AS MOD_ID
+            FROM    (   SELECT  tpte.STORE_CD
+                        ,       tpte.PROD_CD
+                        ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY
+                        ,       ( MOD   (SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY)
+                                  * DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', 0, 1), DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', 0, 1))
+                                ) AS ETC_QTY
+                        ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
+                                        - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                        , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
+                                      )
+                                ) AS QTY
+                        ,       MAX(tpte.REMARK) AS REMARK
+                        FROM    TB_PO_TEMP_EXCEL tpte
+                        ,       TB_MS_PRODUCT tmp
+                        WHERE   tpte.SESSION_ID =   #{sessionId}
+                        AND     tpte.PROD_CD    IS  NOT NULL
+                        AND     tmp.STORE_CD    =   tpte.STORE_CD
+                        AND     tmp.PROD_CD     =   tpte.PROD_CD
+                        AND     tmp.STORE_CD    =   #{storeCd}
+                        AND     tmp.PO_PROD_FG  IN  ('1','3')
+                        AND     tmp.USE_YN      =   'Y'
+                        GROUP
+                        BY      tpte.STORE_CD
+                        ,       tpte.PROD_CD
+                        ,       tmp.PO_UNIT_QTY
+                        ,       tmp.PO_UNIT_ALLOW_FG
+                    ) tpte
+            ,       TB_MS_PRODUCT tmp
+            ,       TB_MS_STORE_ENVST tmse
+            <if test='vendrCd != null and vendrCd != ""'>
+                ,       TB_HQ_VENDOR_PROD thvp
+            </if>
+            WHERE   tmp.STORE_CD       =   #{storeCd}
+            AND     tmp.STORE_CD       =   tpte.STORE_CD
+            AND     tmp.PROD_CD        =   tpte.PROD_CD
+            AND     tmse.STORE_CD      =   tmp.STORE_CD
+            AND     tmse.ENVST_CD      =   '0011'
+            AND     NVL(tpte.QTY,0)    >   0
+            <if test='vendrCd != null and vendrCd != ""'>
+                AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thvp.VENDR_CD = #{vendrCd}
+                AND thvp.PROD_CD = tpte.PROD_CD
+                AND thvp.USE_YN = 'Y'
+            </if>
+        ) B
+        ON  (
+            A.REQ_DATE = B.REQ_DATE
+            AND A.STORE_CD = B.STORE_CD
+            AND A.SLIP_FG = B.SLIP_FG
+            AND A.PROD_CD = B.PROD_CD
         )
-        SELECT  #{date}         ,   #{storeCd}      ,   #{slipFg}
-        ,       '00'            ,   tmp.PROD_CD     ,   tmp.PO_UNIT_FG  ,   tmp.PO_UNIT_QTY
-        ,       tmp.SPLY_UPRC
-        ,       tpte.UNIT_QTY * ${slipFg} AS ORDER_UNIT_QTY
-        ,       tpte.ETC_QTY * ${slipFg} AS ORDER_ETC_QTY
-        ,       tpte.QTY * ${slipFg} AS ORDER_TOT_QTY
-        ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
-              - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)) * ${slipFg} AS ORDER_AMT
-        ,       (ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_VAT
-        ,       (ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)
-              - ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)*NVL(tmse.ENVST_VAL,0)/11)
-              + ROUND(ROUND(tmp.SPLY_UPRC*(tpte.UNIT_QTY*tmp.PO_UNIT_QTY + tpte.ETC_QTY)/tmp.PO_UNIT_QTY)*DECODE(tmp.VAT_FG, '1', 1, 0)/(10+NVL(tmse.ENVST_VAL,0)))) * ${slipFg} AS ORDER_TOT
-        ,       tpte.REMARK
-        ,       #{regDt}
-        ,       #{regId}
-        ,       #{modDt}
-        ,       #{modId}
-        FROM    (   SELECT  tpte.STORE_CD
-                    ,       tpte.PROD_CD
-                    ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY
-                    ,       ( MOD   (SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY)
-                            * DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', 0, 1), DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', 0, 1))
-                            ) AS ETC_QTY
-                    ,       (SUM (NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))
-                                - DECODE(${slipFg}, 1, DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 1, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
-                                , DECODE(SUBSTR(tmp.PO_UNIT_ALLOW_FG, 2, 1), 'B', MOD(SUM(NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0)),tmp.PO_UNIT_QTY), 0)
-                              )
-                            ) AS QTY
-                    ,       MAX(tpte.REMARK) AS REMARK
-                    FROM    TB_PO_TEMP_EXCEL tpte
-                    ,       TB_MS_PRODUCT tmp
-                    WHERE   tpte.SESSION_ID =   #{sessionId}
-                    AND     tpte.PROD_CD    IS  NOT NULL
-                    AND     tmp.STORE_CD    =   tpte.STORE_CD
-                    AND     tmp.PROD_CD     =   tpte.PROD_CD
-                    AND     tmp.STORE_CD    =   #{storeCd}
-                    AND     tmp.PO_PROD_FG  IN  ('1','3')
-                    AND     tmp.USE_YN      =   'Y'
-                    GROUP
-                    BY      tpte.STORE_CD
-                    ,       tpte.PROD_CD
-                    ,       tmp.PO_UNIT_QTY
-                    ,       tmp.PO_UNIT_ALLOW_FG
-                ) tpte
-        ,       TB_MS_PRODUCT tmp
-        ,       TB_MS_STORE_ENVST tmse
-        <if test='vendrCd != null and vendrCd != ""'>
-        ,       TB_HQ_VENDOR_PROD thvp
-        </if>
-        WHERE   tmp.STORE_CD       =   #{storeCd}
-        AND     tmp.STORE_CD       =   tpte.STORE_CD
-        AND     tmp.PROD_CD        =   tpte.PROD_CD
-        AND     tmse.STORE_CD      =   tmp.STORE_CD
-        AND     tmse.ENVST_CD      =   '0011'
-        AND     NVL(tpte.QTY,0)    >   0
-        <if test='vendrCd != null and vendrCd != ""'>
-           AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND thvp.VENDR_CD = #{vendrCd}
-           AND thvp.PROD_CD = tpte.PROD_CD
-           AND thvp.USE_YN = 'Y'
-        </if>
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PO_UNIT_FG = B.PO_UNIT_FG,
+            PO_UNIT_QTY = B.PO_UNIT_QTY,
+            ORDER_SPLY_UPRC = B.ORDER_SPLY_UPRC,
+            ORDER_UNIT_QTY = NVL(A.ORDER_UNIT_QTY, 0) + NVL(B.ORDER_UNIT_QTY, 0),
+            ORDER_ETC_QTY = NVL(A.ORDER_ETC_QTY, 0) + NVL(B.ORDER_ETC_QTY, 0),
+            ORDER_TOT_QTY = NVL(A.ORDER_TOT_QTY, 0) + NVL(B.ORDER_TOT_QTY, 0),
+            ORDER_AMT = NVL(A.ORDER_AMT, 0) + NVL(B.ORDER_AMT, 0),
+            ORDER_VAT = NVL(A.ORDER_VAT, 0) + NVL(B.ORDER_VAT, 0),
+            ORDER_TOT = NVL(A.ORDER_TOT, 0) + NVL(B.ORDER_TOT, 0),
+            REMARK = B.REMARK,
+            MOD_DT = B.MOD_DT,
+            MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.REQ_DATE,
+                A.STORE_CD,
+                A.SLIP_FG,
+                A.HQ_BRAND_CD,
+                A.PROD_CD,
+                A.PO_UNIT_FG,
+                A.PO_UNIT_QTY,
+                A.ORDER_SPLY_UPRC,
+                A.ORDER_UNIT_QTY,
+                A.ORDER_ETC_QTY,
+                A.ORDER_TOT_QTY,
+                A.ORDER_AMT,
+                A.ORDER_VAT,
+                A.ORDER_TOT,
+                A.REMARK,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.REQ_DATE,
+                B.STORE_CD,
+                B.SLIP_FG,
+                B.HQ_BRAND_CD,
+                B.PROD_CD,
+                B.PO_UNIT_FG,
+                B.PO_UNIT_QTY,
+                B.ORDER_SPLY_UPRC,
+                B.ORDER_UNIT_QTY,
+                B.ORDER_ETC_QTY,
+                B.ORDER_TOT_QTY,
+                B.ORDER_AMT,
+                B.ORDER_VAT,
+                B.ORDER_TOT,
+                B.REMARK,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
     </insert>
 
 
