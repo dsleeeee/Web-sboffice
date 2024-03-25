@@ -126,7 +126,6 @@
   </div>
 </div>
 
-
 <script type="text/javascript">
 	var gReqDate 	= '${reqDate}';
 	var gEnvst1044 	= '${envst1044}';
@@ -140,18 +139,17 @@
 
     <%-- 본사 거래처 콤보박스 --%>
     var vendrList = ${vendrList};
-	
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrder.js?ver=20220722.01" charset="utf-8"></script>
 
-<%-- 주문등록 상품 상세 레이어 --%>
+<%-- 주문등록 상품 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/storeOrder/storeOrderDtl.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 주문등록 상품 등록 레이어 --%>
+<%-- 주문등록 상품 등록 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/storeOrder/storeOrderRegist.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>

@@ -1,4 +1,17 @@
-//var app = agrid.getApp();
+/****************************************************************
+ *
+ * 파일명 : storeOrderRegist.js
+ * 설  명 : 주문등록 상품 등록 팝업 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2019.01.04     ㅇㅇㅇ      1.0
+ *
+ * **************************************************************/
+/**
+ * get application
+ */
+var app = agrid.getApp();
 
 /** 주문등록 상세 그리드 controller */
 app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
