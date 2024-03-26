@@ -91,6 +91,9 @@ public class InstlAgencyVO extends CmmVO {
     /** 대리점명(검색용) */
     private String srchAgencyNm;
 
+    /** 웹 사용자 변경 전 PASSWORD */
+    private String priorPwd;
+
 
     public String getAgencyCd() {
         return agencyCd;
@@ -362,5 +365,13 @@ public class InstlAgencyVO extends CmmVO {
 
     public void setSrchAgencyNm(String srchAgencyNm) {
         this.srchAgencyNm = srchAgencyNm;
+    }
+
+    public String getPriorPwd() {
+        return priorPwd;
+    }
+
+    public void setPriorPwd(String priorPwd) {
+        this.priorPwd = priorPwd;
     }
 }

@@ -228,7 +228,7 @@
                     , tce.EMP_NM
                     , tce.EMP_PWD
                     , tce.WEB_USE_YN
-                    , tce.USER_ID
+                    , twui.USER_ID
                     , tce.MP_NO
                     , tce.SERVICE_FG
                     , (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '007' AND NMCODE_CD = tce.SERVICE_FG) AS SERVICE_FG_NM
@@ -243,9 +243,11 @@
                     , tce.MOD_DT
                     , tce.MOD_ID
              FROM TB_CM_EMPLOYEE tce
+             ,    TB_WB_USER_INFO twui
             WHERE 1=1
               AND tce.AGENCY_CD = #{agencyCd}
               AND tce.EMP_NO = #{empNo}
+              AND twui.USER_ID (+)= tce.USER_ID
         ORDER BY tce.EMP_NO
     </select>
 
@@ -345,9 +347,8 @@
         /* USE : InstlAgencyMapper.updateEmployee */
         UPDATE TB_CM_EMPLOYEE
             SET EMP_NM = #{empNm}
-                <!-- , EMP_PWD = #{userPwd} -->
                 , WEB_USE_YN = #{webUseYn}
-                <!-- , USER_ID = #{userId} -->
+                , USER_ID = #{userId}
                 , MP_NO = #{mpNo}
                 , SERVICE_FG = #{serviceFg}
                 , SMS_RECV_YN = #{smsRecvYn}
@@ -368,7 +369,7 @@
           COMMENTS :  웹 사용자 정보가 있으면 수정, 없으면 insert
     -->
     <update id="saveWbUserInfo" parameterType="instlAgencyVO">
-        /* USE : instlAgencyVO.saveWbUserInfo */
+        /* USE : InstlAgencyMapper.saveWbUserInfo */
         MERGE INTO TB_WB_USER_INFO twui
         USING (SELECT tce.USER_ID
                  FROM TB_CM_EMPLOYEE tce
@@ -407,4 +408,18 @@
            #{modId}
        )
     </update>
+
+    <!--  사원 비밀번호 조회 -->
+    <!--
+          TABLE    : TB_WB_USER_INFO
+          PARAM    : instlAgencyVO
+          COMMENTS : 사원의 비밀번호를 조회한다.
+    -->
+    <select id="getAgencyEmpPassword" parameterType="instlAgencyVO" resultType="java.lang.String">
+        /* USE : InstlAgencyMapper.getAgencyEmpPassword */
+        SELECT twui.USER_PWD
+          FROM TB_WB_USER_INFO twui
+         WHERE twui.USER_ID = #{userId}
+    </select>
+
 </mapper>

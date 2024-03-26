@@ -1,17 +1,16 @@
 package kr.co.solbipos.pos.license.instlAgency.service.impl;
 
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.AuthenticationException;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.security.EncUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.application.session.user.enums.PwChgResult;
 import kr.co.solbipos.base.store.emp.enums.EmpResult;
-import kr.co.solbipos.base.store.emp.hq.service.HqEmpVO;
-import kr.co.solbipos.base.store.emp.system.service.SystemEmpVO;
 import kr.co.solbipos.base.store.emp.system.service.impl.SystemEmpMapper;
 import kr.co.solbipos.pos.license.instlAgency.service.InstlAgencyService;
 import kr.co.solbipos.pos.license.instlAgency.service.InstlAgencyVO;
@@ -138,10 +137,26 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
 
             // 수정 시
             if (instlAgencyVO.getSaveType().equals("MOD")) {
+
+                DefaultMap<String> agencyEmpDtlInfo = getAgencyEmpDtl(instlAgencyVO, sessionInfoVO);
+                instlAgencyVO.setPriorPwd(instlAgencyMapper.getAgencyEmpPassword(instlAgencyVO));
+
+                if (instlAgencyVO.getWebUseYn().equals("Y")) {
+
+                    // 한번도 웹 사용한적 없는경우, 웹사용여부 미사용->사용 변경시 비번체크 필요
+                    if(instlAgencyVO.getPriorPwd() == null || instlAgencyVO.getPriorPwd() ==""){
+                        // 비밀번호 정책 체크
+                        EmpResult pwdChgResult = passwordPolicy(instlAgencyVO);
+                        if (EmpResult.SUCCESS != pwdChgResult) {
+                            return pwdChgResult;
+                        }
+                    }
+                }
+
                 if (instlAgencyMapper.updateEmployee(instlAgencyVO) != 1) {
                     return EmpResult.FAIL;
                 }else{
-                    if(instlAgencyVO.getUserId() != ""){
+                    if( "Y".equals(agencyEmpDtlInfo.getStr("webUseYn")) || instlAgencyVO.getWebUseYn().equals("Y")) {
                         if( instlAgencyMapper.saveWbUserInfo(instlAgencyVO) <= 0 ) {
                             return EmpResult.FAIL;
                         }
@@ -182,10 +197,21 @@ public class InstlAgencyServiceImpl implements InstlAgencyService {
 
         String newUserPassword = EncUtil.setEncSHA256(instlAgencyVO.getUserId() + instlAgencyVO.getUserPwd());
 
-        // 비밀번호 정책과 맞지 않음
-        if ( !CmmUtil.passwordPolicyCheck(instlAgencyVO.getUserPwd()) ) {
-            return EmpResult.PASSWORD_REGEXP;
+        /** 패스워드 정책 체크 */
+        PwChgResult pwdChk ;
+        try {
+            pwdChk = CmmUtil.checkPasswd(instlAgencyVO.getUserPwd());
+            if(pwdChk != PwChgResult.CHECK_OK) {
+                return EmpResult.PASSWORD_REGEXP;
+            }
+        } catch (Exception e) {
+            throw new AuthenticationException(messageService.get("login.pwchg.error"), "");
         }
+
+        // 비밀번호 정책과 맞지 않음
+        /*if ( !CmmUtil.passwordPolicyCheck(instlAgencyVO.getUserPwd()) ) {
+            return EmpResult.PASSWORD_REGEXP;
+        }*/
 
         instlAgencyVO.setUserPwd(newUserPassword);
 

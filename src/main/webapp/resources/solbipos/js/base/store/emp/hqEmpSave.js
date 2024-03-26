@@ -66,7 +66,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.newEmpYn = 1; // 1: 신규등록, 2: 수정(WEB 사용), 3: 수정(WEB 미사용)
 
   // 웹사용자 아이디 중복체크 여부
-  $scope.duplicationChkFg = false;
+  $scope.duplicationChkFg = "";
 
   // 사원정보
   $scope.hqEmpRegistInfo;
@@ -131,6 +131,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.hqEmpRegistInfo                    = response.data.data;
       $scope.hqEmpRegistInfo.empInfo            = ' [' + response.data.data.empNo + ']' + response.data.data.empNm;
       $scope.hqEmpRegistInfo.originalWebUserId  = response.data.data.userId;
+      $scope.duplicationChkFg                   = response.data.data.userId;
 
       if (response.data.data.userId != null && response.data.data.userId != undefined && response.data.data.userId != "") {
           $scope.newEmpYn = 2; // 수정(WEB 사용)
@@ -171,7 +172,7 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       console.log('chk duplicate result', result);
 
       if(result == "SUCCESS"){
-        $scope.duplicationChkFg = true;
+        $scope.duplicationChkFg = $scope.hqEmpRegistInfo.userId;
         $scope._popMsg(messages["hqEmp.notDuplicate.msg"]);
       } else if(result === "USER_ID_REGEXP"){
         $scope._popMsg(messages["hqEmp.userIdRegexp.msg"]);
@@ -200,16 +201,24 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.regist = function(){
 
     if($scope.hqEmpRegistInfo.webUseYn === 'Y') {
-      // 웹 사용자 아이디 중복체크
-      if(!$scope.duplicationChkFg) {
-        $scope._popMsg(messages["hqEmp.require.chk.userId"] );
-        return false;
-      }
-      // 비밀번호, 비밀번호 확인 체크
-      if($scope.hqEmpRegistInfo.userPwd !== $scope.hqEmpRegistInfo.userPwdCfm) {
-        $scope._popMsg(messages["hqEmp.passwordNotMatch.msg"] );
-        return false;
-      }
+
+        /*웹사용자ID 중복체크*/
+        if ($scope.duplicationChkFg === "") {
+            $scope._popMsg(messages["hqEmp.require.chk.userId"]);
+            return false;
+        }
+
+        /*웹사용자ID 중복체크2*/
+        if ($scope.hqEmpRegistInfo.userId !== $scope.duplicationChkFg) {
+            $scope._popMsg(messages["hqEmp.require.chk.userId"]);
+            return false;
+        }
+
+        // 비밀번호, 비밀번호 확인 체크
+        if ($scope.hqEmpRegistInfo.userPwd !== $scope.hqEmpRegistInfo.userPwdCfm) {
+            $scope._popMsg(messages["hqEmp.passwordNotMatch.msg"]);
+            return false;
+        }
     } else {
         $scope.hqEmpRegistInfo.userId = "";
         $scope.hqEmpRegistInfo.userPwd = "";
@@ -245,8 +254,15 @@ app.controller('hqEmpRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     if($scope.hqEmpRegistInfo.originalWebUserId == '' || $scope.hqEmpRegistInfo.originalWebUserId == undefined || $scope.hqEmpRegistInfo.originalWebUserId == null){
         // 웹 사용여부 'Y'로 변경시
         if($scope.hqEmpRegistInfo.webUseYn === 'Y') {
-            // 웹 사용자 아이디 중복체크
-            if (!$scope.duplicationChkFg) {
+
+            /*웹사용자ID 중복체크*/
+            if ($scope.duplicationChkFg === "") {
+                $scope._popMsg(messages["hqEmp.require.chk.userId"]);
+                return false;
+            }
+
+            /*웹사용자ID 중복체크2*/
+            if ($scope.hqEmpRegistInfo.userId !== $scope.duplicationChkFg) {
                 $scope._popMsg(messages["hqEmp.require.chk.userId"]);
                 return false;
             }
