@@ -107,7 +107,7 @@ public class CmmUtil {
 
         boolean flag = Pattern.matches(".*[ㄱ-ㅎ|ㅏ-ㅣ|가-힝]+.*$", value);
         boolean flag2 = Pattern.matches(".*[a-zA-Z]+.*", value);
-        boolean flag3 = Pattern.matches("[a-zA-Z0-9]*", value);
+        boolean flag3 = Pattern.matches("[a-z0-9]*", value);
 
         // ds 와 s로 시작하는 id는 본사 관리자 또는 매장 관리자의 id가 될 수 있어서
         // 해당 아이디로는 등록이 불가능하도록 함.
@@ -156,7 +156,7 @@ public class CmmUtil {
         int len = value.length();
 
         boolean flag = Pattern.matches(".*[ㄱ-ㅎ|ㅏ-ㅣ|가-힝]+.*$", value);
-        boolean flag3 = Pattern.matches("[a-zA-Z0-9]*", value);
+        boolean flag3 = Pattern.matches("[a-z0-9]*", value);
 
         // 2021.11.17 BBQ는 매장코드가 숫자로만 되어있어서, 매장코드를 웹 사용자 아이디로 그대로 사용하기 위해 숫자로만 이뤄진 웹 사용자 아이디도 생성 가능하도록 변경.
 

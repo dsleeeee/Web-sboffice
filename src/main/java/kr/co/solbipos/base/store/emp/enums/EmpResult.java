@@ -49,7 +49,7 @@ public enum EmpResult implements CodeEnum {
     USER_ID_CANNOT_USE_HANGEUL("USER_ID_CANNOT_USE_HANGEUL"),
     /** 아이디는 영문자가 반드시 포함되어야 합니다. */
     USER_ID_MUST_CONTAIN_ENG_CAHR("USER_ID_MUST_CONTAIN_ENG_CAHR"),
-    /** 아이디는 영문과 숫자만 가능합니다. */
+    /** 아이디는 영어 소문자와 숫자만 가능합니다. */
     USER_ID_ONLY_ENG_NUM_CHAR("USER_ID_ONLY_ENG_NUM_CHAR"),
     /** 사원번호 정책이 맞지 않음 */
     EMP_NO_REGEXP("EMP_NO_REGEXP")
