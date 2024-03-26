@@ -1,8 +1,6 @@
 package kr.co.solbipos.pos.license.instlAgency.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.application.pos.service.MemberVO;
-import kr.co.solbipos.base.store.emp.system.service.SystemEmpVO;
 import kr.co.solbipos.pos.license.instlAgency.service.InstlAgencyVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -45,4 +43,7 @@ public interface InstlAgencyMapper {
 
     /** 웹 로그인 정보 수정*/
     int saveWbUserInfo(InstlAgencyVO instlAgencyVO);
+
+    /** 현재 패스워드 조회 */
+    String getAgencyEmpPassword(InstlAgencyVO instlAgencyVO);
 }

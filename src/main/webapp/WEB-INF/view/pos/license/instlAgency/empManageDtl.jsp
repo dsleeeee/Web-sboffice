@@ -165,7 +165,13 @@
 
     <%-- 수정 --%>
     $("#empManageDtlLayer #emd_btnEdit").click(function(){
-        empManageRegist("MOD", $("#emd_agencyCd").val(), $("#emd_empNo").text(), $("#emd_pAgencyCd").val());
+
+        // 1: 신규등록, 2: 수정(WEB 사용), 3: 수정(WEB 미사용)
+        var saveType = "2";
+        if($("#emd_userId").text() == '' || $("#emd_userId").text() == undefined || $("#emd_userId").text() == null){
+            saveType = "3";
+        }
+        empManageRegist(saveType, $("#emd_agencyCd").val(), $("#emd_empNo").text(), $("#emd_pAgencyCd").val());
     });
 
     <%-- 레이어팝업 닫기 --%>

@@ -148,12 +148,12 @@
         $("#empManageRegistLayer").show();
 
         // 현재 등록/수정 모드 값과 agencyCd, pAgencyCd 값 갖고있기
-        $("#saveType").val(saveType);
+        $("#saveType").val(saveType); // 1: 신규등록, 2: 수정(WEB 사용), 3: 수정(WEB 미사용)
         $("#emr_agencyCd").val(agencyCd);
         $("#emr_pAgencyCd").val(pAgencyCd);
 
         // 수정모드 시
-        if(saveType === "MOD"){
+        if(saveType === "2" || saveType === "3"){
 
             // 화면명
             $("#emr_title").text("<s:message  code="instlAgency.empModify"/>");
@@ -179,22 +179,13 @@
                     $("#emr_smsRecvYn").val(dtlData.smsRecvYn);
                     $("#emr_remark").val(dtlData.remark);
 
-                    if(dtlData.webUseYn === "Y"){
-                        $("#trUserId").css("display", "")
-                    }else if(dtlData.webUseYn === "N"){
-                        $("#trUserId").css("display", "none")
-                    }
+                    // 웹 사용여부에 따른 ID, 비밀번호 입력창 보이기/숨기기
+                    hideWebInfo();
                 },
                 function (result) {
                     s_alert.pop(result.message);
                 }
             );
-
-            // 수정 모드 시 웹 정보 입력 관련 숨기기 or 입력막기
-            $("#trUserPwd").css("display", "none");
-            $("#spanCheckDuplicate").css("display", "none");
-            $("#emr_userId").attr("readonly",true);
-            $("#trUserId").css("display", "");
 
             // 총판/대리점 권한인 경우 관리자 구분 고정
             if($("#ai_agencyType").val() === "dist"){
@@ -212,17 +203,18 @@
             $("#emr_title").text("<s:message  code="instlAgency.empRegist"/>");
 
             //등록모드 시 웹 정보 입력 관련 보이게 처리
-            $("#trUserId").css("display", "")
+            $("#emr_empNo").attr("placeholder", " 사원번호는 자동으로 생성됩니다.");
+            $("#trUserId").css("display", "");
+            $("#emr_userId").removeAttr("readonly");
             $("#spanCheckDuplicate").css("display", "");
             $("#trUserPwd").css("display", "");
-            $("#emr_userId").removeAttr("readonly");
-            $("#emr_empNo").attr("placeholder", " 사원번호는 자동으로 생성됩니다.");
 
             // 입력 모드시 초기화
             $("#emr_empNm").val("");
             $("#emr_empNo").val("");
             $("#emr_serviceFg").val("");
             $("#emr_userId").val("");
+            $("#duplicationChkFg").val("");
             $("#emr_userPwd").val("");
             $("#emr_userPwdCfm").val("");
             $("#emr_userPwdHd").val("");
@@ -295,21 +287,27 @@
         if(chkValid()){
 
             var params = {};
-            params.saveType = $("#saveType").val();
+            params.saveType = $("#saveType").val() === "1" ? "REG" : "MOD"; // 기존 서비스에서 사용하던 방식이 있어서 변환해준다.
             params.agencyCd = $("#emr_agencyCd").val();
             params.empNo = $("#emr_empNo").val();
             params.empNm = $("#emr_empNm").val();
             params.useYn = $("#emr_useYn").val();
-
-            if($("#saveType").val() === "MOD"){
-                params.userPwd = $("#emr_userPwdHd").val();
-            }else{
-                params.userPwd = $("#emr_userPwd").val();
-            }
-
             params.serviceFg = $("#emr_serviceFg").val();
             params.webUseYn = $("#emr_webUseYn").val();
-            params.userId = $("#emr_userId").val();
+
+            if($("#saveType").val() === "2"){
+                params.userId = $("#emr_userId").val();
+                params.userPwd = $("#emr_userPwdHd").val();
+            }else{
+                if($("#emr_webUseYn").val() === "Y"){
+                    params.userId = $("#emr_userId").val();
+                    params.userPwd = $("#emr_userPwd").val();
+                }else{
+                    params.userId = "";
+                    params.userPwd = "";
+                }
+            }
+
             params.mapEmpNo = $("#emr_mapEmpNo").val();
             params.adminFg = $("#emr_adminFg").val();
             params.mpNo = $("#emr_mpNo").val();
@@ -330,7 +328,7 @@
                         getEmpManageList($("#emr_agencyCd").val(), $("#emr_pAgencyCd").val());
 
                         // 수정 모드 시 상세 화면 Refresh
-                        if($("#saveType").val() === "MOD"){
+                        if($("#saveType").val() === "2" || $("#saveType").val() === "3"){
                             getEmpManageDtl($("#emr_agencyCd").val(),$("#emr_empNo").val(), $("#emr_pAgencyCd").val());
                         }
 
@@ -338,7 +336,7 @@
                         s_alert.pop(messages["systemEmp.userIdRegexp.msg"]);
                         return false;
                     } else if(response.data === 'PASSWORD_REGEXP') {
-                        s_alert.pop(messages["login.pw.not.match.char"]);
+                        s_alert.pop(messages["login.pw.cannot"]);
                         return false;
                     } else {
                         s_alert.pop(messages["cmm.registFail"]);
@@ -389,7 +387,7 @@
             }
 
             /*입력 모드 시에만 비밀번호 입력 체크*/
-            if ($("#saveType").val() === "REG") {
+            if ($("#saveType").val() === "1" || $("#saveType").val() === "3") {
 
                 /*비밀번호 입력*/
                 if ($("#emr_userPwd").val() === "") {
@@ -429,17 +427,20 @@
     /* 웹 사용여부에 따른 ID, 비밀번호 입력창 보이기/숨기기 */
     function hideWebInfo(){
 
-        if($("#emr_webUseYn").val() === "Y"){
-            $("#trUserId").css('display', '');
+        if($("#emr_webUseYn").val() === "Y"){ // 웹사용여부 '사용' 시
 
-            // 비밀번호 입력은 등록 시에만 가능
-            if($("#saveType").val() === "MOD"){
+            $("#trUserId").css('display', '');
+            if($("#saveType").val() === "2") {
+                $("#emr_userId").attr("readonly", true);
+                $("#spanCheckDuplicate").css("display", "none");
                 $("#trUserPwd").css('display', 'none');
             }else{
+                $("#emr_userId").removeAttr("readonly");
+                $("#spanCheckDuplicate").css("display", "");
                 $("#trUserPwd").css('display', '');
             }
 
-        }else{
+        }else{ // 웹사용여부 '미사용' 시
             $("#trUserId").css('display', 'none');
             $("#trUserPwd").css('display', 'none');
         }

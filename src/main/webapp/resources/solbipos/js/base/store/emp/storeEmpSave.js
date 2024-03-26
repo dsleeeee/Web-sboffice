@@ -49,7 +49,7 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
     $scope.newEmpYn = 1; // 1: 신규등록, 2: 수정(WEB 사용), 3: 수정(WEB 미사용)
 
     // 웹사용자 아이디 중복체크 여부
-    $scope.duplicationChkFg = false;
+    $scope.duplicationChkFg = "";
 
     // 사원정보
     $scope.storeEmpRegistInfo;
@@ -92,6 +92,7 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
             $scope.storeEmpRegistInfo = response.data.data;
             $scope.storeEmpRegistInfo.empInfo = ' [' + response.data.data.empNo + ']' + response.data.data.empNm;
             $scope.storeEmpRegistInfo.originalWebUserId = response.data.data.userId;
+            $scope.duplicationChkFg                     = response.data.data.userId;
 
             if (response.data.data.userId != null && response.data.data.userId != undefined && response.data.data.userId != "") {
                 $scope.newEmpYn = 2; // 수정(WEB 사용)
@@ -117,7 +118,7 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
             var result = response.data.data;
 
             if (result == "SUCCESS") {
-                $scope.duplicationChkFg = true;
+                $scope.duplicationChkFg = $scope.storeEmpRegistInfo.userId;
                 $scope._popMsg(messages["storeEmp.notDuplicate.msg"]);
             } else if (result === "USER_ID_REGEXP") {
                 $scope._popMsg(messages["storeEmp.userIdRegexp.msg"]);
@@ -146,11 +147,19 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
     $scope.regist = function () {
 
         if ($scope.storeEmpRegistInfo.webUseYn === 'Y') {
-            // 웹 사용자 아이디 중복체크
-            if (!$scope.duplicationChkFg) {
+
+            /*웹사용자ID 중복체크*/
+            if ($scope.duplicationChkFg === "") {
                 $scope._popMsg(messages["storeEmp.require.chk.userId"]);
                 return false;
             }
+
+            /*웹사용자ID 중복체크2*/
+            if ($scope.storeEmpRegistInfo.userId !== $scope.duplicationChkFg) {
+                $scope._popMsg(messages["storeEmp.require.chk.userId"]);
+                return false;
+            }
+
             // 비밀번호, 비밀번호 확인 체크
             if ($scope.storeEmpRegistInfo.userPwd !== $scope.storeEmpRegistInfo.userPwdCfm) {
                 $scope._popMsg(messages["storeEmp.passwordNotMatch.msg"]);
@@ -190,8 +199,15 @@ app.controller('storeEmpRegistCtrl', ['$scope', '$http', function ($scope, $http
         if ($scope.storeEmpRegistInfo.originalWebUserId == '' || $scope.storeEmpRegistInfo.originalWebUserId == undefined || $scope.storeEmpRegistInfo.originalWebUserId == null) {
             // 웹 사용여부 'Y'로 변경시
             if ($scope.storeEmpRegistInfo.webUseYn === 'Y') {
-                // 웹 사용자 아이디 중복체크
-                if (!$scope.duplicationChkFg) {
+
+                /*웹사용자ID 중복체크*/
+                if ($scope.duplicationChkFg === "") {
+                    $scope._popMsg(messages["storeEmp.require.chk.userId"]);
+                    return false;
+                }
+
+                /*웹사용자ID 중복체크2*/
+                if ($scope.storeEmpRegistInfo.userId !== $scope.duplicationChkFg) {
                     $scope._popMsg(messages["storeEmp.require.chk.userId"]);
                     return false;
                 }

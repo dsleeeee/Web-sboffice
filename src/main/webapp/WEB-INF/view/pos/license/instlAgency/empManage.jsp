@@ -103,7 +103,7 @@
     }
 
     function callEmpManageRegist(){
-        empManageRegist('REG', $("#agencyCd").val(), '', $("#pAgencyCd").val());
+        empManageRegist('1', $("#agencyCd").val(), '', $("#pAgencyCd").val());  // 신규등록
     }
 </script>
 
