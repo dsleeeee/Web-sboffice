@@ -320,8 +320,8 @@
                             sticky-headers="true"
                             selection-mode="Row"
                             items-source="data"
-                            item-formatter="_itemFormatter"
-                            allow-merging="Cells">
+                            item-formatter="_itemFormatter">
+                            <%--allow-merging="Cells">--%>
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="empWebMenu.lMenuCd"/>" binding="lMenuCd" width="*" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>

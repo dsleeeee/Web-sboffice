@@ -37,9 +37,9 @@
                 AND     twrif.P_RESRCE = twri.RESRCE_CD
                 AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
                 AND     twrif.DISP_LEVEL = '3'
-                ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD
-                 ) twr,
-                 (
+                ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD, twr.DISP_IDX, twri.DISP_IDX, twrif.DISP_IDX
+             ) twr,
+             (
                  SELECT twa.RESRCE_CD
                  FROM   TB_HQ_EMPLOYEE the,
                         TB_WB_USER_INFO twu,
@@ -71,7 +71,7 @@
                  AND    twa.USER_ID = twu.USER_ID
                  AND    twa.INCLD_EXCLD_FG = 'E'
                  AND    twa.USE_YN = 'Y'
-                 ) the
+             ) the
         WHERE the.RESRCE_CD = twr.S_MENU_CD
         <if test='sMenuNm != null and sMenuNm != ""'>
             AND twr.S_MENU_NM LIKE '%' || #{sMenuNm} || '%'
