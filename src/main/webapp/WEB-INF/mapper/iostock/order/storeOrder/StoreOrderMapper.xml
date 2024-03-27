@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+    StoreOrderMapper.xml
+    주문등록
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       안동관     2018.09.10      최초작성
+-->
 <mapper namespace="kr.co.solbipos.iostock.order.storeOrder.service.impl.StoreOrderMapper">
 
     <!-- 주문등록 HD 리스트 조회 -->

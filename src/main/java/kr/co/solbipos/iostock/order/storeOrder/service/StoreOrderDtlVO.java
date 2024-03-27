@@ -2,6 +2,22 @@ package kr.co.solbipos.iostock.order.storeOrder.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
+/**
+ * @Class Name : StoreOrderDtlVO.java
+ * @Description : 수불관리 > 수주관리 > 주문등록
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2018.09.10  안동관      최초생성
+ *
+ * @author 솔비포스 차세대개발실 안동관
+ * @since 2018. 09.10
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 public class StoreOrderDtlVO extends PageVO {
 
     private static final long serialVersionUID = 3811192102817748480L;
