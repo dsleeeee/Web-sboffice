@@ -91,11 +91,13 @@ public class CaptionMsgServiceImpl implements CaptionMsgService {
             result += captionMsgMapper.saveCaptionMsg(captionMsgVO);
         }
 
-        if (result == captionMsgVOs.length) {
+        /*if (result == captionMsgVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 
     /** 기능키/메시지 삭제*/

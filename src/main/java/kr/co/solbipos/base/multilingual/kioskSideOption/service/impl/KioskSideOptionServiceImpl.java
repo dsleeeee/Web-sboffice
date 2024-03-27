@@ -79,11 +79,13 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
         kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
         kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
 
-        if (result == kioskSideOptionVOs.length) {
+        /*if (result == kioskSideOptionVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 
     /** 사이드(선택그룹명) 탭 리스트 조회 */
@@ -111,11 +113,13 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
             result += kioskSideOptionMapper.saveSideSdselGrp(kioskSideOptionVO);
         }
 
-        if (result == kioskSideOptionVOs.length) {
+        /*if (result == kioskSideOptionVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 
     /** 사이드(선택분류명) 탭 리스트 조회 */
@@ -143,11 +147,13 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
             result += kioskSideOptionMapper.saveSideSdselClass(kioskSideOptionVO);
         }
 
-        if (result == kioskSideOptionVOs.length) {
+        /*if (result == kioskSideOptionVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 
     /** 옵션(그룹명) 탭 리스트 조회 */
@@ -175,11 +181,13 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
             result += kioskSideOptionMapper.saveOptionGrp(kioskSideOptionVO);
         }
 
-        if (result == kioskSideOptionVOs.length) {
+        /*if (result == kioskSideOptionVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 
     /** 옵션(옵션명) 탭 리스트 조회 */
@@ -207,11 +215,13 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
             result += kioskSideOptionMapper.saveOptionVal(kioskSideOptionVO);
         }
 
-        if (result == kioskSideOptionVOs.length) {
+        /*if (result == kioskSideOptionVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 
 }

@@ -90,7 +90,8 @@ public class FnkeyCmNmcdServiceImpl implements FnkeyCmNmcdService {
 
             return result;
         } else {
-            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            //throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            return result;
         }
     }
 
@@ -109,7 +110,7 @@ public class FnkeyCmNmcdServiceImpl implements FnkeyCmNmcdService {
         return fnkeyCmNmcdMapper.getStoreFnkeyList(fnkeyCmNmcdVO);
     }
 
-    /** 기능키(공통) 탭 영문, 중문, 일문 저장 */
+    /** 기능키(매장) 탭 영문, 중문, 일문 저장 */
     @Override
     public int saveStoreFnkey(FnkeyCmNmcdVO[] fnkeyCmNmcdVOs, SessionInfoVO sessionInfoVO){
         int result = 0;
@@ -125,11 +126,13 @@ public class FnkeyCmNmcdServiceImpl implements FnkeyCmNmcdService {
             result += fnkeyCmNmcdMapper.saveStoreFnkey(fnkeyCmNmcdVO);
         }
 
-        if (result == fnkeyCmNmcdVOs.length) {
+        /*if (result == fnkeyCmNmcdVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 
     /** 공통코드 탭 공통코드 그룹코드 조회(콤보박스용) */
@@ -162,10 +165,12 @@ public class FnkeyCmNmcdServiceImpl implements FnkeyCmNmcdService {
             result += fnkeyCmNmcdMapper.saveCmNmcd(fnkeyCmNmcdVO);
         }
 
-        if (result == fnkeyCmNmcdVOs.length) {
+        /*if (result == fnkeyCmNmcdVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 }

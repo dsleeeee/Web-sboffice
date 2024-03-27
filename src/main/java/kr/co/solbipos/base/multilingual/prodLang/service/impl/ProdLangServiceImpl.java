@@ -81,11 +81,13 @@ public class ProdLangServiceImpl implements ProdLangService {
             result += prodLangMapper.saveProdNm(prodLangVO);
         }
 
-        if (result == prodLangVOs.length) {
+        /*if (result == prodLangVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 
     /** 상품설명 탭 리스트 조회 */
@@ -125,10 +127,12 @@ public class ProdLangServiceImpl implements ProdLangService {
             result += prodLangMapper.saveProdInfo(prodLangVO);
         }
 
-        if (result == prodLangVOs.length) {
+        /*if (result == prodLangVOs.length) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-        }
+        }*/
+
+        return result;
     }
 }
