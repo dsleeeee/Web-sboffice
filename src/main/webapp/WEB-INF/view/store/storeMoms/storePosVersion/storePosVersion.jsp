@@ -452,7 +452,7 @@
                     <wj-flex-grid-column header="<s:message code="storePosVersion.subVal"/>" binding="subVal" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.posLogDt"/>" binding="lastLoginDt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchDate"/>" binding="patchDate" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storePosVersion.patchFg"/>" binding="patchFg" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storePosVersion.patchFg"/>" binding="patchFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.posVerNo2"/>" binding="posVerNo2" width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchVerNo"/>" binding="patchVerNo" width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.scriptNm"/>" binding="scriptNm" width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -465,7 +465,7 @@
 </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20240326.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20240328.01" charset="utf-8"></script>
 
 <%-- 패치정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/storePosVersion/patchDtl.jsp">

@@ -282,9 +282,6 @@ public class StorePosVersionController {
 
         model.addAttribute("selectVerComboListSel", selectVerComboListAllSel);
 
-        System.out.println("ㅎㅇ올"+selectVerComboListAll);
-        System.out.println("ㅎㅇ올셀"+selectVerComboListAllSel);
-
         // 포스용도
         List selectSubPos = storePosVersionService.getSelectSubPos();
 

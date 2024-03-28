@@ -472,6 +472,7 @@
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchSeq"/>" binding="patchSeq" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchDt"/>" binding="patchDt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchCd"/>" binding="patchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storePosVersion.lastPatchCd"/>" binding="lastPatchCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchBfVer"/>" binding="posVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchAfVer"/>" binding="patchVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.scriptNm"/>" binding="scriptNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -499,5 +500,5 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/posPatchLog.js?ver=20240313.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/posPatchLog.js?ver=20240328.01" charset="utf-8"></script>
 

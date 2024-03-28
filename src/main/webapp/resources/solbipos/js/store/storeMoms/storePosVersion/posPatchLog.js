@@ -66,7 +66,6 @@ app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        $scope.lastSale = "7";
 
         var ac = 0;
         s.formatItem.addHandler(function (s, e) {
@@ -75,6 +74,13 @@ app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($sco
                 var item = s.rows[e.row].dataItem;
                 if(item.patchCd !== '0000') {
                     wijmo.addClass(e.cell, 'red');
+                }
+                if(col.binding == "lastPatchCd"){
+                    if(item.lastPatchCd === '0000') {
+                        wijmo.addClass(e.cell, 'blue');
+                    }else if(item.lastPatchCd !== '0000'){
+                        wijmo.addClass(e.cell, 'red');
+                    }
                 }
             }
         });
@@ -148,7 +154,7 @@ app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.momsStoreFg03 = $scope.momsStoreFg03;
         params.momsStoreFg04 = $scope.momsStoreFg04;
         params.momsStoreFg05 = $scope.momsStoreFg05;
-        params.listScale = 500;
+        params.listScale = 5000;
 
         $scope._inquiryMain("/store/storeMoms/storePosVersion/posPatchLog/posPatchLogList.sb", params, function() {}, false);
     };

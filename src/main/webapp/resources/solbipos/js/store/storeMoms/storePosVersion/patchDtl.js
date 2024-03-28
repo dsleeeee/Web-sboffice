@@ -26,6 +26,16 @@ app.controller('patchDtlCtrl', ['$scope', '$http', '$timeout', function ($scope,
         // 합계
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                if(item.patchCd !== '0000') {
+                    wijmo.addClass(e.cell, 'red');
+                }
+            }
+        });
+
     };
 
     // 팝업 호출시 상세정보 조회

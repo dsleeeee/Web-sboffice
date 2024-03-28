@@ -316,7 +316,7 @@
         AND     A.POS_NO        = #{posNo}
         AND     A.PATCH_VER_NO  = #{selectVerCd}
         ORDER
-        BY      A.PATCH_SEQ
+        BY      A.STORE_CD, A.POS_NO, A.PATCH_DATE, A.PATCH_SEQ
     </select>
 
     <!-- 버전 적용 매장 등록   -->
@@ -397,6 +397,22 @@
         ,       A.PATCH_SEQ
         ,       A.PATCH_DT
         ,       A.PATCH_CD
+        ,       (
+                    SELECT  I.PATCH_CD
+                    FROM    (
+                                SELECT  I.PATCH_CD
+                                FROM    TB_PS_PATCH_LOG I
+                                WHERE   I.STORE_CD      =   A.STORE_CD
+                                AND     I.POS_NO        =   A.POS_NO
+                                AND     I.PATCH_DATE    =   A.PATCH_DATE
+                                ORDER
+                                BY      I.STORE_CD
+                                ,       I.POS_NO
+                                ,       I.PATCH_DATE
+                                ,       I.PATCH_SEQ DESC
+                            ) I
+                    WHERE   ROWNUM  =   1
+                )   AS LAST_PATCH_CD
         ,       A.POS_VER_NO
         ,       A.PATCH_VER_NO
         ,       A.SCRIPT_NM
@@ -555,7 +571,7 @@
             </when>
         </choose>
         ORDER
-        BY      A.STORE_CD, A.POS_NO, A.PATCH_SEQ
+        BY      A.STORE_CD, A.POS_NO, A.PATCH_DATE, A.PATCH_SEQ
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

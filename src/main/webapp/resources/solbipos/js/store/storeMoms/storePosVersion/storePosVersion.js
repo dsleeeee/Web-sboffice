@@ -88,8 +88,7 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
     $scope.areaCdDataMap = new wijmo.grid.DataMap(areaCd, 'value', 'name'); // 지역
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name'); // 용도
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name'); // 상태
-    $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 그룹
-    $scope.lastSale = "7";
+    $scope.branchCdDataMap = new wijmo.grid.DataMap(branchCdComboList, 'value', 'name'); // 그
 
     if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
 
@@ -105,8 +104,13 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
           }
           if (col.binding === "patchFg") {
             if (item.patchFg != null && item.patchFg != '') {
-              wijmo.addClass(e.cell, 'wijLink');
-              wijmo.addClass(e.cell, 'blue');
+              if(item.patchFg === "성공") {
+                wijmo.addClass(e.cell, 'blue');
+                wijmo.addClass(e.cell, 'wijLink');
+              }else if(item.patchFg === "실패"){
+                wijmo.addClass(e.cell, 'wij_gridText-red');
+                wijmo.addClass(e.cell, 'wijLink');
+              }
             }
           }
           if (col.binding === "registFgStore") {

@@ -61,4 +61,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/patchDtl.js?ver=20240312.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/patchDtl.js?ver=20240328.01" charset="utf-8"></script>
