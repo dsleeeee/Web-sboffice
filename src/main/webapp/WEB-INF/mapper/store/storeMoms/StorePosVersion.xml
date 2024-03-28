@@ -113,8 +113,8 @@
                 ,       A.PATCH_DATE
                 ,       (
                         CASE
-                            WHEN A.PATCH_CD = '0000' THEN '정상'
-                            WHEN A.PATCH_CD != '0000' THEN '오류'
+                            WHEN A.PATCH_CD = '0000' THEN '성공'
+                            WHEN A.PATCH_CD != '0000' THEN '실패'
                             ELSE NULL
                         END
                         ) AS PATCH_FG
@@ -388,6 +388,7 @@
     -->
     <select id="getPosPatchLogList" parameterType="storePosVersionVO" resultType="DefaultMap">
         /* USE : StorePosVersionMapper.getPosPatchLogList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  A.HQ_OFFICE_CD
         ,       A.HQ_BRAND_CD
         ,       A.STORE_CD
@@ -410,6 +411,7 @@
         ,       B.STORE_NM
         ,       C.HQ_OFFICE_NM
         ,       D.FILE_DESC
+        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_PS_PATCH_LOG A
         ,		TB_MS_STORE B
         ,		TB_HQ_OFFICE C
@@ -465,6 +467,9 @@
         AND     H.STORE_CD  (+) = A.STORE_CD
         AND     H.POS_NO    (+) = A.POS_NO
         AND     B.HQ_OFFICE_CD  = #{hqOfficeCd}
+        <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+            AND     A.PATCH_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
         <if test="selectVerCd != null and selectVerCd != ''">
             AND A.PATCH_VER_NO = #{selectVerCd}
         </if>
@@ -541,8 +546,17 @@
         <if test='lastSale != null and lastSale != ""'>
             AND H.MAX_SALE_DATE BETWEEN TO_CHAR(SYSDATE - #{lastSale}, 'yyyy-mm-dd') AND TO_CHAR(SYSDATE, 'yyyy-mm-dd')
         </if>
+        <choose>
+            <when test='patchFg != null and patchFg == "Y"'>
+                AND A.PATCH_CD  = '0000'
+            </when>
+            <when test='patchFg != null and patchFg == "N"'>
+                AND A.PATCH_CD != '0000'
+            </when>
+        </choose>
         ORDER
         BY      A.STORE_CD, A.POS_NO, A.PATCH_SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 </mapper>

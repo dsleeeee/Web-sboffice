@@ -465,7 +465,7 @@
 </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20240322.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/storePosVersion.js?ver=20240326.01" charset="utf-8"></script>
 
 <%-- 패치정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/storePosVersion/patchDtl.jsp">
