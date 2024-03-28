@@ -569,6 +569,16 @@
             <when test='patchFg != null and patchFg == "N"'>
                 AND A.PATCH_CD != '0000'
             </when>
+            <when test='patchFg != null and patchFg == "All"'>
+                AND 	A.STORE_CD || A.POS_NO || A.PATCH_DATE IN 	(
+                                                                        SELECT 	J.STORE_CD || J.POS_NO || J.PATCH_DATE
+                                                                        FROM	TB_PS_PATCH_LOG J
+                                                                        WHERE 	J.PATCH_CD != '0000'
+                                                                        <if test="selectVerCd != null and selectVerCd != ''">
+                                                                            AND J.PATCH_VER_NO = #{selectVerCd}
+                                                                        </if>
+                                                                    )
+            </when>
         </choose>
         ORDER
         BY      A.STORE_CD, A.POS_NO, A.PATCH_DATE, A.PATCH_SEQ

@@ -500,5 +500,5 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/posPatchLog.js?ver=20240328.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/posPatchLog.js?ver=20240328.02" charset="utf-8"></script>
 

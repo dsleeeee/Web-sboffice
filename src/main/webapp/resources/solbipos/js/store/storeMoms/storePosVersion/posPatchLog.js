@@ -44,7 +44,8 @@ var patchDtTypeComboData = [
 var patchFgData = [
     {"name":"전체","value":""},
     {"name":"성공","value":"Y"},
-    {"name":"실패","value":"N"}
+    {"name":"실패","value":"N"},
+    {"name":"실패전체로그","value":"All"}
 ];
 
 app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
