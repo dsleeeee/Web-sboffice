@@ -257,6 +257,7 @@
                 AND 	ENVST_CD = '1014'
                 ) B
         WHERE   A.PROG_FG = B.ENVST_VAL
+        AND 	A.USE_YN  = 'Y'
         ORDER
         BY      A.REG_DT DESC
     </select>
