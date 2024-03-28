@@ -51,6 +51,7 @@
     var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
     var selectVerComboList = ${selectVerComboList};
+    var selectVerComboListSel = ${selectVerComboListSel};
     var selectSubPos = ${selectSubPos};
 
 </script>

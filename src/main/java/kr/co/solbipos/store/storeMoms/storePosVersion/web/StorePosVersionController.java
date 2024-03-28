@@ -272,9 +272,18 @@ public class StorePosVersionController {
         // 버전선택
         List selectVerComboList = storePosVersionService.getSelectVerList(sessionInfoVO);
 
+        // 매장포스버전현황 탭
         String selectVerComboListAll = cmmCodeUtil.assmblObj(selectVerComboList, "name", "value", UseYn.N);
 
         model.addAttribute("selectVerComboList", selectVerComboListAll);
+
+        // 포스패치로그 탭
+        String selectVerComboListAllSel = cmmCodeUtil.assmblObj(selectVerComboList, "name", "value", UseYn.SELECT);
+
+        model.addAttribute("selectVerComboListSel", selectVerComboListAllSel);
+
+        System.out.println("ㅎㅇ올"+selectVerComboListAll);
+        System.out.println("ㅎㅇ올셀"+selectVerComboListAllSel);
 
         // 포스용도
         List selectSubPos = storePosVersionService.getSelectSubPos();

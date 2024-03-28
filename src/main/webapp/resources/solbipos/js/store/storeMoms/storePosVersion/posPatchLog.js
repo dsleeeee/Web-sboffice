@@ -34,14 +34,28 @@ var mainValAllData = [
     {"name":"서브포스","value":"2"}
 ];
 
+// 패치일자 사용여부
+var patchDtTypeComboData = [
+    {"name":"미사용","value":"N"},
+    {"name":"사용","value":"Y"}
+];
+
+// 패치성공여부
+var patchFgData = [
+    {"name":"전체","value":""},
+    {"name":"성공","value":"Y"},
+    {"name":"실패","value":"N"}
+];
+
 app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('posPatchLogCtrl', $scope, $http, true));
 
     // 브랜드 콤보박스 셋팅
+    $scope._setComboData("patchDtType", patchDtTypeComboData); // 패치일자
     $scope._setComboData("registFgCombo", regStoreFgAllData); // 적용매장구분
-    $scope._setComboData("selectVerCombo", selectVerComboList); // 버전체크
+    $scope._setComboData("selectVerCombo2", selectVerComboListSel); // 버전체크
     $scope._setComboData("lastSaleCombo", dateAllData); // 최종매출일
     $scope._setComboData("mainValCombo", mainValAllData); // 포스메인여부
     $scope._setComboData("subValCombo", selectSubPos); // 포스용도
@@ -65,6 +79,17 @@ app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($sco
             }
         });
 
+    };
+
+    // 사용 구분 콤보박스 선택 이벤트
+    $scope.setUseYnCombo = function (s) {
+        if (s.selectedValue === "Y") {
+            $scope.startDateCombo.isReadOnly = false;
+            $scope.endDateCombo.isReadOnly = false;
+        } else if (s.selectedValue === "N") {
+            $scope.startDateCombo.isReadOnly = true;
+            $scope.endDateCombo.isReadOnly = true;
+        }
     };
 
     // 다른 컨트롤러의 broadcast 받기
@@ -97,9 +122,17 @@ app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.subVal               = $scope.subVal;
         params.posLogDt             = $scope.posLogDt;
 
+
         var verCd =params.selectVer.indexOf("]");
         params.selectVerCd = params.selectVer.substring(1,verCd);
         $scope.selectVerCd = params.selectVerCd;
+
+        // 패치일자 '사용/미사용' 선택에 따른 params
+        if($scope.patchDtTypeCombo.selectedValue === "Y"){
+            params.startDate = wijmo.Globalize.format($scope.startDateCombo.value, 'yyyyMMdd');
+            params.endDate = wijmo.Globalize.format($scope.endDateCombo.value, 'yyyyMMdd');
+        }
+
         // '전체' 일때
         if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
             var momsHqBrandCd = "";
@@ -115,7 +148,7 @@ app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.momsStoreFg03 = $scope.momsStoreFg03;
         params.momsStoreFg04 = $scope.momsStoreFg04;
         params.momsStoreFg05 = $scope.momsStoreFg05;
-        params.listScale = 100;
+        params.listScale = 500;
 
         $scope._inquiryMain("/store/storeMoms/storePosVersion/posPatchLog/posPatchLogList.sb", params, function() {}, false);
     };

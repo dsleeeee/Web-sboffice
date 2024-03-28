@@ -129,6 +129,12 @@ public class StorePosVersionVO extends PageVO {
     /** 버전등록 범위 선택여부 */
     private String confFg;
 
+    /** 시작일자 */
+    private String startDate;
+
+    /** 종료일자 */
+    private String endDate;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -388,4 +394,21 @@ public class StorePosVersionVO extends PageVO {
     public void setConfFg(String confFg) {
         this.confFg = confFg;
     }
+
+    public String startDate() {
+        return startDate;
+    }
+
+    public void startDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String endDate() {
+        return endDate;
+    }
+
+    public void endDate(String endDate) {
+        this.endDate = endDate;
+    }
+
 }

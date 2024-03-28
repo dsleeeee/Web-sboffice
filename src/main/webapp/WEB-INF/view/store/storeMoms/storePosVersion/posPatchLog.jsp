@@ -33,137 +33,196 @@
                 <col class="w35"/>
             </colgroup>
             <tbody>
-            <tr>
-                <%-- 매장코드 --%>
-                <th><s:message code="storePosVersion.storeCd"/></th>
-                <td>
-                    <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" onkeyup="fnNxBtnSearch('2');"/>
-                </td>
-                <%-- 매장명 --%>
-                <th><s:message code="storePosVersion.storeNm"/></th>
-                <td>
-                    <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" onkeyup="fnNxBtnSearch('2');"/>
-                </td>
-            </tr>
-            <tr>
-                <%-- 매장브랜드 --%>
-                <th><s:message code="cmm.moms.storeHqBrand"/></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchStoreHqBrandCdCombo"
-                                ng-model="storeHqBrandCd"
-                                items-source="_getComboData('storeHqBrandCdCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                control="srchStoreHqBrandCdCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-                <%-- 적용매장 --%>
-                <th><s:message code="storePosVersion.registFg"/></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchRegistFg"
-                                ng-model="registFg"
-                                items-source="_getComboData('registFgCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                control="srchRegistFgCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <%-- 버전선택 --%>
-                <th><s:message code="storePosVersion.selectVer"/></th>
-                <td colspan="3">
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchSelectVer"
-                                ng-model="selectVer"
-                                items-source="_getComboData('selectVerCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                control="srchSelectVerCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <%-- 최종매출일 --%>
-                <th><s:message code="storePosVersion.lastSaleDate"/></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchLastSale"
-                                ng-model="lastSale"
-                                items-source="_getComboData('lastSaleCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                control="srchLastSaleCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-                <%-- 포스로그인일자 --%>
-                <th><s:message code="storePosVersion.posLogDt"/></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchPosLogDt"
-                                ng-model="posLogDt"
-                                items-source="_getComboData('posLogDtCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                control="srchPosLogDtCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <%-- 포스메인여부 --%>
-                <th><s:message code="storePosVersion.mainVal"/></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchMainVal"
-                                ng-model="mainVal"
-                                items-source="_getComboData('mainValCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                control="srchMainValCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-                <%-- 포스용도 --%>
-                <th><s:message code="storePosVersion.subVal"/></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchSubVal"
-                                ng-model="subVal"
-                                items-source="_getComboData('subValCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                control="srchSubValCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <th><s:message code="storePosVersion.patchDate" /></th>
+                    <td style="text-align: left;">
+                        <div class="sb-select">
+                                <span class="txtIn w100px">
+                                    <wj-combo-box
+                                            id="patchDtType"
+                                            ng-model="patchDtType"
+                                            control="patchDtTypeCombo"
+                                            items-source="_getComboData('patchDtType')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            selected-index-changed="setUseYnCombo(s)">
+                                    </wj-combo-box>
+                                </span>
+                            <span class="txtIn w110px">
+                                    <wj-input-date
+                                            id="srchTimeStartDate"
+                                            value="startDate"
+                                            ng-model="startDate"
+                                            control="startDateCombo"
+                                            min="2000-01-01"
+                                            max="2099-12-31"
+                                            initialized="_initDateBox(s)">
+                                    </wj-input-date>
+                                </span>
+                            <span class="rg">~</span>
+                            <span class="txtIn w110px">
+                                    <wj-input-date
+                                            id="srchTimeEndDate"
+                                            value="endDate"
+                                            ng-model="endDate"
+                                            control="endDateCombo"
+                                            min="2000-01-01"
+                                            max="2099-12-31"
+                                            initialized="_initDateBox(s)">
+                                    </wj-input-date>
+                                </span>
+                        </div>
+                    </td>
+                    <%-- 패치여부 --%>
+                    <th><s:message code="storePosVersion.patchFg"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchPatchFg"
+                                    ng-model="patchFg"
+                                    items-source="_getComboData('patchFgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchPatchFgCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 매장코드 --%>
+                    <th><s:message code="storePosVersion.storeCd"/></th>
+                    <td>
+                        <input type="text" id="srchStoreCd" name="srchStoreCd" ng-model="storeCd" class="sb-input w100" onkeyup="fnNxBtnSearch('2');"/>
+                    </td>
+                    <%-- 매장명 --%>
+                    <th><s:message code="storePosVersion.storeNm"/></th>
+                    <td>
+                        <input type="text" id="srchStoreNm" name="srchStoreNm" ng-model="storeNm" class="sb-input w100" onkeyup="fnNxBtnSearch('2');"/>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 매장브랜드 --%>
+                    <th><s:message code="cmm.moms.storeHqBrand"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchStoreHqBrandCdCombo"
+                                    ng-model="storeHqBrandCd"
+                                    items-source="_getComboData('storeHqBrandCdCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchStoreHqBrandCdCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 적용매장 --%>
+                    <th><s:message code="storePosVersion.registFg"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchRegistFg"
+                                    ng-model="registFg"
+                                    items-source="_getComboData('registFgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchRegistFgCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 버전선택 --%>
+                    <th><s:message code="storePosVersion.selectVer"/></th>
+                    <td colspan="3">
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchSelectVer"
+                                    ng-model="selectVer"
+                                    items-source="_getComboData('selectVerCombo2')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchSelectVerCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 최종매출일 --%>
+                    <th><s:message code="storePosVersion.lastSaleDate"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchLastSale"
+                                    ng-model="lastSale"
+                                    items-source="_getComboData('lastSaleCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchLastSaleCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 포스로그인일자 --%>
+                    <th><s:message code="storePosVersion.posLogDt"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchPosLogDt"
+                                    ng-model="posLogDt"
+                                    items-source="_getComboData('posLogDtCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchPosLogDtCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 포스메인여부 --%>
+                    <th><s:message code="storePosVersion.mainVal"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchMainVal"
+                                    ng-model="mainVal"
+                                    items-source="_getComboData('mainValCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchMainValCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%-- 포스용도 --%>
+                    <th><s:message code="storePosVersion.subVal"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchSubVal"
+                                    ng-model="subVal"
+                                    items-source="_getComboData('subValCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchSubValCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
 
@@ -413,8 +472,8 @@
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchSeq"/>" binding="patchSeq" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchDt"/>" binding="patchDt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchCd"/>" binding="patchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storePosVersion.posVerNo1"/>" binding="posVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storePosVersion.patchVerNo"/>" binding="patchVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storePosVersion.patchBfVer"/>" binding="posVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storePosVersion.patchAfVer"/>" binding="patchVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.scriptNm"/>" binding="scriptNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.patchErrMsg"/>" binding="patchErrMsg" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="storePosVersion.regDt"/>" binding="regDt" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -429,6 +488,14 @@
             </div>
             <%--//위즈모 테이블--%>
         </div>
+
+        <%-- 페이지 리스트 --%>
+        <div class="pageNum mt20">
+            <%-- id --%>
+            <ul id="posPatchLogCtrlPager" data-size="10">
+            </ul>
+        </div>
+        <%--//페이지 리스트--%>
     </div>
 </div>
 

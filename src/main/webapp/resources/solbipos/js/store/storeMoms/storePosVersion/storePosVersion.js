@@ -44,8 +44,8 @@ var verChkAllData = [
 // 패치여부
 var patchFgData = [
   {"name":"전체","value":""},
-  {"name":"정상","value":"Y"},
-  {"name":"오류","value":"N"}
+  {"name":"성공","value":"Y"},
+  {"name":"실패","value":"N"}
 ];
 
 app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {

@@ -41,8 +41,8 @@
                         <wj-flex-grid-column header="<s:message code="storePosVersion.patchSeq"/>" binding="patchSeq" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storePosVersion.patchDt"/>" binding="patchDt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storePosVersion.patchCd"/>" binding="patchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storePosVersion.posVerNo1"/>" binding="posVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storePosVersion.patchVerNo"/>" binding="patchVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storePosVersion.patchBfVer"/>" binding="posVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storePosVersion.patchAfVer"/>" binding="patchVerNo" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storePosVersion.scriptNm"/>" binding="scriptNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storePosVersion.patchErrMsg"/>" binding="patchErrMsg" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storePosVersion.regDt"/>" binding="regDt" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
