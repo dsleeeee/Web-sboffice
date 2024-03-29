@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 
@@ -99,6 +99,15 @@
                                 </th>
                                 <td colspan="3" id="vAddr"></td>
                             </tr>
+                            <tr <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
+                                <%-- 배송구분 --%>
+                                <th>
+                                    <div class="impWrap"><s:message code="vendr.shipFg" /><em class="imp">*</em></div>
+                                </th>
+                                <td id="vShipFg"></td>
+                                <th></th>
+                                <td></td>
+                            </tr>
                             <tr>
                                 <th>
                                     <div class="impWrap"><s:message code="vendr.remark" /></div>
@@ -124,8 +133,9 @@
 </wj-popup>
 
 <script>
+    var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/info.js?ver=20200506.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/info.js?ver=20240328.03" charset="utf-8"></script>
 
 

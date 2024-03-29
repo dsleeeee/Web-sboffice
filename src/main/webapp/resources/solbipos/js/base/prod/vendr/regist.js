@@ -27,8 +27,9 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("rVendorFg", vendorFgData);      // 거래처구분
-    $scope._setComboData("rVatIncldYn", vatIncldYnData); // 부가세포함여부
-    $scope._setComboData("rUseYn", useYnData);             // 사용여부
+    $scope._setComboData("rVatIncldYn", vatIncldYnData);  // 부가세포함여부
+    $scope._setComboData("rUseYn", useYnData);            // 사용여부
+    $scope._setComboData("rShipFg", useYnData);           // 배송구분
 
     // 등록인지 수정인지 파악하기 위해
     var valType;
@@ -78,6 +79,7 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                     $("#rAddr").val(data.addr);
                     $("#rAddrDtl").val(data.addrDtl);
                     $("#rEmailAddr").val(data.emailAddr);
+                    $scope.shipFgCombo.selectedValue = data.shipFg;
                     $("#rRemark").val(data.remark);
 
                 },
@@ -170,6 +172,12 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             param.addrDtl = $("#rAddrDtl").val();
             param.remark = $("#rRemark").val();
 
+            if(orgnFg == "HQ"){
+                param.shipFg = $scope.shipFgCombo.selectedValue;
+            }else{
+                param.shipFg = '1'; // 매장은 배송구분 미사용, [미사용][배송구분] 1:매장,2:본사(본사전용)
+            }
+
             // 저장
             $scope._postJSONSave.withPopUp(url, param, function () { $scope.close(); });
         }
@@ -199,6 +207,7 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.vendorFgCombo.selectedValue = '1';
         $scope.vatIncldYnCombo.selectedValue = 'N';
         $scope.useYnCombo.selectedValue = 'Y';
+        $scope.shipFgCombo.selectedValue = 'N';
 
     };
 

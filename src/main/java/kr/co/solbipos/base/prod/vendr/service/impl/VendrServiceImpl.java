@@ -107,7 +107,7 @@ public class VendrServiceImpl implements VendrService {
          * NULLABLE 컬럼이므로 수정 필요
          * */
 
-        vendrVO.setShipFg("2");
+        //vendrVO.setShipFg("2");
 
         String currentDt = currentDateTimeString();
 
@@ -155,7 +155,7 @@ public class VendrServiceImpl implements VendrService {
          * 스토리보드상엔 입력받는 필드가 없으나
          * NULLABLE 컬럼이므로 수정 필요
          * */
-        vendrVO.setShipFg("2");
+        //vendrVO.setShipFg("2");
 
         String currentDt = currentDateTimeString();
 

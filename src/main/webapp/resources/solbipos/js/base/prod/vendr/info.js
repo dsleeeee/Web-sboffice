@@ -65,6 +65,9 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                 if(data.postNo != null && data.addr != null && data.addrDtl != null )
                     $("#vAddr").text("("+data.postNo+") "+data.addr + " "+data.addrDtl);
 
+                if(data.shipFgNm != null)
+                    $("#vShipFg").text(data.shipFgNm);
+
                 if(data.remark != null)
                     $("#vRemark").text(data.remark);
 
@@ -123,6 +126,7 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#vEmailAddr").text("");
         $("#vFaxNo").text("");
         $("#vAddr").text("");
+        $("#vShipFg").text("");
         $("#vRemark").text("");
 
     };

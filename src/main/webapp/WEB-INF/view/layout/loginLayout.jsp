@@ -27,10 +27,12 @@
       <!--광고배너영역-->
       <div class="bannerArea">
         <div class="slider">
-          <input type="radio" name="slide_switch" id="id1" checked="checked" /> 
-          <label for="id1"></label> <img src="/resource/solbipos/css/img/banner03.png" alt="" />
+          <input type="radio" name="slide_switch" id="id1" checked="checked" />
+          <label for="id1"></label> <img src="/resource/solbipos/css/img/1.web-ASTRA.jpg" alt="" />
           <input type="radio" name="slide_switch" id="id2" /> 
-          <label for="id2"></label> <img src="/resource/solbipos/css/img/banner04.png" alt="" />
+          <label for="id2"></label> <img src="/resource/solbipos/css/img/2.web-s700Ⅲ.jpg" alt="" />
+          <input type="radio" name="slide_switch" id="id3" />
+          <label for="id3"></label> <img src="/resource/solbipos/css/img/3.web-SAPPHIRE.jpg" alt="" />
         </div>
       </div>
       <!--//광고배너영역-->
@@ -41,3 +43,25 @@
   </div>
 </body>
 </html>
+
+<script>
+    window.onload = function() { setTimeout("onloadFunctions()",0); };
+
+    function onloadFunctions()
+    {
+        var setInterval_chk = 2;
+        setInterval(function()
+        {
+            document.getElementById('id1').checked = false;
+            document.getElementById('id2').checked = false;
+            document.getElementById('id3').checked = false;
+            if(setInterval_chk == 1) document.getElementById('id1').checked = true;
+            if(setInterval_chk == 2) document.getElementById('id2').checked = true;
+            if(setInterval_chk == 3) document.getElementById('id3').checked = true;
+
+            if(setInterval_chk >= 3)    setInterval_chk = 1;
+            else                        setInterval_chk++;
+
+        }, 3000);
+    }
+</script>
