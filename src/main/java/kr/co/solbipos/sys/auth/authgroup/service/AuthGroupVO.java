@@ -37,6 +37,8 @@ public class AuthGroupVO extends CmmVO {
     private UseYn useYn;
     /** 사용자 아이디 */
     private String userId;
+    /** 사용권한구분 */
+    private String authOrgn;
     
     
     /**
@@ -123,5 +125,12 @@ public class AuthGroupVO extends CmmVO {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    
+
+    public String getAuthOrgn() {
+        return authOrgn;
+    }
+
+    public void setAuthOrgn(String authOrgn) {
+        this.authOrgn = authOrgn;
+    }
 }

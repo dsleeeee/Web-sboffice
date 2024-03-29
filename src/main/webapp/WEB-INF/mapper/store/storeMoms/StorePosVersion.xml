@@ -581,6 +581,32 @@
                                                                     )
             </when>
         </choose>
+        <choose>
+            <when test='patchErrMsg != null and patchErrMsg == "FGLIKE001"'>
+                AND A.PATCH_ERR_MSG LIKE '%'||'bad parameters on attach or create'||'%'
+            </when>
+            <when test='patchErrMsg != null and patchErrMsg == "FGLIKE002"'>
+                AND A.PATCH_ERR_MSG LIKE '%'||'Dynamic SQL ErrorSQL error code = -901'||'%'
+            </when>
+            <when test='patchErrMsg != null and patchErrMsg == "FGLIKE003"'>
+                AND A.PATCH_ERR_MSG LIKE '%'||'Your user name and password are not defined.'||'%'
+            </when>
+            <when test='patchErrMsg != null and patchErrMsg == "FGLIKE004"'>
+                AND A.PATCH_ERR_MSG LIKE '%'||'lock conflict on no wait transactionunsuccessful'||'%'
+            </when>
+            <when test='patchErrMsg != null and patchErrMsg == "FGNOTLIKE001"'>
+                AND A.PATCH_ERR_MSG NOT LIKE '%'||'bad parameters on attach or create'||'%'
+            </when>
+            <when test='patchErrMsg != null and patchErrMsg == "FGNOTLIKE002"'>
+                AND A.PATCH_ERR_MSG NOT LIKE '%'||'Dynamic SQL ErrorSQL error code = -901'||'%'
+            </when>
+            <when test='patchErrMsg != null and patchErrMsg == "FGNOTLIKE003"'>
+                AND A.PATCH_ERR_MSG NOT LIKE '%'||'Your user name and password are not defined.'||'%'
+            </when>
+            <when test='patchErrMsg != null and patchErrMsg == "FGNOTLIKE004"'>
+                AND A.PATCH_ERR_MSG NOT LIKE '%'||'lock conflict on no wait transactionunsuccessful'||'%'
+            </when>
+        </choose>
         ORDER
         BY      A.STORE_CD, A.POS_NO, A.PATCH_DATE, A.PATCH_SEQ
         <include refid="CmmSQL.PagingTemplateBottom"/>

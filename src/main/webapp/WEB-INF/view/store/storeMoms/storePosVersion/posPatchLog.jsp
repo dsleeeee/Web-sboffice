@@ -223,6 +223,26 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <%-- 특정 에러메세지 조회 --%>
+                    <th><s:message code="storePosVersion.srchPatchErrMsg"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchPatchErrMsg"
+                                    ng-model="patchErrMsg"
+                                    items-source="_getComboData('patchErrMsgCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    control="srchPatchErrMsgCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
 
@@ -500,5 +520,5 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/posPatchLog.js?ver=20240328.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storePosVersion/posPatchLog.js?ver=20240328.03" charset="utf-8"></script>
 

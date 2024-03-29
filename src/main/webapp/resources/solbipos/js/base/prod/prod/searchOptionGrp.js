@@ -49,6 +49,7 @@ app.controller('searchOptionGrpCtrl', ['$scope', '$http', function ($scope, $htt
 
                     $("#_optionGrpCd").val(selectedRow.optionGrpCd);
                     $("#_optionGrpNm").val(selectedRow.optionGrpNm);
+                    $("#_optionGrpNmCd").val("[" + selectedRow.optionGrpCd + "] " + selectedRow.optionGrpNm);
 
                     $scope.wjSearchOtionGrpLayer.hide();
 

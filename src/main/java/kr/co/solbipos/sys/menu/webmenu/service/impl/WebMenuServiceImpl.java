@@ -203,7 +203,8 @@ public class WebMenuServiceImpl implements WebMenuService {
             if (!temp.getResrceNm().equals(resrceInfoVO.getResrceNm())
                     || !equalsNull(temp.getUrl(), resrceInfoVO.getUrl())
                     || !equalsNull(temp.getSpclAuthor(), resrceInfoVO.getSpclAuthor())
-                    || temp.getDispIdx() != resrceInfoVO.getDispIdx()) {
+                    || temp.getDispIdx() != resrceInfoVO.getDispIdx()
+                    || temp.getAuthOrgn() != resrceInfoVO.getAuthOrgn()) {
 
                 result = webMenuMapper.updateWebMenu(resrceInfoVO);
 

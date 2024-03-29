@@ -119,7 +119,14 @@
         {binding:"targetOrgnNm", header:"<s:message code='authGroup.targetOrgnNm' />", width:100, isReadOnly:true},
       </c:if>
         {binding:"remark", header:"<s:message code='cmm.remark' />", width:100},
-        {binding:"useYn", header:"<s:message code='cmm.use' />", width:50, dataType:wijmo.DataType.Boolean}
+        {binding:"useYn", header:"<s:message code='cmm.use' />", width:50, dataType:wijmo.DataType.Boolean},
+        {binding:"chkAdmin", header:"<s:message code='authGroup.admin' />", width:50, dataType:wijmo.DataType.Boolean},
+        {binding:"chkDist", header:"<s:message code='authGroup.dist' />", width:50, dataType:wijmo.DataType.Boolean},
+        {binding:"chkAgency", header:"<s:message code='authGroup.agency' />", width:50, dataType:wijmo.DataType.Boolean},
+        {binding:"chkHq", header:"<s:message code='authGroup.hq' />", width:50, dataType:wijmo.DataType.Boolean},
+        {binding:"chkStore", header:"<s:message code='authGroup.store' />", width:50, dataType:wijmo.DataType.Boolean},
+        {binding:"chkExStore", header:"<s:message code='authGroup.exStore' />", width:60, dataType:wijmo.DataType.Boolean}
+        <%--,{binding:"authOrgn", header:"<s:message code='webMenu.authOrgn' />", width:70, visible:false}--%>
     ];
     var grid         = wgrid.genGrid("#theGrid", rdata, "${menuCd}", 1, ${clo.getColumnLayout(1)});
     grid.isReadOnly  = false;
@@ -182,6 +189,20 @@
         else if( col.binding == "useYn" ) {
           e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.useYn == true || item.useYn == "Y" ? 'checked' : '') + '>';
         }
+        else if (col.binding == "chkAdmin") {
+          e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chkAdmin == true || item.chkAdmin == "Y" ? 'checked' : '') + '/>';
+        } else if (col.binding == "chkDist") {
+          e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chkDist == true || item.chkDist == "Y" ? 'checked' : '') + '/>';
+        } else if (col.binding == "chkAgency") {
+          e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chkAgency == true || item.chkAgency == "Y" ? 'checked' : '') + '/>';
+        } else if (col.binding == "chkHq") {
+          e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chkHq == true || item.chkHq == "Y" ? 'checked' : '') + '/>';
+        } else if (col.binding == "chkStore") {
+          e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chkStore == true || item.chkStore == "Y" ? 'checked' : '') + '/>';
+        } else if (col.binding == "chkExStore") {
+          e.cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' + (item.chkExStore == true || item.chkExStore == "Y" ? 'checked' : '') + '/>';
+        }
+
       }
     });
 
@@ -209,7 +230,23 @@
           }
         }
       }
+    })
+
+    grid.cellEditEnded.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        if (col.binding === "chkAdmin" || col.binding === "chkDist" ||
+                col.binding === "chkAgent" || col.binding === "chkHq" || col.binding === "chkStore" || col.binding === "chkExStore") {
+          checkedbox(item, col.binding);
+        }
+      }
+      s.collectionView.commitEdit();
     });
+
+    function checkedbox(item, bind){
+      item.bind = true;
+    }
 
     <%-- 리스트 조회 --%>
     $("#btnSearch").click(function(e){
@@ -254,29 +291,86 @@
     $("#btnSave").click(function(e){
 
       var paramArr = new Array();
-
       var gridView = grid.collectionView;
+
       for(var i = 0; i < gridView.itemsAdded.length; i++) {
+        if(gridView.itemsAdded[i].authGrpNm == null || gridView.itemsAdded[i].authGrpNm == ""){
+          s_alert.pop("<s:message code='authGroup.emptyAuthGrpNm'/>");
+          return;
+        }
+        if(orgnFg == 'MASTER' && gridView.itemsAdded[i].targetAllFg == null || gridView.itemsAdded[i].targetAllFg == ""){
+          s_alert.pop("<s:message code='authGroup.emptyTargetAllFg'/>");
+          return;
+        }
         gridView.itemsAdded[i].status = 'I';
+        gridView.itemsAdded[i].authOrgn = '';
+        if(gridView.itemsAdded[i].chkAdmin){
+          gridView.itemsAdded[i].authOrgn += "A";
+        }
+        if(gridView.itemsAdded[i].chkDist){
+          gridView.itemsAdded[i].authOrgn += "P";
+        }
+        if(gridView.itemsAdded[i].chkAgency){
+          gridView.itemsAdded[i].authOrgn += "C";
+        }
+        if(gridView.itemsAdded[i].chkHq){
+          gridView.itemsAdded[i].authOrgn += "H";
+        }
+        if(gridView.itemsAdded[i].chkStore){
+          gridView.itemsAdded[i].authOrgn += "S";
+        }
+        if(gridView.itemsAdded[i].chkExStore){
+          gridView.itemsAdded[i].authOrgn += "I";
+        }
         paramArr.push(gridView.itemsAdded[i]);
       }
+
       for(var i = 0; i < gridView.itemsEdited.length; i++) {
-        gridView.itemsEdited[i].status = 'U';
+        if(gridView.itemsEdited[i].authGrpNm == null || gridView.itemsEdited[i].authGrpNm == ""){
+          s_alert.pop("<s:message code='authGroup.emptyAuthGrpNm'/>");
+          return;
+        }
+        if(orgnFg == 'MASTER' && gridView.itemsEdited[i].targetAllFg == null || gridView.itemsEdited[i].targetAllFg == ""){
+          s_alert.pop("<s:message code='authGroup.emptyTargetAllFg'/>");
+          return;
+        }
+        gridView.itemsEdited[i].status    = 'U';
+        gridView.itemsEdited[i].authOrgn  = "";
+        if(gridView.itemsEdited[i].chkAdmin){
+          gridView.itemsEdited[i].authOrgn += "A";
+        }
+        if(gridView.itemsEdited[i].chkDist){
+          gridView.itemsEdited[i].authOrgn += "P";
+        }
+        if(gridView.itemsEdited[i].chkAgency){
+          gridView.itemsEdited[i].authOrgn += "C";
+        }
+        if(gridView.itemsEdited[i].chkHq){
+          gridView.itemsEdited[i].authOrgn += "H";
+        }
+        if(gridView.itemsEdited[i].chkStore){
+          gridView.itemsEdited[i].authOrgn += "S";
+        }
+        if(gridView.itemsEdited[i].chkExStore){
+          gridView.itemsEdited[i].authOrgn += "I";
+        }
         paramArr.push(gridView.itemsEdited[i]);
       }
       for(var i = 0; i < gridView.itemsRemoved.length; i++) {
         gridView.itemsRemoved[i].status = 'D';
         paramArr.push(gridView.itemsRemoved[i]);
       }
-
       if(paramArr.length <= 0) {
         s_alert.pop("<s:message code='cmm.not.modify'/>");
         return;
       }
+      // return false;
 
       $.postJSONArray("${baseUrl}" + "save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
-        gridView.clearChanges();
+        // gridView.clearChanges();
+        gridView.refresh();
+        search();
       },
       function(result) {
         s_alert.pop(result.message);
@@ -301,6 +395,8 @@
         view.itemsRemoved[i].authGrpCd = tree.currentAuthGrpCd;
         paramArr.push(view.itemsRemoved[i]);
       }
+
+
       //console.log(paramArr);
       if(paramArr.length <= 0) {
         s_alert.pop("<s:message code='cmm.not.modify'/>");

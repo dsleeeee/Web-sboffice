@@ -48,6 +48,20 @@ var patchFgData = [
     {"name":"실패전체로그","value":"All"}
 ];
 
+// 특정에러메세지 조회
+var patchErrMsgData = [
+    {"name":"전체","value":""},
+    {"name":"[포함]bad parameters on attach or create"                ,"value":"FGLIKE001"      },
+    {"name":"[포함]Dynamic SQL ErrorSQL error code = -901"            ,"value":"FGLIKE002"      },
+    {"name":"[포함]Your user name and password are not defined."      ,"value":"FGLIKE003"      },
+    {"name":"[포함]lock conflict on no wait transactionunsuccessful"  ,"value":"FGLIKE004"      },
+    {"name":"[제외]bad parameters on attach or create"                ,"value":"FGNOTLIKE001"       },
+    {"name":"[제외]Dynamic SQL ErrorSQL error code = -901"            ,"value":"FGNOTLIKE002"       },
+    {"name":"[제외]Your user name and password are not defined."      ,"value":"FGNOTLIKE003"       },
+    {"name":"[제외]lock conflict on no wait transactionunsuccessful"  ,"value":"FGNOTLIKE004"       },
+    {"name":"NONE","value":"N"}
+];
+
 app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -63,6 +77,7 @@ app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope._setComboData("verChkCombo", verChkAllData); // 버전체크
     $scope._setComboData("posLogDtCombo", dateAllData); // 포스로그인일자
     $scope._setComboData("patchFgCombo", patchFgData); // 패치여부
+    $scope._setComboData("patchErrMsgCombo", patchErrMsgData); // 특정에러메세지 조회
 
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -128,6 +143,7 @@ app.controller('posPatchLogCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.mainVal              = $scope.mainVal;
         params.subVal               = $scope.subVal;
         params.posLogDt             = $scope.posLogDt;
+        params.patchErrMsg          = $scope.patchErrMsg;
 
 
         var verCd =params.selectVer.indexOf("]");

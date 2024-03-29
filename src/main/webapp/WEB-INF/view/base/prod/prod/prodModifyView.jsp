@@ -466,8 +466,9 @@
                                 initialized="_initComboBox(s)">
                   </wj-combo-box>
                 </div>--%>
-                  <input type="text" class="sb-input w70" id="srchSdselGrpNm" ng-model="prodModifyInfo.sdselGrpNm" ng-click="popUpSdselGrp()" style="float: left;"
+                  <input type="text" class="sb-input w70" id="_sdselGrpNmCd" ng-model="prodModifyInfo.sdselGrpNmCd" ng-click="popUpSdselGrp()" style="float: left;"
                          placeholder="<s:message code="prod.sdselGrpCd" /> 선택" readonly/>
+                  <input type="hidden" id="_sdselGrpNm" name="sdselGrpNm" ng-model="prodModifyInfo.sdselGrpNm" disabled />
                   <input type="hidden" id="_sdselGrpCd" name="sdselGrpCd" ng-model="prodModifyInfo.sdselGrpCd" disabled />
               </td>
             </tr>
@@ -476,10 +477,11 @@
                 <tr>
                   <%--단품/세트선택설정 --%>
                   <th><s:message code="prod.groupProdCd"/></th>
-                  <td>
-                    <input type="text" class="sb-input w70" id="_groupProdNm" ng-model="prodModifyInfo.groupProdNm" ng-click="popUpGroupProdCd()" style="float: left; width: 69%;"
+                  <td colspan="3">
+                    <input type="text" class="sb-input w70" id="_groupProdNmCd" ng-model="prodModifyInfo.groupProdNmCd" ng-click="popUpGroupProdCd()" style="float: left; width: 69%;"
                            placeholder="<s:message code="prod.groupProdCd" /> 선택" readonly/>
                     <input type="hidden" id="_groupProdCd" name="groupProdCd" ng-model="prodModifyInfo.groupProdCd" disabled />
+                    <input type="hidden" id="_groupProdNm" name="groupProdNm" ng-model="prodModifyInfo.groupProdNm" disabled />
                     <button type="button" class="btn_skyblue fl mr5" id="btnCancelGroupProdCd" style="margin-left: 5px;" ng-click="delGroupProdCd()"><s:message code="cmm.selectCancel"/></button>
                   </td>
                 </tr>
@@ -487,10 +489,11 @@
             <tr>
               <%--보증금상품코드 --%>
               <th><s:message code="prod.depositProdCd"/></th>
-              <td>
-                <input type="text" class="sb-input w70" id="_depositProdNm" ng-model="prodModifyInfo.depositProdNm" ng-click="popUpDepositProdCd()" style="float: left; width: 69%;"
+              <td colspan="3">
+                <input type="text" class="sb-input w70" id="_depositProdNmCd" ng-model="prodModifyInfo.depositProdNmCd" ng-click="popUpDepositProdCd()" style="float: left; width: 69%;"
                        placeholder="<s:message code="prod.depositProdCd" /> 선택" readonly/>
                 <input type="hidden" id="_depositProdCd" name="depositProdCd" ng-model="prodModifyInfo.depositProdCd" disabled />
+                <input type="hidden" id="_depositProdNm" name="depositProdNm" ng-model="prodModifyInfo.depositProdNm" disabled />
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelDepositProdCd" style="margin-left: 5px;" ng-click="delDepositProdCd()"><s:message code="cmm.selectCancel"/></button>
               </td>
             </tr>
@@ -875,9 +878,10 @@
               <%-- 상품옵션그룹 --%>
               <th><s:message code="prod.optionGrp"/></th>
               <td>
-                <input type="text" class="sb-input w70" id="_optionGrpNm" ng-model="prodModifyInfo.optionGrpNm" ng-click="popUpOptionGrp()" style="float: left; width: 69%;"
+                <input type="text" class="sb-input w70" id="_optionGrpNmCd" ng-model="prodModifyInfo.optionGrpNmCd" ng-click="popUpOptionGrp()" style="float: left; width: 69%;"
                        placeholder="<s:message code="prod.optionGrp" /> 선택" readonly/>
                 <input type="hidden" id="_optionGrpCd" name="optionGrpCd" ng-model="prodModifyInfo.optionGrpCd" disabled />
+                <input type="hidden" id="_optionGrpNm" name="optionGrpNm" ng-model="prodModifyInfo.optionGrpNm" disabled />
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelOptionGrp" style="margin-left: 5px;" ng-click="delOptionGrp()"><s:message code="cmm.selectCancel"/></button>
               </td>
             </tr>
@@ -1165,7 +1169,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20230223.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20240322.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

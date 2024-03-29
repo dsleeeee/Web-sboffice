@@ -102,9 +102,9 @@
                 </div>
               </td>
             </tr>
-            <%-- 메뉴 정렬 순서 --%>
+            <%-- 사용권한구굽ㄴ --%>
             <tr>
-              <th><s:message code="webMenu.dispIndx" /><em class="imp">*</em></th>
+              <th><s:message code="webMenu.authOrgn" /><em class="imp">*</em></th>
               <td>
                 <div class="sb-select">
                   <div id="dispIdx"></div>
@@ -126,6 +126,52 @@
               <td>
                 <div class="sb-select">
                   <div id=spclAuthor></div>
+                </div>
+              </td>
+            </tr>
+            <%-- 사용권한구분 --%>
+            <tr>
+              <th><s:message code="webMenu.authOrgn" /></th>
+              <td>
+                <div class="sb-select pdt5">
+                  <div id=authOrgn>
+                    <span class="chk ml10">
+                      <label for="chkAdmin">
+                        <s:message code="webMenu.admin" />
+                      </label>
+                      <input type="checkbox" id="chkAdmin" ng-model="isChecked1" />
+                    </span>
+                    <span class="chk ml10">
+                      <label for="chkDist">
+                        <s:message code="webMenu.dist" />
+                      </label>
+                      <input type="checkbox" id="chkDist" ng-model="isChecked2" />
+                    </span>
+                    <span class="chk ml10">
+                      <label for="chkAgency">
+                        <s:message code="webMenu.agency" />
+                      </label>
+                      <input type="checkbox" id="chkAgency" ng-model="isChecked3" />
+                    </span>
+                    <span class="chk ml10">
+                      <label for="chkHq">
+                        <s:message code="webMenu.hq" />
+                      </label>
+                      <input type="checkbox" id="chkHq" ng-model="isChecked4" />
+                    </span>
+                    <span class="chk ml10">
+                      <label for="chkStore">
+                        <s:message code="webMenu.store" />
+                      </label>
+                      <input type="checkbox" id="chkStore" ng-model="isChecked5" />
+                    </span>
+                    <span class="chk ml10">
+                      <label for="chkExStore">
+                        <s:message code="webMenu.exStore" />
+                      </label>
+                      <input type="checkbox" id="chkExStore" ng-model="isChecked6" />
+                    </span>
+                  </div>
                 </div>
               </td>
             </tr>
@@ -204,6 +250,7 @@
 
     <%-- 리소스 트리 선택 이벤트 --%>
     function selectItem(selectedItem) {
+      chkRightInit();
       $.postJSON("/sys/menu/webMenu/webMenu/view.sb", selectedItem, function(result) {
         var w = result.data.list;
         var f = [];
@@ -216,6 +263,35 @@
             url.text = item.url;
             spclAuthor.selectedValue = item.spclAuthor === undefined ? "N" : item.spclAuthor;
             dispIdx.text = item.dispIdx === undefined ? "" : item.dispIdx.toString();
+
+            if(item.authOrgn !== "" && item.authOrgn !== null) {
+                if (item.authOrgn.indexOf("A") !== -1) {
+                    $("#chkAdmin").prop("checked", true);
+                }
+                if (item.authOrgn.indexOf("P") !== -1) {
+                    $("#chkDist").prop("checked", true);
+                }
+                if (item.authOrgn.indexOf("C") !== -1) {
+                    $("#chkAgency").prop("checked", true);
+                }
+                if (item.authOrgn.indexOf("H") !== -1) {
+                    $("#chkHq").prop("checked", true);
+                }
+                if (item.authOrgn.indexOf("S") !== -1) {
+                    $("#chkStore").prop("checked", true);
+                }
+                if (item.authOrgn.indexOf("I") !== -1) {
+                    $("#chkExStore").prop("checked", true);
+                }
+            }else{
+                $("#chkAdmin").prop("checked", false);
+                $("#chkDist").prop("checked", false);
+                $("#chkAgency").prop("checked", false);
+                $("#chkHq").prop("checked", false);
+                $("#chkStore").prop("checked", false);
+                $("#chkExStore").prop("checked", false);
+            }
+
           }
           else if(item.resrceFg === "F") {
             f.push(item);
@@ -295,6 +371,7 @@
 
       <%-- 초기화 --%>
       rightInit();
+      chkRightInit();
     });
 
     <%-- 추가 버튼 --%>
@@ -334,6 +411,26 @@
       param.dispIdx = parseInt(dispIdx.text);
       param.spclAuthor = spclAuthor.selectedValue === "N" ? null : spclAuthor.selectedValue;
 
+      param.authOrgn = "";
+      if($("#chkAdmin").is(":checked")){
+        param.authOrgn += "A";
+      }
+      if($("#chkDist").is(":checked")){
+        param.authOrgn += "P";
+      }
+      if($("#chkAgency").is(":checked")){
+        param.authOrgn += "C";
+      }
+      if($("#chkHq").is(":checked")){
+        param.authOrgn += "H";
+      }
+      if($("#chkStore").is(":checked")){
+        param.authOrgn += "S";
+      }
+      if($("#chkExStore").is(":checked")){
+        param.authOrgn += "I";
+      }
+
       $.postJSONArray("/sys/menu/webMenu/webMenu/save.sb", param, function(result) {
         refreshMenu();
         grid.selectedItem = item;
@@ -369,6 +466,7 @@
         grid.itemsSource = result.data.list;
         searchResrceNm.itemsSource = getSearchList(grid.itemsSource);
         rightInit();
+        chkRightInit();
       },
       function(result) {
         s_alert.pop(result.message);
@@ -382,9 +480,25 @@
       resrceNm.text = "";
       dispIdx.text = "";
       spclAuthor.selectedValue = "N";
+      $("#chkAdmin").prop("checked", false);
+      $("#chkDist").prop("checked", false);
+      $("#chkAgency").prop("checked", false);
+      $("#chkHq").prop("checked", false);
+      $("#chkStore").prop("checked", false);
+      $("#chkExStore").prop("checked", false);
 
       grid2.itemsSource = new wijmo.collections.CollectionView();
       grid2.collectionView.trackChanges = true;
+    }
+
+    <%-- 오른쪽 리소스 입력 화면 체크박스 초기화 --%>
+    function chkRightInit() {
+      $("#chkAdmin").prop("checked", false);
+      $("#chkDist").prop("checked", false);
+      $("#chkAgency").prop("checked", false);
+      $("#chkHq").prop("checked", false);
+      $("#chkStore").prop("checked", false);
+      $("#chkExStore").prop("checked", false);
     }
 
   });

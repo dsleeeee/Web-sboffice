@@ -135,6 +135,9 @@ public class StorePosVersionVO extends PageVO {
     /** 종료일자 */
     private String endDate;
 
+    /** 특정에러메세지 */
+    private String patchErrMsg;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -411,4 +414,11 @@ public class StorePosVersionVO extends PageVO {
         this.endDate = endDate;
     }
 
+    public String getPatchErrMsg() {
+        return patchErrMsg;
+    }
+
+    public void setPatchErrMsg(String patchErrMsg) {
+        this.patchErrMsg = patchErrMsg;
+    }
 }

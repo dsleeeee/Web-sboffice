@@ -21,6 +21,7 @@
         <div class="updownSet mb10">
             <div class="sb-select w150px fl">
                 <div id="posListBox"></div>
+                <input type="hidden" id="orgPosNo" />
             </div>
             <div class="fr mb10">
                 <%-- 기능복사버튼 --%>
@@ -121,8 +122,15 @@
 
         var param = {};
         param.storeCd = selectedStore.storeCd;
-        param.posNo = posListBox.selectedValue;
 
+        if($("#orgPosNo").val() !== '' && $("#orgPosNo").val() !== null && $("#orgPosNo").val() !== undefined){
+            param.posNo = $("#orgPosNo").val();
+            posListBox.selectedValue = $("#orgPosNo").val();
+        }else{
+            param.posNo = posListBox.selectedValue;
+        }
+
+        $("#orgPosNo").val("");
         $.postJSON("/base/store/posfunc/use/getPosFuncList.sb", param,
             function (result) {
                 var list = result.data.list;
@@ -176,6 +184,12 @@
         /* var scope = agrid.getScope("funcKeyCtrl");
          scope.flex.refresh();*/
 
+    }
+
+    <%-- 포스기능 사용관리 탭 화면 보여주기 --%>
+    function showPosFuncList2(orgPosNo) {
+        $("#orgPosNo").val(orgPosNo);
+        showPosFuncList();
     }
 
 </script>

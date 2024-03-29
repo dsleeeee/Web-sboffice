@@ -15,7 +15,8 @@
            A.URL,
            A.SPCL_AUTHOR,
            A.DISP_LEVEL,
-           A.DISP_IDX
+           A.DISP_IDX,
+           A.AUTH_ORGN
       FROM TB_WB_RESRCE_INFO A
      WHERE A.USE_YN = 'Y'
        AND A.RESRCE_CD = #{resrceCd}
@@ -44,7 +45,8 @@
            A.REG_DT,
            A.REG_ID,
            A.MOD_DT,
-           A.MOD_ID
+           A.MOD_ID,
+           A.AUTH_ORGN
       FROM TB_WB_RESRCE_INFO A
      WHERE A.DISP_LEVEL = #{level}
        AND A.RESRCE_FG = 'M'
@@ -65,7 +67,8 @@
            A.URL,
            A.SPCL_AUTHOR,
            A.DISP_LEVEL,
-           A.DISP_IDX
+           A.DISP_IDX,
+           A.AUTH_ORGN
       FROM TB_WB_RESRCE_INFO A
      WHERE A.USE_YN = 'Y'
        AND A.RESRCE_CD = #{resrceCd}
@@ -96,7 +99,8 @@
       REG_DT,
       REG_ID,
       MOD_DT,
-      MOD_ID
+      MOD_ID,
+      AUTH_ORGN
     )
     VALUES
     (
@@ -113,7 +117,8 @@
       #{regDt},
       #{regId},
       #{modDt},
-      #{modId}
+      #{modId},
+      #{authOrgn}
     )
     ]]>
   </insert>
@@ -121,15 +126,16 @@
   <update id="updateWebMenu" parameterType="resrceInfoVO">
     /* WebMenuMapper.deleteWebMenu */
     <![CDATA[
-    UPDATE TB_WB_RESRCE_INFO A
-       SET A.MOD_DT = #{modDt},
-           A.MOD_ID = #{modId},
-           A.FUNC_FG = #{funcFg},
-           A.RESRCE_NM = #{resrceNm},
-           A.URL = #{url},
-           A.DISP_IDX = #{dispIdx},
-           A.SPCL_AUTHOR = #{spclAuthor}
-     WHERE A.RESRCE_CD = #{resrceCd}
+    UPDATE  TB_WB_RESRCE_INFO A
+       SET  A.MOD_DT = #{modDt},
+            A.MOD_ID = #{modId},
+            A.FUNC_FG = #{funcFg},
+            A.RESRCE_NM = #{resrceNm},
+            A.URL = #{url},
+            A.DISP_IDX = #{dispIdx},
+            A.SPCL_AUTHOR = #{spclAuthor},
+            A.AUTH_ORGN = #{authOrgn}
+     WHERE  A.RESRCE_CD = #{resrceCd}
     ]]>
   </update>
 

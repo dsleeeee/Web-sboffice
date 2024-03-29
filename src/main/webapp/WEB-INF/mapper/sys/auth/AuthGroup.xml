@@ -37,7 +37,14 @@
            REG_DT,
            REG_ID,
            MOD_DT,
-           MOD_ID
+           MOD_ID,
+           DECODE(NVL(INSTR(AUTH_ORGN, 'A'),0), 0, NULL, 'Y') AS CHK_ADMIN,
+           DECODE(NVL(INSTR(AUTH_ORGN, 'P'),0), 0, NULL, 'Y') AS CHK_DIST,
+           DECODE(NVL(INSTR(AUTH_ORGN, 'C'),0), 0, NULL, 'Y') AS CHK_AGENCY,
+           DECODE(NVL(INSTR(AUTH_ORGN, 'H'),0), 0, NULL, 'Y') AS CHK_HQ,
+           DECODE(NVL(INSTR(AUTH_ORGN, 'S'),0), 0, NULL, 'Y') AS CHK_STORE,
+           DECODE(NVL(INSTR(AUTH_ORGN, 'I'),0), 0, NULL, 'Y') AS CHK_EX_STORE,
+           AUTH_ORGN
       FROM TB_WB_AUTHOR_GRP_INFO A
      <where>
      <if test='useYn != null and useYn.toString() != ""'>
@@ -82,7 +89,8 @@
         REG_DT,
         REG_ID,
         MOD_DT,
-        MOD_ID
+        MOD_ID,
+        AUTH_ORGN
     )
     VALUES
     (
@@ -95,21 +103,23 @@
         #{regDt},
         #{regId},
         #{modDt},
-        #{modId}
+        #{modId},
+        #{authOrgn}
     )
   </insert>
 
   <update id="updateGroup" parameterType="authGroupVO">
     /* AuthGroupMapper.updateGroup */
      UPDATE TB_WB_AUTHOR_GRP_INFO A
-        SET A.AUTH_GRP_NM = #{authGrpNm},
+        SET A.AUTH_GRP_NM   = #{authGrpNm},
             A.TARGET_ALL_FG = #{targetAllFg},
-            A.TARGET_ORGN = #{targetOrgn},
-            A.REMARK = #{remark},
-            A.USE_YN = #{useYn},
-            A.MOD_DT = #{modDt},
-            A.MOD_ID = #{modId}
-      WHERE A.AUTH_GRP_CD = #{authGrpCd}
+            A.TARGET_ORGN   = #{targetOrgn},
+            A.REMARK        = #{remark},
+            A.USE_YN        = #{useYn},
+            A.MOD_DT        = #{modDt},
+            A.MOD_ID        = #{modId},
+            A.AUTH_ORGN     = #{authOrgn}
+      WHERE A.AUTH_GRP_CD   = #{authGrpCd}
   </update>
 
   <delete id="deleteGroup" parameterType="authGroupVO">

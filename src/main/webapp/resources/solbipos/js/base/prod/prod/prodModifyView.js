@@ -436,6 +436,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
         params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
 
+        // 선택메뉴
+        params.sdselGrpCd = $("#_sdselGrpCd").val();
+
         // 보증금상품코드
         params.depositProdCd = $("#_depositProdCd").val();
 
@@ -1350,6 +1353,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 보증금상품코드
         $("#_depositProdCd").val("");
         $("#_depositProdNm").val("");
+        $("#_depositProdNmCd").val("");
 
         // [1250 맘스터치] 사용시 초기화
         if(momsEnvstVal === "1") {
@@ -1357,10 +1361,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 상품옵션그룹
             $("#_optionGrpCd").val("");
             $("#_optionGrpNm").val("");
+            $("#_optionGrpNmCd").val("");
 
             // 단품/세트선택설정
             $("#_groupProdCd").val("");
             $("#_groupProdNm").val("");
+            $("#_groupProdNmCd").val("");
+
             
             // 단종여부 체크박스
             $scope.isCheckedDisconYn = false;
@@ -1436,9 +1443,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 vSetProdFg = $scope.prodModifyInfo.setProdFg;
 
                 // 사이드상품여부가 '미사용'인 경우 선택메뉴 값이 있더라도 빈칸으로 셋팅
-                if($scope.prodModifyInfo.sideProdYn === 'N'){
+                if($scope.prodModifyInfo.sideProdYn === 'N') {
                     $scope.prodModifyInfo.sdselGrpNm = "";
                     $scope.prodModifyInfo.sdselGrpCd = "";
+                }else if($scope.prodModifyInfo.sideProdYn === 'Y'){
+                    $scope.prodModifyInfo.sdselGrpNmCd = "[" + $scope.prodModifyInfo.sdselGrpCd + "] " + $scope.prodModifyInfo.sdselGrpNm;
                 }
 
                 if($scope.prodModifyInfo.depositCupFg === null){
@@ -1453,10 +1462,18 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $scope.prodModifyInfo.dcYn = "Y";
                 }
 
+                // 선택메뉴
+                if ($scope.prodModifyInfo.sdselGrpCd !== null && $scope.prodModifyInfo.sdselGrpCd !== undefined && $scope.prodModifyInfo.sdselGrpCd !== "") {
+                    $("#_sdselGrpNm").val($scope.prodModifyInfo.sdselGrpNm);
+                    $("#_sdselGrpCd").val($scope.prodModifyInfo.sdselGrpCd);
+                    $("#_sdselGrpNmCd").val("[" + $scope.prodModifyInfo.sdselGrpCd + "] " + $scope.prodModifyInfo.sdselGrpNm);
+                }
+
                 // 보증금상품코드
                 if ($scope.prodModifyInfo.depositProdCd !== null && $scope.prodModifyInfo.depositProdCd !== undefined && $scope.prodModifyInfo.depositProdCd !== "") {
                     $("#_depositProdNm").val($scope.prodModifyInfo.depositProdNm);
                     $("#_depositProdCd").val($scope.prodModifyInfo.depositProdCd);
+                    $("#_depositProdNmCd").val("[" + $scope.prodModifyInfo.depositProdCd + "] " + $scope.prodModifyInfo.depositProdNm);
                 }
 
                 // [1250 맘스터치] 사용시 기존정보 셋팅
@@ -1495,12 +1512,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if ($scope.prodModifyInfo.optionGrpCd !== null && $scope.prodModifyInfo.optionGrpCd !== undefined && $scope.prodModifyInfo.optionGrpCd !== "") {
                         $("#_optionGrpNm").val($scope.prodModifyInfo.optionGrpNm);
                         $("#_optionGrpCd").val($scope.prodModifyInfo.optionGrpCd);
+                        $("#_optionGrpNmCd").val("[" + $scope.prodModifyInfo.optionGrpCd + "] " +$scope.prodModifyInfo.optionGrpNm);
                     }
 
                     // 단품/세트선택설정
                     if ($scope.prodModifyInfo.groupProdCd !== null && $scope.prodModifyInfo.groupProdCd !== undefined && $scope.prodModifyInfo.groupProdCd !== "") {
                         $("#_groupProdNm").val($scope.prodModifyInfo.groupProdNm);
                         $("#_groupProdCd").val($scope.prodModifyInfo.groupProdCd);
+                        $("#_groupProdNmCd").val("[" + $scope.prodModifyInfo.groupProdCd + "] " + $scope.prodModifyInfo.groupProdNm);
                     }
 
                     // 출시일
@@ -1820,6 +1839,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.delOptionGrp = function () {
         $("#_optionGrpNm").val("");
         $("#_optionGrpCd").val("");
+        $("#_optionGrpNmCd").val("");
         $scope.prodModifyInfo.optionGrpCd = "";
         $scope.prodModifyInfo.optionGrpNm = "";
     };
@@ -1834,6 +1854,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.delGroupProdCd = function () {
         $("#_groupProdNm").val("");
         $("#_groupProdCd").val("");
+        $("#_groupProdNmCd").val("");
         $scope.prodModifyInfo.groupProdCd = "";
         $scope.prodModifyInfo.groupProdNm = "";
     };
@@ -1851,6 +1872,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.delDepositProdCd = function () {
         $("#_depositProdNm").val("");
         $("#_depositProdCd").val("");
+        $("#_depositProdNmCd").val("");
         $scope.prodModifyInfo.depositProdCd = "";
         $scope.prodModifyInfo.depositProdNm = "";
     };

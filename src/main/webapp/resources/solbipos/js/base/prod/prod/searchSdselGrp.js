@@ -51,9 +51,9 @@ app.controller('searchSdselGrpCtrl', ['$scope', '$http', function ($scope, $http
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "sdselGrpCd") { // 선택메뉴코드 클릭
 
-                    var scope = agrid.getScope('prodModifyCtrl');
-                    scope.prodModifyInfo.sdselGrpNm = selectedRow.sdselGrpNm;
-                    scope.prodModifyInfo.sdselGrpCd = selectedRow.sdselGrpCd;
+                    $("#_sdselGrpNm").val(selectedRow.sdselGrpNm);
+                    $("#_sdselGrpCd").val(selectedRow.sdselGrpCd);
+                    $("#_sdselGrpNmCd").val("[" + selectedRow.sdselGrpCd + "] " + selectedRow.sdselGrpNm);
 
                     $scope.close();
 
@@ -120,6 +120,7 @@ app.controller('searchSdselGrpCtrl', ['$scope', '$http', function ($scope, $http
 
     $scope.close = function (){
         $("#searchSdselGrpCd").val("");
+        $("#searchSdselGrNm").val("");
         $scope.wjSearchSdselGrpLayer.hide();
     }
 

@@ -49,6 +49,7 @@ app.controller('searchDepositProdCtrl', ['$scope', '$http', function ($scope, $h
 
                     $("#_depositProdCd").val(selectedRow.prodCd);
                     $("#_depositProdNm").val(selectedRow.prodNm);
+                    $("#_depositProdNmCd").val("[" + selectedRow.prodCd + "] " + selectedRow.prodNm);
 
                     $scope.wjSearchDepositProdLayer.hide();
 

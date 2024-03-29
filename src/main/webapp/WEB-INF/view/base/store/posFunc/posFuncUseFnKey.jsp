@@ -54,11 +54,11 @@
                         <wj-flex-grid-column header="<s:message code="posFunc.rowPosi"/>" binding="rowPosi" width="*" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="posFunc.width"/>" binding="width" width="*" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="posFunc.height"/>" binding="height" width="*" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="posFunc.useYn"/>" binding="useYn" width="60"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="useYn" width="60" format="checkBoxText"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
         </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncUseFnKey.js?ver=20230531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncUseFnKey.js?ver=20240322.01" charset="utf-8"></script>

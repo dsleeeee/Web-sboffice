@@ -59,6 +59,7 @@ app.controller('searchGroupProdCtrl', ['$scope', '$http', function ($scope, $htt
 
                     $("#_groupProdCd").val(selectedRow.prodCd);
                     $("#_groupProdNm").val(selectedRow.prodNm);
+                    $("#_groupProdNmCd").val("[" + selectedRow.prodCd + "] " + selectedRow.prodNm);
 
                     $scope.wjSearchGroupProdLayer.hide();
 

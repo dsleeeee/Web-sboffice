@@ -60,4 +60,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchOptionGrp.js?ver=20230215.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchOptionGrp.js?ver=20240325.01" charset="utf-8"></script>
