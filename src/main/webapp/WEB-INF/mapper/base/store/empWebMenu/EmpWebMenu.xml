@@ -20,58 +20,58 @@
         /* EmpWebMenuMapper.getMenuList */
         SELECT twr.*
         FROM (
-                SELECT  twr.RESRCE_CD AS L_MENU_CD,
-                        twr.RESRCE_NM AS L_MENU_NM,
-                        twri.RESRCE_CD AS M_MENU_CD,
-                        twri.RESRCE_NM AS M_MENU_NM,
-                        twrif.RESRCE_CD AS S_MENU_CD,
-                        twrif.RESRCE_NM AS S_MENU_NM
-                FROM    TB_WB_RESRCE_INFO twr,
-                        TB_WB_RESRCE_INFO twri,
-                        TB_WB_RESRCE_INFO twrif
-                WHERE   1=1
-                AND     twr.USE_YN = 'Y'
-                AND     twri.USE_YN = 'Y'
-                AND     twrif.USE_YN = 'Y'
-                AND     twri.P_RESRCE = twr.RESRCE_CD
-                AND     twrif.P_RESRCE = twri.RESRCE_CD
-                AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
-                AND     twrif.DISP_LEVEL = '3'
-                ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD, twr.DISP_IDX, twri.DISP_IDX, twrif.DISP_IDX
-             ) twr,
-             (
-                 SELECT twa.RESRCE_CD
-                 FROM   TB_HQ_EMPLOYEE the,
-                        TB_WB_USER_INFO twu,
-                        TB_WB_AUTHOR_GRP_RESRCE twa
-                 WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
-                 AND    the.EMP_NO = '0000'
-                 AND    twu.USER_ID = the.USER_ID
-                 AND    twa.AUTH_GRP_CD = twu.AUTH_GRP_CD
-                 AND    twa.USE_YN = 'Y'
-                 MINUS
-                 SELECT twa.RESRCE_CD
-                 FROM   TB_HQ_EMPLOYEE the,
-                        TB_WB_USER_INFO twu,
-                        TB_WB_AUTHOR_EXCEPT_V01 twa
-                 WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
-                 AND    the.EMP_NO = '0000'
-                 AND    twu.USER_ID = the.USER_ID
-                 AND    twa.USER_ID = twu.USER_ID
-                 AND    twa.INCLD_EXCLD_FG = 'E'
-                 AND    twa.USE_YN = 'Y'
-                 MINUS
-                 SELECT twa.RESRCE_CD
-                 FROM   TB_HQ_EMPLOYEE the,
-                        TB_WB_USER_INFO twu,
-                        TB_WB_AUTHOR_EXCEPT_V01 twa
-                 WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
-                 AND    the.EMP_NO = '0000'
-                 AND    twu.USER_ID = the.USER_ID
-                 AND    twa.USER_ID = twu.USER_ID
-                 AND    twa.INCLD_EXCLD_FG = 'E'
-                 AND    twa.USE_YN = 'Y'
-             ) the
+        SELECT  twr.RESRCE_CD AS L_MENU_CD,
+        twr.RESRCE_NM AS L_MENU_NM,
+        twri.RESRCE_CD AS M_MENU_CD,
+        twri.RESRCE_NM AS M_MENU_NM,
+        twrif.RESRCE_CD AS S_MENU_CD,
+        twrif.RESRCE_NM AS S_MENU_NM
+        FROM    TB_WB_RESRCE_INFO twr,
+        TB_WB_RESRCE_INFO twri,
+        TB_WB_RESRCE_INFO twrif
+        WHERE   1=1
+        AND     twr.USE_YN = 'Y'
+        AND     twri.USE_YN = 'Y'
+        AND     twrif.USE_YN = 'Y'
+        AND     twri.P_RESRCE = twr.RESRCE_CD
+        AND     twrif.P_RESRCE = twri.RESRCE_CD
+        AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+        AND     twrif.DISP_LEVEL = '3'
+        ORDER BY twr.RESRCE_CD, twri.RESRCE_CD, twrif.RESRCE_CD, twr.DISP_IDX, twri.DISP_IDX, twrif.DISP_IDX
+        ) twr,
+        (
+        SELECT twa.RESRCE_CD
+        FROM   TB_HQ_EMPLOYEE the,
+        TB_WB_USER_INFO twu,
+        TB_WB_AUTHOR_GRP_RESRCE twa
+        WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    the.EMP_NO = '0000'
+        AND    twu.USER_ID = the.USER_ID
+        AND    twa.AUTH_GRP_CD = twu.AUTH_GRP_CD
+        AND    twa.USE_YN = 'Y'
+        MINUS
+        SELECT twa.RESRCE_CD
+        FROM   TB_HQ_EMPLOYEE the,
+        TB_WB_USER_INFO twu,
+        TB_WB_AUTHOR_EXCEPT_V01 twa
+        WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    the.EMP_NO = '0000'
+        AND    twu.USER_ID = the.USER_ID
+        AND    twa.USER_ID = twu.USER_ID
+        AND    twa.INCLD_EXCLD_FG = 'E'
+        AND    twa.USE_YN = 'Y'
+        MINUS
+        SELECT twa.RESRCE_CD
+        FROM   TB_HQ_EMPLOYEE the,
+        TB_WB_USER_INFO twu,
+        TB_WB_AUTHOR_EXCEPT_V01 twa
+        WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    the.EMP_NO = '0000'
+        AND    twu.USER_ID = the.USER_ID
+        AND    twa.USER_ID = twu.USER_ID
+        AND    twa.INCLD_EXCLD_FG = 'E'
+        AND    twa.USE_YN = 'Y'
+        ) the
         WHERE the.RESRCE_CD = twr.S_MENU_CD
         <if test='sMenuNm != null and sMenuNm != ""'>
             AND twr.S_MENU_NM LIKE '%' || #{sMenuNm} || '%'
@@ -104,32 +104,32 @@
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '172' AND NMCODE_CD = the.MOMS_STORE_FG_05) AS MOMS_STORE_FG_05
         FROM 	TB_HQ_EMPLOYEE the
         ,        (
-                SELECT  twub.USER_ID
-                ,       LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD
-                ,       LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
-                FROM    TB_WB_USER_BRAND twub
-                ,       TB_HQ_BRAND thb
-                WHERE   1=1
-                AND     thb.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
-                GROUP BY twub.USER_ID
-                ) twub
+        SELECT  twub.USER_ID
+        ,       LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD
+        ,       LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
+        FROM    TB_WB_USER_BRAND twub
+        ,       TB_HQ_BRAND thb
+        WHERE   1=1
+        AND     thb.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
+        GROUP BY twub.USER_ID
+        ) twub
         WHERE 	the.HQ_OFFICE_CD = #{hqOfficeCd}
         AND 	the.USER_ID = twub.USER_ID(+)
         AND 	the.EMP_NO != '0000'
         AND 	the.USER_ID IS NOT NULL
         AND     the.EMP_NO NOT IN (
-                                    SELECT  DISTINCT THE.EMP_NO
-                                    FROM    TB_HQ_EMPLOYEE the
-                                    ,       TB_WB_USER_INFO twu
-                                    ,       TB_WB_AUTHOR_EXCEPT_V01 twa
-                                    WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
-                                    AND     twu.USER_ID = the.USER_ID
-                                    AND     twa.USER_ID = twu.USER_ID
-                                    AND     twa.INCLD_EXCLD_FG = 'E'
-                                    AND     twa.USE_YN = 'Y'
-                                    AND     twa.RESRCE_CD = #{sMenuCd}
-                                    )
+        SELECT  DISTINCT THE.EMP_NO
+        FROM    TB_HQ_EMPLOYEE the
+        ,       TB_WB_USER_INFO twu
+        ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+        WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     twu.USER_ID = the.USER_ID
+        AND     twa.USER_ID = twu.USER_ID
+        AND     twa.INCLD_EXCLD_FG = 'E'
+        AND     twa.USE_YN = 'Y'
+        AND     twa.RESRCE_CD = #{sMenuCd}
+        )
 
         <if test='empNo != null and empNo != ""'>
             AND the.EMP_NO LIKE '%'||#{empNo}||'%'
@@ -210,43 +210,43 @@
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '171' AND NMCODE_CD = the.MOMS_STORE_FG_04) AS MOMS_STORE_FG_04
         ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '172' AND NMCODE_CD = the.MOMS_STORE_FG_05) AS MOMS_STORE_FG_05
         FROM    (
-                SELECT  DISTINCT the.EMP_NO
-                ,		the.EMP_NM
-                ,		the.USER_ID
-                ,		the.MP_NO
-                ,       the.BRANCH_CD
-                ,       the.MOMS_TEAM
-                ,       the.MOMS_AC_SHOP
-                ,       the.MOMS_AREA_FG
-                ,       the.MOMS_COMMERCIAL
-                ,       the.MOMS_SHOP_TYPE
-                ,       the.MOMS_STORE_MANAGE_TYPE
-                ,       the.MOMS_STORE_FG_01
-                ,       the.MOMS_STORE_FG_02
-                ,       the.MOMS_STORE_FG_03
-                ,       the.MOMS_STORE_FG_04
-                ,       the.MOMS_STORE_FG_05
-                FROM    TB_HQ_EMPLOYEE the
-                ,       TB_WB_USER_INFO twu
-                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
-                WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     twu.USER_ID = the.USER_ID
-                AND     twa.USER_ID = twu.USER_ID
-                AND     twa.INCLD_EXCLD_FG = 'E'
-                AND     twa.USE_YN = 'Y'
-                AND     twa.RESRCE_CD = #{sMenuCd}
-                ) the
-           ,    (
-                SELECT  twub.USER_ID
-                ,       LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD
-                ,       LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
-                FROM    TB_WB_USER_BRAND twub
-                ,       TB_HQ_BRAND thb
-                WHERE   1=1
-                AND     thb.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
-                GROUP BY twub.USER_ID
-                ) twub
+        SELECT  DISTINCT the.EMP_NO
+        ,		the.EMP_NM
+        ,		the.USER_ID
+        ,		the.MP_NO
+        ,       the.BRANCH_CD
+        ,       the.MOMS_TEAM
+        ,       the.MOMS_AC_SHOP
+        ,       the.MOMS_AREA_FG
+        ,       the.MOMS_COMMERCIAL
+        ,       the.MOMS_SHOP_TYPE
+        ,       the.MOMS_STORE_MANAGE_TYPE
+        ,       the.MOMS_STORE_FG_01
+        ,       the.MOMS_STORE_FG_02
+        ,       the.MOMS_STORE_FG_03
+        ,       the.MOMS_STORE_FG_04
+        ,       the.MOMS_STORE_FG_05
+        FROM    TB_HQ_EMPLOYEE the
+        ,       TB_WB_USER_INFO twu
+        ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+        WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     twu.USER_ID = the.USER_ID
+        AND     twa.USER_ID = twu.USER_ID
+        AND     twa.INCLD_EXCLD_FG = 'E'
+        AND     twa.USE_YN = 'Y'
+        AND     twa.RESRCE_CD = #{sMenuCd}
+        ) the
+        ,    (
+        SELECT  twub.USER_ID
+        ,       LISTAGG(twub.HQ_BRAND_CD, ',') WITHIN GROUP (ORDER BY twub.HQ_BRAND_CD) AS HQ_BRAND_CD
+        ,       LISTAGG(thb.HQ_BRAND_NM, ',') WITHIN GROUP (ORDER BY thb.HQ_BRAND_NM) AS HQ_BRAND_NM
+        FROM    TB_WB_USER_BRAND twub
+        ,       TB_HQ_BRAND thb
+        WHERE   1=1
+        AND     thb.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thb.HQ_BRAND_CD = twub.HQ_BRAND_CD
+        GROUP BY twub.USER_ID
+        ) twub
         WHERE   the.USER_ID = twub.USER_ID(+)
         AND 	the.EMP_NO != '0000'
         <if test='empNo != null and empNo != ""'>

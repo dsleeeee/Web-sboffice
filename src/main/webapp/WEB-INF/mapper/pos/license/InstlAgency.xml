@@ -201,17 +201,20 @@
     -->
     <select id="getAgencyEmp" parameterType="instlAgencyVO" resultType="DefaultMap">
         /* USE : InstlAgencyMapper.getAgencyEmp */
-            SELECT   tce.AGENCY_CD
-                    , tce.EMP_NO
-                    , tce.EMP_NM
-                    , tce.USER_ID
-                    , tce.SERVICE_FG
-                    , tce.MP_NO
-                    , tce.WEB_USE_YN
-             FROM TB_CM_EMPLOYEE tce
-            WHERE 1=1
-              AND tce.AGENCY_CD != '00000'
-              AND tce.AGENCY_CD = #{agencyCd}
+        SELECT   tce.AGENCY_CD
+                , tce.EMP_NO
+                , tce.EMP_NM
+                , tce.USER_ID
+                , tce.SERVICE_FG
+                , tce.MP_NO
+                , tce.WEB_USE_YN
+        FROM TB_CM_EMPLOYEE tce
+        WHERE 1=1
+        AND tce.AGENCY_CD != '00000'
+        AND tce.AGENCY_CD = #{agencyCd}
+        <if test='serviceFg != null and serviceFg != ""'>
+            AND tce.SERVICE_FG = #{serviceFg}
+        </if>
         ORDER BY tce.EMP_NO
     </select>
 
