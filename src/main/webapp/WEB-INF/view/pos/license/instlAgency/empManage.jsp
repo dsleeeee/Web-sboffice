@@ -16,12 +16,37 @@
         <%-- 설치업체관리 인증관리 --%>
         <li><a id="authManageTab"  href="#" onClick="changeTabInstlAgency('auth');"><s:message code="instlAgency.authManage" /></a></li>
     </ul>
+    <%--============================================= //탭 =============================================--%>
+    <table class="searchTbl">
+        <colgroup>
+            <col class="w15" />
+            <col class="w35" />
+            <col class="w15" />
+            <col class="w35" />
+        </colgroup>
+        <tbody>
+        <tr>
+            <%-- 재직여부 --%>
+            <th><s:message code="instlAgency.serviceFg" /></th>
+            <td>
+                <select class="sb-select" id="empManage_serviceFg">
+                </select>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
     <div style="padding:10px; height:50px;">
         <%-- 사원등록 --%>
         <button class="btn_skyblue ml5 fr" id="btnNewRegEmp" onclick="callEmpManageRegist();">
             <s:message code="instlAgency.empReg"/>
             <input type="hidden" id="agencyCd"/>
             <input type="hidden" id="pAgencyCd"/>
+        </button>
+        <%-- 조회 --%>
+        <button class="btn_skyblue ml5 fr" id="btnSearch" onclick="searchEmpManageList();">
+            <s:message code="cmm.search" />
         </button>
     </div>
     <div class="w100 mt10 mb20">
@@ -33,10 +58,18 @@
 </div>
 
 <script>
-
     <%-- 재직여부 코드 --%>
     var serviceFg = ${ccu.getCommCodeExcpAll("007")};
     var serviceFgDataMap = new wijmo.grid.DataMap(serviceFg, 'value', 'name');
+
+    // 재직여부 SelectBox 데이터 바인딩
+    var ele = document.getElementById('empManage_serviceFg');
+    for (var i = 0; i < serviceFg.length; i++) {
+        if(i == 0) {
+            ele.innerHTML = ele.innerHTML +'<option value="">전체</option>';
+        }
+        ele.innerHTML = ele.innerHTML +'<option value="' + serviceFg[i]['value'] + '">' + serviceFg[i]['name'] + '</option>';
+    }
 
     <%-- header --%>
     var empManageHeader =
@@ -84,10 +117,11 @@
         $("#agencyCd").val(agCd);
         $("#pAgencyCd").val(pagCd);
 
-        var param = {};
-        param.agencyCd = agCd;
+        var params = {};
+        params.agencyCd = agCd;
+        params.serviceFg = $("#empManage_serviceFg").val();
 
-        $.postJSON("/pos/license/instlAgency/getAgencyEmp.sb", param,
+        $.postJSON("/pos/license/instlAgency/getAgencyEmp.sb", params,
             function(result) {
 
                 var list = result.data.list;
@@ -102,8 +136,14 @@
         );
     }
 
+    // 사원등록
     function callEmpManageRegist(){
         empManageRegist('1', $("#agencyCd").val(), '', $("#pAgencyCd").val());  // 신규등록
+    }
+
+    // 조회
+    function searchEmpManageList(){
+        getEmpManageList($("#agencyCd").val(), $("#pAgencyCd").val());  // 조회
     }
 </script>
 
