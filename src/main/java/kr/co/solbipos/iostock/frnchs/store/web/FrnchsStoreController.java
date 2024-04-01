@@ -80,7 +80,7 @@ public class FrnchsStoreController {
 
     	SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        // 본사 환경설정 1242(거래처출고구분) 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("1242");

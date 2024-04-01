@@ -96,7 +96,7 @@ public class OutstockConfmController {
             System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
         }
 
-        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        // 본사 환경설정 1242(거래처출고구분) 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("1242");

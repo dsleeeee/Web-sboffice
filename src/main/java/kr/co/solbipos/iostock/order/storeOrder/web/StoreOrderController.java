@@ -84,7 +84,7 @@ public class StoreOrderController {
         hqEnvstVO.setEnvstCd("1042");
         String envst1042 = cmmEnvService.getHqEnvst(hqEnvstVO);
 
-        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        // 본사 환경설정 1242(거래처출고구분) 조회
         hqEnvstVO.setEnvstCd("1242");
         String envst1242 = CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0");
 

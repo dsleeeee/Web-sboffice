@@ -97,7 +97,7 @@ public class RtnInstockConfmController {
             System.out.println("storageEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1241"), "0"));
         }
 
-        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        // 본사 환경설정 1242(거래처출고구분) 조회
         hqEnvstVO.setEnvstCd("1242");
         model.addAttribute("envst1242", CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0"));
 

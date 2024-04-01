@@ -77,7 +77,7 @@ public class OutstockDataController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        // 본사 환경설정 1242(거래처출고사용여부) 조회
+        // 본사 환경설정 1242(거래처출고구분) 조회
         HqEnvstVO hqEnvstVO = new HqEnvstVO();
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("1242");
@@ -127,7 +127,7 @@ public class OutstockDataController {
      * @author  안동관
      * @since   2018. 10. 04.
      */
-    @RequestMapping(value = "/outstockData/saveDataCreate", method = RequestMethod.POST)
+    @RequestMapping(value = "/outstockData/saveDataCreate.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveDataCreate(HttpServletRequest request, HttpServletResponse response,
         Model model, @RequestBody OutstockDataVO[] outstockDataVOs) {
