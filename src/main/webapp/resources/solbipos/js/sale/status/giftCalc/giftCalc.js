@@ -95,6 +95,7 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     params.momsStoreManageType = $scope.momsStoreManageType;
                     params.branchCd = selectedRow.branchCd;
                     params.storeHqBrandCd = $scope.storeHqBrandCd;
+                    params.giftSerNo    = $scope.giftSerNo;
                     // '전체' 일때
                     if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
                         var momsHqBrandCd = "";
@@ -212,6 +213,9 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.storeCds = $("#giftCalcStoreCd").val();
         params.posNo = $("#giftCalcSelectPosCd").val();
         params.saleFg = $scope.saleFg;
+        params.giftSerNo = $scope.giftSerNo;
+
+
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
         params.momsAreaFg = $scope.momsAreaFg;
@@ -331,6 +335,8 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.storeCds = $("#giftCalcStoreCd").val();
         params.posNo = $("#giftCalcSelectPosCd").val();
         params.saleFg = $scope.saleFg;
+        params.giftSerNo = $scope.giftSerNo;
+
         params.momsTeam = $scope.momsTeam;
         params.momsAcShop = $scope.momsAcShop;
         params.momsAreaFg = $scope.momsAreaFg;

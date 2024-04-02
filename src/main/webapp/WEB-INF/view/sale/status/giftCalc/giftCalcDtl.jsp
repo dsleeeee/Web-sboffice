@@ -49,6 +49,7 @@
                         <wj-flex-grid-column header="<s:message code="giftCalcDtl.giftUprc"/>" binding="giftUprc" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="giftCalcDtl.apprDt"/>" binding="apprDt" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="giftCalcDtl.apprNo"/>" binding="apprNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="giftCalcDtl.giftSerNo"/>" binding="giftSerNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

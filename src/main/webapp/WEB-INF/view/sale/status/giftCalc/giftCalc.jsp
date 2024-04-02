@@ -48,6 +48,11 @@
                         <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
                     </div>
                 </td>
+                    <%--상품권번호 --%>
+                    <th><s:message code="giftCalc.giftSerNo"/></th>
+                    <td>
+                        <input type="text" id="srchGiftSerNo" name="srchGiftSerNo" ng-model="giftSerNo" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+                    </td>
             </tr>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <tr>
@@ -361,6 +366,7 @@
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="giftCalc.giftCd"/>" binding="giftCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="giftCalc.giftNm"/>" binding="giftNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="giftCalc.giftSerNo"/>" binding="giftSerNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="giftCalc.saleCnt"/>" binding="saleCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="giftCalc.saleAmt"/>" binding="saleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="giftCalc.apprCnt"/>" binding="apprCnt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -439,7 +445,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/giftCalc/giftCalc.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/giftCalc/giftCalc.js?ver=20240329.01" charset="utf-8"></script>
 
 <%-- 지류상품권 정산 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/giftCalc/giftCalcDtl.jsp">

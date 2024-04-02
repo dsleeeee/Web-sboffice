@@ -56,8 +56,15 @@ public class SaleTrnsitnVO extends PageVO {
     private String prodCd;
     /** 상품명 */
     private String prodNm;
+
+	/** 매장(멀티)코드 조회 */
+	private String storeCdQuery;
+
+	/** 매장 코드 */
+	private String storeCds;
     
-    
+    /** 조회 시작일자, 종료일자 차이 */
+    private String diffDay;
     
     
     /** 브랜드코드 */
@@ -708,5 +715,29 @@ public class SaleTrnsitnVO extends PageVO {
 
 	public void setEmpNo(String empNo) {
 		this.empNo = empNo;
+	}
+
+	public String getStoreCdQuery() {
+		return storeCdQuery;
+	}
+
+	public void setStoreCdQuery(String storeCdQuery) {
+		this.storeCdQuery = storeCdQuery;
+	}
+
+	public String getStoreCds() {
+		return storeCds;
+	}
+
+	public void setStoreCds(String storeCds) {
+		this.storeCds = storeCds;
+	}
+
+	public String getDiffDay() {
+		return diffDay;
+	}
+
+	public void setDiffDay(String diffDay) {
+		this.diffDay = diffDay;
 	}
 }

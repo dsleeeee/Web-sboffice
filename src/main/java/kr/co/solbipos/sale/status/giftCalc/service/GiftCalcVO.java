@@ -102,6 +102,9 @@ public class GiftCalcVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 상품권 번호 */
+    private String giftSerNo;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -273,4 +276,8 @@ public class GiftCalcVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getGiftSerNo() { return giftSerNo; }
+
+    public void setGiftSerNo(String giftSerNo) { this.giftSerNo = giftSerNo; }
 }
