@@ -40,12 +40,16 @@
         (
             SELECT
             A.HQ_OFFICE_CD,
+            A.HQ_BRAND_CD,
             A.STORE_CD,
             A.POS_NO,
             B.GIFT_CD,
             C.GIFT_NM,
             A.SALE_FG,
-            B.GIFT_UPRC AS SALE_AMT
+            B.GIFT_UPRC AS SALE_AMT,
+            B.BILL_NO,
+            B.SALE_DATE,
+            B.LINE_NO
             FROM TB_SL_SALE_PAY_GIFT A,
             TB_SL_SALE_PAY_GIFT_DTL B,
             TB_HQ_GIFT C
@@ -66,12 +70,16 @@
         UNION ALL
             SELECT
             A.HQ_OFFICE_CD,
+            A.HQ_BRAND_CD,
             A.STORE_CD,
             A.POS_NO,
             A.BARCD_NO AS GIFT_CD,
             B.NMCODE_NM AS GIFT_NM,
             (CASE WHEN A.SALE_YN = 'Y' THEN 1 WHEN A.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_FG,
-            A.SALE_AMT
+            A.SALE_AMT,
+            A.BILL_NO,
+            A.SALE_DATE,
+            A.LINE_NO
             FROM TB_SL_SALE_PAY_TEMPORARY A,
             TB_CM_NMCODE B
             WHERE 1=1
@@ -80,9 +88,9 @@
                 AND A.STORE_CD IN (${storeCdQuery})
             </if>
             AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            AND A.TEMPORARY_PAY_DTL_CD = 'VGC'
-            AND B.NMCODE_GRP_CD (+)= '230'
-            AND B.NMCODE_ITEM_1 (+)= A.TEMPORARY_PAY_DTL_CD
+            AND A.TEMPORARY_PAY_DTL_CD  = 'VGC'
+            AND B.NMCODE_GRP_CD (+)     = '230'
+            AND B.NMCODE_ITEM_1 (+)     = A.TEMPORARY_PAY_DTL_CD
         ) tsspgd,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi
@@ -95,6 +103,13 @@
         </if>
         <if test='saleFg != null and saleFg != ""'>
             AND tsspgd.SALE_FG = #{saleFg}
+        </if>
+        <if test='giftSerNo != null and giftSerNo != ""'>
+            AND tsspgd.HQ_OFFICE_CD ||  tsspgd.STORE_CD || tsspgd.SALE_DATE || tsspgd.POS_NO || tsspgd.BILL_NO || tsspgd.LINE_NO IN (
+                                                                                                                                        SELECT  HQ_OFFICE_CD || STORE_CD || SALE_DATE || POS_NO || BILL_NO || LINE_NO
+                                                                                                                                        FROM    TB_SL_SALE_PAY_GIFT_DTL
+                                                                                                                                        WHERE   GIFT_SER_NO LIKE '%' || #{giftSerNo} || '%'
+                                                                                                                                    )
         </if>
         AND tms.HQ_OFFICE_CD = tsspgd.HQ_OFFICE_CD
         AND tms.STORE_CD = tsspgd.STORE_CD
@@ -179,12 +194,16 @@
         (
             SELECT
             A.HQ_OFFICE_CD,
+            A.HQ_BRAND_CD,
             A.STORE_CD,
             A.POS_NO,
             B.GIFT_CD,
             C.GIFT_NM,
             A.SALE_FG,
-            B.GIFT_UPRC AS SALE_AMT
+            B.GIFT_UPRC AS SALE_AMT,
+            B.BILL_NO,
+            B.SALE_DATE,
+            B.LINE_NO
             FROM TB_SL_SALE_PAY_GIFT A,
             TB_SL_SALE_PAY_GIFT_DTL B,
             TB_HQ_GIFT C
@@ -205,12 +224,17 @@
         UNION ALL
             SELECT
             A.HQ_OFFICE_CD,
+            A.HQ_BRAND_CD,
             A.STORE_CD,
             A.POS_NO,
             A.BARCD_NO AS GIFT_CD,
             B.NMCODE_NM AS GIFT_NM,
             (CASE WHEN A.SALE_YN = 'Y' THEN 1 WHEN A.SALE_YN = 'N' THEN -1 ELSE 0 END) AS SALE_FG,
-            A.SALE_AMT
+            A.SALE_AMT,
+            A.BILL_NO,
+            A.SALE_DATE,
+            A.LINE_NO,
+            C.GIFT_SEQ
             FROM TB_SL_SALE_PAY_TEMPORARY A,
             TB_CM_NMCODE B
             WHERE 1=1
@@ -219,9 +243,9 @@
                 AND A.STORE_CD IN (${storeCdQuery})
             </if>
             AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            AND A.TEMPORARY_PAY_DTL_CD = 'VGC'
-            AND B.NMCODE_GRP_CD (+)= '230'
-            AND B.NMCODE_ITEM_1 (+)= A.TEMPORARY_PAY_DTL_CD
+            AND A.TEMPORARY_PAY_DTL_CD  = 'VGC'
+            AND B.NMCODE_GRP_CD (+)     = '230'
+            AND B.NMCODE_ITEM_1 (+)     = A.TEMPORARY_PAY_DTL_CD
         ) tsspgd,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi
@@ -234,6 +258,13 @@
         </if>
         <if test='saleFg != null and saleFg != ""'>
             AND tsspgd.SALE_FG = #{saleFg}
+        </if>
+        <if test='giftSerNo != null and giftSerNo != ""'>
+            AND tsspgd.HQ_OFFICE_CD || tsspgd.STORE_CD || tsspgd.SALE_DATE || tsspgd.POS_NO || tsspgd.BILL_NO || tsspgd.LINE_NO IN  (
+                                                                                                                                        SELECT  HQ_OFFICE_CD || STORE_CD || SALE_DATE || POS_NO || BILL_NO || LINE_NO
+                                                                                                                                        FROM    TB_SL_SALE_PAY_GIFT_DTL
+                                                                                                                                        WHERE   GIFT_SER_NO LIKE '%' || #{giftSerNo} || '%'
+                                                                                                                                    )
         </if>
         AND tms.HQ_OFFICE_CD = tsspgd.HQ_OFFICE_CD
         AND tms.STORE_CD = tsspgd.STORE_CD
@@ -313,7 +344,8 @@
         tsspgd.GIFT_NM,
         SUM(tsspgd.GIFT_UPRC) AS GIFT_UPRC,
         tsspgd.APPR_DT,
-        tsspgd.APPR_NO
+        tsspgd.APPR_NO,
+        tsspgd.GIFT_SER_NO
         FROM
         (
             SELECT
@@ -332,7 +364,8 @@
             C.GIFT_NM,
             B.GIFT_UPRC,
             B.APPR_DT,
-            B.APPR_NO
+            B.APPR_NO,
+            B.GIFT_SER_NO
             FROM TB_SL_SALE_PAY_GIFT A,
             TB_SL_SALE_PAY_GIFT_DTL B,
             TB_HQ_GIFT C
@@ -367,9 +400,11 @@
             B.NMCODE_NM AS GIFT_NM,
             9900 AS GIFT_UPRC,
             '' AS APPR_DT,
-            A.APPR_NO
+            A.APPR_NO,
+            C.GIFT_SER_NO
             FROM TB_SL_SALE_PAY_TEMPORARY A,
-            TB_CM_NMCODE B
+            TB_CM_NMCODE B,
+            TB_SL_SALE_PAY_GIFT_DTL C
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='storeCd != null and storeCd != ""'>
@@ -379,6 +414,14 @@
             AND A.TEMPORARY_PAY_DTL_CD = 'VGC'
             AND B.NMCODE_GRP_CD (+)= '230'
             AND B.NMCODE_ITEM_1 (+)= A.TEMPORARY_PAY_DTL_CD
+            AND B.NMCODE_ITEM_1 (+)= A.TEMPORARY_PAY_DTL_CD
+            AND C.HQ_OFFICE_CD  (+)= A.HQ_OFFICE_CD
+            AND C.HQ_BRAND_CD   (+)= A.HQ_BRAND_CD
+            AND C.STORE_CD      (+)= A.STORE_CD
+            AND C.SALE_DATE     (+)= A.SALE_DATE
+            AND C.POS_NO        (+)= A.POS_NO
+            AND C.BILL_NO       (+)= A.BILL_NO
+            AND C.LINE_NO       (+)= A.LINE_NO
         ) tsspgd,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi
@@ -391,6 +434,9 @@
         </if>
         <if test='saleFg != null and saleFg != ""'>
             AND tsspgd.SALE_FG = #{saleFg}
+        </if>
+        <if test='giftSerNo != null and giftSerNo != ""'>
+            AND tsspgd.GIFT_SER_NO LIKE '%' || #{giftSerNo} || '%'
         </if>
         AND tms.HQ_OFFICE_CD = tsspgd.HQ_OFFICE_CD
         AND tms.STORE_CD = tsspgd.STORE_CD
@@ -443,7 +489,7 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        GROUP BY tsspgd.STORE_CD, tms.STORE_NM, tsspgd.SALE_DATE, tsspgd.POS_NO, tsspgd.BILL_NO, tsspgd.LINE_NO, tsspgd.REG_SEQ, tsspgd.SALE_FG, tsspgd.GIFT_CD, tsspgd.GIFT_NM, tsspgd.APPR_DT, tsspgd.APPR_NO
+        GROUP BY tsspgd.STORE_CD, tms.STORE_NM, tsspgd.SALE_DATE, tsspgd.POS_NO, tsspgd.BILL_NO, tsspgd.LINE_NO, tsspgd.REG_SEQ, tsspgd.SALE_FG, tsspgd.GIFT_CD, tsspgd.GIFT_NM, tsspgd.APPR_DT, tsspgd.APPR_NO, tsspgd.GIFT_SER_NO
         ORDER BY tsspgd.STORE_CD, tsspgd.SALE_DATE, tsspgd.POS_NO, tsspgd.BILL_NO, tsspgd.LINE_NO, tsspgd.REG_SEQ
     </select>
 

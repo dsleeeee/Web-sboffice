@@ -31,6 +31,30 @@
         </colgroup>
         <tbody>
 			<tr>
+				<%-- 조회일자 --%>
+				<th><s:message code="cmm.search.date"/></th>
+				<td>
+					<div class="sb-select">
+						<span class="txtIn"><input id="srchStartDate" ng-model="startDate" class="w110px"></span>
+						<span class="rg">~</span>
+						<span class="txtIn"><input id="srchEndDate" ng-model="endDate" class="w110px"></span>
+					</div>
+				</td>
+				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
+				<%--상품권번호 --%>
+				<th><s:message code="cmm.store.select"/></th>
+				<td>
+					<%-- [NXPOS-1648,1699] 매장선택 모듈 통합 / 추후작업예정 --%>
+					<%-- 매장선택 모듈 멀티 선택 사용시 include --%>
+					<jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+						<jsp:param name="targetTypeFg" value="M"/>
+						<jsp:param name="targetId" value="saleTrnsitnStore"/>
+					</jsp:include>
+					<%--// 매장선택 모듈 멀티 선택 사용시 include --%>
+				</td>
+				</c:if>
+			</tr>
+			<tr>
 				<th><s:message code="prod.prodCd" /></th>		<%-- 상품코드 --%>
 				<td><input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCdModel" onkeyup="fnNxBtnSearch();"/></td>
 				<th><s:message code="prod.prodNm" /></th>		<%-- 상품명 --%>
@@ -113,7 +137,7 @@
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
         <div class="wj-gridWrap2" style="overflow-y: hidden; overflow-x: hidden;">
-            <wj-flex-grid	#saleTrnsitnGrid
+            <wj-flex-grid	id="saleTrnsitnGrid"
             				autoGenerateColumns="false"
 			                control="flex"
 			                initialized="initGrid(s,e)"
@@ -144,8 +168,8 @@
                 <wj-flex-grid-column header="<s:message code="saleTrnsitn.dateBefore0"/>"		binding="dateBefore0Qty" 	width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
 
 
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.twoWeekTot"/>" 		binding="twoWeekTot" 		width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTrnsitn.twoWeekAvr"/>" 		binding="twoWeekAvr" 		width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" 		binding="twoWeekTot" 		width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" 		binding="twoWeekAvr" 		width="100" is-read-only="true" align="right" 	aggregate="Sum"></wj-flex-grid-column>
 
 				<c:if test="${sessionInfo.orgnFg == 'HQ'}">
 	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.inWhCarryOut"/>" 		binding="inWhCarryOut" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
@@ -171,22 +195,22 @@
 	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.dayAvrSale"/>" 		binding="dayAvrSale" 		width="100" is-read-only="true" align="right" 	></wj-flex-grid-column>
 	                <wj-flex-grid-column header="<s:message code="saleTrnsitn.exhaustionOrg"/>" 	binding="exhaustionOrg" 	width="100" is-read-only="true" align="center"	></wj-flex-grid-column>
 				</c:if>
-				
-				<%-- Header의 날짜 setting을 위한 값들 --%>
-				<wj-flex-grid-column header="" binding="dateBefore13" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore12" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore11" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore10"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore9" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore8" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore7" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore6"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore5" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore4" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore3" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore2"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore1"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore0" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+
+<%--				 Header의 날짜 setting을 위한 값들 --%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore13" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore12" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore11" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore10"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore9" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore8" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore7" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore6"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore5" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore4" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore3" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore2"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore1"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore0" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
 
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
@@ -266,20 +290,20 @@
 				</c:if>
 
 				<%-- Header의 날짜 setting을 위한 값들 --%>
-				<wj-flex-grid-column header="" binding="dateBefore13" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore12" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore11" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore10"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore9" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore8" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore7" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore6"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore5" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore4" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore3" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore2"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore1"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-				<wj-flex-grid-column header="" binding="dateBefore0" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+<%--				<wj-flex-grid-column header="" binding="dateBefore13" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore12" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore11" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore10"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore9" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore8" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore7" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore6"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore5" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore4" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore3" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore2"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore1"	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
+<%--				<wj-flex-grid-column header="" binding="dateBefore0" 	width="10" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>--%>
 
             </wj-flex-grid>
 	   </div>
@@ -290,4 +314,5 @@
 
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp"/><%-- 상품분류 팝업 --%>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/saleTrnsitn/saleTrnsitn.js?ver=20200131.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/saleTrnsitn/saleTrnsitn.js?ver=20240329.01" charset="utf-8"></script>
+

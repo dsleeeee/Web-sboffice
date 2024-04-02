@@ -164,7 +164,7 @@
 		                SUM(  DECODE(SALE_DATE, #{dateBefore13},TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_13_QTY,
 		
 		                SUM(TOT_SALE_QTY)                                               AS  TWO_WEEK_TOT,
-		                TRUNC(SUM(TOT_SALE_QTY)/14,2)                                   AS  TWO_WEEK_AVR
+		                TRUNC(SUM(TOT_SALE_QTY)/#{diffDay},2)                                   AS  TWO_WEEK_AVR
 		        FROM    (
 		            <choose>
 		                <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
@@ -177,6 +177,9 @@
 		                    FROM    TB_HQ_PRODUCT       A,
 		                            TB_SL_DAILY_PROD    B
 		                    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+						  	<if test='storeCdQuery != null and storeCdQuery != ""'>
+								AND B.STORE_CD IN (${storeCdQuery})
+							</if>
 		                    AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
 		                    AND     A.PROD_CD       = B.PROD_CD
 		                    <if test='prodClassCd != null and prodClassCd != ""'>
@@ -216,10 +219,10 @@
 		                    </if>
 		                </when>
 		            </choose>
-		                    AND     B.SALE_DATE     BETWEEN #{dateBefore13}
-		                                            AND     #{dateBefore0}
+		                    AND     B.SALE_DATE     BETWEEN #{startDate}
+		                                            AND     #{endDate}
 		                	<if test="prodCd != null and prodCd != ''">
-		                    AND     A.PROD_CD       = #{prodCd}
+		                    AND     A.PROD_CD 		= #{prodCd}
 		                	</if>
 		                	<if test="prodNm != null and prodNm != ''">
 		                    AND     A.PROD_NM       LIKE '%' || #{prodNm} || '%'
@@ -456,7 +459,7 @@
 		                SUM(  DECODE(SALE_DATE, #{dateBefore13},TOT_SALE_QTY, 0)  )     AS  DATE_BEFORE_13_QTY,
 		
 		                SUM(TOT_SALE_QTY)                                               AS  TWO_WEEK_TOT,
-		                TRUNC(SUM(TOT_SALE_QTY)/14,2)                                   AS  TWO_WEEK_AVR
+		                TRUNC(SUM(TOT_SALE_QTY)/#{diffDay},2)                                   AS  TWO_WEEK_AVR
 		        FROM    (
 		            <choose>
 		                <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
@@ -469,6 +472,9 @@
 		                    FROM    TB_HQ_PRODUCT       A,
 		                            TB_SL_DAILY_PROD    B
 		                    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+							<if test='storeCdQuery != null and storeCdQuery != ""'>
+								AND B.STORE_CD IN (${storeCdQuery})
+							</if>
 		                    AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
 		                    AND     A.PROD_CD       = B.PROD_CD
 		                    <if test='prodClassCd != null and prodClassCd != ""'>
@@ -508,11 +514,11 @@
 		                    </if>
 		                </when>
 		            </choose>
-		                    AND     B.SALE_DATE     BETWEEN #{dateBefore13}
-		                                            AND     #{dateBefore0}
+		                    AND     B.SALE_DATE     BETWEEN #{startDate}
+		                                            AND     #{endDate}
 		                	<if test="prodCd != null and prodCd != ''">
-		                    AND     A.PROD_CD       = #{prodCd}
-		                	</if>
+							AND     A.PROD_CD 		= #{prodCd}
+							</if>
 		                	<if test="prodNm != null and prodNm != ''">
 		                    AND     A.PROD_NM       LIKE '%' || #{prodNm} || '%'
 		                	</if>
