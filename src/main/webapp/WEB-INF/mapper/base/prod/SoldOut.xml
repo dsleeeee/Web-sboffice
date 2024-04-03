@@ -42,7 +42,8 @@
         tmp.REG_DT,
         tmp.USE_YN,
         tmp.REG_FG,
-        tmpb.BARCD_CD AS BAR_CD
+        tmpb.BARCD_CD AS BAR_CD,
+        DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         FROM
         TB_MS_PRODUCT tmp
         LEFT OUTER JOIN (
@@ -471,7 +472,8 @@
                 tmpsp.ADD_PROD_QTY,
                 tmpsp.DISP_SEQ,
                 NVL(tmpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
-                NVL(tmpsp.SOLD_OUT_YN, 'N') AS SOLD_OUT_YN
+                NVL(tmpsp.SOLD_OUT_YN, 'N') AS SOLD_OUT_YN,
+                DECODE(NVL(tmpsp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         FROM    TB_MS_PRODUCT_SDSEL_PROD tmpsp
         LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
         tmpsp.STORE_CD = tmp.STORE_CD
@@ -533,6 +535,7 @@
         ,       tmpsp.ADD_PROD_QTY
         ,       DECODE(NVL(tmpsp.FIX_PROD_FG, '0'), '0', '선택', '1', '고정') AS FIX_PROD_FG
         ,       NVL(tmpsp.SOLD_OUT_YN, 'N') AS SOLD_OUT_YN
+        ,       DECODE(NVL(tmpsp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
         ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc

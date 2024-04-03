@@ -285,6 +285,7 @@
                         <c:if test="${sessionInfo.orgnFg == 'STORE' and momsEnvstVal == '1'}">
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.soldOutYn"/>" binding="soldOutYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.channelSoldOutYn"/>" binding="channelSoldOutYn" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="" binding="indexNo" width="*" visible="false"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
@@ -451,9 +452,10 @@
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.saleUprc"/>" binding="saleUprc" width="60" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.regYn"/>" binding="regYn" align="center"data-map="regYnDataMap" width="60" is-read-only="true"></wj-flex-grid-column>
-                         <c:if test="${sessionInfo.orgnFg == 'STORE' and momsEnvstVal == '1'}">
+                        <c:if test="${sessionInfo.orgnFg == 'STORE' and momsEnvstVal == '1'}">
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskDisplayYn"/>" binding="kioskDisplayYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.soldOutYn"/>" binding="soldOutYn" align="center" width="60" is-read-only="true"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.channelSoldOutYn"/>" binding="channelSoldOutYn" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>

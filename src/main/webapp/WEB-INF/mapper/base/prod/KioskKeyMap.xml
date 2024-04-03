@@ -818,7 +818,8 @@
                             (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
                             DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN,
                             DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN,
-                            tmp.REMARK
+                            tmp.REMARK,
+                            DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
                       FROM TB_MS_KIOSK_KEY tmkk,
                             TB_MS_PRODUCT tmp
                      WHERE tmp.STORE_CD (+)= tmkk.STORE_CD
@@ -1026,7 +1027,8 @@
                         (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM,
                         DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN,
                         DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN,
-                        tmp.REMARK
+                        tmp.REMARK,
+                        DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_PRODUCT tmp
                   LEFT OUTER JOIN (

@@ -70,7 +70,8 @@
                                                                         FROM TB_MS_POS_ENVST
                                                                         WHERE ENVST_CD = '4019'
                                                                         AND ENVST_VAL = '6'
-                                                                        AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4069
+                                                                        AND STORE_CD = tmp.STORE_CD))), 'Y', 'N') AS USE_YN_4069,
+                DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN (

@@ -55,22 +55,23 @@ app.controller('sdselSoldOutResveAddCtrl', ['$scope', '$http', function ($scope,
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
         // 첫째줄 헤더 생성
-        var dataItem            = {};
-        dataItem.gChk           = messages["cmm.chk"];
-        dataItem.branchCd       = messages["soldOutResve.branchCd"];
-        dataItem.branchNm       = messages["soldOutResve.branchNm"];
-        dataItem.storeCd        = messages["soldOutResve.storeCd"];
-        dataItem.storeNm        = messages["soldOutResve.storeNm"];
-        dataItem.sdselGrpCd     = messages["sideMenuProdSoldOut.sdselGrpCd"];
-        dataItem.sdselGrpNm     = messages["sideMenuProdSoldOut.sdselGrpNm"];
-        dataItem.sdselClassCd   = messages["sideMenuProdSoldOut.sdselClassCd"];
-        dataItem.sdselClassNm   = messages["sideMenuProdSoldOut.sdselClassNm"];
-        dataItem.prodCd         = messages["soldOutResve.prodCd"];
-        dataItem.prodNm         = messages["soldOutResve.prodNm"];
-        dataItem.brand          = messages["soldOutResve.brand"];
-        dataItem.startDate      = messages["soldOutResve.startDate"];
-        dataItem.orgSoldOutYn   = messages["soldOutResve.soldOutYn"];
-        dataItem.soldOutYn      = messages["soldOutResve.soldOutYn"];
+        var dataItem                = {};
+        dataItem.gChk               = messages["cmm.chk"];
+        dataItem.branchCd           = messages["soldOutResve.branchCd"];
+        dataItem.branchNm           = messages["soldOutResve.branchNm"];
+        dataItem.storeCd            = messages["soldOutResve.storeCd"];
+        dataItem.storeNm            = messages["soldOutResve.storeNm"];
+        dataItem.sdselGrpCd         = messages["sideMenuProdSoldOut.sdselGrpCd"];
+        dataItem.sdselGrpNm         = messages["sideMenuProdSoldOut.sdselGrpNm"];
+        dataItem.sdselClassCd       = messages["sideMenuProdSoldOut.sdselClassCd"];
+        dataItem.sdselClassNm       = messages["sideMenuProdSoldOut.sdselClassNm"];
+        dataItem.prodCd             = messages["soldOutResve.prodCd"];
+        dataItem.prodNm             = messages["soldOutResve.prodNm"];
+        dataItem.brand              = messages["soldOutResve.brand"];
+        dataItem.startDate          = messages["soldOutResve.startDate"];
+        dataItem.orgSoldOutYn       = messages["soldOutResve.soldOutYn"];
+        dataItem.soldOutYn          = messages["soldOutResve.soldOutYn"];
+        dataItem.channelSoldOutYn   = messages["soldOutResve.channelSoldOutYn"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 

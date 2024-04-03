@@ -476,6 +476,7 @@
                         <wj-flex-grid-column header="<s:message code="soldOutResve.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="soldOutResve.orgSoldOutYn"/>" binding="orgSoldOutYn" is-read-only="true" width="90" align="center" data-map="soldOutYnDataMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="soldOutResve.soldOutYn"/>" binding="soldOutYn" width="90" align="center" data-map="soldOutYnDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="soldOutResve.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -534,4 +535,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/sdselSoldOutResveAdd.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/soldOutResve/sdselSoldOutResveAdd.js?ver=20240403.01" charset="utf-8"></script>
