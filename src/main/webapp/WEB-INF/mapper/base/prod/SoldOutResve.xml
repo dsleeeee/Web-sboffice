@@ -49,6 +49,7 @@
         ,		tmp.REG_DT
         ,		tmp.USE_YN
         ,		tmp.REG_FG
+        ,       DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_MS_STORE tms
         ,       TB_MS_SOLD_OUT_RESVE tmkdr
@@ -180,6 +181,7 @@
         ,		tmp.PROD_CD
         ,		tmp.PROD_NM
         ,		NVL(tmp.SOLD_OUT_YN, 'N') AS ORG_SOLD_OUT_YN
+        ,       DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         FROM 	TB_MS_PRODUCT tmp
         ,		TB_MS_STORE tms
         ,		TB_MS_STORE_INFO tmsi
@@ -369,6 +371,7 @@
         ,		tmkdr.SOLD_OUT_YN AS ORG_SOLD_OUT_YN
         ,		tmkdr.SOLD_OUT_YN
         ,		tmkdr.RESVE_FG
+        ,       DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_MS_SOLD_OUT_SDSEL_RESVE tmkdr
         ,		TB_MS_PRODUCT tmp
@@ -495,6 +498,7 @@
         ,		tmpsp.PROD_CD
         ,		tmp.PROD_NM
         ,       NVL(tmpsp.SOLD_OUT_YN, 'N') AS ORG_SOLD_OUT_YN
+        ,       DECODE(NVL(tmpsp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
         ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
         ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp

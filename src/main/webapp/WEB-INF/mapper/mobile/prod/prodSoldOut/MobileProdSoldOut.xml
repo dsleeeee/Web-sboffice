@@ -40,7 +40,8 @@
         tmp.REG_DT,
         tmp.USE_YN,
         tmp.REG_FG,
-        tmpb.BARCD_CD AS BAR_CD
+        tmpb.BARCD_CD AS BAR_CD,
+        DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         TB_MS_PRODUCT tmp

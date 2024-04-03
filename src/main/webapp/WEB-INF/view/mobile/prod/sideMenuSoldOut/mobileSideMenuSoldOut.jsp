@@ -149,6 +149,7 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.sideMenuSoldOut.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.sideMenuSoldOut.soldOutYn"/>" binding="soldOutYn" width="100" align="center" data-map="soldOutYnDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.sideMenuSoldOut.channelSoldOutYn"/>" binding="channelSoldOutYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.sideMenuSoldOut.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.sideMenuSoldOut.addProdUprc"/>" binding="addProdUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.sideMenuSoldOut.addProdQty"/>" binding="addProdQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>

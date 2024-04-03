@@ -476,6 +476,7 @@
                     <wj-flex-grid-column header="" binding="orgSoldOutYn" is-read-only="true" width="100" align="center" data-map="soldOutYnDataMap" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="" binding="resveFg" is-read-only="true" width="100" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="soldOutResve.soldOutYn"/>" binding="soldOutYn" width="100" align="center" data-map="soldOutYnDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="soldOutResve.channelSoldOutYn"/>" binding="channelSoldOutYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="soldOutResve.allSoldOutYn"/>" binding="allSoldOutYn" width="100" align="center" data-map="allSoldOutYnDataMap"></wj-flex-grid-column>
                     <c:if test="${brandUseFg == '1'}">
                         <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>

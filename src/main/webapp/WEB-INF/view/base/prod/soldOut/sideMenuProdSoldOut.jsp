@@ -222,6 +222,7 @@
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.addProdQty"/>" binding="addProdQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.fixProdFg"/>" binding="fixProdFg" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.soldOutYn"/>" binding="soldOutYn" data-map="soldOutYnDataMap" width="70" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
