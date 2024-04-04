@@ -128,6 +128,9 @@
   var vendorFgNm = ${ccu.getCommCodeExcpAll("011")};
   var useYn      = ${ccu.getCommCodeExcpAll("067")};
 
+  // [1242 거래처출고구분] 환경설정값
+  var gEnvst1242  = '${envst1242}';
+
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/vendr.js?ver=20220726.01" charset="utf-8"></script>

@@ -29,7 +29,7 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("rVendorFg", vendorFgData);      // 거래처구분
     $scope._setComboData("rVatIncldYn", vatIncldYnData);  // 부가세포함여부
     $scope._setComboData("rUseYn", useYnData);            // 사용여부
-    $scope._setComboData("rShipFg", useYnData);           // 배송구분
+    $scope._setComboData("rShipFg", useYnData);           // 직배송
 
     // 등록인지 수정인지 파악하기 위해
     var valType;
@@ -172,10 +172,10 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             param.addrDtl = $("#rAddrDtl").val();
             param.remark = $("#rRemark").val();
 
-            if(orgnFg == "HQ"){
+            if(orgnFg == "HQ" && gEnvst1242 == "2"){ // 본사권한 이면서, [1242] 거래처출고구분 값이 [2] 거래처별출고전표자동생성 인 경우만, 입력 가능
                 param.shipFg = $scope.shipFgCombo.selectedValue;
             }else{
-                param.shipFg = '1'; // 매장은 배송구분 미사용, [미사용][배송구분] 1:매장,2:본사(본사전용)
+                param.shipFg = 'N'; // 매장권한 이거나, 본사권한 이지만 [1242] 거래처출고구분 값이 [2] 거래처별출고전표자동생성이 아닌 경우는 입력 불가
             }
 
             // 저장

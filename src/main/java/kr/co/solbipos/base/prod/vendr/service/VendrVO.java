@@ -61,7 +61,7 @@ public class VendrVO extends PageVO {
     private String shipPg;
     /** 부가세포함여부 */
     private String vatIncldYn;
-    /** 배송구분 */
+    /** 직배송 */
     private String shipFg;
     /** 사용여부 */
     private UseYn useYn;

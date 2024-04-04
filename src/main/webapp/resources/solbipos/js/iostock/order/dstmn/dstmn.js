@@ -138,6 +138,13 @@ app.controller('dstmnCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     // 거래처는 수정 못하게 처리
     $("#vendrCd").attr("disabled", true);
     $("#vendrCd").css('background-color', '#F0F0F0');
+
+    if(gEnvst1242 == "1"){ // [1242 거래처출고구분] 환경설정값이 '1' 거래처선택주문일 때
+        if(empVendrCd == null || empVendrCd == undefined || empVendrCd == ""){ // 본사사원은 본사 주문건 + 전체 거래처 주문건 모두 조회가능
+            $("#vendrCd").attr("disabled", false);
+            $("#vendrCd").css('background-color', '#FFFFFF');
+        }
+    }
   };
 
   // 다른 컨트롤러의 broadcast 받기

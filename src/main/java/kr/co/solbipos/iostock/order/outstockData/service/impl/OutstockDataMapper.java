@@ -24,6 +24,9 @@ public interface OutstockDataMapper {
     /** 출고자료생성 - 직배송거래처 및 배송기사 조회 */
     List<DefaultMap<String>> getStoreVendrDlvr(OutstockDataVO outstockDataVO);
 
+    /** 출고자료생성 - 직배송거래처 조회 */
+    List<DefaultMap<String>> getStoreVendr(OutstockDataVO outstockDataVO);
+
     /** 출고자료생성 - 출고자료생성 TB_PO_HQ_STORE_DISTRIBUTE 수정 */
     int updateDstbDataCreate(OutstockDataVO outstockDataVO);
 

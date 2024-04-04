@@ -230,6 +230,7 @@
 
 <script type="text/javascript">
 
+  // [1242 거래처출고구분] 환경설정값
   var gEnvst1242  = '${envst1242}';
   var empVendrCd = '${empVendrCd}';
 
@@ -237,7 +238,7 @@
   var vendrList = ${vendrList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstmn/dstmn.js?ver=20220722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstmn/dstmn.js?ver=20240402.02" charset="utf-8"></script>
 
 <%-- 거래명세표 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstmn/dstmnDtl.jsp">

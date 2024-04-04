@@ -130,7 +130,7 @@
                   <input type="text" id="rAddrDtl" ng-model="rAddrDtl" class="sb-input w100" placeholder="주소2" maxlength="100"/>
                 </td>
               </tr>
-              <tr <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
+              <tr <c:if test="${orgnFg != 'HQ' or (orgnFg =='HQ' and envst1242 != '2')}">style="display: none;"</c:if>>
                   <th><s:message code="vendr.shipFg" /><em class="imp">*</em></th>
                   <td colspan="3">
                     <div class="sb-select w30 pdr5" style="float:left;">
@@ -146,7 +146,7 @@
                         </wj-combo-box>
                     </div>
                     <label class="lh25">
-                        (배송구분을 '사용'으로 설정하시면 출고자료 생성시 거래처별로 생성됩니다.)
+                        (직배송을 '사용'으로 설정하시면 출고자료 생성시 거래처별로 생성됩니다.)
                     </label>
                   </td>
               </tr>
@@ -182,4 +182,4 @@
   var useYnData        = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20240328.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20240402.01" charset="utf-8"></script>

@@ -82,8 +82,8 @@
             <a href="#" class="btn_grayS" ng-click=""><s:message code="rtnStoreOrder.dtl.safeStockApply"/></a>
           </td>
           <%-- 거래처 --%>
-          <th <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>><s:message code="rtnStoreOrder.dtl.vendr"/></th>
-          <td <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+          <th <c:if test="${envst1242 == '0' or envst1242 == '2'}">style="display: none;"</c:if>><s:message code="rtnStoreOrder.dtl.vendr"/></th>
+          <td <c:if test="${envst1242 == '0' or envst1242 == '2'}">style="display: none;"</c:if>>
             <div class="sb-select fl w150px">
               <wj-combo-box
                 id="dtlVendrCd"

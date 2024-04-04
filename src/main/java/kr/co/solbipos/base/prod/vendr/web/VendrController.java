@@ -3,10 +3,13 @@ package kr.co.solbipos.base.prod.vendr.web;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.session.SessionService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.vendr.service.VendrService;
 import kr.co.solbipos.base.prod.vendr.service.VendrVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,12 +50,14 @@ public class VendrController {
 
     private final VendrService vendrService;
     private final SessionService sessionService;
+    private final CmmEnvService cmmEnvService;
 
     /** Constructor Injection */
     @Autowired
-    public VendrController(VendrService vendrService, SessionService sessionService) {
+    public VendrController(VendrService vendrService, SessionService sessionService, CmmEnvService cmmEnvService) {
         this.vendrService = vendrService;
         this.sessionService = sessionService;
+        this.cmmEnvService = cmmEnvService;
     }
 
 
@@ -67,6 +72,14 @@ public class VendrController {
     @RequestMapping(value = "/vendr/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, Model model)
     {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 본사 환경설정 1242(거래처출고구분) 조회
+        HqEnvstVO hqEnvstVO = new HqEnvstVO();
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEnvstVO.setEnvstCd("1242");
+        model.addAttribute("envst1242", CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0"));
+
         return RESULT_URI + "/vendr";
     }
 

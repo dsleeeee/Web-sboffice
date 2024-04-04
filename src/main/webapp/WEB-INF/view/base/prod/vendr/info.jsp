@@ -99,8 +99,8 @@
                                 </th>
                                 <td colspan="3" id="vAddr"></td>
                             </tr>
-                            <tr <c:if test="${orgnFg != 'HQ'}">style="display: none;"</c:if>>
-                                <%-- 배송구분 --%>
+                            <tr <c:if test="${orgnFg != 'HQ' or (orgnFg =='HQ' and envst1242 != '2')}">style="display: none;"</c:if>>
+                                <%-- 직배송 --%>
                                 <th>
                                     <div class="impWrap"><s:message code="vendr.shipFg" /><em class="imp">*</em></div>
                                 </th>

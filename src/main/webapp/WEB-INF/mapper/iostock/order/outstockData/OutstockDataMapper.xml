@@ -179,6 +179,52 @@
         ]]>
     </select>
 
+    <!-- 출고자료생성 직배송거래처 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : outstockDataVO
+        COMMENTS : 출고자료생성 직배송거래처를 조회를 조회한다.
+    -->
+    <select id="getStoreVendr" parameterType="outstockDataVO" resultType="DefaultMap">
+        /* USE : OutstockDataMapper.getStoreVendr */
+        SELECT  tphsd.STORE_CD
+        ,       tphsd.SLIP_FG
+        ,       thvp.VENDR_CD
+        FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+        ,       (   SELECT  thvp.PROD_CD
+                    ,       MIN(thvp.VENDR_CD) AS VENDR_CD
+                    FROM    TB_HQ_VENDOR_PROD thvp
+                    WHERE   thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     thvp.VENDR_CD IN (   SELECT  thv.VENDR_CD
+                                                 FROM    TB_HQ_VENDOR thv
+                                                 WHERE   thv.HQ_OFFICE_CD   =   #{hqOfficeCd}
+                                                 AND     thv.USE_YN         =   'Y'
+                                                 AND     thv.SHIP_FG        =   'Y'
+                                             )
+                    AND     thvp.USE_YN = 'Y'
+                    GROUP
+                    BY      thvp.PROD_CD
+                )   thvp
+        WHERE   tphsd.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     tphsd.PROC_FG           =   '20'
+        AND     tphsd.STORE_CD          =   #{storeCd}
+        AND     tphsd.SLIP_FG           =   #{slipFg}
+        AND     thvp.PROD_CD        (+) =   tphsd.PROD_CD
+        <if test='dateFg == "req"'>
+            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "reg"'>
+            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "mod"'>
+            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        GROUP
+        BY      tphsd.STORE_CD, tphsd.SLIP_FG, thvp.VENDR_CD
+        ORDER
+        BY      tphsd.STORE_CD, tphsd.SLIP_FG, thvp.VENDR_CD
+    </select>
+
     <!-- 출고자료생성 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_DISTRIBUTE
@@ -211,11 +257,9 @@
                                 WHERE   STORE_CD   = #{storeCd}
                                 AND     PROD_CD   IN  (   SELECT  PROD_CD
                                                           FROM    TB_HQ_VENDOR_PROD thvp
-                                                          ,       TB_HQ_BRAND thb
-                                                          WHERE   thvp.VENDR_CD     =   #{vendrCd}
-                                                          AND     thb.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                                                          AND     thb.HQ_BRAND_CD   =   thvp.HQ_BRAND_CD
-                                                          AND     thb.USE_YN = 'Y'
+                                                          WHERE   thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                          AND     thvp.VENDR_CD     = #{vendrCd}
+                                                          AND     thvp.USE_YN = 'Y'
                                                       )
                             )
         </if>

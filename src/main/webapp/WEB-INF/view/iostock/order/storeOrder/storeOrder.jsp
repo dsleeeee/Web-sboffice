@@ -63,7 +63,7 @@
           <span class="txtIn"><input id="reqDate" class="w150px" ng-model="reqDate"></span>
         </div>
         <%-- 거래처 --%>
-        <div class="sb-select fl w150px" <c:if test="${envst1242 == '0'}">style="display: none;"</c:if>>
+        <div class="sb-select fl w150px" <c:if test="${envst1242 == '0' or envst1242 == '2'}">style="display: none;"</c:if>>
           <wj-combo-box
             id="vendrCd"
             ng-model="vendrCd"
