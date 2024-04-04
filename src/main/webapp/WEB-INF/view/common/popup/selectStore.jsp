@@ -754,10 +754,10 @@
                 $scope.srchPopBranchCdCombo.selectedIndex = 0;
                 $scope.srchPopStoreChgNotCombo.selectedIndex = 0;
                 $scope.srchPopMomsStoreFg01Combo.selectedIndex = 0;
-                $scope.srchPopMomsStoreFg02Combo.selectedIndex = 0;
-                $scope.srchPopMomsStoreFg03Combo.selectedIndex = 0;
-                $scope.srchPopMomsStoreFg04Combo.selectedIndex = 0;
-                $scope.srchPopMomsStoreFg05Combo.selectedIndex = 0;
+                // $scope.srchPopMomsStoreFg02Combo.selectedIndex = 0;
+                // $scope.srchPopMomsStoreFg03Combo.selectedIndex = 0;
+                // $scope.srchPopMomsStoreFg04Combo.selectedIndex = 0;
+                // $scope.srchPopMomsStoreFg05Combo.selectedIndex = 0;
             });
 
             // 업로드매장 텍스트박스 조회
