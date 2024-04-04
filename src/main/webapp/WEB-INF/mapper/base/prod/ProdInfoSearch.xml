@@ -206,6 +206,10 @@
                 ,		thpi.SALE_CHN_YN_DDN
                 ,		thp.REMARK
                 ,		thpi.PROD_INFO
+                ,       DECODE(thp.REG_FG,'S','매장','H','본사')                                AS REG_FG
+                ,       DECODE(NVL(thp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')             AS SOLD_OUT_YN
+                ,       DECODE(NVL(thp.KIOSK_DISPLAY_YN, 'N'), 'Y', '표시', 'N', '비표시')      AS KIOSK_DISPLAY_YN
+                ,       DECODE(NVL(thp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')     AS CHANNEL_SOLD_OUT_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT thp
                 ,       TB_MS_PRODUCT_CLASS_V02 thpcv	-- 분류정보
@@ -470,6 +474,10 @@
                 ,		thpi.SALE_CHN_YN_DDN
                 ,		thp.REMARK
                 ,		thpi.PROD_INFO
+                ,       DECODE(thp.REG_FG,'S','매장','H','본사')                                AS REG_FG
+                ,       DECODE(NVL(thp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')             AS SOLD_OUT_YN
+                ,       DECODE(NVL(thp.KIOSK_DISPLAY_YN, 'N'), 'Y', '표시', 'N', '비표시')      AS KIOSK_DISPLAY_YN
+                ,       DECODE(NVL(thp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')     AS CHANNEL_SOLD_OUT_YN
                 FROM 	TB_MS_PRODUCT thp
                 ,       TB_MS_PRODUCT_CLASS_V02 thpcv	-- 분류정보
                 -- 가격
