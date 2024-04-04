@@ -589,6 +589,10 @@
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.title.remark"/>" binding="remark" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.title.info"/>" binding="prodInfo" width="80"is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.soldOutYn"/>" binding="soldOutYn" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.kioskDisplayYn"/>" binding="kioskDisplayYn" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
 
                 <wj-flex-grid-column header="<s:message code="prod.brandCd"/>" binding="hqBrandCd" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandN" visible="false"></wj-flex-grid-column>
@@ -735,6 +739,10 @@
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="prod.title.remark"/>" binding="remark" width="80" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.title.info"/>" binding="prodInfo" width="80"is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.regFg"/>" binding="regFg" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.soldOutYn"/>" binding="soldOutYn" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.kioskDisplayYn"/>" binding="kioskDisplayYn" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
         <%--//엑셀 리스트--%>
