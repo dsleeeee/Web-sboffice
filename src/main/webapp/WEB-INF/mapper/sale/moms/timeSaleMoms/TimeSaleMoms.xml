@@ -20,24 +20,24 @@
         /* TimeSaleMomsMapper.getTimeSaleMomsList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-        TO_CHAR(TO_DATE(tsdpt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-        tsdpt.SALE_HOUR,
-        tsdpt.STORE_CD,
+        TO_CHAR(TO_DATE(tsdpst.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdpst.SALE_HOUR,
+        tsdpst.STORE_CD,
         tms.STORE_NM,
         tmp.PROD_NM,
-        SUM(tsdpt.TOT_SALE_QTY) AS TOT_SALE_QTY,
-        SUM(tsdpt.TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(tsdpt.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_AMT END) AS TOT_SALE_AMT1,
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.REAL_SALE_AMT END) AS REAL_SALE_AMT1
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_DAILY_PROD_TIME tsdpt,
+        FROM TB_SL_DAILY_PROD_SDSEL_TIME tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tsdpt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsdpt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tsdpt.STORE_CD IN (${storeCdQuery})
+            AND tsdpst.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -121,12 +121,12 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        AND tms.STORE_CD = tsdpt.STORE_CD
+        AND tms.STORE_CD = tsdpst.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
-        AND tmp.STORE_CD = tsdpt.STORE_CD
-        AND tmp.PROD_CD = tsdpt.PROD_CD
-        GROUP BY tsdpt.SALE_DATE, tsdpt.SALE_HOUR, tsdpt.STORE_CD, tms.STORE_NM, tsdpt.PROD_CD, tmp.PROD_NM
-        ORDER BY tsdpt.SALE_DATE, tsdpt.SALE_HOUR, tsdpt.STORE_CD, tsdpt.PROD_CD
+        AND tmp.STORE_CD = tsdpst.STORE_CD
+        AND tmp.PROD_CD = tsdpst.PROD_CD
+        GROUP BY tsdpst.SALE_DATE, tsdpst.SALE_HOUR, tsdpst.STORE_CD, tms.STORE_NM, tsdpst.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdpst.SALE_DATE, tsdpst.SALE_HOUR, tsdpst.STORE_CD, tsdpst.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -138,23 +138,23 @@
     <select id="getTimeSaleMomsExcelList" parameterType="TimeSaleMomsVO" resultType="DefaultMap">
         /* TimeSaleMomsMapper.getTimeSaleMomsExcelList */
         SELECT
-        TO_CHAR(TO_DATE(tsdpt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-        tsdpt.SALE_HOUR,
-        tsdpt.STORE_CD,
+        TO_CHAR(TO_DATE(tsdpst.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdpst.SALE_HOUR,
+        tsdpst.STORE_CD,
         tms.STORE_NM,
         tmp.PROD_NM,
-        SUM(tsdpt.TOT_SALE_QTY) AS TOT_SALE_QTY,
-        SUM(tsdpt.TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(tsdpt.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-        FROM TB_SL_DAILY_PROD_TIME tsdpt,
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_AMT END) AS TOT_SALE_AMT1,
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+        FROM TB_SL_DAILY_PROD_SDSEL_TIME tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tsdpt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsdpt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tsdpt.STORE_CD IN (${storeCdQuery})
+            AND tsdpst.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -238,12 +238,12 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        AND tms.STORE_CD = tsdpt.STORE_CD
+        AND tms.STORE_CD = tsdpst.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
-        AND tmp.STORE_CD = tsdpt.STORE_CD
-        AND tmp.PROD_CD = tsdpt.PROD_CD
-        GROUP BY tsdpt.SALE_DATE, tsdpt.SALE_HOUR, tsdpt.STORE_CD, tms.STORE_NM, tsdpt.PROD_CD, tmp.PROD_NM
-        ORDER BY tsdpt.SALE_DATE, tsdpt.SALE_HOUR, tsdpt.STORE_CD, tsdpt.PROD_CD
+        AND tmp.STORE_CD = tsdpst.STORE_CD
+        AND tmp.PROD_CD = tsdpst.PROD_CD
+        GROUP BY tsdpst.SALE_DATE, tsdpst.SALE_HOUR, tsdpst.STORE_CD, tms.STORE_NM, tsdpst.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdpst.SALE_DATE, tsdpst.SALE_HOUR, tsdpst.STORE_CD, tsdpst.PROD_CD
     </select>
 
     <!-- 시간대매출 - 분할 엑셀다운로드 조회 -->
@@ -255,23 +255,23 @@
         /* TimeSaleMomsMapper.getTimeSaleMomsExcelDivisionList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-        TO_CHAR(TO_DATE(tsdpt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
-        tsdpt.SALE_HOUR,
-        tsdpt.STORE_CD,
+        TO_CHAR(TO_DATE(tsdpst.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdpst.SALE_HOUR,
+        tsdpst.STORE_CD,
         tms.STORE_NM,
         tmp.PROD_NM,
-        SUM(tsdpt.TOT_SALE_QTY) AS TOT_SALE_QTY,
-        SUM(tsdpt.TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(tsdpt.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-        FROM TB_SL_DAILY_PROD_TIME tsdpt,
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_AMT END) AS TOT_SALE_AMT1,
+        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+        FROM TB_SL_DAILY_PROD_SDSEL_TIME tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tsdpt.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsdpt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdpst.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tsdpt.STORE_CD IN (${storeCdQuery})
+            AND tsdpst.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -355,12 +355,12 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        AND tms.STORE_CD = tsdpt.STORE_CD
+        AND tms.STORE_CD = tsdpst.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
-        AND tmp.STORE_CD = tsdpt.STORE_CD
-        AND tmp.PROD_CD = tsdpt.PROD_CD
-        GROUP BY tsdpt.SALE_DATE, tsdpt.SALE_HOUR, tsdpt.STORE_CD, tms.STORE_NM, tsdpt.PROD_CD, tmp.PROD_NM
-        ORDER BY tsdpt.SALE_DATE, tsdpt.SALE_HOUR, tsdpt.STORE_CD, tsdpt.PROD_CD
+        AND tmp.STORE_CD = tsdpst.STORE_CD
+        AND tmp.PROD_CD = tsdpst.PROD_CD
+        GROUP BY tsdpst.SALE_DATE, tsdpst.SALE_HOUR, tsdpst.STORE_CD, tms.STORE_NM, tsdpst.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdpst.SALE_DATE, tsdpst.SALE_HOUR, tsdpst.STORE_CD, tsdpst.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

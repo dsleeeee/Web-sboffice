@@ -217,7 +217,7 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "saleQty" +  dateArr[i].sOrgDate,
+                                binding: "saleQty1" +  dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -225,7 +225,7 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSalePmixMoms.total"],
-                            binding: "totSaleQty",
+                            binding: "totSaleQty1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -235,7 +235,7 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "realSaleAmt" + dateArr[i].sOrgDate,
+                                binding: "realSaleAmt1" + dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -243,7 +243,7 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSalePmixMoms.total"],
-                            binding: "totRealSaleAmt",
+                            binding: "totRealSaleAmt1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -253,7 +253,7 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "pMix" + dateArr[i].sOrgDate,
+                                binding: "pMixSale1" + dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -261,7 +261,7 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSalePmixMoms.total"],
-                            binding: "totPMix",
+                            binding: "totPMixSale1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -287,19 +287,19 @@ app.controller('prodSalePmixMomsCtrl', ['$scope', '$http', '$timeout', function 
                         dataItem.prodNm = messages["prodSalePmixMoms.prodNm"];
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
+                            eval('dataItem.saleQty1' + dateArr[i].sOrgDate + '= "판매수량"');
                         }
-                        dataItem.totSaleQty = "판매수량";
+                        dataItem.totSaleQty1 = "판매수량";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
+                            eval('dataItem.realSaleAmt1' + dateArr[i].sOrgDate + '= "실매출액"');
                         }
-                        dataItem.totRealSaleAmt = "실매출액";
+                        dataItem.totRealSaleAmt1 = "실매출액";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.pMix' + dateArr[i].sOrgDate + '= "P.MIX"');
+                            eval('dataItem.pMixSale1' + dateArr[i].sOrgDate + '= "P.MIX"');
                         }
-                        dataItem.totPMix = "P.MIX";
+                        dataItem.totPMixSale1 = "P.MIX";
 
                         grid.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -656,7 +656,7 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "saleQty" +  dateArr[i].sOrgDate,
+                                binding: "saleQty1" +  dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -664,7 +664,7 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSalePmixMoms.total"],
-                            binding: "totSaleQty",
+                            binding: "totSaleQty1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -674,7 +674,7 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "realSaleAmt" + dateArr[i].sOrgDate,
+                                binding: "realSaleAmt1" + dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -682,7 +682,7 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSalePmixMoms.total"],
-                            binding: "totRealSaleAmt",
+                            binding: "totRealSaleAmt1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -692,7 +692,7 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "pMix" + dateArr[i].sOrgDate,
+                                binding: "pMixSale1" + dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -700,7 +700,7 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSalePmixMoms.total"],
-                            binding: "totPMix",
+                            binding: "totPMixSale1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -726,19 +726,19 @@ app.controller('prodSalePmixMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                         dataItem.prodNm = messages["prodSalePmixMoms.prodNm"];
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
+                            eval('dataItem.saleQty1' + dateArr[i].sOrgDate + '= "판매수량"');
                         }
-                        dataItem.totSaleQty = "판매수량";
+                        dataItem.totSaleQty1 = "판매수량";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
+                            eval('dataItem.realSaleAmt1' + dateArr[i].sOrgDate + '= "실매출액"');
                         }
-                        dataItem.totRealSaleAmt = "실매출액";
+                        dataItem.totRealSaleAmt1 = "실매출액";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.pMix' + dateArr[i].sOrgDate + '= "P.MIX"');
+                            eval('dataItem.pMixSale1' + dateArr[i].sOrgDate + '= "P.MIX"');
                         }
-                        dataItem.totPMix = "P.MIX";
+                        dataItem.totPMixSale1 = "P.MIX";
 
                         grid.columnHeaders.rows[0].dataItem = dataItem;
 

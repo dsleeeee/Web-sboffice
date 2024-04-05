@@ -379,9 +379,9 @@
                     <wj-flex-grid-column header="<s:message code="timeSaleMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="timeSaleMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="timeSaleMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="timeSaleMoms.saleQty"/>" binding="totSaleQty" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="timeSaleMoms.totSaleAmt"/>" binding="totSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="timeSaleMoms.realSaleAmt"/>" binding="totRealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeSaleMoms.saleQty"/>" binding="saleQty1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeSaleMoms.totSaleAmt"/>" binding="totSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="timeSaleMoms.realSaleAmt"/>" binding="realSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -413,9 +413,9 @@
                 <wj-flex-grid-column header="<s:message code="timeSaleMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="timeSaleMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="timeSaleMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeSaleMoms.saleQty"/>" binding="totSaleQty" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeSaleMoms.totSaleAmt"/>" binding="totSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="timeSaleMoms.realSaleAmt"/>" binding="totRealSaleAmt" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="timeSaleMoms.saleQty"/>" binding="saleQty1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="timeSaleMoms.totSaleAmt"/>" binding="totSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="timeSaleMoms.realSaleAmt"/>" binding="realSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>

@@ -219,7 +219,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "billCnt" +  dateArr[i].sOrgDate,
+                                binding: "billCnt1" +  dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -227,7 +227,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totBillCnt",
+                            binding: "totBillCnt1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -237,7 +237,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "saleQty" +  dateArr[i].sOrgDate,
+                                binding: "saleQty1" +  dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -245,7 +245,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totSaleQty",
+                            binding: "totSaleQty1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -255,7 +255,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "realSaleAmt" + dateArr[i].sOrgDate,
+                                binding: "realSaleAmt1" + dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -263,7 +263,7 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totRealSaleAmt",
+                            binding: "totRealSaleAmt1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -292,19 +292,19 @@ app.controller('prodSaleDayBillMomsCtrl', ['$scope', '$http', '$timeout', functi
                         dataItem.momsAreaFg = messages["cmm.moms.momsAreaFg"];
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.billCnt' + dateArr[i].sOrgDate + '= "영수건수"');
+                            eval('dataItem.billCnt1' + dateArr[i].sOrgDate + '= "영수건수"');
                         }
-                        dataItem.totBillCnt = "영수건수";
+                        dataItem.totBillCnt1 = "영수건수";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
+                            eval('dataItem.saleQty1' + dateArr[i].sOrgDate + '= "판매수량"');
                         }
-                        dataItem.totSaleQty = "판매수량";
+                        dataItem.totSaleQty1 = "판매수량";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
+                            eval('dataItem.realSaleAmt1' + dateArr[i].sOrgDate + '= "실매출액"');
                         }
-                        dataItem.totRealSaleAmt = "실매출액";
+                        dataItem.totRealSaleAmt1 = "실매출액";
 
                         grid.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -710,7 +710,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "billCnt" +  dateArr[i].sOrgDate,
+                                binding: "billCnt1" +  dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -718,7 +718,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totBillCnt",
+                            binding: "totBillCnt1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -728,7 +728,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "saleQty" +  dateArr[i].sOrgDate,
+                                binding: "saleQty1" +  dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -736,7 +736,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totSaleQty",
+                            binding: "totSaleQty1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -746,7 +746,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                         for (var i = 0; i < dateArr.length; i++) {
                             grid.columns.push(new wijmo.grid.Column({
                                 header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                binding: "realSaleAmt" + dateArr[i].sOrgDate,
+                                binding: "realSaleAmt1" + dateArr[i].sOrgDate,
                                 width: 90,
                                 align: "right",
                                 isReadOnly: "true"
@@ -754,7 +754,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                         }
                         grid.columns.push(new wijmo.grid.Column({
                             header: messages["prodSaleDayBillMoms.total"],
-                            binding: "totRealSaleAmt",
+                            binding: "totRealSaleAmt1",
                             width: 90,
                             align: "right",
                             isReadOnly: "true"
@@ -783,19 +783,19 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                         dataItem.momsAreaFg = messages["cmm.moms.momsAreaFg"];
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.billCnt' + dateArr[i].sOrgDate + '= "영수건수"');
+                            eval('dataItem.billCnt1' + dateArr[i].sOrgDate + '= "영수건수"');
                         }
-                        dataItem.totBillCnt = "영수건수";
+                        dataItem.totBillCnt1 = "영수건수";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
+                            eval('dataItem.saleQty1' + dateArr[i].sOrgDate + '= "판매수량"');
                         }
-                        dataItem.totSaleQty = "판매수량";
+                        dataItem.totSaleQty1 = "판매수량";
 
                         for (var i = 0; i < dateArr.length; i++) {
-                            eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
+                            eval('dataItem.realSaleAmt1' + dateArr[i].sOrgDate + '= "실매출액"');
                         }
-                        dataItem.totRealSaleAmt = "실매출액";
+                        dataItem.totRealSaleAmt1 = "실매출액";
 
                         grid.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -991,7 +991,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 for (var i = 0; i < dateArr.length; i++) {
                                                     grid.columns.push(new wijmo.grid.Column({
                                                         header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                                        binding: "billCnt" +  dateArr[i].sOrgDate,
+                                                        binding: "billCnt1" +  dateArr[i].sOrgDate,
                                                         width: 90,
                                                         align: "right",
                                                         isReadOnly: "true"
@@ -999,7 +999,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 }
                                                 grid.columns.push(new wijmo.grid.Column({
                                                     header: messages["prodSaleDayBillMoms.total"],
-                                                    binding: "totBillCnt",
+                                                    binding: "totBillCnt1",
                                                     width: 90,
                                                     align: "right",
                                                     isReadOnly: "true"
@@ -1009,7 +1009,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 for (var i = 0; i < dateArr.length; i++) {
                                                     grid.columns.push(new wijmo.grid.Column({
                                                         header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                                        binding: "saleQty" +  dateArr[i].sOrgDate,
+                                                        binding: "saleQty1" +  dateArr[i].sOrgDate,
                                                         width: 90,
                                                         align: "right",
                                                         isReadOnly: "true"
@@ -1017,7 +1017,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 }
                                                 grid.columns.push(new wijmo.grid.Column({
                                                     header: messages["prodSaleDayBillMoms.total"],
-                                                    binding: "totSaleQty",
+                                                    binding: "totSaleQty1",
                                                     width: 90,
                                                     align: "right",
                                                     isReadOnly: "true"
@@ -1027,7 +1027,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 for (var i = 0; i < dateArr.length; i++) {
                                                     grid.columns.push(new wijmo.grid.Column({
                                                         header: dateArr[i].sOrgDate.replace(regex[0], regex[1]),
-                                                        binding: "realSaleAmt" + dateArr[i].sOrgDate,
+                                                        binding: "realSaleAmt1" + dateArr[i].sOrgDate,
                                                         width: 90,
                                                         align: "right",
                                                         isReadOnly: "true"
@@ -1035,7 +1035,7 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 }
                                                 grid.columns.push(new wijmo.grid.Column({
                                                     header: messages["prodSaleDayBillMoms.total"],
-                                                    binding: "totRealSaleAmt",
+                                                    binding: "totRealSaleAmt1",
                                                     width: 90,
                                                     align: "right",
                                                     isReadOnly: "true"
@@ -1064,19 +1064,19 @@ app.controller('prodSaleDayBillMomsExcelCtrl', ['$scope', '$http', '$timeout', f
                                                 dataItem.momsAreaFg = messages["cmm.moms.momsAreaFg"];
 
                                                 for (var i = 0; i < dateArr.length; i++) {
-                                                    eval('dataItem.billCnt' + dateArr[i].sOrgDate + '= "영수건수"');
+                                                    eval('dataItem.billCnt1' + dateArr[i].sOrgDate + '= "영수건수"');
                                                 }
-                                                dataItem.totBillCnt = "영수건수";
+                                                dataItem.totBillCnt1 = "영수건수";
 
                                                 for (var i = 0; i < dateArr.length; i++) {
-                                                    eval('dataItem.saleQty' + dateArr[i].sOrgDate + '= "판매수량"');
+                                                    eval('dataItem.saleQty1' + dateArr[i].sOrgDate + '= "판매수량"');
                                                 }
-                                                dataItem.totSaleQty = "판매수량";
+                                                dataItem.totSaleQty1 = "판매수량";
 
                                                 for (var i = 0; i < dateArr.length; i++) {
-                                                    eval('dataItem.realSaleAmt' + dateArr[i].sOrgDate + '= "실매출액"');
+                                                    eval('dataItem.realSaleAmt1' + dateArr[i].sOrgDate + '= "실매출액"');
                                                 }
-                                                dataItem.totRealSaleAmt = "실매출액";
+                                                dataItem.totRealSaleAmt1 = "실매출액";
 
                                                 grid.columnHeaders.rows[0].dataItem = dataItem;
 

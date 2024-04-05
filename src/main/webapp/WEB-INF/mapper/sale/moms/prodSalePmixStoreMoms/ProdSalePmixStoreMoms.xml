@@ -39,47 +39,47 @@
             A.PROD_CLASS_CD,
             A.PROD_CD,
             A.PROD_NM,
-            A.SALE_QTY,
-            A.REAL_SALE_AMT,
-            SUM(A.REAL_SALE_AMT) OVER(PARTITION BY A.SALE_DATE) AS P_REAL_SALE_AMT,
-            SUM(A.REAL_SALE_AMT) OVER() AS TOT_REAL_SALE_AMT
+            A.SALE_QTY1,
+            A.REAL_SALE_AMT1,
+            SUM(A.REAL_SALE_AMT1) OVER(PARTITION BY A.SALE_DATE) AS P_REAL_SALE_AMT1,
+            SUM(A.REAL_SALE_AMT1) OVER() AS TOT_REAL_SALE_AMT1
             FROM
             (
                 SELECT
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    tsdp.SALE_DATE,
+                    tsdps.SALE_DATE,
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    tsdp.SALE_YM AS SALE_DATE,
+                    tsdps.SALE_YM AS SALE_DATE,
                 </if>
-                tsdp.STORE_CD,
+                tsdps.STORE_CD,
                 tms.STORE_NM,
                 tmsi.MOMS_AREA_FG,
                 tmp.PROD_CLASS_CD,
-                tsdp.PROD_CD,
+                tsdps.PROD_CD,
                 tmp.PROD_NM,
-                SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
-                SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
                 FROM
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    TB_SL_DAILY_PROD tsdp,
+                    TB_SL_DAILY_PROD_SDSEL tsdps,
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    TB_SL_MONTHLY_PROD tsdp,
+                    TB_SL_MONTHLY_PROD_SDSEL tsdps,
                 </if>
                 TB_MS_STORE tms,
                 TB_MS_STORE_INFO tmsi,
                 TB_MS_PRODUCT tmp
                 WHERE 1=1
-                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    AND tsdp.SALE_YM BETWEEN #{startDate} AND #{endDate}
+                    AND tsdps.SALE_YM BETWEEN #{startDate} AND #{endDate}
                 </if>
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tsdp.STORE_CD IN (${storeCdQuery})
+                    AND tsdps.STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -163,18 +163,18 @@
                 <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
                     AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                 </if>
-                AND tms.STORE_CD = tsdp.STORE_CD
+                AND tms.STORE_CD = tsdps.STORE_CD
                 AND tmsi.STORE_CD (+)= tms.STORE_CD
-                AND tmp.STORE_CD = tsdp.STORE_CD
-                AND tmp.PROD_CD = tsdp.PROD_CD
+                AND tmp.STORE_CD = tsdps.STORE_CD
+                AND tmp.PROD_CD = tsdps.PROD_CD
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    GROUP BY tsdp.SALE_DATE, tsdp.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdp.PROD_CD, tmp.PROD_NM
+                    GROUP BY tsdps.SALE_DATE, tsdps.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdps.PROD_CD, tmp.PROD_NM
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    GROUP BY tsdp.SALE_YM, tsdp.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdp.PROD_CD, tmp.PROD_NM
+                    GROUP BY tsdps.SALE_YM, tsdps.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdps.PROD_CD, tmp.PROD_NM
                 </if>
             ) A
-            GROUP BY A.SALE_DATE, A.STORE_CD, A.STORE_NM, A.MOMS_AREA_FG, A.PROD_CLASS_CD, A.PROD_CD, A.PROD_NM, A.SALE_QTY, A.REAL_SALE_AMT
+            GROUP BY A.SALE_DATE, A.STORE_CD, A.STORE_NM, A.MOMS_AREA_FG, A.PROD_CLASS_CD, A.PROD_CD, A.PROD_NM, A.SALE_QTY1, A.REAL_SALE_AMT1
         ) B
         GROUP BY B.STORE_CD, B.STORE_NM, B.MOMS_AREA_FG, B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
         ORDER BY B.STORE_CD, B.PROD_CLASS_CD, B.PROD_CD
@@ -207,47 +207,47 @@
             A.PROD_CLASS_CD,
             A.PROD_CD,
             A.PROD_NM,
-            A.SALE_QTY,
-            A.REAL_SALE_AMT,
-            SUM(A.REAL_SALE_AMT) OVER(PARTITION BY A.SALE_DATE) AS P_REAL_SALE_AMT,
-            SUM(A.REAL_SALE_AMT) OVER() AS TOT_REAL_SALE_AMT
+            A.SALE_QTY1,
+            A.REAL_SALE_AMT1,
+            SUM(A.REAL_SALE_AMT1) OVER(PARTITION BY A.SALE_DATE) AS P_REAL_SALE_AMT1,
+            SUM(A.REAL_SALE_AMT1) OVER() AS TOT_REAL_SALE_AMT1
             FROM
             (
                 SELECT
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    tsdp.SALE_DATE,
+                    tsdps.SALE_DATE,
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    tsdp.SALE_YM AS SALE_DATE,
+                    tsdps.SALE_YM AS SALE_DATE,
                 </if>
-                tsdp.STORE_CD,
+                tsdps.STORE_CD,
                 tms.STORE_NM,
                 tmsi.MOMS_AREA_FG,
                 tmp.PROD_CLASS_CD,
-                tsdp.PROD_CD,
+                tsdps.PROD_CD,
                 tmp.PROD_NM,
-                SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
-                SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
                 FROM
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    TB_SL_DAILY_PROD tsdp,
+                    TB_SL_DAILY_PROD_SDSEL tsdps,
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    TB_SL_MONTHLY_PROD tsdp,
+                    TB_SL_MONTHLY_PROD_SDSEL tsdps,
                 </if>
                 TB_MS_STORE tms,
                 TB_MS_STORE_INFO tmsi,
                 TB_MS_PRODUCT tmp
                 WHERE 1=1
-                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    AND tsdp.SALE_YM BETWEEN #{startDate} AND #{endDate}
+                    AND tsdps.SALE_YM BETWEEN #{startDate} AND #{endDate}
                 </if>
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tsdp.STORE_CD IN (${storeCdQuery})
+                    AND tsdps.STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -331,18 +331,18 @@
                 <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
                     AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                 </if>
-                AND tms.STORE_CD = tsdp.STORE_CD
+                AND tms.STORE_CD = tsdps.STORE_CD
                 AND tmsi.STORE_CD (+)= tms.STORE_CD
-                AND tmp.STORE_CD = tsdp.STORE_CD
-                AND tmp.PROD_CD = tsdp.PROD_CD
+                AND tmp.STORE_CD = tsdps.STORE_CD
+                AND tmp.PROD_CD = tsdps.PROD_CD
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    GROUP BY tsdp.SALE_DATE, tsdp.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdp.PROD_CD, tmp.PROD_NM
+                    GROUP BY tsdps.SALE_DATE, tsdps.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdps.PROD_CD, tmp.PROD_NM
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    GROUP BY tsdp.SALE_YM, tsdp.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdp.PROD_CD, tmp.PROD_NM
+                    GROUP BY tsdps.SALE_YM, tsdps.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdps.PROD_CD, tmp.PROD_NM
                 </if>
             ) A
-            GROUP BY A.SALE_DATE, A.STORE_CD, A.STORE_NM, A.MOMS_AREA_FG, A.PROD_CLASS_CD, A.PROD_CD, A.PROD_NM, A.SALE_QTY, A.REAL_SALE_AMT
+            GROUP BY A.SALE_DATE, A.STORE_CD, A.STORE_NM, A.MOMS_AREA_FG, A.PROD_CLASS_CD, A.PROD_CD, A.PROD_NM, A.SALE_QTY1, A.REAL_SALE_AMT1
         ) B
         GROUP BY B.STORE_CD, B.STORE_NM, B.MOMS_AREA_FG, B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
         ORDER BY B.STORE_CD, B.PROD_CLASS_CD, B.PROD_CD
@@ -375,47 +375,47 @@
             A.PROD_CLASS_CD,
             A.PROD_CD,
             A.PROD_NM,
-            A.SALE_QTY,
-            A.REAL_SALE_AMT,
-            SUM(A.REAL_SALE_AMT) OVER(PARTITION BY A.SALE_DATE) AS P_REAL_SALE_AMT,
-            SUM(A.REAL_SALE_AMT) OVER() AS TOT_REAL_SALE_AMT
+            A.SALE_QTY1,
+            A.REAL_SALE_AMT1,
+            SUM(A.REAL_SALE_AMT1) OVER(PARTITION BY A.SALE_DATE) AS P_REAL_SALE_AMT1,
+            SUM(A.REAL_SALE_AMT1) OVER() AS TOT_REAL_SALE_AMT1
             FROM
             (
                 SELECT
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    tsdp.SALE_DATE,
+                    tsdps.SALE_DATE,
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    tsdp.SALE_YM AS SALE_DATE,
+                    tsdps.SALE_YM AS SALE_DATE,
                 </if>
-                tsdp.STORE_CD,
+                tsdps.STORE_CD,
                 tms.STORE_NM,
                 tmsi.MOMS_AREA_FG,
                 tmp.PROD_CLASS_CD,
-                tsdp.PROD_CD,
+                tsdps.PROD_CD,
                 tmp.PROD_NM,
-                SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
-                SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
                 FROM
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    TB_SL_DAILY_PROD tsdp,
+                    TB_SL_DAILY_PROD_SDSEL tsdps,
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    TB_SL_MONTHLY_PROD tsdp,
+                    TB_SL_MONTHLY_PROD_SDSEL tsdps,
                 </if>
                 TB_MS_STORE tms,
                 TB_MS_STORE_INFO tmsi,
                 TB_MS_PRODUCT tmp
                 WHERE 1=1
-                AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    AND tsdp.SALE_YM BETWEEN #{startDate} AND #{endDate}
+                    AND tsdps.SALE_YM BETWEEN #{startDate} AND #{endDate}
                 </if>
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
-                    AND tsdp.STORE_CD IN (${storeCdQuery})
+                    AND tsdps.STORE_CD IN (${storeCdQuery})
                 </if>
                 <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
                     AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -499,18 +499,18 @@
                 <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
                     AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                 </if>
-                AND tms.STORE_CD = tsdp.STORE_CD
+                AND tms.STORE_CD = tsdps.STORE_CD
                 AND tmsi.STORE_CD (+)= tms.STORE_CD
-                AND tmp.STORE_CD = tsdp.STORE_CD
-                AND tmp.PROD_CD = tsdp.PROD_CD
+                AND tmp.STORE_CD = tsdps.STORE_CD
+                AND tmp.PROD_CD = tsdps.PROD_CD
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    GROUP BY tsdp.SALE_DATE, tsdp.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdp.PROD_CD, tmp.PROD_NM
+                    GROUP BY tsdps.SALE_DATE, tsdps.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdps.PROD_CD, tmp.PROD_NM
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    GROUP BY tsdp.SALE_YM, tsdp.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdp.PROD_CD, tmp.PROD_NM
+                    GROUP BY tsdps.SALE_YM, tsdps.STORE_CD, tms.STORE_NM, tmsi.MOMS_AREA_FG, tmp.PROD_CLASS_CD, tsdps.PROD_CD, tmp.PROD_NM
                 </if>
             ) A
-            GROUP BY A.SALE_DATE, A.STORE_CD, A.STORE_NM, A.MOMS_AREA_FG, A.PROD_CLASS_CD, A.PROD_CD, A.PROD_NM, A.SALE_QTY, A.REAL_SALE_AMT
+            GROUP BY A.SALE_DATE, A.STORE_CD, A.STORE_NM, A.MOMS_AREA_FG, A.PROD_CLASS_CD, A.PROD_CD, A.PROD_NM, A.SALE_QTY1, A.REAL_SALE_AMT1
         ) B
         GROUP BY B.STORE_CD, B.STORE_NM, B.MOMS_AREA_FG, B.PROD_CLASS_CD, B.PROD_CD, B.PROD_NM
         ORDER BY B.STORE_CD, B.PROD_CLASS_CD, B.PROD_CD

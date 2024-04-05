@@ -20,21 +20,21 @@
         /* ProdSaleDayMomsMapper.getProdSaleDayMomsList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
-        TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
         tmp.PROD_NM,
-        SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
-        SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_AMT END) AS TOT_SALE_AMT1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_DAILY_PROD tsdp,
+        FROM TB_SL_DAILY_PROD_SDSEL tsdps,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tsdp.STORE_CD IN (${storeCdQuery})
+            AND tsdps.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -118,12 +118,12 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        AND tms.STORE_CD = tsdp.STORE_CD
+        AND tms.STORE_CD = tsdps.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
-        AND tmp.STORE_CD = tsdp.STORE_CD
-        AND tmp.PROD_CD = tsdp.PROD_CD
-        GROUP BY tsdp.SALE_DATE, tsdp.PROD_CD, tmp.PROD_NM
-        ORDER BY tsdp.SALE_DATE, tsdp.PROD_CD
+        AND tmp.STORE_CD = tsdps.STORE_CD
+        AND tmp.PROD_CD = tsdps.PROD_CD
+        GROUP BY tsdps.SALE_DATE, tsdps.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdps.SALE_DATE, tsdps.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -135,20 +135,20 @@
     <select id="getProdSaleDayMomsExcelList" parameterType="ProdSaleDayMomsVO" resultType="DefaultMap">
         /* ProdSaleDayMomsMapper.getProdSaleDayMomsExcelList */
         SELECT
-        TO_CHAR(TO_DATE(tsdp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
         tmp.PROD_NM,
-        SUM(tsdp.TOT_SALE_QTY) AS SALE_QTY,
-        SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(tsdp.REAL_SALE_AMT) AS REAL_SALE_AMT
-        FROM TB_SL_DAILY_PROD tsdp,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_AMT END) AS TOT_SALE_AMT1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+        FROM TB_SL_DAILY_PROD_SDSEL tsdps,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
         WHERE 1=1
-        AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND tsdp.STORE_CD IN (${storeCdQuery})
+            AND tsdps.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -232,12 +232,12 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        AND tms.STORE_CD = tsdp.STORE_CD
+        AND tms.STORE_CD = tsdps.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
-        AND tmp.STORE_CD = tsdp.STORE_CD
-        AND tmp.PROD_CD = tsdp.PROD_CD
-        GROUP BY tsdp.SALE_DATE, tsdp.PROD_CD, tmp.PROD_NM
-        ORDER BY tsdp.SALE_DATE, tsdp.PROD_CD
+        AND tmp.STORE_CD = tsdps.STORE_CD
+        AND tmp.PROD_CD = tsdps.PROD_CD
+        GROUP BY tsdps.SALE_DATE, tsdps.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdps.SALE_DATE, tsdps.PROD_CD
     </select>
 
 </mapper>
