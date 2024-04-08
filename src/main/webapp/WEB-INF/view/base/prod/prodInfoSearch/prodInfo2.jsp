@@ -153,10 +153,12 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.saleChnYnDdn"/>" binding="saleChnYnDdn" width="80" align="center" is-read-only="true" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.prodInfo"/>" binding="prodInfo" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.regFg"/>" binding="regFg" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.soldOutYn"/>" binding="soldOutYn" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.kioskDisplayYn"/>" binding="kioskDisplayYn" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+          </c:if>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -234,10 +236,12 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.saleChnYnDdn"/>" binding="saleChnYnDdn" width="80" align="center" is-read-only="true" data-map="useYnDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.prodInfo"/>" binding="prodInfo" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.regFg"/>" binding="regFg" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.soldOutYn"/>" binding="soldOutYn" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.kioskDisplayYn"/>" binding="kioskDisplayYn" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+          <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.regFg"/>" binding="regFg" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.soldOutYn"/>" binding="soldOutYn" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.kioskDisplayYn"/>" binding="kioskDisplayYn" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+          </c:if>
         </wj-flex-grid>
       </div>
     </div>
