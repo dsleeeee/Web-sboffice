@@ -239,6 +239,8 @@ app.controller('instockConfmDtlCtrl', ['$scope', '$http', '$timeout', function (
         $scope._inquirySub("/iostock/order/instockConfm/instockConfmDtl/list.sb", params, function () {	//조회 : URL, parameter, callBack Function
 
         	if (gEnvst1043 === "N") {		//1043: 매장입고시수량변경
+                //출고내역으로 입고내역 세팅
+                $scope.setOutToIn();
 
             } else {
             	global_storage_cnt	= 0;	//매장의 창고 갯수
