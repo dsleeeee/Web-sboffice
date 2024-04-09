@@ -44,6 +44,7 @@
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
+                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
             </if>
             <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
@@ -61,6 +62,7 @@
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
+                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_YM, A.STORE_CD, A.PROD_CD
             </if>
         ) tsdps,
@@ -190,6 +192,7 @@
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
+                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
             </if>
             <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
@@ -207,6 +210,7 @@
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
+                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_YM, A.STORE_CD, A.PROD_CD
             </if>
         ) tsdps,
@@ -336,6 +340,7 @@
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
+                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
             </if>
             <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
@@ -353,6 +358,7 @@
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
+                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_YM, A.STORE_CD, A.PROD_CD
             </if>
         ) tsdps,

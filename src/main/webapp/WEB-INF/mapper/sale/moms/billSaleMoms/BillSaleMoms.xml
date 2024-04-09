@@ -17,7 +17,7 @@
         COMMENTS :
     -->
     <select id="getBillSaleMomsList" parameterType="BillSaleMomsVO" resultType="DefaultMap">
-        /* BillSaleMomsMapper.getTimeSaleStoreMomsList */
+        /* BillSaleMomsMapper.getBillSaleMomsList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         TO_CHAR(TO_DATE(tssd2.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
@@ -157,6 +157,8 @@
             AND tmp.PROD_CD = tssd.PROD_CD
             GROUP BY tssd.SALE_DATE, tssd.BILL_NO, tssd.STORE_CD, tms.STORE_NM, tssd.PROD_CD, tmp.PROD_NM, tssd.SIDE_P_DTL_NO, tssd.BILL_DTL_NO, tssd.SIDE_P_PROD_CD, tssd.SINGLE_PROD_CD
         ) tssd2
+        WHERE 1=1
+        AND (tssd2.SEL_TYPE_FG = 'N' OR tssd2.SEL_TYPE_FG = 'P') -- 단품/세트
         GROUP BY tssd2.SALE_DATE, tssd2.BILL_NO, tssd2.STORE_CD, tssd2.STORE_NM, tssd2.PROD_CD, tssd2.PROD_NM
         ORDER BY tssd2.SALE_DATE, tssd2.BILL_NO, tssd2.STORE_CD, tssd2.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -306,6 +308,8 @@
             AND tmp.PROD_CD = tssd.PROD_CD
             GROUP BY tssd.SALE_DATE, tssd.BILL_NO, tssd.STORE_CD, tms.STORE_NM, tssd.PROD_CD, tmp.PROD_NM, tssd.SIDE_P_DTL_NO, tssd.BILL_DTL_NO, tssd.SIDE_P_PROD_CD, tssd.SINGLE_PROD_CD
         ) tssd2
+        WHERE 1=1
+        AND (tssd2.SEL_TYPE_FG = 'N' OR tssd2.SEL_TYPE_FG = 'P') -- 단품/세트
         GROUP BY tssd2.SALE_DATE, tssd2.BILL_NO, tssd2.STORE_CD, tssd2.STORE_NM, tssd2.PROD_CD, tssd2.PROD_NM
         ORDER BY tssd2.SALE_DATE, tssd2.BILL_NO, tssd2.STORE_CD, tssd2.PROD_CD
     </select>
@@ -455,6 +459,8 @@
             AND tmp.PROD_CD = tssd.PROD_CD
             GROUP BY tssd.SALE_DATE, tssd.BILL_NO, tssd.STORE_CD, tms.STORE_NM, tssd.PROD_CD, tmp.PROD_NM, tssd.SIDE_P_DTL_NO, tssd.BILL_DTL_NO, tssd.SIDE_P_PROD_CD, tssd.SINGLE_PROD_CD
         ) tssd2
+        WHERE 1=1
+        AND (tssd2.SEL_TYPE_FG = 'N' OR tssd2.SEL_TYPE_FG = 'P') -- 단품/세트
         GROUP BY tssd2.SALE_DATE, tssd2.BILL_NO, tssd2.STORE_CD, tssd2.STORE_NM, tssd2.PROD_CD, tssd2.PROD_NM
         ORDER BY tssd2.SALE_DATE, tssd2.BILL_NO, tssd2.STORE_CD, tssd2.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
