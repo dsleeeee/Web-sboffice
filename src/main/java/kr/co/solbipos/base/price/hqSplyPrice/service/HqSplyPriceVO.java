@@ -1,10 +1,10 @@
-package kr.co.solbipos.base.price.splyPrice.service;
+package kr.co.solbipos.base.price.hqSplyPrice.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : SplyPriceVO.java
- * @Description : 기초관리 - 가격관리 - 공급가관리
+ * @Class Name : HqSplyPriceVO.java
+ * @Description : 기초관리 - 가격관리 - 본사공급가관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -17,7 +17,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class SplyPriceVO extends PageVO {
+public class HqSplyPriceVO extends PageVO {
 
     /** 본사코드 */
     private String hqOfficeCd;

@@ -1,4 +1,4 @@
-package kr.co.solbipos.base.price.splyPrice.web;
+package kr.co.solbipos.base.price.hqSplyPrice.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
@@ -6,8 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.price.splyPrice.service.SplyPriceService;
-import kr.co.solbipos.base.price.splyPrice.service.SplyPriceVO;
+import kr.co.solbipos.base.price.hqSplyPrice.service.HqSplyPriceService;
+import kr.co.solbipos.base.price.hqSplyPrice.service.HqSplyPriceVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +24,8 @@ import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
- * @Class Name : SplyPriceController.java
- * @Description : 기초관리 - 가격관리 - 공급가관리
+ * @Class Name : HqSplyPriceController.java
+ * @Description : 기초관리 - 가격관리 - 본사공급가관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -39,18 +39,18 @@ import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
 @Controller
-@RequestMapping(value = "/base/price/splyPrice")
-public class SplyPriceController {
+@RequestMapping(value = "/base/price/hqSplyPrice")
+public class HqSplyPriceController {
 
     private final SessionService sessionService;
-    private final SplyPriceService splyPriceService;
+    private final HqSplyPriceService hqSplyPriceService;
     private final CmmEnvUtil cmmEnvUtil;
 
     /** Constructor Injection */
     @Autowired
-    public SplyPriceController(SessionService sessionService, SplyPriceService splyPriceService, CmmEnvUtil cmmEnvUtil){
+    public HqSplyPriceController(SessionService sessionService, HqSplyPriceService hqSplyPriceService, CmmEnvUtil cmmEnvUtil){
         this.sessionService = sessionService;
-        this.splyPriceService = splyPriceService;
+        this.hqSplyPriceService = hqSplyPriceService;
         this.cmmEnvUtil = cmmEnvUtil;
     }
 
@@ -66,48 +66,48 @@ public class SplyPriceController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        return "base/price/splyPrice/splyPriceTab";
+        return "base/price/hqSplyPrice/hqSplyPriceTab";
     }
 
     /**
      * 본사 공급가관리 조회
      *
-     * @param splyPriceVO
+     * @param hqSplyPriceVO
      * @param request
      * @return
      */
     @RequestMapping(value = "/getHqSplyPriceList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getHqSplyPriceList(SplyPriceVO splyPriceVO, HttpServletRequest request) {
+    public Result getHqSplyPriceList(HqSplyPriceVO hqSplyPriceVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = splyPriceService.getHqSplyPriceList(splyPriceVO, sessionInfoVO);
+        List<DefaultMap<String>> result = hqSplyPriceService.getHqSplyPriceList(hqSplyPriceVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, result, splyPriceVO);
+        return returnListJson(Status.OK, result, hqSplyPriceVO);
     }
 
     /**
      * 본사 공급가관리 엑셀다운로드 조회
      *
-     * @param splyPriceVO
+     * @param hqSplyPriceVO
      * @param request
      * @return
      */
     @RequestMapping(value = "/getHqSplyPriceExcelList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getHqSplyPriceExcelList(SplyPriceVO splyPriceVO, HttpServletRequest request) {
+    public Result getHqSplyPriceExcelList(HqSplyPriceVO hqSplyPriceVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = splyPriceService.getHqSplyPriceExcelList(splyPriceVO, sessionInfoVO);
+        List<DefaultMap<String>> result = hqSplyPriceService.getHqSplyPriceExcelList(hqSplyPriceVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, result, splyPriceVO);
+        return returnListJson(Status.OK, result, hqSplyPriceVO);
     }
 
     /**
      * 본사 공급가 저장
-     * @param splyPriceVOs
+     * @param hqSplyPriceVOs
      * @param request
      * @param response
      * @param model
@@ -115,12 +115,12 @@ public class SplyPriceController {
      */
     @RequestMapping(value = "/saveHqSplyPrice.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveHqSplyPrice(@RequestBody SplyPriceVO[] splyPriceVOs, HttpServletRequest request,
+    public Result saveHqSplyPrice(@RequestBody HqSplyPriceVO[] hqSplyPriceVOs, HttpServletRequest request,
                                       HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = splyPriceService.saveHqSplyPrice(splyPriceVOs, sessionInfoVO);
+        int result = hqSplyPriceService.saveHqSplyPrice(hqSplyPriceVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
@@ -128,24 +128,24 @@ public class SplyPriceController {
     /**
      * 본사 공급가 엑셀 양식다운로드 조회
      *
-     * @param splyPriceVO
+     * @param hqSplyPriceVO
      * @param request
      * @return
      */
     @RequestMapping(value = "/getHqSplyPriceExcelUploadSampleList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getHqSplyPriceExcelUploadSampleList(SplyPriceVO splyPriceVO, HttpServletRequest request) {
+    public Result getHqSplyPriceExcelUploadSampleList(HqSplyPriceVO hqSplyPriceVO, HttpServletRequest request) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = splyPriceService.getHqSplyPriceExcelUploadSampleList(splyPriceVO, sessionInfoVO);
+        List<DefaultMap<String>> result = hqSplyPriceService.getHqSplyPriceExcelUploadSampleList(hqSplyPriceVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, result, splyPriceVO);
+        return returnListJson(Status.OK, result, hqSplyPriceVO);
     }
 
     /**
      * 공급가 업로드 임시테이블 전체 삭제
-     * @param splyPriceVO
+     * @param hqSplyPriceVO
      * @param request
      * @param response
      * @param model
@@ -153,19 +153,19 @@ public class SplyPriceController {
      */
     @RequestMapping(value = "/deleteSplyPriceExcelUploadCheckAll.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result deleteSplyPriceExcelUploadCheckAll(@RequestBody SplyPriceVO splyPriceVO, HttpServletRequest request,
+    public Result deleteSplyPriceExcelUploadCheckAll(@RequestBody HqSplyPriceVO hqSplyPriceVO, HttpServletRequest request,
                                                         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = splyPriceService.deleteSplyPriceExcelUploadCheckAll(splyPriceVO, sessionInfoVO);
+        int result = hqSplyPriceService.deleteSplyPriceExcelUploadCheckAll(hqSplyPriceVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /**
      * 공급가 업로드 임시테이블 삭제
-     * @param splyPriceVOs
+     * @param hqSplyPriceVOs
      * @param request
      * @param response
      * @param model
@@ -173,19 +173,19 @@ public class SplyPriceController {
      */
     @RequestMapping(value = "/deleteSplyPriceExcelUploadCheck.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result deleteSplyPriceExcelUploadCheck(@RequestBody SplyPriceVO[] splyPriceVOs, HttpServletRequest request,
+    public Result deleteSplyPriceExcelUploadCheck(@RequestBody HqSplyPriceVO[] hqSplyPriceVOs, HttpServletRequest request,
                                                         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = splyPriceService.deleteSplyPriceExcelUploadCheck(splyPriceVOs, sessionInfoVO);
+        int result = hqSplyPriceService.deleteSplyPriceExcelUploadCheck(hqSplyPriceVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /**
      * 공급가 업로드 임시테이블 저장
-     * @param splyPriceVOs
+     * @param hqSplyPriceVOs
      * @param request
      * @param response
      * @param model
@@ -193,19 +193,19 @@ public class SplyPriceController {
      */
     @RequestMapping(value = "/saveSplyPriceExcelUploadCheck.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveSplyPriceExcelUploadCheck(@RequestBody SplyPriceVO[] splyPriceVOs, HttpServletRequest request,
+    public Result saveSplyPriceExcelUploadCheck(@RequestBody HqSplyPriceVO[] hqSplyPriceVOs, HttpServletRequest request,
                                                         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = splyPriceService.saveSplyPriceExcelUploadCheck(splyPriceVOs, sessionInfoVO);
+        int result = hqSplyPriceService.saveSplyPriceExcelUploadCheck(hqSplyPriceVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /**
      * 공급가 업로드 임시테이블 데이터 조회
-     * @param splyPriceVO
+     * @param hqSplyPriceVO
      * @param request
      * @param response
      * @param model
@@ -213,19 +213,19 @@ public class SplyPriceController {
      */
     @RequestMapping(value = "/getSplyPriceExcelUploadCheckList.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getSplyPriceExcelUploadCheckList(SplyPriceVO splyPriceVO, HttpServletRequest request,
+    public Result getSplyPriceExcelUploadCheckList(HqSplyPriceVO hqSplyPriceVO, HttpServletRequest request,
                                                      HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<DefaultMap<String>> result = splyPriceService.getSplyPriceExcelUploadCheckList(splyPriceVO, sessionInfoVO);
+        List<DefaultMap<String>> result = hqSplyPriceService.getSplyPriceExcelUploadCheckList(hqSplyPriceVO, sessionInfoVO);
 
-        return returnListJson(Status.OK, result, splyPriceVO);
+        return returnListJson(Status.OK, result, hqSplyPriceVO);
     }
 
     /**
-     * 공급가 검증결과 저장
-     * @param splyPriceVOs
+     * 공급가 업로드 검증결과 저장
+     * @param hqSplyPriceVOs
      * @param request
      * @param response
      * @param model
@@ -233,19 +233,19 @@ public class SplyPriceController {
      */
     @RequestMapping(value = "/saveSplyPriceExcelUploadCheckResult.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveSplyPriceExcelUploadCheckResult(@RequestBody SplyPriceVO[] splyPriceVOs, HttpServletRequest request,
+    public Result saveSplyPriceExcelUploadCheckResult(@RequestBody HqSplyPriceVO[] hqSplyPriceVOs, HttpServletRequest request,
                                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = splyPriceService.saveSplyPriceExcelUploadCheckResult(splyPriceVOs, sessionInfoVO);
+        int result = hqSplyPriceService.saveSplyPriceExcelUploadCheckResult(hqSplyPriceVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
 
     /**
-     * 공급가 엑셀업로드 저장
-     * @param splyPriceVOs
+     * 본사 공급가 엑셀업로드 저장
+     * @param hqSplyPriceVOs
      * @param request
      * @param response
      * @param model
@@ -253,12 +253,12 @@ public class SplyPriceController {
      */
     @RequestMapping(value = "/saveHqSplyPriceExcelUpload.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result saveHqSplyPriceExcelUpload(@RequestBody SplyPriceVO[] splyPriceVOs, HttpServletRequest request,
+    public Result saveHqSplyPriceExcelUpload(@RequestBody HqSplyPriceVO[] hqSplyPriceVOs, HttpServletRequest request,
                                                       HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = splyPriceService.saveHqSplyPriceExcelUpload(splyPriceVOs, sessionInfoVO);
+        int result = hqSplyPriceService.saveHqSplyPriceExcelUpload(hqSplyPriceVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

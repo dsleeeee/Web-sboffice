@@ -1,7 +1,7 @@
 /****************************************************************
  *
- * 파일명 : splyPrice.js
- * 설  명 : 기초관리 > 가격관리 > 공급가관리 > 공급가관리 탭 JavaScript
+ * 파일명 : hqSplyPrice.js
+ * 설  명 : 기초관리 > 가격관리 > 본사공급가관리 > 본사공급가관리 탭 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -39,10 +39,10 @@ var storeSaveFg = [
     {"name": "매장선택", "value": "choice"}
 ];
 
-app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('hqSplyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('splyPriceCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('hqSplyPriceCtrl', $scope, $http, false));
 
     // 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
@@ -80,12 +80,12 @@ app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope
         // 첫째줄 헤더 생성
         var dataItem                  = {};
         dataItem.gChk                 = messages["cmm.chk"];
-        dataItem.prodCd               = messages["splyPrice.prodCd"];
-        dataItem.prodNm               = messages["splyPrice.prodNm"];
-        dataItem.hqSaleUprc           = messages["splyPrice.saleUprc"];
-        dataItem.hqSplyUprc           = messages["splyPrice.splyUprc"];
-        dataItem.splyUprc             = messages["splyPrice.splyUprc"];
-        dataItem.prcCtrlFg            = messages["splyPrice.prcCtrlFg"];
+        dataItem.prodCd               = messages["hqSplyPrice.prodCd"];
+        dataItem.prodNm               = messages["hqSplyPrice.prodNm"];
+        dataItem.hqSaleUprc           = messages["hqSplyPrice.saleUprc"];
+        dataItem.hqSplyUprc           = messages["hqSplyPrice.splyUprc"];
+        dataItem.splyUprc             = messages["hqSplyPrice.splyUprc"];
+        dataItem.prcCtrlFg            = messages["hqSplyPrice.prcCtrlFg"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -128,15 +128,15 @@ app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope
         }
     };
 
-    $scope.$on("splyPriceCtrl", function (event, data) {
+    $scope.$on("hqSplyPriceCtrl", function (event, data) {
         
         // 조회
-        $scope.searchSplyPriceList();
+        $scope.searchHqSplyPriceList();
         event.preventDefault();
     });
 
     // 조회
-    $scope.searchSplyPriceList = function () {
+    $scope.searchHqSplyPriceList = function () {
 
         var params = {};
         params.prodClassCd = $scope.prodClassCd;
@@ -144,7 +144,7 @@ app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.prodNm = $scope.prodNm;
         params.listScale = $scope.listScaleCombo.text;
 
-        $scope._inquirySub('/base/price/splyPrice/getHqSplyPriceList.sb', params, function () {}, false);
+        $scope._inquirySub('/base/price/hqSplyPrice/getHqSplyPriceList.sb', params, function () {}, false);
     };
 
     // 상품분류정보 팝업
@@ -287,7 +287,7 @@ app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope
 
                     // 변경공급가 - 필수 입력값 체크
                     if ($scope.flex.collectionView.items[i].splyUprc === "" || $scope.flex.collectionView.items[i].splyUprc === null) {
-                        $scope._popMsg(messages["splyPrice.splyUprcBlank"]); // 변경공급가를 입력하세요.
+                        $scope._popMsg(messages["hqSplyPrice.splyUprcBlank"]); // 변경공급가를 입력하세요.
                         return false;
                     }
 
@@ -300,21 +300,21 @@ app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope
 
                     // 변경판매가 - 소수점 입력 불가
                     if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].splyUprc)) == false){
-                        $scope._popMsg(messages["splyPrice.splyUprcInChk"]); // 변경공급가는 숫자만(정수9자리) 입력해주세요.
+                        $scope._popMsg(messages["hqSplyPrice.splyUprcInChk"]); // 변경공급가는 숫자만(정수9자리) 입력해주세요.
                         return false;
                     }
 
                     // 변경판매가 - 마이너스(-)외에 다른 문자 입력 불가
                     if (numchkexp.test($scope.flex.collectionView.items[i].splyUprc)) {
                         if((numchkexp2.test($scope.flex.collectionView.items[i].splyUprc) == false)){
-                            $scope._popMsg(messages["splyPrice.splyUprcInChk"]); // 변경공급가는 숫자만(정수9자리) 입력해주세요.
+                            $scope._popMsg(messages["hqSplyPrice.splyUprcInChk"]); // 변경공급가는 숫자만(정수9자리) 입력해주세요.
                             return false;
                         }
                     }
 
                     // 변경판매가 - 1000000000 이상 입력 불가
                     if($scope.flex.collectionView.items[i].splyUprc >= 1000000000){
-                        $scope._popMsg(messages["splyPrice.splyUprcInChk"]); //  변경공급가는 숫자만(정수9자리) 입력해주세요.
+                        $scope._popMsg(messages["hqSplyPrice.splyUprcInChk"]); //  변경공급가는 숫자만(정수9자리) 입력해주세요.
                         return false;
                     }
 
@@ -336,16 +336,16 @@ app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope._popConfirm( "하위매장에 가격이 적용됩니다. 그래도 저장하시겠습니까?", function(){
                 console.log(params);
                 // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-                $scope._save('/base/price/splyPrice/saveHqSplyPrice.sb', params, function(){
+                $scope._save('/base/price/hqSplyPrice/saveHqSplyPrice.sb', params, function(){
                     // 재조회
-                    $scope.searchSplyPriceList();
+                    $scope.searchHqSplyPriceList();
                 });
             });
         } else {
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save('/base/price/splyPrice/saveHqSplyPrice.sb', params, function(){
+            $scope._save('/base/price/hqSplyPrice/saveHqSplyPrice.sb', params, function(){
                 // 재조회
-                $scope.searchSplyPriceList();
+                $scope.searchHqSplyPriceList();
             });
         }
 
@@ -376,7 +376,7 @@ app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
         $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
-            $scope._broadcast('splyPriceExcelCtrl', params);
+            $scope._broadcast('hqSplyPriceExcelCtrl', params);
         });
     };
 
@@ -385,10 +385,10 @@ app.controller('splyPriceCtrl', ['$scope', '$http', '$timeout', function ($scope
 /**
  *  엑셀다운로드 그리드 생성
  */
-app.controller('splyPriceExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('hqSplyPriceExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('splyPriceExcelCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('hqSplyPriceExcelCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -406,11 +406,11 @@ app.controller('splyPriceExcelCtrl', ['$scope', '$http', '$timeout', function ($
         s.columnHeaders.rows.push(new wijmo.grid.Row());
         // 첫째줄 헤더 생성
         var dataItem                  = {};
-        dataItem.prodCd               = messages["splyPrice.prodCd"];
-        dataItem.prodNm               = messages["splyPrice.prodNm"];
-        dataItem.hqSaleUprc           = messages["splyPrice.saleUprc"];
-        dataItem.hqSplyUprc           = messages["splyPrice.splyUprc"];
-        dataItem.prcCtrlFg            = messages["splyPrice.prcCtrlFg"];
+        dataItem.prodCd               = messages["hqSplyPrice.prodCd"];
+        dataItem.prodNm               = messages["hqSplyPrice.prodNm"];
+        dataItem.hqSaleUprc           = messages["hqSplyPrice.saleUprc"];
+        dataItem.hqSplyUprc           = messages["hqSplyPrice.splyUprc"];
+        dataItem.prcCtrlFg            = messages["hqSplyPrice.prcCtrlFg"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -454,7 +454,7 @@ app.controller('splyPriceExcelCtrl', ['$scope', '$http', '$timeout', function ($
     };
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("splyPriceExcelCtrl", function (event, data) {
+    $scope.$on("hqSplyPriceExcelCtrl", function (event, data) {
 
         // 엑셀 리스트 조회
         $scope.searchExcelList(data);
@@ -466,7 +466,7 @@ app.controller('splyPriceExcelCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.searchExcelList = function (params) {
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/base/price/splyPrice/getHqSplyPriceExcelList.sb", params, function() {
+        $scope._inquiryMain("/base/price/hqSplyPrice/getHqSplyPriceExcelList.sb", params, function() {
 
             if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -482,7 +482,7 @@ app.controller('splyPriceExcelCtrl', ['$scope', '$http', '$timeout', function ($
                         //return column.visible;
                         return column.binding != 'gChk';
                     }
-                }, messages["splyPrice.splyPrice"] + '_' + getCurDateTime()+'.xlsx', function () {
+                }, messages["hqSplyPrice.hqSplyPrice"] + '_' + getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

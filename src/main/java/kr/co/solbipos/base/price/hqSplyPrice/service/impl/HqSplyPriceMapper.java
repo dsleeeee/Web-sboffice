@@ -1,15 +1,15 @@
-package kr.co.solbipos.base.price.splyPrice.service.impl;
+package kr.co.solbipos.base.price.hqSplyPrice.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.base.price.splyPrice.service.SplyPriceVO;
+import kr.co.solbipos.base.price.hqSplyPrice.service.HqSplyPriceVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * @Class Name : SplyPriceMapper.java
- * @Description : 기초관리 - 가격관리 - 공급가관리
+ * @Class Name : HqSplyPriceMapper.java
+ * @Description : 기초관리 - 가격관리 - 본사공급가관리
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -24,35 +24,35 @@ import java.util.List;
  */
 @Mapper
 @Repository
-public interface SplyPriceMapper {
+public interface HqSplyPriceMapper {
 
     /** 본사 공급가관리 조회 */
-    List<DefaultMap<String>> getHqSplyPriceList(SplyPriceVO splyPriceVO);
+    List<DefaultMap<String>> getHqSplyPriceList(HqSplyPriceVO hqSplyPriceVO);
 
     /** 본사 공급가관리 엑셀다운로드 조회 */
-    List<DefaultMap<String>> getHqSplyPriceExcelList(SplyPriceVO splyPriceVO);
+    List<DefaultMap<String>> getHqSplyPriceExcelList(HqSplyPriceVO hqSplyPriceVO);
 
     /** 본사 공급가 변경 */
-    int saveHqSplyPrice(SplyPriceVO splyPriceVO);
+    int saveHqSplyPrice(HqSplyPriceVO hqSplyPriceVO);
 
     /** 본사 공급가 변경에 따른 매장 공급가 변경 */
-    int saveStoreSplyPrice(SplyPriceVO splyPriceVO);
+    int saveStoreSplyPrice(HqSplyPriceVO hqSplyPriceVO);
 
     /** 본사 공급가 엑셀 양식다운로드 조회 */
-    List<DefaultMap<String>> getHqSplyPriceExcelUploadSampleList(SplyPriceVO splyPriceVO);
+    List<DefaultMap<String>> getHqSplyPriceExcelUploadSampleList(HqSplyPriceVO hqSplyPriceVO);
 
     /** 공급가 업로드 임시테이블 전체 삭제 */
-    int deleteSplyPriceExcelUploadCheckAll(SplyPriceVO splyPriceVO);
+    int deleteSplyPriceExcelUploadCheckAll(HqSplyPriceVO hqSplyPriceVO);
 
     /** 공급가 업로드 임시테이블 삭제 */
-    int deleteSplyPriceExcelUploadCheck(SplyPriceVO splyPriceVO);
+    int deleteSplyPriceExcelUploadCheck(HqSplyPriceVO hqSplyPriceVO);
 
     /** 공급가 업로드 임시테이블 저장 */
-    int saveSplyPriceExcelUploadCheck(SplyPriceVO splyPriceVO);
+    int saveSplyPriceExcelUploadCheck(HqSplyPriceVO hqSplyPriceVO);
 
     /** 공급가 업로드 임시테이블 데이터 조회 */
-    List<DefaultMap<String>> getSplyPriceExcelUploadCheckList(SplyPriceVO splyPriceVO);
+    List<DefaultMap<String>> getSplyPriceExcelUploadCheckList(HqSplyPriceVO hqSplyPriceVO);
 
     /** 본사 상품코드 존재여부 체크 */
-    int getProdCdChk(SplyPriceVO splyPriceVO);
+    int getProdCdChk(HqSplyPriceVO hqSplyPriceVO);
 }

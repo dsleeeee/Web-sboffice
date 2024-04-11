@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    SplyPrice.xml
-    공급가관리
+    HqSplyPrice.xml
+    본사공급가관리
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
     1       이다솜     2024.04.04     최초작성
 -->
-<mapper namespace="kr.co.solbipos.base.price.splyPrice.service.impl.SplyPriceMapper">
+<mapper namespace="kr.co.solbipos.base.price.hqSplyPrice.service.impl.HqSplyPriceMapper">
 
     <!-- 본사 공급가관리 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 본사 공급가관리 조회
     -->
-    <select id="getHqSplyPriceList" parameterType="splyPriceVO" resultType="DefaultMap">
-        /* SplyPriceMapper.getHqSplyPriceList */
+    <select id="getHqSplyPriceList" parameterType="hqSplyPriceVO" resultType="DefaultMap">
+        /* HqSplyPriceMapper.getHqSplyPriceList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
             SELECT
             thp.PROD_CD,
@@ -88,11 +88,11 @@
     <!-- 본사 공급가관리 엑셀다운로드 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 본사 공급가관리 엑셀다운로드 조회
     -->
-    <select id="getHqSplyPriceExcelList" parameterType="splyPriceVO" resultType="DefaultMap">
-        /* SplyPriceMapper.getHqSplyPriceExcelList */
+    <select id="getHqSplyPriceExcelList" parameterType="hqSplyPriceVO" resultType="DefaultMap">
+        /* HqSplyPriceMapper.getHqSplyPriceExcelList */
         SELECT
         thp.PROD_CD,
         thp.PROD_NM,
@@ -159,11 +159,11 @@
     <!-- 본사 공급가 변경 -->
     <!--
         TABLE    : TB_HQ_PRODUCT
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 본사 공급가 변경
     -->
-    <insert id="saveHqSplyPrice" parameterType="splyPriceVO" >
-        /* USE : SplyPriceMapper.saveHqSplyPrice */
+    <insert id="saveHqSplyPrice" parameterType="hqSplyPriceVO" >
+        /* USE : HqSplyPriceMapper.saveHqSplyPrice */
         MERGE INTO TB_HQ_PRODUCT thp
         USING DUAL
         ON (
@@ -180,11 +180,11 @@
     <!-- 본사 공급가 변경에 따른 매장 공급가 변경 -->
     <!--
         TABLE    : TB_MS_PRODUCT
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 매장 공급가 변경
     -->
-    <insert id="saveStoreSplyPrice" parameterType="splyPriceVO" >
-        /* USE : SplyPriceMapper.saveStoreSplyPrice */
+    <insert id="saveStoreSplyPrice" parameterType="hqSplyPriceVO" >
+        /* USE : HqSplyPriceMapper.saveStoreSplyPrice */
         MERGE INTO TB_MS_PRODUCT tmp
         USING
         (
@@ -218,11 +218,11 @@
     <!-- 본사 공급가 엑셀 양식다운로드 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 본사 공급가 엑셀 양식다운로드 조회
     -->
-    <select id="getHqSplyPriceExcelUploadSampleList" parameterType="splyPriceVO" resultType="DefaultMap">
-        /* SplyPriceMapper.getHqSplyPriceExcelUploadSampleList */
+    <select id="getHqSplyPriceExcelUploadSampleList" parameterType="hqSplyPriceVO" resultType="DefaultMap">
+        /* HqSplyPriceMapper.getHqSplyPriceExcelUploadSampleList */
         SELECT
         thp.PROD_CD,
         thp.PROD_NM,
@@ -259,11 +259,11 @@
     <!-- 공급가 업로드 임시테이블 전체 삭제 -->
     <!--
         TABLE    : TB_TMP_EXCEL_SPLY_PRICE
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 공급가 업로드 임시테이블 전체 삭제
     -->
-    <delete id="deleteSplyPriceExcelUploadCheckAll" parameterType="splyPriceVO">
-        /* SplyPriceMapper.deleteSplyPriceExcelUploadCheckAll */
+    <delete id="deleteSplyPriceExcelUploadCheckAll" parameterType="hqSplyPriceVO">
+        /* HqSplyPriceMapper.deleteSplyPriceExcelUploadCheckAll */
         DELETE
         TB_TMP_EXCEL_SPLY_PRICE
         WHERE 1=1
@@ -274,11 +274,11 @@
     <!-- 공급가 업로드 임시테이블 삭제 -->
     <!--
         TABLE    : TB_TMP_EXCEL_SPLY_PRICE
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 공급가 업로드 임시테이블 삭제
     -->
-    <delete id="deleteSplyPriceExcelUploadCheck" parameterType="splyPriceVO">
-        /* SplyPriceMapper.deleteSplyPriceExcelUploadCheck */
+    <delete id="deleteSplyPriceExcelUploadCheck" parameterType="hqSplyPriceVO">
+        /* HqSplyPriceMapper.deleteSplyPriceExcelUploadCheck */
         DELETE
         TB_TMP_EXCEL_SPLY_PRICE
         WHERE 1=1
@@ -291,11 +291,11 @@
     <!-- 공급가 업로드 임시테이블 저장 -->
     <!--
         TABLE    : TB_TMP_EXCEL_SPLY_PRICE
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 공급가 업로드 임시테이블 저장
     -->
-    <insert id="saveSplyPriceExcelUploadCheck" parameterType="splyPriceVO">
-        /* SplyPriceMapper.saveSplyPriceExcelUploadCheckSave */
+    <insert id="saveSplyPriceExcelUploadCheck" parameterType="hqSplyPriceVO">
+        /* HqSplyPriceMapper.saveSplyPriceExcelUploadCheckSave */
         INSERT INTO TB_TMP_EXCEL_SPLY_PRICE
         (
             SESSION_ID,
@@ -327,11 +327,11 @@
     <!-- 공급가 업로드 임시테이블 데이터 조회 -->
     <!--
         TABLE    : TB_TMP_EXCEL_SPLY_PRICE
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 공급가 업로드 임시테이블 데이터 조회
     -->
-    <select id="getSplyPriceExcelUploadCheckList" parameterType="splyPriceVO" resultType="DefaultMap">
-        /* SplyPriceMapper.getSalePriceExcelUploadCheckList */
+    <select id="getSplyPriceExcelUploadCheckList" parameterType="hqSplyPriceVO" resultType="DefaultMap">
+        /* HqSplyPriceMapper.getSalePriceExcelUploadCheckList */
         SELECT
         A.RESULT,
         A.PROD_CD,
@@ -370,11 +370,11 @@
     <!-- 본사 상품코드 존재여부 체크 -->
     <!--
         TABLE    : TB_HQ_PRODUCT
-        PARAM    : splyPriceVO
+        PARAM    : hqSplyPriceVO
         COMMENTS : 본사 상품코드 존재여부 체크
     -->
-    <select id="getProdCdChk" parameterType="splyPriceVO" resultType="Integer">
-        /* SplyPriceMapper.getProdCdChk */
+    <select id="getProdCdChk" parameterType="hqSplyPriceVO" resultType="Integer">
+        /* HqSplyPriceMapper.getProdCdChk */
         SELECT COUNT(*)
         FROM TB_HQ_PRODUCT
         WHERE 1=1

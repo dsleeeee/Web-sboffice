@@ -3,17 +3,17 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div class="subCon" id="splyPriceView" style="padding: 10px 20px 40px;" ng-controller="splyPriceCtrl">
+<div class="subCon" id="hqSplyPriceView" style="padding: 10px 20px 40px;" ng-controller="hqSplyPriceCtrl">
 
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="splyPrice.splyPrice"/></a>
+        <a href="#" class="open fl"><s:message code="hqSplyPrice.hqSplyPrice"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('splyPriceCtrl', 1)">
+            <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('hqSplyPriceCtrl', 1)">
                 <s:message code="cmm.search"/>
             </button>
             <button class="btn_blue mr5 fl" id="btnShow" ng-click="changeShow()">
-                <s:message code="splyPrice.select.changeAll"/>
+                <s:message code="hqSplyPrice.select.changeAll"/>
             </button>
         </div>
     </div>
@@ -27,7 +27,7 @@
         </colgroup>
         <tbody>
             <%--분류 선택--%>
-            <th><s:message code="splyPrice.select.prodClass"/></th>
+            <th><s:message code="hqSplyPrice.select.prodClass"/></th>
             <td>
                 <input type="text" id="searchProdClassNm" ng-model="prodClassNm" class="sb-input w70" ng-click="popUpProdClass()" style="float: left;"
                                  placeholder="선택" readonly />
@@ -38,14 +38,14 @@
             <tr>
                 <%-- 상품코드 --%>
                 <th>
-                    <s:message code="splyPrice.prodCd"/>
+                    <s:message code="hqSplyPrice.prodCd"/>
                 </th>
                 <td>
                     <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 상품명 --%>
                 <th>
-                    <s:message code="splyPrice.prodNm"/>
+                    <s:message code="hqSplyPrice.prodNm"/>
                 </th>
                 <td>
                     <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
@@ -64,7 +64,7 @@
         <%-- 공급가 --%>
         <tr class="brt">
             <th>
-                <s:message code="splyPrice.splyUprc"/>
+                <s:message code="hqSplyPrice.splyUprc"/>
             </th>
             <th class="oh gr">
                 <%-- 매장판매가/본사판매가 선택 --%>
@@ -115,7 +115,7 @@
                             initialized="_initComboBox(s)">
                     </wj-combo-box>
                 </div>
-                <a href="#" class="btn_grayS ml10" ng-click="changeAmt()"><s:message code="splyPrice.batch"/></a>
+                <a href="#" class="btn_grayS ml10" ng-click="changeAmt()"><s:message code="hqSplyPrice.batch"/></a>
                 <!-- // todo -->
             </th>
         </tr>
@@ -190,12 +190,12 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.hq"/> " binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.hq"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.update"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="120" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.hq"/> " binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.hq"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.update"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="120" align="center"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -205,14 +205,14 @@
     <%-- 페이지 리스트 --%>
     <div class="pageNum mt20">
         <%-- id --%>
-        <ul id="splyPriceCtrlPager" data-size="10">
+        <ul id="hqSplyPriceCtrlPager" data-size="10">
         </ul>
     </div>
     <%--//페이지 리스트--%>
 </div>
 
 <%--엑셀 리스트--%>
-<div class="w100 mt10" style="display:none;" ng-controller="splyPriceExcelCtrl">
+<div class="w100 mt10" style="display:none;" ng-controller="hqSplyPriceExcelCtrl">
     <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     autoGenerateColumns="false"
@@ -226,11 +226,11 @@
                     id="wjGridExcelList">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="splyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.hq"/> " binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.hq"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="120" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.hq"/> " binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.hq"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="120" align="center"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </wj-flex-grid>
@@ -241,7 +241,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/splyPrice/splyPrice.js?ver=20240411.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSplyPrice/hqSplyPrice.js?ver=20240411.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

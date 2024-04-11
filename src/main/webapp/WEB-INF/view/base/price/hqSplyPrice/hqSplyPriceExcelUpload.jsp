@@ -2,12 +2,12 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div class="subCon" id="splyPriceExcelUploadView" style="display: none; padding: 10px 20px 40px;">
+<div class="subCon" id="hqSplyPriceExcelUploadView" style="display: none; padding: 10px 20px 40px;">
 
     <%-- 양식다운로드 --%>
-    <div ng-controller="splyPriceExcelUploadSampleCtrl">
+    <div ng-controller="hqSplyPriceExcelUploadSampleCtrl">
         <div class="searchBar">
-            <a href="#" class="open fl"><s:message code="splyPrice.splyPriceExcelUpload"/></a>
+            <a href="#" class="open fl"><s:message code="hqSplyPrice.splyPriceExcelUpload"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             </div>
@@ -42,18 +42,18 @@
                     ime-enabled="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="splyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.hq"/><s:message code="splyPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.curr.splyPrice"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="splyPrice.change.splyPrice"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.hq"/><s:message code="hqSplyPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.curr.splyPrice"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="hqSplyPrice.change.splyPrice"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
     </div>
 
-    <%-- 공급가관리 엑셀업로드 그리드 --%>
-    <div ng-controller="splyPriceExcelUploadCtrl">
+    <%-- 본사공급가관리 엑셀업로드 그리드 --%>
+    <div ng-controller="hqSplyPriceExcelUploadCtrl">
         <div class="mt10 oh sb-select dkbr">
             <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
@@ -104,26 +104,26 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.result"/>" binding="result" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.hq"/><s:message code="splyPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.curr.splyPrice"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.change.splyPrice"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="120" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.result"/>" binding="result" width="170" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodNm"/>" binding="prodNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.hq"/><s:message code="hqSplyPrice.saleUprc"/>" binding="hqSaleUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.curr.splyPrice"/>" binding="hqSplyUprc" is-read-only="true" width="100" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.change.splyPrice"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="120" align="center"></wj-flex-grid-column>
 
                     <%-- 임시테이블 삭제시 필요 --%>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.seq"/>" binding="seq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.seq"/>" binding="seq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
     </div>
 
     <%-- 엑셀업로드 --%>
-    <div style="display: none" ng-controller="splyPriceExcelUploadAddCtrl">
+    <div style="display: none" ng-controller="hqSplyPriceExcelUploadAddCtrl">
 
-        <input type="file" class="form-control" id="splyPriceExcelUpFile"
-                               ng-model="splyPriceExcelUpFile"
+        <input type="file" class="form-control" id="hqSplyPriceExcelUpFile"
+                               ng-model="hqSplyPriceExcelUpFile"
                                onchange="angular.element(this).scope().excelFileChanged()"
                                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 
@@ -139,8 +139,8 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="splyPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="splyPrice.change.splyPrice"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.change.splyPrice"/>" binding="splyUprc" width="100" align="right"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -151,4 +151,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/splyPrice/splyPriceExcelUpload.js?ver=20240411.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSplyPrice/hqSplyPriceExcelUpload.js?ver=20240411.02" charset="utf-8"></script>

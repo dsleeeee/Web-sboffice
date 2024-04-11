@@ -400,8 +400,8 @@
     <typeAlias alias="salePriceResveVO" type="kr.co.solbipos.base.price.salePriceResve.service.SalePriceResveVO"/>
     <!-- 기초관리 > 가격관리 > 매장별구성상품가격변경 -->
     <typeAlias alias="sideMenuSalePriceVO" type="kr.co.solbipos.base.price.sideMenuSalePrice.service.SideMenuSalePriceVO"/>
-    <!-- 기초관리 > 가격관리 > 공급가관리 -->
-    <typeAlias alias="splyPriceVO" type="kr.co.solbipos.base.price.splyPrice.service.SplyPriceVO"/>
+    <!-- 기초관리 > 가격관리 > 본사공급가관리 -->
+    <typeAlias alias="hqSplyPriceVO" type="kr.co.solbipos.base.price.hqSplyPrice.service.HqSplyPriceVO"/>
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
         <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
