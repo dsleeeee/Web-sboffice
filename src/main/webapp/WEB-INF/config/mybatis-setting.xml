@@ -400,6 +400,8 @@
     <typeAlias alias="salePriceResveVO" type="kr.co.solbipos.base.price.salePriceResve.service.SalePriceResveVO"/>
     <!-- 기초관리 > 가격관리 > 매장별구성상품가격변경 -->
     <typeAlias alias="sideMenuSalePriceVO" type="kr.co.solbipos.base.price.sideMenuSalePrice.service.SideMenuSalePriceVO"/>
+    <!-- 기초관리 > 가격관리 > 공급가관리 -->
+    <typeAlias alias="splyPriceVO" type="kr.co.solbipos.base.price.splyPrice.service.SplyPriceVO"/>
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
         <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
@@ -409,7 +411,6 @@
         <typeAlias alias="ItemUnitPriceVO" type="kr.co.solbipos.base.price.itemunitprice.service.ItemUnitPriceVO"/>
         <typeAlias alias="vendrUnitPriceVO" type="kr.co.solbipos.base.price.vendrunitprice.service.VendrUnitPriceVO"/>
         <typeAlias alias="salePriceStatusVO" type="kr.co.solbipos.base.price.salepricestatus.service.SalePriceStatusVO"/>
-        <typeAlias alias="splyPriceVO" type="kr.co.solbipos.base.price.splyprice.service.SplyPriceVO"/>
         <typeAlias alias="splyPriceHistVO" type="kr.co.solbipos.base.price.splypricehist.service.SplyPriceHistVO"/>
         <typeAlias alias="storeSplyVO" type="kr.co.solbipos.base.price.storesply.service.StoreSplyVO"/>
         <typeAlias alias="storeSplyHistVO" type="kr.co.solbipos.base.price.storesplyhist.service.StoreSplyHistVO"/>

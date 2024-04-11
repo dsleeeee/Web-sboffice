@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SplyPrice.xml
+    공급가관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.04.04     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.splyPrice.service.impl.SplyPriceMapper">
+
+    <!-- 본사 공급가관리 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
+        PARAM    : splyPriceVO
+        COMMENTS : 본사 공급가관리 조회
+    -->
+    <select id="getHqSplyPriceList" parameterType="splyPriceVO" resultType="DefaultMap">
+        /* SplyPriceMapper.getHqSplyPriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+            SELECT
+            thp.PROD_CD,
+            thp.PROD_NM,
+            thp.PROD_CLASS_CD,               -- 상품분류코드
+            thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+            thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+            thp.SPLY_UPRC AS SPLY_UPRC,      -- 변경공급가
+            thp.PRC_CTRL_FG
+            <include refid="CmmSQL.PagingTemplateCount"/>
+            FROM  TB_HQ_PRODUCT thp
+            ,     (
+                        SELECT HQ_OFFICE_CD
+                        ,      PROD_CD
+                        ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                        FROM   TB_HQ_PRODUCT_SALE_PRICE
+                        WHERE 1 = 1
+                        <![CDATA[
+                                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            ]]>
+                        AND   SALE_PRC_FG = '1'
+                        GROUP
+                        BY    HQ_OFFICE_CD, PROD_CD
+                    ) thpsp
+            WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='prodClassCd != null and prodClassCd != ""'>
+                AND thp.PROD_CLASS_CD IN (
+                                            SELECT PROD_CLASS_CD
+                                            FROM   TB_HQ_PRODUCT_CLASS
+                                            WHERE  1=1
+                                            AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                         )
+            </if>
+            <if test='prodCd != null and prodCd != ""'>
+                AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+            </if>
+            <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                <if test='userProdBrands != null and userProdBrands != ""'>
+                    -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                    AND thp.HQ_BRAND_CD IN
+                    <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")">
+                        #{item}
+                    </foreach>
+                </if>
+            </if>
+            AND (
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+            (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+            OR
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+            AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+            AND thpsp.PROD_CD = thp.PROD_CD
+            ORDER BY thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 본사 공급가관리 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_HQ_PRODUCT_CLASS
+        PARAM    : splyPriceVO
+        COMMENTS : 본사 공급가관리 엑셀다운로드 조회
+    -->
+    <select id="getHqSplyPriceExcelList" parameterType="splyPriceVO" resultType="DefaultMap">
+        /* SplyPriceMapper.getHqSplyPriceExcelList */
+        SELECT
+        thp.PROD_CD,
+        thp.PROD_NM,
+        thp.PROD_CLASS_CD,               -- 상품분류코드
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+        thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+        thp.SPLY_UPRC AS SPLY_UPRC,      -- 변경공급가
+        thp.PRC_CTRL_FG
+        FROM  TB_HQ_PRODUCT thp
+        ,     (
+                    SELECT HQ_OFFICE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    HQ_OFFICE_CD, PROD_CD
+                ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_HQ_PRODUCT_CLASS
+                                        WHERE  1=1
+                                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userProdBrands != null and userProdBrands != ""'>
+                -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND thp.HQ_BRAND_CD IN
+                <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER BY thp.PROD_CD
+    </select>
+
+    <!-- 본사 공급가 변경 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : splyPriceVO
+        COMMENTS : 본사 공급가 변경
+    -->
+    <insert id="saveHqSplyPrice" parameterType="splyPriceVO" >
+        /* USE : SplyPriceMapper.saveHqSplyPrice */
+        MERGE INTO TB_HQ_PRODUCT thp
+        USING DUAL
+        ON (
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thp.PROD_CD = #{prodCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     thp.SPLY_UPRC = #{splyUprc}   -- 공급가
+        ,       thp.MOD_DT = #{modDt}
+        ,       thp.MOD_ID = #{modId}
+    </insert>
+
+    <!-- 본사 공급가 변경에 따른 매장 공급가 변경 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : splyPriceVO
+        COMMENTS : 매장 공급가 변경
+    -->
+    <insert id="saveStoreSplyPrice" parameterType="splyPriceVO" >
+        /* USE : SplyPriceMapper.saveStoreSplyPrice */
+        MERGE INTO TB_MS_PRODUCT tmp
+        USING
+        (
+            SELECT  STORE_CD
+            ,       #{prodCd} AS PROD_CD
+            ,       #{splyUprc} AS SPLY_UPRC
+            ,       #{modDt} AS MOD_DT
+            ,       #{modId} AS MOD_ID
+            FROM    TB_MS_STORE
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='applyFg != null and applyFg == "all"'>
+                AND STORE_CD NOT IN (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '164' AND USE_YN = 'Y')
+            </if>
+            <if test='applyFg != null and applyFg == "choice"'>
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND STORE_CD IN (${storeCdQuery})
+                </if>
+            </if>
+        ) B
+        ON  (
+                tmp.STORE_CD = B.STORE_CD
+                AND tmp.PROD_CD = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     tmp.SPLY_UPRC = B.SPLY_UPRC   -- 공급가
+        ,       tmp.MOD_DT    = B.MOD_DT
+        ,       tmp.MOD_ID    = B.MOD_ID
+    </insert>
+
+    <!-- 본사 공급가 엑셀 양식다운로드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : splyPriceVO
+        COMMENTS : 본사 공급가 엑셀 양식다운로드 조회
+    -->
+    <select id="getHqSplyPriceExcelUploadSampleList" parameterType="splyPriceVO" resultType="DefaultMap">
+        /* SplyPriceMapper.getHqSplyPriceExcelUploadSampleList */
+        SELECT
+        thp.PROD_CD,
+        thp.PROD_NM,
+        thp.PROD_CLASS_CD,               -- 상품분류코드
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+        thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+        thp.SPLY_UPRC AS SPLY_UPRC       -- 변경공급가
+        FROM TB_HQ_PRODUCT thp,
+        (
+            SELECT HQ_OFFICE_CD
+            ,      PROD_CD
+            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+            FROM   TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1 = 1
+            <![CDATA[
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+            AND   SALE_PRC_FG = '1'
+            GROUP
+            BY    HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER BY thp.PROD_CD
+    </select>
+
+    <!-- 공급가 업로드 임시테이블 전체 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_SPLY_PRICE
+        PARAM    : splyPriceVO
+        COMMENTS : 공급가 업로드 임시테이블 전체 삭제
+    -->
+    <delete id="deleteSplyPriceExcelUploadCheckAll" parameterType="splyPriceVO">
+        /* SplyPriceMapper.deleteSplyPriceExcelUploadCheckAll */
+        DELETE
+        TB_TMP_EXCEL_SPLY_PRICE
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+    </delete>
+
+    <!-- 공급가 업로드 임시테이블 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_SPLY_PRICE
+        PARAM    : splyPriceVO
+        COMMENTS : 공급가 업로드 임시테이블 삭제
+    -->
+    <delete id="deleteSplyPriceExcelUploadCheck" parameterType="splyPriceVO">
+        /* SplyPriceMapper.deleteSplyPriceExcelUploadCheck */
+        DELETE
+        TB_TMP_EXCEL_SPLY_PRICE
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+        AND SEQ = #{seq}
+    </delete>
+
+    <!-- 공급가 업로드 임시테이블 저장 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_SPLY_PRICE
+        PARAM    : splyPriceVO
+        COMMENTS : 공급가 업로드 임시테이블 저장
+    -->
+    <insert id="saveSplyPriceExcelUploadCheck" parameterType="splyPriceVO">
+        /* SplyPriceMapper.saveSplyPriceExcelUploadCheckSave */
+        INSERT INTO TB_TMP_EXCEL_SPLY_PRICE
+        (
+            SESSION_ID,
+            SEQ,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            PROD_CD,
+            SPLY_UPRC,
+            RESULT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{prodCd},
+            #{splyUprc},
+            #{result},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 공급가 업로드 임시테이블 데이터 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_SPLY_PRICE
+        PARAM    : splyPriceVO
+        COMMENTS : 공급가 업로드 임시테이블 데이터 조회
+    -->
+    <select id="getSplyPriceExcelUploadCheckList" parameterType="splyPriceVO" resultType="DefaultMap">
+        /* SplyPriceMapper.getSalePriceExcelUploadCheckList */
+        SELECT
+        A.RESULT,
+        A.PROD_CD,
+        thp.PROD_NM,
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC, -- 본사판매가
+        thp.SPLY_UPRC AS HQ_SPLY_UPRC,   -- 대표공급가
+        A.SPLY_UPRC AS SPLY_UPRC,        -- 변경공급가
+        thp.PRC_CTRL_FG,
+        A.SEQ
+        FROM TB_TMP_EXCEL_SPLY_PRICE A,
+        TB_HQ_PRODUCT thp,
+        (
+            SELECT HQ_OFFICE_CD
+            ,      PROD_CD
+            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+            FROM   TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1 = 1
+            <![CDATA[
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+            AND   SALE_PRC_FG = '1'
+            GROUP
+            BY    HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE 1=1
+        AND A.SESSION_ID = #{sessionId}
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thp.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= A.PROD_CD
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER BY A.SEQ
+    </select>
+
+    <!-- 본사 상품코드 존재여부 체크 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : splyPriceVO
+        COMMENTS : 본사 상품코드 존재여부 체크
+    -->
+    <select id="getProdCdChk" parameterType="splyPriceVO" resultType="Integer">
+        /* SplyPriceMapper.getProdCdChk */
+        SELECT COUNT(*)
+        FROM TB_HQ_PRODUCT
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+    </select>
+
+</mapper>
