@@ -24,7 +24,7 @@
 	
 			<div class="wj-dialog-body sc2" style="overflow-y: hidden;">
 				<h2 class="h2_tit">
-					<span class="bk">C001 솔비카페(대림점)</span> / <span class="bk">포스번호 : 01</span>
+					<span class="bk">C001 링크카페(대림점)</span> / <span class="bk">포스번호 : 01</span>
 				</h2>
 				<h3 class="h3_tbl brt bg-orange-lite">
 					<p class="txtIn bk s12">조회일자 : <span class="bk">2018년 1월 1일</span> / 마감구분 : 일마감</p>

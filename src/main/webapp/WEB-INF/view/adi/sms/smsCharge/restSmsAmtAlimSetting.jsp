@@ -19,7 +19,7 @@
                     <p class="tl s14 mt5 lh15">※ 잔여금액 알림 설정이란?</p>
                     <p class="tl s14 mt5 lh15">- 충전하신 잔여금액이 '잔여금액 설정값' 이하시 입력하신 번호로 문자서비스를 받으실 수</p>
                     <p class="tl s14 mt5 lh15">&nbsp;&nbsp;있습니다.</p>
-                    <p class="tl s14 mt5 lh15">※ 해당 서비스 이용시 비용은 '솔비포스'에서 부담합니다.</p>
+                    <p class="tl s14 mt5 lh15">※ 해당 서비스 이용시 비용은 '링크'에서 부담합니다.</p>
                 </div>
             </div>
             <table class="tblType01">

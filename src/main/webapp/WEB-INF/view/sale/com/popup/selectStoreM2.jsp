@@ -102,6 +102,7 @@
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+      $scope.srchHqOfficeCd = 'H0393';
     };
 
     $scope.searchFg = "N";

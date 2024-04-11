@@ -118,11 +118,11 @@
             </div>
 
             <div class="mt10 oh sb-select dkbr">
-                <p class="tl s14 mt5 mb10 lh15">- 조회된 OKPOS-KCP 매장 체크 후, 솔비포스 매장환경 복사 선택 -> 이관 등록 클릭</p>
-                <p class="tl s14 mt5 mb10 lh15">- 환경복사 : 솔비포스 시스템에 등록된 매장환경을 복사 ( 체크한 전체 매장에 적용됨 )</p>
+                <p class="tl s14 mt5 mb10 lh15">- 조회된 OKPOS-KCP 매장 체크 후, 링크 매장환경 복사 선택 -> 이관 등록 클릭</p>
+                <p class="tl s14 mt5 mb10 lh15">- 환경복사 : 링크 시스템에 등록된 매장환경을 복사 ( 체크한 전체 매장에 적용됨 )</p>
             </div>
 
-            <%-- 솔비포스 복사매장 선택 --%>
+            <%-- 링크 복사매장 선택 --%>
             <h3 class="h3_tbl"><s:message code="migDataMappingInfo.additionalSetting" /></h3>
             <table class="searchTbl">
                 <colgroup>
@@ -133,7 +133,7 @@
                 </colgroup>
                 <tbody>
                     <tr>
-                        <%-- 솔비포스 매장환경 복사 --%>
+                        <%-- 링크 매장환경 복사 --%>
                         <th>
                             <s:message code="migDataMappingInfo.solbiCopyStoreSetting"/><em class="imp">*</em>
                         </th>

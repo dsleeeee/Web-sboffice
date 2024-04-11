@@ -19,7 +19,7 @@
   <div class="login">
     <header>
       <a href="/">
-        <img src="/resource/solbipos/css/img/Basic_logo.png?v=20210624" alt="솔비포스" style="width:180px;"/>
+        <img src="/resource/solbipos/css/img/Basic_logo.png?v=20210624" alt="링크" style="width:180px;"/>
       </a>
       <%--<h1><s:message code="title.web"/></h1>--%>
     </header>

@@ -20,7 +20,7 @@
   <div class="login">
     <%--<header>
       <a href="/">
-        <img src="/resource/solbipos/css/img/logo_login.png?v=20210219" alt="솔비포스" />
+        <img src="/resource/solbipos/css/img/logo_login.png?v=20210219" alt="링크" />
       </a>
       <h1>모바일 <s:message code="title.web"/></h1>
     </header>--%>

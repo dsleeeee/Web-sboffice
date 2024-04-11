@@ -183,10 +183,10 @@
             ,#{okposStoreNm} -- OKPOS 매장명
             ,#{okposHqOfficeCd} -- OKPOS 본사코드
             ,#{okposHqOfficeNm} -- OKPOS 본사명
-            ,#{solbiStoreCd} -- 솔비 매장코드
-            ,'' -- 솔비 매장명
-            ,''-- 솔비 본사코드
-            ,'' -- 솔비 본사 명
+            ,#{solbiStoreCd} -- 링크 매장코드
+            ,'' -- 링크 매장명
+            ,''-- 링크 본사코드
+            ,'' -- 링크 본사 명
             ,#{date}
             ,'N'
             ,''

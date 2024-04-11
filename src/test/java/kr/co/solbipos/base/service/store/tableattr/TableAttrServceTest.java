@@ -107,7 +107,7 @@ public class TableAttrServceTest extends AbstractApplicationContextTest {
                     "    <mxCell id=\"15\" value=\"교환번호\" style=\"tableAttr;fontFamily=NotoR;fontStyle=0;fontSize=10;fontColor=#000000;align=center\" parent=\"1\" vertex=\"1\">\r\n" +
                     "      <mxGeometry x=\"200\" width=\"200\" height=\"50\" as=\"geometry\"/>\r\n" +
                     "    </mxCell>\r\n" +
-                    "    <mxCell id=\"06\" value=\"솔비포스\" style=\"tableAttr\" vertex=\"1\" parent=\"1\">\r\n" +
+                    "    <mxCell id=\"06\" value=\"링크\" style=\"tableAttr\" vertex=\"1\" parent=\"1\">\r\n" +
                     "      <mxGeometry x=\"50\" y=\"50\" width=\"300\" height=\"300\" as=\"geometry\"/>\r\n" +
                     "    </mxCell>\r\n" +
                     "  </root>\r\n" +
