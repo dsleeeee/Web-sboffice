@@ -468,8 +468,8 @@
                 </div>--%>
                   <input type="text" class="sb-input w70" id="_sdselGrpNmCd" ng-model="prodModifyInfo.sdselGrpNmCd" ng-click="popUpSdselGrp()" style="float: left;"
                          placeholder="<s:message code="prod.sdselGrpCd" /> 선택" readonly/>
-                  <input type="hidden" id="_sdselGrpNm" name="sdselGrpNm" ng-model="prodModifyInfo.sdselGrpNm" disabled />
                   <input type="hidden" id="_sdselGrpCd" name="sdselGrpCd" ng-model="prodModifyInfo.sdselGrpCd" disabled />
+                  <input type="hidden" id="_sdselGrpNm" name="sdselGrpNm" ng-model="prodModifyInfo.sdselGrpNm" disabled />
               </td>
             </tr>
             <%-- [1250 맘스터치] --%>
@@ -1169,7 +1169,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20240322.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20240408.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
