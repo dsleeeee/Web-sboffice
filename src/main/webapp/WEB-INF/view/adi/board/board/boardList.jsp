@@ -105,7 +105,8 @@
                 selection-mode="Row"
                 items-source="data"
                 item-formatter="_itemFormatter"
-                is-read-only="true">
+                is-read-only="true"
+                id="wjGrid">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="board.title"/>" binding="title" width="300" is-read-only="true" align="left"></wj-flex-grid-column>
@@ -171,7 +172,7 @@
     var rootUrl = "${rootUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20210405.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20240412.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

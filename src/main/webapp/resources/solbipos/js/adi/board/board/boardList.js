@@ -99,7 +99,21 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
         params.listScale = $scope.listScaleBoard;
         params.boardCd = boardCd;
 
-        $scope._inquiryMain("/adi/board/board/board/getBoardList.sb", params, function() {}, false);
+        $scope._inquiryMain("/adi/board/board/board/getBoardList.sb", params, function() {
+
+            // 게시물 '[NXPOS2] 포스 및 키오스크 프로그램 최신 설치파일 입니다.' 제목 강조 처리(20240412)
+            var grid = wijmo.Control.getControl("#wjGrid");
+            var rows = grid.rows;
+
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+
+                if(item.boardSeqNo == "326"){
+                    rows[i].cssClass = 'wij_gridBackground-yellow-bold';
+                }
+            }
+
+        }, false);
     };
     // <-- //검색 호출 -->
 
