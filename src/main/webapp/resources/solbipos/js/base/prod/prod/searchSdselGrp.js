@@ -55,6 +55,11 @@ app.controller('searchSdselGrpCtrl', ['$scope', '$http', function ($scope, $http
                     $("#_sdselGrpCd").val(selectedRow.sdselGrpCd);
                     $("#_sdselGrpNmCd").val("[" + selectedRow.sdselGrpCd + "] " + selectedRow.sdselGrpNm);
 
+                    var scope = agrid.getScope("prodModifyCtrl")
+                    scope.prodModifyInfo.sdselGrpCd     = selectedRow.sdselGrpCd;
+                    scope.prodModifyInfo.sdselGrpNm     = selectedRow.sdselGrpNm;
+                    scope.prodModifyInfo.sdselGrpNmCd   = "[" + selectedRow.sdselGrpCd + "] " + selectedRow.sdselGrpNm;
+
                     $scope.close();
 
                 }
@@ -120,7 +125,7 @@ app.controller('searchSdselGrpCtrl', ['$scope', '$http', function ($scope, $http
 
     $scope.close = function (){
         $("#searchSdselGrpCd").val("");
-        $("#searchSdselGrNm").val("");
+        $("#searchSdselGrpNm").val("");
         $scope.wjSearchSdselGrpLayer.hide();
     }
 
