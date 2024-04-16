@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    HqSplyPriceHistory.xml
+    본사공급가History
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.04.12     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.price.hqSplyPriceHistory.service.impl.HqSplyPriceHistoryMapper">
+
+    <!-- 본사 공급가 History 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SPLY_UPRC_HIST
+        PARAM    : hqSplyPriceHistoryVO
+        COMMENTS : 본사 공급가 History 조회
+    -->
+    <select id="getHqSplyPriceHistoryList" parameterType="hqSplyPriceHistoryVO" resultType="DefaultMap">
+        /* HqSplyPriceHistoryMapper.getHqSplyPriceHistoryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT thpsuh.HQ_OFFICE_CD
+        ,      thpsuh.PROD_CD
+        ,      thp.PROD_NM
+        ,      TO_CHAR(TO_DATE(thpsuh.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      thpsuh.PROC_FG
+        ,      thpsuh.B_SPLY_UPRC
+        ,      thpsuh.A_SPLY_UPRC
+        ,      thpsuh.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM   TB_HQ_PRODUCT_SPLY_UPRC_HIST thpsuh
+        ,      TB_HQ_PRODUCT thp
+        WHERE  thpsuh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    thpsuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_HQ_PRODUCT_CLASS
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thpsuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND 	thp.HQ_OFFICE_CD = thpsuh.HQ_OFFICE_CD
+        AND 	thp.PROD_CD = thpsuh.PROD_CD
+        ORDER BY thpsuh.PROD_CD, thpsuh.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 본사 공급가 History 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SPLY_UPRC_HIST
+        PARAM    : hqSplyPriceHistoryVO
+        COMMENTS : 본사 공급가 History 엑셀다운로드 조회
+    -->
+    <select id="getHqSplyPriceHistoryExcelList" parameterType="hqSplyPriceHistoryVO" resultType="DefaultMap">
+        /* HqSplyPriceHistoryMapper.getHqSplyPriceHistoryExcelList */
+        SELECT thpsuh.HQ_OFFICE_CD
+        ,      thpsuh.PROD_CD
+        ,      thp.PROD_NM
+        ,      TO_CHAR(TO_DATE(thpsuh.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      thpsuh.PROC_FG
+        ,      thpsuh.B_SPLY_UPRC
+        ,      thpsuh.A_SPLY_UPRC
+        ,      thpsuh.MOD_ID
+        FROM   TB_HQ_PRODUCT_SPLY_UPRC_HIST thpsuh
+        ,      TB_HQ_PRODUCT thp
+        WHERE  thpsuh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    thpsuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_HQ_PRODUCT_CLASS
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thpsuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND 	thp.HQ_OFFICE_CD = thpsuh.HQ_OFFICE_CD
+        AND 	thp.PROD_CD = thpsuh.PROD_CD
+        ORDER BY thpsuh.PROD_CD, thpsuh.PROC_DT
+    </select>
+
+</mapper>

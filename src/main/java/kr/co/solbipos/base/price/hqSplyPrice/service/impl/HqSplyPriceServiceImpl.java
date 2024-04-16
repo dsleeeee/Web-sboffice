@@ -58,19 +58,6 @@ public class HqSplyPriceServiceImpl implements HqSplyPriceService {
         hqSplyPriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqSplyPriceVO.setUserId(sessionInfoVO.getUserId());
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
-            if (hqSplyPriceVO.getProdHqBrandCd() == "" || hqSplyPriceVO.getProdHqBrandCd() == null) {
-                // 사용자별 브랜드 array 값 세팅
-                if (hqSplyPriceVO.getUserProdBrands() != null && !"".equals(hqSplyPriceVO.getUserProdBrands())) {
-                    String[] userBrandList = hqSplyPriceVO.getUserProdBrands().split(",");
-                    if (userBrandList.length > 0) {
-                        hqSplyPriceVO.setUserProdBrandList(userBrandList);
-                    }
-                }
-            }
-        }
-
         return hqSplyPriceMapper.getHqSplyPriceList(hqSplyPriceVO);
     }
 
@@ -80,19 +67,6 @@ public class HqSplyPriceServiceImpl implements HqSplyPriceService {
 
         hqSplyPriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqSplyPriceVO.setUserId(sessionInfoVO.getUserId());
-
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            // 선택한 상품브랜드가 없을 때 (상품브랜드가 '전체' 일때)
-            if (hqSplyPriceVO.getProdHqBrandCd() == "" || hqSplyPriceVO.getProdHqBrandCd() == null) {
-                // 사용자별 브랜드 array 값 세팅
-                if (hqSplyPriceVO.getUserProdBrands() != null && !"".equals(hqSplyPriceVO.getUserProdBrands())) {
-                    String[] userBrandList = hqSplyPriceVO.getUserProdBrands().split(",");
-                    if (userBrandList.length > 0) {
-                        hqSplyPriceVO.setUserProdBrandList(userBrandList);
-                    }
-                }
-            }
-        }
 
         return hqSplyPriceMapper.getHqSplyPriceExcelList(hqSplyPriceVO);
     }

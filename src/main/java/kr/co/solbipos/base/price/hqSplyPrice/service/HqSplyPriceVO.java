@@ -19,6 +19,8 @@ import kr.co.solbipos.application.common.service.PageVO;
  */
 public class HqSplyPriceVO extends PageVO {
 
+    private static final long serialVersionUID = 7086340148425302580L;
+
     /** 본사코드 */
     private String hqOfficeCd;
 
@@ -48,24 +50,6 @@ public class HqSplyPriceVO extends PageVO {
 
     /** 사용자 아이디 */
     private String userId;
-
-    /** 사용자별 브랜드코드(상품) */
-    private String[] userProdBrandList;
-
-    /** 사용자별 브랜드코드(상품) */
-    private String userProdBrands;
-
-    /** 상품브랜드코드 */
-    private String prodHqBrandCd;
-
-    /** 사용자별 브랜드코드(매장) */
-    private String[] userBrandList;
-
-    /** 사용자별 브랜드코드(매장) */
-    private String userBrands;
-
-    /** 매장브랜드코드 */
-    private String storeHqBrandCd;
 
     /** 전매장적용 구분 */
     private String applyFg;
@@ -166,54 +150,6 @@ public class HqSplyPriceVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String[] getUserProdBrandList() {
-        return userProdBrandList;
-    }
-
-    public void setUserProdBrandList(String[] userProdBrandList) {
-        this.userProdBrandList = userProdBrandList;
-    }
-
-    public String getUserProdBrands() {
-        return userProdBrands;
-    }
-
-    public void setUserProdBrands(String userProdBrands) {
-        this.userProdBrands = userProdBrands;
-    }
-
-    public String getProdHqBrandCd() {
-        return prodHqBrandCd;
-    }
-
-    public void setProdHqBrandCd(String prodHqBrandCd) {
-        this.prodHqBrandCd = prodHqBrandCd;
-    }
-
-    public String[] getUserBrandList() {
-        return userBrandList;
-    }
-
-    public void setUserBrandList(String[] userBrandList) {
-        this.userBrandList = userBrandList;
-    }
-
-    public String getUserBrands() {
-        return userBrands;
-    }
-
-    public void setUserBrands(String userBrands) {
-        this.userBrands = userBrands;
-    }
-
-    public String getStoreHqBrandCd() {
-        return storeHqBrandCd;
-    }
-
-    public void setStoreHqBrandCd(String storeHqBrandCd) {
-        this.storeHqBrandCd = storeHqBrandCd;
     }
 
     public String getApplyFg() {
