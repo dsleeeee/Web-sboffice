@@ -24,7 +24,7 @@
         SELECT thpsuh.HQ_OFFICE_CD
         ,      thpsuh.PROD_CD
         ,      thp.PROD_NM
-        ,      TO_CHAR(TO_DATE(thpsuh.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      TO_CHAR(TO_DATE(SUBSTR(thpsuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
         ,      thpsuh.PROC_FG
         ,      thpsuh.B_SPLY_UPRC
         ,      thpsuh.A_SPLY_UPRC
@@ -71,7 +71,7 @@
         SELECT thpsuh.HQ_OFFICE_CD
         ,      thpsuh.PROD_CD
         ,      thp.PROD_NM
-        ,      TO_CHAR(TO_DATE(thpsuh.PROC_DT ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      TO_CHAR(TO_DATE(SUBSTR(thpsuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
         ,      thpsuh.PROC_FG
         ,      thpsuh.B_SPLY_UPRC
         ,      thpsuh.A_SPLY_UPRC
