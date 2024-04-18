@@ -767,4 +767,61 @@
         ORDER BY NMCODE_CD
     </select>
 
+    <!-- 매장별 적용파일 탭 - 조회  -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_FILE, TB_MS_POS_ADVER_FILE
+        COMMENTS : 매장별 적용파일을 조회한다.
+    -->
+    <select id="getMediaStoreApplyList" parameterType="MediaVO" resultType="DefaultMap">
+        /* USE : Media.getMediaStoreApplyList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.STORE_CD
+        ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.STORE_CD) AS STORE_NM
+        ,       A.ADVER_FILE_NO AS VER_SER_NO
+        ,       B.FILE_DESC     AS VER_SER_NM
+        ,		TO_CHAR(TO_DATE(B.ADVER_S_DATE, 'yyyymmdd'), 'yyyy-mm-dd') || ' ~ ' || TO_CHAR(TO_DATE(B.ADVER_E_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS USE_DATE
+        ,		B.FILE_ORG_NM || '.' || B.FILE_EXT AS FILE_ORG_NM
+        ,		B.FILE_USE_TYPE
+        ,		B.LANG_FG
+        ,		B.FILE_SIZE
+        ,		B.USE_YN
+        ,		B.DISP_TIME
+        ,       B.FILE_NM       AS FILE_NM_EXT
+        ,       B.FILE_EXT
+        ,       B.FILE_ORG_NM   AS REAL_FILE_ORG_NM
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_HQ_POS_ADVER_STORE A
+        ,       TB_HQ_POS_ADVER_FILE B
+        WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        AND     B.HQ_OFFICE_CD  =   A.HQ_OFFICE_CD
+        AND     B.ADVER_FILE_NO =   A.ADVER_FILE_NO
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='verSerNo != null and verSerNo != ""'>
+            AND B.ADVER_FILE_NO LIKE '%' || #{verSerNo} || '%'
+        </if>
+        <if test='verSerNm != null and verSerNm != ""'>
+            AND B.FILE_DESC LIKE '%' || #{verSerNm} || '%'
+        </if>
+        <if test='fileOrgNm != null and fileOrgNm != ""'>
+            AND B.FILE_ORG_NM LIKE '%' || #{fileOrgNm} || '%'
+        </if>
+        <if test='useYn != null and useYn.toString() != ""'>
+            AND B.USE_YN = #{useYn}
+        </if>
+        <if test='fileType != null and fileType.toString() != ""'>
+            AND B.FILE_USE_TYPE = #{fileType}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+            AND #{startDate} BETWEEN B.ADVER_S_DATE AND B.ADVER_E_DATE
+        </if>
+        <if test='langFg != null and langFg != ""'>
+            AND B.LANG_FG = #{langFg}
+        </if>
+        ORDER
+        BY      A.STORE_CD
+        ,       B.FILE_USE_TYPE
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 </mapper>

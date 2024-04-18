@@ -517,4 +517,17 @@ public class MediaServiceImpl implements MediaService {
 
         return mediaMapper.getFileTypeComboList(mediaVO);
     }
+
+    /** 매장별적용파일 탭 - 조회 */
+    @Override
+    public List<DefaultMap<String>> getMediaStoreApplyList(SessionInfoVO sessionInfoVO, MediaVO mediaVO) {
+
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(mediaVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(mediaVO.getStoreCds(), 3900));
+            mediaVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+        return mediaMapper.getMediaStoreApplyList(mediaVO);
+    }
 }

@@ -17,11 +17,16 @@
             <li>
                 <a id="mediaPlaySeqTab" href="#" ng-click="mediaPlaySeqShow()"><s:message code="mediaTab.mediaPlaySeq"/></a>
             </li>
+            <%-- 매장별적용파일 --%>
+            <li id="applyTab" style="display:none;">
+                <a id="mediaStoreApplyTab" href="#" ng-click="mediaStoreApplyShow()"><s:message code="mediaTab.mediaStoreApply"/></a>
+            </li>
+
         </ul>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaTab.js?ver=20221017.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaTab.js?ver=20240417.02" charset="utf-8"></script>
 
 <script type="text/javascript">
 
@@ -48,6 +53,12 @@
 
 <%-- 재생순서관리 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/media/mediaPlaySeq.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 매장별적용파일 레이어 --%>
+<c:import url="/WEB-INF/view/base/store/media/mediaStoreApply.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -108,6 +108,10 @@ public class MediaVO extends PageVO {
     private String langFg;
     /** 매장등록구분 */
     private String storeSelectExceptFg;
+    /** 매장(멀티)선택  */
+    private String storeCds;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -536,5 +540,21 @@ public class MediaVO extends PageVO {
 
     public void setStoreSelectExceptFg(String storeSelectExceptFg) {
         this.storeSelectExceptFg = storeSelectExceptFg;
+    }
+
+    public String getStoreCds() {
+        return storeCds;
+    }
+
+    public void setStoreCds(String storeCds) {
+        this.storeCds = storeCds;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
     }
 }
