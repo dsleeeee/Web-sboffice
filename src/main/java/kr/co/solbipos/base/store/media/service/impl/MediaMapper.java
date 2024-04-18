@@ -90,4 +90,7 @@ public interface MediaMapper {
 
     /** 파일타입 콤보박스 조회 */
     List<DefaultMap<String>> getFileTypeComboList(MediaVO mediaVO);
+
+    /** 매장별적용파일 탭 - 조회 */
+    List<DefaultMap<String>> getMediaStoreApplyList(MediaVO mediaVO);
 }

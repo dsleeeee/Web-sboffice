@@ -448,4 +448,28 @@ System.out.println("kjs: reFileNM : " + reFileNM);
         response.getOutputStream().flush();
         response.getOutputStream().close();
     }
+
+
+    /**
+     * 매장별적용파일 탭 - 조회
+     *
+     * @param mediaVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 04. 17.
+     */
+    @RequestMapping(value = "/media/getMediaStoreApplyList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getMediaStoreApplyList(MediaVO mediaVO, HttpServletRequest request,
+                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = mediaService.getMediaStoreApplyList(sessionInfoVO, mediaVO);
+
+        return returnListJson(Status.OK, list, mediaVO);
+    }
 }
