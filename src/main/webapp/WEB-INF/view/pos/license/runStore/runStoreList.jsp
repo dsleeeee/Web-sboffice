@@ -237,5 +237,5 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/runStore/runStoreList.js?ver=20240411.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/runStore/runStoreList.js?ver=20240419.01" charset="utf-8"></script>
 

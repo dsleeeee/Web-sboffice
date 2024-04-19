@@ -133,15 +133,32 @@ app.controller('runStoreListCtrl', ['$scope', '$http', '$timeout', function ($sc
 
         var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
 
-        // 시작일자가 종료일자보다 빠른지 확인
-        if(date1.getTime() > date2.getTime()){
-            $scope._popMsg(messages['cmm.dateChk.error']);
-            return false;
-        }
+        var month1 = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
+        var month2 = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
+        var diffMonth = (month2.getTime() - month1.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+        
+        if($scope.dayGubun === 'M' && $scope.dayGubun !==null ) {
+            // 시작일자가 종료일자보다 빠른지 확인
+            if (month1.getTime() > month2.getTime()) {
+                $scope._popMsg(messages['cmm.dateChk.error']);
+                return false;
+            }
+            // 조회일자 최대 1년(12개월) 제한
+            if (diffMonth > 1) {
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
+                return false;
+            }
+        }else if($scope.dayGubun === 'D' && $scope.dayGubun !==null) {
+            // 시작일자가 종료일자보다 빠른지 확인
+            if (date1.getTime() > date2.getTime()) {
+                $scope._popMsg(messages['cmm.dateChk.error']);
+                return false;
+            }
 
-        if (diffDay > 31) {
-            $scope._popMsg(messages['cmm.dateOver.1month.error']);
-            return false;
+            if (diffDay > 31) {
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
+                return false;
+            }
         }
         return true;
     };
