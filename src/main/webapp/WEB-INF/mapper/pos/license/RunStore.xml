@@ -517,6 +517,11 @@
                     FROM    TB_SL_DAILY_TOTAL A
                     WHERE   1=1
                     AND     A.SALE_DATE BETWEEN #{lastMonth} || '01' AND #{startMonth} || '31'
+                    <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+                        <![CDATA[
+                             AND A.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+                        ]]>
+                    </if>
                     GROUP
                     BY      A.STORE_CD
                 ) S

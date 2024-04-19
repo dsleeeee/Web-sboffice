@@ -261,7 +261,7 @@ app.controller('runCopyCntCtrl', ['$scope', '$http', '$timeout', function ($scop
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, '런닝매장현황_런닝COPY수(' + startDt +'_' + endDt + ')'+'_'+ getCurDateTime() +'.xlsx', function () {
+            }, '런닝매장현황_런닝COPY수(' + startDt + ')'+'_'+ getCurDateTime() +'.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
