@@ -94,6 +94,8 @@
     <typeAlias alias="instlManageVO" type="kr.co.solbipos.pos.license.instlManage.service.InstlManageVO"/>
     <typeAlias alias="operVO" type="kr.co.solbipos.pos.license.oper.service.OperVO"/>
     <typeAlias alias="instlAgencyVO" type="kr.co.solbipos.pos.license.instlAgency.service.InstlAgencyVO"/>
+    <typeAlias alias="vanFixExceptStoreVO" type="kr.co.solbipos.pos.license.vanFixExceptStore.service.VanFixExceptStoreVO"/>
+    <typeAlias alias="runStoreVO" type="kr.co.solbipos.pos.license.runStore.service.RunStoreVO"/>
 <!--
     <typeAlias alias="instlAgencyVO" type="kr.co.solbipos.pos.license.instlagency.service.InstlAgencyVO"/>
     <typeAlias alias="instlVO" type="kr.co.solbipos.pos.license.instl.service.InstlVO"/>

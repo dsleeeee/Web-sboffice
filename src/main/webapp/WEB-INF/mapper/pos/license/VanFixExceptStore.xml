@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    VanFixExceptStore.xml
+    VAN사 변경허용 매장관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.04.09     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.pos.license.vanFixExceptStore.service.impl.VanFixExceptStoreMapper">
+
+    <!-- 사용자별 브랜드 조회(콤보박스용) -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    : vanFixExceptStoreVO
+        COMMENTS : 콤보박스에서 사용할 밴정보를 조회한다.
+    -->
+    <select id="getVanComboList" parameterType="vanFixExceptStoreVO" resultType="DefaultMap">
+        /* CloseStoreMapper.getVanComboList */
+        SELECT  '' AS VALUE
+                ,       '전체' AS NAME
+        FROM    DUAL
+        UNION
+        SELECT	VAN_CD AS VALUE
+                ,		VAN_NM AS NAME
+        FROM    TB_CM_VAN_CMPNY
+        WHERE	VAN_FG = '01'
+        ORDER
+            BY VALUE NULLS FIRST
+    </select>
+
+    <!-- VAN사 변경허용 매장조회 -->
+    <!--
+        TABLE    : TB_CM_AGENCY
+        PARAM    : vanFixExceptStoreVO
+        COMMENTS : VAN사 변경허용 매장을 조회한다.
+    -->
+    <select id="getVanFixExceptStore" parameterType="vanFixExceptStoreVO" resultType="DefaultMap">
+        /* USE : VanFixExceptStoreMapper.getVanFixExceptStore */
+        SELECT 	tmsvfe.HQ_OFFICE_CD
+        ,		tho.HQ_OFFICE_NM
+        ,		tmsvfe.STORE_CD
+        ,		tms.STORE_NM
+        ,		tca.AGENCY_NM
+        ,		tms.VAN_CD
+        ,		tmsvfe.REMARK
+        FROM 	TB_MS_STORE_VAN_FIX_EXCEPT tmsvfe
+        ,		TB_MS_STORE tms
+        ,		TB_HQ_OFFICE tho
+        ,		TB_CM_AGENCY tca
+        WHERE 	tmsvfe.HQ_OFFICE_CD     =   tms.HQ_OFFICE_CD
+        AND		tmsvfe.STORE_CD         =   tms.STORE_CD
+        AND		tmsvfe.HQ_OFFICE_CD     =   tho.HQ_OFFICE_CD
+        AND		tms.AGENCY_CD           =   tca.AGENCY_CD
+        <if test='includeFg != null and includeFg =="Y"'>
+            <if test="agencyCd != null and agencyCd != ''">
+                AND	tca.AGENCY_CD IN	(
+                                            SELECT 	AGENCY_CD
+                                            FROM 	TB_CM_AGENCY
+                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                            CONNECT BY
+                                            PRIOR       AGENCY_CD = P_AGENCY_CD
+                                            UNION
+                                            SELECT 	AGENCY_CD
+                                            FROM 	TB_CM_AGENCY
+                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                        )
+            </if>
+        </if>
+        <if test='includeFg != null and includeFg =="N"'>
+            <if test="agencyCd != null and agencyCd != ''">
+                AND tms.AGENCY_CD = #{agencyCd}
+            </if>
+        </if>
+        ORDER
+        BY 		tmsvfe.HQ_OFFICE_CD
+        ,		tmsvfe.STORE_CD
+    </select>
+
+    <!-- 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE, TB_CM_AGENCY
+        PARAM    : vanFixExceptStoreVO
+        COMMENTS : 매장 목록을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="vanFixExceptStoreVO" resultType="DefaultMap">
+        /* USE : VanFixExceptStoreMapper.getStoreList */
+        SELECT	tms.HQ_OFFICE_CD
+        ,		tho.HQ_OFFICE_NM
+        ,		tms.STORE_CD
+        ,		tms.STORE_NM
+        ,		tca.AGENCY_NM
+        ,		tms.VAN_CD
+        FROM 	TB_MS_STORE tms
+        ,		TB_HQ_OFFICE tho
+        ,		TB_CM_AGENCY tca
+        WHERE 	tms.HQ_OFFICE_CD    = tho.HQ_OFFICE_CD
+        AND		tms.AGENCY_CD       = tca.AGENCY_CD
+        AND 	tms.STORE_CD NOT IN (SELECT STORE_CD FROM TB_MS_STORE_VAN_FIX_EXCEPT)
+        <if test="vanCd != null and vanCd != ''">
+            AND tms.VAN_CD = #{vanCd}
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd !=""'>
+            AND tms.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm !=""'>
+            AND tho.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+        </if>
+        <if test='storeCd != null and storeCd !=""'>
+            AND tms.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test='storeNm != null and storeNm !=""'>
+            AND tms.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
+        <if test='includeFg != null and includeFg =="N"'>
+            <if test="agencyCd != null and agencyCd != ''">
+                AND tms.AGENCY_CD = #{agencyCd}
+            </if>
+        </if>
+        <if test='includeFg != null and includeFg =="Y"'>
+            <if test="agencyCd != null and agencyCd != ''">
+                AND	tca.AGENCY_CD IN	(
+                                            SELECT 	AGENCY_CD
+                                            FROM 	TB_CM_AGENCY
+                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                            CONNECT BY
+                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                            UNION
+                                            SELECT 	AGENCY_CD
+                                            FROM 	TB_CM_AGENCY
+                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                        )
+            </if>
+        </if>
+        ORDER
+        BY 		tms.HQ_OFFICE_CD
+        ,		tms.STORE_CD
+    </select>
+
+    <!-- 변경허용매장 - 등록 -->
+    <!--
+        TABLE    : TB_MS_STORE_CLOSE_EXCEPT
+        PARAM    : vanFixExceptStoreVO
+        COMMENTS : 매장을 VAN사 변경 허용처리한다.
+    -->
+    <insert id="saveFixExceptStore" parameterType="DefaultMap">
+        /* USE : VanFixExceptStoreMapper.saveFixExceptStore */
+        INSERT INTO TB_MS_STORE_VAN_FIX_EXCEPT
+            (
+                HQ_OFFICE_CD
+            ,   STORE_CD
+            ,   FIX_VAN_CD
+            ,   REMARK
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
+        VALUES
+            (
+                #{hqOfficeCd}
+            ,   #{storeCd}
+            ,   ''
+            ,   #{remark}
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
+    </insert>
+
+    <!-- 변경허용매장 삭제 -->
+    <!--
+        TABLE    : TB_MS_STORE_CLOSE_EXCEPT
+        PARAM    : TB_MS_STORE_VAN_FIX_EXCEPT
+        COMMENTS : 변경허용매장에서 제거한다.
+    -->
+    <delete id="deleteFixExceptStore" parameterType="DefaultMap">
+        /* USE : VanFixExceptStoreMapper.deleteFixExceptStore */
+        DELETE  TB_MS_STORE_VAN_FIX_EXCEPT
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     STORE_CD = #{storeCd}
+    </delete>
+
+</mapper>
