@@ -76,6 +76,9 @@ public class CloseStoreServiceImpl implements CloseStoreService {
     /** 매장 조회 */
     @Override
     public List<DefaultMap<String>> getStoreList(CloseStoreVO closeStoreVO, SessionInfoVO sessionInfoVO) {
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.AGENCY)){
+            closeStoreVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
         return closeStoreMapper.getStoreList(closeStoreVO);
     }
 
@@ -93,6 +96,10 @@ public class CloseStoreServiceImpl implements CloseStoreService {
 
         System.out.println("시간지연으로 타임아웃 체크중 kjs try out:");
 */
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.AGENCY)){
+            closeStoreVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
         return closeStoreMapper.getStoreCloseExceptList(closeStoreVO);
     }
 

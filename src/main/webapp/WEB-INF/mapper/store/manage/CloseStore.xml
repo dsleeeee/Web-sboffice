@@ -224,23 +224,26 @@
     <select id="getStoreCloseExceptList" parameterType="closeStoreVO" resultType="DefaultMap">
         /* USE : CloseStoreMapper.getStoreCloseExceptList */
         SELECT 	tmsce.HQ_OFFICE_CD
-             ,		tho.HQ_OFFICE_NM
-             ,		tmsce.STORE_CD
-             ,		tms.STORE_NM
-             ,		tca.AGENCY_NM
-             ,		tms.VAN_CD
-             ,		tmsce.REMARK
+        ,		tho.HQ_OFFICE_NM
+        ,		tmsce.STORE_CD
+        ,		tms.STORE_NM
+        ,		tca.AGENCY_NM
+        ,		tms.VAN_CD
+        ,		tmsce.REMARK
         FROM 	TB_MS_STORE_CLOSE_EXCEPT tmsce
-           ,		TB_MS_STORE tms
-           ,		TB_HQ_OFFICE tho
-           ,		TB_CM_AGENCY tca
+        ,		TB_MS_STORE tms
+        ,		TB_HQ_OFFICE tho
+        ,		TB_CM_AGENCY tca
         WHERE 	tmsce.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-          AND		tmsce.STORE_CD = tms.STORE_CD
-          AND		tmsce.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
-          AND		tms.AGENCY_CD = tca.AGENCY_CD
+        AND		tmsce.STORE_CD = tms.STORE_CD
+        AND		tmsce.HQ_OFFICE_CD = tho.HQ_OFFICE_CD
+        AND		tms.AGENCY_CD = tca.AGENCY_CD
+        <if test='agencyCd != null and agencyCd !=""'>
+            AND tms.AGENCY_CD LIKE '%' || #{agencyCd} || '%'
+        </if>
         ORDER
-            BY 		tmsce.HQ_OFFICE_CD
-             ,		tmsce.STORE_CD
+        BY 		tmsce.HQ_OFFICE_CD
+        ,		tmsce.STORE_CD
     </select>
 
     <!-- 폐점제외매장 - 등록 -->
