@@ -5,6 +5,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <div id="storeCloseExcept" class="subCon" ng-controller="storeCloseExceptCtrl">
 
@@ -59,6 +60,7 @@
         </div>
       </td>
     </tr>
+    <c:if test="${orgnFg == 'MASTER'}">
     <tr>
       <%-- 관리업체코드 --%>
       <th><s:message code="storeCloseExcept.agencyCd" /></th>
@@ -71,6 +73,7 @@
         <input type="text" class="sb-input w100" id="srchAgencyNm" ng-model="agencyNm" onkeyup="fnNxBtnSearch('2');"/>
       </td>
     </tr>
+    </c:if>
     <tr>
       <%-- 본사코드 --%>
       <th><s:message code="storeCloseExcept.hqOfficeCd" /></th>
@@ -191,4 +194,4 @@
   var sysStatFg = ${ccu.getCommCode("005")};
   var vanComboList = ${vanComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/closeStore/storeCloseExcept.js?ver=20240216.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/closeStore/storeCloseExcept.js?ver=20240422.01" charset="utf-8"></script>

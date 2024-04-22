@@ -142,7 +142,6 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="media.store.storeCd"/>" binding="storeCd" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="media.store.storeNm"/>" binding="storeNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="media.verSerNo"/>" binding="verSerNo" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
@@ -190,7 +189,7 @@
     var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaStoreApply.js?ver=20240417.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaStoreApply.js?ver=20240422.01" charset="utf-8"></script>
 
 <%-- 미리보기 --%>
 <c:import url="/WEB-INF/view/base/store/media/preview.jsp">

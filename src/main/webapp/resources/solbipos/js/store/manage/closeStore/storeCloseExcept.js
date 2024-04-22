@@ -97,7 +97,7 @@ app.controller('storeCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   $scope.$on("storeCtrl", function(event, data) {
     var params = {};
     params.vanCd = $scope.vanCdCombo.selectedValue;
-    params.sysStatFg = $scope.sysStatFg.selectedValue;
+    params.sysStatFg = $scope.statFgCombo.selectedValue;
     params.agencyCd = $scope.agencyCd;
     params.agencyNm = $scope.agencyNm;
     params.hqOfficeCd = $scope.hqOfficeCd;

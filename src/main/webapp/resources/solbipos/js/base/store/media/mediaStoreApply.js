@@ -171,8 +171,7 @@ app.controller('mediaStoreApplyCtrl', ['$scope', '$http', '$timeout', function (
                 includeColumnHeaders: true,
                 includeCellStyles: true,
                 includeColumns: function (column) {
-                    // return column.visible;
-                    return column.binding != 'gChk';
+                    return column.visible;
                 }
             }, '듀얼모니터영상관리_매장별적용파일_' + getCurDateTime() +'.xlsx', function () {
                 $timeout(function () {
