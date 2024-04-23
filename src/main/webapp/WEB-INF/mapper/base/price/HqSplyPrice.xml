@@ -271,7 +271,7 @@
         COMMENTS : 공급가 업로드 임시테이블 저장
     -->
     <insert id="saveSplyPriceExcelUploadCheck" parameterType="hqSplyPriceVO">
-        /* HqSplyPriceMapper.saveSplyPriceExcelUploadCheckSave */
+        /* HqSplyPriceMapper.saveSplyPriceExcelUploadCheck */
         INSERT INTO TB_TMP_EXCEL_SPLY_PRICE
         (
             SESSION_ID,

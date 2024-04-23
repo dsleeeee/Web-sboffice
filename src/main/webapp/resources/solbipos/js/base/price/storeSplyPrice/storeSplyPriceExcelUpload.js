@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : hqSplyPriceExcepUpload.js
- * 설  명 : 기초관리 > 가격관리 > 본사공급가관리 > 본사공급가관리 엑셀업로드 탭 JavaScript
+ * 파일명 : storeSplyPriceExcelUpload.js
+ * 설  명 : 기초관리 > 가격관리 > 매장공급가관리 > 매장공급가관리 엑셀업로드 탭 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2024.04.04     이다솜      1.0
+ * 2024.04.16     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -16,27 +16,37 @@ var app = agrid.getApp();
 /**
  * 양식다운로드
  */
-app.controller('hqSplyPriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('storeSplyPriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSplyPriceExcelUploadSampleCtrl', $scope, $http, false));
-
-    // 콤보박스 데이터 Set
-    $scope._setComboData("excelStoreSaveFg", storeSaveFg);
+    angular.extend(this, new RootController('storeSplyPriceExcelUploadSampleCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
     };
 
-    $scope.$on("hqSplyPriceExcelUploadSampleCtrl", function (event, data) {
+    $scope.$on("storeSplyPriceExcelUploadSampleCtrl", function (event, data) {
         event.preventDefault();
     });
 
     // 양식다운로드
     $scope.sampleDownload = function () {
-        var params = {};
 
-        $scope._inquiryMain("/base/price/hqSplyPrice/getHqSplyPriceExcelUploadSampleList.sb", params, function () {
+        var storeCd = $("#storeSplyPriceExcelUploadStoreCd").val();
+        var storeCdArr = storeCd.split(',');
+        if(storeCd == "") {
+            $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
+            return false;
+        }
+        if(storeCdArr.length > 10) {
+            $scope._popMsg(messages["storeSalePriceExcelUpload.storeCdCntAlert"]); // 선택가능한 매장수는 10개 입니다.
+            return false;
+        }
+
+        var params = {};
+        params.storeCds = storeCd;
+
+        $scope._inquiryMain("/base/price/storeSplyPrice/getStoreSplyPriceExcelUploadSampleList.sb", params, function () {
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
             $timeout(function () {
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex,
@@ -47,7 +57,7 @@ app.controller('hqSplyPriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout
                             return column.visible;
                         }
                     },
-                    messages["hqSplyPrice.hqSplyPrice"] + '_' + messages["hqSplyPrice.splyPriceExcelUpload"] + '_양식_' + getCurDateTime() + '.xlsx',
+                    messages["storeSplyPrice.storeSplyPrice"] + '_' + messages["storeSplyPrice.excelUpload"] + '_양식_' + getCurDateTime() + '.xlsx',
                     function () {
                         $timeout(function () {
                             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
@@ -61,19 +71,26 @@ app.controller('hqSplyPriceExcelUploadSampleCtrl', ['$scope', '$http', '$timeout
     // 엑셀업로드
     $scope.excelUpload = function () {
         // 엑셀업로드 팝업
-        $("#hqSplyPriceExcelUpFile").val('');
-        $("#hqSplyPriceExcelUpFile").trigger('click');
+        $("#storeSplyPriceExcelUpFile").val('');
+        $("#storeSplyPriceExcelUpFile").trigger('click');
+    };
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.storeSplyPriceExcelUploadStoreShow = function () {
+        $scope._broadcast('storeSplyPriceExcelUploadStoreCtrl');
     };
 
 }]);
 
 /**
- *  본사공급가관리 엑셀업로드 그리드
+ *  매장공급가관리 엑셀업로드 그리드
  */
-app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('storeSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSplyPriceExcelUploadCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('storeSplyPriceExcelUploadCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -112,42 +129,32 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         });
     };
 
-    $scope.$on("hqSplyPriceExcelUploadCtrl", function (event, data) {
-        // 공급가 업로드 임시테이블 데이터 조회
-        $scope.searchHqSplyPriceExcelUpload();
+    $scope.$on("storeSplyPriceExcelUploadCtrl", function (event, data) {
+
+        // 조회
+        $scope.searchStoreSplyPriceExcelUpload();
         event.preventDefault();
     });
+    
+    // 조회
+    $scope.searchStoreSplyPriceExcelUpload = function () {
 
-    // 공급가 업로드 임시테이블 데이터 조회
-    $scope.searchHqSplyPriceExcelUpload = function () {
         var params = {};
-
-        $scope._inquiryMain("/base/price/hqSplyPrice/getSplyPriceExcelUploadCheckList.sb", params, function () {}, false);
-    };
-
-    // 저장 적용타입 선택
-    $scope.selectedIndexChanged = function (s) {
-        if (s.selectedValue === "choice") {
-            $("#excelStoreSaveStore").show();
-        } else {
-            $("#excelStoreSaveStore").hide();
-        }
+        $scope._inquiryMain("/base/price/storeSplyPrice/getSplyPriceExcelUploadCheckList.sb", params, function() {}, false);
     };
 
     // 저장버튼 클릭하여 검증
     $scope.save = function () {
 
-        if ($scope.excelStoreSaveFgCombo.selectedValue === "choice") {
-            if ($("#excelChoiceSaveStoreCd").val() === "") {
-                $scope._popMsg("매장을 선택해주세요");
-                return false;
-            }
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["cmm.empty.data"]); // 조회 데이터가 없습니다.
+            return false;
         }
 
         var params = {};
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/price/hqSplyPrice/deleteSplyPriceExcelUploadCheckAll.sb", params, function () {
+        $scope._postJSONSave.withOutPopUp("/base/price/storeSplyPrice/deleteSplyPriceExcelUploadCheckAll.sb", params, function () {
 
             $scope.stepCnt = 100;   // 한번에 DB에 저장할 숫자 세팅
             $scope.progressCnt = 0; // 처리된 숫자
@@ -160,18 +167,7 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-
-                // <-- 검증 -->
-                var result = "";
-                $scope.flex.collectionView.items[i].result = result;
-                $scope.flex.collectionView.items[i].applyFg = $scope.excelStoreSaveFgCombo.selectedValue;
-                if ($scope.excelStoreSaveFgCombo.selectedValue === "choice") {
-                    if ($("#excelChoiceSaveStoreCd").val() === "") {
-                        $scope._popMsg("매장을 선택해주세요");
-                        return false;
-                    }
-                    $scope.flex.collectionView.items[i].saveStoreCds = $("#excelChoiceSaveStoreCd").val();
-                }
+                $scope.flex.collectionView.items[i].result = "";
                 params.push($scope.flex.collectionView.items[i]);
             }
 
@@ -215,7 +211,7 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         // ajax 통신 설정
         $http({
             method: 'POST', //방식
-            url: '/base/price/hqSplyPrice/saveSplyPriceExcelUploadCheckResult.sb', /* 통신할 URL */
+            url: '/base/price/storeSplyPrice/saveSplyPriceExcelUploadCheckResult.sb', /* 통신할 URL */
             data: params, /* 파라메터로 보낼 데이터 : @requestBody */
             params: sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
@@ -224,20 +220,13 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
                 if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
                     $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
                     // 검증결과 조회
-                    $scope.searchHqSplyPriceExcelUpload();
+                    $scope.searchStoreSplyPriceExcelUpload();
 
                     // 검증을 통과한 공급가를 저장하시겠습니까?
-                    var msg = messages["hqSplyPrice.saveConfirm"];
-
-                    // 전매장적용
-                    if ($scope.excelStoreSaveFgCombo.selectedValue !== 'none') {
-                        // 전체 매장에, 검증을 통과한 공급가를 저장하시겠습니까?
-                        msg = messages["hqSplyPrice.saveConfirm2"];
-                    }
-
+                    var msg = messages["storeSplyPrice.saveConfirm"];
                     $scope._popConfirm(msg, function () {
-                        // 공급가 저장
-                        $scope.hqSplyPriceExcelUploadSave();
+                        // 매장공급가 저장
+                        $scope.storeSplyPriceExcelUploadSave();
                     });
                 }
             }
@@ -262,8 +251,8 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         });
     };
 
-    // 공급가 저장
-    $scope.hqSplyPriceExcelUploadSave = function () {
+    // 매장공급가 저장
+    $scope.storeSplyPriceExcelUploadSave = function () {
 
         $scope.stepCnt = 100;    // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
@@ -271,15 +260,6 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            $scope.flex.collectionView.items[i].applyFg = $scope.excelStoreSaveFgCombo.selectedValue;
-            if ($scope.excelStoreSaveFgCombo.selectedValue === "choice") {
-                if ($("#excelChoiceSaveStoreCd").val() === "") {
-                    $scope._popMsg("매장을 선택해주세요");
-                    return false;
-                }
-                $scope.flex.collectionView.items[i].saveStoreCds = $("#excelChoiceSaveStoreCd").val();
-            }
-
             params.push($scope.flex.collectionView.items[i]);
         }
 
@@ -325,7 +305,7 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         // ajax 통신 설정
         $http({
             method: 'POST', //방식
-            url: '/base/price/hqSplyPrice/saveHqSplyPriceExcelUpload.sb', /* 통신할 URL */
+            url: '/base/price/storeSplyPrice/saveStoreSplyPriceExcelUpload.sb', /* 통신할 URL */
             data: params, /* 파라메터로 보낼 데이터 : @requestBody */
             params: sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
@@ -338,7 +318,7 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
                     // 저장되었습니다.
                     $scope._popMsg(messages["cmm.saveSucc"]);
                     // 검증결과 조회
-                    $scope.searchHqSplyPriceExcelUpload();
+                    $scope.searchStoreSplyPriceExcelUpload();
                 }
             }
         }, function errorCallback(response) {
@@ -380,7 +360,7 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
                         return column.binding != 'gChk';
                     }
                 },
-                messages["hqSplyPrice.hqSplyPrice"] + '_' + messages["hqSplyPrice.splyPriceExcelUpload"] + '_' + getCurDateTime() + '.xlsx',
+                messages["storeSplyPrice.storeSplyPrice"] + '_' + messages["storeSplyPrice.excelUpload"] + '_' + getCurDateTime() + '.xlsx',
                 function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
@@ -424,7 +404,7 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/price/hqSplyPrice/deleteSplyPriceExcelUploadCheck.sb", params, function () {
+        $scope._postJSONSave.withOutPopUp("/base/price/storeSplyPrice/deleteSplyPriceExcelUploadCheck.sb", params, function () {
             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
         });
     };
@@ -432,13 +412,6 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
     // 공급가 수정시 체크박스 체크
     $scope.checked = function (item) {
         item.gChk = true;
-    };
-
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.excelChoiceSaveStoreShow = function () {
-        $scope._broadcast('excelChoiceSaveStoreCtrl');
     };
 
     // 작업내역 로딩 팝업
@@ -461,10 +434,10 @@ app.controller('hqSplyPriceExcelUploadCtrl', ['$scope', '$http', '$timeout', fun
 /**
  * 엑셀업로드
  */
-app.controller('hqSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('storeSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSplyPriceExcelUploadAddCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('storeSplyPriceExcelUploadAddCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -476,7 +449,7 @@ app.controller('hqSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', 
         }
     };
 
-    $scope.$on("hqSplyPriceExcelUploadAddCtrl", function (event, data) {
+    $scope.$on("storeSplyPriceExcelUploadAddCtrl", function (event, data) {
         event.preventDefault();
     });
 
@@ -491,7 +464,7 @@ app.controller('hqSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', 
         var params = {};
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._postJSONSave.withOutPopUp("/base/price/hqSplyPrice/deleteSplyPriceExcelUploadCheckAll.sb", params, function () {
+        $scope._postJSONSave.withOutPopUp("/base/price/storeSplyPrice/deleteSplyPriceExcelUploadCheckAll.sb", params, function () {
             // 엑셀 업로드
             $scope.excelUpload();
         });
@@ -504,8 +477,8 @@ app.controller('hqSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', 
         $scope.progressCnt = 0; // 처리된 숫자
 
         // 선택한 파일이 있으면
-        if ($('#hqSplyPriceExcelUpFile')[0].files[0]) {
-            var file          = $('#hqSplyPriceExcelUpFile')[0].files[0];
+        if ($('#storeSplyPriceExcelUpFile')[0].files[0]) {
+            var file          = $('#storeSplyPriceExcelUpFile')[0].files[0];
             var fileName      = file.name;
             var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
@@ -515,7 +488,7 @@ app.controller('hqSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', 
 
                 $timeout(function () {
                     var flex = $scope.flex;
-                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#hqSplyPriceExcelUpFile')[0].files[0], {includeColumnHeaders: true}
+                    wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#storeSplyPriceExcelUpFile')[0].files[0], {includeColumnHeaders: true}
                         , function () {
                             $timeout(function () {
                                 // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
@@ -525,7 +498,7 @@ app.controller('hqSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', 
                     );
                 }, 10);
             } else {
-                $("#hqSplyPriceExcelUpFile").val('');
+                $("#storeSplyPriceExcelUpFile").val('');
                 $scope._popMsg(messages['excelUpload.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
                 return false;
             }
@@ -598,7 +571,7 @@ app.controller('hqSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', 
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/base/price/hqSplyPrice/saveSplyPriceExcelUploadCheck.sb', /* 통신할 URL */
+            url    : '/base/price/storeSplyPrice/saveSplyPriceExcelUploadCheck.sb', /* 통신할 URL */
             data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
@@ -607,7 +580,7 @@ app.controller('hqSplyPriceExcelUploadAddCtrl', ['$scope', '$http', '$timeout', 
                 if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
                     $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
                     // 저장기능 수행후 재조회
-                    $scope._broadcast('hqSplyPriceExcelUploadCtrl');
+                    $scope._broadcast('storeSplyPriceExcelUploadCtrl');
                 }
             }
         }, function errorCallback(response) {

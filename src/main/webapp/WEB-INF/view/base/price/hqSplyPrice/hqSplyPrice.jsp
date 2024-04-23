@@ -83,7 +83,7 @@
                 <%-- 공급가 변경 비율 --%>
                 <div class="sb-select fl">
                 <span>
-                  <input type="number" class="inSty2 w80px" id="inputSaleRate" ng-model="inputSaleRate" max="100" min="0"/>
+                  <input type="text" maxlength="10" numberOnly class="inSty2 w80px" id="inputSaleRate" ng-model="inputSaleRate"/>
                 </span>
                 </div>
                 <div class="sb-select fl w5px mr5 mt10">
@@ -239,9 +239,14 @@
 <%--//엑셀 리스트--%>
 
 <script type="text/javascript">
+    $(function () {
+        $("input:text[numberOnly]").on("keyup", function () {
+            $(this).val($(this).val().replace(/[^-|^0-9]/g, ""));
+        });
+    });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSplyPrice/hqSplyPrice.js?ver=20240411.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSplyPrice/hqSplyPrice.js?ver=20240423.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

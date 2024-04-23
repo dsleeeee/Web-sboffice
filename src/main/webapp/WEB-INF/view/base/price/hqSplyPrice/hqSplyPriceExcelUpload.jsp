@@ -151,4 +151,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSplyPrice/hqSplyPriceExcelUpload.js?ver=20240411.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSplyPrice/hqSplyPriceExcelUpload.js?ver=20240423.01" charset="utf-8"></script>

@@ -268,6 +268,11 @@ app.controller('hqSplyPriceCtrl', ['$scope', '$http', '$timeout', function ($sco
     // 저장
     $scope.saveProdPrice = function(){
 
+        if ($scope.flex.collectionView === undefined) {
+            $scope._popMsg("공급가를 일괄적용할 상품을 조회해주세요.");
+            return false;
+        }
+
         if($scope.storeSaveFgCombo.selectedValue === "choice") {
             if ($("#choiceSaveStoreCd").val() === "") {
                 $scope._popMsg("매장을 선택해주세요");
@@ -298,13 +303,13 @@ app.controller('hqSplyPriceCtrl', ['$scope', '$http', '$timeout', function ($sco
                             Math.floor(value) === value;
                     };
 
-                    // 변경판매가 - 소수점 입력 불가
+                    // 변경공급가 - 소수점 입력 불가
                     if(Number.isInteger(parseFloat($scope.flex.collectionView.items[i].splyUprc)) == false){
                         $scope._popMsg(messages["hqSplyPrice.splyUprcInChk"]); // 변경공급가는 숫자만(정수9자리) 입력해주세요.
                         return false;
                     }
 
-                    // 변경판매가 - 마이너스(-)외에 다른 문자 입력 불가
+                    // 변경공급가 - 마이너스(-)외에 다른 문자 입력 불가
                     if (numchkexp.test($scope.flex.collectionView.items[i].splyUprc)) {
                         if((numchkexp2.test($scope.flex.collectionView.items[i].splyUprc) == false)){
                             $scope._popMsg(messages["hqSplyPrice.splyUprcInChk"]); // 변경공급가는 숫자만(정수9자리) 입력해주세요.
@@ -312,7 +317,7 @@ app.controller('hqSplyPriceCtrl', ['$scope', '$http', '$timeout', function ($sco
                         }
                     }
 
-                    // 변경판매가 - 1000000000 이상 입력 불가
+                    // 변경공급가 - 1000000000 이상 입력 불가
                     if($scope.flex.collectionView.items[i].splyUprc >= 1000000000){
                         $scope._popMsg(messages["hqSplyPrice.splyUprcInChk"]); //  변경공급가는 숫자만(정수9자리) 입력해주세요.
                         return false;
