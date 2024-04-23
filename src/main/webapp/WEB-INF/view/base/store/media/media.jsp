@@ -206,6 +206,3 @@
 <%-- 버전 등록 및 수정 --%>
 <c:import url="/WEB-INF/view/base/store/media/verRegist.jsp">
 </c:import>
-<%-- 미리보기 --%>
-<c:import url="/WEB-INF/view/base/store/media/preview.jsp">
-</c:import>

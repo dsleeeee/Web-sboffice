@@ -62,4 +62,8 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
+
+<%-- 미리보기 팝업 --%>
+<c:import url="/WEB-INF/view/base/store/media/preview.jsp">
+</c:import>
 <%-- 탭페이지 레이어 끝 --%>

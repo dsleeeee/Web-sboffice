@@ -190,7 +190,3 @@
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaStoreApply.js?ver=20240422.01" charset="utf-8"></script>
-
-<%-- 미리보기 --%>
-<c:import url="/WEB-INF/view/base/store/media/preview.jsp">
-</c:import>
