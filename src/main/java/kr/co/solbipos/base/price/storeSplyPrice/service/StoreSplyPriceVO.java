@@ -17,7 +17,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class StoreSplyPriceVO  extends PageVO {
+public class StoreSplyPriceVO extends PageVO {
 
     private static final long serialVersionUID = -897833682570701823L;
 

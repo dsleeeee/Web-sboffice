@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : hqSplyPriceHistory.js
- * 설  명 : 본사공급가History JavaScript
+ * 파일명 : storeSplyPriceHistory.js
+ * 설  명 : 매장공급가History JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2024.04.12     이다솜      1.0
+ * 2024.04.24     이다솜      1.0
  *
  * **************************************************************/
 /**
@@ -19,15 +19,16 @@ var procFgData = [
 var app = agrid.getApp();
 
 /**
- * 본사공급가History 그리드 생성
+ * 매장공급가History 그리드 생성
  */
-app.controller('hqSplyPriceHistoryCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('storeSplyPriceHistoryCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSplyPriceHistoryCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('storeSplyPriceHistoryCtrl', $scope, $http, false));
 
-    //페이지 스케일 콤보박스 데이터 Set
+    // 콤보박스 데이터 Set
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
 
     // 등록일자 셋팅
     $scope.srchStartDate = wcombo.genDateVal("#startDate", gvStartDate);
@@ -37,20 +38,23 @@ app.controller('hqSplyPriceHistoryCtrl', ['$scope', '$http', function ($scope, $
     $scope.initGrid = function (s, e) {
 
         // 그리드 DataMap 설정
-        $scope.procFgDataMap = new wijmo.grid.DataMap(procFgData, 'value', 'name'); // 열람구분
+        $scope.procFgDataMap = new wijmo.grid.DataMap(procFgData, 'value', 'name'); // 입력구분
 
         // 헤더머지
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
+
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.prodCd = messages["hqSplyPriceHistory.prodCd"];
-        dataItem.prodNm = messages["hqSplyPriceHistory.prodNm"];
-        dataItem.bSplyUprc = messages["hqSplyPriceHistory.splyUprc"];
-        dataItem.aSplyUprc = messages["hqSplyPriceHistory.splyUprc"];
-        dataItem.procFg = messages["hqSplyPriceHistory.procFg"];
-        dataItem.procDt = messages["hqSplyPriceHistory.procDt"];
-        dataItem.modId = messages["hqSplyPriceHistory.modId"];
+        dataItem.storeCd = messages["storeSplyPriceHistory.storeCd"];
+        dataItem.storeNm = messages["storeSplyPriceHistory.storeNm"];
+        dataItem.prodCd = messages["storeSplyPriceHistory.prodCd"];
+        dataItem.prodNm = messages["storeSplyPriceHistory.prodNm"];
+        dataItem.bSplyUprc = messages["storeSplyPriceHistory.splyUprc"];
+        dataItem.aSplyUprc = messages["storeSplyPriceHistory.splyUprc"];
+        dataItem.procFg = messages["storeSplyPriceHistory.procFg"];
+        dataItem.procDt = messages["storeSplyPriceHistory.procDt"];
+        dataItem.modId = messages["storeSplyPriceHistory.modId"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -93,23 +97,47 @@ app.controller('hqSplyPriceHistoryCtrl', ['$scope', '$http', function ($scope, $
         }
     };
 
-    $scope.$on("hqSplyPriceHistoryCtrl", function (event, data) {
-        // 본사공급가 History 그리드 조회
-        $scope.searchHqSplyPriceHistoryList();
+    $scope.$on("storeSplyPriceHistoryCtrl", function (event, data) {
+        // 매장공급가 History 그리드 조회
+        $scope.searchStoreSplyPriceHistoryList();
         event.preventDefault();
     });
 
-    // 본사공급가 History 그리드 조회
-    $scope.searchHqSplyPriceHistoryList = function () {
+    // 매장공급가 History 그리드 조회
+    $scope.searchStoreSplyPriceHistoryList = function () {
         var params = {};
-        params.prodClassCd = $scope.hqProdClassCd;
-        params.prodCd = $scope.prodCd;
-        params.prodNm = $scope.prodNm;
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        params.storeCd = $("#storeSplyPriceHistoryStoreCd").val();
+        params.prodClassCd = $scope.prodClassCd;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
         params.listScale = $scope.listScale;
 
-        $scope._inquiryMain('/base/price/hqSplyPriceHistory/getHqSplyPriceHistoryList.sb', params);
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+            // 선택한 상품브랜드가 있을 때
+            params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+            // 선택한 상품브랜드가 없을 때('전체' 일때)
+            if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
+
+        $scope._inquiryMain('/base/price/storeSplyPriceHistory/getStoreSplyPriceHistoryList.sb', params);
+    };
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.storeSplyPriceHistoryStoreShow = function () {
+        $scope._broadcast('storeSplyPriceHistoryStoreCtrl');
     };
 
     // 상품분류정보 팝업
@@ -147,40 +175,64 @@ app.controller('hqSplyPriceHistoryCtrl', ['$scope', '$http', function ($scope, $
         }
 
         var params = {};
-        params.prodClassCd = $scope.hqProdClassCd;
-        params.prodCd = $scope.prodCd;
-        params.prodNm = $scope.prodNm;
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        params.storeCd = $("#storeSplyPriceHistoryStoreCd").val();
+        params.prodClassCd = $scope.prodClassCd;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
+        params.listScale = $scope.listScale;
 
-        $scope._broadcast('hqSplyPriceHistoryExcelCtrl', params);
+        if(brandUseFg === "1" && orgnFg === "HQ"){
+            // 선택한 상품브랜드가 있을 때
+            params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+
+            // 선택한 상품브랜드가 없을 때('전체' 일때)
+            if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
+        }
+
+        $scope._broadcast('storeSplyPriceHistoryExcelCtrl', params);
     }
 
 }]);
 
-app.controller('hqSplyPriceHistoryExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+/**
+ * 매장공급가History 엑셀다운로드
+ */
+app.controller('storeSplyPriceHistoryExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('hqSplyPriceHistoryExcelCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('storeSplyPriceHistoryExcelCtrl', $scope, $http, true));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
         // 그리드 DataMap 설정
-        $scope.procFgDataMap = new wijmo.grid.DataMap(procFgData, 'value', 'name'); // 열람구분
+        $scope.procFgDataMap = new wijmo.grid.DataMap(procFgData, 'value', 'name'); // 입력구분
 
         // 헤더머지
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
+
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.prodCd = messages["hqSplyPriceHistory.prodCd"];
-        dataItem.prodNm = messages["hqSplyPriceHistory.prodNm"];
-        dataItem.bSplyUprc = messages["hqSplyPriceHistory.splyUprc"];
-        dataItem.aSplyUprc = messages["hqSplyPriceHistory.splyUprc"];
-        dataItem.procFg = messages["hqSplyPriceHistory.procFg"];
-        dataItem.procDt = messages["hqSplyPriceHistory.procDt"];
-        dataItem.modId = messages["hqSplyPriceHistory.modId"];
+        dataItem.storeCd = messages["storeSplyPriceHistory.storeCd"];
+        dataItem.storeNm = messages["storeSplyPriceHistory.storeNm"];
+        dataItem.prodCd = messages["storeSplyPriceHistory.prodCd"];
+        dataItem.prodNm = messages["storeSplyPriceHistory.prodNm"];
+        dataItem.bSplyUprc = messages["storeSplyPriceHistory.splyUprc"];
+        dataItem.aSplyUprc = messages["storeSplyPriceHistory.splyUprc"];
+        dataItem.procFg = messages["storeSplyPriceHistory.procFg"];
+        dataItem.procDt = messages["storeSplyPriceHistory.procDt"];
+        dataItem.modId = messages["storeSplyPriceHistory.modId"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -224,8 +276,11 @@ app.controller('hqSplyPriceHistoryExcelCtrl', ['$scope', '$http', '$timeout', fu
     };
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("hqSplyPriceHistoryExcelCtrl", function (event, data) {
+    $scope.$on("storeSplyPriceHistoryExcelCtrl", function (event, data) {
+
+        // 엑셀 리스트 조회
         $scope.searchExcelList(data);
+
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
@@ -237,7 +292,7 @@ app.controller('hqSplyPriceHistoryExcelCtrl', ['$scope', '$http', '$timeout', fu
         var params = data;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/base/price/hqSplyPriceHistory/getHqSplyPriceHistoryExcelList.sb", params, function() {
+        $scope._inquiryMain("/base/price/storeSplyPriceHistory/getStoreSplyPriceHistoryExcelList.sb", params, function() {
             if ($scope.excelFlex.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
@@ -251,7 +306,7 @@ app.controller('hqSplyPriceHistoryExcelCtrl', ['$scope', '$http', '$timeout', fu
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["hqSplyPriceHistory.hqSplyPriceHistory"]+getToday()+'.xlsx', function () {
+                }, messages["storeSplyPriceHistory.storeSplyPriceHistory"] + '_' +getToday()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
