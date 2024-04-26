@@ -23,7 +23,7 @@
         <%-- 설치업체관리 사원관리 --%>
         <li><a id="empManageTab"  href="#" onClick="changeTabInstlAgency('emp');"><s:message code="instlAgency.empManage" /></a></li>
         <%-- 설치업체관리 인증관리 --%>
-        <li><a id="authManageTab"  href="#" onClick="changeTabInstlAgency('auth');"><s:message code="instlAgency.authManage" /></a></li>
+        <li><a id="authManageTab"  href="#" style="visibility:hidden" onClick="changeTabInstlAgency('auth');"><s:message code="instlAgency.authManage" /></a></li>
     </ul>
     <div style="padding:10px; height:50px;">
         <%-- 신규등록 --%>
@@ -146,6 +146,7 @@
     <%-- 업체정보 조회 --%>
     function getAgencyInfo(data) {
 
+        $("#saveFg").val('');
         var params = {};
         params.agencyCd = data.agencyCd;
 
@@ -276,18 +277,23 @@
 
             $.postJSON("/pos/license/instlAgency/saveAgency.sb", params, function(response) {
 
-                    if(response.status === 'OK') {
-                        s_alert.pop(messages["cmm.saveSucc"]);
+                if(response.status === 'OK') {
+                    s_alert.pop(messages["cmm.saveSucc"]);
 
-                        // 업체 리스트 재조회
-                        $("#btnSearch").click();
-
+                    if(params.agencyCd !== null && params.agencyCd !== '') {
+                        // 저장여부구분
+                        $("#saveFg").val(params.agencyCd);
+                    }else{
+                        $("#saveFg").val('save');
                     }
-                },
-                function (result) {
-                    s_alert.pop(result.message);
+
+                    // 업체 리스트 재조회
+                    $("#btnSearch").click();
                 }
-            );
+            },
+            function (result) {
+                s_alert.pop(result.message);
+            });
         }
     };
 

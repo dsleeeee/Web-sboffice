@@ -168,12 +168,12 @@
 
                     <wj-flex-grid-column header="<s:message code="runStore.progFg"/>            " binding="progFg"          width=" 90" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.posCnt"/>            " binding="posCnt"          width=" 60" is-read-only="true" align="center" aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pSaleCnt"/>          " binding="pSaleCnt"        width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pRtnSaleCnt"/>       " binding="pRtnSaleCnt"     width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pRealSaleCnt"/>      " binding="pRealSaleCnt"    width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pCashCnt"/>          " binding="pCashCnt"        width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pCashApprCnt"/>      " binding="pCashApprCnt"    width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pCardCnt"/>          " binding="pCardCnt"        width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pSaleCnt"/>          " binding="pSaleCnt"        width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pRtnSaleCnt"/>       " binding="pRtnSaleCnt"     width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pRealSaleCnt"/>      " binding="pRealSaleCnt"    width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pCashCnt"/>          " binding="pCashCnt"        width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pCashApprCnt"/>      " binding="pCashApprCnt"    width="100" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pCardCnt"/>          " binding="pCardCnt"        width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
 
                     <wj-flex-grid-column header="<s:message code="runStore.instInsDt"/>         " binding="instInsDt"       width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.regDate"/>           " binding="regDate"         width="100" is-read-only="true" align="center" visible="false"> </wj-flex-grid-column>

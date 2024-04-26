@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreLangUse.xml
+    다국어사용현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.04.23     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.store.storeLangUse.service.impl.StoreLangUseMapper">
+
+    <select id="getStoreLangUseList" parameterType="storeLangUseVO" resultType="DefaultMap">
+        /* USE : StoreLangUseMapper.getStoreLangUseList */
+        SELECT  STORE_CD
+        ,       STORE_NM
+        ,       BRANCH_NM
+        ,       BRANCH_CD
+        ,       START_DATE
+        ,       END_DATE
+        ,       TOT_CNT
+        ,       KOREAN_CNT
+        ,       ENGLISH_CNT
+        ,       ENGLISH_PER
+        ,       CHINESE_CNT
+        ,       CHINESE_PER
+        ,       JAPANESE_CNT
+        ,       JAPANESE_PER
+        ,       100 - ENGLISH_PER - CHINESE_PER - JAPANESE_PER AS KOREAN_PER
+        FROM
+            (
+            <choose>
+                <when test='option != null and option != "" and option != "store"'>
+                    SELECT  '-'                                                                      AS STORE_CD
+                    ,       '전체'                                                                   AS STORE_NM
+                    <if test='option == "branch"'>
+                    ,       tms.BRANCH_CD
+                    ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                    </if>
+                    <if test='option == "all"'>
+                        ,       '-'     AS BRANCH_CD
+                        ,       '-'     AS BRANCH_NM
+                    </if>
+                    ,       #{startDate}                                                                    AS START_DATE
+                    ,       #{endDate}                                                                      AS END_DATE
+                    ,       NVL(SUM(A.TOT_CNT),0)                                                           AS TOT_CNT
+                    ,       SUM(A.KOREAN)                                                                   AS KOREAN_CNT
+                    ,       SUM(A.ENGLISH)                                                                  AS ENGLISH_CNT
+                    ,       TRUNC(DECODE(SUM(A.TOT_CNT), 0, 0, SUM(A.ENGLISH)/SUM(A.TOT_CNT))* 100, 2)      AS ENGLISH_PER
+                    ,       SUM(A.CHINESE)                                                                  AS CHINESE_CNT
+                    ,       TRUNC(DECODE(SUM(A.TOT_CNT), 0, 0, SUM(A.CHINESE)/SUM(A.TOT_CNT))* 100, 2)      AS CHINESE_PER
+                    ,       SUM(A.JAPANESE)                                                                 AS JAPANESE_CNT
+                    ,       TRUNC(DECODE(SUM(A.TOT_CNT), 0, 0, SUM(A.JAPANESE)/SUM(A.TOT_CNT))* 100, 2)     AS JAPANESE_PER
+                </when>
+                <when test='option != null and option != "" and option == "store"'>
+                    SELECT 	A.STORE_CD
+                    ,       tms.STORE_NM
+                    ,       tms.BRANCH_CD
+                    ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
+                    ,       #{startDate}                                                    AS START_DATE
+                    ,       #{endDate}                                                      AS END_DATE
+                    ,		A.TOT_CNT                                                       AS TOT_CNT
+                    ,		A.KOREAN                                                        AS KOREAN_CNT
+                    ,		A.ENGLISH                                                       AS ENGLISH_CNT
+                    ,		TRUNC(DECODE(A.TOT_CNT, 0, 0, A.ENGLISH/A.TOT_CNT)* 100, 2)     AS ENGLISH_PER
+                    ,		A.CHINESE                                                       AS CHINESE_CNT
+                    ,		TRUNC(DECODE(A.TOT_CNT, 0, 0, A.CHINESE/A.TOT_CNT)* 100, 2)     AS CHINESE_PER
+                    ,		A.JAPANESE                                                      AS JAPANESE_CNT
+                    ,		TRUNC(DECODE(A.TOT_CNT, 0, 0, A.JAPANESE/A.TOT_CNT)* 100, 2)    AS JAPANESE_PER
+                </when>
+            </choose>
+            FROM
+                (
+                    SELECT  A.STORE_CD
+                    ,       COUNT(A.STORE_CD)                                                AS TOT_CNT
+                    ,       SUM(CASE WHEN NVL(A.MULTI_LANG_FG, '1') = '1' THEN 1 ELSE 0 END) AS KOREAN
+                    ,       SUM(CASE WHEN NVL(A.MULTI_LANG_FG, '1') = '2' THEN 1 ELSE 0 END) AS ENGLISH
+                    ,       SUM(CASE WHEN NVL(A.MULTI_LANG_FG, '1') = '3' THEN 1 ELSE 0 END) AS CHINESE
+                    ,       SUM(CASE WHEN NVL(A.MULTI_LANG_FG, '1') = '4' THEN 1 ELSE 0 END) AS JAPANESE
+                    FROM    TB_SL_SALE_HDR A
+                    ,       (
+                                SELECT  TMPE.STORE_CD
+                                ,       TMPE.POS_NO
+                                FROM    TB_MS_POS_ENVST tmpe
+                                ,       TB_CM_ENVST_DTL tced
+                                WHERE   TMPE.ENVST_CD       = TCED.ENVST_CD
+                                AND     TMPE.ENVST_VAL      = TCED.ENVST_VAL_CD
+                                AND     TCED.ENVST_CD       = '4019'
+                                AND     TCED.ENVST_VAL_CD   = '6'
+                            ) B
+                    WHERE   A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND     A.STORE_CD      = B.STORE_CD
+                    AND     A.POS_NO        = B.POS_NO
+                    AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    GROUP
+                    BY      A.STORE_CD
+                ) A
+                ,       TB_MS_STORE tms
+                ,       TB_MS_STORE_INFO tmsi
+                WHERE   A.STORE_CD = tms.STORE_CD
+                AND     A.STORE_CD = tmsi.STORE_CD(+)
+                <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+                    AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+                </if>
+                <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+                    <if test='userBrands != null and userBrands != ""'>
+                        -- 매장브랜드 전체일때
+                        AND tms.HQ_BRAND_CD IN
+                        <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                <if test='momsTeam != null and momsTeam != ""'>
+                    AND tmsi.MOMS_TEAM = #{momsTeam}
+                </if>
+                <if test='momsAcShop != null and momsAcShop != ""'>
+                    AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+                </if>
+                <if test='momsAreaFg != null and momsAreaFg != ""'>
+                    AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+                </if>
+                <if test='momsCommercial != null and momsCommercial != ""'>
+                    AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+                </if>
+                <if test='momsShopType != null and momsShopType != ""'>
+                    AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+                </if>
+                <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                    AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                </if>
+                <if test='branchCd != null and branchCd != ""'>
+                    AND tms.BRANCH_CD = #{branchCd}
+                </if>
+                <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                    AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                </if>
+                <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                    AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                </if>
+                <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                    AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                </if>
+                <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                    AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                </if>
+                <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                    AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+                </if>
+                <if test='option != null and option != "" and option == "branch"'>
+                    GROUP
+                    BY 		tms.BRANCH_CD
+                </if>
+                ORDER
+                BY      tms.BRANCH_CD NULLS FIRST
+                        <if test='option != null and option != "" and option == "store"'>
+                            ,   tms.STORE_CD
+                            ,   tms.HQ_BRAND_CD
+                            ,   tmsi.MOMS_TEAM
+                            ,   tmsi.MOMS_AC_SHOP
+                        </if>
+            )
+    </select>
+
+</mapper>

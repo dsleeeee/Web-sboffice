@@ -18,6 +18,7 @@
                 <%--매장정보--%>
                 [<label id="cnr_storeCd"></label>]
                 <label id="cnr_storeNm"></label>
+                <label id="cnr_vanFixFg" style="display: none"></label>
 
                 <div class="updownSet oh">
                     <%-- 삭제 --%>
@@ -59,4 +60,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/cornerAdd.js?ver=20240207.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/cornerAdd.js?ver=20240404.02" charset="utf-8"></script>

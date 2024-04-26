@@ -132,12 +132,19 @@
     <div class="mt10 tr">
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>
+        <div class="tooltipBtn fl">설명
+            <span class="tooltiptext tooltip-right"style="width:430px">
+              * <s:message code="runStore.txt1"/><br/>
+              * <s:message code="runStore.txt2"/><br/>
+              * <s:message code="runStore.txt3"/><br/>
+            </span>
+        </div>
     </div>
 
 
     <%-- 그리드 --%>
     <div class="w100 mt10 mb20">
-        <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+        <div class="wj-gridWrap" style="height:320px; overflow-y: hidden; overflow-x: hidden;">
             <div class="row">
                 <wj-flex-grid
                         id="runStoreTrnsitnGrid"
@@ -151,13 +158,13 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="runStore.saleMonth"/>     " binding="saleMonth"     width="80" is-read-only="true" align="center"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.runStoreCnt"/>   " binding="runStoreCnt"   width="100" is-read-only="true" align="right"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.rusPosCnt"/>     " binding="runPosCnt"     width="100" is-read-only="true" align="right"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.openStorecnt"/>  " binding="openStoreCnt"  width="100" is-read-only="true" align="right"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.openPosCnt"/>    " binding="openPosCnt"    width="100" is-read-only="true" align="right"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.closeStoreCnt"/> " binding="closeStoreCnt" width="100" is-read-only="true" align="right"  > </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.closePosCnt"/>   " binding="closePosCnt"   width="100" is-read-only="true" align="right" > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.saleMonth"/>     " binding="saleMonth"     width="60" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.runStoreCnt"/>   " binding="runStoreCnt"   width="80" is-read-only="true" align="right"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.rusPosCnt"/>     " binding="runPosCnt"     width="80" is-read-only="true" align="right"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.openStorecnt"/>  " binding="openStoreCnt"  width="80" is-read-only="true" align="right"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.openPosCnt"/>    " binding="openPosCnt"    width="80" is-read-only="true" align="right"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.closeStoreCnt"/> " binding="closeStoreCnt" width="80" is-read-only="true" align="right"  > </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.closePosCnt"/>   " binding="closePosCnt"   width="80" is-read-only="true" align="right" > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.incStoreCnt"/>   " binding="incStoreCnt"   width="140" is-read-only="true" align="right" > </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.incPosCnt"/>     " binding="incPosCnt"     width="140" is-read-only="true" align="right" > </wj-flex-grid-column>
 

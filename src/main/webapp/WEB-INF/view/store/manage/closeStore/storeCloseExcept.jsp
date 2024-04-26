@@ -194,4 +194,4 @@
   var sysStatFg = ${ccu.getCommCode("005")};
   var vanComboList = ${vanComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/closeStore/storeCloseExcept.js?ver=20240422.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/closeStore/storeCloseExcept.js?ver=20240422.02" charset="utf-8"></script>

@@ -55,6 +55,21 @@
         AND		tmsvfe.STORE_CD         =   tms.STORE_CD
         AND		tmsvfe.HQ_OFFICE_CD     =   tho.HQ_OFFICE_CD
         AND		tms.AGENCY_CD           =   tca.AGENCY_CD
+        <if test="vanCd != null and vanCd != ''">
+            AND tms.VAN_CD = #{vanCd}
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd !=""'>
+            AND tms.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm !=""'>
+            AND tho.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+        </if>
+        <if test='storeCd != null and storeCd !=""'>
+            AND tms.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test='storeNm != null and storeNm !=""'>
+            AND tms.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
         <if test='includeFg != null and includeFg =="Y"'>
             <if test="agencyCd != null and agencyCd != ''">
                 AND	tca.AGENCY_CD IN	(

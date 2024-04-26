@@ -45,7 +45,14 @@
         ,       H.P_SALE_CNT
         ,       H.P_RTN_SALE_CNT
         ,       H.P_REAL_SALE_CNT
+        <choose>
+            <when test='dayGubun == "D"'>
         ,       CASE WHEN H.P_MAX_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(H.P_MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS P_MAX_SALE_DATE
+            </when>
+            <when test='dayGubun == "M"'>
+        ,       CASE WHEN H.P_MAX_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(H.P_MAX_SALE_DATE, 'yyyymm'), 'yyyy-mm') ELSE '' END AS P_MAX_SALE_DATE
+            </when>
+        </choose>
         ,       I.P_CARD_CNT
         ,       J.P_CASH_CNT
         ,       J.P_CASH_APPR_CNT
@@ -119,24 +126,34 @@
         ,       A.MAX_SALE_YM
         ) G
         ,       (
-        SELECT  A.STORE_CD
-        ,       SUM(NVL(A.BILL_CNT      , 0))   P_BILL_CNT
-        ,       SUM(NVL(A.SALE_CNT      , 0))   P_SALE_CNT
-        ,       SUM(NVL(A.RTN_SALE_CNT  , 0))   P_RTN_SALE_CNT
-        ,       SUM(NVL(A.REAL_SALE_CNT , 0))   P_REAL_SALE_CNT
-        ,       MAX(A.SALE_DATE)                P_MAX_SALE_DATE
-        FROM    TB_SL_DAILY_TOTAL A
-        WHERE   1=1
         <choose>
-            <when test='dayGubun != null and dayGubun == "D"'>
-                AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <when test='dayGubun == "D"'>
+                SELECT  A.STORE_CD
+                ,       SUM(NVL(A.BILL_CNT      , 0))   P_BILL_CNT
+                ,       SUM(NVL(A.SALE_CNT      , 0))   P_SALE_CNT
+                ,       SUM(NVL(A.RTN_SALE_CNT  , 0))   P_RTN_SALE_CNT
+                ,       SUM(NVL(A.REAL_SALE_CNT , 0))   P_REAL_SALE_CNT
+                ,       MAX(A.SALE_DATE)                P_MAX_SALE_DATE
+                FROM    TB_SL_DAILY_TOTAL A
+                WHERE   1=1
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                GROUP
+                BY      A.STORE_CD
             </when>
-            <when test='dayGubun != null and dayGubun == "M"'>
-                AND A.SALE_DATE BETWEEN #{startMonth} || '01' AND #{endMonth} || '31'
+            <when test='dayGubun == "M"'>
+                SELECT  A.STORE_CD
+                ,       SUM(NVL(A.BILL_CNT      , 0))   P_BILL_CNT
+                ,       SUM(NVL(A.SALE_CNT      , 0))   P_SALE_CNT
+                ,       SUM(NVL(A.RTN_SALE_CNT  , 0))   P_RTN_SALE_CNT
+                ,       SUM(NVL(A.REAL_SALE_CNT , 0))   P_REAL_SALE_CNT
+                ,       MAX(A.SALE_YM)                P_MAX_SALE_DATE
+                FROM    TB_SL_MONTHLY_TOTAL A
+                WHERE   1=1
+                AND     A.SALE_YM = #{startMonth}
+                GROUP
+                BY      A.STORE_CD
             </when>
         </choose>
-        GROUP
-        BY      A.STORE_CD
         ) H
         ,       (
         SELECT  HQ_OFFICE_CD
@@ -266,25 +283,25 @@
                  AND DECODE(L.SOLBI_STORE_CD, NULL, '0', '1') = #{srchShopMigFg}
             ]]>
         </if>
-        <if test='includeFg != null and includeFg =="N"'>
-            <if test="agencyCd != null and agencyCd != ''">
-                AND D.AGENCY_CD = #{agencyCd}
-            </if>
-        </if>
-        <if test='includeFg != null and includeFg =="Y"'>
-            <if test="agencyCd != null and agencyCd != ''">
-                AND	D.AGENCY_CD IN	(
-                SELECT 	AGENCY_CD
-                FROM 	TB_CM_AGENCY
-                START WITH	P_AGENCY_CD = #{agencyCd}
-                CONNECT BY
-                PRIOR       AGENCY_CD   = P_AGENCY_CD
-                UNION
-                SELECT 	AGENCY_CD
-                FROM 	TB_CM_AGENCY
-                WHERE 	AGENCY_CD = #{agencyCd}
-                )
-            </if>
+        <if test="agencyCd != null and agencyCd != ''">
+            <choose>
+                <when test='includeFg != null and includeFg =="Y"'>
+                    AND	D.AGENCY_CD IN	(
+                                            SELECT 	AGENCY_CD
+                                            FROM 	TB_CM_AGENCY
+                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                            CONNECT BY
+                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                            UNION
+                                            SELECT 	AGENCY_CD
+                                            FROM 	TB_CM_AGENCY
+                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                        )
+                </when>
+                <when test='includeFg != null and includeFg =="N"'>
+                    AND D.AGENCY_CD = #{agencyCd}
+                </when>
+            </choose>
         </if>
         AND     C.NMCODE_GRP_CD     (+) =   '005'
         AND     C.NMCODE_CD         (+) =   B.SYS_STAT_FG
@@ -427,9 +444,9 @@
                     ,       SUM(NVL(A.SALE_CNT      , 0))   P_SALE_CNT
                     ,       SUM(NVL(A.RTN_SALE_CNT  , 0))   P_RTN_SALE_CNT
                     ,       SUM(NVL(A.REAL_SALE_CNT , 0))   P_REAL_SALE_CNT
-                    FROM    TB_SL_DAILY_TOTAL A
+                    FROM    TB_SL_MONTHLY_TOTAL A
                     WHERE   1=1
-                    AND     A.SALE_DATE BETWEEN #{startMonth} || '01' AND #{startMonth} || '31'
+                    AND     A.SALE_YM = #{startMonth}
                     GROUP
                     BY      A.STORE_CD
                 ) H
@@ -562,25 +579,25 @@
                  AND DECODE(L.SOLBI_STORE_CD, NULL, '0', '1') = #{srchShopMigFg}
             ]]>
         </if>
-        <if test='includeFg != null and includeFg =="N"'>
-            <if test="agencyCd != null and agencyCd != ''">
-                AND D.AGENCY_CD = #{agencyCd}
-            </if>
-        </if>
-        <if test='includeFg != null and includeFg =="Y"'>
-            <if test="agencyCd != null and agencyCd != ''">
-                AND	D.AGENCY_CD IN	(
-                                        SELECT 	AGENCY_CD
-                                        FROM 	TB_CM_AGENCY
-                                        START WITH	P_AGENCY_CD = #{agencyCd}
-                                        CONNECT BY
-                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                        UNION
-                                        SELECT 	AGENCY_CD
-                                        FROM 	TB_CM_AGENCY
-                                        WHERE 	AGENCY_CD = #{agencyCd}
-                                    )
-            </if>
+        <if test="agencyCd != null and agencyCd != ''">
+            <choose>
+                <when test='includeFg != null and includeFg =="Y"'>
+                    AND	D.AGENCY_CD IN	(
+                                            SELECT 	AGENCY_CD
+                                            FROM 	TB_CM_AGENCY
+                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                            CONNECT BY
+                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                            UNION
+                                            SELECT 	AGENCY_CD
+                                            FROM 	TB_CM_AGENCY
+                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                        )
+                </when>
+                <when test='includeFg != null and includeFg =="N"'>
+                    AND D.AGENCY_CD = #{agencyCd}
+                </when>
+            </choose>
         </if>
         AND     C.NMCODE_GRP_CD     (+) =   '005'
         AND     C.NMCODE_CD         (+) =   B.SYS_STAT_FG
@@ -637,25 +654,25 @@
                         AND     A.STORE_CD      = C.STORE_CD
                         AND 	B.AGENCY_CD     = C.AGENCY_CD
                         AND     D.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
-                        <if test='includeFg != null and includeFg =="N"'>
-                                <if test="agencyCd != null and agencyCd != ''">
-                                AND C.AGENCY_CD = #{agencyCd}
-                            </if>
-                        </if>
-                        <if test='includeFg != null and includeFg =="Y"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND	C.AGENCY_CD IN	(
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        START WITH	P_AGENCY_CD = #{agencyCd}
-                                                        CONNECT BY
-                                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                        UNION
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        WHERE 	AGENCY_CD = #{agencyCd}
-                                                    )
-                            </if>
+                        <if test="agencyCd != null and agencyCd != ''">
+                            <choose>
+                                <when test='includeFg != null and includeFg =="Y"'>
+                                    AND	C.AGENCY_CD IN	(
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                                            CONNECT BY
+                                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                            UNION
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                                        )
+                                </when>
+                                <when test='includeFg != null and includeFg =="N"'>
+                                    AND C.AGENCY_CD = #{agencyCd}
+                                </when>
+                            </choose>
                         </if>
                         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                             <![CDATA[
@@ -705,25 +722,25 @@
                             AND   E.INST_FG     <>  '0'
                         ]]>
                         AND     F.HQ_OFFICE_CD  = D.HQ_OFFICE_CD
-                        <if test='includeFg != null and includeFg =="N"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND C.AGENCY_CD = #{agencyCd}
-                            </if>
-                        </if>
-                        <if test='includeFg != null and includeFg =="Y"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND	C.AGENCY_CD IN	(
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        START WITH	P_AGENCY_CD = #{agencyCd}
-                                                        CONNECT BY
-                                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                        UNION
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        WHERE 	AGENCY_CD = #{agencyCd}
-                                                    )
-                            </if>
+                        <if test="agencyCd != null and agencyCd != ''">
+                            <choose>
+                                <when test='includeFg != null and includeFg =="Y"'>
+                                    AND	C.AGENCY_CD IN	(
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                                            CONNECT BY
+                                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                            UNION
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                                        )
+                                </when>
+                                <when test='includeFg != null and includeFg =="N"'>
+                                    AND C.AGENCY_CD = #{agencyCd}
+                                </when>
+                            </choose>
                         </if>
                         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                             <![CDATA[
@@ -769,25 +786,25 @@
                         AND 	A.STORE_CD      = C.STORE_CD
                         AND 	B.AGENCY_CD     = C.AGENCY_CD
                         AND     D.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
-                        <if test='includeFg != null and includeFg =="N"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND C.AGENCY_CD = #{agencyCd}
-                            </if>
-                        </if>
-                        <if test='includeFg != null and includeFg =="Y"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND	C.AGENCY_CD IN	(
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        START WITH	P_AGENCY_CD = #{agencyCd}
-                                                        CONNECT BY
-                                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                        UNION
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        WHERE 	AGENCY_CD = #{agencyCd}
-                                                    )
-                            </if>
+                        <if test="agencyCd != null and agencyCd != ''">
+                            <choose>
+                                <when test='includeFg != null and includeFg =="Y"'>
+                                    AND	C.AGENCY_CD IN	(
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                                            CONNECT BY
+                                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                            UNION
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                                        )
+                                </when>
+                                <when test='includeFg != null and includeFg =="N"'>
+                                    AND C.AGENCY_CD = #{agencyCd}
+                                </when>
+                            </choose>
                         </if>
                         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                             <![CDATA[
@@ -842,25 +859,25 @@
                             AND   E.INST_FG     <>  '0'
                         ]]>
                         AND     F.HQ_OFFICE_CD  = D.HQ_OFFICE_CD
-                        <if test='includeFg != null and includeFg =="N"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND C.AGENCY_CD = #{agencyCd}
-                            </if>
-                        </if>
-                        <if test='includeFg != null and includeFg =="Y"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND	C.AGENCY_CD IN	(
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        START WITH	P_AGENCY_CD = #{agencyCd}
-                                                        CONNECT BY
-                                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                        UNION
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        WHERE 	AGENCY_CD = #{agencyCd}
-                                                    )
-                            </if>
+                        <if test="agencyCd != null and agencyCd != ''">
+                            <choose>
+                                <when test='includeFg != null and includeFg =="Y"'>
+                                    AND	C.AGENCY_CD IN	(
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                                            CONNECT BY
+                                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                            UNION
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                                        )
+                                </when>
+                                <when test='includeFg != null and includeFg =="N"'>
+                                    AND C.AGENCY_CD = #{agencyCd}
+                                </when>
+                            </choose>
                         </if>
                         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                             <![CDATA[
@@ -917,25 +934,25 @@
                         AND 	A.STORE_CD      = C.STORE_CD
                         AND 	B.AGENCY_CD     = C.AGENCY_CD
                         AND     D.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
-                        <if test='includeFg != null and includeFg =="N"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND C.AGENCY_CD = #{agencyCd}
-                            </if>
-                        </if>
-                        <if test='includeFg != null and includeFg =="Y"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND	C.AGENCY_CD IN	(
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        START WITH	P_AGENCY_CD = #{agencyCd}
-                                                        CONNECT BY
-                                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                        UNION
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        WHERE 	AGENCY_CD = #{agencyCd}
-                                                    )
-                            </if>
+                        <if test="agencyCd != null and agencyCd != ''">
+                            <choose>
+                                <when test='includeFg != null and includeFg =="Y"'>
+                                    AND	C.AGENCY_CD IN	(
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                                            CONNECT BY
+                                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                            UNION
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                                        )
+                                </when>
+                                <when test='includeFg != null and includeFg =="N"'>
+                                    AND C.AGENCY_CD = #{agencyCd}
+                                </when>
+                            </choose>
                         </if>
                         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                             <![CDATA[
@@ -990,25 +1007,25 @@
                             AND   E.INST_FG     <>  '0'
                         ]]>
                         AND     F.HQ_OFFICE_CD  = D.HQ_OFFICE_CD
-                        <if test='includeFg != null and includeFg =="N"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND C.AGENCY_CD = #{agencyCd}
-                            </if>
-                        </if>
-                        <if test='includeFg != null and includeFg =="Y"'>
-                            <if test="agencyCd != null and agencyCd != ''">
-                                AND	C.AGENCY_CD IN	(
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        START WITH	P_AGENCY_CD = #{agencyCd}
-                                                        CONNECT BY
-                                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                        UNION
-                                                        SELECT 	AGENCY_CD
-                                                        FROM 	TB_CM_AGENCY
-                                                        WHERE 	AGENCY_CD = #{agencyCd}
-                                                    )
-                            </if>
+                        <if test="agencyCd != null and agencyCd != ''">
+                            <choose>
+                                <when test='includeFg != null and includeFg =="Y"'>
+                                    AND	C.AGENCY_CD IN	(
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            START WITH	P_AGENCY_CD = #{agencyCd}
+                                                            CONNECT BY
+                                                            PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                            UNION
+                                                            SELECT 	AGENCY_CD
+                                                            FROM 	TB_CM_AGENCY
+                                                            WHERE 	AGENCY_CD = #{agencyCd}
+                                                        )
+                                </when>
+                                <when test='includeFg != null and includeFg =="N"'>
+                                    AND C.AGENCY_CD = #{agencyCd}
+                                </when>
+                            </choose>
                         </if>
                         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                             <![CDATA[
@@ -1080,25 +1097,25 @@
                 AND     A.STORE_CD      = C.STORE_CD
                 AND 	B.AGENCY_CD     = C.AGENCY_CD
                 AND     D.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
-                <if test='includeFg != null and includeFg =="N"'>
-                    <if test="agencyCd != null and agencyCd != ''">
-                        AND C.AGENCY_CD = #{agencyCd}
-                    </if>
-                </if>
-                <if test='includeFg != null and includeFg =="Y"'>
-                    <if test="agencyCd != null and agencyCd != ''">
-                        AND	C.AGENCY_CD IN	(
-                                                SELECT 	AGENCY_CD
-                                                FROM 	TB_CM_AGENCY
-                                                START WITH	P_AGENCY_CD = #{agencyCd}
-                                                CONNECT BY
-                                                PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                UNION
-                                                SELECT 	AGENCY_CD
-                                                FROM 	TB_CM_AGENCY
-                                                WHERE 	AGENCY_CD = #{agencyCd}
-                                            )
-                    </if>
+                <if test="agencyCd != null and agencyCd != ''">
+                    <choose>
+                        <when test='includeFg != null and includeFg =="Y"'>
+                            AND	C.AGENCY_CD IN	(
+                                                    SELECT 	AGENCY_CD
+                                                    FROM 	TB_CM_AGENCY
+                                                    START WITH	P_AGENCY_CD = #{agencyCd}
+                                                    CONNECT BY
+                                                    PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                    UNION
+                                                    SELECT 	AGENCY_CD
+                                                    FROM 	TB_CM_AGENCY
+                                                    WHERE 	AGENCY_CD = #{agencyCd}
+                                                )
+                        </when>
+                        <when test='includeFg != null and includeFg =="N"'>
+                            AND C.AGENCY_CD = #{agencyCd}
+                        </when>
+                    </choose>
                 </if>
                 <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                     <![CDATA[
@@ -1150,25 +1167,25 @@
                     AND   E.INST_FG     <>  '0'
                 ]]>
                 AND     F.HQ_OFFICE_CD  = D.HQ_OFFICE_CD
-                <if test='includeFg != null and includeFg =="N"'>
-                    <if test="agencyCd != null and agencyCd != ''">
-                        AND C.AGENCY_CD = #{agencyCd}
-                    </if>
-                </if>
-                <if test='includeFg != null and includeFg =="Y"'>
-                    <if test="agencyCd != null and agencyCd != ''">
-                        AND	C.AGENCY_CD IN	(
-                                                SELECT 	AGENCY_CD
-                                                FROM 	TB_CM_AGENCY
-                                                START WITH	P_AGENCY_CD = #{agencyCd}
-                                                CONNECT BY
-                                                PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                UNION
-                                                SELECT 	AGENCY_CD
-                                                FROM 	TB_CM_AGENCY
-                                                WHERE 	AGENCY_CD = #{agencyCd}
-                                            )
-                    </if>
+                <if test="agencyCd != null and agencyCd != ''">
+                    <choose>
+                        <when test='includeFg != null and includeFg =="Y"'>
+                            AND	C.AGENCY_CD IN	(
+                                                    SELECT 	AGENCY_CD
+                                                    FROM 	TB_CM_AGENCY
+                                                    START WITH	P_AGENCY_CD = #{agencyCd}
+                                                    CONNECT BY
+                                                    PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                    UNION
+                                                    SELECT 	AGENCY_CD
+                                                    FROM 	TB_CM_AGENCY
+                                                    WHERE 	AGENCY_CD = #{agencyCd}
+                                                )
+                        </when>
+                        <when test='includeFg != null and includeFg =="N"'>
+                            AND C.AGENCY_CD = #{agencyCd}
+                        </when>
+                    </choose>
                 </if>
                 <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                     <![CDATA[
@@ -1216,25 +1233,25 @@
                 AND 	A.STORE_CD      = C.STORE_CD
                 AND 	B.AGENCY_CD     = C.AGENCY_CD
                 AND     D.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
-                <if test='includeFg != null and includeFg =="N"'>
-                    <if test="agencyCd != null and agencyCd != ''">
-                        AND C.AGENCY_CD = #{agencyCd}
-                    </if>
-                </if>
-                <if test='includeFg != null and includeFg =="Y"'>
-                    <if test="agencyCd != null and agencyCd != ''">
-                        AND	C.AGENCY_CD IN	(
-                                                SELECT 	AGENCY_CD
-                                                FROM 	TB_CM_AGENCY
-                                                START WITH	P_AGENCY_CD = #{agencyCd}
-                                                CONNECT BY
-                                                PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                UNION
-                                                SELECT 	AGENCY_CD
-                                                FROM 	TB_CM_AGENCY
-                                                WHERE 	AGENCY_CD = #{agencyCd}
-                                            )
-                    </if>
+                <if test="agencyCd != null and agencyCd != ''">
+                    <choose>
+                        <when test='includeFg != null and includeFg =="Y"'>
+                            AND	C.AGENCY_CD IN	(
+                                                    SELECT 	AGENCY_CD
+                                                    FROM 	TB_CM_AGENCY
+                                                    START WITH	P_AGENCY_CD = #{agencyCd}
+                                                    CONNECT BY
+                                                    PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                    UNION
+                                                    SELECT 	AGENCY_CD
+                                                    FROM 	TB_CM_AGENCY
+                                                    WHERE 	AGENCY_CD = #{agencyCd}
+                                                )
+                        </when>
+                        <when test='includeFg != null and includeFg =="N"'>
+                            AND C.AGENCY_CD = #{agencyCd}
+                        </when>
+                    </choose>
                 </if>
                 <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                     <![CDATA[
@@ -1291,25 +1308,25 @@
                     AND   E.INST_FG     <>  '0'
                 ]]>
                 AND     F.HQ_OFFICE_CD  = D.HQ_OFFICE_CD
-                <if test='includeFg != null and includeFg =="N"'>
-                    <if test="agencyCd != null and agencyCd != ''">
-                        AND C.AGENCY_CD = #{agencyCd}
-                    </if>
-                </if>
-                <if test='includeFg != null and includeFg =="Y"'>
-                    <if test="agencyCd != null and agencyCd != ''">
-                        AND	C.AGENCY_CD IN	(
-                                                SELECT 	AGENCY_CD
-                                                FROM 	TB_CM_AGENCY
-                                                START WITH	P_AGENCY_CD = #{agencyCd}
-                                                CONNECT BY
-                                                PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                UNION
-                                                SELECT 	AGENCY_CD
-                                                FROM 	TB_CM_AGENCY
-                                                WHERE 	AGENCY_CD = #{agencyCd}
-                                            )
-                    </if>
+                <if test="agencyCd != null and agencyCd != ''">
+                    <choose>
+                        <when test='includeFg != null and includeFg =="Y"'>
+                            AND	C.AGENCY_CD IN	(
+                                                    SELECT 	AGENCY_CD
+                                                    FROM 	TB_CM_AGENCY
+                                                    START WITH	P_AGENCY_CD = #{agencyCd}
+                                                    CONNECT BY
+                                                    PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                    UNION
+                                                    SELECT 	AGENCY_CD
+                                                    FROM 	TB_CM_AGENCY
+                                                    WHERE 	AGENCY_CD = #{agencyCd}
+                                                )
+                        </when>
+                        <when test='includeFg != null and includeFg =="N"'>
+                            AND C.AGENCY_CD = #{agencyCd}
+                        </when>
+                    </choose>
                 </if>
                 <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                     <![CDATA[
@@ -1374,25 +1391,25 @@
                     AND 	A.STORE_CD      = C.STORE_CD
                     AND 	B.AGENCY_CD     = C.AGENCY_CD
                     AND     D.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
-                    <if test='includeFg != null and includeFg =="N"'>
-                        <if test="agencyCd != null and agencyCd != ''">
-                            AND C.AGENCY_CD = #{agencyCd}
-                        </if>
-                    </if>
-                    <if test='includeFg != null and includeFg =="Y"'>
-                        <if test="agencyCd != null and agencyCd != ''">
-                            AND	C.AGENCY_CD IN	(
-                                                    SELECT 	AGENCY_CD
-                                                    FROM 	TB_CM_AGENCY
-                                                    START WITH	P_AGENCY_CD = #{agencyCd}
-                                                    CONNECT BY
-                                                    PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                    UNION
-                                                    SELECT 	AGENCY_CD
-                                                    FROM 	TB_CM_AGENCY
-                                                    WHERE 	AGENCY_CD = #{agencyCd}
-                                                )
-                        </if>
+                    <if test="agencyCd != null and agencyCd != ''">
+                        <choose>
+                            <when test='includeFg != null and includeFg =="Y"'>
+                                AND	C.AGENCY_CD IN	(
+                                                        SELECT 	AGENCY_CD
+                                                        FROM 	TB_CM_AGENCY
+                                                        START WITH	P_AGENCY_CD = #{agencyCd}
+                                                        CONNECT BY
+                                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                        UNION
+                                                        SELECT 	AGENCY_CD
+                                                        FROM 	TB_CM_AGENCY
+                                                        WHERE 	AGENCY_CD = #{agencyCd}
+                                                    )
+                            </when>
+                            <when test='includeFg != null and includeFg =="N"'>
+                                AND C.AGENCY_CD = #{agencyCd}
+                            </when>
+                        </choose>
                     </if>
                     <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                         <![CDATA[
@@ -1449,25 +1466,25 @@
                         AND   E.INST_FG     <>  '0'
                     ]]>
                     AND     F.HQ_OFFICE_CD  = D.HQ_OFFICE_CD
-                    <if test='includeFg != null and includeFg =="N"'>
-                        <if test="agencyCd != null and agencyCd != ''">
-                            AND C.AGENCY_CD = #{agencyCd}
-                        </if>
-                    </if>
-                    <if test='includeFg != null and includeFg =="Y"'>
-                        <if test="agencyCd != null and agencyCd != ''">
-                            AND	C.AGENCY_CD IN	(
-                                                    SELECT 	AGENCY_CD
-                                                    FROM 	TB_CM_AGENCY
-                                                    START WITH	P_AGENCY_CD = #{agencyCd}
-                                                    CONNECT BY
-                                                    PRIOR       AGENCY_CD   = P_AGENCY_CD
-                                                    UNION
-                                                    SELECT 	AGENCY_CD
-                                                    FROM 	TB_CM_AGENCY
-                                                    WHERE 	AGENCY_CD = #{agencyCd}
-                                                )
-                        </if>
+                    <if test="agencyCd != null and agencyCd != ''">
+                        <choose>
+                            <when test='includeFg != null and includeFg =="Y"'>
+                                AND	C.AGENCY_CD IN	(
+                                                        SELECT 	AGENCY_CD
+                                                        FROM 	TB_CM_AGENCY
+                                                        START WITH	P_AGENCY_CD = #{agencyCd}
+                                                        CONNECT BY
+                                                        PRIOR       AGENCY_CD   = P_AGENCY_CD
+                                                        UNION
+                                                        SELECT 	AGENCY_CD
+                                                        FROM 	TB_CM_AGENCY
+                                                        WHERE 	AGENCY_CD = #{agencyCd}
+                                                    )
+                            </when>
+                            <when test='includeFg != null and includeFg =="N"'>
+                                AND C.AGENCY_CD = #{agencyCd}
+                            </when>
+                        </choose>
                     </if>
                     <if test='hqOfficeCd != null and hqOfficeCd != ""'>
                         <![CDATA[

@@ -97,6 +97,7 @@
         <%-- 저장타입 지정 --%>
         <input type="hidden" id="rowAgencyCd" name="rowAgencyCd">
         <input type="hidden" id="rowPAgencyCd" name="rowPAgencyCd">
+        <input type="hidden" id="saveFg" name="saveFg">
     </div>
 </div>
 
@@ -179,6 +180,8 @@
         <%-- 설치업체 목록 조회 --%>
         function search(){
 
+            newRegAgency();
+
             var params = {};
 
             params.srchAgencyCd = $("#srchAgencyCd").val();
@@ -196,6 +199,20 @@
                         agencyGrid.itemsSource = new wijmo.collections.CollectionView([]);
                         return;
                     }
+
+                    var params2 = {};
+                    // 저장 시 재조회
+                    if($("#saveFg").val() !== null) {
+                        if ($("#saveFg").val() === 'save') {
+                            var listMax = list.length - 1;
+                            params2.agencyCd = list[listMax].agencyCd;
+                        } else {
+                            params2.agencyCd = $("#saveFg").val();
+                        }
+                        getAgencyInfo(params2);
+                    }
+
+
 
                     agencyGrid.itemsSource = new wijmo.collections.CollectionView(list);
                     //
@@ -218,7 +235,7 @@
 
                                     // 사원관리, 인증관리 탭 보이기
                                     $("#empManageTab").show();
-                                    $("#authManageTab").show();
+                                    $("#authManageTab").hide();
 
                                     // 선택한 업체 코드 값 hidden 으로 갖고 있기(사원관리, 인증관리 호출 시 사용)
                                     $("#rowAgencyCd").val(selectedRow.agencyCd);
@@ -232,6 +249,9 @@
                             }
                         }
                     });
+
+                    // 조회 시 화면 초기화
+                    // newRegAgency();
 
                 },
                 function (result) {

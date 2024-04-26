@@ -14,7 +14,7 @@
         <%-- 설치업체관리 사원관리 --%>
         <li><a id="empManageTab"  href="#" class="on"><s:message code="instlAgency.empManage" /></a></li>
         <%-- 설치업체관리 인증관리 --%>
-        <li><a id="authManageTab"  href="#" onClick="changeTabInstlAgency('auth');"><s:message code="instlAgency.authManage" /></a></li>
+        <li><a id="authManageTab"  href="#" style="visibility:hidden" onClick="changeTabInstlAgency('auth');"><s:message code="instlAgency.authManage" /></a></li>
     </ul>
     <%--============================================= //탭 =============================================--%>
     <table class="searchTbl">

@@ -8,6 +8,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+<c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 <c:set var="baseUrl" value="/store/manage/terminalManage/" />
 
 <div class="subCon">
@@ -130,6 +131,7 @@
         <label id="lblStoreCd" style="display: none"></label>
         <label id="lblStoreNm" style="display: none"></label>
         <label id="lblHqOfficeCd" style="display: none"></label>
+        <label id="lblVanFixFg" style="display: none"></label>
         <input type="hidden" id="orgTerminalEnvVal"/>
       </div>
       <%-- 터미널 선택 --%>
@@ -268,9 +270,13 @@
   var hqOfficeCd = "${hqOfficeCd}";
   var clsFg = ${ccu.getCommCodeSelect("001")};
   var sysStatFg = ${ccu.getCommCodeSelect("005")};
+  // KOCES 총판 및 하위 대리점 코드
+  var agencyCol = '${agencyCol}';
+
+  var arrAgencyCol = agencyCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20240207.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20240404.02" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <%--<c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">--%>

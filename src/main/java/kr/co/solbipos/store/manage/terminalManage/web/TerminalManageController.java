@@ -7,6 +7,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
+import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosVO;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
@@ -58,12 +59,14 @@ public class TerminalManageController {
 
     /** service */
     private final TerminalManageService service;
+    private final StoreManageService storeManageService;
     private final SessionService sessionService;
 
     /** Constructor Injection */
     @Autowired
-    public TerminalManageController(TerminalManageService service, SessionService sessionService) {
+    public TerminalManageController(TerminalManageService service, StoreManageService storeManageService, SessionService sessionService) {
         this.service = service;
+        this.storeManageService = storeManageService;
         this.sessionService = sessionService;
     }
 
@@ -83,6 +86,17 @@ public class TerminalManageController {
         List<DefaultMap<String>> vendorList = service.getVendorList();
 
         model.addAttribute("vendorList", convertToJson(vendorList) );
+
+        // KOCES VAN 및 하위 대리점 리스트
+        List<DefaultMap<String>> agencyCdList = storeManageService.agencyCdList();
+
+        // 대리점 코드를 , 로 연결하는 문자열 생성
+        String agencyCol = "";
+        for(int i=0; i < agencyCdList.size(); i++) {
+            agencyCol += (agencyCol.equals("") ? "" : ",") + agencyCdList.get(i).getStr("agencyCd");
+        }
+
+        model.addAttribute("agencyCol", agencyCol);
 
         return "store/manage/terminalManage/terminalView";
     }
@@ -366,6 +380,29 @@ public class TerminalManageController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = service.updateTerminalEnvst(storeEnvVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * VAN사 변경허용 체크
+     *
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 04. 16.
+     */
+    @RequestMapping(value = "/terminalManage/chkVanFix.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkVanFix(StoreManageVO storeManageVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = storeManageService.chkVanFix(storeManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

@@ -29,6 +29,15 @@ app.controller('storeCloseExceptCtrl', ['$scope', '$http', '$timeout', function 
   $scope.$on('storeCloseExceptCtrl', function(event, data) {
 
     var params = {};
+    params.vanCd = $scope.vanCdCombo.selectedValue;
+    params.sysStatFg = $scope.statFgCombo.selectedValue;
+    params.agencyCd = $scope.agencyCd;
+    params.agencyNm = $scope.agencyNm;
+    params.hqOfficeCd = $scope.hqOfficeCd;
+    params.hqOfficeNm = $scope.hqOfficeNm;
+    params.storeCd = $scope.storeCd;
+    params.storeNm = $scope.storeNm;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/store/manage/closeStore/storeCloseExcept/getStoreCloseExceptList.sb", params, function() {
       $scope._broadcast('storeCtrl');
@@ -91,6 +100,18 @@ app.controller('storeCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.vanCdDataMap = new wijmo.grid.DataMap(vanComboList, 'value', 'name');
+
+    // 비고 작성시 체크
+    s.cellEditEnded.addHandler(function (s, e) {
+      if (e.panel === s.cells) {
+        var col = s.columns[e.col];
+        var item = s.rows[e.row].dataItem;
+        if (col.binding === "remark") {
+          item.gChk = true;
+        }
+      }
+      s.collectionView.commitEdit();
+    });
   };
 
   // 매장 그리드 조회

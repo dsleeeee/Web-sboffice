@@ -249,8 +249,26 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
             var cornerScope = agrid.getScope('cornerCtrl');
             cornerScope._gridDataInit();
 
+            $scope.chkVanFix(params);
+
         });
     };
+
+    $scope.chkVanFix = function(data){
+        var params = data;
+        // params.agencyCd = orgnCd;
+
+        // VAN사 변경 허용 체크
+        $scope._postJSONQuery.withOutPopUp( "/store/manage/terminalManage/terminalManage/chkVanFix.sb", params, function(response){
+            var chkVanFix = response.data.data;
+            if(chkVanFix === "Y" || chkVanFix === "N") {
+                $("#lblVanFixFg").text(chkVanFix);
+            }else{
+                $("#lblVanFixFg").text("N");
+            }
+        });
+    }
+
 
     // 코너 보여주기
     $scope.showCorner = function () {
@@ -385,6 +403,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         var params = {};
         params.storeCd = $("#lblStoreCd").text();
         params.storeNm = $("#lblStoreNm").text();
+        params.vanFixFg = $("#lblVanFixFg").text();
 
         $scope._broadcast('cornerAddCtrl', params);
 
@@ -558,6 +577,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 포스 정보 저장
     $scope.save = function () {
+
         var terminalScope = agrid.getScope('terminalCtrl');
 
         // 파라미터 설정
@@ -640,6 +660,15 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                                 $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
                                 return false;
                             }
+                        }
+                    }
+                }
+                // KOCES 총판은 벤더코드 KOCES만 저장가능
+                if($("#lblVanFixFg").text() == "Y") {
+                    if (params[i].vendorFg === '01') {
+                        if (params[i].vendorNm !== 'KOCES') {
+                            $scope._popMsg(messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
+                            return false;
                         }
                     }
                 }
@@ -935,6 +964,15 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                                 $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
                                 return false;
                             }
+                        }
+                    }
+                }
+                // KOCES 총판은 벤더코드 KOCES만 저장가능
+                if($("#lblVanFixFg").text() == "Y") {
+                    if (params[i].vendorFg === '01') {
+                        if (params[i].vendorNm !== 'KOCES') {
+                            $scope._popMsg(messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
+                            return false;
                         }
                     }
                 }

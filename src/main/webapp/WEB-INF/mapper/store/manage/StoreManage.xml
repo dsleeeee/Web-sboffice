@@ -12,6 +12,28 @@
 
 <mapper namespace="kr.co.solbipos.store.manage.storemanage.service.impl.StoreManageMapper">
 
+    <!-- 대리점 코드 조회 -->
+    <!--
+        TABLE    : TB_CM_AGENCY
+        PARAM    :
+        COMMENTS : 대리점코드목록을 조회한다.
+    -->
+    <select id="agencyCdList" resultType="DefaultMap">
+        /* USE : StoreManageMapper.agencyCdList */
+        SELECT 	AGENCY_CD
+        FROM 	TB_CM_AGENCY
+        START WITH	P_AGENCY_CD = '00607' or P_AGENCY_CD = '00608'
+        CONNECT BY
+        PRIOR       AGENCY_CD = P_AGENCY_CD
+        UNION
+        SELECT 	AGENCY_CD
+        FROM 	TB_CM_AGENCY
+        WHERE 	AGENCY_CD = '00607' or AGENCY_CD = '00608'
+    </select>
+
+
+
+
     <!-- 매장목록 조회 -->
     <!--
         TABLE    : TB_MS_STORE, TB_HQ_OFFICE
@@ -8773,7 +8795,7 @@
         PARAM    : storePosEnvVO
         COMMENTS : 포스별 4048 스마트오더 사용여부를 조회한다.
     -->
-    <select id="getEnv4048PosList" parameterType="storePosEnvVO" resultType="DefaultMap">
+    <select id="getEnv4048PosList" parameterType="storePosEnvVO" resultType="String">
         /* USE : StoreManageMapper.getEnv4048PosList */
         SELECT  A.POS_NO AS POS_NO
         ,      '['||A.POS_NO||'] '||A.POS_NM AS POS_NM
@@ -8789,5 +8811,31 @@
         ORDER
         BY      A.POS_NO
     </select>
+
+    <!-- VAN사 변경허용 체크 -->
+    <!--
+        TABLE    :
+        PARAM    : storePosEnvVO
+        COMMENTS :
+    -->
+    <select id="chkVanFix" parameterType="storeManageVO" resultType="String">
+        /* USE : StoreManageMapper.chkVanFix */
+        SELECT  FN_GET_AGENCY_CD_NM_STR(#{agencyCd} , #{storeCd}, 'FIX_YN')
+        FROM    DUAL
+    </select>
+
+    <!-- 관리업체 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : storePosEnvVO
+        COMMENTS :
+    -->
+    <select id="getAgencyCd" parameterType="storeManageVO" resultType="String">
+        /* USE : StoreManageMapper.getAgencyCd */
+        SELECT	AGENCY_CD
+        FROM 	TB_MS_STORE
+        WHERE 	STORE_CD = #{storeCd}
+    </select>
+
 
 </mapper>

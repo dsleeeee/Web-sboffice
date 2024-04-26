@@ -196,7 +196,7 @@
 <script type="text/javascript">
     var vanComboList = ${vanComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/vanFixExceptStore/vanFixExceptStore.js?ver=20240409.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/vanFixExceptStore/vanFixExceptStore.js?ver=20240422.01" charset="utf-8"></script>
 
 <%-- 관리밴사 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchVan.jsp">
