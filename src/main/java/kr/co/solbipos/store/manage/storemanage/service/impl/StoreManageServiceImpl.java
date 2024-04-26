@@ -1670,4 +1670,20 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         return mapper.getEnv4048PosList(storePosEnvVO);
     }
+
+    /** KOCES VAN 및 하위 대리점 리스트 */
+    @Override
+    public List<DefaultMap<String>> agencyCdList() {
+        return mapper.agencyCdList();
+    }
+
+    /** VAN사 변경허용 체크 */
+    @Override
+    public String chkVanFix(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+        storeManageVO.setAgencyCd(mapper.getAgencyCd(storeManageVO));
+
+        System.out.println(storeManageVO.getAgencyCd() + "관리업체 코드");
+
+        return mapper.chkVanFix(storeManageVO);
+    }
 }

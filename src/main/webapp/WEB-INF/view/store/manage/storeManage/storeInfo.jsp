@@ -46,6 +46,7 @@
               <col class="w35" />
             </colgroup>
             <tbody>
+            <label id="lblVanFixFg" style="display: none"></label>
             <tr>
               <%-- 본사코드 --%>
               <th><s:message code="storeManage.hqOfficeCd" /><em class="imp">*</em></th>
@@ -699,7 +700,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20240315.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20240404.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

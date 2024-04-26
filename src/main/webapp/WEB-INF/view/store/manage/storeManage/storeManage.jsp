@@ -232,6 +232,10 @@
   var brandUseFg = "${brandUseFg}";
   // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
+  // KOCES 총판 및 하위 대리점 코드
+  var agencyCol = '${agencyCol}';
+
+  var arrAgencyCol = agencyCol.split(',');
 
 </script>
 

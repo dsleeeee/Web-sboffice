@@ -22,12 +22,12 @@
                         <tbody>
                         <tr>
                             <%--사원명--%>
-                            <th><s:message code="instlAgency.empNm" /></th>
+                            <th><s:message code="instlAgency.empNm" /><em class="imp">*</em></th>
                             <td>
                                 <input type="text" id="emr_empNm" name="emr_empNm" maxlength="50"/>
                             </td>
                             <%-- 사용여부 --%>
-                            <th><s:message code="instlAgency.useYn" /></th>
+                            <th><s:message code="instlAgency.useYn" /><em class="imp">*</em></th>
                             <td>
                                 <select class="sb-select" id="emr_useYn">
                                     <option value="N"><s:message code="instlAgency.ynN"/></option>
@@ -42,7 +42,7 @@
                                 <input type="text" id="emr_empNo" name="emr_empNo" maxlength="50" readonly/>
                             </td>
                             <%-- 재직여부 --%>
-                            <th><s:message code="instlAgency.serviceFg" /></th>
+                            <th><s:message code="instlAgency.serviceFg" /><em class="imp">*</em></th>
                             <td>
                                 <select class="sb-select" id="emr_serviceFg">
                                 </select>
@@ -60,7 +60,7 @@
                         </tr>
                         <tr id="trUserId">
                             <%--웹사용자ID--%>
-                            <th><s:message code="instlAgency.userId" /></th>
+                            <th><s:message code="instlAgency.userId" /><em class="imp">*</em></th>
                             <td colspan="3">
                                 <input type="text" id="emr_userId" name="emr_userId" maxlength="50" style="width: 20%"/>
                                 <input type="hidden" id="duplicationChkFg"/>
@@ -71,7 +71,7 @@
                             </td>
                         </tr>
                         <tr id="trUserPwd">
-                            <th><s:message code="instlAgency.userPwd" /></th>
+                            <th><s:message code="instlAgency.userPwd" /><em class="imp">*</em></th>
                             <td colspan="3">
                                 <input type="password" id="emr_userPwd" name="emr_userPwd" style="width: 20%">
                                 <input type="password" id="emr_userPwdCfm" name="emr_userPwdCfm" style="width: 20%"/>
@@ -80,7 +80,7 @@
                         <tr>
                             <th><s:message code="instlAgency.mapEmpNo" /></th>
                             <td><input type="text" id="emr_mapEmpNo" name="emr_mapEmpNo"></td>
-                            <th><s:message code="instlAgency.adminFg" /></th>
+                            <th><s:message code="instlAgency.adminFg" /><em class="imp">*</em></th>
                             <td>
                                 <select class="sb-select" id="emr_adminFg">
                                 </select>
@@ -88,7 +88,7 @@
                         </tr>
                         <tr>
                             <%--휴대폰번호--%>
-                            <th><s:message code="instlAgency.mpNo" /></th>
+                            <th><s:message code="instlAgency.mpNo" /><em class="imp">*</em></th>
                             <td>
                                 <input type="text" id="emr_mpNo" name="emr_mpNo" maxlength="50"/>
                             </td>
@@ -336,7 +336,21 @@
                         s_alert.pop(messages["systemEmp.userIdRegexp.msg"]);
                         return false;
                     } else if(response.data === 'PASSWORD_REGEXP') {
-                        s_alert.pop(messages["login.pw.cannot"]);
+                        // 확인 버튼만 팝업
+                        var id = s_alert.randomString(5);
+                        var pop = $("#_layerOk").clone(false).attr("id", id).appendTo(document.body);
+                        pop.find("p").html(messages["login.pw.cannot"]);
+
+                        // 팝업 띄우기
+                        $("#_alertTent").show();
+                        pop.show();
+
+                        // 확인 클릭
+                        pop.find("a").bind("click", function () {
+                            $("#_alertTent").hide();
+                            pop.remove();
+                        });
+
                         return false;
                     } else {
                         s_alert.pop(messages["cmm.registFail"]);

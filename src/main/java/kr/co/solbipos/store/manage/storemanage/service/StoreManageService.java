@@ -178,4 +178,10 @@ public interface StoreManageService {
 
     /** 포스별 4048 스마트오더 사용여부 조회 */
     List<DefaultMap<Object>> getEnv4048PosList(StorePosEnvVO storePosEnvVO);
+
+    /** KOCES VAN 및 하위 대리점 리스트 */
+    List<DefaultMap<String>> agencyCdList();
+
+    /** VAN사 변경허용 체크 */
+    String chkVanFix(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
 }

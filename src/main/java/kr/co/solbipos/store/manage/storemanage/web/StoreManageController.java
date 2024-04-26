@@ -126,6 +126,18 @@ public class StoreManageController {
         }
         /** //맘스터치 */
 
+        // KOCES VAN 및 하위 대리점 리스트
+        List<DefaultMap<String>> agencyCdList = service.agencyCdList();
+
+        // 대리점 코드를 , 로 연결하는 문자열 생성
+        String agencyCol = "";
+        for(int i=0; i < agencyCdList.size(); i++) {
+            agencyCol += (agencyCol.equals("") ? "" : ",") + agencyCdList.get(i).getStr("agencyCd");
+        }
+
+        model.addAttribute("agencyCol", agencyCol);
+
+
         return "store/manage/storeManage/storeManage";
     }
 
@@ -1122,5 +1134,28 @@ public class StoreManageController {
         List<DefaultMap<Object>> result = service.getEnv4048PosList(storePosEnvVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, storePosEnvVO);
+    }
+
+    /**
+     * VAN사 변경허용 체크
+     *
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 04. 16.
+     */
+    @RequestMapping(value = "/storeManage/chkVanFix.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkVanFix(StoreManageVO storeManageVO, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = service.chkVanFix(storeManageVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

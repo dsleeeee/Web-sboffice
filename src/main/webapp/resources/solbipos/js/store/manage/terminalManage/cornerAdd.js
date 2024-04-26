@@ -57,9 +57,9 @@ app.controller('cornerAddCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.$on("cornerAddCtrl", function(event, data) {
 
         // 매장코드, 매장명
-       $("#cnr_storeCd").text(data.storeCd);
-       $("#cnr_storeNm").text(data.storeNm);
-        
+        $("#cnr_storeCd").text(data.storeCd);
+        $("#cnr_storeNm").text(data.storeNm);
+        $("#cnr_vanFixFg").text(data.vanFixFg);
         // 코너 리스트 조회
         $scope.searchCornerList();
 
@@ -153,6 +153,14 @@ app.controller('cornerAddCtrl', ['$scope', '$http', function ($scope, $http) {
                         // 전화번호는 숫자만 입력해주세요.
                         $scope._popMsg(messages["terminalManage.telNo"] + messages["cmm.require.number"]);
                         return false;
+                    }
+                    
+                    // KOCES 총판은 VAN사코드 KOCES만 저장가능
+                    if($("#cnr_vanFixFg").text() == "Y") {
+                        if (params[i].vanCd !== '008') {
+                            $scope._popMsg(messages["terminalManage.vanCd"] + "는 008" + messages["terminalManage.require.select"]);
+                            return false;
+                        }
                     }
                 }
             }

@@ -1060,6 +1060,8 @@
     <typeAlias alias="storeDayPosVO" type="kr.co.solbipos.sale.store.storeDayPos.service.StoreDayPosVO"/>
     <!-- 맘스터치 > 매장분석 > 매장-월별매출현황(포스별) -->
     <typeAlias alias="storeMonthPosVO" type="kr.co.solbipos.sale.store.storeMonthPos.service.StoreMonthPosVO"/>
+    <!-- 맘스터치 > 매장분석 > 다국어사용현황 -->
+    <typeAlias alias="storeLangUseVO" type="kr.co.solbipos.sale.store.storeLangUse.service.StoreLangUseVO"/>
 
     <!-- 맘스터치 > 매출분석2 > 가승인-상품권결제차액 -->
     <typeAlias alias="payTemporaryVO" type="kr.co.solbipos.sale.status.payTemporary.service.PayTemporaryVO"/>

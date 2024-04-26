@@ -50,16 +50,14 @@
                     </span>
                     <%-- 일 --%>
                     <span id="spanDay">
-                                <span class="txtIn"><input id="srchStartDate" ng-model="srchStartDate" class="w110px"></span>
-                                <span class="rg">~</span>
-                                <span class="txtIn"><input id="srchEndDate" ng-model="srchEndDate" class="w110px"></span>
-                            </span>
+                        <span class="txtIn"><input id="srchStartDate" ng-model="srchStartDate" class="w110px"></span>
+                        <span class="rg">~</span>
+                        <span class="txtIn"><input id="srchEndDate" ng-model="srchEndDate" class="w110px"></span>
+                    </span>
                     <%-- 월 --%>
                     <span id="spanMonth" style="display: none;">
-                                <span class="txtIn"><input id="startMonth" ng-model="srchStartMonth" class="w110px"></span>
-                                <span class="rg">~</span>
-                                <span class="txtIn"><input id="endMonth" ng-model="srchStartMonth" class="w110px"></span>
-                            </span>
+                        <span class="txtIn"><input id="startMonth" ng-model="srchStartMonth" class="w110px"></span>
+                    </span>
                 </div>
             </td>
         </tr>
@@ -149,7 +147,7 @@
         </tr>
         <tr>
             <th>
-                <s:message code="vanFixExceptStore.includeFg" />
+                <s:message code="runStore.includeFg" />
             </th>
             <td>
                 <div class="sb-select">
@@ -201,18 +199,18 @@
 
                     <wj-flex-grid-column header="<s:message code="runStore.progFg"/>            " binding="progFg"          width=" 90" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.posCnt"/>            " binding="posCnt"          width=" 60" is-read-only="true" align="center" aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pSaleCnt"/>          " binding="pSaleCnt"        width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pRtnSaleCnt"/>       " binding="pRtnSaleCnt"     width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pRealSaleCnt"/>      " binding="pRealSaleCnt"    width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pCashCnt"/>          " binding="pCashCnt"        width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pCashApprCnt"/>      " binding="pCashApprCnt"    width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="runStore.pCardCnt"/>          " binding="pCardCnt"        width="120" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pSaleCnt"/>          " binding="pSaleCnt"        width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pRtnSaleCnt"/>       " binding="pRtnSaleCnt"     width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pRealSaleCnt"/>      " binding="pRealSaleCnt"    width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pCashCnt"/>          " binding="pCashCnt"        width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pCashApprCnt"/>      " binding="pCashApprCnt"    width="100" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.pCardCnt"/>          " binding="pCardCnt"        width=" 80" is-read-only="true" align="right"  aggregate="Sum"> </wj-flex-grid-column>
 
                     <wj-flex-grid-column header="<s:message code="runStore.instInsDt"/>         " binding="instInsDt"       width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.regDate"/>           " binding="regDate"         width="100" is-read-only="true" align="center" visible="false"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.sysOpenDate"/>       " binding="sysOpenDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
 
-                    <wj-flex-grid-column header="<s:message code="runStore.maxSaleDate"/>       " binding="pMaxSaleDate"    width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.maxSaleDate"/>       " binding="maxSaleDate"    width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.lastSaleDate"/>      " binding="lastSaleDate"    width="100" is-read-only="true" align="center" visible="false"> </wj-flex-grid-column>
 
                     <wj-flex-grid-column header="<s:message code="runStore.sysStatNm"/>         " binding="sysStatNm"       width=" 50" is-read-only="true" align="center"> </wj-flex-grid-column>
@@ -237,5 +235,5 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/runStore/runStoreList.js?ver=20240419.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/runStore/runStoreList.js?ver=20240419.02" charset="utf-8"></script>
 

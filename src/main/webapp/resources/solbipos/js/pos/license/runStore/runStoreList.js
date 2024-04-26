@@ -48,10 +48,6 @@ app.controller('runStoreListCtrl', ['$scope', '$http', '$timeout', function ($sc
         format       : "yyyy-MM",
         selectionMode: "2" // 달력 선택 모드(1:day 2:month)
     });
-    var endMonth = new wijmo.input.InputDate('#endMonth', {
-        format       : "yyyy-MM",
-        selectionMode: "2" // 달력 선택 모드(1:day 2:month)
-    });
 
 
     // comboBox 초기화
@@ -100,7 +96,7 @@ app.controller('runStoreListCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
-        params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+        params.endMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.dayGubun = $scope.srchDayGubunCombo.selectedValue;
         params.hqOfficeCd = $scope.hqOfficeCd;
         params.hqOfficeNm = $scope.hqOfficeNm
@@ -132,23 +128,8 @@ app.controller('runStoreListCtrl', ['$scope', '$http', '$timeout', function ($sc
         var date2 = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
 
         var diffDay = (date2.getTime() - date1.getTime()) / (1000 * 60 * 60 * 24);
-
-        var month1 = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
-        var month2 = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
-        var diffMonth = (month2.getTime() - month1.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
         
-        if($scope.dayGubun === 'M' && $scope.dayGubun !==null ) {
-            // 시작일자가 종료일자보다 빠른지 확인
-            if (month1.getTime() > month2.getTime()) {
-                $scope._popMsg(messages['cmm.dateChk.error']);
-                return false;
-            }
-            // 조회일자 최대 1년(12개월) 제한
-            if (diffMonth > 1) {
-                $scope._popMsg(messages['cmm.dateOver.1month.error']);
-                return false;
-            }
-        }else if($scope.dayGubun === 'D' && $scope.dayGubun !==null) {
+        if($scope.dayGubun === 'D' && $scope.dayGubun !==null) {
             // 시작일자가 종료일자보다 빠른지 확인
             if (date1.getTime() > date2.getTime()) {
                 $scope._popMsg(messages['cmm.dateChk.error']);
@@ -224,12 +205,14 @@ app.controller('runStoreListCtrl', ['$scope', '$http', '$timeout', function ($sc
         }
         var startDt ='';
         var endDt = ''
+        var msg = '';
         if($scope.srchDayGubun === "D"){
             startDt = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd');
             endDt   = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd');
+            msg = '런닝매장현황_런닝매장현황(' + startDt +'_' + endDt + ')'+'_'+ getCurDateTime() +'.xlsx';
         }else if($scope.srchDayGubun === "M"){
             startDt = wijmo.Globalize.format(startMonth.value, 'yyyy-MM');
-            endDt   = wijmo.Globalize.format(endMonth.value, 'yyyy-MM');
+            msg = '런닝매장현황_런닝매장현황(' + startDt + ')'+'_'+ getCurDateTime() +'.xlsx';
         }
 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
@@ -240,7 +223,7 @@ app.controller('runStoreListCtrl', ['$scope', '$http', '$timeout', function ($sc
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            }, '런닝매장현황_런닝매장현황(' + startDt +'_' + endDt + ')'+'_'+ getCurDateTime() +'.xlsx', function () {
+            }, msg, function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);

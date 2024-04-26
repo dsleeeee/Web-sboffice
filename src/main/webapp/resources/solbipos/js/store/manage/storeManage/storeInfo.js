@@ -210,7 +210,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
     } else {
-      $scope.getStoreInfo();
+      $scope.chkVanFix();
     }
 
     event.preventDefault();
@@ -232,6 +232,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.storeNm ="";
     $scope.store.bizStoreNm ="";
     $scope.store.ownerNm ="";
+
+
+    if (arrAgencyCol.indexOf(orgnCd) !== -1) {
+      $("#lblVanFixFg").text("Y");
+    }else{
+      $("#lblVanFixFg").text("N");
+    }
 
     // 시스템 오픈일자 / 포스개점일자
     // $("#sysOpenDate").attr("disabled", false);
@@ -276,6 +283,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.store.vanCd = "";
     $scope.store.vanNm = "";
+
+    // KOCES 총판은 관리벤사 KOCES로 설정
+    if(arrAgencyCol.indexOf(orgnCd) !== -1){
+      $scope.store.vanCd = "008";
+      $scope.store.vanNm = "KOCES";
+      $("#manageVanCd").val($scope.store.vanCd);
+      $("#manageVanNm").val($scope.store.vanNm);
+    }
     $scope.store.agencyCd = "";
     $scope.store.agencyNm = "";
 
@@ -336,6 +351,25 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
     $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
   };
+
+  $scope.chkVanFix = function(){
+    var params = {};
+    var storeScope  = agrid.getScope('storeManageCtrl'); // 선택된 매장
+    params.storeCd  = storeScope.getSelectedStore().storeCd;
+    // params.agencyCd = orgnCd;
+
+    // VAN사 변경 허용 체크
+    $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/chkVanFix.sb", params, function(response){
+      var chkVanFix = response.data.data;
+      if(chkVanFix === "Y" || chkVanFix === "N") {
+        $("#lblVanFixFg").text(chkVanFix);
+      }else{
+        $("#lblVanFixFg").text("N");
+      }
+      $scope.getStoreInfo();
+    });
+
+  }
 
   /*********************************************************
    * 매장정보 조회
@@ -874,6 +908,25 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
+    // KOCES 총판은 관리벤사 KOCES만 저장가능
+    // if($("#lblVanFixFg").text() == "N") {
+    //   if (arrAgencyCol.indexOf(orgnCd) !== -1) {
+    //     // 관리벤사는 [008] KOCES를 선택해주십시오.
+    //     var msg = messages["storeManage.manageVan"] + "는 [008] KOCES" + messages["cmm.require.select"];
+    //     if ($scope.store.vanCd !== null && $scope.store.vanCd !== '008') {
+    //       $scope._popMsg(msg);
+    //       return false;
+    //     }
+    //   }
+    // }
+
+    if($("#lblVanFixFg").text() == "Y") {
+      if ($scope.store.vanCd !== null && $scope.store.vanCd !== '008') {
+        $scope._popMsg(messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -917,12 +970,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if($scope.bizNoCheck.bizNo > 0) {
         // 해당 사업자번호[123-32-12312]가 이미 등록되어 있습니다. 계속 진행하시겠습니까?
         $scope._popConfirm(messages["storeManage.chk.bizNo1"] +"["+ $scope.store.bizNo1 +"-"+ $scope.store.bizNo2 +"-"+ $scope.store.bizNo3 +"]"+ messages["storeManage.chk.bizNo2"], function() {
-          // 매장정보 저장
-          $scope.storeSave(params);
+            $scope.storeSave(params);
         });
       } else if($scope.bizNoCheck.bizNo === 0) {
-        // 매장정보 저장
-        $scope.storeSave(params);
+          // 매장정보 저장
+          $scope.storeSave(params);
       }
     });
   };
@@ -964,6 +1016,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.storeInfoLayer.hide();
         }
 
+        $scope._broadcast('storeManageCtrl');
       });
     }
     // 수정
@@ -971,6 +1024,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/updateStoreInfo.sb", params, function () {
         $scope._popMsg(messages["cmm.saveSucc"]);
         $scope.storeInfoLayer.hide();
+        $scope._broadcast('storeManageCtrl');
       });
     }
   };
@@ -1494,6 +1548,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.storeCdChkFg = "";
     $scope.store.envst0043 = hqEnvst0043; // 본사신규상품매장생성 [0:자동(기본) / 1:수동]
     $("#hdDigit8Store").val(digit8Store); // 매장코드8이상사용매장
+
+    $("#lblVanFixFg").val("");
 
     $scope.envHqOfficeCdCombo.selectedValue = $scope.store.hqOfficeCd;
 

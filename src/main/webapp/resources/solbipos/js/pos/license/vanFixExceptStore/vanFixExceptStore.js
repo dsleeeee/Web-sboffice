@@ -38,7 +38,14 @@ app.controller('vanFixExceptCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope.$on('vanFixExceptCtrl', function(event, data) {
 
         var params = {};
+
+        params.vanCd = $("#ssl_srchManageVanCd").val();
         params.includeFg = $scope.srchIncludeFgCombo.selectedValue;
+        params.hqOfficeCd = $scope.hqOfficeCd;
+        params.hqOfficeNm = $scope.hqOfficeNm;
+        params.storeCd = $scope.storeCd;
+        params.storeNm = $scope.storeNm;
+
         if(orgnFg === "MASTER"){
             params.agencyCd = $("#ssl_srchAgencyCd").val();
         }else{
@@ -158,6 +165,18 @@ app.controller('vanStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.vanCdDataMap = new wijmo.grid.DataMap(vanComboList, 'value', 'name');
+
+        // 비고 작성시 체크
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "remark") {
+                    item.gChk = true;
+                }
+            }
+            s.collectionView.commitEdit();
+        });
     };
 
     // 대표명칭 그리드 조회
