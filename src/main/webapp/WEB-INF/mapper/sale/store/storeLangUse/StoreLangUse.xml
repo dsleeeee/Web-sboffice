@@ -42,8 +42,8 @@
                         ,       '-'     AS BRANCH_CD
                         ,       '-'     AS BRANCH_NM
                     </if>
-                    ,       #{startDate}                                                                    AS START_DATE
-                    ,       #{endDate}                                                                      AS END_DATE
+                    ,       TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd')                        AS START_DATE
+                    ,       TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd')                          AS END_DATE
                     ,       NVL(SUM(A.TOT_CNT),0)                                                           AS TOT_CNT
                     ,       SUM(A.KOREAN)                                                                   AS KOREAN_CNT
                     ,       SUM(A.ENGLISH)                                                                  AS ENGLISH_CNT
@@ -58,8 +58,8 @@
                     ,       tms.STORE_NM
                     ,       tms.BRANCH_CD
                     ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
-                    ,       #{startDate}                                                    AS START_DATE
-                    ,       #{endDate}                                                      AS END_DATE
+                    ,       TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd')        AS START_DATE
+                    ,       TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd')          AS END_DATE
                     ,		A.TOT_CNT                                                       AS TOT_CNT
                     ,		A.KOREAN                                                        AS KOREAN_CNT
                     ,		A.ENGLISH                                                       AS ENGLISH_CNT

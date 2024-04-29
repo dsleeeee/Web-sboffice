@@ -328,8 +328,8 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="storeLangUse.branchCd"/>" binding="branchCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeLangUse.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLangUse.branchCd"/>" binding="branchCd" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLangUse.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeLangUse.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeLangUse.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeLangUse.startDate"/>" binding="startDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -361,8 +361,8 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="storeLangUse.branchCd"/>" binding="branchCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeLangUse.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLangUse.branchCd"/>" binding="branchCd" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeLangUse.branchNm"/>" binding="branchNm" width="100" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeLangUse.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeLangUse.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeLangUse.startDate"/>" binding="startDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -412,5 +412,5 @@
     
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeLangUse/storeLangUse.js?ver=20240423.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeLangUse/storeLangUse.js?ver=20240429.01" charset="utf-8"></script>
 

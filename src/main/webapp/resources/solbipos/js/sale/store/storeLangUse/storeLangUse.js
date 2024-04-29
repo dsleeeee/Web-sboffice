@@ -15,7 +15,6 @@ var app = agrid.getApp();
 
 var optionData = [
     {"name":"전체","value":"all"},
-    {"name":"그룹별","value":"branch"},
     {"name":"매장별","value":"store"}
 ];
 
@@ -57,6 +56,9 @@ app.controller('storeLangUseCtrl', ['$scope', '$http', '$timeout', function ($sc
         $scope.momsTeamDataMap = new wijmo.grid.DataMap(momsTeamComboList, 'value', 'name');
         $scope.momsAcShopDataMap = new wijmo.grid.DataMap(momsAcShopComboList, 'value', 'name');
 
+        $scope.option = 'store';
+        $(".multiLangStore").show();
+
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
@@ -68,8 +70,8 @@ app.controller('storeLangUseCtrl', ['$scope', '$http', '$timeout', function ($sc
         s.columnHeaders.rows.push(new wijmo.grid.Row());
         // 첫째줄 헤더 생성
         var dataItem         = {};
-        dataItem.branchCd       = messages["storeLangUse.branchCd"];
-        dataItem.branchNm       = messages["storeLangUse.branchNm"];
+        // dataItem.branchCd       = messages["storeLangUse.branchCd"];
+        // dataItem.branchNm       = messages["storeLangUse.branchNm"];
         dataItem.storeCd        = messages["storeLangUse.storeCd"];
         dataItem.storeNm        = messages["storeLangUse.storeNm"];
         dataItem.startDate      = messages["storeLangUse.startDate"];
@@ -325,8 +327,8 @@ app.controller('storeLangUseExcelCtrl', ['$scope', '$http', '$timeout', function
         s.columnHeaders.rows.push(new wijmo.grid.Row());
         // 첫째줄 헤더 생성
         var dataItem         = {};
-        dataItem.branchCd       = messages["storeLangUse.branchCd"];
-        dataItem.branchNm       = messages["storeLangUse.branchNm"];
+        // dataItem.branchCd       = messages["storeLangUse.branchCd"];
+        // dataItem.branchNm       = messages["storeLangUse.branchNm"];
         dataItem.storeCd        = messages["storeLangUse.storeCd"];
         dataItem.storeNm        = messages["storeLangUse.storeNm"];
         dataItem.startDate      = messages["storeLangUse.startDate"];

@@ -922,7 +922,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     if($("#lblVanFixFg").text() == "Y") {
       if ($scope.store.vanCd !== null && $scope.store.vanCd !== '008') {
-        $scope._popMsg(messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
+        $scope._popMsg(messages["storeManage.manageVan"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
         return false;
       }
     }
