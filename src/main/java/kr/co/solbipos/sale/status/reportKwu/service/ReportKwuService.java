@@ -11,6 +11,7 @@ import java.util.List;
  *                광운대 > 리포트 > 결제수단별 매출내역
  *                광운대 > 리포트 > 신용카드 매출내역
  *                광운대 > 리포트 > 현금영수증 발행내역
+ *                광운대 > 리포트 > 분류상품별 결제수단 매출
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
@@ -38,5 +39,8 @@ public interface ReportKwuService {
 
    /** 현금영수증 발행내역 - 리스트 조회 */
    List<DefaultMap<String>> getCashBillInfoList(ReportKwuVO reportKwuVO, SessionInfoVO sessionInfoVO);
+
+   /** 분류상품별 결제수단 매출 - 리스트 조회 */
+   List<DefaultMap<String>> getProdClassPayFgSale2List(ReportKwuVO reportKwuVO, SessionInfoVO sessionInfoVO);
 
 }

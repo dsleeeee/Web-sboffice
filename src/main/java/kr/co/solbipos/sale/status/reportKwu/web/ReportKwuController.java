@@ -224,4 +224,55 @@ public class ReportKwuController {
 
         return ReturnUtil.returnListJson(Status.OK, list, reportKwuVO);
     }
+
+    /**
+     * 분류상품별 결제수단 매출 - 페이지 이동
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김중선
+     * @since   2024.04.30
+     */
+    @RequestMapping(value = "/prodClassPayFgSale2/view.sb", method = RequestMethod.GET)
+    public String prodClassPayFgSale2View(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        ProdPayFgVO prodPayFgVO = new ProdPayFgVO();
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 결제수단 조회
+        List<DefaultMap<String>> payColList = prodPayFgService.getPayColList(prodPayFgVO, sessionInfoVO);
+
+        // 결제수단 코드를 , 로 연결하는 문자열 생성
+        String payCol = "";
+        for(int i=0; i < payColList.size(); i++) {
+            payCol += (payCol.equals("") ? "" : ",") + payColList.get(i).getStr("payCd");
+        }
+        model.addAttribute("payColList", payColList);
+        model.addAttribute("payCol", payCol);
+
+        return "sale/status/reportKwu/prodClassPayFgSale2";
+    }
+
+    /**
+     * 분류상품별 결제수단 매출 - 리스트 조회
+     * @param request
+     * @param response
+     * @param model
+     * @param reportKwuVO
+     * @return
+     * @author  김중선
+     * @since   2024.04.30
+     */
+    @RequestMapping(value = "/prodClassPayFgSale2/getList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassPayFgSale2List(HttpServletRequest request, HttpServletResponse response, Model model, ReportKwuVO reportKwuVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = reportKwuService.getProdClassPayFgSale2List(reportKwuVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, reportKwuVO);
+    }
+
 }

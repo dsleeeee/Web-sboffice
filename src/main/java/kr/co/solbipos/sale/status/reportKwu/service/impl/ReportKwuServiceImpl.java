@@ -136,4 +136,30 @@ public class ReportKwuServiceImpl implements ReportKwuService {
        return reportKwuMapper.getCashBillInfoList(reportKwuVO);
     }
 
+    /** 분류상품별 결제수단 매출 - 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdClassPayFgSale2List(ReportKwuVO reportKwuVO, SessionInfoVO sessionInfoVO) {
+
+        reportKwuVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        reportKwuVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        reportKwuVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if(!StringUtil.getOrBlank(reportKwuVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(reportKwuVO.getStoreCd(), 3900));
+            reportKwuVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 결제수단 array 값 세팅
+        reportKwuVO.setArrPayCol(reportKwuVO.getPayCol().split(","));
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = reportKwuVO.getPayCol().split(",");
+        for(int i=0; i < arrPayCol.length; i++) {
+            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
+        }
+        reportKwuVO.setPivotPayCol(pivotPayCol);
+
+        return reportKwuMapper.getProdClassPayFgSale2List(reportKwuVO);
+    }
 }

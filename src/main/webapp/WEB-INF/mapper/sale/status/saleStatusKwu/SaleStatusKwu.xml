@@ -20,12 +20,13 @@
         /* SaleStatusKwuMapper.getSaleStatusKwuList */
         SELECT
         A.STORE_CD,
-        A.SALE_DATE,
+        SUBSTR(A.SALE_DATE, 1, 4)||'-'||SUBSTR(A.SALE_DATE, 5, 2)||'-'||SUBSTR(A.SALE_DATE, 7, 2) AS SALE_DATE,
         A.POS_NO,
         A.BILL_NO,
         A.SALE_YN,
         TO_CHAR(TO_DATE(A.BILL_DT,'yyyy/mm/dd hh24:mi:ss'),'hh24:mi:ss') AS BILL_DT,
         B.BILL_DTL_NO,
+        FN_GET_PROD_CLASS_CD_NM_STR(A.STORE_CD, C.PROD_CLASS_CD, 'NM_STR')  AS PROD_CLASS_NM,
         B.PROD_CD,
         D.BARCD_CD AS BAR_CD,
         C.PROD_NM,
