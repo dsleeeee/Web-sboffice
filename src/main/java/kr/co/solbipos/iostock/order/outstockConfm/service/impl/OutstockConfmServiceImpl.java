@@ -109,9 +109,35 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
                     result = outstockConfmMapper.updateAutoInstockDtl(outstockConfmVO);
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                    // HD의 진행구분 수정. 출고확정 -> 입고확정
-                    result = outstockConfmMapper.updateAutoInstock(outstockConfmVO);
-                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    //dtl->prod 시에 dtl(seq)과prod(prod)의 키값이 달라서 전체 삭제후 적제 필요 20200916
+                    result = outstockConfmMapper.deleteAutoInstockProdAll(outstockConfmVO);
+
+                    result = outstockConfmMapper.mergeAutoInstockConfmProd(outstockConfmVO);
+                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+                    //HD 수정
+                    result = outstockConfmMapper.updateAutoInstockConfmHd(outstockConfmVO);
+                    if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+                    // 입고확정상태 확인 PROC_FG > 20
+                    // 이미 확정한 경우 저장 및 확정하면 안됨 exception 처리 진행.
+                    result = outstockConfmMapper.getAutoInstockConfirmCnt(outstockConfmVO);
+                    // 이미 입고확정된 내역입니다.
+                    if(result > 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.modifyFail"));
+
+                    // result 1이상이면 이미 입고확정 상태임.[처리구분] TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정]
+                    if(result <= 0) {
+                        // DTL의 진행구분 수정. 출고확정 -> 입고확정
+                        result = outstockConfmMapper.updateAutoInstockDtlConfirm(outstockConfmVO);
+                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // HD의 진행구분 수정. 출고확정 -> 입고확정
+                        result = outstockConfmMapper.updateAutoInstock(outstockConfmVO);
+                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        //PROD 진행구분 수정. 수주확정 -> 출고확정
+                        result = outstockConfmMapper.updateAutoInstockProdConfirm(outstockConfmVO);
+                    }
                 }
             }
 
@@ -319,9 +345,35 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
                 result = outstockConfmMapper.updateAutoInstockDtl(outstockConfmHdVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                // HD의 진행구분 수정. 출고확정 -> 입고확정
-                result = outstockConfmMapper.updateAutoInstock(outstockConfmHdVO);
-                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                //dtl->prod 시에 dtl(seq)과prod(prod)의 키값이 달라서 전체 삭제후 적제 필요 20200916
+                result = outstockConfmMapper.deleteAutoInstockProdAll(outstockConfmHdVO);
+
+                result = outstockConfmMapper.mergeAutoInstockConfmProd(outstockConfmHdVO);
+                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+                //HD 수정
+                result = outstockConfmMapper.updateAutoInstockConfmHd(outstockConfmHdVO);
+                if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
+
+                // 입고확정상태 확인 PROC_FG > 20
+                // 이미 확정한 경우 저장 및 확정하면 안됨 exception 처리 진행.
+                result = outstockConfmMapper.getAutoInstockConfirmCnt(outstockConfmHdVO);
+                // 이미 입고확정된 내역입니다.
+                if(result > 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.modifyFail"));
+
+                // result 1이상이면 이미 입고확정 상태임.[처리구분] TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정]
+                if(result <= 0) {
+                    // DTL의 진행구분 수정. 출고확정 -> 입고확정
+                    result = outstockConfmMapper.updateAutoInstockDtlConfirm(outstockConfmHdVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // HD의 진행구분 수정. 출고확정 -> 입고확정
+                    result = outstockConfmMapper.updateAutoInstock(outstockConfmHdVO);
+                    if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    //PROD 진행구분 수정. 수주확정 -> 출고확정
+                    result = outstockConfmMapper.updateAutoInstockProdConfirm(outstockConfmHdVO);
+                }
             }
         }
 
