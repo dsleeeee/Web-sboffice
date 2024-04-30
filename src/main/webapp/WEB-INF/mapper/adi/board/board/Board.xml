@@ -185,7 +185,7 @@
                         )
                      OR (       -- 총판/대리점이 등록한 글
                                 twuidv01.ORGN_FG = 'A'
-                            AND twuidv01.ORGN_CD != #{orgnGrpCd}
+                            AND twuidv01.ORGN_CD = (SELECT P_AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{orgnGrpCd})
                             AND twbi.APPR_FG = '2'
                             AND twbi.TARGET_FG LIKE '%' || CASE WHEN (SELECT P_AGENCY_CD
                                                                         FROM TB_CM_AGENCY
@@ -345,10 +345,11 @@
         /* ContentMapper.getAgencyPopUpBoardList */
         SELECT  twbi.TITLE,
                 twbi.CONTENT
-        FROM    TB_WB_BOARD_INFO twbi
+        FROM    TB_WB_BOARD_INFO twbi,
+                 TB_WB_USER_INFO_DTL_V01 twuidv01
         WHERE   twbi.BOARD_CD = '01'
         AND     twbi.USE_YN = 'Y'
-        AND     twbi.POPUP_YN =  'Y'
+        AND     twbi.POPUP_YN = 'Y'
           AND (
                     (       -- 게시대상으로 설정된 글
                             twbi.TARGET_FG = '6'
@@ -361,6 +362,8 @@
                                                        THEN '2'
                                                        ELSE '3'
                                                        END || '%'
+                           AND twuidv01.ORGN_CD = (SELECT P_AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{orgnGrpCd})
+                                OR twuidv01.ORGN_CD = #{orgnGrpCd}
                     )
             )
     <![CDATA[
@@ -370,6 +373,7 @@
         AND     twbi.START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND     twbi.END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
     ]]>
+        AND twuidv01.USER_ID (+)= twbi.USER_ID
         ORDER BY 1, twbi.MOD_DT DESC
     </select>
 
