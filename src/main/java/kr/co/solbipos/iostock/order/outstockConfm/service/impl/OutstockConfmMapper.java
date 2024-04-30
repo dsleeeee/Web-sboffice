@@ -41,6 +41,26 @@ public interface OutstockConfmMapper {
     /** 출고확정 - 출고확정 자동입고 DTL 수정*/
     int updateAutoInstockDtl(OutstockConfmVO outstockConfmVO);
 
+    /** 출고확정 - 출고확정 자동입고 DTL 수정*/
+    int updateAutoInstockDtlConfirm(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - PROD 입력전에 이전값 삭제*/
+    int deleteAutoInstockProdAll(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
+    int mergeAutoInstockConfmProd(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - 출고확정 상세 HD 수정 */
+    int updateAutoInstockConfmHd(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - 출고확정 상태 확인 PROC_FG > 20 */
+    int getAutoInstockConfirmCnt(OutstockConfmVO outstockConfmVO);
+
+    /** 출고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
+    int updateAutoInstockProdConfirm(OutstockConfmVO outstockConfmVO);
+
+
+
     /** 출고확정 - 출고확정 자동입고 HD 수정*/
     int updateAutoInstock(OutstockConfmVO outstockConfmVO);
 
