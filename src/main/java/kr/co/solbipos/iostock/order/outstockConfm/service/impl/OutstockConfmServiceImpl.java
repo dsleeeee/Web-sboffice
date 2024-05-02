@@ -122,8 +122,6 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
                     // 입고확정상태 확인 PROC_FG > 20
                     // 이미 확정한 경우 저장 및 확정하면 안됨 exception 처리 진행.
                     result = outstockConfmMapper.getAutoInstockConfirmCnt(outstockConfmVO);
-                    // 이미 입고확정된 내역입니다.
-                    if(result > 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.modifyFail"));
 
                     // result 1이상이면 이미 입고확정 상태임.[처리구분] TB_CM_NMCODE(NMCODE_GRP_CD='113') 10:수주확정 20:출고확정 30:입고확정]
                     if(result <= 0) {
