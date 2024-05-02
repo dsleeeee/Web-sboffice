@@ -768,18 +768,6 @@
         )
     </update>
 
-
-
-
-
-
-
-
-
-
-
-
-
     <!-- 출고확정 - 출고확정 자동입고 DTL 수정 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL
@@ -1000,15 +988,6 @@
         AND     SLIP_NO         =   #{slipNo}
         AND     CONFM_YN        !=  'Y'
     </update>
-
-
-
-
-
-
-
-
-
 
     <!-- 출고확정 - 출고확정 상세 리스트 DTL 수정 -->
     <!--

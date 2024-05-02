@@ -59,8 +59,6 @@ public interface OutstockConfmMapper {
     /** 출고확정 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
     int updateAutoInstockProdConfirm(OutstockConfmVO outstockConfmVO);
 
-
-
     /** 출고확정 - 출고확정 자동입고 HD 수정*/
     int updateAutoInstock(OutstockConfmVO outstockConfmVO);
 
