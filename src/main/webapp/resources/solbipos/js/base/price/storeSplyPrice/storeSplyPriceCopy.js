@@ -47,6 +47,8 @@ app.controller('storeSplyPriceCopyCtrl', ['$scope', '$http', '$timeout', functio
             params.originalStoreCd = $("#originalStoreCd").val();
             params.targetStoreCd = $("#targetStoreCd").val();
 
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+
             $scope._postJSONSave.withOutPopUp("/base/price/storeSplyPrice/copyStoreSplyPrice.sb", params, function (response) {
 
                 if (response.data.status === 'OK') {
@@ -54,6 +56,7 @@ app.controller('storeSplyPriceCopyCtrl', ['$scope', '$http', '$timeout', functio
                 } else {
                     $scope._popMsg(messages["cmm.copyFail"]); //복사 중 에러가 발생 하였습니다.
                 }
+                $scope.$broadcast('loadingPopupInactive');
             });
         });
     };

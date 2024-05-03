@@ -115,7 +115,7 @@
         </wj-combo-box>
         <%--// 페이지 스케일  --%>
         <%-- 엑셀다운로드 --%>
-        <button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
+        <button class="btn_skyblue fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -190,7 +190,7 @@
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/storeSplyPriceHistory/storeSplyPriceHistory.js?ver=20240425.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/storeSplyPriceHistory/storeSplyPriceHistory.js?ver=20240503.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

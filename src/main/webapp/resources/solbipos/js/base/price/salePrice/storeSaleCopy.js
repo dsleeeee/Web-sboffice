@@ -65,6 +65,8 @@ app.controller('storeSaleCopyCtrl', ['$scope', '$http', function ($scope, $http)
 
       $scope._popConfirm(msg, function () {
 
+          $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+
           $http({
               method : 'POST', //방식
               url    : '/base/store/view/copyStoreEnv/copyStoreEnvInfo.sb', /* 통신할 URL */
