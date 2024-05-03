@@ -8795,7 +8795,7 @@
         PARAM    : storePosEnvVO
         COMMENTS : 포스별 4048 스마트오더 사용여부를 조회한다.
     -->
-    <select id="getEnv4048PosList" parameterType="storePosEnvVO" resultType="String">
+    <select id="getEnv4048PosList" parameterType="storePosEnvVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getEnv4048PosList */
         SELECT  A.POS_NO AS POS_NO
         ,      '['||A.POS_NO||'] '||A.POS_NM AS POS_NM

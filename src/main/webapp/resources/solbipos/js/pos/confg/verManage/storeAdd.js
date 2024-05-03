@@ -57,7 +57,7 @@ function comma(num){
 /**********************************************************************
  *  적용매장 그리드
  **********************************************************************/
-app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('addStoreCtrl', $scope, $http, false));
 
@@ -120,6 +120,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     params.orgnFg = orgnFg;
     params.agencyCd = orgnCd;
     params.progFg = manageVer;
+    params.addr = $("#srchAddr").val();
     $scope._inquirySub("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("allStoreCtrl");
@@ -160,13 +161,55 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.versionInfoDetailLayer.show();
   };
 
+  // 양식 다운로드
+  $scope.sampleDownload = function () {
+    var scope = agrid.getScope("verAddStoreExcelFileUploadCtrl");
+    scope.sampleDownload2();
+  };
+
+  // 엑셀업로드
+  $scope.excelUpload = function () {
+
+    // 정상작성 된 데이터만 조회됩니다. 업로드 하시겠습니까?
+    $scope._popConfirm(messages["verManage.excel.confmMsg"], function() {
+
+      $("#excelUpFile").val('');
+      $("#excelUpFile").trigger('click');
+    });
+  };
+
+  // 엑셀다운로드
+  $scope.excelDownload = function(){
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUploadMPS.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles   : false,
+        includeColumns      : function (column) {
+          // return column.visible;
+          return column.binding != 'gChk';
+        }
+      }, '포스버전관리_적용매장' + "_" +getCurDateTime() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+  };
+
 }]);
 
 
 /**********************************************************************
  *  미적용매장 그리드
  **********************************************************************/
-app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('allStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('allStoreCtrl', $scope, $http, false));
 
@@ -186,29 +229,34 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   });
 
   // 미적용매장 목록 조회
-  $scope.allStoreSearch = function(){
+  $scope.allStoreSearch = function(data){
 
     var params = {};
-    var ver    = scope.getSelectVersion().verSerNo;
+    var ver = scope.getSelectVersion().verSerNo;
+    if(data !== null && data !== undefined && data !== ""){
+      params.chkMulti = "Y"
+      params.storeCd  = data;
+    }else {
+      var addStoreScope = agrid.getScope('addStoreCtrl');
 
-    var addStoreScope = agrid.getScope('addStoreCtrl');
+      params.hqOfficeCd = addStoreScope.hqOfficeCd;
+      params.storeCd = $("#srchStoreCd").val();
+      params.storeNm = $("#srchStoreNm").val();
+      params.sysStatFg = addStoreScope.sysStatFg;
+      params.orgnFg = orgnFg;
+      params.agencyCd = orgnCd;
+      params.addr = $("#srchAddr").val();
 
-    params.verSerNo    = ver;
-    params.searchSatus = 'N';
-    params.hqOfficeCd  = addStoreScope.hqOfficeCd;
-    params.storeCd = $("#srchStoreCd").val();
-    params.storeNm = $("#srchStoreNm").val();
-    params.sysStatFg = addStoreScope.sysStatFg;
-    params.orgnFg = orgnFg;
-    params.agencyCd = orgnCd;
-
-    // 복수검색 기능 사용여부
-    if ($("#chkMulti").prop("checked")) {
-      params.chkMulti = "Y";
-    }else{
-      params.chkMulti = "N";
+      // 복수검색 기능 사용여부
+      if ($("#chkMulti").prop("checked")) {
+        params.chkMulti = "Y";
+      } else {
+        params.chkMulti = "N";
+      }
     }
 
+    params.verSerNo = ver;
+    params.searchSatus = 'N';
     params.progFg = manageVer;
 
     $scope._inquirySub("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
@@ -253,4 +301,237 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       addStoreScope._broadcast('addStoreCtrl');
     });
   };
+
+  // 엑셀다운로드
+  $scope.excelDownload = function(){
+
+    if ($scope.flex.rows.length <= 0) {
+      $scope._popMsg(messages["excelUploadMPS.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+      return false;
+    }
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders: true,
+        includeCellStyles   : false,
+        includeColumns      : function (column) {
+          // return column.visible;
+          return column.binding != 'gChk';
+        }
+      }, '포스버전관리_미적용매장' + "_" +getCurDateTime() + '.xlsx', function () {
+        $timeout(function () {
+          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        }, 10);
+      });
+    }, 10);
+  };
+
+}]);
+
+
+/**********************************************************************
+ *  엑셀업로드 그리드
+ **********************************************************************/
+app.controller('verAddStoreExcelFileUploadCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('verAddStoreExcelFileUploadCtrl', $scope, $http, false));
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+
+    // 컬럼헤더:바인딩명 형태의 JSON 데이터 생성.
+    $scope.colHeaderBind = {};
+    for (var i = 0; i < $scope.flex.columns.length; i++) {
+      var col = $scope.flex.columns[i];
+      $scope.colHeaderBind[col.header] = col.binding;
+    }
+  };
+
+  $scope.stepCnt = 100;   // 한번에 DB에 저장할 숫자 세팅
+  $scope.progressCnt = 0; // 처리된 숫자
+
+  $scope.$on("verAddStoreExcelFileUploadCtrl", function(event, data) {
+
+  });
+
+  // 양식 다운로드
+  $scope.sampleDownload2 = function () {
+
+    // 샘플데이터
+    $scope.addRow();
+
+    $timeout(function () {
+      wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+        includeColumnHeaders : true,
+        includeCellStyles : true,
+        includeColumns : function (column) {
+          return column.visible;
+        }
+      }, '미적용매장_엑셀업로드_양식.xlsx');
+    }, 10);
+  };
+
+  // 샘플데이터
+  $scope.addRow = function(){
+
+    // 그리드 초기화
+    var flex = $scope.flex;
+    flex.itemsSource = new wijmo.collections.CollectionView();
+    flex.collectionView.trackChanges = true;
+
+    // 샘플양식에 값 넣기
+    var params = {};
+    params.storeCd = "0000001";
+
+    var newRow = flex.collectionView.addNew();
+    for (var prop in params) {
+      newRow[prop] = params[prop];
+    }
+    flex.collectionView.commitNew();
+  };
+
+  // 엑셀파일이 변경된 경우
+  $scope.excelFileChanged = function () {
+    if ($('#excelUpFile')[0].files[0]) {
+      // 엑셀 업로드 호출
+      $scope.excelUpload();
+    }
+  };
+
+  // 엑셀파일 업로드
+  $scope.excelUpload = function () {
+    $scope.progressCnt = 0; // 처리된 숫자(초기화)
+
+    // 선택한 파일이 있으면
+    if ($('#excelUpFile')[0].files[0]) {
+      var file = $('#excelUpFile')[0].files[0];
+      var fileName = file.name;
+      var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+
+      // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
+      if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+
+        $timeout(function () {
+          var flex = $scope.flex;
+          wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
+              , function (workbook) {
+                $timeout(function () {
+                  $scope.excelUploadToJsonConvert();
+                }, 10);
+              }
+          );
+        }, 10);
+      } else {
+        $("#excelUpFile").val('');
+        $scope._popMsg(messages['empCardInfo.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
+        return false;
+      }
+    }
+  };
+
+  // 엑셀업로드 한 데이터를 JSON 형태로 변경한다.
+  $scope.excelUploadToJsonConvert = function () {
+    var jsonData  = [];
+    var item      = {};
+    var rowLength = $scope.flex.rows.length;
+
+    if (rowLength === 0) {
+      $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+      $scope._popMsg(messages['empCardInfo.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+      return false;
+    }
+
+    // 업로드 된 데이터 JSON 형태로 생성
+    for (var r = 0; r < rowLength; r++) {
+      item = {};
+      for (var c = 0; c < $scope.flex.columns.length; c++) {
+        if ($scope.flex.columns[c].header !== null && $scope.flex.getCellData(r, c, false) !== null) {
+          var colBinding = $scope.colHeaderBind[$scope.flex.columns[c].header.replaceAll('\'', '').replaceAll(' ', '')];
+          var cellValue  = $scope.flex.getCellData(r, c, false) + '';
+          if(colBinding === "storeCd" && cellValue !== null && cellValue !== undefined && cellValue != ""){
+            item[colBinding] = cellValue.replaceAll('\'', '');
+            jsonData.push(item);
+          }
+        }
+      }
+    }
+
+    var len = jsonData.length;
+    if (len === 0) {
+      $scope.excelUploadingPopup(false); // 업로딩 팝업 닫기
+      $scope._popMsg(messages['empCardInfo.not.excelUploadData']); // 엑셀업로드 된 데이터가 없습니다.
+      return false;
+    }
+    $timeout(function () {
+
+      setTimeout(function() {
+        // 새 데이터 등록
+        $scope.save(jsonData);
+      }, 500);
+
+    }, 10);
+  };
+
+  // 데이터 저장
+  $scope.save = function (jsonData) {
+    $scope.totalRows = jsonData.length;
+    var params = '';
+    var msg = '';
+
+    // 저장 시작이면 업로드 중 팝업 오픈
+    if ($scope.progressCnt === 0) {
+      $timeout(function () {
+        $scope.excelUploadingPopup(true);
+        $("#progressCnt").html($scope.progressCnt);
+        $("#totalRows").html($scope.totalRows);
+      }, 10);
+    }
+
+
+    // stepCnt 만큼 데이터 DB에 저장
+    var loopCnt = (parseInt($scope.progressCnt) + parseInt($scope.stepCnt) > parseInt($scope.totalRows) ? parseInt($scope.totalRows) : parseInt($scope.progressCnt) + parseInt($scope.stepCnt));
+    for (var i = $scope.progressCnt; i < $scope.totalRows; i++) {
+      var item = jsonData[i].storeCd;
+      if(i === $scope.totalRows -1){
+        params += item;
+      }else {
+        params += item + ",";
+      }
+    }
+
+    //가상로그인 session 설정
+    var sParam = {};
+    if(document.getElementsByName('sessionId')[0]){
+      sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+
+    // 엑셀업로드 값 조회
+    var scope = agrid.getScope("allStoreCtrl");
+    scope.allStoreSearch(params);
+
+    // 적용매장 그리드 초기화
+    // var addScope = agrid.getScope("addStoreCtrl");
+    // addScope._gridDataInit();
+
+  };
+
+  // 업로딩 팝업 열기
+  $scope.excelUploadingPopup = function (showFg) {
+    if (showFg) {
+      // 팝업내용 동적 생성
+      var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['empCardInfo.excelUploading'] + '</p>';
+      innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 적용 중...</div>';
+      innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+      // html 적용
+      $scope._loadingPopup.content.innerHTML = innerHtml;
+      // 팝업 show
+      $scope._loadingPopup.show(true);
+    } else {
+      $scope._loadingPopup.hide(true);
+    }
+  };
+
 }]);

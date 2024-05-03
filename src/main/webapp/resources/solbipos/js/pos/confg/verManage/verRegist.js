@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+var systemTypeFgData = [
+  {"name":"공통","value":"0"},
+  {"name":"32bit","value":"1"},
+  {"name":"64bit","value":"2"}
+];
+
 /**********************************************************************
  *  회원정보 그리드
  **********************************************************************/
@@ -25,6 +31,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("progFgCombo", progFg);
   $scope._setComboData("useYnCombo", useYn);
   $scope._setComboData("progDetailFgCombo", nmcodeCdList); // 프로그램 상세구분
+  $scope._setComboData("systemTypeFgCombo", systemTypeFgData); // 프로그램 상세구분
 
   // 버전정보
   $scope.version;
@@ -62,6 +69,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
     }else{
 
+      $scope.versionProgDetailFgCombo.selectedValue = '1';
+      $scope.versionSystemTypeFgCombo.selectedValue = '0';
       // UI 셋팅
       $("#btnReg").css("display", "");
       $("#btnMod").css("display", "none");
@@ -148,6 +157,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("useYn", $scope.versionUseYnCombo.selectedValue);
     formData.append("orgnCds", $("#orgnCdsCd").val());
     formData.append("progDetailFg", $scope.version.progDetailFg);
+    formData.append("systemTypeFg", $scope.versionSystemTypeFgCombo.selectedValue);
     var url = '';
 
     if( isEmptyObject($scope.getSelectVersion()) ) {
