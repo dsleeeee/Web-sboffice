@@ -33,6 +33,24 @@ public interface RtnOutstockConfmMapper {
     /** 반품매장출고 - 반품매장출고 자동입고 HD 수정*/
     int updateAutoInstock(RtnOutstockConfmVO rtnOutstockConfmVO);
 
+    /** 반품매장출고 - PROD 삭제 */
+    int deleteAutoRtnOutstockProdAll(RtnOutstockConfmVO rtnOutstockConfmVO);
+
+    /** 반품매장출고 - [본사_수불] 출고전표_매장출고내역_상품 수정 */
+    int mergeAutoRtnOutstockConfmProd(RtnOutstockConfmVO rtnOutstockConfmVO);
+
+    /** 반품매장출고 - 입고확정 상세 HD 수정 */
+    int updateAutoRtnOutstockConfmHd(RtnOutstockConfmVO rtnOutstockConfmVO);
+
+    /** 반품매장출고 - 입고확정상태 확인 PROC_FG > 20 */
+    int getAutoRtnOutstockConfirmCnt(RtnOutstockConfmVO rtnOutstockConfmVO);
+
+    /** 반품매장출고 - 입고확정시 DTL 수정 */
+    int updateRtnOutstockDtlConfirm(RtnOutstockConfmVO rtnOutstockConfmVO);
+
+    /** 반품매장출고 - 입고확정시 PROD 수정 */
+    int updateRtnOutstockProdConfirm(RtnOutstockConfmVO rtnOutstockConfmVO);
+
     /** 반품매장출고 - 전표상세 조회 */
     DefaultMap<String> getSlipNoInfo(RtnOutstockConfmVO rtnOutstockConfmVO);
 
