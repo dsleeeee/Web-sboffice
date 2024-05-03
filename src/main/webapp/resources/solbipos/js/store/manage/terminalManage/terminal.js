@@ -485,7 +485,9 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
             var col = sender.columns[elements.col];
             if (col.binding === "vendorFg" || col.binding === "vendorCd") {
                 var dataItem = s.rows[elements.row].dataItem;
-                if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+                if(dataItem.status === "U"){
+                    elements.cancel = true;
+                }else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
                     elements.cancel = true;
                 }
             }
@@ -511,7 +513,12 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.changeVendorFg = function (s, e) {
         if (e.panel === s.cells) {
             var col = s.columns[e.col];
-            if (col.binding === "vendorNm") {
+            var item = s.rows[e.row].dataItem;
+            if(col.binding === "vendorFg"){
+                if (item.status === "I") {
+                    item.vendorNm = '';
+                }
+            } else if (col.binding === "vendorNm") {
                 var changeVendorFg = s.rows[e.row].dataItem.vendorFg;
                 switch (changeVendorFg) {
                     case '01':
@@ -583,22 +590,28 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
-            $scope.flex.collectionView.itemsEdited[i].posNo = terminalScope.getPosFgVal();
-            params.push($scope.flex.collectionView.itemsEdited[i]);
+            if($scope.flex.collectionView.itemsEdited[i].gChk) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
+                $scope.flex.collectionView.itemsEdited[i].posNo = terminalScope.getPosFgVal();
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            $scope.flex.collectionView.itemsAdded[i].status = "I";
-            $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
-            $scope.flex.collectionView.itemsAdded[i].posNo = terminalScope.getPosFgVal();
-            params.push($scope.flex.collectionView.itemsAdded[i]);
+            if($scope.flex.collectionView.itemsAdded[i].gChk) {
+                $scope.flex.collectionView.itemsAdded[i].status = "I";
+                $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
+                $scope.flex.collectionView.itemsAdded[i].posNo = terminalScope.getPosFgVal();
+                params.push($scope.flex.collectionView.itemsAdded[i]);
+            }
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
-            $scope.flex.collectionView.itemsRemoved[i].posNo = terminalScope.getPosFgVal();
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
+            if($scope.flex.collectionView.itemsRemoved[i].gChk) {
+                $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
+                $scope.flex.collectionView.itemsRemoved[i].posNo = terminalScope.getPosFgVal();
+                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            }
         }
 
         // 필수값 체크
@@ -663,11 +676,11 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                         }
                     }
                 }
-                // KOCES 총판은 벤더코드 KOCES만 저장가능
+                // 벤더구분 [01]VAN인 경우 벤더코드는 [008]KOCES 만 선택가능합니다
                 if($("#lblVanFixFg").text() == "Y") {
                     if (params[i].vendorFg === '01') {
                         if (params[i].vendorNm !== 'KOCES') {
-                            $scope._popMsg(messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
+                            $scope._popMsg(messages["terminalManage.vendorFg"]+"이 [01]VAN인 경우 " + messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
                             return false;
                         }
                     }
@@ -681,9 +694,12 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
             for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                 var item2 = $scope.flex.collectionView.items[j];
                 if(i !== j){
-                    if(item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()){
-                        $scope._popMsg(  "벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
-                        return false;
+                    if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
+                        && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
+                        if (item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()) {
+                            $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
+                            return false;
+                        }
                     }
                 }
             }
@@ -791,7 +807,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
             var col = sender.columns[elements.col];
             if (col.binding === "vendorFg" || col.binding === "vendorCd") {
                 var dataItem = s.rows[elements.row].dataItem;
-                if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+                if(dataItem.status === "U"){
+                    elements.cancel = true;
+                }else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
                     elements.cancel = true;
                 }
             }
@@ -816,9 +834,13 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.changeVendorFg = function (s, e) {
         if (e.panel === s.cells) {
             var col = s.columns[e.col];
-            if (col.binding === "vendorNm") {
+            var item = s.rows[e.row].dataItem;
+            if(col.binding === "vendorFg"){
+                if (item.status === "I") {
+                    item.vendorNm = '';
+                }
+            } else if (col.binding === "vendorNm") {
                 var changeVendorFg = s.rows[e.row].dataItem.vendorFg;
-                // console.log("changeVendorFg : "+ changeVendorFg)
                 switch (changeVendorFg) {
                     case '01':
                         col.dataMap = vanList;
@@ -887,22 +909,28 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            $scope.flex.collectionView.itemsEdited[i].status = "U";
-            $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
-            $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
-            params.push($scope.flex.collectionView.itemsEdited[i]);
+            if($scope.flex.collectionView.itemsEdited[i].gChk) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
+                $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            $scope.flex.collectionView.itemsAdded[i].status = "I";
-            $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
-            $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
-            params.push($scope.flex.collectionView.itemsAdded[i]);
+            if($scope.flex.collectionView.itemsAdded[i].gChk) {
+                $scope.flex.collectionView.itemsAdded[i].status = "I";
+                $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
+                $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
+                params.push($scope.flex.collectionView.itemsAdded[i]);
+            }
         }
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
-            $scope.flex.collectionView.itemsRemoved[i].cornrCd = terminalScope.getCornerFgVal();
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
+            if($scope.flex.collectionView.itemsRemoved[i].gChk) {
+                $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
+                $scope.flex.collectionView.itemsRemoved[i].cornrCd = terminalScope.getCornerFgVal();
+                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            }
         }
 
         //필수값 체크
@@ -971,7 +999,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 if($("#lblVanFixFg").text() == "Y") {
                     if (params[i].vendorFg === '01') {
                         if (params[i].vendorNm !== 'KOCES') {
-                            $scope._popMsg(messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
+                            $scope._popMsg(messages["terminalManage.vendorFg"]+"이 [01]VAN인 경우 " + messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
                             return false;
                         }
                     }
@@ -985,9 +1013,12 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
             for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                 var item2 = $scope.flex.collectionView.items[j];
                 if(i !== j){
-                    if(item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()){
-                        $scope._popMsg(  "벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
-                        return false;
+                    if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
+                       && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
+                        if (item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()) {
+                            $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
+                            return false;
+                        }
                     }
                 }
             }

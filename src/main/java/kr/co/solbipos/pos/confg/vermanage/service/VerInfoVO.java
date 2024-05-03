@@ -60,6 +60,8 @@ public class VerInfoVO extends PageVO {
     private String orgnCds;
     /** 프로그램상세구분 */
     private String progDetailFg;
+    /** 시스템타입 */
+    private String systemTypeFg;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -304,5 +306,13 @@ public class VerInfoVO extends PageVO {
 
     public void setProgDetailFg(String progDetailFg) {
         this.progDetailFg = progDetailFg;
+    }
+
+    public String getSystemTypeFg() {
+        return systemTypeFg;
+    }
+
+    public void setSystemTypeFg(String systemTypeFg) {
+        this.systemTypeFg = systemTypeFg;
     }
 }

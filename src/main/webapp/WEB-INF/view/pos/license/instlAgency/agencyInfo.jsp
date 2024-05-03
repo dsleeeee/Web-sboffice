@@ -43,7 +43,7 @@
             <tbody>
                 <tr>
                     <%-- 총판구분 --%>
-                    <th><s:message code="instlAgency.agencyType" /></th>
+                    <th><s:message code="instlAgency.agencyType" /><em class="imp">*</em></th>
                     <td colspan="3">
                         <select id="ai_agencyType"  class='wj-content' style="width:150px; height:25px;" onchange="hideAgency();">
                             <option value="dist"><s:message code="instlAgency.dist"/></option>
@@ -54,22 +54,24 @@
                     </td>
                 </tr>
                 <tr>
-                    <th><s:message code="instlAgency.agencyCd" />/<s:message code="instlAgency.agencyNm" /></th>
+                    <th>
+                        <s:message code="instlAgency.agencyCd" />/<s:message code="instlAgency.agencyNm" /><em class="imp">*</em>
+                    </th>
                     <td><input type="text" id="ai_agencyCd" readonly ng-model="ai_agencyCd" style="width:90px;"> /
                         <input type="text" id="ai_agencyNm" name="ai_agencyNm" ng-model="ai_agencyNm" style="width:167px;" maxlength="50"/>
                     </td>
                     <%-- 대표자명 --%>
-                    <th><s:message code="instlAgency.ownerNm" /></th>
+                    <th><s:message code="instlAgency.ownerNm" /><em class="imp">*</em></th>
                     <td><input type="text" id="ai_ownerNm" name="ai_ownerNm" ng-model="ai_ownerNm" maxlength="25"/>
                     </td>
                 </tr>
                 <tr>
                     <%-- 사업자번호 --%>
-                    <th><s:message code="instlAgency.bizNo" /></th>
+                    <th><s:message code="instlAgency.bizNo" /><em class="imp">*</em></th>
                     <td><input type="text" id="ai_bizNo" name="ai_bizNo" ng-model="ai_bizNo" maxlength="10"/>
                     </td>
                     <%-- 상호명 --%>
-                    <th><s:message code="instlAgency.bizStoreNm" /></th>
+                    <th><s:message code="instlAgency.bizStoreNm" /><em class="imp">*</em></th>
                     <td><input type="text" id="ai_bizStoreNm" name="ai_bizStoreNm" ng-model="ai_bizStoreNm" maxlength="50"/>
                     </td>
                 </tr>
@@ -83,7 +85,7 @@
                 </tr>--%>
                 <tr>
                     <%-- 전화번호 --%>
-                    <th><s:message code="instlAgency.telNo" /></th>
+                    <th><s:message code="instlAgency.telNo" /><em class="imp">*</em></th>
                     <td><input type="text" id="ai_telNo" name="ai_telNo" ng-model="ai_telNo" maxlength="15"/>
                     </td>
                     <%-- 팩스번호 --%>
@@ -100,7 +102,7 @@
                 </tr>
                 <tr>
                     <%-- 주소 --%>
-                    <th rowspan="3"><s:message code="instlAgency.addr" /></th>
+                    <th rowspan="3"><s:message code="instlAgency.addr" /><em class="imp">*</em></th>
                     <td colspan="3"><input type="text" id="ai_postNo" name="ai_postNo" ng-model="ai_postNo" placeholder="우편번호" style="width: 80px;" maxlength="5" readonly/>
                                       <a href="#" class="btn_grayS ml5" onclick="searchAddr()"><s:message code="instlAgency.addrSearch" /></a>
                     </td>
@@ -347,6 +349,15 @@
             s_alert.pop("<s:message code='instlAgency.addrDtl' /><s:message code='cmm.require.text' />");
             return false;
         }
+
+        // 사업자번호는 숫자만 입력할 수 있습니다.
+        var msg = messages["storeManage.bizNo"]+messages["cmm.require.number"];
+        var numChkregexp = /[^0-9]/g;
+        if(numChkregexp.test( $("#ai_bizNo").val())) {
+            s_alert.pop(msg);
+            return false;
+        }
+
 
         return true;
     }

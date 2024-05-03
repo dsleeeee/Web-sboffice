@@ -99,6 +99,10 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       else if(data.progDetailFg == "3")     $scope.version.progDetailFg = "DID";
       else if(data.progDetailFg == "4")     $scope.version.progDetailFg = "T-오더";
 
+      if(data.systemTypeFg == "0")          $scope.version.systemTypeFg = "공통";
+      else if(data.systemTypeFg == "1")     $scope.version.systemTypeFg = "32bit";
+      else if(data.systemTypeFg == "2")     $scope.version.systemTypeFg = "64bit";
+
       // 파일사이즈 변환하여 표기
       $scope.version.fileSize = getfileSize($scope.version.fileSize);
 
@@ -138,6 +142,7 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#srchHqOfficeNm").val("");
       $("#srchStoreCd").val("");
       $("#srchStoreNm").val("");
+      $("#srchAddr").val("");
     });
     var scope = agrid.getScope("allStoreCtrl")
     scope.progDetailFg = $scope.version.progDetailFg;

@@ -106,6 +106,21 @@
                 <input type="text" id="srchStoreNm" ng-value=""/>
               </td>
             </tr>
+            <tr>
+              <%-- 주소 --%>
+              <th><s:message code="verManage.store.addr" /></th>
+              <td>
+                <input type="text" id="srchAddr" ng-value=""/>
+              </td>
+              <%-- 엑셀업로드 조회 --%>
+              <th><s:message code="verManage.excel.srch"/></th>
+              <td>
+                <%-- 양식다운로드 --%>
+                <button class="btn_skyblue ml2 " ng-click="sampleDownload()"><s:message code="cmm.excel.sampleDown" /></button>
+                <%-- 엑셀업로드 --%>
+                <button class="btn_skyblue ml2 " ng-click="excelUpload()"><s:message code="cmm.excel.excelUpload" /></button>
+              </td>
+            </tr>
             </tbody>
           </table>
           <div class="mt10 tr">
@@ -120,6 +135,10 @@
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.registed"/></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
+              <%-- 엑셀다운로드 --%>
+              <button class="btn_skyblue mr5 fr" ng-click="excelDownload()">
+                <s:message code="cmm.excel.down" />
+              </button>
             </div>
             <div id="regProdGrid" style="height: 370px;">
               <wj-flex-grid
@@ -141,7 +160,7 @@
                 <wj-flex-grid-column header="<s:message code="verManage.store.storeNm"/>" binding="storeNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="40" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
-
+                <wj-flex-grid-column header="<s:message code="verManage.store.addr"/>" binding="addr"  width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -155,6 +174,10 @@
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.noRegisted" /></span>
               <span class="fr"><a href="#" class="btn_grayS2" ng-click="save()" ><s:message code="verManage.regist.new" /></a></span>
+              <%-- 엑셀다운로드 --%>
+              <button class="btn_skyblue mr5 fr" ng-click="excelDownload()">
+                <s:message code="cmm.excel.down" />
+              </button>
             </div>
             <div id="noRegProdGrid" style="height: 370px;">
               <wj-flex-grid
@@ -177,16 +200,41 @@
                 <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="40" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.diffVerCnt"/>" binding="diffVerCnt"  width="90" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.addr"/>" binding="addr"  width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
         </div>
       </div>
+
+        <%-- 양식다운로드, 엑셀 업로드 관련 --%>
+        <div style="display: none;" ng-controller="verAddStoreExcelFileUploadCtrl">
+          <input type="file" class="form-control" id="excelUpFile"
+                 ng-model="excelUpFile"
+                 onchange="angular.element(this).scope().excelFileChanged()"
+                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
+
+          <div class="wj-gridWrap" style="height: 350px; overflow-y: hidden; overflow-x: hidden;">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    items-source="data"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    is-read-only="true">
+
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="media.store.storeCd"/>" binding="storeCd" width="130" align="center" data-type="String"></wj-flex-grid-column>
+
+            </wj-flex-grid>
+          </div>
+        </div>
+
     </div>
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20231013.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20240426.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

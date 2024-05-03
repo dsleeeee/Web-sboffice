@@ -178,7 +178,7 @@
         </div>
 
         <%-- 안내문구 --%>
-        <div class="sb-select w10 fl" align="left" style="width:300px; margin-left:20px;">
+        <div class="sb-select w15 fl" align="left" style="margin-left:20px;">
           <label style="font-size:0.75em; color: #72777b;" id="lblToolTip"></label>
         </div>
 
@@ -276,7 +276,7 @@
   var arrAgencyCol = agencyCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20240404.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20240430.01" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <%--<c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">--%>

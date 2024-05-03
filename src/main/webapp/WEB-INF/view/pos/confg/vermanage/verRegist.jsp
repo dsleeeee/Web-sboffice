@@ -15,7 +15,7 @@
     <%-- body --%>
     <div class="wj-dialog-body">
       <div>
-        <div style="height:250px; overflow-y: auto;">
+        <div style="height:270px; overflow-y: auto;">
           <f:form id="regForm" name="regForm" >
             <h3 class="h3_tbl"><s:message code="verManage.verInfo" /></h3>
             <table class="searchTbl">
@@ -120,6 +120,23 @@
                     </div>
                   </td>
               </tr>
+              <tr>
+                  <%-- 시스템타입 --%>
+                <th><s:message code="verManage.systemTypeFg" /></th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box
+                            id="systemTypeFg"
+                            ng-model="version.systemTypeFg"
+                            control="versionSystemTypeFgCombo"
+                            items-source="_getComboData('systemTypeFgCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
               </tbody>
             </table>
           </f:form>
@@ -137,6 +154,6 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20240308.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20240426.01" charset="utf-8"></script>
 
 
