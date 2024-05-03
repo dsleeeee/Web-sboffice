@@ -107,6 +107,7 @@ public class RtnInstockConfmServiceImpl implements RtnInstockConfmService {
             rtnInstockConfmVO.setRegDt(currentDt);
             rtnInstockConfmVO.setModId(sessionInfoVO.getUserId());
             rtnInstockConfmVO.setModDt(currentDt);
+            rtnInstockConfmVO.setInSplyUprc(rtnInstockConfmVO.getOutSplyUprc());
 
             // DTL 수정
             result = rtnInstockConfmMapper.updateRtnInstockConfmDtl(rtnInstockConfmVO);
