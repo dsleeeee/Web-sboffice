@@ -39,8 +39,8 @@
                     ,       (SELECT BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = tms.BRANCH_CD) AS BRANCH_NM
                     </if>
                     <if test='option == "all"'>
-                        ,       '-'     AS BRANCH_CD
-                        ,       '-'     AS BRANCH_NM
+                        ,       '-'                                                                         AS BRANCH_CD
+                        ,       '-'                                                                         AS BRANCH_NM
                     </if>
                     ,       TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd')                        AS START_DATE
                     ,       TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd')                          AS END_DATE
@@ -151,18 +151,17 @@
                 <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
                     AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                 </if>
-                <if test='option != null and option != "" and option == "branch"'>
+                <if test='option == "branch"'>
                     GROUP
                     BY 		tms.BRANCH_CD
                 </if>
-                ORDER
-                BY      tms.BRANCH_CD NULLS FIRST
-                        <if test='option != null and option != "" and option == "store"'>
-                            ,   tms.STORE_CD
-                            ,   tms.HQ_BRAND_CD
-                            ,   tmsi.MOMS_TEAM
-                            ,   tmsi.MOMS_AC_SHOP
-                        </if>
+                <if test='option != null and option != "" and option == "store"'>
+                    ORDER
+                    BY      tms.STORE_CD
+                    ,       tms.HQ_BRAND_CD
+                    ,       tmsi.MOMS_TEAM
+                    ,       tmsi.MOMS_AC_SHOP
+                </if>
             )
     </select>
 

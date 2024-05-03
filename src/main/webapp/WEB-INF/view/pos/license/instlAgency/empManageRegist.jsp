@@ -222,7 +222,7 @@
             $("#emr_mapEmpNo").val("");
             $("#emr_adminFg").val("");
             $("#emr_mpNo").val("");
-            $("#erm_useYn").val("N");
+            $("#emr_useYn").val("Y");
             $("#emr_smsRecvYn").val("N");
             $("#emr_remark").val("");
 

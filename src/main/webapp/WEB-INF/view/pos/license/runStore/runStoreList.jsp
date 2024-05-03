@@ -210,7 +210,7 @@
                     <wj-flex-grid-column header="<s:message code="runStore.regDate"/>           " binding="regDate"         width="100" is-read-only="true" align="center" visible="false"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.sysOpenDate"/>       " binding="sysOpenDate"     width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
 
-                    <wj-flex-grid-column header="<s:message code="runStore.maxSaleDate"/>       " binding="maxSaleDate"    width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="runStore.maxSaleDate"/>       " binding="pMaxSaleDate"    width="100" is-read-only="true" align="center"> </wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="runStore.lastSaleDate"/>      " binding="lastSaleDate"    width="100" is-read-only="true" align="center" visible="false"> </wj-flex-grid-column>
 
                     <wj-flex-grid-column header="<s:message code="runStore.sysStatNm"/>         " binding="sysStatNm"       width=" 50" is-read-only="true" align="center"> </wj-flex-grid-column>

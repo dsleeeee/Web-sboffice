@@ -121,7 +121,8 @@
                tcpv.REG_DT,
                tcpv.REG_ID,
                tcpv.ORGN_CDS,
-               tcpv.PROG_DETAIL_FG
+               tcpv.PROG_DETAIL_FG,
+               tcpv.SYSTEM_TYPE_FG
           FROM TB_CM_POS_VERSN tcpv
          WHERE tcpv.VER_SER_NO = #{verSerNo}
            AND tcpv.DEL_YN = 'N'
@@ -157,7 +158,8 @@
             MOD_DT,
             MOD_ID,
             ORGN_CDS,
-            PROG_DETAIL_FG
+            PROG_DETAIL_FG,
+            SYSTEM_TYPE_FG
         )
         VALUES
         (
@@ -181,7 +183,8 @@
             #{modDt},
             #{modId},
             #{orgnCds},
-            #{progDetailFg}
+            #{progDetailFg},
+            #{systemTypeFg}
         )
         ]]>
     </insert>
@@ -215,7 +218,8 @@
                MOD_DT         = #{modDt},
                MOD_ID         = #{modId},
                ORGN_CDS       = #{orgnCds},
-               PROG_DETAIL_FG = #{progDetailFg}
+               PROG_DETAIL_FG = #{progDetailFg},
+               SYSTEM_TYPE_FG = #{systemTypeFg}
          WHERE VER_SER_NO     = #{verSerNo}
          ]]>
     </update>
@@ -275,7 +279,8 @@
                tho.HQ_OFFICE_NM,
                tcp.LAST_VER_SER_NO,
                tmp.POS_CNT,
-               NVL(tcpvs.DIFF_VER_CNT, 0) AS DIFF_VER_CNT
+               NVL(tcpvs.DIFF_VER_CNT, 0) AS DIFF_VER_CNT,
+               tms.ADDR
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                (
@@ -352,6 +357,9 @@
         </if>
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test='addr != null and addr != ""'>
+            AND tms.ADDR LIKE '%'|| #{addr} ||'%'
         </if>
         ORDER BY HQ_OFFICE_CD, STORE_CD
     </select>

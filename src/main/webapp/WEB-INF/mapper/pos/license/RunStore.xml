@@ -45,14 +45,7 @@
         ,       H.P_SALE_CNT
         ,       H.P_RTN_SALE_CNT
         ,       H.P_REAL_SALE_CNT
-        <choose>
-            <when test='dayGubun == "D"'>
         ,       CASE WHEN H.P_MAX_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(H.P_MAX_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') ELSE '' END AS P_MAX_SALE_DATE
-            </when>
-            <when test='dayGubun == "M"'>
-        ,       CASE WHEN H.P_MAX_SALE_DATE IS NOT NULL THEN TO_CHAR(TO_DATE(H.P_MAX_SALE_DATE, 'yyyymm'), 'yyyy-mm') ELSE '' END AS P_MAX_SALE_DATE
-            </when>
-        </choose>
         ,       I.P_CARD_CNT
         ,       J.P_CASH_CNT
         ,       J.P_CASH_APPR_CNT
@@ -146,10 +139,19 @@
                 ,       SUM(NVL(A.SALE_CNT      , 0))   P_SALE_CNT
                 ,       SUM(NVL(A.RTN_SALE_CNT  , 0))   P_RTN_SALE_CNT
                 ,       SUM(NVL(A.REAL_SALE_CNT , 0))   P_REAL_SALE_CNT
-                ,       MAX(A.SALE_YM)                P_MAX_SALE_DATE
+                ,       MAX(B.SALE_DATE)                P_MAX_SALE_DATE
                 FROM    TB_SL_MONTHLY_TOTAL A
+                ,       (
+                            SELECT 	STORE_CD
+                            , 		MAX(SALE_DATE) AS SALE_DATE
+                            FROM	TB_SL_DAILY_TOTAL
+                            WHERE 	SALE_DATE LIKE #{startMonth} || '%'
+                            GROUP
+                            BY 		STORE_CD
+                        ) B
                 WHERE   1=1
-                AND     A.SALE_YM = #{startMonth}
+                AND     A.STORE_CD  = B.STORE_CD
+                AND     A.SALE_YM   = #{startMonth}
                 GROUP
                 BY      A.STORE_CD
             </when>

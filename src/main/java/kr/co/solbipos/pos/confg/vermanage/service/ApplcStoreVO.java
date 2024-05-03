@@ -74,6 +74,8 @@ public class ApplcStoreVO extends PageVO {
     private String storeCdQuery;
     /** 프로그램 상세구분 */
     private String progDetailFg;
+    /** 주소 */
+    private String addr;
 
     public OrgnFg getOrgnFg() {
         return orgnFg;
@@ -329,5 +331,13 @@ public class ApplcStoreVO extends PageVO {
 
     public void setProgDetailFg(String progDetailFg) {
         this.progDetailFg = progDetailFg;
+    }
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
     }
 }
