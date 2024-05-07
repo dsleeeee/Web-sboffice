@@ -97,7 +97,7 @@
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.dcAmt"/>" binding="dcAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.realSaleAmt"/>" binding="realSaleAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.gaAmt"/>" binding="gaAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleStatusKwu.varAmt"/>" binding="varAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleStatusKwu.varAmt"/>" binding="vatAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.cashAmt"/>" binding="cashAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.cashBillAmt"/>" binding="cashBillAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleStatusKwu.cardAmt"/>" binding="cardAmt" width="90" is-read-only="true" align="right"></wj-flex-grid-column>
