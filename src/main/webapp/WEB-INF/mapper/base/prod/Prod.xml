@@ -7253,42 +7253,78 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                 SELECT HQ_OFFICE_CD,
-                       PROD_CD,
-                       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                       MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                       MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-                       MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                  FROM TB_HQ_PRODUCT_SALE_PRICE
-                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND PROD_CD = #{prodCd}
-                   <![CDATA[
-                       AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                       AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                   ]]>
-                   AND SALE_PRC_FG = '1'
-                 GROUP
-                    BY HQ_OFFICE_CD,
-                       PROD_CD
+                        PROD_CD,
+                        SUM(SALE_UPRC) AS SALE_UPRC,
+                        SUM(STIN_SALE_UPRC) AS STIN_SALE_UPRC,
+                        SUM(DLVR_SALE_UPRC) AS DLVR_SALE_UPRC,
+                        SUM(PACK_SALE_UPRC) AS PACK_SALE_UPRC
+                FROM
+                (
+                    SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                            #{prodCd} AS PROD_CD,
+                            0 AS SALE_UPRC,
+                            0 AS STIN_SALE_UPRC,
+                            0 AS DLVR_SALE_UPRC,
+                            0 AS PACK_SALE_UPRC
+                      FROM dual
+                    UNION ALL
+                    SELECT HQ_OFFICE_CD,
+                            PROD_CD,
+                            NVL(MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS SALE_UPRC,
+                            NVL(MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS STIN_SALE_UPRC,
+                            NVL(MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS DLVR_SALE_UPRC,
+                            NVL(MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS PACK_SALE_UPRC
+                      FROM TB_HQ_PRODUCT_SALE_PRICE
+                     WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                       AND PROD_CD = #{prodCd}
+                       <![CDATA[
+                           AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                           AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                       ]]>
+                       AND SALE_PRC_FG = '1'
+                     GROUP
+                        BY HQ_OFFICE_CD,
+                           PROD_CD
+                )
+                GROUP BY HQ_OFFICE_CD, PROD_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 SELECT STORE_CD,
-                       PROD_CD,
-                       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                       MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                       MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-                       MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                  FROM TB_MS_PRODUCT_SALE_PRICE
-                 WHERE STORE_CD = #{storeCd}
-                   AND PROD_CD = #{prodCd}
-                   <![CDATA[
-                       AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                       AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                   ]]>
-                   AND SALE_PRC_FG = '1'
-                 GROUP
-                    BY STORE_CD,
-                       PROD_CD
+                        PROD_CD,
+                        SUM(SALE_UPRC) AS SALE_UPRC,
+                        SUM(STIN_SALE_UPRC) AS STIN_SALE_UPRC,
+                        SUM(DLVR_SALE_UPRC) AS DLVR_SALE_UPRC,
+                        SUM(PACK_SALE_UPRC) AS PACK_SALE_UPRC
+                FROM
+                (
+                    SELECT #{storeCd} AS STORE_CD,
+                            #{prodCd} AS PROD_CD,
+                            0 AS SALE_UPRC,
+                            0 AS STIN_SALE_UPRC,
+                            0 AS DLVR_SALE_UPRC,
+                            0 AS PACK_SALE_UPRC
+                      FROM dual
+                    UNION ALL
+                    SELECT STORE_CD,
+                            PROD_CD,
+                            NVL(MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS SALE_UPRC,
+                            NVL(MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS STIN_SALE_UPRC,
+                            NVL(MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS DLVR_SALE_UPRC,
+                            NVL(MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ), 0) AS PACK_SALE_UPRC
+                      FROM TB_MS_PRODUCT_SALE_PRICE
+                     WHERE STORE_CD = #{storeCd}
+                       AND PROD_CD = #{prodCd}
+                       <![CDATA[
+                           AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                           AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                       ]]>
+                       AND SALE_PRC_FG = '1'
+                     GROUP
+                        BY STORE_CD,
+                           PROD_CD
+                )
+                GROUP BY STORE_CD, PROD_CD
             </when>
         </choose>
     </select>
