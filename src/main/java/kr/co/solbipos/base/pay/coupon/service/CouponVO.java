@@ -57,6 +57,8 @@ public class CouponVO extends PageVO {
     private UseYn storeRegFg;
     /** 쿠폰 관련 프로시져 실행 결과 */
     private String result;
+    /** 표기순번 */
+    private String dispSeq;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -280,4 +282,8 @@ public class CouponVO extends PageVO {
     public void setResult(String result) {
         this.result = result;
     }
+
+    public String getDispSeq() { return dispSeq; }
+
+    public void setDispSeq(String dispSeq) { this.dispSeq = dispSeq; }
 }
