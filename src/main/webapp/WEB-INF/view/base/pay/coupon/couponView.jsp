@@ -15,6 +15,7 @@
 <c:set var="baseUrl" value="/base/pay/coupon/" />
 
 <div class="subCon">
+
   <div ng-controller="couponClassCtrl">
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>
@@ -27,7 +28,7 @@
     </div>
 
     <%-- 쿠폰분류등록 --%>
-    <div class="mt10" >
+    <div class="mt10">
       <div class="wj-TblWrapBr pd10" style="height:400px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='coupon.regist.class' /></span>
@@ -50,7 +51,6 @@
           <button class="btn_skyblue" id="btnClassAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
           <button class="btn_skyblue" id="btnClassDel" ng-click="del()"><s:message code='cmm.del' /></button>
           <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
-
         </div>
         <%-- 쿠폰분류등록 그리드 --%>
         <div id="couponClassGrid" class="wj-gridWrap" style="height:280px;overflow-y: hidden;">
@@ -69,18 +69,17 @@
             <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="coupon.payTypeFg"/>" binding="payTypeFg" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="coupon.payClassCd"/>" binding="payClassCd" maxLength="3" is-read-only="true"  width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="coupon.payClassNm"/>" binding="payClassNm"  maxLength="20"  width="*"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="coupon.serNoYn"/>" binding="serNoYn" data-map="useYnDataMap"  width="*" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" data-map="useYnDataMap"  width="*" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false" ></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="coupon.couponCnt"/>" binding="couponCnt" visible="false" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="coupon.payClassCd"/>" binding="payClassCd" maxLength="3" is-read-only="true" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="coupon.payClassNm"/>" binding="payClassNm" maxLength="20" width="*"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="coupon.serNoYn"/>" binding="serNoYn" data-map="useYnDataMap" width="*" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" data-map="useYnDataMap" width="*" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="coupon.couponCnt"/>" binding="couponCnt" visible="false"></wj-flex-grid-column>
             <c:if test="${mappingFg == '1'}">
-              <wj-flex-grid-column header="<s:message code="coupon.mappingCd"/>" binding="mappingCode" data-map="mappingCdDataMap" ></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="coupon.mappingCd"/>" binding="mappingCode" data-map="mappingCdDataMap"></wj-flex-grid-column>
             </c:if>
           </wj-flex-grid>
         </div>
-
         <%-- 페이지 리스트 --%>
         <div class="pageNum mt20">
           <%-- id --%>
@@ -98,19 +97,8 @@
     <div class="wj-TblWrapBr pd10" style="height:400px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='coupon.regist.coupon' /> <span id="couponSubTitle"></span> </span>
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)"
-                visible="false">
-        </wj-combo-box>
-        <%--// 페이지 스케일  --%>
+        <button class="btn_up" id="btnCouponUp" ng-click="rowMoveUp()"><s:message code="cmm.up" /></button>
+        <button class="btn_down" id="btnCouponDown" ng-click="rowMoveDown()"><s:message code="cmm.down" /></button>
         <button class="btn_skyblue" id="btnCouponAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnCouponDel" ng-click="del()"><s:message code='cmm.del' /></button>
         <button class="btn_skyblue" id="btnCouponSave" ng-click="save()"><s:message code='cmm.save' /></button>
@@ -137,50 +125,40 @@
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcFg"/>" binding="coupnDcFg" data-map="coupnDcFgDataMap"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcRate"/>" binding="coupnDcRate" max-length="3"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcAmt"/>" binding="coupnDcAmt" max-length="7"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg"  data-map="coupnApplyFgDataMap" align="center" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnTargetFg"/>" binding="coupnTargetFg" data-map="coupnTargetFgDataMap" align="center" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="coupon.coupnProdFg"/>" binding="coupnProdFg" data-map="coupnProdFgDataMap" align="center" ></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnApplyFg"/>" binding="coupnApplyFg" data-map="coupnApplyFgDataMap" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnTargetFg"/>" binding="coupnTargetFg" data-map="coupnTargetFgDataMap" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="coupon.coupnProdFg"/>" binding="coupnProdFg" data-map="coupnProdFgDataMap" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.prodCnt"/>" binding="prodCnt" is-read-only="true" align="center"></wj-flex-grid-column>
-
           <c:if test="${orgnFg == 'HQ'}">
             <wj-flex-grid-column header="<s:message code="coupon.storeCnt"/>" binding="storeCnt" is-read-only="true" align="center"></wj-flex-grid-column>
           </c:if>
-
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" visible="false"></wj-flex-grid-column>
-
+          <wj-flex-grid-column header="" binding="dispSeq" width="*" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
-
-      <%-- 페이지 리스트 --%>
-      <div class="pageNum mt20">
-        <%-- id --%>
-        <ul id="couponCtrlPager" data-size="10">
-        </ul>
-      </div>
-      <%--//페이지 리스트--%>
-
     </div>
   </div>
+
 </div>
 
 <script type="text/javascript">
-var orgnFg       = "${orgnFg}";
-var useYn        = ${ccu.getCommCodeExcpAll("067")};
-var coupnDcFg    = ${ccu.getCommCodeExcpAll("013")};
-var coupnApplyFg = ${ccu.getCommCodeExcpAll("043")};
-var baseUrl      = "${baseUrl}";
-var coupnEnvstVal = "${coupnEnvstVal}";
-var mappingFg = "${mappingFg}";
-var mappingCd   = ${ccu.getCommCodeExcpAll("805")};
+  var orgnFg       = "${orgnFg}";
+  var useYn        = ${ccu.getCommCodeExcpAll("067")};
+  var coupnDcFg    = ${ccu.getCommCodeExcpAll("013")};
+  var coupnApplyFg = ${ccu.getCommCodeExcpAll("043")};
+  var baseUrl      = "${baseUrl}";
+  var coupnEnvstVal = "${coupnEnvstVal}";
+  var mappingFg = "${mappingFg}";
+  var mappingCd   = ${ccu.getCommCodeExcpAll("805")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20230309.01" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20240508.01" charset="utf-8"></script>
 
 <%-- 쿠폰별 상품 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">
   <c:param name="coupnEnvstVal" value="${coupnEnvstVal}"/>
 </c:import>
-
 
 <%-- 쿠폰별 매장 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponStoreView.jsp">

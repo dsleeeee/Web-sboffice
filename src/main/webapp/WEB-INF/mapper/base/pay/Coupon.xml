@@ -327,7 +327,6 @@
     -->
     <select id="getHqCouponList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : CouponMapper.getHqCouponList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
             thc.HQ_OFFICE_CD,
             thc.COUPN_CD,
@@ -342,15 +341,15 @@
             thc.COUPN_TARGET_FG,
             thc.COUPN_PROD_FG,
             (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcp.COUPN_CD = thc.COUPN_CD ) AS PROD_CNT,
-            (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcs.COUPN_CD = thc.COUPN_CD ) AS STORE_CNT
-        <include refid="CmmSQL.PagingTemplateCount"/>
+            (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcs.COUPN_CD = thc.COUPN_CD ) AS STORE_CNT,
+            thc.DISP_SEQ_NO AS DISP_SEQ
         FROM
             TB_HQ_COUPON thc
         WHERE
             thc.HQ_OFFICE_CD = #{hqOfficeCd}
             AND thc.PAY_CLASS_CD = #{payClassCd}
 --             AND thc.USE_YN = 'Y'
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        ORDER BY thc.DISP_SEQ_NO
     </select>
 
     <!-- 매장 쿠폰 조회 -->
@@ -360,7 +359,6 @@
     -->
     <select id="getStoreCouponList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : CouponMapper.getStoreCouponList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
             tmc.STORE_CD,
             tmc.COUPN_CD,
@@ -374,15 +372,15 @@
             tmc.REG_ID,
             tmc.COUPN_TARGET_FG,
             tmc.COUPN_PROD_FG,
-            (SELECT COUNT(tmcp.PROD_CD) FROM TB_MS_COUPON_PROD tmcp WHERE tmcp.STORE_CD = tmc.STORE_CD AND tmcp.PAY_CLASS_CD = tmc.PAY_CLASS_CD AND tmcp.COUPN_CD = tmc.COUPN_CD ) AS PROD_CNT
-        <include refid="CmmSQL.PagingTemplateCount"/>
+            (SELECT COUNT(tmcp.PROD_CD) FROM TB_MS_COUPON_PROD tmcp WHERE tmcp.STORE_CD = tmc.STORE_CD AND tmcp.PAY_CLASS_CD = tmc.PAY_CLASS_CD AND tmcp.COUPN_CD = tmc.COUPN_CD ) AS PROD_CNT,
+            tmc.DISP_SEQ_NO
         FROM
             TB_MS_COUPON tmc
         WHERE
             tmc.STORE_CD = #{storeCd}
             AND tmc.PAY_CLASS_CD = #{payClassCd}
 --             AND tmc.USE_YN = 'Y'
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        ORDER BY tmc.DISP_SEQ_NO
     </select>
 
     <!-- 쿠폰 코드 조회 -->
@@ -435,7 +433,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            DISP_SEQ_NO
         ) VALUES (
             #{hqOfficeCd},
             #{coupnCd},
@@ -451,7 +450,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{dispSeq}
         )
     </insert>
 
@@ -474,7 +474,8 @@
             COUPN_PROD_FG = #{coupnProdFg},
             USE_YN = #{useYn},
             MOD_DT = #{modDt},
-            MOD_ID = #{modId}
+            MOD_ID = #{modId},
+            DISP_SEQ_NO = #{dispSeq}
         WHERE
             HQ_OFFICE_CD = #{hqOfficeCd}
             AND PAY_CLASS_CD =  #{payClassCd}
@@ -583,7 +584,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            DISP_SEQ_NO
         ) VALUES (
             #{storeCd},
             #{coupnRegFg},
@@ -599,7 +601,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{dispSeq}
         )
     </insert>
 
@@ -622,7 +625,8 @@
             COUPN_PROD_FG = #{coupnProdFg},
             USE_YN = #{useYn},
             MOD_DT = #{modDt},
-            MOD_ID = #{modId}
+            MOD_ID = #{modId},
+            DISP_SEQ_NO = #{dispSeq}
         WHERE
             STORE_CD = #{storeCd}
             AND COUPN_REG_FG =  #{coupnRegFg}

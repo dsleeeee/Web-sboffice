@@ -175,7 +175,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.status = "I";
     params.gChk = true;
-    params.payClassCd="자동채번"
+    params.payClassCd="자동채번";
     params.serNoYn = "Y";
     params.useYn = "Y";
     params.mappingCode = "0601";
@@ -256,7 +256,6 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 분류 매장 적용
   $scope.applyStore = function(){
-
     var params = new Array();
 
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -268,11 +267,11 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._save(baseUrl + "class/applyCouponClassList.sb", params, function(){ $scope.allSearch() })
   };
 
-
   // 쿠폰 삭제 완료 후처리 (쿠폰분류 재조회)
   $scope.allSearch = function () {
     $scope.searchCouponClass();
   };
+
 }]);
 
 
@@ -441,7 +440,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.status = "I";
     params.gChk = true;
-    params.coupnCd="자동채번"
+    params.coupnCd="자동채번";
     params.coupnDcFg = "1";
     params.coupnApplyFg = "1";
     params.coupnTargetFg = "A";
@@ -501,6 +500,17 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.save = function() {
     // 파라미터 설정
     var params = new Array();
+
+    // dispSeq 재설정
+    for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+      if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+          $scope.flex.collectionView.items[s].dispSeq = num;
+          $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+          $scope.flex.collectionView.items[s].status = "U";
+          $scope.flex.collectionView.commitEdit();
+      }
+    }
+
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       if($scope.flex.collectionView.itemsEdited[i].coupnNm == undefined || $scope.flex.collectionView.itemsEdited[i].coupnNm.length == 0){
         $scope._popMsg(messages["coupon.require.coupnNm"]);
@@ -571,11 +581,49 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       s.refresh();
     }
   }
+
+    // 위로 옮기기 버튼
+    $scope.rowMoveUp = function() {
+        var movedRows = 0;
+        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+            var item = $scope.flex.collectionView.items[i];
+            if (i > 0 && item.gChk) {
+                if (!$scope.flex.collectionView.items[i - 1].gChk) {
+                    movedRows = i - 1;
+                    var tmpItem = $scope.flex.collectionView.items[movedRows];
+                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                    $scope.flex.collectionView.items[i] = tmpItem;
+                    $scope.flex.collectionView.commitEdit();
+                    $scope.flex.collectionView.refresh();
+                }
+            }
+        }
+        $scope.flex.select(movedRows, 1);
+    };
+
+    // 아래로 옮기기 버튼
+    $scope.rowMoveDown = function() {
+        var movedRows = 0;
+        for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+            var item = $scope.flex.collectionView.items[i];
+            if ((i < $scope.flex.itemsSource.itemCount - 1) && item.gChk) {
+                if (!$scope.flex.collectionView.items[i + 1].gChk) {
+                    movedRows = i + 1;
+                    var tmpItem = $scope.flex.collectionView.items[movedRows];
+                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                    $scope.flex.collectionView.items[i] = tmpItem;
+                    $scope.flex.collectionView.commitEdit();
+                    $scope.flex.collectionView.refresh();
+                }
+            }
+        }
+        $scope.flex.select(movedRows, 1);
+    };
+
 }]);
+
 
 // 탭 클릭
 $("#couponStoreTab").click(function(){
   location.href = "/base/pay/coupon/store/couponStoreView.sb";
 });
-
-
