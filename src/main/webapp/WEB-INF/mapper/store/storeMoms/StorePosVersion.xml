@@ -258,6 +258,15 @@
                 ) B
         WHERE   A.PROG_FG = B.ENVST_VAL
         AND 	A.USE_YN  = 'Y'
+        AND 	A.VER_SER_NO IN (
+                                    SELECT
+                                    DISTINCT tcpvs.VER_SER_NO
+                                    FROM TB_CM_POS_VERSN_STORE tcpvs,
+                                    TB_MS_STORE tms
+                                    WHERE 1=1
+                                    AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND tms.STORE_CD = tcpvs.STORE_CD
+                              )
         ORDER
         BY      A.REG_DT DESC
     </select>
