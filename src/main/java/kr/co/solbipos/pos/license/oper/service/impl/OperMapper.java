@@ -19,4 +19,10 @@ public interface OperMapper {
 
     /** 대리점인증현황탭 - 대리점인증현황조회*/
     List<DefaultMap<Object>> getAgencyAuthList(OperVO operVO);
+
+    /** 포스용도 조회 */
+    List<DefaultMap<String>> getSelectSubPos();
+
+    /** 운영현황탭 - 조회 */
+    List<DefaultMap<Object>> getOperStoreList(OperVO operVO);
 }

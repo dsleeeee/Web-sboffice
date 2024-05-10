@@ -72,6 +72,12 @@ public class OperVO extends PageVO {
     /** 신규/전환 */
     private String srchShopMigFg;
 
+    /** 포스용도 */
+    private String posUsage;
+
+    /** 사용 OS */
+    private String useOs;
+
     public boolean getChkDt() { return chkDt; }
 
     public void setChkDt(boolean chkDt) { this.chkDt = chkDt; }
@@ -193,4 +199,20 @@ public class OperVO extends PageVO {
     public String getSrchShopMigFg() { return srchShopMigFg; }
 
     public void setSrchShopMigFg(String srchShopMigFg) { this.srchShopMigFg = srchShopMigFg; }
+
+    public String getPosUsage() {
+        return posUsage;
+    }
+
+    public void setPosUsage(String posUsage) {
+        this.posUsage = posUsage;
+    }
+
+    public String getUseOs() {
+        return useOs;
+    }
+
+    public void setUseOs(String useOs) {
+        this.useOs = useOs;
+    }
 }

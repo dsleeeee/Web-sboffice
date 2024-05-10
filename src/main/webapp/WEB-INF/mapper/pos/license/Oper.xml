@@ -618,4 +618,166 @@
         ORDER BY tca.AGENCY_CD
     </select>
 
+    <!-- 포스용도 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN
+        PARAM    : storePosVersionVO
+        COMMENTS : 포스용도를 조회한다.
+    -->
+    <select id="getSelectSubPos" parameterType="OperVO" resultType="DefaultMap">
+        /* USE : OperMapper.getSelectSubPos */
+        SELECT  ENVST_VAL_CD    AS VALUE
+        ,       ENVST_VAL_NM    AS NAME
+        FROM    TB_CM_ENVST_DTL
+        WHERE   ENVST_CD = '4019'
+    </select>
+
+    <!-- 운영현황탭 - 조회-->
+    <!--
+        TABLE    :  TB_PS_EXACTCALC, TB_CM_INSTLL
+        COMMENTS :  운영중인 매장에 정보를 조회한다.
+    -->
+    <select id="getOperStoreList" parameterType="OperVO" resultType="DefaultMap">
+        SELECT 	A.STORE_CD
+        ,       A.OPEN_DT
+        ,		B.STORE_NM
+        ,		C.HQ_OFFICE_CD
+        ,		C.HQ_OFFICE_NM
+        ,		D.AGENCY_NM
+        ,		E.VAN_NM
+        ,		F.POS_NO
+        ,		NVL(H.ENVST_VAL_CD,'1')    AS ENVST_VAL
+        ,		F.SUB_VAL
+        ,		B.SYS_STAT_FG
+        ,		I.WIN_EDT_NO
+        ,		F.POS_VER_NO
+        ,		TO_CHAR(TO_DATE(J.INST_INS_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd')   AS MIN_INST_INS_DT
+        ,		TO_CHAR(TO_DATE(K.INST_INS_DT, 'YYYYMMDDHH24MISS'), 'yyyy-mm-dd')   AS MAX_INST_INS_DT
+        ,       (SELECT AGENCY_NM FROM TB_CM_AGENCY WHERE AGENCY_CD = (SELECT DECODE(P_AGENCY_CD, '00000', AGENCY_CD, P_AGENCY_CD) FROM TB_CM_AGENCY WHERE AGENCY_CD = B.AGENCY_CD)) AS DIST
+        FROM
+                (
+                    SELECT 	STORE_CD
+                    , 		MAX(SALE_DATE) AS OPEN_DT
+                    FROM 	TB_PS_EXACTCALC
+                    WHERE   SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP
+                    BY		STORE_CD
+                ) A
+        ,		TB_MS_STORE B
+        ,		TB_HQ_OFFICE C
+        ,		TB_CM_AGENCY D
+        ,		TB_CM_VAN_CMPNY E
+        ,		(
+                    SELECT  A.STORE_CD
+                    ,       A.POS_NO
+                    ,       A.POS_VER_NO
+                    ,		C.ENVST_VAL_CD
+                    ,		C.ENVST_VAL_NM AS SUB_VAL
+                    FROM    TB_MS_POS A
+                    ,		TB_MS_POS_ENVST B
+                    ,		TB_CM_ENVST_DTL C
+                    WHERE   A.USE_YN        =   'Y'
+                    AND 	A.STORE_CD      = B.STORE_CD
+                    AND 	A.POS_NO 	    = B.POS_NO
+                    AND 	B.ENVST_CD 	    = '4019'
+                    AND		C.ENVST_CD      = B.ENVST_CD
+                    AND 	C.ENVST_VAL_CD  = B.ENVST_VAL
+                ) F
+        ,		(
+                    SELECT 	A.STORE_CD
+                    ,		A.ENVST_VAL
+                    FROM	TB_MS_STORE_ENVST A
+                    WHERE 	ENVST_CD = '1014'
+                ) G
+        ,		(
+                    SELECT 	A.ENVST_VAL_CD
+                    ,		A.ENVST_VAL_NM
+                    FROM 	TB_CM_ENVST_DTL A
+                    WHERE 	A.ENVST_CD = '1014'
+                ) H
+        ,		TB_PS_POS_HW_OS_INFO I
+        ,		(
+                    SELECT 	STORE_CD
+                    ,       POS_NO
+                    ,       MAX(INST_INS_DT)  AS INST_INS_DT
+                    FROM 	TB_CM_INSTLL
+                    WHERE 	INST_FG = '1'
+                    GROUP
+                    BY 		STORE_CD
+                    ,		POS_NO
+                ) J
+        ,		(
+                    SELECT 	STORE_CD
+                    ,       POS_NO
+                    ,       MAX(INST_INS_DT)  AS INST_INS_DT
+                    FROM 	TB_CM_INSTLL
+                    WHERE 	INST_FG = '2'
+                    GROUP
+                    BY 		STORE_CD
+                    ,		POS_NO
+                ) K
+        ,		(
+                    SELECT 	DISTINCT STORE_CD
+                    ,       POS_NO
+                    FROM 	TB_CM_INSTLL
+                    <![CDATA[
+                        WHERE 	INST_FG <> '0'
+                    ]]>
+                ) L
+        WHERE 	B.STORE_CD          =   A.STORE_CD
+        AND 	C.HQ_OFFICE_CD      =   B.HQ_OFFICE_CD
+        AND 	D.AGENCY_CD     (+) =   B.AGENCY_CD
+        AND		E.VAN_CD	    (+) =   B.VAN_CD
+        AND		E.VAN_FG        (+) =   '01'
+        AND		F.STORE_CD      (+) =   A.STORE_CD
+        AND     G.STORE_CD      (+) =   A.STORE_CD
+        AND     H.ENVST_VAL_CD  (+) =   G.ENVST_VAL
+        AND 	I.STORE_CD	    (+) =   A.STORE_CD
+        AND 	I.POS_NO        (+) =   L.POS_NO
+        AND 	J.STORE_CD      (+) =   A.STORE_CD
+        AND 	J.POS_NO        (+) =   L.POS_NO
+        AND 	K.STORE_CD      (+) =   A.STORE_CD
+        AND 	K.POS_NO        (+) =   L.POS_NO
+        AND 	L.STORE_CD      (+) =   A.STORE_CD
+        AND 	L.POS_NO            =   F.POS_NO
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+             AND C.HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+             AND C.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+             AND B.STORE_CD LIKE '%'|| #{storeCd} ||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+             AND B.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+        </if>
+        <if test='manageVanCd != null and manageVanCd != ""'>
+             AND E.VAN_CD = #{manageVanCd}
+        </if>
+        <choose>
+            <!-- 시스템 -->
+            <when test='orgnFg != null and orgnFg == "MASTER"'>
+                <if test='srchAgencyCd != null and srchAgencyCd != ""'>
+                    AND D.AGENCY_CD = #{srchAgencyCd}
+                </if>
+            </when>
+            <!-- 총판 -->
+            <when test='orgnFg != null and orgnFg == "AGENCY"'>
+                AND D.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
+            </when>
+        </choose>
+        <if test='posUsage != null and posUsage != ""'>
+            AND F.ENVST_VAL_CD = #{posUsage}
+        </if>
+        <if test='useOs != null and useOs != ""'>
+            AND TRIM(SUBSTR(I.WIN_EDT_NO,19,2)) = #{useOs}
+        </if>
+        ORDER
+        BY      C.HQ_OFFICE_CD
+        ,       B.STORE_CD
+        ,       F.POS_NO
+        ,       B.SYS_STAT_FG
+    </select>
+
 </mapper>

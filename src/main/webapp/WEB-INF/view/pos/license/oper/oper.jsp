@@ -21,6 +21,10 @@
             <li>
                 <a id="agencyAuthListTab" href="#" ng-click="agencyAuthListShow()"><s:message code="oper.agencyAuthList"/></a>
             </li>
+            <%-- 대리점인증현황 탭 --%>
+            <li>
+                <a id="operStoreListTab" href="#" ng-click="operStoreListShow()"><s:message code="oper.operStoreList"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -28,7 +32,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/oper.js?ver=20220510.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/license/oper/oper.js?ver=20240503.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 러닝매장현황 레이어 --%>
@@ -45,6 +49,12 @@
 
 <%-- 대리점인증현황 레이어 --%>
 <c:import url="/WEB-INF/view/pos/license/oper/agencyAuthList.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 운영현황 레이어 --%>
+<c:import url="/WEB-INF/view/pos/license/oper/operStoreList.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
