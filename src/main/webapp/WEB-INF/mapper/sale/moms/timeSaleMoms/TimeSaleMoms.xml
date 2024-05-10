@@ -25,11 +25,11 @@
         tsdpst.STORE_CD,
         tms.STORE_NM,
         tmp.PROD_NM,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_AMT END) AS TOT_SALE_AMT1,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+        SUM(tsdpst.TOT_SALE_QTY) AS SALE_QTY1,
+        SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
+        SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_DAILY_PROD_SDSEL_TIME tsdpst,
+        FROM TB_SL_DAILY_PROD_SDSEL_TIME_MOMS_V04 tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
@@ -121,7 +121,6 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        AND (tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P') -- 단품/세트
         AND tms.STORE_CD = tsdpst.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
         AND tmp.STORE_CD = tsdpst.STORE_CD
@@ -144,10 +143,10 @@
         tsdpst.STORE_CD,
         tms.STORE_NM,
         tmp.PROD_NM,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_AMT END) AS TOT_SALE_AMT1,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.REAL_SALE_AMT END) AS REAL_SALE_AMT1
-        FROM TB_SL_DAILY_PROD_SDSEL_TIME tsdpst,
+        SUM(tsdpst.TOT_SALE_QTY) AS SALE_QTY1,
+        SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
+        SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
+        FROM TB_SL_DAILY_PROD_SDSEL_TIME_MOMS_V04 tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
@@ -239,7 +238,6 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        AND (tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P') -- 단품/세트
         AND tms.STORE_CD = tsdpst.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
         AND tmp.STORE_CD = tsdpst.STORE_CD
@@ -262,10 +260,10 @@
         tsdpst.STORE_CD,
         tms.STORE_NM,
         tmp.PROD_NM,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_QTY END) AS SALE_QTY1,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.TOT_SALE_AMT END) AS TOT_SALE_AMT1,
-        SUM(CASE WHEN tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P' THEN tsdpst.REAL_SALE_AMT END) AS REAL_SALE_AMT1
-        FROM TB_SL_DAILY_PROD_SDSEL_TIME tsdpst,
+        SUM(tsdpst.TOT_SALE_QTY) AS SALE_QTY1,
+        SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
+        SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
+        FROM TB_SL_DAILY_PROD_SDSEL_TIME_MOMS_V04 tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
@@ -357,7 +355,6 @@
         <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
             AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
         </if>
-        AND (tsdpst.SEL_TYPE_FG = 'N' OR tsdpst.SEL_TYPE_FG = 'P') -- 단품/세트
         AND tms.STORE_CD = tsdpst.STORE_CD
         AND tmsi.STORE_CD (+)= tms.STORE_CD
         AND tmp.STORE_CD = tsdpst.STORE_CD

@@ -34,17 +34,16 @@
                 A.SALE_DATE,
                 A.STORE_CD,
                 A.PROD_CD,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.TOT_SALE_QTY END) AS SALE_QTY1,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY1,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT1
                 ${sQuery2}
-                FROM TB_SL_DAILY_PROD_SDSEL A
+                FROM TB_SL_DAILY_PROD_SDSEL_MOMS_V04 A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
-                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
             </if>
             <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
@@ -52,17 +51,16 @@
                 A.SALE_YM AS SALE_DATE,
                 A.STORE_CD,
                 A.PROD_CD,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.TOT_SALE_QTY END) AS SALE_QTY1,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY1,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT1
                 ${sQuery2}
-                FROM TB_SL_MONTHLY_PROD_SDSEL A
+                FROM TB_SL_MONTHLY_PROD_SDSEL_MOMS_V04 A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND A.SALE_YM BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
-                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_YM, A.STORE_CD, A.PROD_CD
             </if>
         ) tsdps,
@@ -182,17 +180,16 @@
                 A.SALE_DATE,
                 A.STORE_CD,
                 A.PROD_CD,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.TOT_SALE_QTY END) AS SALE_QTY1,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY1,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT1
                 ${sQuery2}
-                FROM TB_SL_DAILY_PROD_SDSEL A
+                FROM TB_SL_DAILY_PROD_SDSEL_MOMS_V04 A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
-                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
             </if>
             <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
@@ -200,17 +197,16 @@
                 A.SALE_YM AS SALE_DATE,
                 A.STORE_CD,
                 A.PROD_CD,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.TOT_SALE_QTY END) AS SALE_QTY1,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY1,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT1
                 ${sQuery2}
-                FROM TB_SL_MONTHLY_PROD_SDSEL A
+                FROM TB_SL_MONTHLY_PROD_SDSEL_MOMS_V04 A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND A.SALE_YM BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
-                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_YM, A.STORE_CD, A.PROD_CD
             </if>
         ) tsdps,
@@ -330,17 +326,16 @@
                 A.SALE_DATE,
                 A.STORE_CD,
                 A.PROD_CD,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.TOT_SALE_QTY END) AS SALE_QTY1,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY1,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT1
                 ${sQuery2}
-                FROM TB_SL_DAILY_PROD_SDSEL A
+                FROM TB_SL_DAILY_PROD_SDSEL_MOMS_V04 A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
-                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_DATE, A.STORE_CD, A.PROD_CD
             </if>
             <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
@@ -348,17 +343,16 @@
                 A.SALE_YM AS SALE_DATE,
                 A.STORE_CD,
                 A.PROD_CD,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.TOT_SALE_QTY END) AS SALE_QTY1,
-                SUM(CASE WHEN A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P' THEN A.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+                SUM(A.TOT_SALE_QTY) AS SALE_QTY1,
+                SUM(A.REAL_SALE_AMT) AS REAL_SALE_AMT1
                 ${sQuery2}
-                FROM TB_SL_MONTHLY_PROD_SDSEL A
+                FROM TB_SL_MONTHLY_PROD_SDSEL_MOMS_V04 A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND A.SALE_YM BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND A.STORE_CD IN (${storeCdQuery})
                 </if>
-                AND (A.SEL_TYPE_FG = 'N' OR A.SEL_TYPE_FG = 'P') -- 단품/세트
                 GROUP BY A.SALE_YM, A.STORE_CD, A.PROD_CD
             </if>
         ) tsdps,

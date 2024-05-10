@@ -49,14 +49,14 @@
                 tmp.PROD_CLASS_CD,
                 tsdps.PROD_CD,
                 tmp.PROD_NM,
-                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
-                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+                SUM(tsdps.TOT_SALE_QTY) AS SALE_QTY1,
+                SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT1
                 FROM
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    TB_SL_DAILY_PROD_SDSEL tsdps,
+                    TB_SL_DAILY_PROD_SDSEL_MOMS_V04 tsdps,
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    TB_SL_MONTHLY_PROD_SDSEL tsdps,
+                    TB_SL_MONTHLY_PROD_SDSEL_MOMS_V04 tsdps,
                 </if>
                 TB_MS_STORE tms,
                 TB_MS_STORE_INFO tmsi,
@@ -154,7 +154,6 @@
                 <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
                     AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                 </if>
-                AND (tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P') -- 단품/세트
                 AND tms.STORE_CD = tsdps.STORE_CD
                 AND tmsi.STORE_CD (+)= tms.STORE_CD
                 AND tmp.STORE_CD = tsdps.STORE_CD
@@ -209,14 +208,14 @@
                 tmp.PROD_CLASS_CD,
                 tsdps.PROD_CD,
                 tmp.PROD_NM,
-                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
-                SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1
+                SUM(tsdps.TOT_SALE_QTY) AS SALE_QTY1,
+                SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT1
                 FROM
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "day"'>
-                    TB_SL_DAILY_PROD_SDSEL tsdps,
+                    TB_SL_DAILY_PROD_SDSEL_MOMS_V04 tsdps,
                 </if>
                 <if test='dayGubun != null and dayGubun != "" and dayGubun == "month"'>
-                    TB_SL_MONTHLY_PROD_SDSEL tsdps,
+                    TB_SL_MONTHLY_PROD_SDSEL_MOMS_V04 tsdps,
                 </if>
                 TB_MS_STORE tms,
                 TB_MS_STORE_INFO tmsi,
@@ -314,7 +313,6 @@
                 <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
                     AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
                 </if>
-                AND (tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P') -- 단품/세트
                 AND tms.STORE_CD = tsdps.STORE_CD
                 AND tmsi.STORE_CD (+)= tms.STORE_CD
                 AND tmp.STORE_CD = tsdps.STORE_CD
