@@ -61,5 +61,17 @@ public class OperServiceImpl implements OperService {
         return operMapper.getAgencyAuthList(operVO);
     }
 
+    /** 포스용도 조회 */
+    @Override
+    public List<DefaultMap<String>> getSelectSubPos() {
+        return operMapper.getSelectSubPos();
+    }
+
+    /** 운영현황탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getOperStoreList(OperVO operVO, SessionInfoVO sessionInfoVO) {
+        return operMapper.getOperStoreList(operVO);
+    }
+
 }
 

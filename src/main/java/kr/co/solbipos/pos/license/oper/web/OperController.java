@@ -1,10 +1,12 @@
 package kr.co.solbipos.pos.license.oper.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.pos.license.oper.service.OperService;
 import kr.co.solbipos.pos.license.oper.service.OperVO;
@@ -25,12 +27,14 @@ public class OperController {
 
     private final SessionService sessionService;
     private final OperService operService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public OperController(SessionService sessionService, OperService operService){
+    public OperController(SessionService sessionService, OperService operService, CmmCodeUtil cmmCodeUtil){
         this.sessionService = sessionService;
         this.operService = operService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -42,6 +46,14 @@ public class OperController {
      * */
     @RequestMapping(value = "/list.sb", method = RequestMethod.GET)
     public String instalManageView(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        // 포스용도
+        List posUsage = operService.getSelectSubPos();
+
+        String posUsageAll = cmmCodeUtil.assmblObj(posUsage, "name", "value", UseYn.ALL);
+
+        model.addAttribute("posUsage", posUsageAll);
+
         return "pos/license/oper/oper";
     }
 
@@ -106,6 +118,27 @@ public class OperController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = operService.getAgencyAuthList(operVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, operVO);
+    }
+
+    /**
+     * 운영현황탭 - 조회
+     *
+     * @param operVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/oper/getOperStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOperStoreList(OperVO operVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = operService.getOperStoreList(operVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, operVO);
     }
