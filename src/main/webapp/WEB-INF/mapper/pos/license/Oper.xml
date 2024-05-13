@@ -638,8 +638,9 @@
         COMMENTS :  운영중인 매장에 정보를 조회한다.
     -->
     <select id="getOperStoreList" parameterType="OperVO" resultType="DefaultMap">
+        /* USE : OperMapper.getOperStoreList */
         SELECT 	A.STORE_CD
-        ,       A.OPEN_DT
+        ,       TO_CHAR(TO_DATE(A.OPEN_DT, 'YYYYMMDD'), 'yyyy-mm-dd')   AS OPEN_DT
         ,		B.STORE_NM
         ,		C.HQ_OFFICE_CD
         ,		C.HQ_OFFICE_NM
