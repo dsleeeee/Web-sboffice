@@ -269,24 +269,38 @@ public class StorePosVersionController {
         }
         model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboListAll);
 
+
         // 버전선택
         List selectVerComboList = storePosVersionService.getSelectVerList(sessionInfoVO);
 
         // 매장포스버전현황 탭
         String selectVerComboListAll = cmmCodeUtil.assmblObj(selectVerComboList, "name", "value", UseYn.N);
-
+        if (selectVerComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            selectVerComboListAll = convertToJson(list);
+        }
         model.addAttribute("selectVerComboList", selectVerComboListAll);
 
         // 포스패치로그 탭
         String selectVerComboListAllSel = cmmCodeUtil.assmblObj(selectVerComboList, "name", "value", UseYn.SELECT);
-
+        if (selectVerComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "선택");
+            m.put("value", "");
+            list.add(m);
+            selectVerComboListAllSel = convertToJson(list);
+        }
         model.addAttribute("selectVerComboListSel", selectVerComboListAllSel);
+
 
         // 포스용도
         List selectSubPos = storePosVersionService.getSelectSubPos();
-
         String selectSubPosAll = cmmCodeUtil.assmblObj(selectSubPos, "name", "value", UseYn.ALL);
-
         model.addAttribute("selectSubPos", selectSubPosAll);
 
 
