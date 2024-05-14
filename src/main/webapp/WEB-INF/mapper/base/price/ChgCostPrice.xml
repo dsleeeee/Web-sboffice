@@ -1,0 +1,1156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ChgCostPrice.xml
+    원가임의변경
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.04.29     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.chgCostPrice.service.impl.ChgCostPriceMapper">
+
+    <!-- 원가임의변경 본사 상품 마스터 원가 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 상품 마스터 원가 조회
+    -->
+    <select id="getHqCostPriceList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getHqCostPriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD               -- 상품분류코드
+        ,      thpsp.SALE_UPRC AS SALE_UPRC    -- 판매가
+        ,      thp.SPLY_UPRC AS SPLY_UPRC      -- 공급가
+        ,      thp.COST_UPRC AS B_COST_UPRC    -- 원가
+        ,      thp.COST_UPRC AS COST_UPRC      -- 원가
+        ,      thp.PRC_CTRL_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM  TB_HQ_PRODUCT thp
+        ,     (
+                    SELECT HQ_OFFICE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    HQ_OFFICE_CD, PROD_CD
+                ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_HQ_PRODUCT_CLASS
+                                        WHERE  1=1
+                                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER BY thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 원가임의변경 본사 수불 원가 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_ST_HQ_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 수불 원가 조회
+    -->
+    <select id="getHqIostockCostPriceList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getHqIostockCostPriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD                         -- 상품분류코드
+        ,      thpsp.SALE_UPRC AS SALE_UPRC              -- 판매가
+        ,      thp.SPLY_UPRC AS SPLY_UPRC                -- 공급가
+        ,      tshsm.AVG_COST_UPRC AS B_COST_UPRC      	 -- 수불원가
+        ,      tshsm.AVG_COST_UPRC AS COST_UPRC          -- 수불원가
+        ,      thp.PRC_CTRL_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM  TB_ST_HQ_STOCK_MONTHLY tshsm
+        ,     TB_HQ_PRODUCT thp
+        ,     (
+                    SELECT HQ_OFFICE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    HQ_OFFICE_CD, PROD_CD
+                ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND   tshsm.IOSTOCK_YM = #{iostockYm}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_HQ_PRODUCT_CLASS
+                                        WHERE  1=1
+                                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND thp.HQ_OFFICE_CD = tshsm.HQ_OFFICE_CD
+        AND thp.PROD_CD = tshsm.PROD_CD
+        ORDER BY thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 원가임의변경 본사 상품 마스터 원가 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 상품 마스터 원가 엑셀다운로드 조회
+    -->
+    <select id="getHqCostPriceExcelList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getHqCostPriceExcelList */
+        SELECT thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD               -- 상품분류코드
+        ,      thpsp.SALE_UPRC AS SALE_UPRC    -- 판매가
+        ,      thp.SPLY_UPRC AS SPLY_UPRC      -- 공급가
+        ,      thp.COST_UPRC AS B_COST_UPRC    -- 원가
+        ,      thp.COST_UPRC AS COST_UPRC      -- 원가
+        ,      thp.PRC_CTRL_FG
+        FROM  TB_HQ_PRODUCT thp
+        ,     (
+                    SELECT HQ_OFFICE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    HQ_OFFICE_CD, PROD_CD
+                ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_HQ_PRODUCT_CLASS
+                                        WHERE  1=1
+                                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER BY thp.PROD_CD
+    </select>
+
+    <!-- 원가임의변경 본사 수불 원가 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_ST_HQ_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 수불 원가 엑셀다운로드 조회
+    -->
+    <select id="getHqIostockCostPriceExcelList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getHqIostockCostPriceExcelList */
+        SELECT thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD                         -- 상품분류코드
+        ,      thpsp.SALE_UPRC AS SALE_UPRC              -- 판매가
+        ,      thp.SPLY_UPRC AS SPLY_UPRC                -- 공급가
+        ,      tshsm.AVG_COST_UPRC AS B_COST_UPRC      	 -- 수불원가
+        ,      tshsm.AVG_COST_UPRC AS COST_UPRC          -- 수불원가
+        ,      thp.PRC_CTRL_FG
+        FROM  TB_ST_HQ_STOCK_MONTHLY tshsm
+        ,     TB_HQ_PRODUCT thp
+        ,     (
+                    SELECT HQ_OFFICE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    HQ_OFFICE_CD, PROD_CD
+                ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND   tshsm.IOSTOCK_YM = #{iostockYm}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_HQ_PRODUCT_CLASS
+                                        WHERE  1=1
+                                        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND thp.HQ_OFFICE_CD = tshsm.HQ_OFFICE_CD
+        AND thp.PROD_CD = tshsm.PROD_CD
+        ORDER BY thp.PROD_CD
+    </select>
+
+    <!-- 원가임의변경 본사 상품 마스터 원가 변경 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 상품 마스터 원가 변경
+    -->
+    <insert id="saveHqCostPrice" parameterType="chgCostPriceVO" >
+        /* USE : ChgCostPriceMapper.saveHqCostPrice */
+        MERGE INTO TB_HQ_PRODUCT thp
+        USING DUAL
+        ON (
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thp.PROD_CD = #{prodCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     thp.COST_UPRC = #{costUprc}   -- 원가
+        ,       thp.MOD_DT = #{modDt}
+        ,       thp.MOD_ID = #{modId}
+    </insert>
+
+    <!-- 원가임의변경 본사 수불 원가 변경 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 수불 원가 변경
+    -->
+    <insert id="saveHqIostockCostPrice" parameterType="chgCostPriceVO" >
+        /* USE : ChgCostPriceMapper.saveHqIostockCostPrice */
+        MERGE INTO TB_ST_HQ_STOCK_MONTHLY tshsm
+        USING DUAL
+        ON (
+                tshsm.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND tshsm.STORAGE_CD = #{storageCd}
+                AND tshsm.IOSTOCK_YM = #{iostockYm}
+                AND tshsm.PROD_CD = #{prodCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     tshsm.AVG_COST_UPRC = #{costUprc}   -- 원가
+        ,       tshsm.MOD_DT = #{modDt}
+    </insert>
+
+    <!-- 원가임의변경 본사 수불 원가 변경에 따른 History 등록 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_MONTHLY_AVG_COST_UPRC_HIST
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 수불 원가 변경에 따른 History 등록
+    -->
+    <insert id="saveHqIostockCostPriceHistory" parameterType="chgCostPriceVO" >
+        /* USE : ChgCostPriceMapper.saveHqIostockCostPriceHistory */
+        INSERT INTO TB_ST_HQ_STOCK_MONTHLY_AVG_COST_UPRC_HIST
+        (
+           HQ_OFFICE_CD
+        ,  IOSTOCK_YM
+        ,  PROD_CD
+        ,  PROC_DT
+        ,  PROC_FG
+        ,  B_AVG_COST_UPRC
+        ,  A_AVG_COST_UPRC
+        ,  MOD_ID
+        )
+        VALUES
+        (
+           #{hqOfficeCd}
+        ,  #{iostockYm}
+        ,  #{prodCd}
+        ,  TO_CHAR(SYSTIMESTAMP,'YYYYMMDDHH24MISSFF')
+        ,  #{procFg}
+        ,  NVL(#{bCostUprc}, 0)
+        ,  NVL(#{costUprc}, 0)
+        ,  #{modId}
+        )
+    </insert>
+
+    <!-- 원가임의변경 매장 상품 마스터 원가 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 상품 마스터 원가 조회
+    -->
+    <select id="getStoreCostPriceList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getStoreCostPriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmp.PROD_CD
+        ,      tmp.PROD_NM
+        ,      tmp.PROD_CLASS_CD               -- 상품분류코드
+        ,      tmpsp.SALE_UPRC AS SALE_UPRC    -- 판매가
+        ,      tmp.SPLY_UPRC AS SPLY_UPRC      -- 공급가
+        ,      tmp.COST_UPRC AS B_COST_UPRC    -- 원가
+        ,      tmp.COST_UPRC AS COST_UPRC      -- 원가
+        ,      tmp.PRC_CTRL_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM  TB_MS_PRODUCT tmp
+        ,     (
+                    SELECT STORE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    STORE_CD, PROD_CD
+                ) tmpsp
+        WHERE tmp.STORE_CD = #{storeCd}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_MS_PRODUCT_CLASS
+                                        WHERE  1=1
+                                        AND    STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        ORDER BY tmp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 원가임의변경 매장 수불 원가 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 수불 원가 조회
+    -->
+    <select id="getStoreIostockCostPriceList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getStoreIostockCostPriceList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmp.PROD_CD
+        ,      tmp.PROD_NM
+        ,      tmp.PROD_CLASS_CD                         -- 상품분류코드
+        ,      tmpsp.SALE_UPRC AS SALE_UPRC              -- 판매가
+        ,      tmp.SPLY_UPRC AS SPLY_UPRC                -- 공급가
+        ,      tsssm.AVG_COST_UPRC AS B_COST_UPRC      	 -- 수불원가
+        ,      tsssm.AVG_COST_UPRC AS COST_UPRC          -- 수불원가
+        ,      tmp.PRC_CTRL_FG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM  TB_ST_STORE_STOCK_MONTHLY tsssm
+        ,     TB_MS_PRODUCT tmp
+        ,     (
+                    SELECT STORE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    STORE_CD, PROD_CD
+
+                ) tmpsp
+        WHERE tmp.STORE_CD = #{storeCd}
+        AND   tsssm.IOSTOCK_YM = #{iostockYm}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmp.STORE_CD = tsssm.STORE_CD
+        AND tmp.PROD_CD = tsssm.PROD_CD
+        ORDER BY tmp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 원가임의변경 매장 상품 마스터 원가 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 상품 마스터 원가 엑셀다운로드 조회
+    -->
+    <select id="getStoreCostPriceExcelList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getStoreCostPriceExcelList */
+        SELECT tmp.PROD_CD
+        ,      tmp.PROD_NM
+        ,      tmp.PROD_CLASS_CD               -- 상품분류코드
+        ,      tmpsp.SALE_UPRC AS SALE_UPRC    -- 판매가
+        ,      tmp.SPLY_UPRC AS SPLY_UPRC      -- 공급가
+        ,      tmp.COST_UPRC AS B_COST_UPRC    -- 원가
+        ,      tmp.COST_UPRC AS COST_UPRC      -- 원가
+        ,      tmp.PRC_CTRL_FG
+        FROM  TB_MS_PRODUCT tmp
+        ,     (
+                    SELECT STORE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    STORE_CD, PROD_CD
+                ) tmpsp
+        WHERE tmp.STORE_CD = #{storeCd}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM   TB_MS_PRODUCT_CLASS
+                                        WHERE  1=1
+                                        AND    STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        ORDER BY tmp.PROD_CD
+    </select>
+
+    <!-- 원가임의변경 매장 수불 원가 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 수불 원가 엑셀다운로드 조회
+    -->
+    <select id="getStoreIostockCostPriceExcelList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getStoreIostockCostPriceExcelList */
+        SELECT tmp.PROD_CD
+        ,      tmp.PROD_NM
+        ,      tmp.PROD_CLASS_CD                         -- 상품분류코드
+        ,      tmpsp.SALE_UPRC AS SALE_UPRC              -- 판매가
+        ,      tmp.SPLY_UPRC AS SPLY_UPRC                -- 공급가
+        ,      tsssm.AVG_COST_UPRC AS B_COST_UPRC      	 -- 수불원가
+        ,      tsssm.AVG_COST_UPRC AS COST_UPRC          -- 수불원가
+        ,      tmp.PRC_CTRL_FG
+        FROM  TB_ST_STORE_STOCK_MONTHLY tsssm
+        ,     TB_MS_PRODUCT tmp
+        ,     (
+                    SELECT STORE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    STORE_CD, PROD_CD
+
+                ) tmpsp
+        WHERE tmp.STORE_CD = #{storeCd}
+        AND   tsssm.IOSTOCK_YM = #{iostockYm}
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmp.STORE_CD = tsssm.STORE_CD
+        AND tmp.PROD_CD = tsssm.PROD_CD
+        ORDER BY tmp.PROD_CD
+    </select>
+
+    <!-- 원가임의변경 매장 상품 마스터 원가 변경 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 상품 마스터 원가 변경
+    -->
+    <insert id="saveStoreCostPrice" parameterType="chgCostPriceVO" >
+        /* USE : ChgCostPriceMapper.saveStoreCostPrice */
+        MERGE INTO TB_MS_PRODUCT tmp
+        USING DUAL
+        ON (
+                tmp.STORE_CD = #{storeCd}
+                AND tmp.PROD_CD = #{prodCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     tmp.COST_UPRC = #{costUprc}   -- 원가
+        ,       tmp.MOD_DT = #{modDt}
+        ,       tmp.MOD_ID = #{modId}
+    </insert>
+
+    <!-- 원가임의변경 매장 수불 원가 변경 -->
+    <!--
+        TABLE    : TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 수불 원가 변경
+    -->
+    <insert id="saveStoreIostockCostPrice" parameterType="chgCostPriceVO" >
+        /* USE : ChgCostPriceMapper.saveStoreIostockCostPrice */
+        MERGE INTO TB_ST_STORE_STOCK_MONTHLY tsssm
+        USING DUAL
+        ON (
+                tsssm.STORE_CD = #{storeCd}
+                AND tsssm.STORAGE_CD = #{storageCd}
+                AND tsssm.IOSTOCK_YM = #{iostockYm}
+                AND tsssm.PROD_CD = #{prodCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     tsssm.AVG_COST_UPRC = #{costUprc}   -- 원가
+        ,       tsssm.MOD_DT = #{modDt}
+    </insert>
+
+    <!-- 원가임의변경 매장 수불 원가 변경에 따른 History 등록 -->
+    <!--
+        TABLE    : TB_ST_STORE_STOCK_MONTHLY_AVG_COST_UPRC_HIST
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 수불 원가 변경에 따른 History 등록
+    -->
+    <insert id="saveStoreIostockCostPriceHistory" parameterType="chgCostPriceVO" >
+        /* USE : ChgCostPriceMapper.saveStoreIostockCostPriceHistory */
+        INSERT INTO TB_ST_STORE_STOCK_MONTHLY_AVG_COST_UPRC_HIST
+        (
+           STORE_CD
+        ,  IOSTOCK_YM
+        ,  PROD_CD
+        ,  PROC_DT
+        ,  PROC_FG
+        ,  B_AVG_COST_UPRC
+        ,  A_AVG_COST_UPRC
+        ,  MOD_ID
+        )
+        VALUES
+        (
+           #{storeCd}
+        ,  #{iostockYm}
+        ,  #{prodCd}
+        ,  TO_CHAR(SYSTIMESTAMP,'YYYYMMDDHH24MISSFF')
+        ,  #{procFg}
+        ,  NVL(#{bCostUprc}, 0)
+        ,  NVL(#{costUprc}, 0)
+        ,  #{modId}
+        )
+    </insert>
+
+    <!-- 원가임의변경 본사 상품 마스터 원가 엑셀 양식다운로드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 상품 마스터 원가 엑셀 양식다운로드 조회
+    -->
+    <select id="getHqCostPriceExcelUploadSampleList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getHqCostPriceExcelUploadSampleList */
+        SELECT thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD               -- 상품분류코드
+        ,      thpsp.SALE_UPRC AS SALE_UPRC    -- 판매가
+        ,      thp.SPLY_UPRC AS SPLY_UPRC      -- 공급가
+        ,      thp.COST_UPRC AS B_COST_UPRC    -- 현재원가
+        ,      thp.COST_UPRC AS COST_UPRC      -- 변경원가
+        FROM  TB_HQ_PRODUCT thp
+        ,     (
+                    SELECT HQ_OFFICE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    HQ_OFFICE_CD, PROD_CD
+                ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER BY thp.PROD_CD
+    </select>
+
+    <!-- 원가임의변경 본사 수불 원가 엑셀 양식다운로드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_ST_HQ_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 수불 원가 엑셀 양식다운로드 조회
+    -->
+    <select id="getHqIostockCostPriceExcelUploadSampleList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getHqIostockCostPriceExcelUploadSampleList */
+        SELECT thp.PROD_CD
+        ,      thp.PROD_NM
+        ,      thp.PROD_CLASS_CD                         -- 상품분류코드
+        ,      thpsp.SALE_UPRC AS SALE_UPRC              -- 판매가
+        ,      thp.SPLY_UPRC AS SPLY_UPRC                -- 공급가
+        ,      tshsm.AVG_COST_UPRC AS B_COST_UPRC      	 -- 현재원가
+        ,      tshsm.AVG_COST_UPRC AS COST_UPRC          -- 변경원가
+        FROM  TB_ST_HQ_STOCK_MONTHLY tshsm
+        ,     TB_HQ_PRODUCT thp
+        ,     (
+                    SELECT HQ_OFFICE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_HQ_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    HQ_OFFICE_CD, PROD_CD
+                ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND   tshsm.IOSTOCK_YM = #{iostockYm}
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND thp.HQ_OFFICE_CD = tshsm.HQ_OFFICE_CD
+        AND thp.PROD_CD = tshsm.PROD_CD
+        ORDER BY thp.PROD_CD
+    </select>
+
+    <!-- 원가임의변경 매장 상품 마스터 원가 엑셀 양식다운로드 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 상품 마스터 원가 엑셀 양식다운로드 조회
+    -->
+    <select id="getStoreCostPriceExcelUploadSampleList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+       /* ChgCostPriceMapper.getStoreCostPriceExcelUploadSampleList */
+        SELECT tmp.PROD_CD
+        ,      tmp.PROD_NM
+        ,      tmp.PROD_CLASS_CD               -- 상품분류코드
+        ,      tmpsp.SALE_UPRC AS SALE_UPRC    -- 판매가
+        ,      tmp.SPLY_UPRC AS SPLY_UPRC      -- 공급가
+        ,      tmp.COST_UPRC AS B_COST_UPRC    -- 현재원가
+        ,      tmp.COST_UPRC AS COST_UPRC      -- 변경원가
+        FROM  TB_MS_PRODUCT tmp
+        ,     (
+                    SELECT STORE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    STORE_CD, PROD_CD
+                ) tmpsp
+        WHERE tmp.STORE_CD = #{storeCd}
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        ORDER BY tmp.PROD_CD
+    </select>
+
+    <!-- 원가임의변경 매장 수불 원가 엑셀 양식다운로드 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE, TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 수불 원가 엑셀 양식다운로드 조회
+    -->
+    <select id="getStoreIostockCostPriceExcelUploadSampleList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+       /* ChgCostPriceMapper.getStoreIostockCostPriceExcelUploadSampleList */
+        SELECT tmp.PROD_CD
+        ,      tmp.PROD_NM
+        ,      tmp.PROD_CLASS_CD                         -- 상품분류코드
+        ,      tmpsp.SALE_UPRC AS SALE_UPRC              -- 판매가
+        ,      tmp.SPLY_UPRC AS SPLY_UPRC                -- 공급가
+        ,      tsssm.AVG_COST_UPRC AS B_COST_UPRC      	 -- 수불원가
+        ,      tsssm.AVG_COST_UPRC AS COST_UPRC          -- 수불원가
+        ,      tmp.PRC_CTRL_FG
+        FROM  TB_ST_STORE_STOCK_MONTHLY tsssm
+        ,     TB_MS_PRODUCT tmp
+        ,     (
+                    SELECT STORE_CD
+                    ,      PROD_CD
+                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                    FROM   TB_MS_PRODUCT_SALE_PRICE
+                    WHERE 1 = 1
+                    <![CDATA[
+                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                        ]]>
+                    AND   SALE_PRC_FG = '1'
+                    GROUP
+                    BY    STORE_CD, PROD_CD
+
+                ) tmpsp
+        WHERE tmp.STORE_CD = #{storeCd}
+        AND   tsssm.IOSTOCK_YM = #{iostockYm}
+        AND (
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmp.STORE_CD = tsssm.STORE_CD
+        AND tmp.PROD_CD = tsssm.PROD_CD
+        ORDER BY tmp.PROD_CD
+    </select>
+
+    <!-- 원가임의변경 엑셀업로드 원가 업로드 임시테이블 전체 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_COST_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 엑셀업로드 원가 업로드 임시테이블 전체 삭제
+    -->
+    <delete id="deleteCostPriceExcelUploadCheckAll" parameterType="chgCostPriceVO">
+        /* ChgCostPriceMapper.deleteCostPriceExcelUploadCheckAll */
+        DELETE
+        TB_TMP_EXCEL_COST_PRICE
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "S"'>
+          AND STORE_CD = #{storeCd}
+        </if>
+    </delete>
+
+    <!-- 원가임의변경 엑셀업로드 원가 업로드 임시테이블 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_COST_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 엑셀업로드 원가 업로드 임시테이블 삭제
+    -->
+    <delete id="deleteCostPriceExcelUploadCheck" parameterType="chgCostPriceVO">
+        /* ChgCostPriceMapper.deleteCostPriceExcelUploadCheck */
+        DELETE
+        TB_TMP_EXCEL_COST_PRICE
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+        AND SEQ = #{seq}
+        <if test='orgnFg != null and orgnFg == "S"'>
+          AND STORE_CD = #{storeCd}
+        </if>
+    </delete>
+
+    <!-- 원가임의변경 원가 업로드 임시테이블 저장 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_COST_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 원가 업로드 임시테이블 저장
+    -->
+    <insert id="saveCostPriceExcelUploadCheck" parameterType="chgCostPriceVO">
+        /* ChgCostPriceMapper.saveCostPriceExcelUploadCheck */
+        INSERT INTO TB_TMP_EXCEL_COST_PRICE
+        (
+            SESSION_ID,
+            SEQ,
+            HQ_OFFICE_CD,
+            STORE_CD,
+            PROD_CD,
+            COST_UPRC,
+            RESULT,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{sessionId},
+            #{seq},
+            #{hqOfficeCd},
+            #{storeCd},
+            #{prodCd},
+            #{costUprc},
+            #{result},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 원가임의변경 본사 상품 마스터 원가 임시테이블 데이터 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_COST_PRICE, TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 상품 마스터 원가 업로드 임시테이블 데이터 조회
+    -->
+    <select id="getHqCostPriceExcelUploadCheckList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getHqCostPriceExcelUploadCheckList */
+        SELECT A.RESULT,
+               A.PROD_CD,
+               thp.PROD_NM,
+               thpsp.SALE_UPRC AS SALE_UPRC,    -- 본사판매가
+               thp.SPLY_UPRC AS SPLY_UPRC,      -- 본사공급가
+               thp.COST_UPRC AS B_COST_UPRC,    -- 본사원가
+               A.COST_UPRC AS COST_UPRC,        -- 변경원가
+               thp.PRC_CTRL_FG,
+               A.SEQ
+        FROM TB_TMP_EXCEL_COST_PRICE A,
+        TB_HQ_PRODUCT thp,
+        (
+            SELECT HQ_OFFICE_CD
+            ,      PROD_CD
+            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+            FROM   TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1 = 1
+            <![CDATA[
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+            AND   SALE_PRC_FG = '1'
+            GROUP
+            BY    HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE 1=1
+        AND A.SESSION_ID = #{sessionId}
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thp.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= A.PROD_CD
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER BY A.SEQ
+    </select>
+
+    <!-- 원가임의변경 본사 수불 원가 임시테이블 데이터 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_COST_PRICE, TB_HQ_PRODUCT, TB_ST_HQ_STOCK_MONTHLY, TB_HQ_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 수불 원가 임시테이블 데이터 조회
+    -->
+    <select id="getHqIostockCostPriceExcelUploadCheckList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getHqIostockCostPriceExcelUploadCheckList */
+        SELECT A.RESULT,
+               A.PROD_CD,
+               thp.PROD_NM,
+               thpsp.SALE_UPRC AS SALE_UPRC,        -- 본사판매가
+               thp.SPLY_UPRC AS SPLY_UPRC,          -- 본사공급가
+               tshsm.AVG_COST_UPRC AS B_COST_UPRC,  -- 수불원가
+               A.COST_UPRC AS COST_UPRC,            -- 변경원가
+               thp.PRC_CTRL_FG,
+               A.SEQ
+        FROM TB_TMP_EXCEL_COST_PRICE A,
+        TB_HQ_PRODUCT thp,
+        TB_ST_HQ_STOCK_MONTHLY tshsm,
+        (
+            SELECT HQ_OFFICE_CD
+            ,      PROD_CD
+            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+            FROM   TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1 = 1
+            <![CDATA[
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                ]]>
+            AND   SALE_PRC_FG = '1'
+            GROUP
+            BY    HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE 1=1
+        AND A.SESSION_ID = #{sessionId}
+        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tshsm.IOSTOCK_YM = #{iostockYm}
+        AND thp.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= A.PROD_CD
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND tshsm.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND tshsm.PROD_CD = thp.PROD_CD
+        ORDER BY A.SEQ
+    </select>
+
+    <!-- 원가임의변경 매장 상품 마스터 원가 임시테이블 데이터 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_COST_PRICE, TB_MS_PRODUCT, TB_MS_PRODUCT_SALE_PRICE
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 상품 마스터 원가 업로드 임시테이블 데이터 조회
+    -->
+    <select id="getStoreCostPriceExcelUploadCheckList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getStoreCostPriceExcelUploadCheckList */
+        SELECT A.RESULT,
+               A.PROD_CD,
+               tmp.PROD_NM,
+               tmpsp.SALE_UPRC AS SALE_UPRC,    -- 매장판매가
+               tmp.SPLY_UPRC AS SPLY_UPRC,      -- 매장공급가
+               tmp.COST_UPRC AS B_COST_UPRC,    -- 매장원가
+               A.COST_UPRC AS COST_UPRC,        -- 변경원가
+               tmp.PRC_CTRL_FG,
+               A.SEQ
+        FROM TB_TMP_EXCEL_COST_PRICE A,
+        TB_MS_PRODUCT tmp,
+        (
+            SELECT STORE_CD
+            ,      PROD_CD
+            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+            FROM   TB_MS_PRODUCT_SALE_PRICE
+            WHERE  1 = 1
+            <![CDATA[
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+            AND    SALE_PRC_FG = '1'
+            GROUP
+               BY  STORE_CD
+            ,      PROD_CD
+        ) tmpsp
+        WHERE 1=1
+        AND A.SESSION_ID = #{sessionId}
+        AND A.STORE_CD = #{storeCd}
+        AND tmp.STORE_CD (+)= A.STORE_CD
+        AND tmp.PROD_CD (+)= A.PROD_CD
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        ORDER BY A.SEQ
+    </select>
+
+    <!-- 원가임의변경 매장 수불 원가 임시테이블 데이터 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_COST_PRICE,
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 수불 원가 임시테이블 데이터 조회
+    -->
+    <select id="getStoreIostockCostPriceExcelUploadCheckList" parameterType="chgCostPriceVO" resultType="DefaultMap">
+        /* ChgCostPriceMapper.getStoreIostockCostPriceExcelUploadCheckList */
+        SELECT A.RESULT,
+               A.PROD_CD,
+               tmp.PROD_NM,
+               tmpsp.SALE_UPRC AS SALE_UPRC,        -- 매장판매가
+               tmp.SPLY_UPRC AS SPLY_UPRC,          -- 매장공급가
+               tsssm.AVG_COST_UPRC AS B_COST_UPRC,  -- 수불원가
+               A.COST_UPRC AS COST_UPRC,            -- 변경원가
+               tmp.PRC_CTRL_FG,
+               A.SEQ
+        FROM TB_TMP_EXCEL_COST_PRICE A,
+        TB_MS_PRODUCT tmp,
+        TB_ST_STORE_STOCK_MONTHLY tsssm,
+        (
+            SELECT STORE_CD
+            ,      PROD_CD
+            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+            FROM   TB_MS_PRODUCT_SALE_PRICE
+            WHERE  1 = 1
+            <![CDATA[
+                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+            AND    SALE_PRC_FG = '1'
+            GROUP
+               BY  STORE_CD
+            ,      PROD_CD
+        ) tmpsp
+        WHERE 1=1
+        AND A.SESSION_ID = #{sessionId}
+        AND A.STORE_CD = #{storeCd}
+        AND tsssm.IOSTOCK_YM = #{iostockYm}
+        AND tmp.STORE_CD (+)= A.STORE_CD
+        AND tmp.PROD_CD (+)= A.PROD_CD
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tsssm.STORE_CD = tmp.STORE_CD
+        AND tsSsm.PROD_CD = tmp.PROD_CD
+        ORDER BY A.SEQ
+    </select>
+
+    <!-- 원가임의변경 본사 상품 상품코드 존재여부 체크 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 상품 상품코드 존재여부 체크
+    -->
+    <select id="getHqProdCdChk" parameterType="chgCostPriceVO" resultType="Integer">
+        /* ChgCostPriceMapper.getHqProdCdChk */
+        SELECT COUNT(*)
+        FROM TB_HQ_PRODUCT
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+    </select>
+
+    <!-- 원가임의변경 본사 수불 상품코드 존재여부 체크 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 본사 수불 상품코드 존재여부 체크
+    -->
+    <select id="getHqIostockProdCdChk" parameterType="chgCostPriceVO" resultType="Integer">
+        /* ChgCostPriceMapper.getHqIostockProdCdChk */
+        SELECT COUNT(*)
+        FROM TB_ST_HQ_STOCK_MONTHLY
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORAGE_CD = #{storageCd}
+        AND IOSTOCK_YM = #{iostockYm}
+        AND PROD_CD = #{prodCd}
+    </select>
+
+    <!-- 원가임의변경 매장 상품 상품코드 존재여부 체크 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 상품 상품코드 존재여부 체크
+    -->
+    <select id="getStoreProdCdChk" parameterType="chgCostPriceVO" resultType="Integer">
+        /* ChgCostPriceMapper.getStoreProdCdChk */
+        SELECT COUNT(*)
+        FROM TB_MS_PRODUCT
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND PROD_CD = #{prodCd}
+    </select>
+
+    <!-- 원가임의변경 매장 수불 상품코드 존재여부 체크 -->
+    <!--
+        TABLE    : TB_ST_STORE_STOCK_MONTHLY
+        PARAM    : chgCostPriceVO
+        COMMENTS : 원가임의변경 매장 수불 상품코드 존재여부 체크
+    -->
+    <select id="getStoreIostockProdCdChk" parameterType="chgCostPriceVO" resultType="Integer">
+        /* ChgCostPriceMapper.getStoreIostockProdCdChk */
+        SELECT COUNT(*)
+        FROM TB_ST_STORE_STOCK_MONTHLY
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND STORAGE_CD = #{storageCd}
+        AND IOSTOCK_YM = #{iostockYm}
+        AND PROD_CD = #{prodCd}
+    </select>
+
+</mapper>
