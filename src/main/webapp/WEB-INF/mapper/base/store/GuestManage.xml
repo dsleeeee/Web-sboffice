@@ -57,7 +57,7 @@
         TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
         COMMENTS : [본사]명칭코드, [매장]명칭코드
     -->
-    <insert id="getGuestManageSaveInsert" parameterType="GuestManageVO" >
+    <insert id="getGuestManageSaveInsert" parameterType="GuestManageVO">
         /* GuestManagMapper.getGuestManageSaveInsert */
         <choose>
             <when test='orgnFg != null and orgnFg != ""'>
@@ -156,7 +156,7 @@
         TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
         COMMENTS : [본사]명칭코드, [매장]명칭코드
     -->
-    <delete id="getGuestManageSaveDelete" parameterType="GuestManageVO" >
+    <delete id="getGuestManageSaveDelete" parameterType="GuestManageVO">
         /* GuestManagMapper.getGuestManageSaveDelete */
         <choose>
             <when test='orgnFg != null and orgnFg != ""'>
@@ -213,7 +213,7 @@
         TABLE    : TB_HQ_NMCODE, TB_MS_STORE_NMCODE
         COMMENTS : [본사]명칭코드, [매장]명칭코드
     -->
-    <insert id="getGuestManageStoreRegistSaveInsert" parameterType="GuestManageVO" >
+    <insert id="getGuestManageStoreRegistSaveInsert" parameterType="GuestManageVO">
         /* GuestManagMapper.getGuestManageStoreRegistSaveInsert */
         MERGE INTO TB_MS_STORE_NMCODE A
         USING
