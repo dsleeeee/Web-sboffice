@@ -109,6 +109,7 @@
                 ) thpsp
         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tshsm.IOSTOCK_YM = #{iostockYm}
+        AND   tshsm.STORAGE_CD = #{storageCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -232,6 +233,7 @@
                 ) thpsp
         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tshsm.IOSTOCK_YM = #{iostockYm}
+        AND   tshsm.STORAGE_CD = #{storageCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -434,6 +436,7 @@
                 ) tmpsp
         WHERE tmp.STORE_CD = #{storeCd}
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
+        AND   tsssm.STORAGE_CD = #{storageCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -555,6 +558,7 @@
                 ) tmpsp
         WHERE tmp.STORE_CD = #{storeCd}
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
+        AND   tsssm.STORAGE_CD = #{storageCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -732,6 +736,7 @@
                 ) thpsp
         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tshsm.IOSTOCK_YM = #{iostockYm}
+        AND   tshsm.STORAGE_CD = #{storageCd}
         AND (
         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
         (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
@@ -821,6 +826,7 @@
                 ) tmpsp
         WHERE tmp.STORE_CD = #{storeCd}
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
+        AND   tsssm.STORAGE_CD = #{storageCd}
         AND (
         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
         OR
@@ -988,6 +994,7 @@
         AND A.SESSION_ID = #{sessionId}
         AND A.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tshsm.IOSTOCK_YM = #{iostockYm}
+        AND tshsm.STORAGE_CD = #{storageCd}
         AND thp.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
         AND thp.PROD_CD (+)= A.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
@@ -1080,6 +1087,7 @@
         AND A.SESSION_ID = #{sessionId}
         AND A.STORE_CD = #{storeCd}
         AND tsssm.IOSTOCK_YM = #{iostockYm}
+        AND tsssm.STORAGE_CD = #{storageCd}
         AND tmp.STORE_CD (+)= A.STORE_CD
         AND tmp.PROD_CD (+)= A.PROD_CD
         AND tmpsp.STORE_CD = tmp.STORE_CD

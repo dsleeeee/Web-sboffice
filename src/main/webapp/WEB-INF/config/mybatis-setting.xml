@@ -412,6 +412,8 @@
     <typeAlias alias="storeSplyPriceHistoryVO" type="kr.co.solbipos.base.price.storeSplyPriceHistory.service.StoreSplyPriceHistoryVO"/>
     <!-- 기초관리 > 가격관리 > 원가임의변경 -->
     <typeAlias alias="chgCostPriceVO" type="kr.co.solbipos.base.price.chgCostPrice.service.ChgCostPriceVO"/>
+    <!-- 기초관리 > 가격관리 > 원가변경History -->
+    <typeAlias alias="chgCostPriceHistoryVO" type="kr.co.solbipos.base.price.chgCostPriceHistory.service.ChgCostPriceHistoryVO"/>
     <!--
         <typeAlias alias="chgBatchVO" type="kr.co.solbipos.base.prod.chgbatch.service.ChgBatchVO"/>
         <typeAlias alias="cornerVO" type="kr.co.solbipos.base.prod.corner.service.CornerVO"/>
@@ -421,7 +423,6 @@
         <typeAlias alias="ItemUnitPriceVO" type="kr.co.solbipos.base.price.itemunitprice.service.ItemUnitPriceVO"/>
         <typeAlias alias="vendrUnitPriceVO" type="kr.co.solbipos.base.price.vendrunitprice.service.VendrUnitPriceVO"/>
         <typeAlias alias="salePriceStatusVO" type="kr.co.solbipos.base.price.salepricestatus.service.SalePriceStatusVO"/>
-        <typeAlias alias="chgCostHistVO" type="kr.co.solbipos.base.price.chgcosthist.service.ChgCostHistVO"/>
         <typeAlias alias="chgStoreCostVO" type="kr.co.solbipos.base.price.chgstorecost.service.ChgStoreCostVO"/>
         <typeAlias alias="chgStoreCostHistVO" type="kr.co.solbipos.base.price.chgstorecosthist.service.ChgStoreCostHistVO"/>
         <typeAlias alias="timesalePriceVO" type="kr.co.solbipos.base.price.timesaleprice.service.TimesalePriceVO"/>

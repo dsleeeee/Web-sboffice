@@ -97,6 +97,7 @@ app.controller('chgCostPriceCtrl', ['$scope', '$http','$timeout', function ($sco
             params.iostockYm = "";
         }else{
             params.iostockYm = wijmo.Globalize.format(iostockYm.value, 'yyyyMM');
+            params.storageCd = "999";
         }
 
         params.prodClassCd = $scope.prodClassCd;
@@ -314,6 +315,7 @@ app.controller('chgCostPriceCtrl', ['$scope', '$http','$timeout', function ($sco
             params.iostockYm = "";
         }else{
             params.iostockYm = wijmo.Globalize.format(iostockYm.value, 'yyyyMM');
+            params.storageCd = "999";
         }
 
         params.prodClassCd = $scope.prodClassCd;

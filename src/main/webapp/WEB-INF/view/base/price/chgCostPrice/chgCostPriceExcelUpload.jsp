@@ -169,4 +169,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/chgCostPrice/chgCostPriceExcelUpload.js?ver=20240513.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/chgCostPrice/chgCostPriceExcelUpload.js?ver=20240516.01" charset="utf-8"></script>

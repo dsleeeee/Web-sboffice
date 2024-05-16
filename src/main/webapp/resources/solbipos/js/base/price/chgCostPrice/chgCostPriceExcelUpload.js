@@ -59,6 +59,7 @@ app.controller('chgCostPriceExcelUploadSampleCtrl', ['$scope', '$http','$timeout
             params.iostockYm = "";
         }else{
             params.iostockYm = wijmo.Globalize.format(excelIostockYm.value, 'yyyyMM');
+            params.storageCd = "999";
         }
 
         $scope._inquiryMain("/base/price/chgCostPrice/getCostPriceExcelUploadSampleList.sb", params, function () {
@@ -168,6 +169,7 @@ app.controller('chgCostPriceExcelUploadCtrl', ['$scope', '$http','$timeout', fun
             params.iostockYm = "";
         }else{
             params.iostockYm = wijmo.Globalize.format(excelIostockYm.value, 'yyyyMM');
+            params.storageCd = "999";
         }
 
         $scope._inquiryMain("/base/price/chgCostPrice/getCostPriceExcelUploadCheckList.sb", params, function () {}, false);

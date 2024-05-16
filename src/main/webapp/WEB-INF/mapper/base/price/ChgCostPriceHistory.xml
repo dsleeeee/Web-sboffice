@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ChgCostPriceHistory.xml
+    원가변경History
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.05.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.price.chgCostPriceHistory.service.impl.ChgCostPriceHistoryMapper">
+
+    <!-- 본사 상품 마스터 원가변경History 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_COST_UPRC_HIST
+        PARAM    : chgCostPriceHistoryVO
+        COMMENTS : 본사 상품 마스터 원가변경History 조회
+    -->
+    <select id="getHqCostPriceHistoryList" parameterType="chgCostPriceHistoryVO" resultType="DefaultMap">
+        /* ChgCostPriceHistoryMapper.getHqCostPriceHistoryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT thpcuh.HQ_OFFICE_CD
+        ,      thpcuh.PROD_CD
+        ,      thp.PROD_NM
+        ,      TO_CHAR(TO_DATE(SUBSTR(thpcuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      thpcuh.PROC_FG
+        ,      thpcuh.B_COST_UPRC
+        ,      thpcuh.A_COST_UPRC
+        ,      thpcuh.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM   TB_HQ_PRODUCT_COST_UPRC_HIST thpcuh
+        ,      TB_HQ_PRODUCT thp
+        WHERE  thpcuh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    thpcuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_HQ_PRODUCT_CLASS
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thpcuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND 	thp.HQ_OFFICE_CD = thpcuh.HQ_OFFICE_CD
+        AND 	thp.PROD_CD = thpcuh.PROD_CD
+        ORDER BY thpcuh.PROD_CD, thpcuh.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 본사 수불 원가변경History 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_MONTHLY_AVG_COST_UPRC_HIST
+        PARAM    : chgCostPriceHistoryVO
+        COMMENTS : 본사 수불 원가변경History 조회
+    -->
+    <select id="getHqIostockCostPriceHistoryList" parameterType="chgCostPriceHistoryVO" resultType="DefaultMap">
+        /* ChgCostPriceHistoryMapper.getHqIostockCostPriceHistoryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tshsmacuh.HQ_OFFICE_CD
+        ,      tshsmacuh.PROD_CD
+        ,      thp.PROD_NM
+        ,      TO_CHAR(TO_DATE(SUBSTR(tshsmacuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      tshsmacuh.PROC_FG
+        ,      tshsmacuh.B_AVG_COST_UPRC AS B_COST_UPRC
+        ,      tshsmacuh.A_AVG_COST_UPRC AS A_COST_UPRC
+        ,      tshsmacuh.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM   TB_ST_HQ_STOCK_MONTHLY_AVG_COST_UPRC_HIST tshsmacuh
+        ,      TB_ST_HQ_STOCK_MONTHLY tshsm
+        ,      TB_HQ_PRODUCT thp
+        WHERE  tshsmacuh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    tshsmacuh.IOSTOCK_YM = #{iostockYm}
+        AND    tshsmacuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_HQ_PRODUCT_CLASS
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tshsmacuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+
+        AND     tshsm.HQ_OFFICE_CD = tshsmacuh.HQ_OFFICE_CD
+        AND     tshsm.IOSTOCK_YM = tshsmacuh.IOSTOCK_YM
+        AND     tshsm.PROD_CD = tshsmacuh.PROD_CD
+        AND     tshsm.STORAGE_CD = #{storageCd}
+        AND 	thp.HQ_OFFICE_CD = tshsmacuh.HQ_OFFICE_CD
+        AND 	thp.PROD_CD = tshsmacuh.PROD_CD
+        ORDER
+        BY      tshsmacuh.PROD_CD, tshsmacuh.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 본사 상품 마스터 원가변경History 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_COST_UPRC_HIST
+        PARAM    : chgCostPriceHistoryVO
+        COMMENTS : 본사 상품 마스터 원가변경History 엑셀다운로드 조회
+    -->
+    <select id="getHqCostPriceHistoryExcelList" parameterType="chgCostPriceHistoryVO" resultType="DefaultMap">
+        /* ChgCostPriceHistoryMapper.getHqCostPriceHistoryExcelList */
+        SELECT thpcuh.HQ_OFFICE_CD
+        ,      thpcuh.PROD_CD
+        ,      thp.PROD_NM
+        ,      TO_CHAR(TO_DATE(SUBSTR(thpcuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      thpcuh.PROC_FG
+        ,      thpcuh.B_COST_UPRC
+        ,      thpcuh.A_COST_UPRC
+        ,      thpcuh.MOD_ID
+        FROM   TB_HQ_PRODUCT_COST_UPRC_HIST thpcuh
+        ,      TB_HQ_PRODUCT thp
+        WHERE  thpcuh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    thpcuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_HQ_PRODUCT_CLASS
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thpcuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND 	thp.HQ_OFFICE_CD = thpcuh.HQ_OFFICE_CD
+        AND 	thp.PROD_CD = thpcuh.PROD_CD
+        ORDER BY thpcuh.PROD_CD, thpcuh.PROC_DT
+    </select>
+
+    <!-- 본사 수불 원가변경History 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_MONTHLY_AVG_COST_UPRC_HIST
+        PARAM    : chgCostPriceHistoryVO
+        COMMENTS : 본사 수불 원가변경History 엑셀다운로드 조회
+    -->
+    <select id="getHqIostockCostPriceHistoryExcelList" parameterType="chgCostPriceHistoryVO" resultType="DefaultMap">
+        /* ChgCostPriceHistoryMapper.getHqIostockCostPriceHistoryExcelList */
+        SELECT tshsmacuh.HQ_OFFICE_CD
+        ,      tshsmacuh.PROD_CD
+        ,      thp.PROD_NM
+        ,      TO_CHAR(TO_DATE(SUBSTR(tshsmacuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      tshsmacuh.PROC_FG
+        ,      tshsmacuh.B_AVG_COST_UPRC AS B_COST_UPRC
+        ,      tshsmacuh.A_AVG_COST_UPRC AS A_COST_UPRC
+        ,      tshsmacuh.MOD_ID
+        FROM   TB_ST_HQ_STOCK_MONTHLY_AVG_COST_UPRC_HIST tshsmacuh
+        ,      TB_ST_HQ_STOCK_MONTHLY tshsm
+        ,      TB_HQ_PRODUCT thp
+        WHERE  tshsmacuh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    tshsmacuh.IOSTOCK_YM = #{iostockYm}
+        AND    tshsmacuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                    SELECT  PROD_CLASS_CD
+                                    FROM    TB_HQ_PRODUCT_CLASS
+                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tshsmacuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+
+        AND     tshsm.HQ_OFFICE_CD = tshsmacuh.HQ_OFFICE_CD
+        AND     tshsm.IOSTOCK_YM = tshsmacuh.IOSTOCK_YM
+        AND     tshsm.PROD_CD = tshsmacuh.PROD_CD
+        AND     tshsm.STORAGE_CD = #{storageCd}
+        AND 	thp.HQ_OFFICE_CD = tshsmacuh.HQ_OFFICE_CD
+        AND 	thp.PROD_CD = tshsmacuh.PROD_CD
+        ORDER
+        BY      tshsmacuh.PROD_CD, tshsmacuh.PROC_DT
+    </select>
+
+    <!-- 매장 상품 마스터 원가변경History 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_COST_UPRC_HIST
+        PARAM    : chgCostPriceHistoryVO
+        COMMENTS : 매장 상품 마스터 원가변경History 조회
+    -->
+    <select id="getStoreCostPriceHistoryList" parameterType="chgCostPriceHistoryVO" resultType="DefaultMap">
+        /* ChgCostPriceHistoryMapper.getStoreCostPriceHistoryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tmpcuh.STORE_CD
+        ,      tmpcuh.PROD_CD
+        ,      tmp.PROD_NM
+        ,      TO_CHAR(TO_DATE(SUBSTR(tmpcuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      tmpcuh.PROC_FG
+        ,      tmpcuh.B_COST_UPRC
+        ,      tmpcuh.A_COST_UPRC
+        ,      tmpcuh.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM   TB_MS_PRODUCT_COST_UPRC_HIST tmpcuh
+        ,      TB_MS_PRODUCT tmp
+        WHERE  tmpcuh.STORE_CD = #{storeCd}
+        AND    tmpcuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD   AND STORE_CD = #{storeCd}
+                                    )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmpcuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND 	tmp.STORE_CD = tmpcuh.STORE_CD
+        AND 	tmp.PROD_CD = tmpcuh.PROD_CD
+        ORDER BY tmpcuh.PROD_CD, tmpcuh.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장 수불 원가변경History 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_STOCK_MONTHLY_AVG_COST_UPRC_HIST
+        PARAM    : chgCostPriceHistoryVO
+        COMMENTS : 매장 수불 원가변경History 조회
+    -->
+    <select id="getStoreIostockCostPriceHistoryList" parameterType="chgCostPriceHistoryVO" resultType="DefaultMap">
+        /* ChgCostPriceHistoryMapper.getStoreIostockCostPriceHistoryList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT tsssmacuh.STORE_CD
+        ,      tsssmacuh.PROD_CD
+        ,      tmp.PROD_NM
+        ,      TO_CHAR(TO_DATE(SUBSTR(tsssmacuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      tsssmacuh.PROC_FG
+        ,      tsssmacuh.B_AVG_COST_UPRC AS B_COST_UPRC
+        ,      tsssmacuh.A_AVG_COST_UPRC AS A_COST_UPRC
+        ,      tsssmacuh.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM   TB_ST_STORE_STOCK_MONTHLY_AVG_COST_UPRC_HIST tsssmacuh
+        ,      TB_ST_STORE_STOCK_MONTHLY tsssm
+        ,      TB_MS_PRODUCT tmp
+        WHERE  tsssmacuh.STORE_CD = #{storeCd}
+        AND    tsssmacuh.IOSTOCK_YM = #{iostockYm}
+        AND    tsssmacuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD   AND STORE_CD = #{storeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tsssmacuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+
+        AND     tsssm.STORE_CD = tsssmacuh.STORE_CD
+        AND     tsssm.IOSTOCK_YM = tsssmacuh.IOSTOCK_YM
+        AND     tsssm.PROD_CD = tsssmacuh.PROD_CD
+        AND     tsssm.STORAGE_CD = #{storageCd}
+        AND 	tmp.STORE_CD = tsssmacuh.STORE_CD
+        AND 	tmp.PROD_CD = tsssmacuh.PROD_CD
+        ORDER
+        BY      tsssmacuh.PROD_CD, tsssmacuh.PROC_DT
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장 상품 마스터 원가변경History 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_COST_UPRC_HIST
+        PARAM    : chgCostPriceHistoryVO
+        COMMENTS : 매장 상품 마스터 원가변경History 엑셀다운로드 조회
+    -->
+    <select id="getStoreCostPriceHistoryExcelList" parameterType="chgCostPriceHistoryVO" resultType="DefaultMap">
+        /* ChgCostPriceHistoryMapper.getStoreCostPriceHistoryExcelList */
+        SELECT tmpcuh.STORE_CD
+        ,      tmpcuh.PROD_CD
+        ,      tmp.PROD_NM
+        ,      TO_CHAR(TO_DATE(SUBSTR(tmpcuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      tmpcuh.PROC_FG
+        ,      tmpcuh.B_COST_UPRC
+        ,      tmpcuh.A_COST_UPRC
+        ,      tmpcuh.MOD_ID
+        FROM   TB_MS_PRODUCT_COST_UPRC_HIST tmpcuh
+        ,      TB_MS_PRODUCT tmp
+        WHERE  tmpcuh.STORE_CD = #{storeCd}
+        AND    tmpcuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD   AND STORE_CD = #{storeCd}
+                                    )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmpcuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND 	tmp.STORE_CD = tmpcuh.STORE_CD
+        AND 	tmp.PROD_CD = tmpcuh.PROD_CD
+        ORDER BY tmpcuh.PROD_CD, tmpcuh.PROC_DT
+    </select>
+
+    <!-- 매장 수불 원가변경History 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_STOCK_MONTHLY_AVG_COST_UPRC_HIST
+        PARAM    : chgCostPriceHistoryVO
+        COMMENTS : 매장 수불 원가변경History 엑셀다운로드 조회
+    -->
+    <select id="getStoreIostockCostPriceHistoryExcelList" parameterType="chgCostPriceHistoryVO" resultType="DefaultMap">
+        /* ChgCostPriceHistoryMapper.getStoreIostockCostPriceHistoryExcelList */
+        SELECT tsssmacuh.STORE_CD
+        ,      tsssmacuh.PROD_CD
+        ,      tmp.PROD_NM
+        ,      TO_CHAR(TO_DATE(SUBSTR(tsssmacuh.PROC_DT ,1 ,14) ,'YYYYMMDDhh24miss'), 'YYYY/MM/DD hh24:mi:ss') AS PROC_DT
+        ,      tsssmacuh.PROC_FG
+        ,      tsssmacuh.B_AVG_COST_UPRC AS B_COST_UPRC
+        ,      tsssmacuh.A_AVG_COST_UPRC AS A_COST_UPRC
+        ,      tsssmacuh.MOD_ID
+        FROM   TB_ST_STORE_STOCK_MONTHLY_AVG_COST_UPRC_HIST tsssmacuh
+        ,      TB_ST_STORE_STOCK_MONTHLY tsssm
+        ,      TB_MS_PRODUCT tmp
+        WHERE  tsssmacuh.STORE_CD = #{storeCd}
+        AND    tsssmacuh.IOSTOCK_YM = #{iostockYm}
+        AND    tsssmacuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD   AND STORE_CD = #{storeCd}
+                                     )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tsssmacuh.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+
+        AND     tsssm.STORE_CD = tsssmacuh.STORE_CD
+        AND     tsssm.IOSTOCK_YM = tsssmacuh.IOSTOCK_YM
+        AND     tsssm.PROD_CD = tsssmacuh.PROD_CD
+        AND     tsssm.STORAGE_CD = #{storageCd}
+        AND 	tmp.STORE_CD = tsssmacuh.STORE_CD
+        AND 	tmp.PROD_CD = tsssmacuh.PROD_CD
+        ORDER
+        BY      tsssmacuh.PROD_CD, tsssmacuh.PROC_DT
+    </select>
+
+</mapper>
