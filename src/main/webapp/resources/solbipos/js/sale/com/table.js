@@ -157,6 +157,12 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
     	params.storeCd  	= $scope.storeCd;
     	params.tblCd    	= $scope.tblCd;
     	params.saleYm     	= $scope.saleYm.replaceAll("-","");
+    }else if($scope.gubun == "dayOfWeek"){
+        params.storeCd  	= $scope.storeCd;
+        params.startDate 	= $scope.startDate;
+        params.endDate 		= $scope.endDate;
+        params.tblCd    	= $scope.tblCd;
+        params.saleDay     	= $scope.saleDay;
     }else{
         params.storeCd  	= $scope.storeCd;
         params.startDate 	= $scope.startDate;
@@ -165,7 +171,7 @@ app.controller('saleComTableCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.saleDate 	= $scope.saleDate.replaceAll("-","");
         params.saleDay     	= $scope.saleDay;
     }
-        
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/com/popup/table/view.sb", params, function () {
           // <-- 그리드 visible -->

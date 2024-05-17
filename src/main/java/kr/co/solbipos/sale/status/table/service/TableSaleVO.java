@@ -46,6 +46,12 @@ public class TableSaleVO extends PageVO{
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
 
+    /** 조회할 첫번째 순서 */
+    private Integer startNum;
+
+    /** 조회할 마지막 순서 */
+    private Integer endNum;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -140,5 +146,21 @@ public class TableSaleVO extends PageVO{
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public Integer getStartNum() {
+        return startNum;
+    }
+
+    public void setStartNum(Integer startNum) {
+        this.startNum = startNum;
+    }
+
+    public Integer getEndNum() {
+        return endNum;
+    }
+
+    public void setEndNum(Integer endNum) {
+        this.endNum = endNum;
     }
 }

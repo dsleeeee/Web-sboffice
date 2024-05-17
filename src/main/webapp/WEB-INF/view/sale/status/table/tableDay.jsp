@@ -12,7 +12,7 @@
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="tableDay.tableDaySale"/></a>
         <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="btnTableDaySearch" ng-click="_broadcast('tableDayCtrlSrch')">
+        <button class="btn_blue fr mt5 mr10" id="btnTableDaySearch" ng-click="_pageView('tableDayCtrlSrch',1)">
             <s:message code="cmm.search"/>
         </button>
     </div>
@@ -169,5 +169,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableDay.js?ver=20200904.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableDay.js?ver=20240516.01" charset="utf-8"></script>
 
