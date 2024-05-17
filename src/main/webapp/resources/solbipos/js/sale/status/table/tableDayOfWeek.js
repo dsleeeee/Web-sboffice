@@ -28,10 +28,21 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding.substring(0, 11) === "realSaleAmt") { // 실매출
+                if (col.binding.substring(12, 23) === "RealSaleAmt") { // 실매출
                     wijmo.addClass(e.cell, 'wijLink');
+                    if(e.cell.textContent === null || e.cell.textContent === ''){
+                        e.cell.textContent = '0';
+                    }
                 } else if (col.binding === "totRealSaleAmt"){
                     wijmo.addClass(e.cell, 'wijLink');
+                } else if (col.binding.substring(12, 19) === "SaleCnt"){
+                    if(e.cell.textContent === null || e.cell.textContent === ''){
+                        e.cell.textContent = '0';
+                    }
+                } else if (col.binding.substring(12, 20) === "GuestCnt"){
+                    if(e.cell.textContent === null || e.cell.textContent === ''){
+                        e.cell.textContent = '0';
+                    }
                 }
             }
         });
@@ -50,7 +61,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
         s.columnHeaders.rows.push(new wijmo.grid.Row());
 
         for(var i = 0; i < s.columnHeaders.rows.length; i++) {
-            s.columnHeaders.setCellData(i, "saleDay", messages["tableDay.saleDay"]);
+            s.columnHeaders.setCellData(i, "yoil", messages["tableDay.saleDay"]);
             s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["tableDay.totRealSaleAmt"]);
             s.columnHeaders.setCellData(i, "totSaleCnt", messages["tableDay.totSaleCnt"]);
             s.columnHeaders.setCellData(i, "totGuestCnt", messages["tableDay.totGuestCnt"]);
@@ -114,14 +125,15 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
                     params.startDate = wijmo.Globalize.format($scope.srchTableDayOfWeekStartDate.value, 'yyyyMMdd');
                     params.endDate = wijmo.Globalize.format($scope.srchTableDayOfWeekEndDate.value, 'yyyyMMdd');
                 }
-                params.saleDay    = selectedRow.saleDay;
+                params.saleDay    = selectedRow.yoil;
                 params.chkPop   = "tablePop";
+                params.gubun   = "dayOfWeek";
 
-                var storeTable   = $("#tableDayOfWeekSelectTableCd").val().split(",");
-                var storeTableOrg   = 	$("#tableDayOfWeekSelectTableCdOrg").val().split(",");
-                var storeCd			=	selectedRow.storeCd; //$("#tableDayOfWeekSelectStoreCd").val();
+                var storeTable   = $scope.excelTableCd.split(",");
+                var storeTableOrg   = 	$scope.tableCdOrg.split(",");
+                var storeCd			=	$scope.excelStoreCd; //$("#tableDayOfWeekSelectStoreCd").val();
 
-                if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
+                if (col.binding.substring(12, 23) === "RealSaleAmt") { // 실매출 클릭
                     var arrStore= [];
                     var arrTbl= [];
                     for(var i=0; i < storeTable.length; i++) {
@@ -139,7 +151,7 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
                 } else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
 //        			params.tblCd	 = storeTable.join(",");
                     params.tblCd	= storeTableOrg.join(",");
-                    params.storeCd	=	storeCd;
+                    params.storeCd	=	$scope.excelStoreCd;
                     $scope._broadcast('saleComTableCtrl', params);
                 }
             }
@@ -183,6 +195,10 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
         params.hqOfficeCd = $("#hqOfficeCd").val();
         params.listScale = $scope.tableDayOfWeekListScale; //-페이지 스케일 갯수
         params.isPageChk = isPageChk;
+
+        $scope.excelStoreCd = params.storeCd;
+        $scope.excelTableCd = params.tableCd;
+        $scope.tableCdOrg = $("#tableDayOfWeekSelectTableCdOrg").val();
 
         //등록일자 '전체기간' 선택에 따른 params
         if(!$scope.isChecked){
@@ -342,18 +358,21 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
                 var colValue = arrTableCd[i];
                 var colName = arrTableNm[i];
                 var colSplit = colName.split('||');
+                if(colValue != null && colValue !=''){
+                    colValue = colValue.substring(0,1).toLowerCase() + colValue.substring(1, colValue.length);
+                }
 
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.realSaleAmt"], binding: 'realSaleAmtT'+(i), width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.saleCnt"], binding: 'saleCntT'+(i), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.guestCnt"], binding: 'guestCnt1T'+(i), width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.realSaleAmt"], binding: colValue +'RealSaleAmt', width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.saleCnt"], 	 binding: colValue + 'SaleCnt', width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.guestCnt"], 	 binding: colValue + 'GuestCnt', width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
-                grid.columnHeaders.setCellData(0, 'realSaleAmtT'+(i), colSplit[0]);
-                grid.columnHeaders.setCellData(0, 'saleCntT'+(i), colSplit[0]);
-                grid.columnHeaders.setCellData(0, 'guestCnt1T'+(i), colSplit[0]);
+                grid.columnHeaders.setCellData(0, colValue + 'RealSaleAmt', colSplit[0]);
+                grid.columnHeaders.setCellData(0, colValue + 'SaleCnt', colSplit[0]);
+                grid.columnHeaders.setCellData(0, colValue + 'GuestCnt', colSplit[0]);
 
-                grid.columnHeaders.setCellData(1, 'realSaleAmtT'+(i), arrTblGrpCd[i] + "(" + colSplit[1] + ")");
-                grid.columnHeaders.setCellData(1, 'saleCntT'+(i), arrTblGrpCd[i] + "(" + colSplit[1] + ")");
-                grid.columnHeaders.setCellData(1, 'guestCnt1T'+(i), arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(1, colValue + 'RealSaleAmt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(1, colValue + 'SaleCnt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(1, colValue + 'GuestCnt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
 
             }
         }

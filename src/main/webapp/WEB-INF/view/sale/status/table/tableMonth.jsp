@@ -10,7 +10,7 @@
     <div class="searchBar flddUnfld">
         <a href="#" class="open fl"><s:message code="tableMonth.tableMonthSale"/></a>
         <%-- 조회 --%>
-        <button class="btn_blue fr mt5 mr10" id="btnTableMonthSearch" ng-click="_broadcast('tableMonthCtrlSrch')">
+        <button class="btn_blue fr mt5 mr10" id="btnTableMonthSearch" ng-click="_pageView('tableMonthCtrlSrch',1)">
             <s:message code="cmm.search"/>
         </button>
     </div>
@@ -181,5 +181,5 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableMonth.js?ver=20190125.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableMonth.js?ver=20140516.01" charset="utf-8"></script>
 

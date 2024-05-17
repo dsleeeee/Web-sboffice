@@ -29,10 +29,21 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding.substring(0, 11) === "realSaleAmt") { // 실매출
+                if (col.binding.substring(12, 23) === "RealSaleAmt") { // 실매출
                     wijmo.addClass(e.cell, 'wijLink');
-                } else if (col.binding === "totRealSaleAmt"){ // 총실매출
+                    if(e.cell.textContent === null || e.cell.textContent === ''){
+                        e.cell.textContent = '0';
+                    }
+                } else if (col.binding === "totRealSaleAmt"){
                     wijmo.addClass(e.cell, 'wijLink');
+                } else if (col.binding.substring(12, 19) === "SaleCnt"){
+                    if(e.cell.textContent === null || e.cell.textContent === ''){
+                        e.cell.textContent = '0';
+                    }
+                } else if (col.binding.substring(12, 20) === "GuestCnt"){
+                    if(e.cell.textContent === null || e.cell.textContent === ''){
+                        e.cell.textContent = '0';
+                    }
                 }
             }
         });
@@ -115,12 +126,12 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
                 params.saleYm  = selectedRow.saleYm;
                 params.chkPop   = "tablePop";
                 params.gubun   = "month";
-                var storeTable   = $("#tableMonthSelectTableCd").val().split(",");;
-                var storeTableOrg   = 	$("#tableMonthSelectTableCdOrg").val().split(",");
-                var storeCd			=	$("#tableMonthSelectStoreCd").val();
+                var storeTable   = $scope.excelTableCd.split(",");
+                var storeTableOrg   = 	$scope.tableCdOrg.split(",");
+                var storeCd			=	$scope.excelStoreCd;
 
 
-                if (col.binding.substring(0, 11) === "realSaleAmt") { //실매출 클릭
+                if (col.binding.substring(12, 23) === "RealSaleAmt") { // 실매출 클릭
                     var arrStore= [];
                     var arrTbl= [];
                     for(var i=0; i < storeTable.length; i++) {
@@ -138,7 +149,7 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
                 } else if (col.binding === "totRealSaleAmt") { // 총실매출 클릭
 //        			params.tblCd	 = storeTable.join(",");
                     params.tblCd	= storeTableOrg.join(",");
-                    params.storeCd	=	storeCd;
+                    params.storeCd	=	$scope.excelStoreCd;
                     $scope._broadcast('saleComTableCtrl', params);
                 }
             }
@@ -200,6 +211,15 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.excelStartDate = params.startDate;
         $scope.excelEndDate = params.endDate;
         $scope.isSearch		= true;
+        $scope.tableCdOrg   = $("#tableMonthSelectTableCdOrg").val();
+
+        if ($scope._getPagingInfo('curr') > 0) {
+            params['curr'] = $scope._getPagingInfo('curr');
+        } else {
+            params['curr'] = 1;
+        }
+        $scope.currMonth = params.curr;
+        $scope.listScale2 = params.listScale;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/table/month/getTableMonthList.sb", params, function() {
@@ -215,8 +235,46 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
                 }
             }
 
+            $scope.getMonthListCnt(params);
+
         });
     };
+
+    $scope.getMonthListCnt = function (params){
+
+        // 페이징 처리
+        $scope._postJSONQuery.withPopUp("/sale/status/table/day/getMonthListCnt.sb", params, function(response) {
+
+            var list = response.data.data.list;
+            // 페이징 처리
+            if (list.length === undefined || list.length === 0) {
+                $scope.data = new wijmo.collections.CollectionView([]);
+                if (response.data.message) {
+                    $scope._setPagingInfo('ctrlName', $scope.name);
+                    $scope._setPagingInfo('pageScale', 10);
+                    $scope._setPagingInfo('curr', 1);
+                    $scope._setPagingInfo('totCnt', 1);
+                    $scope._setPagingInfo('totalPage', 1);
+
+                    $scope._broadcast('drawPager');
+                    $scope._popMsg(response.data.message);
+                }
+                return false;
+            }
+
+            // 페이징 처리
+            if (response.data.data.page && response.data.data.page.curr) {
+                var pagingInfo = response.data.data.page;
+                $scope._setPagingInfo('ctrlName', $scope.name);
+                $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+                $scope._setPagingInfo('curr', pagingInfo.curr);
+                $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+                $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+                $scope._broadcast('drawPager');
+            }
+
+        });
+    }
 
     //전체기간 체크박스 클릭이벤트
     $scope.isChkDt = function() {
@@ -333,19 +391,25 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
                 var colName = arrTableNm[i];
                 var colSplit = colName.split('||');
 
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.realSaleAmt"], binding: 'realSaleAmtT'+i, width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.realSaleCnt"], binding: 'saleCntT'+i, width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.guestCnt"], binding: 'guestCnt1T'+i, width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+                if(colValue != null && colValue !=''){
+                    colValue = colValue.substring(0,1).toLowerCase() + colValue.substring(1, colValue.length);
+                }
 
-                grid.columnHeaders.setCellData(0, 'realSaleAmtT'+i, colSplit[0]);
-                grid.columnHeaders.setCellData(0, 'saleCntT'+i, colSplit[0]);
-                grid.columnHeaders.setCellData(0, 'guestCnt1T'+i, colSplit[0]);
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.realSaleAmt"], binding: colValue +'RealSaleAmt', width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.saleCnt"], 	 binding: colValue + 'SaleCnt', width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.guestCnt"], 	 binding: colValue + 'GuestCnt', width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
-                grid.columnHeaders.setCellData(1, 'realSaleAmtT'+i, arrTblGrpCd[i] + "(" + colSplit[1] + ")");
-                grid.columnHeaders.setCellData(1, 'saleCntT'+i, arrTblGrpCd[i] + "(" + colSplit[1] + ")");
-                grid.columnHeaders.setCellData(1, 'guestCnt1T'+i, arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(0, colValue + 'RealSaleAmt', colSplit[0]);
+                grid.columnHeaders.setCellData(0, colValue + 'SaleCnt', colSplit[0]);
+                grid.columnHeaders.setCellData(0, colValue + 'GuestCnt', colSplit[0]);
+
+                grid.columnHeaders.setCellData(1, colValue + 'RealSaleAmt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(1, colValue + 'SaleCnt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(1, colValue + 'GuestCnt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
             }
         }
+
+        grid.refresh();
 
         grid.itemFormatter = function (panel, r, c, cell) {
 
@@ -374,7 +438,8 @@ app.controller('tableMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
                     if (!isEmpty(panel._rows[r]._data.rnum)) {
                         cell.textContent = (panel._rows[r]._data.rnum).toString();
                     } else {
-                        cell.textContent = (r + 1).toString();
+                        var rowNm2 = ($scope.currMonth - 1) * $scope.listScale2;
+                        cell.textContent = (r + 1 + rowNm2).toString();
                     }
                 }
             } else if (panel.cellType === wijmo.grid.CellType.Cell) { // readOnly 배경색 표시
@@ -597,18 +662,21 @@ app.controller('tableMonthExcelCtrl', ['$scope', '$http', '$timeout', function (
                 var colValue = arrTableCd[i];
                 var colName = arrTableNm[i];
                 var colSplit = colName.split('||');
+                if(colValue != null && colValue !=''){
+                    colValue = colValue.substring(0,1).toLowerCase() + colValue.substring(1, colValue.length);
+                }
 
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.realSaleAmt"], binding: 'realSaleAmtT'+i, width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.realSaleCnt"], binding: 'saleCntT'+i, width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
-                grid.columns.push(new wijmo.grid.Column({header: messages["tableMonth.guestCnt"], binding: 'guestCnt1T'+i, width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.realSaleAmt"], binding: colValue +'RealSaleAmt', width: 80, align: 'right', isReadOnly: 'true', aggregate: 'Sum'}));
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.saleCnt"], 	 binding: colValue + 'SaleCnt', width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
+                grid.columns.push(new wijmo.grid.Column({header: messages["tableDay.guestCnt"], 	 binding: colValue + 'GuestCnt', width: 80, align: 'center', isReadOnly: 'true', aggregate: 'Sum'}));
 
-                grid.columnHeaders.setCellData(0, 'realSaleAmtT'+i, colSplit[0]);
-                grid.columnHeaders.setCellData(0, 'saleCntT'+i, colSplit[0]);
-                grid.columnHeaders.setCellData(0, 'guestCnt1T'+i, colSplit[0]);
+                grid.columnHeaders.setCellData(0, colValue + 'RealSaleAmt', colSplit[0]);
+                grid.columnHeaders.setCellData(0, colValue + 'SaleCnt', colSplit[0]);
+                grid.columnHeaders.setCellData(0, colValue + 'GuestCnt', colSplit[0]);
 
-                grid.columnHeaders.setCellData(1, 'realSaleAmtT'+i, arrTblGrpCd[i] + "(" + colSplit[1] + ")");
-                grid.columnHeaders.setCellData(1, 'saleCntT'+i, arrTblGrpCd[i] + "(" + colSplit[1] + ")");
-                grid.columnHeaders.setCellData(1, 'guestCnt1T'+i, arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(1, colValue + 'RealSaleAmt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(1, colValue + 'SaleCnt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
+                grid.columnHeaders.setCellData(1, colValue + 'GuestCnt', arrTblGrpCd[i] + "(" + colSplit[1] + ")");
             }
         }
 

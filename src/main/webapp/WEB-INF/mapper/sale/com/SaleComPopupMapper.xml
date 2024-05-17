@@ -54,7 +54,10 @@
 				,		TSSH.NET_SALE_AMT
 				,		TSSH.VAT_AMT
 			  	FROM	TB_SL_SALE_HDR	TSSH
-			  	WHERE	TSSH.HQ_OFFICE_CD = #{hqOfficeCd}
+			  	,		TB_MS_TABLE_V01 TMT
+			  	WHERE	TMT.STORE_CD		= TSSH.STORE_CD
+			  	AND		TMT.TBL_CD			= TSSH.TBL_CD
+			  	AND 	TSSH.HQ_OFFICE_CD 	= #{hqOfficeCd}
 			  	<if test='storeCd != null and storeCd != ""'>
 					AND TSSH.STORE_CD = #{storeCd}
 				</if>

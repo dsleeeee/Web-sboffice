@@ -3,67 +3,177 @@
 
 <mapper namespace="kr.co.solbipos.sale.status.table.service.impl.TableSaleMapper">
 
+    <!-- 일자별 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS : 일자별 값을 조회한다.
+    -->
     <select id="getTableDayList" parameterType="tableSaleVO" resultType="DefaultMap">
         /* TableSaleMapper.getTableDayList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT STORE_CD
-        , TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-        , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
-        , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
-        , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
-        , NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT
-        ${sQuery1}
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_DAILY_TABLE TSDT
-        WHERE 1 = 1
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        SELECT 	DECODE(GROUPING(A.STORE_CD ||'||'|| A.TBL_CD), 1, 'TOTAL', A.STORE_CD ||'||'|| A.TBL_CD) AS STORE_TBL_CD
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'DY') AS SALE_DAY
+        ,		SUM(A.REAL_SALE_AMT)      AS REAL_SALE_AMT
+        ,		SUM(A.SALE_CNT)           AS SALE_CNT
+        ,		SUM(A.GUEST_CNT_1)        AS GUEST_CNT
+        FROM 	TB_SL_DAILY_TABLE A
+        ,		TB_MS_TABLE_V01 B
+        WHERE 	1=1
+        AND 	A.STORE_CD      = B.STORE_CD
+        AND 	A.TBL_CD        = B.TBL_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND STORE_CD||'||'||TBL_CD IN
+            AND A.STORE_CD||'||'||A.TBL_CD IN
             <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test='startDate != null and startDate != ""'>
-            AND TSDT.SALE_DATE <![CDATA[>= ]]> #{startDate}
-        </if>
-        <if test='endDate != null and endDate != ""'>
-            AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
-        </if>
         GROUP
-        BY 	  STORE_CD, SALE_DATE
+        BY 		ROLLUP(A.STORE_CD ||'||'|| A.TBL_CD)
+        ,		A.SALE_DATE
         ORDER
-        BY    SALE_DATE DESC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        BY      A.SALE_DATE DESC
+        ,		A.STORE_CD || '||' || A.TBL_CD
     </select>
 
-    <select id="getTableDayExcelList" parameterType="tableSaleVO" resultType="DefaultMap">
-        /* TableSaleMapper.getTableDayExcelList */
-        SELECT TSDT.STORE_CD
-        , TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-        , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY
-        , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
-        , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
-        , NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT
-        ${sQuery1}
-        FROM TB_SL_DAILY_TABLE TSDT
-        WHERE 1 = 1
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
+    <!-- 일자별 로우 수 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS : 일자별 값의 총 로우 수를 조회한다.
+    -->
+    <select id="getDayListCnt" parameterType="tableSaleVO" resultType="DefaultMap">
+        /* TableSaleMapper.getDayListCnt */
+        SELECT	A.SALE_DATE
+        , 		COUNT(*) OVER() AS TOT_CNT
+        FROM 	TB_SL_DAILY_TABLE A
+        ,       TB_MS_TABLE_V01 B
+        WHERE 	1=1
+        AND     A.STORE_CD      = B.STORE_CD
+        AND     A.TBL_CD        = B.TBL_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND STORE_CD||'||'||TBL_CD IN
+            AND A.STORE_CD||'||'||A.TBL_CD IN
             <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test='startDate != null and startDate != ""'>
-            AND TSDT.SALE_DATE <![CDATA[>= ]]> #{startDate}
-        </if>
-        <if test='endDate != null and endDate != ""'>
-            AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
+        GROUP
+        BY 		A.SALE_DATE
+    </select>
+
+    <!-- 일자별 로우 수에 맞는 날짜 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS : 일자별 값의 로우 수에 맞는 날짜를 조회한다.
+    -->
+    <select id="getSearchSaleDay" parameterType="tableSaleVO" resultType="DefaultMap">
+        /* TableSaleMapper.getSearchSaleDay */
+        SELECT 	FIRST_VALUE(SALE_DATE) OVER()   AS F_VAL
+        ,		LAST_VALUE(SALE_DATE) OVER()    AS L_VAL
+        FROM    (
+                    SELECT  SALE_DATE
+                    ,       ROWNUM AS NUM
+                    FROM
+                            (
+                                SELECT	A.SALE_DATE
+                                , 		COUNT(*) OVER() AS TOT_CNT
+                                FROM 	TB_SL_DAILY_TABLE A
+                                ,       TB_MS_TABLE_V01 B
+                                WHERE 	1=1
+                                AND     A.STORE_CD      = B.STORE_CD
+                                AND     A.TBL_CD        = B.TBL_CD
+                                AND     A.STORE_CD      = #{storeCd}
+                                AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                <if test='arrTableCd != null and arrTableCd.length >= 0'>
+                                    AND A.STORE_CD||'||'||A.TBL_CD IN
+                                    <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                GROUP
+                                BY 		A.SALE_DATE
+                                ORDER
+                                BY 		A.SALE_DATE DESC
+                            )
+        )
+        WHERE NUM BETWEEN #{startNum} AND #{endNum}
+    </select>
+
+<!--    <select id="getTableDayList" parameterType="tableSaleVO" resultType="DefaultMap">-->
+<!--        /* TableSaleMapper.getTableDayList */-->
+<!--        <include refid="CmmSQL.PagingTemplateHeader"/>-->
+<!--        SELECT STORE_CD-->
+<!--        , TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE-->
+<!--        , TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') SALE_DAY-->
+<!--        , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT-->
+<!--        , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT-->
+<!--        , NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT-->
+<!--        ${sQuery1}-->
+<!--        <include refid="CmmSQL.PagingTemplateCount"/>-->
+<!--        FROM TB_SL_DAILY_TABLE TSDT-->
+<!--        WHERE 1 = 1-->
+<!--        AND HQ_OFFICE_CD = #{hqOfficeCd}-->
+<!--        <if test='arrTableCd != null and arrTableCd.length >= 0'>-->
+<!--            AND STORE_CD||'||'||TBL_CD IN-->
+<!--            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">-->
+<!--                #{item}-->
+<!--            </foreach>-->
+<!--        </if>-->
+<!--        <if test='startDate != null and startDate != ""'>-->
+<!--            AND TSDT.SALE_DATE <![CDATA[>= ]]> #{startDate}-->
+<!--        </if>-->
+<!--        <if test='endDate != null and endDate != ""'>-->
+<!--            AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}-->
+<!--        </if>-->
+<!--        GROUP-->
+<!--        BY 	  STORE_CD, SALE_DATE-->
+<!--        ORDER-->
+<!--        BY    SALE_DATE DESC-->
+<!--        <include refid="CmmSQL.PagingTemplateBottom"/>-->
+<!--    </select>-->
+
+    <!-- 일자별 엑셀 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS :
+    -->
+    <select id="getTableDayExcelList" parameterType="tableSaleVO" resultType="DefaultMap">
+        /* TableSaleMapper.getTableDayExcelList */
+        SELECT 	DECODE(GROUPING(A.STORE_CD ||'||'|| A.TBL_CD), 1, 'TOTAL', A.STORE_CD ||'||'|| A.TBL_CD) AS STORE_TBL_CD
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'DY') AS SALE_DAY
+        ,		SUM(A.REAL_SALE_AMT)      AS REAL_SALE_AMT
+        ,		SUM(A.SALE_CNT)           AS SALE_CNT
+        ,		SUM(A.GUEST_CNT_1)        AS GUEST_CNT
+        FROM 	TB_SL_DAILY_TABLE A
+        ,		TB_MS_TABLE_V01 B
+        WHERE 	1=1
+        AND 	A.STORE_CD      = B.STORE_CD
+        AND 	A.TBL_CD        = B.TBL_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='arrTableCd != null and arrTableCd.length >= 0'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN
+            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         GROUP
-        BY    TSDT.STORE_CD, SALE_DATE
+        BY 		ROLLUP(A.STORE_CD ||'||'|| A.TBL_CD)
+        ,		A.SALE_DATE
         ORDER
-        BY    SALE_DATE DESC
+        BY      A.SALE_DATE DESC
+        ,		A.STORE_CD || '||' || A.TBL_CD
     </select>
 
     <select id="getStoreTableList" parameterType="tableSaleVO" resultType="DefaultMap">
@@ -88,101 +198,188 @@
         ORDER BY TMP.STORE_CD||'||'||TMP.TBL_CD
     </select>
 
+    <!-- 요일별 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS :
+    -->
     <select id="getTableDayOfWeekList" parameterType="tableSaleVO" resultType="DefaultMap">
         /* TableSaleMapper.getTableDayOfWeekList */
-        SELECT 	TSDT.STORE_CD
-        , TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean') AS SALE_DAY
-        , CASE TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
-        WHEN '일' THEN 1
-        WHEN '월' THEN 2
-        WHEN '화' THEN 3
-        WHEN '수' THEN 4
-        WHEN '목' THEN 5
-        WHEN '금' THEN 6
-        ELSE 7
-        END AS DAY_ORDER
-        , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
-        , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
-        , NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT
-        ${sQuery1}
-        FROM TB_SL_DAILY_TABLE TSDT
-        WHERE 1 = 1
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
-        <if test='arrTableCd != null and arrTableCd != ""'>
-            AND STORE_CD||'||'||TBL_CD IN
+        SELECT 	DECODE(GROUPING(A.STORE_CD || '||' ||A.TBL_CD), 1, 'TOTAL', A.STORE_CD || '||' ||A.TBL_CD) AS STORE_TBL_CD
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+        ,       CASE TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+                    WHEN '일' THEN 1
+                    WHEN '월' THEN 2
+                    WHEN '화' THEN 3
+                    WHEN '수' THEN 4
+                    WHEN '목' THEN 5
+                    WHEN '금' THEN 6
+                    ELSE 7
+                END AS DAY_ORDER
+        ,		SUM(A.REAL_SALE_AMT)      AS REAL_SALE_AMT
+        ,		SUM(A.SALE_CNT)           AS SALE_CNT
+        ,		SUM(A.GUEST_CNT_1)        AS GUEST_CNT
+        FROM 	TB_SL_DAILY_TABLE A
+        ,		TB_MS_TABLE_V01 B
+        WHERE 	1=1
+        AND 	A.STORE_CD      = B.STORE_CD
+        AND 	A.TBL_CD        = B.TBL_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='arrTableCd != null and arrTableCd.length >= 0'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN
             <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test='startDate != null and startDate != ""'>
-            AND TSDT.SALE_DATE <![CDATA[>= ]]> #{startDate}
-        </if>
-        <if test='endDate != null and endDate != ""'>
-            AND TSDT.SALE_DATE <![CDATA[<= ]]> #{endDate}
-        </if>
-        GROUP BY TSDT.STORE_CD, TO_CHAR(TO_DATE(TSDT.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
-        ORDER BY DAY_ORDER
+        GROUP
+        BY 		ROLLUP(A.STORE_CD || '||' ||A.TBL_CD)
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'DY')
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYY-MM-DD'),'DY','NLS_DATE_LANGUAGE=korean')
+        ORDER
+        BY 		DAY_ORDER
+        ,       A.STORE_CD || '||' ||A.TBL_CD
     </select>
 
+    <!-- 월별 로우 수 조회 -->
+    <!--
+        TABLE    : TB_SL_MONTHLY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS : 월별 값의 총 로우 수를 조회한다.
+    -->
+    <select id="getMonthListCnt" parameterType="tableSaleVO" resultType="DefaultMap">
+        /* TableSaleMapper.getMonthListCnt */
+        SELECT	A.SALE_YM
+        , 		COUNT(*) OVER() AS TOT_CNT
+        FROM 	TB_SL_MONTHLY_TABLE A
+        ,       TB_MS_TABLE_V01 B
+        WHERE 	1=1
+        AND     A.STORE_CD      = B.STORE_CD
+        AND     A.TBL_CD        = B.TBL_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND 	A.SALE_YM BETWEEN #{startDate} AND #{endDate}
+        <if test='arrTableCd != null and arrTableCd.length >= 0'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN
+            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        GROUP
+        BY 		A.SALE_YM
+    </select>
+
+    <!-- 월별 로우 수에 맞는 날짜 조회 -->
+    <!--
+        TABLE    : TB_SL_MONTHLY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS : 월별 값의 로우 수에 맞는 날짜를 조회한다.
+    -->
+    <select id="getSearchSaleMonth" parameterType="tableSaleVO" resultType="DefaultMap">
+        /* TableSaleMapper.getSearchSaleMonth */
+        SELECT 	FIRST_VALUE(SALE_YM) OVER()   AS F_VAL
+        ,		LAST_VALUE(SALE_YM) OVER()    AS L_VAL
+        FROM    (
+                    SELECT	SALE_YM
+                    ,       ROWNUM AS NUM
+                    FROM
+                        (
+                            SELECT	A.SALE_YM
+                            , 		COUNT(*) OVER() AS TOT_CNT
+                            FROM 	TB_SL_MONTHLY_TABLE A
+                            ,       TB_MS_TABLE_V01 B
+                            WHERE 	1=1
+                            AND     A.STORE_CD      = B.STORE_CD
+                            AND     A.TBL_CD        = B.TBL_CD
+                            AND     A.STORE_CD      = #{storeCd}
+                            AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                            AND 	A.SALE_YM BETWEEN #{startDate} AND #{endDate}
+                            <if test='arrTableCd != null and arrTableCd.length >= 0'>
+                                AND A.STORE_CD||'||'||A.TBL_CD IN
+                                <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
+                                    #{item}
+                                </foreach>
+                            </if>
+                            GROUP
+                            BY 		A.SALE_YM
+                            ORDER
+                            BY 		A.SALE_YM DESC
+                        )
+                )
+        WHERE NUM BETWEEN #{startNum} AND #{endNum}
+    </select>
+
+
+    <!-- 월별 조회 -->
+    <!--
+        TABLE    : TB_SL_MONTHLY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS :
+    -->
     <select id="getTableMonthList" parameterType="tableSaleVO" resultType="DefaultMap">
         /* TableSaleMapper.getTableMonthList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT STORE_CD
-        , TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
-        , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
-        , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
-        , NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT
-        ${sQuery1}
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_MONTHLY_TABLE TSDT
-        WHERE 1 = 1
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        SELECT 	DECODE(GROUPING(A.STORE_CD || '||' ||A.TBL_CD), 1, 'TOTAL', A.STORE_CD || '||' ||A.TBL_CD) AS STORE_TBL_CD
+        ,		TO_CHAR(TO_DATE(A.SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
+        ,		SUM(A.REAL_SALE_AMT)      AS REAL_SALE_AMT
+        ,		SUM(A.SALE_CNT)           AS SALE_CNT
+        ,		SUM(A.GUEST_CNT_1)        AS GUEST_CNT
+        FROM 	TB_SL_MONTHLY_TABLE A
+        ,		TB_MS_TABLE_V01 B
+        WHERE 	1=1
+        AND 	A.STORE_CD      = B.STORE_CD
+        AND 	A.TBL_CD        = B.TBL_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND 	A.SALE_YM BETWEEN #{startDate} AND #{endDate}
         <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND STORE_CD||'||'||TBL_CD IN
+            AND A.STORE_CD||'||'||A.TBL_CD IN
             <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test='startDate != null and startDate != ""'>
-            AND TSDT.SALE_YM <![CDATA[>= ]]> #{startDate}
-        </if>
-        <if test='endDate != null and endDate != ""'>
-            AND TSDT.SALE_YM <![CDATA[<= ]]> #{endDate}
-        </if>
         GROUP
-        BY 	  STORE_CD, SALE_YM
+        BY 		ROLLUP(A.STORE_CD || '||' ||A.TBL_CD)
+        ,		TO_CHAR(TO_DATE(A.SALE_YM, 'YYYYMM'), 'YYYY-MM')
         ORDER
-        BY    SALE_YM DESC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        BY     	TO_CHAR(TO_DATE(A.SALE_YM, 'YYYYMM'), 'YYYY-MM') DESC
+        ,		A.STORE_CD || '||' ||A.TBL_CD
     </select>
 
+    <!-- 월별 엑셀 조회 -->
+    <!--
+        TABLE    : TB_SL_MONTHLY_TABLE
+        PARAM    : tableSaleVO
+        COMMENTS :
+    -->
     <select id="getTableMonthExcelList" parameterType="tableSaleVO" resultType="DefaultMap">
         /* TableSaleMapper.getTableMonthExcelList */
-        SELECT STORE_CD
-        , TO_CHAR(TO_DATE(SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
-        , NVL(SUM(REAL_SALE_AMT), 0) TOT_REAL_SALE_AMT
-        , NVL(SUM(SALE_CNT), 0) TOT_SALE_CNT
-        , NVL(SUM(TOT_GUEST_CNT), 0) TOT_GUEST_CNT
-        ${sQuery1}
-        FROM TB_SL_MONTHLY_TABLE TSDT
-        WHERE 1 = 1
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        SELECT 	DECODE(GROUPING(A.STORE_CD || '||' ||A.TBL_CD), 1, 'TOTAL', A.STORE_CD || '||' ||A.TBL_CD) AS STORE_TBL_CD
+        ,		TO_CHAR(TO_DATE(A.SALE_YM, 'YYYYMM'), 'YYYY-MM') AS SALE_YM
+        ,		SUM(A.REAL_SALE_AMT)      AS REAL_SALE_AMT
+        ,		SUM(A.SALE_CNT)           AS SALE_CNT
+        ,		SUM(A.GUEST_CNT_1)        AS GUEST_CNT
+        FROM 	TB_SL_MONTHLY_TABLE A
+        ,		TB_MS_TABLE_V01 B
+        WHERE 	1=1
+        AND 	A.STORE_CD      = B.STORE_CD
+        AND 	A.TBL_CD        = B.TBL_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND 	A.SALE_YM BETWEEN #{startDate} AND #{endDate}
         <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND STORE_CD||'||'||TBL_CD IN
+            AND A.STORE_CD||'||'||A.TBL_CD IN
             <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
                 #{item}
             </foreach>
         </if>
-        <if test='startDate != null and startDate != ""'>
-            AND TSDT.SALE_YM <![CDATA[>= ]]> #{startDate}
-        </if>
-        <if test='endDate != null and endDate != ""'>
-            AND TSDT.SALE_YM <![CDATA[<= ]]> #{endDate}
-        </if>
         GROUP
-        BY    STORE_CD, SALE_YM
+        BY 		ROLLUP(A.STORE_CD || '||' ||A.TBL_CD)
+        ,		TO_CHAR(TO_DATE(A.SALE_YM, 'YYYYMM'), 'YYYY-MM')
         ORDER
-        BY    SALE_YM DESC
+        BY     	TO_CHAR(TO_DATE(A.SALE_YM, 'YYYYMM'), 'YYYY-MM') DESC
+        ,		A.STORE_CD || '||' ||A.TBL_CD
     </select>
 
     <select id="getTableDayPeriodList" parameterType="tableSaleVO" resultType="DefaultMap">
