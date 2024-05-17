@@ -529,4 +529,55 @@ public class CouponServiceImpl implements CouponService {
 
         return procCnt;
     }
+
+    /** 쿠폰 순서저장 */
+    @Override
+    public int getCouponSeqChgSave(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(CouponVO couponVO : couponVOs) {
+
+            couponVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                couponVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            couponVO.setModDt(currentDt);
+            couponVO.setModId(sessionInfoVO.getUserId());
+
+            procCnt = couponMapper.getCouponSeqChgSaveUpdate(couponVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 쿠폰순서 매장적용 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getCouponSeqChgStoreRegistList(CouponVO couponVO, SessionInfoVO sessionInfoVO) {
+
+        couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return couponMapper.getCouponSeqChgStoreRegistList(couponVO);
+    }
+
+    /** 쿠폰순서 매장적용 팝업 - 저장 */
+    @Override
+    public int getCouponSeqChgStoreRegistSave(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(CouponVO couponVO : couponVOs) {
+
+            couponVO.setModDt(currentDt);
+            couponVO.setModId(sessionInfoVO.getUserId());
+
+            couponVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            procCnt = couponMapper.getCouponSeqChgStoreRegistSaveMerge(couponVO);
+        }
+
+        return procCnt;
+    }
 }

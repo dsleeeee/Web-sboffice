@@ -56,4 +56,12 @@ public interface CouponService {
     /** 쿠폰 적용 매장 삭제 */
     int deleteCouponStore(CouponStoreVO[] couponStoreVOs, SessionInfoVO sessionInfoVO);
 
+    /** 쿠폰 순서저장 */
+    int getCouponSeqChgSave(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO);
+
+    /** 쿠폰순서 매장적용 팝업 - 조회 */
+    List<DefaultMap<Object>> getCouponSeqChgStoreRegistList(CouponVO couponVO, SessionInfoVO sessionInfoVO);
+
+    /** 쿠폰순서 매장적용 팝업 - 저장 */
+    int getCouponSeqChgStoreRegistSave(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO);
 }

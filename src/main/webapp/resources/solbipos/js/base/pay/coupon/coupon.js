@@ -40,6 +40,7 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
   } else { // 본사통제는 버튼O
     if(gvStoreCd === '' ) $scope.userUseYn = true;
   }
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     // 그리드 DataMap 설정
@@ -141,6 +142,9 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
       couponScope.$apply(function(){
         couponScope._gridDataInit();
       });
+
+      $('#btnCouponSeqChgSave').hide();
+      $('#btnCouponSeqChgStoreApply').hide();
     }, false);
   };
 
@@ -420,6 +424,20 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       $('#btnCouponSave').show();
     }
 
+    // 프랜매장 && 본사쿠폰분류 && couponSeqChgVal=1
+    if(hqOfficeCd !== "00000" && (orgnFg != null && orgnFg == "STORE") && params.payClassCd <= 799 && couponSeqChgVal === "1") {
+      $('#btnCouponSeqChgSave').show();
+    } else {
+      $('#btnCouponSeqChgSave').hide();
+    }
+
+    // 본사 && couponSeqChgVal=1
+    if((orgnFg != null && orgnFg == "HQ") && couponSeqChgVal === "1") {
+      $('#btnCouponSeqChgStoreApply').show();
+    } else {
+      $('#btnCouponSeqChgStoreApply').hide();
+    }
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getCouponList.sb", params, function(){
       selectedCoupon = null;
@@ -552,16 +570,25 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
+
     // 적용 상품 팝업 핸들러 추가
     $scope.couponProdLayer.shown.addHandler(function (s) {
       $("#couponProdTitle").text('[' + selectedCouponClass.payClassCd + '] '
         + selectedCouponClass.payClassNm + ' > [' + selectedCoupon.coupnCd + '] ' + selectedCoupon.coupnNm);
       $("#payClasssCd").val(selectedCouponClass.payClassCd);
     });
+
     // 적용 매장 팝업 핸들러 추가
     $scope.couponStoreLayer.shown.addHandler(function (s) {
       $("#couponStoreTitle").text('[' + selectedCouponClass.payClassCd + '] '
         + selectedCouponClass.payClassNm + ' > [' + selectedCoupon.coupnCd + '] ' + selectedCoupon.coupnNm);
+    });
+
+    // 쿠폰순서 매장적용 팝업 핸들러 추가
+    $scope.wjCouponSeqChgRegistLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+          $scope._broadcast('couponSeqChgStoreRegistCtrl', selectedCouponClass.payClassCd);
+      }, 50)
     });
   });
 
@@ -580,45 +607,75 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
       }
       s.refresh();
     }
-  }
+  };
 
-    // 위로 옮기기 버튼
-    $scope.rowMoveUp = function() {
-        var movedRows = 0;
-        for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
-            var item = $scope.flex.collectionView.items[i];
-            if (i > 0 && item.gChk) {
-                if (!$scope.flex.collectionView.items[i - 1].gChk) {
-                    movedRows = i - 1;
-                    var tmpItem = $scope.flex.collectionView.items[movedRows];
-                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
-                    $scope.flex.collectionView.items[i] = tmpItem;
-                    $scope.flex.collectionView.commitEdit();
-                    $scope.flex.collectionView.refresh();
-                }
-            }
-        }
-        $scope.flex.select(movedRows, 1);
-    };
+  // 위로 옮기기 버튼
+  $scope.rowMoveUp = function() {
+      var movedRows = 0;
+      for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+          var item = $scope.flex.collectionView.items[i];
+          if (i > 0 && item.gChk) {
+              if (!$scope.flex.collectionView.items[i - 1].gChk) {
+                  movedRows = i - 1;
+                  var tmpItem = $scope.flex.collectionView.items[movedRows];
+                  $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                  $scope.flex.collectionView.items[i] = tmpItem;
+                  $scope.flex.collectionView.commitEdit();
+                  $scope.flex.collectionView.refresh();
+              }
+          }
+      }
+      $scope.flex.select(movedRows, 1);
+  };
 
-    // 아래로 옮기기 버튼
-    $scope.rowMoveDown = function() {
-        var movedRows = 0;
-        for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
-            var item = $scope.flex.collectionView.items[i];
-            if ((i < $scope.flex.itemsSource.itemCount - 1) && item.gChk) {
-                if (!$scope.flex.collectionView.items[i + 1].gChk) {
-                    movedRows = i + 1;
-                    var tmpItem = $scope.flex.collectionView.items[movedRows];
-                    $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
-                    $scope.flex.collectionView.items[i] = tmpItem;
-                    $scope.flex.collectionView.commitEdit();
-                    $scope.flex.collectionView.refresh();
-                }
-            }
-        }
-        $scope.flex.select(movedRows, 1);
-    };
+  // 아래로 옮기기 버튼
+  $scope.rowMoveDown = function() {
+      var movedRows = 0;
+      for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+          var item = $scope.flex.collectionView.items[i];
+          if ((i < $scope.flex.itemsSource.itemCount - 1) && item.gChk) {
+              if (!$scope.flex.collectionView.items[i + 1].gChk) {
+                  movedRows = i + 1;
+                  var tmpItem = $scope.flex.collectionView.items[movedRows];
+                  $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+                  $scope.flex.collectionView.items[i] = tmpItem;
+                  $scope.flex.collectionView.commitEdit();
+                  $scope.flex.collectionView.refresh();
+              }
+          }
+      }
+      $scope.flex.select(movedRows, 1);
+  };
+
+  // 순서저장
+  $scope.couponSeqChgSave = function() {
+    // 파라미터 설정
+    var params = new Array();
+
+    // dispSeq 재설정
+    for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+      if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+        $scope.flex.collectionView.items[s].dispSeq = num;
+        $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+        $scope.flex.collectionView.items[s].status = "U";
+        $scope.flex.collectionView.commitEdit();
+      }
+    }
+
+    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+      $scope.flex.collectionView.itemsEdited[i].status = "U";
+      params.push($scope.flex.collectionView.itemsEdited[i]);
+    }
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save(baseUrl + "class/getCouponSeqChgSave.sb", params, function(){ $scope.searchCoupon(); });
+  };
+
+  // 쿠폰순서 매장적용
+  $scope.couponSeqChgStoreApply = function() {
+    $scope.wjCouponSeqChgRegistLayer.show(true);
+    event.preventDefault();
+  };
 
 }]);
 

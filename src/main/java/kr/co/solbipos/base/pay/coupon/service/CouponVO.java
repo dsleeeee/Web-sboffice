@@ -29,6 +29,8 @@ public class CouponVO extends PageVO {
     private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
+    /** 매장명 */
+    private String storeNm;
     /** 쿠폰등록구분 */
     private String coupnRegFg;
     /** 권종분류코드 */
@@ -59,6 +61,8 @@ public class CouponVO extends PageVO {
     private String result;
     /** 표기순번 */
     private String dispSeq;
+    /** 매장상태 */
+    private String sysStatFg;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -96,6 +100,14 @@ public class CouponVO extends PageVO {
      */
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
     }
 
     /**
@@ -286,4 +298,8 @@ public class CouponVO extends PageVO {
     public String getDispSeq() { return dispSeq; }
 
     public void setDispSeq(String dispSeq) { this.dispSeq = dispSeq; }
+
+    public String getSysStatFg() { return sysStatFg; }
+
+    public void setSysStatFg(String sysStatFg) { this.sysStatFg = sysStatFg; }
 }

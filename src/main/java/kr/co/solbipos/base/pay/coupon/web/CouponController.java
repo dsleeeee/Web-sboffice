@@ -1,6 +1,5 @@
 package kr.co.solbipos.base.pay.coupon.web;
 
-
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
@@ -8,6 +7,7 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.*;
@@ -103,6 +103,12 @@ public class CouponController {
 //        model.addAttribute("coupnEnvstVal", coupnEnvstVal);
         // [0019] 사용하지 않는 코드인데 에러나서 고정값으로 수정 (2021-09-30)
         model.addAttribute("coupnEnvstVal", "1");
+
+
+        // [1299] 프랜매장-쿠폰순서수정허용여부
+        model.addAttribute("couponSeqChgVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1299"), "0"));
+
+
         return "base/pay/coupon/couponView";
     }
 
@@ -338,5 +344,74 @@ public class CouponController {
         int result =  service.deleteCouponStore(couponStoreVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 쿠폰 순서저장
+     *
+     * @param couponVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 05. 14.
+     */
+    @RequestMapping(value = "/class/getCouponSeqChgSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCouponSeqChgSave(@RequestBody CouponVO[] couponVOs, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.getCouponSeqChgSave(couponVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 쿠폰순서 매장적용 팝업 - 조회
+     *
+     * @param couponVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 05. 14.
+     */
+    @RequestMapping(value = "/class/getCouponSeqChgStoreRegistList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCouponSeqChgStoreRegistList(CouponVO couponVO, HttpServletRequest request,
+                                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = service.getCouponSeqChgStoreRegistList(couponVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, couponVO);
+    }
+
+    /**
+     * 쿠폰순서 매장적용 팝업 - 저장
+     *
+     * @param couponVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 05. 14.
+     */
+    @RequestMapping(value = "/class/getCouponSeqChgStoreRegistSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getGuestManageSave(@RequestBody CouponVO[] couponVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.getCouponSeqChgStoreRegistSave(couponVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

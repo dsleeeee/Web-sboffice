@@ -91,7 +91,6 @@
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
-
     </select>
 
     <!-- 쿠폰 분류 코드 조회 -->
@@ -1179,7 +1178,102 @@
         }
     </select>
 
+    <!-- 쿠폰 순서저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getCouponSeqChgSaveUpdate" parameterType="CouponVO">
+        /* CouponMapper.getCouponSeqChgSaveUpdate */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                UPDATE
+                TB_HQ_COUPON
+                SET
+                DISP_SEQ_NO = #{dispSeq},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PAY_CLASS_CD = #{payClassCd}
+                AND COUPN_CD = #{coupnCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                UPDATE
+                TB_MS_COUPON
+                SET
+                DISP_SEQ_NO = #{dispSeq},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE 1=1
+                AND STORE_CD = #{storeCd}
+                AND PAY_CLASS_CD = #{payClassCd}
+                AND COUPN_CD = #{coupnCd}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 쿠폰순서 매장적용 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCouponSeqChgStoreRegistList" parameterType="CouponVO" resultType="DefaultMap">
+        /* CouponMapper.getCouponSeqChgStoreRegistList */
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG
+        FROM TB_MS_STORE tms
+        WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 쿠폰순서 매장적용 팝업 - 저장 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getCouponSeqChgStoreRegistSaveMerge" parameterType="CouponVO">
+        /* CouponMapper.getCouponSeqChgStoreRegistSaveMerge */
+        MERGE INTO TB_MS_COUPON A
+        USING
+        (
+            SELECT
+            #{storeCd} AS STORE_CD,
+            PAY_CLASS_CD,
+            COUPN_CD,
+            DISP_SEQ_NO,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_HQ_COUPON
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            AND PAY_CLASS_CD = #{payClassCd}
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PAY_CLASS_CD = B.PAY_CLASS_CD
+                AND A.COUPN_CD = B.COUPN_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            A.DISP_SEQ_NO = B.DISP_SEQ_NO,
+            A.MOD_DT = B.MOD_DT,
+            A.MOD_ID = B.MOD_ID
+    </update>
+
 </mapper>
-
-
-

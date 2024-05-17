@@ -145,4 +145,13 @@ public interface CouponMapper {
     int getCouponCnt(CouponVO couponVO);
     int getCouponProdCnt(CouponVO couponVO);
     int getCouponStoreCnt(CouponVO couponVO);
+
+    /** 쿠폰 순서저장 update */
+    int getCouponSeqChgSaveUpdate(CouponVO couponVO);
+
+    /** 객층쿠폰순서리 매장적용 팝업 - 조회 */
+    List<DefaultMap<Object>> getCouponSeqChgStoreRegistList(CouponVO couponVO);
+
+    /** 쿠폰순서 매장적용 팝업 - 저장 merge */
+    int getCouponSeqChgStoreRegistSaveMerge(CouponVO couponVO);
 }
