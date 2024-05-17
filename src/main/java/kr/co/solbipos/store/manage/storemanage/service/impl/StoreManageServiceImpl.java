@@ -445,6 +445,9 @@ public class StoreManageServiceImpl implements StoreManageService{
                 /** 배달시스템상품명칭매핑 정보 매장에 생성  */
                 procCnt += mapper.insertStoreHqProductDlvrProdNm(storeManageVO);
 
+                /** 배달시스템상품명칭멀티매핑 정보 매장에 생성  */
+                procCnt += mapper.insertStoreHqProductDlvrProdNmMulti(storeManageVO);
+
                 /** 본사 듀얼모니터영상 정보 매장에 생성  */
                 procCnt += mapper.insertStoreHqAdver(storeManageVO);
 

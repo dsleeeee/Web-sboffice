@@ -7777,6 +7777,70 @@
                     )
     </insert>
 
+    <!-- 배달시스템상품명칭멀티매핑 정보 복사 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <insert id="insertStoreHqProductDlvrProdNmMulti" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreHqProductDlvrProdNmMulti */
+        MERGE INTO TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
+            USING
+                (
+                    SELECT #{storeCd} AS STORE_CD,
+                           SEQ,
+                           PROD_CD,
+                           DLVR_NAME_CD,
+                           DLVR_PROD_NM,
+                           #{regDt} AS REG_DT,
+                           #{regId} AS REG_ID,
+                           #{modDt} AS MOD_DT,
+                           #{modId} AS MOD_ID,
+                           DLVR_MAPPING_FG
+                    FROM TB_HQ_PRODUCT_DLVR_PROD_NM_MULTI
+                    WHERE 1=1
+                      AND HQ_OFFICE_CD = #{hqOfficeCd}
+                ) B
+            ON  (
+                    A.STORE_CD = B.STORE_CD
+                    AND A.SEQ = B.SEQ
+                    AND A.DLVR_NAME_CD = B.DLVR_NAME_CD
+                    AND A.PROD_CD = B.PROD_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                    SET
+                        DLVR_PROD_NM = B.DLVR_PROD_NM,
+                        MOD_DT = B.MOD_DT,
+                        MOD_ID = B.MOD_ID,
+                        DLVR_MAPPING_FG = B.DLVR_MAPPING_FG
+            WHEN NOT MATCHED THEN
+                INSERT (
+                        A.STORE_CD,
+                        A.SEQ,
+                        A.PROD_CD,
+                        A.DLVR_NAME_CD,
+                        A.DLVR_PROD_NM,
+                        A.REG_DT,
+                        A.REG_ID,
+                        A.MOD_DT,
+                        A.MOD_ID,
+                        A.DLVR_MAPPING_FG
+                    ) VALUES (
+                        B.STORE_CD,
+                        B.SEQ,
+                        B.PROD_CD,
+                        B.DLVR_NAME_CD,
+                        B.DLVR_PROD_NM,
+                        B.REG_DT,
+                        B.REG_ID,
+                        B.MOD_DT,
+                        B.MOD_ID,
+                        B.DLVR_MAPPING_FG
+                    )
+    </insert>
+
     <!-- 듀얼모니터영상 정보 복사 -->
     <!--
         TABLE    : TB_HQ_POS_ADVER_STORE
