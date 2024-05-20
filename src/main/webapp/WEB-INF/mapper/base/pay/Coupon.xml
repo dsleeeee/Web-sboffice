@@ -1187,7 +1187,7 @@
         /* CouponMapper.getCouponSeqChgSaveUpdate */
         <choose>
             <!-- 본사 -->
-            <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
+            <when test='orgnFg != null and orgnFg == "H"'>
                 UPDATE
                 TB_HQ_COUPON
                 SET
@@ -1200,7 +1200,7 @@
                 AND COUPN_CD = #{coupnCd}
             </when>
             <!-- 매장 -->
-            <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
+            <when test='orgnFg != null and orgnFg == "S"'>
                 UPDATE
                 TB_MS_COUPON
                 SET
