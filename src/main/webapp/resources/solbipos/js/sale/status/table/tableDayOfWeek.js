@@ -121,13 +121,12 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
                 var col         = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
                 var params       = {};
-                if(!$scope.isChecked){
-                    params.startDate = wijmo.Globalize.format($scope.srchTableDayOfWeekStartDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format($scope.srchTableDayOfWeekEndDate.value, 'yyyyMMdd');
-                }
                 params.saleDay    = selectedRow.yoil;
                 params.chkPop   = "tablePop";
                 params.gubun   = "dayOfWeek";
+
+                params.startDate = $scope.srchStartDate;
+                params.endDate = $scope.srchEndDate;
 
                 var storeTable   = $scope.excelTableCd.split(",");
                 var storeTableOrg   = 	$scope.tableCdOrg.split(",");
@@ -210,6 +209,9 @@ app.controller('tableDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($
             $scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
             return false;
         }
+
+        $scope.srchStartDate = params.startDate;
+        $scope.srchEndDate = params.endDate;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/table/dayofweek/getTableDayOfWeekList.sb", params, function() {

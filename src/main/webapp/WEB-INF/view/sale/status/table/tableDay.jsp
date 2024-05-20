@@ -120,8 +120,8 @@
                     item-formatter="_itemFormatter">
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="tableDay.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="tableDay.saleDate"/>" binding="saleDate" width="130" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="tableDay.saleDay"/>" binding="saleDay" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="tableDay.saleDate"/>" binding="saleDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="tableDay.saleDay"/>" binding="saleDay" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="tableDay.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="tableDay.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="tableDay.totGuestCnt"/>" binding="totGuestCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -157,8 +157,8 @@
                     frozen-columns="5"
                     item-formatter="_itemFormatter">
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="tableDay.saleDate"/>" binding="saleDate" width="130" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="tableDay.saleDay"/>" binding="saleDay" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="tableDay.saleDate"/>" binding="saleDate" width="90" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="tableDay.saleDay"/>" binding="saleDay" width="50" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="tableDay.totRealSaleAmt"/>" binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="tableDay.totSaleCnt"/>" binding="totSaleCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="tableDay.totGuestCnt"/>" binding="totGuestCnt" width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
