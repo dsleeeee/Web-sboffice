@@ -126,7 +126,7 @@ app.controller('chgCostPriceHistoryCtrl', ['$scope', '$http', function ($scope, 
         }
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.hqProdClassCd;
+        params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.listScale = $scope.listScale;
@@ -188,7 +188,7 @@ app.controller('chgCostPriceHistoryCtrl', ['$scope', '$http', function ($scope, 
         }
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.hqProdClassCd;
+        params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
 

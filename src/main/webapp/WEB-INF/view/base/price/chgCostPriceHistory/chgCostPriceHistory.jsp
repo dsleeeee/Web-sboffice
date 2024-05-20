@@ -128,7 +128,7 @@
     <%-- 페이지 리스트 --%>
     <div class="pageNum mt20">
         <%-- id --%>
-        <ul id="hqSplyPriceHistoryCtrlPager" data-size="10">
+        <ul id="chgCostPriceHistoryCtrlPager" data-size="10">
         </ul>
     </div>
     <%--//페이지 리스트--%>
