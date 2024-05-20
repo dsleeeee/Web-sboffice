@@ -23,7 +23,7 @@ var sysStatFgComboData = [
 ];
 
 /**
- *  객층관리 매장적용 팝업 조회 그리드 생성
+ *  쿠폰순서 매장적용 팝업 조회 그리드 생성
  */
 app.controller('couponSeqChgStoreRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
