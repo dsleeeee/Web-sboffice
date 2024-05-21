@@ -872,10 +872,10 @@
                AND tmcp.COUPN_CD (+)= #{coupnCd}
                AND tmcp.PROD_CD (+)= tmp.PROD_CD
             <if test='prodCd != null and prodCd != ""'>
-                AND thp.PROD_CD = #{prodCd}
+                AND tmp.PROD_CD = #{prodCd}
             </if>
             <if test='prodNm != null and prodNm != ""'>
-                AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
             </if>
                AND tmcp.PROD_CD IS NULL
         </if>
