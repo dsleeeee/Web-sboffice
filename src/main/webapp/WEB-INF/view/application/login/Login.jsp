@@ -117,6 +117,21 @@
       document.getElementById("resrceCd").value           = document.getElementById("resrceCd").value;
       $('#nxBtnSearchn').click();
     }
+
+    var setInterval_chk = 2;
+    setInterval(function()
+    {
+      document.getElementById('id1').checked = false;
+      document.getElementById('id2').checked = false;
+      document.getElementById('id3').checked = false;
+      if(setInterval_chk == 1) document.getElementById('id1').checked = true;
+      if(setInterval_chk == 2) document.getElementById('id2').checked = true;
+      if(setInterval_chk == 3) document.getElementById('id3').checked = true;
+
+      if(setInterval_chk >= 3)    setInterval_chk = 1;
+      else                        setInterval_chk++;
+
+    }, 3000);
   }
 
 
