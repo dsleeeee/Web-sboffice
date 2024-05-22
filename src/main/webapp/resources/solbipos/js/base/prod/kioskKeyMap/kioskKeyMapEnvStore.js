@@ -85,41 +85,48 @@ app.controller('kioskKeyMapEnvStoreCtrl', ['$scope', '$http', function ($scope, 
             // '01' 키맵그룹을 매장포스환경에 적용하시겠습니까?
             $scope._popConfirm("'" + $scope.envStoreTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"], function() {
 
-                // 본사의 키맵그룹 정보도 수신하시겠습니까?
-                var id = s_alert.randomString(5);
-                var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
+                // 맘스터치 매장인 경우 별도 처리
+                if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
 
-                pop.find("p").html(messages["kioskKeyMap.keyMapStoreKioskPosEnv2.msg"] + "<br/>"
-                                              + "[확인] 클릭시, 키맵설정 적용 & 본사 키맵그룹 '" + $scope.envStoreTuClsTypeCombo.text + "' 매장 적용<br/>"
-                                              + "[취소] 클릭시, 키맵설정만 적용");
+                    // 본사의 키맵그룹 정보도 수신하시겠습니까?
+                    var id = s_alert.randomString(5);
+                    var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
 
-                // 팝업 띄우기
-                $("#_alertTent").show();
-                pop.show();
+                    pop.find("p").html(messages["kioskKeyMap.keyMapStoreKioskPosEnv2.msg"] + "<br/>"
+                        + "[확인] 클릭시, 키맵설정 적용 & 본사 키맵그룹 '" + $scope.envStoreTuClsTypeCombo.text + "' 매장 적용<br/>"
+                        + "[취소] 클릭시, 키맵설정만 적용");
 
-                // 확인 버튼 클릭시, 매장사용키맵 환경설정값 & 본사 키맵 정보 매장적용 UPDATE
-                pop.find("a.btn_blue.conf").bind("click", function () {
-                    $("#_alertTent").hide();
-                    pop.remove();
+                    // 팝업 띄우기
+                    $("#_alertTent").show();
+                    pop.show();
 
-                    setTimeout(function () {
-                        $scope.save("Y");
-                    }, 50);
+                    // 확인 버튼 클릭시, 매장사용키맵 환경설정값 & 본사 키맵 정보 매장적용 UPDATE
+                    pop.find("a.btn_blue.conf").bind("click", function () {
+                        $("#_alertTent").hide();
+                        pop.remove();
 
-                    return false;
-                });
+                        setTimeout(function () {
+                            $scope.save("Y");
+                        }, 50);
 
-                // 취소 버튼 클릭시, 매장사용키맵 환경설정값만 UPDATE
-                pop.find("a.btn_gray.conf").bind("click", function () {
-                    $("#_alertTent").hide();
-                    pop.remove();
+                        return false;
+                    });
 
-                    setTimeout(function () {
-                        $scope.save("N");
-                    }, 50);
+                    // 취소 버튼 클릭시, 매장사용키맵 환경설정값만 UPDATE
+                    pop.find("a.btn_gray.conf").bind("click", function () {
+                        $("#_alertTent").hide();
+                        pop.remove();
 
-                    return false;
-                });
+                        setTimeout(function () {
+                            $scope.save("N");
+                        }, 50);
+
+                        return false;
+                    });
+
+                } else {
+                    $scope.save("N");
+                }
             });
         }
         

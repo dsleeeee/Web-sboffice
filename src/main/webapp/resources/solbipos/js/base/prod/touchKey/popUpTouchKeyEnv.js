@@ -166,86 +166,116 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
             // 매장사용터치키 설정을 하시겠습니까?<br/>(선택매장이 많은경우, 오래걸릴 수 있습니다.)
             $scope._popConfirm(messages["touchKey.touchKeyEnvToStore.msg"], function () {
 
-                // 본사의 터치키그룹 정보도 수신하시겠습니까?
-                var id = s_alert.randomString(5);
-                var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
+                // 맘스터치 매장인 경우 별도 처리
+                if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {
 
-                pop.find("p").html(messages["touchKey.touchKeyEnvToStore2.msg"] + "<br/>"
-                                              + "[확인] 클릭시, 터치키설정 적용 & 본사 터치키그룹 '" + $scope.touchKeyEnvCombo.text + "' 매장 적용<br/>"
-                                              + "[취소] 클릭시, 터치키설정만 적용");
+                    // 본사의 터치키그룹 정보도 수신하시겠습니까?
+                    var id = s_alert.randomString(5);
+                    var pop = $("#_layerConf").clone(true).attr("id", id).appendTo(document.body);
 
-                // 팝업 띄우기
-                $("#_alertTent").show();
-                pop.show();
+                    pop.find("p").html(messages["touchKey.touchKeyEnvToStore2.msg"] + "<br/>"
+                                                  + "[확인] 클릭시, 터치키설정 적용 & 본사 터치키그룹 '" + $scope.touchKeyEnvCombo.text + "' 매장 적용<br/>"
+                                                  + "[취소] 클릭시, 터치키설정만 적용");
 
-                // 확인 버튼 클릭시, 매장사용터치키 환경설정값 & 본사 터치키 정보 매장적용 UPDATE
-                pop.find("a.btn_blue.conf").bind("click", function () {
-                    $("#_alertTent").hide();
-                    pop.remove();
+                    // 팝업 띄우기
+                    $("#_alertTent").show();
+                    pop.show();
 
-                    setTimeout(function () {
-                        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                            var item = $scope.flex.collectionView.items[i];
-                            if (item.gChk === true) {
-                                if (item.posNo !== null && item.posNo !== "") {
-                                    item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
+                    // 확인 버튼 클릭시, 매장사용터치키 환경설정값 & 본사 터치키 정보 매장적용 UPDATE
+                    pop.find("a.btn_blue.conf").bind("click", function () {
+                        $("#_alertTent").hide();
+                        pop.remove();
 
-                                    // 본사 터치키 매장적용 여부
-                                    item.chkApplyStore = "Y";
-                                    item.tukeyGrpCd = $scope.touchKeyEnvCombo.selectedValue;
-                                    params.push(item);
+                        setTimeout(function () {
+                            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                                var item = $scope.flex.collectionView.items[i];
+                                if (item.gChk === true) {
+                                    if (item.posNo !== null && item.posNo !== "") {
+                                        item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
+
+                                        // 본사 터치키 매장적용 여부
+                                        item.chkApplyStore = "Y";
+                                        item.tukeyGrpCd = $scope.touchKeyEnvCombo.selectedValue;
+                                        params.push(item);
+                                    }
                                 }
                             }
-                        }
-                        console.log(params);
+                            console.log(params);
 
-                        // 적용할 대상이 없습니다.
-                        if (params.length <= 0) {
-                            s_alert.pop(messages["touchKey.msg.select"]);
-                            return false;
-                        }
+                            // 적용할 대상이 없습니다.
+                            if (params.length <= 0) {
+                                s_alert.pop(messages["touchKey.msg.select"]);
+                                return false;
+                            }
 
-                        // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
-                        $scope.applyDataChk(params);
+                            // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
+                            $scope.applyDataChk(params);
 
-                    }, 50);
+                        }, 50);
 
-                    return false;
-                });
+                        return false;
+                    });
 
-                // 취소 버튼 클릭시, 매장사용터치키 환경설정값만 UPDATE
-                pop.find("a.btn_gray.conf").bind("click", function () {
-                    $("#_alertTent").hide();
-                    pop.remove();
+                    // 취소 버튼 클릭시, 매장사용터치키 환경설정값만 UPDATE
+                    pop.find("a.btn_gray.conf").bind("click", function () {
+                        $("#_alertTent").hide();
+                        pop.remove();
 
-                    setTimeout(function () {
-                        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                            var item = $scope.flex.collectionView.items[i];
-                            if (item.gChk === true) {
-                                if (item.posNo !== null && item.posNo !== "") {
-                                    item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
+                        setTimeout(function () {
+                            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                                var item = $scope.flex.collectionView.items[i];
+                                if (item.gChk === true) {
+                                    if (item.posNo !== null && item.posNo !== "") {
+                                        item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
 
-                                    // 본사 터치키 매장적용 여부
-                                    item.chkApplyStore = "N";
-                                    params.push(item);
+                                        // 본사 터치키 매장적용 여부
+                                        item.chkApplyStore = "N";
+                                        params.push(item);
+                                    }
                                 }
                             }
+                            console.log(params);
+
+                            // 적용할 대상이 없습니다.
+                            if (params.length <= 0) {
+                                s_alert.pop(messages["touchKey.msg.select"]);
+                                return false;
+                            }
+
+                            // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
+                            $scope.applyDataChk(params);
+
+                        }, 50);
+
+                         return false;
+                    });
+
+                } else { 
+
+                    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                        var item = $scope.flex.collectionView.items[i];
+                        if (item.gChk === true) {
+                            if (item.posNo !== null && item.posNo !== "") {
+                                item.envstVal = $scope.touchKeyEnvCombo.selectedValue;
+
+                                // 본사 터치키 매장적용 여부
+                                item.chkApplyStore = "N";
+                                params.push(item);
+                            }
                         }
-                        console.log(params);
+                    }
+                    console.log(params);
 
-                        // 적용할 대상이 없습니다.
-                        if (params.length <= 0) {
-                            s_alert.pop(messages["touchKey.msg.select"]);
-                            return false;
-                        }
+                    // 적용할 대상이 없습니다.
+                    if (params.length <= 0) {
+                        s_alert.pop(messages["touchKey.msg.select"]);
+                        return false;
+                    }
 
-                        // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
-                        $scope.applyDataChk(params);
-
-                    }, 50);
-
-                     return false;
-                });
+                    // 매장사용터치키설정 매장 데이터량 체크하여 선작업 후 저장
+                    $scope.applyDataChk(params);
+                    
+                }
             });
         }
 
