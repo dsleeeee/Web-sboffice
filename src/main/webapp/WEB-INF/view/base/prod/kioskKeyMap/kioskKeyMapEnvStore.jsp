@@ -62,4 +62,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnvStore.js?ver=20240311.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnvStore.js?ver=20240522.01" charset="utf-8"></script>
