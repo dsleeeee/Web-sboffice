@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ProdImgBarrierFree.xml
+    베리어프리-이미지관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2024.05.17     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.prodImgBarrierFree.service.impl.ProdImgBarrierFreeMapper">
+
+    <!-- 베리어프리-이미지관리 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdImgBarrierFreeList" parameterType="ProdImgBarrierFreeVO" resultType="DefaultMap">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                thp.HQ_OFFICE_CD,
+                thp.PROD_CD,
+                thp.PROD_NM,
+                thp.PROD_CLASS_CD,
+                ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                thp.USE_YN
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN (
+                                        SELECT
+                                        HQ_OFFICE_CD,
+                                        PROD_CD,
+                                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                        FROM
+                                        TB_HQ_PRODUCT_SALE_PRICE
+                                        WHERE
+                                        HQ_OFFICE_CD = #{hqOfficeCd}
+                                        <![CDATA[
+                                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                        ]]>
+                                        AND SALE_PRC_FG = '1'
+                                        GROUP BY
+                                        HQ_OFFICE_CD, PROD_CD
+                                    ) thpsp ON
+                                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                                    AND thp.PROD_CD = thpsp.PROD_CD
+                WHERE
+                thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                                    SELECT 1
+                                    FROM
+                                    TB_HQ_PRODUCT_BARCD
+                                    WHERE
+                                    HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                                    AND PROD_CD = thp.PROD_CD
+                                    AND BARCD_CD = #{barCd}
+                                ) --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                                                    SELECT
+                                                    PROD_CLASS_CD
+                                                    FROM
+                                                    TB_HQ_PRODUCT_CLASS
+                                                    WHERE
+                                                    HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    START WITH
+                                                    PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    CONNECT BY
+                                                    PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                )
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn} --사용여부
+                </if>
+                <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+                    AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+                </if>
+                <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+                    <if test='userProdBrands != null and userProdBrands != ""'>
+                        -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                        AND thp.HQ_BRAND_CD IN
+                        <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                </if>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ORDER BY thp.PROD_CD ASC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT
+                tmp.STORE_CD,
+                tmp.PROD_CD,
+                tmp.PROD_NM,
+                tms.HQ_OFFICE_CD,
+                tmp.PROD_CLASS_CD,
+                ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+                NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+                tmp.USE_YN
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM
+                TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN (
+                                        SELECT
+                                        STORE_CD,
+                                        PROD_CD,
+                                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
+                                        FROM
+                                        TB_MS_PRODUCT_SALE_PRICE
+                                        WHERE
+                                        STORE_CD = #{storeCd}
+                                        <![CDATA[
+                                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                                        ]]>
+                                        AND SALE_PRC_FG = '1'
+                                        GROUP BY
+                                        STORE_CD, PROD_CD
+                                    ) thpsp ON
+                                    tmp.STORE_CD = thpsp.STORE_CD
+                                    AND tmp.PROD_CD = thpsp.PROD_CD
+                                    INNER JOIN TB_MS_STORE tms ON
+                                    tms.STORE_CD  = tmp.STORE_CD
+                WHERE
+                tmp.STORE_CD = #{storeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <![CDATA[
+                        AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+                <if test="prodCd != null and prodCd != ''">
+                    AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+                </if>
+                <if test="barCd != null and barCd != ''">
+                    AND EXISTS (
+                                    SELECT 1
+                                    FROM
+                                    TB_MS_PRODUCT_BARCD
+                                    WHERE
+                                    STORE_CD = tmp.STORE_CD
+                                    AND PROD_CD = tmp.PROD_CD
+                                    AND BARCD_CD = #{barCd}
+                                ) --바코드
+                </if>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM
+                                                TB_MS_PRODUCT_CLASS
+                                                WHERE
+                                                STORE_CD = #{storeCd}
+                                                START WITH
+                                                PROD_CLASS_CD = #{prodClassCd}  AND STORE_CD = #{storeCd}
+                                                CONNECT BY
+                                                PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD  AND STORE_CD = #{storeCd}
+                                            )
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN = #{useYn} --사용여부
+                </if>
+                AND (
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ORDER BY tmp.PROD_CD ASC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 베리어프리-이미지관리 - 이미지 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdImgBarrierFreeImageList" parameterType="ProdImgBarrierFreeVO" resultType="DefaultMap">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeImageList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT HQ_OFFICE_CD,
+                        PROD_CD,
+                        IMG_FG,
+                        IMG_URL,
+                        IMG_FILE_NM,
+                        IMG_CHG_DT,
+                        REMARK,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                FROM TB_HQ_PRODUCT_IMAGE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT STORE_CD,
+                        PROD_CD,
+                        IMG_FG,
+                        IMG_URL,
+                        IMG_FILE_NM,
+                        IMG_CHG_DT,
+                        REMARK,
+                        REG_DT,
+                        REG_ID,
+                        MOD_DT,
+                        MOD_ID
+                FROM TB_MS_PRODUCT_IMAGE
+                WHERE STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 베리어프리-이미지관리 - 기존 이미지 정보가 있는지 확인 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdImgBarrierFreeImageChk" parameterType="ProdImgBarrierFreeVO" resultType="String">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeImageChk */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT IMG_FILE_NM
+                FROM TB_HQ_PRODUCT_IMAGE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT IMG_FILE_NM
+                FROM TB_MS_PRODUCT_IMAGE
+                WHERE STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 베리어프리-이미지관리 - 이미지 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getProdImgBarrierFreeImageSaveInsert" parameterType="ProdImgBarrierFreeVO">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeImageSaveInsert */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                INSERT INTO TB_HQ_PRODUCT_IMAGE
+                (
+                    HQ_OFFICE_CD,
+                    PROD_CD,
+                    IMG_FG,
+                    IMG_URL,
+                    IMG_FILE_NM,
+                    IMG_CHG_DT,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{prodCd},
+                    #{imgFg},
+                    #{imgUrl},
+                    #{imgFileNm},
+                    #{imgChgDt},
+                    #{remark},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                INSERT INTO TB_MS_PRODUCT_IMAGE
+                (
+                    STORE_CD,
+                    PROD_CD,
+                    IMG_FG,
+                    IMG_URL,
+                    IMG_FILE_NM,
+                    IMG_CHG_DT,
+                    REMARK,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{storeCd},
+                    #{prodCd},
+                    #{imgFg},
+                    #{imgUrl},
+                    #{imgFileNm},
+                    #{imgChgDt},
+                    #{remark},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 베리어프리-이미지관리 - 이미지 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getProdImgBarrierFreeImageSaveUpdate" parameterType="ProdImgBarrierFreeVO">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeImageSaveUpdate */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                UPDATE TB_HQ_PRODUCT_IMAGE
+                SET IMG_URL = #{imgUrl},
+                    IMG_FILE_NM = #{imgFileNm},
+                    IMG_CHG_DT = #{imgChgDt},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                UPDATE TB_MS_PRODUCT_IMAGE
+                SET IMG_URL = #{imgUrl},
+                    IMG_FILE_NM = #{imgFileNm},
+                    IMG_CHG_DT = #{imgChgDt},
+                    MOD_DT = #{modDt},
+                    MOD_ID = #{modId}
+                WHERE STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+        </choose>
+    </update>
+
+    <!-- 베리어프리-이미지관리 - 이미지 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getProdImgBarrierFreeImageDelete" parameterType="ProdImgBarrierFreeVO">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeImageDelete */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_PRODUCT_IMAGE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROD_CD = #{prodCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_PRODUCT_IMAGE
+                WHERE STORE_CD = #{storeCd}
+                AND PROD_CD = #{prodCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 베리어프리-이미지관리 매장적용 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getProdImgBarrierFreeStoreRegistList" parameterType="ProdImgBarrierFreeVO" resultType="DefaultMap">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeStoreRegistList */
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG
+        FROM TB_MS_STORE tms
+        WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        ORDER BY tms.STORE_CD ASC
+    </select>
+
+    <!-- 베리어프리-이미지관리 매장적용 팝업 - 이미지매장적용 전 기존 매장상품이미지 정보 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getProdImgBarrierFreeStoreRegistDelete" parameterType="ProdImgBarrierFreeVO">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeStoreRegistDelete */
+        DELETE TB_MS_PRODUCT_IMAGE
+        WHERE STORE_CD = #{storeCd}
+        AND IMG_FG IN
+        <foreach collection="arrImgFg" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 베리어프리-이미지관리 매장적용 팝업 - 전체복사 기존 이미지 정보 리스트 -->
+    <!--
+          TABLE    :
+          COMMENTS :
+    -->
+    <select id="getProdImgBarrierFreeStoreRegistFileNm" parameterType="ProdImgBarrierFreeVO" resultType="DefaultMap">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeStoreRegistFileNm */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  IMG_FILE_NM AS ORG_IMG_FILE_NM
+                FROM    TB_HQ_PRODUCT_IMAGE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     IMG_FG = #{orgImgFg}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  IMG_FILE_NM AS ORG_IMG_FILE_NM
+                FROM    TB_MS_PRODUCT_IMAGE
+                WHERE   STORE_CD = #{storeCd}
+                AND     IMG_FG = #{orgImgFg}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 베리어프리-이미지관리 매장적용 팝업 - 본사상품이미지 매장적용(낱개) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getProdImgBarrierFreeStoreRegistSave" parameterType="ProdImgBarrierFreeVO">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeStoreRegistSave */
+        INSERT INTO TB_MS_PRODUCT_IMAGE
+         (
+            STORE_CD,
+            PROD_CD,
+            IMG_FG,
+            IMG_URL,
+            IMG_FILE_NM,
+            IMG_CHG_DT,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+         )
+        SELECT #{storeCd},
+                PROD_CD,
+                IMG_FG,
+                SUBSTR(IMG_URL , 0, INSTR (IMG_URL, #{hqOfficeCd}) -1) || #{storeCd} || '/' || #{orgImgFg} AS IMG_URL,
+                IMG_FILE_NM,
+                #{regDt},
+                REMARK,
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+          FROM TB_HQ_PRODUCT_IMAGE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND IMG_FG = #{orgImgFg}
+    </insert>
+
+    <!-- 베리어프리-이미지관리 이미지복사 팝업 - 이미지 복사 -->
+    <!--
+          TABLE    :
+          COMMENTS :
+    -->
+    <insert id="getProdImgBarrierFreeCopySave" parameterType="ProdImgBarrierFreeVO">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeCopySave */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_IMAGE
+                USING (
+                            SELECT  SUBSTR(IMG_URL, 0, LENGTH(IMG_URL)-3) || REPLACE(SUBSTR(IMG_URL, -3), #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                            IMG_FILE_NM
+                            FROM    TB_HQ_PRODUCT_IMAGE
+                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND     PROD_CD = #{prodCd}
+                            AND     IMG_FG = #{orgImgFg}
+                        ) thpi
+                ON (
+                        HQ_OFFICE_CD    = #{hqOfficeCd}
+                        AND PROD_CD         = #{prodCd}
+                        AND IMG_FG          = #{imgFg}
+                    )
+                WHEN MATCHED THEN
+                    UPDATE
+                    SET IMG_URL     = thpi.IMG_URL
+                    ,   IMG_FILE_NM = thpi.IMG_FILE_NM
+                    ,   MOD_DT      = #{modDt}
+                    ,   MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        HQ_OFFICE_CD
+                    ,   PROD_CD
+                    ,   IMG_FG
+                    ,   IMG_URL
+                    ,   IMG_FILE_NM
+                    ,   IMG_CHG_DT
+                    ,   REMARK
+                    ,   REG_DT
+                    ,   REG_ID
+                    ,   MOD_DT
+                    ,   MOD_ID
+                    ) VALUES (
+                        #{hqOfficeCd}
+                    ,   #{prodCd}
+                    ,   #{imgFg}
+                    ,   thpi.IMG_URL
+                    ,   thpi.IMG_FILE_NM
+                    ,   #{imgChgDt}
+                    ,   #{remark}
+                    ,   #{regDt}
+                    ,   #{regId}
+                    ,   #{modDt}
+                    ,   #{modId}
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_IMAGE
+                USING (
+                            SELECT  SUBSTR(IMG_URL, 0, LENGTH(IMG_URL)-3) || REPLACE(SUBSTR(IMG_URL, -3), #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                            IMG_FILE_NM
+                            FROM    TB_MS_PRODUCT_IMAGE
+                            WHERE   STORE_CD = #{storeCd}
+                            AND     PROD_CD = #{prodCd}
+                            AND     IMG_FG = #{orgImgFg}
+                        ) thpi
+                ON (
+                        STORE_CD    = #{storeCd}
+                        AND PROD_CD = #{prodCd}
+                        AND IMG_FG  = #{imgFg}
+                    )
+                WHEN MATCHED THEN
+                    UPDATE
+                    SET IMG_URL     = thpi.IMG_URL
+                    ,   IMG_FILE_NM = thpi.IMG_FILE_NM
+                    ,   MOD_DT      = #{modDt}
+                    ,   MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        STORE_CD
+                    ,   PROD_CD
+                    ,   IMG_FG
+                    ,   IMG_URL
+                    ,   IMG_FILE_NM
+                    ,   IMG_CHG_DT
+                    ,   REMARK
+                    ,   REG_DT
+                    ,   REG_ID
+                    ,   MOD_DT
+                    ,   MOD_ID
+                    ) VALUES (
+                        #{storeCd}
+                    ,   #{prodCd}
+                    ,   #{imgFg}
+                    ,   thpi.IMG_URL
+                    ,   thpi.IMG_FILE_NM
+                    ,   #{imgChgDt}
+                    ,   #{remark}
+                    ,   #{regDt}
+                    ,   #{regId}
+                    ,   #{modDt}
+                    ,   #{modId}
+                    )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 베리어프리-이미지관리 이미지복사 팝업 - 이미지 전체 복사 -->
+    <!--
+          TABLE    :
+          COMMENTS :
+    -->
+    <insert id="getProdImgBarrierFreeCopySaveAll" parameterType="ProdImgBarrierFreeVO">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeCopySaveAll */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_IMAGE thpi1
+                USING (
+                            SELECT  HQ_OFFICE_CD,
+                            PROD_CD,
+                            SUBSTR(IMG_URL, 0, LENGTH(IMG_URL)-3) || REPLACE(SUBSTR(IMG_URL, -3), #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                            IMG_FILE_NM
+                            FROM    TB_HQ_PRODUCT_IMAGE
+                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND     IMG_FG = #{orgImgFg}
+                        ) thpi2
+                ON (
+                        thpi1.HQ_OFFICE_CD    = thpi2.HQ_OFFICE_CD
+                        AND thpi1.PROD_CD         = thpi2.PROD_CD
+                        AND thpi1.IMG_FG          = #{imgFg}
+                    )
+                WHEN MATCHED THEN
+                    UPDATE
+                    SET IMG_URL     = thpi2.IMG_URL
+                    ,   IMG_FILE_NM = thpi2.IMG_FILE_NM
+                    ,   MOD_DT      = #{modDt}
+                    ,   MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        HQ_OFFICE_CD
+                    ,   PROD_CD
+                    ,   IMG_FG
+                    ,   IMG_URL
+                    ,   IMG_FILE_NM
+                    ,   IMG_CHG_DT
+                    ,   REMARK
+                    ,   REG_DT
+                    ,   REG_ID
+                    ,   MOD_DT
+                    ,   MOD_ID
+                    ) VALUES (
+                        thpi2.HQ_OFFICE_CD
+                    ,   thpi2.PROD_CD
+                    ,   #{imgFg}
+                    ,   thpi2.IMG_URL
+                    ,   thpi2.IMG_FILE_NM
+                    ,   #{imgChgDt}
+                    ,   #{remark}
+                    ,   #{regDt}
+                    ,   #{regId}
+                    ,   #{modDt}
+                    ,   #{modId}
+                    )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_IMAGE tmpi1
+                USING (
+                            SELECT  STORE_CD,
+                            PROD_CD,
+                            SUBSTR(IMG_URL, 0, LENGTH(IMG_URL)-3) || REPLACE(SUBSTR(IMG_URL, -3), #{orgImgFg}, #{imgFg}) AS IMG_URL,
+                            IMG_FILE_NM
+                            FROM    TB_MS_PRODUCT_IMAGE
+                            WHERE   STORE_CD = #{storeCd}
+                            AND     IMG_FG = #{orgImgFg}
+                        ) tmpi2
+                ON (
+                        tmpi1.STORE_CD = tmpi2.STORE_CD
+                        AND tmpi1.PROD_CD = tmpi2.PROD_CD
+                        AND tmpi1.IMG_FG  = #{imgFg}
+                    )
+                WHEN MATCHED THEN
+                    UPDATE
+                    SET IMG_URL     = tmpi2.IMG_URL
+                    ,   IMG_FILE_NM = tmpi2.IMG_FILE_NM
+                    ,   MOD_DT      = #{modDt}
+                    ,   MOD_ID      = #{modId}
+                WHEN NOT MATCHED THEN
+                    INSERT
+                    (
+                        STORE_CD
+                    ,   PROD_CD
+                    ,   IMG_FG
+                    ,   IMG_URL
+                    ,   IMG_FILE_NM
+                    ,   IMG_CHG_DT
+                    ,   REMARK
+                    ,   REG_DT
+                    ,   REG_ID
+                    ,   MOD_DT
+                    ,   MOD_ID
+                    ) VALUES (
+                        tmpi2.STORE_CD
+                    ,   tmpi2.PROD_CD
+                    ,   #{imgFg}
+                    ,   tmpi2.IMG_URL
+                    ,   tmpi2.IMG_FILE_NM
+                    ,   #{imgChgDt}
+                    ,   #{remark}
+                    ,   #{regDt}
+                    ,   #{regId}
+                    ,   #{modDt}
+                    ,   #{modId}
+                    )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 베리어프리-이미지관리 이미지복사 팝업 - 이미지 정보 조회 -->
+    <!--
+          TABLE    :
+          COMMENTS :
+    -->
+    <select id="getProdImgBarrierFreeCopyFileNm" parameterType="ProdImgBarrierFreeVO" resultType="String">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeCopyFileNm */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  IMG_FILE_NM AS ORG_IMG_FILE_NM
+                FROM    TB_HQ_PRODUCT_IMAGE
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     IMG_FG = #{orgImgFg}
+                AND     PROD_CD  = #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  IMG_FILE_NM AS ORG_IMG_FILE_NM
+                FROM    TB_MS_PRODUCT_IMAGE
+                WHERE   STORE_CD = #{storeCd}
+                AND     IMG_FG = #{orgImgFg}
+                AND     PROD_CD  = #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 베리어프리-이미지관리 이미지전체삭제 팝업 - 전체삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getProdImgBarrierFreeDeleteAll" parameterType="ProdImgBarrierFreeVO">
+        /* ProdImgBarrierFreeMapper.getProdImgBarrierFreeDeleteAll */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_PRODUCT_IMAGE
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_PRODUCT_IMAGE
+                WHERE STORE_CD = #{storeCd}
+                AND IMG_FG = #{imgFg}
+            </when>
+        </choose>
+    </delete>
+
+</mapper>

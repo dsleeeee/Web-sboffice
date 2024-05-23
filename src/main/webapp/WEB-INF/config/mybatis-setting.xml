@@ -380,7 +380,7 @@
     <!-- 기초관리 > 상품관리2 > 테이블오더키맵관리 -->
     <typeAlias alias="tableOrderKeyMapVO" type="kr.co.solbipos.base.prod.tableOrderKeyMap.service.TableOrderKeyMapVO"/>
     <!-- 기초관리 > 상품관리2 > 베리어프리-이미지관리 -->
-    <!--<typeAlias alias="prodImgBarrierFreeVO" type="kr.co.solbipos.base.prod.prodImgBarrierFree.service.ProdImgBarrierFreeVO"/>-->
+    <typeAlias alias="prodImgBarrierFreeVO" type="kr.co.solbipos.base.prod.prodImgBarrierFree.service.ProdImgBarrierFreeVO"/>
     <!-- 기초관리 > 상품관리 > 상품정보조회 -->
     <typeAlias alias="prodSearchVO" type="kr.co.solbipos.base.prod.prodSearch.service.ProdSearchVO"/>
     <!--
