@@ -242,6 +242,9 @@ public interface StoreManageMapper {
     /** 배달상품명칭매핑 복사 TODO */
     int copyDlvrProdCopy(StoreManageVO storeManageVO);
 
+    /** 배달상품명칭멀티매핑 복사 TODO */
+    int copyDlvrProdMultiCopy(StoreManageVO storeManageVO);
+
     /** 매장환경 정보 조회 */
     List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO);
 

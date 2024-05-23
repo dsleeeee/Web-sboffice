@@ -683,7 +683,10 @@ public class StoreManageServiceImpl implements StoreManageService{
 
                     // 배달상품명칭매핑 복사
                     if( "dlvrProd".equals(copyEnv[i]) ) {
+                        // 배달상품명칭매핑
                         procCnt += mapper.copyDlvrProdCopy(storeManageVO);
+                        // 배달상품명칭멀티매핑
+                        procCnt += mapper.copyDlvrProdMultiCopy(storeManageVO);
                     }
                 }
             }

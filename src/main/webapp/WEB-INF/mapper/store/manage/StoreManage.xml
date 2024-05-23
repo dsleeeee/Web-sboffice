@@ -5480,6 +5480,68 @@
                 )
     </insert>
 
+    <!-- 배달상품명칭멀티매핑 복사 -->
+    <!--
+       TABLE    : TB_MS_PRODUCT_DLVR_PROD_NM
+       PARAM    : storeManageVO
+       COMMENTS : 배달상품명칭매핑을 복사한다
+    -->
+    <insert id="copyDlvrProdMultiCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyDlvrProdMultiCopy */
+        MERGE INTO TB_MS_PRODUCT_DLVR_PROD_NM_MULTI A
+            USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       SEQ
+                ,       PROD_CD
+                ,       DLVR_NAME_CD
+                ,       DLVR_PROD_NM
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       DLVR_MAPPING_FG
+                FROM    TB_MS_PRODUCT_DLVR_PROD_NM_MULTI
+                WHERE   STORE_CD = #{copyStoreCd}
+                AND     DLVR_NAME_CD IN (SELECT NMCODE_CD
+                                           FROM TB_CM_NMCODE
+                                          WHERE NMCODE_GRP_CD = '112'
+                                            AND NMCODE_CD != '1')
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.SEQ           = A.SEQ
+                AND B.PROD_CD       =  A.PROD_CD
+                AND B.DLVR_NAME_CD  =  A.DLVR_NAME_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.SEQ
+                ,     A.PROD_CD
+                ,     A.DLVR_NAME_CD
+                ,     A.DLVR_PROD_NM
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                ,     A.DLVR_MAPPING_FG
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.SEQ
+                ,     B.PROD_CD
+                ,     B.DLVR_NAME_CD
+                ,     B.DLVR_PROD_NM
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                ,     B.DLVR_MAPPING_FG
+                )
+    </insert>
+
     <!-- 공통코드 복사   -->
     <!--
         TABLE    : TB_MS_NMCODE
