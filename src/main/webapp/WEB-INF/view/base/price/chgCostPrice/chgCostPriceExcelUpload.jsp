@@ -132,7 +132,7 @@
                     <wj-flex-grid-column header="<s:message code="chgCostPrice.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="120" align="center"></wj-flex-grid-column>
 
                     <%-- 임시테이블 삭제시 필요 --%>
-                    <wj-flex-grid-column header="<s:message code="hqSplyPrice.seq"/>" binding="seq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="chgCostPrice.seq"/>" binding="seq" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
