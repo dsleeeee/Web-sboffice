@@ -743,12 +743,21 @@
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>
     <typeAlias alias="storeMoveVO" type="kr.co.solbipos.iostock.move.storeMove.service.StoreMoveVO"/>
     <typeAlias alias="standMoveVO" type="kr.co.solbipos.iostock.move.standMove.service.StandMoveVO"/>
-    <!-- 수불관리>본사-매장간 입출고내역>매장별 입출고내역 -->
+    <!-- 수불관리 > 본사-매장간 입출고내역 > 매장별 입출고내역 -->
     <typeAlias alias="frnchsStoreVO" type="kr.co.solbipos.iostock.frnchs.store.service.FrnchsStoreVO"/>
-    <!-- 수불관리>본사-매장간 입출고내역>매장-상품별 입출고내역 -->
+    <!-- 수불관리 > 본사-매장간 입출고내역 > 매장-상품별 입출고내역 -->
     <typeAlias alias="frnchsStoreProdVO" type="kr.co.solbipos.iostock.frnchs.storeProd.service.FrnchsStoreProdVO"/>
-    <!-- 수불관리>본사-매장간 입출고내역>상품별 입출고내역 -->
+    <!-- 수불관리 > 본사-매장간 입출고내역 > 상품별 입출고내역 -->
     <typeAlias alias="frnchsProdVO" type="kr.co.solbipos.iostock.frnchs.prod.service.FrnchsProdVO"/>
+    <!-- 수불관리 > 본사-매장간 입출고 내역 > 주문대비 입출고현황 -->
+    <typeAlias alias="orderVO" type="kr.co.solbipos.iostock.frnchs.order.service.OrderVO"/>
+    <!-- 수불관리 > 본사-매장간 입출고 내역 > 전표별 입출고내역 -->
+    <typeAlias alias="slipVO" type="kr.co.solbipos.iostock.frnchs.slip.service.SlipVO"/>
+    <!-- 수불관리 > 본사-매장간 입출고 내역 > 특이사항 입출고내역 -->
+    <typeAlias alias="UnusualVO" type="kr.co.solbipos.iostock.frnchs.unusual.service.UnusualVO"/>
+
+    <!-- 수불관리 > 보나비 > 폐기내역조회 -->
+    <!--<typeAlias alias="disuseInfoBonavieVO" type="kr.co.solbipos.iostock.bonavie.disuseInfoBonavie.service.DisuseInfoBonavieVO"/>-->
 
     <!-- 재고 -->
     <typeAlias alias="hqCurrVO" type="kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO"/>
@@ -775,6 +784,22 @@
     <typeAlias alias="weightStockVO" type="kr.co.solbipos.stock.product.weightStock.service.WeightStockVO"/>
     <!-- 재고관리 > 생산관리 > 재고현황(매장-기간별) -->
     <typeAlias alias="stockPeriodVO" type="kr.co.solbipos.stock.product.stockPeriod.service.StockPeriodVO"/>
+
+    <!-- 재고관리 > 재고현황 > 본사매장통합현재고 -->
+    <typeAlias alias="currUnityVO" type="kr.co.solbipos.stock.status.currUnity.service.CurrUnityVO"/>
+    <!-- 재고관리 > 재고현황 > 창고별현재고현황 -->
+    <typeAlias alias="storageHqCurrVO" type="kr.co.solbipos.stock.curr.storageHqCurr.service.StorageHqCurrVO"/>
+    <!-- 재고관리 > 재고현황 > 일수불현황 -->
+    <typeAlias alias="dayIoStockVO" type="kr.co.solbipos.stock.status.dayiostock.service.DayIostockVO"/>
+    <!-- 재고관리 > 재고현황 > 월수불현황 -->
+    <typeAlias alias="monthIostockVO" type="kr.co.solbipos.stock.status.monthiostock.service.MonthIostockVO"/>
+    <!-- 재고관리 > 재고현황 > 일자별수불현황 -->
+    <typeAlias alias="dailyIoStockVO" type="kr.co.solbipos.stock.status.dailyIoStock.service.DailyIoStockVO"/>
+
+    <!-- 재고관리 > 매장재고현황 > 매장일수불 -->
+    <typeAlias alias="storeDayVO" type="kr.co.solbipos.stock.status.storeday.service.StoreDayVO"/>
+    <!-- 재고관리 > 매장재고현황 > 매장월수불 -->
+    <typeAlias alias="stockStoreMonthVO" type="kr.co.solbipos.stock.status.storemonth.service.StockStoreMonthVO"/>
 
     <!-- 공통팝업 수불/재고 엑셀업로드 -->
     <typeAlias alias="excelUploadVO" type="kr.co.solbipos.iostock.cmmExcelUpload.excelUpload.service.ExcelUploadVO"/>
@@ -855,7 +880,6 @@
     <typeAlias alias="daySaleReportVO" type="kr.co.solbipos.sale.status.daySaleReport.service.DaySaleReportVO"/>
     <!-- 매출관리 > 매출현황2 > 중분류(매출분석) 다운로드(정직유부) -->
     <typeAlias alias="saleAnalysisReportVO" type="kr.co.solbipos.sale.status.saleAnalysisReport.service.SaleAnalysisReportVO"/>
-
     <!-- 매출관리 > 매출현황2 > 상품별(사이드) -->
     <typeAlias alias="sideVO" type="kr.co.solbipos.sale.status.side.service.SideVO"/>
     <!-- 매출관리 > 매출현황2 > 오프라인추가매출현황 -->
@@ -1109,29 +1133,6 @@
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
     <!-- 매출관리 > 배달현황 > 주문채널별현황 -->
     <typeAlias alias="orderChannelVO" type="kr.co.solbipos.sale.dlvr.orderChannel.service.OrderChannelVO"/>
-
-    <!-- 수불관리 > 본사-매장간 입출고 내역 > 주문대비 입출고현황 -->
-    <typeAlias alias="orderVO" type="kr.co.solbipos.iostock.frnchs.order.service.OrderVO"/>
-    <!-- 수불관리 > 본사-매장간 입출고 내역 > 전표별 입출고내역 -->
-    <typeAlias alias="slipVO" type="kr.co.solbipos.iostock.frnchs.slip.service.SlipVO"/>
-    <!-- 수불관리 > 본사-매장간 입출고 내역 > 특이사항 입출고내역 -->
-	<typeAlias alias="UnusualVO" type="kr.co.solbipos.iostock.frnchs.unusual.service.UnusualVO"/>
-
-    <!-- 재고관리 > 재고현황 > 본사매장통합현재고 -->
-    <typeAlias alias="currUnityVO" type="kr.co.solbipos.stock.status.currUnity.service.CurrUnityVO"/>
-    <!-- 재고관리 > 재고현황 > 창고별현재고현황 -->
-    <typeAlias alias="storageHqCurrVO" type="kr.co.solbipos.stock.curr.storageHqCurr.service.StorageHqCurrVO"/>
-    <!-- 재고관리 > 재고현황 > 일수불현황 -->
-    <typeAlias alias="dayIoStockVO" type="kr.co.solbipos.stock.status.dayiostock.service.DayIostockVO"/>
-    <!-- 재고관리 > 재고현황 > 월수불현황 -->
-    <typeAlias alias="monthIostockVO" type="kr.co.solbipos.stock.status.monthiostock.service.MonthIostockVO"/>
-    <!-- 재고관리 > 재고현황 > 일자별수불현황 -->
-    <typeAlias alias="dailyIoStockVO" type="kr.co.solbipos.stock.status.dailyIoStock.service.DailyIoStockVO"/>
-
-    <!-- 재고관리 > 매장재고현황 > 매장일수불 -->
-    <typeAlias alias="storeDayVO" type="kr.co.solbipos.stock.status.storeday.service.StoreDayVO"/>
-    <!-- 재고관리 > 매장재고현황 > 매장월수불 -->
-    <typeAlias alias="stockStoreMonthVO" type="kr.co.solbipos.stock.status.storemonth.service.StockStoreMonthVO"/>
 
     <!-- 매출 공통팝업-->
     <typeAlias alias="billInfoVO" type="kr.co.solbipos.sale.cmmSalePopup.billInfo.service.BillInfoVO"/>
