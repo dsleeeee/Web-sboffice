@@ -346,7 +346,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <th><s:message code="kioskKeyMap.useYn" /></th><%--사용여부--%>
+                        <%-- 사용여부 --%>
+                        <th><s:message code="kioskKeyMap.useYn" /></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -357,11 +358,13 @@
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false"
-                                        initialized="_initComboBox(s)">
+                                        initialized="_initComboBox(s)"
+                                        selected-index="1">
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <th><s:message code="kioskKeymap.prodTypeFg" /></th><%--상품유형--%>
+                        <%--상품유형--%>
+                        <th><s:message code="kioskKeymap.prodTypeFg" /></th>
                         <td>
                             <div class="sb-select">
                                 <wj-combo-box
@@ -501,7 +504,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20240312.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20240528.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -215,7 +215,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         scope.prodClassCd = "";
         scope.prodClassCdNm = "";
         scope.barCd = "";
-        scope.useYnAllCombo.selectedIndex = 0;
+        scope.useYnAllCombo.selectedIndex = 1;
         scope.prodTypeFgAllCombo.selectedIndex = 0;
         scope.regYnAllCombo.selectedIndex = 0;
 
@@ -259,7 +259,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         scope.prodClassCd = "";
         scope.prodClassCdNm = "";
         scope.barCd = "";
-        scope.useYnAllCombo.selectedIndex = 0;
+        scope.useYnAllCombo.selectedIndex = 1;
         scope.prodTypeFgAllCombo.selectedIndex = 0;
         scope.regYnAllCombo.selectedIndex = 0;
 
