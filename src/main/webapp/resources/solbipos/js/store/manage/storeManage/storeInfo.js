@@ -307,9 +307,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#agencyNm").val(orgnNm);
     }
 
+    $scope.store.siteCd = "";
     $scope.store.mapStoreCd = "";
     $scope.store.latitude = "";
     $scope.store.longitude = "";
+    $("#siteCd").val("");
+    $("#mapStoreCd").val("");
     $("#latitude").val("");
     $("#longitude").val("");
 
