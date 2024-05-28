@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DisuseInfoBonavie.xml
+    폐기내역조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2024.05.23     최초작성
+-->
+<mapper namespace="kr.co.solbipos.iostock.bonavie.disuseInfoBonavie.service.impl.DisuseInfoBonavieMapper">
+
+    <!-- 폐기내역조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDisuseInfoBonavieList" parameterType="DisuseInfoBonavieVO" resultType="DefaultMap">
+        /* DisuseInfoBonavieMapper.getDisuseInfoBonavieList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        TO_CHAR(TO_DATE(A.DT_IO, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS DT_IO,
+        B.STORE_CD,
+        C.STORE_NM,
+        (CASE WHEN A.CD_COMPANY = 'TEST01' THEN '테스트' WHEN A.CD_COMPANY = '15' THEN '실가동' ELSE A.CD_COMPANY END) AS CD_COMPANY,
+        A.CD_PLANT,
+        A.NO_EGR,
+        A.NO_EGRLINE,
+        A.CD_PJT,
+        A.CD_PARTNER,
+        A.CD_ITEM AS PROD_CD,
+        D.PROD_NM,
+        A.QT_IO,
+        A.UM,
+        A.AM,
+        A.VAT,
+        A.NO_IO,
+        A.NO_IOLINE,
+        (CASE WHEN A.FG_TPIO = '003' THEN '폐기' WHEN A.FG_TPIO = '004' THEN '재고실사(출고)' WHEN A.FG_TPIO = '005' THEN '무상출고' ELSE A.FG_TPIO END) AS FG_TPIO,
+        A.CD_QTIOTP,
+        (CASE WHEN A.FG_STATUS = '0' THEN '정상' WHEN A.FG_STATUS = '1' THEN '삭제' ELSE A.FG_STATUS END) AS FG_STATUS,
+        TO_CHAR(TO_DATE(A.DTS_INSERT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS DTS_INSERT,
+        A.ID_INSERT,
+        TO_CHAR(TO_DATE(A.DTS_UPDATE, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS DTS_UPDATE,
+        A.ID_UPDATE,
+        A.SEND_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_NEOE_SPOS_EGR A,
+        TB_NEOE_SPOS_STR B,
+        TB_MS_STORE C,
+        TB_MS_PRODUCT D
+        WHERE 1=1
+        AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND A.DT_IO BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCd != null and storeCd != ""'>
+            AND B.STORE_CD = #{storeCd}
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND A.CD_ITEM LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND D.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND B.CD_PARTNER = A.CD_PARTNER
+        AND B.CD_COMPANY = A.CD_COMPANY
+        AND C.STORE_CD = B.STORE_CD
+        AND D.STORE_CD = B.STORE_CD
+        AND D.PROD_CD = A.CD_ITEM
+        ORDER BY A.DT_IO, B.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 폐기내역조회 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDisuseInfoBonavieExcelList" parameterType="DisuseInfoBonavieVO" resultType="DefaultMap">
+        /* DisuseInfoBonavieMapper.getDisuseInfoBonavieExcelList */
+        SELECT
+        TO_CHAR(TO_DATE(A.DT_IO, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD') AS DT_IO,
+        B.STORE_CD,
+        C.STORE_NM,
+        (CASE WHEN A.CD_COMPANY = 'TEST01' THEN '테스트' WHEN A.CD_COMPANY = '15' THEN '실가동' ELSE A.CD_COMPANY END) AS CD_COMPANY,
+        A.CD_PLANT,
+        A.NO_EGR,
+        A.NO_EGRLINE,
+        A.CD_PJT,
+        A.CD_PARTNER,
+        A.CD_ITEM AS PROD_CD,
+        D.PROD_NM,
+        A.QT_IO,
+        A.UM,
+        A.AM,
+        A.VAT,
+        A.NO_IO,
+        A.NO_IOLINE,
+        (CASE WHEN A.FG_TPIO = '003' THEN '폐기' WHEN A.FG_TPIO = '004' THEN '재고실사(출고)' WHEN A.FG_TPIO = '005' THEN '무상출고' ELSE A.FG_TPIO END) AS FG_TPIO,
+        A.CD_QTIOTP,
+        (CASE WHEN A.FG_STATUS = '0' THEN '정상' WHEN A.FG_STATUS = '1' THEN '삭제' ELSE A.FG_STATUS END) AS FG_STATUS,
+        TO_CHAR(TO_DATE(A.DTS_INSERT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS DTS_INSERT,
+        A.ID_INSERT,
+        TO_CHAR(TO_DATE(A.DTS_UPDATE, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS DTS_UPDATE,
+        A.ID_UPDATE,
+        A.SEND_YN
+        FROM TB_NEOE_SPOS_EGR A,
+        TB_NEOE_SPOS_STR B,
+        TB_MS_STORE C,
+        TB_MS_PRODUCT D
+        WHERE 1=1
+        AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND A.DT_IO BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCd != null and storeCd != ""'>
+            AND B.STORE_CD = #{storeCd}
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND A.CD_ITEM LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND D.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND B.CD_PARTNER = A.CD_PARTNER
+        AND B.CD_COMPANY = A.CD_COMPANY
+        AND C.STORE_CD = B.STORE_CD
+        AND D.STORE_CD = B.STORE_CD
+        AND D.PROD_CD = A.CD_ITEM
+        ORDER BY A.DT_IO, B.STORE_CD
+    </select>
+
+</mapper>

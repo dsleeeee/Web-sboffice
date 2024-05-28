@@ -757,7 +757,7 @@
     <typeAlias alias="UnusualVO" type="kr.co.solbipos.iostock.frnchs.unusual.service.UnusualVO"/>
 
     <!-- 수불관리 > 보나비 > 폐기내역조회 -->
-    <!--<typeAlias alias="disuseInfoBonavieVO" type="kr.co.solbipos.iostock.bonavie.disuseInfoBonavie.service.DisuseInfoBonavieVO"/>-->
+    <typeAlias alias="disuseInfoBonavieVO" type="kr.co.solbipos.iostock.bonavie.disuseInfoBonavie.service.DisuseInfoBonavieVO"/>
 
     <!-- 재고 -->
     <typeAlias alias="hqCurrVO" type="kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO"/>
