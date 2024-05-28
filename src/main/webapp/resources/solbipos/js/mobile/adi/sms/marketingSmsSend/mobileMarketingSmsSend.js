@@ -850,10 +850,11 @@ app.controller('mobileMarketingSmsSendCtrl', ['$scope', '$http', '$timeout', fun
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withOutPopUp("/adi/sms/smsSend/smsSend/getSmsSendReserve1000Save.sb", params, function(){
-                // $scope.allSearch();
+                $scope.allSearch();
 
+                // 20240528 운영중에는 실시간 전송이 되니까 count 안맞음으로 인한 오류로 제거
                 // 1000건 이상 전송시 전송테이블에 Insert 되는동안 로딩바
-                smsSendloadingInsert1000(params.smsSendSeq, params.smsSendListCnt);
+                // smsSendloadingInsert1000(params.smsSendSeq, params.smsSendListCnt);
             });
         } else {
             // 파라미터 설정
