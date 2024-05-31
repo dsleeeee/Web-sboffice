@@ -12,12 +12,13 @@
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="prod.regStore" />
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close" onclick="closePop()"></a>
     </div>
 
     <%-- body --%>
     <div class="wj-dialog-body">
       <div ng-controller="regStoreCtrl">
+        <label id="lblCurr" style="display: none"></label>
         <table class="tblType01">
           <colgroup>
             <col class="w15" />
@@ -463,4 +464,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20240531.01" charset="utf-8"></script>

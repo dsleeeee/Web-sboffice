@@ -84,6 +84,8 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 		// 매출관리>매출현황>코너별>일자별탭, 요일별탭, 월별탭
     	} else if(saleComPopupVO.getChkPop().equals("cornerDayProdPop")) {
 			return saleComPopupMapper.getCornerDayProdPopList(saleComPopupVO);
+		}else if(saleComPopupVO.getChkPop().equals("cornerMonthProdPop")) {
+			return saleComPopupMapper.getCornerMonthProdPopList(saleComPopupVO);
 		}
 
         return null;

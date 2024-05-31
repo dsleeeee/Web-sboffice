@@ -101,5 +101,5 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekCorner.js?ver=20240223.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekCorner.js?ver=20240531.01" charset="utf-8"></script>
 

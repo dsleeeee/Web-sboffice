@@ -825,20 +825,20 @@
             FROM
             (
                 SELECT
-                TO_CHAR(TO_DATE(tsdcp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
+                TO_CHAR(TO_DATE(tsdcp.SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
                 tsdcp.STORE_CD,
                 SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT,
                 SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
                 (tsdcp.STORE_CD || tsdcp.CORNR_CD) AS STORE_CORNR_CD
-                FROM TB_SL_DAILY_CORNR tsdcp
+                FROM TB_SL_MONTHLY_CORNR tsdcp
                 WHERE 1=1
                 AND tsdcp.HQ_OFFICE_CD = #{membrOrgnCd}
-                AND tsdcp.SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                AND tsdcp.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                 AND tsdcp.STORE_CD IN
                 <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
                     #{item}
                 </foreach>
-                GROUP BY tsdcp.SALE_DATE, tsdcp.STORE_CD, tsdcp.CORNR_CD
+                GROUP BY tsdcp.SALE_YM, tsdcp.STORE_CD, tsdcp.CORNR_CD
             )
             PIVOT
             (
@@ -951,18 +951,18 @@
                 SUM(SALE_QTY) AS SALE_QTY
         FROM    (
                 SELECT 	STORE_CD || POS_NO AS STORE_POS_NO,
-                        TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm') YEAR_MONTH,
-                        SUM(SALE_AMT) AS SALE_AMT,
-                        SUM(DC_AMT) AS DC_AMT,
+                        TO_CHAR(TO_DATE(SALE_YM, 'yyyymm'), 'yyyy-mm') YEAR_MONTH,
+                        SUM(TOT_SALE_AMT) AS SALE_AMT,
+                        SUM(TOT_DC_AMT) AS DC_AMT,
                         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
                         SUM(SALE_QTY) AS SALE_QTY
-                FROM 	TB_SL_SALE_DTL tssd
+                FROM 	TB_SL_MONTHLY_POS tssd
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     SALE_DATE BETWEEN #{startMonth}||'01' AND #{endMonth} ||'31'
+                AND     SALE_YM BETWEEN #{startMonth} AND #{endMonth}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>
                     AND STORE_CD IN (${storeCdQuery})
                 </if>
-                GROUP BY STORE_CD || POS_NO, SALE_DATE
+                GROUP BY STORE_CD || POS_NO, SALE_YM
                 )
         GROUP BY YEAR_MONTH,  ROLLUP(STORE_POS_NO)
     </select>

@@ -165,7 +165,7 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     var params      = {};
                     params.yearMonth = selectedRow.yearMonth.replace("-", "");
                     params.storeCd = $scope.srchStoreCd;
-                    params.gubun = "month";
+                    params.gubun = "monthPos";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
                 }

@@ -6516,7 +6516,7 @@
         /* USE : StoreManageMapper.getProdClass */
         SELECT tmpc.P_PROD_CLASS_CD ,
         tmpc.PROD_CLASS_CD ,
-        tmpc.PROD_CLASS_NM
+        tmpc.PROD_CLASS_NM  || '['|| tmpc.PROD_CLASS_CD || ']' AS PROD_CLASS_NM
         FROM TB_MS_PRODUCT_CLASS tmpc,
         (
         SELECT tmp.STORE_CD,
@@ -6580,7 +6580,7 @@
         /* USE : StoreManageMapper.getPrintProductInfo */
         SELECT STORE_CD,
         PROD_CD,
-        PROD_NM,
+        PROD_NM || '[' || PROD_CD || ']' AS PROD_NM,
         PROD_CLASS_CD,
         #{prterNo} AS PRTER_NO
         FROM TB_MS_PRODUCT

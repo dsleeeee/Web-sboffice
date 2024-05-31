@@ -53,6 +53,7 @@
            AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
  		GROUP BY TSDCP.CORNR_CD, TSDCP.STORE_CD, TMS.STORE_CD, TMS.STORE_NM, TMC.CORNR_CD, TMC.CORNR_NM
+        ORDER BY TSDCP.STORE_CD, TMC.CORNR_CD, TMC.CORNR_NM
        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -96,6 +97,7 @@
            AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
         </if>
         GROUP BY TSDCP.CORNR_CD, TSDCP.STORE_CD, TMS.STORE_CD, TMS.STORE_NM, TMC.CORNR_CD, TMC.CORNR_NM
+        ORDER BY TSDCP.STORE_CD, TMC.CORNR_CD, TMC.CORNR_NM
     </select>
 
     <!-- 설정기간별탭 - 상세 조회 -->
@@ -108,14 +110,14 @@
         /* USE : CornerDayPeriodMapper.getCornerDayPeriodDtlList */
         <!--<include refid="CmmSQL.PagingTemplateHeader"/>-->
         SELECT
-        FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        FN_GET_PROD_CLASS_CD_NM_STR(tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
         tsdcp.PROD_CD,
         tmp.PROD_NM,
         SUM(tsdcp.TOT_SALE_QTY) AS TOT_SALE_QTY,
         SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT
         <!--<include refid="CmmSQL.PagingTemplateCount"/>-->
         FROM TB_SL_DAILY_CORNR_PROD tsdcp,
-        TB_MS_PRODUCT tmp
+        TB_HQ_PRODUCT tmp
         WHERE 1=1
         AND tsdcp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCd != null and storeCd != ""'>
@@ -125,10 +127,11 @@
         <if test='cornrCd != null and cornrCd != ""'>
             AND tsdcp.CORNR_CD = #{cornrCd}
         </if>
-        AND tmp.STORE_CD = tsdcp.STORE_CD
+        AND tmp.HQ_OFFICE_CD = tsdcp.HQ_OFFICE_CD
         AND tmp.PROD_CD = tsdcp.PROD_CD
-        GROUP BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD, tmp.PROD_NM
-        ORDER BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD
+        AND tmp.CORNR_CD = TSDCP.CORNR_CD
+        GROUP BY tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD
         <!--<include refid="CmmSQL.PagingTemplateBottom"/>-->
     </select>
 
@@ -141,26 +144,27 @@
     <select id="getCornerDayPeriodDtlExcelList" parameterType="cornerDayPeriodVO" resultType="DefaultMap">
         /* USE : CornerDayPeriodMapper.getCornerDayPeriodDtlExcelList */
         SELECT
-        FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        FN_GET_PROD_CLASS_CD_NM_STR(tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
         tsdcp.PROD_CD,
         tmp.PROD_NM,
         SUM(tsdcp.TOT_SALE_QTY) AS TOT_SALE_QTY,
         SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT
         FROM TB_SL_DAILY_CORNR_PROD tsdcp,
-        TB_MS_PRODUCT tmp
+        TB_HQ_PRODUCT tmp
         WHERE 1=1
         AND tsdcp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCd != null and storeCd != ""'>
-            AND tsdcp.STORE_CD    = #{storeCd}
+            AND tsdcp.STORE_CD = #{storeCd}
         </if>
         AND tsdcp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='cornrCd != null and cornrCd != ""'>
             AND tsdcp.CORNR_CD = #{cornrCd}
         </if>
-        AND tmp.STORE_CD = tsdcp.STORE_CD
+        AND tmp.HQ_OFFICE_CD = tsdcp.HQ_OFFICE_CD
         AND tmp.PROD_CD = tsdcp.PROD_CD
-        GROUP BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD, tmp.PROD_NM
-        ORDER BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD
+        AND tmp.CORNR_CD = TSDCP.CORNR_CD
+        GROUP BY tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD, tmp.PROD_NM
+        ORDER BY tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD
     </select>
 
 </mapper>

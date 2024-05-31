@@ -54,9 +54,9 @@ app.controller('cornerMonthCtrl', ['$scope', '$http', '$timeout', function ($sco
         var col          = ht.panel.columns[ht.col];
         var selectedRow  = s.rows[ht.row].dataItem;
         var params       = {};
-		params.chkPop    = "cornerDayProdPop"; // 매출관리>매출현황>코너별>월별탭
-		params.startDate = selectedRow.saleYm.replace("-", "") + "01";
-		params.endDate   = selectedRow.saleYm.replace("-", "") + "31";
+		params.chkPop    = "cornerMonthProdPop"; // 매출관리>매출현황>코너별>월별탭
+		params.startDate = selectedRow.saleYm.replace("-", "");
+		params.endDate   = selectedRow.saleYm.replace("-", "");
 		var storeCornr   = $scope.cornrCdForExcel.split(",");
 		var arrStoreCornr     = [];
 		for(var i=0; i < storeCornr.length; i++) {

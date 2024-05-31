@@ -85,7 +85,7 @@
             <%--- 적용상품 그리드 --%>
             <div class="oh mt20">
                 <div class="w50 fl" ng-controller="regProdCtrl">
-                    <div class="wj-TblWrap mr10" style="height:395px; overflow-y:hidden;">
+                    <div class="wj-TblWrap mr10" style="height:410px; overflow-y:hidden;">
                         <div class="oh">
                             <span class="fl bk lh20 s14"><s:message code="prod.regProd"/></span>
                             <span class="fr">
@@ -126,7 +126,7 @@
                 </div>
                 <%--- 미적용상품 그리드 --%>
                 <div class="w50 fr" ng-controller="noRegProdCtrl">
-                    <div class="wj-TblWrap ml10" style="height:395px; overflow-y: hidden;" >
+                    <div class="wj-TblWrap ml10" style="height:410px; overflow-y: hidden;" >
                         <div class="oh">
                             <span class="fl bk lh20 s14"><s:message code="prod.noRegProd"/></span>
                             <span class="fr"><a href="#" class="btn_grayS2" ng-click="regist()" ><s:message code="prod.regist"/></a></span>

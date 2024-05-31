@@ -882,11 +882,11 @@
                 SELECT 	STORE_CD || POS_NO AS STORE_POS_NO,
                 TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD') -1, 'D') AS YOIL_NUM,
                 TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-                SUM(SALE_AMT) AS SALE_AMT,
-                SUM(DC_AMT) AS DC_AMT,
+                SUM(TOT_SALE_AMT) AS SALE_AMT,
+                SUM(TOT_DC_AMT) AS DC_AMT,
                 SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-                SUM(SALE_QTY) AS SALE_QTY
-                FROM 	TB_SL_SALE_DTL tssd
+                SUM(SALE_QTY + NVL(SIDE_SALE_QTY,0)) AS SALE_QTY
+                FROM 	TB_SL_DAILY_POS tssd
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     SALE_DATE BETWEEN #{startDate} AND #{endDate}
                 <if test='storeCdQuery != null and storeCdQuery != ""'>

@@ -120,4 +120,13 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
             $("#tblSearchAddShow").hide();
         }
     };
+
+    // 팝업 닫기
+    $scope.close = function(){
+        $scope.storeProdBatchListLayer.hide();
+
+        // 재조회
+        $scope._broadcast('prodCtrl');
+    };
+
 }]);

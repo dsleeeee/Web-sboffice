@@ -156,6 +156,8 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
                     params.storeCd  = $scope.searchStoreCd;
                     params.yoil     = selectedRow.yoil;
                     params.gubun    = "dayOfWeekCorner";
+                    params.startDate = $scope.srchStartDate;
+                    params.endDate = $scope.srchEndDate;
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
                 }
@@ -171,6 +173,8 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
                         params.cornrCd  = cornerColList[i].cornrCd;
                         params.yoil     = selectedRow.yoil;
                         params.gubun    = "dayOfWeekCorner";
+                        params.startDate = $scope.srchStartDate;
+                        params.endDate = $scope.srchEndDate;
 
                         // 값이 있으면 링크
                         // if (nvl(selectedRow[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') !== '' && nvl(selectedRow[("cornr" + cornerColList[i].storeCornrCd + "SaleQty")], '') != "0") {
@@ -264,6 +268,9 @@ app.controller('dayOfWeekCornerCtrl', ['$scope', '$http', '$timeout', function (
         params.storeCornerCd = storeCornerCd;
 
         $scope.searchStoreCd = params.storeCd;
+
+        $scope.srchStartDate= params.startDate;
+        $scope.srchEndDate= params.endDate;
 
         $scope._inquiryMain("/sale/day/dayOfWeek/dayOfWeek/getDayOfWeekCornerList.sb", params, function() {}, false);
 

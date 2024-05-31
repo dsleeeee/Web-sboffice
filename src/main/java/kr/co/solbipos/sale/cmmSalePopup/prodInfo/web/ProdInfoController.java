@@ -187,4 +187,51 @@ public class ProdInfoController {
 
         return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
     }
+
+    /**
+     * 매출공통팝업 - 일자별 - 포스별 상품매출 상세내역 조회
+     *
+     * @param   prodInfoVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 05. 17.
+     */
+    @RequestMapping(value = "/prodSaleDtl/getPosProdSaleDtlDayList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosProdSaleDtlDayList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodInfoService.getPosProdSaleDtlDayList(prodInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
+    }
+
+
+    /**
+     * 매출공통팝업 - 월별 - 포스별 상품매출 상세내역 조회
+     *
+     * @param   prodInfoVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 05. 20.
+     */
+    @RequestMapping(value = "/prodSaleDtl/getPosProdSaleDtlMonthList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPosProdSaleDtlMonthList(ProdInfoVO prodInfoVO, HttpServletRequest request,
+                                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodInfoService.getPosProdSaleDtlMonthList(prodInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodInfoVO);
+    }
 }

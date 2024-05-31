@@ -272,9 +272,6 @@
                         OR  tsdcp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                         )
                 </if>
-                <if test="posNo != null and posNo != ''">
-                    AND tsdcp.POS_NO = #{posNo}
-                </if>
                 <if test="cornrCd != null and cornrCd != ''">
                     AND tsdcp.CORNR_CD = #{cornrCd}
                 </if>
@@ -293,6 +290,108 @@
                 </if>
             )
         )
+        WHERE 1=1
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            GROUP BY HQ_OFFICE_CD, PROD_CLASS_CD, PROD_CD, PROD_NM
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            GROUP BY STORE_CD, PROD_CLASS_CD, PROD_CD, PROD_NM
+        </if>
+        ORDER BY PROD_CD
+    </select>
+
+    <!-- 매출공통팝업 - 포스별 상품매출 상세내역 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPosProdSaleDtlDayList" parameterType="ProdInfoVO" resultType="DefaultMap">
+        /* ProdInfoMapper.getPosProdSaleDtlDayList */
+        SELECT
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            HQ_OFFICE_CD,
+            FN_GET_PROD_CLASS_CD_NM_STR(HQ_OFFICE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            STORE_CD,
+            FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        </if>
+        PROD_CLASS_CD,
+        PROD_CD,
+        PROD_NM,
+        SUM(SALE_QTY) AS SALE_QTY,
+        SUM(SALE_AMT) AS TOT_SALE_AMT,
+        SUM(DC_AMT) AS TOT_DC_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM
+            (
+                SELECT
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    HQ_OFFICE_CD,
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    STORE_CD,
+                </if>
+                PROD_CLASS_CD,
+                PROD_CD,
+                PROD_NM,
+                SALE_AMT,
+                SALE_QTY,
+                DC_AMT,
+                REAL_SALE_AMT
+                FROM
+                    (
+                        SELECT
+                        <!-- 본사 -->
+                        <if test='orgnFg == "H"'>
+                            tsdcp.HQ_OFFICE_CD,
+                        </if>
+                        <!-- 매장 -->
+                        <if test='orgnFg == "S"'>
+                            tsdcp.STORE_CD,
+                        </if>
+                        tmp.PROD_CLASS_CD,
+                        tsdcp.PROD_CD,
+                        tmp.PROD_NM,
+                        SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
+                        SUM(tsdcp.TOT_SALE_AMT) AS SALE_AMT,
+                        SUM(tsdcp.TOT_DC_AMT) AS DC_AMT,
+                        SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                        FROM TB_SL_DAILY_POS_PROD tsdcp,
+                        TB_HQ_PRODUCT tmp
+                        WHERE 1=1
+                        AND tsdcp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND tsdcp.STORE_CD IN (${storeCdQuery})
+                        </if>
+                        <if test='orgnFg != null and orgnFg == "H"'>
+                            AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                            OR  tsdcp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                            )
+                        </if>
+                        <if test="posNo != null and posNo != ''">
+                            AND tsdcp.POS_NO = #{posNo}
+                        </if>
+                        AND tsdcp.SALE_DATE         = #{saleDate}
+                        AND tmp.HQ_OFFICE_CD  (+)   = tsdcp.HQ_OFFICE_CD
+                        AND tmp.PROD_CD       (+)   = tsdcp.PROD_CD
+                        <!-- 본사 -->
+                        <if test='orgnFg == "H"'>
+                            GROUP BY tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD, tmp.PROD_NM
+                        </if>
+                        <!-- 매장 -->
+                        <if test='orgnFg == "S"'>
+                            GROUP BY tsdcp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD, tmp.PROD_NM
+                        </if>
+                    )
+            )
         WHERE 1=1
         <!-- 본사 -->
         <if test='orgnFg == "H"'>
@@ -367,12 +466,7 @@
                 SUM(tsmp.TOT_DC_AMT) AS DC_AMT,
                 SUM(tsmp.REAL_SALE_AMT) AS REAL_SALE_AMT
                 FROM
-                <if test='gubun != "monthPos"'>
-                    TB_SL_MONTHLY_CORNR_PROD tsmp,
-                </if>
-                <if test='gubun == "monthPos"'>
-                    TB_SL_MONTHLY_POS_PROD tsmp,
-                </if>
+                TB_SL_MONTHLY_CORNR_PROD tsmp,
                 TB_MS_PRODUCT tmp
                 WHERE 1=1
                 AND tsmp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -401,6 +495,111 @@
                 <!-- 매장 -->
                 <if test='orgnFg == "S"'>
                     GROUP BY tsmp.STORE_CD, tmp.PROD_CLASS_CD, tsmp.PROD_CD, tmp.PROD_NM
+                </if>
+            )
+        )
+        WHERE 1=1
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            GROUP BY HQ_OFFICE_CD, PROD_CLASS_CD, PROD_CD, PROD_NM
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            GROUP BY STORE_CD, PROD_CLASS_CD, PROD_CD, PROD_NM
+        </if>
+        ORDER BY PROD_CD
+    </select>
+
+    <!-- 매출공통팝업 - 포스별 상품매출 상세내역 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPosProdSaleDtlMonthList" parameterType="ProdInfoVO" resultType="DefaultMap">
+        /* ProdInfoMapper.getPosProdSaleDtlMonthList */
+        SELECT
+        <!-- 본사 -->
+        <if test='orgnFg == "H"'>
+            HQ_OFFICE_CD,
+            FN_GET_PROD_CLASS_CD_NM_STR(HQ_OFFICE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        </if>
+        <!-- 매장 -->
+        <if test='orgnFg == "S"'>
+            STORE_CD,
+            FN_GET_PROD_CLASS_CD_NM_STR(STORE_CD, PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        </if>
+        PROD_CLASS_CD,
+        PROD_CD,
+        PROD_NM,
+        SUM(SALE_QTY) AS SALE_QTY,
+        SUM(SALE_AMT) AS TOT_SALE_AMT,
+        SUM(DC_AMT) AS TOT_DC_AMT,
+        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        FROM
+        (
+            SELECT
+            <!-- 본사 -->
+            <if test='orgnFg == "H"'>
+                HQ_OFFICE_CD,
+            </if>
+            <!-- 매장 -->
+            <if test='orgnFg == "S"'>
+                STORE_CD,
+            </if>
+            PROD_CLASS_CD,
+            PROD_CD,
+            PROD_NM,
+            SALE_AMT,
+            SALE_QTY,
+            DC_AMT,
+            REAL_SALE_AMT
+            FROM
+            (
+                SELECT
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    tsdcp.HQ_OFFICE_CD,
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    tsdcp.STORE_CD,
+                </if>
+                tmp.PROD_CLASS_CD,
+                tsdcp.PROD_CD,
+                tmp.PROD_NM,
+                SUM(tsdcp.TOT_SALE_QTY) AS SALE_QTY,
+                SUM(tsdcp.TOT_SALE_AMT) AS SALE_AMT,
+                SUM(tsdcp.TOT_DC_AMT) AS DC_AMT,
+                SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM TB_SL_MONTHLY_POS_PROD tsdcp,
+                TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_BARCD tmpb
+                WHERE 1=1
+                AND tsdcp.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdcp.STORE_CD IN (${storeCdQuery})
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR  tsdcp.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                    )
+                </if>
+                <if test="posNo != null and posNo != ''">
+                    AND tsdcp.POS_NO = #{posNo}
+                </if>
+                AND tsdcp.SALE_YM = #{yearMonth}
+                AND tmp.STORE_CD (+)= tsdcp.STORE_CD
+                AND tmp.PROD_CD (+)= tsdcp.PROD_CD
+                AND tmpb.STORE_CD (+)= tmp.STORE_CD
+                AND tmpb.PROD_CD (+)= tmp.PROD_CD
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    GROUP BY tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD, tmp.PROD_NM
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    GROUP BY tsdcp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.PROD_CD, tmp.PROD_NM
                 </if>
             )
         )
@@ -724,6 +923,7 @@
         <if test="cornrCd != null and cornrCd != ''">
             AND tsdcp.CORNR_CD = #{cornrCd}
         </if>
+        AND tsdcp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         AND TO_CHAR(TO_DATE(tsdcp.SALE_DATE, 'YYYYMMDD'), 'DY') = #{yoil}
         AND tmp.STORE_CD (+)= tsdcp.STORE_CD
         AND tmp.PROD_CD (+)= tsdcp.PROD_CD

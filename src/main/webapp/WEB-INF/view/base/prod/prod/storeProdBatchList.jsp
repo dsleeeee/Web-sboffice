@@ -9,7 +9,7 @@
 
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="prod.title.storeList"/>
-            <a href="#" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close" ng-click="close() "></a>
         </div>
 
         <div class="wj-dialog-body">
@@ -318,4 +318,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchList.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchList.js?ver=20240531.01" charset="utf-8"></script>

@@ -24,4 +24,10 @@ public interface ProdInfoService {
 
     /** 매출공통팝업 - 상품매출 상세내역 조회 */
     List<DefaultMap<Object>> getProdSaleDtlDayOfWeekList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 매출공통팝업 - 일별 - 포스별 상품매출 상세내역 조회 */
+    List<DefaultMap<Object>> getPosProdSaleDtlDayList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 매출공통팝업 - 월별 - 포스별 상품매출 상세내역 조회 */
+    List<DefaultMap<Object>> getPosProdSaleDtlMonthList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO);
 }

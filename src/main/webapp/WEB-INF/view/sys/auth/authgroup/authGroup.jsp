@@ -66,6 +66,10 @@
   <%--2단--%>
   <div class="wj-TblWrap mt10">
 
+    <%--권한그룹--%>
+    <label id="authOrgnTree" style="display: none"></label>
+    <%--그룹코드--%>
+    <label id="grpCdTree" style="display: none"></label>
     <%--left--%>
     <div class="w60 fl">
       <div class="wj-TblWrapBr mr10 pd10" style="height:500px; overflow-y: hidden;">
@@ -88,6 +92,7 @@
         <div class="updownSet oh mb10">
           <span id="groupInfo" class="fl bk lh30 "></span>
           <span class="fl bk lh30 ml5"><s:message code="authGroup.resrcInfo"/></span>
+          <button id="srchAuthOrgn" class="btn_skyblue"><s:message code="authGroup.srchAuthOrgn"/></button>
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
         <%--위즈모 트리  // todo height 조정--%>
@@ -216,6 +221,27 @@
           $("#treeResrce").css("display", "");
           param.authGrpCd = grid.cells.getCellData(ht.row, ht.col, true);
           $("#groupInfo").html('[' + grid.cells.getCellData(ht.row, ht.col, true) + ']' + grid.cells.getCellData(ht.row, ht.col +1, true));
+
+          var arr = ['A','P','C','H','S','I'];
+          var authArr = [];
+          for(var i=0; i<arr.length; i ++){
+            if(grid.cells.getCellData(ht.row, ht.col+i+7, true) === 'Y'){
+              authArr.push(arr[i]);
+            }
+          }
+
+          var authStr = ''
+          for(var i=0; i<authArr.length; i ++){
+            if(authArr.length-1 === i ) {
+              authStr += authArr[i]
+            }else{
+              authStr += authArr[i] + "|"
+            }
+          }
+
+          $("#authOrgnTree").text(authStr);
+          $("#grpCdTree").text(grid.cells.getCellData(ht.row, ht.col, true));
+
           if(param.authGrpCd != '') {
             tree.itemsSource = new Array();
             tree.refresh();
@@ -409,6 +435,32 @@
       function(result) {
         s_alert.pop(result.message);
       });
+
+    });
+
+    <%-- 권한구분조회 --%>
+    $("#srchAuthOrgn").click(function(e){
+      if(isEmpty(tree.currentAuthGrpCd)) {
+        s_alert.pop("<s:message code='authGroup.authGroup' /><s:message code='cmm.require.select' />");
+        return;
+      }
+
+      var param = {};
+      param.authGrpCd = $("#grpCdTree").text();
+      param.authOrgn  = $("#authOrgnTree").text();
+
+      if(param.authGrpCd != '') {
+        tree.itemsSource = new Array();
+        tree.refresh();
+        $.postJSON("${baseUrl}" + "listResrce.sb", param, function(result) {
+                  tree.itemsSource = result.data.list;
+                  <%-- 트리에서 저장 예외관리 시 키로 사용--%>
+                  tree.currentAuthGrpCd = param.authGrpCd;
+                },
+                function(result) {
+                  s_alert.pop(result.message);
+                });
+      }
 
     });
 
