@@ -278,6 +278,62 @@
             TB_WB_FIXING twf
         LEFT OUTER JOIN TB_WB_RESRCE_INFO twri ON
             twf.RESRCE_CD = twri.RESRCE_CD
+        INNER JOIN (
+            SELECT
+                twri.RESRCE_CD
+            FROM
+                TB_WB_RESRCE_INFO twri
+            START WITH
+                twri.RESRCE_CD IN
+                                (
+                                    SELECT
+                                        twagr.RESRCE_CD
+                                    FROM
+                                        TB_WB_AUTHOR_GRP_INFO twagi
+                                    LEFT OUTER JOIN TB_WB_AUTHOR_GRP_RESRCE twagr ON
+                                        twagi.AUTH_GRP_CD = twagr.AUTH_GRP_CD
+                                        AND twagr.USE_YN = 'Y'
+                                    WHERE
+                                        twagr.AUTH_GRP_CD = #{authGrpCd}
+                                        AND twagi.USE_YN = 'Y'
+                                    <if test='optResrceCd != null and optResrceCd != ""'> <!-- 해당 메뉴(사용자가 따로 지정한 ULR)는 사용자 메뉴권한에 상관없이 접근가능 -->
+                                    UNION
+                                        SELECT
+                                            #{optResrceCd} AS RESRCE_CD
+                                        FROM
+                                            DUAL
+                                    </if>
+                                    UNION ALL
+                                    SELECT
+                                        twae.RESRCE_CD
+                                    FROM
+                                        TB_WB_AUTHOR_EXCEPT_V01 twae
+                                    WHERE
+                                        twae.USER_ID = #{userId}
+                                        AND twae.INCLD_EXCLD_FG = 'I'
+                                        AND twae.USE_YN = 'Y'
+                                        AND twae.LOGIN_FG = NVL(#{loginFg}, 'W')
+                                    MINUS
+                                    SELECT
+                                        twae.RESRCE_CD
+                                    FROM
+                                        TB_WB_AUTHOR_EXCEPT_V01 twae
+                                    WHERE
+                                        twae.USER_ID = #{userId}
+                                        AND twae.INCLD_EXCLD_FG = 'E'
+                                        AND twae.USE_YN = 'Y'
+                                        AND twae.LOGIN_FG = NVL(#{loginFg}, 'W')
+                                    <if test='optResrceCd != null and optResrceCd != ""'> <!-- 해당 메뉴(사용자가 따로 지정한 ULR)는 사용자 메뉴권한에 상관없이 접근가능 -->
+                                        AND twae.RESRCE_CD != #{optResrceCd}
+                                    </if>
+                                )
+                AND twri.RESRCE_FG = 'M'
+                AND twri.USE_YN = 'Y'
+            CONNECT BY
+                twri.RESRCE_CD = PRIOR twri.P_RESRCE
+            GROUP BY
+                twri.RESRCE_CD ) auth ON
+            twri.RESRCE_CD = auth.RESRCE_CD
         WHERE
             twf.USER_ID = #{userId}
             AND twf.USE_YN = 'Y'

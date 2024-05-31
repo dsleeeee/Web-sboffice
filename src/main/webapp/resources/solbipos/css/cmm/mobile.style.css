@@ -1380,6 +1380,7 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 
 /*즐겨찾기 관리*/
 .txtIcFav {width:18px; height:17px; display:inline-block; background:url(../img/ic_menu_org.png) no-repeat; background-position:0 -17px; position:relative; top:2px;}
+.txtIcFix {width:18px; height:17px; display:inline-block; background:url(../img/ic_menu_org.png) no-repeat; background-position:-18px -17px; position:relative; top:2px;}
 .menuOrg {width:790px;}
 .sort {overflow:hidden; position:relative;}
 .sort div {float:left; width:190px; margin-left:10px;}
