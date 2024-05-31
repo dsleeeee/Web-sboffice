@@ -48,7 +48,7 @@
             <div class="mt10 tr">
                 <div class="oh sb-select dkbr">
                     <%--조회--%>
-                    <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('prodRecpOriginAddCtrl', 1)" ><s:message code="cmm.search" /></button>
+                    <button class="btn_skyblue fr" id="btnSearch" ng-click="_broadcast('prodRecpOriginAddCtrl', 1)"><s:message code="cmm.search" /></button>
                 </div>
             </div>
 

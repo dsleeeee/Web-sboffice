@@ -1449,9 +1449,10 @@ p.touchBtn a:first-child:hover:before {content:''; position:absolute; margin:17p
 
 /*즐겨찾기 관리*/
 .txtIcFav {width:18px; height:17px; display:inline-block; background:url(../img/ic_menu_org.png) no-repeat; background-position:0 -17px; position:relative; top:2px;}
-.menuOrg {width:790px;}
+.txtIcFix {width:18px; height:17px; display:inline-block; background:url(../img/ic_menu_org.png) no-repeat; background-position:-18px -17px; position:relative; top:2px;}
+.menuOrg {width:793px;}
 .sort {overflow:hidden; position:relative;}
-.sort div {float:left; width:190px; margin-left:10px;}
+.sort div {float:left; width:192px; margin-left:5px;}
 .sort div:first-child {margin-left:0;}
 .sort .depth1 {font-size:0.75em; background:#e8e8e8; height:35px; line-height:35px; border-top:1px solid #ccc; border-bottom:1px solid #ccc; color:#222; padding:0 10px;}
 .sort .depth2 {font-size:0.75em; background:#f6f6f6; line-height:1.3em; border-top:1px solid #e8e8e8; border-bottom:1px solid #e8e8e8; color:#222; padding:4px 10px;}

@@ -105,8 +105,14 @@ $(document).ready(function () {
 
     return rootNodes;
   }
+
+  var searchCntFirst = 0; // 조회 결과 count alert
   // 즐겨찾기 관리 메뉴 생성
   function makeMenu() {
+    // 조회 결과 count
+    var searchCnt = 0;
+    $("#lblBkmkSearchCnt").text(searchCnt);
+
     var menuCnt = 0;
     var menuHtml = "";
     var param = {};
@@ -147,12 +153,34 @@ $(document).ready(function () {
                     var third;
                     for (var mt = 0; mt < second.children.length; mt++) {
                       third = second.children[mt];
-                      menuHtml += '<li><span class="txt">' + third.resrceNm + '</span><span class="btn">';
+
+                      // 메뉴명 클릭시 메뉴이동 URL
+                      var hrefUrl;
+                      // 가상로그인
+                      if(document.getElementsByName('sessionId')[0]) {
+                        var vSessionId = document.getElementsByName('sessionId')[0].value;
+                        hrefUrl = third.url + '?sid='+ vSessionId;
+                      // 로그인
+                      } else {
+                        hrefUrl = third.url;
+                      }
+
+                      // 조회시 메뉴명 LIKE 검색
+                      var bkmkResrceNm = $("#srchBkmkResrceNm").val();
+                      if(bkmkResrceNm == "") {
+                        menuHtml += '<li><span class="txt">' + third.resrceNm + '</span><span class="btn">';
+                      } else if (third.resrceNm.includes(bkmkResrceNm) == true) {
+                        searchCnt = searchCnt +1; // 조회 결과 count
+                        menuHtml += '<li><a href=' + hrefUrl + '><span class="txt bk" style="background-color:lightpink">' + third.resrceNm + '</span></a><span class="btn">';
+                      } else {
+                        menuHtml += '<li><span class="txt">' + third.resrceNm + '</span><span class="btn">';
+                      }
                       menuHtml += '<a href="#" id="fav_' + third.resrceCd + '" class="ic_fav off"></a>';
                       menuHtml += '<a href="#" id="fix_' + third.resrceCd + '" class="ic_fix off"></a>';
                       menuHtml += '</span></li>';
                     }
                     menuHtml += '</ul>';
+                    $("#lblBkmkSearchCnt").text(searchCnt); // 조회 결과 count
                   }
                 }
               }
@@ -181,7 +209,7 @@ $(document).ready(function () {
                 second = first.children[bs];
                 if (second && second.children.length > 0) {
                   var third;
-                  for (var bt = 0; bt < first.children.length; bt++) {
+                  for (var bt = 0; bt < second.children.length; bt++) {
                     third = second.children[bt];
                     if (third) {
                       $("#fav_" + third.resrceCd).removeClass("ic_fav off").addClass("ic_fav on");
@@ -193,7 +221,7 @@ $(document).ready(function () {
           }
         }
       }
-      // 고정메뉴 
+      // 고정메뉴
       if ( result.data.fixData ) {
         var fixMenus = result.data.fixData;
         if (fixMenus) {
@@ -213,7 +241,7 @@ $(document).ready(function () {
       $(".ic_fix").click(function (event) {
         if ($(this).hasClass("ic_fix off")) {
           var fixedCnt = $(".ic_fix.on").length;
-          if (fixedCnt > 3) {
+          if (fixedCnt > 2) {
             s_alert.pop("고정메뉴는 최대 3개까지 선택 가능합니다.");
           } else {
             $(this).removeClass("ic_fix off").addClass("ic_fix on");
@@ -224,10 +252,22 @@ $(document).ready(function () {
       });
 
       $("#_brmkLayer, #_brmkFullDimmed").show();
+
+      // 조회 결과 count alert
+      if(searchCntFirst > 0) {
+        s_alert.pop($("#lblBkmkSearchCnt").text() + "개 조회됨");
+      } else {
+        searchCntFirst++;
+      }
     },
     function (result) {
       s_alert.pop(result.message);
     });
   }
+
+  // 조회
+  $(".bkmk_search").click(function (e) {
+    makeMenu();
+  });
 
 });
