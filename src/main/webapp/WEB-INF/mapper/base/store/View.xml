@@ -29,8 +29,8 @@
                tms.POST_NO || ') ' || tms.ADDR || tms.ADDR_DTL  AS ADDRESS,
                tmp.POS_VER_NO,
                tms.SYS_STAT_FG,
-               TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
-               TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
+               TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY-MM-DD') AS SYS_OPEN_DATE,
+               (CASE WHEN tms.SYS_STAT_FG = '2' THEN TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY-MM-DD') ELSE null END) AS SYS_CLOSURE_DATE,
                tme.USER_ID AS MS_USER_ID,
                tms.ADDR,
                tms.LATITUDE,
@@ -85,6 +85,7 @@
         /* USE : ViewMapper.getStoreListExcel */
         SELECT tms.STORE_CD,
         tms.STORE_NM,
+        thb.HQ_BRAND_NM,
         tms.CLS_FG,
         tms.BIZ_NO ,
         tms.OWNER_NM,
@@ -92,14 +93,24 @@
         tms.POST_NO || ') ' || tms.ADDR || tms.ADDR_DTL  AS ADDRESS,
         tmp.POS_VER_NO,
         tms.SYS_STAT_FG,
-        TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_OPEN_DATE,
-        TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY/MM/DD') AS SYS_CLOSURE_DATE
+        TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyyMMdd'), 'YYYY-MM-DD') AS SYS_OPEN_DATE,
+        (CASE WHEN tms.SYS_STAT_FG = '2' THEN TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'yyyyMMdd'), 'YYYY-MM-DD') ELSE null END) AS SYS_CLOSURE_DATE,
+        tme.USER_ID AS MS_USER_ID,
+        tms.ADDR,
+        tms.LATITUDE,
+        tms.LONGITUDE
         FROM TB_MS_STORE tms,
-        TB_MS_POS tmp
+        TB_MS_POS tmp,
+        TB_MS_EMPLOYEE tme,
+        TB_HQ_BRAND thb
         WHERE tms.HQ_OFFICE_CD =  #{hqOfficeCd}
+        AND tms.HQ_OFFICE_CD = thb.HQ_OFFICE_CD
+        AND tms.HQ_BRAND_CD = thb.HQ_BRAND_CD
         AND tmp.STORE_CD (+)= tms.STORE_CD
         AND tmp.POS_NO (+)= '01' -- 기본포스(포스 최신버전 가져오기 위함)
         AND tmp.USE_YN (+)= 'Y'
+        AND tme.STORE_CD (+)= tms.STORE_CD
+        AND tme.EMP_NO (+)= '0000'
         <if test='storeCd != null and storeCd != ""'>
             AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
         </if>

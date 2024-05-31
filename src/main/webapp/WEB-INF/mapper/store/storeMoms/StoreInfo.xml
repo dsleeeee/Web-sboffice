@@ -41,7 +41,7 @@
         ,       tms.CLS_FG
         ,       tms.SYS_STAT_FG
         ,       TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SYS_OPEN_DATE
-        ,       (CASE WHEN tms.SYS_CLOSURE_DATE = '99991231' THEN null ELSE tms.SYS_CLOSURE_DATE END) AS SYS_CLOSURE_DATE
+        ,       (CASE WHEN tms.SYS_STAT_FG = '2' THEN TO_CHAR(TO_DATE( (CASE WHEN tms.SYS_CLOSURE_DATE = '99991231' THEN null ELSE tms.SYS_CLOSURE_DATE END) , 'yyyyMMdd'), 'YYYY-MM-DD') ELSE null END) AS SYS_CLOSURE_DATE
         ,       (SELECT tcvc.VAN_NM FROM TB_CM_VAN_CMPNY tcvc WHERE tcvc.VAN_FG ='01' AND  tcvc.VAN_CD = tms.VAN_CD) AS VAN_CD
         ,       (SELECT tca.AGENCY_NM FROM TB_CM_AGENCY tca WHERE tca.AGENCY_CD = tms.AGENCY_CD) AS AGENCY_CD
         ,       tms.REMARK
