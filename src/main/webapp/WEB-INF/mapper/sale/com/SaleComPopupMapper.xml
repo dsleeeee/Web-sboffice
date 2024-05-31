@@ -434,7 +434,14 @@
 		FROM
 		(
 			SELECT
-			FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+			<!-- 본사 -->
+			<if test='orgnFg == "H"'>
+				FN_GET_PROD_CLASS_CD_NM_STR(tsdcp.HQ_OFFICE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+			</if>
+			<!-- 매장 -->
+			<if test='orgnFg == "S"'>
+				FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+			</if>
 			TO_CHAR(TO_DATE(tsdcp.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
 			tmp.STORE_CD||'||'||tsdcp.CORNR_CD AS STORE_CORNR_CD,
 			tsdcp.PROD_CD,
@@ -442,7 +449,8 @@
 			SUM(tsdcp.TOT_SALE_QTY) AS TOT_SALE_QTY,
 			SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT
 			FROM TB_SL_DAILY_CORNR_PROD tsdcp,
-			TB_MS_PRODUCT tmp
+			TB_MS_PRODUCT tmp,
+			TB_MS_PRODUCT_BARCD tmpb
 			WHERE 1=1
 			AND tsdcp.HQ_OFFICE_CD = #{hqOfficeCd}
 			<if test='arrStoreCd != null and arrStoreCd != ""'>
@@ -452,17 +460,75 @@
 				</foreach>
 			</if>
 			AND tsdcp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-			AND tmp.STORE_CD = tsdcp.STORE_CD
-			AND tmp.PROD_CD = tsdcp.PROD_CD
-			GROUP BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.SALE_DATE,  tsdcp.CORNR_CD, tsdcp.PROD_CD, tmp.PROD_NM
+			AND tmp.STORE_CD 	(+) = tsdcp.STORE_CD
+			AND tmp.PROD_CD  	(+) = tsdcp.PROD_CD
+			AND tmpb.STORE_CD	(+) = tmp.STORE_CD
+			AND tmpb.PROD_CD 	(+) = tmp.PROD_CD
+			<if test='arrStoreCornr != null and arrStoreCornr != ""'>
+				AND tsdcp.STORE_CD||'||'||tsdcp.CORNR_CD IN
+				<foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
+					#{item}
+				</foreach>
+			</if>
+			GROUP BY <if test='orgnFg == "H"'>
+						 tsdcp.HQ_OFFICE_CD,
+					 </if>
+			         tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.SALE_DATE,  tsdcp.CORNR_CD, tsdcp.PROD_CD, tmp.PROD_NM
 		)
 		WHERE 1=1
+		<if test='yoil != null and yoil != ""'>
+			AND YOIL = #{yoil}
+		</if>
+		GROUP BY PATH_NM, PROD_CD, PROD_NM
+		ORDER BY PROD_CD
+	</select>
+
+	<!-- 매출공통팝업 - 월별 팝업 -->
+	<!--
+        TABLE    :
+        PARAM    : saleComPopupVO
+        COMMENTS :
+    -->
+	<select id="getCornerMonthProdPopList" parameterType="saleComPopupVO" resultType="DefaultMap">
+		/* USE : SaleComPopupMapper.getCornerMonthProdPopList */
+		SELECT
+		PATH_NM,
+		PROD_CD,
+		PROD_NM,
+		SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
+		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+		FROM
+		(
+		SELECT
+		FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+		TO_CHAR(TO_DATE(tsdcp.SALE_YM, 'YYYYMMDD'), 'DY') AS YOIL,
+		tmp.STORE_CD||'||'||tsdcp.CORNR_CD AS STORE_CORNR_CD,
+		tsdcp.PROD_CD,
+		tmp.PROD_NM,
+		SUM(tsdcp.TOT_SALE_QTY) AS TOT_SALE_QTY,
+		SUM(tsdcp.REAL_SALE_AMT) AS REAL_SALE_AMT
+		FROM TB_SL_MONTHLY_CORNR_PROD tsdcp,
+		TB_MS_PRODUCT tmp
+		WHERE 1=1
+		AND tsdcp.HQ_OFFICE_CD = #{hqOfficeCd}
+		<if test='arrStoreCd != null and arrStoreCd != ""'>
+			AND tsdcp.STORE_CD IN
+			<foreach collection="arrStoreCd" item="item" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		AND tsdcp.SALE_YM BETWEEN #{startDate} AND #{endDate}
+		AND tmp.STORE_CD (+) = tsdcp.STORE_CD
+		AND tmp.PROD_CD  (+) = tsdcp.PROD_CD
 		<if test='arrStoreCornr != null and arrStoreCornr != ""'>
-			AND STORE_CORNR_CD IN
+			AND tsdcp.STORE_CD||'||'||tsdcp.CORNR_CD IN
 			<foreach collection="arrStoreCornr" item="item" open="(" close=")" separator=",">
 				#{item}
 			</foreach>
 		</if>
+		GROUP BY tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdcp.SALE_YM,  tsdcp.CORNR_CD, tsdcp.PROD_CD, tmp.PROD_NM
+		)
+		WHERE 1=1
 		<if test='yoil != null and yoil != ""'>
 			AND YOIL = #{yoil}
 		</if>

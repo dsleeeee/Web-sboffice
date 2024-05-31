@@ -25,11 +25,8 @@
         AND     A.STORE_CD      = #{storeCd}
         AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND A.STORE_CD||'||'||A.TBL_CD IN
-            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
         </if>
         GROUP
         BY 		ROLLUP(A.STORE_CD ||'||'|| A.TBL_CD)
@@ -57,11 +54,8 @@
         AND     A.STORE_CD      = #{storeCd}
         AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND A.STORE_CD||'||'||A.TBL_CD IN
-            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
         </if>
         GROUP
         BY 		A.SALE_DATE
@@ -92,11 +86,8 @@
                                 AND     A.STORE_CD      = #{storeCd}
                                 AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                                <if test='arrTableCd != null and arrTableCd.length >= 0'>
-                                    AND A.STORE_CD||'||'||A.TBL_CD IN
-                                    <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                                        #{item}
-                                    </foreach>
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
                                 </if>
                                 GROUP
                                 BY 		A.SALE_DATE
@@ -162,11 +153,8 @@
         AND     A.STORE_CD      = #{storeCd}
         AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND A.STORE_CD||'||'||A.TBL_CD IN
-            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
         </if>
         GROUP
         BY 		ROLLUP(A.STORE_CD ||'||'|| A.TBL_CD)
@@ -228,11 +216,8 @@
         AND     A.STORE_CD      = #{storeCd}
         AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND A.STORE_CD||'||'||A.TBL_CD IN
-            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
         </if>
         GROUP
         BY 		ROLLUP(A.STORE_CD || '||' ||A.TBL_CD)
@@ -261,11 +246,8 @@
         AND     A.STORE_CD      = #{storeCd}
         AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND 	A.SALE_YM BETWEEN #{startDate} AND #{endDate}
-        <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND A.STORE_CD||'||'||A.TBL_CD IN
-            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
         </if>
         GROUP
         BY 		A.SALE_YM
@@ -296,11 +278,8 @@
                             AND     A.STORE_CD      = #{storeCd}
                             AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
                             AND 	A.SALE_YM BETWEEN #{startDate} AND #{endDate}
-                            <if test='arrTableCd != null and arrTableCd.length >= 0'>
-                                AND A.STORE_CD||'||'||A.TBL_CD IN
-                                <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                                    #{item}
-                                </foreach>
+                            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
                             </if>
                             GROUP
                             BY 		A.SALE_YM
@@ -333,11 +312,8 @@
         AND     A.STORE_CD      = #{storeCd}
         AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND 	A.SALE_YM BETWEEN #{startDate} AND #{endDate}
-        <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND A.STORE_CD||'||'||A.TBL_CD IN
-            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
         </if>
         GROUP
         BY 		ROLLUP(A.STORE_CD || '||' ||A.TBL_CD)
@@ -368,11 +344,8 @@
         AND     A.STORE_CD      = #{storeCd}
         AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND 	A.SALE_YM BETWEEN #{startDate} AND #{endDate}
-        <if test='arrTableCd != null and arrTableCd.length >= 0'>
-            AND A.STORE_CD||'||'||A.TBL_CD IN
-            <foreach collection="arrTableCd" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND A.STORE_CD||'||'||A.TBL_CD IN (${storeCdQuery})
         </if>
         GROUP
         BY 		ROLLUP(A.STORE_CD || '||' ||A.TBL_CD)

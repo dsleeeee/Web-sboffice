@@ -9,6 +9,10 @@
  *
  * **************************************************************/
 
+function closePop(){
+  var scope = agrid.getScope("regStoreCtrl");
+  scope.close();
+}
 /**
  *  상품적용매장 그리드 생성
  */
@@ -68,6 +72,10 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 등록 매장 그리드 조회
   $scope.$on("regStoreCtrl", function(event, data) {
+    if(data !== null && data !== "" && data !== undefined) {
+      $("#lblCurr").text(data.curr);
+    }
+
     $scope.searchRegStore();
     // 등록상품 조회 후, 미등록상품 조회
     var noRegStoreGrid = agrid.getScope("noRegStoreCtrl");
@@ -304,6 +312,13 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#tblSearchAddShowReg").hide();
     }
   };
+
+  $scope.close= function () {
+    var scope = agrid.getScope("prodCtrl");
+    scope._pageView('prodCtrl', $("#lblCurr").text());
+  }
+
+
 }]);
 
 /**
@@ -395,7 +410,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.allSearch = function () {
     $scope.searchNoRegStore();
     var regStoreGrid = agrid.getScope("regStoreCtrl");
-    regStoreGrid.searchRegStore();
+    $scope._broadcast('regStoreCtrl');
   };
 }]);
 

@@ -194,9 +194,11 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
 	    	 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 	    	 return false;
 	    }
-	  if($("#cornerDayPeriodSelectStoreCd").val().split(",").length > 10) {
-		  $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 10개 선택 가능합니다.
-		  return false;
+	  if($scope.orgnFg === 'HQ') {
+		  if ($("#cornerDayPeriodSelectStoreCd").val().split(",").length > 10) {
+			  $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 10개 선택 가능합니다.
+			  return false;
+		  }
 	  }
 	  
     // 파라미터

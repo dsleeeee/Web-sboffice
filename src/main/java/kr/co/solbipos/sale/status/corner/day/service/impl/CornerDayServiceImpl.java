@@ -55,9 +55,9 @@ public class CornerDayServiceImpl implements CornerDayService {
 	    	String sQuery1 = "";
 	    	for(int i=0; i<cornerDayVO.getArrCornrCd().length; i++) {
 	    		String[] list = cornerDayVO.getArrCornrCd();
-	    		sQuery1 += ", NVL(SUM(CASE STORE_CD||'||'||CORNR_CD WHEN '" + list[i] + "' THEN TSDCP.REAL_SALE_AMT END),'0') REAL_SALE_AMT"+ i +"\n";
-	    		sQuery1 += ", NVL(SUM(CASE STORE_CD||'||'||CORNR_CD WHEN '" + list[i] + "' THEN TSDCP.TOT_SALE_QTY END),'0') SALE_QTY"+ i +"\n";
-	    	}
+	    		sQuery1 += ", NVL(SUM(CASE TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD WHEN '" + list[i] + "' THEN TSDCP.TOT_SALE_QTY END),'0') SALE_QTY"+ i +"\n";
+				sQuery1 += ", NVL(SUM(CASE TSDCP.STORE_CD||'||'||TSDCP.CORNR_CD WHEN '" + list[i] + "' THEN TSDCP.REAL_SALE_AMT END),'0') REAL_SALE_AMT"+ i +"\n";
+			}
 	    	cornerDayVO.setsQuery1(sQuery1);
     	}
     	return cornerDayMapper.getCornerDayList(cornerDayVO);

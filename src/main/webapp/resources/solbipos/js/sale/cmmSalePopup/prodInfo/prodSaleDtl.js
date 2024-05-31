@@ -55,12 +55,14 @@ app.controller('prodSaleDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
         else if(data.gubun == "dayPos") {
             params.saleDate = data.saleDate;
             params.posNo    = data.posNo;
-            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlDayList.sb", params, function() {}, false);
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getPosProdSaleDtlDayList.sb", params, function() {}, false);
         }
         // 기간별매출 > 요일별 탭 > 코너별 탭
         else if(data.gubun == "dayOfWeekCorner") {
-            params.yoil     = data.yoil;
-            params.cornrCd  = data.cornrCd;
+            params.yoil         = data.yoil;
+            params.cornrCd      = data.cornrCd;
+            params.startDate    = data.startDate;
+            params.endDate      = data.endDate;
             $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlDayOfWeekList.sb", params, function() {}, false);
         }
         // 기간별매출 > 월별 탭 > 과면세별,포스별,코너별 탭
@@ -75,7 +77,7 @@ app.controller('prodSaleDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
         else if(data.gubun == "monthPos") {
             params.yearMonth = data.yearMonth;
             params.posNo  = data.posNo;
-            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getProdSaleDtlMonthList.sb", params, function() {}, false);
+            $scope._inquiryMain("/sale/cmmSalePopup/prodInfo/prodSaleDtl/getPosProdSaleDtlMonthList.sb", params, function() {}, false);
         }
         // 기간별매출 > 일자별 탭 > 상품분류별 탭
         else if(data.gubun == "dayProdClass") {

@@ -46,6 +46,13 @@ public class TableSaleServiceImpl implements TableSaleService {
         tableSaleVO.setStartNum(startNum);
         tableSaleVO.setEndNum(endNum);
 
+        // 매장 array 값 세팅
+        if(!StringUtil.getOrBlank(tableSaleVO.getTableCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableSaleVO.getTableCd(), 3900));
+            tableSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
         // 날짜 추려내기
         List<DefaultMap<Object>> result2 =  tableSaleMapper.getSearchSaleDay(tableSaleVO);
 
@@ -72,14 +79,14 @@ public class TableSaleServiceImpl implements TableSaleService {
 
                 map = new DefaultMap<>();
             } else {
-                    // 공통정보 날짜,요일
-                    map.put("SALE_DATE", result.get(i).get("saleDate"));
-                    map.put("SALE_DAY", result.get(i).get("saleDay"));
-                    // 매장별 정보
-                    map.put(result.get(i).get("storeTblCd") + "_REAL_SALE_AMT", result.get(i).get("realSaleAmt"));
-                    map.put(result.get(i).get("storeTblCd") + "_SALE_CNT", result.get(i).get("saleCnt"));
-                    map.put(result.get(i).get("storeTblCd") + "_GUEST_CNT", result.get(i).get("guestCnt"));
-                }
+                // 공통정보 날짜,요일
+                map.put("SALE_DATE", result.get(i).get("saleDate"));
+                map.put("SALE_DAY", result.get(i).get("saleDay"));
+                // 매장별 정보
+                map.put(result.get(i).get("storeTblCd") + "_REAL_SALE_AMT", result.get(i).get("realSaleAmt"));
+                map.put(result.get(i).get("storeTblCd") + "_SALE_CNT", result.get(i).get("saleCnt"));
+                map.put(result.get(i).get("storeTblCd") + "_GUEST_CNT", result.get(i).get("guestCnt"));
+            }
         }
 
         return selectList;
@@ -94,6 +101,12 @@ public class TableSaleServiceImpl implements TableSaleService {
         /*if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
             tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
         }*/
+
+        if(!StringUtil.getOrBlank(tableSaleVO.getTableCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableSaleVO.getTableCd(), 3900));
+            tableSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
 
         List<DefaultMap<Object>> result =  tableSaleMapper.getTableDayList(tableSaleVO);
@@ -148,6 +161,11 @@ public class TableSaleServiceImpl implements TableSaleService {
         /*if(!StringUtil.getOrBlank(tableSaleVO.getStoreCd()).equals("")) {
             tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
         }*/
+        if(!StringUtil.getOrBlank(tableSaleVO.getTableCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableSaleVO.getTableCd(), 3900));
+            tableSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         List<DefaultMap<Object>> result =  tableSaleMapper.getTableDayOfWeekList(tableSaleVO);
 
@@ -196,6 +214,12 @@ public class TableSaleServiceImpl implements TableSaleService {
         tableSaleVO.setStartNum(startNum);
         tableSaleVO.setEndNum(endNum);
 
+        if(!StringUtil.getOrBlank(tableSaleVO.getTableCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableSaleVO.getTableCd(), 3900));
+            tableSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
         // 날짜 추려내기
         List<DefaultMap<Object>> result2 =  tableSaleMapper.getSearchSaleMonth(tableSaleVO);
 
@@ -243,6 +267,12 @@ public class TableSaleServiceImpl implements TableSaleService {
             tableSaleVO.setArrStoreCd(tableSaleVO.getStoreCd().split(","));
         }
 */
+        if(!StringUtil.getOrBlank(tableSaleVO.getTableCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableSaleVO.getTableCd(), 3900));
+            tableSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
         List<DefaultMap<Object>> result =  tableSaleMapper.getTableMonthList(tableSaleVO);
 
         List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
@@ -309,6 +339,12 @@ public class TableSaleServiceImpl implements TableSaleService {
     public List<DefaultMap<Object>> getDayListCnt(TableSaleVO tableSaleVO, SessionInfoVO sessionInfoVO) {
         tableSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+        if(!StringUtil.getOrBlank(tableSaleVO.getTableCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableSaleVO.getTableCd(), 3900));
+            tableSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
         return tableSaleMapper.getDayListCnt(tableSaleVO);
     }
 
@@ -316,6 +352,12 @@ public class TableSaleServiceImpl implements TableSaleService {
     @Override
     public List<DefaultMap<Object>> getMonthListCnt(TableSaleVO tableSaleVO, SessionInfoVO sessionInfoVO) {
         tableSaleVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(!StringUtil.getOrBlank(tableSaleVO.getTableCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(tableSaleVO.getTableCd(), 3900));
+            tableSaleVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
 
         return tableSaleMapper.getMonthListCnt(tableSaleVO);
     }

@@ -33,12 +33,7 @@
                 #{item}
             </foreach>
         </if>
-        <if test='startDate != null and startDate != ""'>
-           AND TSDCP.SALE_DATE >= #{startDate}
-        </if>
-        <if test='endDate != null and endDate != ""'>
-           AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
-        </if>
+           AND TSDCP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <![CDATA[
         GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
         ORDER BY TSDCP.SALE_DATE DESC
@@ -80,14 +75,13 @@
         COMMENTS : 코너별매출일자별 - 리스트를 조회한다.
     -->
     <select id="getCornerDayExcelList" parameterType="cornerDayVO" resultType="DefaultMap">
-       <![CDATA[
-       SELECT TSDCP.STORE_CD
-       		  , TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE
+        <![CDATA[
+        SELECT TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'YYYYMMDD'),'YYYY-MM-DD') SALE_DATE
               ,TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY') yoil
               ,NVL(SUM(TSDCP.REAL_SALE_AMT),'0') TOT_REAL_SALE_AMT
               ,NVL(SUM(TSDCP.TOT_SALE_QTY),'0') TOT_SALE_QTY
               ${sQuery1}
-       ]]>
+        ]]>
         <![CDATA[
         FROM TB_SL_DAILY_CORNR TSDCP
         WHERE TSDCP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -101,14 +95,9 @@
                 #{item}
             </foreach>
         </if>
-        <if test='startDate != null and startDate != ""'>
-           AND TSDCP.SALE_DATE >= #{startDate}
-        </if>
-        <if test='endDate != null and endDate != ""'>
-           AND TSDCP.SALE_DATE <![CDATA[<= ]]> #{endDate}
-        </if>
+        AND TSDCP.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <![CDATA[
-        GROUP BY TSDCP.STORE_CD, TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
+        GROUP BY TSDCP.SALE_DATE, TO_CHAR(TO_DATE(TSDCP.SALE_DATE, 'yyyymmdd'),'DY')
         ORDER BY TSDCP.SALE_DATE DESC
         ]]>
     </select>

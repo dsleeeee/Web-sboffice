@@ -104,4 +104,7 @@ public interface SaleComPopupMapper {
     
     /** 매출공통팝업 - 원 현금결제내역 - 영수증 팝업 조회 */
     List<DefaultMap<String>> selectBillRealRtnPopCash(SaleComPopupVO saleComPopupVO);
+
+    /** 매출공통팝업 - 월별 팝업 조회 */
+    List<DefaultMap<String>> getCornerMonthProdPopList(SaleComPopupVO saleComPopupVO);
 }

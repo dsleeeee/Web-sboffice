@@ -169,7 +169,49 @@ public class ProdInfoServiceImpl implements ProdInfoService {
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodInfoVO.getStoreCds(), 3900));
             prodInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+        System.out.println(prodInfoVO.getStartDate()+"시작날짜");
+        System.out.println(prodInfoVO.getEndDate()+"종료날짜");
 
         return prodInfoMapper.getProdSaleDtlDayOfWeekList(prodInfoVO);
+    }
+
+    /** 매출공통팝업 - 포스별 상품매출 상세내역 조회 */
+    @Override
+    public List<DefaultMap<Object>> getPosProdSaleDtlDayList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+
+        prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(prodInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodInfoVO.getStoreCds(), 3900));
+            prodInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return prodInfoMapper.getPosProdSaleDtlDayList(prodInfoVO);
+    }
+
+    @Override
+    public List<DefaultMap<Object>> getPosProdSaleDtlMonthList(ProdInfoVO prodInfoVO, SessionInfoVO sessionInfoVO) {
+        prodInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            prodInfoVO.setStoreCds(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(prodInfoVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodInfoVO.getStoreCds(), 3900));
+            prodInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return prodInfoMapper.getPosProdSaleDtlMonthList(prodInfoVO);
     }
 }

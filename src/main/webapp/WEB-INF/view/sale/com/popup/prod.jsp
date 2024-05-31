@@ -14,7 +14,7 @@
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body sc2" style="height: 360px;">
-      <div class="mt20 oh sb-select dkbr">
+      <div class="oh sb-select dkbr">
         <%-- 엑셀 다운로드 --%>
         <button class="btn_skyblue ml5 fr" id="btnExcel" ng-click="excelDownload()">
           <s:message code="cmm.excel.down" />

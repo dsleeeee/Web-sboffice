@@ -166,7 +166,7 @@ app.controller('dayPosCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                     var params      = {};
                     params.saleDate = selectedRow.saleDate.replaceAll("-","");
                     params.storeCd = $scope.srchStoreCd;
-                    params.gubun = "day";
+                    params.gubun = "dayPos";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
                 }

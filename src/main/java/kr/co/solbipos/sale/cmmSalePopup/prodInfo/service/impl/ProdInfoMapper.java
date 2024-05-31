@@ -28,4 +28,10 @@ public interface ProdInfoMapper {
 
     /** 매출공통팝업 - 상품매출 상세내역 조회 */
     List<DefaultMap<Object>> getProdSaleDtlDayOfWeekList(ProdInfoVO prodInfoVO);
+
+    /** 매출공통팝업 - 포스별 상품매출 상세내역 조회 */
+    List<DefaultMap<Object>> getPosProdSaleDtlDayList(ProdInfoVO prodInfoVO);
+
+    /** 매출공통팝업 - 포스별 상품매출 상세내역 조회 */
+    List<DefaultMap<Object>> getPosProdSaleDtlMonthList(ProdInfoVO prodInfoVO);
 }

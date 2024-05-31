@@ -304,17 +304,24 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope.registProdStore = function(prodInfo) {
     $scope.setProdInfo(prodInfo);
     $scope.currPageNo = $scope._getPagingInfo('curr');
-    $scope.prodStoreRegistLayer.show(true, function (s) {
-      var regStoreGrid = agrid.getScope('regStoreCtrl');
-      regStoreGrid.$apply(function(){
-        regStoreGrid._gridDataInit();
-      });
-      var noRegStoreGrid = agrid.getScope('noRegStoreCtrl');
-      noRegStoreGrid.$apply(function(){
-        noRegStoreGrid._gridDataInit();
-      });
-      $scope._pageView('prodCtrl', $scope.currPageNo);
-    });
+    $scope.prodStoreRegistLayer.show();
+    var params = {};
+    params.curr = $scope.currPageNo;
+    $scope._broadcast('regStoreCtrl',params);
+    // var regStoreGrid = agrid.getScope('regStoreCtrl');
+    // regStoreGrid._pageView('regStoreCtrl',1);
+    // $scope.prodStoreRegistLayer.show(true, function (s) {
+    //   var regStoreGrid = agrid.getScope('regStoreCtrl');
+    //   regStoreGrid._pageView('regStoreCtrl',1);
+    //   regStoreGrid.$apply(function(){
+    //     regStoreGrid._gridDataInit();
+    //   });
+    //   var noRegStoreGrid = agrid.getScope('noRegStoreCtrl');
+    //   noRegStoreGrid.$apply(function(){
+    //     noRegStoreGrid._gridDataInit();
+    //   });
+    //   $scope._pageView('prodCtrl', $scope.currPageNo);
+    // });
   };
 
   // 신규상품 등록
