@@ -106,7 +106,6 @@ $(document).ready(function () {
     return rootNodes;
   }
 
-  var searchCntFirst = 0; // 조회 결과 count alert
   // 즐겨찾기 관리 메뉴 생성
   function makeMenu() {
     // 조회 결과 count
@@ -252,13 +251,6 @@ $(document).ready(function () {
       });
 
       $("#_brmkLayer, #_brmkFullDimmed").show();
-
-      // 조회 결과 count alert
-      if(searchCntFirst > 0) {
-        s_alert.pop($("#lblBkmkSearchCnt").text() + "개 조회됨");
-      } else {
-        searchCntFirst++;
-      }
     },
     function (result) {
       s_alert.pop(result.message);

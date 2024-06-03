@@ -54,4 +54,4 @@
     </div>
     <!--//layer:For Center screen-->
 
-<script type="text/javascript" src="/resource/solbipos/js/application/layer/bkmk.js?ver=20240528.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/layer/bkmk.js?ver=20240603.01" charset="utf-8"></script>
