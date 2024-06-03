@@ -36,6 +36,9 @@ public class DisuseInfoBonavieVO extends PageVO {
     /** 매장코드 */
     private String storeCd;
 
+    /** 매장코드 */
+    private String srchStoreCd;
+
     /** 상품코드 */
     private String prodCd;
 
@@ -57,6 +60,10 @@ public class DisuseInfoBonavieVO extends PageVO {
     public String getStoreCd() { return storeCd; }
 
     public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+
+    public String getSrchStoreCd() { return srchStoreCd; }
+
+    public void setSrchStoreCd(String srchStoreCd) { this.srchStoreCd = srchStoreCd; }
 
     public String getProdCd() {
         return prodCd;

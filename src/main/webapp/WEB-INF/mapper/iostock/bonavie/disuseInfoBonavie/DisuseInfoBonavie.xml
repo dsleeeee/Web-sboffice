@@ -56,6 +56,9 @@
         <if test='storeCd != null and storeCd != ""'>
             AND B.STORE_CD = #{storeCd}
         </if>
+        <if test='srchStoreCd != null and srchStoreCd != ""'>
+            AND B.STORE_CD LIKE '%'||#{srchStoreCd}||'%'
+        </if>
         <if test='prodCd != null and prodCd != ""'>
             AND A.CD_ITEM LIKE '%'||#{prodCd}||'%'
         </if>
@@ -113,6 +116,9 @@
         AND A.DT_IO BETWEEN #{startDate} AND #{endDate}
         <if test='storeCd != null and storeCd != ""'>
             AND B.STORE_CD = #{storeCd}
+        </if>
+        <if test='srchStoreCd != null and srchStoreCd != ""'>
+            AND B.STORE_CD LIKE '%'||#{srchStoreCd}||'%'
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND A.CD_ITEM LIKE '%'||#{prodCd}||'%'

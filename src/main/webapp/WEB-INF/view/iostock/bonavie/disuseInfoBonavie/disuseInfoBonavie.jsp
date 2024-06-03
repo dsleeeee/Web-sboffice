@@ -41,7 +41,7 @@
                     <%-- 매장코드 --%>
                     <th><s:message code="cmm.storeCd" /></th>
                     <td>
-                        <input type="text" id="srchStoreCd" ng-model="storeCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+                        <input type="text" id="srchStoreCd" ng-model="srchStoreCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                     </td>
                 </c:if>
                 <c:if test="${sessionInfo.orgnFg == 'STORE'}">
@@ -182,4 +182,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/bonavie/disuseInfoBonavie/disuseInfoBonavie.js?ver=20240523.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/bonavie/disuseInfoBonavie/disuseInfoBonavie.js?ver=20240603.01" charset="utf-8"></script>
