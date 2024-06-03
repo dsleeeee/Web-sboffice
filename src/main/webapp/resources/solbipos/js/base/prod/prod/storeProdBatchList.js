@@ -70,6 +70,9 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
 
     // 조회 버튼 클릭 (_broadcast)
     $scope.$on("storeProdBatchListCtrl", function(event, data) {
+        if(data !== null && data !== "" && data !== undefined) {
+            $("#lblCurrBatch").text(data.curr);
+        }
         $scope.getStoreList();
         event.preventDefault();
     });
@@ -126,7 +129,9 @@ app.controller('storeProdBatchListCtrl', ['$scope', '$http', function ($scope, $
         $scope.storeProdBatchListLayer.hide();
 
         // 재조회
-        $scope._broadcast('prodCtrl');
+        // $scope._broadcast('prodCtrl');
+        var scope = agrid.getScope("prodCtrl");
+        scope._pageView('prodCtrl', $("#lblCurrBatch").text());
     };
 
 }]);

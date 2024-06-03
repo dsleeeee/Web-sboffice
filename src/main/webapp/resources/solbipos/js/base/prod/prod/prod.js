@@ -383,7 +383,12 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
   // 매장 리스트 팝업(매장 상품 일괄적용을 위한)
   $scope.storeProdBatchList = function() {
+    $scope.currPageNo = $scope._getPagingInfo('curr');
     $scope.storeProdBatchListLayer.show(true);
+    var params = {};
+    params.curr = $scope.currPageNo;
+    $scope._broadcast('storeProdBatchListCtrl',params);
+
   };
 
   // 상품분류정보 팝업

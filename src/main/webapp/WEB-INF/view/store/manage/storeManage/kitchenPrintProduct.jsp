@@ -67,7 +67,8 @@
           display-member-path="'prodNm'"
           child-items-path="'items'"
           show-checkboxes="true"
-          checked-items-changed="checkedItems(tvChk)">
+          checked-items-changed="checkedItems(tvChk)"
+          style="width:auto;">
         </wj-tree-view>
       </div>
     </div>
@@ -89,7 +90,8 @@
           display-member-path="'prodNm'"
           child-items-path="'items'"
           show-checkboxes="true"
-          checked-items-changed="checkedItems(tvChk)">
+          checked-items-changed="checkedItems(tvChk)"
+          style="width:auto;">
         </wj-tree-view>
       </div>
     </div>

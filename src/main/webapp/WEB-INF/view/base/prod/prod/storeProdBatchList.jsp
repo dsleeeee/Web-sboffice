@@ -13,6 +13,7 @@
         </div>
 
         <div class="wj-dialog-body">
+            <label id="lblCurrBatch" style="display: none"></label>
             <%-- 조회조건 --%>
             <div class="searchBar flddUnfld">
                 <a href="#" class="open fl"><s:message code="prod.title.storeList"/></a>
@@ -318,4 +319,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchList.js?ver=20240531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchList.js?ver=20240603.01" charset="utf-8"></script>

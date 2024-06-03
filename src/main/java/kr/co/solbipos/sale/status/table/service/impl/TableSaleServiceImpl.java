@@ -56,7 +56,7 @@ public class TableSaleServiceImpl implements TableSaleService {
         // 날짜 추려내기
         List<DefaultMap<Object>> result2 =  tableSaleMapper.getSearchSaleDay(tableSaleVO);
 
-        if(result2 != null) {
+        if(result2.size() != 0) {
             tableSaleVO.setStartDate((String) result2.get(0).get("lVal"));
             tableSaleVO.setEndDate((String) result2.get(0).get("fVal"));
         }
@@ -223,7 +223,7 @@ public class TableSaleServiceImpl implements TableSaleService {
         // 날짜 추려내기
         List<DefaultMap<Object>> result2 =  tableSaleMapper.getSearchSaleMonth(tableSaleVO);
 
-        if(result2 != null) {
+        if(result2.size() != 0) {
             tableSaleVO.setStartDate((String) result2.get(0).get("lVal"));
             tableSaleVO.setEndDate((String) result2.get(0).get("fVal"));
         }
