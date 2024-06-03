@@ -96,8 +96,10 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtIo"/>" binding="dtIo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                        <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdCompany"/>" binding="cdCompany" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPlant"/>" binding="cdPlant" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgr"/>" binding="noEgr" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -147,8 +149,10 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtIo"/>" binding="dtIo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                    <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdCompany"/>" binding="cdCompany" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPlant"/>" binding="cdPlant" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgr"/>" binding="noEgr" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
