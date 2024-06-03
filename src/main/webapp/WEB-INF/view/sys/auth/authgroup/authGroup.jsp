@@ -92,6 +92,7 @@
         <div class="updownSet oh mb10">
           <span id="groupInfo" class="fl bk lh30 "></span>
           <span class="fl bk lh30 ml5"><s:message code="authGroup.resrcInfo"/></span>
+          <button id="srchAll" class="btn_skyblue"><s:message code="authGroup.srchAll"/></button>
           <button id="srchAuthOrgn" class="btn_skyblue"><s:message code="authGroup.srchAuthOrgn"/></button>
           <button id="btnResrceSave" class="btn_skyblue"><s:message code="cmm.save"/></button>
         </div>
@@ -281,6 +282,7 @@
 
     <%-- 리스트 조회 --%>
     function search() {
+      $("#grpCdTree").text("");
       var param = {};
       param.grpNm = grpNm.text;
       param.useYn = useYn.selectedValue;
@@ -301,6 +303,7 @@
     });
     <%-- 권한 그룹  삭제 --%>
     $("#btnDel").click(function(e){
+      $("#grpCdTree").text("");
       for(var selected = 0; selected < grid.selectedItems.length; selected++ ) {
         var rows = grid.selectedRows[selected];
         var item = rows.dataItem;
@@ -316,6 +319,7 @@
     <%-- 권한 그룹 저장 --%>
     $("#btnSave").click(function(e){
 
+      $("#grpCdTree").text("");
       var paramArr = new Array();
       var gridView = grid.collectionView;
 
@@ -410,6 +414,11 @@
         return;
       }
 
+      if($("#grpCdTree").text() === "" || $("#grpCdTree").text() === null || $("#grpCdTree").text() === undefined){
+        s_alert.pop("<s:message code='authGroup.authGroup' /><s:message code='cmm.require.select' />");
+        return;
+      }
+
       var paramArr = new Array();
       for(var i = 0; i < view.itemsAdded.length; i++) {
         view.itemsAdded[i].status = 'I';
@@ -444,10 +453,18 @@
         s_alert.pop("<s:message code='authGroup.authGroup' /><s:message code='cmm.require.select' />");
         return;
       }
+      if($("#grpCdTree").text() === "" || $("#grpCdTree").text() === null || $("#grpCdTree").text() === undefined){
+        s_alert.pop("<s:message code='authGroup.authGroup' /><s:message code='cmm.require.select' />");
+        return;
+      }
 
       var param = {};
       param.authGrpCd = $("#grpCdTree").text();
-      param.authOrgn  = $("#authOrgnTree").text();
+      if($("#authOrgnTree").text() !== null && $("#authOrgnTree").text() !== "") {
+        param.authOrgn = $("#authOrgnTree").text();
+      }else{
+        param.authOrgn = '';
+      }
 
       if(param.authGrpCd != '') {
         tree.itemsSource = new Array();
@@ -462,6 +479,31 @@
                 });
       }
 
+    });
+
+    <%-- 전체조회 --%>
+    $("#srchAll").click(function(e){
+
+      if($("#grpCdTree").text() === "" || $("#grpCdTree").text() === null || $("#grpCdTree").text() === undefined){
+        s_alert.pop("<s:message code='authGroup.authGroup' /><s:message code='cmm.require.select' />");
+        return;
+      }
+
+      var param = {};
+      param.authGrpCd = $("#grpCdTree").text();
+
+      if(param.authGrpCd != '') {
+        tree.itemsSource = new Array();
+        tree.refresh();
+        $.postJSON("${baseUrl}" + "listResrce.sb", param, function(result) {
+                  tree.itemsSource = result.data.list;
+                  <%-- 트리에서 저장 예외관리 시 키로 사용--%>
+                  tree.currentAuthGrpCd = param.authGrpCd;
+                },
+                function(result) {
+                  s_alert.pop(result.message);
+                });
+      }
     });
 
     <%-- 예외관리 팝업 --%>

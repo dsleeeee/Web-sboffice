@@ -151,7 +151,7 @@
                FROM TB_WB_RESRCE_INFO A
               WHERE A.USE_YN = 'Y'
                 AND A.RESRCE_FG = 'M'
-                <if test='authOrgn != null and authOrgn != ""'>
+                <if test='authOrgn != null'>
                 AND REGEXP_LIKE(A.AUTH_ORGN , #{authOrgn})
                 </if>
               START WITH A.P_RESRCE = '000000'
