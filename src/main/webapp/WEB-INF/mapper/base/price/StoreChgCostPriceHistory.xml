@@ -110,10 +110,10 @@
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
-                                        FROM TB_MS_PRODUCT_CLASS
-                                        WHERE STORE_CD = #{storeCd}
-                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD   AND STORE_CD = #{storeCd}
+                                        FROM   TB_MS_PRODUCT_CLASS
+                                        WHERE  STORE_CD = tsssmacuh.STORE_CD
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tsssmacuh.STORE_CD
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tsssmacuh.STORE_CD
                                      )
         </if>
         <if test='prodCd != null and prodCd != ""'>
@@ -181,10 +181,10 @@
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
-                                        FROM TB_MS_PRODUCT_CLASS
-                                        WHERE STORE_CD = #{storeCd}
-                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD   AND STORE_CD = #{storeCd}
+                                        FROM   TB_MS_PRODUCT_CLASS
+                                        WHERE  STORE_CD = tmpcuh.STORE_CD
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmpcuh.STORE_CD
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tmpcuh.STORE_CD
                                     )
         </if>
         <if test='prodCd != null and prodCd != ""'>
@@ -246,11 +246,11 @@
         AND    tsssmacuh.PROC_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '999999'
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
-                                        SELECT PROD_CLASS_CD
-                                        FROM TB_MS_PRODUCT_CLASS
-                                        WHERE STORE_CD = #{storeCd}
-                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD   AND STORE_CD = #{storeCd}
+                                           SELECT PROD_CLASS_CD
+                                           FROM   TB_MS_PRODUCT_CLASS
+                                           WHERE  STORE_CD = tsssmacuh.STORE_CD
+                                           START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tsssmacuh.STORE_CD
+                                           CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = tsssmacuh.STORE_CD
                                      )
         </if>
         <if test='prodCd != null and prodCd != ""'>
