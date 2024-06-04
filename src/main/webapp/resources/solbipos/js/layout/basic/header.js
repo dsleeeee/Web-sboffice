@@ -20,8 +20,9 @@ $(".userId").click(function () {
 });
 
 $(".favClose").click(function () {
-  callPostJson("/menu/delFixMenu.sb", $(this).data("value"));
-  return false;
+  // 고정된 메뉴은 상단 메뉴에서 제거 안되게 주석처리 20240604
+  // callPostJson("/menu/delFixMenu.sb", $(this).data("value"));
+  // return false;
 });
 
 $(".histClose").click(function () {
