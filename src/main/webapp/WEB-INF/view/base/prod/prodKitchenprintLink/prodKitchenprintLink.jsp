@@ -238,7 +238,7 @@
   </div>
 </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/prodKitchenprintLink.js?ver=20201224.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/prodKitchenprintLink.js?ver=20240530.01" charset="utf-8"></script>
 
 <script type="text/javascript">
   var sysStatFg = ${ccu.getCommCode("005")};

@@ -94,16 +94,4 @@ app.controller('storeSaleCopyCtrl', ['$scope', '$http', function ($scope, $http)
       });
   };
 
-  // <-- //검색 호출 -->
-    // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.originalStoreShow = function () {
-        $scope._pageView('originalStoreCtrl', 1);
-    };
-
-    $scope.targetStoreShow = function () {
-        $scope._pageView('targetStoreCtrl', 1);
-    };
-
 }]);

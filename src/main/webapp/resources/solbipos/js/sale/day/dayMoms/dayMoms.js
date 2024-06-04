@@ -301,13 +301,6 @@ app.controller('dayMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     }
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.dayMomsStoreShow = function () {
-    $scope._broadcast('dayMomsStoreCtrl');
-  };
-
   // 엑셀 다운로드
   $scope.excelDownload = function () {
     if ($scope.flex.rows.length <= 0) {

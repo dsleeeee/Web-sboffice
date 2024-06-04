@@ -389,13 +389,6 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope._broadcast('mCoupnCalcSelectPosCtrl');
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.mCoupnCalcStoreShow = function () {
-        $scope._broadcast('mCoupnCalcStoreCtrl');
-    };
-
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
         if( $("#tblSearchAddShow").css("display") === 'none') {

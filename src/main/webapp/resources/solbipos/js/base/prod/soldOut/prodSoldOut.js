@@ -184,13 +184,6 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
     event.preventDefault();
   });
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.prodSoldOutStoreShow = function () {
-    $scope._broadcast('prodSoldOutStoreCtrl');
-  };
-
   // 상품선택 모듈 팝업 사용시 정의
   // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
   // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

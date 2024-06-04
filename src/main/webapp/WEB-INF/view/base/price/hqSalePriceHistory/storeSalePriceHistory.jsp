@@ -205,4 +205,4 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSalePriceHistory/storeSalePriceHistory.js?ver=20230111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/hqSalePriceHistory/storeSalePriceHistory.js?ver=20240530.01" charset="utf-8"></script>

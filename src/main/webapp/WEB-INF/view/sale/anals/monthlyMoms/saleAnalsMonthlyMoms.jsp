@@ -382,7 +382,7 @@
 	var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthlyMoms/saleAnalsMonthlyMoms.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthlyMoms/saleAnalsMonthlyMoms.js?ver=20240530.01" charset="utf-8"></script>
 
 <%-- 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/anals/monthlyMoms/saleAnalsMonthlyMomsStore.jsp">

@@ -82,7 +82,7 @@
 
     <%-- 그리드 --%>
     <div ng-controller="hqSalePriceExcelUploadCtrl">
-        <div class="mt10 oh sb-select dkbr">
+        <div class="mt10 oh">
             <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
                 <s:message code="cmm.excel.down" />
@@ -92,10 +92,10 @@
                 <s:message code="cmm.del" />
             </button>
             <%-- 저장 --%>
-            <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="save()">
+            <button class="btn_skyblue fr" id="btnSave" ng-click="save()">
                 <s:message code="cmm.save" />
             </button>
-            <div id="excelStoreSaveStore" class="fr mr10 oh bk" style="width: 200px; height:25px; display: none;">
+            <div id="excelStoreSaveStore" class="fr oh bk" style="width: 280px; height:25px;display: none;">
                 <%-- 매장선택 모듈 사용시 include --%>
                 <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
                     <jsp:param name="targetTypeFg" value="M"/>
@@ -103,7 +103,7 @@
                 </jsp:include>
                 <%--// 매장선택 모듈 사용시 include --%>
             </div>
-            <div class="sb-select w200px fr mr10">
+            <div class="sb-select w200px fr mr5">
                 <wj-combo-box
                         id="excelStoreSaveFg"
                         ng-model="excelStoreSaveFg"

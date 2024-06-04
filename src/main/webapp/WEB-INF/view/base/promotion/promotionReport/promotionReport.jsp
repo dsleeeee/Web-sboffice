@@ -464,7 +464,7 @@
   var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotionReport/promotionReport.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/promotionReport/promotionReport.js?ver=20240530.01" charset="utf-8"></script>
 
 <%-- 프로모션정산 상세 --%>
 <c:import url="/WEB-INF/view/base/promotion/promotionReport/promotionReportDtl.jsp">

@@ -164,26 +164,12 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
     return $scope.prodInfo;
   };
 
-  // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.searchStoreShow = function () {
-    $scope._broadcast('searchStoreCtrl');
-  };
-
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
     // 상품분류 팝업 핸들러 추가
     $scope.prodClassPopUpLayer.shown.addHandler(function (s) {
     });
   });
-
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.storeSalePriceStoreShow = function () {
-        $scope._broadcast('storeSalePriceStoreCtrl');
-    };
 
     // 조회조건/분할 엑셀다운로드
     $scope.excelDownload = function () {

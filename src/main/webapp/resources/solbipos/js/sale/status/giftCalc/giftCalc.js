@@ -287,13 +287,6 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
     };
     // <-- //검색 호출 -->
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.giftCalcStoreShow = function () {
-        $scope._broadcast('giftCalcStoreCtrl');
-    };
-
     //포스선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

@@ -195,5 +195,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayGnrlz/todayGnrlz.js?ver=20190122.09" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayGnrlz/todayGnrlz.js?ver=20240530.01" charset="utf-8"></script>
 

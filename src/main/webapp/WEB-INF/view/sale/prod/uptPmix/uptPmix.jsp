@@ -525,4 +525,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/uptPmix/uptPmix.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/uptPmix/uptPmix.js?ver=20240530.01" charset="utf-8"></script>

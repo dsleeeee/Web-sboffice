@@ -129,19 +129,21 @@
         </tbody>
     </table>
 
-    <div class="mt10 oh sb-select dkbr">
+    <div class="mt10 oh">
         <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                control="listScaleCombo"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-        </wj-combo-box>
+        <div class="fl sb-select">
+            <wj-combo-box
+                    class="w100px fl"
+                    id="listScaleBox"
+                    ng-model="listScale"
+                    control="listScaleCombo"
+                    items-source="_getComboData('listScaleBox')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
 
         <%-- 조회조건 엑셀다운로드 --%>
         <button class="btn_skyblue fr" ng-click="excelDownload()">
@@ -152,7 +154,7 @@
             <s:message code="cmm.save"/>
         </button>
 
-        <div id="storeSaveStore" class="fr mr10 oh bk" style="width: 200px; height:25px; display: none;">
+        <div id="storeSaveStore" class="fr oh bk" style="width: 280px; height:25px;display: none;">
             <%-- 매장선택 모듈 사용시 include --%>
             <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
                 <jsp:param name="targetTypeFg" value="M"/>
@@ -160,7 +162,7 @@
             </jsp:include>
             <%--// 매장선택 모듈 사용시 include --%>
         </div>
-        <div class="sb-select w200px fr mr10">
+        <div class="sb-select w200px fr mr5">
             <wj-combo-box
                     id="storeSaveFg"
                     ng-model="storeSaveFg"

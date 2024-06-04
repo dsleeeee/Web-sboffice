@@ -5,16 +5,17 @@
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>"/>
 <input type="text"
        id="<c:out value="${param.targetId}Nm"/>"
-       class="sb-input fl mr5"
+       class="sb-input fl"
        style="cursor:pointer; width:200px;"
-       value=<s:message code="cmm.all"/>
-       ng-click="<c:out value="${param.targetId}"/>Show()"
+       value=<c:choose><c:when test="${param.targetTypeFg == 'M'}"><s:message code="cmm.all"/></c:when><c:otherwise><s:message code="cmm.select"/></c:otherwise></c:choose>
+       ng-click="_pageView('<c:out value="${param.targetId}"/>Ctrl', 1)"
        readonly/>
+<button type="button" class="btn_skyblue fl" id="btnCancelStoreCd" style="margin-left: 5px;" onclick="delStore('<c:out value="${param.targetId}"/>', '<c:out value="${param.targetTypeFg}"/>')"><s:message code="cmm.selectCancel"/></button>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:630px;">
     <div class="wj-dialog wj-dialog-columns">
         <div class="wj-dialog-header wj-dialog-header-font">
-            > <s:message code="cmm.store.select"/>
+            <s:message code="cmm.store.select"/>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
@@ -414,6 +415,17 @@
         {"name": "판매가변경제한매장외", "value": "2"}
     ];
 
+    // 매장선택 초기화
+    function delStore(targetId, targetTypeFg){
+        $("#" + targetId+ "Cd").val("");
+
+        if(targetTypeFg == "M") {
+            $("#" + targetId + "Nm").val(messages["cmm.all"]);
+        }else{
+            $("#" + targetId + "Nm").val(messages["cmm.select"]);
+        }
+    }
+
     /** 매장선택 controller */
     app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
 
@@ -497,7 +509,7 @@
                     // 검색조건
                     $("#tblSearch1${param.targetId}").css("display", "");
 
-                } else if(targetTypeFg == "COMMON") {
+                } else if(companyFg == "COMMON") {
                     // 검색조건
                     $("#tblSearch1${param.targetId}").css("display", "none");
                 }

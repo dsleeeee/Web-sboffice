@@ -362,13 +362,6 @@ app.controller('byStoreChgCostPriceCtrl', ['$scope', '$http','$timeout', functio
         $scope.prodClassNm = "";
     };
 
-    // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.searchStoreShow = function () {
-        $scope._broadcast('searchStoreCtrl');
-    };
-
     // 일괄변경 테이블 숨김/보임
     $scope.changeShow = function () {
         if ($("#tblStoreChange").css("display") === 'none') {

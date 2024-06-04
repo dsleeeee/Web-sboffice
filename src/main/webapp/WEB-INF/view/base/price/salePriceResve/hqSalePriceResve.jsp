@@ -333,24 +333,26 @@
         </tbody>
     </table>
 
-    <div class="mt10 oh sb-select dkbr">
+    <div class="mt10 oh">
         <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                control="listScaleCombo"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="_initComboBox(s)">
-        </wj-combo-box>
+        <div class="fl sb-select">
+            <wj-combo-box
+                    class="w100px fl"
+                    id="listScaleBox"
+                    ng-model="listScale"
+                    control="listScaleCombo"
+                    items-source="_getComboData('listScaleBox')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
         <%-- 저장 --%>
         <button class="btn_skyblue fr" ng-click="addProdPrice()"><s:message code="salePriceResve.priceResve" /></button>
         <button class="btn_skyblue fr mr5" ng-click="saveProdPrice()"><s:message code="cmm.edit" /></button>
         <button class="btn_skyblue fr mr5" ng-click="delProdPrice()"><s:message code="cmm.del" /></button>
-        <div id="storeSaveStore" class="fr oh bk mr10" style="width: 200px; height:25px; display: none;">
+        <div id="storeSaveStore" class="fr oh bk" style="width: 280px; height:25px;display: none;">
             <%-- 매장선택 모듈 사용시 include --%>
             <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
                 <jsp:param name="targetTypeFg" value="M"/>
@@ -358,7 +360,7 @@
             </jsp:include>
             <%--// 매장선택 모듈 사용시 include --%>
         </div>
-        <div class="sb-select w200px fr mr10">
+        <div class="sb-select w200px fr mr5">
             <wj-combo-box
                     id="storeSaveFg"
                     ng-model="storeSaveFg"

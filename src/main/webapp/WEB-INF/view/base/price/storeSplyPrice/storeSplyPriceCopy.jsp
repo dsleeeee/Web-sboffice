@@ -58,4 +58,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/storeSplyPrice/storeSplyPriceCopy.js?ver=20240503.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/storeSplyPrice/storeSplyPriceCopy.js?ver=20240530.01" charset="utf-8"></script>

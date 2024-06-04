@@ -31,10 +31,6 @@ app.controller('prodKitchenprintLinkCtrl', ['$scope', '$http', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('prodKitchenprintLinkCtrl', $scope, $http, false));
 
-  $scope.prodKitchenprintStoreShow = function () {
-    $scope._broadcast('prodKitchenprintStoreCtrl');
-  };
-
   // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
   $scope.userStoreCd = gvStoreCd;
   $scope.btnShowFg = false;

@@ -418,4 +418,4 @@
   var arrPayCol = payCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/pay/payFg/payFg.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/pay/payFg/payFg.js?ver=20240530.01" charset="utf-8"></script>

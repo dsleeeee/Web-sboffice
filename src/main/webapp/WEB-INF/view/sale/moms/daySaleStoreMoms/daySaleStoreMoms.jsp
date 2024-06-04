@@ -10,7 +10,6 @@
 <div class="subCon">
 
     <div ng-controller="daySaleStoreMomsCtrl">
-        <%--<div class="searchBar flddUnfld">--%>
         <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
@@ -430,4 +429,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/daySaleStoreMoms/daySaleStoreMoms.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/daySaleStoreMoms/daySaleStoreMoms.js?ver=20240530.01" charset="utf-8"></script>

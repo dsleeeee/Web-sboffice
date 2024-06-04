@@ -4,12 +4,7 @@
 var app = agrid.getApp();
 
 app.controller('storeCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.todayGnrlzSelectStoreShow = function () {
-    $scope._broadcast('todayGnrlzSelectStoreCtrl');
-  };
+
 }]);
 
 /** 당일매출종합현황 그리드 controller */
@@ -53,14 +48,6 @@ app.controller('storeCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/today/todayGnrlz/todayGnrlz/list.sb", params, null, false);
-  };
-
-
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.todayGnrlzSelectStoreShow = function () {
-    $scope._broadcast('todayGnrlzSelectStoreCtrl');
   };
 
   // 매출종합 엑셀 다운로드

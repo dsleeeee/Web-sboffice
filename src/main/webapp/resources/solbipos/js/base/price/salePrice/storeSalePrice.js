@@ -275,13 +275,6 @@ $scope._setComboData("listScaleBox", gvListScaleBoxData);
     return $scope.prodInfo;
   };
 
-  // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.searchStoreShow = function () {
-    $scope._broadcast('searchStoreCtrl');
-  };
-
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
     // 상품분류 팝업 핸들러 추가
