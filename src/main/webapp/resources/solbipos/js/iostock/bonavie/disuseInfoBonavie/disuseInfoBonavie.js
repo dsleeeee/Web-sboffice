@@ -74,7 +74,7 @@ app.controller('disuseInfoBonavieCtrl', ['$scope', '$http', '$timeout', function
     // <-- //검색 호출 -->
 
     // 조회조건 엑셀다운로드
-    $scope.excelDownload = function (excelType) {
+    $scope.excelDownload = function () {
         var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
         var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
         var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
