@@ -8,9 +8,9 @@
 
 <!-- contents start -->
 <div class="subCon3" ng-controller="storeMonthCtrl">
+
     <div class="searchBar flddUnfld">
       <a href="#" class="open fl">${menuNm}</a>
-
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeMonthMainCtrlSrch')">
         <s:message code="cmm.search"/>
@@ -213,7 +213,7 @@
 	              <wj-flex-grid-column header="<s:message code="storeMonth.accStoreMoveOutAmt"/>"   binding="moveOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeMonth.accDisuse"/>"            binding="disuseQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeMonth.accAdj"/>"               binding="adjQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="storeMonth.accSetIn"/>"             binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeMonth.accSetIn"/>"             binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
 	              <wj-flex-grid-column header="<s:message code="storeMonth.endingStockQty"/>"       binding="closeQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeMonth.endingStockAmt"/>"       binding="closeAmt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -248,8 +248,7 @@
                             initialized="initGrid(s,e)"
                             is-read-only="true"
                             item-formatter="_itemFormatter"
-                            frozen-columns="6"
-                    >
+                            frozen-columns="6">
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="storeMonth.prodClassNm"/>"          binding="prodClassNm" width="200" align="left" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -281,21 +280,21 @@
                         <wj-flex-grid-column header="<s:message code="storeMonth.accStoreMoveOutAmt"/>"   binding="moveOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeMonth.accDisuse"/>"            binding="disuseQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeMonth.accAdj"/>"               binding="adjQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="storeMonth.accSetIn"/>"             binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeMonth.accSetIn"/>"             binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
                         <wj-flex-grid-column header="<s:message code="storeMonth.endingStockQty"/>"       binding="closeQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeMonth.endingStockAmt"/>"       binding="closeAmt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-
                     </wj-flex-grid>
                 </div>
             </div>
             <%--//엑셀 리스트--%>
 	    </div>
     </div>
+
 </div>
 <!-- //contents end -->
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/storemonth/storeMonth.js?ver=20220803.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/storemonth/storeMonth.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
