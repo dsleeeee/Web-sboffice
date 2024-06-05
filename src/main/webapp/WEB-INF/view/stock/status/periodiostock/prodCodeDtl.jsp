@@ -146,8 +146,9 @@
     </div>
   </div>
 </wj-popup>
+
 <script type="text/javascript">
 	var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/prodCodeDtl.js?ver=20200319.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/prodCodeDtl.js?ver=20240605.01" charset="utf-8"></script>

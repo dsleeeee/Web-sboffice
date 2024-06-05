@@ -164,7 +164,7 @@ app.controller('prodCodeDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 		      }	
 		  	  
 		  $scope._inquirySub("/stock/com/popup/cmmQtyDtl/getCmmProdCodeDtlList.sb", params);
-	  }
+	  };
 	  
 	  //엑셀 다운로드
 	  $scope.excelDownload = function () {
@@ -181,7 +181,7 @@ app.controller('prodCodeDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
 	        includeColumns      : function (column) {
 	          return column.visible;
 	        }
-	      }, $(menuNm).selector + '_' + messages["periodIostock.iostockDetail"]+'_'+getToday()+'.xlsx', function () {
+	      }, messages["periodIostock.iostockDetail"]+'_'+getToday()+'.xlsx', function () {
 	        $timeout(function () {
 	          $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
 	        }, 10);
