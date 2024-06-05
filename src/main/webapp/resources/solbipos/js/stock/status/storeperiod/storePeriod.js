@@ -281,7 +281,7 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 			for(var i=7; i<length; i++){
 				if(columns[i].binding.slice(-3) == 'Tot'){
 					columns[i].visible = false;
-				}else if(columns[i].binding != 'prodClassNm'){
+				}else if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 					columns[i].visible = true;
 				}
 			}
@@ -290,14 +290,14 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 				if(columns[i].binding != 'poUnitQty'){
 					if(columns[i].binding.slice(-3) == 'Qty'){
 						columns[i].visible = false;
-					}else if(columns[i].binding != 'prodClassNm'){
+					}else if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 						columns[i].visible = true;
 					}
 				}
 			}
 		}else{ //수량 + 금액
 			for(var i=0; i<length; i++){
-				if(columns[i].binding != 'prodClassNm'){
+				if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 					columns[i].visible = true;
 				}
 			}
@@ -443,7 +443,7 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 			for(var i=0; i<length; i++){
 				if(columns[i].binding.slice(-3) == 'Tot'){
 					columns[i].visible = false;
-				}else if(columns[i].binding != 'prodClassNm'){
+				}else if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 					columns[i].visible = true;
 				}
 			}
@@ -452,14 +452,14 @@ app.controller('storePeriodExcelCtrl', ['$scope', '$http', '$timeout', function 
 				if(columns[i].binding != 'poUnitQty'){
 					if(columns[i].binding.slice(-3) == 'Qty'){
 						columns[i].visible = false;
-					}else if(columns[i].binding != 'prodClassNm'){
+					}else if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 						columns[i].visible = true;
 					}
 				}
 			}
 		}else{ //수량 + 금액
 			for(var i=0; i<length; i++){
-				if(columns[i].binding != 'prodClassNm'){
+				if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 					columns[i].visible = true;
 				}
 			}
