@@ -199,11 +199,13 @@ app.controller('dailyIoStockCtrl', ['$scope', '$http', '$timeout', function ($sc
 
 	for(var c = 0; c < columns.length; c++) {
 		var substr = columns[c].binding.slice(-3);
-		if (substr === "Qty") { // 수량
-			$scope.flex.columns[c].visible = amtFg;
-		} else if (substr === "Tot") { // 금액
-			$scope.flex.columns[c].visible = qtyFg;
-		}
+        if(columns[c].binding != 'setInQty'){
+            if (substr === "Qty") { // 수량
+                $scope.flex.columns[c].visible = amtFg;
+            } else if (substr === "Tot") { // 금액
+                $scope.flex.columns[c].visible = qtyFg;
+            }
+        }
 	}
   };
 
@@ -397,11 +399,13 @@ app.controller('dailyIoStockExcelCtrl', ['$scope', '$http', '$timeout', function
 
 	for(var c = 0; c < columns.length; c++) {
 		var substr = columns[c].binding.slice(-3);
-		if (substr === "Qty") { // 수량
-			$scope.excelFlex.columns[c].visible = amtFg;
-		} else if (substr === "Tot") { // 금액
-			$scope.excelFlex.columns[c].visible = qtyFg;
-		}
+        if(columns[c].binding != 'setInQty') {
+            if (substr === "Qty") { // 수량
+                $scope.excelFlex.columns[c].visible = amtFg;
+            } else if (substr === "Tot") { // 금액
+                $scope.excelFlex.columns[c].visible = qtyFg;
+            }
+        }
 	}
   };
 

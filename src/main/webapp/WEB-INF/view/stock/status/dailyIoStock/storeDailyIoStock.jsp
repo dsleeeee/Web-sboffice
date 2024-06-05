@@ -104,7 +104,7 @@
           <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"  binding="moveOutTot"    width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyIostock.col8"/>"       binding="disuseQty"     width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyIostock.col9"/>"       binding="adjQty"        width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dailyIostock.col10"/>"      binding="setInQty"      width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dailyIostock.col10"/>"      binding="setInQty"      width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
 
       </wj-flex-grid>
@@ -157,7 +157,7 @@
           <wj-flex-grid-column header="<s:message code="dailyIostock.ioOccrTot"/>"  binding="moveOutTot"    width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyIostock.col8"/>"       binding="disuseQty"     width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dailyIostock.col9"/>"       binding="adjQty"        width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dailyIostock.col10"/>"      binding="setInQty"      width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dailyIostock.col10"/>"      binding="setInQty"      width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
       </div>
@@ -167,7 +167,7 @@
 </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/dailyIoStock/storeDailyIoStock.js?ver=20220803.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/dailyIoStock/storeDailyIoStock.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/stock/com/popup/dailyIoStockInfo/dailyIoStockInfo.jsp">
