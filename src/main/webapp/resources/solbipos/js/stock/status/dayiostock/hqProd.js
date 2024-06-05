@@ -369,13 +369,13 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
     	  for(var i=6; i<length; i++){
     		  if(columns[i].binding.slice(-3) == 'Tot'){
     			  columns[i].visible = false;
-    		  }else if(columns[i].binding.slice(-3) == 'Qty'){
+    		  }else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty' && columns[i].binding != 'saleVendrOrderQty' && columns[i].binding != 'saleVendrOrderTot' && columns[i].binding != 'saleVendrRtnQty' && columns[i].binding != 'saleVendrRtnTot'){
     			  columns[i].visible = true;
     		  }
           }
       }else if(check == '2'){ // 금액
     	  for(var i=6; i<length; i++){
-    		  if(columns[i].binding != 'poUnitQty'){
+    		  if(columns[i].binding != 'poUnitQty' && columns[i].binding != 'setInQty' && columns[i].binding != 'saleVendrOrderQty' && columns[i].binding != 'saleVendrOrderTot' && columns[i].binding != 'saleVendrRtnQty' && columns[i].binding != 'saleVendrRtnTot'){
 				  if(columns[i].binding.slice(-3) == 'Qty'){
 	    			  columns[i].visible = false;
 	    		  }else if(columns[i].binding.slice(-3) == 'Tot'){
@@ -385,7 +385,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
           }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
-    		  if(columns[i].binding != 'prodClassNm'){
+    		  if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty' && columns[i].binding != 'saleVendrOrderQty' && columns[i].binding != 'saleVendrOrderTot' && columns[i].binding != 'saleVendrRtnQty' && columns[i].binding != 'saleVendrRtnTot'){
     			  columns[i].visible = true;
     		  }
           }
@@ -587,14 +587,14 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 			  var colLength = columns[i].binding.length;
 			  if(columns[i].binding.slice(-3) == 'Tot'){
 				  columns[i].visible = false;
-			  }else if(columns[i].binding.slice(-3) == 'Qty'){
+			  }else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty' && columns[i].binding != 'saleVendrOrderQty' && columns[i].binding != 'saleVendrOrderTot' && columns[i].binding != 'saleVendrRtnQty' && columns[i].binding != 'saleVendrRtnTot'){
 				  columns[i].visible = true;
 			  }
 		  }
 	  }else if(check == '2'){ // 금액
 		  for(var i=6; i<length; i++){
 			  var colLength = columns[i].binding.length;
-			  if(columns[i].binding != 'poUnitQty'){
+			  if(columns[i].binding != 'poUnitQty' && columns[i].binding != 'setInQty' && columns[i].binding != 'saleVendrOrderQty' && columns[i].binding != 'saleVendrOrderTot' && columns[i].binding != 'saleVendrRtnQty' && columns[i].binding != 'saleVendrRtnTot'){
 				  if(columns[i].binding.slice(-3) == 'Qty'){
 					  columns[i].visible = false;
 				  }else if(columns[i].binding.slice(-3) == 'Tot'){
@@ -604,7 +604,7 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 		  }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
-    		  if(columns[i].binding != 'prodClassNm'){
+    		  if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty' && columns[i].binding != 'saleVendrOrderQty' && columns[i].binding != 'saleVendrOrderTot' && columns[i].binding != 'saleVendrRtnQty' && columns[i].binding != 'saleVendrRtnTot'){
     			  columns[i].visible = true;
     		  }
           }
