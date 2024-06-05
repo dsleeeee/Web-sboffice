@@ -380,7 +380,7 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     		  var colLength = columns[i].binding.length;
 			  if(columns[i].binding.slice(-3) == 'Tot'){
     			  columns[i].visible = false;
-    		  }else if(columns[i].binding != 'prodClassNm'){
+    		  }else if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
     			  columns[i].visible = true;
     		  }
           }
@@ -390,14 +390,14 @@ app.controller('storeDayMainCtrl', ['$scope', '$http', '$timeout', function ($sc
     		  if(columns[i].binding != 'poUnitQty'){
 				  if(columns[i].binding.slice(-3) == 'Qty'){
 	    			  columns[i].visible = false;
-	    		  }else if(columns[i].binding != 'prodClassNm'){
+	    		  }else if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 	    			  columns[i].visible = true;
 	    		  }
     		  }
           }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
-    		  if(columns[i].binding != 'prodClassNm'){
+    		  if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
     			  columns[i].visible = true;
     		  }
           }
@@ -538,7 +538,7 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    		  var colLength = columns[i].binding.length;
 				  if(columns[i].binding.slice(-3) == 'Tot'){
 	    			  columns[i].visible = false;
-	    		  }else if(columns[i].binding != 'prodClassNm'){
+	    		  }else if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 	    			  columns[i].visible = true;
 	    		  }
 	          }
@@ -548,14 +548,14 @@ app.controller('storeDayExcelCtrl', ['$scope', '$http', '$timeout', function ($s
 	    		  if(columns[i].binding != 'poUnitQty'){
 					  if(columns[i].binding.slice(-3) == 'Qty'){
 		    			  columns[i].visible = false;
-		    		  }else if(columns[i].binding != 'prodClassNm'){
+		    		  }else if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 		    			  columns[i].visible = true;
 		    		  }
 	    		  }
 	          }
 	      }else{ //수량 + 금액
 	    	  for(var i=0; i<length; i++){
-	    		  if(columns[i].binding != 'prodClassNm'){
+	    		  if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
 	    			  columns[i].visible = true;
 	    		  }
 	          }

@@ -193,7 +193,7 @@
 	              <wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveOutAmt"/>"	binding="moveOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accDisuse"/>"      	binding="disuseQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="storeDay.accAdj"/>"         	binding="adjQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="storeDay.accSetIn"/>"       	binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="storeDay.accSetIn"/>"       	binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
 	              <wj-flex-grid-column header="<s:message code="cmm.search.date"/>"       	    binding="startDate" width="60" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
 	            </wj-flex-grid>
@@ -253,7 +253,7 @@
 					<wj-flex-grid-column header="<s:message code="storeDay.accStoreMoveOutAmt"/>"	binding="moveOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="storeDay.accDisuse"/>"      		binding="disuseQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="storeDay.accAdj"/>"         		binding="adjQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="storeDay.accSetIn"/>"       		binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="storeDay.accSetIn"/>"       		binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 	            </wj-flex-grid>
 	        </div>
 	    </div>
@@ -261,7 +261,7 @@
 </div>
 <!-- //contents end -->
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/storeday/storeDay.js?ver=20220803.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/storeday/storeDay.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
