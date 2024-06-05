@@ -179,7 +179,7 @@
 	       <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	       <wj-flex-grid-column header="<s:message code="periodIostock.disuse"/>"		binding="disuseQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	       <wj-flex-grid-column header="<s:message code="periodIostock.adj"/>"			binding="adjQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="periodIostock.setIn"/>"		binding="setInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+	       <wj-flex-grid-column header="<s:message code="periodIostock.setIn"/>"		binding="setInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
 			<wj-flex-grid-column header="<s:message code="cmm.search.date"/>"	binding="startDate"		width="60"		align="center"	is-read-only="true" visible="false"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="cmm.search.date"/>"	binding="endDate"		width="60"		align="center"	is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -220,8 +220,8 @@
 			<wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="left"	is-read-only="true"	visible="false"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"		binding="prodCd"		width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="left"	is-read-only="true"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"	binding="poUnitQty"		width="50"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"	binding="poUnitFgNm"	width="50"		align="center"	is-read-only="true" ></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"		binding="poUnitQty"		width="50"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"		binding="poUnitFgNm"	width="50"		align="center"	is-read-only="true" ></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"		binding="barcdCd"		width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>
 
 			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -239,9 +239,9 @@
 			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveInTot"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="disuseQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="adjQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="setInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="periodIostock.disuse"/>"		binding="disuseQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="periodIostock.adj"/>"			binding="adjQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+			<wj-flex-grid-column header="<s:message code="periodIostock.setIn"/>"		binding="setInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
 		</wj-flex-grid>
       </div>
@@ -249,7 +249,7 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/storeProd.js?ver=20220803.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/storeProd.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
