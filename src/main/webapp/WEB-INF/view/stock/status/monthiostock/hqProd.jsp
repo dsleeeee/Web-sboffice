@@ -270,8 +270,6 @@
 
                         <wj-flex-grid-column header="<s:message code="monthIostock.endingStockQty"/>"     binding="closeQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="monthIostock.endingStockAmt"/>"     binding="closeAmt" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-
-                        <wj-flex-grid-column header="<s:message code="cmm.search.date"/>"	binding="startDate"		width="60"		align="center"	is-read-only="true" visible="false"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
