@@ -591,10 +591,12 @@ app.controller('monthIostockExcelCtrl', ['$scope', '$http', '$timeout', function
 		if(check == '1'){ // 수량
 			for(var i=6; i<length; i++){
 				var colLength = columns[i].binding.length;
-				if(columns[i].binding.slice(-3) == 'Tot'){
-					columns[i].visible = false;
-				}else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty' && columns[i].binding != 'saleVendrOrderQty' && columns[i].binding != 'saleVendrOrderTot' && columns[i].binding != 'saleVendrRtnQty' && columns[i].binding != 'saleVendrRtnTot'){
-					columns[i].visible = true;
+				if(columns[i].binding != 'setInQty' && columns[i].binding != 'saleVendrOrderQty' && columns[i].binding != 'saleVendrOrderTot' && columns[i].binding != 'saleVendrRtnQty' && columns[i].binding != 'saleVendrRtnTot') {
+					if (columns[i].binding.slice(-3) == 'Tot') {
+						columns[i].visible = false;
+					} else if (columns[i].binding.slice(-3) == 'Qty') {
+						columns[i].visible = true;
+					}
 				}
 			}
 		}else if(check == '2'){ // 금액
