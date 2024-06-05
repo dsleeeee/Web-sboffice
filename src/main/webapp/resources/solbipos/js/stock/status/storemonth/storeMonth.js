@@ -373,7 +373,7 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
     		  if(columns[i].binding != 'poUnitQty'){
     			  if(columns[i].binding.slice(-3) == 'Tot' || columns[i].binding.slice(-3) == 'Amt'){
         			  columns[i].visible = false;
-        		  }else if(columns[i].binding.slice(-3) == 'Qty'){
+        		  }else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty'){
         			  columns[i].visible = true;
         		  }
     		  }
@@ -384,7 +384,7 @@ app.controller('storeMonthMainCtrl', ['$scope', '$http', '$timeout', function ($
     		  if(columns[i].binding != 'poUnitQty'){
     			  if(columns[i].binding.slice(-3) == 'Qty'){
         			  columns[i].visible = false;
-        		  }else if(columns[i].binding.slice(-3) == 'Tot' || columns[i].binding.slice(-3) == 'Amt'){
+        		  }else if(columns[i].binding.slice(-3) == 'Tot' || columns[i].binding.slice(-3) == 'Amt' && columns[i].binding != 'setInQty'){
         			  columns[i].visible = true;
         		  }
     		  }
@@ -601,7 +601,7 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 				var colLength = columns[i].binding.length;
 				if(columns[i].binding.slice(-3) == 'Tot'){
 					columns[i].visible = false;
-				}else if(columns[i].binding.slice(-3) == 'Qty'){
+				}else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty'){
 					columns[i].visible = true;
 				}
 			}
@@ -611,7 +611,7 @@ app.controller('storeMonthMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 				if(columns[i].binding != 'poUnitQty'){
 					if(columns[i].binding.slice(-3) == 'Qty'){
 						columns[i].visible = false;
-					}else if(columns[i].binding.slice(-3) == 'Tot'){
+					}else if(columns[i].binding.slice(-3) == 'Tot' && columns[i].binding != 'setInQty'){
 						columns[i].visible = true;
 					}
 				}
