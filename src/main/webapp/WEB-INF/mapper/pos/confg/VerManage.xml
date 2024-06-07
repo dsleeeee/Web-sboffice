@@ -270,90 +270,111 @@
     -->
     <select id="srchStoreList" parameterType="applcStoreVO" resultType="DefaultMap">
         /* USE : VerManageMapper.srchStoreList */
-        SELECT tms.STORE_CD,
-               tms.SYS_STAT_FG,
-               tms.VAN_CD,
-               tms.CLS_FG,
-               tms.STORE_NM,
-               tho.HQ_OFFICE_CD,
-               tho.HQ_OFFICE_NM,
-               tcp.LAST_VER_SER_NO,
-               tmp.POS_CNT,
-               NVL(tcpvs.DIFF_VER_CNT, 0) AS DIFF_VER_CNT,
-               tms.ADDR
-          FROM TB_MS_STORE tms,
-               TB_HQ_OFFICE tho,
-               (
-                SELECT STORE_CD,
-                       MAX(VER_SER_NO) AS  LAST_VER_SER_NO
-                  FROM TB_CM_POS_VERSN_STORE
-                 GROUP BY STORE_CD
-                ) tcp,
-               (
-                SELECT A.STORE_CD,
-                       COUNT(A.VER_SER_NO) AS DIFF_VER_CNT
-                  FROM (
-                            SELECT tcpvs.STORE_CD,
-                                   tcpvs.VER_SER_NO,
-                                   tcpv.PROG_FG
-                            FROM TB_CM_POS_VERSN_STORE tcpvs,
-                                 TB_CM_POS_VERSN tcpv
-                            WHERE 1=1
-                            AND tcpv.VER_SER_NO (+)= tcpvs.VER_SER_NO
-                            GROUP BY  tcpvs.STORE_CD,
-                                      tcpvs.VER_SER_NO,
-                                      tcpv.PROG_FG
-                       ) A
-                 WHERE A.PROG_FG != #{progFg}
-                 GROUP
-                    BY A.STORE_CD
-               ) tcpvs,
-               (
-               SELECT STORE_CD, COUNT(POS_NO) AS POS_CNT
-                 FROM TB_MS_POS
-                WHERE USE_YN ='Y'
-                GROUP by STORE_CD
-               ) tmp
-        <if test='searchSatus != null and searchSatus == "N"'>
-               ,(
-                SELECT STORE_CD
-                  FROM TB_MS_STORE_ENVST
-                 WHERE ENVST_CD = '1014'
-                   AND ENVST_VAL = #{progFg}
-               )tmse
+        SELECT  tms.STORE_CD
+        ,       tms.SYS_STAT_FG
+        ,       tms.VAN_CD
+        ,       tms.CLS_FG
+        ,       tms.STORE_NM
+        ,       tho.HQ_OFFICE_CD
+        ,       tho.HQ_OFFICE_NM
+        ,       tcp.LAST_VER_SER_NO
+        ,       tmp.POS_CNT
+        ,       NVL(tcpvs.DIFF_VER_CNT, 0) AS DIFF_VER_CNT
+        ,       tms.ADDR
+        ,       DECODE(tcpvs2.LAST_START_DT, NULL, '-', TO_CHAR(TO_DATE(tcpvs2.LAST_START_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI')) AS LAST_START_DT
+        FROM    TB_MS_STORE tms
+        ,       TB_HQ_OFFICE tho
+        ,       (
+                    SELECT  STORE_CD
+                    ,       MAX(VER_SER_NO) AS  LAST_VER_SER_NO
+                    FROM    TB_CM_POS_VERSN_STORE
+                    GROUP
+                    BY      STORE_CD
+                ) tcp
+        ,       (
+                    SELECT  A.STORE_CD
+                    ,       COUNT(A.VER_SER_NO) AS DIFF_VER_CNT
+                    FROM    (
+                                SELECT  tcpvs.STORE_CD
+                                ,       tcpvs.VER_SER_NO
+                                ,       tcpv.PROG_FG
+                                FROM    TB_CM_POS_VERSN_STORE tcpvs
+                                ,       TB_CM_POS_VERSN tcpv
+                                WHERE   1=1
+                                AND     tcpv.VER_SER_NO (+)= tcpvs.VER_SER_NO
+                                GROUP
+                                BY      tcpvs.STORE_CD
+                                ,       tcpvs.VER_SER_NO
+                                ,       tcpv.PROG_FG
+                            ) A
+                    WHERE   A.PROG_FG != #{progFg}
+                    GROUP
+                    BY      A.STORE_CD
+                ) tcpvs
+        ,       (
+                    SELECT  STORE_CD
+                    ,       COUNT(POS_NO) AS POS_CNT
+                    FROM    TB_MS_POS
+                    WHERE   USE_YN ='Y'
+                    GROUP
+                    by      STORE_CD
+                ) tmp
+                <if test='searchSatus != null and searchSatus == "N"'>
+        ,       (
+                    SELECT  STORE_CD
+                    FROM    TB_MS_STORE_ENVST
+                    WHERE   ENVST_CD = '1014'
+                    AND     ENVST_VAL = #{progFg}
+                ) tmse
+                </if>
+        ,       (
+                    SELECT 	STORE_CD
+                    ,       MAX(DN_START_DT) AS  LAST_START_DT
+                    ,       VER_SER_NO
+                    FROM 	TB_CM_POS_VERSN_STORE
+                    WHERE   VER_SER_NO = #{verSerNo}
+                    GROUP
+                    BY 	    STORE_CD
+                    ,       VER_SER_NO
+                ) tcpvs2
+        WHERE   tho.HQ_OFFICE_CD    = tms.HQ_OFFICE_CD
+        AND     tmp.STORE_CD        = tms.STORE_CD
+        <if test='searchSatus != null and searchSatus == "Y"'>
+            AND tms.STORE_CD IN (
+                                    SELECT  STORE_CD
+                                    FROM    TB_CM_POS_VERSN_STORE
+                                    WHERE   VER_SER_NO = #{verSerNo}
+                                )
         </if>
-         WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-           AND tmp.STORE_CD = tms.STORE_CD
-      <if test='searchSatus != null and searchSatus == "Y"'>
-           AND tms.STORE_CD IN (SELECT STORE_CD
-                                  FROM TB_CM_POS_VERSN_STORE
-                                 WHERE VER_SER_NO = #{verSerNo} )
-      </if>
-      <if test='searchSatus != null and searchSatus == "N"'>
-           AND tms.STORE_CD NOT IN (SELECT STORE_CD
-                                      FROM TB_CM_POS_VERSN_STORE
-                                     WHERE VER_SER_NO = #{verSerNo} )
-          AND tmse.STORE_CD = tms.STORE_CD
-      </if>
-           AND tcp.STORE_CD (+)= tms.STORE_CD
-           AND tcpvs.STORE_CD (+)= tms.STORE_CD
+        <if test='searchSatus != null and searchSatus == "N"'>
+            AND tms.STORE_CD NOT IN (
+                                        SELECT  STORE_CD
+                                        FROM    TB_CM_POS_VERSN_STORE
+                                        WHERE   VER_SER_NO = #{verSerNo}
+                                    )
+            AND tmse.STORE_CD = tms.STORE_CD
+        </if>
+        AND     tcp.STORE_CD    (+) = tms.STORE_CD
+        AND     tcpvs.STORE_CD  (+) = tms.STORE_CD
+        AND     tcpvs.STORE_CD  (+) = tms.STORE_CD
+        AND     tcpvs2.STORE_CD (+) = tms.STORE_CD
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-           AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
         </if>
         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-           AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
+            AND tho.HQ_OFFICE_NM LIKE '%'|| #{hqOfficeNm} ||'%'
         </if>
         <if test='orgnFg != null and orgnFg.toString == "AGENCY"'>
             AND tms.AGENCY_CD = #{agencyCd}
         </if>
         <if test='storeCd != null and storeCd != ""'>
-           AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
+            AND tms.STORE_CD LIKE '%'||  #{storeCd}||'%'
         </if>
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tms.STORE_CD IN (${storeCdQuery})
         </if>
         <if test='storeNm != null and storeNm != ""'>
-           AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
+            AND tms.STORE_NM LIKE '%'|| #{storeNm} ||'%'
         </if>
         <if test='sysStatFg != null and sysStatFg != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg}
@@ -361,7 +382,9 @@
         <if test='addr != null and addr != ""'>
             AND tms.ADDR LIKE '%'|| #{addr} ||'%'
         </if>
-        ORDER BY HQ_OFFICE_CD, STORE_CD
+        ORDER
+        BY      HQ_OFFICE_CD
+        ,       STORE_CD
     </select>
 
     <!-- 버전 적용 매장 등록   -->
@@ -380,6 +403,7 @@
                 #{regId},
                 #{modDt},
                 #{modId},
+                #{resveDate},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }
@@ -410,6 +434,72 @@
            AND STORE_CD = #{storeCd}
         ]]>
     </delete>
+
+    <!-- 포스버전정보 상세내역 조회  -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_INFO
+        PARAM    :
+        COMMENTS : 포스버전에 상세내역을 조회힌다.
+    -->
+    <select id="getPatchInfo" parameterType="verInfoVO" resultType="java.lang.String">
+        /* USE : VerManageMapper.getPatchInfo */
+        SELECT 	VER_SER_PATCH_INFO
+        FROM 	TB_CM_POS_VERSN_INFO
+        WHERE 	VER_SER_NO = #{verSerNo}
+    </select>
+
+    <!-- 포스버전 상세내역 등록 및 수정   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_INFO
+        COMMENTS : 포스버전 상세내역 등록한다.
+    -->
+    <insert id="verPatchInfoRegist" parameterType="verInfoVO">
+        /* USE : VerManageMapper.verPatchInfoRegist */
+        MERGE INTO TB_CM_POS_VERSN_INFO
+        USING DUAL
+        ON  (
+                VER_SER_NO = #{verSerNo}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET VER_SER_PATCH_INFO  = #{verSerPatchInfo},
+            MOD_DT              = #{modDt},
+            MOD_ID              = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT  (
+                    VER_SER_NO,
+                    VER_SER_PATCH_INFO,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{verSerNo},
+                    #{verSerPatchInfo},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
+    </insert>
+
+    <!-- 포스버전 상세내역 수정   -->
+    <!--
+        TABLE    : TB_CM_POS_VERSN_INFO
+        COMMENTS : 포스버전 상세내역을 수정한다.
+    -->
+    <update id="verPatchInfoModify" parameterType="verInfoVO">
+        /* USE : VerManageMapper.verPatchInfoModify */
+        <![CDATA[
+        UPDATE TB_CM_POS_VERSN_INFO
+           SET VER_SER_PATCH_INFO       = #{verSerPatchInfo},
+               MOD_DT                   = #{modDt},
+               MOD_ID                   = #{modId}
+         WHERE VER_SER_NO               = #{verSerNo}
+         ]]>
+    </update>
 
 </mapper>
 

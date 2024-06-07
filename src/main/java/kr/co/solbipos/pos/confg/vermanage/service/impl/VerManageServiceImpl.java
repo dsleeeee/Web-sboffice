@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.util.HtmlUtils;
 
 import java.io.File;
 import java.util.Iterator;
@@ -124,6 +125,9 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setSystemTypeFg((String)multi.getParameter("systemTypeFg"));
             verInfo.setDelYn("N");
 
+            String verSerPatchInfo = HtmlUtils.htmlUnescape((String)multi.getParameter("verSerPatchInfo"));
+            verInfo.setVerSerPatchInfo(verSerPatchInfo);
+
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
                 verInfo.setUseYn(UseYn.Y);
             } else {
@@ -137,7 +141,10 @@ public class VerManageServiceImpl implements VerManageService {
 
             // 버전등록
             if(verManageMapper.verRegist(verInfo) > 0) {
-                isSuccess = true;
+                // 상세내역 등록
+                if(verManageMapper.verPatchInfoRegist(verInfo) > 0) {
+                    isSuccess = true;
+                }
             } else {
                 isSuccess = false;
             }
@@ -184,7 +191,11 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setOrgnCds((String)multi.getParameter("orgnCds"));
             verInfo.setProgDetailFg((String)multi.getParameter("progDetailFg"));
             verInfo.setSystemTypeFg((String)multi.getParameter("systemTypeFg"));
+
             verInfo.setDelYn("N");
+
+            String verSerPatchInfo = HtmlUtils.htmlUnescape((String)multi.getParameter("verSerPatchInfo"));
+            verInfo.setVerSerPatchInfo(verSerPatchInfo);
 
             if(String.valueOf(UseYn.Y).equals(multi.getParameter("useYn"))){
                 verInfo.setUseYn(UseYn.Y);
@@ -198,6 +209,8 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setModId(sessionInfo.getUserId());
 
             verManageMapper.verModify(verInfo);
+            // 상세내역 수정
+            verManageMapper.verPatchInfoRegist(verInfo);
 
             isSuccess = true;
 
@@ -327,5 +340,11 @@ public class VerManageServiceImpl implements VerManageService {
 //            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 //        }
         return procCnt;
+    }
+
+    /** 포스버전정보 상세내역 조회 */
+    @Override
+    public String getPatchInfo(VerInfoVO verInfo) {
+        return  verManageMapper.getPatchInfo(verInfo);
     }
 }

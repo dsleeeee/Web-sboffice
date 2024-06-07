@@ -55,4 +55,7 @@ public interface VerManageService {
 
     /** 버전 적용 매장 삭제 */
     int removeStore(ApplcStoreVO[] applcStores, SessionInfoVO sessionInfo);
+
+    /** 포스버전정보 상세내역 조회 */
+    String getPatchInfo(VerInfoVO verInfo);
 }

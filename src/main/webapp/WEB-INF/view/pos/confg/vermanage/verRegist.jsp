@@ -2,8 +2,8 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:400px;">
-    <div class="wj-dialog wj-dialog-columns title" ng-controller="verRegistCtrl">
+<wj-popup control="versionRegistLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:550px;">
+    <div class="wj-dialog wj-dialog-columns title" ng-controller="verRegistCtrl" style="height:550px;">
 
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
@@ -14,8 +14,8 @@
 
     <%-- body --%>
     <div class="wj-dialog-body">
-      <div>
-        <div style="height:270px; overflow-y: auto;">
+      <div style="height:500px;">
+        <div style="overflow-y: auto;">
           <f:form id="regForm" name="regForm" >
             <h3 class="h3_tbl"><s:message code="verManage.verInfo" /></h3>
             <table class="searchTbl">
@@ -141,6 +141,22 @@
             </table>
           </f:form>
         </div>
+        <h3 class="h3_tbl"><s:message code="verManage.posInfo"/></h3>
+        <div class="tblBr">
+          <table class="tblType01">
+            <colgroup>
+              <col class="w100"/>
+            </colgroup>
+            <tbody>
+            <tr>
+              <th class="gr lh30">
+                <%--              <input type="text" id="_info" name="info" style="height:50px" class="sb-input w100" ng-model="prodModifyInfo.info"/>--%>
+                <textarea id="_info"  class="w100" cols="42" style="height:100px;resize: none;" ng-model="version.verSerPatchInfo"></textarea>
+              </th>
+            </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="btnSet2">
           <%-- 신규 --%>
           <span><a href="#" class="btn_blue pd20" ng-click="chkForm()" id="btnReg"><s:message code="verManage.regist.new" /></a></span>
@@ -154,6 +170,6 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20240426.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verRegist.js?ver=20240605.01" charset="utf-8"></script>
 
 

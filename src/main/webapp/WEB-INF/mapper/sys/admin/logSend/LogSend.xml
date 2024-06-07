@@ -27,16 +27,20 @@
                 tmp.POS_NO,
                 tmp.POS_VER_NO,
                 tmp.SYS_STAT_FG,
-                tmp.DB_SEND_YN
+                tmp.DB_SEND_YN,
+                tmp.INC_DB_YN,
+                tmp.INC_SMLOG_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
           FROM TB_HQ_OFFICE tho,
                 (SELECT tms.HQ_OFFICE_CD,
-                         tms.STORE_CD,
-                         tms.STORE_NM,
-                         tmp.POS_NO,
-                         tmp.POS_VER_NO,
-                         tms.SYS_STAT_FG,
-                         (CASE WHEN tmp.DB_SEND_YN IS NULL THEN 'N' ELSE tmp.DB_SEND_YN END) AS DB_SEND_YN
+                        tms.STORE_CD,
+                        tms.STORE_NM,
+                        tmp.POS_NO,
+                        tmp.POS_VER_NO,
+                        tms.SYS_STAT_FG,
+                        (CASE WHEN tmp.DB_SEND_YN IS NULL THEN 'N' ELSE tmp.DB_SEND_YN END) AS DB_SEND_YN,
+                        tmp.INC_DB_YN,
+                        tmp.INC_SMLOG_YN
                    FROM TB_MS_POS tmp,
                          TB_MS_STORE tms
                   WHERE tms.STORE_CD = tmp.STORE_CD) tmp
@@ -69,8 +73,10 @@
     <update id="updateLogSend" parameterType="logSendVO">
         /* USE : LogSendMapper.updateLogSend */
         UPDATE TB_MS_POS
-           SET DB_SEND_YN = #{dbSendYn}
-         WHERE STORE_CD = #{storeCd}
+           SET DB_SEND_YN   = #{dbSendYn},
+               INC_DB_YN    = #{incDb},
+               INC_SMLOG_YN = #{incSmlog}
+        WHERE STORE_CD = #{storeCd}
            AND POS_NO = #{posNo}
     </update>
 

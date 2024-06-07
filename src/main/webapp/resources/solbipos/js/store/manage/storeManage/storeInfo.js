@@ -1329,6 +1329,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchManageVan = function(){
     var popup = $scope.vanLayer;
 
+    if($("#lblVanFixFg").text() == "Y") {
+      $scope._popMsg(messages["storeManage.manageVan"] + "는 [008] KOCES을(를) 변경할 수 없습니다.");
+      return false;
+    }
+
     // 팝업 닫을때
     popup.show(true, function (s) {
       var vanScope = agrid.getScope('searchVanCtrl');

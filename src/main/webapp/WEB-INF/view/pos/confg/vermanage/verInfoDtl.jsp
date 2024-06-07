@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
-<wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:430px;">
+<wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:550px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -26,7 +26,7 @@
       </ul>
 
       <div>
-        <div style="height:250px; overflow-y: auto;">
+        <div style="height:235px; overflow-y: auto;">
           <f:form id="viewForm" name="viewForm" >
             <h3 class="h3_tbl"><s:message code="storeManage.basicInfo" /></h3>
             <table class="searchTbl">
@@ -104,6 +104,22 @@
               </tbody>
             </table>
           </f:form>
+        </div>
+        <h3 class="h3_tbl"><s:message code="verManage.posInfo"/></h3>
+        <div class="tblBr">
+          <table class="tblType01">
+            <colgroup>
+              <col class="w100"/>
+            </colgroup>
+            <tbody>
+            <tr>
+              <th class="gr lh30">
+                <%--              <input type="text" id="_info" name="info" style="height:50px" class="sb-input w100" ng-model="prodModifyInfo.info"/>--%>
+                <textarea id="_info"  class="w100" cols="42" style="height:100px;resize: none;" ng-model="version.verSerPatchInfo" readonly></textarea>
+              </th>
+            </tr>
+            </tbody>
+          </table>
         </div>
         <div class="btnSet2">
           <c:if test="${orgnFg == 'MASTER'}">

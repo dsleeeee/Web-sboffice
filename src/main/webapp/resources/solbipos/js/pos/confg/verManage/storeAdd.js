@@ -11,6 +11,26 @@
 /**
  * get application
  */
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+  var timeVal = i.toString();
+  if(i>=0 && i<=9){
+    timeVal = "0" + timeVal;
+  }
+  Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
+// 분, 초 VALUE
+var MmSs = [60];
+for(i =0 ; i < 60; i++){
+  var timeVal = i.toString();
+  if(i>=0 && i<=9){
+    timeVal = "0" + timeVal;
+  }
+  MmSs[i] = {"name":timeVal,"value":timeVal}
+}
+
 var app = agrid.getApp();
 
 // 탭 변경
@@ -64,12 +84,16 @@ app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.hqOfficeCd = gvHqOfficeCd;
 
   // 조회조건
+  var commuteInDt = wcombo.genDateVal("#commuteInDt", gvStartDate);
   $scope._setComboData("hqOffice", hqList);
+  $scope._setComboData("commuteInDtHhCombo", Hh);
+  $scope._setComboData("commuteInDtMmCombo", MmSs);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name');
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+
   };
 
   // 조회 버튼 클릭
@@ -177,6 +201,60 @@ app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
       $("#excelUpFile").trigger('click');
     });
   };
+
+  // 신규버전예약등록
+  $scope.resveRegist = function(){
+
+    var params = new Array();
+    var ver    = scope.getSelectVersion().verSerNo;
+
+    var sScope = agrid.getScope('allStoreCtrl')
+
+    // NXPOS_V1/V2 외에 적용매장등록된 내역이 있습니다.<br>[포스관리] - [POS 설정관리] - [매장별 POS 버전 삭제] 에서 관리 후 진행하여 주십시오.
+    for (var i = 0; i < sScope.flex.collectionView.items.length; i++) {
+      if (sScope.flex.collectionView.items[i].gChk) {
+        if(sScope.flex.collectionView.items[i].diffVerCnt > 0){
+          sScope._popMsg( "NXPOS_V" + manageVer + messages["verManage.store.diffVerCnt.chk.msg"]);
+          return false;
+        }
+      }
+    }
+
+    var resveDate = wijmo.Globalize.format(commuteInDt.value, 'yyyyMMdd') +$scope.commuteInDtHhCombo.selectedValue + $scope.commuteInDtMmCombo.selectedValue + '00';
+
+    for (var i = 0; i < sScope.flex.collectionView.items.length; i++) {
+      if(sScope.flex.collectionView.items[i].gChk) {
+        sScope.flex.collectionView.items[i].verSerNo = ver;
+        sScope.flex.collectionView.items[i].resveDate = resveDate;
+        params.push(sScope.flex.collectionView.items[i]);
+      }
+    }
+
+    if(params.length == 0){
+      $scope._popMsg("선택된 매장이 없습니다.");
+      return false;
+    }
+
+    var now = new Date();
+    var resDate = wijmo.Globalize.format(commuteInDt.value, 'yyyy-MM-dd') + ' ' +$scope.commuteInDtHhCombo.selectedValue + ':' + $scope.commuteInDtMmCombo.selectedValue + ':00';
+    var resDt = new Date(resDate);
+
+    // 예약일시가 현재 시간보다 빠른지 비교
+    if(now.getTime() > resDt.getTime()){
+      $scope._popMsg("예약일시를 확인하세요.");
+      return false;
+    }
+
+    // console.log('save params',params);
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._save("/pos/confg/verManage/applcStore/regist.sb", params, function(){
+      // 적용매장 조회 후, 미적용 매장 조회
+      var addStoreScope = agrid.getScope("addStoreCtrl");
+      addStoreScope._broadcast('addStoreCtrl');
+    });
+
+  }
 
   // 엑셀다운로드
   $scope.excelDownload = function(){

@@ -58,4 +58,11 @@ public interface VerManageMapper {
 
     /** 버전 적용 매장 삭제 */
     int removeStore(ApplcStoreVO applcStore);
+
+    /** 포스버전정보 상세내역 조회 */
+    String getPatchInfo(VerInfoVO verInfo);
+
+    /** 포스버전정보 상세내역 등록 및 수정*/
+    int verPatchInfoRegist(VerInfoVO verInfo);
+
 }

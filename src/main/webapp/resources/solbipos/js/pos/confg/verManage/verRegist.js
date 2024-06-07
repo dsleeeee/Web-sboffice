@@ -142,6 +142,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var formData = new FormData($("#regForm")[0]);
 
+
     if($scope.version.fileDesc === null || $scope.version.fileDesc === undefined || $scope.version.fileDesc === ""){
       $scope.version.fileDesc = "";
     }
@@ -158,6 +159,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("orgnCds", $("#orgnCdsCd").val());
     formData.append("progDetailFg", $scope.version.progDetailFg);
     formData.append("systemTypeFg", $scope.versionSystemTypeFgCombo.selectedValue);
+    formData.append("verSerPatchInfo", $scope.version.verSerPatchInfo);
     var url = '';
 
     if( isEmptyObject($scope.getSelectVersion()) ) {
@@ -253,6 +255,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 파일사이즈 변환하여 표기
       $scope.version.fileSize = getfileSize($scope.version.fileSize);
+
+      $scope.version.verSerPatchInfo = data.verSerPatchInfo;
 
     });
   };

@@ -76,6 +76,8 @@ public class ApplcStoreVO extends PageVO {
     private String progDetailFg;
     /** 주소 */
     private String addr;
+    /** 예약일시 */
+    private String resveDate;
 
     public OrgnFg getOrgnFg() {
         return orgnFg;
@@ -339,5 +341,13 @@ public class ApplcStoreVO extends PageVO {
 
     public void setAddr(String addr) {
         this.addr = addr;
+    }
+
+    public String getResveDate() {
+        return resveDate;
+    }
+
+    public void setResveDate(String resveDate) {
+        this.resveDate = resveDate;
     }
 }
