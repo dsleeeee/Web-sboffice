@@ -125,12 +125,48 @@
           </table>
           <div class="mt10 tr">
             <%-- 조회 --%>
-            <button id="btnSearchStore" class="btn_skyblue" onclick="search()"><s:message code="cmm.search" /></button>
+            <button id="btnSearchStore" class="btn_skyblue" onclick="search()"><s:message code="cmm.search" /></button></br>
+              <div class="mt10">
+                <span class="fr"><a href="#" class="btn_grayS2" ng-click="resveRegist()"><s:message code="verManage.store.resveRegisted" /></a></span>
+              </div>
+            <div class="fr pd5 s14" style="padding-right: 5px;">
+              <label>분 </label>
+            </div>
+            <div class="sb-select fr" style="width:65px;">
+              <wj-combo-box
+                      id="commuteInDtMm"
+                      ng-model="commuteInDtMm"
+                      items-source="_getComboData('commuteInDtMmCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="commuteInDtMmCombo"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <div class="fr pd5 s14" style="padding-right: 15px;">
+              <label>시 </label>
+            </div>
+            <div class="sb-select fr" style="width:65px;">
+              <wj-combo-box
+                      id="commuteInDtHh"
+                      ng-model="commuteInDtHh"
+                      items-source="_getComboData('commuteInDtHhCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="commuteInDtHhCombo"
+                      initialized="_initComboBox(s)">
+              </wj-combo-box>
+            </div>
+            <div class="sb-select fr" style="padding-right: 10px;">
+              <span class="txtIn"><input id="commuteInDt" class="w120px"></span>
+            </div>
           </div>
         </div>
 
         <%-- 등록매장 그리드 --%>
-        <div class="oh mt40 w50 fl">
+        <div class="oh mt10 w50 fl">
           <div class="wj-TblWrap mr10" style="height:405px; overflow-y: hidden;">
             <div class="oh mb10">
               <span class="fl bk lh20 s14"><s:message code="verManage.store.registed"/></span>
@@ -152,6 +188,7 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="32"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="verManage.store.resveDate"/>" binding="lastStartDt" align="center" width="110" is-read-only="true" ></wj-flex-grid-column>
                 <c:if test="${orgnFg != 'HQ'}">
                   <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeCd"/>" binding="hqOfficeCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
                   <wj-flex-grid-column header="<s:message code="verManage.store.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
@@ -168,7 +205,7 @@
       </div>
 
       <%--- 미등록매장 그리드 --%>
-      <div class="oh mt40 w50 ">
+      <div class="oh mt10 w50 ">
         <div class=" ">
           <div class="wj-TblWrap ml10" style="height:405px; overflow-y: hidden;" ng-controller="allStoreCtrl">
             <div class="oh mb10">
@@ -234,7 +271,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20240426.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20240531.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

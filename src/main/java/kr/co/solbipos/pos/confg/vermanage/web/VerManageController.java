@@ -129,6 +129,11 @@ public class VerManageController {
 
         DefaultMap<String> result = verManageService.dtlInfo(verInfo);
 
+        // 포스버전정보 상세내역 조회
+        String verSerPatchInfo = verManageService.getPatchInfo(verInfo);
+
+        result.put("verSerPatchInfo", verSerPatchInfo);
+
         return returnJson(Status.OK, result);
     }
 

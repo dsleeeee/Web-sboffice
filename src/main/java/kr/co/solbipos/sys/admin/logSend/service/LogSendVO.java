@@ -18,8 +18,12 @@ public class LogSendVO extends PageVO {
     private String sysStatFg;
     /** [POS-DB/로그 서버송신구분]:Y/N */
     private String dbSendYn;
-    /** 포스 번호*/
+    /** 포스 번호 */
     private String PosNo;
+    /** DB포함여부 */
+    private String incDb;
+    /** 스마트오더로그포함여부 */
+    private String incSmlog;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -75,5 +79,21 @@ public class LogSendVO extends PageVO {
 
     public void setPosNo(String posNo) {
         PosNo = posNo;
+    }
+
+    public String getIncDb() {
+        return incDb;
+    }
+
+    public void setIncDb(String incDb) {
+        this.incDb = incDb;
+    }
+
+    public String getIncSmlog() {
+        return incSmlog;
+    }
+
+    public void setIncSmlog(String incSmlog) {
+        this.incSmlog = incSmlog;
     }
 }

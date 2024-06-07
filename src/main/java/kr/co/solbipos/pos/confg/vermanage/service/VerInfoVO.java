@@ -62,6 +62,8 @@ public class VerInfoVO extends PageVO {
     private String progDetailFg;
     /** 시스템타입 */
     private String systemTypeFg;
+    /** 시스템타입 */
+    private String verSerPatchInfo;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -314,5 +316,13 @@ public class VerInfoVO extends PageVO {
 
     public void setSystemTypeFg(String systemTypeFg) {
         this.systemTypeFg = systemTypeFg;
+    }
+
+    public String getVerSerPatchInfo() {
+        return verSerPatchInfo;
+    }
+
+    public void setVerSerPatchInfo(String verSerPatchInfo) {
+        this.verSerPatchInfo = verSerPatchInfo;
     }
 }

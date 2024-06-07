@@ -90,6 +90,34 @@
 
         <%-- 전송 --%>
         <button class="btn_skyblue ml5 fr" id="btnSend" ng-click="logSend()"><s:message code="logSend.send" /></button>
+        <%-- 스마트오더로그포함 --%>
+        <div class="sb-select w120px ml5 fr">
+            <wj-combo-box
+                    id="incSmlogYn"
+                    ng-model="incSmlog"
+                    control="incSmlogCombo"
+                    items-source="_getComboData('incSmlogYn')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
+        <span class="bk fr lh25 ml5 s14">스마트오더로그포함 : </span>
+        <%-- 스마트오더로그포함 --%>
+        <div class="sb-select w120px ml5 fr">
+            <wj-combo-box
+                    id="incDbYn"
+                    ng-model="incDb"
+                    control="incDbCombo"
+                    items-source="_getComboData('incDbYn')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)">
+            </wj-combo-box>
+        </div>
+        <span class="bk fr lh25 s14">DB포함 : </span>
 
     </div>
 
@@ -113,6 +141,8 @@
                     <wj-flex-grid-column header="<s:message code="logSend.posNo"/>" binding="posNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="logSend.posVerNo"/>" binding="posVerNo" align="center" width="200" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="logSend.dbSendYn"/>" binding="dbSendYn" data-map="dbSendYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="logSend.incDb"/>" binding="incDbYn" data-map="incDataMap" align="center" width="120" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="logSend.incSmlog"/>" binding="incSmlogYn" data-map="incDataMap" align="center" width="180" is-read-only="true"></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
@@ -131,4 +161,4 @@
 <script>
     var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/logSend/logSend.js?ver=20200825.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/logSend/logSend.js?ver=20240604.12" charset="utf-8"></script>
