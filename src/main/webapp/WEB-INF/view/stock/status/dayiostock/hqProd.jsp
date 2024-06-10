@@ -177,9 +177,9 @@
 	              <wj-flex-grid-column header="<s:message code="dayIostock.accStoreMoveOutAmt"/>"	binding="storeMoveOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.accDisuse"/>"      		binding="disuseQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 	              <wj-flex-grid-column header="<s:message code="dayIostock.accAdj"/>"         		binding="adjQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	              <wj-flex-grid-column header="<s:message code="dayIostock.accSetIn"/>"       		binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"	></wj-flex-grid-column>
+	              <wj-flex-grid-column header="<s:message code="dayIostock.accSetIn"/>"       		binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-				  <wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrOutQty"/>"	binding="saleVendrOrderQty" width="60" align="center" is-read-only="true" aggregate="Sum" visible="false"</wj-flex-grid-column>
+				  <wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrOutQty"/>"	binding="saleVendrOrderQty" width="60" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 				  <wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrOutAmt"/>"	binding="saleVendrOrderTot" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 				  <wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrInQty"/>" 	binding="saleVendrRtnQty" width="60" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 				  <wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrInAmt"/>" 	binding="saleVendrRtnTot" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
@@ -239,9 +239,9 @@
 					<wj-flex-grid-column header="<s:message code="dayIostock.accStoreMoveOutAmt"/>"	binding="storeMoveOutTot" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accDisuse"/>"      	binding="disuseQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accAdj"/>"         	binding="adjQty" width="60" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-					<wj-flex-grid-column header="<s:message code="dayIostock.accSetIn"/>"       		binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"	></wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dayIostock.accSetIn"/>"       		binding="setInQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-					<wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrOutQty"/>"	binding="saleVendrOrderQty" width="60" align="center" is-read-only="true" aggregate="Sum" visible="false"</wj-flex-grid-column>
+					<wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrOutQty"/>"	binding="saleVendrOrderQty" width="60" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrOutAmt"/>"	binding="saleVendrOrderTot" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrInQty"/>" 	binding="saleVendrRtnQty" width="60" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 					<wj-flex-grid-column header="<s:message code="dayIostock.accSaleVendrInAmt"/>" 	binding="saleVendrRtnTot" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
