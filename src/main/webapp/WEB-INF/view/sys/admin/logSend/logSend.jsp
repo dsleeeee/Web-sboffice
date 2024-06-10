@@ -138,6 +138,7 @@
                     <wj-flex-grid-column header="<s:message code="logSend.hqOfficeNm"/>" binding="hqOfficeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="logSend.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="logSend.storeNm"/>" binding="storeNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="logSend.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgMap" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="logSend.posNo"/>" binding="posNo" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="logSend.posVerNo"/>" binding="posVerNo" align="center" width="200" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="logSend.dbSendYn"/>" binding="dbSendYn" data-map="dbSendYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
@@ -161,4 +162,4 @@
 <script>
     var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/logSend/logSend.js?ver=20240604.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/logSend/logSend.js?ver=20240610.01" charset="utf-8"></script>

@@ -39,6 +39,7 @@ app.controller('logSendCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope.dbSendYnDataMap = new wijmo.grid.DataMap(dbSendYn, 'value', 'name');
         $scope.incDataMap = new wijmo.grid.DataMap(incComboData, 'value', 'name');
+        $scope.sysStatFgMap    = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
     };
 
     // 조회 버튼 클릭
@@ -55,10 +56,11 @@ app.controller('logSendCtrl', ['$scope', '$http', function ($scope, $http) {
         params.hqOfficeCd = "";
         params.hqOfficeCd = "";*/
         params.sysStatFg  = $scope.sysStatFg;
+        params.listScale = $scope.listScale;
 
         $scope._inquiryMain("/sys/admin/logSend/logSend/getPosList.sb", params, function() {}, false);
     }
-    
+
     $scope.logSend = function () {
 
         var params = new Array();

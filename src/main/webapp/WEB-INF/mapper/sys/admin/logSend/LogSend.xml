@@ -46,13 +46,13 @@
                   WHERE tms.STORE_CD = tmp.STORE_CD) tmp
          WHERE tho.HQ_OFFICE_CD = tmp.HQ_OFFICE_CD
         <if test='hqOfficeCd != null and hqOfficeCd !=""'>
-            AND tmp.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+            AND UPPER(tmp.HQ_OFFICE_CD) LIKE '%' || UPPER(#{hqOfficeCd}) || '%'
         </if>
         <if test='hqOfficeNm != null and hqOfficeNm !=""'>
             AND tho.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
         </if>
         <if test='storeCd != null and storeCd !=""'>
-            AND tmp.STORE_CD LIKE '%' || #{storeCd} || '%'
+            AND UPPER(tmp.STORE_CD) LIKE '%' || UPPER(#{storeCd}) || '%'
         </if>
         <if test='storeNm != null and storeNm !=""'>
             AND tmp.STORE_NM LIKE '%' || #{storeNm} || '%'
