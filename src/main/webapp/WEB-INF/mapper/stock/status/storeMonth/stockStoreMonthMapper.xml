@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.stock.status.storemonth.service.impl.StockStoreMonthMapper">
+
     <!-- 매장월수불 - 리스트 조회 -->
     <!--
         TABLE    : TB_ST_STORE_STOCK_MONTHLY, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD, TB_HQ_PRODUCT_CLASS
@@ -10,6 +10,7 @@
         COMMENTS : 매장월수불현황 - 리스트를 조회한다.
     -->
     <select id="stockStoreMonthList" parameterType="stockStoreMonthVO" resultType="DefaultMap">
+        /* StockStoreMonthMapper.stockStoreMonthList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT A.*
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
@@ -75,7 +76,7 @@
                       AND TPSSM.IOSTOCK_YM  = #{startDate}
                    </if>
                    <if test='prodCd != null and prodCd != ""'>
-                      AND TMP.PROD_CD  = #{prodCd}
+                      AND TMP.PROD_CD LIKE '%'||#{prodCd}||'%'
                    </if>
                    <if test='storeCdQuery != null and storeCdQuery != ""'>
                       AND TPSSM.STORE_CD IN (${storeCdQuery})
@@ -121,7 +122,6 @@
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
-
     <!-- 매장월수불 - 리스트 조회 -->
     <!--
         TABLE    : TB_ST_STORE_STOCK_MONTHLY, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD, TB_HQ_PRODUCT_CLASS
@@ -129,6 +129,7 @@
         COMMENTS : 매장월수불현황 - 리스트를 조회한다.
     -->
     <select id="stockStoreMonthExcelList" parameterType="stockStoreMonthVO" resultType="DefaultMap">
+        /* StockStoreMonthMapper.stockStoreMonthExcelList */
         SELECT A.*
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
         FROM (
@@ -192,7 +193,7 @@
                       AND TPSSM.IOSTOCK_YM  = #{startDate}
                    </if>
                    <if test='prodCd != null and prodCd != ""'>
-                      AND TMP.PROD_CD  = #{prodCd}
+                      AND TMP.PROD_CD LIKE '%'||#{prodCd}||'%'
                    </if>
                    <if test='storeCdQuery != null and storeCdQuery != ""'>
                       AND TPSSM.STORE_CD IN (${storeCdQuery})
@@ -236,4 +237,5 @@
                         , TPSSM.STORE_CD
             ) A
     </select>
+
 </mapper>
