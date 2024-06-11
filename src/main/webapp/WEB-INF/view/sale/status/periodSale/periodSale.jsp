@@ -9,7 +9,7 @@
 
 <div class="subCon">
   <div ng-controller="periodSaleCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="nxBtnSearch3" ng-click="_broadcast('periodSaleCtrl')">

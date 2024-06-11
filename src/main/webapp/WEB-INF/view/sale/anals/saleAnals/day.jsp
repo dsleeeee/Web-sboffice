@@ -7,7 +7,7 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <div id="dayView" name="dayView" class="subCon" ng-controller="dayCtrl" style="padding: 10px 20px 40px;">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl"><s:message code="saleAnals.day"/></a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dayCtrl')">
@@ -112,4 +112,4 @@
 <script>
   var orgnFg = "${orgnFg}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/saleAnals/day.js?ver=20220922.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/saleAnals/day.js?ver=20240605.01" charset="utf-8"></script>

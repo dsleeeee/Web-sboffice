@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="goalDayView" class="subCon3"  ng-controller="goalDayCtrl" style="padding: 10px 20px 40px;">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl"><s:message code="goal.goalDay.versusGoalSaleAnals"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnGoalDaySearch" ng-click="_broadcast('goalDayCtrlSrch')">
@@ -142,7 +142,7 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/goal/day/goalDay.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/goal/day/goalDay.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 팝업 레이어 시작 --%>
 <%-- 매장현황 팝업 상세 레이어 --%>

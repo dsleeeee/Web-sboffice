@@ -206,13 +206,6 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	  grid.isReadOnly = $scope.isAll;;
   };
   
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.empDayOfWeekSelectStoreShow = function () {
-    $scope._broadcast('empDayOfWeekSelectStoreCtrl');
-  };
-  
   //판매자 조회
   $scope.getEmpNmList = function () {
 	  	$scope.flex.refresh();

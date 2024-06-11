@@ -6,7 +6,7 @@
 <c:set var="menuNm"	value="${sessionScope.sessionInfo.currentMenu.resrceNm}" />
 
 <div id="cornerDayPeriodView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="cornerDayPeriodCtrl">
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="corner.dayPeriod" /></a>
 		<%-- 조회 --%>
 		<button class="btn_blue fr mt5 mr10" id="btnCornerDayPeriodSearch" ng-click="_broadcast('cornerDayPeriodMainCtrlSrch')">

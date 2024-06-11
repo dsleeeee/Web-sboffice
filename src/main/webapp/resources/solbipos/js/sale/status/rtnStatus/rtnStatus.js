@@ -20,13 +20,6 @@ app.controller('rtnStatusDayCtrl', ['$scope', '$http', '$timeout', function ($sc
   $scope._setComboData("rtnStatusDayDtlListScaleBox", gvListScaleBoxData);
   $scope._setComboData("rtnStatusPosDtlListScaleBox", gvListScaleBoxData);
 
-  //매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.rtnStatusDaySelectStoreShow = function () {
-    $scope._broadcast('rtnStatusDaySelectStoreCtrl');
-  };
-
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
     $scope.srchRtnStatusDayStartDate.isReadOnly = $scope.isChecked;

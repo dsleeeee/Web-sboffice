@@ -10,7 +10,7 @@
 <div id="monthPosView" name="monthView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="monthPosCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"> <s:message code="month.posSale" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -98,4 +98,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthPos.js?ver=20240531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthPos.js?ver=20240605.01" charset="utf-8"></script>

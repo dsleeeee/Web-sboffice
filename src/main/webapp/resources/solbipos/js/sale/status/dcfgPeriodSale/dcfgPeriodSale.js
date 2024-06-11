@@ -152,13 +152,6 @@ app.controller('dcfgPeriodSaleCtrl', ['$scope', '$http', '$timeout', function ($
 
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.dcfgPeriodSaleStoreShow = function () {
-        $scope._broadcast('dcfgPeriodSaleStoreCtrl');
-    };
-
     // 할인유형선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

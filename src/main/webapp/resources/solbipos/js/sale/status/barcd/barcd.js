@@ -25,13 +25,6 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
     $scope.srchBarcdEndDate.isReadOnly = $scope.isChecked;
   };
 
-  //매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.barcdSelectStoreShow = function () {
-    $scope._broadcast('barcdSelectStoreCtrl');
-  };
-
   // 상품분류 항목표시 체크에 따른 대분류, 중분류, 소분류 표시
   $scope.isChkProdClassDisplay = function(){
 	  $scope._broadcast("chkProdClassDisplay");

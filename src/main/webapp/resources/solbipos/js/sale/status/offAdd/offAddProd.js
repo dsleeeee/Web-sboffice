@@ -123,13 +123,6 @@ app.controller('offAddProdCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope._inquiryMain("/sale/status/offAdd/offAdd/getOffAddProdList.sb", params, function() {});
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.offAddProdStoreShow = function () {
-    $scope._broadcast('offAddProdStoreCtrl');
-  };
-
   //엑셀 다운로드
   $scope.excelDownloadPayFg = function () {
     var params = {};

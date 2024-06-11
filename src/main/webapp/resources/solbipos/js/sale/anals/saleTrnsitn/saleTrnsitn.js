@@ -262,14 +262,6 @@ app.controller('saleTrnsitnCtrl', ['$scope', '$http', '$timeout', function ($sco
 
     };	//$scope.initGrid	--------------------------------------------------------------------------------------------------------------------------
 
-	//매장선택 모듈 팝업 사용시 정의
-	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	$scope.saleTrnsitnStoreShow = function () {
-		$scope._broadcast('saleTrnsitnStoreCtrl');
-	};
-
-
     //[조회] - START			--------------------------------------------------------------------------------------------------------------------------
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("saleTrnsitnCtrl", function (event, data) {

@@ -11,7 +11,7 @@
 <div id="monthTimeView" name="monthView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="monthTimeCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"> <s:message code="month.timeSale" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -171,4 +171,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTime.js?ver=20200117.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTime.js?ver=20240605.01" charset="utf-8"></script>

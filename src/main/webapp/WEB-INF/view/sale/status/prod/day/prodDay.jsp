@@ -10,7 +10,7 @@
 
 <div id="prodDayView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 	<div ng-controller="prodDayCtrl">
-		<div class="searchBar flddUnfld">
+		<div class="searchBar">
 			<a href="#" class="open fl"><s:message code="prodsale.day"/></a>
 	    	<%-- 조회 --%>
 	    	<button class="btn_blue fr mt5 mr10" id="nxBtnSearch5" ng-click="_pageView('prodDayCtrl',1)">
@@ -185,7 +185,7 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/day/prodDay.js?ver=20221102.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/day/prodDay.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <%-- <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp"> --%>

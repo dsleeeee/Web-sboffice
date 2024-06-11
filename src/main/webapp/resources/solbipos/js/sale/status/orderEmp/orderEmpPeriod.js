@@ -17,13 +17,6 @@ app.controller('orderEmpPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.srchOrderEmpPeriodStartDate.isReadOnly = $scope.isChecked;
     $scope.srchOrderEmpPeriodEndDate.isReadOnly = $scope.isChecked;
   };
-
-  //매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.orderEmpPeriodSelectStoreShow = function () {
-    $scope._broadcast('orderEmpPeriodSelectStoreCtrl');
-  };
 }]);
 
 app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {

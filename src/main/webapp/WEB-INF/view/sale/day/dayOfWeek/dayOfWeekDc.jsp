@@ -101,4 +101,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekDc.js?ver=20191119.16" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayOfWeek/dayOfWeekDc.js?ver=20240605.01" charset="utf-8"></script>

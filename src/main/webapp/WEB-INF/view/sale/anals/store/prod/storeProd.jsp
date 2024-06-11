@@ -12,7 +12,7 @@
 
 <div id="storeProdView" class="subCon" ng-controller="storeProdCtrl" style="padding: 10px 20px 40px;">
 	<input type="hidden" id="HqOfficeCd" name="HqOfficeCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="store.prod"/></a>		
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeProdCtrl')">
@@ -182,7 +182,7 @@
 	<%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/prod/storeProd.js?ver=20190125.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/prod/storeProd.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp">

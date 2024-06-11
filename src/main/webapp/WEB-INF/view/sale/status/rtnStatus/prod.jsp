@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="rtnStatusProdView" class="subCon3" style="display: none;padding: 10px 20px 40px;" ng-controller="rtnStatusProdCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl"><s:message code="rtnStatus.prod"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnRtnStatusProdSearch" ng-click="_pageView('rtnStatusProdCtrl',1)">
@@ -147,4 +147,4 @@
    <%-- //엑셀 리스트 --%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/rtnStatus/prod.js?ver=20200106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/rtnStatus/prod.js?ver=20240605.01" charset="utf-8"></script>

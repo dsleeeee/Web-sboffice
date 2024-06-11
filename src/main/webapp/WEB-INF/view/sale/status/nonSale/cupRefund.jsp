@@ -9,7 +9,7 @@
 
 <div id="cupRefundView" class="subCon" style="display: none;">
 	<div ng-controller="cupRefundCtrl">
-		<div class="searchBar flddUnfld">
+		<div class="searchBar">
 			<a href="#" class="open fl"><s:message code="nonSale.cupRefund"/></a>
 	    	<%-- 조회 --%>
 	    	<button class="btn_blue fr mt5 mr10" id="nxBtnSearch5" ng-click="_pageView('cupRefundCtrl',1)">
@@ -156,4 +156,4 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/nonSale/cupRefund.js?ver=20220608.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/nonSale/cupRefund.js?ver=20240605.01" charset="utf-8"></script>

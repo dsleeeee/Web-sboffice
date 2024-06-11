@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <div id="posDayPeriodView" class="subCon" style="display: none;" ng-controller="posDayPeriodCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="pos.dayPeriod"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnPosDayPeriodSearch" ng-click="_broadcast('posDayPeriodMainCtrlSrch')">
@@ -229,4 +229,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDayPeriod.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDayPeriod.js?ver=20240605.01" charset="utf-8"></script>

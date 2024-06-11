@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <div id="prodPosView" class="subCon3" style="display: none;padding: 10px 20px 40px;" ng-controller="prodPosCtrl"> <%-- 수정 사항 :: class="subCon" >> class="subCon3"--%>
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="prodsale.pos"/></a>
 		<%-- 조회 --%>
 		<button class="btn_blue fr mt5 mr10" id="btnPosProdSearch" ng-click="_pageView('prodPosCtrl',1)">

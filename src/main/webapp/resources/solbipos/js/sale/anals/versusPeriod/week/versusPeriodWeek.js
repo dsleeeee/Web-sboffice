@@ -241,14 +241,7 @@ app.controller('versusPeriodWeekCtrl', ['$scope', '$http', '$timeout', function 
 	$scope.srchCompStartDate.isReadOnly = $scope.isCheckedComp;
 	$scope.srchCompEndDate.isReadOnly = $scope.isCheckedComp;
   };
-
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.versusPeriodWeekSelectStoreShow = function () {
-    $scope._broadcast('versusPeriodWeekSelectStoreCtrl');
-  };
-
+  
   // 엑셀 다운로드
   $scope.excelDownloadDay = function () {
     if ($scope.flex.rows.length <= 0) {

@@ -108,13 +108,6 @@ app.controller('daySaleReportCtrl', ['$scope', '$http', function ($scope, $http)
     };
     // <-- //검색 호출 -->
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.daySaleReportStoreShow = function () {
-        $scope._broadcast('daySaleReportStoreCtrl');
-    };
-
     // <-- 자료생성 -->
     $scope.dataCreate = function(){
         if ($("#daySaleReportStoreCd").val() == "") {

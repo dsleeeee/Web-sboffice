@@ -271,13 +271,6 @@ app.controller('empCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     }
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.empCardStoreShow = function () {
-    $scope._broadcast('empCardStoreCtrl');
-  };
-
   // 매장의 POS 리스트 조회
   $scope.getStorePosList = function () {
     var url             = '/sale/today/todayDtl/todayDtl/storePosList.sb';

@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/sale/satus/dc/" />
 
 <div class="subCon" ng-controller="dcDcfgCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnDcDcfgSearch" ng-click="_broadcast('dcDcfgMainCtrlSrch')">
@@ -213,7 +213,7 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/dc/dcfg.js?ver=20230616.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dc/dcfg.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 상품매출내역 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">

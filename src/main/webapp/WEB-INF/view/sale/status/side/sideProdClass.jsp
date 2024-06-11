@@ -10,7 +10,7 @@
 <c:set var="baseUrl" value="/sale/status/prod/class/prodClass/"/>
 
 <div id="sideProdClassView" class="subCon3" ng-controller="sideProdClassCtrl" style="padding: 10px 20px 40px;"> <%-- 수정 사항 || 클래스 변경 :: class="subCon" >> class="subCon3"--%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="side.prodClass"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="nxBtnSearch1" ng-click="_broadcast('sideProdClassCtrl')">
@@ -190,7 +190,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/side/sideProdClass.js?ver=20200106.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/side/sideProdClass.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp">

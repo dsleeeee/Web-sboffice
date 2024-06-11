@@ -378,14 +378,6 @@ app.controller('versusPeriodClassCtrl', ['$scope', '$http', '$timeout', function
 	$scope.srchCompEndDate.isReadOnly = $scope.isCheckedComp;
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.versusPeriodClassSelectStoreShow = function () {
-    $scope._broadcast('versusPeriodClassSelectStoreCtrl');
-  };
-
-
   //매장의 브랜드 리스트 조회
   $scope.getBrandCdList = function () {
     var url             = '/sale/anals/versusPeriod/class/getBrandCdList.sb';

@@ -9,7 +9,7 @@
 
 <div id="offAddProdView" class="subCon" style="display: none;">
 	<div ng-controller="offAddProdCtrl">
-		<div class="searchBar flddUnfld">
+		<div class="searchBar">
 			<a href="#" class="open fl"><s:message code="offAdd.prod"/></a>
     		<%-- 조회 --%>
     		<button class="btn_blue fr mt5 mr10" id="nxBtnSearch3" ng-click="_pageView('offAddProdCtrl',1)">
@@ -230,7 +230,7 @@
 	var arrPayCol   = payCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/offAdd/offAddProd.js?ver=20220314.00" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/offAdd/offAddProd.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 결제내역 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/payFg.jsp">

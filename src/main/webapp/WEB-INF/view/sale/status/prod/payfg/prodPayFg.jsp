@@ -10,7 +10,7 @@
 
 <div id="prodPayFgView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 	<div ng-controller="prodPayFgCtrl">
-		<div class="searchBar flddUnfld">
+		<div class="searchBar">
 			<a href="#" class="open fl"><s:message code="prodsale.fayfg"/></a>
     		<%-- 조회 --%>
     		<button class="btn_blue fr mt5 mr10" id="nxBtnSearch3" ng-click="_pageView('prodPayFgCtrl',1)">
@@ -205,7 +205,7 @@
 	var arrPayCol   = payCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/payFg/prodPayFg.js?ver=20200106.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/payFg/prodPayFg.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 결제내역 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/payFg.jsp">

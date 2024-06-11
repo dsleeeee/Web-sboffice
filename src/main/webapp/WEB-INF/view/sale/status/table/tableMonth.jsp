@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="tableMonthView" class="subCon"  ng-controller="tableMonthCtrl" style="display: none;">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="tableMonth.tableMonthSale"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnTableMonthSearch" ng-click="_pageView('tableMonthCtrlSrch',1)">

@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="posHourView" class="subCon" style="display: none;" ng-controller="posHourCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="pos.hour"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnPosDaySearch" ng-click="_broadcast('posHourCtrlSrch')">

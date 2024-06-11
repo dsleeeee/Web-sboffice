@@ -83,13 +83,6 @@ app.controller('sideMenuClassStoreCtrl', ['$scope', '$http', '$timeout', functio
     };
     // <-- //검색 호출 -->
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.sideMenuClassStoreStoreShow = function () {
-        $scope._broadcast('sideMenuClassStoreStoreCtrl');
-    };
-
     // 선택그룹 선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

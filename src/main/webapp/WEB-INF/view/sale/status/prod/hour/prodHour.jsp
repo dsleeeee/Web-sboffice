@@ -10,7 +10,7 @@
 <c:set var="baseUrl" value="/sale/status/prod/hour/prodHour/"/>
 
 <div id="prodHourView" name="dayView" class="subCon3" style="display: none;padding: 10px 20px 40px;" ng-controller="prodHourCtrl"> <%-- 수정 사항 || 클래스 변경 :: class="subCon" >> class="subCon3"--%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="day.time"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('prodHourCtrl',1)">
@@ -217,4 +217,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/hour/prodHour.js?ver=20200107.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/hour/prodHour.js?ver=20240605.01" charset="utf-8"></script>

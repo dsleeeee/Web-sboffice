@@ -60,11 +60,4 @@ app.controller('prepaidDtlCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._inquiryMain("/membr/anals/prepaidDtl/prepaidDtl/getPrepaidDtlMemberList.sb", params, function() {}, false);
   };
 
-  // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.storeShow = function () {
-    $scope._broadcast('storeCtrl');
-  };
-
 }]);

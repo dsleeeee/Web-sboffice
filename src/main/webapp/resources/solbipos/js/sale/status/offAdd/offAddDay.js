@@ -112,14 +112,6 @@ app.controller('offAddDayCtrl', ['$scope', '$http', '$timeout', function ($scope
     };
     // <-- //검색 호출 -->
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.offAddDayStoreShow = function () {
-        $scope._broadcast('offAddDayStoreCtrl');
-    };
-
-
     // 시간대별 엑셀 다운로드
     $scope.excelDownloadPeriodSaleTime = function () {
         if ($scope.flex.rows.length <= 0) {

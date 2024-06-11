@@ -6,7 +6,7 @@
 
 <div class="subCon" ng-controller="nonSaleChargeCtrl">
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -156,4 +156,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/nonSaleCharge/nonSaleCharge.js?ver=20210206.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/nonSaleCharge/nonSaleCharge.js?ver=20240605.01" charset="utf-8"></script>

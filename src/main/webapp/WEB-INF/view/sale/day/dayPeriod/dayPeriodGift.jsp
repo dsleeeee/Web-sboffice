@@ -11,7 +11,7 @@
 
     <div ng-controller="dayPeriodGiftCtrl">
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl"> <s:message code="dayPeriod.giftSale" /></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -154,4 +154,4 @@
     var giftProcFgData = ${ccu.getCommCodeExcpAll("048")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodGift.js?ver=20200206.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodGift.js?ver=20240605.01" charset="utf-8"></script>
