@@ -9,7 +9,7 @@
 
 <div id="nonSaleDayView" class="subCon" style="display: none;">
 	<div ng-controller="nonSaleDayCtrl">
-		<div class="searchBar flddUnfld">
+		<div class="searchBar">
 			<a href="#" class="open fl"><s:message code="nonSale.day"/></a>
 	    	<%-- 조회 --%>
 	    	<button class="btn_blue fr mt5 mr10" id="nxBtnSearch5" ng-click="_pageView('nonSaleDayCtrl',1)">
@@ -168,4 +168,4 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/nonSale/nonSaleDay.js?ver=20200111.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/nonSale/nonSaleDay.js?ver=20240605.01" charset="utf-8"></script>

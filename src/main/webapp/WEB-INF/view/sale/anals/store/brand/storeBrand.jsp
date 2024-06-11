@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/sale/anals/store/" />
 
 <div id="storeBrandView" class="subCon" ng-controller="storeBrandCtrl" style="padding: 10px 20px 40px;">
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="store.brand" /></a>
 		<%-- 조회 --%>
 		<button class="btn_blue fr mt5 mr10" id="btnStoreBrandSearch" ng-click="_broadcast('storeBrandCtrlSrch')">
@@ -113,7 +113,7 @@
 
 	</div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/brand/storeBrand.js?ver=20190125.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/brand/storeBrand.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 상품매출내역 팝업 상세 레이어 --%>
 <%-- <c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">

@@ -91,4 +91,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/orderChannel/orderChannelDay.js?ver=20231012.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/orderChannel/orderChannelDay.js?ver=20240605.01" charset="utf-8"></script>

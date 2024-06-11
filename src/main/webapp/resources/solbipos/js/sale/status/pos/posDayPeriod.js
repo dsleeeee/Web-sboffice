@@ -30,13 +30,6 @@ app.controller('posDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($sc
         $scope._broadcast("chkProdClassExcelDisplay");
     }
 
-    //매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.posDayPeriodSelectStoreShow = function () {
-        $scope._broadcast('posDayPeriodSelectStoreCtrl');
-    };
-
 }]);
 
 /** 일자별(코너별 매출) controller */

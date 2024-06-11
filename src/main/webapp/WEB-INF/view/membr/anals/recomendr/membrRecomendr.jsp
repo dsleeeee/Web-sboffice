@@ -9,7 +9,7 @@
 <div class="subCon" ng-controller="membrRecomendrCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -138,7 +138,7 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrRecomendr/membrRecomendr.js?ver=2020062901.12" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrRecomendr/membrRecomendr.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 매장 선택 --%>
 <c:import url="/WEB-INF/view/application/layer/store.jsp">

@@ -276,13 +276,6 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
     };
     // <-- //검색 호출 -->
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.monthPosStoreShow = function () {
-        $scope._broadcast('monthPosStoreCtrl');
-    };
-
 // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {
 

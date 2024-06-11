@@ -12,7 +12,7 @@
 
 <div id="storeRankView" class="subCon" ng-controller="storeRankCtrl" style="padding: 10px 20px 40px;">
 	<input type="hidden" id="HqOfficeCd" name="HqOfficeCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="store.rank"/></a>
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnStoreRankSearch" ng-click="_broadcast('storeRankCtrl')">
@@ -197,7 +197,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20190126.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20240605.01" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/anals/store/rank/storeIndexNo.jsp">
 	<c:param name="menuCd" value="${menuCd}"/>

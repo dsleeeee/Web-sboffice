@@ -3,7 +3,7 @@
  */
 var app = agrid.getApp();
 
-/** 영수증별매출상세현황 controller */
+/** 기간매출상세 controller */
 app.controller('periodSaleCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('periodSaleCtrl', $scope, $http, true));
@@ -81,15 +81,6 @@ app.controller('periodSaleCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/periodSale/list.sb", params);
   };
-
-
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.periodSaleSelectStoreShow = function () {
-    $scope._broadcast('periodSaleSelectStoreCtrl');
-  };
-
 
   // 매장의 POS 리스트 조회
   $scope.getStorePosList = function () {

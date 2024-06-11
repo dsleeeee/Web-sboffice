@@ -12,7 +12,7 @@
 
 <div id="storeMonthView" class="subCon" ng-controller="storeMonthCtrl" style="padding: 10px 20px 40px;">
 	<input type="hidden" id="HqOfficeCd" name="HqOfficeCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="store.month"/></a>		
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeMonthCtrl')">
@@ -141,4 +141,4 @@
     <%--//위즈모 테이블--%>  
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/month/storeMonth.js?ver=20190125.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/month/storeMonth.js?ver=20240605.01" charset="utf-8"></script>

@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/sale/satus/table/" />
 
 <div id="tableDayPeriodView" class="subCon" ng-controller="tableDayPeriodCtrl" style="display: none;">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message
                 code="tableDayPeriod.tableDayPeriodSale" /></a>
         <%-- 조회 --%>
@@ -171,4 +171,4 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableDayPeriod.js?ver=20190122.07" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/table/tableDayPeriod.js?ver=20240605.01" charset="utf-8"></script>

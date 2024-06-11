@@ -99,4 +99,4 @@
 <script type="text/javascript">
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTax.js?ver=20191219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTax.js?ver=20240605.01" charset="utf-8"></script>

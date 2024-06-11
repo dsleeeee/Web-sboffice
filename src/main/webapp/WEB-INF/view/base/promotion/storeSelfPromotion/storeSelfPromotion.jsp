@@ -82,7 +82,7 @@
 </div>
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/promotion/storeSelfPromotion/storeSelfPromotion.js?ver=20210909.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/promotion/storeSelfPromotion/storeSelfPromotion.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 매장자체프로모션현황 상세 --%>
 <c:import url="/WEB-INF/view/base/promotion/storeSelfPromotion/storeSelfPromotionDtl.jsp">

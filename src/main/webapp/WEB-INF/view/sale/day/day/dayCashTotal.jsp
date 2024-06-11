@@ -8,7 +8,7 @@
 <c:set var="baseUrl" value="/sale/day/day/dayTotal/"/>
 
 <div id="dayTotalView" name="dayView" class="subCon" ng-controller="dayTotalCtrl" style="padding: 10px 20px 40px;">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl"><s:message code="day.dayCashTotal"/></a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dayTotalCtrl')">
@@ -125,4 +125,4 @@
 <script>
   var orgnFg = "${orgnFg}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCashTotal.js?ver=20210720.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayCashTotal.js?ver=20240605.01" charset="utf-8"></script>

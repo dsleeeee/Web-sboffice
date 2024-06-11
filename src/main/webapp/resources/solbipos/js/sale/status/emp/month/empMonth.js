@@ -200,13 +200,6 @@ app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.empMonthSelectStoreShow = function () {
-    $scope._broadcast('empMonthSelectStoreCtrl');
-  };
-
   //전체기간 체크박스 클릭이벤트
   $scope.isChkDt = function() {
 	$scope.empMonthStartDateCombo.isReadOnly = $scope.isChecked;

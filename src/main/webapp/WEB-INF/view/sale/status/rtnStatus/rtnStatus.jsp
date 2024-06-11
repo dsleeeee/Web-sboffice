@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="rtnStatusDayView" class="subCon"  ng-controller="rtnStatusDayCtrl" style="padding: 10px 20px 40px;">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl"><s:message code="rtnStatus.rtnStatus"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnRtnStatusDaySearch" ng-click="_broadcast('rtnStatusDayMainCtrlSrch')">
@@ -314,4 +314,4 @@
 <!-- //contents end -->
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/rtnStatus/rtnStatus.js" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/rtnStatus/rtnStatus.js?ver=20240605.01" charset="utf-8"></script>

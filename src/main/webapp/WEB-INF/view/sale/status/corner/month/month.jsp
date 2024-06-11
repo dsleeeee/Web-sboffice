@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="cornerMonthView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="cornerMonthCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl"><s:message code="corner.month"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnCornerMonthSearch" ng-click="_broadcast('cornerMonthCtrlSrch')">

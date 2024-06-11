@@ -11,7 +11,7 @@
 
     <div ng-controller="dayPeriodProdClassCtrl">
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl"> <s:message code="dayPeriod.prodClassSale" /></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -142,7 +142,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodProdClass.js?ver=20200326.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayPeriod/dayPeriodProdClass.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>

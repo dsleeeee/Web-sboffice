@@ -9,7 +9,7 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div id="dlvrFgProdView" class="subCon" ng-controller="dlvrFgProdCtrl" style="padding: 10px 20px 40px;">
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="dlvrFg.prod"/></a>
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="nxBtnSearch1" ng-click="_broadcast('dlvrFgProdCtrl')">
@@ -240,7 +240,7 @@
 	var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/dlvrFg/dlvrFgProd.js?ver=20210729.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/dlvr/dlvrFg/dlvrFgProd.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

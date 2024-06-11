@@ -189,4 +189,4 @@
     var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaStoreApply.js?ver=20240422.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaStoreApply.js?ver=20240605.01" charset="utf-8"></script>

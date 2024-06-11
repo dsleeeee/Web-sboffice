@@ -9,7 +9,7 @@
 
 <div id="tableDayView" class="subCon"  ng-controller="tableDayCtrl" style="display: none;">
     <input type="hidden" id="HqOfficeCd" name="HqOfficeCd" ng-model="HqOfficeCd" value="${gvHqOfficeCd}"/>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="tableDay.tableDaySale"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnTableDaySearch" ng-click="_pageView('tableDayCtrlSrch',1)">

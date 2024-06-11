@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="posExcclcView" class="subCon3"  ng-controller="posExcclcCtrl" style="padding: 10px 20px 40px;">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl"><s:message code="posExccl.posExcclInfo"/></a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnPosExcclcSearch" ng-click="_broadcast('posExcclcCtrlSrch')">
@@ -178,7 +178,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/posExcclc/posExcclc/posExcclc.js?ver=201901112.18" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/posExcclc/posExcclc/posExcclc.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 본사 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/sale/status/posExcclc/posExcclc/posExcclcDetail.jsp">

@@ -40,13 +40,6 @@ app.controller('rtnStatusBillCtrl', ['$scope', '$http', '$timeout', function ($s
   $scope._setComboData("srchOption1", srchOption1);
   $scope._setComboData("srchOption2", srchOption2);
 
-  //매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.rtnStatusBillSelectStoreShow = function () {
-    $scope._broadcast('rtnStatusBillSelectStoreCtrl');
-  };
-
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 

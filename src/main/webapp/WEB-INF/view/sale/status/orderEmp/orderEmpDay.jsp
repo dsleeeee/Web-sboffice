@@ -9,7 +9,7 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <div id="orderEmpDayView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="orderEmpDayCtrl">
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="empsale.day"/></a>
     	<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('orderEmpDayCtrl')">
@@ -153,4 +153,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpDay.js?ver=20220610.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpDay.js?ver=20240605.01" charset="utf-8"></script>

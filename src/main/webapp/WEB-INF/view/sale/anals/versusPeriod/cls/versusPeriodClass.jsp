@@ -9,7 +9,7 @@
 
 <div id="versusPeriodClassView" class="subCon" style="display: none;">
 	<div ng-controller="versusPeriodClassCtrl">
-		<div class="searchBar flddUnfld">
+		<div class="searchBar">
 			<a href="#" class="open fl"><s:message code="versusPeriod.cls"/></a>
 	    	<%-- 조회 --%>
 	    	<button class="btn_blue fr mt5 mr10" id="btnVersusPeriodClassSearch" ng-click="_broadcast('versusPeriodClassCtrlSrch')">
@@ -340,7 +340,7 @@
 
     });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/cls/versusPeriodClass.js?ver=20190126.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/versusPeriod/cls/versusPeriodClass.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <%-- <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp"> --%>

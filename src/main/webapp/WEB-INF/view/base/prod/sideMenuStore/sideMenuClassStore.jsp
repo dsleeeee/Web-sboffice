@@ -168,4 +168,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClassStore.js?ver=20240229.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenuStore/sideMenuClassStore.js?ver=20240605.01" charset="utf-8"></script>

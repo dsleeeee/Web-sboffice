@@ -218,13 +218,6 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http, $timeo
     $scope.srchEndDate.isReadOnly = $scope.isChecked;
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.empPosSelectStoreShow = function () {
-    $scope._broadcast('empPosSelectStoreCtrl');
-  };
-
   //판매자 조회
   $scope.getEmpNmList = function () {
 	  	$scope.flex.refresh();

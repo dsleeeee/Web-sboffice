@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="tableDayOfWeekView" class="subCon"  ng-controller="tableDayOfWeekCtrl" style="display: none;">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="tableDayOfWeek.tableDayOfWeekSale"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnTableDayOfWeekSearch" ng-click="_broadcast('tableDayOfWeekCtrlSrch')">

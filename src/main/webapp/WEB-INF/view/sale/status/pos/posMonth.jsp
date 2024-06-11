@@ -7,7 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 
 <div id="posMonthView" class="subCon" style="display: none;" ng-controller="posMonthCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="pos.month"/></a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnPosMonthSearch" ng-click="_broadcast('posMonthCtrlSrch')">

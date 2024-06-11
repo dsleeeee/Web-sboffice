@@ -26,7 +26,7 @@
 --%>
 <div id="reportView" class="subCon"  style="display: none;padding: 10px 20px 40px;">
 	<div class="div_sort_class" data-sort="0">
-	    <div class="searchBar flddUnfld" ng-controller="reportCtrl" ng-init="init()">
+	    <div class="searchBar" ng-controller="reportCtrl" ng-init="init()">
 	        <a href="#" class="open fl">${menuNm}</a>
 	        <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;"><%-- [조회] --%>
 	        	<button class="btn_blue fr" ng-click="_broadcast('reportCtrl')"><s:message code="cmm.search" /></button>
@@ -873,7 +873,7 @@
 </div>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReportNew/report/report.js?ver=20200610.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/dailyReportNew/report/report.js?ver=20240605.01" charset="utf-8"></script>
 
 <script type="text/javascript" charset="utf-8">
 	/*

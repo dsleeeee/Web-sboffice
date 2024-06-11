@@ -28,13 +28,6 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 		// 기능수행 종료 : 반드시 추가
 		event.preventDefault();
 	});
-
-	// 매장선택 모듈 팝업 사용시 정의
-	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	$scope.saleAnalsMonthlySelectStoreShow = function () {
-		$scope._broadcast('saleAnalsMonthlySelectStoreCtrl');
-	};
 	
 	// 리스트 조회
 	$scope.searchSaleAnalsMonthlyList = function () {

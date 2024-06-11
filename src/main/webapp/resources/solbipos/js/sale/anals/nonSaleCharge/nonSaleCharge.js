@@ -52,13 +52,6 @@ app.controller('nonSaleChargeCtrl', ['$scope', '$http', function ($scope, $http)
         $scope._inquiryMain("/sale/anals/nonSaleCharge/list.sb", params, function() {}, false);
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.nonSaleChargeStoreShow = function () {
-        $scope._broadcast('nonSaleChargeStoreCtrl');
-    };
-
     // 엑셀 다운로드
     $scope.excelDownload = function () {
 

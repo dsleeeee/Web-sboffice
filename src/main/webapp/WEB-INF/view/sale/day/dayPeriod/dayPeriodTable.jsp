@@ -10,7 +10,7 @@
 <div id="dayPeriodTableView" name="dayPeriodView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="dayPeriodTableCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"> <s:message code="dayPeriod.tableSale" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">

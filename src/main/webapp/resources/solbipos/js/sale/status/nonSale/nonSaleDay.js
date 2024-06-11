@@ -82,13 +82,6 @@ app.controller('nonSaleDayCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope._inquiryMain("/sale/status/nonSale/nonSale/getNonSaleDayList.sb", params, function() {});
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.nonSaleDaySelectStoreShow = function () {
-        $scope._broadcast('nonSaleDaySelectStoreCtrl');
-    };
-
     // 상품분류정보 팝업
     $scope.popUpNonSaleDay = function() {
         var popUp = $scope.prodClassPopUpLayer.show(true, function (s) {

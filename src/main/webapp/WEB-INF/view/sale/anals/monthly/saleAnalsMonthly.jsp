@@ -12,7 +12,7 @@
 <div class="subCon" ng-controller="saleAnalsMonthlyCtrl" ng-init="init()">
 
   <%-- 조회조건 --%>
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <%-- <a href="#" class="open fl">${menuNm}</a> --%>
     <a href="#" class="open fl"><s:message code="saleAnalsMonthly.title"/></a>
     <%-- 조회 --%>
@@ -131,7 +131,7 @@
   
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthly/saleAnalsMonthly.js?ver=20200116.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthly/saleAnalsMonthly.js?ver=20240605.01" charset="utf-8"></script>
 
 
 <%-- 상품코드 상세 레이어 --%>
