@@ -19,7 +19,7 @@ var app = agrid.getApp();
 app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('dayMembrCtrl', $scope, $http, true));
+  angular.extend(this, new RootController('dayMembrCtrl', $scope, $http, false));
 
   // 검색조건에 조회기간
   var startDate = wcombo.genDateVal("#startDate", gvStartDate);
@@ -43,6 +43,12 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var col = s.columns[e.col];
         if (col.binding === "realSaleAmt" || col.binding === "membrNm") {
           wijmo.addClass(e.cell, 'wijLink');
+        }
+
+        if (col.format === "date") {
+          e.cell.innerHTML = getFormatDate(e.cell.innerText);
+        }  else if (col.format === "dateTime") {
+          e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
         }
       }
     });

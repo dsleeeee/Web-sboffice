@@ -151,10 +151,10 @@
                             is-read-only="true">
 
                             <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleDate"/>" binding="saleDate" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayMembrPurchs.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayMembrPurchs.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleQty"/>" binding="saleQty" width="80" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayMembrPurchs.saleQty"/>" binding="saleQty" width="70" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayMembrPurchs.realSaleAmt"/>" binding="realSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayMembrPurchs.membrSavePoint"/>" binding="membrSavePoint" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayMembrPurchs.membrUsePoint"/>" binding="membrUsePoint" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
@@ -178,4 +178,4 @@
     var smsRecvYnDataMap  = ${ccu.getCommCodeExcpAll("072")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembrDetail.js?ver=20201203.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembrDetail.js?ver=20240612.01" charset="utf-8"></script>

@@ -119,7 +119,7 @@
         ) tsshp
         WHERE   tssh.YOIL = tssd.YOIL(+)
         AND     tssh.YOIL = tsshp.YOIL(+)
-        ORDER BY tssh.YOIL
+        ORDER BY DECODE(tssh.YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
     </select>
 
     <!-- 할인구별별탭 - 할인구분별 매출조회-->
@@ -184,7 +184,7 @@
             )
             GROUP BY YOIL
         )
-        ORDER BY YOIL
+        ORDER BY DECODE(YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
     </select>
 
     <!-- 과면세별탭 - 과면세별 매출조회-->
@@ -232,7 +232,7 @@
             </if>
         )
         GROUP BY YOIL
-        ORDER BY YOIL
+        ORDER BY DECODE(YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
     </select>
 
     <!-- 시간대별탭 - 시간대별 매출조회-->
@@ -273,7 +273,7 @@
                 GROUP BY SALE_DATE, STORE_CD
             ) tssh
         GROUP BY YOIL
-        ORDER BY YOIL
+        ORDER BY DECODE(YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
         </if>
         <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
             SELECT tssh.YOIL
@@ -334,7 +334,7 @@
             GROUP BY YOIL, STORE_CD
             ) tssh
             GROUP BY YOIL
-            ORDER BY YOIL
+            ORDER BY DECODE(YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
         </if>
     </select>
 
@@ -397,7 +397,7 @@
                     AND PATH LIKE '%'|| #{prodClassCd} ||'%'
                 </if>
                 GROUP BY YOIL
-                ORDER BY YOIL
+                ORDER BY DECODE(YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
             </when>
             <!-- 분류있음 -->
             <when test='level != null and level != "Level0"'>
@@ -500,7 +500,7 @@
                     )
                     GROUP BY YOIL
                 ) tba
-                ORDER BY tba.YOIL
+                ORDER BY DECODE(tba.YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
             </when>
         </choose>
         <!--<choose>-->
@@ -772,15 +772,7 @@
             )
             GROUP BY YOIL
         )
-        ORDER BY    CASE YOIL
-                                WHEN '월' THEN 1
-                                WHEN '화' THEN 2
-                                WHEN '수' THEN 3
-                                WHEN '목' THEN 4
-                                WHEN '금' THEN 5
-                                WHEN '토' THEN 6
-                                WHEN '일' THEN 7
-                    END
+        ORDER BY DECODE(YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
     </select>
 
     <!-- 외식테이블별탭 - 외식테이블별 매출조회-->
@@ -861,7 +853,7 @@
             )
             GROUP BY YOIL
         )
-        ORDER BY YOIL
+        ORDER BY DECODE(YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
     </select>
 
     <!-- 포스별탭 - 포스별 매출조회-->
@@ -880,7 +872,7 @@
                 SUM(SALE_QTY) AS SALE_QTY
         FROM    (
                 SELECT 	STORE_CD || POS_NO AS STORE_POS_NO,
-                TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD') -1, 'D') AS YOIL_NUM,
+                TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'D') AS YOIL_NUM,
                 TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
                 SUM(TOT_SALE_AMT) AS SALE_AMT,
                 SUM(TOT_DC_AMT) AS DC_AMT,

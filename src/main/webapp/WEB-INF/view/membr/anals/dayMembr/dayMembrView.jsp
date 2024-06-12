@@ -33,9 +33,9 @@
             <th><s:message code="cmm.search.date"/></th>
             <td colspan="3">
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="startDate" name="startDate" class="w120px"/></span>
+                    <span class="txtIn"> <input id="startDate" name="startDate" class="w110px"/></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="endDate" name="endDate" class="w120px"/></span>
+                    <span class="txtIn"> <input id="endDate" name="endDate" class="w110px"/></span>
                 </div>
             </td>
         </tr>
@@ -73,7 +73,7 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="dayMembr.saleDate"/>" binding="saleDate" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayMembr.saleDate"/>" binding="saleDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayMembr.saleFg"/>" binding="saleFg" data-map="saleFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayMembr.membrNm"/>" binding="membrNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayMembr.membrCardNo"/>" binding="membrCardNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -87,7 +87,6 @@
 
                     <%--팝업 조회시 필요--%>
                     <wj-flex-grid-column header="<s:message code="dayMembr.membrNo"/>" binding="membrNo" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-
                 </wj-flex-grid>
             </div>
         </div>
@@ -112,7 +111,7 @@
     var saleFgData = ${ccu.getCommCodeExcpAll("047")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembr.js?ver=20201203.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembr.js?ver=20240612.01" charset="utf-8"></script>
 
 <%-- 매출 상세정보 --%>
 <c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrPurchsView.jsp">
