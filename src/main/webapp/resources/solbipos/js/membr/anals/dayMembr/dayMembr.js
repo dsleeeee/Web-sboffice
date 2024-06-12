@@ -44,6 +44,13 @@ app.controller('dayMembrCtrl', ['$scope', '$http', '$timeout', function ($scope,
         if (col.binding === "realSaleAmt" || col.binding === "membrNm") {
           wijmo.addClass(e.cell, 'wijLink');
         }
+
+        if (col.format === "date") {
+          e.cell.innerHTML = getFormatDate(e.cell.innerText);
+        }
+        else if (col.format === "dateTime") {
+          e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+        }
       }
     });
 
