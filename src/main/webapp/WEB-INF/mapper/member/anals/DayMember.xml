@@ -90,6 +90,7 @@
             IN (${pivotPayCol})
         )
         GROUP BY SALE_DATE, SALE_FG, MEMBR_NO, MEMBR_NM, MEMBR_CARD_NO
+        ORDER BY SALE_DATE DESC
     </select>
 
 
