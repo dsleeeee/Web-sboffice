@@ -19,7 +19,7 @@ var app = agrid.getApp();
 app.controller('dayMembrPurchsCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('dayMembrPurchsCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('dayMembrPurchsCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -29,8 +29,7 @@ app.controller('dayMembrPurchsCtrl', ['$scope', '$http', function ($scope, $http
                 var col = s.columns[e.col];
                 if (col.format === "date") {
                     e.cell.innerHTML = getFormatDate(e.cell.innerText);
-                }
-                else if (col.format === "dateTime") {
+                } else if (col.format === "dateTime") {
                     e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
                 }
             }
