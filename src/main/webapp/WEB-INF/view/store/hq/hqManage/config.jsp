@@ -279,6 +279,7 @@ $("#envLayer #btnSave").click(function(){
   var arrChg = []; //  변경된 환경변수 배열 Key 값
   var params = [];
 
+  var envst0001 = 'N'; // [0001] 사원별매장관리
   // var paramArr = [];
 
   for(var i=0; i<objEnvstCd.length; i++) {
@@ -292,6 +293,12 @@ $("#envLayer #btnSave").click(function(){
       return false;
     }
 
+    // [0001] 사원별매장관리
+    if(objEnvstCd[i].value == "0001") {
+      if(objEnvstValCd[i].value == "Y") {
+        envst0001 = 'Y';
+      }
+    }
 
     if (objOldEnvstVal[i].value !== $("#env" + objEnvstCd[i].value).val()) {
 
@@ -355,6 +362,12 @@ $("#envLayer #btnSave").click(function(){
         s_alert.pop(result.message);
       });
     });
+
+    // [0001] 사원별매장관리
+    if(envst0001 == 'Y') {
+      var msgStr = "사원별매장관리를 사용으로 변경 하실 경우, 본사 화면 [기초관리] - [매장관리] - [사원별매장관리] 에서 관리 매장을 등록하셔야 매출이 표시 됩니다.";
+      s_alert.pop(msgStr);
+    }
 });
 
 <%-- 기본값 설정 버튼 클릭 --%>
