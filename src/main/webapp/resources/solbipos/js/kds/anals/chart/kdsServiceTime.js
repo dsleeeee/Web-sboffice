@@ -522,10 +522,6 @@ app.controller('kdsServiceTimeCtrl', ['$scope', '$http', '$timeout', function ($
         // });
     };
 
-    $scope.regStoreShow = function () {
-        $scope._broadcast('regStoreCtrl');
-    };
-
 // 차트
     $scope.chartKds = function () {
         console.log("chart!!!");

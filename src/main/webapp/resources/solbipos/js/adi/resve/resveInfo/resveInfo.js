@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : resveInfo.js
- * 설  명 : 거래처관리목록 JavaScript
+ * 설  명 : 예약현황 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -83,10 +83,4 @@ app.controller('resveInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._inquiryMain("/adi/resve/resveInfo/view.sb", params, function() {}, false);
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.resveInfoStoreShow = function () {
-        $scope._broadcast('resveInfoStoreCtrl');
-    };
 }]);

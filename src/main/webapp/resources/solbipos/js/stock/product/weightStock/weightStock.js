@@ -68,13 +68,6 @@ app.controller('weightStockCtrl', ['$scope', '$http', '$timeout', function ($sco
     };
     // <-- //검색 호출 -->
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show']
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.weightStockSelectStoreShow = function () {
-        $scope._broadcast('weightStockSelectStoreCtrl');
-    };
-
     // 상품분류정보 팝업
     $scope.popUpProdClass = function() {
         var popUp = $scope.prodClassPopUpLayer;

@@ -438,16 +438,6 @@ app.controller('kdsDayStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         });
     };
 
-    // 조회 매장
-    $scope.regStoreShow = function () {
-        $scope._broadcast('regStoreCtrl');
-    };
-
-    // 대비 매장
-    $scope.conRegStoreShow = function () {
-        $scope._broadcast('conRegStoreCtrl');
-    };
-
     // 체크
     $scope.valueCheck = function () {
         var date1 = new Date(wijmo.Globalize.format(kdsDayStartDate.value, 'yyyy-MM-dd'));

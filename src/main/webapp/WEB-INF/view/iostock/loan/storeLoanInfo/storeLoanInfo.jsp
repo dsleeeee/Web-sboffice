@@ -8,7 +8,7 @@
 <c:set var="baseUrl" value="/iostock/loan/storeLoanInfo/storeLoanInfo/"/>
 
 <div class="subCon" ng-controller="storeLoanInfoCtrl">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="searchStoreLoanInfo()"><s:message code="cmm.search"/></button>
@@ -82,4 +82,4 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoanInfo/storeLoanInfo.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoanInfo/storeLoanInfo.js?ver=20240611.01" charset="utf-8"></script>

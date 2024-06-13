@@ -28,13 +28,6 @@ app.controller('orderCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
 	    {"name": messages["orderStockInfo.rtn"], "value": "-1"} // 반품
 	  ]);
 
-	  //매장선택 모듈 팝업 사용시 정의
-	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	  $scope.orderSelectStoreShow = function () {
-		  $scope._broadcast('orderSelectStoreCtrl');
-	  };
-
 	// 그리드 전표구분
 	  $scope.slipFgMap = new wijmo.grid.DataMap([
 	    {id: "1", name: messages["vendrInstock.slipFgIn"]},

@@ -68,13 +68,6 @@ app.controller('dailyTableKwuCtrl', ['$scope', '$http', '$timeout', function ($s
     };
     // <-- //검색 호출 -->
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.dailyTableKwuSelectStoreShow = function () {
-        $scope._broadcast('dailyTableKwuSelectStoreCtrl');
-    };
-
     // 엑셀다운로드
     $scope.excelDownload = function(){
         var dailyTableKwuCtrl_sl = agrid.getScope("dailyTableKwuCtrl_sl"); // 매출종합

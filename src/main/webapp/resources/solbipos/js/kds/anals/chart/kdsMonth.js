@@ -241,10 +241,6 @@ app.controller('kdsMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
         // });
     };
 
-    $scope.regStoreShow = function () {
-        $scope._broadcast('regStoreCtrl');
-    };
-
 // 차트
     $scope.chartKds = function () {
     };

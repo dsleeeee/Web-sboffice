@@ -9,7 +9,7 @@
 <!-- contents start -->
 <div class="subCon3" ng-controller="storeMonthCtrl">
 
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storeMonthMainCtrlSrch')">
@@ -294,7 +294,7 @@
 </div>
 <!-- //contents end -->
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/storemonth/storeMonth.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/storemonth/storeMonth.js?ver=20240611.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

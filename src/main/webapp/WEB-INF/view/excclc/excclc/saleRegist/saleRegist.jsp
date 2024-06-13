@@ -9,7 +9,7 @@
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div class="subCon" ng-controller="saleRegistCtrl">
-  <div class="searchBar flddUnfld">
+  <div class="searchBar">
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('saleRegistCtrl')">
@@ -98,7 +98,7 @@
   <%-- 상품유형구분 --%>
   var prodTypeFgData = ${ccu.getCommCodeExcpAll("008")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegist/saleRegist.js?ver=20220624.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegist/saleRegist.js?ver=20240611.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 신규등록 --%>
 <c:import url="/WEB-INF/view/excclc/excclc/saleRegist/newRegist.jsp">

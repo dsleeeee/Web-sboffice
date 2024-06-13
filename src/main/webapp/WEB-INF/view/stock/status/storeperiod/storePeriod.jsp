@@ -10,7 +10,7 @@
 <c:set var="baseUrl" value="/stock/status/storeperiod/"/>
 
 <div class="subCon" ng-controller="storePeriodCtrl">
-	<div class="searchBar flddUnfld">
+	<div class="searchBar">
 		<a href="#" class="open fl"><s:message code="storePeriod.storePeriod"/></a>
 		<%-- 조회 --%>
     	<button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('storePeriodCtrlSrch')"><s:message code="cmm.search"/></button>
@@ -271,7 +271,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/storeperiod/storePeriod.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/storeperiod/storePeriod.js?ver=20240611.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

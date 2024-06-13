@@ -126,4 +126,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/depositDdc/popup/depositDdcReg.js?ver=20220421.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/depositDdc/popup/depositDdcReg.js?ver=20240611.01" charset="utf-8"></script>

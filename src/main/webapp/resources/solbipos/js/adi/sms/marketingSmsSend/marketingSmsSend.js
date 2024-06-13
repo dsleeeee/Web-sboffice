@@ -1078,16 +1078,6 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         // });
     });
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.regStoreShow = function () {
-        $scope._broadcast('regStoreCtrl');
-    };
-    $scope.regUseStoreShow = function () {
-        $scope._broadcast('regUseStoreCtrl');
-    };
-
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
         if( $("#tblSearchAddShow").css("display") === 'none') {

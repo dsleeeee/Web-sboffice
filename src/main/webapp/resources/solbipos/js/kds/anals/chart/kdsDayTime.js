@@ -455,10 +455,6 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
         // });
     };
 
-    $scope.regStoreShow = function () {
-        $scope._broadcast('regStoreCtrl');
-    };
-
 // 차트
     $scope.chartKds = function () {
         if(!$scope.valueCheck()){
@@ -565,10 +561,6 @@ app.controller('kdsDayTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
                 }
             }
         });
-    };
-
-    $scope.regStoreShow = function () {
-        $scope._broadcast('regStoreCtrl');
     };
 
     // 체크

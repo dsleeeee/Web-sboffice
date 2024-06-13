@@ -155,8 +155,4 @@ app.controller('saleRegistCtrl', ['$scope', '$http', '$timeout', function ($scop
     });
   };
 
-  // 매장선택
-  $scope.saleRegistStoreShow = function () {
-    $scope._broadcast('saleRegistStoreCtrl');
-  };
 }]);

@@ -141,4 +141,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/mony/status/status.js?ver=20210517.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/mony/status/status.js?ver=20240611.01" charset="utf-8"></script>

@@ -11,7 +11,7 @@
 <div class="subCon" ng-controller="kdsDayStoreCtrl">
     <input type="hidden" id="resurceFg" class="sb-input w50" ng-model="resurceFg" value="${orgnFg}"/>
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -290,7 +290,7 @@
     }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayStore.js?ver=2020070801.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kds/anals/chart/kdsDayStore.js?ver=20240611.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

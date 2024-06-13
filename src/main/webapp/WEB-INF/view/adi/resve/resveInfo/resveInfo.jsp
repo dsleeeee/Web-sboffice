@@ -10,7 +10,7 @@
 <div class="subCon" ng-controller="resveInfoCtrl">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -143,4 +143,4 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/resve/resveInfo/resveInfo.js?ver=20210520.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/resve/resveInfo/resveInfo.js?ver=20240611.01" charset="utf-8"></script>

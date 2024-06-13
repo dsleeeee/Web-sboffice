@@ -7,7 +7,7 @@
 <c:set var="baseUrl" value="/iostock/fnrchs/prod/prod/"/>
 
 <div class="subCon3" ng-controller="prodCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open  fl">${menuNm}</a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodCtrlSrch')">
@@ -192,7 +192,7 @@
     <%-- 본사 거래처 콤보박스 --%>
     var vendrList = ${vendrList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/prod/frnchsProd.js?ver=20220727.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/prod/frnchsProd.js?ver=20240611.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -161,13 +161,6 @@ app.controller('frnchsStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         $scope.excelFg = true;
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.frnchsStoreSelectStoreShow = function () {
-        $scope._broadcast('frnchsStoreSelectStoreCtrl');
-    };
-
     //거래명세표 리스트 조회
     $scope.searchDstmnList = function () {
         // 파라미터

@@ -92,13 +92,6 @@ app.controller('storeTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope._broadcast('depositDdcRegCtrl', params);
     };
 
-    // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.selectStoreShow = function () {
-        $scope._broadcast('selectStoreCtrl');
-    };
-    
     // 매장별집계 엑셀다운로드
     $scope.excelDownload = function () {
 

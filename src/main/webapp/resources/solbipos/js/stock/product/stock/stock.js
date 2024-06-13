@@ -68,13 +68,6 @@ app.controller('stockCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
         $scope._inquiryMain("/stock/product/stock/stock/getStockList.sb", params, function() {}, false);
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.stockSelectStoreShow = function () {
-        $scope._broadcast('stockSelectStoreCtrl');
-    };
-
     // 상품분류정보 팝업
     $scope.popUpProdClass = function() {
         var popUp = $scope.prodClassPopUpLayer;

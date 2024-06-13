@@ -87,13 +87,6 @@ app.controller('prodClassSaleRateCtrl', ['$scope', '$http', '$timeout', function
     $scope._inquiryMain("/sale/prod/prodClassSaleRate/prodClassSaleRate/getProdClassSaleRateList.sb", params);
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.prodClassSaleRateStoreShow = function () {
-    $scope._broadcast('prodClassSaleRateStoreCtrl');
-  };
-
   // 상품분류정보 팝업
   $scope.popUpProdClass = function() {
     var popUp = $scope.prodClassPopUpLayer;

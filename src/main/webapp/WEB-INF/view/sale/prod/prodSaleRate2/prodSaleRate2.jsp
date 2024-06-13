@@ -9,7 +9,7 @@
 
 <div class="subCon">
   <div ng-controller="prodSaleRate2Ctrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('prodSaleRate2Ctrl')">
@@ -211,7 +211,7 @@
   var arrDlvrInFgCol = dlvrInFgCol.split(',');
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRate2/prodSaleRate2.js?ver=20221103.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRate2/prodSaleRate2.js?ver=20246011.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

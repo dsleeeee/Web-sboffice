@@ -133,13 +133,6 @@ app.controller('rtnDstbCloseProdAddProdCtrl', ['$scope', '$http', '$timeout', fu
     }, 10);
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.rtnDstbCloseProdAddProdSelectStoreShow = function () {
-    $scope._broadcast('rtnDstbCloseProdAddProdSelectStoreCtrl');
-  };
-
 
   // 상품분류정보 팝업
   $scope.popUpProdClass = function () {

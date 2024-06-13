@@ -10,7 +10,7 @@
 
 <div id="reqDateCopyView" class="subCon" style="display: none;padding: 10px 20px 40px;">
   <div ng-controller="reqDateCopyCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="search();"><s:message code="cmm.search"/></button>
@@ -128,6 +128,6 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/reqDateCopy.js?ver=20200824.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/reqDateCopy.js?ver=20240611.01" charset="utf-8"></script>
 
 

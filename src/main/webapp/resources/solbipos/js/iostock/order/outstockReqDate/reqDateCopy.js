@@ -37,19 +37,6 @@ app.controller('reqDateCopyCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._broadcast('reqDateCopyDaysCtrl', {proc: "copy"});
   });
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.targetSelectStoreShow = function () {
-    $scope._broadcast('targetSelectStoreCtrl');
-  };
-
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.copySelectStoreShow = function () {
-    $scope._broadcast('copySelectStoreCtrl');
-  };
 }]);
 
 /** 요일별 그리드 controller */

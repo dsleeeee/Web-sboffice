@@ -133,14 +133,6 @@ app.controller('rtnStoreOrderCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._broadcast("rtnStoreOrderRegistCtrl", params);
   };
 
-  // 매장선택 모듈 팝업 사용시 정의
-  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-  $scope.rtnStoreOrderSelectStoreShow = function () {
-    $scope._broadcast('rtnStoreOrderSelectStoreCtrl');
-  };
-
-
   // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
   // comboFg : map - 그리드에 사용할 Combo, combo - ComboBox 생성. 두가지 다 사용할경우 combo,map 으로 하면 둘 다 생성.
   // comboId : combo 생성할 ID

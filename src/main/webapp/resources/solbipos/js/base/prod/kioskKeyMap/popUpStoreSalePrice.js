@@ -229,13 +229,6 @@ app.controller('popUpStoreSalePriceCtrl', ['$scope', '$http', '$timeout', functi
         }
     };
 
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.choiceSaveStoreShow = function () {
-        $scope._broadcast('choiceSaveStoreCtrl');
-    };
-
     // 저장
     $scope.saveProdPrice = function(){
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
@@ -380,13 +373,6 @@ app.controller('popUpStoreSalePriceCtrl', ['$scope', '$http', '$timeout', functi
         $scope._save('/base/price/salePrice/prodSalePrice/saveProdSalePrice.sb', params, function(){
             $scope.searchSalePriceList();
         });
-    };
-
-    // 매장선택 모듈 팝업 사용시 정의 (매장찾기)
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.searchStoreShow = function () {
-        $scope._broadcast('searchStoreCtrl');
     };
 
     // 매장선택 모듈 팝업 사용시 정의 (상품찾기)

@@ -27,13 +27,6 @@ app.controller('storeMonthCtrl', ['$scope', '$http', '$timeout', function ($scop
 	    {"name": messages["storeMonth.Amt"], "value": "2"} // 금액
 	  ]);
 
-	  //매장선택 모듈 팝업 사용시 정의
-	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	  $scope.storeMonthSelectStoreShow = function () {
-	    $scope._broadcast('storeMonthSelectStoreCtrl');
-	  };
-
 	  //거래처선택 모듈 팝업 사용시 정의
 	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	  // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

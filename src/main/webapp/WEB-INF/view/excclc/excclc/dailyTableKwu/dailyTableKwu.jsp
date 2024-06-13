@@ -12,7 +12,7 @@
 
     <div ng-controller="dailyTableKwuCtrl">
         <%-- 조회조건 --%>
-        <div class="searchBar flddUnfld">
+        <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -175,7 +175,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu/dailyTableKwu.js?ver=20221027.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu/dailyTableKwu.js?ver=20240611.01" charset="utf-8"></script>
 
 <%-- 일일일계표2 인쇄 레이어 --%>
 <c:import url="/WEB-INF/view/excclc/excclc/dailyTableKwu/dailyTableReportKwu.jsp">

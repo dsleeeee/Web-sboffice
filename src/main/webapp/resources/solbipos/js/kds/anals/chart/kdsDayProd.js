@@ -231,10 +231,6 @@ app.controller('kdsDayProdCtrl', ['$scope', '$http', '$timeout', function ($scop
         // });
     };
 
-    $scope.regStoreShow = function () {
-        $scope._broadcast('regStoreCtrl');
-    };
-
 // 차트
     $scope.chartKds = function () {
     };

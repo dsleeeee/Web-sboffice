@@ -10,7 +10,7 @@
 <c:set var="baseUrl" value="/stock/manage/viewStore/"/>
 
 <div class="subCon" ng-controller="stockViewStoreCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnDcDcfgSearch" ng-click="_broadcast('stockViewStoreCtrl')">
@@ -204,4 +204,4 @@
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/manage/viewStore/viewStore.js?ver=20200316.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/manage/viewStore/viewStore.js?ver=20240611.01" charset="utf-8"></script>

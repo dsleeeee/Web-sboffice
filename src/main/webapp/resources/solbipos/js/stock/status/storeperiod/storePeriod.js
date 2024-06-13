@@ -16,13 +16,6 @@ app.controller('storePeriodCtrl', ['$scope', '$http', '$timeout', function ($sco
 	// 조회조건 콤보박스 listScale 세팅
 	$scope._setComboData("storePeriodListScaleBox", gvListScaleBoxData);
 
-	// 매장선택 모듈 팝업 사용시 정의
-	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-	$scope.storePeriodSelectStoreShow = function () {
-		$scope._broadcast('storePeriodSelectStoreCtrl');
-	};
-
 	//거래처선택 모듈 팝업 사용시 정의
 	// 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
 	// _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'

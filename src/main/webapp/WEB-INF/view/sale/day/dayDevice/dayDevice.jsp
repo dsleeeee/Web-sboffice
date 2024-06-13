@@ -9,7 +9,7 @@
 
 <div class="subCon">
   <div ng-controller="dayDeviceCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
       <%-- 조회 --%>
       <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('dayDeviceCtrl')">
@@ -158,5 +158,5 @@
   var storeCd = "${storeCd}";
   var posFg  = ${cnv.getEnvCodeExcpAll("4020")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayDevice/dayDevice.js?ver=20221006.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayDevice/dayDevice.js?ver=20240611.01" charset="utf-8"></script>
 

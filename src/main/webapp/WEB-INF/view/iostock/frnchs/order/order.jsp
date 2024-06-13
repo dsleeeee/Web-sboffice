@@ -8,7 +8,7 @@
 
 <div class="subCon3">
   <div ng-controller="orderCtrl">
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
       <a href="#" class="open fl">${menuNm}</a>
       
       <%-- 조회 --%>
@@ -386,7 +386,7 @@
   <%-- 본사 거래처 콤보박스 --%>
   var vendrList = ${vendrList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/order/order.js?ver=20220726.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/frnchs/order/order.js?ver=20240611.01" charset="utf-8"></script>
 
 <%-- 입고 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/vendr/orderStockInfo/prodInstockInfo.jsp">

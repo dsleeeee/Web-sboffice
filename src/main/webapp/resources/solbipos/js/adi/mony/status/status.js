@@ -109,13 +109,6 @@ app.controller('monyStatusCtrl', ['$scope', '$http','$timeout', function ($scope
             });
         }
     };
-
-    // 매장선택 모듈 팝업 사용시 정의
-    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
-    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
-    $scope.monyStatusStoreShow = function () {
-        $scope._broadcast('monyStatusStoreCtrl');
-    };
     
     // 엑셀 다운로드
     $scope.excelDownload = function () {
