@@ -1262,7 +1262,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 touchKeyClassVO.setStoreCd(sessionInfoVO.getStoreCd());
             }
             touchKeyClassVO.setTukeyGrpCd(touchKeyVO.getTukeyGrpCd());
-            keyMapper.deleteTouchKeyClass(touchKeyClassVO);
+            keyMapper.deleteAllTouchKeyClass(touchKeyClassVO);
 
             touchKeyVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             touchKeyVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -1271,7 +1271,7 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             }
             touchKeyVO.setTukeyGrpCd(touchKeyVO.getTukeyGrpCd());
             keyMapper.deleteTouchkeyGrp(touchKeyVO);
-            keyMapper.deleteTouchKey(touchKeyVO);
+            keyMapper.deleteAllTouchKey(touchKeyVO);
         }
 
         return procCnt;

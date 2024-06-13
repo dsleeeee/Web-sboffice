@@ -11,6 +11,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyClassVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1353,5 +1355,34 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         kioskKeyMapVO.setUserId(sessionInfoVO.getUserId());
 
         return kioskKeyMapMapper.getSalePrice(kioskKeyMapVO);
+    }
+
+    @Override
+    public int getKioskKeyDelete(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        for(KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+
+            KioskKeyMapVO kioskKeyMapClassVO = new KioskKeyMapVO();
+            kioskKeyMapClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            kioskKeyMapClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapClassVO.setPosNo(kioskKeyMapVO.getPosNo());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                kioskKeyMapClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            kioskKeyMapClassVO.setTuClsType(kioskKeyMapVO.getTuClsType());
+            kioskKeyMapMapper.deleteAllKioskKeyClass(kioskKeyMapClassVO);
+
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            kioskKeyMapMapper.deleteKioskkeyGrp(kioskKeyMapVO);
+            kioskKeyMapMapper.deleteAllKioskKey(kioskKeyMapVO);
+        }
+
+        return procCnt;
     }
 }

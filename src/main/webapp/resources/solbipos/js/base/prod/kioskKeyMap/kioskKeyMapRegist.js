@@ -544,6 +544,16 @@ console.log(params);
         $scope._broadcast('kioskKeyMapStoreCopyCtrl');
     };
 
+    // 키오스크키맵삭제
+    $scope.kioskKeyDel = function(){
+        $scope.kioskKeyDelLayer.show(true);
+        if(orgnFg === "HQ"){
+            $scope._broadcast('kioskKeyDelCtrl', null);
+        } else {
+            $scope._broadcast('kioskKeyDelCtrl', $scope.posNoCombo.selectedValue);
+        }
+    };
+
     // 추천메뉴
     $scope.tuRecmd = function(){
 

@@ -252,4 +252,13 @@ public interface KioskKeyMapMapper {
 
     /** 키오스크 매장적용(매장/포장) - 매장 그룹명 수정 */
     int insertStoreGrpNmReg(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 삭제 팝업 - 키오스크키맵그룹 삭제 */
+    int deleteKioskkeyGrp(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 삭제 팝업 - 키오스크키맵 삭제 */
+    int deleteAllKioskKey(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크키맵 삭제 팝업 - 키오스크 카테고리(분류) 삭제 */
+    int deleteAllKioskKeyClass(KioskKeyMapVO kioskKeyMapVO);
 }
