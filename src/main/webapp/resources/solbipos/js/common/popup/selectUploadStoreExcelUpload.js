@@ -113,7 +113,7 @@ app.controller('selectUploadStoreExcelUploadCtrl', ['$scope', '$http', '$timeout
                 if ($scope.selectUploadStoreExcelUploadFlex.columns[c].header !== null) {
                     if ($scope.selectUploadStoreExcelUploadFlex.columns[c].header !== null && $scope.selectUploadStoreExcelUploadFlex.getCellData(r, c, false) !== null) {
                         var colBinding = $scope.colHeaderBind[$scope.selectUploadStoreExcelUploadFlex.columns[c].header];
-                        var cellValue  = $scope.selectUploadStoreExcelUploadFlex.getCellData(r, c, false) + '';
+                        var cellValue  = $scope.selectUploadStoreExcelUploadFlex.getCellData(r, c, false).replaceAll('\'', '') + '';
                         item[colBinding] = cellValue;
                     }
                 }
