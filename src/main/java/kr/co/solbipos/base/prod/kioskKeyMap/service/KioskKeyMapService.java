@@ -127,4 +127,7 @@ public interface KioskKeyMapService {
 
     /** 판매가관리 조회 */
     List<DefaultMap<Object>> getSalePrice(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 키오스크키맵 팝업 - 삭제 */
+    int getKioskKeyDelete(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 }

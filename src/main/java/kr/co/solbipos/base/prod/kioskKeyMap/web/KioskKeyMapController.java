@@ -13,6 +13,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapService;
 import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
+import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1084,5 +1085,28 @@ public class KioskKeyMapController {
         List<DefaultMap<Object>> result = kioskKeyMapService.getSalePrice(kioskKeyMapVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, kioskKeyMapVO);
+    }
+
+    /**
+     * 키오스크키맵 팝업 - 삭제
+     *
+     * @param kioskKeyMapVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 06. 05.
+     */
+    @RequestMapping(value = "/kioskKeyMap/getKioskKeyDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskKeyDelete(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskKeyMapService.getKioskKeyDelete(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

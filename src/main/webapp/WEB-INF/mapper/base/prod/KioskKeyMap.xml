@@ -194,7 +194,7 @@
     </insert>
 
 
-    <!-- 터치키그룹_조회 -->
+    <!-- 키맵그룹_조회 -->
     <!--
         TABLE    : TB_HQ_KIOSK_GROUP, TB_MS_KIOSK_GROUP
         PARAM    : kioskKeyMapVO
@@ -213,6 +213,12 @@
                 AND 	thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE (+)
                 AND     thkc.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     thkc.TU_CLS_TYPE NOT IN ('00')
+                <if test="tuClsType != null and tuClsType !=''">
+                    AND thkc.TU_CLS_TYPE LIKE '%'||#{tuClsType}||'%'
+                </if>
+                <if test="tuClsTypeNm != null and tuClsTypeNm !=''">
+                    AND thkg.TU_CLS_TYPE_NM LIKE '%'||#{tuClsTypeNm}||'%'
+                </if>
                 ORDER BY thkc.TU_CLS_TYPE
             </when>
             <!-- 매장 -->
@@ -228,6 +234,12 @@
                 AND     tmkc.STORE_CD = #{storeCd}
                 AND     tmkc.POS_NO = #{posNo}
                 AND     tmkc.TU_CLS_TYPE NOT IN ('00')
+                <if test="tuClsType != null and tuClsType !=''">
+                    AND tmkc.TU_CLS_TYPE LIKE '%'||#{tuClsType}||'%'
+                </if>
+                <if test="tuClsTypeNm != null and tuClsTypeNm !=''">
+                    AND tmkg.TU_CLS_TYPE_NM LIKE '%'||#{tuClsTypeNm}||'%'
+                </if>
                 ORDER BY tmkc.TU_CLS_TYPE
             </when>
         </choose>
@@ -4695,4 +4707,86 @@
             ,   #{modId}
             )
     </update>
+
+    <!-- 키오스크키맵 삭제 팝업 - 키오스크키맵그룹 삭제 -->
+    <!--
+        TABLE    :
+        PARAM    : kioskKeyMapVO
+        COMMENTS :
+    -->
+    <delete id="deleteKioskkeyGrp" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.deleteKioskkeyGrp */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM    TB_HQ_KIOSK_GROUP
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     TU_CLS_TYPE = #{tuClsType}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM    TB_MS_KIOSK_GROUP
+                WHERE   STORE_CD = #{storeCd}
+                AND     POS_NO = #{posNo}
+                AND     TU_CLS_TYPE = #{tuClsType}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 키오스크키맵 삭제 팝업 - 키오스크키맵 삭제 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 카테고리(분류) 삭제 시, 카테고리에 속한 키맵도 삭제한다.
+    -->
+    <delete id="deleteAllKioskKey" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.deleteAllKioskKey */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM    TB_HQ_KIOSK_KEY
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     TU_CLS_TYPE = #{tuClsType}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM    TB_MS_KIOSK_KEY
+                WHERE   STORE_CD = #{storeCd}
+                AND     POS_NO = #{posNo}
+                AND     TU_CLS_TYPE = #{tuClsType}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 키오스크키맵 삭제 팝업 - 키오스크 카테고리(분류) 삭제 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS, TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 카테고리(분류) 삭제한다.
+    -->
+    <delete id="deleteAllKioskKeyClass" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.deleteAllKioskKeyClass */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM    TB_HQ_KIOSK_CLS
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     TU_CLS_TYPE = #{tuClsType}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM    TB_MS_KIOSK_CLS
+                WHERE   STORE_CD = #{storeCd}
+                AND     POS_NO = #{posNo}
+                AND     TU_CLS_TYPE = #{tuClsType}
+            </when>
+        </choose>
+    </delete>
+
 </mapper>

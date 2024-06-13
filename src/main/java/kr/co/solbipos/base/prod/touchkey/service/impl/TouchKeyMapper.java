@@ -207,4 +207,9 @@ public interface TouchKeyMapper {
     /** 본사 그룹명 변경 시 매장 그룹명 추가 및 수정 */
     int updateStoreGrpNm(TouchKeyVO touchKeyVO);
 
+    /** 터치키 삭제 팝업 - 판매터치키 분류삭제 */
+    int deleteAllTouchKeyClass(TouchKeyClassVO touchKeyClassVO);
+
+    /** 터치키 삭제 팝업 - 판매터치키 삭제 */
+    int deleteAllTouchKey(TouchKeyVO touchKeyVO);
 }

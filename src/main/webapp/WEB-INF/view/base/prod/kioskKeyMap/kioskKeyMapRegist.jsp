@@ -95,6 +95,12 @@
                                 <s:message code="kioskKeyMap.tuClsTypeStore" />
                             </button>
                         </c:if>
+                        <%-- 키오스크키맵삭제 --%>
+                        <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && kioskKeyEnvstVal == '1')}">
+                        <button class="btn_skyblue" id="btnDelKioskKey" ng-click="kioskKeyDel()">
+                            <s:message code="kioskKeyMap.kioskKeyDel" />
+                        </button>
+                        </c:if>
                         <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
                             <s:message code="kioskKeyMap.tuRecmd" />
                         </button>
@@ -504,7 +510,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20240528.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20240605.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -520,6 +526,10 @@
 
 <%-- 키맵적용(매장/포장) 팝업(매장용) --%>
 <c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyMapEnvStore.jsp">
+</c:import>
+
+<%-- 키오스크키맵삭제 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/kioskKeyMap/kioskKeyDel.jsp">
 </c:import>
 
 <%-- 추천메뉴 팝업 --%>
