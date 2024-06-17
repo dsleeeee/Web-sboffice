@@ -1381,6 +1381,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             }
             kioskKeyMapMapper.deleteKioskkeyGrp(kioskKeyMapVO);
             kioskKeyMapMapper.deleteAllKioskKey(kioskKeyMapVO);
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                kioskKeyMapMapper.deleteKioskKeyLsm(kioskKeyMapVO);
+            }
         }
 
         return procCnt;

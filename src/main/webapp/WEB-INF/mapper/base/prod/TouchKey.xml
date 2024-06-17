@@ -3957,7 +3957,6 @@
         </choose>
     </delete>
 
-
     <!-- 판매터치키 분류 삭제 -->
     <!--
         TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
@@ -3990,6 +3989,21 @@
                 </if>
             </when>
         </choose>
+    </delete>
+
+    <!-- 판매터치키 매장수정허용 삭제 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        PARAM    : touchKeyClassVO
+        COMMENTS : 판매터치키 매장수정허용분류를 삭제한다.
+    -->
+    <delete id="deleteTouchKeyLsm" parameterType="touchKeyClassVO">
+        /* USE : TouchkeyMapper.deleteTouchKeyLsm */
+                DELETE
+                FROM    TB_HQ_NMCODE
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     NMCODE_NM       = #{tukeyGrpCd}
+                AND     NMCODE_GRP_CD   = '228'
     </delete>
 
 </mapper>

@@ -212,4 +212,7 @@ public interface TouchKeyMapper {
 
     /** 터치키 삭제 팝업 - 판매터치키 삭제 */
     int deleteAllTouchKey(TouchKeyVO touchKeyVO);
+
+    /** 터치키 삭제 팝업 - 매장수정허용분류 삭제 */
+    int deleteTouchKeyLsm(TouchKeyVO touchKeyVO);
 }

@@ -1272,6 +1272,9 @@ public class TouchKeyServiceImpl implements TouchKeyService {
             touchKeyVO.setTukeyGrpCd(touchKeyVO.getTukeyGrpCd());
             keyMapper.deleteTouchkeyGrp(touchKeyVO);
             keyMapper.deleteAllTouchKey(touchKeyVO);
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                keyMapper.deleteTouchKeyLsm(touchKeyVO);
+            }
         }
 
         return procCnt;
