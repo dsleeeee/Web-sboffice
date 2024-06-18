@@ -28,7 +28,7 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 출고일자 --%>
+                <%-- 폐기일자 --%>
                 <th><s:message code="disuseInfoBonavie.dtIo"/></th>
                 <td>
                     <div class="sb-select">
@@ -50,12 +50,12 @@
                 </c:if>
             </tr>
             <tr>
-                <%-- 품목코드 --%>
+                <%-- 상품코드 --%>
                 <th><s:message code="disuseInfoBonavie.prodCd" /></th>
                 <td>
                     <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                 </td>
-                <%-- 품목명 --%>
+                <%-- 상품명 --%>
                 <th><s:message code="disuseInfoBonavie.prodNm" /></th>
                 <td>
                     <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
@@ -100,27 +100,17 @@
                         <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                     </c:if>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdCompany"/>" binding="cdCompany" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPlant"/>" binding="cdPlant" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgr"/>" binding="noEgr" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgrline"/>" binding="noEgrline" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPjt"/>" binding="cdPjt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPartner"/>" binding="cdPartner" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.prodCd"/>" binding="prodCd" width="95" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.prodNm"/>" binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.qtIo"/>" binding="qtIo" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.um"/>" binding="um" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.am"/>" binding="am" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.vat"/>" binding="vat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noIo"/>" binding="noIo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noIoline"/>" binding="noIoline" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.qtIo"/>" binding="qtIo" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.fgTpio"/>" binding="fgTpio" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.fgTpioRemark"/>" binding="fgTpioRemark" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdQtiotp"/>" binding="cdQtiotp" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.fgStatus"/>" binding="fgStatus" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtsInsert"/>" binding="dtsInsert" width="125" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.idInsert"/>" binding="idInsert" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtsUpdate"/>" binding="dtsUpdate" width="125" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.idUpdate"/>" binding="idUpdate" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.sendYn"/>" binding="sendYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
@@ -153,27 +143,17 @@
                     <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdCompany"/>" binding="cdCompany" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPlant"/>" binding="cdPlant" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgr"/>" binding="noEgr" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgrline"/>" binding="noEgrline" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPjt"/>" binding="cdPjt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPartner"/>" binding="cdPartner" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.prodCd"/>" binding="prodCd" width="95" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.prodNm"/>" binding="prodNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.qtIo"/>" binding="qtIo" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.um"/>" binding="um" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.am"/>" binding="am" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.vat"/>" binding="vat" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noIo"/>" binding="noIo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noIoline"/>" binding="noIoline" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.qtIo"/>" binding="qtIo" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.fgTpio"/>" binding="fgTpio" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.fgTpioRemark"/>" binding="fgTpioRemark" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdQtiotp"/>" binding="cdQtiotp" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.fgStatus"/>" binding="fgStatus" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtsInsert"/>" binding="dtsInsert" width="125" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.idInsert"/>" binding="idInsert" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtsUpdate"/>" binding="dtsUpdate" width="125" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.idUpdate"/>" binding="idUpdate" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.sendYn"/>" binding="sendYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
