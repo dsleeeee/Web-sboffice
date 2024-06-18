@@ -258,14 +258,14 @@ public class VirtualLoginController {
             LOGGER.info("가상로그인 시작 : {} sessionInfoVO.getUserId(): ", sessionInfoVO.getUserId()+", BaseEnv.VIRTUAL_LOGIN_ID:"+BaseEnv.VIRTUAL_LOGIN_ID);
             // 신규 세션 생성을 위해 VO 재사용
             sessionInfoVO = new SessionInfoVO();
-            sessionInfoVO.setLoginIp(getClientIp(request));
-            sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
             // 사용자ID를 가상로그인ID로 설정
             sessionInfoVO.setUserId(BaseEnv.VIRTUAL_LOGIN_ID);
             // 가상로그인 아이디는 현재 아이디가 되어야함
             sessionInfoVO.setvUserId(vGetUserId);
             // userId 로 사용자 조회 ( sessionInfoVO 값 Override 주의 )
             sessionInfoVO = authService.selectWebUser(sessionInfoVO);
+            sessionInfoVO.setLoginIp(getClientIp(request));
+            sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
             // 가상로그인은 로그인 상태 정상으로 판단
             sessionInfoVO.setLoginResult(LoginResult.SUCCESS);
             // sessionId 세팅
