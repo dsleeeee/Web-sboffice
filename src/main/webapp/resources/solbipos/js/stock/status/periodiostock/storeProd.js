@@ -28,6 +28,12 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    {"name": messages["periodIostock.Tot"], "value": "Tot"}
 	]);
 
+	// 조회조건 마감재고표시 데이터 Set
+	$scope._setComboData("srchStockOptionCombo", [
+		{"name": "미표시", "value": "N"},
+		{"name": "표시", "value": "Y"}
+	]);
+
 	$scope.periodIostockSelectVendrShow = function () {
 		$scope._broadcast('periodIostockSelectVendrCtrl');
 	};
@@ -43,7 +49,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	        var col = s.columns[e.col];
 	        var colCode = col.binding.slice(-3);
 
-	        if (col.binding === "prodCd" || colCode === "Qty" && s.cells.getCellData(e.row,e.col,false) != null && col.binding !== "poUnitQty" && col.binding !== "setInQty") { // 상품코드 & 수량
+	        if (col.binding === "prodCd" || colCode === "Qty" && s.cells.getCellData(e.row,e.col,false) != null && col.binding !== "poUnitQty" && col.binding !== "setInQty" && col.binding !== "baseQty" && col.binding !== "closeQty") { // 상품코드 & 수량
 	        	var item = s.rows[e.row].dataItem;
 	          	wijmo.addClass(e.cell, 'wijLink');
 	          	wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -70,6 +76,8 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    dataItem.poUnitQty		= messages["periodIostock.poUnitQty"];
 	    dataItem.poUnitFgNm		= messages["periodIostock.poUnitFg"];
 	    dataItem.barcdCd		= messages["periodIostock.barcdCd"];
+		dataItem.baseQty			= messages["periodIostock.basicStock"];
+		dataItem.baseTot			= messages["periodIostock.basicStock"];
 
 	    // 공통
 	    dataItem.moveInQty		= messages["periodIostock.ioOccr04"]; // 매장이입
@@ -79,6 +87,8 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		dataItem.disuseQty		= messages["periodIostock.disuse"]; // 재고폐기
 		dataItem.adjQty			= messages["periodIostock.adj"]; // 재고조정
 		dataItem.setInQty		= messages["periodIostock.setIn"]; // 세트생성
+		dataItem.closeQty			= messages["periodIostock.endingStock"];
+		dataItem.closeTot			= messages["periodIostock.endingStock"];
 
 	    // 매장
 	    dataItem.storeInQty		= messages["periodIostock.ioOccr03"]; // 매장입고
@@ -161,7 +171,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 	    		if (col.binding === "prodCd") { // 상품코드
 	    			$scope._broadcast('prodCodeDtlCtrl', params);
 	    		}
-	    		if (col.binding.slice(-3) === "Qty" && selectedRow[col.binding] != null && col.binding !== "poUnitQty" && col.binding !== "setInQty"){
+	    		if (col.binding.slice(-3) === "Qty" && selectedRow[col.binding] != null && col.binding !== "poUnitQty" && col.binding !== "setInQty" && col.binding !== "baseQty" && col.binding !== "closeQty"){
 	    	        var colCode = col.binding;
 	    	        params.poUnitQty = selectedRow.poUnitQty; // 입수
 	    	        params.colCode = colCode; // 수량(컬럼 뒤에 붙는 숫자, 어떤 수량인지 구분)
@@ -246,6 +256,7 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 		$scope.excelListScale 	= params.listScale;
 		$scope.excelSrchOption	= $scope.srchOption;
 		$scope.isSearch			= true;
+		$scope.excelSrchStockOption	= $scope.srchStockOption;
 
 		if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
@@ -260,17 +271,31 @@ app.controller('periodiostockCtrl', ['$scope', '$http', '$timeout', function ($s
 
 	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
 	$scope.srchOptionView = function(){
-		var srchSrchOption = $scope.srchOption;
+		var check = $scope.srchOption;
+		var check2 = $scope.srchStockOption;
 		var columns = $scope.flex.columns;
 		var includeWord;
 		for(var i=0; i<columns.length-2; i++){
 			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : ""; // 컬럼명에 Qty나 Tot 포함시 해당 문자열을 읽어오고, 포함하지 않을 경우 [0]에 null 값이 들어가므로 "" 로 변경해준다.
 			if(includeWord !== "" && includeWord !== "poUnitQty" && columns[i].binding != 'setInQty'){ // poUnitQty(입수)는 조회옵션에 따라 visible처리를 해야하는 컬럼이 아니라 무조건 표시해야하는 컬럼
-				//srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
-				if(srchSrchOption.indexOf(includeWord) >= 0){
-					columns[i].visible = true; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
-				}else{
-					columns[i].visible = false;
+				// 기초/마감재고
+				if(columns[i].binding == 'baseQty' || columns[i].binding == 'baseTot' || columns[i].binding == 'closeQty' || columns[i].binding == 'closeTot'){
+					if(check2 == "N") { // 미표시
+						columns[i].visible = false;
+					} else if(check2 == "Y") { // 표시
+						if(check.indexOf(includeWord) >= 0){
+							columns[i].visible = true; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+						}else{
+							columns[i].visible = false;
+						}
+					}
+				} else {
+					//check.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+					if(check.indexOf(includeWord) >= 0){
+						columns[i].visible = true; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+					}else{
+						columns[i].visible = false;
+					}
 				}
 			}
 		}
@@ -325,6 +350,8 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 		dataItem.poUnitQty		= messages["periodIostock.poUnitQty"];
 		dataItem.poUnitFgNm		= messages["periodIostock.poUnitFg"];
 		dataItem.barcdCd		= messages["periodIostock.barcdCd"];
+		dataItem.baseQty			= messages["periodIostock.basicStock"];
+		dataItem.baseTot			= messages["periodIostock.basicStock"];
 
 		// 공통
 		dataItem.moveInQty		= messages["periodIostock.ioOccr04"]; // 매장이입
@@ -334,6 +361,8 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 		dataItem.disuseQty		= messages["periodIostock.disuse"]; // 재고폐기
 		dataItem.adjQty			= messages["periodIostock.adj"]; // 재고조정
 		dataItem.setInQty		= messages["periodIostock.setIn"]; // 세트생성
+		dataItem.closeQty			= messages["periodIostock.endingStock"];
+		dataItem.closeTot			= messages["periodIostock.endingStock"];
 
 		// 매장
 		dataItem.storeInQty		= messages["periodIostock.ioOccr03"]; // 매장입고
@@ -404,17 +433,31 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 
 	// 조회옵션에 따른 visible 처리 (박정은, 20.03.17)
 	$scope.srchOptionView = function(){
-		var srchSrchOption = $scope.excelSrchOption;
+		var check = $scope.excelSrchOption;
+		var check2 = $scope.excelSrchStockOption;
 		var columns = $scope.excelFlex.columns;
 		var includeWord;
 		for(var i=0; i<columns.length; i++){
 			includeWord = /Qty|Tot/.exec(columns[i].binding) ? /Qty|Tot/.exec(columns[i].binding)[0] : ""; // 컬럼명에 Qty나 Tot 포함시 해당 문자열을 읽어오고, 포함하지 않을 경우 [0]에 null 값이 들어가므로 "" 로 변경해준다.
 			if(includeWord !== "" && includeWord !== "poUnitQty" && columns[i].binding != 'setInQty'){ // poUnitQty(입수)는 조회옵션에 따라 visible처리를 해야하는 컬럼이 아니라 무조건 표시해야하는 컬럼
-				//srchSrchOption.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
-				if(srchSrchOption.indexOf(includeWord) >= 0){
-					columns[i].visible = true; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
-				}else{
-					columns[i].visible = false;
+				// 기초/마감재고
+				if(columns[i].binding == 'baseQty' || columns[i].binding == 'baseTot' || columns[i].binding == 'closeQty' || columns[i].binding == 'closeTot'){
+					if(check2 == "N") { // 미표시
+						columns[i].visible = false;
+					} else if(check2 == "Y") { // 표시
+						if(check.indexOf(includeWord) >= 0){
+							columns[i].visible = true; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+						}else{
+							columns[i].visible = false;
+						}
+					}
+				} else {
+					//check.includes(includeWord) ? columns[i].visible = true : columns[i].visible = false; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+					if(check.indexOf(includeWord) >= 0){
+						columns[i].visible = true; // 선택한 옵션값에 포함되는 컬럼을 true로 변경
+					}else{
+						columns[i].visible = false;
+					}
 				}
 			}
 		}
@@ -446,6 +489,7 @@ app.controller('periodiostockExcelCtrl', ['$scope', '$http', '$timeout', functio
 		params.unitFg		= $scope.excelUnitFg; // 단위구분
 		params.srchOption	= $scope.excelSrchOption; // 조회옵션
 		params.listScale 	= $scope.excelListScale;
+		params.srchStockOption	= $scope.excelSrchStockOption;
 
 		if(params.startDate > params.endDate){
 		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
