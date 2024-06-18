@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.stock.status.storeday.service.impl.StoreDayMapper">
+
     <!-- 매장일수불 - 리스트 조회 -->
     <!--
         TABLE    : TB_ST_STORE_STOCK_DAILY, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD, TB_HQ_PRODUCT_CLASS
@@ -10,6 +10,7 @@
         COMMENTS : 매장일수불현황 - 리스트를 조회한다.
     -->
     <select id="storeDayList" parameterType="storeDayVO" resultType="DefaultMap">
+        /* StoreDayMapper.storeDayList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT A.*
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
@@ -34,6 +35,8 @@
                          , SF_ZERO_TO_NULL(SUM(DISUSE_QTY / TMP.PO_UNIT_QTY))       AS DISUSE_QTY /* 재고폐기 수량*/
                          , SF_ZERO_TO_NULL(SUM(ADJ_QTY / TMP.PO_UNIT_QTY))          AS ADJ_QTY /* 재고조정 수량*/
                          , SF_ZERO_TO_NULL(SUM(SET_IN_QTY / TMP.PO_UNIT_QTY))       AS SET_IN_QTY /* 세트생성 수량*/
+                         , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / THP.PO_UNIT_QTY))      AS BASE_QTY /* 기초재고수량 */
+                         , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / THP.PO_UNIT_QTY))     AS CLOSE_QTY /* 기말재고수량 */
                      </if>
                      <if test='unitFg == "0"'>
                          , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY))   AS STORE_IN_QTY /* 매장입고 수량*/
@@ -46,6 +49,8 @@
                          , SF_ZERO_TO_NULL(SUM(DISUSE_QTY))     AS DISUSE_QTY /* 재고폐기 수량*/
                          , SF_ZERO_TO_NULL(SUM(ADJ_QTY))        AS ADJ_QTY /* 재고조정 수량*/
                          , SF_ZERO_TO_NULL(SUM(SET_IN_QTY))     AS SET_IN_QTY /* 세트생성 수량*/
+                         , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY))    AS BASE_QTY /* 기초재고수량 */
+                         , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY))   AS CLOSE_QTY /* 기말재고수량 */
                      </if>
                      , SF_ZERO_TO_NULL(SUM(STORE_IN_TOT))   AS STORE_IN_TOT /* 매장입고 금액*/
                      , SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT))  AS STORE_OUT_TOT /* 매장반품 금액*/
@@ -54,28 +59,52 @@
                      , SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT)) AS STORE_SALE_TOT /* 매장판매 금액*/
                      , SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT))    AS MOVE_IN_TOT /* 매장이입 금액*/
                      , SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT))   AS MOVE_OUT_TOT /* 매장이출 금액*/
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))    AS BASE_TOT /* 기초재고금액 */
+                     , SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))   AS CLOSE_TOT /* 기말재고금액 */
                      , #{startDate} AS START_DATE
-                  FROM TB_ST_STORE_STOCK_DAILY TSSSD 
-                     , TB_MS_PRODUCT TMP
-                     , TB_MS_PRODUCT_BARCD TMPB
-                 WHERE TSSSD.STORE_CD     = TMP.STORE_CD
-                   AND TSSSD.PROD_CD      = TMP.PROD_CD
-                   AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
-                   AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
-                   AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
-                   AND TMP.STOCK_PROD_YN = 'Y'
-                   AND TMP.USE_YN = 'Y'
-                   <if test='startDate != null and startDate != ""'>
-                      AND TSSSD.IOSTOCK_DATE  = #{startDate}
-                   </if>
-                   <if test='prodCd != null and prodCd != ""'>
-                      AND TMP.PROD_CD  = #{prodCd}
-                   </if>
-                   <if test='storeCdQuery != null and storeCdQuery != ""'>
-                      AND TSSSD.STORE_CD IN (${storeCdQuery})
-                   </if>
-                   <if test='arrVendrCd != null and arrVendrCd != ""'>
-			          AND TMP.PROD_CD IN    ( SELECT  PROD_CD
+                FROM TB_ST_STORE_STOCK_DAILY TSSSD
+                    , TB_MS_PRODUCT TMP
+                    , TB_MS_PRODUCT_BARCD TMPB
+                    , (
+                            SELECT STORE_CD
+                            ,       PROD_CD
+                            ,       DATE_QTY AS BASE_QTY
+                            ,       AVG_COST_UPRC AS BASE_TOT
+                            FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+                            WHERE  STORE_CD   	  (+) = #{storeCd}
+                            AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
+                    ) v1
+                    , (
+                            SELECT STORE_CD
+                            ,       PROD_CD
+                            ,       DATE_QTY AS CLOSE_QTY
+                            ,       AVG_COST_UPRC AS CLOSE_TOT
+                            FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+                            WHERE  STORE_CD  	  (+) = #{storeCd}
+                            AND    THE_DATE      (+) = #{startDate}
+                    ) v2
+                WHERE TSSSD.STORE_CD     = TMP.STORE_CD
+                    AND TSSSD.PROD_CD      = TMP.PROD_CD
+                    AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
+                    AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
+                    AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
+                    AND v1.STORE_CD 	(+)= TSSSD.STORE_CD
+                    AND v1.PROD_CD      (+)= TSSSD.PROD_CD
+                    AND v2.STORE_CD		(+)= TSSSD.STORE_CD
+                    AND v2.PROD_CD      (+)= TSSSD.PROD_CD
+                    AND TMP.STOCK_PROD_YN = 'Y'
+                    AND TMP.USE_YN = 'Y'
+                    <if test='startDate != null and startDate != ""'>
+                        AND TSSSD.IOSTOCK_DATE  = #{startDate}
+                    </if>
+                    <if test='prodCd != null and prodCd != ""'>
+                        AND TMP.PROD_CD  = #{prodCd}
+                    </if>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND TSSSD.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='arrVendrCd != null and arrVendrCd != ""'>
+			            AND TMP.PROD_CD IN    ( SELECT  PROD_CD
 			                                  FROM    TB_MS_VENDOR_PROD
 			                                  WHERE   STORE_CD = TSSSD.STORE_CD
 			                                  AND     VENDR_CD IN
@@ -83,9 +112,9 @@
 			                                      #{item}
 			                                  </foreach>
 			                                )
-			       </if>
-                   <if test='prodClassCd != null and prodClassCd != ""'>
-                      AND TMP.PROD_CLASS_CD  IN (
+			        </if>
+                    <if test='prodClassCd != null and prodClassCd != ""'>
+                        AND TMP.PROD_CLASS_CD  IN (
                                                     SELECT              PROD_CLASS_CD
                                                     FROM                TB_HQ_PRODUCT_CLASS
                                                     WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
@@ -94,29 +123,29 @@
                                                     CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
                                                     AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
                                                 )
-                   </if>
-                   <if test='prodNm != null and prodNm != ""'>
-                      AND TMP.PROD_NM  LIKE '%'||#{prodNm}||'%'
-                   </if>
-                   <if test='barcdCd != null and barcdCd != ""'>
-                      AND TMPB.BARCD_CD  = #{barcdCd}
-                   </if>
-                 GROUP BY  TMP.STORE_CD
-                         , TMP.PROD_CLASS_CD
-                         , TSSSD.PROD_CD
-                         , TMP.PROD_NM
-                         , TSSSD.STORE_CD
-                         , TMP.PO_UNIT_QTY
-                         , TMP.PO_UNIT_FG
-                         , TMPB.BARCD_CD
-                 ORDER BY TSSSD.PROD_CD
-                        , TSSSD.STORE_CD
+                    </if>
+                    <if test='prodNm != null and prodNm != ""'>
+                        AND TMP.PROD_NM  LIKE '%'||#{prodNm}||'%'
+                    </if>
+                    <if test='barcdCd != null and barcdCd != ""'>
+                        AND TMPB.BARCD_CD  = #{barcdCd}
+                    </if>
+                GROUP BY  TMP.STORE_CD
+                    , TMP.PROD_CLASS_CD
+                    , TSSSD.PROD_CD
+                    , TMP.PROD_NM
+                    , TSSSD.STORE_CD
+                    , TMP.PO_UNIT_QTY
+                    , TMP.PO_UNIT_FG
+                    , TMPB.BARCD_CD
+                ORDER BY TSSSD.PROD_CD
+                    , TSSSD.STORE_CD
             ) A
-
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <select id="storeDayExcelList" parameterType="storeDayVO" resultType="DefaultMap">
+        /* StoreDayMapper.storeDayExcelList */
         SELECT A.*
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
         FROM (
@@ -139,6 +168,8 @@
                         , SF_ZERO_TO_NULL(SUM(DISUSE_QTY / TMP.PO_UNIT_QTY))       AS DISUSE_QTY /* 재고폐기 수량*/
                         , SF_ZERO_TO_NULL(SUM(ADJ_QTY / TMP.PO_UNIT_QTY))          AS ADJ_QTY /* 재고조정 수량*/
                         , SF_ZERO_TO_NULL(SUM(SET_IN_QTY / TMP.PO_UNIT_QTY))       AS SET_IN_QTY /* 세트생성 수량*/
+                        , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / THP.PO_UNIT_QTY))      AS BASE_QTY /* 기초재고수량 */
+                        , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / THP.PO_UNIT_QTY))     AS CLOSE_QTY /* 기말재고수량 */
                     </if>
                     <if test='unitFg == "0"'>
                         , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY))   AS STORE_IN_QTY /* 매장입고 수량*/
@@ -151,6 +182,8 @@
                         , SF_ZERO_TO_NULL(SUM(DISUSE_QTY))     AS DISUSE_QTY /* 재고폐기 수량*/
                         , SF_ZERO_TO_NULL(SUM(ADJ_QTY))        AS ADJ_QTY /* 재고조정 수량*/
                         , SF_ZERO_TO_NULL(SUM(SET_IN_QTY))     AS SET_IN_QTY /* 세트생성 수량*/
+                        , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY))    AS BASE_QTY /* 기초재고수량 */
+                        , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY))   AS CLOSE_QTY /* 기말재고수량 */
                     </if>
                     , SF_ZERO_TO_NULL(SUM(STORE_IN_TOT))   AS STORE_IN_TOT /* 매장입고 금액*/
                     , SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT))  AS STORE_OUT_TOT /* 매장반품 금액*/
@@ -159,27 +192,51 @@
                     , SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT)) AS STORE_SALE_TOT /* 매장판매 금액*/
                     , SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT))    AS MOVE_IN_TOT /* 매장이입 금액*/
                     , SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT))   AS MOVE_OUT_TOT /* 매장이출 금액*/
-                    FROM TB_ST_STORE_STOCK_DAILY TSSSD
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))    AS BASE_TOT /* 기초재고금액 */
+                    , SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))   AS CLOSE_TOT /* 기말재고금액 */
+                FROM TB_ST_STORE_STOCK_DAILY TSSSD
                     , TB_MS_PRODUCT TMP
-                     , TB_MS_PRODUCT_BARCD TMPB
-                 WHERE TSSSD.STORE_CD     = TMP.STORE_CD
-                   AND TSSSD.PROD_CD      = TMP.PROD_CD
-                   AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
-                   AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
-                   AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
-                   AND TMP.STOCK_PROD_YN = 'Y'
-                   AND TMP.USE_YN = 'Y'
-                   <if test='startDate != null and startDate != ""'>
-                      AND TSSSD.IOSTOCK_DATE  = #{startDate}
-                   </if>
-                   <if test='prodCd != null and prodCd != ""'>
-                      AND TMP.PROD_CD  = #{prodCd}
-                   </if>
-                   <if test='storeCdQuery != null and storeCdQuery != ""'>
-                      AND TSSSD.STORE_CD IN (${storeCdQuery})
-                   </if>
-                   <if test='arrVendrCd != null and arrVendrCd != ""'>
-			          AND TMP.PROD_CD IN    ( SELECT  PROD_CD
+                    , TB_MS_PRODUCT_BARCD TMPB
+                    , (
+                            SELECT STORE_CD
+                            ,       PROD_CD
+                            ,       DATE_QTY AS BASE_QTY
+                            ,       AVG_COST_UPRC AS BASE_TOT
+                            FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+                            WHERE  STORE_CD   	  (+) = #{storeCd}
+                            AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
+                    ) v1
+                    , (
+                            SELECT STORE_CD
+                            ,       PROD_CD
+                            ,       DATE_QTY AS CLOSE_QTY
+                            ,       AVG_COST_UPRC AS CLOSE_TOT
+                            FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+                            WHERE  STORE_CD  	  (+) = #{storeCd}
+                            AND    THE_DATE      (+) = #{startDate}
+                    ) v2
+                WHERE TSSSD.STORE_CD     = TMP.STORE_CD
+                    AND TSSSD.PROD_CD      = TMP.PROD_CD
+                    AND EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
+                    AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
+                    AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
+                    AND v1.STORE_CD 	(+)= TSSSD.STORE_CD
+                    AND v1.PROD_CD      (+)= TSSSD.PROD_CD
+                    AND v2.STORE_CD		(+)= TSSSD.STORE_CD
+                    AND v2.PROD_CD      (+)= TSSSD.PROD_CD
+                    AND TMP.STOCK_PROD_YN = 'Y'
+                    AND TMP.USE_YN = 'Y'
+                    <if test='startDate != null and startDate != ""'>
+                        AND TSSSD.IOSTOCK_DATE  = #{startDate}
+                    </if>
+                    <if test='prodCd != null and prodCd != ""'>
+                        AND TMP.PROD_CD  = #{prodCd}
+                    </if>
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND TSSSD.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    <if test='arrVendrCd != null and arrVendrCd != ""'>
+			            AND TMP.PROD_CD IN    ( SELECT  PROD_CD
 			                                  FROM    TB_MS_VENDOR_PROD
 			                                  WHERE   STORE_CD = TSSSD.STORE_CD
 			                                  AND     VENDR_CD IN
@@ -187,9 +244,9 @@
 			                                      #{item}
 			                                  </foreach>
 			                                )
-			       </if>
-                   <if test='prodClassCd != null and prodClassCd != ""'>
-                      AND TMP.PROD_CLASS_CD  IN (
+			        </if>
+                    <if test='prodClassCd != null and prodClassCd != ""'>
+                        AND TMP.PROD_CLASS_CD  IN (
                                                     SELECT              PROD_CLASS_CD
                                                     FROM                TB_HQ_PRODUCT_CLASS
                                                     WHERE               HQ_OFFICE_CD    = #{hqOfficeCd}
@@ -198,23 +255,24 @@
                                                     CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
                                                     AND                 HQ_OFFICE_CD    = #{hqOfficeCd}
                                                 )
-                   </if>
-                   <if test='prodNm != null and prodNm != ""'>
-                      AND TMP.PROD_NM  LIKE '%'||#{prodNm}||'%'
-                   </if>
-                   <if test='barcdCd != null and barcdCd != ""'>
-                      AND TMPB.BARCD_CD  = #{barcdCd}
-                   </if>
-                 GROUP BY  TMP.STORE_CD
-                         , TMP.PROD_CLASS_CD
-                         , TSSSD.PROD_CD
-                         , TMP.PROD_NM
-                         , TSSSD.STORE_CD
-                         , TMP.PO_UNIT_QTY
-                         , TMP.PO_UNIT_FG
-                         , TMPB.BARCD_CD
-                 ORDER BY TSSSD.PROD_CD
-                        , TSSSD.STORE_CD
+                    </if>
+                    <if test='prodNm != null and prodNm != ""'>
+                        AND TMP.PROD_NM  LIKE '%'||#{prodNm}||'%'
+                    </if>
+                    <if test='barcdCd != null and barcdCd != ""'>
+                        AND TMPB.BARCD_CD  = #{barcdCd}
+                    </if>
+                GROUP BY  TMP.STORE_CD
+                    , TMP.PROD_CLASS_CD
+                    , TSSSD.PROD_CD
+                    , TMP.PROD_NM
+                    , TSSSD.STORE_CD
+                    , TMP.PO_UNIT_QTY
+                    , TMP.PO_UNIT_FG
+                    , TMPB.BARCD_CD
+                ORDER BY TSSSD.PROD_CD
+                    , TSSSD.STORE_CD
             ) A
     </select>
+
 </mapper>
