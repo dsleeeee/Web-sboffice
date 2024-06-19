@@ -46,20 +46,20 @@ app.controller('userWebHistCtrl', ['$scope', '$http', '$timeout', function ($sco
 
                 if (col.format === "date") {
                     e.cell.innerHTML = getFormatDate(e.cell.innerText);
+                } else if (col.format === "dateTime") {
+                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
                 }
             }
         });
-
-    }
+    };
 
     // <-- 검색 호출 -->
     $scope.$on("userWebHistCtrl", function(event, data) {
-        $scope.searchUserWebHist(data);
+        $scope.searchUserWebHist();
         event.preventDefault();
     });
 
-    $scope.searchUserWebHist = function(data){
-
+    $scope.searchUserWebHist = function(){
         var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
         var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
         var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
@@ -77,22 +77,23 @@ app.controller('userWebHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         }
 
         var params = {};
-        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
-        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
-        params.userId = data.userId;
-        params.userNm = data.userNm;
-        params.hqOfficeCd = data.hqOfficeCd;
-        params.hqOfficeNm = data.hqOfficeNm;
-        params.storeCd = data.storeCd;
-        params.storeNm = data.storeNm;
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.userId = $scope.userId;
+        params.userNm = $scope.userNm;
+        params.hqOfficeCd = $scope.hqOfficeCd;
+        params.hqOfficeNm = $scope.hqOfficeNm;
+        params.storeCd = $scope.storeCd;
+        params.storeNm = $scope.storeNm;
+        params.vUserId = $scope.vUserId;
+        params.loginIp = $scope.loginIp;
 
         $scope._inquiryMain("/sys/stats/userWebHist/userWebHist/getUserWebHistList.sb", params, function() {}, false);
-
-    }
+    };
+    // <-- //검색 호출 -->
 
     // 엑셀 다운로드
     $scope.excelDownload = function () {
-
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -106,7 +107,7 @@ app.controller('userWebHistCtrl', ['$scope', '$http', '$timeout', function ($sco
                 includeColumns      : function (column) {
                     return column.visible;
                 }
-            },  messages["userWebHist.userWebHist"] + '_'+ getToday() + '.xlsx', function () {
+            }, '사용자웹사용이력' + '_'+ getToday() + '.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);

@@ -40,6 +40,12 @@ public class UserWebHistVO extends PageVO {
     /** 매장명 */
     private String storeNm;
 
+    /** 로그인 IP */
+    private String loginIp;
+
+    /** 버추얼로그인 사용자 아이디 */
+    private String vUserId;
+
     public String getUserId() {
         return userId;
     }
@@ -86,5 +92,21 @@ public class UserWebHistVO extends PageVO {
 
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
+    }
+
+    public String getLoginIp() {
+        return loginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
+
+    public String getvUserId() {
+        return vUserId;
+    }
+
+    public void setvUserId(String vUserId) {
+        this.vUserId = vUserId;
     }
 }
