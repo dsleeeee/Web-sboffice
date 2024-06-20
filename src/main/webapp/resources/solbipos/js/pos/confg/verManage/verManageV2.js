@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+//  시스템타입
+var systemTypeFgDataMapData = [
+  {"name":"공통","value":"0"},
+  {"name":"32bit","value":"1"},
+  {"name":"64bit","value":"2"}
+];
+
 /**********************************************************************
  *  포스버전관리 그리드
  **********************************************************************/
@@ -41,6 +48,7 @@ app.controller('verManageV2Ctrl', ['$scope', '$http', function ($scope, $http) {
     $scope.progFgDataMap = new wijmo.grid.DataMap(progFg, 'value', 'name');
     $scope.containYnDataMap = new wijmo.grid.DataMap(containYn, 'value', 'name');
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
+    $scope.systemTypeFgDataMap = new wijmo.grid.DataMap(systemTypeFgDataMapData, 'value', 'name');
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {

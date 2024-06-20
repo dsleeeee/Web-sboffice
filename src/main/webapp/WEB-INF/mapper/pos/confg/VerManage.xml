@@ -50,7 +50,8 @@
                 tcpvs.REG_CNT,
                 tcpvs.RECV_CNT,
                 tcpv.ORGN_CDS,
-                tcn.NMCODE_NM   AS PROG_DETAIL_FG
+                tcn.NMCODE_NM AS PROG_DETAIL_FG,
+                tcpv.SYSTEM_TYPE_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_CM_POS_VERSN tcpv,
                 (

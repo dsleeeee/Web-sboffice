@@ -9,6 +9,7 @@
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="subCon" ng-controller="verManageV2Ctrl" id="verManageV2View" style="padding: 10px 20px 40px">
+
   <div class="searchBar">
     <a href="#" class="open fl">
       <c:if test="${orgnFg != 'HQ'}">${menuNm}</c:if>
@@ -21,8 +22,6 @@
       </button>
     </div>
   </div>
-
-
   <table class="searchTbl">
     <colgroup>
       <col class="w15" />
@@ -67,7 +66,6 @@
   </table>
 
   <div class="mt10 oh sb-select dkbr">
-
     <%-- 페이지 스케일  --%>
     <wj-combo-box
             class="w100px fl"
@@ -102,17 +100,17 @@
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.verSerNo"/>" binding="verSerNo" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.fileDesc"/>" binding="fileDesc" align="left" width="160" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.progFg"/>" binding="progFg" data-map="progFgDataMap" width="120" align="center" is-read-only="true" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.contain.pgm"/>" binding="pgmYn" data-map="containYnDataMap"  align="center" width="90" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.contain.db"/>" binding="dbYn" data-map="containYnDataMap" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.contain.img"/>" binding="imgYn"  data-map="containYnDataMap"  align="center" width="90" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.fileSize"/>" binding="fileSize"  width="120" align="right" is-read-only="true" ></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.regCnt"/>" binding="regCnt" align="center" width="90"  is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.recvCnt"/>" binding="recvCnt" align="center" width="90"  is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="90"  is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.progFg"/>" binding="progFg" data-map="progFgDataMap" width="90" align="center" is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.progDetailFg"/>" binding="progDetailFg" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.systemTypeFg"/>" binding="systemTypeFg" data-map="systemTypeFgDataMap" width="75" align="center" is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.contain.pgm"/>" binding="pgmYn" data-map="containYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.contain.db"/>" binding="dbYn" data-map="containYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.contain.img"/>" binding="imgYn" data-map="containYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.fileSize"/>" binding="fileSize" width="110" align="right" is-read-only="true" ></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.regCnt"/>" binding="regCnt" align="center" width="75" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.recvCnt"/>" binding="recvCnt" align="center" width="75" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.orgnCds"/>" binding="orgnCds" align="center" width="150" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="verManage.progDetailFg"/>" binding="progDetailFg" align="center" width="120" is-read-only="true"></wj-flex-grid-column>
-
       </wj-flex-grid>
     </div>
   </div>
@@ -124,7 +122,9 @@
     </ul>
   </div>
   <%--//페이지 리스트--%>
+
 </div>
+
 <script>
   var containYn   = ${ccu.getCommCodeExcpAll("058")};
   var progFg      = ${ccu.getCommCodeExcpAll("059")};
@@ -134,9 +134,9 @@
   var hqList = ${ccu.getHqOfficeList()};
   var hqOfficeCd = "${hqOfficeCd}";
   var nmcodeCdList = ${nmcodeCdList};
-
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManageV2.js?ver=20240308.01" charset="utf-8"></script>
+
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManageV2.js?ver=20240620.01" charset="utf-8"></script>
 
 <!-- 관리자 화면인 경우만 아래 화면 import -->
 <!-- 본사 화면인 경우 탭 화면으로 구성되어 있어 이미 [POS 버전관리]화면에서 import 하고 있으므로, 중복을 방지하여 오류 안나게 처리 -->
