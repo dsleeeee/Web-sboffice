@@ -45,6 +45,10 @@ app.controller('hedofcMainCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('hedofcMainCtrl', $scope, $http, true));
 
+    if(userId == "h0393") {
+        s_alert.pop("맘스터치의 주요 정보 변경은 맘스터치 본사에서만 가능합니다. 맘스터치외 관리자 분은 사용에 주의하여 주시기 바랍니다.");
+    }
+
     // 총 매장수
     $("#totalStoreCnt").text(storeCntList[0].storeCnt1 + ' /' + storeCntList[0].storeCntTotal);
 
