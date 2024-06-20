@@ -10,22 +10,28 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	
 	$scope.srchStartDate = wcombo.genDateVal("#srchDayIostockStartDate", getToday());
 
-	  // 접속 사용자의 권한
-	  $scope.orgnFg = gvOrgnFg;
-	  $scope.isChecked = false;
+    // 접속 사용자의 권한
+    $scope.orgnFg = gvOrgnFg;
+    $scope.isChecked = false;
 
-	  //조회조건 단위구분 데이터 Set
-	  $scope._setComboData("srchUnitFgDisplay", [
-	    {"name": messages["dayIostock.unitStockFg"], "value": "0"}, // 재고단위
-	    {"name": messages["dayIostock.unitOrderFg"], "value": "1"} // 주문단위
-	  ]);
+    // 조회조건 단위구분 데이터 Set
+    $scope._setComboData("srchUnitFgDisplay", [
+        {"name": messages["dayIostock.unitStockFg"], "value": "0"}, // 재고단위
+        {"name": messages["dayIostock.unitOrderFg"], "value": "1"} // 주문단위
+    ]);
 
-	  //조회조건 조회옵션 데이터 Set
-	  $scope._setComboData("srchOptionDisplay", [
-		{"name": messages["dayIostock.Qty"] + "+" + messages["dayIostock.Amt"], "value": "3"}, // 수량+금액
-	    {"name": messages["dayIostock.Qty"], "value": "1"}, // 수량
-	    {"name": messages["dayIostock.Amt"], "value": "2"} // 금액
-	  ]);
+    // 조회조건 조회옵션 데이터 Set
+    $scope._setComboData("srchOptionDisplay", [
+        {"name": messages["dayIostock.Qty"] + "+" + messages["dayIostock.Amt"], "value": "3"}, // 수량+금액
+        {"name": messages["dayIostock.Qty"], "value": "1"}, // 수량
+        {"name": messages["dayIostock.Amt"], "value": "2"} // 금액
+    ]);
+
+    // 조회조건 마감재고표시 데이터 Set
+    $scope._setComboData("srchStockOptionCombo", [
+        {"name": "미표시", "value": "N"},
+        {"name": "표시", "value": "Y"}
+    ]);
 
 	  //거래처선택 모듈 팝업 사용시 정의
 	  // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
@@ -59,7 +65,7 @@ app.controller('dayIostockCtrl', ['$scope', '$http', '$timeout', function ($scop
 	  $scope.delProdClass = function(){
 	    $scope.prodClassCd = "";
 	    $scope.prodClassCdNm = "";
-	  }
+	  };
 
 
 	  // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.
@@ -177,7 +183,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var colLength = col.binding.length;
-        if (col.binding === "prodCd" || col.binding.slice(-3) === 'Qty' && s.cells.getCellData(e.row, e.col,false) != null && col.binding !== "poUnitQty" && col.binding !== "setInQty") { // 수량
+        if (col.binding === "prodCd" || col.binding.slice(-3) === 'Qty' && s.cells.getCellData(e.row, e.col,false) != null && col.binding !== "poUnitQty" && col.binding !== "setInQty" && col.binding !== "baseQty" && col.binding !== "closeQty") { // 수량
     		wijmo.addClass(e.cell, 'wijLink');
             wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
@@ -217,7 +223,7 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
             if (col.binding === "prodCd") { // 상품코드
     			$scope._broadcast('prodCodeDtlCtrl', params);
     		}
-            if (col.binding.slice(-3) === 'Qty' && selectedRow[col.binding] != null && col.binding !== "poUnitQty" && col.binding !== "setInQty") { // 수량
+            if (col.binding.slice(-3) === 'Qty' && selectedRow[col.binding] != null && col.binding !== "poUnitQty" && col.binding !== "setInQty" && col.binding !== "baseQty" && col.binding !== "closeQty") { // 수량
             	var colCode = col.binding;
             	params.colCode = colCode; // 수량(컬럼 뒤에 붙는 숫자, 어떤 수량인지 구분)
             	params.ioOccrFg = s.columnHeaders.getCellData(0,ht.col,false);
@@ -243,6 +249,8 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
 	  poUnitQty		: messages["dayIostock.poUnitQty"],
 	  poUnitFgNm	: messages["dayIostock.poUnitFg"],
 	  barcdCd		: messages["dayIostock.barcdCd"],
+	  baseQty			:messages["dayIostock.basicStock"],
+      baseTot			:messages["dayIostock.basicStock"],
 
 	  storeInQty	:messages["dayIostock.accStoreIn"],
 	  storeInTot	:messages["dayIostock.accStoreIn"],
@@ -263,6 +271,8 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
       adjQty		:messages["dayIostock.accAdj"],
       setInQty		:messages["dayIostock.accSetIn"],
 
+	  closeQty			:messages["dayIostock.endingStock"],
+      closeTot			:messages["dayIostock.endingStock"],
     };
 
     s.itemFormatter = function (panel, r, c, cell) {
@@ -347,48 +357,85 @@ app.controller('dayIostockMainCtrl', ['$scope', '$http', '$timeout', function ($
     $scope.excelProdClassCd = params.prodClassCd;
     $scope.excelUnitFg 	    = params.unitFg;
     $scope.excelSrchOption	= $scope.srchOption;
+    $scope.excelSrchStockOption	= $scope.srchStockOption;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/stock/status/dayIoStock/prod/viewList.sb", params, function () {
-    	$scope.displayChg($scope.srchOption);
+    	$scope.displayChg($scope.srchOption, $scope.srchStockOption);
     });
     $scope.excelFg = true;
   };
 
 
   //조회옵션 함수
-  $scope.displayChg = function (srchOption) {
+  $scope.displayChg = function (srchOption, srchStockOption) {
 	  var check = srchOption;
+      var check2 = srchStockOption;
 	  var grid = wijmo.Control.getControl("#dayIostockMainGrid");
       var columns = grid.columns;
       var length  = grid.columns.length-1;
 
       if(check == '1'){ // 수량
     	  for(var i=6; i<length; i++){
-			  if(columns[i].binding.slice(-3) == 'Tot'){
-    			  columns[i].visible = false;
-    		  }else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty'){
-    			  columns[i].visible = true;
-    		  }
+              // 기초/마감재고
+              if(columns[i].binding == 'baseQty' || columns[i].binding == 'baseTot' || columns[i].binding == 'closeQty' || columns[i].binding == 'closeTot'){
+                  if(check2 == "N") { // 미표시
+                      columns[i].visible = false;
+                  } else if(check2 == "Y") { // 표시
+                      if(columns[i].binding == 'baseQty' || columns[i].binding == 'closeQty'){
+                          columns[i].visible = true;
+                      } else if(columns[i].binding == 'baseTot' || columns[i].binding == 'closeTot'){
+                          columns[i].visible = false;
+                      }
+                  }
+              } else {
+                  if(columns[i].binding.slice(-3) == 'Tot'){
+                      columns[i].visible = false;
+                  }else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty'){
+                      columns[i].visible = true;
+                  }
+              }
           }
       }else if(check == '2'){ // 금액
     	  for(var i=6; i<length; i++){
     		  if(columns[i].binding != 'poUnitQty' && columns[i].binding != 'setInQty'){
-				  if(columns[i].binding.slice(-3) == 'Qty'){
-	    			  columns[i].visible = false;
-	    		  }else if(columns[i].binding.slice(-3) == 'Tot'){
-	    			  columns[i].visible = true;
-	    		  }
+                  // 기초/마감재고
+                  if(columns[i].binding == 'baseQty' || columns[i].binding == 'baseTot' || columns[i].binding == 'closeQty' || columns[i].binding == 'closeTot'){
+                      if(check2 == "N") { // 미표시
+                          columns[i].visible = false;
+                      } else if(check2 == "Y") { // 표시
+                          if(columns[i].binding == 'baseQty' || columns[i].binding == 'closeQty'){
+                              columns[i].visible = false;
+                          } else if(columns[i].binding == 'baseTot' || columns[i].binding == 'closeTot'){
+                              columns[i].visible = true;
+                          }
+                      }
+                  } else {
+                      if(columns[i].binding.slice(-3) == 'Qty'){
+                          columns[i].visible = false;
+                      }else if(columns[i].binding.slice(-3) == 'Tot'){
+                          columns[i].visible = true;
+                      }
+                  }
     		  }
           }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
     		  if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
-    			  columns[i].visible = true;
+                  // 기초/마감재고
+                  if(columns[i].binding == 'baseQty' || columns[i].binding == 'baseTot' || columns[i].binding == 'closeQty' || columns[i].binding == 'closeTot'){
+                      if(check2 == "N") { // 미표시
+                          columns[i].visible = false;
+                      } else if(check2 == "Y") { // 표시
+                          columns[i].visible = true;
+                      }
+                  } else {
+                      columns[i].visible = true;
+                  }
     		  }
           }
       }
-  }
+  };
 
   //엑셀 다운로드
   $scope.excelDownloadDayIostock = function () {
@@ -427,6 +474,8 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 	  poUnitQty		: messages["dayIostock.poUnitQty"],
 	  poUnitFgNm	: messages["dayIostock.poUnitFg"],
 	  barcdCd		: messages["dayIostock.barcdCd"],
+	  baseQty			:messages["dayIostock.basicStock"],
+      baseTot			:messages["dayIostock.basicStock"],
 
 	  storeInQty	:messages["dayIostock.accStoreIn"],
 	  storeInTot	:messages["dayIostock.accStoreIn"],
@@ -446,6 +495,9 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 	  disuseQty		:messages["dayIostock.accDisuse"],
 	  adjQty		:messages["dayIostock.accAdj"],
 	  setInQty		:messages["dayIostock.accSetIn"],
+
+	  closeQty			:messages["dayIostock.endingStock"],
+      closeTot			:messages["dayIostock.endingStock"],
     };
 
     s.itemFormatter = function (panel, r, c, cell) {
@@ -573,6 +625,8 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
   //조회옵션 함수
   $scope.displayChg = function () {
 	  var check = $scope.excelSrchOption;
+      var check2 = $scope.excelSrchStockOption;
+
 	  var grid = wijmo.Control.getControl("#dayIostockMainExcelGrid");
       var columns = grid.columns;
       var length  = grid.columns.length;
@@ -580,30 +634,65 @@ app.controller('dayIostockMainExcelCtrl', ['$scope', '$http', '$timeout', functi
 	  if(check == '1'){ // 수량
 		  for(var i=6; i<length; i++){
 			  var colLength = columns[i].binding.length;
-			  if(columns[i].binding.slice(-3) == 'Tot'){
-				  columns[i].visible = false;
-			  }else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty'){
-				  columns[i].visible = true;
-			  }
+              // 기초/마감재고
+              if(columns[i].binding == 'baseQty' || columns[i].binding == 'baseTot' || columns[i].binding == 'closeQty' || columns[i].binding == 'closeTot'){
+                  if(check2 == "N") { // 미표시
+                      columns[i].visible = false;
+                  } else if(check2 == "Y") { // 표시
+                      if(columns[i].binding == 'baseQty' || columns[i].binding == 'closeQty'){
+                          columns[i].visible = true;
+                      } else if(columns[i].binding == 'baseTot' || columns[i].binding == 'closeTot'){
+                          columns[i].visible = false;
+                      }
+                  }
+              } else {
+                  if(columns[i].binding.slice(-3) == 'Tot'){
+                      columns[i].visible = false;
+                  }else if(columns[i].binding.slice(-3) == 'Qty' && columns[i].binding != 'setInQty'){
+                      columns[i].visible = true;
+                  }
+              }
 		  }
 	  }else if(check == '2'){ // 금액
 		  for(var i=6; i<length; i++){
 			  var colLength = columns[i].binding.length;
 			  if(columns[i].binding != 'poUnitQty' && columns[i].binding != 'setInQty'){
-				  if(columns[i].binding.slice(-3) == 'Qty'){
-					  columns[i].visible = false;
-				  }else if(columns[i].binding.slice(-3) == 'Tot'){
-					  columns[i].visible = true;
-				  }
+                  // 기초/마감재고
+                  if(columns[i].binding == 'baseQty' || columns[i].binding == 'baseTot' || columns[i].binding == 'closeQty' || columns[i].binding == 'closeTot'){
+                      if(check2 == "N") { // 미표시
+                          columns[i].visible = false;
+                      } else if(check2 == "Y") { // 표시
+                          if(columns[i].binding == 'baseQty' || columns[i].binding == 'closeQty'){
+                              columns[i].visible = false;
+                          } else if(columns[i].binding == 'baseTot' || columns[i].binding == 'closeTot'){
+                              columns[i].visible = true;
+                          }
+                      }
+                  } else {
+                      if(columns[i].binding.slice(-3) == 'Qty'){
+                          columns[i].visible = false;
+                      }else if(columns[i].binding.slice(-3) == 'Tot'){
+                          columns[i].visible = true;
+                      }
+                  }
 			  }
 		  }
       }else{ //수량 + 금액
     	  for(var i=0; i<length; i++){
     		  if(columns[i].binding != 'prodClassNm' && columns[i].binding != 'setInQty'){
-    			  columns[i].visible = true;
+                  // 기초/마감재고
+                  if(columns[i].binding == 'baseQty' || columns[i].binding == 'baseTot' || columns[i].binding == 'closeQty' || columns[i].binding == 'closeTot'){
+                      if(check2 == "N") { // 미표시
+                          columns[i].visible = false;
+                      } else if(check2 == "Y") { // 표시
+                          columns[i].visible = true;
+                      }
+                  } else {
+                      columns[i].visible = true;
+                  }
     		  }
           }
       }
-  }
+  };
 
 }]);

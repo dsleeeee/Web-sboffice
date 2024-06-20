@@ -78,7 +78,6 @@
 				<input type="hidden" id="_prodClassCd" name="prodClassCd" class="sb-input w100" ng-model="prodClassCdModel" disabled/>
 				<button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
 			</td>
-
 			<%-- 조회옵션 --%>
             <th><s:message code="periodIostock.srchOption" /></th>
             <td>
@@ -116,6 +115,27 @@
                 <input type="hidden" id="periodIostockSelectVendrCd" value=""/>
             </td>
 		</tr>
+		<tr>
+			<%-- 기초/마감재고표시 --%>
+			<th><s:message code="periodIostock.stockOption"/></th>
+			<td>
+				<div class="sb-select">
+                    <span class="txtIn w120px">
+                        <wj-combo-box
+								id="srchStockOptionCombo"
+								ng-model="srchStockOption"
+								items-source="_getComboData('srchStockOptionCombo')"
+								display-member-path="name"
+								selected-value-path="value"
+								is-editable="false"
+								initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </span>
+				</div>
+			</td>
+			<td></td>
+			<td></td>
+		</tr>
 	</table>
 
 	<input type="hidden" id="hqOfficeCd" value="${sessionInfo.hqOfficeCd}"/>
@@ -136,120 +156,128 @@
 			is-editable="true"
 			text-changed="_checkValidation(s)">
         </wj-combo-box>
-
     	<%-- 엑셀 다운로드 --%>
     	<button class="btn_skyblue ml5 fr" id="btnExcelDown" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
   	</div>
 
   	<%--위즈모 테이블--%>
     <div id="wjGridWrap" class="w100 mt10">
-      <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
-        <wj-flex-grid
-          autoGenerateColumns="false"
-          selection-mode="Row"
-          items-source="data"
-          control="flex"
-          initialized="initGrid(s,e)"
-          is-read-only="true"
-          item-formatter="_itemFormatter"
-          frozen-columns="6">
+		<div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
+			<wj-flex-grid
+				autoGenerateColumns="false"
+				selection-mode="Row"
+				items-source="data"
+				control="flex"
+				initialized="initGrid(s,e)"
+				is-read-only="true"
+				item-formatter="_itemFormatter"
+				frozen-columns="6">
 
-          <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="left"	is-read-only="true"	visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"		binding="prodCd"		width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="left"	is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"		binding="poUnitQty"		width="50"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"		binding="poUnitFgNm"	width="50"		align="center"	is-read-only="true" ></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"		binding="barcdCd"		width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>
+				<!-- define columns -->
+				<wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="left"	is-read-only="true"	visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"		binding="prodCd"		width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="left"	is-read-only="true"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"		binding="poUnitQty"		width="50"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"		binding="poUnitFgNm"	width="50"		align="center"	is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"		binding="barcdCd"		width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.basicStockQty"/>"      binding="baseQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.basicStockAmt"/>"      binding="baseTot" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeInTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="purchsInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="purchsInTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="purchsOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="purchsOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeSaleQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-		  <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeSaleTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeInTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="purchsInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="purchsInTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="purchsOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="purchsOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeSaleQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeSaleTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
-	       <wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveInTot"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="periodIostock.disuse"/>"		binding="disuseQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="periodIostock.adj"/>"			binding="adjQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-	       <wj-flex-grid-column header="<s:message code="periodIostock.setIn"/>"		binding="setInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveInTot"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.disuse"/>"		binding="disuseQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.adj"/>"			binding="adjQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.setIn"/>"		binding="setInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-			<wj-flex-grid-column header="<s:message code="cmm.search.date"/>"	binding="startDate"		width="60"		align="center"	is-read-only="true" visible="false"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="cmm.search.date"/>"	binding="endDate"		width="60"		align="center"	is-read-only="true" visible="false"></wj-flex-grid-column>
-        </wj-flex-grid>
+				<wj-flex-grid-column header="<s:message code="periodIostock.endingStockQty"/>"     binding="closeQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.endingStockAmt"/>"     binding="closeTot" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-        <%-- ColumnPicker 사용시 include --%>
-        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
-          <jsp:param name="pickerTarget" value="periodiostockCtrl"/>
-        </jsp:include>
-        <%--// ColumnPicker 사용시 include --%>
-      </div>
-    </div>
+				<wj-flex-grid-column header="<s:message code="cmm.search.date"/>"	binding="startDate"		width="60"		align="center"	is-read-only="true" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="cmm.search.date"/>"	binding="endDate"		width="60"		align="center"	is-read-only="true" visible="false"></wj-flex-grid-column>
+			</wj-flex-grid>
+			<%-- ColumnPicker 사용시 include --%>
+			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
+				<jsp:param name="pickerTarget" value="periodiostockCtrl"/>
+			</jsp:include>
+			<%--// ColumnPicker 사용시 include --%>
+		</div>
+	</div>
     <%--//위즈모 테이블--%>
 
-    <%-- 페이지 리스트 --%>
-  <div class="pageNum mt20">
-    <%-- id --%>
-    <ul id="periodiostockCtrlPager" data-size="10">
-    </ul>
-  </div>
-  <%--//페이지 리스트--%>
+	<%-- 페이지 리스트 --%>
+	<div class="pageNum mt20">
+		<%-- id --%>
+		<ul id="periodiostockCtrlPager" data-size="10">
+		</ul>
+	</div>
+	<%--//페이지 리스트--%>
 
-  <%--엑셀 리스트--%>
-    <div id="wjGridWrap" class="w100 mt10" style="display:none;" ng-controller="periodiostockExcelCtrl">
-      <div class="wj-gridWrap" style="height: 350px;">
-        <wj-flex-grid
-          id="periodiostockExcelGrid"
-          autoGenerateColumns="false"
-          selection-mode="Row"
-          items-source="data"
-          control="excelFlex"
-          initialized="initGrid(s,e)"
-          is-read-only="true"
-          item-formatter="_itemFormatter"
-          frozen-columns="6">
+	<%--엑셀 리스트--%>
+	<div id="wjGridWrap" class="w100 mt10" style="display:none;" ng-controller="periodiostockExcelCtrl">
+		<div class="wj-gridWrap" style="height: 350px;">
+			<wj-flex-grid
+				id="periodiostockExcelGrid"
+				autoGenerateColumns="false"
+				selection-mode="Row"
+				items-source="data"
+				control="excelFlex"
+				initialized="initGrid(s,e)"
+				is-read-only="true"
+				item-formatter="_itemFormatter"
+				frozen-columns="6">
 
-          <!-- define columns -->
-			<wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="left"	is-read-only="true"	visible="false"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"		binding="prodCd"		width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="left"	is-read-only="true"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"		binding="poUnitQty"		width="50"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"		binding="poUnitFgNm"	width="50"		align="center"	is-read-only="true" ></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"		binding="barcdCd"		width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>
+				<!-- define columns -->
+				<wj-flex-grid-column header="<s:message code="periodIostock.prodClassNm"/>"	binding="prodClassNm"	width="200"		align="left"	is-read-only="true"	visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.prodCd"/>"		binding="prodCd"		width="100"		align="center"	is-read-only="true"	format="d"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.prodNm"/>"		binding="prodNm"		width="150"		align="left"	is-read-only="true"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.poUnitQty"/>"		binding="poUnitQty"		width="50"		align="right"	is-read-only="true"	aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.poUnitFg"/>"		binding="poUnitFgNm"	width="50"		align="center"	is-read-only="true" ></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.barcdCd"/>"		binding="barcdCd"		width="120"		align="center"	is-read-only="true" format="d"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.basicStockQty"/>"      binding="baseQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.basicStockAmt"/>"      binding="baseTot" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeInTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="purchsInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="purchsInTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="purchsOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="purchsOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeSaleQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeSaleTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeInTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="purchsInQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="purchsInTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="purchsOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="purchsOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="storeSaleQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="storeSaleTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveInTot"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.disuse"/>"		binding="disuseQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.adj"/>"			binding="adjQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-			<wj-flex-grid-column header="<s:message code="periodIostock.setIn"/>"		binding="setInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveInTot"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Qty"/>"			binding="moveOutQty"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.Tot"/>"			binding="moveOutTot"	width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.disuse"/>"		binding="disuseQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.adj"/>"			binding="adjQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.setIn"/>"		binding="setInQty"		width="60"		align="right"	is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
-		</wj-flex-grid>
-      </div>
-    </div>
-    <%--//엑셀 리스트--%>
+				<wj-flex-grid-column header="<s:message code="periodIostock.endingStockQty"/>"     binding="closeQty" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="periodIostock.endingStockAmt"/>"     binding="closeTot" width="60" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
+			</wj-flex-grid>
+		</div>
+	</div>
+	<%--//엑셀 리스트--%>
+
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/storeProd.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/stock/status/periodiostock/storeProd.js?ver=20240614.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

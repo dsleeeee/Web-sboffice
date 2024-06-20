@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.stock.status.dayiostock.service.impl.DayIostockMapper">
 
@@ -11,6 +10,7 @@
         COMMENTS : 일수불현황 - 본사 리스트를 조회한다.
     -->
     <select id="hqDayIostockList" parameterType="dayIostockVO" resultType="DefaultMap">
+		/* DayIostockMapper.hqDayIostockList */
 	    <include refid="CmmSQL.PagingTemplateHeader"/>
 	    SELECT A.*
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
@@ -42,6 +42,10 @@
 					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT))                   	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
 					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY / THP.PO_UNIT_QTY)) 	AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
 					 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT))                   	AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / THP.PO_UNIT_QTY))                  AS BASE_QTY /* 기초재고수량 */
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))                                    AS BASE_TOT /* 기초재고금액 */
+					 , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / THP.PO_UNIT_QTY))                 AS CLOSE_QTY /* 기말재고수량 */
+					 , SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))                                   AS CLOSE_TOT /* 기말재고금액 */
 				 </if>
 				 <if test='unitFg == "0"'>
 					 , SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY))			AS VENDR_IN_QTY /* 본사입고 수량*/
@@ -63,11 +67,33 @@
 	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT))	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
 	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY)) 	AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
 	                 , SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT)) 	AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY))                AS BASE_QTY /* 기초재고수량 */
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))                AS BASE_TOT /* 기초재고금액 */
+					 , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY))               AS CLOSE_QTY /* 기말재고수량 */
+					 , SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))               AS CLOSE_TOT /* 기말재고금액 */
 				 </if>
 		    		, #{startDate} AS START_DATE
 			  FROM TB_ST_HQ_STOCK_DAILY TSHSD
 			     , TB_HQ_PRODUCT THP
 			     , TB_HQ_PRODUCT_BARCD THPB
+			     , (
+						SELECT HQ_OFFICE_CD
+						,       PROD_CD
+						,       DATE_QTY AS BASE_QTY
+						,       AVG_COST_UPRC AS BASE_TOT
+						FROM   TB_ST_HQ_STOCK_CUR_DATE_V01
+						WHERE  HQ_OFFICE_CD  (+) = #{hqOfficeCd}
+						AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
+					) v1
+				 , (
+						SELECT HQ_OFFICE_CD
+						,       PROD_CD
+						,       DATE_QTY AS CLOSE_QTY
+						,       AVG_COST_UPRC AS CLOSE_TOT
+						FROM   TB_ST_HQ_STOCK_CUR_DATE_V01
+						WHERE  HQ_OFFICE_CD  (+) = #{hqOfficeCd}
+						AND    THE_DATE      (+) = #{startDate}
+				 ) v2
 			 WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
 		       AND THP.STOCK_PROD_YN = 'Y'
 		       AND THP.USE_YN = 'Y'
@@ -109,10 +135,14 @@
 		                                    </foreach>
 		                                  )
 		        </if>
-			   AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
-			   AND TSHSD.PROD_CD      = THP.PROD_CD
-			   AND TSHSD.HQ_OFFICE_CD = THPB.HQ_OFFICE_CD(+)
-			   AND TSHSD.PROD_CD      = THPB.PROD_CD(+)
+				AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+				AND TSHSD.PROD_CD      = THP.PROD_CD
+				AND TSHSD.HQ_OFFICE_CD = THPB.HQ_OFFICE_CD(+)
+				AND TSHSD.PROD_CD      = THPB.PROD_CD(+)
+				AND v1.HQ_OFFICE_CD (+)= TSHSD.HQ_OFFICE_CD
+				AND v1.PROD_CD      (+)= TSHSD.PROD_CD
+				AND v2.HQ_OFFICE_CD (+)= TSHSD.HQ_OFFICE_CD
+				AND v2.PROD_CD      (+)= TSHSD.PROD_CD
 			 GROUP BY  THP.PROD_CLASS_CD
 				     , TSHSD.PROD_CD
 				     , THP.PROD_NM
@@ -131,6 +161,7 @@
         COMMENTS : 일수불현황 - 본사 리스트를 조회한다.
     -->
     <select id="storeDayIostockList" parameterType="dayIostockVO" resultType="DefaultMap">
+		/* DayIostockMapper.storeDayIostockList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT A.*
              , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
@@ -160,6 +191,10 @@
 				     , SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY / TMP.PO_UNIT_QTY))		AS DISUSE_QTY /* 재고폐기 수량*/
 				     , SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY / TMP.PO_UNIT_QTY)) 		AS ADJ_QTY /* 재고조정 수량*/
 				     , SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY / TMP.PO_UNIT_QTY))		AS SET_IN_QTY /* 세트생성 수량*/
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / TMP.PO_UNIT_QTY))          AS BASE_QTY /* 기초재고수량 */
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))                            AS BASE_TOT /* 기초재고금액 */
+					 , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / TMP.PO_UNIT_QTY))         AS CLOSE_QTY /* 기말재고수량 */
+					 , SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))                           AS CLOSE_TOT /* 기말재고금액 */
 			     </if>
 			     <if test='unitFg == "0"'>
                      , SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY)) 	AS STORE_IN_QTY /* 매장입고 수량*/
@@ -179,11 +214,33 @@
                      , SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY)) 		AS DISUSE_QTY /* 재고폐기 수량*/
                      , SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY)) 			AS ADJ_QTY /* 재고조정 수량*/
                      , SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY)) 		AS SET_IN_QTY /* 세트생성 수량*/
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY))            AS BASE_QTY /* 기초재고수량 */
+                     , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))            AS BASE_TOT /* 기초재고금액 */
+					 , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY))           AS CLOSE_QTY /* 기말재고수량 */
+					 , SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))           AS CLOSE_TOT /* 기말재고금액 */
                  </if>
 					, #{startDate} AS START_DATE
 			  FROM TB_ST_STORE_STOCK_DAILY TSSSD
 			     , TB_MS_PRODUCT TMP
 			     , TB_MS_PRODUCT_BARCD TMPB
+				 , (
+						SELECT STORE_CD
+						,       PROD_CD
+						,       DATE_QTY AS BASE_QTY
+						,       AVG_COST_UPRC AS BASE_TOT
+						FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+						WHERE  STORE_CD  	 (+) = #{storeCd}
+						AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
+			  	 ) v1
+			 	 , (
+						SELECT STORE_CD
+						,       PROD_CD
+						,       DATE_QTY AS CLOSE_QTY
+						,       AVG_COST_UPRC AS CLOSE_TOT
+						FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+						WHERE  STORE_CD  	 (+) = #{storeCd}
+						AND    THE_DATE      (+) = #{startDate}
+				 ) v2
 			 WHERE TSSSD.STORE_CD    = #{storeCd}
 		       AND TMP.STOCK_PROD_YN = 'Y'
 		       AND TMP.USE_YN = 'Y'
@@ -220,10 +277,14 @@
                                             </foreach>
                                           )
                 </if>
-			   AND TSSSD.STORE_CD     = TMP.STORE_CD
-			   AND TSSSD.PROD_CD      = TMP.PROD_CD
-			   AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
-			   AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
+				AND TSSSD.STORE_CD     = TMP.STORE_CD
+				AND TSSSD.PROD_CD      = TMP.PROD_CD
+				AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
+				AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
+				AND v1.STORE_CD 	(+)= TSSSD.STORE_CD
+				AND v1.PROD_CD      (+)= TSSSD.PROD_CD
+				AND v2.STORE_CD		(+)= TSSSD.STORE_CD
+				AND v2.PROD_CD      (+)= TSSSD.PROD_CD
 			 GROUP BY  TMP.PROD_CLASS_CD
 			         , TSSSD.PROD_CD
 				     , TMP.PROD_NM
@@ -242,6 +303,7 @@
         COMMENTS : 일수불현황 - 본사 리스트를 조회한다.
     -->
     <select id="hqDayIostockExcelList" parameterType="dayIostockVO" resultType="DefaultMap">
+		/* DayIostockMapper.hqDayIostockExcelList */
 	    SELECT A.*
              , (SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
 	    FROM (
@@ -271,6 +333,10 @@
 					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT))                   	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
 					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY / THP.PO_UNIT_QTY)) 		AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
 					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT))                   		AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / THP.PO_UNIT_QTY))                   AS BASE_QTY /* 기초재고수량 */
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))                                     AS BASE_TOT /* 기초재고금액 */
+					, SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / THP.PO_UNIT_QTY))                  AS CLOSE_QTY /* 기말재고수량 */
+					, SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))                                    AS CLOSE_TOT /* 기말재고금액 */
 				</if>
 				<if test='unitFg == "0"'>
 					, SF_ZERO_TO_NULL(SUM(TSHSD.VENDR_IN_QTY)) 			AS VENDR_IN_QTY /* 본사입고 수량*/
@@ -292,10 +358,32 @@
 					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_ORDER_TOT)) 	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
 					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_QTY)) 	AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
 					, SF_ZERO_TO_NULL(SUM(TSHSD.SALE_VENDR_RTN_TOT)) 	AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY))                 AS BASE_QTY /* 기초재고수량 */
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))                 AS BASE_TOT /* 기초재고금액 */
+					, SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY))                AS CLOSE_QTY /* 기말재고수량 */
+					, SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))                AS CLOSE_TOT /* 기말재고금액 */
 				</if>
 				FROM TB_ST_HQ_STOCK_DAILY TSHSD
 			     , TB_HQ_PRODUCT THP
 			     , TB_HQ_PRODUCT_BARCD THPB
+				 , (
+						SELECT HQ_OFFICE_CD
+						,       PROD_CD
+						,       DATE_QTY AS BASE_QTY
+						,       AVG_COST_UPRC AS BASE_TOT
+						FROM   TB_ST_HQ_STOCK_CUR_DATE_V01
+						WHERE  HQ_OFFICE_CD  (+) = #{hqOfficeCd}
+						AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
+				 ) v1
+				 , (
+						SELECT HQ_OFFICE_CD
+						,       PROD_CD
+						,       DATE_QTY AS CLOSE_QTY
+						,       AVG_COST_UPRC AS CLOSE_TOT
+						FROM   TB_ST_HQ_STOCK_CUR_DATE_V01
+						WHERE  HQ_OFFICE_CD  (+) = #{hqOfficeCd}
+						AND    THE_DATE      (+) = #{startDate}
+				 ) v2
 			 WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
                AND THP.STOCK_PROD_YN = 'Y'
                AND THP.USE_YN = 'Y'
@@ -337,11 +425,15 @@
 		                                    </foreach>
 		                                  )
 		        </if>
-			   AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
-			   AND TSHSD.PROD_CD      = THP.PROD_CD
-			   AND TSHSD.HQ_OFFICE_CD = THPB.HQ_OFFICE_CD(+)
-			   AND TSHSD.PROD_CD      = THPB.PROD_CD(+)
-			 GROUP BY  THP.PROD_CLASS_CD
+				AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+				AND TSHSD.PROD_CD      = THP.PROD_CD
+				AND TSHSD.HQ_OFFICE_CD = THPB.HQ_OFFICE_CD(+)
+				AND TSHSD.PROD_CD      = THPB.PROD_CD(+)
+				AND v1.HQ_OFFICE_CD (+)= TSHSD.HQ_OFFICE_CD
+				AND v1.PROD_CD      (+)= TSHSD.PROD_CD
+				AND v2.HQ_OFFICE_CD (+)= TSHSD.HQ_OFFICE_CD
+				AND v2.PROD_CD      (+)= TSHSD.PROD_CD
+		GROUP BY  THP.PROD_CLASS_CD
 				     , TSHSD.PROD_CD
 				     , THP.PROD_NM
 				     , THP.PO_UNIT_QTY
@@ -358,6 +450,7 @@
         COMMENTS : 일수불현황 - 본사 리스트를 조회한다.
     -->
     <select id="storeDayIostockExcelList" parameterType="dayIostockVO" resultType="DefaultMap">
+		/* DayIostockMapper.storeDayIostockExcelList */
         SELECT A.*
              , (SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = A.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
         FROM (
@@ -385,6 +478,10 @@
 					, SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY / TMP.PO_UNIT_QTY)) 		AS DISUSE_QTY /* 재고폐기 수량*/
 					, SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY / TMP.PO_UNIT_QTY)) 		AS ADJ_QTY /* 재고조정 수량*/
 					, SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY / TMP.PO_UNIT_QTY)) 		AS SET_IN_QTY /* 세트생성 수량*/
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / TMP.PO_UNIT_QTY))           AS BASE_QTY /* 기초재고수량 */
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))                             AS BASE_TOT /* 기초재고금액 */
+					, SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / TMP.PO_UNIT_QTY))          AS CLOSE_QTY /* 기말재고수량 */
+					, SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))                            AS CLOSE_TOT /* 기말재고금액 */
 				</if>
 				<if test='unitFg == "0"'>
 					, SF_ZERO_TO_NULL(SUM(TSSSD.STORE_IN_QTY)) 		AS STORE_IN_QTY /* 매장입고 수량*/
@@ -404,10 +501,32 @@
 					, SF_ZERO_TO_NULL(SUM(TSSSD.DISUSE_QTY)) 		AS DISUSE_QTY /* 재고폐기 수량*/
 					, SF_ZERO_TO_NULL(SUM(TSSSD.ADJ_QTY)) 			AS ADJ_QTY /* 재고조정 수량*/
 					, SF_ZERO_TO_NULL(SUM(TSSSD.SET_IN_QTY)) 		AS SET_IN_QTY /* 세트생성 수량*/
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY))             AS BASE_QTY /* 기초재고수량 */
+                    , SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))             AS BASE_TOT /* 기초재고금액 */
+					, SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY))            AS CLOSE_QTY /* 기말재고수량 */
+					, SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))            AS CLOSE_TOT /* 기말재고금액 */
 				</if>
 				FROM TB_ST_STORE_STOCK_DAILY TSSSD
 			     , TB_MS_PRODUCT TMP
 			     , TB_MS_PRODUCT_BARCD TMPB
+				 , (
+						SELECT STORE_CD
+						,       PROD_CD
+						,       DATE_QTY AS BASE_QTY
+						,       AVG_COST_UPRC AS BASE_TOT
+						FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+						WHERE  STORE_CD   	  (+) = #{storeCd}
+						AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
+				 ) v1
+				 , (
+						SELECT STORE_CD
+						,       PROD_CD
+						,       DATE_QTY AS CLOSE_QTY
+						,       AVG_COST_UPRC AS CLOSE_TOT
+						FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+						WHERE  STORE_CD  	  (+) = #{storeCd}
+						AND    THE_DATE      (+) = #{startDate}
+				 ) v2
 			 WHERE TSSSD.STORE_CD    = #{storeCd}
 			   AND TMP.STOCK_PROD_YN = 'Y'
 			   AND TMP.USE_YN = 'Y'
@@ -444,11 +563,15 @@
                                             </foreach>
                                           )
                 </if>
-			   AND TSSSD.STORE_CD     = TMP.STORE_CD
-			   AND TSSSD.PROD_CD      = TMP.PROD_CD
-			   AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
-			   AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
-			 GROUP BY  TMP.PROD_CLASS_CD
+				AND TSSSD.STORE_CD     = TMP.STORE_CD
+				AND TSSSD.PROD_CD      = TMP.PROD_CD
+				AND TSSSD.STORE_CD     = TMPB.STORE_CD(+)
+				AND TSSSD.PROD_CD      = TMPB.PROD_CD(+)
+				AND v1.STORE_CD 	(+)= TSSSD.STORE_CD
+				AND v1.PROD_CD      (+)= TSSSD.PROD_CD
+				AND v2.STORE_CD		(+)= TSSSD.STORE_CD
+				AND v2.PROD_CD      (+)= TSSSD.PROD_CD
+		GROUP BY  TMP.PROD_CLASS_CD
 			         , TSSSD.PROD_CD
 				     , TMP.PROD_NM
 				     , TMP.PO_UNIT_QTY
@@ -457,4 +580,5 @@
             ) A
             ORDER BY A.PROD_CD
     </select>
+
 </mapper>

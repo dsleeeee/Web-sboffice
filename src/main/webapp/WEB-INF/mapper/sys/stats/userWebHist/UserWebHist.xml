@@ -20,57 +20,61 @@
     <select id="getUserWebHistList" parameterType="userWebHistVO" resultType="DefaultMap">
         /* UserWebHistMapper.getUserWebHistList */
         SELECT  A.H_DATE
-             ,  A.H_DT
-             ,  A.USER_ID
-             ,  B.USER_NM
-             ,  B.HQ_OFFICE_CD
-             ,  B.HQ_OFFICE_NM
-             ,  B.STORE_CD
-             ,  B.STORE_NM
-             ,  (CASE WHEN A.LM_FG = 'L' THEN '로그인'
-                      WHEN A.LM_FG = 'M' THEN '메뉴'
-                      ELSE null END
-                ) AS LM_FG
-             ,  A.STAT_CD
-             ,  A.LOGIN_ORGN
-             ,  A.V_USER_ID
-             ,  A.RESRCE_CD
-             ,  REPLACE(SUBSTR(C.PATH, 0, 7) ,'/','') AS LEVEL1
-             ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 0, 7) ,'/',''))) AS LEVEL1_NM
-             ,  REPLACE(SUBSTR(C.PATH, 8, 7) ,'/','') AS LEVEL2
-             ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 8, 7) ,'/',''))) AS LEVEL2_NM
-             ,  REPLACE(SUBSTR(C.PATH, 15, 7) ,'/','') AS LEVEL3
-             ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM
+                ,  A.H_DT
+                ,  A.USER_ID
+                ,  B.USER_NM
+                ,  B.HQ_OFFICE_CD
+                ,  B.HQ_OFFICE_NM
+                ,  B.STORE_CD
+                ,  B.STORE_NM
+                ,  (CASE WHEN A.LM_FG = 'L' THEN '로그인'
+                        WHEN A.LM_FG = 'M' THEN '메뉴'
+                        ELSE null END
+                    ) AS LM_FG
+                ,  A.STAT_CD
+                ,  A.LOGIN_ORGN
+                ,  A.V_USER_ID
+                ,  D.USER_NM AS V_USER_NM
+                ,  A.RESRCE_CD
+                ,  REPLACE(SUBSTR(C.PATH, 0, 7) ,'/','') AS LEVEL1
+                ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 0, 7) ,'/',''))) AS LEVEL1_NM
+                ,  REPLACE(SUBSTR(C.PATH, 8, 7) ,'/','') AS LEVEL2
+                ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 8, 7) ,'/',''))) AS LEVEL2_NM
+                ,  REPLACE(SUBSTR(C.PATH, 15, 7) ,'/','') AS LEVEL3
+                ,  (SELECT RESRCE_NM FROM TB_WB_RESRCE_INFO WHERE RESRCE_CD=(REPLACE(SUBSTR(C.PATH, 15, 7) ,'/',''))) AS LEVEL3_NM
+                , A.LOGIN_IP
         FROM
             (
                 (
                     SELECT LOGIN_DATE AS H_DATE,
-                           TO_CHAR(TO_DATE(LOGIN_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
-                           USER_ID,
-                           'L' AS LM_FG,
-                           STAT_CD AS STAT_CD,
-                           LOGIN_ORGN AS LOGIN_ORGN,
-                           V_USER_ID AS V_USER_ID,
-                           '' AS RESRCE_CD
+                            TO_CHAR(TO_DATE(LOGIN_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
+                            USER_ID,
+                            'L' AS LM_FG,
+                            STAT_CD AS STAT_CD,
+                            LOGIN_ORGN AS LOGIN_ORGN,
+                            V_USER_ID AS V_USER_ID,
+                            '' AS RESRCE_CD,
+                            LOGIN_IP
                     FROM TB_WB_LOGIN_HIST
                     WHERE LOGIN_DATE BETWEEN #{startDate} AND #{endDate}
                 )
                 UNION ALL
                 (
                     SELECT USE_DATE AS H_DATE,
-                           TO_CHAR(TO_DATE(USE_DATE || SUBSTR(USE_DT,0,6), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
-                           USER_ID,
-                           'M' AS LM_FG,
-                           '' AS STAT_CD,
-                           '' AS LOGIN_ORGN,
-                           '' AS V_USER_ID,
-                           RESRCE_CD AS RESRCE_CD
+                            TO_CHAR(TO_DATE(USE_DATE || SUBSTR(USE_DT,0,6), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd hh24:mi:ss') AS H_DT,
+                            USER_ID,
+                            'M' AS LM_FG,
+                            '' AS STAT_CD,
+                            '' AS LOGIN_ORGN,
+                            V_USER_ID,
+                            RESRCE_CD AS RESRCE_CD,
+                            LOGIN_IP
                     FROM TB_WB_MENU_USE_HIST
                     WHERE USE_DATE BETWEEN #{startDate} AND #{endDate}
                 )
             ) A
-           ,    TB_WB_USER_INFO_DTL_V01 B
-           ,    (
+            ,   TB_WB_USER_INFO_DTL_V01 B
+            ,   (
                     SELECT  RESRCE_CD,
                             SYS_CONNECT_BY_PATH (RESRCE_CD, '/') PATH
                     FROM    TB_WB_RESRCE_INFO
@@ -78,9 +82,11 @@
                     START WITH P_RESRCE = '000000'
                     CONNECT BY P_RESRCE = PRIOR RESRCE_CD
                 ) C
+            ,    TB_WB_USER_INFO_DTL_V01 D
         WHERE   A.H_DATE BETWEEN #{startDate} AND #{endDate}
         AND 	B.USER_ID   (+) =   A.USER_ID
         AND     C.RESRCE_CD (+) =   A.RESRCE_CD
+        AND     D.USER_ID (+) =   A.V_USER_ID
         <if test='userId != null and userId != ""'>
             AND B.USER_ID LIKE '%'||#{userId}||'%'
         </if>
@@ -99,8 +105,13 @@
         <if test='storeNm != null and storeNm != ""'>
             AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
         </if>
-        ORDER BY A.H_DATE asc
-           ,     A.H_DT asc
+        <if test='vUserId != null and vUserId != ""'>
+            AND A.V_USER_ID LIKE '%'||#{vUserId}||'%'
+        </if>
+        <if test='loginIp != null and loginIp != ""'>
+            AND A.LOGIN_IP LIKE '%'||#{loginIp}||'%'
+        </if>
+        ORDER BY A.H_DATE, A.H_DT
     </select>
 
 </mapper>

@@ -107,6 +107,8 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         menuUseHistVO.setResrceCd(resrceInfoBaseVO.getResrceCd());
         menuUseHistVO.setUseDate(currentDateString());
         menuUseHistVO.setUseDt(currentTimeMsString());
+        menuUseHistVO.setLoginIp(sessionInfoVO.getLoginIp());
+        menuUseHistVO.setvUserId(sessionInfoVO.getvUserId());
 
         return cmmMenuMapper.insertMenuUseHist(menuUseHistVO);
     }

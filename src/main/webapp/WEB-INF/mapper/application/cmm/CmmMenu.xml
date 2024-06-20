@@ -117,13 +117,17 @@
             USER_ID,
             RESRCE_CD,
             USE_DATE,
-            USE_DT
+            USE_DT,
+            LOGIN_IP,
+            V_USER_ID
         ) VALUES (
             SQ_WB_MENU_HIST.NEXTVAL,
             #{userId},
             #{resrceCd},
             #{useDate},
-            #{useDt}
+            #{useDt},
+            #{loginIp},
+            #{vUserId}
         )
     </insert>
 

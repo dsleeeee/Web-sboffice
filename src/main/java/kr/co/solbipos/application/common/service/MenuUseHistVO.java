@@ -29,8 +29,11 @@ public class MenuUseHistVO extends CmmVO {
     private String useDate;
     /** 사용 일시 */
     private String useDt;
-    
-    
+    /** 로그인 IP */
+    private String loginIp;
+    /** 버추얼로그인 사용자 아이디 */
+    private String vUserId;
+
     /**
      * @return the seq
      */
@@ -91,5 +94,28 @@ public class MenuUseHistVO extends CmmVO {
     public void setUseDt(String useDt) {
         this.useDt = useDt;
     }
-    
+    /**
+     * @return the loginIp
+     */
+    public String getLoginIp() {
+        return loginIp;
+    }
+    /**
+     * @param loginIp the loginIp to set
+     */
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
+    /**
+     * @return the vUserId
+     */
+    public String getvUserId() {
+        return vUserId;
+    }
+    /**
+     * @param vUserId the vUserId to set
+     */
+    public void setvUserId(String vUserId) {
+        this.vUserId = vUserId;
+    }
 }
