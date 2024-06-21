@@ -403,6 +403,9 @@
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+
+                <%--저장시 필요--%>
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.saleProdYn"/>" binding="oldSaleProdYn" width="90" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -421,7 +424,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20230711.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20240621.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

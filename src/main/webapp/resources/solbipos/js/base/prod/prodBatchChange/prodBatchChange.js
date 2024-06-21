@@ -193,6 +193,21 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
             return false;
         }
 
+        // 판매상품여부 변경으로 인한 배민 주문 차단
+        var saleProdYnCntChk = 0;
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            if($scope.flex.collectionView.items[i].gChk) {
+                if($scope.flex.collectionView.items[i].oldSaleProdYn == "Y" && $scope.flex.collectionView.items[i].saleProdYn == "N") {
+                    saleProdYnCntChk = saleProdYnCntChk + 1;
+                }
+            }
+        }
+        if(saleProdYnCntChk > 0) {
+            if (!confirm("판매상품여부 미사용으로 변경 시 주문 앱에서 주문이 불가능해 집니다.\n그래도 변경 하시겠습니까?")) {
+                return false;
+            }
+        }
+
         $scope._popConfirm(messages["cmm.choo.save"], function() {
             // 프랜 매장일때만
             if(orgnFg == "STORE" && hqOfficeCd != "00000") {
