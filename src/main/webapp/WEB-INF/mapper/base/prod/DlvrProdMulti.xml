@@ -621,6 +621,9 @@
                 ,       DLVR_PROD_NM
                 HAVING  COUNT(*) > 1
                 )
+                <![CDATA[
+                    WHERE   ROWNUM  <   10
+                ]]>
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -672,6 +675,9 @@
                     ,       DLVR_PROD_NM
                     HAVING  COUNT(*) > 1
                 )
+                <![CDATA[
+                    WHERE   ROWNUM  <   10
+                ]]>
             </when>
         </choose>
     </select>
