@@ -1340,6 +1340,26 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
         }
 
+        // 판매상품여부 변경으로 인한 배민 주문 차단
+        // 판매상품여부 Y -> N
+        if($scope.prodModifyInfo.oldSaleProdYn == "Y" && $scope.prodModifyInfo.saleProdYn == "N") {
+            if (!confirm("판매상품여부 미사용으로 변경 시 주문 앱에서 주문이 불가능해 집니다.\n그래도 변경 하시겠습니까?")) {
+                return false;
+            }
+        }
+        // 사용여부 Y -> N
+        if($scope.prodModifyInfo.oldUseYn == "Y" && $scope.prodModifyInfo.useYn == "N") {
+            if (!confirm("사용여부 미사용으로 변경 시 주문 앱에서 주문이 불가능해 집니다.\n그래도 변경 하시겠습니까?")) {
+                return false;
+            }
+        }
+        // 단종 N -> Y
+        if($scope.prodModifyInfo.oldDisconYn == "N" && $scope.prodModifyInfo.disconYn == "Y") {
+            if (!confirm("단종으로 변경 시 단종되는 날짜부터 주문 앱에서 주문이 불가능해 집니다.\n그래도 변경 하시겠습니까?")) {
+                return false;
+            }
+        }
+
         return true;
     };
 

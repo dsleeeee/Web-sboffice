@@ -463,6 +463,7 @@
                 thp.PROD_DLVR_AMT,
                 thp.PROD_TYPE_FG,                               -- 상품유형구분
                 thp.SALE_PROD_YN,                               -- 판매상품여부
+                thp.SALE_PROD_YN AS OLD_SALE_PROD_YN,                               -- 판매상품여부
                 thp.STOCK_PROD_YN,                              -- 재고관리여부
                 thp.SIDE_PROD_YN,
                 thp.SET_PROD_FG,                                -- 세트상품구분
@@ -483,6 +484,7 @@
                 0 AS DEFAULT_STOCK,             -- todo 초기재고
                 thp.STOCK_UNIT_FG,
                 thp.USE_YN,                     -- 사용여부
+                thp.USE_YN AS OLD_USE_YN,                     -- 사용여부
                 NVL(thp.REMARK, '') AS REMARK,  -- 비고
                 thp.REG_DT,
                 thpi.IMG_URL,
@@ -508,6 +510,7 @@
                 thp.RELEASE_DATE,
                 thp.DISCON_DATE,
                 thp.DISCON_YN,
+                thp.DISCON_YN AS OLD_DISCON_YN,
                 (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE thp2.HQ_OFFICE_CD = #{hqOfficeCd} AND thp2.PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM,
                 thp.GROUP_PROD_CD,
                 (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE thp2.HQ_OFFICE_CD = #{hqOfficeCd} AND thp2.PROD_CD = thp.DEPOSIT_PROD_CD) AS DEPOSIT_PROD_NM,
