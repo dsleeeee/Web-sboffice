@@ -1101,6 +1101,8 @@
     <typeAlias alias="mCoupnCalcVO" type="kr.co.solbipos.sale.status.mCoupnCalc.service.MCoupnCalcVO"/>
     <!-- 맘스터치 > 매출분석2 > 주문시간트레킹 -->
     <typeAlias alias="orderTimeTrackingVO" type="kr.co.solbipos.sale.anals.orderTimeTracking.service.OrderTimeTrackingVO"/>
+    <!-- 맘스터치 > 매출분석2 > 주문시간트레킹-메뉴별 -->
+    <typeAlias alias="orderTimeTrackingMenuVO" type="kr.co.solbipos.sale.anals.orderTimeTrackingMenu.service.OrderTimeTrackingMenuVO"/>
     <!-- 맘스터치 > 매출분석2 > 지류상품권 정산 -->
     <typeAlias alias="giftCalcVO" type="kr.co.solbipos.sale.status.giftCalc.service.GiftCalcVO"/>
     <!-- 맘스터치 > 매출분석2 > 서비스타임(평균시간) -->

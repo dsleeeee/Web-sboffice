@@ -76,12 +76,22 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             // 매장브랜드, 상품브랜드가 '전체' 일때
-            if (kioskDisplayVO.getStoreHqBrandCd() == "" || kioskDisplayVO.getStoreHqBrandCd() == null || kioskDisplayVO.getProdHqBrandCd() == "" || kioskDisplayVO.getProdHqBrandCd() == null) {
+            if (kioskDisplayVO.getStoreHqBrandCd() == "" || kioskDisplayVO.getStoreHqBrandCd() == null) {
                 // 사용자별 브랜드 array 값 세팅
                 if (kioskDisplayVO.getUserBrands() != null && !"".equals(kioskDisplayVO.getUserBrands())) {
                     String[] userBrandList = kioskDisplayVO.getUserBrands().split(",");
                     if (userBrandList.length > 0) {
                         kioskDisplayVO.setUserBrandList(userBrandList);
+                    }
+                }
+            }
+            // 매장브랜드, 상품브랜드가 '전체' 일때
+            if (kioskDisplayVO.getProdHqBrandCd() == "" || kioskDisplayVO.getProdHqBrandCd() == null) {
+                // 사용자별 브랜드 array 값 세팅
+                if (kioskDisplayVO.getProdBrands() != null && !"".equals(kioskDisplayVO.getProdBrands())) {
+                    String[] prodBrandList = kioskDisplayVO.getProdBrands().split(",");
+                    if (prodBrandList.length > 0) {
+                        kioskDisplayVO.setProdBrandList(prodBrandList);
                     }
                 }
             }
@@ -214,5 +224,21 @@ public class KioskDisplayServiceImpl implements KioskDisplayService {
         }
 
         return result;
+    }
+
+    //매장별 상품브랜드 조회
+    @Override
+    public List<DefaultMap<Object>> getUserBrandComboListAll(KioskDisplayVO kioskDisplayVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){
+            kioskDisplayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskDisplayVO.setOrgnFg("H");
+        }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            kioskDisplayVO.setStoreCd(sessionInfoVO.getStoreCd());
+            kioskDisplayVO.setOrgnFg("S");
+        }
+
+        return kioskDisplayMapper.getUserBrandComboListAll(kioskDisplayVO);
     }
 }

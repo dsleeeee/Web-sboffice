@@ -114,6 +114,7 @@
                      modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                      closeFunc - 팝업 닫기시 호출할 함수--%>
                 <jsp:include page="/WEB-INF/view/sale/com/popup/selectProdSMoms.jsp" flush="true">
+                    <jsp:param name="targetBrandFg" value="A"/>
                     <jsp:param name="targetId" value="kioskDisplayProd"/>
                 </jsp:include>
                 <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
@@ -553,6 +554,7 @@
     var momsEnvstVal = "${momsEnvstVal}";
 
     // List 형식("" 안붙임)
+    var userHqStoreBrandCdComboList = ${userHqStoreBrandCdComboList};
     var userHqBrandCdComboList = ${userHqBrandCdComboList};
     var momsTeamComboList = ${momsTeamComboList};
     var momsAcShopComboList = ${momsAcShopComboList};
@@ -568,7 +570,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20240617.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

@@ -105,6 +105,10 @@ public class KioskDisplayController {
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
+        // 매장별 브랜드 콤보박스 조회(사용자 상관없이 전체 브랜드 표시)
+        KioskDisplayVO kioskDisplayVO = new KioskDisplayVO();
+        model.addAttribute("userHqStoreBrandCdComboList", convertToJson(kioskDisplayService.getUserBrandComboListAll(kioskDisplayVO, sessionInfoVO)));
+
         // 사용자별 브랜드 콤보박스 조회
         DayProdVO dayProdVO = new DayProdVO();
         model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));

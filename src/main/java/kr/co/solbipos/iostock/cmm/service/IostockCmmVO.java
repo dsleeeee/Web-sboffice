@@ -114,6 +114,9 @@ public class IostockCmmVO extends PageVO {
     /** 조회매장 팝업 구분 */
     private String selectStoreFg;
 
+    /**  */
+    private String targetBrandFg;
+
     /**
      * @return the orgnFg
      */
@@ -469,4 +472,12 @@ public class IostockCmmVO extends PageVO {
     public String getSelectStoreFg() { return selectStoreFg; }
 
     public void setSelectStoreFg(String selectStoreFg) { this.selectStoreFg = selectStoreFg; }
+
+    public String getTargetBrandFg() {
+        return targetBrandFg;
+    }
+
+    public void setTargetBrandFg(String targetBrandFg) {
+        this.targetBrandFg = targetBrandFg;
+    }
 }

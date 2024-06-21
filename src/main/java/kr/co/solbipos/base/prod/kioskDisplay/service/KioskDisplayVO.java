@@ -316,6 +316,12 @@ public class KioskDisplayVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 매장별 브랜드코드 */
+    private String[] prodBrandList;
+
+    /** 매장별 브랜드코드 */
+    private String prodBrands;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1401,4 +1407,20 @@ public class KioskDisplayVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String[] getProdBrandList() {
+        return prodBrandList;
+    }
+
+    public void setProdBrandList(String[] prodBrandList) {
+        this.prodBrandList = prodBrandList;
+    }
+
+    public String getProdBrands() {
+        return prodBrands;
+    }
+
+    public void setProdBrands(String prodBrands) {
+        this.prodBrands = prodBrands;
+    }
 }

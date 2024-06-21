@@ -28,6 +28,11 @@ app.controller('prodCornerCtrl', ['$scope', '$http', function ($scope, $http) {
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        if(cornerList2.length <= 0){
+            $scope._popMsg(messages["prodCorner.notExists.cornr"]); // 이동할 코너가 없습니다.
+
+        }
+
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
@@ -79,6 +84,11 @@ app.controller('prodCornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 코너 이동
     $scope.changeProdCorner = function(){
+
+        if(cornerList2.length <= 0){
+            $scope._popMsg(messages["prodCorner.notExists.cornr"]); // 이동할 코너가 없습니다.
+            return false;
+        }
 
         if($scope.srchCornrCd === $scope.cornrCd) {
             /*조회한 코너가 이동할 코너가 같습니다. 이동할 코너를 다시 선택하세요.*/

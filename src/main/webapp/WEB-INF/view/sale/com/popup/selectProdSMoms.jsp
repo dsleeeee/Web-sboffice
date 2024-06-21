@@ -122,7 +122,7 @@
   var app = agrid.getApp();
 
   // 상품브랜드 콤보박스 항목 저장시 쓰려고
-  var momsHqBrandCdComboList;
+  var momsHqBrandCdComboList2;
 
   /** 매장선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
@@ -167,12 +167,13 @@
 
       // 상품브랜드
       var params = {};
+      params.targetBrandFg = "${param.targetBrandFg}";
       $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
         if (response.data.data.list.length > 0) {
           var list = response.data.data.list;
           $scope._setComboData("popProdHqBrandCdCombo", list);
           // 상품브랜드 콤보박스 항목 저장시 쓰려고
-          momsHqBrandCdComboList = list;
+          momsHqBrandCdComboList2 = list;
         }
       });
     };
@@ -207,9 +208,9 @@
       // '전체' 일때
       if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
         var momsHqBrandCd = "";
-        for(var i=0; i < momsHqBrandCdComboList.length; i++){
-          if(momsHqBrandCdComboList[i].value !== null) {
-            momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+        for(var i=0; i < momsHqBrandCdComboList2.length; i++){
+          if(momsHqBrandCdComboList2[i].value !== null) {
+            momsHqBrandCd += momsHqBrandCdComboList2[i].value + ","
           }
         }
         params.userBrands = momsHqBrandCd;

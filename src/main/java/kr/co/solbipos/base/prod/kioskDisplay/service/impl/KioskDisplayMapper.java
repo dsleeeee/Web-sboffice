@@ -1,6 +1,7 @@
 package kr.co.solbipos.base.prod.kioskDisplay.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -67,4 +68,7 @@ public interface KioskDisplayMapper {
 
     // 엑셀 업로드
     int getExcelUploadSave(KioskDisplayVO kioskDisplayVO);
+
+    // 매장별 상품브랜드 조회
+    List<DefaultMap<Object>> getUserBrandComboListAll(KioskDisplayVO kioskDisplayVO);
 }

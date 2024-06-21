@@ -49,7 +49,8 @@
         ,       tsshp.PAY02 AS PAY02 -- 현금
         ,       tsshp.PAY021 AS PAY021 -- 현금영수증
         ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                    tsdto.SALE_QTY${item} AS SALE_QTY${item}
+                    tsdto.REAL_SALE_CNT${item} AS REAL_SALE_CNT${item}
+        ,           tsdto.SALE_QTY${item} AS SALE_QTY${item}
         ,           tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
                 </foreach>
         FROM    (   SELECT  SALE_DATE
@@ -139,7 +140,8 @@
                 ) tsshp
         ,       (   SELECT  SALE_DATE
                     ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_CNT END) AS REAL_SALE_CNT${item}
+                        ,       SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
                         ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                             </foreach>
                     FROM    TB_SL_DAILY_TOTAL_ORDAPP tsdto

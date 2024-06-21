@@ -208,7 +208,7 @@
     var cornerList2 = ${cornerList2};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/corner/prodCorner.js?ver=20240228.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/corner/prodCorner.js?ver=20240620.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

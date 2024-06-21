@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    OrderTimeTrackingMenuMapper.xml
+    주문시간트레킹-메뉴별
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.06.18     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.sale.anals.orderTimeTrackingMenu.service.impl.OrderTimeTrackingMenuMapper">
+
+    <!-- 주문시간트레킹 리스트 조회 -->
+    <!--
+        TABLE    : TB_PS_ORDER_TRACKING
+        PARAM    : orderTimeTrackingMenuVO
+        COMMENTS : 주문시간트레킹 리스트를 조회한다.
+    -->
+    <select id="getOrderTimeTrackingMenuList" parameterType="orderTimeTrackingMenuVO" resultType="DefaultMap">
+        /* USE : OrderTimeTrackingMenuMapper.getOrderTimeTrackingMenuList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  tpot.HQ_OFFICE_CD
+        ,       tpot.HQ_BRAND_CD
+        ,       tpot.STORE_CD
+        ,       tms.STORE_NM
+        ,       tmsi.MOMS_STORE_FG_01
+        ,       tmsi.MOMS_STORE_FG_02
+        ,       tmsi.MOMS_STORE_FG_03
+        ,       tmsi.MOMS_STORE_FG_04
+        ,       tmsi.MOMS_STORE_FG_05
+        ,       TO_CHAR(TO_DATE(tpot.SALE_DATE,'yyyymmdd'),'yyyy-mm-dd')AS SALE_DATE
+        ,       tpot.SERVICE_TYPE
+        ,       tpot.CHANNEL_ORDER_NO
+        ,       tpot.CHANNEL_TYPE
+        ,       tpot.CHANNEL_SERVICE
+        ,       TO_CHAR(TO_DATE(tpot.CHANNEL_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CHANNEL_REG_DT
+        ,       tpot.VORDER_NO
+        ,       TO_CHAR(TO_DATE(tpot.VORDER_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS VORDER_REG_DT
+        ,       tpot.ORDER_NO
+        ,       C.PROD_CD
+        ,       D.PROD_NM
+        ,       TO_CHAR(TO_DATE(tpot.POS_REG_DT,'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS POS_REG_DT
+        ,       tpot.ACCEPTED_FG
+        ,       TO_CHAR(TO_DATE(tpot.ACCEPTED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ACCEPTED_DT
+        ,       TO_CHAR(TO_DATE(tpot.COOKED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS COOKED_DT
+        ,       TO_CHAR(TO_DATE(tpot.FINISHED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS FINISHED_DT
+        ,       TO_CHAR(TO_DATE(DECODE(tpot.CALLED_DT, '1', '', tpot.CALLED_DT), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CALLED_DT
+        ,       TO_CHAR(TO_DATE(DECODE(tpot.LAST_CALLED_DT, '1', '', tpot.LAST_CALLED_DT), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS LAST_CALLED_DT
+        ,       TO_CHAR(TO_DATE(tpot.ASSIGNED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ASSIGNED_DT
+        ,       TO_CHAR(TO_DATE(tpot.PICKED_UP_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS PICKED_UP_DT
+        ,       tpot.COMPLETED_FG
+        ,       TO_CHAR(TO_DATE(tpot.COMPLETED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS COMPLETED_DT
+        ,       tpot.CANCELED_FG
+        ,       TO_CHAR(TO_DATE(tpot.CANCELED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CANCELED_DT
+        ,       tpot.CANCELED_MEMO
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM   TB_PS_ORDER_TRACKING tpot
+        ,      TB_MS_STORE tms
+        ,      TB_MS_STORE_INFO tmsi
+        ,      TB_SL_SALE_HDR_DLVR B
+        ,      TB_SL_SALE_DTL C
+        ,      TB_MS_PRODUCT D
+        WHERE  tpot.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tpot.STORE_CD IN (${storeCdQuery})
+        </if>
+        AND   tpot.SALE_DATE            = #{startDate}
+        AND   tms.HQ_OFFICE_CD          = tpot.HQ_OFFICE_CD
+        AND   tms.STORE_CD              = tpot.STORE_CD
+        AND   tms.STORE_CD              = tmsi.STORE_CD (+)
+        AND   B.STORE_CD            (+) =    tpot.STORE_CD
+        AND   B.SALE_DATE           (+) =    tpot.SALE_DATE
+        AND   B.CHANNEL_ORDER_NO    (+) =    tpot.CHANNEL_ORDER_NO
+        AND   C.STORE_CD            (+) =    B.STORE_CD
+        AND   C.SALE_DATE           (+) =    B.SALE_DATE
+        AND   C.POS_NO              (+) =    B.POS_NO
+        AND   C.BILL_NO             (+) =    B.BILL_NO
+        AND   D.STORE_CD            (+) =    C.STORE_CD
+        AND   D.PROD_CD             (+) =    C.PROD_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        ORDER BY tpot.CHANNEL_REG_DT DESC, tpot.POS_REG_DT DESC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 주문시간트레킹 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_PS_ORDER_TRACKING
+        PARAM    : orderTimeTrackingMenuVO
+        COMMENTS : 주문시간트레킹 엑셀다운로드 리스트를 조회한다.
+    -->
+    <select id="getOrderTimeTrackingMenuExcelList" parameterType="orderTimeTrackingMenuVO" resultType="DefaultMap">
+        /* USE : OrderTimeTrackingMenuMapper.getOrderTimeTrackingMenuExcelList */
+        SELECT  tpot.HQ_OFFICE_CD
+        ,       tpot.HQ_BRAND_CD
+        ,       tpot.STORE_CD
+        ,       tms.STORE_NM
+        ,       tmsi.MOMS_STORE_FG_01
+        ,       tmsi.MOMS_STORE_FG_02
+        ,       tmsi.MOMS_STORE_FG_03
+        ,       tmsi.MOMS_STORE_FG_04
+        ,       tmsi.MOMS_STORE_FG_05
+        ,       TO_CHAR(TO_DATE(tpot.SALE_DATE,'yyyymmdd'),'yyyy-mm-dd')AS SALE_DATE
+        ,       tpot.SERVICE_TYPE
+        ,       tpot.CHANNEL_ORDER_NO
+        ,       tpot.CHANNEL_TYPE
+        ,       tpot.CHANNEL_SERVICE
+        ,       TO_CHAR(TO_DATE(tpot.CHANNEL_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CHANNEL_REG_DT
+        ,       tpot.VORDER_NO
+        ,       TO_CHAR(TO_DATE(tpot.VORDER_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS VORDER_REG_DT
+        ,       tpot.ORDER_NO
+        ,       C.PROD_CD
+        ,       D.PROD_NM
+        ,       TO_CHAR(TO_DATE(tpot.POS_REG_DT,'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS POS_REG_DT
+        ,       tpot.ACCEPTED_FG
+        ,       TO_CHAR(TO_DATE(tpot.ACCEPTED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ACCEPTED_DT
+        ,       TO_CHAR(TO_DATE(tpot.COOKED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS COOKED_DT
+        ,       TO_CHAR(TO_DATE(tpot.FINISHED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS FINISHED_DT
+        ,       TO_CHAR(TO_DATE(DECODE(tpot.CALLED_DT, '1', '', tpot.CALLED_DT), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CALLED_DT
+        ,       TO_CHAR(TO_DATE(DECODE(tpot.LAST_CALLED_DT, '1', '', tpot.LAST_CALLED_DT), 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS LAST_CALLED_DT
+        ,       TO_CHAR(TO_DATE(tpot.ASSIGNED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS ASSIGNED_DT
+        ,       TO_CHAR(TO_DATE(tpot.PICKED_UP_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS PICKED_UP_DT
+        ,       tpot.COMPLETED_FG
+        ,       TO_CHAR(TO_DATE(tpot.COMPLETED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS COMPLETED_DT
+        ,       tpot.CANCELED_FG
+        ,       TO_CHAR(TO_DATE(tpot.CANCELED_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CANCELED_DT
+        ,       tpot.CANCELED_MEMO
+        FROM   TB_PS_ORDER_TRACKING tpot
+        ,      TB_MS_STORE tms
+        ,      TB_MS_STORE_INFO tmsi
+        ,      TB_SL_SALE_HDR_DLVR B
+        ,      TB_SL_SALE_DTL C
+        ,      TB_MS_PRODUCT D
+        WHERE  tpot.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tpot.STORE_CD IN (${storeCdQuery})
+        </if>
+        AND   tpot.SALE_DATE            = #{startDate}
+        AND   tms.HQ_OFFICE_CD          = tpot.HQ_OFFICE_CD
+        AND   tms.STORE_CD              = tpot.STORE_CD
+        AND   tms.STORE_CD              = tmsi.STORE_CD (+)
+        AND   B.STORE_CD            (+) =    tpot.STORE_CD
+        AND   B.SALE_DATE           (+) =    tpot.SALE_DATE
+        AND   B.CHANNEL_ORDER_NO    (+) =    tpot.CHANNEL_ORDER_NO
+        AND   C.STORE_CD            (+) =    B.STORE_CD
+        AND   C.SALE_DATE           (+) =    B.SALE_DATE
+        AND   C.POS_NO              (+) =    B.POS_NO
+        AND   C.BILL_NO             (+) =    B.BILL_NO
+        AND   D.STORE_CD            (+) =    C.STORE_CD
+        AND   D.PROD_CD             (+) =    C.PROD_CD
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        ORDER BY tpot.CHANNEL_REG_DT DESC, tpot.POS_REG_DT DESC
+    </select>
+
+</mapper>

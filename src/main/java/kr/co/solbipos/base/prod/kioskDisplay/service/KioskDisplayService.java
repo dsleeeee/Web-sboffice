@@ -44,4 +44,7 @@ public interface KioskDisplayService {
 
     // 엑셀 업로드
     int getExcelUploadSave(KioskDisplayVO[] kioskDisplayVOs, SessionInfoVO sessionInfoVO);
+
+    // 매장별 상품브랜드 조회
+    List<DefaultMap<Object>> getUserBrandComboListAll(KioskDisplayVO kioskDisplayVO, SessionInfoVO sessionInfoVO);
 }

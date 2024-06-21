@@ -348,6 +348,7 @@
           <wj-flex-grid-column header="<s:message code="day.dayTotal.packRealSaleRate"/>" binding="packRealSaleRate" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
           <%-- 채널 컬럼 생성--%>
           <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
+            <wj-flex-grid-column header="<s:message code="dayMoms.billCnt"/>" binding="realSaleCnt${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMoms.prodSaleQty"/>" binding="saleQty${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dayMoms.realSaleAmt"/>" binding="realSaleAmt${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </c:forEach>
@@ -432,7 +433,7 @@
   var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayMoms/dayMoms.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayMoms/dayMoms.js?ver=20240618.01" charset="utf-8"></script>
 
 <%-- 팝업 레이어 시작 --%>
 <%-- 매장별 매출현황 팝업 레이어 --%>

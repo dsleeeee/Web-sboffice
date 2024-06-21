@@ -114,9 +114,12 @@ public class IostockCmmServiceImpl implements IostockCmmService {
         iostockCmmVO.setUserId(sessionInfoVO.getUserId());
 
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            // 사용자별 브랜드 사용 조회
-            String userBrands = iostockCmmMapper.getUserBrandCdList(iostockCmmVO);
-            iostockCmmVO.setUserBrands(userBrands);
+
+            if(iostockCmmVO.getTargetBrandFg() == null || iostockCmmVO.getTargetBrandFg() == "" ) {
+                // 사용자별 브랜드 사용 조회
+                String userBrands = iostockCmmMapper.getUserBrandCdList(iostockCmmVO);
+                iostockCmmVO.setUserBrands(userBrands);
+            }
 
             if (iostockCmmVO.getUserBrands() != null && !"".equals(iostockCmmVO.getUserBrands())) {
                 // 사용자별 브랜드 array 값 세팅
