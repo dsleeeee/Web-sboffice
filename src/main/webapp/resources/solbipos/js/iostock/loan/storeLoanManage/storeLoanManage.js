@@ -42,7 +42,7 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
         }
       }
     });
-    
+
     // keydown event listener
     s.addEventListener(s.hostElement, 'keydown', function(e) {
        if (e.keyCode == wijmo.Key.Delete && !e.target.getAttribute("aria-readonly")) {
@@ -55,7 +55,7 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
           e.preventDefault();
        }
     });
-        
+
     // 그리드 클릭 이벤트
     s.addEventListener(s.hostElement, 'mousedown', function (e) {
       var ht = s.hitTest(e);
@@ -79,32 +79,32 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
 
   	//다른 컨트롤러의 broadcast 받기
 	$scope.$on("storeLoanManageCtrl", function (event, data) {
-	
+
 //		if( $("#posDaySelectStoreCd").val() === ''){
 //		 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 //		 	return false;
-//		}  
-		
+//		}
+
 		$scope.searchStoreLoanManage(true);
-		
+
 //		var storeCd = $("#posDaySelectStoreCd").val();
 //			$scope.getRePosNmList(storeCd, posCd);
 	});
-  
+
 	//다른 컨트롤러의 broadcast 받기(페이징 초기화)
 	$scope.$on("storeLoanManageCtrlSrch", function (event, data) {
-	
+
 //		if( $("#posDaySelectStoreCd").val() === ''){
 //		 	$scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
 //		 	return false;
-//		}  
-		
+//		}
+
 		$scope.searchStoreLoanManage(false);
-		
+
 //		var storeCd = $("#posDaySelectStoreCd").val();
 //			$scope.getRePosNmList(storeCd, posCd);
 	});
-  
+
   // 리스트 조회
   $scope.searchStoreLoanManage = function (isPageChk) {
     // 파라미터
@@ -130,24 +130,29 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
         return false;
       }
 
+/*
       if (item.limitLoanAmt !== null && item.maxOrderAmt === null) {
         $scope._popMsg(messages["loan.maxOrderAmt"]+" "+messages["cmm.require.text"]); // 1회주문한도액을 입력해주세요.
         return false;
       }
+*/
+
       if (item.maxOrderAmt !== null && item.limitLoanAmt === null) {
         $scope._popMsg(messages["loan.limitLoanAmt"]+" "+messages["cmm.require.text"]); // 여신한도액을 입력해주세요.
         return false;
       }
 
-      item.status = "U";
-      params.push(item);
+      if(item.limitLoanAmt !== null) {
+        item.status = "U";
+        params.push(item);
+      }
     }
 
     $scope._save("/iostock/loan/storeLoanManage/storeLoanManage/save.sb", params, function () {
       $scope.searchStoreLoanManage();
     });
   };
-  
+
 //삭제
   $scope.fnDel = function () {
     var msg = messages["loan.delLimitLoanAmtMsg"]; // 선택하신 자료를 삭제합니다. 삭제하시겠습니까?
@@ -155,7 +160,7 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
     	var params = [];
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
           var item = $scope.flex.collectionView.itemsEdited[i];
-          
+
           if (item.gChk === true) {
         	  // if (item.limitLoanAmt !== null ) {
               //     $scope._popMsg(messages["loan.delLimitLoanAmt.txt"]); // 여신한도액이 있는 자료만 삭제할 수 있습니다.
@@ -170,7 +175,82 @@ app.controller('storeLoanManageCtrl', ['$scope', '$http', function ($scope, $htt
         }
         $scope._save("/iostock/loan/storeLoanManage/storeLoanManage/delLimitLoanAmt.sb", params, function () {
           $scope.searchStoreLoanManage()
-        }); 
+        });
+    });
+  };
+
+  // 전체엑셀 다운로드
+  $scope.excelDownloadTotal = function () {
+    // 파라미터
+    var params = {};
+    // param.storeCd = $("#srchStoreCd").val();
+    // param.storeNm = $("#srchStoreNm").val();
+
+    $scope._broadcast('storeLoanManageExcelCtrl',params);
+  }
+
+}]);
+
+
+app.controller('storeLoanManageExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('storeLoanManageExcelCtrl', $scope, $http, true));
+
+  //페이지 스케일 콤보박스 데이터 Set
+  $scope._setComboData("listScaleBox", gvListScaleBoxData);
+
+  $scope.noOutstockAmtFg = new wijmo.grid.DataMap([
+    {id: "N", name: messages["loan.noOutstockAmtFgN"]},
+    {id: "Y", name: messages["loan.noOutstockAmtFgY"]}
+  ], 'id', 'name');
+
+  $scope.orderCloseYn = new wijmo.grid.DataMap([
+    {id: "false", name: ""},
+    {id: "true" , name: "중지"}
+  ], 'id', 'name');
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    // picker 사용시 호출 : 미사용시 호출안함
+    $scope._makePickColumns("storeLoanManageExcelCtrl");
+
+    // add the new GroupRow to the grid's 'columnFooters' panel
+    s.columnFooters.rows.push(new wijmo.grid.GroupRow());
+    // add a sigma to the header to show that this is a summary row
+    s.bottomLeftCells.setCellData(0, 0, '합계');
+  };
+
+  // 다른 컨트롤러의 broadcast 받기
+  $scope.$on("storeLoanManageExcelCtrl", function (event, data) {
+    $scope.searchExcelList(data);
+    // 기능수행 종료 : 반드시 추가
+    event.preventDefault();
+  });
+
+  // 엑셀 리스트 조회
+  $scope.searchExcelList = function (params) {
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._inquiryMain("/iostock/loan/storeLoanManage/storeLoanManage/storeLoanManageExcelCtrlList.sb", params, function() {
+      if ($scope.excelFlex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+        return false;
+      }
+
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+      $timeout(function () {
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+          includeColumnHeaders: true,
+          includeCellStyles   : true,
+          includeColumns      : function (column) {
+            return column.visible;
+          }
+        }, '매장여신관리' + '_' + getCurDateTime()+'.xlsx', function () {
+          $timeout(function () {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+          }, 10);
+        });
+      }, 10);
     });
   };
 

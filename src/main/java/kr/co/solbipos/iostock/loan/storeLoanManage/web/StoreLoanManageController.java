@@ -83,16 +83,40 @@ public class StoreLoanManageController {
      * @author  안동관
      * @since   2018. 08. 20.
      */
-    
+
     @RequestMapping(value = "/storeLoanManage/list.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStoreLoanManageList(HttpServletRequest request, HttpServletResponse response,
-                                   StoreLoanManageVO storeLoanManageVO, Model model) {
+                                         StoreLoanManageVO storeLoanManageVO, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeLoanManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         List<DefaultMap<String>> list = storeLoanManageService.getStoreLoanManageList(storeLoanManageVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, storeLoanManageVO);
+
+    }
+    /**
+     * 매장여신관리 - 전체엑셀 다운로드
+     * @param   request
+     * @param   response
+     * @param   storeLoanManageVO
+     * @param   model
+     * @return  Result
+     * @author  김중선
+     * @since   2024. 06. 21.
+     */
+
+    @RequestMapping(value = "/storeLoanManage/storeLoanManageExcelCtrlList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreLoanManageExcelCtrlList(HttpServletRequest request, HttpServletResponse response,
+                                         StoreLoanManageVO storeLoanManageVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        storeLoanManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = storeLoanManageService.getStoreLoanManageExcelCtrlList(storeLoanManageVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, storeLoanManageVO);
 

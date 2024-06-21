@@ -30,6 +30,12 @@ public class StoreLoanManageServiceImpl implements StoreLoanManageService {
         return storeLoanManageMapper.getStoreLoanManageList(storeLoanManageVO);
     }
 
+    /** 매장여신관리 목록 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreLoanManageExcelCtrlList(StoreLoanManageVO storeLoanManageVO) {
+        return storeLoanManageMapper.getStoreLoanManageExcelCtrlList(storeLoanManageVO);
+    }
+
     /** 매장여신 저장 */
     @Override
     public int saveLoanManageList(StoreLoanManageVO[] storeLoanManageVOs, SessionInfoVO sessionInfoVO) {

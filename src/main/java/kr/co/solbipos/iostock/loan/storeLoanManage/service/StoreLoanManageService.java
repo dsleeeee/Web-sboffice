@@ -25,6 +25,9 @@ public interface StoreLoanManageService {
     /** 매장여신 목록 조회 */
     List<DefaultMap<String>> getStoreLoanManageList(StoreLoanManageVO storeLoanManageVO);
 
+    /** 매장여신 전체엑셀 다운로드 */
+    List<DefaultMap<String>> getStoreLoanManageExcelCtrlList(StoreLoanManageVO storeLoanManageVO);
+
     /** 매장여신 저장 */
     int saveLoanManageList(StoreLoanManageVO[] storeLoanManageVOs, SessionInfoVO sessionInfoVO);
 

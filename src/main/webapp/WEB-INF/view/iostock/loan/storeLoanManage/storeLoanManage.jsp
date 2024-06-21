@@ -38,7 +38,7 @@
 
   <ul class="txtSty2 mt10 pdb10 bb">
     <li class="red">
-      <s:message code="loan.info1"/>(개발중)<br>
+      <s:message code="loan.info1"/><font color='blue'>(개발중)</font><br>
       <p>
         <span><s:message code="loan.info1.txt1"/></span>
         <s:message code="loan.info1.txt1.1"/><br>
@@ -49,12 +49,18 @@
       </p>
     </li>
     <li class="red mt10">
-      <s:message code="loan.info2"/>(개발중)<br>
+      <s:message code="loan.info2"/><font color='blue'>(개발중)</font><br>
       <p>
         <span><s:message code="loan.info2.txt1"/></span>
         <s:message code="loan.info2.txt1.1"/><br>
         <span><s:message code="loan.info2.txt2"/></span>
         <s:message code="loan.info2.txt2.1"/>
+      </p>
+    </li>
+    <li class="red mt10">
+      <font color='blue'>(개발중)</font><br>
+      <p>
+        <span><font color='blue'>[여신사용액][여신잔액][주문가능액]</font></span>
       </p>
     </li>
   </ul>
@@ -74,14 +80,14 @@
 	  text-changed="_checkValidation(s)">
     </wj-combo-box>
     <%--// 페이지 스케일  --%>
-    <%-- 엑셀 다운로드 --%>
-    <%--<button id="btnExcel" class="btn_skyblue fr" ng-click="excelDown()"><s:message code="cmm.excel.down"/></button>--%>
+    <%-- 전체엑셀 다운로드 --%>
+    <button class="btn_skyblue ml5 fr" ng-click="excelDownloadTotal()" ><s:message code="cmm.excel.downTotal"/></button>
     <%-- 삭제 --%>
-    <button id="btnDel" class="btn_skyblue fr mr5" ng-click="fnDel()"><s:message code="cmm.delete"/></button>    
+    <button id="btnDel" class="btn_skyblue fr mr5" ng-click="fnDel()"><s:message code="cmm.delete"/></button>
     <%-- 저장 --%>
     <button id="btnSave" class="btn_skyblue fr mr5" ng-click="save()"><s:message code="cmm.save"/></button>
 
-    
+
   </div>
 
   <div class="w100 mt10">
@@ -104,14 +110,14 @@
         <wj-flex-grid-column header="<s:message code="loan.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.limitLoanAmt"/>" binding="limitLoanAmt" width="90" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.useLoanAmt"/>" binding="useLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.currLoanAmt"/>" binding="currLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmt"/>" binding="maxOrderAmt" width="90" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmtYn"/>" binding="maxOrderAmtYn" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.useLoanAmt"/>" binding="useLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.currLoanAmt"/>" binding="currLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmtYn"/>" binding="maxOrderAmtYn" width="120" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmt"/>" binding="maxOrderAmt" width="110" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.orderFg"/>" binding="orderFg" width="90" align="center" is-read-only="false" data-map="orderFg"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.availableOrderAmt"/>" binding="availableOrderAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.availableOrderAmt"/>" binding="availableOrderAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.noOutstockAmtFg"/>" binding="noOutstockAmtFg" width="90" align="center" is-read-only="false" data-map="noOutstockAmtFg"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="loan.orderCloseYn"/>" binding="orderCloseYn" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.orderCloseYn"/>" binding="orderCloseYn" width="120" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loan.remark"/>" binding="remark" width="100" align="left" is-read-only="false"></wj-flex-grid-column>
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -131,9 +137,42 @@
   </div>
   <%--//페이지 리스트--%>
 
+  <%--엑셀 리스트--%>
+  <div class="w100 mt10" style="display:none;" ng-controller="storeLoanManageExcelCtrl">
+    <%--위즈모 테이블--%>
+    <div class="wj-gridWrap" style="height: 300px; overflow-x: hidden; overflow-y: hidden;">
+      <wj-flex-grid
+                autoGenerateColumns="false"
+                control="excelFlex"
+                initialized="initGrid(s,e)"
+                sticky-headers="true"
+                selection-mode="Row"
+                items-source="data"
+                item-formatter="_itemFormatter"
+                frozen-columns="2"
+                sorted-column="toggleFreeze(false)"
+                ime-enabled="true">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="loan.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.limitLoanAmt"/>" binding="limitLoanAmt" width="90" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.useLoanAmt"/>" binding="useLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.currLoanAmt"/>" binding="currLoanAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.maxOrderAmt"/>" binding="maxOrderAmt" width="110" align="right" is-read-only="false" max-length=10 data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.orderFg"/>" binding="orderFg" width="90" align="center" is-read-only="false" data-map="orderFg"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.availableOrderAmt"/>" binding="availableOrderAmt" width="90" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.noOutstockAmtFg"/>" binding="noOutstockAmtFg" width="90" align="center" is-read-only="false" data-map="noOutstockAmtFg"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.orderCloseYn"/>" binding="orderCloseYn" width="120" align="center" is-read-only="false" data-map="orderCloseYn"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loan.remark"/>" binding="remark" width="100" align="left" is-read-only="false"></wj-flex-grid-column>
+      </wj-flex-grid>
+    </div>
+    <%--//위즈모 테이블--%>
+  </div>
+  <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoanManage/storeLoanManage.js?ver=20200824.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoanManage/storeLoanManage.js?ver=20240620.02" charset="utf-8"></script>
 
 <%-- 매장여신관리 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/loan/storeLoanManage/storeLoanManageDtl.jsp">
