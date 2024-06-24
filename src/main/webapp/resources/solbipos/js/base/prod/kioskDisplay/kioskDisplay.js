@@ -506,6 +506,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
     var vScope = agrid.getScope('excelUploadKioskDisplayCtrl');
     vScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
     $scope._popMsg(messages['cmm.saveSucc']);
+    $scope._pageView('kioskDisplayCtrl', 1);
   };
 }]);
 
