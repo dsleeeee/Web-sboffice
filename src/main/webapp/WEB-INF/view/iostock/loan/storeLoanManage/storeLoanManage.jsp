@@ -63,8 +63,10 @@
         <span><font color='blue'>[여신사용액][여신잔액][주문가능액]</font></span>
       </p>
     </li>
+    <li class="red mt10">
+      <s:message code="loan.delLimitLoanAmt.txt2"/>
+    </li>
   </ul>
-
   <div class="mt10 oh sb-select dkbr">
     <%-- 페이지 스케일  --%>
     <wj-combo-box

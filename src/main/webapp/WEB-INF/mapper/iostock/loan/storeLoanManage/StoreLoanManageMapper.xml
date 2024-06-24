@@ -80,7 +80,7 @@
         AND     tphsl.STORE_CD  (+) =   tms.STORE_CD
         ]]>
         <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD = #{storeCd}
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
         </if>
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
@@ -332,12 +332,6 @@
         WHERE   tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
         AND     tphsl.STORE_CD  (+) =   tms.STORE_CD
         ]]>
-        <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD = #{storeCd}
-        </if>
-        <if test='storeNm != null and storeNm != ""'>
-            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
-        </if>
         ORDER BY tms.STORE_CD
     </select>
 
