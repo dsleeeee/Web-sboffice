@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ArtiseePromotion.xml
+    아티제전용프로모션
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.06.13     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.promotion.artiseePromotion.service.impl.ArtiseePromotionMapper">
+
+    <!-- 아티제전용프로모션 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_NEOE_PROMO, TB_MS_NEOE_PROMO
+        PARAM    : artiseePromotionVO
+        COMMENTS : 아티제전용프로모션 리스트를 조회한다.
+    -->
+    <select id="getPromotionList" parameterType="artiseePromotionVO" resultType="DefaultMap">
+        /* USE : ArtiseePromotionMapper.getPromotionList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                  HQ_OFFICE_CD
+                , PROMOTION_CD
+                , PROMO_COMP_FG
+                , PROMO_TYPE_FG
+                , PROD_TYPE_FG
+                , TO_CHAR(TO_DATE(START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD
+                , TO_CHAR(TO_DATE(END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
+                , DC_SET
+                , PROMOTION_NM
+                , MEMO
+                , USE_YN
+                FROM TB_HQ_NEOE_PROMO
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='promotionNm != null and promotionNm != ""'>
+                    AND PROMOTION_NM LIKE '%' || #{promotionNm} || '%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND USE_YN = #{useYn}
+                </if>
+                <if test='promotionDate != null and promotionDate != ""'>
+                    AND #{promotionDate} BETWEEN START_YMD AND END_YMD
+                </if>
+                ORDER
+                BY PROMOTION_CD DESC
+          </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                  STORE_CD
+                , PROMOTION_CD
+                , PROMO_COMP_FG
+                , PROMO_TYPE_FG
+                , PROD_TYPE_FG
+                , TO_CHAR(TO_DATE(START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD
+                , TO_CHAR(TO_DATE(END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
+                , DC_SET
+                , PROMOTION_NM
+                , MEMO
+                , USE_YN
+                FROM TB_MS_NEOE_PROMO
+                WHERE STORE_CD = #{storeCd}
+                <if test='promotionNm != null and promotionNm != ""'>
+                    AND PROMOTION_NM LIKE '%' || #{promotionNm} || '%'
+                </if>
+                <if test='useYn != null and useYn != ""'>
+                    AND USE_YN = #{useYn}
+                </if>
+                <if test='promotionDate != null and promotionDate != ""'>
+                    AND #{promotionDate} BETWEEN START_YMD AND END_YMD
+                </if>
+                ORDER
+                BY PROMOTION_CD DESC
+          </when>
+        </choose>
+    </select>
+
+    <!-- 아티제전용프로모션 프로모션 코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_NEOE_PROMO
+        PARAM    : artiseePromotionVO
+        COMMENTS : 프로모션 생성 시, 프로모션 코드를 생성한다.
+    -->
+    <select id="getPromotionCode" parameterType="artiseePromotionVO" resultType="String">
+        /* USE : ArtiseePromotionMapper.getPromotionCode */
+        SELECT LPAD(NVL(MAX(PROMOTION_CD), '0') + 1, 5, '0')
+          FROM TB_HQ_NEOE_PROMO
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 아티제전용프로모션 프로모션 마스터 정보 저장 -->
+    <!--
+          TABLE    : TB_HQ_NEOE_PROMO
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 마스터 정보가 있으면 update, 없으면 insert
+    -->
+    <update id="savePromotion" parameterType="artiseePromotionVO">
+        /* USE : ArtiseePromotionMapper.savePromotion */
+        MERGE INTO TB_HQ_NEOE_PROMO A
+             USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD
+                     ,      #{promotionCd} AS PROMOTION_CD
+                     ,      #{promoCompFg} AS PROMO_COMP_FG
+                     ,      #{promoTypeFg} AS PROMO_TYPE_FG
+                     ,      #{prodTypeFg} AS PROD_TYPE_FG
+                     ,      #{startYmd} AS START_YMD
+                     ,      #{endYmd} AS END_YMD
+                     ,      #{dcSet} AS DC_SET
+                     ,      #{promotionNm} AS PROMOTION_NM
+                     ,      #{memo} AS MEMO
+                     ,      #{useYn} AS USE_YN
+                     ,      #{regDt} AS REG_DT
+                     ,      #{regId} AS REG_ID
+                     ,      #{modDt} AS MOD_DT
+                     ,      #{modId} AS MOD_ID
+                     FROM   DUAL
+                    ) B
+                ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD)
+              WHEN MATCHED THEN
+            UPDATE
+               SET A.PROMO_COMP_FG = B.PROMO_COMP_FG
+               ,   A.PROMO_TYPE_FG = B.PROMO_TYPE_FG
+               ,   A.PROD_TYPE_FG = B.PROD_TYPE_FG
+               ,   A.START_YMD = B.START_YMD
+               ,   A.END_YMD = B.END_YMD
+               ,   A.DC_SET = B.DC_SET
+               ,   A.PROMOTION_NM = B.PROMOTION_NM
+               ,   A.MEMO = B.MEMO
+               ,   A.USE_YN = B.USE_YN
+               ,   A.MOD_ID = B.MOD_ID
+               ,   A.MOD_DT = B.MOD_DT
+             WHEN NOT MATCHED THEN
+           INSERT
+            (     A.HQ_OFFICE_CD
+                , A.PROMOTION_CD
+                , A.PROMO_COMP_FG
+                , A.PROMO_TYPE_FG
+                , A.PROD_TYPE_FG
+                , A.START_YMD
+                , A.END_YMD
+                , A.DC_SET
+                , A.PROMOTION_NM
+                , A.MEMO
+                , A.USE_YN
+                , A.REG_DT
+                , A.REG_ID
+                , A.MOD_DT
+                , A.MOD_ID
+            )
+            VALUES
+            (     B.HQ_OFFICE_CD
+                , B.PROMOTION_CD
+                , B.PROMO_COMP_FG
+                , B.PROMO_TYPE_FG
+                , B.PROD_TYPE_FG
+                , B.START_YMD
+                , B.END_YMD
+                , B.DC_SET
+                , B.PROMOTION_NM
+                , B.MEMO
+                , B.USE_YN
+                , B.REG_DT
+                , B.REG_ID
+                , B.MOD_DT
+                , B.MOD_ID
+            )
+    </update>
+
+    <!-- 아티제전용프로모션 상세 조회 -->
+    <!--
+          TABLE    : TB_HQ_NEOE_PROMO
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 상세 정보를 조회한다.
+    -->
+    <select id="getPromotionDetail" parameterType="artiseePromotionVO" resultType="DefaultMap">
+        /* ArtiseePromotionMapper.getPromotionDetail */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                    HQ_OFFICE_CD
+                  , PROMOTION_CD
+                  , PROMO_COMP_FG
+                  , PROMO_TYPE_FG
+                  , PROD_TYPE_FG
+                  , START_YMD
+                  , END_YMD
+                  , DC_SET
+                  , PROMOTION_NM
+                  , MEMO
+                  , USE_YN
+                  , REG_DT
+                FROM  TB_HQ_NEOE_PROMO
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND   PROMOTION_CD = #{promotionCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+               SELECT
+                   STORE_CD
+                 , PROMOTION_CD
+                 , PROMO_COMP_FG
+                 , PROMO_TYPE_FG
+                 , PROD_TYPE_FG
+                 , START_YMD
+                 , END_YMD
+                 , DC_SET
+                 , PROMOTION_NM
+                 , MEMO
+                 , USE_YN
+                 , REG_DT
+               FROM  TB_MS_NEOE_PROMO
+               WHERE STORE_CD = #{storeCd}
+               AND   PROMOTION_CD = #{promotionCd}
+            </when>
+        </choose>
+
+    </select>
+
+    <!-- 아티제전용프로모션 적용상품 리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_NEOE_PROMO_BENE_PROD
+          PARAM    : artiseePromotionVO
+          COMMENTS : 아티제전용프로모션 적용상품 리스트를 조회한다.
+    -->
+    <select id="getPromotionProdList" parameterType="artiseePromotionVO" resultType="DefaultMap">
+        /* ArtiseePromotionMapper.getPromotionProdList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <choose>
+                    <!-- 적용대상이 상품 일 때 -->
+                    <when test='prodTypeFg != null and prodTypeFg == "1"'>
+                        SELECT thnpbp.HQ_OFFICE_CD,
+                               thnpbp.PROMOTION_CD,
+                               thnpbp.PROD_CD,
+                               thnpbp.GIFT_QTY,
+                               thp.PROD_NM
+                        FROM   TB_HQ_NEOE_PROMO_BENE_PROD thnpbp,
+                               TB_HQ_PRODUCT thp
+                        WHERE  thnpbp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND    thnpbp.PROMOTION_CD = #{promotionCd}
+                        AND    thp.HQ_OFFICE_CD (+)= thnpbp.HQ_OFFICE_CD
+                        AND    thp.PROD_CD (+)= thnpbp.PROD_CD
+                        ORDER
+                           BY  thnpbp.PROD_CD ASC
+                    </when>
+                    <!-- 적용대상이 분류 일 때 -->
+                    <when test='prodTypeFg != null and prodTypeFg == "2"'>
+                        SELECT thnpbp.HQ_OFFICE_CD,
+                               thnpbp.PROMOTION_CD,
+                               thnpbp.PROD_CD,
+                               thnpbp.GIFT_QTY,
+                               thpc.PROD_CLASS_NM AS PROD_NM
+                          FROM  TB_HQ_NEOE_PROMO_BENE_PROD thnpbp,
+                                TB_HQ_PRODUCT_CLASS thpc
+                         WHERE thnpbp.HQ_OFFICE_CD = #{hqOfficeCd}
+                           AND thnpbp.PROMOTION_CD = #{promotionCd}
+                           AND thpc.HQ_OFFICE_CD (+)= thnpbp.HQ_OFFICE_CD
+                           AND thpc.PROD_CLASS_CD (+)= thnpbp.PROD_CD
+                         ORDER
+                            BY  thnpbp.PROD_CD ASC
+                    </when>
+                </choose>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <choose>
+                    <!-- 적용대상이 상품 일 때 -->
+                    <when test='prodTypeFg != null and prodTypeFg == "1"'>
+                        SELECT tmnpbp.STORE_CD,
+                               tmnpbp.PROMOTION_CD,
+                               tmnpbp.PROD_CD,
+                               tmnpbp.GIFT_QTY,
+                               tmp.PROD_NM
+                        FROM   TB_MS_NEOE_PROMO_BENE_PROD tmnpbp,
+                               TB_MS_PRODUCT tmp
+                        WHERE  tmnpbp.STORE_CD = #{storeCd}
+                        AND    tmnpbp.PROMOTION_CD = #{promotionCd}
+                        AND    tmp.STORE_CD (+)= tmnpbp.STORE_CD
+                        AND    tmp.PROD_CD (+)= tmnpbp.PROD_CD
+                        ORDER
+                           BY  tmnpbp.PROD_CD ASC
+                    </when>
+                    <!-- 적용대상이 분류 일 때 -->
+                    <when test='prodTypeFg != null and prodTypeFg == "2"'>
+                        SELECT tmnpbp.STORE_CD,
+                               tmnpbp.PROMOTION_CD,
+                               tmnpbp.PROD_CD,
+                               tmnpbp.GIFT_QTY,
+                               tmpc.PROD_CLASS_NM AS PROD_NM
+                          FROM  TB_MS_NEOE_PROMO_BENE_PROD tmnpbp,
+                                TB_MS_PRODUCT_CLASS tmpc
+                         WHERE tmnpbp.STORE_CD = #{storeCd}
+                           AND tmnpbp.PROMOTION_CD = #{promotionCd}
+                           AND tmpc.STORE_CD (+)= tmnpbp.STORE_CD
+                           AND tmpc.PROD_CLASS_CD (+)= tmnpbp.PROD_CD
+                         ORDER
+                            BY  tmnpbp.PROD_CD ASC
+                    </when>
+                </choose>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 아티제전용프로모션 적용상품 선택팝업 상품리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 상품선택팝업에서 상품리스트를 조회한다.
+    -->
+    <select id="getProdList" parameterType="artiseePromotionVO" resultType="DefaultMap">
+        /* ArtiseePromotionMapper.getProdList */
+        SELECT HQ_OFFICE_CD
+        ,      PROD_CD
+        ,      PROD_NM
+        ,      '1' AS GIFT_QTY
+        ,      USE_YN
+        FROM   TB_HQ_PRODUCT
+        WHERE 1=1
+        AND    HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="prodCd != null and prodCd != ''">
+           AND PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+           AND PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="useYn != null and useYn != ''">
+           AND USE_YN  = #{useYn} --사용여부
+        </if>
+           AND PROD_CD NOT IN (SELECT PROD_CD FROM TB_HQ_NEOE_PROMO_BENE_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+         ORDER
+            BY PROD_CD ASC
+    </select>
+
+    <!-- 아티제전용프로모션 적용분류 선택팝업 분류리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_PRODUCT_CLASS
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 분류선택팝업에서 분류리스트를 조회한다.(소분류만 사용)
+    -->
+    <select id="getClassList" parameterType="artiseePromotionVO" resultType="DefaultMap">
+        /* ArtiseePromotionMapper.getClassList */
+        SELECT HQ_OFFICE_CD
+        ,      PROD_CLASS_CD
+        ,      PROD_CLASS_NM
+        ,      GIFT_QTY
+        ,      DEPTH_LEVEL
+        FROM (
+                SELECT A.HQ_OFFICE_CD
+                , A.PROD_CLASS_CD
+                , A.PROD_CLASS_NM
+                , '1' AS GIFT_QTY
+                , FN_GET_PROD_CLASS_CD_NM_STR(A.HQ_OFFICE_CD, A.PROD_CLASS_CD, 'LEVEL') AS DEPTH_LEVEL
+                FROM TB_HQ_PRODUCT_CLASS A
+                WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND A.PROD_CLASS_CD LIKE '%'||#{prodClassCd}||'%' --분류코드
+                </if>
+                <if test="prodClassNm != null and prodClassNm != ''">
+                    AND A.PROD_CLASS_NM LIKE '%'||#{prodClassNm}||'%' --분류명
+                </if>
+                AND A.PROD_CLASS_CD NOT IN (SELECT PROD_CD FROM TB_HQ_NEOE_PROMO_BENE_PROD WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND PROMOTION_CD = #{promotionCd})
+             )
+        WHERE DEPTH_LEVEL = '3'
+        ORDER
+        BY PROD_CLASS_CD ASC
+    </select>
+
+    <!-- 아티제전용프로모션 적용상품, 적용분류 선택팝업 상품추가 -->
+    <!--
+          TABLE    : TB_HQ_NEOE_PROMO_BENE_PROD
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 상품선택팝업에서 상품, 분류를 추가한다.
+    -->
+    <insert id="insertPromotionProd" parameterType="artiseePromotionVO">
+        /* ArtiseePromotionMapper.insertPromotionProd */
+        INSERT INTO TB_HQ_NEOE_PROMO_BENE_PROD
+        (
+            HQ_OFFICE_CD,
+            PROMOTION_CD,
+            PROD_CD,
+            GIFT_QTY,
+            REG_ID,
+            REG_DT,
+            MOD_ID,
+            MOD_DT
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{promotionCd},
+            #{prodCd},
+            #{giftQty},
+            #{regId},
+            #{regDt},
+            #{modId},
+            #{modDt}
+        )
+    </insert>
+
+    <!-- 아티제전용프로모션 적용상품, 적용분류 조건수량 수정 -->
+    <!--
+        TABLE    : TB_HQ_NEOE_PROMO_BENE_PROD
+        PARAM    : artiseePromotionVO
+        COMMENTS : 프로모션 적용상품, 적용분류의 조건수량 수정한다.
+    -->
+    <update id="updatePromotionProd" parameterType="artiseePromotionVO">
+        /* USE : ArtiseePromotionMapper.updatePromotionProd */
+        UPDATE TB_HQ_NEOE_PROMO_BENE_PROD
+        SET    GIFT_QTY = #{giftQty},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        AND    PROMOTION_CD = #{promotionCd}
+        AND    PROD_CD = #{prodCd}
+    </update>
+
+    <!-- 아티제전용프로모션 적용상품, 적용분류 삭제 -->
+    <!--
+        TABLE    : TB_HQ_NEOE_PROMO_BENE_PROD
+        PARAM    : artiseePromotionVO
+        COMMENTS : 프로모션 적용상품, 적용분류를 삭제한다.
+    -->
+    <delete id="deletePromotionProd" parameterType="artiseePromotionVO">
+        /* USE : ArtiseePromotionMapper.deletePromotionProd */
+        DELETE
+          FROM TB_HQ_NEOE_PROMO_BENE_PROD
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROMOTION_CD = #{promotionCd}
+           AND PROD_CD = #{prodCd}
+    </delete>
+
+    <!-- 아티제전용프로모션 적용상품, 적용분류 전체삭제 -->
+    <!--
+        TABLE    : TB_HQ_NEOE_PROMO_BENE_PROD
+        PARAM    : artiseePromotionVO
+        COMMENTS : 프로모션 적용상품, 적용분류를 모두 삭제한다.
+    -->
+    <delete id="deletePromotionProdAll" parameterType="artiseePromotionVO">
+        /* USE : ArtiseePromotionMapper.deletePromotionProdAll */
+        DELETE
+          FROM TB_HQ_NEOE_PROMO_BENE_PROD
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROMOTION_CD = #{promotionCd}
+    </delete>
+
+    <!-- 아티제전용프로모션 적용매장 리스트 조회 -->
+    <!--
+          TABLE    : TB_HQ_NEOE_PROMO_STORE
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 적용매장 리스트를 조회한다.
+    -->
+    <select id="getPromotionStoreList" parameterType="artiseePromotionVO" resultType="DefaultMap">
+        /* ArtiseePromotionMapper.getPromotionStoreList */
+        SELECT thnps.HQ_OFFICE_CD,
+               thnps.PROMOTION_CD,
+               thnps.STORE_CD,
+               tms.STORE_NM
+          FROM TB_HQ_NEOE_PROMO_STORE thnps,
+               TB_MS_STORE tms
+         WHERE thnps.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND thnps.PROMOTION_CD = #{promotionCd}
+           AND tms.HQ_OFFICE_CD = thnps.HQ_OFFICE_CD
+           AND tms.STORE_CD = thnps.STORE_CD
+         ORDER
+            BY thnps.STORE_CD ASC
+    </select>
+
+    <!-- 아티제전용프로모션 적용매장 선택팝업 매장리스트 조회 -->
+    <!--
+          TABLE    : TB_MS_STORE
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 매장선택팝업에서 매장리스트를 조회한다.
+    -->
+    <select id="getStoreList" parameterType="artiseePromotionVO" resultType="DefaultMap">
+        /* ArtiseePromotionMapper.getStoreList */
+        SELECT STORE_CD
+        ,      STORE_NM
+        ,      SYS_STAT_FG
+        FROM   TB_MS_STORE
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="storeCd != null and storeCd != ''">
+            AND STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND SYS_STAT_FG = #{sysStatFg} --매장상태구분
+        </if>
+            AND STORE_CD NOT IN (SELECT STORE_CD FROM TB_HQ_NEOE_PROMO_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROMOTION_CD = #{promotionCd})
+          ORDER
+             BY STORE_CD ASC
+    </select>
+
+    <!-- 아티제전용프로모션 적용매장 선택팝업 전매장적용 -->
+    <!--
+          TABLE    : TB_HQ_NEOE_PROMO_STORE, TB_MS_STORE
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 매장선택팝업에서 전매장을 적용한다.
+    -->
+    <insert id="insertPromotionStoreAll" parameterType="artiseePromotionVO">
+        /* ArtiseePromotionMapper.insertPromotionStoreAll */
+        MERGE INTO TB_HQ_NEOE_PROMO_STORE A
+             USING ( SELECT #{hqOfficeCd} AS HQ_OFFICE_CD,
+                              #{promotionCd} AS PROMOTION_CD,
+                              STORE_CD,
+                              #{regId} AS REG_ID,
+                              #{regDt} AS REG_DT,
+                              #{modId} AS MOD_ID,
+                              #{modDt} AS MOD_DT
+                        FROM TB_MS_STORE
+                       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    ) B
+                ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD AND A.STORE_CD = B.STORE_CD)
+              WHEN MATCHED THEN
+            UPDATE
+               SET A.MOD_ID = B.MOD_ID,
+                   A.MOD_DT = B.MOD_DT
+             WHEN NOT MATCHED THEN
+            INSERT
+                    (      A.HQ_OFFICE_CD,
+                           A.PROMOTION_CD,
+                           A.STORE_CD,
+                           A.REG_DT,
+                           A.REG_ID,
+                           A.MOD_DT,
+                           A.MOD_ID
+                    )
+            VALUES
+                    (      B.HQ_OFFICE_CD,
+                           B.PROMOTION_CD,
+                           B.STORE_CD,
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                    )
+    </insert>
+
+    <!-- 아티제전용프로모션 적용매장 선택팝업 매장추가 -->
+    <!--
+          TABLE    : TB_HQ_NEOE_PROMO_STORE, TB_MS_STORE
+          PARAM    : artiseePromotionVO
+          COMMENTS : 프로모션 매장선택팝업에서 매장을 추가한다.
+    -->
+    <insert id="insertPromotionStore" parameterType="artiseePromotionVO">
+        /* ArtiseePromotionMapper.insertPromotionStore */
+        MERGE INTO TB_HQ_NEOE_PROMO_STORE A
+             USING ( SELECT  #{hqOfficeCd} AS HQ_OFFICE_CD,
+                             #{promotionCd} AS PROMOTION_CD,
+                             STORE_CD,
+                             #{regId} AS REG_ID,
+                             #{regDt} AS REG_DT,
+                             #{modId} AS MOD_ID,
+                             #{modDt} AS MOD_DT
+                        FROM TB_MS_STORE
+                       WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                         AND STORE_CD = #{storeCd}
+                    ) B
+                ON (A.HQ_OFFICE_CD = B.HQ_OFFICE_CD AND A.PROMOTION_CD = B.PROMOTION_CD AND A.STORE_CD = B.STORE_CD)
+              WHEN MATCHED THEN
+            UPDATE
+               SET A.MOD_ID = B.MOD_ID,
+                   A.MOD_DT = B.MOD_DT
+             WHEN NOT MATCHED THEN
+            INSERT
+                    (      A.HQ_OFFICE_CD,
+                           A.PROMOTION_CD,
+                           A.STORE_CD,
+                           A.REG_DT,
+                           A.REG_ID,
+                           A.MOD_DT,
+                           A.MOD_ID
+                    )
+            VALUES
+                    (      B.HQ_OFFICE_CD,
+                           B.PROMOTION_CD,
+                           B.STORE_CD,
+                           B.REG_DT,
+                           B.REG_ID,
+                           B.MOD_DT,
+                           B.MOD_ID
+                    )
+    </insert>
+
+    <!-- 아티제전용프로모션 적용매장 삭제 -->
+    <!--
+        TABLE    : TB_HQ_NEOE_PROMO_STORE
+        PARAM    : artiseePromotionVO
+        COMMENTS : 프로모션 적용매장을 삭제한다.
+    -->
+    <delete id="deletePromotionStore" parameterType="artiseePromotionVO">
+        /* USE : ArtiseePromotionMapper.deletePromotionStore */
+        DELETE
+          FROM TB_HQ_NEOE_PROMO_STORE
+         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+           AND PROMOTION_CD = #{promotionCd}
+           AND STORE_CD = #{storeCd}
+    </delete>
+
+</mapper>

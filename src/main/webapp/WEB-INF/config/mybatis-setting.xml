@@ -180,7 +180,8 @@
     <typeAlias alias="storeSelfPromotionVO" type="kr.co.solbipos.base.promotion.storeSelfPromotion.service.StoreSelfPromotionVO"/>
     <!-- 기초관리 > 프로모션관리 > 프로모션정산 -->
     <typeAlias alias="promotionReportVO" type="kr.co.solbipos.base.promotion.promotionReport.service.PromotionReportVO"/>
-
+    <!-- 기초관리 > 프로모션관리 > 아티제전용프로모션 -->
+    <typeAlias alias="artiseePromotionVO" type="kr.co.solbipos.base.promotion.artiseePromotion.service.ArtiseePromotionVO"/>
     <!--
         <typeAlias alias="storeViewVO" type="kr.co.solbipos.store.manage.storeview.service.StoreViewVO"/>
         <typeAlias alias="storeConfgVO" type="kr.co.solbipos.store.manage.storeconfg.service.StoreConfgVO"/>
