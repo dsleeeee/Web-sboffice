@@ -130,21 +130,21 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="userWebHist.date"/>" binding="hDate" width="80" is-read-only="true" align="center" format="date"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.dateTime"/>" binding="hDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="userWebHist.userId"/>" binding="userId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.userId"/>" binding="userId" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.userNm"/>" binding="userNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="userWebHist.hqOfficeCd"/>" binding="hqOfficeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="userWebHist.hqOfficeNm"/>" binding="hqOfficeNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.hqOfficeCd"/>" binding="hqOfficeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.hqOfficeNm"/>" binding="hqOfficeNm" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.lmFg"/>" binding="lmFg" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="userWebHist.statCd"/>" binding="statCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="userWebHist.loginOrgn"/>" binding="loginOrgn" data-map="loginOrgnDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.statCd"/>" binding="statCd" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.loginOrgn"/>" binding="loginOrgn" data-map="loginOrgnDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.vUserId"/>" binding="vUserId" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.vUserNm"/>" binding="vUserNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.level1Nm"/>" binding="level1Nm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.level2Nm"/>" binding="level2Nm" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="userWebHist.level3Nm"/>" binding="level3Nm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="userWebHist.loginIp"/>" binding="loginIp" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="userWebHist.loginIp"/>" binding="loginIp" width="95" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

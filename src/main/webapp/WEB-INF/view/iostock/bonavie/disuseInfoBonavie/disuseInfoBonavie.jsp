@@ -14,7 +14,7 @@
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('disuseInfoBonavieCtrl', 1)">
+                <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('disuseInfoBonavieCtrl', 1)">
                     <s:message code="cmm.search"/>
                 </button>
             </div>
@@ -100,7 +100,7 @@
                         <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                     </c:if>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgr"/>" binding="noEgr" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgr"/>" binding="noEgr" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgrline"/>" binding="noEgrline" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPartner"/>" binding="cdPartner" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.prodCd"/>" binding="prodCd" width="95" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -143,7 +143,7 @@
                     <wj-flex-grid-column header="<s:message code="cmm.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cmm.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 </c:if>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgr"/>" binding="noEgr" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgr"/>" binding="noEgr" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.noEgrline"/>" binding="noEgrline" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdPartner"/>" binding="cdPartner" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.prodCd"/>" binding="prodCd" width="95" align="center" is-read-only="true"></wj-flex-grid-column>
