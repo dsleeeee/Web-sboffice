@@ -59,8 +59,7 @@
         FROM   TB_PS_ORDER_TRACKING tpot
         ,      TB_MS_STORE tms
         ,      TB_MS_STORE_INFO tmsi
-        ,      TB_SL_SALE_HDR_DLVR B
-        ,      TB_SL_SALE_DTL C
+        ,      TB_OD_ORDER_DTL C
         ,      TB_MS_PRODUCT D
         WHERE  tpot.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
@@ -70,13 +69,9 @@
         AND   tms.HQ_OFFICE_CD          = tpot.HQ_OFFICE_CD
         AND   tms.STORE_CD              = tpot.STORE_CD
         AND   tms.STORE_CD              = tmsi.STORE_CD (+)
-        AND   B.STORE_CD            (+) =    tpot.STORE_CD
-        AND   B.SALE_DATE           (+) =    tpot.SALE_DATE
-        AND   B.CHANNEL_ORDER_NO    (+) =    tpot.CHANNEL_ORDER_NO
-        AND   C.STORE_CD            (+) =    B.STORE_CD
-        AND   C.SALE_DATE           (+) =    B.SALE_DATE
-        AND   C.POS_NO              (+) =    B.POS_NO
-        AND   C.BILL_NO             (+) =    B.BILL_NO
+        AND   C.STORE_CD            (+) =    tpot.STORE_CD
+        AND   C.SALE_DATE           (+) =    tpot.SALE_DATE
+        AND   C.ORDER_NO            (+) =    tpot.ORDER_NO
         AND   D.STORE_CD            (+) =    C.STORE_CD
         AND   D.PROD_CD             (+) =    C.PROD_CD
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
@@ -176,8 +171,7 @@
         FROM   TB_PS_ORDER_TRACKING tpot
         ,      TB_MS_STORE tms
         ,      TB_MS_STORE_INFO tmsi
-        ,      TB_SL_SALE_HDR_DLVR B
-        ,      TB_SL_SALE_DTL C
+        ,      TB_OD_ORDER_DTL C
         ,      TB_MS_PRODUCT D
         WHERE  tpot.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
@@ -187,13 +181,9 @@
         AND   tms.HQ_OFFICE_CD          = tpot.HQ_OFFICE_CD
         AND   tms.STORE_CD              = tpot.STORE_CD
         AND   tms.STORE_CD              = tmsi.STORE_CD (+)
-        AND   B.STORE_CD            (+) =    tpot.STORE_CD
-        AND   B.SALE_DATE           (+) =    tpot.SALE_DATE
-        AND   B.CHANNEL_ORDER_NO    (+) =    tpot.CHANNEL_ORDER_NO
-        AND   C.STORE_CD            (+) =    B.STORE_CD
-        AND   C.SALE_DATE           (+) =    B.SALE_DATE
-        AND   C.POS_NO              (+) =    B.POS_NO
-        AND   C.BILL_NO             (+) =    B.BILL_NO
+        AND   C.STORE_CD            (+) =    tpot.STORE_CD
+        AND   C.SALE_DATE           (+) =    tpot.SALE_DATE
+        AND   C.ORDER_NO            (+) =    tpot.ORDER_NO
         AND   D.STORE_CD            (+) =    C.STORE_CD
         AND   D.PROD_CD             (+) =    C.PROD_CD
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
