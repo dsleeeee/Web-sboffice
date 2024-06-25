@@ -111,7 +111,7 @@
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdQtiotp"/>" binding="cdQtiotp" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtsInsert"/>" binding="dtsInsert" width="125" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtsUpdate"/>" binding="dtsUpdate" width="125" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.sendYn"/>" binding="sendYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.sendYn"/>" binding="sendYn" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -154,7 +154,7 @@
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.cdQtiotp"/>" binding="cdQtiotp" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtsInsert"/>" binding="dtsInsert" width="125" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.dtsUpdate"/>" binding="dtsUpdate" width="125" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.sendYn"/>" binding="sendYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="disuseInfoBonavie.sendYn"/>" binding="sendYn" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
