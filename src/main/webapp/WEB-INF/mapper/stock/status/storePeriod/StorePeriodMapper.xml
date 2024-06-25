@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.solbipos.stock.status.storeperiod.service.impl.StorePeriodMapper">
 
@@ -14,56 +13,84 @@
         /* USE : StorePeriodMapper.getStorePeriodList */
     	<include refid="CmmSQL.PagingTemplateHeader"/>
 		SELECT FN_GET_PROD_CLASS_CD_NM_STR(TMP.STORE_CD, TMP.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
-			 , TSSSD.PROD_CD
-		     , TMP.PROD_NM
-		     , TSSSD.STORE_CD
-			 , (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TSSSD.STORE_CD) AS STORE_NM
-		     , TMP.PO_UNIT_QTY
-		     , TMP.PO_UNIT_FG
-			 ,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = TMP.PO_UNIT_FG)  AS PO_UNIT_FG_NM
-			 , TMPB.BARCD_CD
-		     <if test='unitFg == "1"'>
-		     , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_IN_QTY   /* 매장입고 수량*/
-		     , SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_OUT_QTY  /* 매장반품 수량*/
-			 , SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY 	/ TMP.PO_UNIT_QTY)) AS PURCHS_IN_QTY  /* 사입입고 수량*/
-			 , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
-			 , SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_SALE_QTY /* 매장판매 수량*/
-			 , SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY 		/ TMP.PO_UNIT_QTY)) AS MOVE_IN_QTY 	 /* 매장이입 수량*/
-			 , SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS MOVE_OUT_QTY   /* 매장이출 수량*/
-			 , SF_ZERO_TO_NULL(SUM(DISUSE_QTY 		/ TMP.PO_UNIT_QTY)) AS DISUSE_QTY 	 /* 재고폐기 수량*/
-		     , SF_ZERO_TO_NULL(SUM(ADJ_QTY 			/ TMP.PO_UNIT_QTY)) AS ADJ_QTY 		 /* 재고조정 수량*/
-		     , SF_ZERO_TO_NULL(SUM(SET_IN_QTY	 	/ TMP.PO_UNIT_QTY)) AS SET_IN_QTY	 /* 세트생성 수량*/
-		     </if>
-		     <if test='unitFg == "0"'>
-		     , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY 	)) AS STORE_IN_QTY   /* 매장입고 수량*/
-		     , SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY 	)) AS STORE_OUT_QTY  /* 매장반품 수량*/
-			 , SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY 	)) AS PURCHS_IN_QTY  /* 사입입고 수량*/
-			 , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY 	)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
-			 , SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY 	)) AS STORE_SALE_QTY /* 매장판매 수량*/
-			 , SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY 		)) AS MOVE_IN_QTY 	 /* 매장이입 수량*/
-			 , SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY 	)) AS MOVE_OUT_QTY   /* 매장이출 수량*/
-			 , SF_ZERO_TO_NULL(SUM(DISUSE_QTY 		)) AS DISUSE_QTY 	 /* 재고폐기 수량*/
-		     , SF_ZERO_TO_NULL(SUM(ADJ_QTY 			)) AS ADJ_QTY 		 /* 재고조정 수량*/
-		     , SF_ZERO_TO_NULL(SUM(SET_IN_QTY	 	)) AS SET_IN_QTY	 /* 세트생성 수량*/
-		     </if>
-		     , SF_ZERO_TO_NULL(SUM(STORE_IN_TOT 	)) AS STORE_IN_TOT 	 /* 매장입고 금액*/
-		     , SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT 	)) AS STORE_OUT_TOT  /* 매장반품 금액*/
-		     , SF_ZERO_TO_NULL(SUM(PURCHS_IN_TOT 	)) AS PURCHS_IN_TOT  /* 사입입고 금액*/
-		     , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_TOT 	)) AS PURCHS_OUT_TOT /* 사입반품 금액*/
-		     , SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT 	)) AS STORE_SALE_TOT /* 매장판매 금액*/
-		     , SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT 		)) AS MOVE_IN_TOT 	 /* 매장이입 금액*/
-		     , SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT 	)) AS MOVE_OUT_TOT 	 /* 매장이출 금액*/
-			 , #{startDate} AS START_DATE
-		     , #{endDate} AS END_DATE
+				, TSSSD.PROD_CD
+				, TMP.PROD_NM
+				, TSSSD.STORE_CD
+				, (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TSSSD.STORE_CD) AS STORE_NM
+				, TMP.PO_UNIT_QTY
+				, TMP.PO_UNIT_FG
+				,	(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = TMP.PO_UNIT_FG)  AS PO_UNIT_FG_NM
+				, TMPB.BARCD_CD
+				<if test='unitFg == "1"'>
+				, SF_ZERO_TO_NULL(SUM(STORE_IN_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_IN_QTY   /* 매장입고 수량*/
+				, SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_OUT_QTY  /* 매장반품 수량*/
+				, SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY 	/ TMP.PO_UNIT_QTY)) AS PURCHS_IN_QTY  /* 사입입고 수량*/
+				, SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
+				, SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_SALE_QTY /* 매장판매 수량*/
+				, SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY 		/ TMP.PO_UNIT_QTY)) AS MOVE_IN_QTY 	 /* 매장이입 수량*/
+				, SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS MOVE_OUT_QTY   /* 매장이출 수량*/
+				, SF_ZERO_TO_NULL(SUM(DISUSE_QTY 		/ TMP.PO_UNIT_QTY)) AS DISUSE_QTY 	 /* 재고폐기 수량*/
+				, SF_ZERO_TO_NULL(SUM(ADJ_QTY 			/ TMP.PO_UNIT_QTY)) AS ADJ_QTY 		 /* 재고조정 수량*/
+				, SF_ZERO_TO_NULL(SUM(SET_IN_QTY	 	/ TMP.PO_UNIT_QTY)) AS SET_IN_QTY	 /* 세트생성 수량*/
+				, SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / TMP.PO_UNIT_QTY))      AS BASE_QTY /* 기초재고수량 */
+				, SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / TMP.PO_UNIT_QTY))     AS CLOSE_QTY /* 기말재고수량 */
+				</if>
+				<if test='unitFg == "0"'>
+				, SF_ZERO_TO_NULL(SUM(STORE_IN_QTY 	)) AS STORE_IN_QTY   /* 매장입고 수량*/
+				, SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY 	)) AS STORE_OUT_QTY  /* 매장반품 수량*/
+				, SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY 	)) AS PURCHS_IN_QTY  /* 사입입고 수량*/
+				, SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY 	)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
+				, SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY 	)) AS STORE_SALE_QTY /* 매장판매 수량*/
+				, SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY 		)) AS MOVE_IN_QTY 	 /* 매장이입 수량*/
+				, SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY 	)) AS MOVE_OUT_QTY   /* 매장이출 수량*/
+				, SF_ZERO_TO_NULL(SUM(DISUSE_QTY 		)) AS DISUSE_QTY 	 /* 재고폐기 수량*/
+				, SF_ZERO_TO_NULL(SUM(ADJ_QTY 			)) AS ADJ_QTY 		 /* 재고조정 수량*/
+				, SF_ZERO_TO_NULL(SUM(SET_IN_QTY	 	)) AS SET_IN_QTY	 /* 세트생성 수량*/
+				, SF_ZERO_TO_NULL(SUM(v1.BASE_QTY))       AS BASE_QTY /* 기초재고수량 */
+				, SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY))      AS CLOSE_QTY /* 기말재고수량 */
+				</if>
+				, SF_ZERO_TO_NULL(SUM(STORE_IN_TOT 	)) AS STORE_IN_TOT 	 /* 매장입고 금액*/
+				, SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT 	)) AS STORE_OUT_TOT  /* 매장반품 금액*/
+				, SF_ZERO_TO_NULL(SUM(PURCHS_IN_TOT 	)) AS PURCHS_IN_TOT  /* 사입입고 금액*/
+				, SF_ZERO_TO_NULL(SUM(PURCHS_OUT_TOT 	)) AS PURCHS_OUT_TOT /* 사입반품 금액*/
+				, SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT 	)) AS STORE_SALE_TOT /* 매장판매 금액*/
+				, SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT 		)) AS MOVE_IN_TOT 	 /* 매장이입 금액*/
+				, SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT 	)) AS MOVE_OUT_TOT 	 /* 매장이출 금액*/
+				, SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))       AS BASE_TOT /* 기초재고금액 */
+				, SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))      AS CLOSE_TOT /* 기말재고금액 */
+				, #{startDate} AS START_DATE
+				, #{endDate} AS END_DATE
   		<include refid="CmmSQL.PagingTemplateCount"/>
   		FROM   TB_ST_STORE_STOCK_DAILY TSSSD 
-		     , TB_MS_PRODUCT TMP
-		     , TB_MS_PRODUCT_BARCD TMPB
+			, TB_MS_PRODUCT TMP
+			, TB_MS_PRODUCT_BARCD TMPB
+			, (
+					SELECT STORE_CD
+					,       PROD_CD
+					,       DATE_QTY AS BASE_QTY
+					,       AVG_COST_UPRC AS BASE_TOT
+					FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+					WHERE  STORE_CD   	  (+) = #{storeCd}
+					AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
+			) v1
+			, (
+					SELECT STORE_CD
+					,       PROD_CD
+					,       DATE_QTY AS CLOSE_QTY
+					,       AVG_COST_UPRC AS CLOSE_TOT
+					FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+					WHERE  STORE_CD  	  (+) = #{storeCd}
+					AND    THE_DATE      (+) = #{endDate}
+			) v2
  		WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
  		AND	TSSSD.STORE_CD 	= TMP.STORE_CD
 	    AND TSSSD.PROD_CD     = TMP.PROD_CD
 	    AND TSSSD.STORE_CD 	= TMPB.STORE_CD(+)
 	    AND TSSSD.PROD_CD     = TMPB.PROD_CD(+)
+		AND v1.STORE_CD 	(+)= TSSSD.STORE_CD
+		AND v1.PROD_CD      (+)= TSSSD.PROD_CD
+		AND v2.STORE_CD		(+)= TSSSD.STORE_CD
+		AND v2.PROD_CD      (+)= TSSSD.PROD_CD
 		AND TMP.STOCK_PROD_YN = 'Y'
 		AND TMP.USE_YN = 'Y'
 	    <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
@@ -82,15 +109,15 @@
 			AND TMPB.BARCD_CD = #{barcdCd}
 		</if>
 		<if test='prodClassCd != null and prodClassCd != ""'>
-	              AND TMP.PROD_CLASS_CD IN  (
-	                                          SELECT              PROD_CLASS_CD
-	                                          FROM                TB_HQ_PRODUCT_CLASS
-	                                          WHERE               HQ_OFFICE_CD = #{hqOfficeCd}
-	                                          START WITH          PROD_CLASS_CD   = #{prodClassCd}
-	                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
-	                                          CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
-	                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
-	                                         )
+              AND TMP.PROD_CLASS_CD IN  (
+                                          SELECT              PROD_CLASS_CD
+                                          FROM                TB_HQ_PRODUCT_CLASS
+                                          WHERE               HQ_OFFICE_CD = #{hqOfficeCd}
+                                          START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
+                                          CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
+                                         )
 	     </if>
 	     <if test='arrVendrCd != null and arrVendrCd != ""'>
             AND tmp.PROD_CD IN    ( SELECT  PROD_CD
@@ -165,36 +192,41 @@
     <select id="getStoreperiodExcelList" parameterType="storePeriodVO" resultType="DefaultMap">
     	/* USE : StorePeriodMapper.getStoreperiodExcelList */
 		SELECT FN_GET_PROD_CLASS_CD_NM_STR(TMP.STORE_CD, TMP.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
-			 , TSSSD.PROD_CD
-		     , TMP.PROD_NM
-		     , TSSSD.STORE_CD
-			 , (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TSSSD.STORE_CD) AS STORE_NM
-		     , TMP.PO_UNIT_QTY
-		     , TMP.PO_UNIT_FG
-		     , TMPB.BARCD_CD
+			, TSSSD.PROD_CD
+			, TMP.PROD_NM
+			, TSSSD.STORE_CD
+			, (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = TSSSD.STORE_CD) AS STORE_NM
+			, TMP.PO_UNIT_QTY
+			, TMP.PO_UNIT_FG
+			, TMPB.BARCD_CD
 			<if test='unitFg == "1"'>
-				, SF_ZERO_TO_NULL(SUM(STORE_IN_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_IN_QTY   /* 매장입고 수량*/
-				, SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_OUT_QTY  /* 매장반품 수량*/
-				, SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY 	/ TMP.PO_UNIT_QTY)) AS PURCHS_IN_QTY  /* 사입입고 수량*/
-				, SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
-				, SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_SALE_QTY /* 매장판매 수량*/
-				, SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY 		/ TMP.PO_UNIT_QTY)) AS MOVE_IN_QTY 	 /* 매장이입 수량*/
-				, SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS MOVE_OUT_QTY   /* 매장이출 수량*/
-				, SF_ZERO_TO_NULL(SUM(DISUSE_QTY 		/ TMP.PO_UNIT_QTY)) AS DISUSE_QTY 	 /* 재고폐기 수량*/
-				, SF_ZERO_TO_NULL(SUM(ADJ_QTY 			/ TMP.PO_UNIT_QTY)) AS ADJ_QTY 		 /* 재고조정 수량*/
-				, SF_ZERO_TO_NULL(SUM(SET_IN_QTY	 	/ TMP.PO_UNIT_QTY)) AS SET_IN_QTY	 /* 세트생성 수량*/
+			, SF_ZERO_TO_NULL(SUM(STORE_IN_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_IN_QTY   /* 매장입고 수량*/
+			, SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_OUT_QTY  /* 매장반품 수량*/
+			, SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY 	/ TMP.PO_UNIT_QTY)) AS PURCHS_IN_QTY  /* 사입입고 수량*/
+			, SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
+			, SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY 	/ TMP.PO_UNIT_QTY)) AS STORE_SALE_QTY /* 매장판매 수량*/
+			, SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY 		/ TMP.PO_UNIT_QTY)) AS MOVE_IN_QTY 	 /* 매장이입 수량*/
+			, SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY 	/ TMP.PO_UNIT_QTY)) AS MOVE_OUT_QTY   /* 매장이출 수량*/
+			, SF_ZERO_TO_NULL(SUM(DISUSE_QTY 		/ TMP.PO_UNIT_QTY)) AS DISUSE_QTY 	 /* 재고폐기 수량*/
+			, SF_ZERO_TO_NULL(SUM(ADJ_QTY 			/ TMP.PO_UNIT_QTY)) AS ADJ_QTY 		 /* 재고조정 수량*/
+			, SF_ZERO_TO_NULL(SUM(SET_IN_QTY	 	/ TMP.PO_UNIT_QTY)) AS SET_IN_QTY	 /* 세트생성 수량*/
+
+			, SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / TMP.PO_UNIT_QTY))      AS BASE_QTY /* 기초재고수량 */
+			, SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / TMP.PO_UNIT_QTY))     AS CLOSE_QTY /* 기말재고수량 */
 			</if>
 			<if test='unitFg == "0"'>
-				, SF_ZERO_TO_NULL(SUM(STORE_IN_QTY 	)) AS STORE_IN_QTY   /* 매장입고 수량*/
-				, SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY 	)) AS STORE_OUT_QTY  /* 매장반품 수량*/
-				, SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY 	)) AS PURCHS_IN_QTY  /* 사입입고 수량*/
-				, SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY 	)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
-				, SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY 	)) AS STORE_SALE_QTY /* 매장판매 수량*/
-				, SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY 		)) AS MOVE_IN_QTY 	 /* 매장이입 수량*/
-				, SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY 	)) AS MOVE_OUT_QTY   /* 매장이출 수량*/
-				, SF_ZERO_TO_NULL(SUM(DISUSE_QTY 		)) AS DISUSE_QTY 	 /* 재고폐기 수량*/
-				, SF_ZERO_TO_NULL(SUM(ADJ_QTY 			)) AS ADJ_QTY 		 /* 재고조정 수량*/
-				, SF_ZERO_TO_NULL(SUM(SET_IN_QTY	 	)) AS SET_IN_QTY	 /* 세트생성 수량*/
+			, SF_ZERO_TO_NULL(SUM(STORE_IN_QTY 	)) AS STORE_IN_QTY   /* 매장입고 수량*/
+			, SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY 	)) AS STORE_OUT_QTY  /* 매장반품 수량*/
+			, SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY 	)) AS PURCHS_IN_QTY  /* 사입입고 수량*/
+			, SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY 	)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
+			, SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY 	)) AS STORE_SALE_QTY /* 매장판매 수량*/
+			, SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY 		)) AS MOVE_IN_QTY 	 /* 매장이입 수량*/
+			, SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY 	)) AS MOVE_OUT_QTY   /* 매장이출 수량*/
+			, SF_ZERO_TO_NULL(SUM(DISUSE_QTY 		)) AS DISUSE_QTY 	 /* 재고폐기 수량*/
+			, SF_ZERO_TO_NULL(SUM(ADJ_QTY 			)) AS ADJ_QTY 		 /* 재고조정 수량*/
+			, SF_ZERO_TO_NULL(SUM(SET_IN_QTY	 	)) AS SET_IN_QTY	 /* 세트생성 수량*/
+			, SF_ZERO_TO_NULL(SUM(v1.BASE_QTY))       AS BASE_QTY /* 기초재고수량 */
+			, SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY))      AS CLOSE_QTY /* 기말재고수량 */
 			</if>
 			, SF_ZERO_TO_NULL(SUM(STORE_IN_TOT 	)) AS STORE_IN_TOT 	 /* 매장입고 금액*/
 			, SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT 	)) AS STORE_OUT_TOT  /* 매장반품 금액*/
@@ -203,14 +235,38 @@
 			, SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT 	)) AS STORE_SALE_TOT /* 매장판매 금액*/
 			, SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT 		)) AS MOVE_IN_TOT 	 /* 매장이입 금액*/
 			, SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT 	)) AS MOVE_OUT_TOT 	 /* 매장이출 금액*/
+			, SF_ZERO_TO_NULL(SUM(v1.BASE_TOT))       AS BASE_TOT /* 기초재고금액 */
+			, SF_ZERO_TO_NULL(SUM(v2.CLOSE_TOT))      AS CLOSE_TOT /* 기말재고금액 */
 		FROM   TB_ST_STORE_STOCK_DAILY TSSSD
-			 , TB_MS_PRODUCT TMP
-		     , TB_MS_PRODUCT_BARCD TMPB
- 		WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
+			, TB_MS_PRODUCT TMP
+			, TB_MS_PRODUCT_BARCD TMPB
+			, (
+					SELECT STORE_CD
+					,       PROD_CD
+					,       DATE_QTY AS BASE_QTY
+					,       AVG_COST_UPRC AS BASE_TOT
+					FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+					WHERE  STORE_CD   	  (+) = #{storeCd}
+					AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
+			) v1
+			, (
+					SELECT STORE_CD
+					,       PROD_CD
+					,       DATE_QTY AS CLOSE_QTY
+					,       AVG_COST_UPRC AS CLOSE_TOT
+					FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
+					WHERE  STORE_CD  	  (+) = #{storeCd}
+					AND    THE_DATE      (+) = #{endDate}
+			) v2
+		WHERE EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
  		AND	TSSSD.STORE_CD 	= TMP.STORE_CD
 	    AND TSSSD.PROD_CD     = TMP.PROD_CD
 	    AND TSSSD.STORE_CD 	= TMPB.STORE_CD(+)
 	    AND TSSSD.PROD_CD     = TMPB.PROD_CD(+)
+		AND v1.STORE_CD 	(+)= TSSSD.STORE_CD
+		AND v1.PROD_CD      (+)= TSSSD.PROD_CD
+		AND v2.STORE_CD		(+)= TSSSD.STORE_CD
+		AND v2.PROD_CD      (+)= TSSSD.PROD_CD
 		AND TMP.STOCK_PROD_YN = 'Y'
 		AND TMP.USE_YN = 'Y'
 	    <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
@@ -229,15 +285,15 @@
 			AND TMPB.BARCD_CD = #{barcdCd}
 		</if>
 		<if test='prodClassCd != null and prodClassCd != ""'>
-	              AND TMP.PROD_CLASS_CD IN  (
-	                                          SELECT              PROD_CLASS_CD
-	                                          FROM                TB_HQ_PRODUCT_CLASS
-	                                          WHERE               HQ_OFFICE_CD = #{hqOfficeCd}
-	                                          START WITH          PROD_CLASS_CD   = #{prodClassCd}
-	                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
-	                                          CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
-	                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
-	                                         )
+              AND TMP.PROD_CLASS_CD IN  (
+                                          SELECT              PROD_CLASS_CD
+                                          FROM                TB_HQ_PRODUCT_CLASS
+                                          WHERE               HQ_OFFICE_CD = #{hqOfficeCd}
+                                          START WITH          PROD_CLASS_CD   = #{prodClassCd}
+                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
+                                          CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+                                          AND                 HQ_OFFICE_CD = #{hqOfficeCd}
+                                         )
 	     </if>
 	     <if test='arrVendrCd != null and arrVendrCd != ""'>
             AND tmp.PROD_CD IN    ( SELECT  PROD_CD
