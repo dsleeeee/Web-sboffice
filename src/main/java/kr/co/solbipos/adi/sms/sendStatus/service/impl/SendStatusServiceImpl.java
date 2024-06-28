@@ -100,6 +100,9 @@ public class SendStatusServiceImpl implements SendStatusService {
 
             // 전송이력 복구
             procCnt = sendStatusMapper.getSmsSendSeqRecoverSaveUpdate(sendStatusVO);
+
+            // 일자별전송현황 복구
+            procCnt = sendStatusMapper.getDaySmsSendRecoverSaveUpdate(sendStatusVO);
         }
 
         return procCnt;

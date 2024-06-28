@@ -209,7 +209,7 @@
                     FROM
                     (
                         SELECT
-                        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
+                        FN_IS_TELNO_CHK2(SBPENC.D(tmm.TEL_NO)) AS TEL_NO,
                         SBPENC.D(tmm.ADDR) AS ADDR,
                         SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
                         tmmp.LAST_SALE_DATE
@@ -219,6 +219,9 @@
                         </if>
                         TB_MB_MEMBER_POINT tmmp
                         WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
+                        <![CDATA[
+                            AND FN_IS_TELNO_CHK2(SBPENC.D(tmm.TEL_NO)) <> '0'
+                        ]]>
                         AND tmmp.MEMBR_NO (+)= tmm.MEMBR_NO
                         AND tmmp.MEMBR_ORGN_CD (+)= tmm.MEMBR_ORGN_CD
                         <if test='visitStoreMembr == "true" or (regUseStoreCd != null and !regUseStoreCd.equals(""))'>
@@ -337,12 +340,15 @@
                     UNION ALL
                     (
                         SELECT
-                        SBPENC.D(tmm.TEL_NO) AS TEL_NO,
+                        FN_IS_TELNO_CHK2(SBPENC.D(tmm.TEL_NO)) AS TEL_NO,
                         SBPENC.D(tmm.ADDR) AS ADDR,
                         SBPENC.D(tmm.ADDR_DTL) AS ADDR_DTL,
                         tmm.LAST_SALE_DATE
                         FROM TB_PS_DLVR_MEMBER tmm
                         WHERE tmm.MEMBR_ORGN_CD = #{orgnGrpCd}
+                        <![CDATA[
+                            AND FN_IS_TELNO_CHK2(SBPENC.D(tmm.TEL_NO)) <> '0'
+                        ]]>
                         <if test='orgnFg != null and orgnFg == "S"'>
                             <if test='storeMembr == "true"'>
                                 AND tmm.REG_STORE_CD = #{storeCd}

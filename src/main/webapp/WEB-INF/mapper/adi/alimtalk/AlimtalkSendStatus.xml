@@ -222,6 +222,9 @@
                 </if>
             </when>
         </choose>
+        <if test="sendStatus != null and sendStatus != ''">
+            AND hmt.SEND_STATUS = #{sendStatus}
+        </if>
         AND twuidv01.ORGN_CD = hmt.S_OGN_CD
         ORDER BY hmt.REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -257,6 +260,27 @@
         WHERE 1=1
         AND ALK_SEND_ORGN_CD = #{orgnCd}
         AND ALK_SEND_SEQ = #{alkSendSeq}
+    </update>
+
+    <!-- 알림톡 일자별전송현황 복구 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getDayAlkSendSeqRecoverSaveUpdate" parameterType="AlimtalkSendStatusVO">
+        /* AlimtalkSendStatusMapper.getDayAlkSendSeqRecoverSaveUpdate */
+        UPDATE
+        HCS_DDSMS_T
+        SET
+        TOT_SEND_QTY = (SELECT (TOT_SEND_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        TOT_WAIT_QTY = (SELECT (TOT_WAIT_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        ALK_SEND_QTY = (SELECT (ALK_SEND_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        ALK_WAIT_QTY = (SELECT (ALK_WAIT_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)
     </update>
 
     <!-- 알림톡 일자별 전송현황 - 조회 -->
