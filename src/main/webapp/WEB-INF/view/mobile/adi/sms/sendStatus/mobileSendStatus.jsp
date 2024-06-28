@@ -57,22 +57,30 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <%-- 결과 --%>
+            <th>
+                <s:message code="mobile.sendStatus.sendStatus" />
+            </th>
+            <td>
+                <div class="sb-select w40">
+                    <wj-combo-box
+                            id="srchSendStatusCombo"
+                            ng-model="sendStatus"
+                            items-source="_getComboData('sendStatusCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="sendStatusCombo">
+                    </wj-combo-box>
+                </div>
+            </td>
+        </tr>
         </tbody>
     </table>
 
     <div class="mt10 oh sb-select dkbr">
-        <%-- 페이지 스케일  --%>
-        <wj-combo-box
-                class="w100px fl"
-                id="listScaleBox"
-                ng-model="listScale"
-                items-source="_getComboData('listScaleBox')"
-                display-member-path="name"
-                selected-value-path="value"
-                is-editable="false"
-                initialized="initComboBox(s)">
-        </wj-combo-box>
-        <%--// 페이지 스케일  --%>
         <%-- SMS전송 --%>
         <%--<button class="btn_skyblue ml5 fr" id="btnSmsSendRepresent" ng-click="smsSendPop()">--%>
             <%--<s:message code="mobile.sendStatus.smsSend"/>--%>
@@ -93,17 +101,19 @@
                 sticky-headers="true"
                 selection-mode="Row"
                 items-source="data"
-                item-formatter="_itemFormatter">
+                item-formatter="_itemFormatter"
+                id="wjGridMobileSendStatus">
 
             <%--<!-- define columns -->--%>
             <wj-flex-grid-column header="<s:message code="mobile.cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mobile.sendStatus.regDt"/>" binding="regDt" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.orgnNm"/>" binding="sOgnNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.name"/>" binding="sUserNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.telNo"/>" binding="sPhoneNumber" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.orgnNm"/>" binding="rOgnNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.telNo"/>" binding="rPhoneNumber" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.sOrgnNm"/>" binding="sOgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.sName"/>" binding="sUserNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.sTelNo"/>" binding="sPhoneNumber" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.rOrgnNm"/>" binding="rOgnNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.rTelNo"/>" binding="rPhoneNumber" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.reserveYn"/>" binding="reserveYn" data-map="reserveYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mobile.sendStatus.sendDate"/>" binding="sendDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mobile.sendStatus.readDate"/>" binding="readDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mobile.sendStatus.sendStatus"/>" binding="sendStatus" data-map="sendStatusFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -113,7 +123,6 @@
 
             <%--저장시 필요--%>
             <wj-flex-grid-column header="<s:message code="mobile.sendStatus.msgId"/>" binding="msgId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="mobile.sendStatus.reserveYn"/>" binding="reserveYn" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mobile.sendStatus.gubun"/>" binding="gubun" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mobile.sendStatus.smsSendSeq"/>" binding="smsSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="mobile.sendStatus.sendStatus"/>" binding="sendStatus" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -145,7 +154,7 @@
     <%--</c:forEach>--%>
 <%--</script>--%>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/sms/sendStatus/mobileSendStatus.js?ver=20220104.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/adi/sms/sendStatus/mobileSendStatus.js?ver=20240627.01" charset="utf-8"></script>
 
 <%-- 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/adi/sms/sendStatus/mobileMessageDtl.jsp">

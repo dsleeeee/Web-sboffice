@@ -313,6 +313,9 @@
                 </if>
             </when>
         </choose>
+        <if test="sendStatus != null and sendStatus != ''">
+            AND hmt.SEND_STATUS = #{sendStatus}
+        </if>
         AND twuidv01.ORGN_CD = hmt.S_OGN_CD
         ORDER BY hmt.REG_DT DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -371,6 +374,37 @@
         WHERE 1=1
         AND SMS_SEND_ORGN_CD = #{orgnCd}
         AND SMS_SEND_SEQ = #{smsSendSeq}
+    </update>
+
+    <!-- 일자별전송현황 복구 -->
+    <!--
+        TABLE    : HCS_DDSMS_T
+        COMMENTS :
+    -->
+    <update id="getDaySmsSendRecoverSaveUpdate" parameterType="SendStatusVO">
+        /* SendStatusMapper.getDaySmsSendRecoverSaveUpdate */
+        UPDATE
+        HCS_DDSMS_T
+        SET
+        TOT_SEND_QTY = (SELECT (TOT_SEND_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        TOT_WAIT_QTY = (SELECT (TOT_WAIT_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        <if test='msgType == "1"'>
+            SMS_SEND_QTY = (SELECT (SMS_SEND_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+            SMS_WAIT_QTY = (SELECT (SMS_WAIT_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        </if>
+        <if test='msgType == "2"'>
+            LMS_SEND_QTY = (SELECT (LMS_SEND_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+            LMS_WAIT_QTY = (SELECT (LMS_WAIT_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        </if>
+        <if test='msgType == "3"'>
+            MMS_SEND_QTY = (SELECT (MMS_SEND_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+            MMS_WAIT_QTY = (SELECT (MMS_WAIT_QTY-1) FROM HCS_DDSMS_T WHERE OGN_CD = #{orgnCd} AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)),
+        </if>
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND OGN_CD = #{orgnCd}
+        AND SMS_DATE = SUBSTR(#{sendDate}, 0, 8)
     </update>
 
     <!-- 일자별 전송현황 - 조회 -->

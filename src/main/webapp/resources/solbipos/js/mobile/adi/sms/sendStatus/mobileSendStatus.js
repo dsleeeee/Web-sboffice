@@ -21,6 +21,7 @@ var msgTypeDataMapData = [
 ];
 // 결과
 var sendStatusFgData = [
+    {"name":"전체","value":""},
     {"name":"발송대기","value":"0"},
     {"name":"발송완료","value":"3"},
     {"name":"발송실패","value":"-1"}
@@ -40,21 +41,20 @@ app.controller('mobileSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('mobileSendStatusCtrl', $scope, $http, false));
 
-    // comboBox 초기화
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
-
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#startDate", gvStartDate);
     var endDate = wcombo.genDateVal("#endDate", gvEndDate);
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("reserveYnCombo", reserveYnDataMapData); // 예약여부
+    $scope._setComboData("sendStatusCombo", sendStatusFgData); // 결과
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.msgTypeDataMap = new wijmo.grid.DataMap(msgTypeDataMapData, 'value', 'name'); // 메세지타입
         $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
+        $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -92,69 +92,6 @@ app.controller('mobileSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
                 }
             }
         });
-
-        // <-- 그리드 헤더2줄 -->
-        // 헤더머지
-        s.allowMerging = 2;
-        s.columnHeaders.rows.push(new wijmo.grid.Row());
-
-        // 첫째줄 헤더 생성
-        var dataItem = {};
-        dataItem.gChk = messages["mobile.cmm.chk"];
-        dataItem.regDt = messages["mobile.sendStatus.regDt"];
-        dataItem.sOgnNm = messages["mobile.sendStatus.send"];
-        dataItem.sUserNm = messages["mobile.sendStatus.send"];
-        dataItem.sPhoneNumber = messages["mobile.sendStatus.send"];
-        dataItem.rOgnNm = messages["mobile.sendStatus.receive"];
-        dataItem.rPhoneNumber = messages["mobile.sendStatus.receive"];
-        dataItem.msgType = messages["mobile.sendStatus.msgType"];
-        dataItem.sendDate = messages["mobile.sendStatus.sendDate"];
-        dataItem.readDate = messages["mobile.sendStatus.readDate"];
-        dataItem.sendStatus = messages["mobile.sendStatus.sendStatus"];
-        dataItem.resultNm = messages["mobile.sendStatus.resultNm"];
-        dataItem.company = messages["mobile.sendStatus.company"];
-        dataItem.msgContent = messages["mobile.sendStatus.msgContent"];
-
-        s.columnHeaders.rows[0].dataItem = dataItem;
-
-        s.itemFormatter = function (panel, r, c, cell) {
-            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-                //align in center horizontally and vertically
-                panel.rows[r].allowMerging    = true;
-                panel.columns[c].allowMerging = true;
-                wijmo.setCss(cell, {
-                    display    : 'table',
-                    tableLayout: 'fixed'
-                });
-                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-                wijmo.setCss(cell.children[0], {
-                    display      : 'table-cell',
-                    verticalAlign: 'middle',
-                    textAlign    : 'center'
-                });
-            }
-            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-                // GroupRow 인 경우에는 표시하지 않는다.
-                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-                    cell.textContent = '';
-                } else {
-                    if (!isEmpty(panel._rows[r]._data.rnum)) {
-                        cell.textContent = (panel._rows[r]._data.rnum).toString();
-                    } else {
-                        cell.textContent = (r + 1).toString();
-                    }
-                }
-            }
-            // readOnly 배경색 표시
-            else if (panel.cellType === wijmo.grid.CellType.Cell) {
-                var col = panel.columns[c];
-                if (col.isReadOnly) {
-                    wijmo.addClass(cell, 'wj-custom-readonly');
-                }
-            }
-        }
-        // <-- //그리드 헤더2줄 -->
     };
 
     // <-- 검색 호출 -->
@@ -167,10 +104,25 @@ app.controller('mobileSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-        params.listScale = $scope.listScale;
-        params.reserveYn = $scope.reserveYnCombo.selectedValue;
+        params.listScale = 2000;
 
         $scope._inquirySub("/adi/sms/sendStatus/sendStatus/getSendStatusList.sb", params, function() {
+
+            var grid = wijmo.Control.getControl("#wjGridMobileSendStatus");
+            var rows = grid.rows;
+
+            for (var i = 0; i < $scope.flexMobileSendStatus.collectionView.items.length; i++) {
+                var item = $scope.flexMobileSendStatus.collectionView.items[i];
+                if(item.reserveYn != "1"
+                    || item.sendStatus == "3"
+                    || item.sendStatus == "-1"
+                    || (item.sendDate != "" && parseInt(item.sendDate.substring(0, 16)) <= parseInt(getCurDateTime())) ) {
+
+                    item.gChk = false;
+                    rows[i].isReadOnly = true;
+                }
+            }
+
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기
             gridShowMsgNoData("mobileSendStatus", $scope.flexMobileSendStatus, "N");
         }, false);
@@ -198,7 +150,8 @@ app.controller('mobileSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
             if($scope.flexMobileSendStatus.collectionView.items[i].gChk) {
                 if($scope.flexMobileSendStatus.collectionView.items[i].reserveYn != "1"
                     || $scope.flexMobileSendStatus.collectionView.items[i].sendStatus == "3"
-                    || ($scope.flexMobileSendStatus.collectionView.items[i].sendDate != "" && parseInt($scope.flexMobileSendStatus.collectionView.items[i].sendDate.substring(0, 8)) >= parseInt(getCurDateTime())) ) {
+                    || $scope.flexMobileSendStatus.collectionView.items[i].sendStatus == "-1"
+                    || ($scope.flexMobileSendStatus.collectionView.items[i].sendDate != "" && parseInt($scope.flexMobileSendStatus.collectionView.items[i].sendDate.substring(0, 16)) <= parseInt(getCurDateTime())) ) {
 
                     $scope._popMsg(messages["mobile.sendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
                     return false;
@@ -211,7 +164,7 @@ app.controller('mobileSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
         // 예약 문자를 취소하시겠습니까?
         if (confirm(messages["mobile.sendStatus.reserveCancelConfirm"])) {
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp("/adi/sms/sendStatus/sendStatus/getSendStatusReserveCancelSave.sb", params, function(){ $scope.searchSendStatus() });
+            $scope._postJSONSave.withPopUp("/adi/sms/sendStatus/sendStatus/getSendStatusReserveCancelSave.sb", params, function(){ $scope.searchMobileSendStatus() });
         }
     };
 

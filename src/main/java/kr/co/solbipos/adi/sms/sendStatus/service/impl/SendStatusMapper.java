@@ -42,6 +42,9 @@ public interface SendStatusMapper {
     /** 전송이력 복구 */
     int getSmsSendSeqRecoverSaveUpdate(SendStatusVO sendStatusVO);
 
+    /** 일자별전송현황 복구 */
+    int getDaySmsSendRecoverSaveUpdate(SendStatusVO sendStatusVO);
+
     /** 일자별 전송현황 - 조회 */
     List<DefaultMap<Object>> getDaySendStatusList(SendStatusVO sendStatusVO);
 

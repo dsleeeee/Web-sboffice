@@ -78,6 +78,12 @@ public class SendStatusVO extends PageVO {
     /** 매장명 */
     private String storeNm;
 
+    /** 결과 */
+    private String sendStatus;
+
+    /** 예약일시 */
+    private String sendDate;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -164,5 +170,21 @@ public class SendStatusVO extends PageVO {
 
     public void setStoreNm(String storeNm) {
         this.storeNm = storeNm;
+    }
+
+    public String getSendStatus() {
+        return sendStatus;
+    }
+
+    public void setSendStatus(String sendStatus) {
+        this.sendStatus = sendStatus;
+    }
+
+    public String getSendDate() {
+        return sendDate;
+    }
+
+    public void setSendDate(String sendDate) {
+        this.sendDate = sendDate;
     }
 }
