@@ -26,6 +26,7 @@ var alkMsgTypeDataMapData = [
 ];
 // 결과
 var sendStatusFgData = [
+    {"name":"전체","value":""},
     {"name":"발송대기","value":"0"},
     {"name":"발송완료","value":"3"},
     {"name":"발송실패","value":"-1"}
@@ -51,15 +52,13 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('alimtalkSendStatusCtrl', $scope, $http, false));
 
-    // comboBox 초기화
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
-
     // 검색조건에 조회기간
     var startDate = wcombo.genDateVal("#startDate", gvStartDate);
     var endDate = wcombo.genDateVal("#endDate", gvEndDate);
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("reserveYnCombo", reserveYnDataMapData); // 예약여부
+    $scope._setComboData("sendStatusCombo", sendStatusFgData); // 결과
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -68,6 +67,7 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
         $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
         $scope.rmTypeDataMap = new wijmo.grid.DataMap(rmTypeDataMapData, 'value', 'name'); // 대체발송 메세지타입
         $scope.rmSendYnDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); // 대체발송 사용여부
+        $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -125,75 +125,6 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
                 }
             }
         });
-
-        // <-- 그리드 헤더2줄 -->
-        // 헤더머지
-        s.allowMerging = 2;
-        s.columnHeaders.rows.push(new wijmo.grid.Row());
-
-        // 첫째줄 헤더 생성
-        var dataItem = {};
-        dataItem.gChk = messages["cmm.chk"];
-        dataItem.regDt = messages["alimtalkSendStatus.regDt"];
-        dataItem.sOgnNm = messages["alimtalkSendStatus.send"];
-        dataItem.sUserNm = messages["alimtalkSendStatus.send"];
-        dataItem.rOgnNm = messages["alimtalkSendStatus.receive"];
-        dataItem.rPhoneNumber = messages["alimtalkSendStatus.receive"];
-        dataItem.msgType = messages["alimtalkSendStatus.msgType"];
-        dataItem.sendDate = messages["alimtalkSendStatus.sendDate"];
-        dataItem.readDate = messages["alimtalkSendStatus.readDate"];
-        dataItem.sendStatus = messages["alimtalkSendStatus.sendStatus"];
-        dataItem.resultNm = messages["alimtalkSendStatus.resultNm"];
-        dataItem.msgContent = messages["alimtalkSendStatus.msgContent"];
-        dataItem.sendOrgnNm = messages["alimtalkSendStatus.sendOrgnNm"];
-        dataItem.payOrgnNm = messages["alimtalkSendStatus.payOrgnNm"];
-        dataItem.senderKeyOrgnNm = messages["alimtalkSendStatus.senderKeyOrgnNm"];
-        dataItem.rmSendYn = messages["alimtalkSendStatus.rm"];
-        dataItem.rmType = messages["alimtalkSendStatus.rm"];
-        dataItem.rmTitle = messages["alimtalkSendStatus.rm"];
-        dataItem.rmContent = messages["alimtalkSendStatus.rm"];
-        dataItem.rmSendNo = messages["alimtalkSendStatus.rm"];
-
-        s.columnHeaders.rows[0].dataItem = dataItem;
-
-        s.itemFormatter = function (panel, r, c, cell) {
-            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-                //align in center horizontally and vertically
-                panel.rows[r].allowMerging    = true;
-                panel.columns[c].allowMerging = true;
-                wijmo.setCss(cell, {
-                    display    : 'table',
-                    tableLayout: 'fixed'
-                });
-                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-                wijmo.setCss(cell.children[0], {
-                    display      : 'table-cell',
-                    verticalAlign: 'middle',
-                    textAlign    : 'center'
-                });
-            }
-            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-                // GroupRow 인 경우에는 표시하지 않는다.
-                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-                    cell.textContent = '';
-                } else {
-                    if (!isEmpty(panel._rows[r]._data.rnum)) {
-                        cell.textContent = (panel._rows[r]._data.rnum).toString();
-                    } else {
-                        cell.textContent = (r + 1).toString();
-                    }
-                }
-            }
-            // readOnly 배경색 표시
-            else if (panel.cellType === wijmo.grid.CellType.Cell) {
-                var col = panel.columns[c];
-                if (col.isReadOnly) {
-                    wijmo.addClass(cell, 'wj-custom-readonly');
-                }
-            }
-        }
-        // <-- //그리드 헤더2줄 -->
     };
 
     // <-- 검색 호출 -->
@@ -206,9 +137,26 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-        params.listScale = $scope.listScale;
+        params.listScale = 2000;
 
-        $scope._inquiryMain("/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus/getAlimtalkSendStatusList.sb", params, function() {}, false);
+        $scope._inquiryMain("/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus/getAlimtalkSendStatusList.sb", params, function() {
+
+            var grid = wijmo.Control.getControl("#wjGridAlimtalSendStatus");
+            var rows = grid.rows;
+
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+                if(item.reserveYn != "1"
+                    || item.sendStatus == "3"
+                    || item.sendStatus == "-1"
+                    || (item.sendDate != "" && parseInt(item.sendDate.substring(0, 16)) <= parseInt(getCurDateTime())) ) {
+
+                    item.gChk = false;
+                    rows[i].isReadOnly = true;
+                }
+            }
+
+        }, false);
     };
     // <-- //검색 호출 -->
 
@@ -233,7 +181,8 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', function ($scope, $
             if($scope.flex.collectionView.items[i].gChk) {
                 if($scope.flex.collectionView.items[i].reserveYn != "1"
                     || $scope.flex.collectionView.items[i].sendStatus == "3"
-                    || ($scope.flex.collectionView.items[i].sendDate != "" && parseInt($scope.flex.collectionView.items[i].sendDate.substring(0, 8)) >= parseInt(getCurDateTime())) ) {
+                    || $scope.flex.collectionView.items[i].sendStatus == "-1"
+                    || ($scope.flex.collectionView.items[i].sendDate != "" && parseInt($scope.flex.collectionView.items[i].sendDate.substring(0, 16)) <= parseInt(getCurDateTime())) ) {
 
                     $scope._popMsg(messages["alimtalkSendStatus.reserveCancelAlert"]); // 예약 문자가 아니거나 이미 전송된 문자입니다.
                     return false;

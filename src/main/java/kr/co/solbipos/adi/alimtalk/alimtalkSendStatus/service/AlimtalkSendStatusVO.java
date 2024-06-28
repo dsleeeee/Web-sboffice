@@ -96,6 +96,12 @@ public class AlimtalkSendStatusVO extends PageVO {
     /** 문자 전송 성공시 메세지ID */
     private String requestId;
 
+    /** 결과 */
+    private String sendStatus;
+
+    /** 예약일시 */
+    private String sendDate;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -207,4 +213,20 @@ public class AlimtalkSendStatusVO extends PageVO {
     public String getRequestId() { return requestId; }
 
     public void setRequestId(String requestId) { this.requestId = requestId; }
+
+    public String getSendStatus() {
+        return sendStatus;
+    }
+
+    public void setSendStatus(String sendStatus) {
+        this.sendStatus = sendStatus;
+    }
+
+    public String getSendDate() {
+        return sendDate;
+    }
+
+    public void setSendDate(String sendDate) {
+        this.sendDate = sendDate;
+    }
 }

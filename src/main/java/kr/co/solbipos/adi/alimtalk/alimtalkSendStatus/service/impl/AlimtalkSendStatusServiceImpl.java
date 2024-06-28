@@ -111,6 +111,9 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
         // 알림톡 전송이력 복구
         procCnt = alimtalkSendStatusMapper.getAlkSendSeqRecoverSaveUpdate(alimtalkSendStatusVO);
 
+        // 알림톡 일자별전송현황 복구
+        procCnt = alimtalkSendStatusMapper.getDayAlkSendSeqRecoverSaveUpdate(alimtalkSendStatusVO);
+
         return procCnt;
     }
 

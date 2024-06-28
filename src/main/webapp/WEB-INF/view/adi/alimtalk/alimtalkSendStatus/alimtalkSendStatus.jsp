@@ -44,24 +44,8 @@
                         <span class="txtIn"><input id="endDate" name="endDate" class="w110px" /></span>
                     </div>
                 </td>
-                <%-- 예약여부 --%>
-                <th>
-                    <s:message code="alimtalkSendStatus.reserveYn" />
-                </th>
-                <td>
-                    <div class="sb-select w40">
-                        <wj-combo-box
-                                id="srchReserveYnCombo"
-                                ng-model="reserveYn"
-                                items-source="_getComboData('reserveYnCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                control="reserveYnCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <%-- 보내는이 소속코드 --%>
@@ -95,24 +79,50 @@
                     <input type="text" class="sb-input w100" id="srchRrOrgnNm" ng-model="rrOrgnNm" onkeyup="fnNxBtnSearch('1');"/>
                 </td>
             </tr>
+            <tr>
+                <%-- 예약여부 --%>
+                <th>
+                    <s:message code="alimtalkSendStatus.reserveYn" />
+                </th>
+                <td>
+                    <div class="sb-select w40">
+                        <wj-combo-box
+                                id="srchReserveYnCombo"
+                                ng-model="reserveYn"
+                                items-source="_getComboData('reserveYnCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="reserveYnCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 결과 --%>
+                <th>
+                    <s:message code="alimtalkSendStatus.sendStatus" />
+                </th>
+                <td>
+                    <div class="sb-select w40">
+                        <wj-combo-box
+                                id="srchSendStatusCombo"
+                                ng-model="sendStatus"
+                                items-source="_getComboData('sendStatusCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                control="sendStatusCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <%-- 페이지 스케일  --%>
-            <wj-combo-box
-                    class="w100px fl"
-                    id="listScaleBox"
-                    ng-model="listScale"
-                    items-source="_getComboData('listScaleBox')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="initComboBox(s)">
-            </wj-combo-box>
-            <%--// 페이지 스케일  --%>
             <%-- 예약취소 --%>
-            <button class="btn_skyblue ml5 fr" id="btnCancelRepresent" ng-click="reserveCancel()">
+            <button class="btn_skyblue ml5 fr" id="btnCancelRepresent" ng-click="reserveCancel()" style="display: none;">
                 <s:message code="alimtalkSendStatus.reserveCancel" />
             </button>
         </div>
@@ -127,33 +137,34 @@
                         sticky-headers="true"
                         selection-mode="Row"
                         items-source="data"
-                        item-formatter="_itemFormatter">
+                        item-formatter="_itemFormatter"
+                        id="wjGridAlimtalSendStatus">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.regDt"/>" binding="regDt" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.orgnNm"/>" binding="sOgnNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.name"/>" binding="sUserNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.orgnNm"/>" binding="rOgnNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.telNo"/>" binding="rPhoneNumber" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sOrgnNm"/>" binding="sOgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sUserNm"/>" binding="sUserNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rOrgnNm"/>" binding="rOgnNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rTelNo"/>" binding="rPhoneNumber" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.reserveYn"/>" binding="reserveYn" data-map="reserveYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendDate"/>" binding="sendDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.readDate"/>" binding="readDate" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendStatus"/>" binding="sendStatus" data-map="sendStatusFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.resultNm"/>" binding="resultNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgContent"/>" binding="msgContent" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendOrgnNm"/>" binding="sendOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.payOrgnNm"/>" binding="payOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnNm"/>" binding="senderKeyOrgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendOrgnNm"/>" binding="sendOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.payOrgnNm"/>" binding="payOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnNm"/>" binding="senderKeyOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendYn"/>" binding="rmSendYn" data-map="rmSendYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmTitle"/>" binding="rmTitle" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmContent"/>" binding="rmContent" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendNo"/>" binding="rmSendNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
                     <%--저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgId"/>" binding="msgId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.reserveYn"/>" binding="reserveYn" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.gubun"/>" binding="gubun" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.alkSendSeq"/>" binding="alkSendSeq" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.requestId"/>" binding="requestId" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -173,9 +184,9 @@
 </div>
 
 <script type="text/javascript">
+    var orgnFg = "${orgnFg}";
     var orgnCd = "${orgnCd}";
     var userId = "${userId}";
-    var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
     var storeCd = "${storeCd}";
 
@@ -189,7 +200,7 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20220513.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20240627.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">
