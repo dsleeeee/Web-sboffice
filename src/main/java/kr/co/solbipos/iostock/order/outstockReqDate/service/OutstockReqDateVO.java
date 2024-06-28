@@ -49,6 +49,28 @@ public class OutstockReqDateVO extends PageVO {
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
 
+    /** 시작시간 */
+    private String orderStartTimeSun;
+    private String orderStartTimeMon;
+    private String orderStartTimeTue;
+    private String orderStartTimeWed;
+    private String orderStartTimeThu;
+    private String orderStartTimeFri;
+    private String orderStartTimeSat;
+    private String orderStartTime;
+
+    /** 마감시간 */
+    private String orderEndTimeSun;
+    private String orderEndTimeMon;
+    private String orderEndTimeTue;
+    private String orderEndTimeWed;
+    private String orderEndTimeThu;
+    private String orderEndTimeFri;
+    private String orderEndTimeSat;
+    private String orderEndTime;
+
+
+
     /**
      * @return the hqOfficeCd
      */
@@ -335,5 +357,133 @@ public class OutstockReqDateVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getOrderStartTimeSun() {
+        return orderStartTimeSun;
+    }
+
+    public void setOrderStartTimeSun(String orderStartTimeSun) {
+        this.orderStartTimeSun = orderStartTimeSun;
+    }
+
+    public String getOrderStartTimeMon() {
+        return orderStartTimeMon;
+    }
+
+    public void setOrderStartTimeMon(String orderStartTimeMon) {
+        this.orderStartTimeMon = orderStartTimeMon;
+    }
+
+    public String getOrderStartTimeTue() {
+        return orderStartTimeTue;
+    }
+
+    public void setOrderStartTimeTue(String orderStartTimeTue) {
+        this.orderStartTimeTue = orderStartTimeTue;
+    }
+
+    public String getOrderStartTimeWed() {
+        return orderStartTimeWed;
+    }
+
+    public void setOrderStartTimeWed(String orderStartTimeWed) {
+        this.orderStartTimeWed = orderStartTimeWed;
+    }
+
+    public String getOrderStartTimeThu() {
+        return orderStartTimeThu;
+    }
+
+    public void setOrderStartTimeThu(String orderStartTimeThu) {
+        this.orderStartTimeThu = orderStartTimeThu;
+    }
+
+    public String getOrderStartTimeFri() {
+        return orderStartTimeFri;
+    }
+
+    public void setOrderStartTimeFri(String orderStartTimeFri) {
+        this.orderStartTimeFri = orderStartTimeFri;
+    }
+
+    public String getOrderStartTimeSat() {
+        return orderStartTimeSat;
+    }
+
+    public void setOrderStartTimeSat(String orderStartTimeSat) {
+        this.orderStartTimeSat = orderStartTimeSat;
+    }
+
+    public String getOrderEndTimeSun() {
+        return orderEndTimeSun;
+    }
+
+    public void setOrderEndTimeSun(String orderEndTimeSun) {
+        this.orderEndTimeSun = orderEndTimeSun;
+    }
+
+    public String getOrderEndTimeMon() {
+        return orderEndTimeMon;
+    }
+
+    public void setOrderEndTimeMon(String orderEndTimeMon) {
+        this.orderEndTimeMon = orderEndTimeMon;
+    }
+
+    public String getOrderEndTimeTue() {
+        return orderEndTimeTue;
+    }
+
+    public void setOrderEndTimeTue(String orderEndTimeTue) {
+        this.orderEndTimeTue = orderEndTimeTue;
+    }
+
+    public String getOrderEndTimeWed() {
+        return orderEndTimeWed;
+    }
+
+    public void setOrderEndTimeWed(String orderEndTimeWed) {
+        this.orderEndTimeWed = orderEndTimeWed;
+    }
+
+    public String getOrderEndTimeThu() {
+        return orderEndTimeThu;
+    }
+
+    public void setOrderEndTimeThu(String orderEndTimeThu) {
+        this.orderEndTimeThu = orderEndTimeThu;
+    }
+
+    public String getOrderEndTimeFri() {
+        return orderEndTimeFri;
+    }
+
+    public void setOrderEndTimeFri(String orderEndTimeFri) {
+        this.orderEndTimeFri = orderEndTimeFri;
+    }
+
+    public String getOrderEndTimeSat() {
+        return orderEndTimeSat;
+    }
+
+    public void setOrderEndTimeSat(String orderEndTimeSat) {
+        this.orderEndTimeSat = orderEndTimeSat;
+    }
+
+    public String getOrderStartTime() {
+        return orderStartTime;
+    }
+
+    public void setOrderStartTime(String orderStartTime) {
+        this.orderStartTime = orderStartTime;
+    }
+
+    public String getOrderEndTime() {
+        return orderEndTime;
+    }
+
+    public void setOrderEndTime(String orderEndTime) {
+        this.orderEndTime = orderEndTime;
     }
 }

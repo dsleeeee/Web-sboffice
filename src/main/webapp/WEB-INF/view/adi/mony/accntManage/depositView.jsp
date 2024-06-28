@@ -111,4 +111,4 @@ var hqOfficeCd = "${hqOfficeCd}";
 var baseUrl = "${baseUrl}";
 var useYnFg = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/adi/mony/accntManage/deposit.js?ver=2018101204" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/mony/accntManage/deposit.js?ver=20240621.01" charset="utf-8"></script>

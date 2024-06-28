@@ -427,21 +427,21 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 회원명 최대길이 체크
         if (nvl($scope.member.membrNm, '') !== '' && nvl($scope.member.membrNm + '', '').getByteLengthForOracle() > 50) {
-            msg = messages["regist.membr.nm"] + messages["excelUpload.overLength"] + " 50 " + messages["excelUpload.bateLengthInfo"];
+            msg = messages["regist.membr.nm"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + $scope.member.membrNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
             $scope._popMsg(msg);
             return false;
         }
 
         // 회원명 영문 최대길이 체크
         if (nvl($scope.member.membrEngNm, '') !== '' && nvl($scope.member.membrEngNm + '', '').getByteLengthForOracle() > 50) {
-            msg = messages["member.excel.nm.en"] + messages["excelUpload.overLength"] + " 50 " + messages["excelUpload.bateLengthInfo"];
+            msg = messages["member.excel.nm.en"] + messages["cmm.overLength"] + " 50 " + ", 현재 : " + $scope.member.membrEngNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
             $scope._popMsg(msg);
             return false;
         }
 
         // 단축번호 최대길이 체크
         if (nvl($scope.member.shortNo, '') !== '' && nvl($scope.member.shortNo + '', '').getByteLengthForOracle() > 4) {
-            msg = messages["member.excel.shortNo"] + messages["excelUpload.overLength"] + " 4 ";
+            msg = messages["member.excel.shortNo"] + messages["cmm.overLength"] + " 4 ";
             $scope._popMsg(msg);
             return false;
         }
@@ -463,7 +463,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 전화번호 최대길이 체크
         if (nvl($scope.member.telNo, '') !== '' && nvl($scope.member.telNo + '', '').getByteLengthForOracle() > 14) {
-            msg = messages["regist.tel"] + messages["excelUpload.overLength"] + " 14 " + messages["excelUpload.bateLengthInfo"];
+            msg = messages["regist.tel"] + messages["cmm.overLength"] + " 14 " + messages["cmm.bateLengthInfo"];
             $scope._popMsg(msg);
             return false;
         }
@@ -537,7 +537,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 이메일 최대길이 체크
         if (nvl($scope.member.emailAddr, '') !== '' && nvl($scope.member.emailAddr + '', '').getByteLengthForOracle() > 30) {
-            msg = messages["regist.email"] + messages["excelUpload.overLength"] + " 30 " + messages["excelUpload.bateLengthInfo"];
+            msg = messages["regist.email"] + messages["cmm.overLength"] + " 30 " + ", 현재 : " + $scope.member.emailAddr.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
             $scope._popMsg(msg);
             return false;
         }
@@ -549,9 +549,16 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
+        // 주소 최대길이 체크
+        if (nvl($scope.member.addr, '') !== '' && nvl($scope.member.addr + '', '').getByteLengthForOracle() > 200) {
+            msg = messages["regist.addr"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + $scope.member.addr.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+            $scope._popMsg(msg);
+            return false;
+        }
+
         // 상세주소 최대길이 체크
-        if (nvl($scope.member.addrDtl, '') !== '' && nvl($scope.member.addrDtl + '', '').getByteLengthForOracle() > 100) {
-            msg = messages["regist.addr"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"];
+        if (nvl($scope.member.addrDtl, '') !== '' && nvl($scope.member.addrDtl + '', '').getByteLengthForOracle() > 200) {
+            msg = messages["regist.delivery.addr.dtl"] + messages["cmm.overLength"] + " 200 " + ", 현재 : " + $scope.member.addrDtl.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
             $scope._popMsg(msg);
             return false;
         }
@@ -571,8 +578,8 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         }
 
         // 비고 최대길이 체크
-        if (nvl($scope.member.remark, '') !== '' && nvl($scope.member.remark + '', '').getByteLengthForOracle() > 300) {
-            msg = messages["regist.remark"] + messages["excelUpload.overLength"] + " 300 " + messages["excelUpload.bateLengthInfo"];
+        if (nvl($scope.member.remark, '') !== '' && nvl($scope.member.remark + '', '').getByteLengthForOracle() > 100) {
+            msg = messages["regist.remark"] + messages["cmm.overLength"] + " 100 " + ", 현재 : " + $scope.member.remark.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
             $scope._popMsg(msg);
             return false;
         }

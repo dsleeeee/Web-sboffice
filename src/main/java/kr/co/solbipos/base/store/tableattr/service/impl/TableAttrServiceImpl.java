@@ -123,6 +123,9 @@ public class TableAttrServiceImpl implements TableAttrService {
         for(TableAttrVO tableAttrTempVO : tableAttrVOs) {
         	tableAttrTempVO.setStoreCd(sessionInfoVO.getStoreCd());
         	tableAttrTempVO.setRegId(sessionInfoVO.getUserId());
+            System.out.println(tableAttrTempVO.getAttrNm()+"속성명222");
+            System.out.println(tableAttrTempVO.getImgNm()+"이미지명222");
+            System.out.println(tableAttrTempVO.getFontNm()+"폰트명222");
             if( mapper.mergeStoreTableAttr(tableAttrTempVO) != 1 ) {
                 throw new BizException( messageService.get("cmm.saveFail") );
             }

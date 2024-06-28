@@ -220,6 +220,20 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
           return false;
         }
       }
+
+      var numChkexp = /[^0-9]/g;
+      if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].prterNetPort)) {
+        $scope._popMsg(messages["storeManage.prterNetPort"]+messages["cmm.require.number"]); // TCP/포트는 숫자만 입력할 수 있습니다.
+        return false;
+      }
+      // TCP/포트 최대길이 체크
+      if (nvl($scope.flex.collectionView.itemsEdited[i].prterNetPort, '') !== '' &&
+          nvl($scope.flex.collectionView.itemsEdited[i].prterNetPort + '', '').length > 5) {
+        var msg = messages["storeManage.prterNetPort"] + messages["cmm.overLength"] + " 5 " +
+            ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].prterNetPort.length
+        $scope._popMsg(msg);
+        return false;
+      }
       $scope.flex.collectionView.itemsEdited[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[i]);
@@ -234,6 +248,21 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
           $scope._popMsg(messages["storeManage.kitchenPrint.prterNmLengthChk"]); // 이름 길이가 너무 깁니다.
           return false;
         }
+      }
+
+      var numChkexp = /[^0-9]/g;
+      if (numChkexp.test($scope.flex.collectionView.itemsAdded[i].prterNetPort)) {
+        $scope._popMsg(messages["storeManage.prterNetPort"]+messages["cmm.require.number"]); // TCP/포트는 숫자만 입력할 수 있습니다.
+        return false;
+      }
+
+      // TCP/포트 최대길이 체크
+      if (nvl($scope.flex.collectionView.itemsAdded[i].prterNetPort, '') !== '' &&
+          nvl($scope.flex.collectionView.itemsAdded[i].prterNetPort + '', '').length > 5) {
+        var msg = messages["storeManage.prterNetPort"] + messages["cmm.overLength"] + " 5 " +
+            ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].prterNetPort.length
+        $scope._popMsg(msg);
+        return false;
       }
       $scope.flex.collectionView.itemsAdded[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsAdded[i].status = "I";

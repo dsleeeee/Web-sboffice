@@ -1,3 +1,4 @@
+
 app.controller('reqDateCopyCtrl', ['$scope', '$http', function ($scope, $http) {
   // angular.extend(this, new RootController('reqDateCopyCtrl', $scope, $http, true));
 
@@ -85,7 +86,35 @@ app.controller('reqDateCopyDaysCtrl', ['$scope', '$http', function ($scope, $htt
       thu         : messages["outstockReqDate.outstockReqDate"],
       fri         : messages["outstockReqDate.outstockReqDate"],
       sat         : messages["outstockReqDate.outstockReqDate"],
-      daysRemark  : messages["outstockReqDate.remark"],
+      startHourSun  : messages["outstockReqDate.sun"],
+      startMsSun    : messages["outstockReqDate.sun"],
+      endHourSun    : messages["outstockReqDate.sun"],
+      endMsSun      : messages["outstockReqDate.sun"],
+      startHourMon  : messages["outstockReqDate.mon"],
+      startMsMon    : messages["outstockReqDate.mon"],
+      endHourMon    : messages["outstockReqDate.mon"],
+      endMsMon      : messages["outstockReqDate.mon"],
+      startHourTue  : messages["outstockReqDate.tue"],
+      startMsTue    : messages["outstockReqDate.tue"],
+      endHourTue    : messages["outstockReqDate.tue"],
+      endMsTue      : messages["outstockReqDate.tue"],
+      startHourWed  : messages["outstockReqDate.wed"],
+      startMsWed    : messages["outstockReqDate.wed"],
+      endHourWed    : messages["outstockReqDate.wed"],
+      endMsWed      : messages["outstockReqDate.wed"],
+      startHourThu  : messages["outstockReqDate.thu"],
+      startMsThu    : messages["outstockReqDate.thu"],
+      endHourThu    : messages["outstockReqDate.thu"],
+      endMsThu      : messages["outstockReqDate.thu"],
+      startHourFri  : messages["outstockReqDate.fri"],
+      startMsFri    : messages["outstockReqDate.fri"],
+      endHourFri    : messages["outstockReqDate.fri"],
+      endMsFri      : messages["outstockReqDate.fri"],
+      startHourSat  : messages["outstockReqDate.sat"],
+      startMsSat    : messages["outstockReqDate.sat"],
+      endHourSat    : messages["outstockReqDate.sat"],
+      endMsSat      : messages["outstockReqDate.sat"],
+      daysRemark    : messages["outstockReqDate.remark"]
     };
   };
 
@@ -260,6 +289,46 @@ app.controller('reqDateCopySpecificCtrl', ['$scope', '$http', function ($scope, 
       }
     });
 
+    // 헤더머지
+    s.allowMerging  = 2;
+    s.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly || panel.grid.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    }
+
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -300,16 +369,24 @@ app.controller('reqDateCopySpecificCtrl', ['$scope', '$http', function ($scope, 
   // 특정일 복사
   $scope.specificCopy = function () {
     var params = [];
-    var flex   = $scope.flex;
-    for (var i = 0; i < flex.rows.length; i++) {
-      if (flex.getCellData(i, 0)) {
-        // 타겟매장과 복사할 매장이 동일합니다.
-        if (flex.rows[i]._data.storeCd == $("#copySelectStoreCd").val()) {
-          $scope._popMsg(messages["outstockReqDate.duplicate.targetSelectStore"]);
-          return false;
-        }
-        flex.rows[i]._data.copyStoreCd = $("#copySelectStoreCd").val();
-        params.push(flex.rows[i]._data);
+    var flex   = $scope.flexSpec;
+
+    if(flex.rows.length <= 0) {
+      $scope._popMsg(messages["cmm.empty.data"]);
+      return false;
+    }
+
+    if ($("#copySelectStoreCd").val().indexOf($("#targetSelectStoreCd").val()) !== -1) {
+      $scope._popMsg(messages["outstockReqDate.duplicate.targetSelectStore"]);
+      return false;
+    }
+
+    for (var i = 0; i < flex.collectionView.items.length; i++) {
+      if(flex.collectionView.items[i].gChk === true){
+        flex.collectionView.items[i].copyStoreCd = $("#copySelectStoreCd").val();
+        flex.collectionView.items[i].orderStartTime = flex.collectionView.items[i].startHour + flex.collectionView.items[i].startMs;
+        flex.collectionView.items[i].orderEndTime = flex.collectionView.items[i].endHour + flex.collectionView.items[i].endMs;
+        params.push(flex.collectionView.items[i]);
       }
     }
 

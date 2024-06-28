@@ -735,6 +735,15 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           return false;
         }
 
+        // 분류명 최대길이 체크
+        if (nvl($scope.flex.collectionView.itemsEdited[u].sdselClassNm, '') !== '' &&
+            nvl($scope.flex.collectionView.itemsEdited[u].sdselClassNm + '', '').getByteLengthForOracle() > 50) {
+          var msg = messages["sideMenu.selectMenu.sdselClassNm"] + messages["cmm.overLength"] + " 50 " +
+              ", 현재 : " + $scope.flex.collectionView.itemsEdited[u].sdselClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+          $scope._popMsg(msg);
+          return false;
+        }
+
         if(nvl($scope.flex.collectionView.itemsEdited[u].fixProdCnt, 0) > nvl($scope.flex.collectionView.itemsEdited[u].sdselQty, 0)){
           $scope._popMsg( "'" + $scope.flex.collectionView.itemsEdited[u].sdselClassNm + "[" + $scope.flex.collectionView.itemsEdited[u].sdselClassCd + "]'"
               + messages["sideMenu.selectMenu.sdselQtyChk.msg"]
@@ -763,6 +772,15 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
       for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
         if($scope.flex.collectionView.itemsAdded[i].sdselClassNm == ""){
           $scope._popMsg(messages["sideMenu.selectMenu.sdselClassNm"] + messages["sideMenu.selectMenu.inputEnv"]);
+          return false;
+        }
+
+        // 분류명 최대길이 체크
+        if (nvl($scope.flex.collectionView.itemsAdded[i].sdselClassNm, '') !== '' &&
+            nvl($scope.flex.collectionView.itemsAdded[i].sdselClassNm + '', '').getByteLengthForOracle() > 50) {
+          var msg = messages["sideMenu.selectMenu.sdselClassNm"] + messages["cmm.overLength"] + " 50 " +
+              ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].sdselClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+          $scope._popMsg(msg);
           return false;
         }
 

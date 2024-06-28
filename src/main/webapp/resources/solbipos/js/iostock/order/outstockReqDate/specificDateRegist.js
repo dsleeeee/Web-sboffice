@@ -1,12 +1,44 @@
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+  var timeVal = i.toString();
+  if(i>=0 && i<=9){
+    timeVal = "0" + timeVal;
+  }
+  Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
+// 분, 초 VALUE
+var MmSs = [60];
+for(i =0 ; i < 60; i++){
+  var timeVal = i.toString();
+  if(i>=0 && i<=9){
+    timeVal = "0" + timeVal;
+  }
+  MmSs[i] = {"name":timeVal,"value":timeVal}
+}
+
 /** 특정일 신규등록 controller */
 app.controller('speDateRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.default = {
     outstockReqYn     : "N",
     storeCd           : "",
-    specificDateRemark: ""
+    specificDateRemark: "",
+    startHour         : "00",
+    startMs           : "00",
+    endHour           : "23",
+    endMs             : "59"
   };
 
   var specificDate = wcombo.genDate("#specificDate");
+  $scope._setComboData("outStockHourCombo", Hh);
+  $scope._setComboData("outStockMsCombo", MmSs);
+
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+    $scope.endHourCombo.selectedValue = '23';
+    $scope.endMsCombo.selectedValue   = '59';
+  }
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on('speDateRegistCtrl', function (event, paramObj) {
@@ -31,6 +63,9 @@ app.controller('speDateRegistCtrl', ['$scope', '$http', function ($scope, $http)
     $scope.speDate.specificDate = wijmo.Globalize.format(specificDate.value, 'yyyyMMdd');
     // 매장 선택 모듈의 매장코드값 파라미터 세팅
     $scope.speDate.storeCd      = $("#speDateRegistStoreCd").val();
+
+    $scope.speDate.orderStartTime = $scope.startHourCombo.selectedValue + $scope.startMsCombo.selectedValue;
+    $scope.speDate.orderEndTime = $scope.endHourCombo.selectedValue + $scope.endMsCombo.selectedValue;
 
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){

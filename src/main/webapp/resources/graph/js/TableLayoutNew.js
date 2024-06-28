@@ -1820,7 +1820,17 @@ FormatLayout.prototype.save = function() {
 	if ($("#btnBgFile")[0].files && $("#btnBgFile")[0].files[0]) {
 
     	var file = $("#btnBgFile")[0].files[0];
+
 	    if (fileCheck(file)) {
+
+	        var msg;
+            if (nvl(file.name, '') !== '' &&
+                nvl(file.name + '', '').getByteLengthForOracle() > 50) {
+                msg = messages["tableLayout.bgImg"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + file.name.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                alert(msg)
+                return false;
+            }
 
 	    	// ajax로 전달할 폼 객체
 	        var formData = new FormData();

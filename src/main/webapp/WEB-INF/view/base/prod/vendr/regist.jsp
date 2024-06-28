@@ -126,8 +126,8 @@
                   <a id="btnSrchAddr" href="#" class="btn_grayS ml5" onclick="searchAddr()">
                     <s:message code="storeManage.srchAddr" />
                   </a>
-                  <input type="text" id="rAddr" ng-model="rAddr" class="sb-input w100" placeholder="주소1" maxlength="100" style="margin:4px 0px;" readonly/>
-                  <input type="text" id="rAddrDtl" ng-model="rAddrDtl" class="sb-input w100" placeholder="주소2" maxlength="100"/>
+                  <input type="text" id="rAddr" ng-model="rAddr" class="sb-input w100" placeholder="주소1" maxlength="300" style="margin:4px 0px;" readonly/>
+                  <input type="text" id="rAddrDtl" ng-model="rAddrDtl" class="sb-input w100" placeholder="주소2" maxlength="300"/>
                 </td>
               </tr>
               <tr <c:if test="${orgnFg != 'HQ' or (orgnFg =='HQ' and envst1242 != '2')}">style="display: none;"</c:if>>
@@ -182,4 +182,4 @@
   var useYnData        = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20240402.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20240621.01" charset="utf-8"></script>

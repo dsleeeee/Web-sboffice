@@ -316,15 +316,17 @@ app.controller('prodClassLevel1Ctrl', ['$scope', '$http', '$timeout', function (
 
         // 분류명 길이체크 따로 함(기존에 등록된 분류명중 이미 15자리 넘는 분류가 있어, 새로 추가하거나 수정한 분류만 체크하는걸로 변경)
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            if($scope.flex.collectionView.itemsAdded[i].prodClassNm.length > 15){
-                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+            if(nvl($scope.flex.collectionView.itemsAdded[i].prodClassNm + '', '').getByteLengthForOracle() > 50){
+                $scope._popMsg(messages["info.prodClassLevel1"] + " " + messages["info.prodClassName"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].prodClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
                 return;
             }
         }
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            if($scope.flex.collectionView.itemsEdited[i].prodClassNm.length > 15){
-                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+            if(nvl($scope.flex.collectionView.itemsEdited[i].prodClassNm + '', '').getByteLengthForOracle() > 50){
+                $scope._popMsg(messages["info.prodClassLevel1"] + " " + messages["info.prodClassName"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].prodClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
                 return;
             }
         }
@@ -792,15 +794,17 @@ app.controller('prodClassLevel2Ctrl', ['$scope', '$http', '$timeout', function (
 
         // 분류명 길이체크 따로 함(기존에 등록된 분류명중 이미 15자리 넘는 분류가 있어, 새로 추가하거나 수정한 분류만 체크하는걸로 변경)
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            if($scope.flex.collectionView.itemsAdded[i].prodClassNm.length > 15){
-                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+            if(nvl($scope.flex.collectionView.itemsAdded[i].prodClassNm + '', '').getByteLengthForOracle() > 50){
+                $scope._popMsg(messages["info.prodClassLevel2"] + " " + messages["info.prodClassName"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].prodClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
                 return;
             }
         }
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            if($scope.flex.collectionView.itemsEdited[i].prodClassNm.length > 15){
-                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+            if(nvl($scope.flex.collectionView.itemsEdited[i].prodClassNm + '', '').getByteLengthForOracle() > 50){
+                $scope._popMsg(messages["info.prodClassLevel2"] + " " + messages["info.prodClassName"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].prodClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
                 return;
             }
         }
@@ -1241,15 +1245,17 @@ app.controller('prodClassLevel3Ctrl', ['$scope', '$http', '$timeout', function (
 
         // 분류명 길이체크 따로 함(기존에 등록된 분류명중 이미 15자리 넘는 분류가 있어, 새로 추가하거나 수정한 분류만 체크하는걸로 변경)
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            if($scope.flex.collectionView.itemsAdded[i].prodClassNm.length > 15){
-                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+            if(nvl($scope.flex.collectionView.itemsAdded[i].prodClassNm + '', '').getByteLengthForOracle() > 50){
+                $scope._popMsg(messages["info.prodClassLevel3"] + " " + messages["info.prodClassName"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].prodClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
                 return;
             }
         }
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            if($scope.flex.collectionView.itemsEdited[i].prodClassNm.length > 15){
-                $scope._popMsg(messages['info.prodClassNmLength.msg']); // 분류명은 최대 15자리까지 입력할 수 있습니다.
+            if(nvl($scope.flex.collectionView.itemsEdited[i].prodClassNm + '', '').getByteLengthForOracle() > 50){
+                $scope._popMsg(messages["info.prodClassLevel3"] + " " + messages["info.prodClassName"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].prodClassNm .getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);
                 return;
             }
         }

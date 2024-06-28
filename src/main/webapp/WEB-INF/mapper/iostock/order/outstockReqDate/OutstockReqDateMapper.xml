@@ -36,14 +36,42 @@
         SELECT  tms.STORE_CD, tms.STORE_NM
         ,       tms.OWNER_NM, tms.SYS_STAT_FG
         ,       NVL(tphsl.ORDER_CLOSE_YN, 'N') AS ORDER_CLOSE_YN
-        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '1'), 0, 'Y', NULL, 'Y', 'N') AS SUN
-        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '2'), 0, 'Y', NULL, 'Y', 'N') AS MON
-        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '3'), 0, 'Y', NULL, 'Y', 'N') AS TUE
-        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '4'), 0, 'Y', NULL, 'Y', 'N') AS WED
-        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '5'), 0, 'Y', NULL, 'Y', 'N') AS THU
-        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '6'), 0, 'Y', NULL, 'Y', 'N') AS FRI
-        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '7'), 0, 'Y', NULL, 'Y', 'N') AS SAT
-        ,       tphsod.REMARK AS DAYS_REMARK
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '1'), 0, 'Y', NULL, 'Y', 'N')   AS SUN
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '2'), 0, 'Y', NULL, 'Y', 'N')   AS MON
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '3'), 0, 'Y', NULL, 'Y', 'N')   AS TUE
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '4'), 0, 'Y', NULL, 'Y', 'N')   AS WED
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '5'), 0, 'Y', NULL, 'Y', 'N')   AS THU
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '6'), 0, 'Y', NULL, 'Y', 'N')   AS FRI
+        ,       DECODE(INSTR(tphsod.REQ_NO_DAY, '7'), 0, 'Y', NULL, 'Y', 'N')   AS SAT
+        ,       DECODE(tphsod.ORDER_START_TIME_SUN, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_SUN, 0, 2))        AS START_HOUR_SUN
+        ,		DECODE(tphsod.ORDER_START_TIME_SUN, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_SUN, 3, 4))        AS START_MS_SUN
+        ,		DECODE(tphsod.ORDER_END_TIME_SUN, NULL, '23', SUBSTR(tphsod.ORDER_END_TIME_SUN, 0, 2))            AS END_HOUR_SUN
+        ,		DECODE(tphsod.ORDER_END_TIME_SUN, NULL, '59', SUBSTR(tphsod.ORDER_END_TIME_SUN, 3, 4))            AS END_MS_SUN
+        ,       DECODE(tphsod.ORDER_START_TIME_MON, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_MON, 0, 2))        AS START_HOUR_MON
+        ,		DECODE(tphsod.ORDER_START_TIME_MON, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_MON, 3, 4))        AS START_MS_MON
+        ,		DECODE(tphsod.ORDER_END_TIME_MON, NULL, '23', SUBSTR(tphsod.ORDER_END_TIME_MON, 0, 2))            AS END_HOUR_MON
+        ,		DECODE(tphsod.ORDER_END_TIME_MON, NULL, '59', SUBSTR(tphsod.ORDER_END_TIME_MON, 3, 4))            AS END_MS_MON
+        ,       DECODE(tphsod.ORDER_START_TIME_TUE, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_TUE, 0, 2))        AS START_HOUR_TUE
+        ,		DECODE(tphsod.ORDER_START_TIME_TUE, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_TUE, 3, 4))        AS START_MS_TUE
+        ,		DECODE(tphsod.ORDER_END_TIME_TUE, NULL, '23', SUBSTR(tphsod.ORDER_END_TIME_TUE, 0, 2))            AS END_HOUR_TUE
+        ,		DECODE(tphsod.ORDER_END_TIME_TUE, NULL, '59', SUBSTR(tphsod.ORDER_END_TIME_TUE, 3, 4))            AS END_MS_TUE
+        ,       DECODE(tphsod.ORDER_START_TIME_WED, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_WED, 0, 2))        AS START_HOUR_WED
+        ,		DECODE(tphsod.ORDER_START_TIME_WED, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_WED, 3, 4))        AS START_MS_WED
+        ,		DECODE(tphsod.ORDER_END_TIME_WED, NULL, '23', SUBSTR(tphsod.ORDER_END_TIME_WED, 0, 2))            AS END_HOUR_WED
+        ,		DECODE(tphsod.ORDER_END_TIME_WED, NULL, '59', SUBSTR(tphsod.ORDER_END_TIME_WED, 3, 4))            AS END_MS_WED
+        ,       DECODE(tphsod.ORDER_START_TIME_THU, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_THU, 0, 2))        AS START_HOUR_THU
+        ,		DECODE(tphsod.ORDER_START_TIME_THU, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_THU, 3, 4))        AS START_MS_THU
+        ,		DECODE(tphsod.ORDER_END_TIME_THU, NULL, '23', SUBSTR(tphsod.ORDER_END_TIME_THU, 0, 2))            AS END_HOUR_THU
+        ,		DECODE(tphsod.ORDER_END_TIME_THU, NULL, '59', SUBSTR(tphsod.ORDER_END_TIME_THU, 3, 4))            AS END_MS_THU
+        ,       DECODE(tphsod.ORDER_START_TIME_FRI, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_FRI, 0, 2))        AS START_HOUR_FRI
+        ,		DECODE(tphsod.ORDER_START_TIME_FRI, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_FRI, 3, 4))        AS START_MS_FRI
+        ,		DECODE(tphsod.ORDER_END_TIME_FRI, NULL, '23', SUBSTR(tphsod.ORDER_END_TIME_FRI, 0, 2))            AS END_HOUR_FRI
+        ,		DECODE(tphsod.ORDER_END_TIME_FRI, NULL, '59', SUBSTR(tphsod.ORDER_END_TIME_FRI, 3, 4))            AS END_MS_FRI
+        ,       DECODE(tphsod.ORDER_START_TIME_SAT, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_SAT, 0, 2))        AS START_HOUR_SAT
+        ,		DECODE(tphsod.ORDER_START_TIME_SAT, NULL, '00', SUBSTR(tphsod.ORDER_START_TIME_SAT, 3, 4))        AS START_MS_SAT
+        ,		DECODE(tphsod.ORDER_END_TIME_SAT, NULL, '23', SUBSTR(tphsod.ORDER_END_TIME_SAT, 0, 2))            AS END_HOUR_SAT
+        ,		DECODE(tphsod.ORDER_END_TIME_SAT, NULL, '59', SUBSTR(tphsod.ORDER_END_TIME_SAT, 3, 4))            AS END_MS_SAT
+        ,       tphsod.REMARK                                                   AS DAYS_REMARK
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -78,7 +106,21 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            ORDER_START_TIME_SUN,
+            ORDER_START_TIME_MON,
+            ORDER_START_TIME_TUE,
+            ORDER_START_TIME_WED,
+            ORDER_START_TIME_THU,
+            ORDER_START_TIME_FRI,
+            ORDER_START_TIME_SAT,
+            ORDER_END_TIME_SUN,
+            ORDER_END_TIME_MON,
+            ORDER_END_TIME_TUE,
+            ORDER_END_TIME_WED,
+            ORDER_END_TIME_THU,
+            ORDER_END_TIME_FRI,
+            ORDER_END_TIME_SAT
         )
         VALUES
         (
@@ -89,7 +131,21 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{orderStartTimeSun},
+            #{orderStartTimeMon},
+            #{orderStartTimeTue},
+            #{orderStartTimeWed},
+            #{orderStartTimeThu},
+            #{orderStartTimeFri},
+            #{orderStartTimeSat},
+            #{orderEndTimeSun},
+            #{orderEndTimeMon},
+            #{orderEndTimeTue},
+            #{orderEndTimeWed},
+            #{orderEndTimeThu},
+            #{orderEndTimeFri},
+            #{orderEndTimeSat}
         )
     </insert>
 
@@ -102,12 +158,26 @@
     <update id="updateReqDateDays" parameterType="outstockReqDateVO">
         /* USE : outstockReqDateMapper.updateReqDateDays */
         UPDATE  TB_PO_HQ_STORE_ORDER_DAYS
-        SET     REQ_NO_DAY      = #{reqNoDay},
-                REMARK          = #{daysRemark},
-                REG_DT          = #{regDt},
-                REG_ID          = #{regId},
-                MOD_DT          = #{modDt},
-                MOD_ID          = #{modId}
+        SET     REQ_NO_DAY              = #{reqNoDay},
+                REMARK                  = #{daysRemark},
+                REG_DT                  = #{regDt},
+                REG_ID                  = #{regId},
+                MOD_DT                  = #{modDt},
+                MOD_ID                  = #{modId},
+                ORDER_START_TIME_SUN    = #{orderStartTimeSun},
+                ORDER_START_TIME_MON    = #{orderStartTimeMon},
+                ORDER_START_TIME_TUE    = #{orderStartTimeTue},
+                ORDER_START_TIME_WED    = #{orderStartTimeWed},
+                ORDER_START_TIME_THU    = #{orderStartTimeThu},
+                ORDER_START_TIME_FRI    = #{orderStartTimeFri},
+                ORDER_START_TIME_SAT    = #{orderStartTimeSat},
+                ORDER_END_TIME_SUN      = #{orderEndTimeSun},
+                ORDER_END_TIME_MON      = #{orderEndTimeMon},
+                ORDER_END_TIME_TUE      = #{orderEndTimeTue},
+                ORDER_END_TIME_WED      = #{orderEndTimeWed},
+                ORDER_END_TIME_THU      = #{orderEndTimeThu},
+                ORDER_END_TIME_FRI      = #{orderEndTimeFri},
+                ORDER_END_TIME_SAT      = #{orderEndTimeSat}
         WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
         AND     STORE_CD     = #{storeCd}
     </update>
@@ -127,6 +197,10 @@
         ,       tphsos.SPECIFIC_DATE
         ,       tphsos.OUTSTOCK_REQ_YN
         ,       tphsos.REMARK AS SPECIFIC_DATE_REMARK
+        ,		DECODE(tphsos.ORDER_START_TIME, NULL, '00', SUBSTR(ORDER_START_TIME, 0, 2))     AS START_HOUR
+        ,		DECODE(tphsos.ORDER_START_TIME, NULL, '00', SUBSTR(ORDER_START_TIME, 3, 4))     AS START_MS
+        ,		DECODE(tphsos.ORDER_END_TIME, NULL, '23', SUBSTR(ORDER_END_TIME, 0, 2))         AS END_HOUR
+        ,		DECODE(tphsos.ORDER_END_TIME, NULL, '59', SUBSTR(ORDER_END_TIME, 3, 4))         AS END_MS
         ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
@@ -160,7 +234,9 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            ORDER_START_TIME,
+            ORDER_END_TIME
         )
         VALUES
         (
@@ -172,7 +248,9 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{orderStartTime},
+            #{orderEndTime}
         )
     </insert>
 
@@ -185,10 +263,12 @@
     <update id="updateSpecificDate" parameterType="outstockReqDateVO">
         /* USE : outstockReqDateMapper.updateSpecificDate */
         UPDATE  TB_PO_HQ_STORE_ORDER_SPECIFIC
-        SET     OUTSTOCK_REQ_YN = #{outstockReqYn},
-                REMARK          = #{specificDateRemark},
-                MOD_DT          = #{modDt},
-                MOD_ID          = #{modId}
+        SET     OUTSTOCK_REQ_YN     = #{outstockReqYn},
+                REMARK              = #{specificDateRemark},
+                MOD_DT              = #{modDt},
+                MOD_ID              = #{modId},
+                ORDER_START_TIME    = #{orderStartTime},
+                ORDER_END_TIME      = #{orderEndTime}
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     STORE_CD      = #{storeCd}
         AND     SPECIFIC_DATE = #{specificDate}
@@ -242,7 +322,9 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            ORDER_START_TIME,
+            ORDER_END_TIME
         )
         VALUES
         (
@@ -254,7 +336,9 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{orderStartTime},
+            #{orderEndTime}
         )
     </insert>
 
@@ -288,7 +372,21 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            ORDER_START_TIME_SUN,
+            ORDER_START_TIME_MON,
+            ORDER_START_TIME_TUE,
+            ORDER_START_TIME_WED,
+            ORDER_START_TIME_THU,
+            ORDER_START_TIME_FRI,
+            ORDER_START_TIME_SAT,
+            ORDER_END_TIME_SUN,
+            ORDER_END_TIME_MON,
+            ORDER_END_TIME_TUE,
+            ORDER_END_TIME_WED,
+            ORDER_END_TIME_THU,
+            ORDER_END_TIME_FRI,
+            ORDER_END_TIME_SAT
         )
         SELECT  HQ_OFFICE_CD,
                 #{copyStoreCd},
@@ -297,7 +395,21 @@
                 #{regDt},
                 #{regId},
                 #{modDt},
-                #{modId}
+                #{modId},
+                ORDER_START_TIME_SUN,
+                ORDER_START_TIME_MON,
+                ORDER_START_TIME_TUE,
+                ORDER_START_TIME_WED,
+                ORDER_START_TIME_THU,
+                ORDER_START_TIME_FRI,
+                ORDER_START_TIME_SAT,
+                ORDER_END_TIME_SUN,
+                ORDER_END_TIME_MON,
+                ORDER_END_TIME_TUE,
+                ORDER_END_TIME_WED,
+                ORDER_END_TIME_THU,
+                ORDER_END_TIME_FRI,
+                ORDER_END_TIME_SAT
         FROM    TB_PO_HQ_STORE_ORDER_DAYS
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     STORE_CD      = #{storeCd}

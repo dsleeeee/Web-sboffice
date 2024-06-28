@@ -1,3 +1,22 @@
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+  var timeVal = i.toString();
+  if(i>=0 && i<=9){
+    timeVal = "0" + timeVal;
+  }
+  Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
+// 분, 초 VALUE
+var MmSs = [60];
+for(i =0 ; i < 60; i++){
+  var timeVal = i.toString();
+  if(i>=0 && i<=9){
+    timeVal = "0" + timeVal;
+  }
+  MmSs[i] = {"name":timeVal,"value":timeVal}
+}
 /** 특정일 그리드 controller */
 app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
@@ -12,6 +31,8 @@ app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 그리드 DataMap 설정
     $scope.sysStatFgMap     = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+    $scope.timeHourMap    = new wijmo.grid.DataMap(Hh, 'value', 'name');
+    $scope.timeMsMap    = new wijmo.grid.DataMap(MmSs, 'value', 'name');
     $scope.outstockReqYnMap = new wijmo.grid.DataMap([
       {id: "Y", name: messages["outstockReqDate.outstockReqYnY"]},
       {id: "N", name: messages["outstockReqDate.outstockReqYnN"]},
@@ -34,6 +55,46 @@ app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
     });
+
+    // 헤더머지
+    s.allowMerging  = 2;
+    s.itemFormatter = function (panel, r, c, cell) {
+      if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+        //align in center horizontally and vertically
+        panel.rows[r].allowMerging    = true;
+        panel.columns[c].allowMerging = true;
+        wijmo.setCss(cell, {
+          display    : 'table',
+          tableLayout: 'fixed'
+        });
+        cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+        wijmo.setCss(cell.children[0], {
+          display      : 'table-cell',
+          verticalAlign: 'middle',
+          textAlign    : 'center'
+        });
+      }
+      // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+      else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+        // GroupRow 인 경우에는 표시하지 않는다.
+        if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+          cell.textContent = '';
+        } else {
+          if (!isEmpty(panel._rows[r]._data.rnum)) {
+            cell.textContent = (panel._rows[r]._data.rnum).toString();
+          } else {
+            cell.textContent = (r + 1).toString();
+          }
+        }
+      }
+      // readOnly 배경색 표시
+      else if (panel.cellType === wijmo.grid.CellType.Cell) {
+        var col = panel.columns[c];
+        if (col.isReadOnly || panel.grid.isReadOnly) {
+          wijmo.addClass(cell, 'wj-custom-readonly');
+        }
+      }
+    }
 
   };
 
@@ -67,6 +128,14 @@ app.controller('specificCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = [];
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
+
+      if($scope.flex.collectionView.itemsEdited[i].outstockReqYn === 'Y') {
+        $scope.flex.collectionView.itemsEdited[i].orderStartTime = $scope.flex.collectionView.itemsEdited[i].startHour + $scope.flex.collectionView.itemsEdited[i].startMs;
+        $scope.flex.collectionView.itemsEdited[i].orderEndTime = $scope.flex.collectionView.itemsEdited[i].endHour + $scope.flex.collectionView.itemsEdited[i].endMs;
+      }else{
+        $scope.flex.collectionView.itemsEdited[i].orderStartTime = null;
+        $scope.flex.collectionView.itemsEdited[i].orderEndTime = null;
+      }
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     $.postJSONArray("/iostock/order/outstockReqDate/specificDate/save.sb", params, function(result) {

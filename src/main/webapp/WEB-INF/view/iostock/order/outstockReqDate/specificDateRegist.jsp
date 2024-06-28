@@ -13,9 +13,9 @@
         <table class="tblType01">
           <colgroup>
             <col class="w15"/>
-            <col class="w35"/>
+            <col class="w30"/>
             <col class="w15"/>
-            <col class="w35"/>
+            <col class="w40"/>
           </colgroup>
           <tbody>
           <tr>
@@ -44,6 +44,62 @@
                 <option value="Y"><s:message code="outstockReqDate.outstockReqYnY"/></option>
               </select>
             </td>
+            <th><s:message code="outstockReqDate.outStockTime"/></th>
+            <td>
+              <div class="sb-select w20 fl">
+                <wj-combo-box
+                        id="startHour"
+                        ng-model="speDate.startHour"
+                        items-source="_getComboData('outStockHourCombo')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="startHourCombo">
+                </wj-combo-box>
+              </div>
+              <div class="fl pd5 s14">
+                <label> : </label>
+              </div>
+              <div class="sb-select w20 fl">
+                <wj-combo-box
+                        id="startMs"
+                        ng-model="speDate.startMs"
+                        items-source="_getComboData('outStockMsCombo')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="startMsCombo">
+                </wj-combo-box>
+              </div>
+              <div class="fl pd5 s14">
+                <label> ~ </label>
+              </div>
+              <div class="sb-select w20 fl">
+                <wj-combo-box
+                        id="endHour"
+                        ng-model="speDate.endHour"
+                        items-source="_getComboData('outStockHourCombo')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="endHourCombo">
+                </wj-combo-box>
+              </div>
+              <div class="fl pd5 s14">
+                <label> : </label>
+              </div>
+              <div class="sb-select w20 fl">
+                <wj-combo-box
+                        id="endMs"
+                        ng-model="speDate.endMs"
+                        items-source="_getComboData('outStockMsCombo')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        control="endMsCombo">
+                </wj-combo-box>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><s:message code="outstockReqDate.specificDateRemark"/><em class="imp">*</em></th>
@@ -68,4 +124,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20181224.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20240628.01" charset="utf-8"></script>
