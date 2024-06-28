@@ -56,6 +56,11 @@
 <%--    &lt;%&ndash;<button id="btnExcel" class="btn_skyblue fr" ng-click="excelDown()"><s:message code="cmm.excel.down"/></button>&ndash;%&gt;--%>
 <%--  </div>--%>
 
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>
+    </div>
+
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
     <div class="wj-gridWrap" style="height: 350px; overflow-x: hidden; overflow-y: hidden;">
@@ -66,12 +71,15 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="true"
-        item-formatter="_itemFormatter">
+        item-formatter="_itemFormatter"
+        ime-enabled="true"
+        id="wjGridLoanInfoCtrl">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="loanInfo.loanDate"/>" binding="loanDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loanInfo.outAmt"/>" binding="outAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loanInfo.inAmt"/>" binding="inAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="loanInfo.limitLoanAmt"/>" binding="limitLoanAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loanInfo.currLoanAmt"/>" binding="currLoanAmt" width="100" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="loanInfo.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
@@ -86,4 +94,4 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/loanInfo/loanInfo.js?ver=20181224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/loanInfo/loanInfo.js?ver=20240627.01" charset="utf-8"></script>

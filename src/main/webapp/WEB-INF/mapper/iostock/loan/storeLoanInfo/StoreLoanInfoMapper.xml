@@ -33,17 +33,17 @@
                                 AND     SLIP_FG     =   1
                                 AND     PROC_FG     IN  ('20', '30')
                                 UNION ALL
-                                SELECT  tphso.STORE_CD, tphso.IN_DATE LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                                SELECT  tphso.STORE_CD, tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + NVL(tphso.PENALTY_AMT, 0)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
                                 FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
-                                ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
                                 WHERE   tphso.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND     tphso.IN_DATE     >   #{startDate}
                                 AND     tphso.SLIP_FG     =   -1
                                 AND     tphso.PROC_FG     =   '30'
-                                AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
-                                AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
-                                GROUP
-                                BY      tphso.STORE_CD, tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                                UNION ALL
+                                SELECT  A.STORE_CD, A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
+                                FROM    TB_PO_HQ_STORE_MONEY A
+                                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                AND     A.MONEY_DATE    >   #{startDate}
                             )
                     GROUP
                     BY      STORE_CD
@@ -58,17 +58,17 @@
                                 AND     SLIP_FG     =   1
                                 AND     PROC_FG     IN  ('20', '30')
                                 UNION ALL
-                                SELECT  tphso.STORE_CD, tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                                SELECT  tphso.STORE_CD, tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + NVL(tphso.PENALTY_AMT, 0)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
                                 FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
-                                ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
                                 WHERE   tphso.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND     tphso.IN_DATE     BETWEEN #{startDate} AND #{endDate}
                                 AND     tphso.SLIP_FG     =   -1
                                 AND     tphso.PROC_FG     =   '30'
-                                AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
-                                AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
-                                GROUP
-                                BY      tphso.STORE_CD, tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                                UNION ALL
+                                SELECT  A.STORE_CD, A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
+                                FROM    TB_PO_HQ_STORE_MONEY A
+                                WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     A.MONEY_DATE    BETWEEN #{startDate} AND #{endDate}
                             )
                     UNION ALL
                     SELECT  STORE_CD, '조회기간 전' AS LOAN_DATE, '' AS SLIP_NO, SUM(OUT_AMT) AS OUT_AMT, SUM(IN_AMT) AS IN_AMT, '' AS REMARK, '3' AS ORDER_RANK
@@ -80,17 +80,17 @@
                                 AND     SLIP_FG     =   1
                                 AND     PROC_FG     IN  ('20', '30')
                                 UNION ALL
-                                SELECT  tphso.STORE_CD, tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                                SELECT  tphso.STORE_CD, tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + NVL(tphso.PENALTY_AMT, 0)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
                                 FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
-                                ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
                                 WHERE   tphso.HQ_OFFICE_CD = #{hqOfficeCd}
                                 AND     tphso.IN_DATE     <   #{startDate}
                                 AND     tphso.SLIP_FG     =   -1
                                 AND     tphso.PROC_FG     =   '30'
-                                AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
-                                AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
-                                GROUP
-                                BY      tphso.STORE_CD, tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                                UNION ALL
+                                SELECT  A.STORE_CD, A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
+                                FROM    TB_PO_HQ_STORE_MONEY A
+                                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                AND     A.MONEY_DATE    <    #{startDate}
                             )
                     GROUP
                     BY      STORE_CD

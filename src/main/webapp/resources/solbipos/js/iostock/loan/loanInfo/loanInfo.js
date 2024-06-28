@@ -4,7 +4,7 @@
 var app = agrid.getApp();
 
 /** 여신현황 그리드 controller */
-app.controller('loanInfoCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('loanInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('loanInfoCtrl', $scope, $http, true));
 
@@ -41,7 +41,20 @@ app.controller('loanInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-    $scope._inquiryMain("/iostock/loan/loanInfo/loanInfo/list.sb", params);
+    $scope._inquiryMain("/iostock/loan/loanInfo/loanInfo/list.sb", params, function() {
+        var grid = wijmo.Control.getControl("#wjGridLoanInfoCtrl");
+        var rows = grid.rows;
+        var currLoan = 0;
+
+        for (var i = $scope.flex.collectionView.items.length-1; i >= 0 ; i--) {
+            var item = $scope.flex.collectionView.items[i];
+
+            if(i == ($scope.flex.collectionView.items.length-1))    currLoan = item.limitLoanAmt;
+
+            currLoan = currLoan - item.outAmt + item.inAmt;
+            item.currLoanAmt = currLoan;
+        }
+    }, false);
   };
 
   // 조회일자 값 변경 이벤트 함수
@@ -52,5 +65,29 @@ app.controller('loanInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.dateLayer = true;
     }
   };
+
+    // 엑셀 다운로드
+    $scope.excelDownloadInfo = function () {
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: true,  //20220427 false 엑섹속도 cell 스타일 확인중
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            }, '여신현황_' + getCurDateTime() +'.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
+    };
 
 }]);

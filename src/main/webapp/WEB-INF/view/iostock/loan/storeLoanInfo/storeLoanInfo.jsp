@@ -50,6 +50,11 @@
 <%--    &lt;%&ndash;<button id="btnExcel" class="btn_skyblue fr" ng-click="excelDown()"><s:message code="cmm.excel.down"/></button>&ndash;%&gt;--%>
 <%--  </div>--%>
 
+    <div class="mt10 oh sb-select dkbr">
+        <%-- 엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownloadInfo()"><s:message code="cmm.excel.down"/></button>
+    </div>
+
   <div class="w100 mt10">
     <%--위즈모 테이블--%>
     <div class="wj-gridWrap" style="height: 450px; overflow-x: hidden; overflow-y: hidden; ">
@@ -60,7 +65,9 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="true"
-        item-formatter="_itemFormatter">
+        item-formatter="_itemFormatter"
+        ime-enabled="true"
+        id="wjGridStoreLoanInfoCtrl">
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="storeLoanInfo.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -68,6 +75,7 @@
         <wj-flex-grid-column header="<s:message code="storeLoanInfo.loanDate"/>" binding="loanDate" width="80" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeLoanInfo.outAmt"/>" binding="outAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeLoanInfo.inAmt"/>" binding="inAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeLoanInfo.limitLoanAmt"/>" binding="limitLoanAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeLoanInfo.currLoanAmt"/>" binding="currLoanAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeLoanInfo.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
 
@@ -82,4 +90,4 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoanInfo/storeLoanInfo.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/storeLoanInfo/storeLoanInfo.js?ver=20240627.01" charset="utf-8"></script>

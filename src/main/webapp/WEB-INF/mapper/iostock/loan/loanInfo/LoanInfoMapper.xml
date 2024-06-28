@@ -21,6 +21,11 @@
     -->
     <select id="getLoanInfoList" parameterType="loanInfoVO" resultType="DefaultMap">
         /* USE : LoanInfoMapper.getLoanInfoList */
+        <![CDATA[
+        SELECT  B.LOAN_DATE, B.SLIP_NO, B.OUT_AMT, B.IN_AMT, B.REMARK, B.ORDER_RANK, A.LIMIT_LOAN_AMT, A.CURR_LOAN_AMT
+        FROM    TB_PO_HQ_STORE_LOAN A
+        ,       (
+        ]]>
         <if test='dateFg != null and dateFg != ""'>
         <![CDATA[
         SELECT  '조회기간 후' AS LOAN_DATE, '' AS SLIP_NO, SUM(OUT_AMT) AS OUT_AMT, SUM(IN_AMT) AS IN_AMT, '' AS REMARK, '1' AS ORDER_RANK
@@ -32,17 +37,17 @@
                     AND     SLIP_FG     =   1
                     AND     PROC_FG     IN  ('20', '30')
                     UNION ALL
-                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + NVL(tphso.PENALTY_AMT, 0)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
                     FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
-                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
                     WHERE   tphso.STORE_CD    =   #{storeCd}
                     AND     tphso.IN_DATE     >   #{startDate}
                     AND     tphso.SLIP_FG     =   -1
                     AND     tphso.PROC_FG     =   '30'
-                    AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
-                    AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
-                    GROUP
-                    BY      tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                    UNION ALL
+                    SELECT  A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
+                    FROM    TB_PO_HQ_STORE_MONEY A
+                    WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     A.MONEY_DATE    >   #{startDate}
                 )
         HAVING  COUNT(*) > 0
         UNION ALL
@@ -62,9 +67,8 @@
                     AND     SLIP_FG     =   1
                     AND     PROC_FG     IN  ('20', '30')
                     UNION ALL
-                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + NVL(tphso.PENALTY_AMT, 0)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
                     FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
-                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
                     WHERE   tphso.STORE_CD    =   #{storeCd}
         ]]>
                     <if test='dateFg != null and dateFg != ""'>
@@ -73,10 +77,15 @@
         <![CDATA[
                     AND     tphso.SLIP_FG     =   -1
                     AND     tphso.PROC_FG     =   '30'
-                    AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
-                    AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
-                    GROUP
-                    BY      tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                    UNION ALL
+                    SELECT  A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
+                    FROM    TB_PO_HQ_STORE_MONEY A
+                    WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+        ]]>
+                    <if test='dateFg != null and dateFg != ""'>
+                    AND     A.MONEY_DATE     BETWEEN #{startDate} AND #{endDate}
+                    </if>
+        <![CDATA[
                 )
         ]]>
         <if test='dateFg != null and dateFg != ""'>
@@ -91,24 +100,26 @@
                     AND     SLIP_FG     =   1
                     AND     PROC_FG     IN  ('20', '30')
                     UNION ALL
-                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + SUM(tphsod.PENALTY_AMT)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
+                    SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + NVL(tphso.PENALTY_AMT, 0)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
                     FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
-                    ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
                     WHERE   tphso.STORE_CD    =   #{storeCd}
                     AND     tphso.IN_DATE     <   #{startDate}
                     AND     tphso.SLIP_FG     =   -1
                     AND     tphso.PROC_FG     =   '30'
-                    AND     tphsod.HQ_OFFICE_CD    =   tphso.HQ_OFFICE_CD
-                    AND     tphsod.SLIP_NO         =   tphso.SLIP_NO
-                    GROUP
-                    BY      tphso.IN_DATE, tphso.SLIP_NO, tphso.IN_TOT, tphso.REMARK
+                    UNION ALL
+                    SELECT  A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
+                    FROM    TB_PO_HQ_STORE_MONEY A
+                    WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    AND     A.MONEY_DATE    <   #{startDate}
                 )
         HAVING  COUNT(*) > 0
         ]]>
         </if>
         <![CDATA[
+                ) B
+        WHERE   A.STORE_CD  =   #{storeCd}
         ORDER
-        BY      ORDER_RANK, LOAN_DATE DESC, SLIP_NO DESC
+        BY      B.ORDER_RANK, B.LOAN_DATE DESC, B.SLIP_NO DESC
         ]]>
     </select>
 
