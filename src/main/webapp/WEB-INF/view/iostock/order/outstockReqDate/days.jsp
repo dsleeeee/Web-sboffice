@@ -84,7 +84,35 @@
         <wj-flex-grid-column header="<s:message code="outstockReqDate.thu"/>" binding="thu" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.fri"/>" binding="fri" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.sat"/>" binding="sat" width="50" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>" binding="daysRemark" width="*" align="left" is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startHourSun"  width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startMsSun"    width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endHourSun"    width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endMsSun"      width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startHourMon"  width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startMsMon"    width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endHourMon"    width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endMsMon"      width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startHourTue"  width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startMsTue"    width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endHourTue"    width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endMsTue"      width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startHourWed"  width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startMsWed"    width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endHourWed"    width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endMsWed"      width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startHourThu"  width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startMsThu"    width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endHourThu"    width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endMsThu"      width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startHourFri"  width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startMsFri"    width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endHourFri"    width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endMsFri"      width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startHourSat"  width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>" binding="startMsSat"    width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endHourSat"    width="40" align="left" is-read-only="false" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"   binding="endMsSat"      width="40" align="left" is-read-only="false" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.remark"/>" binding="daysRemark" width="80" align="left" is-read-only="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
@@ -105,6 +133,6 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/days.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/days.js?ver=20240627.01" charset="utf-8"></script>
 
 

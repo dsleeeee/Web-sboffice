@@ -116,6 +116,30 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             return false;
         }
 
+        // 이메일 최대길이 체크
+        if (nvl($("#rEmailAddr").val(), '') !== '' && nvl($("#rEmailAddr").val() + '', '').getByteLengthForOracle() > 100) {
+            msg = messages["vendr.emailAddr"] + messages["cmm.overLength"] + " 100 " +
+                ", 현재 : " + $("#rEmailAddr").val().getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+            $scope._popMsg(msg);
+            return false;
+        }
+
+        // 주소 최대길이 체크
+        if (nvl($("#rAddr").val(), '') !== '' && nvl($("#rAddr").val() + '', '').getByteLengthForOracle() > 100) {
+            msg = messages["vendr.addr"] + messages["cmm.overLength"] + " 100 " +
+                ", 현재 : " + $("#rAddr").val().getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+            $scope._popMsg(msg);
+            return false;
+        }
+
+        // 주소상세 최대길이 체크
+        if (nvl($("#rAddrDtl").val(), '') !== '' && nvl($("#rAddrDtl").val() + '', '').getByteLengthForOracle() > 100) {
+            msg = messages["vendr.addrDtl"] + messages["cmm.overLength"] + " 100 " +
+                ", 현재 : " + $("#rAddrDtl").val().getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+            $scope._popMsg(msg);
+            return false;
+        }
+
         /*// 거래처 구분 여부를 선택 해주세요.
         var msg = messages["vendr.vendorFg"] + messages["cmm.require.select"];
         if($scope.rVendorFg === "") {

@@ -1,3 +1,22 @@
+// 시 VALUE
+var Hh = [24];
+for(i =0 ; i < 24; i++){
+  var timeVal = i.toString();
+  if(i>=0 && i<=9){
+    timeVal = "0" + timeVal;
+  }
+  Hh[i] = {"name":timeVal,"value":timeVal}
+}
+
+// 분, 초 VALUE
+var MmSs = [60];
+for(i =0 ; i < 60; i++){
+  var timeVal = i.toString();
+  if(i>=0 && i<=9){
+    timeVal = "0" + timeVal;
+  }
+  MmSs[i] = {"name":timeVal,"value":timeVal}
+}
 /** 요일별 그리드 controller */
 app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
@@ -12,10 +31,13 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 그리드 DataMap 설정
     $scope.sysStatFgMap    = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
+    $scope.timeHourMap    = new wijmo.grid.DataMap(Hh, 'value', 'name');
+    $scope.timeMsMap    = new wijmo.grid.DataMap(MmSs, 'value', 'name');
     $scope.orderCloseYnMap = new wijmo.grid.DataMap([
       {id: "Y", name: messages["outstockReqDate.orderCloseYnY"]},
       {id: "N", name: messages["outstockReqDate.orderCloseYnN"]},
     ], 'id', 'name');
+
 
     // 그리드 링크 효과
     s.formatItem.addHandler(function (s, e) {
@@ -26,26 +48,56 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
         //   wijmo.addClass(e.cell, 'wj-custom-readonly');
         // }
       }
+
     });
 
     // 헤더머지
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
-      storeCd     : messages["outstockReqDate.storeCd"],
-      storeNm     : messages["outstockReqDate.storeNm"],
-      ownerNm     : messages["cmm.owner.nm"],
-      sysStatFg   : messages["outstockReqDate.sysStatFg"],
-      orderCloseYn: messages["outstockReqDate.orderCloseYn"],
-      sun         : messages["outstockReqDate.outstockReqDate"],
-      mon         : messages["outstockReqDate.outstockReqDate"],
-      tue         : messages["outstockReqDate.outstockReqDate"],
-      wed         : messages["outstockReqDate.outstockReqDate"],
-      thu         : messages["outstockReqDate.outstockReqDate"],
-      fri         : messages["outstockReqDate.outstockReqDate"],
-      sat         : messages["outstockReqDate.outstockReqDate"],
-      daysRemark  : messages["outstockReqDate.remark"],
+      storeCd       : messages["outstockReqDate.storeCd"],
+      storeNm       : messages["outstockReqDate.storeNm"],
+      ownerNm       : messages["cmm.owner.nm"],
+      sysStatFg     : messages["outstockReqDate.sysStatFg"],
+      orderCloseYn  : messages["outstockReqDate.orderCloseYn"],
+      sun           : messages["outstockReqDate.outstockReqDate"],
+      mon           : messages["outstockReqDate.outstockReqDate"],
+      tue           : messages["outstockReqDate.outstockReqDate"],
+      wed           : messages["outstockReqDate.outstockReqDate"],
+      thu           : messages["outstockReqDate.outstockReqDate"],
+      fri           : messages["outstockReqDate.outstockReqDate"],
+      sat           : messages["outstockReqDate.outstockReqDate"],
+      startHourSun  : messages["outstockReqDate.sun"],
+      startMsSun    : messages["outstockReqDate.sun"],
+      endHourSun    : messages["outstockReqDate.sun"],
+      endMsSun      : messages["outstockReqDate.sun"],
+      startHourMon  : messages["outstockReqDate.mon"],
+      startMsMon    : messages["outstockReqDate.mon"],
+      endHourMon    : messages["outstockReqDate.mon"],
+      endMsMon      : messages["outstockReqDate.mon"],
+      startHourTue  : messages["outstockReqDate.tue"],
+      startMsTue    : messages["outstockReqDate.tue"],
+      endHourTue    : messages["outstockReqDate.tue"],
+      endMsTue      : messages["outstockReqDate.tue"],
+      startHourWed  : messages["outstockReqDate.wed"],
+      startMsWed    : messages["outstockReqDate.wed"],
+      endHourWed    : messages["outstockReqDate.wed"],
+      endMsWed      : messages["outstockReqDate.wed"],
+      startHourThu  : messages["outstockReqDate.thu"],
+      startMsThu    : messages["outstockReqDate.thu"],
+      endHourThu    : messages["outstockReqDate.thu"],
+      endMsThu      : messages["outstockReqDate.thu"],
+      startHourFri  : messages["outstockReqDate.fri"],
+      startMsFri    : messages["outstockReqDate.fri"],
+      endHourFri    : messages["outstockReqDate.fri"],
+      endMsFri      : messages["outstockReqDate.fri"],
+      startHourSat  : messages["outstockReqDate.sat"],
+      startMsSat    : messages["outstockReqDate.sat"],
+      endHourSat    : messages["outstockReqDate.sat"],
+      endMsSat      : messages["outstockReqDate.sat"],
+      daysRemark    : messages["outstockReqDate.remark"]
     };
+
   };
 
 
@@ -66,6 +118,8 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
         verticalAlign: 'middle',
         textAlign    : 'center'
       });
+
+
 
       if ((panel.grid.columnHeaders.rows.length - 1) === r) {
         // 헤더의 전체선택 클릭 로직
@@ -153,6 +207,25 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = [];
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       $scope.flex.collectionView.itemsEdited[i].status = "U";
+
+      // 시작시간
+      $scope.flex.collectionView.itemsEdited[i].orderStartTimeSun = $scope.flex.collectionView.itemsEdited[i].startHourSun + $scope.flex.collectionView.itemsEdited[i].startMsSun;
+      $scope.flex.collectionView.itemsEdited[i].orderStartTimeMon = $scope.flex.collectionView.itemsEdited[i].startHourMon + $scope.flex.collectionView.itemsEdited[i].startMsMon;
+      $scope.flex.collectionView.itemsEdited[i].orderStartTimeTue = $scope.flex.collectionView.itemsEdited[i].startHourTue + $scope.flex.collectionView.itemsEdited[i].startMsTue;
+      $scope.flex.collectionView.itemsEdited[i].orderStartTimeWed = $scope.flex.collectionView.itemsEdited[i].startHourWed + $scope.flex.collectionView.itemsEdited[i].startMsWed;
+      $scope.flex.collectionView.itemsEdited[i].orderStartTimeThu = $scope.flex.collectionView.itemsEdited[i].startHourThu + $scope.flex.collectionView.itemsEdited[i].startMsThu;
+      $scope.flex.collectionView.itemsEdited[i].orderStartTimeFri = $scope.flex.collectionView.itemsEdited[i].startHourFri + $scope.flex.collectionView.itemsEdited[i].startMsFri;
+      $scope.flex.collectionView.itemsEdited[i].orderStartTimeSat = $scope.flex.collectionView.itemsEdited[i].startHourSat + $scope.flex.collectionView.itemsEdited[i].startMsSat;
+
+      // 마감시간
+      $scope.flex.collectionView.itemsEdited[i].orderEndTimeSun   = $scope.flex.collectionView.itemsEdited[i].endHourSun + $scope.flex.collectionView.itemsEdited[i].endMsSun;
+      $scope.flex.collectionView.itemsEdited[i].orderEndTimeMon   = $scope.flex.collectionView.itemsEdited[i].endHourMon + $scope.flex.collectionView.itemsEdited[i].endMsMon;
+      $scope.flex.collectionView.itemsEdited[i].orderEndTimeTue   = $scope.flex.collectionView.itemsEdited[i].endHourTue + $scope.flex.collectionView.itemsEdited[i].endMsTue;
+      $scope.flex.collectionView.itemsEdited[i].orderEndTimeWed   = $scope.flex.collectionView.itemsEdited[i].endHourWed + $scope.flex.collectionView.itemsEdited[i].endMsWed;
+      $scope.flex.collectionView.itemsEdited[i].orderEndTimeThu   = $scope.flex.collectionView.itemsEdited[i].endHourThu + $scope.flex.collectionView.itemsEdited[i].endMsThu;
+      $scope.flex.collectionView.itemsEdited[i].orderEndTimeFri   = $scope.flex.collectionView.itemsEdited[i].endHourFri + $scope.flex.collectionView.itemsEdited[i].endMsFri;
+      $scope.flex.collectionView.itemsEdited[i].orderEndTimeSat   = $scope.flex.collectionView.itemsEdited[i].endHourSat + $scope.flex.collectionView.itemsEdited[i].endMsSat;
+
       params.push($scope.flex.collectionView.itemsEdited[i]);
     }
     $scope._save("/iostock/order/outstockReqDate/days/save.sb", params, function () {

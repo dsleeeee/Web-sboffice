@@ -50,6 +50,10 @@
 		is-editable="true"
 		text-changed="_checkValidation(s)">
       </wj-combo-box>
+        <div class="w400px fl">
+          <p class="tl s14 mt5 ml5 lh15">* 시작시간/마감시간은 요청여부 [가능] 일 경우만 동작합니다.</p>
+        </div>
+
       <%--// 페이지 스케일  --%>
       <div class="tr">
         <%-- 신규등록 --%>
@@ -71,7 +75,7 @@
         control="flex"
         initialized="initGrid(s,e)"
         is-read-only="false"
-        item-formatter="_itemFormatter"
+        item-formatter="itemFormatter"
         ime-enabled="true">
 
         <!-- define columns -->
@@ -83,7 +87,10 @@
         <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDate"/>" binding="specificDate" width="100" align="center" format="date" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.specificDateRemark"/>" binding="specificDateRemark" width="*" align="left" is-read-only="false" max-length="100"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.outstockReqYn"/>" binding="outstockReqYn" width="70" align="center" data-map="outstockReqYnMap" is-read-only="false"></wj-flex-grid-column>
-
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>"   binding="startHour" width="40" align="left" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.startTime"/>"   binding="startMs"   width="40" align="left" data-map="timeMsMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"     binding="endHour"   width="40" align="left" data-map="timeHourMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.endTime"/>"     binding="endMs"     width="40" align="left" data-map="timeMsMap"></wj-flex-grid-column>
       </wj-flex-grid>
       <%-- ColumnPicker 사용시 include --%>
       <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -103,7 +110,7 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDate.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDate.js?ver=20240627.01" charset="utf-8"></script>
 
 <%-- 특정일 신규등록 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockReqDate/specificDateRegist.jsp">

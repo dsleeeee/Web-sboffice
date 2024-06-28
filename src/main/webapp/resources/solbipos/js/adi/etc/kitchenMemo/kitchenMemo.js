@@ -132,6 +132,14 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = new Array();
     for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
       if($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm !== ""){
+        // 주방메모 최대길이 체크
+        if (nvl($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm, '') !== '' &&
+            nvl($scope.flex.collectionView.itemsEdited[i].kitchnMemoNm + '', '').getByteLengthForOracle() > 50) {
+          var msg = messages["kitchenMemo.kitchnMemoNm"] + messages["cmm.overLength"] + " 50 " +
+              ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].kitchnMemoNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+          $scope._popMsg(msg);
+          return false;
+        }
         $scope.flex.collectionView.itemsEdited[i].status = "U";
         params.push($scope.flex.collectionView.itemsEdited[i]);
       } else {
@@ -141,6 +149,14 @@ app.controller('kitchenMemoCtrl', ['$scope', '$http', function ($scope, $http) {
     }
     for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
       if($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm !== ""){
+        // 주방메모 최대길이 체크
+        if (nvl($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm, '') !== '' &&
+            nvl($scope.flex.collectionView.itemsAdded[i].kitchnMemoNm + '', '').getByteLengthForOracle() > 50) {
+          var msg = messages["kitchenMemo.kitchnMemoNm"] + messages["cmm.overLength"] + " 50 " +
+              ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].kitchnMemoNm.getByteLengthForOracle()  + messages["cmm.bateLengthInfo"];
+          $scope._popMsg(msg);
+          return false;
+        }
         $scope.flex.collectionView.itemsAdded[i].status = "I";
         params.push($scope.flex.collectionView.itemsAdded[i]);
       } else {

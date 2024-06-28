@@ -293,6 +293,24 @@ app.controller('dlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
         console.log($scope.flex.collectionView);
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+
+            // 주소 최대길이 체크
+            if(nvl($scope.flex.collectionView.itemsEdited[i].addr, '') !== '' &&
+                nvl($scope.flex.collectionView.itemsEdited[i].addr + '', '').getByteLengthForOracle() > 200){
+                var msg = messages["dlvr.membr.addr"] + messages["cmm.overLength"] + " 200 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].addr.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                $scope._popMsg(msg);
+                return false;
+            }
+
+            // 상세주소 최대길이 체크
+            if(nvl($scope.flex.collectionView.itemsEdited[i].addrDtl, '') !== '' &&
+                nvl($scope.flex.collectionView.itemsEdited[i].addrDtl + '', '').getByteLengthForOracle() > 200){
+                var msg = messages["dlvr.membr.areaDetail"] + messages["cmm.overLength"] + " 200 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].addrDtl.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                $scope._popMsg(msg);
+                return false;
+            }
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
@@ -479,6 +497,21 @@ app.controller('dlvrTelCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             // 전화번호를 입력하세요.
             var msg = messages["regist.tel"] + messages["cmm.require.text"];
             if ($scope.flex.collectionView.itemsEdited[i].telNo === "") {
+                $scope._popMsg(msg);
+                return false;
+            }
+
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].telNo)) {
+                $scope._popMsg(messages["regist.tel"]+messages["cmm.require.number"]); // 연락처는 숫자만 입력할 수 있습니다.
+                return false;
+            }
+
+            // 전화번호 최대길이 체크
+            if(nvl($scope.flex.collectionView.itemsEdited[i].telNo, '') !== '' &&
+                nvl($scope.flex.collectionView.itemsEdited[i].telNo + '', '').getByteLengthForOracle() > 15){
+                var msg = messages["dlvr.membr.phoneNumber"] + messages["cmm.overLength"] + " 15 " +
+                    ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].telNo.getByteLengthForOracle() +  messages["cmm.bateLengthInfo"];
                 $scope._popMsg(msg);
                 return false;
             }

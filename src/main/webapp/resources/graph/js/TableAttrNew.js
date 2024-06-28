@@ -1450,6 +1450,32 @@ FormatAttr.prototype.typeSave = function() {
     	preview.stopEditing();
     }
 
+    //선택된 셀에서 스타일 정보 읽기
+    var cells = graph.getChildCells(graph.getDefaultParent(), true, true);
+    var initFontFamily;
+    var attrNm;
+    var msg;
+    for (var i = 0; i < cells.length; i++) {
+        var cell = cells[i];
+        var state = graph.view.getState(cell);
+        if (state != null) {
+            initFontFamily = mxUtils.getValue(state.style, mxConstants.STYLE_FONTFAMILY, null);
+            attrNm = cell.value;
+            if (nvl(initFontFamily, '') !== '' && nvl(initFontFamily+ '', '').getByteLengthForOracle() > 50) {
+                msg = messages["tableAttr.font"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + initFontFamily.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+                alert(msg)
+                return false;
+            }
+            if (nvl(attrNm, '') !== '' && nvl(attrNm+ '', '').getByteLengthForOracle() > 50) {
+                msg = messages["tableAttr.attrNm"] + messages["cmm.overLength"] + " 50 " +
+                    ", 현재 : " + attrNm.getByteLengthForOracle()  + messages["cmm.bateLengthInfo"];
+                alert(msg)
+                return false;
+            }
+        }
+    }
+
     var nodeGraph = null;
     var nodePreview = null;
 

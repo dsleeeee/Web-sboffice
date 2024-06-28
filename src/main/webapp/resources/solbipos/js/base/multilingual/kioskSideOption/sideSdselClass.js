@@ -76,18 +76,21 @@ app.controller('sideSdselClassCtrl', ['$scope', '$http', '$timeout', function ($
             for (var i = 0; i < params.length; i++) {
                 var item = params[i];
 
-                if (nvl(item.sdselClassEnNm + '', '').getByteLengthForOracle() > 100) {
-                    $scope._popMsg(messages["kioskSideOption.en"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                if (nvl(item.sdselClassEnNm + '', '').getByteLengthForOracle() > 50) {
+                    $scope._popMsg(messages["kioskSideOption.en"] + messages["cmm.overLength"] + " 50 " +
+                        ", 현재 : " + item.sdselClassEnNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);  // 영문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
 
-                if (nvl(item.sdselClassCnNm + '', '').getByteLengthForOracle() > 100) {
-                    $scope._popMsg(messages["kioskSideOption.cn"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                if (nvl(item.sdselClassCnNm + '', '').getByteLengthForOracle() > 50) {
+                    $scope._popMsg(messages["kioskSideOption.cn"] + messages["cmm.overLength"] + " 50 " +
+                        ", 현재 : " + item.sdselClassCnNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]);  // 중문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
 
-                if (nvl(item.sdselClassJpNm + '', '').getByteLengthForOracle() > 100) {
-                    $scope._popMsg(messages["kioskSideOption.jp"] + " " + messages["kioskSideOption.valueSize.chk.msg"]);  // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
+                if (nvl(item.sdselClassJpNm + '', '').getByteLengthForOracle() > 50) {
+                    $scope._popMsg(messages["kioskSideOption.jp"] + messages["cmm.overLength"] + " 50 " +
+                        ", 현재 : " + item.sdselClassJpNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]); // 일문 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다.
                     return false;
                 }
             }

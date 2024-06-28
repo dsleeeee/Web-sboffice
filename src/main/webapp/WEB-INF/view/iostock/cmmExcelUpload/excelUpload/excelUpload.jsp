@@ -720,8 +720,9 @@
                     }
 
                     // 회원명(한글) 최대길이 체크
-                    if (nvl(item.membrNm + '', '').getByteLengthForOracle() > 100) {
-                        msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"]; // 회원명(한글)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 100 (영문:2byte, 한글:3byte)
+                    if (nvl(item.membrNm + '', '').getByteLengthForOracle() > 50) {
+                        msg = messages["member.excel.nm.kr"] + messages["excelUpload.overLength"] + " 50 " +
+                            ", 현재 : " + item.membrNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 회원명(한글)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 50 현재 : (영문:1yte, 한글:3byte)
                         item.result = msg;
                         failCnt++;
                         continue;
@@ -735,7 +736,8 @@
 
                 // 회원명(영문) 최대길이 체크
                 if (nvl(item.memberEngNm, '') !== '' && nvl(item.memberEngNm + '', '').getByteLengthForOracle() > 100) {
-                    msg = messages["member.excel.nm.en"] + messages["excelUpload.overLength"] + " 100 " + messages["excelUpload.bateLengthInfo"]; // 회원명(영문)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 100 (영문:2byte, 한글:3byte)
+                    msg = messages["member.excel.nm.en"] + messages["excelUpload.overLength"] + " 100 " +
+                        ", 현재 : " + item.memberEngNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 회원명(영문)의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 100 현재 : (영문:1yte, 한글:3byte)
                     item.result = msg;
                     failCnt++;
                     continue;
@@ -826,7 +828,8 @@
 
                     // 회원카드번호 최대길이 체크
                     if (nvl(item.membrCardNo, '') !== '' && nvl(item.membrCardNo + '', '').getByteLengthForOracle() > 40) {
-                        msg = messages["member.excel.membrCardNo"] + messages["excelUpload.overLength"] + " 40 " + messages["excelUpload.bateLengthInfo"]; // 회원카드번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 40 (영문:2byte, 한글:3byte)
+                        msg = messages["member.excel.membrCardNo"] + messages["excelUpload.overLength"] + " 40 " +
+                            ", 현재 : " + item.membrCardNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 회원카드번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 40 현재 : (영문:1yte, 한글:3byte)
                         item.result = msg;
                         failCnt++;
                         continue;
@@ -837,7 +840,8 @@
                 if (nvl(item.birthday, '') !== '') {
                     // 생년월일 최대길이 체크
                     if (nvl(item.birthday + '', '').getByteLengthForOracle() > 8) {
-                        msg = messages["member.excel.birthday"] + messages["excelUpload.overLength"] + " 8 " + messages["excelUpload.bateLengthInfo"];
+                        msg = messages["member.excel.birthday"] + messages["excelUpload.overLength"] + " 8 " +
+                            ", 현재 : " + item.birthday.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 생년월일 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 8 현재 : (영문:1yte, 한글:3byte)
                         item.result = msg;
                         failCnt++;
                         continue;
@@ -925,7 +929,8 @@
                     }
                     // 전화번호 최대길이 체크
                     if (nvl(item.memberTelNo + '', '').getByteLengthForOracle() > 16) {
-                        msg = messages["member.excel.telNo"] + messages["excelUpload.overLength"] + " 16 " + messages["excelUpload.bateLengthInfo"]; // 전화번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 16 (영문:2byte, 한글:3byte)
+                        msg = messages["member.excel.telNo"] + messages["excelUpload.overLength"] + " 16 " +
+                            ", 현재 : " + item.memberTelNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 전화번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 16 현재 : (영문:1yte, 한글:3byte)
                         item.result = msg;
                         failCnt++;
                         continue;
@@ -949,7 +954,8 @@
                     }
                     // 단축번호 최대길이 체크
                     if (nvl(item.memberShortNo + '', '').getByteLengthForOracle() > 4) {
-                        msg = messages["member.excel.shortNo"] + messages["excelUpload.overLength"] + " 4 " + messages["excelUpload.bateLengthInfo"]; // 단축번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 4 (영문:2byte, 한글:3byte)
+                        msg = messages["member.excel.shortNo"] + messages["excelUpload.overLength"] + " 4 " +
+                            ", 현재 : " + item.memberShortNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 단축번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 4 현재 : (영문:1yte, 한글:3byte)
                         item.result = msg;
                         failCnt++;
                         continue;
@@ -968,7 +974,8 @@
                     }
                     // E-MAIL 최대길이 체크
                     if (nvl(item.memberEmail + '', '').getByteLengthForOracle() > 200) {
-                        msg = messages["member.excel.email"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"]; // E-MAIL의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 200 (영문:2byte, 한글:3byte)
+                        msg = messages["member.excel.email"] + messages["excelUpload.overLength"] + " 200 " +
+                            ", 현재 : " + item.memberEmail.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // E-MAIL의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 200 현재 : (영문:1yte, 한글:3byte)
                         item.result = msg;
                         failCnt++;
                         continue;
@@ -977,7 +984,8 @@
 
                 // 우편번호 최대길이 체크
                 if (nvl(item.memberPostNo, '') !== '' && nvl(item.memberPostNo + '', '').getByteLengthForOracle() > 5) {
-                    msg = messages["member.excel.postNo"] + messages["excelUpload.overLength"] + " 5 " + messages["excelUpload.bateLengthInfo"]; // 우편번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 5 (영문:2byte, 한글:3byte)
+                    msg = messages["member.excel.postNo"] + messages["excelUpload.overLength"] + " 5 " +
+                        ", 현재 : " + item.memberPostNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 우편번호의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 5 현재 : (영문:1yte, 한글:3byte)
                     item.result = msg;
                     failCnt++;
                     continue;
@@ -985,7 +993,8 @@
 
                 // 주소 최대길이 체크
                 if (nvl(item.memberAddr, '') !== '' && nvl(item.memberAddr + '', '').getByteLengthForOracle() > 200) {
-                    msg = messages["member.excel.addr"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"]; // 주소의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 200 (영문:2byte, 한글:3byte)
+                    msg = messages["member.excel.addr"] + messages["excelUpload.overLength"] + " 200 " +
+                        ", 현재 : " + item.memberAddr.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 주소의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 200 현재 : (영문:1yte, 한글:3byte)
                     item.result = msg;
                     failCnt++;
                     continue;
@@ -993,7 +1002,8 @@
 
                 // 상세주소 최대길이 체크
                 if (nvl(item.memberAddrDtl, '') !== '' && nvl(item.memberAddrDtl + '', '').getByteLengthForOracle() > 200) {
-                    msg = messages["member.excel.addrDtl"] + messages["excelUpload.overLength"] + " 200 " + messages["excelUpload.bateLengthInfo"]; // 상세주소의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 200 (영문:2byte, 한글:3byte)
+                    msg = messages["member.excel.addrDtl"] + messages["excelUpload.overLength"] + " 200 " +
+                        ", 현재 : " + item.memberAddrDtl.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; // 상세주소의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 200 현재 : (영문:1yte, 한글:3byte)
                     item.result = msg;
                     failCnt++;
                     continue;

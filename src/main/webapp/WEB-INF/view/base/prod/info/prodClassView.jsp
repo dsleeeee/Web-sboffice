@@ -348,8 +348,13 @@
           s_alert.pop("<s:message code='info.require.clsNm'/>");
           return;
         }
-        if(view.itemsAdded[i].prodClassNm.length > 15 ) {
-          s_alert.pop("<s:message code='info.prodClassNm'/><s:message code='cmm.regexp' arguments='15'/>");
+
+        // 상품분류명 최대길이 체크
+        if (nvl(view.itemsAdded[i].prodClassNm, '') !== '' &&
+                nvl(view.itemsAdded[i].prodClassNm + '', '').getByteLengthForOracle() > 50) {
+          var msg = messages["info.prodClassNm"] + messages["cmm.overLength"] + " 50 "  +
+                  ", 현재 : " + view.itemsAdded[i].prodClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+          s_alert.pop(msg);
           return;
         }
 
@@ -373,8 +378,12 @@
             }
           }
         }
-        if(view.itemsEdited[i].prodClassNm.length > 15 ) {
-          s_alert.pop("<s:message code='info.prodClassNm'/><s:message code='cmm.regexp' arguments='15'/>");
+        // 상품분류명 최대길이 체크
+        if (nvl(view.itemsEdited[i].prodClassNm, '') !== '' &&
+                nvl(view.itemsEdited[i].prodClassNm + '', '').getByteLengthForOracle() > 50) {
+          var msg = messages["info.prodClassNm"] + messages["cmm.overLength"] + " 50 "  +
+                  ", 현재 : " + view.itemsEdited[i].prodClassNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+          s_alert.pop(msg);
           return;
         }
 

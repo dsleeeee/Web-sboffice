@@ -147,6 +147,14 @@ app.controller('depositViewCtrl', ['$scope', '$http', function ($scope, $http) {
           return false;
         }
 
+        // 계정명 최대길이 체크
+        if (nvl(item.accntNm, '') !== '' && nvl(item.accntNm + '', '').getByteLengthForOracle() > 50) {
+          msg = messages["accntManage.deposit"] + messages["cmm.overLength"] + " 50 " +
+              ", 현재 : " + item.accntNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+          $scope._popMsg(msg);
+          return false;
+        }
+
         if (orgnFg === "STORE") {
           if (hqOfficeCd !== "00000") {
             if (item.accntCd !== "자동채번") {
@@ -343,6 +351,14 @@ app.controller('withdrawCtrl', ['$scope', '$http', function ($scope, $http) {
 
         if (item.accntNm === null || item.accntNm === '' || item.accntNm === undefined) {
           $scope._popMsg(messages["accntManage.withdraw"] + messages["accntManage.chk.accntNm"]); // 출금계정의 계정명을 반드시 입력하세요.
+          return false;
+        }
+
+        // 계정명 최대길이 체크
+        if (nvl(item.accntNm, '') !== '' && nvl(item.accntNm + '', '').getByteLengthForOracle() > 50) {
+          msg = messages["accntManage.deposit"] + messages["cmm.overLength"] + " 50 " +
+              ", 현재 : " + item.accntNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+          $scope._popMsg(msg);
           return false;
         }
 

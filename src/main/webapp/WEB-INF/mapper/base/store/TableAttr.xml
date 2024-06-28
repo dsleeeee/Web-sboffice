@@ -183,7 +183,7 @@
            A.WIDTH = #{width},
            A.HEIGHT = #{height},
            A.TEXTALIGN_FG = #{textalignFg},
-           A.IMG_NM = #{imgNm},
+<!--        A.IMG_NM = #{imgNm}, 컬럼길이차이(서버-포스) 관련 수정 중 등록화면이 없어서 주석처리 -->
            A.FONT_NM = #{fontNm},
            A.FONT_SIZE = #{fontSize},
            A.FONT_STYLE_FG = #{fontStyleFg},
@@ -204,7 +204,7 @@
         A.WIDTH,
         A.HEIGHT,
         A.TEXTALIGN_FG,
-        A.IMG_NM,
+<!--        A.IMG_NM, 컬럼길이차이(서버-포스) 관련 수정 중 등록화면이 없어서 주석처리 -->
         A.FONT_NM,
         A.FONT_SIZE,
         A.FONT_STYLE_FG,
@@ -225,7 +225,7 @@
         #{width},
         #{height},
         #{textalignFg},
-        #{imgNm},
+<!--        #{imgNm}, 컬럼길이차이(서버-포스) 관련 수정 중 등록화면이 없어서 주석처리 -->
         #{fontNm},
         #{fontSize},
         #{fontStyleFg},

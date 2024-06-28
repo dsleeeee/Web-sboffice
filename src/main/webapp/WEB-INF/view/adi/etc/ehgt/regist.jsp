@@ -233,15 +233,29 @@
       }
 
 
+      var chkLeng = true;
       $(".crncy-item").each(function(index, element) {
+        //  통화코드 최대길이 체크
+        if (nvl($(this).data("cd"), '') !== '' && nvl($(this).data("cd") + '', '').getByteLengthForOracle() > 3) {
+          var msg = messages["ehgt.crncy"] + messages["excelUpload.overLength"] + " 3 " +
+                  ", 현재 : " + $(this).data("cd").getByteLengthForOracle() + messages["excelUpload.bateLengthInfo"];
+          s_alert.pop(msg);
+          chkLeng = false;
+          return false;
+        }
         paramArr.push({
           saleDate:getDate(saleDate),
           crncyCd:$(this).data("cd"),
           crncyAmt:$(this).data("unit"),
           krwAmt:removeComma($(this).val())
         });
-
       });
+
+      if(!chkLeng){
+        return false;
+      }
+
+
 
       $.postJSONArray("${baseUrl}/save.sb", paramArr, function(result) {
         s_alert.pop("<s:message code='cmm.saveSucc' />");
