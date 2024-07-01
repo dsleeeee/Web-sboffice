@@ -71,7 +71,7 @@
                             ,       DATE_QTY AS BASE_QTY
                             ,       AVG_COST_UPRC AS BASE_TOT
                             FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
-                            WHERE  STORE_CD   	  (+) = #{storeCd}
+                            WHERE  STORE_CD   	  IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                             AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
                     ) v1
                     , (
@@ -80,7 +80,7 @@
                             ,       DATE_QTY AS CLOSE_QTY
                             ,       AVG_COST_UPRC AS CLOSE_TOT
                             FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
-                            WHERE  STORE_CD  	  (+) = #{storeCd}
+                            WHERE  STORE_CD  	  IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                             AND    THE_DATE      (+) = #{startDate}
                     ) v2
                 WHERE TSSSD.STORE_CD     = TMP.STORE_CD
@@ -203,7 +203,7 @@
                             ,       DATE_QTY AS BASE_QTY
                             ,       AVG_COST_UPRC AS BASE_TOT
                             FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
-                            WHERE  STORE_CD   	  (+) = #{storeCd}
+                            WHERE  STORE_CD   	  IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                             AND    THE_DATE      (+) = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
                     ) v1
                     , (
@@ -212,7 +212,7 @@
                             ,       DATE_QTY AS CLOSE_QTY
                             ,       AVG_COST_UPRC AS CLOSE_TOT
                             FROM   TB_ST_STORE_STOCK_CUR_DATE_V01
-                            WHERE  STORE_CD  	  (+) = #{storeCd}
+                            WHERE  STORE_CD  	  IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                             AND    THE_DATE      (+) = #{startDate}
                     ) v2
                 WHERE TSSSD.STORE_CD     = TMP.STORE_CD
