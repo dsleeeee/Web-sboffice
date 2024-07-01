@@ -35,8 +35,8 @@
                          , SF_ZERO_TO_NULL(SUM(DISUSE_QTY / TMP.PO_UNIT_QTY))       AS DISUSE_QTY /* 재고폐기 수량*/
                          , SF_ZERO_TO_NULL(SUM(ADJ_QTY / TMP.PO_UNIT_QTY))          AS ADJ_QTY /* 재고조정 수량*/
                          , SF_ZERO_TO_NULL(SUM(SET_IN_QTY / TMP.PO_UNIT_QTY))       AS SET_IN_QTY /* 세트생성 수량*/
-                         , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / THP.PO_UNIT_QTY))      AS BASE_QTY /* 기초재고수량 */
-                         , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / THP.PO_UNIT_QTY))     AS CLOSE_QTY /* 기말재고수량 */
+                         , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / TMP.PO_UNIT_QTY))      AS BASE_QTY /* 기초재고수량 */
+                         , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / TMP.PO_UNIT_QTY))     AS CLOSE_QTY /* 기말재고수량 */
                      </if>
                      <if test='unitFg == "0"'>
                          , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY))   AS STORE_IN_QTY /* 매장입고 수량*/
@@ -168,8 +168,8 @@
                         , SF_ZERO_TO_NULL(SUM(DISUSE_QTY / TMP.PO_UNIT_QTY))       AS DISUSE_QTY /* 재고폐기 수량*/
                         , SF_ZERO_TO_NULL(SUM(ADJ_QTY / TMP.PO_UNIT_QTY))          AS ADJ_QTY /* 재고조정 수량*/
                         , SF_ZERO_TO_NULL(SUM(SET_IN_QTY / TMP.PO_UNIT_QTY))       AS SET_IN_QTY /* 세트생성 수량*/
-                        , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / THP.PO_UNIT_QTY))      AS BASE_QTY /* 기초재고수량 */
-                        , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / THP.PO_UNIT_QTY))     AS CLOSE_QTY /* 기말재고수량 */
+                        , SF_ZERO_TO_NULL(SUM(v1.BASE_QTY / TMP.PO_UNIT_QTY))      AS BASE_QTY /* 기초재고수량 */
+                        , SF_ZERO_TO_NULL(SUM(v2.CLOSE_QTY / TMP.PO_UNIT_QTY))     AS CLOSE_QTY /* 기말재고수량 */
                     </if>
                     <if test='unitFg == "0"'>
                         , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY))   AS STORE_IN_QTY /* 매장입고 수량*/
