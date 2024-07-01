@@ -189,6 +189,7 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
     $scope._save("/store/manage/storeManage/storeManage/saveKitchenPrintProduct.sb", params,
         function(){
           $scope._popMsg(messages["cmm.saveSucc"]);
+          $scope.getKitchenPrintList();
           //재로딩
           $scope.getProductList();
         }
@@ -215,6 +216,8 @@ app.controller('kitchenPrintProductCtrl', ['$scope', '$http', function ($scope, 
     $scope._save("/store/manage/storeManage/storeManage/saveKitchenPrintProduct.sb", params,
       function(){
         $scope._popMsg(messages["cmm.saveSucc"]);
+
+        $scope.getKitchenPrintList();
         //재로딩
         $scope.getProductList();
       }

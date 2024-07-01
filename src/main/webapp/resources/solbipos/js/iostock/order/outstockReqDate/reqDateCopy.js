@@ -74,6 +74,7 @@ app.controller('reqDateCopyDaysCtrl', ['$scope', '$http', function ($scope, $htt
     s.allowMerging = 2;
     s.columnHeaders.rows.push(new wijmo.grid.Row());
     s.columnHeaders.rows[0].dataItem = {
+      gChk        : messages["cmm.chk"],
       storeCd     : messages["outstockReqDate.storeCd"],
       storeNm     : messages["outstockReqDate.storeNm"],
       ownerNm     : messages["cmm.owner.nm"],
