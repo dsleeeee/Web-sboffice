@@ -168,6 +168,13 @@
                     </if>
                 )
             )
+            WHERE 1=1
+            <if test="ssOrgnNm != null and ssOrgnNm != ''">
+                AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+            </if>
+            <if test="rrOrgnNm != null and rrOrgnNm != ''">
+                AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+            </if>
         ) hmt,
         (
             SELECT
