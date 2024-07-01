@@ -68,8 +68,9 @@
         item-formatter="itemFormatter">
 
         <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="20" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="*" align="left" format="cDate" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockReqDate.storeNm"/>" binding="storeNm" width="80" align="left" format="cDate" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="cmm.owner.nm"/>" binding="ownerNm" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.sysStatFg"/>" binding="sysStatFg" width="50" align="center" data-map="sysStatFgMap" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockReqDate.orderCloseYn"/>" binding="orderCloseYn" width="80" align="center" data-map="orderCloseYnMap" is-read-only="true"></wj-flex-grid-column>
@@ -159,6 +160,6 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/reqDateCopy.js?ver=20240627.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/reqDateCopy.js?ver=20240701.01" charset="utf-8"></script>
 
 

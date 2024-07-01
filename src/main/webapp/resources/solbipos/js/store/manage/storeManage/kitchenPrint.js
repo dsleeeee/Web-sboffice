@@ -221,10 +221,12 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         }
       }
 
-      var numChkexp = /[^0-9]/g;
-      if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].prterNetPort)) {
-        $scope._popMsg(messages["storeManage.prterNetPort"]+messages["cmm.require.number"]); // TCP/포트는 숫자만 입력할 수 있습니다.
-        return false;
+      if($scope.flex.collectionView.itemsEdited[i].prterNetPort !== "" && $scope.flex.collectionView.itemsEdited[i].prterNetPort !== null && $scope.flex.collectionView.itemsEdited[i].prterNetPort !== undefined){
+        var numChkexp = /[^0-9]/g;
+        if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].prterNetPort)) {
+          $scope._popMsg(messages["storeManage.prterNetPort"] + messages["cmm.require.number"]); // TCP/포트는 숫자만 입력할 수 있습니다.
+          return false;
+        }
       }
       // TCP/포트 최대길이 체크
       if (nvl($scope.flex.collectionView.itemsEdited[i].prterNetPort, '') !== '' &&
@@ -250,10 +252,12 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         }
       }
 
-      var numChkexp = /[^0-9]/g;
-      if (numChkexp.test($scope.flex.collectionView.itemsAdded[i].prterNetPort)) {
-        $scope._popMsg(messages["storeManage.prterNetPort"]+messages["cmm.require.number"]); // TCP/포트는 숫자만 입력할 수 있습니다.
-        return false;
+      if($scope.flex.collectionView.itemsAdded[i].prterNetPort !== "" && $scope.flex.collectionView.itemsAdded[i].prterNetPort !== null && $scope.flex.collectionView.itemsAdded[i].prterNetPort !== undefined){
+        var numChkexp = /[^0-9]/g;
+        if (numChkexp.test($scope.flex.collectionView.itemsAdded[i].prterNetPort)) {
+          $scope._popMsg(messages["storeManage.prterNetPort"] + messages["cmm.require.number"]); // TCP/포트는 숫자만 입력할 수 있습니다.
+          return false;
+        }
       }
 
       // TCP/포트 최대길이 체크
