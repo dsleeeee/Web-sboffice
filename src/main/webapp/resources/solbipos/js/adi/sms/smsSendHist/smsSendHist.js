@@ -180,6 +180,13 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.ssOrgnCd = $scope.ssOrgnCd;
+        params.ssOrgnNm = $scope.ssOrgnNm;
+        params.subject = $scope.subject;
+        params.msgContent = $scope.msgContent;
+        if(orgnFg == "HQ") {
+            params.gubunCombo = $scope.gubunCombo;
+        }
         params.storeCds = $("#smsSendHistStoreCd").val();
         params.listScale = $scope.listScale;
 
@@ -224,6 +231,13 @@ app.controller('smsSendHistCtrl', ['$scope', '$http', '$timeout', function ($sco
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.ssOrgnCd = $scope.ssOrgnCd;
+        params.ssOrgnNm = $scope.ssOrgnNm;
+        params.subject = $scope.subject;
+        params.msgContent = $scope.msgContent;
+        if(orgnFg == "HQ") {
+            params.gubunCombo = $scope.gubunCombo;
+        }
         params.storeCds = $("#smsSendHistStoreCd").val();
 
         $scope._broadcast('smsSendHistExcelCtrl', params);

@@ -54,6 +54,12 @@ public class SmsSendHistVO extends PageVO {
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
 
+    /** 송신자 소속코드 */
+    private String ssOrgnCd;
+
+    /** 송신자 소속명 */
+    private String ssOrgnNm;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -105,4 +111,12 @@ public class SmsSendHistVO extends PageVO {
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
     }
+
+    public String getSsOrgnCd() { return ssOrgnCd; }
+
+    public void setSsOrgnCd(String ssOrgnCd) { this.ssOrgnCd = ssOrgnCd; }
+
+    public String getSsOrgnNm() { return ssOrgnNm; }
+
+    public void setSsOrgnNm(String ssOrgnNm) { this.ssOrgnNm = ssOrgnNm; }
 }

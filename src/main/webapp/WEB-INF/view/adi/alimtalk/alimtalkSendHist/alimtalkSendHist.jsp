@@ -42,23 +42,41 @@
                     </div>
                 </td>
             </tr>
-            <c:if test="${orgnFg eq 'HQ'}">
+            <c:if test="${orgnFg eq 'MASTER'}">
                 <tr>
-                    <%-- 제목 --%>
+                    <%-- 보내는이 소속코드 --%>
                     <th>
-                        <s:message code="alimtalkSendHist.subject" />
+                        <s:message code="alimtalkSendHist.sOrgnCd"/>
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchSubject" ng-model="subject" onkeyup="fnNxBtnSearch('2');"/>
+                        <input type="text" class="sb-input w100" id="srchSsOrgnCd" ng-model="ssOrgnCd" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
-                        <%-- 메세지 --%>
+                    <%-- 보내는이 소속명 --%>
                     <th>
-                        <s:message code="alimtalkSendHist.msgContent" />
+                        <s:message code="alimtalkSendHist.sOrgnNm"/>
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchMsgContent" ng-model="msgContent" onkeyup="fnNxBtnSearch('2');"/>
+                        <input type="text" class="sb-input w100" id="srchSsOrgnNm" ng-model="ssOrgnNm" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                 </tr>
+            </c:if>
+            <tr>
+                <%-- 제목 --%>
+                <th>
+                    <s:message code="alimtalkSendHist.subject" />
+                </th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchSubject" ng-model="subject" onkeyup="fnNxBtnSearch('2');"/>
+                </td>
+                    <%-- 메세지 --%>
+                <th>
+                    <s:message code="alimtalkSendHist.msgContent" />
+                </th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchMsgContent" ng-model="msgContent" onkeyup="fnNxBtnSearch('2');"/>
+                </td>
+            </tr>
+            <c:if test="${orgnFg eq 'HQ'}">
                 <tr>
                     <%-- 조회구분 --%>
                     <th>
@@ -105,9 +123,9 @@
                     is-editable="false"
                     initialized="initComboBox(s)">
             </wj-combo-box>
-            <%-- 엑셀다운로드 --%>
+            <%-- 조회조건 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
-                <s:message code="cmm.excel.down" />
+                <s:message code="cmm.excel.downCondition" />
             </button>
         </div>
 
@@ -190,7 +208,11 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var orgnFg = "${orgnFg}";
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20240702.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">--%>
