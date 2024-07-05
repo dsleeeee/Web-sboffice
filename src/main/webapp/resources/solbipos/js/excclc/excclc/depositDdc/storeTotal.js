@@ -165,20 +165,23 @@ app.controller('storeTotalDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
 
     $scope.$on("storeTotalDtlCtrl", function(event, data) {
-        
+
         // 상세내역 리스트 조회
         $scope.searchStoreTotalDtl(data);
         event.preventDefault();
 
     });
-    
+
     // 상세내역 리스트 조회
     $scope.searchStoreTotalDtl = function (data) {
 
         var params = {};
-        params.startDate = data.startDate;
-        params.endDate = data.endDate;
-        params.storeCd = data.storeCd;
+        if(data !== null)
+        {
+            params.startDate = data.startDate;
+            params.endDate = data.endDate;
+            params.storeCd = data.storeCd;
+        }
 
         $scope._inquiryMain('/excclc/excclc/depositDdc/getStoreTotalDtlList.sb', params);
 

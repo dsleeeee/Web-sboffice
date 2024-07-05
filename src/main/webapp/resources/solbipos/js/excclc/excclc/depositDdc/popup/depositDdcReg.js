@@ -26,7 +26,7 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
         $scope.setCombo();
 
         if(data.seqNo !== undefined && data.seqNo !== null && data.seqNo !== ""){
-            
+
             // hidden 키값 셋팅
             $("#hdMoneyDate").val(data.moneyDate);
             $("#hdStoreCd").val(data.storeCd);
@@ -36,9 +36,6 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             // title 셋팅
             $("#lblTitle").text(messages["depositDdc.depositDdcMod"]);
 
-            // 기존 임금/기타공제 정보 셋팅
-            $scope.setDepositDdc();
-
             //  키값 정보 수정 불가
             $("#moneyDate").attr("disabled", true);
             $("#moneyDate").css('background-color', '#F0F0F0');
@@ -47,6 +44,10 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             $("#moneyStoreSelectCancelBtn").css("display", "none");
             $("#btnDel").css("display", "");
 
+            $("#moneyStorebtnCancelStoreCd").css("display", "none");
+
+            // 기존 임금/기타공제 정보 셋팅
+            $scope.setDepositDdc();
         }else{
 
             // title 셋팅
@@ -59,6 +60,8 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             $("#moneyStoreNm").css('background-color', '#FFFFFF');
             $("#moneyStoreSelectCancelBtn").css("display", "");
             $("#btnDel").css("display", "none");
+
+            $("#moneyStorebtnCancelStoreCd").css("display", "");
         }
 
     });
@@ -77,9 +80,9 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
 
                 $("#moneyStoreNm").val("[" + $("#hdStoreCd").val() + "] " + result.data.data.storeNm);
                 $("#moneyStoreCd").val($("#hdStoreCd").val());
-                $scope.moneyFgCombo.selectedValue = result.data.data.moneyFg;
                 $("#moneyAmt").val(result.data.data.moneyAmt);
                 $("#moneyRemark").val(result.data.data.remark);
+                $scope.moneyFgCombo.selectedValue = result.data.data.moneyFg;
             }
 
         });
@@ -219,7 +222,7 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
         $scope.moneyDate.value = getCurDate('-');
         $("#moneyStoreCd").val("");
         $("#moneyStoreNm").val("");
-        $scope.moneyFgCombo.selectedIndex = 0;
+        //$scope.moneyFgCombo.selectedIndex = 0;
         $("#moneyAmt").val("");
         $("#moneyRemark").val("");
 
