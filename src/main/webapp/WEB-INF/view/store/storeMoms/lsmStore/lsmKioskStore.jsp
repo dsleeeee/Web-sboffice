@@ -12,14 +12,69 @@
             <a href="#" class="open fl"><s:message code="lsmStore.kiosk"/></a>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <%-- 조회 --%>
-                <button class="btn_blue fr" id="nxBtnSearch" ng-click="_broadcast('lsmKioskStoreCtrl')">
+                <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('lsmKioskStoreCtrl',1);">
                     <s:message code="cmm.search"/>
                 </button>
             </div>
         </div>
+        <table class="searchTbl">
+            <colgroup>
+                <col class="w15"/>
+                <col class="w35"/>
+                <col class="w15"/>
+                <col class="w35"/>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
+                    <td>
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="M"/>
+                            <jsp:param name="targetId" value="lsmKiosk"/>
+                        </jsp:include>
+                        <%--// 매장선택 모듈 사용시 include --%>
+                    </td>
+                    <%-- 매장브랜드 --%>
+                    <th><s:message code="cmm.moms.storeHqBrand"/></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchStoreHqBrandCdCombo"
+                                    ng-model="storeHqBrandCd"
+                                    items-source="_getComboData('storeHqBrandCdCombo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="srchStoreHqBrandCdCombo">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><s:message code="lsmStore.kioskGrpCd" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchTuClsType" ng-model="srchTuClsType" onkeyup="fnNxBtnSearch('2');" />
+                    </td>
+                    <th><s:message code="lsmStore.kioskGrpNm" /></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchTuClsTypeNm" ng-model="srchTuClsTypeNm" onkeyup="fnNxBtnSearch('2');" />
+                    </td>
+                </tr>
+            <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                <input type="hidden" id="lsmKioskCd" value="${sessionInfo.storeCd}"/>
+            </c:if>
+            </tbody>
+        </table>
         <div class="mt10 oh sb-select dkbr">
             <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+            <%-- 엑셀업로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelUpload()"><s:message code="cmm.excel.excelUpload"/></button>
+            <%-- 양식다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="sampleDownload()"><s:message code="cmm.excel.sampleDown"/></button>
+
         </div>
 
         <div class="w100 mt10">
@@ -87,5 +142,8 @@
         <%--//엑셀 리스트 --%>
     </div>
 </div>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/lsmStore/lsmKioskStore.js?ver=20240607.01" charset="utf-8"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/lsmStore/lsmKioskStore.js?ver=20243018.01" charset="utf-8"></script>
+<%-- 엑셀업로드 --%>
+<c:import url="/WEB-INF/view/store/storeMoms/lsmStore/excelUploadLsmKioskStore.jsp">
+</c:import>

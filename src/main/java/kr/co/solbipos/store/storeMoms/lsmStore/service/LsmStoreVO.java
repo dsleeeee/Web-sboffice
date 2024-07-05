@@ -1,6 +1,7 @@
 package kr.co.solbipos.store.storeMoms.lsmStore.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
+import kr.co.solbipos.base.common.enums.InFg;
 
 /**
  * @Class Name : LsmStoreVO.java
@@ -70,6 +71,96 @@ public class LsmStoreVO extends PageVO {
 
     /** 그룹코드 */
     private String branchCd;
+
+    /** 조회매장 */
+    private String storeCds;
+
+    /** 키오스크그룹코드 */
+    private String tuClsType;
+
+    /** 키오스크그룹명 */
+    private String tuClsTypeNm;
+
+    /** 키오스크카테고리코드 */
+    private String tuClsCd;
+
+    /** 포스번호 */
+    private String posNo;
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
+    /** 구분값 */
+    private String clsFg;
+
+    /** 키맵코드 */
+    private String tuKeyCd;
+
+    /** 페이지수 */
+    private String tuPage;
+
+    /** Display 순서 */
+    private String indexNo;
+
+    /** 상품코드 */
+    private String prodCd;
+
+    /** 세션 ID */
+    private String sessionId;
+    
+    /** 터치키그룹코드 */
+    private String tukeyGrpCd;
+
+    /** 터치키그룹명 */
+    private String tukeyGrpNm;
+
+    /** 터치키코드 */
+    private String tukeyCd;
+
+    /** 터치키분류코드 */
+    private String tukeyClassCd;
+
+    /** 페이지번호 */
+    private String pageNo;
+
+    /** X값 */
+    private String x;
+
+    /** Y값 */
+    private String y;
+
+    /** 너비 */
+    private String width;
+
+    /** 높이 */
+    private String height;
+
+    /** 스타일코드 */
+    private String styleCd;
+
+    /** 폰트사이즈 */
+    private String fontSize;
+
+    /** 폰트색상 */
+    private String fontColor;
+
+    /** 바탕색상 */
+    private String fillColor;
+
+    /** 이미지명 */
+    private String ImgNm;
+
+    /** 입력구분 */
+    private InFg inFg;
+
+    /** 환경설정값 */
+    private String envstVal;
+
+    /** 처리갯수 */
+    private int progressCnt;
+
+    /** 다운로드 구분 */
+    private String downFg;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -197,5 +288,245 @@ public class LsmStoreVO extends PageVO {
 
     public void setBranchCd(String branchCd) {
         this.branchCd = branchCd;
+    }
+
+    public String getStoreCds() {
+        return storeCds;
+    }
+
+    public void setStoreCds(String storeCds) {
+        this.storeCds = storeCds;
+    }
+
+    public String getTuClsType() {
+        return tuClsType;
+    }
+
+    public void setTuClsType(String tuClsType) {
+        this.tuClsType = tuClsType;
+    }
+
+    public String getTuClsTypeNm() {
+        return tuClsTypeNm;
+    }
+
+    public void setTuClsTypeNm(String tuClsTypeNm) {
+        this.tuClsTypeNm = tuClsTypeNm;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getTuClsCd() {
+        return tuClsCd;
+    }
+
+    public void setTuClsCd(String tuClsCd) {
+        this.tuClsCd = tuClsCd;
+    }
+
+    public String getPosNo() {
+        return posNo;
+    }
+
+    public void setPosNo(String posNo) {
+        this.posNo = posNo;
+    }
+
+    public String getClsFg() {
+        return clsFg;
+    }
+
+    public void setClsFg(String clsFg) {
+        this.clsFg = clsFg;
+    }
+
+    public String getTuKeyCd() {
+        return tuKeyCd;
+    }
+
+    public void setTuKeyCd(String tuKeyCd) {
+        this.tuKeyCd = tuKeyCd;
+    }
+
+    public String getTuPage() {
+        return tuPage;
+    }
+
+    public void setTuPage(String tuPage) {
+        this.tuPage = tuPage;
+    }
+
+    public String getIndexNo() {
+        return indexNo;
+    }
+
+    public void setIndexNo(String indexNo) {
+        this.indexNo = indexNo;
+    }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getTukeyGrpCd() {
+        return tukeyGrpCd;
+    }
+
+    public void setTukeyGrpCd(String tukeyGrpCd) {
+        this.tukeyGrpCd = tukeyGrpCd;
+    }
+
+    public String getTukeyGrpNm() {
+        return tukeyGrpNm;
+    }
+
+    public void setTukeyGrpNm(String tukeyGrpNm) {
+        this.tukeyGrpNm = tukeyGrpNm;
+    }
+
+    public String getTukeyCd() {
+        return tukeyCd;
+    }
+
+    public void setTukeyCd(String tukeyCd) {
+        this.tukeyCd = tukeyCd;
+    }
+
+    public String getTukeyClassCd() {
+        return tukeyClassCd;
+    }
+
+    public void setTukeyClassCd(String tukeyClassCd) {
+        this.tukeyClassCd = tukeyClassCd;
+    }
+
+    public String getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(String pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public String getX() {
+        return x;
+    }
+
+    public void setX(String x) {
+        this.x = x;
+    }
+
+    public String getY() {
+        return y;
+    }
+
+    public void setY(String y) {
+        this.y = y;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getStyleCd() {
+        return styleCd;
+    }
+
+    public void setStyleCd(String styleCd) {
+        this.styleCd = styleCd;
+    }
+
+    public String getFontSize() {
+        return fontSize;
+    }
+
+    public void setFontSize(String fontSize) {
+        this.fontSize = fontSize;
+    }
+
+    public String getFontColor() {
+        return fontColor;
+    }
+
+    public void setFontColor(String fontColor) {
+        this.fontColor = fontColor;
+    }
+
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(String fillColor) {
+        this.fillColor = fillColor;
+    }
+
+    public String getImgNm() {
+        return ImgNm;
+    }
+
+    public void setImgNm(String imgNm) {
+        ImgNm = imgNm;
+    }
+
+    public InFg getInFg() {
+        return inFg;
+    }
+
+    public void setInFg(InFg inFg) {
+        this.inFg = inFg;
+    }
+
+    public String getEnvstVal() {
+        return envstVal;
+    }
+
+    public void setEnvstVal(String envstVal) {
+        this.envstVal = envstVal;
+    }
+
+    public int getProgressCnt() {
+        return progressCnt;
+    }
+
+    public void setProgressCnt(int progressCnt) {
+        this.progressCnt = progressCnt;
+    }
+
+    public String getDownFg() {
+        return downFg;
+    }
+
+    public void setDownFg(String downFg) {
+        this.downFg = downFg;
     }
 }
