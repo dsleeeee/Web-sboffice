@@ -10,7 +10,7 @@
        value=<c:choose><c:when test="${param.targetTypeFg == 'M'}"><s:message code="cmm.all"/></c:when><c:otherwise><s:message code="cmm.select"/></c:otherwise></c:choose>
        ng-click="_pageView('<c:out value="${param.targetId}"/>Ctrl', 1)"
        readonly/>
-<button type="button" class="btn_skyblue fl" id="btnCancelStoreCd" style="margin-left: 5px;" onclick="delStore('<c:out value="${param.targetId}"/>', '<c:out value="${param.targetTypeFg}"/>')"><s:message code="cmm.selectCancel"/></button>
+<button type="button" class="btn_skyblue fl" id="<c:out value="${param.targetId}"/>btnCancelStoreCd" style="margin-left: 5px;" onclick="delStore('<c:out value="${param.targetId}"/>', '<c:out value="${param.targetTypeFg}"/>')"><s:message code="cmm.selectCancel"/></button>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:630px;">
     <div class="wj-dialog wj-dialog-columns">

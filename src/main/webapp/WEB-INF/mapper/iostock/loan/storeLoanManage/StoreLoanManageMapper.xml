@@ -66,7 +66,7 @@
                       ,'3'
                       ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
                              ,1
-                             ,tphsl.MAX_ORDER_AMT
+                             ,DECODE(tphsl.MAX_ORDER_AMT, NULL, 999999999, tphsl.MAX_ORDER_AMT)
                              ,0
                              )
                       ) AVAILABLE_ORDER_AMT
@@ -210,13 +210,12 @@
         MOD_DT,
         MOD_ID
     )
-    VALUES
-    (
+    SELECT
         #{hqOfficeCd},
         #{storeCd},
         #{limitLoanAmt},
-        0,
-        #{limitLoanAmt},
+        NVL(SUM(A.TOT_LOAN),0),
+        #{limitLoanAmt} - NVL(SUM(A.TOT_LOAN),0),
         #{maxOrderAmt},
         #{orderFg},
         #{noOutstockAmtFg},
@@ -226,7 +225,22 @@
         #{regId},
         #{modDt},
         #{modId}
-    )
+    FROM    (   SELECT  OUT_TOT                     TOT_LOAN
+                FROM    TB_PO_HQ_STORE_OUTSTOCK
+                WHERE   STORE_CD    =   #{storeCd}
+                AND     SLIP_FG     =   1
+                AND     PROC_FG     IN  ('20','30')
+                UNION   ALL
+                SELECT  IN_TOT + PENALTY_AMT        TOT_LOAN
+                FROM    TB_PO_HQ_STORE_OUTSTOCK
+                WHERE   STORE_CD    =   #{storeCd}
+                AND     SLIP_FG     =   -1
+                AND     PROC_FG     =   '30'
+                UNION   ALL
+                SELECT  MONEY_AMT * (-1)            TOT_LOAN
+                FROM    TB_PO_HQ_STORE_MONEY
+                WHERE   STORE_CD    =   #{storeCd}
+            ) A
   </insert>
 
     <!-- 매장여신 저장 -->
@@ -320,7 +334,7 @@
                       ,'3'
                       ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
                              ,1
-                             ,tphsl.MAX_ORDER_AMT
+                             ,DECODE(tphsl.MAX_ORDER_AMT, NULL, 999999999, tphsl.MAX_ORDER_AMT)
                              ,0
                              )
                       ) AVAILABLE_ORDER_AMT
