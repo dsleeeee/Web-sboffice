@@ -21,7 +21,9 @@
         </ul>
     </div>
 </div>
-
+<script>
+    var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
+</script>
 <script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/lsmStore/lsmStoreTab.js?ver=20240318.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>

@@ -467,14 +467,27 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+                if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "vendorNm") {
                     var item = s.rows[e.row].dataItem;
-                    if (item.status !== "I") {
-                        wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                    if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+                        if (item.status !== "I") {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
-                        // Attribute 의 변경사항을 적용.
-                        e.cell.outerHTML = e.cell.outerHTML;
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
+                    }
+                }
+                if($("#lblVanFixFg").text() == "Y") {
+                    if (col.binding === "vendorNm") {
+                        if (item.vendorFg === "01") {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
                     }
                 }
             }
@@ -490,6 +503,13 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                 }else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
                     elements.cancel = true;
                 }
+            }else if (col.binding === "vendorNm"){
+                if($("#lblVanFixFg").text() == "Y") {
+                    var dataItem = s.rows[elements.row].dataItem;
+                    if(dataItem.vendorFg === "01") {
+                        elements.cancel = true;
+                    }
+                }
             }
         });
 
@@ -502,6 +522,13 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                     col.binding === "vendorNm" || col.binding === "vendorCd" || col.binding === "vendorTermnlNo" ||
                     col.binding === "vendorSerNo") {
                     $scope.checked(item);
+                    if($("#lblVanFixFg").text() == "Y") {
+                        if(col.binding === "vendorFg"){
+                            if(item.vendorFg === '01') {
+                                item.vendorNm = "KOCES";
+                            }
+                        }
+                    }
                 }
             }
             s.collectionView.commitEdit();
@@ -576,6 +603,9 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         params.status = "I";
         params.vendorFg = "01";
         params.vendorCd = "001";
+        if($("#lblVanFixFg").text() == "Y") {
+            params.vendorNm = "KOCES";
+        }
         params.gChk = true;
 
         // 추가기능 수행 : 파라미터
@@ -789,14 +819,27 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+                if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "vendorNm") {
                     var item = s.rows[e.row].dataItem;
-                    if (item.status !== "I") {
-                        wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                    if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+                        if (item.status !== "I") {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
-                        // Attribute 의 변경사항을 적용.
-                        e.cell.outerHTML = e.cell.outerHTML;
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
+                    }
+                    if($("#lblVanFixFg").text() == "Y") {
+                        if (col.binding === "vendorNm") {
+                            if (item.vendorFg === "01") {
+                                wijmo.addClass(e.cell, 'wj-custom-readonly');
+                                wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                                // Attribute 의 변경사항을 적용.
+                                e.cell.outerHTML = e.cell.outerHTML;
+                            }
+                        }
                     }
                 }
             }
@@ -812,6 +855,13 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 }else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
                     elements.cancel = true;
                 }
+            }else if (col.binding === "vendorNm"){
+                if($("#lblVanFixFg").text() == "Y") {
+                    var dataItem = s.rows[elements.row].dataItem;
+                    if(dataItem.vendorFg === "01") {
+                        elements.cancel = true;
+                    }
+                }
             }
         });
 
@@ -824,6 +874,13 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                     col.binding === "vendorNm" || col.binding === "vendorCd" || col.binding === "vendorTermnlNo" ||
                     col.binding === "vendorSerNo") {
                     $scope.checked(item);
+                    if($("#lblVanFixFg").text() == "Y") {
+                        if(col.binding === "vendorFg"){
+                            if(item.vendorFg === '01') {
+                                item.vendorNm = "KOCES";
+                            }
+                        }
+                    }
                 }
             }
             s.collectionView.commitEdit();
@@ -895,6 +952,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         params.status = "I";
         params.vendorFg = "01";
         params.vendorCd = "001";
+        if($("#lblVanFixFg").text() == "Y") {
+            params.vendorNm = "KOCES";
+        }
         params.gChk = true;
 
         // 추가기능 수행 : 파라미터

@@ -8,6 +8,8 @@ app.controller('lsmStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('lsmStoreCtrl', $scope, $http, true));
 
+  $scope._setComboData("storeHqBrandCdCombo", momsHqBrandCdComboList); // 매장브랜드
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
   };
@@ -25,7 +27,14 @@ app.controller('lsmStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.searchLsmStoreList = function () {
     // 파라미터
     var params       = {};
+
+    params.storeCds         = $("#lsmTukeyCd").val();
+    params.storeHqBrandCd   = $scope.storeHqBrandCd;
+    params.tukeyGrpCd        = $scope.srchTukeyGrpCd;
+    params.tukeyGrpNm      = $scope.srchTukeyGrpNm;
+
     params.listScale = 500;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/store/storeMoms/lsmStore/lsmStore/getLsmStoreList.sb", params, function (){
     });
@@ -35,8 +44,38 @@ app.controller('lsmStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope.excelDownload = function (){
     // 파라미터
     var params = {};
+    params.storeCds       = $("#lsmTukeyCd").val();
+    params.storeHqBrandCd = $scope.storeHqBrandCd;
+    params.tukeyGrpCd     = $scope.srchTukeyGrpCd;
+    params.tukeyGrpNm     = $scope.srchTukeyGrpNm;
+    params.downFg         = "A";
     $scope._broadcast('lsmStoreExcelCtrl',params);
   }
+
+  // 양식다운로드
+  $scope.sampleDownload = function () {
+    // 파라미터
+    var params = {};
+    params.downFg         = "S";
+    $scope._broadcast('lsmStoreExcelCtrl',params);
+  };
+
+  // 엑셀업로드
+  $scope.excelUpload = function () {
+    var msg = messages["lsmStore.excelUpload.kiosk.confmMsg"];  // 매장수정허용카테고리(LSM)인 키오스크 카테고리코드만 수정됩니다.
+
+    $scope._popConfirm(msg, function() {
+
+      $("#lsmTukeyStoreExcelUpFile").val('');
+      $("#lsmTukeyStoreExcelUpFile").trigger('click');
+
+    });
+  };
+
+  $scope.uploadCallBack = function () {
+    $scope._pageView('lsmStoreCtrl', 1);
+  };
+
 }]);
 
 
@@ -58,9 +97,10 @@ app.controller('lsmStoreExcelCtrl', ['$scope', '$http', '$timeout', function ($s
   });
 
   // 리스트 조회
-  $scope.searchExcelList = function () {
+  $scope.searchExcelList = function (data) {
     // 파라미터
-    var params       = {};
+    var params       = data;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/store/storeMoms/lsmStore/lsmStore/getLsmStoreExcelList.sb", params, function() {
 
@@ -71,15 +111,30 @@ app.controller('lsmStoreExcelCtrl', ['$scope', '$http', '$timeout', function ($s
         return false;
       }
 
+      var msg = '';
+
+      if(params.downFg === 'S'){
+        msg = messages["lsmStore.lsmStore"] + '(' + messages["lsmStore.tukey"] +')_' + messages["cmm.excel.sampleDown"];
+      }else{
+        msg = messages["lsmStore.lsmStore"] + '(' + messages["lsmStore.tukey"] +')_';
+      }
+
       $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
       $timeout(function () {
         wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(flex, {
           includeColumnHeaders: true,
           includeCellStyles   : true,
           includeColumns      : function (column) {
-            return column.visible;
+            if(params.downFg === 'S') {
+              if( column.binding == 'posNo' || column.binding == 'saleUprc'){
+                }else {
+                return column.visible;
+              }
+            }else{
+              return column.visible;
+            }
           }
-        }, messages["lsmStore.lsmStore"] + '(' + messages["lsmStore.tukey"]  +')_' + getCurDateTime() +'.xlsx', function () {
+        }, msg + getCurDateTime() +'.xlsx', function () {
           $timeout(function () {
             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
           }, 10);
