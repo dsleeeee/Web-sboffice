@@ -21,6 +21,7 @@ var mpayList = new Array();
 var mcoupnList = new Array();
 var paperVoucherList = new Array();
 var taxRefundList = new Array();
+var sktList = new Array();
 
 for (var i in vandorList) {
     if (vandorList[i].vanFg === '01') {
@@ -35,6 +36,8 @@ for (var i in vandorList) {
         paperVoucherList.push(vandorList[i].name);
     } else if (vandorList[i].vanFg === '07') {
         taxRefundList.push(vandorList[i].name);
+    } else if (vandorList[i].vanFg === '08') {
+        sktList.push(vandorList[i].name);
     }
 }
 /**********************************************************************
@@ -566,6 +569,9 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                     case '07':
                         col.dataMap = taxRefundList;
                         break;
+                    case '08':
+                        col.dataMap = sktList;
+                        break;
                 }
             }
         }
@@ -916,6 +922,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                         break;
                     case '07':
                         col.dataMap = taxRefundList;
+                        break;
+                    case '08':
+                        col.dataMap = sktList;
                         break;
                 }
             }

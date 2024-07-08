@@ -21,6 +21,7 @@ var mpayList    = new Array();
 var mcoupnList  = new Array();
 var paperVoucherList  = new Array();
 var taxRefundList  = new Array();
+var sktList = new Array();
 
 for(var i in vandorList) {
   if(vandorList[i].vanFg === '01'){
@@ -35,6 +36,8 @@ for(var i in vandorList) {
     paperVoucherList.push(vandorList[i].name);
   } else if(vandorList[i].vanFg === '07'){
     taxRefundList.push(vandorList[i].name);
+  } else if(vandorList[i].vanFg === '08'){
+    sktList.push(vandorList[i].name);
   }
 }
 /**********************************************************************
