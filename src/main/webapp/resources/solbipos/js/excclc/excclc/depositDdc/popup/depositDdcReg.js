@@ -23,8 +23,6 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
 
     $scope.$on("depositDdcRegCtrl", function (event, data) {
 
-        $scope.setCombo();
-
         if(data.seqNo !== undefined && data.seqNo !== null && data.seqNo !== ""){
 
             // hidden 키값 셋팅
@@ -47,7 +45,8 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             $("#moneyStorebtnCancelStoreCd").css("display", "none");
 
             // 기존 임금/기타공제 정보 셋팅
-            $scope.setDepositDdc();
+            $scope.setCombo("Y");
+            //$scope.setDepositDdc();
         }else{
 
             // title 셋팅
@@ -62,6 +61,9 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             $("#btnDel").css("display", "none");
 
             $("#moneyStorebtnCancelStoreCd").css("display", "");
+
+            // 기존 임금/기타공제 정보 셋팅
+            $scope.setCombo("N");
         }
 
     });
@@ -164,7 +166,7 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
     };
 
     // 계정 콤보박스 셋팅
-    $scope.setCombo = function () {
+    $scope.setCombo = function (setDepositDdcYN) {
 
         var comboParams = {};
         comboParams.nmcodeGrpCd = "133";
@@ -195,6 +197,7 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
                         comboArray.push(comboData);
                     }
                     $scope._setComboData("moneyFg", comboArray);
+                    if(setDepositDdcYN == 'Y') $scope.setDepositDdc();
                 }
             }
         }, function errorCallback(response) {
