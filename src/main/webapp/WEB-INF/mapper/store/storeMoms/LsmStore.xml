@@ -641,11 +641,14 @@
                             AND 	ENVST_VAL = '6'
                             AND     STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                         ) C
+                ,       TB_MS_STORE D
                 WHERE 	A.SESSION_ID	= #{sessionId}
                 AND     B.NMCODE_NM     = A.TU_CLS_TYPE
                 AND 	B.NMCODE_ITEM_1 = A.TU_CLS_CD
                 AND 	C.STORE_CD		= A.STORE_CD
                 AND 	C.POS_NO		= A.POS_NO
+                AND     D.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     D.STORE_CD      = A.STORE_CD
             ) B
         ON
             (
@@ -1099,21 +1102,24 @@
                                             AND 	NMCODE_ITEM_2 	= 'Y'
                                             AND 	HQ_OFFICE_CD 	= #{hqOfficeCd}
                                         ) B
+                                ,       TB_MS_STORE C
                                 WHERE 	tttk.SESSION_ID	= #{sessionId}
                                 AND 	B.NMCODE_NM		= tttk.TUKEY_GRP_CD
                                 AND 	B.NMCODE_ITEM_1	= tttk.TUKEY_CLASS_CD
                                 AND     tttk.TUKEY_FG   = '01'
+                                AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     C.STORE_CD      = tttk.STORE_CD
                                 ORDER
                                 BY      tttk.TUKEY_GRP_CD
                                 ,       tttk.TUKEY_CLASS_CD
                                 ,       tttk.TUKEY_CD
                             ) A
-                           ,	(
-                                    SELECT 	B.ENVST_VAL
-                                    ,       B.STORE_CD
-                                    FROM 	TB_MS_STORE_ENVST B
-                                    WHERE 	B.ENVST_CD = '1041'
-                                ) B
+                        ,	(
+                                SELECT 	B.ENVST_VAL
+                                ,       B.STORE_CD
+                                FROM 	TB_MS_STORE_ENVST B
+                                WHERE 	B.ENVST_CD = '1041'
+                            ) B
                         WHERE 	A.STORE_CD = B.STORE_CD
                     ) tttk
             ) tmtk
@@ -1211,10 +1217,13 @@
                                             AND 	NMCODE_ITEM_2 	= 'Y'
                                             AND 	HQ_OFFICE_CD 	= #{hqOfficeCd}
                                         ) B
+                                ,       TB_MS_STORE C
                                 WHERE 	tttk.SESSION_ID	= #{sessionId}
                                 AND 	B.NMCODE_NM		= tttk.TUKEY_GRP_CD
                                 AND 	B.NMCODE_ITEM_1	= tttk.TUKEY_CLASS_CD
                                 AND     tttk.TUKEY_FG   = '02'
+                                AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     C.STORE_CD      = tttk.STORE_CD
                                 ORDER
                                 BY      tttk.TUKEY_GRP_CD
                                 ,       tttk.TUKEY_CLASS_CD
@@ -1324,10 +1333,13 @@
                                             AND 	NMCODE_ITEM_2 	= 'Y'
                                             AND 	HQ_OFFICE_CD 	= #{hqOfficeCd}
                                         ) B
+                                ,       TB_MS_STORE C
                                 WHERE 	tttk.SESSION_ID	= #{sessionId}
                                 AND 	B.NMCODE_NM		= tttk.TUKEY_GRP_CD
                                 AND 	B.NMCODE_ITEM_1	= tttk.TUKEY_CLASS_CD
                                 AND     tttk.TUKEY_FG   = '03'
+                                AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                AND     C.STORE_CD      = tttk.STORE_CD
                                 ORDER
                                 BY      tttk.TUKEY_GRP_CD
                                 ,       tttk.TUKEY_CLASS_CD
@@ -1398,7 +1410,7 @@
         SELECT 	    '매장코드 ['||A.STORE_CD 	||'] - '
                 ||  '포스번호 ['||A.POS_NO    	||'] - '
                 ||  '그룹코드 ['||A.TU_CLS_TYPE  ||'] - '
-                ||  '분류코드 ['||A.TU_CLS_CD  	||'] - '
+                ||  '카테고리코드 ['||A.TU_CLS_CD  	||'] - '
                 ||  '최대 상품수 [999] '
         FROM	(
                     SELECT 	A.STORE_CD
@@ -1449,7 +1461,7 @@
     -->
     <select id="getTukeyChkUseYn" parameterType="lsmStoreVO" resultType="String">
         /* USE : LsmStoreMapper.getTukeyChkUseYn */
-        SELECT 	DECODE(MAX(A.PROD_CD), NULL, NULL, '상품코드 ['||MAX(A.PROD_CD)    ||'] ' || '외 ['||(TRUNC(COUNT(A.PROD_CD)/3)-1)||'] 건')
+        SELECT 	DECODE(MAX(A.PROD_CD), NULL, NULL, '상품코드 ['||MAX(A.PROD_CD)    ||'] ' || '외 ['||(COUNT(A.PROD_CD)-1)||'] 건')
         FROM 	TB_TMP_TOUCH_KEY A
         ,		TB_MS_PRODUCT B
         ,		(
@@ -1462,6 +1474,7 @@
                     AND 	HQ_OFFICE_CD 	= #{hqOfficeCd}
                 ) C
         WHERE 	A.SESSION_ID    = #{sessionId}
+        AND 	A.TUKEY_FG 		= '01'
         AND 	B.STORE_CD      = A.STORE_CD
         AND 	B.PROD_CD       = A.PROD_CD
         AND 	B.USE_YN        = 'N'
@@ -1479,7 +1492,7 @@
         /* USE : LsmStoreMapper.getTukeyChkProdCnt */
         SELECT      '매장코드 ['||A.STORE_CD        ||'] - '
                 ||  '그룹코드 ['||A.TUKEY_GRP_CD    ||'] - '
-                ||  '카테고리코드 ['||A.TUKEY_CLASS_CD  ||'] - '
+                ||  '분류코드 ['||A.TUKEY_CLASS_CD  ||'] - '
                 ||  '최대 상품수 ['||(
                                     SELECT 	MAX((5*(8-TO_NUMBER(C.ENVST_VAL))-1)*5) AS MAX_CNT
                                     FROM 	TB_MS_STORE_ENVST C

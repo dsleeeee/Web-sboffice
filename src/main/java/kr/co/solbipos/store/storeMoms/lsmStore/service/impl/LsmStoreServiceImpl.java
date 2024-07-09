@@ -115,6 +115,7 @@ public class LsmStoreServiceImpl implements LsmStoreService {
             lsmStoreVO.setModId(sessionInfoVO.getUserId());
             lsmStoreVO.setClsFg("K"); // K: KIOSK
             lsmStoreVO.setSessionId(sessionInfoVO.getUserId());
+            lsmStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             //임시 테이블 삭제
             if(lsmStoreVO.getProgressCnt() == 0) {
