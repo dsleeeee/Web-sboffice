@@ -80,11 +80,7 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     if (orgnFg === "STORE") {
         if(hqOfficeCd !== "00000") {
-            if(membrClassManageFg === "0"){
-                $scope.storeMembr = true;
-            } else {
-                $scope.visitStoreMembr = true;
-            }
+            $scope.storeMembr = true;
         }
     } else {
         $scope.storeMembr = false;

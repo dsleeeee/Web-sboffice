@@ -269,6 +269,9 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
           case '07':
             col.dataMap = taxRefundList;
             break;
+          case '08':
+            col.dataMap = sktList;
+            break;
         }
       }
     }
