@@ -156,11 +156,13 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
                         }else{ continue; }
                     }else{
                         if(vProdCd !== null && vProdCd !== "") {
-                            var prodNmVal ="";
+                            var prodNmVal = "";
+                            var vDlvrCd = "";
                             item["prodCd"] = vProdCd;
                             item["dlvrNameCd"] = colBinding.replaceAll("dlvrProdNm", "");
                             if(cellValue != null && cellValue != "") {
-                                prodNmVal = cellValue.toString().trim();
+                                vDlvrCd = cellValue.toString().replaceAll("'", "").replaceAll(" ", "");
+                                prodNmVal = vDlvrCd.toString().trim();
                                 item["dlvrProdNm"] = prodNmVal.substr(0, 30);
                             }else{
                                 prodNmVal = cellValue;
