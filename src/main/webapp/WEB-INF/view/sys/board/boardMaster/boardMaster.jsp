@@ -15,19 +15,19 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('boardMasterCtrl',1)">
+            <button class="btn_blue fr" ng-click="_pageView('boardMasterCtrl', 1)">
                 <s:message code="cmm.search" />
             </button>
         </div>
     </div>
 
     <%-- 그리드 --%>
-    <div class="mt10 mb40">
-        <div class="wj-TblWrapBr pd10" style="height:470px;">
+    <div class="mt10">
+        <div class="wj-TblWrapBr pd10" style="height:440px;">
             <div class="updownSet oh mb10">
-                <button class="btn_skyblue" id="btnCouponAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
-                <button class="btn_skyblue" id="btnCouponDel" ng-click="del()"><s:message code='cmm.del' /></button>
-                <button class="btn_skyblue" id="btnClassSave" ng-click="save()"><s:message code='cmm.save' /></button>
+                <button class="btn_skyblue" ng-click="addRow()"><s:message code='cmm.add' /></button>
+                <button class="btn_skyblue" ng-click="del()"><s:message code='cmm.del' /></button>
+                <button class="btn_skyblue" ng-click="save()"><s:message code='cmm.save' /></button>
             </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
