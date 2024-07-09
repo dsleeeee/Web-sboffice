@@ -64,6 +64,7 @@ app.controller('outstockDataCtrl', ['$scope', '$http', function ($scope, $http) 
           params.storeNm   = selectedRow.storeNm;
           params.slipFg    = $scope.slipFg;
           params.vendrCd   = $scope.vendrCdCombo.selectedValue;
+          params.orderSlipNo  = selectedRow.orderSlipNo;
           $scope._broadcast('outstockDataDtlCtrl', params);
         }
       }
@@ -136,6 +137,7 @@ app.controller('outstockDataCtrl', ['$scope', '$http', function ($scope, $http) 
         item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
         item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
         item.vendrCd   = $scope.vendrCdCombo.selectedValue;
+
         params.push(item);
       }
     }

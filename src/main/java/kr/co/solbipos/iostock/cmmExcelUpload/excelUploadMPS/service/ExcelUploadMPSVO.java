@@ -77,6 +77,8 @@ public class ExcelUploadMPSVO extends PageVO {
     private String adjStorageCd;
 
     private String disuseStorageCd;
+    /** 주문전표번호 */
+    private String orderSlipNo;
 
     /**
      * @return the orgnFg
@@ -416,6 +418,11 @@ public class ExcelUploadMPSVO extends PageVO {
         this.disuseStorageCd = disuseStorageCd;
     }
 
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
 
-
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
+    }
 }

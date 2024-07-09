@@ -8,7 +8,7 @@
 
 <div class="subCon" ng-controller="storeOrderCtrl">
   <div class="searchBar">
-    <a href="#" class="open">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="storeOrder.storeOrder" /></a>
   </div>
   <table class="searchTbl">
     <colgroup>
@@ -105,6 +105,7 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="storeOrder.reqDate"/>" binding="reqDate" width="100" align="center" is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.orderSlipNo"/>" binding="orderSlipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.slipFg"/>" binding="slipFg" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.procFg"/>" binding="procFg" width="70" align="center" is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.vendr"/>" binding="hqVendrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -112,7 +113,7 @@
         <wj-flex-grid-column header="<s:message code="storeOrder.orderAmt"/>" binding="orderAmt" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.orderVat"/>" binding="orderVat" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.orderTot"/>" binding="orderTot" width="70" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeOrder.remark"/>" binding="remark" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeOrder.remark"/>" binding="remark" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeOrder.vendr"/>" binding="hqVendrCd" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
@@ -141,7 +142,7 @@
     var vendrList = ${vendrList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrder.js?ver=20220722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrder.js?ver=20240709.01" charset="utf-8"></script>
 
 <%-- 주문등록 상품 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/storeOrder/storeOrderDtl.jsp">

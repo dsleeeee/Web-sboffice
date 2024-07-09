@@ -100,4 +100,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbReq/rtnDstbReqDtl.js?ver=20220804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbReq/rtnDstbReqDtl.js?ver=20240709.01" charset="utf-8"></script>

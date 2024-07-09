@@ -117,6 +117,7 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.reqDate"/>"  binding="reqDate" 	width="100" align="center" 	is-read-only="true" format="date"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnStoreOrder.orderSlipNo"/>"  binding="orderSlipNo" 	width="100" align="center" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.slipFg"/>"   binding="slipFg" 	width="70" 	align="center" 	is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.procFg"/>"   binding="procFg" 	width="70" 	align="center" 	is-read-only="true" data-map="procFgMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnStoreOrder.vendr"/>"    binding="hqVendrNm" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -158,7 +159,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnStoreOrder/rtnStoreOrder.js?ver=20240709.01" charset="utf-8"></script>
 
 <%-- 반품등록 상품 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl.jsp">

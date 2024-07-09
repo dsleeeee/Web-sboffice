@@ -44,7 +44,8 @@
 
             <!-- define columns -->
         <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                      	binding="gChk"             	width="40"  align="center" ></wj-flex-grid-column>--%>
-            <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.seq"/>"         binding="seq"               width="0"   align="center"  is-read-only="true"                                                     visible="false" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderSlipNo"/>" binding="orderSlipNo"       width="100"  align="center"  is-read-only="true"                                                                     ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.seq"/>"         binding="seq"               width="0"   align="center"  is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.storeCd"/>"     binding="storeCd"           width="70"  align="center"  is-read-only="true"                                                                     ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.storeNm"/>"     binding="storeNm"           width="150" align="left"    is-read-only="true"                                                                     ></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="dstbCloseProd.dtl.orderFg"/>"     binding="orderFg"           width="65"	align="center"  is-read-only="true"     data-map="orderFgMap"                                           ></wj-flex-grid-column>

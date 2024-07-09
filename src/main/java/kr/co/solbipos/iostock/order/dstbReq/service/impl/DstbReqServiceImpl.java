@@ -56,6 +56,7 @@ public class DstbReqServiceImpl implements DstbReqService {
             storeOrderVO.setReqDate(dstbReqVO.getReqDate());
             storeOrderVO.setStoreCd(dstbReqVO.getStoreCd());
             storeOrderVO.setSlipFg(dstbReqVO.getSlipFg());
+            storeOrderVO.setOrderSlipNo(dstbReqVO.getOrderSlipNo());
             DefaultMap<String> orderProcFg = storeOrderService.getOrderProcFgCheck(storeOrderVO);
 
             // 처리구분이 분배마감이 아닌 경우 실행
@@ -129,6 +130,7 @@ public class DstbReqServiceImpl implements DstbReqService {
                 storeOrderVO.setModId(sessionInfoVO.getUserId());
                 storeOrderVO.setModDt(currentDt);
                 storeOrderVO.setVendrCd(dstbReqVO.getVendrCd());
+                storeOrderVO.setOrderSlipNo(dstbReqVO.getOrderSlipNo());
             }
 
             int slipFg       = dstbReqVO.getSlipFg();
@@ -179,6 +181,7 @@ public class DstbReqServiceImpl implements DstbReqService {
             dstbReqVO.setModId(sessionInfoVO.getUserId());
             dstbReqVO.setModDt(currentDt);
             dstbReqVO.setVendrCd(storeOrderVO.getVendrCd());
+            dstbReqVO.setOrderSlipNo(storeOrderVO.getOrderSlipNo());
 
             result = dstbReqMapper.insertDstbReqRegist(dstbReqVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

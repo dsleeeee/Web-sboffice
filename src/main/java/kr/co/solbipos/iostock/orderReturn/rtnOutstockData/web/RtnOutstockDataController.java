@@ -126,7 +126,7 @@ public class RtnOutstockDataController {
      * @author  안동관
      * @since   2018. 10. 17.
      */
-    @RequestMapping(value = "/rtnOutstockData/saveDataCreate", method = RequestMethod.POST)
+    @RequestMapping(value = "/rtnOutstockData/saveDataCreate.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result saveDataCreate(HttpServletRequest request, HttpServletResponse response,
         Model model, @RequestBody RtnOutstockDataVO[] rtnOutstockDataVOs) {

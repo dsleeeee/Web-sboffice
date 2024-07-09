@@ -65,6 +65,7 @@ app.controller('rtnOutstockDataCtrl', ['$scope', '$http', function ($scope, $htt
           params.slipFg    = $scope.slipFg;
           params.reqDate   = selectedRow.reqDate;
           params.vendrCd   = $scope.vendrCdCombo.selectedValue;
+          params.orderSlipNo = selectedRow.orderSlipNo;
           $scope._broadcast('rtnOutstockDataDtlCtrl', params);
         }
       }

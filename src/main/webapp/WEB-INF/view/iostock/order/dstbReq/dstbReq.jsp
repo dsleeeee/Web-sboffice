@@ -98,6 +98,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 			binding="gChk" 		width="30" 	align="center"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbReq.reqDate"/>" 	binding="reqDate" 	width="100"	align="center" 	is-read-only="true" 					format="date"				></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="dstbReq.orderSlipNo"/>" binding="orderSlipNo" 	width="100"	align="center" 	is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbReq.storeCd"/>" 	binding="storeCd" 	width="70" 	align="center" 	is-read-only="true"													></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbReq.storeNm"/>" 	binding="storeNm" 	width="150" align="left" 	is-read-only="true"													></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="dstbReq.procFg"/>" 	binding="procFg" 	width="70" 	align="center" 	is-read-only="true" data-map="procFgMap"							></wj-flex-grid-column>
@@ -128,7 +129,7 @@
   var vendrList = ${vendrList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbReq/dstbReq.js?ver=20220722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/dstbReq/dstbReq.js?ver=20240709.01" charset="utf-8"></script>
 
 <%-- 분배등록 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/dstbReq/dstbReqDtl.jsp">

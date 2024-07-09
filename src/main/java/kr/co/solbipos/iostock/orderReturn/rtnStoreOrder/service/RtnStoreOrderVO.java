@@ -58,7 +58,8 @@ public class RtnStoreOrderVO extends PageVO {
      * H : 본사
      * S : 매장, 가맹점 */
     private String orgnFg;
-
+    /** 주문전표번호 */
+    private String orderSlipNo;
 
     /**
      * @return the reqDate
@@ -382,5 +383,13 @@ public class RtnStoreOrderVO extends PageVO {
 
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
+    }
+
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
+
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
     }
 }

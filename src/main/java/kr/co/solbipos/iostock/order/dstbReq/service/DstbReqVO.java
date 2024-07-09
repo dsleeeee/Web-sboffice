@@ -111,6 +111,8 @@ public class DstbReqVO extends PageVO {
     private String dstbConfirmFg;
     /** 거래처코드 */
     private String vendrCd;
+    /** 주문전표번호*/
+    private String orderSlipNo;
 
 
     public String getOrgnFg() {
@@ -785,5 +787,13 @@ public class DstbReqVO extends PageVO {
 
     public void setVendrCd(String vendrCd) {
         this.vendrCd = vendrCd;
+    }
+
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
+
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
     }
 }

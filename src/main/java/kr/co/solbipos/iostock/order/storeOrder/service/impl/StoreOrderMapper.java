@@ -106,4 +106,7 @@ public interface StoreOrderMapper {
 
     /** 본사 거래처 조회(콤보박스용) */
     List<DefaultMap<String>> getHqVendrCombo(StoreOrderVO storeOrderVO);
+
+    /** 주문전표번호 채번 */
+    String getOrderSlipNo(StoreOrderVO storeOrderVO);
 }

@@ -160,6 +160,8 @@ public class RtnDstbCloseStoreVO extends PageVO {
     private String outStorageCd;
     /** 거래처코드 */
     private String vendrCd;
+    /** 주문전표번호 */
+    private String orderSlipNo;
     
     /**
      * @return the hqOfficeCd
@@ -1043,5 +1045,13 @@ public class RtnDstbCloseStoreVO extends PageVO {
 
     public void setVendrCd(String vendrCd) {
         this.vendrCd = vendrCd;
+    }
+
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
+
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
     }
 }

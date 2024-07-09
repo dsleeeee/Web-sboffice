@@ -79,6 +79,7 @@ app.controller('storeOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
           params.procFg   = selectedRow.procFg;
           params.hdRemark = selectedRow.remark;
           params.vendrCd  = selectedRow.hqVendrCd;
+          params.orderSlipNo = selectedRow.orderSlipNo;
           $scope._broadcast('storeOrderDtlCtrl', params);
         }
       }
@@ -118,6 +119,7 @@ app.controller('storeOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
     params.slipFg     = $scope.slipFg;
     params.hdRemark   = "";
     params.vendrCd    = $scope.vendrCdCombo.selectedValue;
+    params.orderSlipNo = ""; // 주문전표번호, 신규 요청등록인 경우 null
     $scope._broadcast("storeOrderRegistCtrl", params);
   };
 

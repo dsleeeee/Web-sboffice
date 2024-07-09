@@ -89,6 +89,7 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="outstockData.orderSlipNo"/>" binding="orderSlipNo" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockData.storeCd"/>" binding="storeCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockData.storeNm"/>" binding="storeNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="outstockData.sysStatFg"/>" binding="sysStatFg" width="70" align="center" is-read-only="true" data-map="sysStatFgMap"></wj-flex-grid-column>
@@ -122,7 +123,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockData/outstockData.js?ver=20220722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockData/outstockData.js?ver=20240709.01" charset="utf-8"></script>
 
 <%-- 출고자료생성 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockData/outstockDataDtl.jsp">

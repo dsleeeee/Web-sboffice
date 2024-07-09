@@ -145,6 +145,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope.procFg      = data.procFg;
     $scope.dtlHdRemark = data.hdRemark;
     $scope.vendrCd     = data.vendrCd;
+    $scope.orderSlipNo = data.orderSlipNo;
 
     $scope.wjStoreOrderDtlLayer.show(true);
 
@@ -174,7 +175,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       }
     }
 
-    $("#spanDtlTitle").html(messages["storeOrder.reqDate"] + ' : ' + getFormatDate($scope.reqDate, '-'));
+    $("#spanDtlTitle").html(messages["storeOrder.reqDate"] + ' : ' + getFormatDate($scope.reqDate, '-') + ' / ' + messages["storeOrder.orderSlipNo"] + ' : ' + nvl($scope.orderSlipNo, ''));
     $scope.searchStoreLoan("Y");
 
     // 기능수행 종료 : 반드시 추가
@@ -184,8 +185,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   // 매장여신 조회
   $scope.searchStoreLoan = function (popShowFg) {
     var params     = {};
-    params.reqDate = $scope.reqDate;
-    params.slipFg  = $scope.slipFg;
+    params.orderSlipNo = $scope.orderSlipNo; // 주문전표번호
 
     //가상로그인 session 설정
 	    if(document.getElementsByName('sessionId')[0]){
@@ -252,18 +252,17 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   $scope.searchStoreOrderDtlList = function () {
     // 파라미터
     var params     = {};
-    params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
+    params.orderSlipNo = $scope.orderSlipNo;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/order/storeOrder/storeOrderDtl/list.sb", params);
   };
 
-  // 주문가능한지 체크(저장, 확전 전에 체크)
+  // 저장, 주문확정 클릭 (주문가능한지 체크(저장, 확전 전에 체크))
   $scope.storeCloseCheck = function (saveFg, orderTotAmt){
 
     var params     = {};
     params.reqDate = $scope.reqDate;
-    params.slipFg  = $scope.slipFg;
 
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -308,9 +307,10 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   // 주문 상품 저장 전 출고요청일자에 등록한 주문 총 합계 금액 조회
   $scope.getOrderTotAmt = function(){
 
-    var params       = {};
-    params.reqDate   = $scope.reqDate;
-    params.vendrCd   = $scope.vendrCd;
+    var params = {};
+    params.vendrCd = $scope.vendrCd;
+    params.orderSlipNo = $scope.orderSlipNo;
+
     $scope._postJSONQuery.withOutPopUp( "/iostock/order/storeOrder/storeOrder/getOrderTotAmt.sb", params, function(response) {
 
       if(response.data.data !== null) {
@@ -332,6 +332,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리.
       item.hdRemark  = $scope.dtlHdRemark;
       item.vendrCd   = $scope.vendrCd;
+      item.orderSlipNo = $scope.orderSlipNo;
 
       if (item.orderTotQty !== null && item.orderTotQty !== 0 && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {
           $scope._popMsg(messages["storeOrder.dtl.prodCd"] +"["+item.prodCd+"]" +" "+ messages["storeOrder.dtl.not.minOrderQty"]); // 주문수량은 최소주문수량 이상 입력하셔야 합니다.
@@ -421,6 +422,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
         params.remark   = $scope.dtlHdRemark;
         params.envst1042= gEnvst1042;
         params.vendrCd  = $scope.vendrCd;
+        params.orderSlipNo = $scope.orderSlipNo;
 
         //여신잔액 check를 위한 추가 - START
 	        var orderTot = 0;
@@ -457,6 +459,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     params.slipFg     = $scope.slipFg;
     params.hdRemark   = $scope.dtlHdRemark;
     params.vendrCd    = $scope.vendrCd;
+    params.orderSlipNo = $scope.orderSlipNo;
     $scope._broadcast("storeOrderRegistCtrl", params);
   };
 
@@ -544,6 +547,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       var params     = {};
       params.reqDate = $scope.reqDate;
       params.slipFg  = $scope.slipFg;
+      params.orderSlipNo = $scope.orderSlipNo;
 
       //가상로그인 session 설정
   	    if(document.getElementsByName('sessionId')[0]){

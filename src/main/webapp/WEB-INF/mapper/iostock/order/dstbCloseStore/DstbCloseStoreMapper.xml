@@ -80,7 +80,7 @@
     <select id="getDstbCloseStoreDtlList" parameterType="dstbCloseStoreVO" resultMap="confirmListMap">
         /* USE : DstbCloseStoreMapper.getDstbCloseStoreDtlList */
         <![CDATA[
-        SELECT  tphsd.STORE_CD, tmp.PROD_CD, tmp.PROD_NM
+        SELECT  tphsd.ORDER_SLIP_NO, tphsd.STORE_CD, tmp.PROD_CD, tmp.PROD_NM
         ,       DECODE(tmp.VAT_FG, '1', 1, 0) AS VAT_FG01
         ,       tphsd.SEQ
         ,       TRUNC(DECODE(SIGN(tshsc.CURR_QTY),-1,0,tshsc.CURR_QTY) / tmp.PO_UNIT_QTY) AS HD_CUR_UNIT_QTY
@@ -180,6 +180,14 @@
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     REQ_DATE      = #{reqDate}
         AND     SEQ           = #{seq}
+        <choose>
+            <when test='orderSlipNo != null and orderSlipNo != ""'>
+                AND ORDER_SLIP_NO = #{orderSlipNo}
+            </when>
+            <otherwise>
+                AND ORDER_SLIP_NO IS NULL
+            </otherwise>
+        </choose>
     </update>
 
     <!-- 분배마감 - 분배마감 상세 리스트 확정 -->
@@ -197,6 +205,14 @@
         WHERE   HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     REQ_DATE      = #{reqDate}
         AND     SEQ           = #{seq}
+        <choose>
+            <when test='orderSlipNo != null and orderSlipNo != ""'>
+                AND ORDER_SLIP_NO = #{orderSlipNo}
+            </when>
+            <otherwise>
+                AND ORDER_SLIP_NO IS NULL
+            </otherwise>
+        </choose>
     </update>
 
     <!-- 분배마감 - 분배마감 상세 리스트 저장 -->
@@ -475,7 +491,8 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            HQ_VENDR_CD
+            HQ_VENDR_CD,
+            ORDER_SLIP_NO
         )
         VALUES
         (
@@ -504,7 +521,8 @@
             #{regId},
             #{modDt},
             #{modId},
-            #{vendrCd}
+            #{vendrCd},
+            #{orderSlipNo}
         )
     </insert>
 

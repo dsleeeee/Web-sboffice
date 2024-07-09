@@ -80,11 +80,18 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 
     /** 주문등록 주문상품 저장 */
     @Override
-    public int saveStoreOrderRegist(StoreOrderDtlVO[] storeOrderDtlVOs, SessionInfoVO sessionInfoVO) {
+    public String saveStoreOrderRegist(StoreOrderDtlVO[] storeOrderDtlVOs, SessionInfoVO sessionInfoVO) {
         int returnResult = 0;
         int result = 0;
         String currentDt = currentDateTimeString();
         StoreOrderVO storeOrderVO = new StoreOrderVO();
+
+        // 신규등록 시, 주문전표번호 채번
+        String sOrderSlipNo = "";
+       if("".equals(storeOrderDtlVOs[0].getOrderSlipNo()) || storeOrderDtlVOs[0].getOrderSlipNo() == null || 1 > storeOrderDtlVOs[0].getOrderSlipNo().length()){
+           storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+           sOrderSlipNo = storeOrderMapper.getOrderSlipNo(storeOrderVO);
+       }
 
         int i = 0;
         for (StoreOrderDtlVO storeOrderDtlVO : storeOrderDtlVOs) {
@@ -102,10 +109,18 @@ public class StoreOrderServiceImpl implements StoreOrderService {
                 storeOrderVO.setModDt(currentDt);
                 storeOrderVO.setVendrCd(storeOrderDtlVO.getVendrCd());
 
-                //주문진행구분 체크
-                DefaultMap<String> orderProcFg = getOrderProcFgCheck(storeOrderVO);
-                if(orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
-                    throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.dstbConfirm.msg")); //주문이 본사에서 분배완료 되었습니다.
+                if(!"".equals(sOrderSlipNo)){
+                    // 신규등록인 경우, 새로 채번한 주문전표번호로 셋팅
+                    storeOrderVO.setOrderSlipNo(sOrderSlipNo);
+                }else{
+                    // 수정인 경우
+                    storeOrderVO.setOrderSlipNo(storeOrderDtlVO.getOrderSlipNo());
+
+                    //주문진행구분 체크
+                    DefaultMap<String> orderProcFg = getOrderProcFgCheck(storeOrderVO);
+                    if(orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
+                        throw new JsonException(Status.SERVER_ERROR, messageService.get("storeOrder.dtl.dstbConfirm.msg")); //주문이 본사에서 분배완료 되었습니다.
+                    }
                 }
             }
             LOGGER.debug("### EmpNo: " + sessionInfoVO.getEmpNo());
@@ -151,6 +166,11 @@ public class StoreOrderServiceImpl implements StoreOrderService {
             storeOrderDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             storeOrderDtlVO.setStoreCd(sessionInfoVO.getStoreCd());
 
+            // 신규등록인 경우, 새로 채번한 주문전표번호로 셋팅
+            if(!"".equals(sOrderSlipNo)){
+                storeOrderDtlVO.setOrderSlipNo(sOrderSlipNo);
+            }
+
             //추가
             if(insFg.equals("I")) {
                 result = storeOrderMapper.insertStoreOrderDtl(storeOrderDtlVO);
@@ -192,7 +212,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         }
 
         if ( returnResult == storeOrderDtlVOs.length) {
-            return returnResult;
+            return storeOrderVO.getOrderSlipNo();
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
@@ -246,6 +266,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         LOGGER.debug("remark   : " + storeOrderVO.getRemark		()	);
         LOGGER.debug("EmpNo    : " + sessionInfoVO.getEmpNo		()	);
         LOGGER.debug("OrderTot : " + storeOrderVO.getOrderTot	()	);
+        LOGGER.debug("OrderSlipNo : " + storeOrderVO.getOrderSlipNo()	);
 
         //매장 주문마감 및 발주중지 여부 체크
         String orderCloseFg = "N";
@@ -267,6 +288,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 	        storeOrderLoanVO.setSlipFg		(storeOrderVO.getSlipFg		()	);
 	        storeOrderLoanVO.setHqOfficeCd	(storeOrderVO.getHqOfficeCd	() 	);
 	        storeOrderLoanVO.setStoreCd		(storeOrderVO.getStoreCd	() 	);
+            storeOrderLoanVO.setOrderSlipNo	(storeOrderVO.getOrderSlipNo() 	);
 
 	        DefaultMap<String> storeLoan = storeOrderMapper.getStoreLoan(storeOrderLoanVO);
 
@@ -315,6 +337,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         dstbReqVO.setModId		(sessionInfoVO.getUserId());
         dstbReqVO.setModDt		(currentDt);
         dstbReqVO.setVendrCd(storeOrderVO.getVendrCd());
+        dstbReqVO.setOrderSlipNo(storeOrderVO.getOrderSlipNo());
 
         result = storeOrderMapper.insertDstbRegist(dstbReqVO);				//TB_PO_HQ_STORE_DISTRIBUTE
         if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -333,6 +356,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         dstbCloseStoreVO.setSlipFg		(storeOrderVO.getSlipFg ());
         dstbCloseStoreVO.setEmpNo		(dstbReqVO.getEmpNo   	());
         dstbCloseStoreVO.setVendrCd     (dstbReqVO.getVendrCd());
+        dstbCloseStoreVO.setOrderSlipNo(dstbReqVO.getOrderSlipNo());
 
         result = dstbCloseStoreMapper.updateDstbCloseConfirm(dstbCloseStoreVO);	//TB_PO_HQ_STORE_DISTRIBUTE
         if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -367,6 +391,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
             outstockDataVO.setDateFg("req");
             outstockDataVO.setStartDate(dstbCloseStoreVO.getReqDate());
             outstockDataVO.setEndDate(dstbCloseStoreVO.getReqDate());
+            outstockDataVO.setOrderSlipNo(dstbCloseStoreVO.getOrderSlipNo());
 
             //직배송거래처 및 배송기사 조회
             //List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
@@ -412,10 +437,19 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 
     /** 주문등록 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
+    public String excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
+
+        // 신규등록 시, 주문전표번호 채번
+        String sOrderSlipNo = "";
+        if("".equals(excelUploadMPSVO.getOrderSlipNo()) || excelUploadMPSVO.getOrderSlipNo() == null || 1 > excelUploadMPSVO.getOrderSlipNo().length()){
+            StoreOrderVO storeOrderVO =  new StoreOrderVO();
+            storeOrderVO.setStoreCd(sessionInfoVO.getStoreCd());
+            sOrderSlipNo = storeOrderMapper.getOrderSlipNo(storeOrderVO);
+            excelUploadMPSVO.setOrderSlipNo(sOrderSlipNo);
+        }
 
         excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
         excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -439,6 +473,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         storeOrderLoanVO.setSlipFg		(excelUploadMPSVO.getSlipFg	()	);
         storeOrderLoanVO.setHqOfficeCd	(excelUploadMPSVO.getHqOfficeCd() 	);
         storeOrderLoanVO.setStoreCd		(excelUploadMPSVO.getStoreCd	() 	);
+        storeOrderLoanVO.setOrderSlipNo (excelUploadMPSVO.getOrderSlipNo());
 
         DefaultMap<String> storeLoan = storeOrderMapper.getStoreLoan(storeOrderLoanVO);
         /*
@@ -510,6 +545,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
         storeOrderVO.setProcFg("00");
         storeOrderVO.setRemark(excelUploadMPSVO.getHdRemark());
         storeOrderVO.setVendrCd(excelUploadMPSVO.getVendrCd());
+        storeOrderVO.setOrderSlipNo(excelUploadMPSVO.getOrderSlipNo());
 
         //주문요청일의 상품건수 조회
         dtlCnt = storeOrderMapper.getDtlCnt(storeOrderVO);
@@ -531,7 +567,7 @@ public class StoreOrderServiceImpl implements StoreOrderService {
             }
         }
 
-        return result;
+        return storeOrderVO.getOrderSlipNo();
     }
 
     /** 주문등록 출고요청일자에 등록한 주문 총 합계 금액 조회 */

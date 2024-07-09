@@ -14,6 +14,7 @@ import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
 import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.order.outstockData.service.OutstockDataVO;
 import kr.co.solbipos.iostock.order.outstockData.service.impl.OutstockDataMapper;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderProdVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderService;
@@ -67,13 +68,19 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
     /** 반품등록 반품상품 저장 */
     @Override
-    public int saveRtnStoreOrderRegist(RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs, SessionInfoVO sessionInfoVO) {
+    public String saveRtnStoreOrderRegist(RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs, SessionInfoVO sessionInfoVO) {
         int returnResult = 0;
         int result = 0;
         String currentDt = currentDateTimeString();
         RtnStoreOrderVO rtnStoreOrderVO = new RtnStoreOrderVO();
         RtnStoreOrderProdVO	prodVO;
 
+        // 신규등록 시, 반품주문전표번호 채번
+        String sOrderSlipNo = "";
+        if("".equals(rtnStoreOrderDtlVOs[0].getOrderSlipNo()) || rtnStoreOrderDtlVOs[0].getOrderSlipNo() == null || 1 > rtnStoreOrderDtlVOs[0].getOrderSlipNo().length()){
+            rtnStoreOrderVO.setStoreCd(rtnStoreOrderDtlVOs[0].getStoreCd());
+            sOrderSlipNo = rtnStoreOrderMapper.getOrderSlipNo(rtnStoreOrderVO);
+        }
 
         int i = 0;
         for (RtnStoreOrderDtlVO rtnStoreOrderDtlVO : rtnStoreOrderDtlVOs) {
@@ -92,10 +99,18 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 rtnStoreOrderVO.setModDt(currentDt);
                 rtnStoreOrderVO.setVendrCd(rtnStoreOrderDtlVO.getVendrCd());
 
-                // 반품진행구분 체크
-                DefaultMap<String> orderProcFg = getOrderProcFgCheck(rtnStoreOrderVO);
-                if(orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
-                    throw new JsonException(Status.SERVER_ERROR, messageService.get("rtnStoreOrder.dtl.dstbConfirm.msg")); //반품이 본사에서 분배완료 되었습니다.
+                if(!"".equals(sOrderSlipNo)){
+                    // 신규등록인 경우, 새로 채번한 주문전표번호로 셋팅
+                    rtnStoreOrderVO.setOrderSlipNo(sOrderSlipNo);
+                }else {
+                    // 수정인 경우
+                    rtnStoreOrderVO.setOrderSlipNo(rtnStoreOrderDtlVO.getOrderSlipNo());
+
+                    // 반품진행구분 체크
+                    DefaultMap<String> orderProcFg = getOrderProcFgCheck(rtnStoreOrderVO);
+                    if (orderProcFg != null && !StringUtil.getOrBlank(orderProcFg.get("procFg")).equals("00")) {
+                        throw new JsonException(Status.SERVER_ERROR, messageService.get("rtnStoreOrder.dtl.dstbConfirm.msg")); //반품이 본사에서 분배완료 되었습니다.
+                    }
                 }
             }
 
@@ -142,6 +157,11 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             }
             rtnStoreOrderDtlVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+            // 신규등록인 경우, 새로 채번한 반품주문전표번호로 셋팅
+            if(!"".equals(sOrderSlipNo)){
+                rtnStoreOrderDtlVO.setOrderSlipNo(sOrderSlipNo);
+            }
+
             // 추가
             if(insFg.equals("I")) {
             	if(rtnStoreOrderDtlVO.getOrderTotQty() != 0 && rtnStoreOrderDtlVO.getOrderTotQty() != null) {
@@ -163,6 +183,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	                prodVO.setOrderAmt			    (rtnStoreOrderDtlVO .getOrderAmt		()		);		//입고금액
 	                prodVO.setOrderVat			    (rtnStoreOrderDtlVO .getOrderVat		()		);		//입고금액VAT
 	                prodVO.setOrderTot			    (rtnStoreOrderDtlVO .getOrderTot		()		);		//입고금액합계
+                    prodVO.setOrderSlipNo           (rtnStoreOrderDtlVO.getOrderSlipNo());                  //반품주문전표번호
 
 	            	prodVO.setRegId			        (sessionInfoVO.getUserId()		);
 	            	prodVO.setRegDt			        (currentDt	);
@@ -197,6 +218,8 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	                prodVO.setOrderAmt			    (rtnStoreOrderDtlVO .getOrderAmt		()		);		//입고금액
 	                prodVO.setOrderVat			    (rtnStoreOrderDtlVO .getOrderVat		()		);		//입고금액VAT
 	                prodVO.setOrderTot			    (rtnStoreOrderDtlVO .getOrderTot		()		);		//입고금액합계
+                    prodVO.setOrderSlipNo           (rtnStoreOrderDtlVO.getOrderSlipNo());                  //반품주문전표번호
+
 
 	            	prodVO.setRegId			        (sessionInfoVO.getUserId()		);
 	            	prodVO.setRegDt			        (currentDt	);
@@ -244,7 +267,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             }
         }
 
-        return returnResult;
+        return rtnStoreOrderVO.getOrderSlipNo();
 
     }
 
@@ -273,6 +296,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
                 rtnStoreOrderVO.setModId(sessionInfoVO.getUserId());
                 rtnStoreOrderVO.setModDt(currentDt);
                 rtnStoreOrderVO.setVendrCd(rtnStoreOrderDtlVO.getVendrCd());
+                rtnStoreOrderVO.setOrderSlipNo(rtnStoreOrderDtlVO.getOrderSlipNo());
 
                 // 반품진행구분 체크
                 DefaultMap<String> orderProcFg = getOrderProcFgCheck(rtnStoreOrderVO);
@@ -341,6 +365,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 	                prodVO.setOrderAmt			    (rtnStoreOrderDtlVO .getOrderAmt		()		);		//입고금액
 	                prodVO.setOrderVat			    (rtnStoreOrderDtlVO .getOrderVat		()		);		//입고금액VAT
 	                prodVO.setOrderTot			    (rtnStoreOrderDtlVO .getOrderTot		()		);		//입고금액합계
+                    prodVO.setOrderSlipNo           (rtnStoreOrderDtlVO.getOrderSlipNo());                  //반품주문전표번호
 
 	            	prodVO.setRegId			        (sessionInfoVO.getUserId()		);
 	            	prodVO.setRegDt			        (currentDt	);
@@ -450,6 +475,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         dstbReqVO.setModId(sessionInfoVO.getUserId());
         dstbReqVO.setModDt(currentDt);
         dstbReqVO.setVendrCd(rtnStoreOrderVO.getVendrCd());
+        dstbReqVO.setOrderSlipNo(rtnStoreOrderVO.getOrderSlipNo());
 
         result = rtnStoreOrderMapper.insertDstbRegist(dstbReqVO);
 //      반품수량을 업데이트 하는건데 result > 0 확인요망?
@@ -469,6 +495,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         dstbCloseStoreVO.setModDt(currentDt);
         dstbCloseStoreVO.setEmpNo		(dstbReqVO.getEmpNo   	());
         dstbCloseStoreVO.setVendrCd(dstbReqVO.getVendrCd());
+        dstbCloseStoreVO.setOrderSlipNo(dstbReqVO.getOrderSlipNo());
 
         result = dstbCloseStoreMapper.updateDstbCloseConfirm(dstbCloseStoreVO);
         if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
@@ -505,6 +532,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
             outstockDataVO.setDateFg("req");
             outstockDataVO.setStartDate(dstbCloseStoreVO.getReqDate());
             outstockDataVO.setEndDate(dstbCloseStoreVO.getReqDate());
+            outstockDataVO.setOrderSlipNo(dstbCloseStoreVO.getOrderSlipNo());
 
             // 등록된 분배자료 기준으로 출고 자료 생성 - 분배자료확인(직배송거래처 및 배송기사 조회)
             //List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
@@ -549,10 +577,19 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
 
     /** 반품등록 - 엑셀업로드 */
     @Override
-    public int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
+    public String excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
 
         String currentDt = currentDateTimeString();
+
+        // 신규등록 시, 주문전표번호 채번
+        String sOrderSlipNo = "";
+        if("".equals(excelUploadMPSVO.getOrderSlipNo()) || excelUploadMPSVO.getOrderSlipNo() == null || 1 > excelUploadMPSVO.getOrderSlipNo().length()){
+            RtnStoreOrderVO rtnStoreOrderVO =  new RtnStoreOrderVO();
+            rtnStoreOrderVO.setStoreCd(excelUploadMPSVO.getStoreCd());
+            sOrderSlipNo = rtnStoreOrderMapper.getOrderSlipNo(rtnStoreOrderVO);
+            excelUploadMPSVO.setOrderSlipNo(sOrderSlipNo);
+        }
 
         excelUploadMPSVO.setSessionId(sessionInfoVO.getSessionId());
         excelUploadMPSVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -594,6 +631,7 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         rtnStoreOrderVO.setProcFg("00");
         rtnStoreOrderVO.setRemark(excelUploadMPSVO.getHdRemark());
         rtnStoreOrderVO.setVendrCd(excelUploadMPSVO.getVendrCd());
+        rtnStoreOrderVO.setOrderSlipNo(excelUploadMPSVO.getOrderSlipNo());
 
         // 주문요청일의 상품건수 조회
         dtlCnt = rtnStoreOrderMapper.getDtlCnt(rtnStoreOrderVO);
@@ -620,6 +658,6 @@ public class RtnStoreOrderServiceImpl implements RtnStoreOrderService {
         // 주문수량으로 정상 입력된 데이터 TEMP 테이블에서 삭제
         result = rtnStoreOrderMapper.deleteExcelUploadCompleteData(excelUploadMPSVO);
 
-        return result;
+        return rtnStoreOrderVO.getOrderSlipNo();
     }
 }

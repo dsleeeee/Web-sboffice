@@ -220,7 +220,7 @@ public class RtnStoreOrderController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = rtnStoreOrderService.saveRtnStoreOrderRegist(rtnStoreOrderDtlVOs, sessionInfoVO);
+        String result = rtnStoreOrderService.saveRtnStoreOrderRegist(rtnStoreOrderDtlVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -313,7 +313,7 @@ public class RtnStoreOrderController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = rtnStoreOrderService.excelUpload(excelUploadMPSVO, sessionInfoVO);
+        String result = rtnStoreOrderService.excelUpload(excelUploadMPSVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

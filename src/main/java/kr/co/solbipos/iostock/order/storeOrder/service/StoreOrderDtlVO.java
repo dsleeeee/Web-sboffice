@@ -98,6 +98,8 @@ public class StoreOrderDtlVO extends PageVO {
     private String saleUprc;
     /** 거래처코드 */
     private String vendrCd;
+    /** 주문번표번호 */
+    private String orderSlipNo;
 
     /**
      * @return the reqDate
@@ -623,5 +625,13 @@ public class StoreOrderDtlVO extends PageVO {
 
     public void setVendrCd(String vendrCd) {
         this.vendrCd = vendrCd;
+    }
+
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
+
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
     }
 }

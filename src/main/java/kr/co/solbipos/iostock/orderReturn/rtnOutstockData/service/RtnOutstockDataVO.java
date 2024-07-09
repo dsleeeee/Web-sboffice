@@ -120,6 +120,9 @@ public class RtnOutstockDataVO extends PageVO {
     private String hqBrandCd;
     /** 출고예약일자 */
     private String reqDate;
+    /** 주문전표번호*/
+    private String orderSlipNo;
+
     /**
      * @return the hqOfficeCd
      */
@@ -911,5 +914,12 @@ public class RtnOutstockDataVO extends PageVO {
 	public void setReqDate(String reqDate) {
 		this.reqDate = reqDate;
 	}
-    
+
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
+
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
+    }
 }

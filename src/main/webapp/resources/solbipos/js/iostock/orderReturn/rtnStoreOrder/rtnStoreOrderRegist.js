@@ -207,6 +207,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       $scope.regHdRemark = data.hdRemark;
       $scope.storeCd     = data.storeCd;
       $scope.vendrCd     = data.vendrCd;
+      $scope.orderSlipNo = data.orderSlipNo;  // 주문전표번호, 신규 요청등록인 경우 null, 주문 상품상세내역 페이지에서 호출한 경우 값 존재
 
       // 거래처는 수정 못하게 처리
       $("#dtlVendrCd").attr("disabled", true);
@@ -233,8 +234,14 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       
       // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
       $scope._queryCombo("combo", "saveDtlRtnRegOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
-      
-      $scope.orderProcFgCheck(); // 반품진행구분 체크
+
+      // 주문전표번호 존재하는 경우(주문 상품상세내역 페이지에서 호출한 경우), 주문진행구분 확인
+      if ($scope.orderSlipNo !== "" && $scope.orderSlipNo !== null && $scope.orderSlipNo !== undefined) {
+          $scope.orderProcFgCheck(); // 반품진행구분 체크
+      }else{
+          $scope.wjRtnStoreOrderRegistLayer.show(true);
+           $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
+      }
     }
     else { // 페이징처리에서 broadcast 호출시
       $scope.searchRtnStoreOrderRegistList();
@@ -249,13 +256,13 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     var params     = {};
     params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
-    params.storeCd = $scope.storeCd;
-    
+    params.orderSlipNo = $scope.orderSlipNo; // 주문전표번호, 신규 요청등록인 경우 null, 주문 상품상세내역 페이지에서 호출한 경우 값 존재
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
-    	params['sid'] = document.getElementsByName('sessionId')[0].value;
+        params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
-    
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
@@ -290,6 +297,8 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
 //      $scope.wjRtnStoreOrderRegistLayer.show(true);
 //      $("#registSubTitle").html(' ('+messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ')');
     });
+
+
   };
 
   // 반품가능상품 리스트 조회
@@ -303,6 +312,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     params.storeCd   = $scope.storeCd;
     params.listScale = 50;
     params.vendrCd   = $scope.vendrCd;
+    params.orderSlipNo = $scope.orderSlipNo; // 주문전표번호, 신규 요청등록인 경우 null, 주문 상품상세내역 페이지에서 호출한 경우 값 존재
     
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/list.sb", params);
@@ -336,6 +346,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
       item.storeCd   = $scope.storeCd;
       item.outStorageCd	= $scope.save.dtl.rtnRegOutStorageCd;
       item.vendrCd   = $scope.vendrCd;
+      item.orderSlipNo = $scope.orderSlipNo; // 주문전표번호, 신규 요청등록인 경우 null, 주문 상품상세내역 페이지에서 호출한 경우 값 존재
       orderTot += parseInt(item.orderTot);
 
       params.push(item);
@@ -346,9 +357,18 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
         params['sid'] = document.getElementsByName('sessionId')[0].value;
     }
     
-    $scope._save("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/save.sb", params, function () {
+    /*$scope._save("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/save.sb", params, function () {
       $scope.saveRegistCallback()
+    });*/
+
+    $scope._postJSONSave.withPopUp("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderRegist/save.sb", params, function (response) {
+
+      if (response.data.data !== null) {
+          $scope.orderSlipNo = response.data.data;
+          $scope.saveRegistCallback();
+      }
     });
+
   };
 
   // 저장 후 콜백 서치 함수
@@ -493,6 +513,7 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     params.hdRemark = $scope.regHdRemark;
     params.addQtyFg = $scope.addQtyFg;
     params.vendrCd  = $scope.vendrCd;
+    params.orderSlipNo = $scope.orderSlipNo;
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -514,7 +535,10 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
         $scope.excelUploadErrInfo();
 
         // 등록 그리드 및 여신, 부모 그리드 조회
-        $scope.saveRegistCallback();
+        if (response.data.data !== null) {
+            $scope.orderSlipNo = response.data.data;
+            $scope.saveRegistCallback();
+        }
       }
     }, function errorCallback(response) {
       $scope._popMsg(response.data.message);

@@ -53,6 +53,7 @@ public class RtnDstbReqServiceImpl implements RtnDstbReqService {
             storeOrderVO.setReqDate(rtnDstbReqVO.getReqDate());
             storeOrderVO.setStoreCd(rtnDstbReqVO.getStoreCd());
             storeOrderVO.setSlipFg(rtnDstbReqVO.getSlipFg());
+            storeOrderVO.setOrderSlipNo(rtnDstbReqVO.getOrderSlipNo());
             DefaultMap<String> orderProcFg = storeOrderService.getOrderProcFgCheck(storeOrderVO);
 
             // 처리구분이 분배마감이 아닌 경우 실행
@@ -126,6 +127,7 @@ public class RtnDstbReqServiceImpl implements RtnDstbReqService {
                 storeOrderVO.setModId(sessionInfoVO.getUserId());
                 storeOrderVO.setModDt(currentDt);
                 storeOrderVO.setVendrCd(rtnDstbReqVO.getVendrCd());
+                storeOrderVO.setOrderSlipNo(rtnDstbReqVO.getOrderSlipNo());
             }
 
             int slipFg       = rtnDstbReqVO.getSlipFg();
@@ -176,6 +178,7 @@ public class RtnDstbReqServiceImpl implements RtnDstbReqService {
             rtnDstbReqVO.setModId(sessionInfoVO.getUserId());
             rtnDstbReqVO.setModDt(currentDt);
             rtnDstbReqVO.setVendrCd(storeOrderVO.getVendrCd());
+            rtnDstbReqVO.setOrderSlipNo(storeOrderVO.getOrderSlipNo());
 
             result = rtnDstbReqMapper.insertRtnDstbReqRegist(rtnDstbReqVO);
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

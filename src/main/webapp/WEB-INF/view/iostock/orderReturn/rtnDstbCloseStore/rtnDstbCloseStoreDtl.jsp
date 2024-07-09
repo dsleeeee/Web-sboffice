@@ -44,6 +44,7 @@
             <!-- define columns -->
             <%--<wj-flex-grid-column header="<s:message code="cmm.chk"/>"                             binding="gChk"             width="40"  align="center" ></wj-flex-grid-column>--%>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.seq"/>" binding="seq" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.orderSlipNo"/>" binding="orderSlipNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.storeCd"/>" binding="storeCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="rtnDstbCloseStore.dtl.prodNm"/>" binding="prodNm" width="130" align="left" is-read-only="true"></wj-flex-grid-column>

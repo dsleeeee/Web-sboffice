@@ -171,6 +171,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
 	    $scope.dtlHdRemark = data.hdRemark;
 	    $scope.storeCd     = data.storeCd;
 	    $scope.vendrCd     = data.vendrCd;
+        $scope.orderSlipNo = data.orderSlipNo;
 
 	    $scope.wjRtnStoreOrderDtlLayer.show(true);
 	    if ($scope.procFg === "00") {
@@ -198,7 +199,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
 	    // 파라미터 (comboFg, comboId, gridMapId, url, params, option, callback)
 	    $scope._queryCombo("combo", "saveDtlRtnOutStorageCd", null, url, comboParams, null); // 명칭관리 조회시 url 없이 그룹코드만 넘긴다.
 	    
-	    $("#spanDtlTitle").html(messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-'));
+	    $("#spanDtlTitle").html(messages["rtnStoreOrder.reqDate"]+' : ' + getFormatDate($scope.reqDate, '-') + ' / ' + messages["rtnStoreOrder.orderSlipNo"] + ' : ' + nvl($scope.orderSlipNo, ''));
 	    $scope.wjRtnStoreOrderDtlLayer.show(true);
 	    $scope.searchRtnStoreOrderDtlList();
 	    // 기능수행 종료 : 반드시 추가
@@ -210,9 +211,9 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
   $scope.searchRtnStoreOrderDtlList = function () {
     // 파라미터
     var params     = {};
-    params.reqDate = $scope.reqDate;
-    params.slipFg  = $scope.slipFg;
     params.storeCd = $scope.storeCd;
+    params.slipFg  = $scope.slipFg;
+    params.orderSlipNo = $scope.orderSlipNo;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
 //    $scope._inquirySub("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/list.sb", params);
     params.listScale = 50;
@@ -375,6 +376,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
       item.storeCd   = $scope.storeCd;
       item.outStorageCd	= $scope.save.dtl.rtnOutStorageCd;
       item.vendrCd = $scope.vendrCd;
+      item.orderSlipNo = $scope.orderSlipNo;
       orderTot += parseInt(item.orderTot);
            
       
@@ -409,6 +411,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     params.storeCd = $scope.storeCd;
     params.envst1042= gEnvst1042;
     params.vendrCd = $scope.vendrCd;
+    params.orderSlipNo = $scope.orderSlipNo;
     
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
@@ -439,6 +442,7 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
     params.hdRemark   = $scope.dtlHdRemark;
     params.storeCd    = $scope.storeCd;
     params.vendrCd    = $scope.vendrCd;
+    params.orderSlipNo = $scope.orderSlipNo;
     $scope._broadcast("rtnStoreOrderRegistCtrl", params);
   };
 
@@ -523,8 +527,8 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
   // 주문진행구분을 체크하여, 버튼 show/hidden 처리
   $scope.orderProcFgCheck = function () {
       var params     = {};
-      params.reqDate = $scope.reqDate;
-      params.slipFg  = $scope.slipFg;
+      params.slipFg = $scope.slipFg;
+      params.orderSlipNo = $scope.orderSlipNo;
       params.storeCd = $scope.storeCd;
 
       //가상로그인 session 설정

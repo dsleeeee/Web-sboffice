@@ -17,7 +17,7 @@ public interface RtnStoreOrderService {
     List<DefaultMap<String>> getRtnStoreOrderRegistList(RtnStoreOrderDtlVO rtnStoreOrderDtlVO);
 
     /** 반품등록 반품상품 저장 */
-    int saveRtnStoreOrderRegist(RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs, SessionInfoVO sessionInfoVO);
+    String saveRtnStoreOrderRegist(RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs, SessionInfoVO sessionInfoVO);
     
     /** 반품등록 반품상세 저장 */
     int saveRtnStoreOrderDtl(RtnStoreOrderDtlVO[] rtnStoreOrderDtlVOs, SessionInfoVO sessionInfoVO);
@@ -32,6 +32,6 @@ public interface RtnStoreOrderService {
     int saveRtnStoreOrderConfirm(RtnStoreOrderVO rtnStoreOrderVO, SessionInfoVO sessionInfoVO);
 
     /** 엑셀업로드 */
-    int excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO);
+    String excelUpload(ExcelUploadMPSVO excelUploadMPSVO, SessionInfoVO sessionInfoVO);
 
 }

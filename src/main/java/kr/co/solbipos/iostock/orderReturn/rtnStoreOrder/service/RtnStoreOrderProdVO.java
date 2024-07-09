@@ -36,6 +36,9 @@ public class RtnStoreOrderProdVO extends PageVO {
     private String storageCd;
     /** 출고창고 */
     private String outStorageCd;
+    /**주문전표번호*/
+    private String orderSlipNo;
+
 	public String getReqDate() {
 		return reqDate;
 	}
@@ -126,9 +129,12 @@ public class RtnStoreOrderProdVO extends PageVO {
 	public void setOutStorageCd(String outStorageCd) {
 		this.outStorageCd = outStorageCd;
 	}
-    
-    
-    
-    
-	
+
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
+
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
+    }
 }

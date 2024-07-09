@@ -90,6 +90,7 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.slipFg  = data.slipFg;
     $scope.procFg  = data.procFg;
     $scope.vendrCd = data.vendrCd;
+    $scope.orderSlipNo = data.orderSlipNo;
 
     $("#spanDtlTitle").html('['+messages["dstbReq.dtl.order"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
     $scope.orderProcFgCheck();
@@ -100,9 +101,9 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   // 주문진행구분 체크 및 HD 비고 조회
   $scope.orderProcFgCheck = function () {
     var params     = {};
-    params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
-    params.storeCd = $scope.storeCd;
+    params.orderSlipNo = $scope.orderSlipNo;
+
 
     //가상로그인 session 설정
 	      if(document.getElementsByName('sessionId')[0]){
@@ -136,9 +137,7 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   // 매장여신 조회
   $scope.searchStoreLoan = function () {
     var params     = {};
-    params.reqDate = $scope.reqDate;
-    params.slipFg  = $scope.slipFg;
-    params.storeCd = $scope.storeCd;
+    params.orderSlipNo = $scope.orderSlipNo; // 주문전표번호
 
     //가상로그인 session 설정
 	      if(document.getElementsByName('sessionId')[0]){
@@ -208,7 +207,7 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   $scope.searchDstbReqDtlList = function () {
     // 파라미터
     var params     = {};
-    params.reqDate = $scope.reqDate;
+    params.orderSlipNo = $scope.orderSlipNo;
     params.storeCd = $scope.storeCd;
     params.slipFg  = $scope.slipFg;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -271,6 +270,8 @@ app.controller('dstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
       item.dstbConfirmFg = ($("#dstbConfirmFg").is(":checked") ? $("#dstbConfirmFg").val() : "");
       item.hdRemark      = $scope.hdRemark;
       item.vendrCd       = $scope.vendrCd;
+      item.orderSlipNo = $scope.orderSlipNo;
+
       mdTot += parseInt(item.mdTot);
       params.push(item);
     }

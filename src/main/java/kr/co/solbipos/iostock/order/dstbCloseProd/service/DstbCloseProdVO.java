@@ -116,6 +116,8 @@ public class DstbCloseProdVO extends PageVO {
     private String vendrCd;
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+    /** 주문전표번호 */
+    private String orderSlipNo;
 
     /**
      * @return the hqOfficeCd
@@ -873,5 +875,13 @@ public class DstbCloseProdVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
+
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
     }
 }

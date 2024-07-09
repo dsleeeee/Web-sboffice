@@ -96,6 +96,7 @@ app.controller('rtnDstbReqCtrl', ['$scope', '$http', function ($scope, $http) {
           params.procFg   = selectedRow.procFg;
           params.hdRemark = selectedRow.remark;
           params.vendrCd  = $scope.vendrCdCombo.selectedValue;
+          params.orderSlipNo = selectedRow.orderSlipNo;
           $scope._broadcast('rtnDstbReqDtlCtrl', params);
         }
       }

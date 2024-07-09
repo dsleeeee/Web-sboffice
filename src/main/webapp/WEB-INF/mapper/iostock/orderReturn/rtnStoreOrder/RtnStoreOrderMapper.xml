@@ -13,7 +13,7 @@
     <select id="getRtnStoreOrderList" parameterType="rtnStoreOrderVO" resultType="DefaultMap">
         /* USE : RtnStoreOrderMapper.getRtnStoreOrderList */
         <![CDATA[
-        SELECT   tphso.REQ_DATE, tphso.STORE_CD
+        SELECT   tphso.REQ_DATE, tphso.STORE_CD, tphso.ORDER_SLIP_NO
         ,        tphso.DTL_CNT, tphso.PROC_FG, tphso.REMARK
         ,        tphso.SLIP_FG, tphso.MOD_DT
         ,        tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY
@@ -54,7 +54,7 @@
               </otherwise>
           </choose>
         </if>
-        ORDER BY tphso.REQ_DATE DESC
+        ORDER BY tphso.REQ_DATE, tphso.ORDER_SLIP_NO DESC
     </select>
 
     <!-- 반품등록 DT 리스트 조회 -->
@@ -242,9 +242,9 @@
 	                        FROM    TB_PO_HQ_STORE_ORDER_DTL tphso
 	                        ,       TB_MS_PRODUCT tmp
 	                        ,       TB_HQ_ENVST the
-	                        WHERE   tphso.REQ_DATE      =   #{reqDate}
-	                        AND     tphso.STORE_CD      =   #{storeCd}
+	                        WHERE   tphso.STORE_CD      =   #{storeCd}
 	                        AND     tphso.SLIP_FG       =   -1
+                            AND     tphso.ORDER_SLIP_NO =   #{orderSlipNo}
 	                        AND     tmp.STORE_CD        =   tphso.STORE_CD
 	                        AND     tmp.PROD_CD         =   tphso.PROD_CD
 	                        AND     the.HQ_OFFICE_CD    =   #{hqOfficeCd}
@@ -715,8 +715,8 @@
 	                    AND     tsssc.STORE_CD    (+) =   tmp.STORE_CD
 	                    AND     tsssc.PROD_CD     (+) =   tmp.PROD_CD
 	                    AND     tshsc.PROD_CD     (+) =   tmp.PROD_CD
-				        AND     tphso.REQ_DATE    (+) =   #{reqDate}
-				        AND     tphsod.REQ_DATE   (+) =   #{reqDate}
+				        AND     tphso.ORDER_SLIP_NO    (+) =   #{orderSlipNo}
+				        AND     tphsod.ORDER_SLIP_NO   (+) =   #{orderSlipNo}
 				        AND     tphso.STORE_CD    (+) =   tmp.STORE_CD
 				        AND     tphso.PROD_CD     (+) =   tmp.PROD_CD
 				        AND     tphso.SLIP_FG     (+) =   1
@@ -782,9 +782,9 @@
         <![CDATA[
         SELECT  COUNT(tphsod.PROD_CD) AS DTL_CNT
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
-        WHERE   tphsod.REQ_DATE    = #{reqDate}
-        AND     tphsod.STORE_CD    = #{storeCd}
+        WHERE   tphsod.STORE_CD    = #{storeCd}
         AND     tphsod.SLIP_FG     = #{slipFg}
+        AND     tphsod.ORDER_SLIP_NO = #{orderSlipNo}
         ]]>
     </select>
 
@@ -798,9 +798,9 @@
         /* USE : RtnStoreOrderMapper.getHdExist */
         SELECT  DECODE(COUNT(*), 0, 'N', 'Y') AS IS_EXIST
         FROM    TB_PO_HQ_STORE_ORDER tphso
-        WHERE   tphso.REQ_DATE    = #{reqDate}
-        AND     tphso.STORE_CD    = #{storeCd}
+        WHERE   tphso.STORE_CD    = #{storeCd}
         AND     tphso.SLIP_FG     = #{slipFg}
+        AND     tphso.ORDER_SLIP_NO = #{orderSlipNo}
         <choose>
             <when test='vendrCd != null and vendrCd != ""'>
               AND tphso.HQ_VENDR_CD = #{vendrCd}
@@ -822,8 +822,8 @@
         <![CDATA[
         SELECT  PROC_FG, REMARK
         FROM    TB_PO_HQ_STORE_ORDER tphso
-        WHERE   tphso.REQ_DATE    = #{reqDate}
-        AND     tphso.STORE_CD    = #{storeCd}
+        WHERE   tphso.STORE_CD    = #{storeCd}
+        AND     tphso.ORDER_SLIP_NO = #{orderSlipNo}
         AND     tphso.SLIP_FG     = #{slipFg}
         ]]>
     </select>
@@ -901,7 +901,8 @@
             REG_DT,
             REG_ID,
             MOD_DT,
-            MOD_ID
+            MOD_ID,
+            ORDER_SLIP_NO
         )
         VALUES
         (
@@ -923,7 +924,8 @@
             #{regDt},
             #{regId},
             #{modDt},
-            #{modId}
+            #{modId},
+            #{orderSlipNo}
         )
     </insert>
 
@@ -978,10 +980,10 @@
         ,       ORDER_TOT		=	#{orderTot}
         ,       MOD_DT  		= #{modDt}
         ,       MOD_ID  		= #{modId}
-		WHERE REQ_DATE 	= #{reqDate}
-		AND STORE_CD 	= #{storeCd}
+		WHERE STORE_CD 	= #{storeCd}
 		AND SLIP_FG 	= #{slipFg}
 		AND PROD_CD 	= #{prodCd}
+        AND ORDER_SLIP_NO = #{orderSlipNo}
 		AND STORAGE_CD 	= #{storageCd}
 	</update>
 
@@ -995,7 +997,7 @@
         /* USE : RtnStoreOrderMapper.savetRtnStoreOrderProd */
        MERGE INTO TB_PO_HQ_STORE_ORDER_PROD TPHSOP
         USING DUAL
-           ON (TPHSOP.REQ_DATE 		= #{reqDate}
+           ON (TPHSOP.ORDER_SLIP_NO	= #{orderSlipNo}
 		AND 	TPHSOP.STORE_CD 	= #{storeCd}
 		AND 	TPHSOP.SLIP_FG 		= #{slipFg}
 		AND 	TPHSOP.PROD_CD 		= #{prodCd}
@@ -1033,7 +1035,8 @@
              TPHSOP.REG_DT,
              TPHSOP.REG_ID,
              TPHSOP.MOD_DT,
-             TPHSOP.MOD_ID
+             TPHSOP.MOD_ID,
+             TPHSOP.ORDER_SLIP_NO
          )
          VALUES
          (
@@ -1054,7 +1057,8 @@
              #{regDt},
              #{regId},
              #{modDt},
-             #{modId}
+             #{modId},
+             #{orderSlipNo}
          )
     </insert>
 
@@ -1085,7 +1089,8 @@
              REG_DT,
              REG_ID,
              MOD_DT,
-             MOD_ID
+             MOD_ID,
+             ORDER_SLIP_NO
         )
         SELECT  '000'
         ,       tmp.PROD_CD
@@ -1108,6 +1113,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       #{orderSlipNo}
         FROM    (   SELECT  tpte.STORE_CD
                     ,       tpte.PROD_CD
                     ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY
@@ -1182,10 +1188,10 @@
                 REMARK             = #{remark},
                 MOD_DT             = #{modDt},
                 MOD_ID             = #{modId}
-        WHERE   REQ_DATE    = #{reqDate}
-        AND     STORE_CD    = #{storeCd}
+        WHERE   STORE_CD    = #{storeCd}
         AND     SLIP_FG     = #{slipFg}
         AND     PROD_CD     = #{prodCd}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
     </update>
 
     <!-- 반품등록 반품상품 DTL 저장 -->
@@ -1197,10 +1203,10 @@
     <delete id="deleteRtnStoreOrderDtl" parameterType="rtnStoreOrderDtlVO">
         /* USE : RtnStoreOrderMapper.deleteRtnStoreOrderDtl */
         DELETE  TB_PO_HQ_STORE_ORDER_DTL
-        WHERE   REQ_DATE    = #{reqDate}
-        AND     STORE_CD    = #{storeCd}
+        WHERE   STORE_CD    = #{storeCd}
         AND     SLIP_FG     = #{slipFg}
         AND     PROD_CD     = #{prodCd}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
     </delete>
 
 	<!-- 반품등록 반품상품 PROD 삭제 -->
@@ -1212,10 +1218,10 @@
     <delete id="deleteRtnStoreOrderProd" parameterType="rtnStoreOrderDtlVO">
         /* USE : RtnStoreOrderMapper.deleteRtnStoreOrderProd */
         DELETE  TB_PO_HQ_STORE_ORDER_PROD
-        WHERE   REQ_DATE    = #{reqDate}
-        AND     STORE_CD    = #{storeCd}
+        WHERE   STORE_CD    = #{storeCd}
         AND     SLIP_FG     = #{slipFg}
         AND     PROD_CD     = #{prodCd}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
     </delete>
 
     <!-- 반품등록 반품상품 HD 저장 -->
@@ -1251,7 +1257,8 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            HQ_VENDR_CD
+            HQ_VENDR_CD,
+            ORDER_SLIP_NO
         )
         SELECT  tphsod.REQ_DATE
         ,       tphsod.STORE_CD
@@ -1277,10 +1284,11 @@
         ,       #{modDt}
         ,       #{modId}
         ,       #{vendrCd}
+        ,       #{orderSlipNo}
         FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
-        WHERE   tphsod.REQ_DATE  = #{reqDate}
-        AND     tphsod.STORE_CD  = #{storeCd}
+        WHERE   tphsod.STORE_CD  = #{storeCd}
         AND     tphsod.SLIP_FG   = #{slipFg}
+        AND     tphsod.ORDER_SLIP_NO = #{orderSlipNo}
         GROUP
         BY      tphsod.REQ_DATE
         ,       tphsod.STORE_CD
@@ -1307,17 +1315,17 @@
                   ,       NVL(SUM(tphsod.MD_AMT), 0)        , NVL(SUM(tphsod.MD_VAT), 0)       , NVL(SUM(tphsod.MD_TOT), 0)
                   ,       COUNT(tphsod.PROD_CD)
                   FROM    TB_PO_HQ_STORE_ORDER_DTL tphsod
-                  WHERE   tphsod.REQ_DATE  = #{reqDate}
-                  AND     tphsod.STORE_CD  = #{storeCd}
+                  WHERE   tphsod.STORE_CD  = #{storeCd}
                   AND     tphsod.SLIP_FG   = #{slipFg}
+                  AND     tphsod.ORDER_SLIP_NO = #{orderSlipNo}
                 )
         ,       PROC_FG = #{procFg}
         ,       REMARK  = #{remark}
         ,       MOD_DT  = #{modDt}
         ,       MOD_ID  = #{modId}
-        WHERE   REQ_DATE    = #{reqDate}
-        AND     STORE_CD    = #{storeCd}
+        WHERE   STORE_CD    = #{storeCd}
         AND     SLIP_FG     = #{slipFg}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
     </update>
 
     <!-- 반품등록 반품상품 HD 저장 -->
@@ -1329,9 +1337,9 @@
     <delete id="deleteRtnStoreOrder" parameterType="rtnStoreOrderVO">
         /* USE : RtnStoreOrderMapper.deleteRtnStoreOrder */
         DELETE  TB_PO_HQ_STORE_ORDER
-        WHERE   REQ_DATE    = #{reqDate}
-        AND     STORE_CD    = #{storeCd}
+        WHERE   STORE_CD    = #{storeCd}
         AND     SLIP_FG     = #{slipFg}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
     </delete>
 
     <!-- 반품등록 확정 - 반품수량을 MD수량으로 수정 -->
@@ -1352,9 +1360,9 @@
         ,       MD_TOT          =   ORDER_TOT
         ,       MOD_DT          =   #{modDt}
         ,       MOD_ID          =   #{modId}
-        WHERE   REQ_DATE  = #{reqDate}
-        AND     STORE_CD  = #{storeCd}
+        WHERE   STORE_CD  = #{storeCd}
         AND     SLIP_FG   = #{slipFg}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
     </update>
 
     <!--  반품등록 확정 - 분배자료 생성 -->
@@ -1414,7 +1422,8 @@
         REG_ID,
         MOD_DT,
         MOD_ID,
-        HQ_VENDR_CD
+        HQ_VENDR_CD,
+        ORDER_SLIP_NO
         )
         SELECT  #{hqOfficeCd}
         ,       #{reqDate}
@@ -1458,14 +1467,15 @@
         ,       #{modDt}
         ,       #{modId}
         ,       #{vendrCd}
+        ,       #{orderSlipNo}
         FROM    (   SELECT  PROD_CD         ,   PO_UNIT_FG     ,   PO_UNIT_QTY
         ,       REMARK
         ,       ORDER_SPLY_UPRC ,   ORDER_UNIT_QTY ,   ORDER_ETC_QTY      ,   ORDER_TOT_QTY       ,   ORDER_AMT       ,   ORDER_VAT       ,   ORDER_TOT
         ,       MD_SPLY_UPRC    ,   MD_UNIT_QTY    ,   MD_ETC_QTY         ,   MD_TOT_QTY          ,   MD_AMT          ,   MD_VAT          ,   MD_TOT
         FROM    TB_PO_HQ_STORE_ORDER_DTL
-        WHERE   REQ_DATE    =   #{reqDate}
-        AND     STORE_CD    =   #{storeCd}
+        WHERE   STORE_CD    =   #{storeCd}
         AND     SLIP_FG     =   #{slipFg}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
         ORDER
         BY      PROD_CD
         )
@@ -1556,6 +1566,7 @@
         WHERE   REQ_DATE      = #{date}
         AND     STORE_CD      = #{storeCd}
         AND     SLIP_FG       = #{slipFg}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
         AND     PROD_CD       IN  ( SELECT  PROD_CD
                                     FROM    TB_PO_TEMP_EXCEL
                                     WHERE   SESSION_ID  = #{sessionId}
@@ -1575,6 +1586,7 @@
         WHERE   REQ_DATE      = #{date}
         AND     STORE_CD      = #{storeCd}
         AND     SLIP_FG       = #{slipFg}
+        AND     ORDER_SLIP_NO = #{orderSlipNo}
         AND     PROD_CD       IN  ( SELECT  PROD_CD
                                     FROM    TB_PO_TEMP_EXCEL
                                     WHERE   SESSION_ID  = #{sessionId}
@@ -1605,6 +1617,7 @@
         ,   REG_ID
         ,   MOD_DT
         ,   MOD_ID
+        ,   ORDER_SLIP_NO
         )
         SELECT  #{date}         ,   #{storeCd}      ,   #{slipFg}
         ,       '00'            ,   tmp.PROD_CD     ,   tmp.PO_UNIT_FG  ,   tmp.PO_UNIT_QTY
@@ -1623,6 +1636,7 @@
         ,       #{regId}
         ,       #{modDt}
         ,       #{modId}
+        ,       #{orderSlipNo}
         FROM    (   SELECT  tpte.STORE_CD
                     ,       tpte.PROD_CD
                     ,       TRUNC(SUM(NVL(tpte.UNIT_QTY, 0)*tmp.PO_UNIT_QTY+NVL(tpte.ETC_QTY, 0)+NVL(tpte.QTY, 0))/tmp.PO_UNIT_QTY) AS UNIT_QTY
@@ -1713,4 +1727,20 @@
                                 )
     </delete>
     <!--                엑셀업로드 끝                 -->
+
+    <!-- 반품주문전표번호 채번 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER
+        COMMENTS : 반품주문전표번호 채번
+    -->
+    <select id="getOrderSlipNo" parameterType="rtnStoreOrderVO" resultType="String">
+        /* RtnStoreOrderMapper.getOrderSlipNo */
+        SELECT
+            CASE WHEN MAX(TO_NUMBER(SUBSTR(ORDER_SLIP_NO,1,4))) = TO_NUMBER(TO_CHAR(SYSDATE,'YYMM'))
+                 THEN TO_CHAR(SYSDATE,'YYMM') || LPAD(NVL(TO_NUMBER(SUBSTR(MAX(ORDER_SLIP_NO),5)),0) + 1, 6, '0')
+                 ELSE TO_CHAR(SYSDATE,'YYMM') || LPAD(1, 6, '0')
+            END AS ORDER_SLIP_NO
+        FROM TB_PO_HQ_STORE_ORDER
+        WHERE STORE_CD = #{storeCd}
+    </select>
 </mapper>

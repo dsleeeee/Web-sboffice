@@ -89,6 +89,7 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" 					binding="gChk" 		width="40" 	align="center" 	is-read-only="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="rtnOutstockData.orderSlipNo"/>" 	binding="orderSlipNo" 	width="100" 	align="center" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeCd"/>" 	binding="storeCd" 	width="70" 	align="center" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockData.storeNm"/>" 	binding="storeNm" 	width="180" align="left" 	is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="rtnOutstockData.reqDate"/>" 	binding="reqDate" 	width="0" 	align="left" 	is-read-only="true" ></wj-flex-grid-column>
@@ -126,7 +127,7 @@
   var sysStatFg     = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockData/rtnOutstockData.js?ver=20220804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockData/rtnOutstockData.js?ver=20240709.01" charset="utf-8"></script>
 
 <%-- 반품자료생성 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnOutstockData/rtnOutstockDataDtl.jsp">

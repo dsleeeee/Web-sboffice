@@ -200,7 +200,7 @@ public class StoreOrderController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = storeOrderService.saveStoreOrderRegist(storeOrderDtlVOs, sessionInfoVO);
+        String result = storeOrderService.saveStoreOrderRegist(storeOrderDtlVOs, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
@@ -351,7 +351,7 @@ public class StoreOrderController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        int result = storeOrderService.excelUpload(excelUploadMPSVO, sessionInfoVO);
+        String result = storeOrderService.excelUpload(excelUploadMPSVO, sessionInfoVO);
 
         return ReturnUtil.returnJson(Status.OK, result);
     }

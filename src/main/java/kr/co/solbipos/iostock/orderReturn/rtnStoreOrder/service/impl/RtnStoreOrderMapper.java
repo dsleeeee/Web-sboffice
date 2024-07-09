@@ -3,6 +3,7 @@ package kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.iostock.cmmExcelUpload.excelUploadMPS.service.ExcelUploadMPSVO;
 import kr.co.solbipos.iostock.order.dstbReq.service.DstbReqVO;
+import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderDtlVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderProdVO;
 import kr.co.solbipos.iostock.orderReturn.rtnStoreOrder.service.RtnStoreOrderVO;
@@ -85,4 +86,7 @@ public interface RtnStoreOrderMapper {
     
     /** 반품등록 PROD 삭제 */
     int deleteExlRtnStoreOrderProd(ExcelUploadMPSVO excelUploadMPSVO);
+
+    /** 반품주문전표번호 채번 */
+    String getOrderSlipNo(RtnStoreOrderVO rtnStoreOrderVO);
 }

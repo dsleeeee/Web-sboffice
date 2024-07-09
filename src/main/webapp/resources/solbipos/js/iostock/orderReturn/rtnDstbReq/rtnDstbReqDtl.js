@@ -85,6 +85,7 @@ app.controller('rtnDstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope.slipFg  = data.slipFg;
     $scope.procFg  = data.procFg;
     $scope.vendrCd = data.vendrCd;
+    $scope.orderSlipNo = data.orderSlipNo;
 
     $("#spanDtlTitle").html('['+messages["rtnDstbReq.dtl.orderReturn"]+'] ' + '[' + $scope.storeCd + '] ' + $scope.storeNm);
     $scope.orderProcFgCheck();
@@ -95,9 +96,9 @@ app.controller('rtnDstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   // 주문진행구분 체크 및 HD 비고 조회
   $scope.orderProcFgCheck = function () {
     var params     = {};
-    params.reqDate = $scope.reqDate;
     params.slipFg  = $scope.slipFg;
     params.storeCd = $scope.storeCd;
+    params.orderSlipNo = $scope.orderSlipNo;
 
     // ajax 통신 설정
     $http({
@@ -128,9 +129,11 @@ app.controller('rtnDstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   $scope.searchRtnDstbReqDtlList = function () {
     // 파라미터
     var params     = {};
-    params.reqDate = $scope.reqDate;
+    //params.reqDate = $scope.reqDate;
     params.storeCd = $scope.storeCd;
     params.slipFg  = $scope.slipFg;
+    params.orderSlipNo = $scope.orderSlipNo;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/iostock/orderReturn/rtnDstbReq/rtnDstbReqDtl/list.sb", params, function () {
       $("#dstbConfirmFg").prop("checked", false);
@@ -214,6 +217,7 @@ app.controller('rtnDstbReqDtlCtrl', ['$scope', '$http', '$timeout', function ($s
       item.dstbConfirmFg = ($("#dstbConfirmFg").is(":checked") ? $("#dstbConfirmFg").val() : "");
       item.hdRemark      = $scope.hdRemark;
       item.vendrCd       = $scope.vendrCd;
+      item.orderSlipNo   = $scope.orderSlipNo;
       params.push(item);
     }
 

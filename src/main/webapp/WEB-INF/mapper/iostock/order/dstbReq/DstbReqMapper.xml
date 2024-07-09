@@ -12,7 +12,7 @@
     -->
     <select id="getDstbReqList" parameterType="dstbReqVO" resultType="DefaultMap">
         /* USE : DstbReqMapper.getDstbReqList */
-        SELECT   tphso.REQ_DATE, tphso.STORE_CD, tms.STORE_NM
+        SELECT   tphso.REQ_DATE, tphso.STORE_CD, tms.STORE_NM, tphso.ORDER_SLIP_NO
         ,        tphso.DTL_CNT,  tphso.PROC_FG,  tphso.REMARK
         ,        tphso.SLIP_FG,  tphso.MOD_DT
         ,        tphso.ORDER_TOT_QTY * tphso.SLIP_FG	AS ORDER_TOT_QTY
@@ -108,7 +108,7 @@
                 )   tshsc
         ,       TB_HQ_ENVST the
         WHERE   tphsod.STORE_CD       =   #{storeCd}
-        AND     tphsod.REQ_DATE       =   #{reqDate}
+        AND     tphsod.ORDER_SLIP_NO  =   #{orderSlipNo}
         AND     tphsod.SLIP_FG        =   #{slipFg}
         AND     tphsod.STORE_CD       =   tmp.STORE_CD
         AND     tphsod.PROD_CD        =   tmp.PROD_CD
@@ -176,7 +176,8 @@
             REG_ID,
             MOD_DT,
             MOD_ID,
-            HQ_VENDR_CD
+            HQ_VENDR_CD,
+            ORDER_SLIP_NO
         )
         SELECT  #{hqOfficeCd}
         ,       #{reqDate}
@@ -220,12 +221,13 @@
         ,       #{modDt}
         ,       #{modId}
         ,       #{vendrCd}
+        ,       #{orderSlipNo}
         FROM    (   SELECT  PROD_CD         ,   PO_UNIT_FG     ,   PO_UNIT_QTY
                     ,       REMARK
                     ,       ORDER_SPLY_UPRC ,   ORDER_UNIT_QTY ,   ORDER_ETC_QTY      ,   ORDER_TOT_QTY       ,   ORDER_AMT       ,   ORDER_VAT       ,   ORDER_TOT
                     ,       MD_SPLY_UPRC    ,   MD_UNIT_QTY    ,   MD_ETC_QTY         ,   MD_TOT_QTY          ,   MD_AMT          ,   MD_VAT          ,   MD_TOT
                     FROM    TB_PO_HQ_STORE_ORDER_DTL
-                    WHERE   REQ_DATE    =   #{reqDate}
+                    WHERE   ORDER_SLIP_NO = #{orderSlipNo}
                     AND     STORE_CD    =   #{storeCd}
                     AND     SLIP_FG     =   #{slipFg}
                     ORDER
@@ -251,7 +253,7 @@
                 MD_TOT          = ORDER_TOT,
                 MOD_DT          = #{modDt},
                 MOD_ID          = #{modId}
-        WHERE   REQ_DATE    = #{reqDate}
+        WHERE   ORDER_SLIP_NO = #{orderSlipNo}
         AND     STORE_CD    = #{storeCd}
         AND     SLIP_FG     = #{slipFg}
     </update>
@@ -275,7 +277,7 @@
                 REMARK          = #{remark},
                 MOD_DT          = #{modDt},
                 MOD_ID          = #{modId}
-        WHERE   REQ_DATE    = #{reqDate}
+        WHERE   ORDER_SLIP_NO = #{orderSlipNo}
         AND     STORE_CD    = #{storeCd}
         AND     SLIP_FG     = #{slipFg}
         AND     PROD_CD     = #{prodCd}

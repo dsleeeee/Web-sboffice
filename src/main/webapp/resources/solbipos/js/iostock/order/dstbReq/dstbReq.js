@@ -81,6 +81,7 @@ app.controller('dstbReqCtrl', ['$scope', '$http', '$timeout', function ($scope, 
           params.slipFg   = selectedRow.slipFg;
           params.procFg   = selectedRow.procFg;
           params.hdRemark = selectedRow.remark;
+          params.orderSlipNo = selectedRow.orderSlipNo;
           params.vendrCd  = $scope.vendrCdCombo.selectedValue;
           $scope._broadcast('dstbReqDtlCtrl', params);
         }
