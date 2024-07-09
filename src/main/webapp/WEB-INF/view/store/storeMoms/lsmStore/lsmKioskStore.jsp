@@ -68,6 +68,10 @@
             </tbody>
         </table>
         <div class="mt10 oh sb-select dkbr">
+            <p class="tl s13 mt5 ml5 lh15 fl">엑셀업로드 적용기준 : </p>
+            <p class="tl s13 mt5 ml5 lh15 fl">1. 허용분류/카테고리(LSM) 만 수정 <br/>
+                                              2. 상품의 단종/사용 여부 체크<br/>
+                                              3. 그외에 맞지 않는 정보는 등록되지 않음</p>
             <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
             <%-- 엑셀업로드 --%>
