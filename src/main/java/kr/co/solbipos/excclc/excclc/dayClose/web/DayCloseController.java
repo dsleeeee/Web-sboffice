@@ -92,7 +92,7 @@ public class DayCloseController {
     }
 
     /**
-     * 마감데이터수신
+     * 마감데이터 조회
      * @param dayCloseVO
      * @param request
      * @param response
@@ -113,7 +113,7 @@ public class DayCloseController {
     }
 
     /**
-     * 매출수기등록 저장
+     * 마감
      *
      * @param dayCloseVO
      * @param request
@@ -137,7 +137,7 @@ public class DayCloseController {
 
 
     /**
-     * 매출수기등록 저장
+     * 마감취소
      *
      * @param dayCloseVO
      * @param request
@@ -155,6 +155,29 @@ public class DayCloseController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = dayCloseService.closeCancel(dayCloseVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 광운대일마감 - 저장
+     *
+     * @param dayCloseVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 07. 10.
+     */
+    @RequestMapping(value = "/dayClose/getDayCloseSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDayCloseSave(@RequestBody DayCloseVO[] dayCloseVOs, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = dayCloseService.getDayCloseSave(dayCloseVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

@@ -8,6 +8,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 import kr.co.solbipos.excclc.excclc.dayClose.service.DayCloseService;
 import kr.co.solbipos.excclc.excclc.dayClose.service.DayCloseVO;
 import org.slf4j.Logger;
@@ -52,7 +53,7 @@ public class DayCloseServiceImpl implements DayCloseService {
         this.messageService = messageService;
     }
 
-    /** 마감데이터 조회 */
+    /** 조회 */
     @Override
     public List<DefaultMap<String>> getDayCloseList(DayCloseVO dayCloseVO, SessionInfoVO sessionInfoVO) {
         dayCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -70,12 +71,14 @@ public class DayCloseServiceImpl implements DayCloseService {
         return dayCloseMapper.getDayCloseList(dayCloseVO);
     }
 
+    /** 마감데이터 조회 */
     @Override
     public DefaultMap<String> getDayCloseDtl(DayCloseVO dayCloseVO, SessionInfoVO sessionInfoVO) {
         dayCloseVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return dayCloseMapper.getDayCloseDtl(dayCloseVO);
     }
 
+    /** 마감 */
     @Override
     public int saveClose(DayCloseVO dayCloseVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -91,6 +94,7 @@ public class DayCloseServiceImpl implements DayCloseService {
         return result;
     }
 
+    /** 마감취소 */
     @Override
     public int closeCancel(DayCloseVO dayCloseVO, SessionInfoVO sessionInfoVO) {
         int result = 0;
@@ -104,6 +108,26 @@ public class DayCloseServiceImpl implements DayCloseService {
         result += dayCloseMapper.closeCancel(dayCloseVO);
 
         return result;
+    }
+
+    /** 광운대일마감 - 저장 */
+    @Override
+    public int getDayCloseSave(DayCloseVO[] dayCloseVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(DayCloseVO dayCloseVO : dayCloseVOs) {
+
+            dayCloseVO.setModDt(currentDt);
+            dayCloseVO.setModId(sessionInfoVO.getUserId());
+
+           if(dayCloseVO.getStatus() == GridDataFg.UPDATE) {
+                procCnt = dayCloseMapper.getDayCloseSaveUpdate(dayCloseVO);
+           }
+        }
+
+        return procCnt;
     }
 
 }

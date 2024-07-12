@@ -3,11 +3,11 @@
 
 <!--
     DayClose.xml
-    매출수기등록
+    광운대일마감
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
-    1       권지현     2022.09.08     최초작성
+    1       권지현     2022.09.07     최초작성
 -->
 <mapper namespace="kr.co.solbipos.excclc.excclc.dayClose.service.impl.DayCloseMapper">
 
@@ -45,6 +45,25 @@
         ,       C.REMARK4
         ,       C.REMARK5
         ,       C.REMARK6
+        ,       C.REMARK6
+        ,       C.STATUS_CASH_IN_AMT
+        ,       C.STATUS_CASH_OUT_AMT
+        ,       C.STATUS_CASH_TOTAL_AMT
+        ,       C.STATUS_CARD_IN_AMT
+        ,       C.STATUS_CARD_OUT_AMT
+        ,       C.STATUS_CARD_TOTAL_AMT
+        ,       C.ACCOUNT_STATUS_MAIN_HANA_IN_AMT
+        ,       C.ACCOUNT_STATUS_MAIN_HANA_OUT_AMT
+        ,       C.ACCOUNT_STATUS_MAIN_HANA_TOTAL_AMT
+        ,       C.ACCOUNT_STATUS_CARD_HANA_IN_AMT
+        ,       C.ACCOUNT_STATUS_CARD_HANA_OUT_AMT
+        ,       C.ACCOUNT_STATUS_CARD_HANA_TOTAL_AMT
+        ,       C.ACCOUNT_STATUS_CARD_KB_IN_AMT
+        ,       C.ACCOUNT_STATUS_CARD_KB_OUT_AMT
+        ,       C.ACCOUNT_STATUS_CARD_KB_TOTAL_AMT
+        ,       C.ACCOUNT_STATUS_SP_HANA_IN_AMT
+        ,       C.ACCOUNT_STATUS_SP_HANA_OUT_AMT
+        ,       C.ACCOUNT_STATUS_SP_HANA_TOTAL_AMT
         FROM    (
                 SELECT  B.STORE_CD
                 ,       B.STORE_NM
@@ -184,100 +203,154 @@
         MERGE INTO TB_PO_CLOSE_KWU tpc
         USING DUAL
         ON (
-            tpc.STORE_CD = #{storeCd}
-            AND tpc.CLOSE_DATE = #{closeDate}
+                tpc.STORE_CD = #{storeCd}
+                AND tpc.CLOSE_DATE = #{closeDate}
             )
         WHEN MATCHED THEN
-        UPDATE
-        SET
-            OPEN_DATE       = #{openDate},
-            CLOSE_FG        = #{closeFg},
-            INTEREST_AMT    = #{interestAmt},
-            IN_AMT          = #{inAmt},
-            OUT_AMT         = #{outAmt},
-            GROUP_AMT       = #{groupAmt},
-            HOCKEY_AMT      = #{hockeyAmt},
-            ETC_AMT         = #{etcAmt},
-            IN_DAY_AMT      = #{inDayAmt},
-            IN_SUM          = #{inSum},
-            IN_MONTH_SUM    = #{inMonthSum},
-            IN_B_MONTH_SUM  = #{inBMonthSum},
-            IN_TOTAL_SUM    = #{inTotalSum},
-            OUT_SUM         = #{outSum},
-            OUT_MONTH_SUM   = #{outMonthSum},
-            OUT_B_MONTH_SUM = #{outBMonthSum},
-            OUT_TOTAL_SUM   = #{outTotalSum},
-            REMARK1         = #{remark1},
-            REMARK2         = #{remark2},
-            REMARK3         = #{remark3},
-            REMARK4         = #{remark4},
-            REMARK5         = #{remark5},
-            REMARK6         = #{remark6},
-            MOD_DT          = #{modDt},
-            MOD_ID          = #{modId}
+            UPDATE
+            SET
+                OPEN_DATE       = #{openDate},
+                CLOSE_FG        = #{closeFg},
+                INTEREST_AMT    = #{interestAmt},
+                IN_AMT          = #{inAmt},
+                OUT_AMT         = #{outAmt},
+                GROUP_AMT       = #{groupAmt},
+                HOCKEY_AMT      = #{hockeyAmt},
+                ETC_AMT         = #{etcAmt},
+                IN_DAY_AMT      = #{inDayAmt},
+                IN_SUM          = #{inSum},
+                IN_MONTH_SUM    = #{inMonthSum},
+                IN_B_MONTH_SUM  = #{inBMonthSum},
+                IN_TOTAL_SUM    = #{inTotalSum},
+                OUT_SUM         = #{outSum},
+                OUT_MONTH_SUM   = #{outMonthSum},
+                OUT_B_MONTH_SUM = #{outBMonthSum},
+                OUT_TOTAL_SUM   = #{outTotalSum},
+                REMARK1         = #{remark1},
+                REMARK2         = #{remark2},
+                REMARK3         = #{remark3},
+                REMARK4         = #{remark4},
+                REMARK5         = #{remark5},
+                REMARK6         = #{remark6},
+                MOD_DT          = #{modDt},
+                MOD_ID          = #{modId},
+                STATUS_CASH_IN_AMT = #{statusCashInAmt},
+                STATUS_CASH_OUT_AMT = #{statusCashOutAmt},
+                STATUS_CASH_TOTAL_AMT = #{statusCashTotalAmt},
+                STATUS_CARD_IN_AMT = #{statusCardInAmt},
+                STATUS_CARD_OUT_AMT = #{statusCardOutAmt},
+                STATUS_CARD_TOTAL_AMT = #{statusCardTotalAmt},
+                ACCOUNT_STATUS_MAIN_HANA_IN_AMT = #{accountStatusMainHanaInAmt},
+                ACCOUNT_STATUS_MAIN_HANA_OUT_AMT = #{accountStatusMainHanaOutAmt},
+                ACCOUNT_STATUS_MAIN_HANA_TOTAL_AMT = #{accountStatusMainHanaTotalAmt},
+                ACCOUNT_STATUS_CARD_HANA_IN_AMT = #{accountStatusCardHanaInAmt},
+                ACCOUNT_STATUS_CARD_HANA_OUT_AMT = #{accountStatusCardHanaOutAmt},
+                ACCOUNT_STATUS_CARD_HANA_TOTAL_AMT = #{accountStatusCardHanaTotalAmt},
+                ACCOUNT_STATUS_CARD_KB_IN_AMT = #{accountStatusCardKbInAmt},
+                ACCOUNT_STATUS_CARD_KB_OUT_AMT = #{accountStatusCardKbOutAmt},
+                ACCOUNT_STATUS_CARD_KB_TOTAL_AMT = #{accountStatusCardKbTotalAmt},
+                ACCOUNT_STATUS_SP_HANA_IN_AMT = #{accountStatusSpHanaInAmt},
+                ACCOUNT_STATUS_SP_HANA_OUT_AMT = #{accountStatusSpHanaOutAmt},
+                ACCOUNT_STATUS_SP_HANA_TOTAL_AMT = #{accountStatusSpHanaTotalAmt}
         WHEN NOT MATCHED THEN
-        INSERT
-        (
-            STORE_CD,
-            OPEN_DATE,
-            CLOSE_FG,
-            CLOSE_DATE,
-            INTEREST_AMT,
-            IN_AMT,
-            OUT_AMT,
-            GROUP_AMT,
-            HOCKEY_AMT,
-            ETC_AMT,
-            IN_DAY_AMT,
-            IN_SUM,
-            IN_MONTH_SUM,
-            IN_B_MONTH_SUM,
-            IN_TOTAL_SUM,
-            OUT_SUM,
-            OUT_MONTH_SUM,
-            OUT_B_MONTH_SUM,
-            OUT_TOTAL_SUM,
-            REMARK1,
-            REMARK2,
-            REMARK3,
-            REMARK4,
-            REMARK5,
-            REMARK6,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
+            INSERT
+            (
+                STORE_CD,
+                OPEN_DATE,
+                CLOSE_FG,
+                CLOSE_DATE,
+                INTEREST_AMT,
+                IN_AMT,
+                OUT_AMT,
+                GROUP_AMT,
+                HOCKEY_AMT,
+                ETC_AMT,
+                IN_DAY_AMT,
+                IN_SUM,
+                IN_MONTH_SUM,
+                IN_B_MONTH_SUM,
+                IN_TOTAL_SUM,
+                OUT_SUM,
+                OUT_MONTH_SUM,
+                OUT_B_MONTH_SUM,
+                OUT_TOTAL_SUM,
+                REMARK1,
+                REMARK2,
+                REMARK3,
+                REMARK4,
+                REMARK5,
+                REMARK6,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                STATUS_CASH_IN_AMT,
+                STATUS_CASH_OUT_AMT,
+                STATUS_CASH_TOTAL_AMT,
+                STATUS_CARD_IN_AMT,
+                STATUS_CARD_OUT_AMT,
+                STATUS_CARD_TOTAL_AMT,
+                ACCOUNT_STATUS_MAIN_HANA_IN_AMT,
+                ACCOUNT_STATUS_MAIN_HANA_OUT_AMT,
+                ACCOUNT_STATUS_MAIN_HANA_TOTAL_AMT,
+                ACCOUNT_STATUS_CARD_HANA_IN_AMT,
+                ACCOUNT_STATUS_CARD_HANA_OUT_AMT,
+                ACCOUNT_STATUS_CARD_HANA_TOTAL_AMT,
+                ACCOUNT_STATUS_CARD_KB_IN_AMT,
+                ACCOUNT_STATUS_CARD_KB_OUT_AMT,
+                ACCOUNT_STATUS_CARD_KB_TOTAL_AMT,
+                ACCOUNT_STATUS_SP_HANA_IN_AMT,
+                ACCOUNT_STATUS_SP_HANA_OUT_AMT,
+                ACCOUNT_STATUS_SP_HANA_TOTAL_AMT
             ) VALUES (
-            #{storeCd},
-            #{closeDate},
-            #{closeFg},
-            #{openDate},
-            #{interestAmt},
-            #{inAmt},
-            #{outAmt},
-            #{groupAmt},
-            #{hockeyAmt},
-            #{etcAmt},
-            #{inDayAmt},
-            #{inSum},
-            #{inMonthSum},
-            #{inBMonthSum},
-            #{inTotalSum},
-            #{outSum},
-            #{outMonthSum},
-            #{outBMonthSum},
-            #{outTotalSum},
-            #{remark1},
-            #{remark2},
-            #{remark3},
-            #{remark4},
-            #{remark5},
-            #{remark6},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+                #{storeCd},
+                #{closeDate},
+                #{closeFg},
+                #{openDate},
+                #{interestAmt},
+                #{inAmt},
+                #{outAmt},
+                #{groupAmt},
+                #{hockeyAmt},
+                #{etcAmt},
+                #{inDayAmt},
+                #{inSum},
+                #{inMonthSum},
+                #{inBMonthSum},
+                #{inTotalSum},
+                #{outSum},
+                #{outMonthSum},
+                #{outBMonthSum},
+                #{outTotalSum},
+                #{remark1},
+                #{remark2},
+                #{remark3},
+                #{remark4},
+                #{remark5},
+                #{remark6},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{statusCashInAmt},
+                #{statusCashOutAmt},
+                #{statusCashTotalAmt},
+                #{statusCardInAmt},
+                #{statusCardOutAmt},
+                #{statusCardTotalAmt},
+                #{accountStatusMainHanaInAmt},
+                #{accountStatusMainHanaOutAmt},
+                #{accountStatusMainHanaTotalAmt},
+                #{accountStatusCardHanaInAmt},
+                #{accountStatusCardHanaOutAmt},
+                #{accountStatusCardHanaTotalAmt},
+                #{accountStatusCardKbInAmt},
+                #{accountStatusCardKbOutAmt},
+                #{accountStatusCardKbTotalAmt},
+                #{accountStatusSpHanaInAmt},
+                #{accountStatusSpHanaOutAmt},
+                #{accountStatusSpHanaTotalAmt}
+            )
     </insert>
 
     <!-- 마감데이터 취소 -->
@@ -287,6 +360,7 @@
         COMMENTS : 마감데이터 취소
     -->
     <update id="closeCancel" parameterType="dayCloseVO">
+        /* DayCloseMapper.closeCancel */
         UPDATE  TB_PO_CLOSE_KWU
         SET     CLOSE_FG    = #{closeFg},
                 MOD_DT      = #{modDt},
@@ -294,4 +368,40 @@
         WHERE   STORE_CD    = #{storeCd}
         AND     CLOSE_DATE  = #{closeDate}
     </update>
+
+    <!-- 광운대일마감 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getDayCloseSaveUpdate" parameterType="dayCloseVO">
+        /* DayCloseMapper.getDayCloseSaveUpdate */
+        UPDATE
+        TB_PO_CLOSE_KWU
+        SET
+        STATUS_CASH_IN_AMT = #{statusCashInAmt},
+        STATUS_CASH_OUT_AMT = #{statusCashOutAmt},
+        STATUS_CASH_TOTAL_AMT = #{statusCashTotalAmt},
+        STATUS_CARD_IN_AMT = #{statusCardInAmt},
+        STATUS_CARD_OUT_AMT = #{statusCardOutAmt},
+        STATUS_CARD_TOTAL_AMT = #{statusCardTotalAmt},
+        ACCOUNT_STATUS_MAIN_HANA_IN_AMT = #{accountStatusMainHanaInAmt},
+        ACCOUNT_STATUS_MAIN_HANA_OUT_AMT = #{accountStatusMainHanaOutAmt},
+        ACCOUNT_STATUS_MAIN_HANA_TOTAL_AMT = #{accountStatusMainHanaTotalAmt},
+        ACCOUNT_STATUS_CARD_HANA_IN_AMT = #{accountStatusCardHanaInAmt},
+        ACCOUNT_STATUS_CARD_HANA_OUT_AMT = #{accountStatusCardHanaOutAmt},
+        ACCOUNT_STATUS_CARD_HANA_TOTAL_AMT = #{accountStatusCardHanaTotalAmt},
+        ACCOUNT_STATUS_CARD_KB_IN_AMT = #{accountStatusCardKbInAmt},
+        ACCOUNT_STATUS_CARD_KB_OUT_AMT = #{accountStatusCardKbOutAmt},
+        ACCOUNT_STATUS_CARD_KB_TOTAL_AMT = #{accountStatusCardKbTotalAmt},
+        ACCOUNT_STATUS_SP_HANA_IN_AMT = #{accountStatusSpHanaInAmt},
+        ACCOUNT_STATUS_SP_HANA_OUT_AMT = #{accountStatusSpHanaOutAmt},
+        ACCOUNT_STATUS_SP_HANA_TOTAL_AMT = #{accountStatusSpHanaTotalAmt},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND CLOSE_DATE = #{closeDate}
+    </update>
+
 </mapper>

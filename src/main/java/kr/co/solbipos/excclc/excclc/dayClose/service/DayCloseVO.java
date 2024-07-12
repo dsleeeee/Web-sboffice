@@ -45,6 +45,48 @@ public class DayCloseVO extends PageVO {
     private String remark5;
     private String remark6;
 
+    /** 출납현황_현금_입금 */
+    private long statusCashInAmt;
+    /** 출납현황_현금_출금 */
+    private long statusCashOutAmt;
+    /** 출납현황_현금_잔액 */
+    private long statusCashTotalAmt;
+
+    /** 출납현황_신용카드계좌입금_입금 */
+    private long statusCardInAmt;
+    /** 출납현황_신용카드계좌입금_출금 */
+    private long statusCardOutAmt;
+    /** 출납현황_신용카드계좌입금_잔액 */
+    private long statusCardTotalAmt;
+
+    /** 계좌현황_MAIN-하나_입금 */
+    private long accountStatusMainHanaInAmt;
+    /** 계좌현황_MAIN-하나_출금 */
+    private long accountStatusMainHanaOutAmt;
+    /** 계좌현황_MAIN-하나_잔액 */
+    private long accountStatusMainHanaTotalAmt;
+
+    /** 계좌현황_신용카드-하나_입금 */
+    private long accountStatusCardHanaInAmt;
+    /** 계좌현황_신용카드-하나_출금 */
+    private long accountStatusCardHanaOutAmt;
+    /** 계좌현황_신용카드-하나_잔액 */
+    private long accountStatusCardHanaTotalAmt;
+
+    /** 계좌현황_신용카드-국민_입금 */
+    private long accountStatusCardKbInAmt;
+    /** 계좌현황_신용카드-국민_출금 */
+    private long accountStatusCardKbOutAmt;
+    /** 계좌현황_신용카드-국민_잔액 */
+    private long accountStatusCardKbTotalAmt;
+
+    /** 계좌현황_방학특강-하나_입금 */
+    private long accountStatusSpHanaInAmt;
+    /** 계좌현황_방학특강-하나_출금 */
+    private long accountStatusSpHanaOutAmt;
+    /** 계좌현황_방학특강-하나_잔액 */
+    private long accountStatusSpHanaTotalAmt;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -276,4 +318,84 @@ public class DayCloseVO extends PageVO {
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
     }
+
+    public long getStatusCashInAmt() {
+        return statusCashInAmt;
+    }
+
+    public void setStatusCashInAmt(long statusCashInAmt) {
+        this.statusCashInAmt = statusCashInAmt;
+    }
+
+    public long getStatusCashOutAmt() {
+        return statusCashOutAmt;
+    }
+
+    public void setStatusCashOutAmt(long statusCashOutAmt) {
+        this.statusCashOutAmt = statusCashOutAmt;
+    }
+
+    public long getStatusCashTotalAmt() { return statusCashTotalAmt; }
+
+    public void setStatusCashTotalAmt(long statusCashTotalAmt) { this.statusCashTotalAmt = statusCashTotalAmt; }
+
+    public long getStatusCardInAmt() { return statusCardInAmt; }
+
+    public void setStatusCardInAmt(long statusCardInAmt) { this.statusCardInAmt = statusCardInAmt; }
+
+    public long getStatusCardOutAmt() { return statusCardOutAmt; }
+
+    public void setStatusCardOutAmt(long statusCardOutAmt) { this.statusCardOutAmt = statusCardOutAmt; }
+
+    public long getStatusCardTotalAmt() { return statusCardTotalAmt; }
+
+    public void setStatusCardTotalAmt(long statusCardTotalAmt) { this.statusCardTotalAmt = statusCardTotalAmt; }
+
+    public long getAccountStatusMainHanaInAmt() { return accountStatusMainHanaInAmt; }
+
+    public void setAccountStatusMainHanaInAmt(long accountStatusMainHanaInAmt) { this.accountStatusMainHanaInAmt = accountStatusMainHanaInAmt; }
+
+    public long getAccountStatusMainHanaOutAmt() { return accountStatusMainHanaOutAmt; }
+
+    public void setAccountStatusMainHanaOutAmt(long accountStatusMainHanaOutAmt) { this.accountStatusMainHanaOutAmt = accountStatusMainHanaOutAmt; }
+
+    public long getAccountStatusMainHanaTotalAmt() { return accountStatusMainHanaTotalAmt; }
+
+    public void setAccountStatusMainHanaTotalAmt(long accountStatusMainHanaTotalAmt) { this.accountStatusMainHanaTotalAmt = accountStatusMainHanaTotalAmt; }
+
+    public long getAccountStatusCardHanaInAmt() { return accountStatusCardHanaInAmt; }
+
+    public void setAccountStatusCardHanaInAmt(long accountStatusCardHanaInAmt) { this.accountStatusCardHanaInAmt = accountStatusCardHanaInAmt; }
+
+    public long getAccountStatusCardHanaOutAmt() { return accountStatusCardHanaOutAmt; }
+
+    public void setAccountStatusCardHanaOutAmt(long accountStatusCardHanaOutAmt) { this.accountStatusCardHanaOutAmt = accountStatusCardHanaOutAmt; }
+
+    public long getAccountStatusCardHanaTotalAmt() { return accountStatusCardHanaTotalAmt; }
+
+    public void setAccountStatusCardHanaTotalAmt(long accountStatusCardHanaTotalAmt) { this.accountStatusCardHanaTotalAmt = accountStatusCardHanaTotalAmt; }
+
+    public long getAccountStatusCardKbInAmt() { return accountStatusCardKbInAmt; }
+
+    public void setAccountStatusCardKbInAmt(long accountStatusCardKbInAmt) { this.accountStatusCardKbInAmt = accountStatusCardKbInAmt; }
+
+    public long getAccountStatusCardKbOutAmt() { return accountStatusCardKbOutAmt; }
+
+    public void setAccountStatusCardKbOutAmt(long accountStatusCardKbOutAmt) { this.accountStatusCardKbOutAmt = accountStatusCardKbOutAmt; }
+
+    public long getAccountStatusCardKbTotalAmt() { return accountStatusCardKbTotalAmt; }
+
+    public void setAccountStatusCardKbTotalAmt(long accountStatusCardKbTotalAmt) { this.accountStatusCardKbTotalAmt = accountStatusCardKbTotalAmt; }
+
+    public long getAccountStatusSpHanaInAmt() { return accountStatusSpHanaInAmt; }
+
+    public void setAccountStatusSpHanaInAmt(long accountStatusSpHanaInAmt) { this.accountStatusSpHanaInAmt = accountStatusSpHanaInAmt; }
+
+    public long getAccountStatusSpHanaOutAmt() { return accountStatusSpHanaOutAmt; }
+
+    public void setAccountStatusSpHanaOutAmt(long accountStatusSpHanaOutAmt) { this.accountStatusSpHanaOutAmt = accountStatusSpHanaOutAmt; }
+
+    public long getAccountStatusSpHanaTotalAmt() { return accountStatusSpHanaTotalAmt; }
+
+    public void setAccountStatusSpHanaTotalAmt(long accountStatusSpHanaTotalAmt) { this.accountStatusSpHanaTotalAmt = accountStatusSpHanaTotalAmt; }
 }
