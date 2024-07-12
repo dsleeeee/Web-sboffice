@@ -116,11 +116,24 @@ app.controller('instockConfmCtrl', ['$scope', '$http', '$timeout', function ($sc
       comboUrl = url;
     }
 
+    // 가상로그인 session 설정
+    var sParam = {};
+    if (document.getElementsByName('sessionId')[0]) {
+      sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+    }
+
+    // 진행구분, 전표종류 조회시 기존 파라미터 값 셋팅
+    if(gridMapId !== "dlvrMap"){
+      sParam = params;
+    }
+
+
     // ajax 통신 설정
     $http({
       method : 'POST', //방식
       url    : comboUrl, /* 통신할 URL */
-      params : params, /* 파라메터로 보낼 데이터 */
+      data: params, /* 파라메터로 보낼 데이터 : @requestBody */
+      params: sParam,
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       if ($scope._httpStatusCheck(response, true)) {

@@ -500,6 +500,12 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         var orderTot = 0;
         var grid = $scope.flex;
 
+        // 수정된 내역이 있는지 체크
+        if ($scope.flex.collectionView.itemsEdited.length <= 0) {
+            $scope._popMsg(messages["cmm.not.modify"]);
+            return false;
+        }
+
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             var item = $scope.flex.collectionView.items[i];
             if (item.orderTotQty !== null && item.orderTotQty !== 0 && (parseInt(item.orderTotQty) < parseInt(item.poMinQty))) {

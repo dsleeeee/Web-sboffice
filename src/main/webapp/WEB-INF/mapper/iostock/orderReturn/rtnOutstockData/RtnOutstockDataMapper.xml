@@ -205,22 +205,17 @@
         AND     SLIP_FG       = #{slipFg}
         AND     STORE_CD      = #{storeCd}
         AND     PROC_FG       = #{procFg}
-        <choose>
-            <when test='orderSlipNo != null and orderSlipNo != ""'>
-                AND ORDER_SLIP_NO = #{orderSlipNo}
-            </when>
-            <otherwise>
-                AND ORDER_SLIP_NO IS NULL
-            </otherwise>
-        </choose>
+        <if test='orderSlipNo != null and orderSlipNo != ""'>
+            AND ORDER_SLIP_NO = #{orderSlipNo}
+        </if>
         <if test='dateFg == "req"'>
-            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+           AND REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test='dateFg == "reg"'>
-            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+           AND REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
         <if test='dateFg == "mod"'>
-            AND REQ_DATE BETWEEN #{reqDate} AND #{reqDate}
+           AND MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
         </if>
         <if test='vendrCd != null and vendrCd != ""'>
             AND PROD_CD IN  (   SELECT  PROD_CD
@@ -277,14 +272,9 @@
                     AND     SLIP_FG         =   #{slipFg}
                     AND     SLIP_NO         =   #{slipNo}
                     AND     PROC_FG         =   '30'
-                    <choose>
-                        <when test='orderSlipNo != null and orderSlipNo != ""'>
-                            AND ORDER_SLIP_NO = #{orderSlipNo}
-                        </when>
-                        <otherwise>
-                            AND ORDER_SLIP_NO IS NULL
-                        </otherwise>
-                    </choose>
+                    <if test='orderSlipNo != null and orderSlipNo != ""'>
+                        AND ORDER_SLIP_NO = #{orderSlipNo}
+                    </if>
                     ORDER
                     BY      PROD_CD, DSTB_FG, MGR_SPLY_UPRC DESC, SEQ
                 )

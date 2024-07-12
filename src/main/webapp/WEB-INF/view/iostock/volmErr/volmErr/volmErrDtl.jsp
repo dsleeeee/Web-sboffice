@@ -143,29 +143,29 @@
               </tbody>
             </table>
 
-      <div class="tr mt10 mb5 fr">
-        <div id="volmErrBtnLayer" style="display: none;">
-          <span class="chk txtIn fl lh30" style="top: -2px;" ng-if="volmErrConfirmFg">
-            <input type="checkbox" name="volmErrConfirmFg" id="volmErrConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
-            <label for="volmErrConfirmFg"><s:message code="volmErr.dtl.confirm"/></label>
-          </span>
-          <%-- 출고일자 --%>
-        <%--<div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">--%>
-       		<div id="divDtlOutDate" class="sb-select ml10 fl">
-            <p class="s12 fl mr5 lh30"><s:message code="volmErr.dtl.outDate"/> : </p>
-            <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
-          </div>
-          <%-- 저장 --%>
-          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave">
-            <s:message code="cmm.save"/></button>
-          <%-- 엑셀 다운로드 --%>
-          <button class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
+        <div class="tr mt10 mb5 fr">
+            <div id="volmErrBtnLayer" style="display: none;">
+              <span class="chk txtIn fl lh30" style="top: -2px;" ng-if="volmErrConfirmFg">
+                <input type="checkbox" name="volmErrConfirmFg" id="volmErrConfirmFg" value="Y" ng-click="fnConfirmChk()"/>
+                <label for="volmErrConfirmFg"><s:message code="volmErr.dtl.confirm"/></label>
+              </span>
+                <%-- 출고일자 --%>
+                <%--<div id="divDtlOutDate" class="sb-select ml10 fl" style="display: none;">--%>
+                <div id="divDtlOutDate" class="sb-select ml10 fl">
+                    <p class="s12 fl mr5 lh30"><s:message code="volmErr.dtl.outDate"/> : </p>
+                    <span class="txtIn"><input id="dtlOutDate" class="w120px"></span>
+                </div>
+                <%-- 저장 --%>
+                <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave">
+                    <s:message code="cmm.save"/></button>
+                <%-- 엑셀 다운로드 --%>
+                <button class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
+            </div>
+            <div id="volmErrBtnExcelLayer" style="display: none;">
+                <%-- 엑셀 다운로드 --%>
+                <button class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
+            </div>
         </div>
-        <div id="volmErrBtnExcelLayer" style="display: none;">
-	        <%-- 엑셀 다운로드 --%>
-	        <button class="btn_skyblue ml5 fl" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
-        </div>
-      </div>
       <div style="clear: both;"></div>
 
       <div class="w100">
@@ -201,4 +201,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErrDtl.js?ver=20220906.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErrDtl.js?ver=20240711.01" charset="utf-8"></script>

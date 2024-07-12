@@ -325,6 +325,13 @@ app.controller('rtnStoreOrderRegistCtrl', ['$scope', '$http', '$timeout', functi
     var orderTot = 0;
 //    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
 //      var item = $scope.flex.collectionView.itemsEdited[i];
+
+    // 수정된 내역이 있는지 체크
+    if ($scope.flex.collectionView.itemsEdited.length <= 0) {
+      $scope._popMsg(messages["cmm.not.modify"]);
+      return false;
+    }
+
     for (var i=0; i<$scope.flex.collectionView.items.length; i++) {
   	  var item =  $scope.flex.collectionView.items[i];      
 

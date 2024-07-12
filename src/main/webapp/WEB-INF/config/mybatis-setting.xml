@@ -759,9 +759,10 @@
     <typeAlias alias="slipVO" type="kr.co.solbipos.iostock.frnchs.slip.service.SlipVO"/>
     <!-- 수불관리 > 본사-매장간 입출고 내역 > 특이사항 입출고내역 -->
     <typeAlias alias="UnusualVO" type="kr.co.solbipos.iostock.frnchs.unusual.service.UnusualVO"/>
-
     <!-- 수불관리 > 보나비 > 폐기내역조회 -->
     <typeAlias alias="disuseInfoBonavieVO" type="kr.co.solbipos.iostock.bonavie.disuseInfoBonavie.service.DisuseInfoBonavieVO"/>
+    <!-- 수불관리 > 반품관리 > 반품본사입고현황 -->
+    <typeAlias alias="rtnInstockConfmStoreVO" type="kr.co.solbipos.iostock.orderReturn.rtnInstockConfmStore.service.RtnInstockConfmStoreVO"/>
 
     <!-- 재고 -->
     <typeAlias alias="hqCurrVO" type="kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO"/>

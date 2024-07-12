@@ -252,14 +252,9 @@
         AND     SLIP_FG       = #{slipFg}
         AND     STORE_CD      = #{storeCd}
         AND     PROC_FG       = #{procFg}
-        <choose>
-            <when test='orderSlipNo != null and orderSlipNo != ""'>
-                AND ORDER_SLIP_NO = #{orderSlipNo}
-            </when>
-            <otherwise>
-                AND ORDER_SLIP_NO IS NULL
-            </otherwise>
-        </choose>
+        <if test='orderSlipNo != null and orderSlipNo != ""'>
+            AND ORDER_SLIP_NO = #{orderSlipNo}
+        </if>
         <if test='dateFg == "req"'>
             AND REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
@@ -322,14 +317,9 @@
                     AND     SLIP_FG         =   #{slipFg}
                     AND     SLIP_NO         =   #{slipNo}
                     AND     PROC_FG         =   '30'
-                    <choose>
-                        <when test='orderSlipNo != null and orderSlipNo != ""'>
-                            AND ORDER_SLIP_NO = #{orderSlipNo}
-                        </when>
-                        <otherwise>
-                            AND ORDER_SLIP_NO IS NULL
-                        </otherwise>
-                    </choose>
+                    <if test='orderSlipNo != null and orderSlipNo != ""'>
+                        AND ORDER_SLIP_NO = #{orderSlipNo}
+                    </if>
                     ORDER
                     BY      PROD_CD, DSTB_FG, MGR_SPLY_UPRC DESC, SEQ
                 )

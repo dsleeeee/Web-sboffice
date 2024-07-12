@@ -123,7 +123,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockData/outstockData.js?ver=20240709.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockData/outstockData.js?ver=20240711.01" charset="utf-8"></script>
 
 <%-- 출고자료생성 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockData/outstockDataDtl.jsp">

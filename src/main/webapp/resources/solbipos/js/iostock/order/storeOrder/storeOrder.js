@@ -55,7 +55,7 @@ app.controller('storeOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if (col.binding === "reqDate") { // 출고요청일자
+        if (col.binding === "orderSlipNo") { // 주문전표번호
           wijmo.addClass(e.cell, 'wijLink');
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
@@ -72,7 +72,7 @@ app.controller('storeOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
       if (ht.cellType === wijmo.grid.CellType.Cell) {
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
-        if (col.binding === "reqDate") { // 출고요청일자 클릭
+        if (col.binding === "orderSlipNo") { // 주문전표번호 클릭
           var params      = {};
           params.reqDate  = selectedRow.reqDate;
           params.slipFg   = selectedRow.slipFg;

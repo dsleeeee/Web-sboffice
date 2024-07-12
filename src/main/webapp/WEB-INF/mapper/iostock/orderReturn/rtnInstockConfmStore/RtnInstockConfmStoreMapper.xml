@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.solbipos.iostock.orderReturn.rtnInstockConfmStore.service.impl.RtnInstockConfmStoreMapper">
+
+    <!-- 반품본사입고현황 - 반품본사입고현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_MS_EMPLOYEE, TB_HQ_EMPLOYEE
+        PARAM    : rtnInstockConfmStoreVO
+        COMMENTS : 반품본사입고 - 반품본사입고 리스트를 조회한다.
+    -->
+    <select id="getRtnInstockConfmStoreList" parameterType="rtnInstockConfmStoreVO" resultType="DefaultMap">
+        /* USE : RtnInstockConfmStoreMapper.getRtnInstockConfmStoreList */
+        <![CDATA[
+            SELECT tphso.SLIP_NO, tphso.VENDR_CD, tphso.SLIP_FG, tphso.SLIP_KIND, tphso.PROC_FG, tphso.STORE_CD, tms.STORE_NM
+            ,      tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY, tphso.ORDER_AMT*tphso.SLIP_FG AS ORDER_AMT
+            ,      tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY, tphso.ORDER_VAT*tphso.SLIP_FG AS ORDER_VAT
+            ,      tphso.ORDER_TOT_QTY*tphso.SLIP_FG AS ORDER_TOT_QTY, tphso.ORDER_TOT*tphso.SLIP_FG AS ORDER_TOT
+            ,      tphso.MGR_TOT_QTY  *tphso.SLIP_FG AS MGR_TOT_QTY  , tphso.MGR_AMT  *tphso.SLIP_FG AS MGR_AMT
+            ,      tphso.MGR_TOT_QTY  *tphso.SLIP_FG AS MGR_TOT_QTY  , tphso.MGR_VAT  *tphso.SLIP_FG AS MGR_VAT
+            ,      tphso.MGR_TOT_QTY  *tphso.SLIP_FG AS MGR_TOT_QTY  , tphso.MGR_TOT  *tphso.SLIP_FG AS MGR_TOT
+            ,      (CASE WHEN tphso.PROC_FG <  '20' THEN tphso.OUT_DATE                  ELSE NULL END) AS REQ_DATE
+            ,      (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_DATE                  ELSE NULL END) AS OUT_DATE
+            ,      (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_TOT_QTY*tphso.SLIP_FG ELSE NULL END) AS OUT_TOT_QTY
+            ,      (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_AMT*tphso.SLIP_FG     ELSE NULL END) AS OUT_AMT
+            ,      (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_VAT*tphso.SLIP_FG     ELSE NULL END) AS OUT_VAT
+            ,      (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_TOT*tphso.SLIP_FG     ELSE NULL END) AS OUT_TOT
+            ,      (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_DATE                   ELSE NULL END) AS IN_DATE
+            ,      (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_TOT_QTY *tphso.SLIP_FG ELSE NULL END) AS IN_TOT_QTY
+            ,      (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_AMT *tphso.SLIP_FG     ELSE NULL END) AS IN_AMT
+            ,      (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_VAT *tphso.SLIP_FG     ELSE NULL END) AS IN_VAT
+            ,      (CASE WHEN tphso.PROC_FG >= '30' THEN tphso.IN_TOT *tphso.SLIP_FG     ELSE NULL END) AS IN_TOT
+            ,      (CASE WHEN tphso.PROC_FG >= '20' THEN tphso.OUT_DT                    ELSE NULL END) AS OUT_DT
+            ,      (CASE WHEN tphso.PROC_FG >= '20' THEN userInfo.EMP_NM                 ELSE NULL END) AS OUT_NM
+            ,      tphso.REMARK, tphso.HQ_REMARK, tphso.DLVR_CD
+        ]]>
+        FROM TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,    TB_MS_STORE tms
+        ,    (  SELECT  tme.USER_ID
+                ,       tme.EMP_NM
+                  FROM  TB_MS_STORE tms
+                ,       TB_MS_EMPLOYEE tme
+                 WHERE  tms.HQ_OFFICE_CD = #{hqOfficeCd}
+                 AND    tme.STORE_CD = tms.STORE_CD
+                 UNION
+                 SELECT the.USER_ID
+                 ,      the.EMP_NM
+                 FROM   TB_HQ_EMPLOYEE the
+                 WHERE  the.HQ_OFFICE_CD = #{hqOfficeCd}
+             ) userInfo
+        WHERE tphso.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+            AND tphso.STORE_CD = #{storeCd}
+        </if>
+        AND tphso.OUT_DATE BETWEEN #{startDate} AND #{endDate}
+        AND tms.STORE_CD = tphso.STORE_CD
+        AND userInfo.USER_ID (+) = tphso.MOD_ID
+        <if test='slipFg != null and slipFg != ""'>
+            AND tphso.SLIP_FG = #{slipFg}
+        </if>
+        <if test='slipKind != null and slipKind != ""'>
+            AND tphso.SLIP_KIND = #{slipKind}
+        </if>
+        <if test='procFg != null and procFg != ""'>
+            AND tphso.PROC_FG = #{procFg}
+        </if>
+        <if test='vendrCd != null and vendrCd != ""'>
+            AND tphso.VENDR_CD = #{vendrCd}
+        </if>
+        <if test='dlvrCd != null and dlvrCd != ""'>
+            AND tphso.DLVR_CD = #{dlvrCd}
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD = #{storeCd}
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        ORDER BY tphso.SLIP_NO
+    </select>
+
+    <!-- 반품본사입고현황 - 전표 상세 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK, TB_MS_STORE, TB_CM_NMCODE, TB_PO_HQ_DELIVERY_CHARGER
+        PARAM    : rtnInstockConfmStoreVO
+        COMMENTS : 반품본사입고 - 전표 상세 조회
+    -->
+    <select id="getSlipNoInfo" parameterType="rtnInstockConfmStoreVO" resultType="DefaultMap">
+        /* USE : RtnInstockConfmStoreMapper.getSlipNoInfo */
+        <![CDATA[
+        SELECT  tphso.*
+        ,       tms.STORE_NM
+        ,       tcn.NMCODE_NM AS SLIP_KIND_NM
+        ,       tphdc.DLVR_NM
+        FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
+        ,       TB_MS_STORE tms
+        ,       TB_CM_NMCODE tcn
+        ,       TB_PO_HQ_DELIVERY_CHARGER tphdc
+        WHERE   tphso.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     tphso.SLIP_NO           =   #{slipNo}
+        AND     tms.STORE_CD            =   tphso.STORE_CD
+        AND     tcn.NMCODE_GRP_CD   (+) =   '114'
+        AND     tcn.NMCODE_CD       (+) =   tphso.SLIP_KIND
+        AND     tphdc.HQ_OFFICE_CD  (+) =   tphso.HQ_OFFICE_CD
+        AND     tphdc.DLVR_CD       (+) =   tphso.DLVR_CD
+        ]]>
+    </select>
+
+    <!-- 반품본사입고현황 - 전표 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_HQ_PRODUCT, TB_HQ_PRODUCT_BARCD, TB_HQ_ENVST
+        PARAM    : rtnInstockConfmStoreVO
+        COMMENTS : 반품본사입고현황 - 전표 상세 리스트 조회
+    -->
+    <select id="getRtnInstockConfmStoreDtlList" parameterType="rtnInstockConfmStoreVO" resultType="DefaultMap">
+        /* USE : RtnInstockConfmStoreMapper.getRtnInstockConfmStoreDtlList */
+        SELECT  A.SLIP_NO,
+                A.SLIP_FG,
+                A.STORE_CD,
+                A.PROD_CD,
+                A.PROD_NM,
+                A.SEQ,
+                A.PO_UNIT_FG,
+                A.PO_UNIT_QTY,
+                A.PO_UNIT_ALLOW_FG,
+                A.VAT_FG01,
+                A.ORDER_SPLY_UPRC,
+                A.ORDER_UNIT_QTY,
+                A.ORDER_ETC_QTY,
+                A.ORDER_AMT,
+                A.ORDER_VAT,
+                A.ORDER_TOT,
+                A.MGR_SPLY_UPRC,
+                A.MGR_UNIT_QTY,
+                A.MGR_ETC_QTY,
+                A.MGR_AMT,
+                A.MGR_VAT,
+                A.MGR_TOT,
+                A.OUT_SPLY_UPRC,
+                A.OUT_UNIT_QTY,
+                A.OUT_ETC_QTY,
+                A.OUT_TOT_QTY,
+                A.OUT_AMT,
+                A.OUT_VAT,
+                A.OUT_TOT,
+                A.IN_SPLY_UPRC,
+                A.IN_UNIT_QTY,
+                A.IN_ETC_QTY,
+                A.IN_AMT,
+                A.IN_VAT,
+                A.IN_TOT,
+                A.REMARK,
+                A.ENVST0011,
+                A.BARCD_CD
+        FROM    (
+                    SELECT  A.HQ_OFFICE_CD,
+                            A.SLIP_NO,
+                            A.SLIP_FG,
+                            A.STORE_CD,
+                            A.PROD_CD,
+                            B.PROD_NM,
+                            A.SEQ,
+                            A.PO_UNIT_FG,
+                            A.PO_UNIT_QTY,
+                            B.PO_UNIT_ALLOW_FG,
+                            DECODE(B.VAT_FG, '1', 1, 0)                                                     AS VAT_FG01,
+                            A.ORDER_SPLY_UPRC                                                               AS ORDER_SPLY_UPRC,
+                            TO_NUMBER(DECODE(A.ORDER_UNIT_QTY,  0,NULL, A.ORDER_UNIT_QTY * A.SLIP_FG))      AS ORDER_UNIT_QTY,
+                            TO_NUMBER(DECODE(A.ORDER_ETC_QTY,   0,NULL, A.ORDER_ETC_QTY  * A.SLIP_FG))      AS ORDER_ETC_QTY,
+                            A.ORDER_AMT * A.SLIP_FG                                                         AS ORDER_AMT,
+                            A.ORDER_VAT * A.SLIP_FG                                                         AS ORDER_VAT,
+                            A.ORDER_TOT * A.SLIP_FG                                                         AS ORDER_TOT,
+                            A.MGR_SPLY_UPRC                                                                 AS MGR_SPLY_UPRC,
+                            TO_NUMBER(DECODE(A.MGR_UNIT_QTY,    0,NULL, A.MGR_UNIT_QTY * A.SLIP_FG))        AS MGR_UNIT_QTY,
+                            TO_NUMBER(DECODE(A.MGR_ETC_QTY ,    0,NULL, A.MGR_ETC_QTY  * A.SLIP_FG))        AS MGR_ETC_QTY,
+                            A.MGR_AMT * A.SLIP_FG                                                           AS MGR_AMT,
+                            A.MGR_VAT * A.SLIP_FG                                                           AS MGR_VAT,
+                            A.MGR_TOT * A.SLIP_FG                                                           AS MGR_TOT,
+                            A.OUT_SPLY_UPRC                                                                 AS OUT_SPLY_UPRC,
+                            TO_NUMBER(DECODE(A.OUT_UNIT_QTY,    0,NULL, A.OUT_UNIT_QTY * A.SLIP_FG))        AS OUT_UNIT_QTY,
+                            TO_NUMBER(DECODE(A.OUT_ETC_QTY,     0,NULL, A.OUT_ETC_QTY  * A.SLIP_FG))        AS OUT_ETC_QTY,
+                            TO_NUMBER(DECODE(A.OUT_TOT_QTY,     0,NULL, A.OUT_TOT_QTY  * A.SLIP_FG))        AS OUT_TOT_QTY,
+                            A.OUT_AMT * A.SLIP_FG                                                           AS OUT_AMT,
+                            A.OUT_VAT * A.SLIP_FG                                                           AS OUT_VAT,
+                            A.OUT_TOT * A.SLIP_FG                                                           AS OUT_TOT,
+                            A.IN_SPLY_UPRC                                                                  AS IN_SPLY_UPRC,
+                            TO_NUMBER(DECODE(A.IN_UNIT_QTY,     0,NULL, A.IN_UNIT_QTY * A.SLIP_FG))         AS IN_UNIT_QTY,
+                            TO_NUMBER(DECODE(A.IN_ETC_QTY,      0,NULL, A.IN_ETC_QTY  * A.SLIP_FG))         AS IN_ETC_QTY,
+                            A.IN_AMT* A.SLIP_FG                                                             AS IN_AMT,
+                            A.IN_VAT* A.SLIP_FG                                                             AS IN_VAT,
+                            A.IN_TOT* A.SLIP_FG                                                             AS IN_TOT,
+                            A.REMARK,
+                            D.ENVST_VAL                                                                     AS ENVST0011,
+                            C.BARCD_CD
+                    FROM    TB_PO_HQ_STORE_OUTSTOCK_DTL    A,
+                            TB_HQ_PRODUCT                  B,
+                            TB_HQ_PRODUCT_BARCD            C,
+                            TB_HQ_ENVST                    D
+                    WHERE   A.HQ_OFFICE_CD         = #{hqOfficeCd}
+                    AND     A.SLIP_NO              = #{slipNo}
+                    AND     B.HQ_OFFICE_CD         = A.HQ_OFFICE_CD
+                    AND     B.PROD_CD              = A.PROD_CD
+                    AND     C.HQ_OFFICE_CD     (+) = A.HQ_OFFICE_CD
+                    AND     C.PROD_CD          (+) = A.PROD_CD
+                    AND     D.HQ_OFFICE_CD         = #{hqOfficeCd}
+                    AND     D.ENVST_CD             = '0011'			<!-- 출고가-부가세포함여부 -->
+                )   A
+        ORDER BY    A.PROD_CD
+    </select>
+</mapper>

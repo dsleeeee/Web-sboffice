@@ -331,17 +331,18 @@
     <select id="getTransReportInfoList" parameterType="dstmnVO" resultType="DefaultMap">
         /* USE : DstmnMapper.getTransReportInfoList */
         <![CDATA[
-        SELECT  tphso.SLIP_NO, tphso.STORE_CD, tphso.OUT_DATE
+        SELECT  tphso.SLIP_NO, tphso.STORE_CD
+        ,       TO_CHAR(TO_DATE(tphso.OUT_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS OUT_DATE
         ,       tms.STORE_NM AS SUPPLIED_NM
         ,       tms.OWNER_NM AS SUPPLIED_OWNER_NM
         ,       tms.BIZ_NO AS SUPPLIED_BIZ_NO
         ,       tms.ADDR || tms.ADDR_DTL AS SUPPLIED_ADDR
         ,       tphdc.DLVR_NM
         ,       tphso.REMARK
-        ,       NVL(SUM(tphsod.OUT_AMT),0) AS TOT_AMT
-        ,       NVL(SUM(tphsod.OUT_VAT),0) AS TOT_VAT
-        ,       NVL(SUM(tphsod.OUT_TOT),0) AS TOT_TOT
-        ,       NVL(SUM(tphsod.OUT_TOT_QTY),0) AS TOT_QTY
+        ,       NVL(ABS(SUM(tphsod.OUT_AMT)),0) AS TOT_AMT
+        ,       NVL(ABS(SUM(tphsod.OUT_VAT)),0) AS TOT_VAT
+        ,       NVL(ABS(SUM(tphsod.OUT_TOT)),0) AS TOT_TOT
+        ,       NVL(ABS(SUM(tphsod.OUT_TOT_QTY)),0) AS TOT_QTY
         FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
         ,       TB_PO_HQ_STORE_OUTSTOCK_DTL tphsod
         ,       TB_MS_PRODUCT tmp

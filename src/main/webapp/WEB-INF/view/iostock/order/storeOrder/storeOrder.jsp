@@ -142,7 +142,7 @@
     var vendrList = ${vendrList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrder.js?ver=20240709.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/storeOrder/storeOrder.js?ver=20240711.01" charset="utf-8"></script>
 
 <%-- 주문등록 상품 상세 팝업 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/storeOrder/storeOrderDtl.jsp">

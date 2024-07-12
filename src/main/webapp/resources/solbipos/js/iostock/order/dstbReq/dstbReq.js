@@ -138,7 +138,7 @@ app.controller('dstbReqCtrl', ['$scope', '$http', '$timeout', function ($scope, 
           for (var i = 0; i < flex.rows.length; i++) {
             var cell = flex.cells.getCellElement(i, c);
             // TODO : 활성화 및 readOnly 아닌 경우에만 체크되도록
-             if (flex.getCellData(i, 4) === '00') {
+             if (flex.getCellData(i, 5) === '00') {
               flex.setCellData(i, c, cb.checked);
              }
           }

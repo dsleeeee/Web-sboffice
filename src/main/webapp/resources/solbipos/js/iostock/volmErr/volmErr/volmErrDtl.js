@@ -3,6 +3,10 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('volmErrDtlCtrl', $scope, $http, true));
 
+  // 버튼 show/hide 제어
+  $scope.volmErrConfirmFg = false;
+  $scope.btnDtlSave = false;
+
   $scope.orgnFg = gvOrgnFg;
   $scope.outDate = wcombo.genDateVal("#dtlOutDate", getNextDay());
   $scope.errFgMap = new wijmo.grid.DataMap([
@@ -108,10 +112,14 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     if ($scope.procFg === "0" && gvOrgnFg !=="S") {    //procFgMap(0:입력, 1:확정)
         //console.log('000 $scope.procFg === "0"');
         $("#volmErrBtnLayer").show();
-        $scope.volmErrConfirmFg   = true;
-        $scope.btnDtlSave         = true;
+        $("#volmErrBtnExcelLayer").hide();
+        $scope.volmErrConfirmFg = true;
+        $scope.btnDtlSave = true;
     } else if($scope.procFg === "0" && gvOrgnFg ==="S") {
+        $("#volmErrBtnLayer").hide();
         $("#volmErrBtnExcelLayer").show();
+        $scope.volmErrConfirmFg = false;
+        $scope.btnDtlSave = false;
         // var flex = $scope.flex;
         // flex.formatItem.addHandler(function (s, e) {
         // 	if (e.panel === s.cells) {
@@ -135,9 +143,9 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 	}
         // });
         $("#volmErrBtnLayer").hide();
-        $scope.volmErrConfirmFg   = false;
-        $scope.btnDtlSave         = false;
         $("#volmErrBtnExcelLayer").hide();
+        $scope.volmErrConfirmFg = false;
+        $scope.btnDtlSave = false;
     }
 
     $("#volmErrConfirmFg"   ).prop("checked", false);
