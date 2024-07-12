@@ -26,9 +26,16 @@ public interface DayCloseService {
 
     /** 조회 */
     List<DefaultMap<String>> getDayCloseList(DayCloseVO dayCloseVO, SessionInfoVO sessionInfoVO);
+
     /** 마감데이터 조회 */
     DefaultMap<String> getDayCloseDtl(DayCloseVO dayCloseVO, SessionInfoVO sessionInfoVO);
+
+    /** 마감 */
     int saveClose(DayCloseVO dayCloseVO, SessionInfoVO sessionInfoVO);
+
+    /** 마감취소 */
     int closeCancel(DayCloseVO dayCloseVO, SessionInfoVO sessionInfoVO);
 
+    /** 광운대일마감 - 저장 */
+    int getDayCloseSave(DayCloseVO[] dayCloseVOs, SessionInfoVO sessionInfoVO);
 }

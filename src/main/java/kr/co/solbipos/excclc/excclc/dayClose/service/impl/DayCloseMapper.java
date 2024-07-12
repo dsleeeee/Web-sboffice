@@ -30,11 +30,16 @@ public interface DayCloseMapper {
 
     /** 조회 */
     List<DefaultMap<String>> getDayCloseList(DayCloseVO dayCloseVO);
+
     /** 마감데이터 조회 */
     DefaultMap<String> getDayCloseDtl(DayCloseVO dayCloseVO);
+
     /** 마감 */
     int saveClose(DayCloseVO dayCloseVO);
+
     /** 마감취소 */
     int closeCancel(DayCloseVO dayCloseVO);
 
+    /** 광운대일마감 - 저장 update */
+    int getDayCloseSaveUpdate(DayCloseVO dayCloseVO);
 }
