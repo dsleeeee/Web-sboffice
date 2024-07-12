@@ -70,30 +70,30 @@ app.controller('menuBaseCtrl', ['$scope', '$http', function ($scope, $http) {
                 if ( col.binding === "useCnt") {
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-                    params.resrceNm = $("#srchResrceNm").val();
-                    params.userId = $("#srchUserId").val();
-                    params.userNm = $("#srchUserNm").val();
-                    params.hqOfficeCd = $("#srchHqOfficeCd").val();
-                    params.hqOfficeNm = $("#srchHqOfficeNm").val();
-                    params.storeCd = $("#srchStoreCd").val();
-                    params.storeNm = $("#srchStoreNm").val();
-                    params.level = $scope.level;
+                    params.startDate    = $scope.srchStartDate
+                    params.endDate      = $scope.srchEndDate
+                    params.resrceNm     = $scope.srchResrceNm
+                    params.userId       = $scope.srchUserId
+                    params.userNm       = $scope.srchUserNm
+                    params.hqOfficeCd   = $scope.srchHqOfficeCd
+                    params.hqOfficeNm   = $scope.srchHqOfficeNm
+                    params.storeCd      = $scope.srchStoreCd
+                    params.storeNm      = $scope.srchStoreNm
+                    params.level        = $scope.srchLevel;
 
-                    if($scope.level === "1") {
+                    if($scope.srchLevel === "1") {
                         params.resrceCd = selectedRow.level1;
 
-                    } else if($scope.level === "2") {
+                    } else if($scope.srchLevel === "2") {
                         params.resrceCd = selectedRow.level2;
 
                         // 값이 있으면 링크 효과
-                        if (nvl(selectedRow[("level2")], '') !== '') {
+                        if (nvl(selectedRow[("level2")], '') === '') {
                             params.level = "1";
                             params.resrceCd = selectedRow.level1;
                         }
 
-                    } else if($scope.level === "3") {
+                    } else if($scope.srchLevel === "3") {
                         params.resrceCd = selectedRow.level3;
 
                         // 값이 있으면 링크 효과
@@ -127,6 +127,17 @@ app.controller('menuBaseCtrl', ['$scope', '$http', function ($scope, $http) {
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.level = $scope.level;
 
+        $scope.srchLevel        = params.level;
+        $scope.srchStartDate    = params.startDate;
+        $scope.srchEndDate      = params.endDate;
+        $scope.srchResrceNm     = $scope.resrceNm;
+        $scope.srchUserId       = $scope.userId
+        $scope.srchUserNm       = $scope.userNm
+        $scope.srchHqOfficeCd   = $scope.hqOfficeCd
+        $scope.srchHqOfficeNm   = $scope.hqOfficeNm
+        $scope.srchStoreCd      = $scope.storeCd
+        $scope.srchStoreNm      = $scope.storeNm
+
         $scope._inquiryMain("/sys/stats/menuBase/menuBase/getMenuBaseList.sb", params, function() {
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('menuBaseDetailCtrl');
@@ -137,17 +148,17 @@ app.controller('menuBaseCtrl', ['$scope', '$http', function ($scope, $http) {
             var grid = wijmo.Control.getControl("#wjGridMenuBaseList");
             var columns = grid.columns;
 
-            if($scope.level === "1") { //대분류
+            if(params.level === "1") { //대분류
                 columns[0].visible = true;
                 columns[1].visible = false;
                 columns[2].visible = false;
                 columns[3].visible = true;
-            } else if($scope.level  === "2") { //중분류
+            } else if(params.level  === "2") { //중분류
                 columns[0].visible = true;
                 columns[1].visible = true;
                 columns[2].visible = false;
                 columns[3].visible = true;
-            } else if($scope.level  === "3") { //소분류
+            } else if(params.level  === "3") { //소분류
                 columns[0].visible = true;
                 columns[1].visible = true;
                 columns[2].visible = true;

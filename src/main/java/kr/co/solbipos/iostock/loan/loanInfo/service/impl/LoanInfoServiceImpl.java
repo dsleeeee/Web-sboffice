@@ -24,4 +24,10 @@ public class LoanInfoServiceImpl implements LoanInfoService {
         return loanInfoMapper.getLoanInfoList(loanInfoVO);
     }
 
+    /** 매장여신정보 조회 */
+    @Override
+    public List<DefaultMap<String>> getStoreLoanManageList(LoanInfoVO loanInfoVO) {
+        return loanInfoMapper.getStoreLoanManageList(loanInfoVO);
+    }
+
 }

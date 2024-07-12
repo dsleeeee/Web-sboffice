@@ -68,7 +68,7 @@
                     BY      VER_SER_NO
                ) tcpvs,
                (
-                    SELECT  NMCODE_NM, nmcode_cd
+                    SELECT  NMCODE_NM, NMCODE_CD
                     FROM    TB_CM_NMCODE
                     WHERE   NMCODE_GRP_CD ='405'
                ) tcn
@@ -85,10 +85,13 @@
             AND tcpv.VER_SER_NM LIKE '%' || #{verSerNm} || '%'
         </if>
         <if test='fileDesc != null and fileDesc != ""'>
-            AND tcpv.FILE_DESC = #{fileDesc}
+            AND tcpv.FILE_DESC LIKE '%' || #{fileDesc} || '%'
         </if>
         <if test='progFg != null and progFg != ""'>
             AND tcpv.PROG_FG = #{progFg}
+        </if>
+        <if test='progDetailFg != null and progDetailFg != ""'>
+            AND tcn.NMCODE_CD = #{progDetailFg}
         </if>
         AND tcn.NMCODE_CD (+)= tcpv.PROG_DETAIL_FG
         ORDER

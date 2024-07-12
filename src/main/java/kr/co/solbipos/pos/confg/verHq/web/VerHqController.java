@@ -75,6 +75,7 @@ public class VerHqController {
 
         // 프로그램 상세구분 코드 조회(콤보박스용)
         model.addAttribute("nmcodeCdList", cmmCodeUtil.assmblObj(verManageService.getNmcodeCdList(), "name", "value", UseYn.N));
+        model.addAttribute("nmcodeCdListAll", cmmCodeUtil.assmblObj(verManageService.getNmcodeCdList(), "name", "value", UseYn.ALL));
 
         return "pos/confg/varhq/verHq";
     }

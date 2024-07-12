@@ -33,7 +33,8 @@
             ,       SUM(REAL_SALE_CNT) AS REAL_SALE_CNT
             ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
             ,       <foreach collection="arrTimeCol" item="item" separator=",">
-                        SUM(CASE WHEN SALE_HOUR = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                        SUM(CASE WHEN SALE_HOUR = ${item} THEN REAL_SALE_CNT END) AS REAL_SALE_CNT${item}
+            ,           SUM(CASE WHEN SALE_HOUR = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
             ,           SUM(CASE WHEN SALE_HOUR = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                     </foreach>
             FROM    TB_SL_DAILY_TIME tssh
@@ -119,7 +120,8 @@
             ,       SUM(REAL_SALE_CNT) AS REAL_SALE_CNT
             ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
             ,       <foreach collection="arrTimeCol" item="item" separator=",">
-                        NVL(SUM(SALE_QTY${item}), 0) AS SALE_QTY${item}
+                        NVL(SUM(REAL_SALE_CNT${item}),0) AS REAL_SALE_CNT${item}
+            ,           NVL(SUM(SALE_QTY${item}), 0) AS SALE_QTY${item}
             ,           NVL(SUM(REAL_SALE_AMT${item}), 0) AS REAL_SALE_AMT${item}
                     </foreach>
             FROM    (
@@ -135,7 +137,8 @@
                         ,		SUM(RTN_SALE_CNT) AS RTN_SALE_CNT
                         ,		SUM(REAL_SALE_CNT) AS REAL_SALE_CNT
                         ,       <foreach collection="arrTimeCol" item="item" separator=",">
-                                    SUM(CASE WHEN TIME_SLOT = ${item} THEN SALE_QTY END)AS SALE_QTY${item}
+                                    SUM(CASE WHEN TIME_SLOT = ${item} THEN REAL_SALE_CNT END)AS REAL_SALE_CNT${item}
+                        ,           SUM(CASE WHEN TIME_SLOT = ${item} THEN SALE_QTY END)AS SALE_QTY${item}
                         ,           SUM(CASE WHEN TIME_SLOT = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                                 </foreach>
                         FROM   (

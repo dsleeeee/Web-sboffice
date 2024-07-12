@@ -16,7 +16,7 @@
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_pageView('menuBaseCtrl',1)">
+                <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('menuBaseCtrl',1)">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -48,7 +48,7 @@
                         <s:message code="menuBase.resrceNm" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchResrceNm" ng-model="resrceNm" />
+                        <input type="text" class="sb-input w100" id="srchResrceNm" ng-model="resrceNm" onkeyup="fnNxBtnSearch();" />
                     </td>
                     <%-- 사용환경 --%>
                     <th>
@@ -74,14 +74,14 @@
                         <s:message code="menuBase.userId" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchUserId" ng-model="userId" />
+                        <input type="text" class="sb-input w100" id="srchUserId" ng-model="userId" onkeyup="fnNxBtnSearch();" />
                     </td>
                     <%-- 사용자명 --%>
                     <th>
                         <s:message code="menuBase.userNm" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchUserNm" ng-model="userNm" />
+                        <input type="text" class="sb-input w100" id="srchUserNm" ng-model="userNm" onkeyup="fnNxBtnSearch();" />
                     </td>
                 </tr>
                 <tr>
@@ -90,14 +90,14 @@
                         <s:message code="menuBase.hqOfficeCd" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" />
+                        <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" onkeyup="fnNxBtnSearch();" />
                     </td>
                     <%-- 본사명 --%>
                     <th>
                         <s:message code="menuBase.hqOfficeNm" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" />
+                        <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" onkeyup="fnNxBtnSearch();" />
                     </td>
                 </tr>
                 <tr>
@@ -106,14 +106,14 @@
                         <s:message code="menuBase.storeCd" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" />
+                        <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();" />
                     </td>
                     <%-- 매장명 --%>
                     <th>
                         <s:message code="menuBase.storeNm" />
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" />
+                        <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();" />
                     </td>
                 </tr>
             </tbody>
@@ -198,4 +198,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/stats/menuBase/menuBase.js?ver=20200527.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/stats/menuBase/menuBase.js?ver=20240710.01" charset="utf-8"></script>

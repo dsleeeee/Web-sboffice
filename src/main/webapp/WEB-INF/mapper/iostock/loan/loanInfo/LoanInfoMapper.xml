@@ -13,6 +13,12 @@
 
 <mapper namespace="kr.co.solbipos.iostock.loan.loanInfo.service.impl.LoanInfoMapper">
 
+    <!-- 주문중지여부 ListMap -->
+    <resultMap id="orderCloseListMap" type="DefaultMap">
+        <result column="ORDER_CLOSE_YN" property="orderCloseYn" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="MAX_ORDER_AMT_YN" property="maxOrderAmtYn" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
     <!-- 여신현황 조회 -->
     <!--
         TABLE    : TB_PO_HQ_STORE_LOAN, TB_PO_HQ_STORE_OUTSTOCK, TB_PO_HQ_STORE_OUTSTOCK_DTL, TB_MS_STORE
@@ -121,6 +127,71 @@
         ORDER
         BY      B.ORDER_RANK, B.LOAN_DATE DESC, B.SLIP_NO DESC
         ]]>
+    </select>
+
+    <!-- 매장여신관리 리스트 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_LOAN
+        PARAM    : loanInfoVO
+        COMMENTS : 매장여신관리 리스트를 조회한다.
+    -->
+    <select id="getStoreLoanManageList" parameterType="loanInfoVO" resultMap="orderCloseListMap">
+        /* USE : LoanInfoMapper.getStoreLoanManageList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        <![CDATA[
+        SELECT  tms.STORE_CD, tms.STORE_NM
+        ,       NVL(tphsl.LIMIT_LOAN_AMT, '') AS LIMIT_LOAN_AMT, tphsl.USE_LOAN_AMT, tphsl.CURR_LOAN_AMT
+        ,       NVL(tphsl.MAX_ORDER_AMT, '') AS MAX_ORDER_AMT, NVL(tphsl.ORDER_FG, '1') AS ORDER_FG, NVL(tphsl.NO_OUTSTOCK_AMT_FG, 'N') AS NO_OUTSTOCK_AMT_FG
+        ,       'N' AS MAX_ORDER_AMT_YN
+        ,       NVL(tphsl.ORDER_CLOSE_YN, 'N') AS ORDER_CLOSE_YN
+        ,       DECODE(tphsl.ORDER_FG
+                      ,'1'
+                      ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
+                             ,1
+                             ,DECODE(tphsl.MAX_ORDER_AMT
+                                    ,NULL
+                                    ,tphsl.CURR_LOAN_AMT
+                                    ,DECODE(SIGN(tphsl.CURR_LOAN_AMT-tphsl.MAX_ORDER_AMT)
+                                           ,1
+                                           ,tphsl.MAX_ORDER_AMT
+                                           ,tphsl.CURR_LOAN_AMT
+                                           )
+                                    )
+                             ,0
+                             )
+                      ,'2'
+                      ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
+                             ,1
+                             ,DECODE(tphsl.MAX_ORDER_AMT
+                                    ,NULL
+                                    ,tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT
+                                    ,DECODE(SIGN(tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT-tphsl.MAX_ORDER_AMT)
+                                           ,1
+                                           ,tphsl.MAX_ORDER_AMT
+                                           ,tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT
+                                           )
+                                    )
+                             ,0
+                             )
+                      ,'3'
+                      ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
+                             ,1
+                             ,DECODE(tphsl.MAX_ORDER_AMT, NULL, 999999999, tphsl.MAX_ORDER_AMT)
+                             ,0
+                             )
+                      ) AVAILABLE_ORDER_AMT
+        ,       NVL(tphsl.REMARK, '') AS REMARK
+        ]]>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        <![CDATA[
+        FROM    TB_MS_STORE tms
+        ,       TB_PO_HQ_STORE_LOAN tphsl
+        WHERE   tms.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     tphsl.STORE_CD  (+) =   tms.STORE_CD
+        AND     tms.STORE_CD        =   #{storeCd}
+        ]]>
+        ORDER BY tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 </mapper>

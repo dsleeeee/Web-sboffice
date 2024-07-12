@@ -106,6 +106,7 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         var j=0;
         for (var i = 0; i < 24; i++) {
             j=i + 1;
+            dataItem['realSaleCnt' + i] = i + "시 ~ " + j + "시";
             dataItem['saleQty' + i] = i + "시 ~ " + j + "시";
             dataItem['realSaleAmt' + i] = i + "시 ~ " + j + "시";
             dataItem['rate' + i] = i + "시 ~ " + j + "시";
@@ -114,6 +115,7 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
         // 시간대분류 컬럼 생성
         for (var i = 0; i < timeSlotColList.length; i++) {
+            dataItem['realSaleCnt' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
             dataItem['saleQty' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
             dataItem['realSaleAmt' + timeSlotColList[i].value.replaceAll("~","")]     = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
             dataItem['rate' + timeSlotColList[i].value.replaceAll("~","")] = timeSlotColList[i].name + "(" + timeSlotColList[i].value + ")";
@@ -183,9 +185,11 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("dayTimeCtrl", function (event, data) {
-        if($scope.startTime*1 > $scope.endTime*1){ // *1하는이유 : Time들이 String이라 int로 바꿀라고
-            $scope._popMsg(messages["dayTime.startEnd"]); // 검색 시작 시간대가 검색 종료 시간대보다 큽니다.
-            return false;
+        if($("input[name=optionFg]:checked").val() == "time") {
+            if ($scope.startTime * 1 > $scope.endTime * 1) { // *1하는이유 : Time들이 String이라 int로 바꿀라고
+                $scope._popMsg(messages["dayTime.startEnd"]); // 검색 시작 시간대가 검색 종료 시간대보다 큽니다.
+                return false;
+            }
         }
 
         $scope.searchDayTimeList();
@@ -278,14 +282,14 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
                 if($("input[name=optionFg]:checked").val() == "time"){ // 시간대
                     for(var j = start; j <= end; j++) {
-                        if (columns[i].binding == 'saleQty'+j || columns[i].binding == 'realSaleAmt'+j || columns[i].binding == 'rate'+j) {
+                        if (columns[i].binding == 'realSaleCnt'+j || columns[i].binding == 'saleQty'+j || columns[i].binding == 'realSaleAmt'+j || columns[i].binding == 'rate'+j) {
                             columns[i].visible = true;
                         }
                     }
                 } else if($("input[name=optionFg]:checked").val() == "timeSlot") {   // 시간대분류
                     for (var j = 0; j < timeSlotColList.length; j++) {
                         if ($scope.timeSlot == timeSlotColList[j].value || $scope.timeSlot === "") {
-                            if (columns[i].binding == 'saleQty' + timeSlotColList[j].value.replaceAll("~", "") || columns[i].binding == 'realSaleAmt' + timeSlotColList[j].value.replaceAll("~", "") || columns[i].binding == 'rate' + timeSlotColList[j].value.replaceAll("~", "")) {
+                            if (columns[i].binding == 'realSaleCnt'+ timeSlotColList[j].value.replaceAll("~", "") || columns[i].binding == 'saleQty' + timeSlotColList[j].value.replaceAll("~", "") || columns[i].binding == 'realSaleAmt' + timeSlotColList[j].value.replaceAll("~", "") || columns[i].binding == 'rate' + timeSlotColList[j].value.replaceAll("~", "")) {
                                 columns[i].visible = true;
                             }
                         }

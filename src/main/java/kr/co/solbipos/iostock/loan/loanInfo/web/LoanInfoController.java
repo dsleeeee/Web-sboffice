@@ -86,4 +86,29 @@ public class LoanInfoController {
 
         return ReturnUtil.returnListJson(Status.OK, list, loanInfoVO);
     }
+
+    /**
+     * 매장여신정보 조회
+     * @param   request
+     * @param   response
+     * @param   loanInfoVO
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024. 07. 10.
+     */
+    @RequestMapping(value = "/loanInfo/getStoreLoanManageList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreLoanManageList(HttpServletRequest request, HttpServletResponse response,
+                                  LoanInfoVO loanInfoVO, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        loanInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        loanInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        List<DefaultMap<String>> list = loanInfoService.getStoreLoanManageList(loanInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, loanInfoVO);
+    }
+
 }

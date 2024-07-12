@@ -33,6 +33,8 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
   // 콤보박스 데이터
   $scope._setComboData("srchProgFgCombo", progFg);
 
+  $scope._setComboData("srchProgDtlFgCombo", nmcodeCdListAll); // 프로그램 상세구분
+
   // 선택 버전
   $scope.selectVersion;
   $scope.setSelectVersion = function(ver){
@@ -108,6 +110,8 @@ app.controller('verManageCtrl', ['$scope', '$http', function ($scope, $http) {
     params.curr = $scope._getPagingInfo('curr');
     params.hqOfficeCd = hqOfficeCd;
     params.progFg = $scope.srchProgFgCombo.selectedValue;
+    params.progDetailFg = $scope.srchProgDtlFgCombo.selectedValue;
+    params.fileDesc = $scope.fileDesc;
 
     $scope._inquiryMain("/pos/confg/verManage/verInfo/list.sb", params, function() {
     });
