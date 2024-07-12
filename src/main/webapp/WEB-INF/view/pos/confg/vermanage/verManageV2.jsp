@@ -17,7 +17,7 @@
     </a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('verManageV2Ctrl', 1)">
+      <button class="btn_blue fr" id="nxBtnSearch4" ng-click="_pageView('verManageV2Ctrl', 1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -34,12 +34,34 @@
         <%-- 버전일련번호 --%>
         <th><s:message code="verManage.verSerNo" /></th>
         <td>
-          <input type="text" id="srchVerSerNo" class="sb-input w100" ng-model="verSerNo" onkeyup="fnNxBtnSearch();" />
+          <input type="text" id="srchVerSerNo" class="sb-input w100" ng-model="verSerNo" onkeyup="fnNxBtnSearch('4');" />
         </td>
         <%-- 버전적용명 --%>
         <th><s:message code="verManage.verSerNm" /></th>
         <td>
-          <input type="text" id="srchVerSerNm" class="sb-input w100" ng-model="verSerNm" onkeyup="fnNxBtnSearch();" />
+          <input type="text" id="srchVerSerNm" class="sb-input w100" ng-model="verSerNm" onkeyup="fnNxBtnSearch('4');" />
+        </td>
+      </tr>
+      <tr>
+        <%-- 프로그램상세구분 --%>
+        <th><s:message code="verManage.progDetailFg" /></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchProgDtlFg"
+                    ng-model="progDtlFg"
+                    control="srchProgDtlFgCombo"
+                    items-source="_getComboData('srchProgDtlFgCombo')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false">
+            </wj-combo-box>
+          </div>
+        </td>
+        <%-- 버전적용명 --%>
+        <th><s:message code="verManage.fileDesc" /></th>
+        <td>
+          <input type="text" id="srchFileDesc" class="sb-input w100" ng-model="fileDesc" onkeyup="fnNxBtnSearch('4');" />
         </td>
       </tr>
       <tr style="display: none;">
@@ -99,6 +121,7 @@
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="90" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.verSerNo"/>" binding="verSerNo" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="verManage.verSerNm"/>" binding="verSerNm" align="center" width="120" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.fileDesc"/>" binding="fileDesc" align="left" width="160" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.progFg"/>" binding="progFg" data-map="progFgDataMap" width="90" align="center" is-read-only="true" ></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="verManage.progDetailFg"/>" binding="progDetailFg" align="center" width="110" is-read-only="true"></wj-flex-grid-column>
@@ -134,9 +157,10 @@
   var hqList = ${ccu.getHqOfficeList()};
   var hqOfficeCd = "${hqOfficeCd}";
   var nmcodeCdList = ${nmcodeCdList};
+  var nmcodeCdListAll = ${nmcodeCdListAll}
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManageV2.js?ver=20240620.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verManageV2.js?ver=20240709.01" charset="utf-8"></script>
 
 <!-- 관리자 화면인 경우만 아래 화면 import -->
 <!-- 본사 화면인 경우 탭 화면으로 구성되어 있어 이미 [POS 버전관리]화면에서 import 하고 있으므로, 중복을 방지하여 오류 안나게 처리 -->

@@ -438,31 +438,31 @@
                 AND LEVEL${level} = #{resrceCd}
             ]]>
         </if>
-        <choose>
-            <when test='resrceNm != null and resrceNm != ""'>
-                <!-- 대분류 -->
-                <if test='level == "1"'>
-                    <![CDATA[
-                       AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-                <!-- 중분류 -->
-                <if test='level == "2"'>
-                    <![CDATA[
-                        AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-                <!-- 소분류 -->
-                <if test='level == "3"'>
-                    <![CDATA[
-                        AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'
-                        OR LEVEL3_NM LIKE '%'||#{resrceNm}||'%'
-                    ]]>
-                </if>
-            </when>
-        </choose>
+<!--        <choose>-->
+<!--            <when test='resrceNm != null and resrceNm != ""'>-->
+<!--                &lt;!&ndash; 대분류 &ndash;&gt;-->
+<!--                <if test='level == "1"'>-->
+<!--                    <![CDATA[-->
+<!--                       AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'-->
+<!--                    ]]>-->
+<!--                </if>-->
+<!--                &lt;!&ndash; 중분류 &ndash;&gt;-->
+<!--                <if test='level == "2"'>-->
+<!--                    <![CDATA[-->
+<!--                        AND LEVEL1_NM LIKE '%'||#{resrceNm}||'%'-->
+<!--                        OR LEVEL2_NM LIKE '%'||#{resrceNm}||'%'-->
+<!--                    ]]>-->
+<!--                </if>-->
+<!--                &lt;!&ndash; 소분류 &ndash;&gt;-->
+<!--                <if test='level == "3"'>-->
+<!--                    <![CDATA[-->
+<!--                        AND LEVEL1_NM   = #{resrceNm}-->
+<!--                        OR LEVEL2_NM    = #{resrceNm}-->
+<!--                        OR LEVEL3_NM    = #{resrceNm}-->
+<!--                    ]]>-->
+<!--                </if>-->
+<!--            </when>-->
+<!--        </choose>-->
         <choose>
             <when test='level != null and level != ""'>
                 <!-- 대분류 -->

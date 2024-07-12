@@ -402,6 +402,7 @@
 
                 <%-- 시간대 컬럼 생성--%>
                 <c:forEach var="i" begin="0" end="23">
+                    <wj-flex-grid-column header="<s:message code="dayTime.realSaleCnt"/>" binding="realSaleCnt${i}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayTime.prodSaleQty"/>" binding="saleQty${i}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayTime.realSaleAmt"/>" binding="realSaleAmt${i}" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayTime.rate"/>" binding="rate${i}" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -409,6 +410,7 @@
 
                 <%-- 시간대분류류 컬럼 생성--%>
                <c:forEach var="timeSlotCol" items="${timeSlotColList}">
+                   <wj-flex-grid-column header="<s:message code="dayTime.realSaleCnt"/>" binding="realSaleCnt${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="dayTime.prodSaleQty"/>" binding="saleQty${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="dayTime.realSaleAmt"/>" binding="realSaleAmt${timeSlotCol.value.replace("~","")}" width="100" align="right" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="dayTime.rate"/>" binding="rate${timeSlotCol.value.replace("~","")}" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -453,4 +455,4 @@
     var arrTimeSlotCol = timeSlotCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayTime/dayTime.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/dayTime/dayTime.js?ver=20240709.01" charset="utf-8"></script>

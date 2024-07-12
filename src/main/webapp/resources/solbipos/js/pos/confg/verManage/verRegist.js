@@ -142,9 +142,12 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var formData = new FormData($("#regForm")[0]);
 
-
     if($scope.version.fileDesc === null || $scope.version.fileDesc === undefined || $scope.version.fileDesc === ""){
       $scope.version.fileDesc = "";
+    }
+
+    if($scope.version.verSerPatchInfo === null || $scope.version.verSerPatchInfo === undefined || $scope.version.verSerPatchInfo === ""){
+      $scope.version.verSerPatchInfo = "";
     }
 
     formData.append("verSerNo", $scope.version.verSerNo);

@@ -382,13 +382,13 @@
 
     <c:forEach var="board" items="${boardList}" varStatus="status">
     // 쿠키체크 후 팝업 띄우기
-    if(getCookie("notPopup${status.index}")!="Y") {
+    if(getCookie("notPopupSystem" + orgnCd + "${status.index}")!="Y") {
         $("#divDimmed${status.index}").css('display', 'block');
         $("#divPopup${status.index}").css('display', 'block');
     }
 
     $("#btnCloseToday${status.index}").click(function(){
-        setCookie('notPopup${status.index}','Y', 1);
+        setCookie('notPopupSystem' + orgnCd + '${status.index}','Y', 1);
         $("#divDimmed${status.index}").css('display', 'none');
         $("#divPopup${status.index}").css('display', 'none');
     });

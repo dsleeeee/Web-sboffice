@@ -114,7 +114,6 @@ public class VerManageServiceImpl implements VerManageService {
 
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
-            verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
             verInfo.setProgFg((String)multi.getParameter("progFg"));
             verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
             verInfo.setImgYn((String)multi.getParameter("imgYn"));
@@ -125,6 +124,8 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setSystemTypeFg((String)multi.getParameter("systemTypeFg"));
             verInfo.setDelYn("N");
 
+            String fileDesc = HtmlUtils.htmlUnescape((String)multi.getParameter("fileDesc"));
+            verInfo.setFileDesc(fileDesc);
             String verSerPatchInfo = HtmlUtils.htmlUnescape((String)multi.getParameter("verSerPatchInfo"));
             verInfo.setVerSerPatchInfo(verSerPatchInfo);
 
@@ -183,7 +184,6 @@ public class VerManageServiceImpl implements VerManageService {
 
             verInfo.setVerSerNo((String)multi.getParameter("verSerNo"));
             verInfo.setVerSerNm((String)multi.getParameter("verSerNm"));
-            verInfo.setFileDesc((String)multi.getParameter("fileDesc"));
             verInfo.setProgFg((String)multi.getParameter("progFg"));
             verInfo.setPgmYn((String)multi.getParameter("pgmYn"));
             verInfo.setImgYn((String)multi.getParameter("imgYn"));
@@ -193,6 +193,9 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setSystemTypeFg((String)multi.getParameter("systemTypeFg"));
 
             verInfo.setDelYn("N");
+
+            String fileDesc = HtmlUtils.htmlUnescape((String)multi.getParameter("fileDesc"));
+            verInfo.setFileDesc(fileDesc);
 
             String verSerPatchInfo = HtmlUtils.htmlUnescape((String)multi.getParameter("verSerPatchInfo"));
             verInfo.setVerSerPatchInfo(verSerPatchInfo);
