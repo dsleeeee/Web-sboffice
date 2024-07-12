@@ -682,11 +682,11 @@
             FROM
             (
                 SELECT
-                B.B_TOTAL_AMT,
+                SUM(B.B_TOTAL_AMT) AS B_TOTAL_AMT,
                 '현금(매표소현금+main통장입금)' AS FG,
-                A.IN_AMT,
-                A.OUT_AMT,
-                A.TOTAL_AMT
+                SUM(A.IN_AMT) AS IN_AMT,
+                SUM(A.OUT_AMT) AS OUT_AMT,
+                SUM(A.TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
@@ -710,11 +710,11 @@
             UNION ALL
             (
                 SELECT
-                B.B_TOTAL_AMT,
+                SUM(B.B_TOTAL_AMT) AS B_TOTAL_AMT,
                 '신용카드계좌입금' AS FG,
-                A.IN_AMT,
-                A.OUT_AMT,
-                A.TOTAL_AMT
+                SUM(A.IN_AMT) AS IN_AMT,
+                SUM(A.OUT_AMT) AS OUT_AMT,
+                SUM(A.TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
@@ -769,10 +769,10 @@
                 'main' AS FG,
                 '하나' AS BANK_NM,
                 '244-910004-32905' AS ACCOUNT_NUM,
-                B.B_TOTAL_AMT,
-                A.IN_AMT,
-                A.OUT_AMT,
-                A.TOTAL_AMT
+                SUM(B.B_TOTAL_AMT) AS B_TOTAL_AMT,
+                SUM(A.IN_AMT) AS IN_AMT,
+                SUM(A.OUT_AMT) AS OUT_AMT,
+                SUM(A.TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
@@ -799,10 +799,10 @@
                 '신용카드' AS FG,
                 '하나' AS BANK_NM,
                 '244-910004-47805' AS ACCOUNT_NUM,
-                B.B_TOTAL_AMT,
-                A.IN_AMT,
-                A.OUT_AMT,
-                A.TOTAL_AMT
+                SUM(B.B_TOTAL_AMT) AS B_TOTAL_AMT,
+                SUM(A.IN_AMT) AS IN_AMT,
+                SUM(A.OUT_AMT) AS OUT_AMT,
+                SUM(A.TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
@@ -829,10 +829,10 @@
                 '신용카드' AS FG,
                 '국민' AS BANK_NM,
                 '092101-04-103044' AS ACCOUNT_NUM,
-                B.B_TOTAL_AMT,
-                A.IN_AMT,
-                A.OUT_AMT,
-                A.TOTAL_AMT
+                SUM(B.B_TOTAL_AMT) AS B_TOTAL_AMT,
+                SUM(A.IN_AMT) AS IN_AMT,
+                SUM(A.OUT_AMT) AS OUT_AMT,
+                SUM(A.TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
@@ -859,10 +859,10 @@
                 '하나' AS FG,
                 '국민' AS BANK_NM,
                 '506-910050-82605' AS ACCOUNT_NUM,
-                B.B_TOTAL_AMT,
-                A.IN_AMT,
-                A.OUT_AMT,
-                A.TOTAL_AMT
+                SUM(B.B_TOTAL_AMT) AS B_TOTAL_AMT,
+                SUM(A.IN_AMT) AS IN_AMT,
+                SUM(A.OUT_AMT) AS OUT_AMT,
+                SUM(A.TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
