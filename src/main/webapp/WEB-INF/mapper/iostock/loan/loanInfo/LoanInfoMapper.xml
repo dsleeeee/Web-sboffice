@@ -52,7 +52,7 @@
                     UNION ALL
                     SELECT  A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
                     FROM    TB_PO_HQ_STORE_MONEY A
-                    WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    WHERE   A.STORE_CD  =   #{storeCd}
                     AND     A.MONEY_DATE    >   #{endDate}
                 )
         HAVING  COUNT(*) > 0
@@ -86,7 +86,7 @@
                     UNION ALL
                     SELECT  A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
                     FROM    TB_PO_HQ_STORE_MONEY A
-                    WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    WHERE   A.STORE_CD  =   #{storeCd}
         ]]>
                     <if test='dateFg != null and dateFg != ""'>
                     AND     A.MONEY_DATE     BETWEEN #{startDate} AND #{endDate}
@@ -115,7 +115,7 @@
                     UNION ALL
                     SELECT  A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
                     FROM    TB_PO_HQ_STORE_MONEY A
-                    WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                    WHERE   A.STORE_CD  =   #{storeCd}
                     AND     A.MONEY_DATE    <   #{startDate}
                 )
         HAVING  COUNT(*) > 0
