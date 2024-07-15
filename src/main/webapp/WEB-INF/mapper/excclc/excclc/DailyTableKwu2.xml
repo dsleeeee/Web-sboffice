@@ -682,18 +682,18 @@
             FROM
             (
                 SELECT
-                B_TOTAL_AMT,
+                SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
                 '현금(매표소현금+main통장입금)' AS FG,
-                IN_AMT,
-                OUT_AMT,
-                TOTAL_AMT
+                SUM(IN_AMT) AS IN_AMT,
+                SUM(OUT_AMT) AS OUT_AMT,
+                SUM(TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
-                    SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
-                    SUM(IN_AMT) AS IN_AMT,
-                    SUM(OUT_AMT) AS OUT_AMT,
-                    SUM(TOTAL_AMT) AS TOTAL_AMT
+                    B_TOTAL_AMT,
+                    IN_AMT,
+                    OUT_AMT,
+                    TOTAL_AMT
                     FROM
                     (
                         SELECT
@@ -723,18 +723,18 @@
             UNION ALL
             (
                 SELECT
-                B_TOTAL_AMT,
+                SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
                 '신용카드계좌입금' AS FG,
-                IN_AMT,
-                OUT_AMT,
-                TOTAL_AMT
+                SUM(IN_AMT) AS IN_AMT,
+                SUM(OUT_AMT) AS OUT_AMT,
+                SUM(TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
-                    SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
-                    SUM(IN_AMT) AS IN_AMT,
-                    SUM(OUT_AMT) AS OUT_AMT,
-                    SUM(TOTAL_AMT) AS TOTAL_AMT
+                    B_TOTAL_AMT,
+                    IN_AMT,
+                    OUT_AMT,
+                    TOTAL_AMT
                     FROM
                     (
                         SELECT
@@ -795,17 +795,17 @@
                 'main' AS FG,
                 '하나' AS BANK_NM,
                 '244-910004-32905' AS ACCOUNT_NUM,
-                B_TOTAL_AMT,
-                IN_AMT,
-                OUT_AMT,
-                TOTAL_AMT
+                SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
+                SUM(IN_AMT) AS IN_AMT,
+                SUM(OUT_AMT) AS OUT_AMT,
+                SUM(TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
-                    SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
-                    SUM(IN_AMT) AS IN_AMT,
-                    SUM(OUT_AMT) AS OUT_AMT,
-                    SUM(TOTAL_AMT) AS TOTAL_AMT
+                    B_TOTAL_AMT,
+                    IN_AMT,
+                    OUT_AMT,
+                    TOTAL_AMT
                     FROM
                     (
                         SELECT
@@ -838,17 +838,17 @@
                 '신용카드' AS FG,
                 '하나' AS BANK_NM,
                 '244-910004-47805' AS ACCOUNT_NUM,
-                B_TOTAL_AMT,
-                IN_AMT,
-                OUT_AMT,
-                TOTAL_AMT
+                SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
+                SUM(IN_AMT) AS IN_AMT,
+                SUM(OUT_AMT) AS OUT_AMT,
+                SUM(TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
-                    SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
-                    SUM(IN_AMT) AS IN_AMT,
-                    SUM(OUT_AMT) AS OUT_AMT,
-                    SUM(TOTAL_AMT) AS TOTAL_AMT
+                    B_TOTAL_AMT,
+                    IN_AMT,
+                    OUT_AMT,
+                    TOTAL_AMT
                     FROM
                     (
                         SELECT
@@ -881,17 +881,17 @@
                 '신용카드' AS FG,
                 '국민' AS BANK_NM,
                 '092101-04-103044' AS ACCOUNT_NUM,
-                B_TOTAL_AMT,
-                IN_AMT,
-                OUT_AMT,
-                TOTAL_AMT
+                SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
+                SUM(IN_AMT) AS IN_AMT,
+                SUM(OUT_AMT) AS OUT_AMT,
+                SUM(TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
-                    SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
-                    SUM(IN_AMT) AS IN_AMT,
-                    SUM(OUT_AMT) AS OUT_AMT,
-                    SUM(TOTAL_AMT) AS TOTAL_AMT
+                    B_TOTAL_AMT,
+                    IN_AMT,
+                    OUT_AMT,
+                    TOTAL_AMT
                     FROM
                     (
                         SELECT
@@ -924,17 +924,17 @@
                 '방학특강' AS FG,
                 '하나' AS BANK_NM,
                 '506-910050-82605' AS ACCOUNT_NUM,
-                B_TOTAL_AMT,
-                IN_AMT,
-                OUT_AMT,
-                TOTAL_AMT
+                SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
+                SUM(IN_AMT) AS IN_AMT,
+                SUM(OUT_AMT) AS OUT_AMT,
+                SUM(TOTAL_AMT) AS TOTAL_AMT
                 FROM
                 (
                     SELECT
-                    SUM(B_TOTAL_AMT) AS B_TOTAL_AMT,
-                    SUM(IN_AMT) AS IN_AMT,
-                    SUM(OUT_AMT) AS OUT_AMT,
-                    SUM(TOTAL_AMT) AS TOTAL_AMT
+                    B_TOTAL_AMT,
+                    IN_AMT,
+                    OUT_AMT,
+                    TOTAL_AMT
                     FROM
                     (
                         SELECT
