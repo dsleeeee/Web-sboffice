@@ -46,14 +46,14 @@
                     SELECT  tphso.IN_DATE AS LOAN_DATE, tphso.SLIP_NO, (tphso.IN_TOT + NVL(tphso.PENALTY_AMT, 0)) AS OUT_AMT, 0 AS IN_AMT, tphso.REMARK
                     FROM    TB_PO_HQ_STORE_OUTSTOCK tphso
                     WHERE   tphso.STORE_CD    =   #{storeCd}
-                    AND     tphso.IN_DATE     >   #{startDate}
+                    AND     tphso.IN_DATE     >   #{endDate}
                     AND     tphso.SLIP_FG     =   -1
                     AND     tphso.PROC_FG     =   '30'
                     UNION ALL
                     SELECT  A.MONEY_DATE AS LOAN_DATE, '' AS SLIP_NO, 0 AS OUT_AMT, A.MONEY_AMT AS IN_AMT, A.REMARK
                     FROM    TB_PO_HQ_STORE_MONEY A
                     WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                    AND     A.MONEY_DATE    >   #{startDate}
+                    AND     A.MONEY_DATE    >   #{endDate}
                 )
         HAVING  COUNT(*) > 0
         UNION ALL
