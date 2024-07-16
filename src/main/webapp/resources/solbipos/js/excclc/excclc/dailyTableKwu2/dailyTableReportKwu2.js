@@ -35,8 +35,8 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
             // dailyTableKwu2Report html 내용 초기화
             $("#dailyTableKwu2Report").html('');
 
-            $("#divPrintNum1").css("display", "");
-            $("#divPrintNum2").css("display", "none");
+            $("#divPrintNum21").css("display", "");
+            $("#divPrintNum22").css("display", "none");
 
             $scope.searchDailyTableReportKwu2();
 
@@ -44,8 +44,8 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
             // dailyTableKwu2Report html 내용 초기화
             $("#dailyTableKwu2Report2").html('');
 
-            $("#divPrintNum1").css("display", "none");
-            $("#divPrintNum2").css("display", "");
+            $("#divPrintNum21").css("display", "none");
+            $("#divPrintNum22").css("display", "");
 
             $scope.searchDailyTableReportKwu22();
         }

@@ -129,6 +129,23 @@ app.controller('dailyTableKwuCtrl', ['$scope', '$http', '$timeout', function ($s
         $scope.wjDailyTableReportKwuLayer.show(true);
     };
 
+    // 일일일계표 인쇄
+    $scope.print2 = function(printNum){
+        if($scope.orgnFg != "S") {
+            if( $("#dailyTableKwuSelectStoreCd").val() == "" ){
+                s_alert.pop( messages["dailyReport.alert.selectStore"] );	//선택된 매장이 없습니다. 매장을 선택해 주십시오.
+                return;
+            }
+        }
+
+        var params = {};
+        params.printNum = printNum;
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        params.storeCd = $("#dailyTableKwuSelectStoreCd").val();
+        $scope.setSelectedDailyTableKwu(params);
+        $scope.wjDailyTableReportKwu2Layer.show(true);
+    };
+
     // 선택
     $scope.selectedDailyTableKwu;
     $scope.setSelectedDailyTableKwu = function(store) {
@@ -141,13 +158,21 @@ app.controller('dailyTableKwuCtrl', ['$scope', '$http', '$timeout', function ($s
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
 
-        // 일일일계표 인쇄 결과 팝업 핸들러 추가
+        // 일일일계표2 인쇄 결과 팝업 핸들러 추가
         $scope.wjDailyTableReportKwuLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('dailyTableReportKwuCtrl', $scope.getSelectedDailyTableKwu());
             }, 50)
         });
+
+        // 일일일계표3 인쇄 결과 팝업 핸들러 추가
+        $scope.wjDailyTableReportKwu2Layer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('dailyTableReportKwu2Ctrl', $scope.getSelectedDailyTableKwu());
+            }, 50)
+        });
     });
+
 }]);
 
 

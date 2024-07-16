@@ -14,7 +14,7 @@
         </div>
         <div class="wj-dialog-body sc2" style="height: 600px;">
             <%-- 첫째 장 인쇄 --%>
-            <div id="divPrintNum1" style="display: none;">
+            <div id="divPrintNum21" style="display: none;">
                 <div class="mt5 mb10 tr">
                     <%-- 인쇄 --%>
                     <button type="button" class="btn_skyblue ml5" id="btnPrint" ng-click="print()"><s:message code="cmm.print"/></button>
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <%-- 둘째 장 인쇄 --%>
-            <div id="divPrintNum2" style="display: none;">
+            <div id="divPrintNum22" style="display: none;">
                 <div class="mt5 mb10 tr">
                     <%-- 인쇄 --%>
                     <button type="button" class="btn_skyblue ml5" id="btnPrint" ng-click="print2()"><s:message code="cmm.print"/></button>
@@ -35,4 +35,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu2/dailyTableReportKwu2.js?ver=20240711.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu2/dailyTableReportKwu2.js?ver=20240715.01" charset="utf-8"></script>

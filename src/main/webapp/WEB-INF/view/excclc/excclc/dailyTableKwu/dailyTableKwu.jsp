@@ -61,6 +61,7 @@
         </table>
         <div class="mt10 oh sb-select dkbr">
             <span class="fr">
+                <button class="btn_skyblue" ng-click="print2('1')">일일일계표 <s:message code="cmm.print"	/></button>
                 <button class="btn_skyblue" ng-click="print('1')">첫째 장 <s:message code="cmm.print"	/></button>
                 <button class="btn_skyblue" ng-click="print('2')">둘째 장 <s:message code="cmm.print"	/></button>
              <button class="btn_skyblue" ng-click="excelDownload()" ><s:message code="cmm.excel.down"	/></button>
@@ -175,10 +176,16 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu/dailyTableKwu.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu/dailyTableKwu.js?ver=20240615.01" charset="utf-8"></script>
 
 <%-- 일일일계표2 인쇄 레이어 --%>
 <c:import url="/WEB-INF/view/excclc/excclc/dailyTableKwu/dailyTableReportKwu.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 일일일계표3 인쇄 레이어 --%>
+<c:import url="/WEB-INF/view/excclc/excclc/dailyTableKwu2/dailyTableReportKwu2.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
