@@ -73,4 +73,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsReserve.js?ver=20211230.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsReserve.js?ver=20240717.01" charset="utf-8"></script>
