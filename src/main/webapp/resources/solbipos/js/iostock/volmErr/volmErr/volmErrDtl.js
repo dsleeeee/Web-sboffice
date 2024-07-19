@@ -109,7 +109,7 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
         console.log('data.procFg ==     : ' + data.procFg === $scope.procFg );
         console.log('data.procFg ==     : ' + data.procFg ==  $scope.procFg );
         */
-    if ($scope.procFg === "0" && gvOrgnFg !=="S") {    //procFgMap(0:입력, 1:확정)
+    if ($scope.procFg === "0" && gvOrgnFg ==="H") {    //procFgMap(0:입력, 1:확정)
         //console.log('000 $scope.procFg === "0"');
         $("#volmErrBtnLayer").show();
         $("#volmErrBtnExcelLayer").hide();
@@ -216,10 +216,10 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
     }).then(function successCallback(response) {
       if ($scope._httpStatusCheck(response, true)) {
         if (!$.isEmptyObject(response.data.data)) {
-          if (response.data.data.orderFg > 0) {
-            $scope._popMsg(messages["storeOrder.dtl.not.orderDate"]);
-            return false;
-          }
+            if (response.data.data.chkResult !== 'Y') {
+                $scope._popMsg(response.data.data.chkResult);
+                return false;
+            }
         }
         $scope.storeCloseCheck();
       }
