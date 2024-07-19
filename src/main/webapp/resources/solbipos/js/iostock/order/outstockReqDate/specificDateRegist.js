@@ -56,6 +56,8 @@ app.controller('speDateRegistCtrl', ['$scope', '$http', function ($scope, $http)
 
   // 특정일 저장
   $scope.submitForm = function () {
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
     //값체크
     if (!valueCheck()) return false;
 
@@ -83,10 +85,15 @@ app.controller('speDateRegistCtrl', ['$scope', '$http', function ($scope, $http)
       var resData = response.data;
       // 통신은 성공하였으나 데이터 엑세스에 실패한 경우
       if (resData.status == "FAIL") {
+        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         $scope.s_alert(resData.message);
+      }else if(resData.status == "SERVER_ERROR"){
+        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+        $scope._popMsg(messages["cmm.saveFail"]);
       }
       // 성공한 경우
       else {
+        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
         $scope._popMsg(messages["cmm.saveSucc"]);
         // 특정일 그리드 새로고침
         $scope._broadcast('specificCtrl');

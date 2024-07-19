@@ -192,7 +192,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.splyUprcUseYn = "Y"; // 공급단가사용여부
             params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
             params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종원가단가
-            params.poProdFg = "1"; // 발주상품구분
+            // 발주상품구분
+            if(orgnFg == "HQ") {
+                params.poProdFg = "1";
+            }else if(orgnFg == "STORE"){
+                params.poProdFg = "4";
+            }else{
+                params.poProdFg = "9";
+            }
             params.poUnitFg = "1"; // 발주단위
             params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
             params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량

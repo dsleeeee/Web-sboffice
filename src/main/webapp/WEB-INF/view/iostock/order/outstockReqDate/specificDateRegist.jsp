@@ -124,4 +124,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20240628.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20240716.01" charset="utf-8"></script>

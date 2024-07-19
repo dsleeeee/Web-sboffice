@@ -697,26 +697,14 @@
                     FROM
                     (
                         SELECT
-                        0 AS B_TOTAL_AMT,
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'B_STATUS_CASH_TOTAL_AMT') AS B_TOTAL_AMT,
                         tpck.STATUS_CASH_IN_AMT AS IN_AMT,
                         tpck.STATUS_CASH_OUT_AMT AS OUT_AMT,
-                        tpck.STATUS_CASH_TOTAL_AMT AS TOTAL_AMT
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'STATUS_CASH_TOTAL_AMT') AS TOTAL_AMT
                         FROM TB_PO_CLOSE_KWU tpck
                         WHERE 1=1
                         AND tpck.STORE_CD = #{storeCd}
                         AND tpck.CLOSE_DATE = #{startDate}
-                    )
-                    UNION ALL
-                    (
-                        SELECT
-                        tpck.STATUS_CASH_TOTAL_AMT AS B_TOTAL_AMT,
-                        0 AS IN_AMT,
-                        0 AS OUT_AMT,
-                        0 AS TOTAL_AMT
-                        FROM TB_PO_CLOSE_KWU tpck
-                        WHERE 1=1
-                        AND tpck.STORE_CD = #{storeCd}
-                        AND tpck.CLOSE_DATE = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
                     )
                 )
             )
@@ -738,26 +726,14 @@
                     FROM
                     (
                         SELECT
-                        0 AS B_TOTAL_AMT,
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'B_STATUS_CARD_TOTAL_AMT') AS B_TOTAL_AMT,
                         tpck.STATUS_CARD_IN_AMT AS IN_AMT,
                         tpck.STATUS_CARD_OUT_AMT AS OUT_AMT,
-                        tpck.STATUS_CARD_TOTAL_AMT AS TOTAL_AMT
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'STATUS_CARD_TOTAL_AMT') AS TOTAL_AMT
                         FROM TB_PO_CLOSE_KWU tpck
                         WHERE 1=1
                         AND tpck.STORE_CD = #{storeCd}
                         AND tpck.CLOSE_DATE = #{startDate}
-                    )
-                    UNION ALL
-                    (
-                        SELECT
-                        tpck.STATUS_CARD_TOTAL_AMT AS B_TOTAL_AMT,
-                        0 AS IN_AMT,
-                        0 AS OUT_AMT,
-                        0 AS TOTAL_AMT
-                        FROM TB_PO_CLOSE_KWU tpck
-                        WHERE 1=1
-                        AND tpck.STORE_CD = #{storeCd}
-                        AND tpck.CLOSE_DATE = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
                     )
                 )
             )
@@ -809,26 +785,14 @@
                     FROM
                     (
                         SELECT
-                        0 AS B_TOTAL_AMT,
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'B_ACCOUNT_STATUS_MAIN_HANA_TOTAL_AMT') AS B_TOTAL_AMT,
                         tpck.ACCOUNT_STATUS_MAIN_HANA_IN_AMT AS IN_AMT,
                         tpck.ACCOUNT_STATUS_MAIN_HANA_OUT_AMT AS OUT_AMT,
-                        tpck.ACCOUNT_STATUS_MAIN_HANA_TOTAL_AMT AS TOTAL_AMT
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'ACCOUNT_STATUS_MAIN_HANA_TOTAL_AMT') AS TOTAL_AMT
                         FROM TB_PO_CLOSE_KWU tpck
                         WHERE 1=1
                         AND tpck.STORE_CD = #{storeCd}
                         AND tpck.CLOSE_DATE = #{startDate}
-                    )
-                   UNION ALL
-                    (
-                        SELECT
-                        tpck.ACCOUNT_STATUS_MAIN_HANA_TOTAL_AMT AS B_TOTAL_AMT,
-                        0 AS IN_AMT,
-                        0 AS OUT_AMT,
-                        0 AS TOTAL_AMT
-                        FROM TB_PO_CLOSE_KWU tpck
-                        WHERE 1=1
-                        AND tpck.STORE_CD = #{storeCd}
-                        AND tpck.CLOSE_DATE = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
                     )
                 )
             )
@@ -852,26 +816,14 @@
                     FROM
                     (
                         SELECT
-                        0 AS B_TOTAL_AMT,
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'B_ACCOUNT_STATUS_CARD_HANA_TOTAL_AMT') AS B_TOTAL_AMT,
                         tpck.ACCOUNT_STATUS_CARD_HANA_IN_AMT AS IN_AMT,
                         tpck.ACCOUNT_STATUS_CARD_HANA_OUT_AMT AS OUT_AMT,
-                        tpck.ACCOUNT_STATUS_CARD_HANA_TOTAL_AMT AS TOTAL_AMT
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'ACCOUNT_STATUS_CARD_HANA_TOTAL_AMT') AS TOTAL_AMT
                         FROM TB_PO_CLOSE_KWU tpck
                         WHERE 1=1
                         AND tpck.STORE_CD = #{storeCd}
                         AND tpck.CLOSE_DATE = #{startDate}
-                    )
-                       UNION ALL
-                    (
-                        SELECT
-                        tpck.ACCOUNT_STATUS_CARD_HANA_TOTAL_AMT AS B_TOTAL_AMT,
-                        0 AS IN_AMT,
-                        0 AS OUT_AMT,
-                        0 AS TOTAL_AMT
-                        FROM TB_PO_CLOSE_KWU tpck
-                        WHERE 1=1
-                        AND tpck.STORE_CD = #{storeCd}
-                        AND tpck.CLOSE_DATE = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
                     )
                 )
             )
@@ -895,26 +847,14 @@
                     FROM
                     (
                         SELECT
-                        0 AS B_TOTAL_AMT,
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'B_ACCOUNT_STATUS_CARD_KB_TOTAL_AMT') AS B_TOTAL_AMT,
                         tpck.ACCOUNT_STATUS_CARD_KB_IN_AMT AS IN_AMT,
                         tpck.ACCOUNT_STATUS_CARD_KB_OUT_AMT AS OUT_AMT,
-                        tpck.ACCOUNT_STATUS_CARD_KB_TOTAL_AMT AS TOTAL_AMT
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'ACCOUNT_STATUS_CARD_KB_TOTAL_AMT') AS TOTAL_AMT
                         FROM TB_PO_CLOSE_KWU tpck
                         WHERE 1=1
                         AND tpck.STORE_CD = #{storeCd}
                         AND tpck.CLOSE_DATE = #{startDate}
-                    )
-                    UNION ALL
-                    (
-                        SELECT
-                        tpck.ACCOUNT_STATUS_CARD_KB_TOTAL_AMT AS B_TOTAL_AMT,
-                        0 AS IN_AMT,
-                        0 AS OUT_AMT,
-                        0 AS TOTAL_AMT
-                        FROM TB_PO_CLOSE_KWU tpck
-                        WHERE 1=1
-                        AND tpck.STORE_CD = #{storeCd}
-                        AND tpck.CLOSE_DATE = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
                     )
                 )
             )
@@ -938,26 +878,14 @@
                     FROM
                     (
                         SELECT
-                        0 AS B_TOTAL_AMT,
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'B_ACCOUNT_STATUS_SP_HANA_TOTAL_AMT') AS B_TOTAL_AMT,
                         tpck.ACCOUNT_STATUS_SP_HANA_IN_AMT AS IN_AMT,
                         tpck.ACCOUNT_STATUS_SP_HANA_OUT_AMT AS OUT_AMT,
-                        tpck.ACCOUNT_STATUS_SP_HANA_TOTAL_AMT AS TOTAL_AMT
+                        FN_GET_TB_PO_CLOSE_KWU_TOTAL_AMT(#{storeCd}, #{startDate}, 'ACCOUNT_STATUS_SP_HANA_TOTAL_AMT') AS TOTAL_AMT
                         FROM TB_PO_CLOSE_KWU tpck
                         WHERE 1=1
                         AND tpck.STORE_CD = #{storeCd}
                         AND tpck.CLOSE_DATE = #{startDate}
-                    )
-                    UNION ALL
-                    (
-                        SELECT
-                        tpck.ACCOUNT_STATUS_SP_HANA_TOTAL_AMT AS B_TOTAL_AMT,
-                        0 AS IN_AMT,
-                        0 AS OUT_AMT,
-                        0 AS TOTAL_AMT
-                        FROM TB_PO_CLOSE_KWU tpck
-                        WHERE 1=1
-                        AND tpck.STORE_CD = #{storeCd}
-                        AND tpck.CLOSE_DATE = TO_CHAR(TO_DATE(#{startDate}, 'YYYYMMDD')-1, 'YYYYMMDD')
                     )
                 )
             )

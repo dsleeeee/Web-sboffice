@@ -481,6 +481,17 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
             // 발주상품구분
             if (prodExcelUploadVO.getPoProdFg() != null && !"".equals(prodExcelUploadVO.getPoProdFg())) {
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+
+                } else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+                    if (!prodExcelUploadVO.getPoProdFg().equals("4") && !prodExcelUploadVO.getPoProdFg().equals("9")) {
+                        prodExcelUploadVO.setResult("발주상품구분를 확인해주세요.");
+                    }
+                } else{
+                    if (!prodExcelUploadVO.getPoProdFg().equals("9")) {
+                        prodExcelUploadVO.setResult("발주상품구분를 확인해주세요.");
+                    }
+                }
             } else {
                 prodExcelUploadVO.setResult("발주상품구분를 선택해주세요.");
             }

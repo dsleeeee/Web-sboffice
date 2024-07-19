@@ -134,8 +134,10 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.prodTypeFg = "1";
         if(orgnFg === "HQ"){
             params.poProdFg = "1";
-        } else {
+        } else if(orgnFg === "STORE"){
             params.poProdFg = "4";
+        } else{
+            params.poProdFg = "9";
         }
         params.splyUprc = "0";
         params.costUprc = "0";
@@ -207,7 +209,11 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.flex.collectionView.items[i].packSaleUprc = "";
             $scope.flex.collectionView.items[i].vendrCd = "";
             $scope.flex.collectionView.items[i].prodTypeFg = "1";
-            $scope.flex.collectionView.items[i].poProdFg = "1";
+            if(orgnFg == "HQ") {
+                $scope.flex.collectionView.items[i].poProdFg = "1";
+            }else{
+                $scope.flex.collectionView.items[i].poProdFg = "4";
+            }
             $scope.flex.collectionView.items[i].splyUprc = "0";
             $scope.flex.collectionView.items[i].costUprc = "0";
             $scope.flex.collectionView.items[i].vatFg = "1";

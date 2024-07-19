@@ -109,8 +109,10 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         params.splyUprc = "1000";
         if(orgnFg === "HQ"){
             params.poProdFg = "1";
-        } else {
+        } else if(orgnFg === "STORE"){
             params.poProdFg = "4";
+        } else{
+            params.poProdFg = "9";
         }
         params.poUnitFg = "1";
         params.poUnitQty = "1";
