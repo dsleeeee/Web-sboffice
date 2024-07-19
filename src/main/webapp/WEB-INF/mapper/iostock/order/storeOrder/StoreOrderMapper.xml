@@ -317,7 +317,7 @@
     -->
     <select id="getStoreOrderDateCheck" parameterType="storeOrderVO" resultType="DefaultMap">
         /* USE : storeOrderMapper.getStoreOrderDateCheck */
-        <![CDATA[
+        <!--
         SELECT  SUM(ORDER_FG) AS ORDER_FG
         FROM    (   SELECT  DECODE(NVL(tphsos.OUTSTOCK_REQ_YN, 'N'), 'Y', 1, 0) AS ORDER_FG
                     FROM    TB_PO_HQ_STORE_ORDER_SPECIFIC tphsos
@@ -331,7 +331,9 @@
                     AND     tphsod.STORE_CD     = #{storeCd}
                     AND     tphsod.REQ_NO_DAY   LIKE    '%'||(SELECT TO_CHAR(TO_DATE(#{reqDate}, 'YYYYMMDD'), 'D') FROM DUAL)||'%'
                 )
-        ]]>
+        -->
+        SELECT FN_GET_ORDER_DATE_CHK(#{storeCd}, #{reqDate}, '', '') AS CHK_RESULT
+        FROM DUAL
     </select>
 
     <!-- 주문등록 매장마감 여부 조회 -->
@@ -375,100 +377,83 @@
     -->
     <select id="getStoreLoan" parameterType="storeOrderVO" resultType="DefaultMap">
         /* USE : storeOrderMapper.getStoreLoan */
-        SELECT  NVL(tphso.PREV_ORDER_TOT, 0) AS PREV_ORDER_TOT,
-				tphsl.LIMIT_LOAN_AMT,
-        		tphsl.CURR_LOAN_AMT,
-        		tphsl.MAX_ORDER_AMT,
-                (tphsl.LIMIT_LOAN_AMT - tphso2.OUT_TOT - tphso.PREV_ORDER_TOT + tphsm.MONEY_AMT) AS AVAILABLE_ORDER_AMT,
-				tphsl.NO_OUTSTOCK_AMT_FG,
-				tphsl.ORDER_CLOSE_YN
-        FROM    (   SELECT  NVL(SUM(tphso.ORDER_TOT), 0) AS PREV_ORDER_TOT
-                    FROM    TB_PO_HQ_STORE_ORDER tphso
-                    WHERE   STORE_CD  =   #{storeCd}
-                    AND     ORDER_SLIP_NO != #{orderSlipNo}
-                    AND     PROC_FG   IN  ('00','10')								<!-- 00:등록, 10:등록완료, 20:분배완료 (화면: 등록, 분배중, 분배완료) -->
-                ) tphso
-        ,       (   SELECT  NVL(tphsl.LIMIT_LOAN_AMT,       0) AS LIMIT_LOAN_AMT,
-        					tphsl.CURR_LOAN_AMT,
-							NVL(tphsl.MAX_ORDER_AMT,        0) AS MAX_ORDER_AMT,
-                    		NVL(tphsl.NO_OUTSTOCK_AMT_FG, 'N') AS NO_OUTSTOCK_AMT_FG,
-                    		NVL(tphsl.ORDER_CLOSE_YN,     'N') AS ORDER_CLOSE_YN
-                    		<!--
-							DECODE(tphsl.ORDER_FG
-                                  ,'1'
-                                  ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
-                                         ,1
-                                         ,DECODE(tphsl.MAX_ORDER_AMT
-                                                ,NULL
-                                                ,tphsl.CURR_LOAN_AMT
-                                                ,DECODE(SIGN(tphsl.CURR_LOAN_AMT-tphsl.MAX_ORDER_AMT)
-                                                       ,1
-                                                       ,tphsl.MAX_ORDER_AMT
-                                                       ,tphsl.CURR_LOAN_AMT
-                                                       )
-                                                )
-                                         ,0
-                                         )
-                                  ,'2'
-                                  ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
-                                         ,1
-                                         ,DECODE(tphsl.MAX_ORDER_AMT
-                                                ,NULL
-                                                ,tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT
-                                                ,DECODE(SIGN(tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT-tphsl.MAX_ORDER_AMT)
-                                                       ,1
-                                                       ,tphsl.MAX_ORDER_AMT
-                                                       ,tphsl.LIMIT_LOAN_AMT+tphsl.CURR_LOAN_AMT
-                                                       )
-                                                )
-                                         ,0
-                                         )
-                                  ,'3'
-                                  ,DECODE(SIGN(tphsl.CURR_LOAN_AMT)
-                                         ,1
-                                         ,tphsl.MAX_ORDER_AMT
-                                         ,0
-                                         )
-                                  ) AS AVAILABLE_ORDER_AMT
-							-->
-							<!--
-							DECODE(tphsl.ORDER_FG   ,'1', DECODE(SIGN(tphsl.CURR_LOAN_AMT), 1, DECODE(  tphsl.MAX_ORDER_AMT,
-                                                                                                        NULL,
-                                                                                                        tphsl.CURR_LOAN_AMT,
-                                                                                                        DECODE( SIGN(tphsl.CURR_LOAN_AMT - tphsl.MAX_ORDER_AMT                       ),1, tphsl.MAX_ORDER_AMT, tphsl.CURR_LOAN_AMT                          )), 0)
-                                                    ,'2', DECODE(SIGN(tphsl.CURR_LOAN_AMT), 1, DECODE(  tphsl.MAX_ORDER_AMT,
-                                                                                                        NULL,
-                                                                                                        tphsl.LIMIT_LOAN_AMT + tphsl.CURR_LOAN_AMT,
-                                                                                                        DECODE( SIGN(tphsl.LIMIT_LOAN_AMT + tphsl.CURR_LOAN_AMT - tphsl.MAX_ORDER_AMT),1, tphsl.MAX_ORDER_AMT, tphsl.LIMIT_LOAN_AMT + tphsl.CURR_LOAN_AMT   )), 0)
-                                                    ,'3', DECODE(SIGN(tphsl.CURR_LOAN_AMT), 1, tphsl.MAX_ORDER_AMT, 0)
-                            ) AS AVAILABLE_ORDER_AMT
-							-->
-							<!--
-					                    방식1 : 여신잔액과 1회 주문한도액 중 작은 금액                                                          (1회 주문한도액 미입력시 여신잔액)
-					                    방식2 : 여신잔액이 0보다 큰 경우, 여신한도액 + 여신잔액과 1회 주문한도액 중 작은금액 (1회 주문한도액 미입력시 여신한도액 + 여신잔액)
-					                    방식3 : 여신잔액이 0보다 큰 경우, 주문가능                                                              (1회 주문한도액 미입력시 주문가능액은 무한대)
-							-->
-			                <!-- DECODE	(tphsl.ORDER_FG,'1', DECODE( SIGN(NVL(tphsl.MAX_ORDER_AMT,0)),   0, tphsl.CURR_LOAN_AMT,                   		LEAST(tphsl.CURR_LOAN_AMT, tphsl.MAX_ORDER_AMT)																		),
-			                                 		'2', DECODE( SIGN(NVL(tphsl.MAX_ORDER_AMT,0)),   0, tphsl.CURR_LOAN_AMT + tphsl.LIMIT_LOAN_AMT,	DECODE(SIGN(tphsl.CURR_LOAN_AMT), 1,LEAST(tphsl.CURR_LOAN_AMT + tphsl.LIMIT_LOAN_AMT, tphsl.MAX_ORDER_AMT), 0	)   ),
-			                                 		'3', DECODE( SIGN(NVL(tphsl.MAX_ORDER_AMT,0)),   0, 999999999,									DECODE(SIGN(tphsl.CURR_LOAN_AMT), 1,999999999,                                           					0   )   )	/* 9자리이기에 999999999 */
-									)	AS AVAILABLE_ORDER_AMT -->
-                    FROM    TB_PO_HQ_STORE_LOAN tphsl
-                    WHERE   tphsl.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                    AND     tphsl.STORE_CD      =   #{storeCd}
-                ) tphsl
-        ,       (
-                    SELECT NVL(SUM(tphso2.OUT_TOT), 0) AS OUT_TOT
-                    FROM TB_PO_HQ_STORE_OUTSTOCK tphso2
-                    WHERE tphso2.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tphso2.STORE_CD = #{storeCd}
-                    AND tphso2.PROC_FG = '20'
-                ) tphso2
-        ,       (
-                    SELECT NVL(SUM(tphsm.MONEY_AMT), 0) AS MONEY_AMT
-                    FROM TB_PO_HQ_STORE_MONEY tphsm
-                    WHERE tphsm.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND tphsm.STORE_CD = #{storeCd}
-                ) tphsm
+        SELECT  A.PREV_ORDER_TOT
+        ,       A.ORDER_AMT
+        ,       B.HQ_OFFICE_CD
+        ,       B.STORE_CD
+        ,       B.LIMIT_LOAN_AMT
+        ,       B.USE_LOAN_AMT
+        ,       B.CURR_LOAN_AMT
+        ,       B.MAX_ORDER_AMT
+        ,       B.ORDER_FG
+        ,       B.NO_OUTSTOCK_AMT_FG
+        ,       B.ORDER_CLOSE_YN
+        ,       B.REMARK
+        --,       B.AVAILABLE_ORDER_AMT
+        ,       DECODE(NVL(B.NO_OUTSTOCK_AMT_FG, 'N'), 'N', B.AVAILABLE_ORDER_AMT, (B.AVAILABLE_ORDER_AMT - A.PREV_ORDER_TOT)) AS AVAILABLE_ORDER_AMT
+        FROM    (
+                    <if test='orderSlipNo != null and orderSlipNo != ""'>
+                        SELECT  NVL(SUM(DECODE(A.ORDER_SLIP_NO, #{orderSlipNo}, 0, A.ORDER_TOT)), 0) AS PREV_ORDER_TOT
+                        ,       NVL(SUM(DECODE(A.ORDER_SLIP_NO, #{orderSlipNo}, A.ORDER_TOT, 0 )), 0) AS ORDER_AMT
+                    </if>
+                    <if test='orderSlipNo == null or orderSlipNo == ""'>
+                        SELECT  NVL(SUM(A.ORDER_TOT), 0) AS PREV_ORDER_TOT
+                        ,       0 AS ORDER_AMT
+                    </if>
+                    FROM    TB_PO_HQ_STORE_ORDER A
+                    WHERE   A.STORE_CD = #{storeCd}
+                    AND     A.PROC_FG IN ('00','10') <!-- 00:등록, 10:등록완료, 20:분배완료 (화면: 등록, 분배중, 분배완료) -->
+                ) A
+        ,       (   SELECT  B.HQ_OFFICE_CD
+                    ,       B.STORE_CD
+                    ,       B.LIMIT_LOAN_AMT
+                    ,       B.USE_LOAN_AMT
+                    ,       B.CURR_LOAN_AMT
+                    ,       B.MAX_ORDER_AMT
+                    ,       B.ORDER_FG
+                    ,       NVL(B.NO_OUTSTOCK_AMT_FG, 'N')  AS  NO_OUTSTOCK_AMT_FG
+                    ,       NVL(B.ORDER_CLOSE_YN, 'N')      AS  ORDER_CLOSE_YN
+                    ,       B.REMARK
+                    ,       DECODE(B.ORDER_FG
+                                   ,'1'
+                                   ,DECODE(SIGN(B.CURR_LOAN_AMT)
+                                          ,1
+                                          ,DECODE(B.MAX_ORDER_AMT
+                                                 ,NULL
+                                                 ,B.CURR_LOAN_AMT
+                                                 ,DECODE(SIGN(B.CURR_LOAN_AMT-B.MAX_ORDER_AMT)
+                                                        ,1
+                                                        ,B.MAX_ORDER_AMT
+                                                        ,B.CURR_LOAN_AMT
+                                                        )
+                                                 )
+                                          ,0
+                                          )
+                                   ,'2'
+                                   ,DECODE(SIGN(B.CURR_LOAN_AMT)
+                                          ,1
+                                          ,DECODE(B.MAX_ORDER_AMT
+                                                 ,NULL
+                                                 ,B.LIMIT_LOAN_AMT+B.CURR_LOAN_AMT
+                                                 ,DECODE(SIGN(B.LIMIT_LOAN_AMT+B.CURR_LOAN_AMT-B.MAX_ORDER_AMT)
+                                                        ,1
+                                                        ,B.MAX_ORDER_AMT
+                                                        ,B.LIMIT_LOAN_AMT+B.CURR_LOAN_AMT
+                                                        )
+                                                 )
+                                          ,0
+                                          )
+                                   ,'3'
+                                   ,DECODE(SIGN(B.CURR_LOAN_AMT)
+                                          ,1
+                                          ,DECODE(B.MAX_ORDER_AMT, NULL, 999999999, B.MAX_ORDER_AMT)
+                                          ,0
+                                          )
+                                   ) AS AVAILABLE_ORDER_AMT
+                    FROM    TB_PO_HQ_STORE_LOAN B
+                    WHERE   B.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     B.STORE_CD = #{storeCd}
+                ) B
     </select>
 
     <!-- 주문등록 출고요청가능일 조회 -->

@@ -201,4 +201,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErrDtl.js?ver=20240711.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/volmErr/volmErr/volmErrDtl.js?ver=20240719.01" charset="utf-8"></script>

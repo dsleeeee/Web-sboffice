@@ -208,7 +208,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
             }
             // 주문 상품상세내역 페이지에서 호출한 경우
             else if ($scope.callParent === "storeOrderDtl") {
-                $scope.storeCloseCheck(); // 매장마감여부 체크
+                $scope.storeOrderDateCheck(); // 출고요청가능일인지 여부 체크
             }
         } else { // 페이징처리에서 broadcast 호출시
             $scope.searchStoreOrderRegistList();
@@ -222,7 +222,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     $scope.storeOrderDateCheck = function () {
         var params = {};
         params.reqDate = $scope.reqDate;
-        params.slipFg = $scope.slipFg;
 
         //가상로그인 session 설정
         if (document.getElementsByName('sessionId')[0]) {
@@ -238,12 +237,12 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
                 if (!$.isEmptyObject(response.data.data)) {
-                    if (response.data.data.orderFg > 0) {
-                        $scope._popMsg(messages["storeOrder.dtl.not.orderDate"]);
+                    if (response.data.data.chkResult !== 'Y') {
+                        $scope._popMsg(response.data.data.chkResult);
                         return false;
                     }
                 }
-                $scope.storeCloseCheck();
+                $scope.orderProcFgCheck(); // 주문진행구분 체크
             }
         }, function errorCallback(response) {
             // called asynchronously if an error occurs
@@ -260,7 +259,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // 매장마감여부 체크
-    $scope.storeCloseCheck = function () {
+    /*$scope.storeCloseCheck = function () {
         var params = {};
         params.reqDate = $scope.reqDate;
 
@@ -272,8 +271,8 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         // ajax 통신 설정
         $http({
             method: 'POST', //방식
-            url: '/iostock/order/storeOrder/storeOrderRegist/storeCloseCheck.sb', /* 통신할 URL */
-            params: params, /* 파라메터로 보낼 데이터 */
+            url: '/iostock/order/storeOrder/storeOrderRegist/storeCloseCheck.sb', /!* 통신할 URL *!/
+            params: params, /!* 파라메터로 보낼 데이터 *!/
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
@@ -298,7 +297,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         }).then(function () {
             // "complete" code here
         });
-    };
+    };*/
 
     // 주문진행구분 체크 및 HD 비고 조회
     $scope.orderProcFgCheck = function () {
@@ -384,17 +383,6 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
                             $scope.noOutstockAmtFg = response.data.data.noOutstockAmtFg;        // 미출고금액고려여부
                             $scope.availableOrderAmt = response.data.data.availableOrderAmt;    // 주문가능액
 
-                            // 미출고금액 고려여부 사용인 경우
-                            if ($scope.noOutstockAmtFg === "Y") {
-                                if (parseInt($scope.availableOrderAmt) <= (parseInt($scope.currLoanAmt) - parseInt($scope.prevOrderTot))) {
-                                    // 해당 조건에는 조회해 온 주문가능액 그대로 사용
-                                } else if (parseInt($scope.availableOrderAmt) >= (parseInt($scope.currLoanAmt) - parseInt($scope.prevOrderTot)) && parseInt($scope.maxOrderAmt) != 0) {
-                                    $scope.availableOrderAmt = parseInt($scope.currLoanAmt) - parseInt($scope.prevOrderTot);
-                                } else {
-                                    $scope.availableOrderAmt = parseInt($scope.availableOrderAmt) - parseInt($scope.prevOrderTot);
-                                }
-                            }
-
                             $("#registStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
                         } else {
                             $("#registStoreLoanInfo").html('');
@@ -446,22 +434,25 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
             params['sid'] = document.getElementsByName('sessionId')[0].value;
         }
 
-        // 매장마감여부 체크
+        // 출고요청가능일인지 여부 체크
         // ajax 통신 설정
         $http({
             method: 'POST', //방식
-            url: '/iostock/order/storeOrder/storeOrderRegist/storeCloseCheck.sb', /* 통신할 URL */
+            url: '/iostock/order/storeOrder/storeOrderRegist/orderDateCheck.sb', /* 통신할 URL */
             params: params, /* 파라메터로 보낼 데이터 */
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
                 if (!$.isEmptyObject(response.data.data)) {
-                    if (response.data.data.orderCloseFg === "Y") {
-                        $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
+                    if (response.data.data.chkResult !== 'Y') {
+                        $scope._popMsg(response.data.data.chkResult);
                         return false;
                     }
                 }
-                $scope.getOrderTotAmt(); // 주문 상품 저장 전 출고요청일자에 등록한 주문 총 합계 금액 조회
+
+                // 신규 주문 시, 현재 주문 총 합계 금액 0원
+                // 주문 수정 시, 해당 주문전표의 현재 주문 총 합계 금액 조회
+                $scope.getOrderTotAmt();
             }
         }, function errorCallback(response) {
             // called asynchronously if an error occurs
@@ -477,7 +468,8 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         });
     };
 
-    // 주문 상품 저장 전 출고요청일자에 등록한 주문 총 합계 금액 조회
+    // 신규 주문 시, 현재 주문 총 합계 금액 0원
+    // 주문 수정 시, 해당 주문전표의 현재 주문 총 합계 금액 조회
     $scope.getOrderTotAmt = function () {
 
         var params = {};
@@ -558,28 +550,78 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         // 상품 주문 합계 + 이전에 등록한 주문 총 합계
         orderTot += parseInt(orderTotAmt);
 
-        // 1회주문한도액과 주문가능금액 중 적은금액을 기준으로 주문가능금액 체크
-        var approvalAmt = $scope.maxOrderAmt > $scope.availableOrderAmt ? $scope.availableOrderAmt : $scope.maxOrderAmt;
-        var approvalAmtNm = $scope.maxOrderAmt > $scope.availableOrderAmt ? messages["loan.availableOrderAmt"] : messages["loan.maxOrderAmt"];
+        // 매장여신 조회해 주문 가능여부 다시한번 체크
+        var params2 = {};
+        params2.orderSlipNo = $scope.orderSlipNo; // 주문전표번호, 신규 요청등록인 경우 null, 주문 상품상세내역 페이지에서 호출한 경우 값 존재
 
-        // 주문가능액 체크
-        if (approvalAmt != null) {
-            if (parseInt(approvalAmt) < parseInt(orderTot)) {
-                $scope._popMsg("주문 총 금액이 " + approvalAmtNm + "을 초과하였습니다.");
-                return false;
-            }
+        //가상로그인 session 설정
+        if (document.getElementsByName('sessionId')[0]) {
+            params2['sid'] = document.getElementsByName('sessionId')[0].value;
         }
 
-        /*$scope._save("/iostock/order/storeOrder/storeOrderRegist/save.sb", params, function () {
-            $scope.saveRegistCallback()
-        });*/
+        // ajax 통신 설정
+        $http({
+            method: 'POST', //방식
+            url: '/iostock/order/storeOrder/storeOrderRegist/storeLoan.sb', /* 통신할 URL */
+            params: params2, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data)) {
+                    // 발주중지 상태이면 상품추가/변경 불가
+                    if (response.data.data.orderCloseYn === "Y") {
+                        $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
+                        return false;
+                    } else {
+                        // 주문가능금액이 있으면
+                        if (response.data.data.availableOrderAmt !== null) {
+                            $scope.prevOrderTot = response.data.data.prevOrderTot;              // 이전주문금액
+                            $scope.limitLoanAmt = response.data.data.limitLoanAmt;              // 여신한도액
+                            $scope.currLoanAmt = response.data.data.currLoanAmt;                // 여신잔액
+                            $scope.maxOrderAmt = response.data.data.maxOrderAmt;                // 1회주문한도
+                            $scope.noOutstockAmtFg = response.data.data.noOutstockAmtFg;        // 미출고금액고려여부
+                            $scope.availableOrderAmt = response.data.data.availableOrderAmt;    // 주문가능액
 
-        $scope._postJSONSave.withPopUp("/iostock/order/storeOrder/storeOrderRegist/save.sb", params, function (response) {
+                            $("#registStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
+                        } else {
+                            $("#registStoreLoanInfo").html('');
+                        }
 
-            if (response.data.data !== null) {
-                $scope.orderSlipNo = response.data.data;
-                $scope.saveRegistCallback();
+                        // 총 주문금액이 주문가능금액보다 이하면 주문가능
+                        if($scope.availableOrderAmt >= orderTot){
+                            // 주문 저장
+                            $scope._postJSONSave.withPopUp("/iostock/order/storeOrder/storeOrderRegist/save.sb", params, function (response) {
+                                if (response.data.data !== null) {
+                                    $scope.orderSlipNo = response.data.data;
+                                    $scope.saveRegistCallback();
+                                }
+                            });
+                        }else{
+                            $scope._popMsg(messages["storeOrder.dtl.orderTotOver"]);
+                            return false;
+                        }
+                    }
+                }else{ // 여신 미사용인 경우, 여신과 상관없이 주문
+                    // 주문 저장
+                    $scope._postJSONSave.withPopUp("/iostock/order/storeOrder/storeOrderRegist/save.sb", params, function (response) {
+                        if (response.data.data !== null) {
+                            $scope.orderSlipNo = response.data.data;
+                            $scope.saveRegistCallback();
+                        }
+                    });
+                }
             }
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.error']);
+            }
+            return false;
+        }).then(function () {
+
         });
     };
 
