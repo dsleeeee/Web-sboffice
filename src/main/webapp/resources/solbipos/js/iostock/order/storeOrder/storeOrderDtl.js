@@ -528,9 +528,12 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
   // 저장 후 콜백 함수
   $scope.saveOrderDtlCallback = function () {
     $scope.searchStoreOrderDtlList();
-    //$scope.searchStoreLoan("N");
-    $scope.orderProcFgCheck(); // 주문진행구분을 체크하여, 버튼 show/hidden 처리
 
+    // 매장여신 조회 재조회
+    $scope.searchStoreLoan("N");
+
+    // 주문진행구분을 체크하여, 버튼 show/hidden 처리
+    $scope.orderProcFgCheck();
 
     var storeOrderScope = agrid.getScope('storeOrderCtrl');
     storeOrderScope.searchStoreOrderList();

@@ -45,6 +45,8 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     $scope.srchRegEndDate = wcombo.genDate("#srchRegEndDate");
 
     $scope.reset = function () {
+        // 왜인지 모르겠다만... 화면 진입시 조회해야 매장 여신 금액들이 제대로 셋팅된다
+        // 매장여신 조회
         $scope.searchStoreLoan('Y');
     };
 
@@ -174,7 +176,8 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeOrderRegistCtrl", function (event, data) {
 
-        //$scope.reset();
+        $scope.reset();
+
         // 그리드 초기화
         var cv = new wijmo.collections.CollectionView([]);
         cv.trackChanges = true;
@@ -628,6 +631,8 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     // 저장 후 콜백 서치 함수
     $scope.saveRegistCallback = function () {
         $scope.searchStoreOrderRegistList();
+        
+        // 매장여신 조회 재조회
         $scope.searchStoreLoan("N");
 
         // 신규 요청등록인 경우

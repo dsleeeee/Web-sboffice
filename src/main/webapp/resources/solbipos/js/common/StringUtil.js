@@ -225,6 +225,9 @@ function keyupNextTab(input, next, inputlen) {
  */
 function addComma(str) {
   var regexp = /\B(?=(\d{3})+(?!\d))/g;
+  if(str == null || str == "" || str == undefined){
+      return "";
+  }
   return str.toString().replace(regexp, ',');
 }
 
