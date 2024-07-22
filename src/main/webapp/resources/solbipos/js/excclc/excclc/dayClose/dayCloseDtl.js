@@ -113,24 +113,24 @@ app.controller('dayCloseDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
             $("#outBMonthSum").val(data.outBMonthSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
             $("#outTotalSum").val(data.outTotalSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 
-            $("#statusCashInAmt").val(data.statusCashInAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#statusCashOutAmt").val(data.statusCashOutAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#statusCashTotalAmt").val(data.statusCashTotalAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#statusCardInAmt").val(data.statusCardInAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#statusCardOutAmt").val(data.statusCardOutAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#statusCardTotalAmt").val(data.statusCardTotalAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusMainHanaInAmt").val(data.accountStatusMainHanaInAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusMainHanaOutAmt").val(data.accountStatusMainHanaOutAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusMainHanaTotalAmt").val(data.accountStatusMainHanaTotalAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusCardHanaInAmt").val(data.accountStatusCardHanaInAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusCardHanaOutAmt").val(data.accountStatusCardHanaOutAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusCardHanaTotalAmt").val(data.accountStatusCardHanaTotalAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusCardKbInAmt").val(data.accountStatusCardKbInAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusCardKbOutAmt").val(data.accountStatusCardKbOutAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusCardKbTotalAmt").val(data.accountStatusCardKbTotalAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusSpHanaInAmt").val(data.accountStatusSpHanaInAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusSpHanaOutAmt").val(data.accountStatusSpHanaOutAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-            $("#accountStatusSpHanaTotalAmt").val(data.accountStatusSpHanaTotalAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            $("#statusCashInAmt").val(addComma2(data.statusCashInAmt));
+            $("#statusCashOutAmt").val(addComma2(data.statusCashOutAmt));
+            $("#statusCashTotalAmt").val(addComma2(data.statusCashTotalAmt));
+            $("#statusCardInAmt").val(addComma2(data.statusCardInAmt));
+            $("#statusCardOutAmt").val(addComma2(data.statusCardOutAmt));
+            $("#statusCardTotalAmt").val(addComma2(data.statusCardTotalAmt));
+            $("#accountStatusMainHanaInAmt").val(addComma2(data.accountStatusMainHanaInAmt));
+            $("#accountStatusMainHanaOutAmt").val(addComma2(data.accountStatusMainHanaOutAmt));
+            $("#accountStatusMainHanaTotalAmt").val(addComma2(data.accountStatusMainHanaTotalAmt));
+            $("#accountStatusCardHanaInAmt").val(addComma2(data.accountStatusCardHanaInAmt));
+            $("#accountStatusCardHanaOutAmt").val(addComma2(data.accountStatusCardHanaOutAmt));
+            $("#accountStatusCardHanaTotalAmt").val(addComma2(data.accountStatusCardHanaTotalAmt));
+            $("#accountStatusCardKbInAmt").val(addComma2(data.accountStatusCardKbInAmt));
+            $("#accountStatusCardKbOutAmt").val(addComma2(data.accountStatusCardKbOutAmt));
+            $("#accountStatusCardKbTotalAmt").val(addComma2(data.accountStatusCardKbTotalAmt));
+            $("#accountStatusSpHanaInAmt").val(addComma2(data.accountStatusSpHanaInAmt));
+            $("#accountStatusSpHanaOutAmt").val(addComma2(data.accountStatusSpHanaOutAmt));
+            $("#accountStatusSpHanaTotalAmt").val(addComma2(data.accountStatusSpHanaTotalAmt));
 
             $("#remark1").val(data.remark1);
             $("#remark2").val(data.remark2);
@@ -139,7 +139,19 @@ app.controller('dayCloseDtlCtrl', ['$scope', '$http', '$timeout', function ($sco
             $("#remark5").val(data.remark5);
             $("#remark6").val(data.remark6);
         }
+
     };
+
+    // 콤마 추가
+    function addComma2(str) {
+        if(str === null){
+            return str;
+        }else {
+            var regexp = /\B(?=(\d{3})+(?!\d))/g;
+            return str.toString().replace(regexp, ',');
+        }
+    }
+
 
     // 마감데이터 수신
     $scope.getDayCloseDtl = function () {
