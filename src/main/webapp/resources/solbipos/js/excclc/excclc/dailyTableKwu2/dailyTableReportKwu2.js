@@ -14,6 +14,17 @@
 var app = agrid.getApp();
 
 /**
+ * 콤마 추가
+ * @param str
+ * @returns {string}
+ */
+function addComma2(str) {
+    var regexp = /\B(?=(\d{3})+(?!\d))/g;
+    return str.toString().replace(regexp, ',');
+}
+
+
+/**
  *  일일일계표 인쇄 팝업 조회 그리드 생성
  */
 app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope, $http) {
@@ -172,14 +183,14 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
         for (var i = 0; i < $scope.dailyTableKwu2Ctrl_courseType.length; i++) {
             // 금액표시(,)
             var item = $scope.dailyTableKwu2Ctrl_courseType[i];
-            var cashAmt = (item.cashAmt === undefined || item.cashAmt == null || item.cashAmt.length <= 0) ? nvl(item.cashAmt,0) : addComma(item.cashAmt);
-            var cardAmt = (item.cardAmt === undefined || item.cardAmt == null || item.cardAmt.length <= 0) ? nvl(item.cardAmt,0) : addComma(item.cardAmt);
-            var daySaleQty = (item.daySaleQty === undefined || item.daySaleQty == null || item.daySaleQty.length <= 0) ? nvl(item.daySaleQty,0) : addComma(item.daySaleQty);
-            var daily = (item.daily === undefined || item.daily == null || item.daily.length <= 0) ? nvl(item.daily,0) : addComma(item.daily);
-            var monthSaleQty = (item.monthSaleQty === undefined || item.monthSaleQty == null || item.monthSaleQty.length <= 0) ? nvl(item.monthSaleQty,0) : addComma(item.monthSaleQty);
-            var monthly = (item.monthly === undefined || item.monthly == null || item.monthly.length <= 0) ? nvl(item.monthly,0) : addComma(item.monthly);
-            var bMonthly = (item.bMonthly === undefined || item.bMonthly == null || item.bMonthly.length <= 0) ? nvl(item.bMonthly,0) : addComma(item.bMonthly);
-            var totSum = (item.totSum === undefined || item.totSum == null || item.totSum.length <= 0) ? nvl(item.totSum,0) : addComma(item.totSum);
+            var cashAmt = (item.cashAmt === undefined || item.cashAmt == null || item.cashAmt.length <= 0) ? nvl(item.cashAmt,0) : addComma2(item.cashAmt);
+            var cardAmt = (item.cardAmt === undefined || item.cardAmt == null || item.cardAmt.length <= 0) ? nvl(item.cardAmt,0) : addComma2(item.cardAmt);
+            var daySaleQty = (item.daySaleQty === undefined || item.daySaleQty == null || item.daySaleQty.length <= 0) ? nvl(item.daySaleQty,0) : addComma2(item.daySaleQty);
+            var daily = (item.daily === undefined || item.daily == null || item.daily.length <= 0) ? nvl(item.daily,0) : addComma2(item.daily);
+            var monthSaleQty = (item.monthSaleQty === undefined || item.monthSaleQty == null || item.monthSaleQty.length <= 0) ? nvl(item.monthSaleQty,0) : addComma2(item.monthSaleQty);
+            var monthly = (item.monthly === undefined || item.monthly == null || item.monthly.length <= 0) ? nvl(item.monthly,0) : addComma2(item.monthly);
+            var bMonthly = (item.bMonthly === undefined || item.bMonthly == null || item.bMonthly.length <= 0) ? nvl(item.bMonthly,0) : addComma2(item.bMonthly);
+            var totSum = (item.totSum === undefined || item.totSum == null || item.totSum.length <= 0) ? nvl(item.totSum,0) : addComma2(item.totSum);
             courseTypeListHtml += '<tr class="h25">'
                 + '<td class="tc" style="background-color: lightgrey;">' + item.fg + '</td>'
                 + '<td class="tr">' + cashAmt + '</td>'
@@ -232,12 +243,12 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
         for (var i = 0; i < $scope.dailyTableKwu2Ctrl_tuition1.length; i++) {
             // 금액표시(,)
             var item = $scope.dailyTableKwu2Ctrl_tuition1[i];
-            var cashAmt = (item.cashAmt === undefined || item.cashAmt == null || item.cashAmt.length <= 0) ? nvl(item.cashAmt,0) : addComma(item.cashAmt);
-            var cardAmt = (item.cardAmt === undefined || item.cardAmt == null || item.cardAmt.length <= 0) ? nvl(item.cardAmt,0) : addComma(item.cardAmt);
-            var catAmt = (item.catAmt === undefined || item.catAmt == null || item.catAmt.length <= 0) ? nvl(item.catAmt,0) : addComma(item.catAmt);
-            var totInAmt = (item.totInAmt === undefined || item.totInAmt == null || item.totInAmt.length <= 0) ? nvl(item.totInAmt,0) : addComma(item.totInAmt);
-            var cancelCnt = (item.cancelCnt === undefined || item.cancelCnt == null || item.cancelCnt.length <= 0) ? nvl(item.cancelCnt,0) : addComma(item.cancelCnt);
-            var cancelAmt = (item.cancelAmt === undefined || item.cancelAmt == null || item.cancelAmt.length <= 0) ? nvl(item.cancelAmt,0) : addComma(item.cancelAmt);
+            var cashAmt = (item.cashAmt === undefined || item.cashAmt == null || item.cashAmt.length <= 0) ? nvl(item.cashAmt,0) : addComma2(item.cashAmt);
+            var cardAmt = (item.cardAmt === undefined || item.cardAmt == null || item.cardAmt.length <= 0) ? nvl(item.cardAmt,0) : addComma2(item.cardAmt);
+            var catAmt = (item.catAmt === undefined || item.catAmt == null || item.catAmt.length <= 0) ? nvl(item.catAmt,0) : addComma2(item.catAmt);
+            var totInAmt = (item.totInAmt === undefined || item.totInAmt == null || item.totInAmt.length <= 0) ? nvl(item.totInAmt,0) : addComma2(item.totInAmt);
+            var cancelCnt = (item.cancelCnt === undefined || item.cancelCnt == null || item.cancelCnt.length <= 0) ? nvl(item.cancelCnt,0) : addComma2(item.cancelCnt);
+            var cancelAmt = (item.cancelAmt === undefined || item.cancelAmt == null || item.cancelAmt.length <= 0) ? nvl(item.cancelAmt,0) : addComma2(item.cancelAmt);
             tuition1ListHtml += '<tr class="h25">'
                 + '<td class="tc" style="background-color: lightgrey;">' + item.fg + '</td>'
                 + '<td class="tr">' + cashAmt + '</td>'
@@ -279,15 +290,15 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
         for (var i = 0; i < $scope.dailyTableKwu2Ctrl_tuition2.length; i++) {
             // 금액표시(,)
             var item = $scope.dailyTableKwu2Ctrl_tuition2[i];
-            var bMonthUnpaidAmt = (item.bMonthUnpaidAmt === undefined || item.bMonthUnpaidAmt == null || item.bMonthUnpaidAmt.length <= 0) ? nvl(item.bMonthUnpaidAmt,0) : addComma(item.bMonthUnpaidAmt);
-            var monthUnpaidAmt = (item.monthUnpaidAmt === undefined || item.monthUnpaidAmt == null || item.monthUnpaidAmt.length <= 0) ? nvl(item.monthUnpaidAmt,0) : addComma(item.monthUnpaidAmt);
-            var commissionAmt = (item.commissionAmt === undefined || item.commissionAmt == null || item.commissionAmt.length <= 0) ? nvl(item.commissionAmt,0) : addComma(item.commissionAmt);
-            var interestAmt = (item.interestAmt === undefined || item.interestAmt == null || item.interestAmt.length <= 0) ? nvl(item.interestAmt,0) : addComma(item.interestAmt);
-            var creditAmt = (item.creditAmt === undefined || item.creditAmt == null || item.creditAmt.length <= 0) ? nvl(item.creditAmt,0) : addComma(item.creditAmt);
+            var bMonthUnpaidAmt = (item.bMonthUnpaidAmt === undefined || item.bMonthUnpaidAmt == null || item.bMonthUnpaidAmt.length <= 0) ? nvl(item.bMonthUnpaidAmt,0) : addComma2(item.bMonthUnpaidAmt);
+            var monthUnpaidAmt = (item.monthUnpaidAmt === undefined || item.monthUnpaidAmt == null || item.monthUnpaidAmt.length <= 0) ? nvl(item.monthUnpaidAmt,0) : addComma2(item.monthUnpaidAmt);
+            var commissionAmt = (item.commissionAmt === undefined || item.commissionAmt == null || item.commissionAmt.length <= 0) ? nvl(item.commissionAmt,0) : addComma2(item.commissionAmt);
+            var interestAmt = (item.interestAmt === undefined || item.interestAmt == null || item.interestAmt.length <= 0) ? nvl(item.interestAmt,0) : addComma2(item.interestAmt);
+            var creditAmt = (item.creditAmt === undefined || item.creditAmt == null || item.creditAmt.length <= 0) ? nvl(item.creditAmt,0) : addComma2(item.creditAmt);
             if(item.fg == "월계") {
                 creditAmt = "";
             }
-            var cardInAmt = (item.cardInAmt === undefined || item.cardInAmt == null || item.cardInAmt.length <= 0) ? nvl(item.cardInAmt,0) : addComma(item.cardInAmt);
+            var cardInAmt = (item.cardInAmt === undefined || item.cardInAmt == null || item.cardInAmt.length <= 0) ? nvl(item.cardInAmt,0) : addComma2(item.cardInAmt);
             tuition2ListHtml += '<tr class="h25">'
                 + '<td class="tc" style="background-color: lightgrey;">' + item.fg + '</td>'
                 + '<td class="tr">' + bMonthUnpaidAmt + '</td>'
@@ -346,7 +357,7 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
             var item = $scope.dailyTableKwu2Ctrl_groupCourse[i];
             var fg = nvl(item.fg, '');
             var summary = nvl(item.summary, '');
-            var amt = (item.amt === undefined || item.amt == null || item.amt.length <= 0) ? nvl(item.amt,0) : addComma(item.amt);
+            var amt = (item.amt === undefined || item.amt == null || item.amt.length <= 0) ? nvl(item.amt,0) : addComma2(item.amt);
             groupCourseListHtml += '<tr class="h25">'
                 + '<td class="tc">' + fg + '</td>'
                 + '<td class="tl">' + item.groupNm + '</td>'
@@ -392,11 +403,11 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
         for (var i = 0; i < $scope.dailyTableKwu2Ctrl_status.length; i++) {
             // 금액표시(,)
             var item = $scope.dailyTableKwu2Ctrl_status[i];
-            var bTotalAmt = (item.bTotalAmt === undefined || item.bTotalAmt == null || item.bTotalAmt.length <= 0) ? nvl(item.bTotalAmt,0) : addComma(item.bTotalAmt);
+            var bTotalAmt = (item.bTotalAmt === undefined || item.bTotalAmt == null || item.bTotalAmt.length <= 0) ? nvl(item.bTotalAmt,0) : addComma2(item.bTotalAmt);
             var fg = nvl(item.fg, '');
-            var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma(item.inAmt);
-            var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma(item.outAmt);
-            var totalAmt = (item.totalAmt === undefined || item.totalAmt == null || item.totalAmt.length <= 0) ? nvl(item.totalAmt,0) : addComma(item.totalAmt);
+            var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma2(item.inAmt);
+            var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma2(item.outAmt);
+            var totalAmt = (item.totalAmt === undefined || item.totalAmt == null || item.totalAmt.length <= 0) ? nvl(item.totalAmt,0) : addComma2(item.totalAmt);
             statusListHtml += '<tr class="h25">'
                 + '<td class="tr">' + bTotalAmt + '</td>'
                 + '<td class="tc">' + fg + '</td>'
@@ -449,10 +460,10 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
             var fg = nvl(item.fg, '');
             var bankNm = nvl(item.bankNm, '');
             var accountNum = nvl(item.accountNum, '');
-            var bTotalAmt = (item.bTotalAmt === undefined || item.bTotalAmt == null || item.bTotalAmt.length <= 0) ? nvl(item.bTotalAmt,0) : addComma(item.bTotalAmt);
-            var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma(item.inAmt);
-            var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma(item.outAmt);
-            var totalAmt = (item.totalAmt === undefined || item.totalAmt == null || item.totalAmt.length <= 0) ? nvl(item.totalAmt,0) : addComma(item.totalAmt);
+            var bTotalAmt = (item.bTotalAmt === undefined || item.bTotalAmt == null || item.bTotalAmt.length <= 0) ? nvl(item.bTotalAmt,0) : addComma2(item.bTotalAmt);
+            var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma2(item.inAmt);
+            var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma2(item.outAmt);
+            var totalAmt = (item.totalAmt === undefined || item.totalAmt == null || item.totalAmt.length <= 0) ? nvl(item.totalAmt,0) : addComma2(item.totalAmt);
             if(fg == "계") {
                 accountStatusListHtml += '<tr class="h25">'
                     + '<td class="tc" colspan="2">' + fg + '</td>'
@@ -617,9 +628,9 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
         for (var i = 0; i < $scope.dailyTableKwu2Ctrl_paymentStatus1.length; i++) {
             // 금액표시(,)
             var item = $scope.dailyTableKwu2Ctrl_paymentStatus1[i];
-            var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma(item.inAmt);
-            var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma(item.outAmt);
-            var remainAmt = (item.remainAmt === undefined || item.remainAmt == null || item.remainAmt.length <= 0) ? nvl(item.remainAmt,0) : addComma(item.remainAmt);
+            var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma2(item.inAmt);
+            var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma2(item.outAmt);
+            var remainAmt = (item.remainAmt === undefined || item.remainAmt == null || item.remainAmt.length <= 0) ? nvl(item.remainAmt,0) : addComma2(item.remainAmt);
             paymentStatus1ListHtml += '<tr class="h25">'
                 + '<td class="tr">' + inAmt + '</td>'
                 + '<td class="tr">' + outAmt + '</td>'
@@ -656,9 +667,9 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
         for (var i = 0; i < $scope.dailyTableKwu2Ctrl_paymentStatus2.length; i++) {
             // 금액표시(,)
             var item = $scope.dailyTableKwu2Ctrl_paymentStatus2[i];
-            var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma(item.inAmt);
-            var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma(item.outAmt);
-            var remainAmt = (item.remainAmt === undefined || item.remainAmt == null || item.remainAmt.length <= 0) ? nvl(item.remainAmt,0) : addComma(item.remainAmt);
+            var inAmt = (item.inAmt === undefined || item.inAmt == null || item.inAmt.length <= 0) ? nvl(item.inAmt,0) : addComma2(item.inAmt);
+            var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma2(item.outAmt);
+            var remainAmt = (item.remainAmt === undefined || item.remainAmt == null || item.remainAmt.length <= 0) ? nvl(item.remainAmt,0) : addComma2(item.remainAmt);
             if(i === 0) {
                 paymentStatus2ListHtml += '<tr class="h25">'
                     + '<td class="tc" style="background-color: lightgrey;">' + item.inInfo + '</td>'

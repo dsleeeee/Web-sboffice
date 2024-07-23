@@ -35,4 +35,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu2/dailyTableReportKwu2.js?ver=20240715.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/dailyTableKwu2/dailyTableReportKwu2.js?ver=20240723.01" charset="utf-8"></script>
