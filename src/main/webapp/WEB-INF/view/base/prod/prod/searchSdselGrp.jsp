@@ -75,8 +75,8 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchSdselGrp.js?ver=20240322.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchSdselGrp.js?ver=20240722.01" charset="utf-8"></script>
 
 <%-- 신규선택메뉴생성 팝업 --%>
-<c:import url="/WEB-INF/view/base/prod/prod/popUpNewSdsel.jsp">
-</c:import>
+<%--<c:import url="/WEB-INF/view/base/prod/prod/popUpNewSdsel.jsp">--%>
+<%--</c:import>--%>

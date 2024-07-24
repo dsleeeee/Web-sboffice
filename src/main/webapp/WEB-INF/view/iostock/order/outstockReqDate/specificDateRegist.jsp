@@ -44,8 +44,8 @@
                 <option value="Y"><s:message code="outstockReqDate.outstockReqYnY"/></option>
               </select>
             </td>
-            <th><s:message code="outstockReqDate.outStockTime"/></th>
-            <td>
+            <th style="display: none;"><s:message code="outstockReqDate.outStockTime"/></th>
+            <td style="display: none;">
               <div class="sb-select w20 fl">
                 <wj-combo-box
                         id="startHour"
