@@ -384,7 +384,8 @@ app.controller('monthProdSaleRateMomsCtrl', ['$scope', '$http', '$timeout', func
            params.branchCd = $scope.srchBranchCdCombo.selectedValue;
 
            // '전체' 일때
-           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+
              var momsHqBrandCd = "";
              for(var i=0; i < momsHqBrandCdComboList.length; i++){
                if(momsHqBrandCdComboList[i].value !== null) {
@@ -525,7 +526,7 @@ app.controller('monthProdSaleRateMomsCtrl', ['$scope', '$http', '$timeout', func
            params.branchCd = $scope.srchBranchCdCombo.selectedValue;
 
            // '전체' 일때
-           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
              var momsHqBrandCd = "";
              for(var i=0; i < momsHqBrandCdComboList.length; i++){
                if(momsHqBrandCdComboList[i].value !== null) {
@@ -1176,7 +1177,7 @@ app.controller('monthProdSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout',
                                     }, 1000);
                                 });
                                 resolve();
-                                
+
                             });
                         //}, 3000*x);
                     });
