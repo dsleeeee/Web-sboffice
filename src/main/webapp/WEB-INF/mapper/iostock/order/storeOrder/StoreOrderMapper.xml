@@ -391,6 +391,7 @@
         ,       B.REMARK
         --,       B.AVAILABLE_ORDER_AMT
         ,       DECODE(NVL(B.NO_OUTSTOCK_AMT_FG, 'N'), 'N', B.AVAILABLE_ORDER_AMT, (B.AVAILABLE_ORDER_AMT - A.PREV_ORDER_TOT)) AS AVAILABLE_ORDER_AMT
+        ,       DECODE(NVL(B.NO_OUTSTOCK_AMT_FG, 'N'), 'N', B.AVAILABLE_ORDER_AMT - A.ORDER_AMT, (B.AVAILABLE_ORDER_AMT - A.PREV_ORDER_TOT - A.ORDER_AMT)) AS AVAILABLE_ORDER_AMT_SAVE
         FROM    (
                     <if test='orderSlipNo != null and orderSlipNo != ""'>
                         SELECT  NVL(SUM(DECODE(A.ORDER_SLIP_NO, #{orderSlipNo}, 0, A.ORDER_TOT)), 0) AS PREV_ORDER_TOT

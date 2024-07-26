@@ -7,12 +7,9 @@ import kr.co.common.service.code.impl.CmmEnvMapper;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmService;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
-import kr.co.solbipos.iostock.vendr.vendrInstock.service.VendrInstockVO;
 import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -426,5 +423,25 @@ public class OutstockConfmServiceImpl implements OutstockConfmService {
     public List<DefaultMap<String>> getOutStorageCombo2(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO) {
 
         return outstockConfmMapper.getOutStorageCombo2(outstockConfmVO);
+    }
+
+    /** 본사 출고 시, 주문허용여부 확인 */
+    @Override
+    public String getStoreOrderDateCheckAll(OutstockConfmVO[] outstockConfmVOs, SessionInfoVO sessionInfoVO) {
+
+        String confirmYn = "";
+        String result = "";
+
+        for(OutstockConfmVO outstockConfmVO : outstockConfmVOs) {
+
+            // 본사 출고 시, 주문허용여부 확인
+            confirmYn = outstockConfmMapper.getStoreOrderDateCheck(outstockConfmVO);
+
+            if(!confirmYn.equals("Y")){
+                result += confirmYn;
+            }
+        }
+
+        return result;
     }
 }

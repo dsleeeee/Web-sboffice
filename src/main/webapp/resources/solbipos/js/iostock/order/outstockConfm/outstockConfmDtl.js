@@ -312,6 +312,39 @@ app.controller('outstockConfmDtlCtrl', ['$scope', '$http', '$timeout', function 
 
   };
 
+  // 본사 출고 시, 주문허용여부 확인
+  $scope.chkOutstockConfirmDtl = function(){
+
+      var params = [];
+      var item = {};
+
+      item.reqDate = wijmo.Globalize.format($scope.dtlOutDate.value, 'yyyyMMdd');
+      item.orderSlipNo = 'H'; // 본사출고허용여부 구분자
+      item.storeCd = $scope.storeCd;
+      params.push(item);
+
+      // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+      $scope._postJSONSave.withOutPopUp("/iostock/order/outstockConfm/outstockConfm/getStoreOrderDateCheckAll.sb", params, function (response) {
+          var result = response.data.data;
+
+          if(result === null || result === "") {
+              // 저장
+              $scope.save();
+          } else {
+              if($("#outstockConfirmFg").is(":checked")) {
+                  // 처리하시겠습니까?
+                  $scope._popConfirm(result + "처리하시겠습니까?", function () {
+                      // 저장
+                      $scope.save();
+                  });
+              }else{
+                  // 저장
+                   $scope.save();
+              }
+          }
+      });
+  };
+
   // 저장
   $scope.save = function () {
     var params = [];

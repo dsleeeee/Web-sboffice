@@ -145,15 +145,23 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope.vendrCd     = data.vendrCd;
     $scope.orderSlipNo = data.orderSlipNo;
 
-    $scope.wjStoreOrderDtlLayer.show(true);
-
     // 당일보다 이전일자 요청등록 불가
     var today = getCurDate();
     if (parseInt(today) > parseInt($scope.reqDate)) {
-      $scope._popMsg(messages["storeOrder.dtl.not.prevDateOrder"]); // 당일보다 이전일자로 요청등록을 하실 수 없습니다.
-      $scope.btnAddProd = false;
-      $scope.btnDtlSave = false;
-      $scope.btnConfirm = false;
+
+        if ($scope.procFg === "00") { // 진행구분이 '등록' 인 경우
+            $scope.btnAddProd = false;
+            $scope.btnDtlSave = true;
+            $scope.btnConfirm = false;
+            $scope.flex.isReadOnly = false;
+        }else{
+            $scope._popMsg(messages["storeOrder.dtl.not.prevDateOrder"]); // 당일보다 이전일자로 요청등록을 하실 수 없습니다.
+            $scope.btnAddProd = false;
+            $scope.btnDtlSave = false;
+            $scope.btnConfirm = false;
+            $scope.flex.isReadOnly = true;
+            //return false;
+        }
     } else {
       if ($scope.procFg === "00") {
         $scope.btnAddProd      = true;
@@ -172,6 +180,8 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
         $scope.flex.isReadOnly = true;
       }
     }
+
+    $scope.wjStoreOrderDtlLayer.show(true);
 
     $("#spanDtlTitle").html(messages["storeOrder.reqDate"] + ' : ' + getFormatDate($scope.reqDate, '-') + ' / ' + messages["storeOrder.orderSlipNo"] + ' : ' + nvl($scope.orderSlipNo, ''));
     $scope.searchStoreLoan("Y");
@@ -205,14 +215,27 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
           } else {
             $scope.flex.isReadOnly = false;
 
+              // 주문가능액
+              $scope.availableOrderAmt = null;
+
+              // 신규등록일 때
+              if(params.orderSlipNo === null || params.orderSlipNo === undefined || params.orderSlipNo === ""){
+                  if (response.data.data.availableOrderAmt !== null) {
+                      $scope.availableOrderAmt = response.data.data.availableOrderAmt;        // 주문가능액
+                  }
+              }else{ // 전표수정일 때
+                  if (response.data.data.availableOrderAmtSave !== null) {
+                      $scope.availableOrderAmt = response.data.data.availableOrderAmtSave;    // 주문가능액
+                  }
+              }
+
             // 주문가능금액이 있으면
-            if (response.data.data.availableOrderAmt !== null) {
+            if ($scope.availableOrderAmt !== null) {
               $scope.prevOrderTot      = response.data.data.prevOrderTot;
               $scope.limitLoanAmt      = response.data.data.limitLoanAmt;
               $scope.currLoanAmt       = response.data.data.currLoanAmt;
               $scope.maxOrderAmt       = response.data.data.maxOrderAmt;
               $scope.noOutstockAmtFg   = response.data.data.noOutstockAmtFg;
-              $scope.availableOrderAmt = response.data.data.availableOrderAmt;
 
               $("#dtlStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
             } else {
@@ -378,14 +401,27 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                   } else {
                       $scope.flex.isReadOnly = false;
 
+                      // 주문가능액
+                      $scope.availableOrderAmt = null;
+
+                      // 신규등록일 때
+                      if(params2.orderSlipNo === null || params2.orderSlipNo === undefined || params2.orderSlipNo === ""){
+                          if (response.data.data.availableOrderAmt !== null) {
+                              $scope.availableOrderAmt = response.data.data.availableOrderAmt;        // 주문가능액
+                          }
+                      }else{ // 전표수정일 때
+                          if (response.data.data.availableOrderAmtSave !== null) {
+                              $scope.availableOrderAmt = response.data.data.availableOrderAmtSave;    // 주문가능액
+                          }
+                      }
+
                       // 주문가능금액이 있으면
-                      if (response.data.data.availableOrderAmt !== null) {
+                      if ($scope.availableOrderAmt !== null) {
                           $scope.prevOrderTot = response.data.data.prevOrderTot;
                           $scope.limitLoanAmt = response.data.data.limitLoanAmt;
                           $scope.currLoanAmt = response.data.data.currLoanAmt;
                           $scope.maxOrderAmt = response.data.data.maxOrderAmt;
                           $scope.noOutstockAmtFg = response.data.data.noOutstockAmtFg;
-                          $scope.availableOrderAmt = response.data.data.availableOrderAmt;
 
                           $("#dtlStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
                       } else {
@@ -393,7 +429,7 @@ app.controller('storeOrderDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                       }
 
                       // 총 주문금액이 주문가능금액보다 이하면 주문가능
-                      if ($scope.availableOrderAmt >= orderTot) {
+                      if ($scope.availableOrderAmt >= (parseInt(orderTot) -  parseInt(orderTotAmt))) { // 주문수량에 기주문도 포함될 수 있기 때문에, 기주문 제거하고 현재 주문하려는 금액으로만 비교한다.
 
                           // 수정한 값 없이 확정하는 경우, 바로 확정 진행
                           if (params.length <= 0) {

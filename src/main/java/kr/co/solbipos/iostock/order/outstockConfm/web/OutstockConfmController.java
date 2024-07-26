@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
 /**
@@ -383,4 +384,26 @@ public class OutstockConfmController {
 
         return ReturnUtil.returnListJson(Status.OK, list, outstockConfmVO);
     }
+
+    /**
+     * 본사 출고 시, 주문허용여부 확인
+     * @param outstockConfmVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2024. 07. 23.
+     */
+    @RequestMapping(value = "/outstockConfm/getStoreOrderDateCheckAll.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreOrderDateCheckAll(@RequestBody OutstockConfmVO[] outstockConfmVOs, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = outstockConfmService.getStoreOrderDateCheckAll(outstockConfmVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

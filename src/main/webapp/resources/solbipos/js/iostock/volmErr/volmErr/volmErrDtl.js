@@ -66,6 +66,19 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
               }
           }
       });
+
+      s.cellEditEnded.addHandler(function (s, e) {
+          if (e.panel === s.cells) {
+              var col = s.columns[e.col];
+              var item = s.rows[e.row].dataItem;
+              // 처리구분 변경 시, 확정 체크박스 체크 해제
+              if (col.binding === "errFg") {
+                  $("#volmErrConfirmFg").prop("checked", false);
+                  $scope.fnConfirmChk();
+              }
+          }
+          s.collectionView.commitEdit();
+      });
   };
 
   // 다른 컨트롤러의 broadcast 받기
@@ -173,7 +186,6 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
       $scope._inquirySub("/iostock/volmErr/volmErr/volmErrDtl/list.sb", params, function () {});
   };
 
-
   // 저장
   $scope.save = function () { // IF : 확정 AND O2, O4 일때 마감 체크 ; // ELSE : 확정이 아니면 바로 SAVE; 확정 AND O1, O3, O5 일때 바로 SAVE; 
 	  for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
@@ -197,44 +209,34 @@ app.controller('volmErrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 
   // 출고요청가능일인지 여부 체크
   $scope.storeOrderDateCheck = function () {
-    var params     = {};
-    params.reqDate = wijmo.Globalize.format($scope.outDate.value, 'yyyyMMdd');
-    params.slipFg  = $scope.slipFg;
-    params.storeCd = $scope.storeCd;
 
-    //가상로그인 session 설정
-	    if(document.getElementsByName('sessionId')[0]){
-	    	params['sid'] = document.getElementsByName('sessionId')[0].value;
-	    }
+    var params = [];
+    var item = {};
 
-    // ajax 통신 설정
-    $http({
-      method : 'POST', //방식
-      url    : '/iostock/order/storeOrder/storeOrderRegist/orderDateCheck.sb', /* 통신할 URL */
-      params : params, /* 파라메터로 보낼 데이터 */
-      headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-    }).then(function successCallback(response) {
-      if ($scope._httpStatusCheck(response, true)) {
-        if (!$.isEmptyObject(response.data.data)) {
-            if (response.data.data.chkResult !== 'Y') {
-                $scope._popMsg(response.data.data.chkResult);
-                return false;
+    item.reqDate = wijmo.Globalize.format($scope.outDate.value, 'yyyyMMdd');
+    item.orderSlipNo = 'H'; // 본사출고허용여부 구분자
+    item.storeCd = $scope.storeCd;
+    params.push(item);
+
+    // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+    $scope._postJSONSave.withOutPopUp("/iostock/order/outstockConfm/outstockConfm/getStoreOrderDateCheckAll.sb", params, function (response) {
+        var result = response.data.data;
+
+        if(result === null || result === "") {
+            // 매장마감여부 체크
+            $scope.storeCloseCheck();
+        } else {
+            if($("#volmErrConfirmFg").is(":checked")) {
+                // 처리하시겠습니까?
+                $scope._popConfirm(result + "처리하시겠습니까?", function () {
+                    // 매장마감여부 체크
+                    $scope.storeCloseCheck();
+                });
+            }else{
+                // 매장마감여부 체크
+                $scope.storeCloseCheck();
             }
         }
-        $scope.storeCloseCheck();
-      }
-    }, function errorCallback(response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-      if (response.data.message) {
-        $scope._popMsg(response.data.message);
-      } else {
-        $scope._popMsg(messages['cmm.error']);
-      }
-      
-      return false;
-    }).then(function () {
-    	
     });
   };
   

@@ -151,7 +151,7 @@
           <%-- 출고내역으로 입고내역 세팅 --%>
           <button type="button" id="btnSetOutToIn" class="btn_skyblue ml5 fl" style="display: none;" ng-click="setOutToIn()" ng-if="btnSetOutToIn"><s:message code="outstockConfm.dtl.setOutToIn"/></button>          
           <%-- 저장 --%>
-          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="save()" ng-if="btnDtlSave">
+          <button type="button" id="btnDtlSave" class="btn_skyblue ml5 fl" ng-click="chkOutstockConfirmDtl()" ng-if="btnDtlSave">
             <s:message code="cmm.save"/></button>
         </div>
         <%-- 출고 후 저장 --%>
@@ -209,4 +209,4 @@
   var storageEnvstVal = "${storageEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfmDtl.js?ver=20220726.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfmDtl.js?ver=20240725.01" charset="utf-8"></script>

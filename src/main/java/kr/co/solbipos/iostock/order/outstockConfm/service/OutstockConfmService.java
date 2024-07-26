@@ -30,4 +30,7 @@ public interface OutstockConfmService {
     /** 출고창고 콤보조회(권한에 상관없이 본사창고 또는 매장창고 조회) */
     List<DefaultMap<String>> getOutStorageCombo2(OutstockConfmVO outstockConfmVO, SessionInfoVO sessionInfoVO);
 
+    /** 본사 출고 시, 주문허용여부 확인 */
+    String getStoreOrderDateCheckAll(OutstockConfmVO[] outstockConfmVOs, SessionInfoVO sessionInfoVO);
+
 }

@@ -182,34 +182,72 @@ app.controller('outstockConfmCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._inquiryMain("/iostock/order/outstockConfm/outstockConfm/list.sb", params);
   };
 
-  $scope.saveOutstockConfirm = function () {
-    var params = [];
+    // 본사 출고 시, 주문허용여부 확인
+    $scope.chkOutstockConfirm =  function () {
 
-    if ($scope.flex.collectionView.itemsEdited.length <= 0) {
-      $scope._popMsg(messages["cmm.not.modify"]);
-      return false;
-    }
+        var params = [];
 
-    for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-      var item = $scope.flex.collectionView.itemsEdited[i];
+        if ($scope.flex.collectionView.itemsEdited.length <= 0) {
+            $scope._popMsg(messages["cmm.not.modify"]);
+            return false;
+        }
 
-      if (item.gChk === true) {
-        item.status    	= "U";
-        item.outDate   	= wijmo.Globalize.format(outDate.value, 'yyyyMMdd');
-        item.outStorageCd	= $scope.save.outStorageCd;
-        item.dlvrCd		= $scope.save.dlvrCd;
-        item.empNo     	= "0000";
-        item.storageCd 	= "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
-        item.hqBrandCd 	= "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
-        item.vendrCd    = $scope.vendrCdCombo.selectedValue;
-        params.push(item);
-      }
-    }
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            var item = $scope.flex.collectionView.itemsEdited[i];
 
-    $scope._save("/iostock/order/outstockConfm/outstockConfm/saveOutstockConfirm.sb", params, function () {
-      $scope.getReqNoConfirmCnt()
-    });
-  };
+            if (item.gChk === true) {
+                item.reqDate = wijmo.Globalize.format(outDate.value, 'yyyyMMdd');
+                item.orderSlipNo = 'H'; // 본사출고허용여부 구분자
+                params.push(item);
+            }
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/iostock/order/outstockConfm/outstockConfm/getStoreOrderDateCheckAll.sb", params, function (response) {
+            var result = response.data.data;
+
+            if(result === null || result === "") {
+                // 출고확정
+                $scope.saveOutstockConfirm();
+            } else {
+                // 출고요청일불가 매장이 있습니다. 처리하시겠습니까?
+                $scope._popConfirm(messages["outstockConfm.outstockConfirm.msg"], function() {
+                    // 출고확정
+                    $scope.saveOutstockConfirm();
+                });
+            }
+        });
+    };
+
+    // 출고확정
+    $scope.saveOutstockConfirm = function () {
+        var params = [];
+
+        if ($scope.flex.collectionView.itemsEdited.length <= 0) {
+            $scope._popMsg(messages["cmm.not.modify"]);
+            return false;
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            var item = $scope.flex.collectionView.itemsEdited[i];
+
+            if (item.gChk === true) {
+                item.status = "U";
+                item.outDate = wijmo.Globalize.format(outDate.value, 'yyyyMMdd');
+                item.outStorageCd = $scope.save.outStorageCd;
+                item.dlvrCd = $scope.save.dlvrCd;
+                item.empNo = "0000";
+                item.storageCd = "999";	//전체재고용 창고코드 ('001' -> '000' -> '999')
+                item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
+                item.vendrCd = $scope.vendrCdCombo.selectedValue;
+                params.push(item);
+            }
+        }
+
+        $scope._save("/iostock/order/outstockConfm/outstockConfm/saveOutstockConfirm.sb", params, function () {
+            $scope.getReqNoConfirmCnt()
+        });
+    };
 
 
   // DB 데이터를 조회해와서 그리드에서 사용할 Combo를 생성한다.

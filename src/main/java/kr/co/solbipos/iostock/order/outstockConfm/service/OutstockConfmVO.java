@@ -183,6 +183,8 @@ public class OutstockConfmVO extends PageVO {
     private String outStorageCd;
     /** 창고콤보타입(매장, 본사) */
     private String storageTypeCombo;
+    /** 주문전표번호 */
+    private String orderSlipNo;
     
     
     /**
@@ -1267,5 +1269,13 @@ public class OutstockConfmVO extends PageVO {
 
     public void setStorageTypeCombo(String storageTypeCombo) {
         this.storageTypeCombo = storageTypeCombo;
+    }
+
+    public String getOrderSlipNo() {
+        return orderSlipNo;
+    }
+
+    public void setOrderSlipNo(String orderSlipNo) {
+        this.orderSlipNo = orderSlipNo;
     }
 }

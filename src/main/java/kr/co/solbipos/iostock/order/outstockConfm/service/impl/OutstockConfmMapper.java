@@ -1,7 +1,6 @@
 package kr.co.solbipos.iostock.order.outstockConfm.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.solbipos.iostock.order.instockConfm.service.InstockConfmProdVO;
 import kr.co.solbipos.iostock.order.outstockConfm.service.OutstockConfmVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -85,4 +84,7 @@ public interface OutstockConfmMapper {
 
     /** 출고창고 콤보조회(권한에 상관없이 본사창고 또는 매장창고 조회) */
     List<DefaultMap<String>> getOutStorageCombo2(OutstockConfmVO outstockConfmVO);
+
+    /** 본사 출고 시, 주문허용여부 확인 */
+    String getStoreOrderDateCheck(OutstockConfmVO outstockConfmVO);
 }

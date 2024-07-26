@@ -166,8 +166,8 @@
         initialized="_initComboBox(s)">
       </wj-combo-box>
     </span>
-    <%-- 출고자료생성 --%>
-    <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="saveOutstockConfirm()">
+    <%-- 출고확정 --%>
+    <button type="button" id="btnConfirm" class="btn_skyblue ml5 fl" ng-click="chkOutstockConfirm()">
       <s:message code="outstockConfm.outstockConfirm"/>
     </button>
   </div>
@@ -228,7 +228,7 @@
   var vendrList = ${vendrList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20220722.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockConfm/outstockConfm.js?ver=20240725.01" charset="utf-8"></script>
 
 <%-- 출고확정 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/order/outstockConfm/outstockConfmDtl.jsp">

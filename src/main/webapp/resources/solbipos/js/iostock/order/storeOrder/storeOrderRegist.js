@@ -46,6 +46,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
 
     $scope.reset = function () {
         // 왜인지 모르겠다만... 화면 진입시 조회해야 매장 여신 금액들이 제대로 셋팅된다
+        // registStoreLoanInfo 가 맨 처음 undefined 로 인식됨
         // 매장여신 조회
         $scope.searchStoreLoan('Y');
     };
@@ -176,7 +177,8 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("storeOrderRegistCtrl", function (event, data) {
 
-        $scope.reset();
+        //조건에 맞지 않으면 팝업 자체를 오픈 안하기 위해 주석처리 
+        //$scope.reset();
 
         // 그리드 초기화
         var cv = new wijmo.collections.CollectionView([]);
@@ -214,6 +216,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
                 $scope.storeOrderDateCheck(); // 출고요청가능일인지 여부 체크
             }
         } else { // 페이징처리에서 broadcast 호출시
+            $scope.reset();
             $scope.searchStoreOrderRegistList();
         }
 
@@ -333,7 +336,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
                         }
                         $scope.regHdRemark = response.data.data.remark;
                     }
-
+                    $scope.reset();
                     $scope.searchStoreLoan("Y"); // 매장여신 조회
                 }
             }, function errorCallback(response) {
@@ -349,6 +352,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
                 // "complete" code here
             });
         } else { // 신규 요청등록시
+            $scope.reset();
             $scope.searchStoreLoan("Y"); // 매장여신 조회
         }
     };
@@ -377,19 +381,33 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
                         $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
                         return false;
                     } else {
-                        // 주문가능금액이 있으면
-                        if (response.data.data.availableOrderAmt !== null) {
-                            $scope.prevOrderTot = response.data.data.prevOrderTot;              // 이전주문금액
-                            $scope.limitLoanAmt = response.data.data.limitLoanAmt;              // 여신한도액
-                            $scope.currLoanAmt = response.data.data.currLoanAmt;                // 여신잔액
-                            $scope.maxOrderAmt = response.data.data.maxOrderAmt;                // 1회주문한도
-                            $scope.noOutstockAmtFg = response.data.data.noOutstockAmtFg;        // 미출고금액고려여부
-                            $scope.availableOrderAmt = response.data.data.availableOrderAmt;    // 주문가능액
 
-                            $("#registStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
-                        } else {
-                            $("#registStoreLoanInfo").html('');
-                        }
+                            // 주문가능액
+                            $scope.availableOrderAmt = null;
+
+                            // 신규등록일 때
+                            if(params.orderSlipNo === null || params.orderSlipNo === undefined || params.orderSlipNo === ""){
+                                if (response.data.data.availableOrderAmt !== null) {
+                                    $scope.availableOrderAmt = response.data.data.availableOrderAmt;        // 주문가능액
+                                }
+                            }else{ // 전표수정일 때
+                                if (response.data.data.availableOrderAmtSave !== null) {
+                                    $scope.availableOrderAmt = response.data.data.availableOrderAmtSave;    // 주문가능액
+                                }
+                            }
+
+                            // 주문가능금액이 있으면
+                            if ($scope.availableOrderAmt !== null) {
+                                $scope.prevOrderTot = response.data.data.prevOrderTot;              // 이전주문금액
+                                $scope.limitLoanAmt = response.data.data.limitLoanAmt;              // 여신한도액
+                                $scope.currLoanAmt = response.data.data.currLoanAmt;                // 여신잔액
+                                $scope.maxOrderAmt = response.data.data.maxOrderAmt;                // 1회주문한도
+                                $scope.noOutstockAmtFg = response.data.data.noOutstockAmtFg;        // 미출고금액고려여부
+
+                                $("#registStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
+                            } else {
+                                $("#registStoreLoanInfo").html('');
+                            }
                     }
                 }
             }
@@ -551,7 +569,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 상품 주문 합계 + 이전에 등록한 주문 총 합계
-        orderTot += parseInt(orderTotAmt);
+        //orderTot += parseInt(orderTotAmt);
 
         // 매장여신 조회해 주문 가능여부 다시한번 체크
         var params2 = {};
@@ -576,14 +594,28 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
                         $scope._popMsg(messages["storeOrder.dtl.orderClose"]);
                         return false;
                     } else {
+
+                        // 주문가능액
+                        $scope.availableOrderAmt = null;
+
+                        // 신규등록일 때
+                        if($scope.orderSlipNo === null || $scope.orderSlipNo === undefined || $scope.orderSlipNo === ""){
+                            if (response.data.data.availableOrderAmt !== null) {
+                                $scope.availableOrderAmt = response.data.data.availableOrderAmt;        // 주문가능액
+                            }
+                        }else{ // 전표수정일 때
+                            if (response.data.data.availableOrderAmtSave !== null) {
+                                $scope.availableOrderAmt = response.data.data.availableOrderAmtSave;    // 주문가능액
+                            }
+                        }
+
                         // 주문가능금액이 있으면
-                        if (response.data.data.availableOrderAmt !== null) {
+                        if ($scope.availableOrderAmt !== null) {
                             $scope.prevOrderTot = response.data.data.prevOrderTot;              // 이전주문금액
                             $scope.limitLoanAmt = response.data.data.limitLoanAmt;              // 여신한도액
                             $scope.currLoanAmt = response.data.data.currLoanAmt;                // 여신잔액
                             $scope.maxOrderAmt = response.data.data.maxOrderAmt;                // 1회주문한도
                             $scope.noOutstockAmtFg = response.data.data.noOutstockAmtFg;        // 미출고금액고려여부
-                            $scope.availableOrderAmt = response.data.data.availableOrderAmt;    // 주문가능액
 
                             $("#registStoreLoanInfo").html("1회주문한도액 : " + addComma($scope.maxOrderAmt) + " 여신한도액 : " + addComma($scope.limitLoanAmt) + " 미출고액 : " + addComma($scope.prevOrderTot) + " 주문가능액 : " + addComma($scope.availableOrderAmt));
                         } else {
@@ -647,6 +679,7 @@ app.controller('storeOrderRegistCtrl', ['$scope', '$http', '$timeout', function 
 
             var storeOrderDtlScope = agrid.getScope('storeOrderDtlCtrl');
             storeOrderDtlScope.searchStoreOrderDtlList();
+            storeOrderDtlScope.searchStoreLoan("Y");
         }
     };
 

@@ -1174,4 +1174,16 @@
         ORDER BY STORAGE_CD
     </select>
 
+    <!-- 본사 출고 시, 주문허용여부 확인-->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_ORDER_SPECIFIC, TB_PO_HQ_STORE_ORDER_DAYS
+        PARAM    : outstockConfmVO
+        COMMENTS : 본사 출고 시, 주문허용여부를 조회한다.
+    -->
+    <select id="getStoreOrderDateCheck" parameterType="outstockConfmVO" resultType="String">
+        /* USE : OutstockConfmMapper.getStoreOrderDateCheck */
+        SELECT FN_GET_ORDER_DATE_CHK(#{storeCd}, #{reqDate}, #{orderSlipNo}, '') AS CHK_RESULT
+        FROM DUAL
+    </select>
+
 </mapper>
