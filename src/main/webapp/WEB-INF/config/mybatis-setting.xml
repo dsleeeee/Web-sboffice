@@ -763,6 +763,8 @@
     <typeAlias alias="disuseInfoBonavieVO" type="kr.co.solbipos.iostock.bonavie.disuseInfoBonavie.service.DisuseInfoBonavieVO"/>
     <!-- 수불관리 > 반품관리 > 반품본사입고현황 -->
     <typeAlias alias="rtnInstockConfmStoreVO" type="kr.co.solbipos.iostock.orderReturn.rtnInstockConfmStore.service.RtnInstockConfmStoreVO"/>
+    <!-- 수불관리 > 주문관리 > 가상계좌내역 -->
+    <typeAlias alias="virtualAccountVO" type="kr.co.solbipos.iostock.loan.virtualAccount.service.VirtualAccountVO"/>
 
     <!-- 재고 -->
     <typeAlias alias="hqCurrVO" type="kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO"/>

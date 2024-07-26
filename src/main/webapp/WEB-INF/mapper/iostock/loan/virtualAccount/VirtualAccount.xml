@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    VirtualAccount.xml
+    가상계좌내역
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2024.07.24     최초작성
+-->
+<mapper namespace="kr.co.solbipos.iostock.loan.virtualAccount.service.impl.VirtualAccountMapper">
+
+    <!-- 가상계좌 키값 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getVirtualAccountKeyColList" parameterType="VirtualAccountVO" resultType="DefaultMap">
+        /* VirtualAccountMapper.getVirtualAccountKeyColList */
+        SELECT
+        tcvk.SITE_CD,
+        tcvk.KCP_CERT_INFO
+        FROM TB_CM_VACCNT_KCP tcvk
+        WHERE 1=1
+        AND tcvk.VACCNT_ORGN_CD = #{orgnCd}
+    </select>
+
+    <!-- 가상계좌 등록순번 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getVirtualAccountReqSeq" parameterType="VirtualAccountVO" resultType="String">
+        /* VirtualAccountMapper.getVirtualAccountReqSeq */
+        SELECT ( NVL(MAX(REQ_SEQ), 0) +1 ) AS REQ_SEQ
+        FROM TB_HQ_VACCNT_DEPOSIT
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+        AND REQ_DATE = #{reqDate}
+    </select>
+
+    <!-- 가상계좌 입금 생성 팝업 - 가상계좌 발급 저장 Insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getVirtualAccountRegisterSaveInsert" parameterType="VirtualAccountVO">
+        /* VirtualAccountMapper.getVirtualAccountRegisterSaveInsert */
+        INSERT INTO TB_HQ_VACCNT_DEPOSIT
+        (
+            HQ_OFFICE_CD,
+            STORE_CD,
+            REQ_DATE,
+            REQ_SEQ,
+            REQ_SITE_CD,
+            REQ_PAY_METHOD,
+            REQ_CUST_IP,
+            REQ_AMOUNT,
+            REQ_VA_MNY,
+            REQ_CURRENCY,
+            REQ_ORDR_IDXX,
+            REQ_GOOD_NAME,
+            REQ_BUYR_NAME,
+            REQ_BUYR_MAIL,
+            REQ_BUYR_TEL2,
+            REQ_VA_TXTYPE,
+            REQ_VA_BANKCODE,
+            REQ_VA_NAME,
+            REQ_VA_DATE,
+            REQ_VA_RECEIPT_GUBN,
+            REQ_VA_TAXNO,
+            REQ_REG_DT,
+            REQ_REG_ID,
+            DEPOSIT_FG
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{storeCd},
+            #{reqDate},
+            #{reqSeq},
+            #{site_cd}, -- REQ_SITE_CD,
+            #{pay_method}, -- REQ_PAY_METHOD,
+            #{cust_ip}, -- REQ_CUST_IP,
+            #{amount}, -- REQ_AMOUNT,
+            #{va_mny}, -- REQ_VA_MNY,
+            #{currency}, -- REQ_CURRENCY,
+            #{ordr_idxx}, -- REQ_ORDR_IDXX,
+            #{good_name}, -- REQ_GOOD_NAME,
+            #{buyr_name}, -- REQ_BUYR_NAME,
+            #{buyr_mail}, -- REQ_BUYR_MAIL,
+            #{buyr_tel2}, -- REQ_BUYR_TEL2,
+            #{va_txtype}, -- REQ_VA_TXTYPE,
+            #{va_bankcode}, -- REQ_VA_BANKCODE,
+            #{va_name}, -- REQ_VA_NAME,
+            #{va_date}, -- REQ_VA_DATE,
+            #{va_receipt_gubn}, -- REQ_VA_RECEIPT_GUBN,
+            #{va_taxno}, -- REQ_VA_TAXNO,
+            #{regDt}, -- REQ_REG_DT,
+            #{userId}, -- REQ_REG_ID,
+            '0'
+        )
+    </insert>
+
+    <!-- 가상계좌 입금 생성 팝업 - 가상계좌 발급 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getVirtualAccountRegisterSaveUpdate" parameterType="VirtualAccountVO">
+        /* VirtualAccountMapper.getVirtualAccountRegisterSaveUpdate */
+        UPDATE
+        TB_HQ_VACCNT_DEPOSIT
+        SET
+        RES_CD = #{res_cd},
+        RES_DT = #{resDt},
+        RES_MSG = #{res_msg},
+        TNO = #{tno},
+        RES_AMOUNT = #{amount},
+        RES_BANKNAME = #{bankname},
+        RES_BANKCODE = #{bankcode},
+        RES_DEPOSITOR = #{depositor},
+        RES_ACCOUNT = #{account},
+        RES_APP_TIME = #{app_time},
+        DEPOSIT_FG = #{depositFg}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND STORE_CD = #{storeCd}
+        AND REQ_DATE = #{reqDate}
+        AND REQ_SEQ = #{reqSeq}
+    </update>
+
+</mapper>
