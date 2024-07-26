@@ -216,7 +216,7 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
             + '<col style="width: 85%">'
             + '</colgroup>'
             + '<tr class="h25">'
-            + '<td class="tl br0 s15">2. 수강료현황</td>'
+            + '<td class="tl br0 s15">2. 입금현황</td>'
             + '<td class="tc br0"></td>'
             + '</tr>'
             + '</table>';
