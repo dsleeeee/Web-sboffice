@@ -57,9 +57,10 @@ app.controller('speDateRegistCtrl', ['$scope', '$http', function ($scope, $http)
   // 특정일 저장
   $scope.submitForm = function () {
 
-    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
     //값체크
     if (!valueCheck()) return false;
+
+    $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
     // 특정일값 넘길 파라미터에 세팅
     $scope.speDate.specificDate = wijmo.Globalize.format(specificDate.value, 'yyyyMMdd');

@@ -224,34 +224,52 @@
     -->
     <insert id="insertSpecificDate" parameterType="outstockReqDateVO">
         /* USE : outstockReqDateMapper.insertSpecificDate */
-        INSERT INTO TB_PO_HQ_STORE_ORDER_SPECIFIC
-        (
-            HQ_OFFICE_CD,
-            STORE_CD,
-            SPECIFIC_DATE,
-            OUTSTOCK_REQ_YN,
-            REMARK,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
-            ORDER_START_TIME,
-            ORDER_END_TIME
-        )
+        MERGE INTO TB_PO_HQ_STORE_ORDER_SPECIFIC A
+        USING DUAL
+        ON
+            (
+                    A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                AND	A.STORE_CD		= #{storeCd}
+                AND	A.SPECIFIC_DATE = #{specificDate}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+                    A.OUTSTOCK_REQ_YN 	= #{outstockReqYn}
+                ,	A.REMARK 			= #{specificDateRemark}
+                ,   A.ORDER_START_TIME  = #{orderStartTime}
+                ,   A.ORDER_END_TIME    = #{orderEndTime}
+                ,	A.MOD_DT 			= #{modDt}
+                ,	A.MOD_ID 			= #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+                (
+                    A.HQ_OFFICE_CD
+                ,   A.STORE_CD
+                ,   A.SPECIFIC_DATE
+                ,   A.OUTSTOCK_REQ_YN
+                ,   A.REMARK
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
+                ,   A.ORDER_START_TIME
+                ,   A.ORDER_END_TIME
+                )
         VALUES
-        (
-            #{hqOfficeCd},
-            #{storeCd},
-            #{specificDate},
-            #{outstockReqYn},
-            #{specificDateRemark},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId},
-            #{orderStartTime},
-            #{orderEndTime}
-        )
+                (
+                    #{hqOfficeCd}
+                ,   #{storeCd}
+                ,   #{specificDate}
+                ,   #{outstockReqYn}
+                ,   #{specificDateRemark}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                ,   #{orderStartTime}
+                ,   #{orderEndTime}
+                )
     </insert>
 
     <!-- 출고요청일관리 특정일 저장 -->

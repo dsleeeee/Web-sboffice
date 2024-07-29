@@ -9,6 +9,9 @@
       <a href="#" class="wj-hide btn_close"></a>
     </div>
     <div class="wj-dialog-body">
+      <div class="mt10 oh sb-select dkbr">
+        <p class="tl s13 mb10 ml5 fl">* <s:message code="outstockReqDate.specificDate.regMsg"/> </p>
+      </div>
       <form id="speDateForm" ng-submit="submitForm()">
         <table class="tblType01">
           <colgroup>
@@ -124,4 +127,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20240716.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20240729.01" charset="utf-8"></script>
