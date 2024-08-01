@@ -1575,7 +1575,7 @@
 				,DECODE(TNNPC.SALE_YN, 'Y', '승인', 'N',  '취소') AS APPR_PROC
 				,DECODE(TNNPC.APPR_PROC_FG, 1, '포스승인', 2, '단말기승인') AS APPR_PROC_FG
 				,TNNPC.ACQUIRE_NM
-				,DECODE(TNNPC.CARD_TYPE_FG, 1, '일반', 2, 'PAYON', 3, 'APP', 4, 'UNION', 5, 'PAYCO') AS CARD_TYPE_FG
+				,DECODE(TNNPC.CARD_TYPE_FG, '1', '일반', '2', 'PAYON', '3', 'APP', '4', 'UNION', '5', 'PAYCO', '6', '유니온페이', '7', '현금IC') AS CARD_TYPE_FG
 				,TNNPC.CARD_NO
 				,TNNPC.SALE_AMT
 				,TNNPC.TIP_AMT
