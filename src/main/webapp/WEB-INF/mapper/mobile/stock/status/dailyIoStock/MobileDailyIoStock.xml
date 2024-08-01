@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileDailyIoStock.xml
+    일자별수불현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.07.19     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.mobile.stock.status.dailyIoStock.service.impl.MobileDailyIoStockMapper">
+
+    <!-- 일자별수불현황 - 일자별수불현황 리스트 조회  -->
+    <select id="getDailyIoStockList" parameterType="mobileDailyIoStockVO" resultType="DefaultMap">
+        /* USE : MobileDailyIoStockMapper.getDailyIoStockList */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT TO_CHAR(TO_DATE(TSHSD.IOSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IO_OCCR_DT
+                , SF_ZERO_TO_NULL(SUM(VENDR_IN_QTY)) 			AS VENDR_IN_QTY /* 본사입고 수량*/
+                , SF_ZERO_TO_NULL(SUM(VENDR_IN_TOT)) 			AS VENDR_IN_TOT /* 본사입고 금액*/
+                , SF_ZERO_TO_NULL(SUM(VENDR_OUT_QTY)) 			AS VENDR_OUT_QTY /* 업체반출 수량*/
+                , SF_ZERO_TO_NULL(SUM(VENDR_OUT_TOT)) 			AS VENDR_OUT_TOT /* 업체반출 금액*/
+                , SF_ZERO_TO_NULL(SUM(HQ_OUT_QTY)) 			AS HQ_OUT_QTY /* 본사출고 수량*/
+                , SF_ZERO_TO_NULL(SUM(HQ_OUT_TOT)) 			AS HQ_OUT_TOT /* 본사출고 금액*/
+                , SF_ZERO_TO_NULL(SUM(HQ_IN_QTY)) 				AS HQ_IN_QTY /* 본사반입 수량*/
+                , SF_ZERO_TO_NULL(SUM(HQ_IN_TOT)) 				AS HQ_IN_TOT /* 본사반입 금액*/
+                , SF_ZERO_TO_NULL(SUM(STORE_MOVE_IN_QTY)) 		AS STORE_MOVE_IN_QTY /* 매장이입 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_MOVE_IN_TOT)) 		AS STORE_MOVE_IN_TOT /* 매장이입 금액*/
+                , SF_ZERO_TO_NULL(SUM(STORE_MOVE_OUT_QTY)) 	AS STORE_MOVE_OUT_QTY /* 매장이출 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_MOVE_OUT_TOT)) 	AS STORE_MOVE_OUT_TOT /* 매장이출 금액*/
+                , SF_ZERO_TO_NULL(SUM(DISUSE_QTY)) 			AS DISUSE_QTY /* 재고폐기 수량*/
+                , SF_ZERO_TO_NULL(SUM(ADJ_QTY)) 				AS ADJ_QTY /* 재고조정 수량*/
+                , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) 			AS SET_IN_QTY /* 세트생성 수량*/
+                , SF_ZERO_TO_NULL(SUM(SALE_VENDR_ORDER_QTY))	AS SALE_VENDR_ORDER_QTY /* 거래처출고 수량*/
+                , SF_ZERO_TO_NULL(SUM(SALE_VENDR_ORDER_TOT))	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
+                , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_QTY))		AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
+                , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_TOT))		AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_ST_HQ_STOCK_DAILY TSHSD
+                , TB_HQ_PRODUCT THP
+                WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND THP.STOCK_PROD_YN = 'Y'
+                AND THP.USE_YN = 'Y'
+                AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+                AND TSHSD.PROD_CD = THP.PROD_CD
+                <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+                    AND TSHSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
+                </if>
+                GROUP BY TSHSD.IOSTOCK_DATE
+                ORDER BY TSHSD.IOSTOCK_DATE DESC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT TO_CHAR(TO_DATE(TSSSD.IOSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IO_OCCR_DT
+                , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY)) 	AS STORE_IN_QTY /* 매장입고 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_IN_TOT)) 	AS STORE_IN_TOT /* 매장입고 금액*/
+                , SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY)) 	AS STORE_OUT_QTY /* 매장반품 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT)) 	AS STORE_OUT_TOT /* 매장반품 금액*/
+                , SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY)) 	AS PURCHS_IN_QTY /* 사입입고 수량*/
+                , SF_ZERO_TO_NULL(SUM(PURCHS_IN_TOT)) 	AS PURCHS_IN_TOT /* 사입입고 금액*/
+                , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
+                , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_TOT)) AS PURCHS_OUT_TOT /* 사입반품 금액*/
+                , SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY)) AS STORE_SALE_QTY /* 매장판매 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT)) AS STORE_SALE_TOT /* 매장판매 금액*/
+                , SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY)) 	AS MOVE_IN_QTY /* 매장이입 수량*/
+                , SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT)) 	AS MOVE_IN_TOT /* 매장이입 금액*/
+                , SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY)) 	AS MOVE_OUT_QTY /* 매장이출 수량*/
+                , SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT)) 	AS MOVE_OUT_TOT /* 매장이출 금액*/
+                , SF_ZERO_TO_NULL(SUM(DISUSE_QTY)) 	AS DISUSE_QTY /* 재고폐기 수량*/
+                , SF_ZERO_TO_NULL(SUM(ADJ_QTY)) 		AS ADJ_QTY /* 재고조정 수량*/
+                , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) 	AS SET_IN_QTY /* 세트생성 수량*/
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM TB_ST_STORE_STOCK_DAILY TSSSD
+                , TB_MS_PRODUCT TMP
+                WHERE TSSSD.STORE_CD = #{storeCd}
+                AND TMP.STOCK_PROD_YN = 'Y'
+                AND TMP.USE_YN = 'Y'
+                AND TSSSD.STORE_CD = TMP.STORE_CD
+                AND TSSSD.PROD_CD = TMP.PROD_CD
+                <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+                    AND TSSSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
+                </if>
+                GROUP BY TSSSD.IOSTOCK_DATE
+                ORDER BY TSSSD.IOSTOCK_DATE DESC
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
+    </select>
+
+
+    <!-- 일자별수불현황 - 일자별수불현황 리스트(엑셀) 조회  -->
+    <select id="getDailyIoStockExcelList" parameterType="mobileDailyIoStockVO" resultType="DefaultMap">
+        /* USE : MobileDailyIoStockMapper.getDailyIoStockExcelList */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>    <!-- 본사 -->
+                SELECT TO_CHAR(TO_DATE(TSHSD.IOSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IO_OCCR_DT
+                , SF_ZERO_TO_NULL(SUM(VENDR_IN_QTY)) 			AS VENDR_IN_QTY /* 본사입고 수량*/
+                , SF_ZERO_TO_NULL(SUM(VENDR_IN_TOT)) 			AS VENDR_IN_TOT /* 본사입고 금액*/
+                , SF_ZERO_TO_NULL(SUM(VENDR_OUT_QTY)) 			AS VENDR_OUT_QTY /* 업체반출 수량*/
+                , SF_ZERO_TO_NULL(SUM(VENDR_OUT_TOT)) 			AS VENDR_OUT_TOT /* 업체반출 금액*/
+                , SF_ZERO_TO_NULL(SUM(HQ_OUT_QTY)) 			AS HQ_OUT_QTY /* 본사출고 수량*/
+                , SF_ZERO_TO_NULL(SUM(HQ_OUT_TOT)) 			AS HQ_OUT_TOT /* 본사출고 금액*/
+                , SF_ZERO_TO_NULL(SUM(HQ_IN_QTY)) 				AS HQ_IN_QTY /* 본사반입 수량*/
+                , SF_ZERO_TO_NULL(SUM(HQ_IN_TOT)) 				AS HQ_IN_TOT /* 본사반입 금액*/
+                , SF_ZERO_TO_NULL(SUM(STORE_MOVE_IN_QTY)) 		AS STORE_MOVE_IN_QTY /* 매장이입 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_MOVE_IN_TOT)) 		AS STORE_MOVE_IN_TOT /* 매장이입 금액*/
+                , SF_ZERO_TO_NULL(SUM(STORE_MOVE_OUT_QTY)) 	AS STORE_MOVE_OUT_QTY /* 매장이출 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_MOVE_OUT_TOT)) 	AS STORE_MOVE_OUT_TOT /* 매장이출 금액*/
+                , SF_ZERO_TO_NULL(SUM(DISUSE_QTY)) 			AS DISUSE_QTY /* 재고폐기 수량*/
+                , SF_ZERO_TO_NULL(SUM(ADJ_QTY)) 				AS ADJ_QTY /* 재고조정 수량*/
+                , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) 			AS SET_IN_QTY /* 세트생성 수량*/
+                , SF_ZERO_TO_NULL(SUM(SALE_VENDR_ORDER_QTY))	AS SALE_VENDR_ORDER_QTY /* 거래처출고 수량*/
+                , SF_ZERO_TO_NULL(SUM(SALE_VENDR_ORDER_TOT))	AS SALE_VENDR_ORDER_TOT /* 거래처출고 금액*/
+                , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_QTY))		AS SALE_VENDR_RTN_QTY /* 거래처반품 수량*/
+                , SF_ZERO_TO_NULL(SUM(SALE_VENDR_RTN_TOT))		AS SALE_VENDR_RTN_TOT /* 거래처반품 금액*/
+                FROM TB_ST_HQ_STOCK_DAILY TSHSD
+                , TB_HQ_PRODUCT THP
+                WHERE TSHSD.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND THP.STOCK_PROD_YN = 'Y'
+                AND THP.USE_YN = 'Y'
+                AND TSHSD.HQ_OFFICE_CD = THP.HQ_OFFICE_CD
+                AND TSHSD.PROD_CD = THP.PROD_CD
+                <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+                    AND TSHSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
+                </if>
+                GROUP BY TSHSD.IOSTOCK_DATE
+                ORDER BY TSHSD.IOSTOCK_DATE DESC
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>    <!-- 가맹점 -->
+                SELECT TO_CHAR(TO_DATE(TSSSD.IOSTOCK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS IO_OCCR_DT
+                , SF_ZERO_TO_NULL(SUM(STORE_IN_QTY)) 	AS STORE_IN_QTY /* 매장입고 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_IN_TOT)) 	AS STORE_IN_TOT /* 매장입고 금액*/
+                , SF_ZERO_TO_NULL(SUM(STORE_OUT_QTY)) 	AS STORE_OUT_QTY /* 매장반품 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_OUT_TOT)) 	AS STORE_OUT_TOT /* 매장반품 금액*/
+                , SF_ZERO_TO_NULL(SUM(PURCHS_IN_QTY)) 	AS PURCHS_IN_QTY /* 사입입고 수량*/
+                , SF_ZERO_TO_NULL(SUM(PURCHS_IN_TOT)) 	AS PURCHS_IN_TOT /* 사입입고 금액*/
+                , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_QTY)) AS PURCHS_OUT_QTY /* 사입반품 수량*/
+                , SF_ZERO_TO_NULL(SUM(PURCHS_OUT_TOT)) AS PURCHS_OUT_TOT /* 사입반품 금액*/
+                , SF_ZERO_TO_NULL(SUM(STORE_SALE_QTY)) AS STORE_SALE_QTY /* 매장판매 수량*/
+                , SF_ZERO_TO_NULL(SUM(STORE_SALE_TOT)) AS STORE_SALE_TOT /* 매장판매 금액*/
+                , SF_ZERO_TO_NULL(SUM(MOVE_IN_QTY)) 	AS MOVE_IN_QTY /* 매장이입 수량*/
+                , SF_ZERO_TO_NULL(SUM(MOVE_IN_TOT)) 	AS MOVE_IN_TOT /* 매장이입 금액*/
+                , SF_ZERO_TO_NULL(SUM(MOVE_OUT_QTY)) 	AS MOVE_OUT_QTY /* 매장이출 수량*/
+                , SF_ZERO_TO_NULL(SUM(MOVE_OUT_TOT)) 	AS MOVE_OUT_TOT /* 매장이출 금액*/
+                , SF_ZERO_TO_NULL(SUM(DISUSE_QTY)) 	AS DISUSE_QTY /* 재고폐기 수량*/
+                , SF_ZERO_TO_NULL(SUM(ADJ_QTY)) 		AS ADJ_QTY /* 재고조정 수량*/
+                , SF_ZERO_TO_NULL(SUM(SET_IN_QTY)) 	AS SET_IN_QTY /* 세트생성 수량*/
+                FROM TB_ST_STORE_STOCK_DAILY TSSSD
+                , TB_MS_PRODUCT TMP
+                WHERE TSSSD.STORE_CD = #{storeCd}
+                AND TMP.STOCK_PROD_YN = 'Y'
+                AND TMP.USE_YN = 'Y'
+                AND TSSSD.STORE_CD = TMP.STORE_CD
+                AND TSSSD.PROD_CD = TMP.PROD_CD
+                <if test="startDate != '' and startDate != null and endDate != '' and endDate != null">
+                    AND TSSSD.IOSTOCK_DATE BETWEEN #{startDate} AND #{endDate}
+                </if>
+                GROUP BY TSSSD.IOSTOCK_DATE
+                ORDER BY TSSSD.IOSTOCK_DATE DESC
+            </when>
+        </choose>
+    </select>
+
+</mapper>

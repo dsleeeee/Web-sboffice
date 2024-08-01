@@ -1273,6 +1273,29 @@
 
     <!-- (모바일) 공통 결제수단 팝업 -->
     <typeAlias alias="mobilePayInfoVO" type="kr.co.solbipos.mobile.sale.cmmSalePopup.payInfo.service.MobilePayInfoVO"/>
+
+    <!-- (모바일) 재고현황 > 본사매장통합현재고 -->
+    <typeAlias alias="mobileCurrUnityVO" type="kr.co.solbipos.mobile.stock.status.currUnity.service.MobileCurrUnityVO"/>
+    <!-- (모바일) 재고현황 > 현재고현황 -->
+    <typeAlias alias="mobileHqCurrVO" type="kr.co.solbipos.mobile.stock.curr.hqCurr.service.MobileHqCurrVO"/>
+    <!-- (모바일) 재고현황 > 일수불현황 -->
+    <typeAlias alias="mobileDayIoStockVO" type="kr.co.solbipos.mobile.stock.status.dayIoStock.service.MobileDayIoStockVO"/>
+    <!-- (모바일) 재고현황 > 일수불현황 -->
+    <typeAlias alias="mobileMonthIoStockVO" type="kr.co.solbipos.mobile.stock.status.monthIoStock.service.MobileMonthIoStockVO"/>
+    <!-- (모바일) 재고현황 > 기간수불현황 -->
+    <typeAlias alias="mobilePeriodIoStockVO" type="kr.co.solbipos.mobile.stock.status.periodIoStock.service.MobilePeriodIoStockVO"/>
+    <!-- (모바일) 재고현황 > 일자별수불현황 -->
+    <typeAlias alias="mobileDailyIoStockVO" type="kr.co.solbipos.mobile.stock.status.dailyIoStock.service.MobileDailyIoStockVO"/>
+    <!-- (모바일) 재고현황 > 매장현재고 -->
+    <typeAlias alias="mobileStoreCurrVO" type="kr.co.solbipos.mobile.stock.curr.storeCurr.service.MobileStoreCurrVO"/>
+    <!-- (모바일) 재고현황 > 매장일수불 -->
+    <typeAlias alias="mobileStoreDayVO" type="kr.co.solbipos.mobile.stock.status.storeDay.service.MobileStoreDayVO"/>
+    <!-- (모바일) 재고현황 > 매장월수불 -->
+    <typeAlias alias="mobileStoreMonthVO" type="kr.co.solbipos.mobile.stock.status.storeMonth.service.MobileStoreMonthVO"/>
+    <!-- (모바일) 재고현황 > 매장기간수불 -->
+    <typeAlias alias="mobileStorePeriodVO" type="kr.co.solbipos.mobile.stock.status.storePeriod.service.MobileStorePeriodVO"/>
+    <!-- (모바일) 재고현황 > 재고현황공통팝업 -->
+    <typeAlias alias="mobileStockComPopupVO" type="kr.co.solbipos.mobile.stock.com.popup.service.MobileStockComPopupVO"/>
     <!-- ====================================== 모바일 끝 ====================================== -->
 
   </typeAliases>

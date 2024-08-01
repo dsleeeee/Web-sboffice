@@ -7,7 +7,7 @@
 <%--기본 본인 매장정보로 셋팅--%>
 <input type="hidden" id="<c:out value="${param.targetId}Cd"/>" value="${sessionInfo.storeCd}"/>
 <input type="text"
-       id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:245px;" ng-click="<c:out value="${param.targetId}"/>Show()"
+       id="<c:out value="${param.targetId}Nm"/>" class="sb-input fl mr5" style="cursor:pointer; width:100%;" ng-click="<c:out value="${param.targetId}"/>Show()"
        value=<s:message code="cmm.all"/> readonly/>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:85%;">
