@@ -1,0 +1,154 @@
+package kr.co.solbipos.mobile.stock.status.storePeriod.service;
+
+import kr.co.solbipos.application.common.service.PageVO;
+/**
+ * @Class Name : MobileStorePeriodVO.java
+ * @Description : (모바일)재고현황 > 매장기간수불
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2024.07.23  김유승      최초생성
+ *
+ * @author 솔비포스 WEB개발팀 김유승
+ * @since 2024.07.23
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+public class MobileStorePeriodVO extends PageVO {
+
+    private static final long serialVersionUID = 7357525630499110304L;
+
+    /** 본사코드 */
+    private String hqOfficeCd;
+    /** 매장코드 */
+    private String storeCd;
+    /** 매장코드 array */
+    private String arrStoreCd[];
+    /** 매장명 */
+    private String storeNm;
+    /** 상품코드 */
+    private String prodCd;
+    /** 상품명 */
+    private String prodNm;
+    /** 바코드 */
+    private String barcdCd;
+    /** 거래처 */
+    private String vendrCd;
+    /** 거래처코드 array */
+    private String arrVendrCd[];
+    /** 분류 */
+    private String prodClassCd;
+    /** 단위 */
+    private String unitFg;
+    /** 조회옵션 */
+    private String srchOption;
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
+    private String storeCdQuery;
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    public void setArrStoreCd(String arrStoreCd[]) {
+        this.arrStoreCd = arrStoreCd;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
+    }
+
+    public String getBarcdCd() {
+        return barcdCd;
+    }
+
+    public void setBarcdCd(String barcdCd) {
+        this.barcdCd = barcdCd;
+    }
+
+    public String getVendrCd() {
+        return vendrCd;
+    }
+
+    public void setVendrCd(String vendrCd) {
+        this.vendrCd = vendrCd;
+    }
+
+    public String[] getArrVendrCd() {
+        return arrVendrCd;
+    }
+
+    public void setArrVendrCd(String arrVendrCd[]) {
+        this.arrVendrCd = arrVendrCd;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    public String getUnitFg() {
+        return unitFg;
+    }
+
+    public void setUnitFg(String unitFg) {
+        this.unitFg = unitFg;
+    }
+
+    public String getSrchOption() {
+        return srchOption;
+    }
+
+    public void setSrchOption(String srchOption) {
+        this.srchOption = srchOption;
+    }
+
+    public String getStoreCdQuery() {
+        return storeCdQuery;
+    }
+
+    public void setStoreCdQuery(String storeCdQuery) {
+        this.storeCdQuery = storeCdQuery;
+    }
+}

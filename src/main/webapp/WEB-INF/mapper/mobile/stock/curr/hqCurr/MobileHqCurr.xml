@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileHqCurr.xml
+    현재고현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.07.19     최초작성
+-->
+<mapper namespace="kr.co.solbipos.mobile.stock.curr.hqCurr.service.impl.MobileHqCurrMapper">
+
+    <!-- 현재고현황 - 본사 현재고현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_STOCK_CUR, TB_HQ_PRODUCT, TB_HQ_PRODUCT_BARCD
+        PARAM    : mobileHqCurrVO
+        COMMENTS : 현재고현황 - 현재고현황 리스트를 조회한다.
+    -->
+    <select id="getHqCurrList" parameterType="mobileHqCurrVO" resultType="DefaultMap">
+        /* USE : MobileHqCurrMapper.getHqCurrList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, tshsc.PROD_CD,'NM') AS VENDR_NM
+        ,		tshsc.PROD_CD
+        ,       thp.PROD_NM
+        ,       tshsc.FIRST_VENDR_IN_DATE
+        ,       tshsc.LAST_VENDR_IN_DATE
+        ,       tshsc.FIRST_HQ_OUT_DATE
+        ,       tshsc.LAST_HQ_OUT_DATE
+        ,       tshsc.FIRST_SALE_DATE
+        ,       tshsc.LAST_SALE_DATE
+        ,       thp.COST_UPRC
+        <!-- ,       thv.VENDR_NM -->
+        ,       thpb.BARCD_CD
+        ,       thp.PO_UNIT_QTY
+        ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
+
+        <if test='unitFg == "1"'>
+            ,       thp.PO_UNIT_FG AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = thp.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+            ,       (thp.SAFE_STOCK_QTY / thp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               ) / thp.PO_UNIT_QTY) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       ) / thp.PO_UNIT_QTY) AS ACC_VENDR_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                      ) / thp.PO_UNIT_QTY) AS ACC_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                         ) / thp.PO_UNIT_QTY) AS ACC_HQ_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_IN_QTY                          ) / thp.PO_UNIT_QTY) AS ACC_HQ_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_IN_QTY                  ) / thp.PO_UNIT_QTY) AS ACC_STORE_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_OUT_QTY                 ) / thp.PO_UNIT_QTY) AS ACC_STORE_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_DISUSE_QTY                         ) / thp.PO_UNIT_QTY) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_ADJ_QTY                            ) / thp.PO_UNIT_QTY) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY ) / thp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 ) / thp.PO_UNIT_QTY) AS ACC_SALE_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  ) / thp.PO_UNIT_QTY) AS ACC_SALE_VENDR_IN_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_OUT_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_OUT_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_IN_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_IN_QTY
+        </if>
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+            ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               )) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                      )) AS ACC_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                         )) AS ACC_HQ_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_IN_QTY                          )) AS ACC_HQ_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_IN_QTY                  )) AS ACC_STORE_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_OUT_QTY                 )) AS ACC_STORE_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_DISUSE_QTY                         )) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_ADJ_QTY                            )) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 )) AS ACC_SALE_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  )) AS ACC_SALE_VENDR_IN_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_OUT_QTY                 	  )) AS ACC_HQ_MOVE_OUT_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_IN_QTY                 	  )) AS ACC_HQ_MOVE_IN_QTY
+        </if>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_ST_HQ_STOCK_CUR tshsc
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_HQ_PRODUCT_BARCD thpb
+        <!-- ,       (   SELECT   thvp.PROD_CD
+                    ,      LISTAGG((SELECT 	thv.VENDR_NM
+                                    FROM	TB_HQ_VENDOR thv
+                                    WHERE 	thv.HQ_OFFICE_CD  = thvp.HQ_OFFICE_CD
+                                    AND		thv.VENDR_CD  = thvp.VENDR_CD), ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
+                    FROM    TB_HQ_VENDOR_PROD thvp
+                    WHERE   thvp.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    GROUP
+                    BY      thvp.PROD_CD
+                ) thv -->
+        WHERE   tshsc.HQ_OFFICE_CD    	=   #{hqOfficeCd}
+        AND     tshsc.STORAGE_CD      	=   '999'
+        AND     thp.HQ_OFFICE_CD      	=   tshsc.HQ_OFFICE_CD
+        AND     thp.PROD_CD           	=   tshsc.PROD_CD
+        AND     thp.STOCK_PROD_YN     	=   'Y'
+        AND     thp.USE_YN            	=   'Y'
+        AND     thpb.HQ_OFFICE_CD (+) 	=   tshsc.HQ_OFFICE_CD
+        AND     thpb.PROD_CD      (+) 	=   tshsc.PROD_CD
+        <!-- AND     thv.PROD_CD       (+) 	=   tshsc.PROD_CD -->
+        <if test='prodCd != null and prodCd != ""'>
+            AND tshsc.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND thpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='safeStockFg == "0"'>
+            AND thp.SAFE_STOCK_QTY > 0 AND thp.SAFE_STOCK_QTY > tshsc.CURR_QTY
+        </if>
+        <if test='weightFg == "0"'>
+            AND thp.PROD_TYPE_FG IN ('1')
+        </if>
+        <if test='weightFg == "1"'>
+            AND thp.PROD_TYPE_FG IN ('2', '3')
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+            FROM    DUAL
+            UNION
+            SELECT  thpc.PROD_CLASS_CD
+            FROM    TB_HQ_PRODUCT_CLASS thpc
+            WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd} AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND thp.PROD_CD IN    ( SELECT  PROD_CD
+            FROM    TB_HQ_VENDOR_PROD
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     VENDR_CD IN
+            <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        ORDER BY tshsc.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 현재고현황 - 매장 현재고현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_STOCK_CUR, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        PARAM    : storeCurrVO
+        COMMENTS : 현재고현황 - 현재고현황 리스트를 조회한다.
+    -->
+    <select id="getHqStoreCurrList" parameterType="mobileHqCurrVO" resultType="DefaultMap">
+        /* USE : MobileHqCurrMapper.getHqStoreCurrList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{storeCd}, tsssc.PROD_CD,'NM') AS VENDR_NM
+        ,		tsssc.PROD_CD             ,   tmp.PROD_NM
+        ,       tsssc.FIRST_IN_DATE       ,   tsssc.LAST_IN_DATE
+        ,       tsssc.FIRST_SALE_DATE     ,   tsssc.LAST_SALE_DATE
+        ,       tsssc.STORE_CD
+        ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = tsssc.STORE_CD) AS STORE_NM
+        ,       tmp.COST_UPRC
+        <!-- ,       tmv.VENDR_NM -->
+        ,       tmpb.BARCD_CD
+        ,       tmp.PO_UNIT_QTY
+        ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
+        <if test='unitFg == "1"'>
+            ,       tmp.PO_UNIT_FG AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = tmp.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
+            ,       (tmp.SAFE_STOCK_QTY / tmp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               ) / tmp.PO_UNIT_QTY) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_IN_QTY                       ) / tmp.PO_UNIT_QTY) AS ACC_STORE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_OUT_QTY                      ) / tmp.PO_UNIT_QTY) AS ACC_STORE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_OUT_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_PURCHS_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_IN_QTY                      ) / tmp.PO_UNIT_QTY) AS ACC_PURCHS_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_IN_QTY                        ) / tmp.PO_UNIT_QTY) AS ACC_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_OUT_QTY                       ) / tmp.PO_UNIT_QTY) AS ACC_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_DISUSE_QTY                         ) / tmp.PO_UNIT_QTY) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_ADJ_QTY                            ) / tmp.PO_UNIT_QTY) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY ) / tmp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_STORE_SALE_QTY
+        </if>
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
+            ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               )) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_IN_QTY                       )) AS ACC_STORE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_OUT_QTY                      )) AS ACC_STORE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_OUT_QTY                     )) AS ACC_PURCHS_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_IN_QTY                      )) AS ACC_PURCHS_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_IN_QTY                        )) AS ACC_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_OUT_QTY                       )) AS ACC_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_DISUSE_QTY                         )) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_ADJ_QTY                            )) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     )) AS ACC_STORE_SALE_QTY
+        </if>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_ST_STORE_STOCK_CUR tsssc
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        <!-- ,       (   SELECT  tmvp.PROD_CD
+                    ,   LISTAGG((   SELECT 	tmv.VENDR_NM
+                                    FROM	TB_MS_VENDOR tmv
+                                    WHERE 	tmv.STORE_CD  = tmvp.STORE_CD
+                                    AND		tmv.VENDR_CD  = tmvp.VENDR_CD), ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
+                    FROM    TB_MS_VENDOR_PROD tmvp
+                    WHERE   tmvp.STORE_CD    =   #{storeCd}
+                    GROUP
+                    BY      tmvp.PROD_CD
+                ) tmv -->
+        WHERE   tsssc.STORE_CD        =   #{storeCd}
+        AND     tmp.STORE_CD          =   tsssc.STORE_CD
+        AND     tsssc.STORAGE_CD      =   '999'
+        AND     tmp.PROD_CD           =   tsssc.PROD_CD
+        AND     tmp.STOCK_PROD_YN     =   'Y'
+        AND     tmp.USE_YN            =   'Y'
+        AND     tmpb.STORE_CD     (+) =   tsssc.STORE_CD
+        AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
+        <!-- AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD -->
+        <if test='prodCd != null and prodCd != ""'>
+            AND tsssc.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='safeStockFg == "0"'>
+            AND tmp.SAFE_STOCK_QTY > 0 AND tmp.SAFE_STOCK_QTY > tsssc.CURR_QTY
+        </if>
+        <if test='weightFg == "0"'>
+            AND tmp.PROD_TYPE_FG IN ('1')
+        </if>
+        <if test='weightFg == "1"'>
+            AND tmp.PROD_TYPE_FG IN ('2', '3')
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN  (
+            SELECT              PROD_CLASS_CD
+            FROM                TB_MS_PRODUCT_CLASS
+            WHERE               STORE_CD        = #{storeCd}
+            START WITH          PROD_CLASS_CD   = #{prodClassCd}
+            AND                 STORE_CD        = #{storeCd}
+            CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+            AND                 STORE_CD        = #{storeCd}
+            )
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND tmp.PROD_CD IN    ( SELECT  PROD_CD
+            FROM    TB_MS_VENDOR_PROD
+            WHERE   STORE_CD = #{storeCd}
+            AND     VENDR_CD IN
+            <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        ORDER BY tsssc.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <select id="getHqCurrDtlList" parameterType="mobileHqCurrVO" resultType="DefaultMap">
+        SELECT	TSHSC.PROD_CD
+        ,		TSHSC.STORAGE_CD
+        ,		THS.STORAGE_NM
+        ,		SUM(TSHSC.CURR_QTY)	AS	CURR_QTY
+        FROM	TB_ST_HQ_STOCK_CUR 	TSHSC
+        ,		TB_HQ_STORAGE		THS
+        ,       TB_HQ_PRODUCT THP
+        WHERE	TSHSC.HQ_OFFICE_CD	=	#{hqOfficeCd}
+        AND		TSHSC.STORAGE_CD	<![CDATA[ >= ]]>	'001'			<!-- 고정 -->
+        AND		TSHSC.STORAGE_CD	<![CDATA[ < ]]>	'999'			<!-- 고정 -->
+        <if test='prodCd != null and prodCd != ""'>
+            AND		TSHSC.PROD_CD		=	#{prodCd}
+        </if>
+        AND		THS.HQ_OFFICE_CD		=	TSHSC.HQ_OFFICE_CD
+        AND		THS.STORAGE_CD		=	TSHSC.STORAGE_CD
+        AND     THP.STOCK_PROD_YN = 'Y'
+        AND     TSHSC.HQ_OFFICE_CD    (+) =   THP.HQ_OFFICE_CD
+        AND     TSHSC.PROD_CD     (+) =   THP.PROD_CD
+        GROUP
+        BY		TSHSC.PROD_CD
+        ,		TSHSC.STORAGE_CD
+        ,		THS.STORAGE_NM
+        ORDER
+        BY		TSHSC.STORAGE_CD
+    </select>
+
+    <select id="getStoreCurrDtlList" parameterType="mobileHqCurrVO" resultType="DefaultMap">
+        SELECT	TSSSC.PROD_CD
+        ,		TSSSC.STORAGE_CD
+        ,		DECODE(TSSSC.STORAGE_CD, '000', '매대', TMS.STORAGE_NM)	AS STORAGE_NM
+        ,		SUM(TSSSC.CURR_QTY)	AS	CURR_QTY
+        FROM	TB_ST_STORE_STOCK_CUR 	TSSSC
+        ,		TB_MS_STORAGE		TMS
+        ,       TB_MS_PRODUCT TMP
+        WHERE	TSSSC.STORE_CD	=	#{storeCd}
+        AND		TSSSC.STORAGE_CD	<![CDATA[ >= ]]> '000'
+        AND		TSSSC.STORAGE_CD	<![CDATA[ < ]]>	'999'
+        <if test='prodCd != null and prodCd != ""'>
+            AND		TSSSC.PROD_CD		=	#{prodCd}
+        </if>
+        AND		TMS.STORE_CD	(+)	=	TSSSC.STORE_CD
+        AND		TMS.STORAGE_CD	(+)	=	TSSSC.STORAGE_CD
+        AND     TMP.STOCK_PROD_YN   = 'Y'
+        AND     TMP.USE_YN          = 'Y'
+        AND     TSSSC.STORE_CD    (+) =   TMP.STORE_CD
+        AND     TSSSC.PROD_CD     (+) =   TMP.PROD_CD
+        GROUP
+        BY		TSSSC.PROD_CD
+        ,		TSSSC.STORAGE_CD
+        ,		TMS.STORAGE_NM
+        ORDER
+        BY		TSSSC.STORAGE_CD
+    </select>
+
+    <select id="getHqCurrExcelList" parameterType="mobileHqCurrVO" resultType="DefaultMap">
+        /* USE : MobileHqCurrMapper.getHqCurrExcelList */
+        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(#{hqOfficeCd}, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, tshsc.PROD_CD,'NM') AS VENDR_NM
+        ,		tshsc.PROD_CD
+        ,       thp.PROD_NM
+        ,       tshsc.FIRST_VENDR_IN_DATE
+        ,       tshsc.LAST_VENDR_IN_DATE
+        ,       tshsc.FIRST_HQ_OUT_DATE
+        ,       tshsc.LAST_HQ_OUT_DATE
+        ,       tshsc.FIRST_SALE_DATE
+        ,       tshsc.LAST_SALE_DATE
+        ,       thp.COST_UPRC
+        <!-- ,       thv.VENDR_NM -->
+        ,       thpb.BARCD_CD
+        ,       thp.PO_UNIT_QTY
+        ,       ROUND(tshsc.CURR_QTY * thp.COST_UPRC / thp.PO_UNIT_QTY) AS CURR_AMT
+
+        <if test='unitFg == "1"'>
+            ,       thp.PO_UNIT_FG AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = thp.PO_UNIT_FG)  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+            ,       (thp.SAFE_STOCK_QTY / thp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               ) / thp.PO_UNIT_QTY) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       ) / thp.PO_UNIT_QTY) AS ACC_VENDR_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                      ) / thp.PO_UNIT_QTY) AS ACC_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                         ) / thp.PO_UNIT_QTY) AS ACC_HQ_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_IN_QTY                          ) / thp.PO_UNIT_QTY) AS ACC_HQ_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_IN_QTY                  ) / thp.PO_UNIT_QTY) AS ACC_STORE_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_OUT_QTY                 ) / thp.PO_UNIT_QTY) AS ACC_STORE_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_DISUSE_QTY                         ) / thp.PO_UNIT_QTY) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_ADJ_QTY                            ) / thp.PO_UNIT_QTY) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY ) / thp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 ) / thp.PO_UNIT_QTY) AS ACC_SALE_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  ) / thp.PO_UNIT_QTY) AS ACC_SALE_VENDR_IN_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_OUT_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_OUT_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_IN_QTY                 	  ) / thp.PO_UNIT_QTY) AS ACC_HQ_MOVE_IN_QTY
+        </if>
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE NMCODE_GRP_CD = '093' AND HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_CD = (CASE WHEN thp.STOCK_UNIT_FG IS NOT NULL THEN thp.STOCK_UNIT_FG ELSE thp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM      /* 본사 가상로그인시 */
+            ,       thp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.CURR_QTY                               )) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_IN_QTY                       )) AS ACC_VENDR_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_VENDR_OUT_QTY                      )) AS ACC_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_OUT_QTY                         )) AS ACC_HQ_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_HQ_IN_QTY                          )) AS ACC_HQ_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_IN_QTY                  )) AS ACC_STORE_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_STORE_MOVE_OUT_QTY                 )) AS ACC_STORE_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_DISUSE_QTY                         )) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_ADJ_QTY                            )) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SET_IN_QTY + tshsc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_OUT_QTY                 )) AS ACC_SALE_VENDR_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tshsc.ACC_SALE_VENDR_IN_QTY                  )) AS ACC_SALE_VENDR_IN_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_OUT_QTY                 	  )) AS ACC_HQ_MOVE_OUT_QTY
+            ,		SF_ZERO_TO_NULL((tshsc.ACC_HQ_MOVE_IN_QTY                 	  )) AS ACC_HQ_MOVE_IN_QTY
+        </if>
+        FROM    TB_ST_HQ_STOCK_CUR tshsc
+        ,       TB_HQ_PRODUCT thp
+        ,       TB_HQ_PRODUCT_BARCD thpb
+        <!-- ,       (   SELECT   thvp.PROD_CD
+                    ,      LISTAGG((SELECT 	thv.VENDR_NM
+                                    FROM	TB_HQ_VENDOR thv
+                                    WHERE 	thv.HQ_OFFICE_CD  = thvp.HQ_OFFICE_CD
+                                    AND		thv.VENDR_CD  = thvp.VENDR_CD), ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
+                    FROM    TB_HQ_VENDOR_PROD thvp
+                    WHERE   thvp.HQ_OFFICE_CD    =   #{hqOfficeCd}
+                    GROUP
+                    BY      thvp.PROD_CD
+                ) thv -->
+        WHERE   tshsc.HQ_OFFICE_CD    =   #{hqOfficeCd}
+        AND     tshsc.STORAGE_CD      =   '999'
+        AND     thp.HQ_OFFICE_CD      =   tshsc.HQ_OFFICE_CD
+        AND     thp.PROD_CD           =   tshsc.PROD_CD
+        AND     thp.STOCK_PROD_YN     =   'Y'
+        AND     thp.USE_YN            =   'Y'
+        AND     thpb.HQ_OFFICE_CD (+) =   tshsc.HQ_OFFICE_CD
+        AND     thpb.PROD_CD      (+) =   tshsc.PROD_CD
+        <!-- AND     thv.PROD_CD       (+) =   tshsc.PROD_CD -->
+        <if test='prodCd != null and prodCd != ""'>
+            AND tshsc.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND thpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='safeStockFg == "0"'>
+            AND thp.SAFE_STOCK_QTY > 0 AND thp.SAFE_STOCK_QTY > tshsc.CURR_QTY
+        </if>
+        <if test='weightFg == "0"'>
+            AND thp.PROD_TYPE_FG IN ('1')
+        </if>
+        <if test='weightFg == "1"'>
+            AND thp.PROD_TYPE_FG IN ('2', '3')
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN  ( SELECT  #{prodClassCd} AS PROD_CLASS_CD
+            FROM    DUAL
+            UNION
+            SELECT  thpc.PROD_CLASS_CD
+            FROM    TB_HQ_PRODUCT_CLASS thpc
+            WHERE   thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH  thpc.P_PROD_CLASS_CD = #{prodClassCd} AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY  thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND thp.PROD_CD IN    ( SELECT  PROD_CD
+            FROM    TB_HQ_VENDOR_PROD
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     VENDR_CD IN
+            <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        ORDER BY tshsc.PROD_CD
+    </select>
+
+    <select id="getHqStoreCurrExcelList" parameterType="mobileHqCurrVO" resultType="DefaultMap">
+        /* USE : MobileHqCurrMapper.getHqStoreCurrExcelList */
+        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{storeCd}, tsssc.PROD_CD,'NM') AS VENDR_NM
+        ,		tsssc.PROD_CD             ,   tmp.PROD_NM
+        ,       tsssc.FIRST_IN_DATE       ,   tsssc.LAST_IN_DATE
+        ,       tsssc.FIRST_SALE_DATE     ,   tsssc.LAST_SALE_DATE
+        ,       tsssc.STORE_CD
+        ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = tsssc.STORE_CD) AS STORE_NM
+        ,       tmp.COST_UPRC
+        <!-- ,       tmv.VENDR_NM -->
+        ,       tmpb.BARCD_CD
+        ,       tmp.PO_UNIT_QTY
+        ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
+        <if test='unitFg == "1"'>
+            ,       tmp.PO_UNIT_FG AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = tmp.PO_UNIT_FG)  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
+            ,       (tmp.SAFE_STOCK_QTY / tmp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               ) / tmp.PO_UNIT_QTY) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_IN_QTY                       ) / tmp.PO_UNIT_QTY) AS ACC_STORE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_OUT_QTY                      ) / tmp.PO_UNIT_QTY) AS ACC_STORE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_OUT_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_PURCHS_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_IN_QTY                      ) / tmp.PO_UNIT_QTY) AS ACC_PURCHS_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_IN_QTY                        ) / tmp.PO_UNIT_QTY) AS ACC_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_OUT_QTY                       ) / tmp.PO_UNIT_QTY) AS ACC_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_DISUSE_QTY                         ) / tmp.PO_UNIT_QTY) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_ADJ_QTY                            ) / tmp.PO_UNIT_QTY) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY ) / tmp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_STORE_SALE_QTY
+        </if>
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,		(SELECT NMCODE_NM FROM TB_MS_STORE_NMCODE WHERE NMCODE_GRP_CD = '093' AND STORE_CD = #{storeCd} AND NMCODE_CD = (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END))  AS PO_UNIT_FG_NM        /* 매장 가상로그인시 */
+            ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               )) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_IN_QTY                       )) AS ACC_STORE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_OUT_QTY                      )) AS ACC_STORE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_OUT_QTY                     )) AS ACC_PURCHS_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_IN_QTY                      )) AS ACC_PURCHS_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_IN_QTY                        )) AS ACC_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_OUT_QTY                       )) AS ACC_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_DISUSE_QTY                         )) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_ADJ_QTY                            )) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     )) AS ACC_STORE_SALE_QTY
+        </if>
+        FROM    TB_ST_STORE_STOCK_CUR tsssc
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        <!-- ,       (   SELECT  tmvp.PROD_CD
+                    ,   LISTAGG((   SELECT 	tmv.VENDR_NM
+                                    FROM	TB_MS_VENDOR tmv
+                                    WHERE 	tmv.STORE_CD  = tmvp.STORE_CD
+                                    AND		tmv.VENDR_CD  = tmvp.VENDR_CD), ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
+                    FROM    TB_MS_VENDOR_PROD tmvp
+                    WHERE   tmvp.STORE_CD    =   #{storeCd}
+                    GROUP
+                    BY      tmvp.PROD_CD
+                ) tmv -->
+        WHERE   tsssc.STORE_CD        =   #{storeCd}
+        AND     tmp.STORE_CD          =   tsssc.STORE_CD
+        AND     tsssc.STORAGE_CD      =   '999'
+        AND     tmp.PROD_CD           =   tsssc.PROD_CD
+        AND     tmp.STOCK_PROD_YN     =   'Y'
+        AND     tmp.USE_YN            =   'Y'
+        AND     tmpb.STORE_CD     (+) =   tsssc.STORE_CD
+        AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
+        <!-- AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD -->
+        <if test='prodCd != null and prodCd != ""'>
+            AND tsssc.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='safeStockFg == "0"'>
+            AND tmp.SAFE_STOCK_QTY > 0 AND tmp.SAFE_STOCK_QTY > tsssc.CURR_QTY
+        </if>
+        <if test='weightFg == "0"'>
+            AND tmp.PROD_TYPE_FG IN ('1')
+        </if>
+        <if test='weightFg == "1"'>
+            AND tmp.PROD_TYPE_FG IN ('2', '3')
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN  (
+            SELECT              PROD_CLASS_CD
+            FROM                TB_MS_PRODUCT_CLASS
+            WHERE               STORE_CD        = #{storeCd}
+            START WITH          PROD_CLASS_CD   = #{prodClassCd}
+            AND                 STORE_CD        = #{storeCd}
+            CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+            AND                 STORE_CD        = #{storeCd}
+            )
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND tmp.PROD_CD IN    ( SELECT  PROD_CD
+            FROM    TB_MS_VENDOR_PROD
+            WHERE   STORE_CD = #{storeCd}
+            AND     VENDR_CD IN
+            <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        ORDER BY tsssc.PROD_CD
+    </select>
+
+</mapper>
