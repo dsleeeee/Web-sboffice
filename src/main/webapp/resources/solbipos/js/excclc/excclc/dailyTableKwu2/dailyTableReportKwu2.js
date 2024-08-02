@@ -386,15 +386,15 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
 
         statusListHeaderHtml += '<table class="w100">' // 출납현황 header html
             + '<colgroup>'
-            + '<col style="width:18%;">'
             + '<col style="width:28%;">'
+            + '<col style="width:18%;">'
             + '<col style="width:18%;">'
             + '<col style="width:18%;">'
             + '<col style="width:18%;">'
             + '</colgroup>'
             + '<tr class="h30">'
+            + '<th class="tc" style="background-color: lightgrey;">적요</th>'
             + '<th class="tc" style="background-color: lightgrey;">전일잔액</th>'
-            + '<th class="tc" style="background-color: lightgrey;">구분</th>'
             + '<th class="tc" style="background-color: lightgrey;">입금</th>'
             + '<th class="tc" style="background-color: lightgrey;">출금</th>'
             + '<th class="tc" style="background-color: lightgrey;">잔액</th>'
@@ -409,8 +409,8 @@ app.controller('dailyTableReportKwu2Ctrl', ['$scope', '$http', function ($scope,
             var outAmt = (item.outAmt === undefined || item.outAmt == null || item.outAmt.length <= 0) ? nvl(item.outAmt,0) : addComma2(item.outAmt);
             var totalAmt = (item.totalAmt === undefined || item.totalAmt == null || item.totalAmt.length <= 0) ? nvl(item.totalAmt,0) : addComma2(item.totalAmt);
             statusListHtml += '<tr class="h25">'
-                + '<td class="tr">' + bTotalAmt + '</td>'
                 + '<td class="tc">' + fg + '</td>'
+                + '<td class="tr">' + bTotalAmt + '</td>'
                 + '<td class="tr">' + inAmt + '</td>'
                 + '<td class="tr">' + outAmt + '</td>'
                 + '<td class="tr">' + totalAmt + '</td>'
