@@ -39,6 +39,12 @@ public class VirtualAccountVO extends PageVO {
     /** 매장코드 */
     private String storeCd;
 
+    /** 매장명 */
+    private String storeNm;
+
+    /** [매장코드] 매장명 */
+    private String storeCdNm;
+
     /** 등록일자 */
     private String reqDate;
 
@@ -65,17 +71,21 @@ public class VirtualAccountVO extends PageVO {
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
 
-    public String getHqOfficeCd() {
-        return hqOfficeCd;
-    }
+    public String getHqOfficeCd() { return hqOfficeCd; }
 
-    public void setHqOfficeCd(String hqOfficeCd) {
-        this.hqOfficeCd = hqOfficeCd;
-    }
+    public void setHqOfficeCd(String hqOfficeCd) { this.hqOfficeCd = hqOfficeCd; }
 
     public String getStoreCd() { return storeCd; }
 
     public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+
+    public String getStoreNm() { return storeNm; }
+
+    public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
+
+    public String getStoreCdNm() { return storeCdNm; }
+
+    public void setStoreCdNm(String storeCdNm) { this.storeCdNm = storeCdNm; }
 
     public String getReqDate() { return reqDate; }
 
@@ -100,6 +110,7 @@ public class VirtualAccountVO extends PageVO {
     public String getDepositFg() { return depositFg; }
 
     public void setDepositFg(String depositFg) { this.depositFg = depositFg; }
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,6 +246,7 @@ public class VirtualAccountVO extends PageVO {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // KCP API 응답(가상계좌 발급) start
     /** 결과코드 */
@@ -263,6 +275,22 @@ public class VirtualAccountVO extends PageVO {
 
     /** 가상계좌 발급 시각 */
     private String app_time;
+
+    private String order_no;
+    private String mall_taxno;
+    private String van_apptime;
+    private String res_free_mny;
+//    private String pay_method;
+    private String trace_no;
+//    private String va_name;
+//    private String va_date;
+    private String escw_yn;
+    private String res_vat_mny;
+    private String res_tax_flag;
+    private String res_en_msg;
+    private String van_txid;
+    private String res_tax_mny;
+    private String van_cd;
 
     public String getRes_cd() { return res_cd; }
 
@@ -299,6 +327,66 @@ public class VirtualAccountVO extends PageVO {
     public String getApp_time() { return app_time; }
 
     public void setApp_time(String app_time) { this.app_time = app_time; }
+
+    public String getOrder_no() { return order_no; }
+
+    public void setOrder_no(String order_no) { this.order_no = order_no; }
+
+    public String getMall_taxno() { return mall_taxno; }
+
+    public void setMall_taxno(String mall_taxno) { this.mall_taxno = mall_taxno; }
+
+    public String getVan_apptime() { return van_apptime; }
+
+    public void setVan_apptime(String van_apptime) { this.van_apptime = van_apptime; }
+
+    public String getRes_free_mny() { return res_free_mny; }
+
+    public void setRes_free_mny(String res_free_mny) { this.res_free_mny = res_free_mny; }
+
+//    public String getPay_method() { return pay_method; }
+//
+//    public void setPay_method(String pay_method) { this.pay_method = pay_method; }
+
+    public String getTrace_no() { return trace_no; }
+
+    public void setTrace_no(String trace_no) { this.trace_no = trace_no; }
+
+//    public String getVa_name() { return va_name; }
+//
+//    public void setVa_name(String va_name) { this.va_name = va_name; }
+//
+//    public String getVa_date() { return va_date; }
+//
+//    public void setVa_date(String va_date) { this.va_date = va_date; }
+
+    public String getEscw_yn() { return escw_yn; }
+
+    public void setEscw_yn(String escw_yn) { this.escw_yn = escw_yn; }
+
+    public String getRes_vat_mny() { return res_vat_mny; }
+
+    public void setRes_vat_mny(String res_vat_mny) { this.res_vat_mny = res_vat_mny; }
+
+    public String getRes_tax_flag() { return res_tax_flag; }
+
+    public void setRes_tax_flag(String res_tax_flag) { this.res_tax_flag = res_tax_flag; }
+
+    public String getRes_en_msg() { return res_en_msg; }
+
+    public void setRes_en_msg(String res_en_msg) { this.res_en_msg = res_en_msg; }
+
+    public String getVan_txid() { return van_txid; }
+
+    public void setVan_txid(String van_txid) { this.van_txid = van_txid; }
+
+    public String getRes_tax_mny() { return res_tax_mny; }
+
+    public void setRes_tax_mny(String res_tax_mny) { this.res_tax_mny = res_tax_mny; }
+
+    public String getVan_cd() { return van_cd; }
+
+    public void setVan_cd(String van_cd) { this.van_cd = van_cd; }
 
 // KCP API 응답(가상계좌 발급) end
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

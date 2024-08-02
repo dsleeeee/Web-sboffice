@@ -2,54 +2,62 @@
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 
-<wj-popup control="wjVirtualAccountRegisterLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;height:580px;" fade-in="false" fade-out="false">
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
+<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
+<c:set var="storeNm" value="${sessionScope.sessionInfo.storeNm}"/>
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
+<c:set var="userNm" value="${sessionScope.sessionInfo.userNm}"/>
+
+<wj-popup control="wjVirtualAccountRegisterLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;height:400px;" fade-in="false" fade-out="false">
     <div ng-controller="virtualAccountRegisterCtrl">
 
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="virtualAccountRegister.info"/>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
+            <%-- [매장코드] 매장명 --%>
+            <label id="lblStoreCdNm" style="display: none;"></label>
         </div>
 
         <div class="wj-dialog-body">
-            <div class="w100 mb5">
+            <div class="w100 mb5" style="display: none;">
                 <div class="oh">
-                    <p class="tl s14 mt5 lh15 blue">* 주문정보</p>
+                    <p class="tl s14 mt5 lh15 blue">* 기본정보</p>
                 </div>
             </div>
-            <table class="tblType01">
+            <table class="tblType01" style="display: none;">
                 <colgroup>
                     <col class="w35"/>
                     <col class="w65"/>
                 </colgroup>
                 <tbody>
-                <tr>
-                    <%-- 주문번호 --%>
-                    <th>
-                        <div class="impWrap">
-                            <s:message code="virtualAccountRegister.ordrIdxx"/>
-                            <em class="imp">*</em>
-                        </div>
-                    </th>
-                    <td>
-                        <input type="text" class="sb-input w100" id="ordr_idxx" ng-model="ordr_idxx" />
-                    </td>
-                </tr>
-                <tr>
-                    <%-- 상품명 --%>
-                    <th><s:message code="virtualAccountRegister.goodName"/></th>
-                    <td>
-                        <input type="text" class="sb-input w100" id="good_name" ng-model="good_name" />
-                    </td>
-                </tr>
+                <%--<tr>--%>
+                    <%--&lt;%&ndash; 주문번호 &ndash;%&gt;--%>
+                    <%--<th>--%>
+                        <%--<div class="impWrap">--%>
+                            <%--<s:message code="virtualAccountRegister.ordrIdxx"/>--%>
+                            <%--<em class="imp">*</em>--%>
+                        <%--</div>--%>
+                    <%--</th>--%>
+                    <%--<td>--%>
+                        <%--<input type="text" class="sb-input w100" id="ordr_idxx" ng-model="ordr_idxx" />--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
+                <%--<tr>--%>
+                    <%--&lt;%&ndash; 상품명 &ndash;%&gt;--%>
+                    <%--<th><s:message code="virtualAccountRegister.goodName"/></th>--%>
+                    <%--<td>--%>
+                        <%--<input type="text" class="sb-input w100" id="good_name" ng-model="good_name" />--%>
+                    <%--</td>--%>
+                <%--</tr>--%>
                 <tr>
                     <%-- 주문자명 --%>
                     <th><s:message code="virtualAccountRegister.buyrName"/></th>
                     <td>
-                        <input type="text" class="sb-input w100" id="buyr_name" ng-model="buyr_name" />
+                        <input type="text" class="sb-input w100" id="buyr_name" ng-model="buyr_name" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -80,18 +88,6 @@
                 </colgroup>
                 <tbody>
                 <tr>
-                    <%-- 입금자명 --%>
-                    <th>
-                        <div class="impWrap">
-                            <s:message code="virtualAccountRegister.vaName"/>
-                            <em class="imp">*</em>
-                        </div>
-                    </th>
-                    <td>
-                        <input type="text" class="sb-input w100" id="va_name" ng-model="va_name" />
-                    </td>
-                </tr>
-                <tr>
                     <%-- 가상계좌 발급금액 --%>
                     <th>
                         <div class="impWrap">
@@ -100,7 +96,7 @@
                         </div>
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="va_mny" ng-model="va_mny" />
+                        <input type="text" class="sb-input w100 tr" id="va_mny" ng-model="va_mny" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -127,6 +123,18 @@
                     </td>
                 </tr>
                 <tr>
+                    <%-- 입금자명 --%>
+                    <th>
+                        <div class="impWrap">
+                            <s:message code="virtualAccountRegister.vaName"/>
+                            <em class="imp">*</em>
+                        </div>
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="va_name" ng-model="va_name" readonly />
+                    </td>
+                </tr>
+                <tr>
                     <%-- 입금마감 시각 --%>
                     <th>
                         <div class="impWrap">
@@ -135,7 +143,10 @@
                         </div>
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="va_date" ng-model="va_date" />
+                        <div style="display: none;">
+                            <input type="text" class="sb-input w100" id="va_date" ng-model="va_date" readonly />
+                        </div>
+                        <input type="text" class="sb-input w100" id="va_date2" ng-model="va_date2" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -177,11 +188,24 @@
             </table>
             <div class="tc mt20">
                 <%-- 가상계좌 발급 --%>
-                <button class="btn_blue" id="btnVirtualAccountRegisterSave" ng-click="virtualAccountRegisterSave()"><s:message code="virtualAccountRegister.virtualAccountSave" /></button>
+                <button class="btn_blue" id="btnVirtualAccountRegisterSave" ng-click="virtualAccountInfoChk()"><s:message code="virtualAccountRegister.virtualAccountSave" /></button>
             </div>
         </div>
 
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccountRegister.js?ver=20240724.01" charset="utf-8"></script>
+<script type="text/javascript">
+    var orgnFg = "${orgnFg}";
+    var orgnCd = "${orgnCd}";
+    var hqOfficeCd = "${hqOfficeCd}";
+    var storeCd = "${storeCd}";
+    var storeNm = "${storeNm}";
+    var userId = "${userId}";
+    var userNm = "${userNm}";
+
+    <%-- 가상계좌 API 은행코드 --%>
+    var vaBankcodeComboData = ${ccu.getCommCodeSelect("233")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccountRegister.js?ver=20240801.01" charset="utf-8"></script>

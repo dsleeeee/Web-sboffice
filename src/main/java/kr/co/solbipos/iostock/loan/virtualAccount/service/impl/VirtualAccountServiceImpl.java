@@ -48,16 +48,30 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
         this.virtualAccountMapper = virtualAccountMapper;
     }
 
+    /** 가상계좌내역 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getVirtualAccountList(VirtualAccountVO virtualAccountVO, SessionInfoVO sessionInfoVO) {
+
+        virtualAccountVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return virtualAccountMapper.getVirtualAccountList(virtualAccountVO);
+    }
+
     /** 가상계좌 키값 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getVirtualAccountKeyColList(VirtualAccountVO virtualAccountVO, SessionInfoVO sessionInfoVO) {
 
-        virtualAccountVO.setOrgnCd(sessionInfoVO.getOrgnCd());
-
         return virtualAccountMapper.getVirtualAccountKeyColList(virtualAccountVO);
     }
 
-    /** 가상계좌 등록순번 조회 */
+    /** 가상계좌 API URL 조회 */
+    @Override
+    public String getVirtualAccountApiTargetUrl(VirtualAccountVO virtualAccountVO) {
+
+        return virtualAccountMapper.getVirtualAccountApiTargetUrl(virtualAccountVO);
+    }
+
+    /** 가상계좌 등록순번 조회(자동채번) */
     @Override
     public String getVirtualAccountReqSeq(VirtualAccountVO virtualAccountVO) {
 

@@ -11,6 +11,41 @@
 -->
 <mapper namespace="kr.co.solbipos.iostock.loan.virtualAccount.service.impl.VirtualAccountMapper">
 
+    <!-- 가상계좌내역 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getVirtualAccountList" parameterType="VirtualAccountVO" resultType="DefaultMap">
+        /* VirtualAccountMapper.getVirtualAccountList */
+        SELECT
+        thvd.STORE_CD,
+        tms.STORE_NM,
+        thvd.REQ_DATE,
+        thvd.REQ_SEQ,
+        thvd.REQ_VA_MNY AS VA_MNY,
+        thvd.REQ_ORDR_IDXX AS ORDR_IDXX,
+        thvd.REQ_GOOD_NAME AS GOOD_NAME,
+        (CASE WHEN thvd.REQ_VA_RECEIPT_GUBN = '' THEN 'N' ELSE 'Y' END) AS RECEIPT_YN,
+        thvd.REQ_VA_TAXNO AS VA_TAXNO,
+        thvd.RES_BANKNAME AS BANKNAME,
+        thvd.RES_DEPOSITOR AS DEPOSITOR,
+        thvd.RES_ACCOUNT AS ACCOUNT,
+        thvd.DEPOSIT_FG,
+        thvd.RES_ORDER_NO AS ORDER_NO
+        FROM TB_HQ_VACCNT_DEPOSIT thvd,
+        TB_MS_STORE tms
+        WHERE 1=1
+        AND thvd.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thvd.STORE_CD = #{storeCd}
+        AND thvd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='depositFg != null and depositFg != ""'>
+            AND thvd.DEPOSIT_FG = #{depositFg}
+        </if>
+        AND tms.STORE_CD = thvd.STORE_CD
+        ORDER BY thvd.STORE_CD, tms.STORE_NM, thvd.REQ_DATE, thvd.REQ_SEQ
+    </select>
+
     <!-- 가상계좌 키값 리스트 조회 -->
     <!--
         TABLE    :
@@ -26,14 +61,29 @@
         AND tcvk.VACCNT_ORGN_CD = #{orgnCd}
     </select>
 
-    <!-- 가상계좌 등록순번 조회 -->
+    <!-- 가상계좌 API URL 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getVirtualAccountApiTargetUrl" parameterType="VirtualAccountVO" resultType="String">
+        /* VirtualAccountMapper.getVirtualAccountApiTargetUrl */
+        SELECT
+        tcn.NMCODE_ITEM_1
+        FROM TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tcn.NMCODE_GRP_CD = '234'
+        AND tcn.NMCODE_CD = '00'
+    </select>
+
+    <!-- 가상계좌 등록순번 조회(자동채번) -->
     <!--
         TABLE    :
         COMMENTS :
     -->
     <select id="getVirtualAccountReqSeq" parameterType="VirtualAccountVO" resultType="String">
         /* VirtualAccountMapper.getVirtualAccountReqSeq */
-        SELECT ( NVL(MAX(REQ_SEQ), 0) +1 ) AS REQ_SEQ
+        SELECT (NVL(MAX(REQ_SEQ), 0) +1) AS REQ_SEQ
         FROM TB_HQ_VACCNT_DEPOSIT
         WHERE 1=1
         AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -124,7 +174,22 @@
         RES_DEPOSITOR = #{depositor},
         RES_ACCOUNT = #{account},
         RES_APP_TIME = #{app_time},
-        DEPOSIT_FG = #{depositFg}
+        DEPOSIT_FG = #{depositFg},
+        RES_ORDER_NO = #{order_no},
+        RES_MALL_TAXNO = #{mall_taxno},
+        RES_VAN_APPTIME = #{van_apptime},
+        RES_RES_FREE_MNY = #{res_free_mny},
+        RES_PAY_METHOD = #{pay_method},
+        RES_TRACE_NO = #{trace_no},
+        RES_VA_NAME = #{va_name},
+        RES_VA_DATE = #{va_date},
+        RES_ESCW_YN = #{escw_yn},
+        RES_RES_VAT_MNY = #{res_vat_mny},
+        RES_RES_TAX_FLAG = #{res_tax_flag},
+        RES_RES_EN_MSG = #{res_en_msg},
+        RES_VAN_TXID = #{van_txid},
+        RES_RES_TAX_MNY = #{res_tax_mny},
+        RES_VAN_CD = #{van_cd}
         WHERE 1=1
         AND HQ_OFFICE_CD = #{hqOfficeCd}
         AND STORE_CD = #{storeCd}

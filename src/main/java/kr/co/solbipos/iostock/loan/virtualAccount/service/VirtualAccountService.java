@@ -22,10 +22,16 @@ import java.util.List;
  */
 public interface VirtualAccountService {
 
+    /** 가상계좌내역 - 조회 */
+    List<DefaultMap<Object>> getVirtualAccountList(VirtualAccountVO virtualAccountVO, SessionInfoVO sessionInfoVO);
+
     /** 가상계좌 키값 리스트 조회 */
     List<DefaultMap<String>> getVirtualAccountKeyColList(VirtualAccountVO virtualAccountVO, SessionInfoVO sessionInfoVO);
 
-    /** 가상계좌 등록순번 조회 */
+    /** 가상계좌 API URL 조회 */
+    String getVirtualAccountApiTargetUrl(VirtualAccountVO virtualAccountVO);
+
+    /** 가상계좌 등록순번 조회(자동채번) */
     String getVirtualAccountReqSeq(VirtualAccountVO virtualAccountVO);
 
     /** 가상계좌 입금 생성 팝업 - 가상계좌 발급 저장 Insert */
