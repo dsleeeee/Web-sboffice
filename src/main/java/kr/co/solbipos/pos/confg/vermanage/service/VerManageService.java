@@ -27,7 +27,7 @@ public interface VerManageService {
     List<DefaultMap<String>> getNmcodeCdList();
 
     /** 포스버전 목록 조회 */
-    List<DefaultMap<String>> list(VerInfoVO verInfo);
+    List<DefaultMap<String>> list(VerInfoVO verInfo, SessionInfoVO sessionInfoVO);
 
     /** 포스버전정보 상세 조회 */
     DefaultMap<String> dtlInfo(VerInfoVO verInfo);

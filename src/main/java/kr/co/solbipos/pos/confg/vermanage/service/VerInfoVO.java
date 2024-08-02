@@ -64,6 +64,14 @@ public class VerInfoVO extends PageVO {
     private String systemTypeFg;
     /** 시스템타입 */
     private String verSerPatchInfo;
+    /** 총판/대리점노출여부 */
+    private String agencyDispYn;
+    /** 소속구분
+     * M : 시스템
+     * A : 대리점
+     * H : 본사
+     * S : 매장, 가맹점 */
+    private String orgnFg;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -324,5 +332,21 @@ public class VerInfoVO extends PageVO {
 
     public void setVerSerPatchInfo(String verSerPatchInfo) {
         this.verSerPatchInfo = verSerPatchInfo;
+    }
+
+    public String getAgencyDispYn() {
+        return agencyDispYn;
+    }
+
+    public void setAgencyDispYn(String agencyDispYn) {
+        this.agencyDispYn = agencyDispYn;
+    }
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
     }
 }
