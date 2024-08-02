@@ -77,13 +77,6 @@ app.controller('virtualAccountCtrl', ['$scope', '$http', function ($scope, $http
     });
 
     $scope.searchVirtualAccount = function(){
-        if(orgnFg == "HQ") {
-            if($("#virtualAccountStoreCd").val() == "") {
-                $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
-                return;
-            }
-        }
-
         var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
         var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
 
@@ -98,7 +91,8 @@ app.controller('virtualAccountCtrl', ['$scope', '$http', function ($scope, $http
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.depositFg = $scope.depositFg;
-        params.storeCd = $("#virtualAccountStoreCd").val();
+        params.storeCd = $scope.storeCd;
+        params.storeNm = $scope.storeNm;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/iostock/loan/virtualAccount/virtualAccount/getVirtualAccountList.sb", params, function (){});

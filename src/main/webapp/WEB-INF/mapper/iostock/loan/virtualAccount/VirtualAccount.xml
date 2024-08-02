@@ -26,7 +26,7 @@
         thvd.REQ_VA_MNY AS VA_MNY,
         thvd.REQ_ORDR_IDXX AS ORDR_IDXX,
         thvd.REQ_GOOD_NAME AS GOOD_NAME,
-        (CASE WHEN thvd.REQ_VA_RECEIPT_GUBN = '' THEN 'N' ELSE 'Y' END) AS RECEIPT_YN,
+        (CASE WHEN thvd.REQ_VA_RECEIPT_GUBN IS NULL THEN 'N' ELSE 'Y' END) AS RECEIPT_YN,
         thvd.REQ_VA_TAXNO AS VA_TAXNO,
         thvd.RES_BANKNAME AS BANKNAME,
         thvd.RES_DEPOSITOR AS DEPOSITOR,
@@ -37,10 +37,15 @@
         TB_MS_STORE tms
         WHERE 1=1
         AND thvd.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND thvd.STORE_CD = #{storeCd}
         AND thvd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='depositFg != null and depositFg != ""'>
             AND thvd.DEPOSIT_FG = #{depositFg}
+        </if>
+        <if test='storeCd != null and storeCd !=""'>
+            AND thvd.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test='storeNm != null and storeNm !=""'>
+            AND tms.STORE_NM LIKE '%' || #{storeNm} || '%'
         </if>
         AND tms.STORE_CD = thvd.STORE_CD
         ORDER BY thvd.STORE_CD, tms.STORE_NM, thvd.REQ_DATE, thvd.REQ_SEQ

@@ -55,32 +55,47 @@
         </tr>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <tr>
-                <%-- 매장선택 --%>
-                <th><s:message code="cmm.store.select"/></th>
+                <%-- 매장코드 --%>
+                <th><s:message code="cmm.storeCd" /></th>
                 <td>
-                    <%-- 매장선택 모듈 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                        <jsp:param name="targetTypeFg" value="S"/>
-                        <jsp:param name="targetId" value="virtualAccountStore"/>
-                    </jsp:include>
-                    <%--// 매장선택 모듈 사용시 include --%>
+                    <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();" />
+                </td>
+                <%-- 매장명 --%>
+                <th><s:message code="cmm.storeNm" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();" />
                 </td>
             </tr>
-        </c:if>
-        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-            <input type="hidden" id="virtualAccountStoreCd" value="${sessionInfo.storeCd}"/>
         </c:if>
         </tbody>
     </table>
 
     <div class="mt10 oh">
         <%-- 가상계좌 입금 생성 --%>
-        <button class="btn_skyblue ml5 mb10 fr" ng-click="loanVirtualAccount()"><s:message code="virtualAccount.virtualAccountRegister"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="loanVirtualAccount()"><s:message code="virtualAccount.virtualAccountRegister"/></button>
         <div class="sb-select dkbr ml5 fr">
             <%-- 가상계좌 발급금액 --%>
             <s:message code="virtualAccountRegister.vaMny"/> :
             <input type="text" class="sb-input w130px tr" id="txtVaMny" ng-model="txtVaMny" />
         </div>
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+            <%-- 매장 --%>
+            <div class="ml5 fr">
+                <%-- 매장선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                    <jsp:param name="targetTypeFg" value="S"/>
+                    <jsp:param name="targetId" value="virtualAccountStore"/>
+                </jsp:include>
+                <%--// 매장선택 모듈 사용시 include --%>
+            </div>
+            <div class="sb-select dkbr ml5 fr">
+                <%-- 매장선택 --%>
+                <p class="tl s14 mt5 lh15"><s:message code="cmm.store.select"/> : </p>
+            </div>
+        </c:if>
+        <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+            <input type="hidden" id="virtualAccountStoreCd" value="${sessionInfo.storeCd}"/>
+        </c:if>
     </div>
 
     <div class="w100 mt10">
