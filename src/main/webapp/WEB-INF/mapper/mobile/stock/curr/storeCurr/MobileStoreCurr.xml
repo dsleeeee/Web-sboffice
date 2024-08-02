@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MobileStoreCurr.xml
+    매장현재고
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.07.23     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.mobile.stock.curr.storeCurr.service.impl.MobileStoreCurrMapper">
+
+    <!-- 현재고현황 - 현재고현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_ST_STORE_STOCK_CUR, TB_MS_PRODUCT, TB_MS_PRODUCT_BARCD
+        PARAM    : storeCurrVO
+        COMMENTS : 현재고현황 - 현재고현황 리스트를 조회한다.
+    -->
+    <select id="getStoreCurrList" parameterType="mobileStoreCurrVO" resultType="DefaultMap">
+        /* USE : MobileStoreCurrMapper.getStoreCurrList */
+        SELECT  FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, tsssc.PROD_CD,'NM') AS VENDR_NM
+        ,		tsssc.PROD_CD             ,   tmp.PROD_NM
+        ,       tsssc.FIRST_IN_DATE       ,   tsssc.LAST_IN_DATE
+        ,       tsssc.FIRST_SALE_DATE     ,   tsssc.LAST_SALE_DATE
+        ,       tsssc.STORE_CD
+        ,       (SELECT STORE_NM FROM TB_MS_STORE Z WHERE Z.STORE_CD = tsssc.STORE_CD) AS STORE_NM
+        ,       tmp.COST_UPRC
+        /*        ,       tmv.VENDR_NM	*/
+        ,       tmpb.BARCD_CD
+        ,       tmp.PO_UNIT_QTY
+        ,       ROUND(tsssc.CURR_QTY * tmp.COST_UPRC / tmp.PO_UNIT_QTY) AS CURR_AMT
+        <if test='unitFg == "1"'>
+            ,       tmp.PO_UNIT_FG AS PO_UNIT_FG
+            ,       (tmp.SAFE_STOCK_QTY / tmp.PO_UNIT_QTY) AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               ) / tmp.PO_UNIT_QTY) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_IN_QTY                       ) / tmp.PO_UNIT_QTY) AS ACC_STORE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_OUT_QTY                      ) / tmp.PO_UNIT_QTY) AS ACC_STORE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_OUT_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_PURCHS_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_IN_QTY                      ) / tmp.PO_UNIT_QTY) AS ACC_PURCHS_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_IN_QTY                        ) / tmp.PO_UNIT_QTY) AS ACC_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_OUT_QTY                       ) / tmp.PO_UNIT_QTY) AS ACC_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_DISUSE_QTY                         ) / tmp.PO_UNIT_QTY) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_ADJ_QTY                            ) / tmp.PO_UNIT_QTY) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY ) / tmp.PO_UNIT_QTY) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     ) / tmp.PO_UNIT_QTY) AS ACC_STORE_SALE_QTY
+        </if>
+        <if test='unitFg == "0"'>
+            ,       (CASE WHEN tmp.STOCK_UNIT_FG IS NOT NULL THEN tmp.STOCK_UNIT_FG ELSE tmp.PO_UNIT_FG END) AS PO_UNIT_FG
+            ,       tmp.SAFE_STOCK_QTY AS SAFE_STOCK_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.CURR_QTY                               )) AS CURR_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_IN_QTY                       )) AS ACC_STORE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_OUT_QTY                      )) AS ACC_STORE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_OUT_QTY                     )) AS ACC_PURCHS_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_PURCHS_IN_QTY                      )) AS ACC_PURCHS_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_IN_QTY                        )) AS ACC_MOVE_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_MOVE_OUT_QTY                       )) AS ACC_MOVE_OUT_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_DISUSE_QTY                         )) AS ACC_DISUSE_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_ADJ_QTY                            )) AS ACC_ADJ_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_SET_IN_QTY + tsssc.ACC_SET_OUT_QTY )) AS ACC_SET_IN_QTY
+            ,       SF_ZERO_TO_NULL((tsssc.ACC_STORE_SALE_QTY                     )) AS ACC_STORE_SALE_QTY
+        </if>
+        FROM    TB_ST_STORE_STOCK_CUR tsssc
+        ,       TB_MS_PRODUCT tmp
+        ,       TB_MS_PRODUCT_BARCD tmpb
+        /*
+        ,       (   SELECT	tmvp.PROD_CD
+        ,		LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmv.VENDR_CD) AS VENDR_NM
+        FROM	TB_MS_VENDOR tmv
+        ,		TB_MS_VENDOR_PROD tmvp
+        WHERE	tmvp.STORE_CD =	  tmv.STORE_CD
+        AND		tmvp.VENDR_CD =	  tmv.VENDR_CD
+        GROUP
+        BY      tmvp.PROD_CD
+        ) tmv
+        */
+        WHERE   tmp.STORE_CD          =   tsssc.STORE_CD
+        AND		EXISTS (SELECT * FROM TB_MS_STORE Z WHERE Z.STORE_CD = tmp.STORE_CD AND Z.HQ_OFFICE_CD = #{hqOfficeCd})
+        AND     tsssc.STORAGE_CD      =   '999'
+        AND     tmp.PROD_CD           =   tsssc.PROD_CD
+        AND     tmp.STOCK_PROD_YN     =   'Y'
+        AND     tmp.USE_YN            =   'Y'
+        AND     tmpb.STORE_CD     (+) =   tsssc.STORE_CD
+        AND     tmpb.PROD_CD      (+) =   tsssc.PROD_CD
+        /*
+        AND     tmv.PROD_CD       (+) =   tsssc.PROD_CD
+        */
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND TMP.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tsssc.PROD_CD = #{prodCd}
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='barcdCd != null and barcdCd != ""'>
+            AND tmpb.BARCD_CD = #{barcdCd}
+        </if>
+        <if test='safeStockFg == "0"'>
+            AND tmp.SAFE_STOCK_QTY > 0 AND tmp.SAFE_STOCK_QTY > tsssc.CURR_QTY
+        </if>
+        <if test='weightFg == "0"'>
+            AND tmp.PROD_TYPE_FG IN ('1')
+        </if>
+        <if test='weightFg == "1"'>
+            AND tmp.PROD_TYPE_FG IN ('2', '3')
+        </if>
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND tmp.PROD_CLASS_CD IN  (
+            SELECT              PROD_CLASS_CD
+            FROM                TB_MS_PRODUCT_CLASS
+            WHERE               STORE_CD        = tsssc.STORE_CD
+            START WITH          PROD_CLASS_CD   = #{prodClassCd}
+            AND                 STORE_CD        = tsssc.STORE_CD
+            CONNECT BY PRIOR    PROD_CLASS_CD   = P_PROD_CLASS_CD
+            AND                 STORE_CD        = tsssc.STORE_CD
+            )
+        </if>
+        <if test='arrVendrCd != null and arrVendrCd != ""'>
+            AND tmp.PROD_CD IN    ( SELECT  PROD_CD
+            FROM    TB_HQ_VENDOR_PROD
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     VENDR_CD IN
+            <foreach collection="arrVendrCd" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        ORDER BY tsssc.PROD_CD
+    </select>
+
+</mapper>
