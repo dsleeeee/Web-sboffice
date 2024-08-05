@@ -246,8 +246,8 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
         $("#lblKcpCertInfo").text("");
 
         $("#va_mny").val(""); // 가상계좌 발급금액
-        // $("#ordr_idxx").val(""); // 상점관리 주문번호
-        // $("#good_name").val(""); // 상품명
+        $("#ordr_idxx").val(""); // 상점관리 주문번호
+        $("#good_name").val(""); // 상품명
         $("#buyr_name").val(""); // 주문자명
         $("#buyr_tel2").val(""); // 주문자 E-Mail
         $("#buyr_mail").val(""); // 주문자 휴대폰번호

@@ -41,25 +41,25 @@
                     <col class="w65"/>
                 </colgroup>
                 <tbody>
-                <%--<tr>--%>
-                    <%--&lt;%&ndash; 주문번호 &ndash;%&gt;--%>
-                    <%--<th>--%>
-                        <%--<div class="impWrap">--%>
-                            <%--<s:message code="virtualAccountRegister.ordrIdxx"/>--%>
-                            <%--<em class="imp">*</em>--%>
-                        <%--</div>--%>
-                    <%--</th>--%>
-                    <%--<td>--%>
-                        <%--<input type="text" class="sb-input w100" id="ordr_idxx" ng-model="ordr_idxx" />--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                    <%--&lt;%&ndash; 상품명 &ndash;%&gt;--%>
-                    <%--<th><s:message code="virtualAccountRegister.goodName"/></th>--%>
-                    <%--<td>--%>
-                        <%--<input type="text" class="sb-input w100" id="good_name" ng-model="good_name" />--%>
-                    <%--</td>--%>
-                <%--</tr>--%>
+                <tr>
+                    <%-- 주문번호 --%>
+                    <th>
+                        <div class="impWrap">
+                            <s:message code="virtualAccountRegister.ordrIdxx"/>
+                            <em class="imp">*</em>
+                        </div>
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="ordr_idxx" ng-model="ordr_idxx" placeholder="자동채번" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 상품명 --%>
+                    <th><s:message code="virtualAccountRegister.goodName"/></th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="good_name" ng-model="good_name" placeholder="자동채번" readonly />
+                    </td>
+                </tr>
                 <tr>
                     <%-- 주문자명 --%>
                     <th><s:message code="virtualAccountRegister.buyrName"/></th>
@@ -198,7 +198,7 @@
                         </div>
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="va_taxno" ng-model="va_taxno" />
+                        <input type="text" class="sb-input w100" id="va_taxno" ng-model="va_taxno" placeholder="'-'를 제외한 번호 입력" />
                     </td>
                 </tr>
                 </tbody>
@@ -221,4 +221,4 @@
     var vaBankcodeComboData = ${ccu.getCommCodeSelect("233")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccountRegister.js?ver=20240802.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccountRegister.js?ver=20240805.01" charset="utf-8"></script>
