@@ -6,7 +6,7 @@
 <input type="text"
        id="<c:out value="${param.targetId}Nm"/>"
        class="sb-input fl mr5"
-       style="cursor:pointer; width:200px;"
+       style="cursor:pointer; width:170px;"
        value=<s:message code="cmm.chk"/>
        ng-click="<c:out value="${param.targetId}"/>Show()"
        readonly/>
@@ -96,7 +96,8 @@
       // 본사선택 팝업 오픈
       eval('$scope.wj' + targetId + 'LayerM.show(true)');
 
-      $scope.srchHqOfficeNm = '맘';
+      $scope.srchHqOfficeCd = '';
+      $scope.srchHqOfficeNm = '';
       $scope.searchHqOffice();
       
       // 팝업 닫힐시 이벤트

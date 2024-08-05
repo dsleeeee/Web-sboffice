@@ -68,6 +68,7 @@
                   <wj-combo-box
                           id="srchSysStatFg"
                           ng-model="sysStatFg"
+                          control="sysStatFgCombo"
                           items-source="_getComboData('sysStatFg')"
                           display-member-path="name"
                           selected-value-path="value"
@@ -271,7 +272,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20240531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20240805.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

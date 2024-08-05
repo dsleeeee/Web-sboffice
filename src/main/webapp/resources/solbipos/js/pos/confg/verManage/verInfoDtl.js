@@ -148,8 +148,13 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#srchStoreCd").val("");
       $("#srchStoreNm").val("");
       $("#srchAddr").val("");
+
+      sScope.hqOfficeCombo.selectedIndex = 0;
+      sScope.sysStatFgCombo.selectedIndex = 0;
+      $("input:checkbox[id='chkMulti']").prop("checked", false);
+
     });
-    var scope = agrid.getScope("allStoreCtrl")
+    var scope = agrid.getScope("allStoreCtrl");
     scope.progDetailFg = $scope.version.progDetailFg;
   };
 
