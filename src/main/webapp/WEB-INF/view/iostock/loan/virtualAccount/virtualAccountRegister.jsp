@@ -3,11 +3,6 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
-<c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
-<c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}"/>
-<c:set var="storeNm" value="${sessionScope.sessionInfo.storeNm}"/>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="userNm" value="${sessionScope.sessionInfo.userNm}"/>
 
@@ -18,8 +13,19 @@
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="virtualAccountRegister.info"/>
             <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
-            <%-- [매장코드] 매장명 --%>
-            <label id="lblStoreCdNm" style="display: none;"></label>
+        </div>
+
+        <div style="display: none;">
+            <%-- 본사코드 --%>
+            <label id="lblHqOfficeCd"></label>
+            <%-- 매장코드 --%>
+            <label id="lblStoreCd"></label>
+            <%-- 매장명 --%>
+            <label id="lblStoreNm"></label>
+            <%-- NHN KCP 발급 사이트코드 --%>
+            <label id="lblSiteCd"></label>
+            <%-- KCP PG-API 인증서정보(직렬화) --%>
+            <label id="lblKcpCertInfo"></label>
         </div>
 
         <div class="wj-dialog-body">
@@ -177,9 +183,19 @@
                 </tr>
                 <tr id="trReceipt2" style="display: none;">
                     <%-- 휴대폰번호/현금영수증카드 --%>
-                    <th id="thVaReceiptGubn0"><s:message code="virtualAccountRegister.vaTaxno0"/></th>
+                    <th id="thVaReceiptGubn0">
+                        <div class="impWrap">
+                            <s:message code="virtualAccountRegister.vaTaxno0"/>
+                            <em class="imp">*</em>
+                        </div>
+                    </th>
                     <%-- 사업자번호 --%>
-                    <th id="thVaReceiptGubn1" style="display: none;"><s:message code="virtualAccountRegister.vaTaxno1"/></th>
+                    <th id="thVaReceiptGubn1" style="display: none;">
+                        <div class="impWrap">
+                            <s:message code="virtualAccountRegister.vaTaxno1"/>
+                            <em class="imp">*</em>
+                        </div>
+                    </th>
                     <td>
                         <input type="text" class="sb-input w100" id="va_taxno" ng-model="va_taxno" />
                     </td>
@@ -188,7 +204,7 @@
             </table>
             <div class="tc mt20">
                 <%-- 가상계좌 발급 --%>
-                <button class="btn_blue" id="btnVirtualAccountRegisterSave" ng-click="virtualAccountInfoChk()"><s:message code="virtualAccountRegister.virtualAccountSave" /></button>
+                <button class="btn_blue" id="btnVirtualAccountRegisterSave" ng-click="virtualAccountRegisterSave()"><s:message code="virtualAccountRegister.virtualAccountSave" /></button>
             </div>
         </div>
 
@@ -196,11 +212,6 @@
 </wj-popup>
 
 <script type="text/javascript">
-    var orgnFg = "${orgnFg}";
-    var orgnCd = "${orgnCd}";
-    var hqOfficeCd = "${hqOfficeCd}";
-    var storeCd = "${storeCd}";
-    var storeNm = "${storeNm}";
     var userId = "${userId}";
     var userNm = "${userNm}";
 
@@ -208,4 +219,4 @@
     var vaBankcodeComboData = ${ccu.getCommCodeSelect("233")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccountRegister.js?ver=20240801.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccountRegister.js?ver=20240802.01" charset="utf-8"></script>

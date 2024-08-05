@@ -42,9 +42,6 @@ public class VirtualAccountVO extends PageVO {
     /** 매장명 */
     private String storeNm;
 
-    /** [매장코드] 매장명 */
-    private String storeCdNm;
-
     /** 등록일자 */
     private String reqDate;
 
@@ -82,10 +79,6 @@ public class VirtualAccountVO extends PageVO {
     public String getStoreNm() { return storeNm; }
 
     public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
-
-    public String getStoreCdNm() { return storeCdNm; }
-
-    public void setStoreCdNm(String storeCdNm) { this.storeCdNm = storeCdNm; }
 
     public String getReqDate() { return reqDate; }
 

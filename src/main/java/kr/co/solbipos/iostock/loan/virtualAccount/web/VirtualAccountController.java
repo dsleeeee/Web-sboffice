@@ -192,7 +192,7 @@ public class VirtualAccountController {
 
         // 상품명
         // 20240731 가상계좌입금 1 [DS00004] 설아 카페 구로점
-        String good_name = currentDate + " 가상계좌입금 " + reqSeq + " " + virtualAccountVO.getStoreCdNm();
+        String good_name = currentDate + " 가상계좌입금 " + reqSeq + " [" + virtualAccountVO.getStoreCd() + "] " + virtualAccountVO.getStoreNm();
         if(good_name.length() > 100) {
             good_name = good_name.substring(0, 100);
         }

@@ -102,34 +102,12 @@ app.controller('virtualAccountCtrl', ['$scope', '$http', function ($scope, $http
     // 가상계좌 입금 생성
     $scope.loanVirtualAccount = function(){
         var params = {};
-        if(orgnFg == "HQ") {
-            params.storeCd = $("#virtualAccountStoreCd").val();
-            params.storeCdNm = $("#virtualAccountStoreNm").val();
-        }
+        params.storeCd = $("#virtualAccountStoreCd").val();
         params.va_mny = $("#txtVaMny").val().replaceAll(",", ""); // 가상계좌 발급금액
 
-        if(orgnFg == "HQ") {
-            if(params.storeCd == "") {
-                $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
-                return;
-            }
-        }
-
-        if (params.va_mny == "" || params.va_mny == null) {
-            $scope._popMsg(messages["virtualAccount.vaMnyBlankAlert"]); // 가상계좌 발급금액을 입력해주세요.
+        if(params.storeCd == "") {
+            $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
             return;
-        } else {
-            // 숫자만 입력
-            var numChkexp = /[^0-9]/g;
-            if (numChkexp.test(params.va_mny)) {
-                $scope._popMsg(messages["virtualAccount.vaMnyNumberChkAlert"]); // 가상계좌 발급금액은 숫자만 입력해주세요.
-                return;
-            }
-
-            if(parseInt(params.va_mny) < 1){
-                $scope._popMsg(messages["virtualAccount.vaMnyInChkAlert"]); // 가상계좌 발급금액은 1원 이상 입력해주세요.
-                return;
-            }
         }
 
         $scope.setSelectedStore(params);

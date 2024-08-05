@@ -5,7 +5,6 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <div class="subCon" ng-controller="virtualAccountCtrl">
 
@@ -134,13 +133,11 @@
 </div>
 
 <script type="text/javascript">
-    var orgnFg = "${orgnFg}";
-
     <%-- 가상계좌 API 은행코드 --%>
     var vaBankcodeComboData = ${ccu.getCommCodeSelect("233")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccount.js?ver=20240801.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccount.js?ver=20240802.01" charset="utf-8"></script>
 
 <%-- 가상계좌 입금 생성 팝업 --%>
 <c:import url="/WEB-INF/view/iostock/loan/virtualAccount/virtualAccountRegister.jsp">

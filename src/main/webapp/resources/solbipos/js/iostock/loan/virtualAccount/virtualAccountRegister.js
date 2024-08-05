@@ -47,59 +47,84 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
         date = String(yyyy) + String(mm) + dd + hours + minutes + seconds;
         var date2 = String(yyyy) + "-" + String(mm) + "-" + dd + " " + hours + ":" + minutes + ":" + seconds;
 
-        if(orgnFg == "HQ") {
-            storeCd = data.storeCd; // 매장코드
-            $("#lblStoreCdNm").text(data.storeCdNm); // [매장코드] 매장명
-        } else {
-            $("#lblStoreCdNm").text("[" + storeCd + "] " + storeNm); // [매장코드] 매장명
-        }
-        $("#va_mny").val(data.va_mny.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")); // 가상계좌 발급금액
+        $("#lblStoreCd").text(data.storeCd); // 매장코드
         $("#buyr_name").val(userNm); // 주문자명
         $("#va_name").val(userNm); // 입금자명
         $("#va_date").val(date); // 입금 마감시각
         $("#va_date2").val(date2); // 입금 마감시각 (YYYY-MM-DD HH24:MI:SS)
 
-        $scope.searchVirtualAccountRegister();
+        // 가상계좌 기초정보 체크
+        $scope.virtualAccountInfoChk();
+
+        // 가상계좌 발급금액 체크
+        $scope.vaMnyChk(data.va_mny);
+
         event.preventDefault();
     });
-
-    $scope.searchVirtualAccountRegister = function() {
-    };
     // <-- //검색 호출 -->
 
     // 가상계좌 기초정보 체크
-    $scope.virtualAccountInfoChk = function(){
+    $scope.virtualAccountInfoChk = function() {
         var params = {};
-        params.orgnCd = orgnCd;
+        params.storeCd = $("#lblStoreCd").text();
 
         $scope._postJSONQuery.withOutPopUp("/iostock/loan/virtualAccount/virtualAccountRegister/getVirtualAccountKeyColList.sb", params, function(response){
             var info = response.data.data.list[0];
 
             if(response.data.data.list.length > 0) {
-                // 가상계좌 발급
-                $scope.virtualAccountRegisterSave(info.siteCd, info.kcpCertInfo);
-            } else {
-                $scope._popMsg(messages["virtualAccountRegister.virtualAccountInfoChkAlert"]); // 가상계좌 기초정보가 없습니다.
-                return false;
+                if(info.siteCd == "" || info.siteCd == null) {
+                    // 팝업 닫기
+                    $scope.close();
+                    $scope._popMsg(messages["virtualAccountRegister.virtualAccountInfoChkAlert"]); // 가상계좌 기초정보가 없습니다.
+                    return;
+                } else {
+                    $("#lblHqOfficeCd").text(info.hqOfficeCd);
+                    $("#lblStoreNm").text(info.storeNm);
+                    $("#lblSiteCd").text(info.siteCd);
+                    $("#lblKcpCertInfo").text(info.kcpCertInfo);
+                }
             }
         });
     };
 
-    // 가상계좌 발급
-    $scope.virtualAccountRegisterSave = function(siteCd, kcpCertInfo) {
-        if ($scope.srchVaBankcodeCombo.selectedValue == "") {
-            $scope._popMsg(messages["virtualAccountRegister.vaBankcodeBlankAlert"]); // 입금은행을 입력해주세요.
+    // 가상계좌 발급금액 체크
+    $scope.vaMnyChk = function(va_mny) {
+        if (va_mny == "" || va_mny == null) {
+            // 팝업 닫기
+            $scope.close();
+            $scope._popMsg(messages["virtualAccountRegister.vaMnyBlankAlert"]); // 가상계좌 발급금액을 입력해주세요.
             return;
+        } else {
+            // 숫자만 입력
+            var numChkexp = /[^0-9]/g;
+            if (numChkexp.test(va_mny)) {
+                // 팝업 닫기
+                $scope.close();
+                $scope._popMsg(messages["virtualAccountRegister.vaMnyNumberChkAlert"]); // 가상계좌 발급금액은 숫자만 입력해주세요.
+                return;
+            }
+
+            if(parseInt(va_mny) < 1){
+                // 팝업 닫기
+                $scope.close();
+                $scope._popMsg(messages["virtualAccountRegister.vaMnyInChkAlert"]); // 가상계좌 발급금액은 1원 이상 입력해주세요.
+                return;
+            }
         }
 
+        $("#va_mny").val(va_mny.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")); // 가상계좌 발급금액
+    };
+
+    // 가상계좌 발급
+    $scope.virtualAccountRegisterSave = function() {
         var params = {};
-        params.orgnCd = orgnCd;
-        params.hqOfficeCd = hqOfficeCd;
-        params.storeCd = storeCd;
-        params.storeCdNm = $("#lblStoreCdNm").text();
+        params.orgnCd = $("#lblHqOfficeCd").text();
+        params.hqOfficeCd = $("#lblHqOfficeCd").text();
+        params.storeCd = $("#lblStoreCd").text();
+        params.storeNm = $("#lblStoreNm").text();
         params.userId = userId;
-        params.site_cd = siteCd;
-        params.kcp_cert_info = kcpCertInfo;
+        params.site_cd = $("#lblSiteCd").text();
+        params.kcp_cert_info = $("#lblKcpCertInfo").text();
         params.va_mny = $("#va_mny").val().replaceAll(",", ""); // 가상계좌 발급금액
         params.amount = params.va_mny; // 총 금액
         // params.ordr_idxx = $("#ordr_idxx").val(); // 상점관리 주문번호
@@ -117,6 +142,18 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
         } else {
             params.va_receipt_gubn = ""; // 현금영수증 발행용도
             params.va_taxno = ""; // 현금영수증 식별번호
+        }
+
+        if(params.va_bankcode == "" || params.va_bankcode == null) {
+            $scope._popMsg(messages["virtualAccountRegister.vaBankcodeBlankAlert"]); // 입금은행을 입력해주세요.
+            return;
+        }
+
+        if(receipt === "Y") {
+            if(params.va_taxno === "" || params.va_taxno == null) {
+                $scope._popMsg(messages["virtualAccountRegister.vaTaxnoBlankAlert"]); // 현금영수증 식별번호를 입력해주세요.
+                return;
+            }
         }
 
         // 로딩바 show
@@ -140,6 +177,8 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
                     $scope.$broadcast('loadingPopupInactive');
                     // 팝업 닫기
                     $scope.close();
+                    // 재조회
+                    $scope.allSearch();
                 }
                 else if (result.data.resultCode.toString() !== "0000") {
                     $scope._popMsg(result.data.resultMessage.toString());
@@ -195,8 +234,13 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
     };
 
     // 팝업 닫기
-    $scope.close = function(){
-        $("#lblStoreCdNm").text(""); // [매장코드] 매장명
+    $scope.close = function() {
+        $("#lblHqOfficeCd").text("");
+        $("#lblStoreCd").text("");
+        $("#lblStoreNm").text("");
+        $("#lblSiteCd").text("");
+        $("#lblKcpCertInfo").text("");
+
         $("#va_mny").val(""); // 가상계좌 발급금액
         // $("#ordr_idxx").val(""); // 상점관리 주문번호
         // $("#good_name").val(""); // 상품명
@@ -210,9 +254,6 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
         $("#va_taxno").val(""); // 현금영수증 식별번호
 
         $scope.wjVirtualAccountRegisterLayer.hide();
-
-        // 재조회
-        $scope.allSearch();
     };
 
     // 재조회

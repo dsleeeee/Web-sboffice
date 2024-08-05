@@ -59,11 +59,16 @@
     <select id="getVirtualAccountKeyColList" parameterType="VirtualAccountVO" resultType="DefaultMap">
         /* VirtualAccountMapper.getVirtualAccountKeyColList */
         SELECT
+        tms.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
         tcvk.SITE_CD,
         tcvk.KCP_CERT_INFO
-        FROM TB_CM_VACCNT_KCP tcvk
+        FROM TB_MS_STORE tms,
+        TB_CM_VACCNT_KCP tcvk
         WHERE 1=1
-        AND tcvk.VACCNT_ORGN_CD = #{orgnCd}
+        AND tms.STORE_CD = #{storeCd}
+        AND tcvk.VACCNT_ORGN_CD (+)= tms.HQ_OFFICE_CD
     </select>
 
     <!-- 가상계좌 API URL 조회 -->
