@@ -3,6 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
 <c:set var="userNm" value="${sessionScope.sessionInfo.userNm}"/>
 
@@ -212,6 +213,7 @@
 </wj-popup>
 
 <script type="text/javascript">
+    var orgnFg = "${orgnFg}";
     var userId = "${userId}";
     var userNm = "${userNm}";
 

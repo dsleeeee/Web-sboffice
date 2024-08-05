@@ -118,7 +118,11 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
     // 가상계좌 발급
     $scope.virtualAccountRegisterSave = function() {
         var params = {};
-        params.orgnCd = $("#lblHqOfficeCd").text();
+        if(orgnFg == "HQ") {
+            params.orgnCd = $("#lblHqOfficeCd").text();
+        } else {
+            params.orgnCd = $("#lblStoreCd").text();
+        }
         params.hqOfficeCd = $("#lblHqOfficeCd").text();
         params.storeCd = $("#lblStoreCd").text();
         params.storeNm = $("#lblStoreNm").text();
