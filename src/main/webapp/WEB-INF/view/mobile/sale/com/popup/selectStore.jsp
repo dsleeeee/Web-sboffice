@@ -133,10 +133,10 @@
             }
 
             // 매장 반드시 선택해야함.
-            if(arrStoreCd.length === 0){
-                s_alert.pop(messages["cmm.require.store"]);
-                return;
-            }
+            // if(arrStoreCd.length === 0){
+            //     s_alert.pop(messages["cmm.require.store"]);
+            //     return;
+            // }
 
             $("#" + targetId + "Cd").val(arrStoreCd.join());
             $("#" + targetPosId + "Cd").val("");
