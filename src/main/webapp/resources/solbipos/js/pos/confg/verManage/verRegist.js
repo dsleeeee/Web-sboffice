@@ -274,6 +274,10 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 총판/대리점노출여부 초기화
     $scope.versionAgencyDispYnCombo.selectedIndex = 0;
 
+    // 버전체크정보(참고용) 초기화
+    $("#orgnCdsCd").val("");
+    $("#orgnCdsNm").val("");
+
     $scope.versionRegistLayer.hide();
     console.log("closePop");
   };
@@ -284,5 +288,11 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.orgnCdsShow = function () {
     $scope._broadcast('orgnCdsCtrl');
   };
+
+    // 버전체크정보(참고용) 선택취소
+    $scope.delOrgnCds = function(){
+        $("#orgnCdsCd").val("");
+        $("#orgnCdsNm").val("");
+    };
 }]);
 
