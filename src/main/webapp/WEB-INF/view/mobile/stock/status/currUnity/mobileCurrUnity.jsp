@@ -373,7 +373,7 @@
 
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/mobile/stock/status/currUnity/mobileCurrUnity.js?ver=20240719.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/stock/status/currUnity/mobileCurrUnity.js?ver=20240805.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/sale/com/popup/selectProdClassCd.jsp">

@@ -118,6 +118,7 @@ app.controller('mobileCurrUnityCtrl', ['$scope', '$http', '$timeout', function (
             if(rows.length > 0){
                 params.prodCd   = rows[0].dataItem.prodCd;
                 $scope._broadcast("currUnityHqDtlSrchCtrl", params);
+                $scope._broadcast("currUnityStoreDtlSrchCtrl", params);
                 // 본사수량 상세조회.
 //	        $scope._broadcast("currUnityHqDtlSrchCtrl", params);
             } else{
@@ -125,6 +126,8 @@ app.controller('mobileCurrUnityCtrl', ['$scope', '$http', '$timeout', function (
                 //params.prodCd = -1;
                 var orderDtlScope = agrid.getScope('mobileCurrUnityHqDtlCtrl');
                 orderDtlScope.dtlGridDefault();
+                var orderDtlScope2 = agrid.getScope('mobileCurrUnityStoreDtlCtrl');
+                orderDtlScope2.dtlGridDefault();
             }
 
 
