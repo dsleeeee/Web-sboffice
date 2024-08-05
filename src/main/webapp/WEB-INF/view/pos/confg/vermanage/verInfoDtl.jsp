@@ -4,7 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
-<wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:550px;">
+<wj-popup control="versionInfoDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:600px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -26,7 +26,7 @@
       </ul>
 
       <div>
-        <div style="height:235px; overflow-y: auto;">
+        <div style="height:250px; overflow-y: auto;">
           <f:form id="viewForm" name="viewForm" >
             <h3 class="h3_tbl"><s:message code="storeManage.basicInfo" /></h3>
             <table class="searchTbl">
@@ -100,6 +100,23 @@
                   <%-- 시스템타입 --%>
                 <th><s:message code="verManage.systemTypeFg" /></th>
                 <td>{{version.systemTypeFg}}</td>
+                <c:if test="${orgnFg == 'MASTER'}">
+                    <%--총판/대리점노출여부--%>
+                    <th><s:message code="verManage.agencyDispYn" /></th>
+                    <td>
+                        <wj-combo-box
+                              ng-model="version.agencyDispYn"
+                              ng-hide="true"
+                              text="_agencyDispYn"
+                              items-source="_getComboData('agencyDispYnCombo')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false">
+                        </wj-combo-box>
+                        {{_agencyDispYn}}
+                        <%--{{version.agencyDispYn}}--%>
+                    </td>
+                </c:if>
               </tr>
               </tbody>
             </table>
@@ -133,6 +150,6 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verInfoDtl.js?ver=20240426.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verInfoDtl.js?ver=20240802.01" charset="utf-8"></script>
 
 

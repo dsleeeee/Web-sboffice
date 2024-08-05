@@ -32,6 +32,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("useYnCombo", useYn);
   $scope._setComboData("progDetailFgCombo", nmcodeCdList); // 프로그램 상세구분
   $scope._setComboData("systemTypeFgCombo", systemTypeFgData); // 프로그램 상세구분
+  $scope._setComboData("agencyDispYnCombo", agencyDispYnData); // 총판/대리점노출여부
 
   // 버전정보
   $scope.version;
@@ -163,6 +164,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("progDetailFg", $scope.version.progDetailFg);
     formData.append("systemTypeFg", $scope.versionSystemTypeFgCombo.selectedValue);
     formData.append("verSerPatchInfo", $scope.version.verSerPatchInfo);
+    formData.append("agencyDispYn", $scope.version.agencyDispYn);
     var url = '';
 
     if( isEmptyObject($scope.getSelectVersion()) ) {
@@ -268,6 +270,9 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.closePop = function(){
     // 초기화
     $scope.setSelectVersion(null);
+
+    // 총판/대리점노출여부 초기화
+    $scope.versionAgencyDispYnCombo.selectedIndex = 0;
 
     $scope.versionRegistLayer.hide();
     console.log("closePop");

@@ -93,6 +93,9 @@
         <if test='progDetailFg != null and progDetailFg != ""'>
             AND tcn.NMCODE_CD = #{progDetailFg}
         </if>
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND tcpv.AGENCY_DISP_YN = 'Y'
+        </if>
         AND tcn.NMCODE_CD (+)= tcpv.PROG_DETAIL_FG
         ORDER
         BY      tcpv.REG_DT DESC
@@ -126,7 +129,8 @@
                tcpv.REG_ID,
                tcpv.ORGN_CDS,
                tcpv.PROG_DETAIL_FG,
-               tcpv.SYSTEM_TYPE_FG
+               tcpv.SYSTEM_TYPE_FG,
+               NVL(tcpv.AGENCY_DISP_YN, 'N') AS AGENCY_DISP_YN
           FROM TB_CM_POS_VERSN tcpv
          WHERE tcpv.VER_SER_NO = #{verSerNo}
            AND tcpv.DEL_YN = 'N'
@@ -163,7 +167,8 @@
             MOD_ID,
             ORGN_CDS,
             PROG_DETAIL_FG,
-            SYSTEM_TYPE_FG
+            SYSTEM_TYPE_FG,
+            AGENCY_DISP_YN
         )
         VALUES
         (
@@ -188,7 +193,8 @@
             #{modId},
             #{orgnCds},
             #{progDetailFg},
-            #{systemTypeFg}
+            #{systemTypeFg},
+            #{agencyDispYn}
         )
         ]]>
     </insert>
@@ -223,7 +229,8 @@
                MOD_ID         = #{modId},
                ORGN_CDS       = #{orgnCds},
                PROG_DETAIL_FG = #{progDetailFg},
-               SYSTEM_TYPE_FG = #{systemTypeFg}
+               SYSTEM_TYPE_FG = #{systemTypeFg},
+               AGENCY_DISP_YN = #{agencyDispYn}
          WHERE VER_SER_NO     = #{verSerNo}
          ]]>
     </update>

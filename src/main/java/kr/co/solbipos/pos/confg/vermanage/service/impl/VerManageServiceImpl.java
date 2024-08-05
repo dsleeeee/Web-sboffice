@@ -68,7 +68,9 @@ public class VerManageServiceImpl implements VerManageService {
 
     /** 포스버전 목록 조회 */
     @Override
-    public List<DefaultMap<String>> list(VerInfoVO verInfo) {
+    public List<DefaultMap<String>> list(VerInfoVO verInfo, SessionInfoVO sessionInfoVO) {
+
+        verInfo.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         return verManageMapper.getList(verInfo);
     }
 
@@ -122,6 +124,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setOrgnCds((String)multi.getParameter("orgnCds"));
             verInfo.setProgDetailFg((String)multi.getParameter("progDetailFg"));
             verInfo.setSystemTypeFg((String)multi.getParameter("systemTypeFg"));
+            verInfo.setAgencyDispYn((String)multi.getParameter("agencyDispYn"));
             verInfo.setDelYn("N");
 
             String fileDesc = HtmlUtils.htmlUnescape((String)multi.getParameter("fileDesc"));
@@ -191,6 +194,7 @@ public class VerManageServiceImpl implements VerManageService {
             verInfo.setOrgnCds((String)multi.getParameter("orgnCds"));
             verInfo.setProgDetailFg((String)multi.getParameter("progDetailFg"));
             verInfo.setSystemTypeFg((String)multi.getParameter("systemTypeFg"));
+            verInfo.setAgencyDispYn((String)multi.getParameter("agencyDispYn"));
 
             verInfo.setDelYn("N");
 

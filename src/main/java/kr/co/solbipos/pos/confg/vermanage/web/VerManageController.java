@@ -111,7 +111,9 @@ public class VerManageController {
     public Result list(VerInfoVO verInfo, HttpServletRequest request,
             HttpServletResponse response, Model model) {
 
-        List<DefaultMap<String>> list = verManageService.list(verInfo);
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = verManageService.list(verInfo, sessionInfoVO);
 
         return returnListJson(Status.OK, list, verInfo);
     }
