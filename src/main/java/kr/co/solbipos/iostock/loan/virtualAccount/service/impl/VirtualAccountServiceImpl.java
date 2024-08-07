@@ -1,24 +1,14 @@
 package kr.co.solbipos.iostock.loan.virtualAccount.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.iostock.loan.virtualAccount.service.VirtualAccountService;
 import kr.co.solbipos.iostock.loan.virtualAccount.service.VirtualAccountVO;
-// API VO
-import kr.co.solbipos.iostock.loan.virtualAccount.service.ApiVirtualAccountRegisterVO;
-import kr.co.solbipos.iostock.loan.virtualAccount.service.ApiVirtualAccountRegisterReceiveVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static kr.co.common.utils.DateUtil.currentDateString;
-import static kr.co.common.utils.DateUtil.currentDateTimeString;
 
 /**
  * @Class Name : VirtualAccountServiceImpl.java
@@ -99,5 +89,4 @@ public class VirtualAccountServiceImpl implements VirtualAccountService {
 
         return procCnt;
     }
-
 }

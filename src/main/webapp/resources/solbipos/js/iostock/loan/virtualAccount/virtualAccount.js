@@ -104,6 +104,7 @@ app.controller('virtualAccountCtrl', ['$scope', '$http', function ($scope, $http
         var params = {};
         params.storeCd = $("#virtualAccountStoreCd").val();
         params.va_mny = $("#txtVaMny").val().replaceAll(",", ""); // 가상계좌 발급금액
+        params.menuGubun = "virtualAccount"; // 화면구분
 
         if(params.storeCd == "") {
             $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.

@@ -21,18 +21,6 @@ public class VirtualAccountVO extends PageVO {
 
     private static final long serialVersionUID = 4567094904301269212L;
 
-    /**
-     * 소속구분
-     * M : 시스템
-     * A : 대리점
-     * H : 본사
-     * S : 매장, 가맹점
-     */
-    private String orgnFg;
-
-    /** 소속코드 */
-    private String orgnCd;
-
     /** 본사코드 */
     private String hqOfficeCd;
 
@@ -59,14 +47,6 @@ public class VirtualAccountVO extends PageVO {
 
     /** 가상계좌 상태구분 */
     private String depositFg;
-
-    public String getOrgnFg() { return orgnFg; }
-
-    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
-
-    public String getOrgnCd() { return orgnCd; }
-
-    public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
 
     public String getHqOfficeCd() { return hqOfficeCd; }
 

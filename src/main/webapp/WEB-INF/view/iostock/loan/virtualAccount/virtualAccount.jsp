@@ -69,7 +69,7 @@
         </tbody>
     </table>
 
-    <div class="mt10 oh">
+    <div class="mt10 oh" style="display: none;">
         <%-- 가상계좌 입금 생성 --%>
         <button class="btn_skyblue ml5 fr" ng-click="loanVirtualAccount()"><s:message code="virtualAccount.virtualAccountRegister"/></button>
         <div class="sb-select dkbr ml5 fr">
@@ -137,7 +137,7 @@
     var vaBankcodeComboData = ${ccu.getCommCodeSelect("233")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccount.js?ver=20240802.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccount.js?ver=20240807.01" charset="utf-8"></script>
 
 <%-- 가상계좌 입금 생성 팝업 --%>
 <c:import url="/WEB-INF/view/iostock/loan/virtualAccount/virtualAccountRegister.jsp">

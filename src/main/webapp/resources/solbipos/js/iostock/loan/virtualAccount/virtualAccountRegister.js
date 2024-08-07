@@ -47,9 +47,8 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
         date = String(yyyy) + String(mm) + dd + hours + minutes + seconds;
         var date2 = String(yyyy) + "-" + String(mm) + "-" + dd + " " + hours + ":" + minutes + ":" + seconds;
 
+        $("#lblMenuGubun").text(data.menuGubun); // 화면구분
         $("#lblStoreCd").text(data.storeCd); // 매장코드
-        $("#buyr_name").val(userNm); // 주문자명
-        $("#va_name").val(userNm); // 입금자명
         $("#va_date").val(date); // 입금 마감시각
         $("#va_date2").val(date2); // 입금 마감시각 (YYYY-MM-DD HH24:MI:SS)
 
@@ -82,6 +81,13 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
                     $("#lblStoreNm").text(info.storeNm);
                     $("#lblSiteCd").text(info.siteCd);
                     $("#lblKcpCertInfo").text(info.kcpCertInfo);
+                    if(orgnFg == "STORE") {
+                        $("#buyr_name").val(userNm); // 주문자명
+                        $("#va_name").val(userNm); // 입금자명
+                    } else {
+                        $("#buyr_name").val(info.userNm); // 주문자명
+                        $("#va_name").val(info.userNm); // 입금자명
+                    }
                 }
             }
         });
@@ -118,11 +124,6 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
     // 가상계좌 발급
     $scope.virtualAccountRegisterSave = function() {
         var params = {};
-        if(orgnFg == "HQ") {
-            params.orgnCd = $("#lblHqOfficeCd").text();
-        } else {
-            params.orgnCd = $("#lblStoreCd").text();
-        }
         params.hqOfficeCd = $("#lblHqOfficeCd").text();
         params.storeCd = $("#lblStoreCd").text();
         params.storeNm = $("#lblStoreNm").text();
@@ -179,10 +180,10 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
                     $scope._popMsg("정상처리 되었습니다.");
                     // 로딩바 hide
                     $scope.$broadcast('loadingPopupInactive');
-                    // 팝업 닫기
-                    $scope.close();
                     // 재조회
                     $scope.allSearch();
+                    // 팝업 닫기
+                    $scope.close();
                 }
                 else if (result.data.resultCode.toString() !== "0000") {
                     $scope._popMsg(result.data.resultMessage.toString());
@@ -239,6 +240,7 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
 
     // 팝업 닫기
     $scope.close = function() {
+        $("#lblMenuGubun").text(""); // 화면구분
         $("#lblHqOfficeCd").text("");
         $("#lblStoreCd").text("");
         $("#lblStoreNm").text("");
@@ -262,9 +264,13 @@ app.controller('virtualAccountRegisterCtrl', ['$scope', '$http', function ($scop
 
     // 재조회
     $scope.allSearch = function () {
+        var menuGubun = $("#lblMenuGubun").text(); // 화면구분
+
         // 가상계좌내역
-        var scope = agrid.getScope('virtualAccountCtrl');
-        scope.searchVirtualAccount();
+        if(menuGubun == "virtualAccount") {
+            var scope = agrid.getScope('virtualAccountCtrl');
+            scope.searchVirtualAccount();
+        }
     };
 
 }]);

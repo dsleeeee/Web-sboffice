@@ -2,10 +2,6 @@ package kr.co.solbipos.iostock.loan.virtualAccount.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.iostock.loan.virtualAccount.service.VirtualAccountVO;
-import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-// API VO
-import kr.co.solbipos.iostock.loan.virtualAccount.service.ApiVirtualAccountRegisterVO;
-import kr.co.solbipos.iostock.loan.virtualAccount.service.ApiVirtualAccountRegisterReceiveVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

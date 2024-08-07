@@ -17,6 +17,8 @@
         </div>
 
         <div style="display: none;">
+            <%-- 화면구분 --%>
+            <label id="lblMenuGubun"></label>
             <%-- 본사코드 --%>
             <label id="lblHqOfficeCd"></label>
             <%-- 매장코드 --%>
@@ -221,4 +223,4 @@
     var vaBankcodeComboData = ${ccu.getCommCodeSelect("233")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccountRegister.js?ver=20240805.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccount/virtualAccountRegister.js?ver=20240807.01" charset="utf-8"></script>

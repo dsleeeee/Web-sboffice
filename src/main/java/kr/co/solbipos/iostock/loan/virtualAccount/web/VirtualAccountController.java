@@ -12,7 +12,6 @@ import kr.co.solbipos.iostock.loan.virtualAccount.service.VirtualAccountVO;
 // API VO
 import kr.co.solbipos.iostock.loan.virtualAccount.service.ApiVirtualAccountRegisterVO;
 import kr.co.solbipos.iostock.loan.virtualAccount.service.ApiVirtualAccountRegisterReceiveVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -187,7 +186,7 @@ public class VirtualAccountController {
         virtualAccountVO.setReqSeq(reqSeq);
 
         // 상점관리 주문번호
-        String ordr_idxx = virtualAccountVO.getOrgnCd() + prodDt + StringUtil.lpad(reqSeq, 8, "0");
+        String ordr_idxx = virtualAccountVO.getStoreCd() + prodDt + StringUtil.lpad(reqSeq, 8, "0");
         virtualAccountVO.setOrdr_idxx(ordr_idxx);
 
         // 상품명
