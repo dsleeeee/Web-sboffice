@@ -747,6 +747,7 @@
     <typeAlias alias="hqStoreMoveVO" type="kr.co.solbipos.iostock.move.hqStoreMove.service.HqStoreMoveVO"/>
     <typeAlias alias="storeMoveVO" type="kr.co.solbipos.iostock.move.storeMove.service.StoreMoveVO"/>
     <typeAlias alias="standMoveVO" type="kr.co.solbipos.iostock.move.standMove.service.StandMoveVO"/>
+
     <!-- 수불관리 > 본사-매장간 입출고내역 > 매장별 입출고내역 -->
     <typeAlias alias="frnchsStoreVO" type="kr.co.solbipos.iostock.frnchs.store.service.FrnchsStoreVO"/>
     <!-- 수불관리 > 본사-매장간 입출고내역 > 매장-상품별 입출고내역 -->
@@ -759,12 +760,18 @@
     <typeAlias alias="slipVO" type="kr.co.solbipos.iostock.frnchs.slip.service.SlipVO"/>
     <!-- 수불관리 > 본사-매장간 입출고 내역 > 특이사항 입출고내역 -->
     <typeAlias alias="UnusualVO" type="kr.co.solbipos.iostock.frnchs.unusual.service.UnusualVO"/>
+
     <!-- 수불관리 > 보나비 > 폐기내역조회 -->
     <typeAlias alias="disuseInfoBonavieVO" type="kr.co.solbipos.iostock.bonavie.disuseInfoBonavie.service.DisuseInfoBonavieVO"/>
+
     <!-- 수불관리 > 반품관리 > 반품본사입고현황 -->
     <typeAlias alias="rtnInstockConfmStoreVO" type="kr.co.solbipos.iostock.orderReturn.rtnInstockConfmStore.service.RtnInstockConfmStoreVO"/>
+
     <!-- 수불관리 > 주문관리 > 가상계좌내역 -->
     <typeAlias alias="virtualAccountVO" type="kr.co.solbipos.iostock.loan.virtualAccount.service.VirtualAccountVO"/>
+    <!-- 수불관리 > 주문관리 > 가상계좌-기초정보등록 -->
+    <typeAlias alias="virtualAccountInfoVO" type="kr.co.solbipos.iostock.loan.virtualAccountInfo.service.VirtualAccountInfoVO"/>
+
 
     <!-- 재고 -->
     <typeAlias alias="hqCurrVO" type="kr.co.solbipos.stock.curr.hqCurr.service.HqCurrVO"/>
