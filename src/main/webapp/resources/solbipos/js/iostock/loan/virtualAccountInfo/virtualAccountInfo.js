@@ -96,25 +96,18 @@ app.controller('virtualAccountInfoCtrl', ['$scope', '$http', function ($scope, $
             return false;
         }
 
-        if(orgnFg == "MASTER") {
-            if ($scope.flex.rows.length > 1) {
-                $scope._popMsg(messages["virtualAccountInfo.rowCountAlert"]); // 추가 버튼 클릭 후 저장해주세요.
-                return false;
-            }
-        }
-
         // 파라미터 설정
         var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if($scope.flex.collectionView.items[i].siteCd == "" || $scope.flex.collectionView.items[i].siteCd == null) {
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if($scope.flex.collectionView.itemsEdited[i].siteCd == "" || $scope.flex.collectionView.itemsEdited[i].siteCd == null) {
                 $scope._popMsg(messages["virtualAccountInfo.siteCdBlankAlert"]); // NHN KCP 발급 사이트코드를 입력해주세요.
                 return false;
             }
-            if($scope.flex.collectionView.items[i].kcpCertInfo == "" || $scope.flex.collectionView.items[i].kcpCertInfo == null) {
+            if($scope.flex.collectionView.itemsEdited[i].kcpCertInfo == "" || $scope.flex.collectionView.itemsEdited[i].kcpCertInfo == null) {
                 $scope._popMsg(messages["virtualAccountInfo.kcpCertInfoBlankAlert"]); // KCP PG-API 인증서정보를 입력해주세요.
                 return false;
             }
-            params.push($scope.flex.collectionView.items[i]);
+            params.push($scope.flex.collectionView.itemsEdited[i]);
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수

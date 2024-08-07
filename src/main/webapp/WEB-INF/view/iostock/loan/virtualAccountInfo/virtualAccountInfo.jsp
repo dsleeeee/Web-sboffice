@@ -68,7 +68,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccountInfo/virtualAccountInfo.js?ver=20240806.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/loan/virtualAccountInfo/virtualAccountInfo.js?ver=20240807.01" charset="utf-8"></script>
 
 <%-- 본사 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchHq.jsp">
