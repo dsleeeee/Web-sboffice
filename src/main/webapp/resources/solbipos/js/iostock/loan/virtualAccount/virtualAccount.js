@@ -100,7 +100,7 @@ app.controller('virtualAccountCtrl', ['$scope', '$http', function ($scope, $http
     // <-- //검색 호출 -->
 
     // 가상계좌 입금 생성
-    $scope.loanVirtualAccount = function(){
+    $scope.virtualAccountRegister = function(){
         var params = {};
         params.storeCd = $("#virtualAccountStoreCd").val();
         params.va_mny = $("#txtVaMny").val().replaceAll(",", ""); // 가상계좌 발급금액
@@ -111,18 +111,18 @@ app.controller('virtualAccountCtrl', ['$scope', '$http', function ($scope, $http
             return;
         }
 
-        $scope.setSelectedStore(params);
+        $scope.setSelectedVirtualAccount(params);
         $scope.wjVirtualAccountRegisterLayer.show(true);
         event.preventDefault();
     };
 
     // 선택 매장
-    $scope.selectedStore;
-    $scope.setSelectedStore = function(store) {
-        $scope.selectedStore = store;
+    $scope.selectedVirtualAccount;
+    $scope.setSelectedVirtualAccount = function(store) {
+        $scope.selectedVirtualAccount = store;
     };
-    $scope.getSelectedStore = function(){
-        return $scope.selectedStore;
+    $scope.getSelectedVirtualAccount = function(){
+        return $scope.selectedVirtualAccount;
     };
 
     // 화면 ready 된 후 설정
@@ -131,7 +131,7 @@ app.controller('virtualAccountCtrl', ['$scope', '$http', function ($scope, $http
         // 가상계좌 입금 생성 팝업 핸들러 추가
         $scope.wjVirtualAccountRegisterLayer.shown.addHandler(function (s) {
             setTimeout(function() {
-                $scope._broadcast('virtualAccountRegisterCtrl', $scope.getSelectedStore());
+                $scope._broadcast('virtualAccountRegisterCtrl', $scope.getSelectedVirtualAccount());
             }, 50)
         });
     });
