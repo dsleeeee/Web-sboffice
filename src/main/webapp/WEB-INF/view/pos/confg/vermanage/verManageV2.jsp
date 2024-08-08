@@ -164,7 +164,7 @@
 
 <!-- 관리자 화면인 경우만 아래 화면 import -->
 <!-- 본사 화면인 경우 탭 화면으로 구성되어 있어 이미 [POS 버전관리]화면에서 import 하고 있으므로, 중복을 방지하여 오류 안나게 처리 -->
-<c:if test="${orgnFg == 'MASTER'}">
+<c:if test="${orgnFg == 'MASTER' || orgnFg == 'AGENCY'}">
   <%-- 버전 상세정보 레이어 --%>
   <c:import url="/WEB-INF/view/pos/confg/vermanage/verInfoDtl.jsp">
   </c:import>
