@@ -1,6 +1,9 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 
 <wj-popup id="wjSpeDateRegistLayer" control="wjSpeDateRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
   <div id="speDateRegistLayer" class="wj-dialog wj-dialog-columns" ng-controller="speDateRegistCtrl">
@@ -27,17 +30,19 @@
               <div class="sb-select">
                 <span class="txtIn"><input id="specificDate" class="w200px" ng-model="speDate.specificDate"></span>
               </div>
-            </td>
-            <%-- 매장선택 --%>
-            <th><s:message code="cmm.store.select"/><em class="imp">*</em></th>
-            <td>
-              <%-- 매장선택 모듈 사용시 include --%>
-              <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                <jsp:param name="targetTypeFg" value="S"/>
-                <jsp:param name="targetId" value="speDateRegistStore"/>
-              </jsp:include>
-              <%--// 매장선택 모듈 사용시 include --%>
-            </td>
+            <c:if test="${orgnFg == 'HQ'}">
+              </td>
+              <%-- 매장선택 --%>
+              <th><s:message code="cmm.store.select"/><em class="imp">*</em></th>
+              <td>
+                <%-- 매장선택 모듈 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                  <jsp:param name="targetTypeFg" value="S"/>
+                  <jsp:param name="targetId" value="speDateRegistStore"/>
+                </jsp:include>
+                <%--// 매장선택 모듈 사용시 include --%>
+              </td>
+            </c:if>
           </tr>
           <tr>
             <th><s:message code="outstockReqDate.outstockReqYn"/></th>
@@ -127,4 +132,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20240729.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/order/outstockReqDate/specificDateRegist.js?ver=20240805.01" charset="utf-8"></script>
