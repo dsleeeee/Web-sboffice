@@ -65,7 +65,12 @@ app.controller('speDateRegistCtrl', ['$scope', '$http', function ($scope, $http)
     // 특정일값 넘길 파라미터에 세팅
     $scope.speDate.specificDate = wijmo.Globalize.format(specificDate.value, 'yyyyMMdd');
     // 매장 선택 모듈의 매장코드값 파라미터 세팅
-    $scope.speDate.storeCd      = $("#speDateRegistStoreCd").val();
+
+    if(orgnFg === "STORE"){
+      $scope.speDate.storeCd  = orgnCd;
+    }else {
+      $scope.speDate.storeCd  = $("#speDateRegistStoreCd").val();
+    }
 
     $scope.speDate.orderStartTime = $scope.startHourCombo.selectedValue + $scope.startMsCombo.selectedValue;
     $scope.speDate.orderEndTime = $scope.endHourCombo.selectedValue + $scope.endMsCombo.selectedValue;
@@ -123,10 +128,12 @@ app.controller('speDateRegistCtrl', ['$scope', '$http', function ($scope, $http)
 function valueCheck() {
   /** 매장을 선택해주세요. */
   var msg = messages["outstockReqDate.require.selectStore"];
-  if ($("#speDateRegistStoreCd").val() === "") {
-    s_alert.popOk(msg, function () {
-    });
-    return false;
+  if(orgnFg === "HQ") {
+    if ($("#speDateRegistStoreCd").val() === "") {
+      s_alert.popOk(msg, function () {
+      });
+      return false;
+    }
   }
 
   /** 설명(을)를 입력하세요. */

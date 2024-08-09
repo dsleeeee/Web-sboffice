@@ -156,4 +156,4 @@
   var userId       = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20231102.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20240807.01" charset="utf-8"></script>

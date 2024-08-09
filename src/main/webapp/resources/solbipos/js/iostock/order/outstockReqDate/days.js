@@ -196,7 +196,11 @@ app.controller('daysCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchDaysList = function () {
     // 파라미터
     var params     = {};
-    params.storeCd = $("#daysSelectStoreCd").val();
+    if(orgnFg === "STORE"){
+      params.storeCd  = orgnCd;
+    }else {
+      params.storeCd = $("#daysSelectStoreCd").val();
+    }
     params.listScale = $scope.conListScale.text; //-페이지 스케일 갯수
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/iostock/order/outstockReqDate/days/list.sb", params);
