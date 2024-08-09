@@ -5,80 +5,124 @@ var app = agrid.getApp();
 
 /** 여신정보 그리드 controller */
 app.controller('loanInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-  // 상위 객체 상속 : T/F 는 picker
-  angular.extend(this, new RootController('loanInfoCtrl', $scope, $http, true));
 
-  var srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
-  var srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('loanInfoCtrl', $scope, $http, true));
 
+    var srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
+    var srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
-  // 그리드 DataMap 설정
-  $scope.orderFg = new wijmo.grid.DataMap([
-      {id: "1", name: messages["loan.orderFg1"]},
-      {id: "2", name: messages["loan.orderFg2"]},
-      {id: "3", name: messages["loan.orderFg3"]}
-  ], 'id', 'name');
+    // 그리드 DataMap 설정
+    $scope.orderFg = new wijmo.grid.DataMap([
+        {id: "1", name: messages["loan.orderFg1"]},
+        {id: "2", name: messages["loan.orderFg2"]},
+        {id: "3", name: messages["loan.orderFg3"]}
+    ], 'id', 'name');
 
-  $scope.noOutstockAmtFg = new wijmo.grid.DataMap([
-      {id: "N", name: messages["loan.noOutstockAmtFgN"]},
-      {id: "Y", name: messages["loan.noOutstockAmtFgY"]}
-  ], 'id', 'name');
+    $scope.noOutstockAmtFg = new wijmo.grid.DataMap([
+        {id: "N", name: messages["loan.noOutstockAmtFgN"]},
+        {id: "Y", name: messages["loan.noOutstockAmtFgY"]}
+    ], 'id', 'name');
 
-  $scope._setComboData("srchDateFg", [
-    {"name": messages["loanInfo.all"], "value": ""},
-    {"name": messages["loanInfo.searchDate"], "value": "date"}
-  ]);
+    $scope._setComboData("srchDateFg", [
+        {"name": messages["loanInfo.all"], "value": ""},
+        {"name": messages["loanInfo.searchDate"], "value": "date"}
+    ]);
 
-  // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {
-    // picker 사용시 호출 : 미사용시 호출안함
-    $scope._makePickColumns("loanInfoCtrl");
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // picker 사용시 호출 : 미사용시 호출안함
+        $scope._makePickColumns("loanInfoCtrl");
+    };
 
-  };
+    // 리스트 조회
+    $scope.searchLoanInfo = function () {
+        if($scope.dateFg === 'date') {
+            var startDt = new Date(wijmo.Globalize.format(srchStartDate.value, 'yyyy-MM-dd'));
+            var endDt = new Date(wijmo.Globalize.format(srchEndDate.value, 'yyyy-MM-dd'));
 
-  // 리스트 조회
-  $scope.searchLoanInfo = function () {
+            // 시작일자가 종료일자보다 빠른지 확인
+            if (startDt.getTime() > endDt.getTime()) {
+                $scope._popMsg(messages['cmm.dateChk.error']);
+                return false;
+            }
+        }
 
-      if($scope.dateFg === 'date') {
-          var startDt = new Date(wijmo.Globalize.format(srchStartDate.value, 'yyyy-MM-dd'));
-          var endDt = new Date(wijmo.Globalize.format(srchEndDate.value, 'yyyy-MM-dd'));
+        // 파라미터
+        var params       = {};
+        params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
+        params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
+        params.dateFg    = $scope.dateFg;
 
-          // 시작일자가 종료일자보다 빠른지 확인
-          if (startDt.getTime() > endDt.getTime()) {
-              $scope._popMsg(messages['cmm.dateChk.error']);
-              return false;
-          }
-      }
+        $scope._inquiryMain("/iostock/loan/loanInfo/loanInfo/getStoreLoanManageList.sb", params, function() {
+            $scope._broadcast('loanInfoManageCtrl', params);
+        });
+    };
 
-    // 파라미터
-    var params       = {};
-    params.startDate = wijmo.Globalize.format(srchStartDate.value, 'yyyyMMdd');
-    params.endDate   = wijmo.Globalize.format(srchEndDate.value, 'yyyyMMdd');
-    params.dateFg    = $scope.dateFg;
+    // 조회일자 값 변경 이벤트 함수
+    $scope.selectedIndexChanged = function (s, e) {
+        if (s.selectedValue === "") {
+            $scope.dateLayer = false;
+        } else {
+            $scope.dateLayer = true;
+        }
+    };
 
-    $scope._inquiryMain("/iostock/loan/loanInfo/loanInfo/getStoreLoanManageList.sb", params, function() {
-        $scope._broadcast('loanInfoManageCtrl', params);
+    // 가상계좌 입금 생성
+    $scope.virtualAccountRegister = function(){
+        var params = {};
+        params.storeCd = $("#loanInfoStoreCd").val();
+        params.va_mny = $("#txtVaMny").val().replaceAll(",", ""); // 가상계좌 발급금액
+        params.menuGubun = ""; // 화면구분
+
+        if(params.storeCd == "") {
+            $scope._popMsg(messages["cmm.require.selectStore"]); // 매장을 선택해 주세요.
+            return;
+        }
+
+        $scope.setSelectedVirtualAccount(params);
+        $scope.wjVirtualAccountRegisterLayer.show(true);
+        event.preventDefault();
+    };
+
+    // 선택 매장
+    $scope.selectedVirtualAccount;
+    $scope.setSelectedVirtualAccount = function(store) {
+        $scope.selectedVirtualAccount = store;
+    };
+    $scope.getSelectedVirtualAccount = function(){
+        return $scope.selectedVirtualAccount;
+    };
+
+    // 화면 ready 된 후 설정
+    angular.element(document).ready(function () {
+
+        // 가상계좌 입금 생성 팝업 핸들러 추가
+        $scope.wjVirtualAccountRegisterLayer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('virtualAccountRegisterCtrl', $scope.getSelectedVirtualAccount());
+            }, 50)
+        });
     });
 
-  };
+    // 여신사용액
+    $scope.loanVirtualAccount = function(){
+        if($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["cmm.empty.data"]);
+            return false;
+        }
 
-  // 조회일자 값 변경 이벤트 함수
-  $scope.selectedIndexChanged = function (s, e) {
-    if (s.selectedValue === "") {
-      $scope.dateLayer = false;
-    } else {
-      $scope.dateLayer = true;
-    }
-  };
-
+        $("#txtVaMny").val($scope.flex.collectionView.items[0].useLoanAmt); // 가상계좌 발급금액
+    };
 
 }]);
 
+
 /** 여신현황 그리드 controller */
 app.controller('loanInfoManageCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('loanInfoManageCtrl', $scope, $http, true));
-
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -130,7 +174,6 @@ app.controller('loanInfoManageCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 엑셀 다운로드
     $scope.excelDownloadInfo = function () {
-
         if ($scope.flex2.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
