@@ -247,6 +247,7 @@
                             <button type="button" class="btn_skyblue" ng-click="delImg('004')"><s:message code="cmm.del" /></button>
                         </td>
                         <td>
+                            <p class="s12 red mb10"><s:message code="prodImg.fileSize.max3" /></p>
                             <button type="button" class="btn_skyblue" ng-click="imgCancel('005', 'F')"><s:message code="cmm.selectCancel" /></button>
                             <button type="button" class="btn_skyblue" ng-click="regImg('005')"><s:message code="prodImg.regImg" /></button>
                             <button type="button" class="btn_skyblue" ng-click="delImg('005')"><s:message code="cmm.del" /></button>
