@@ -112,6 +112,11 @@ app.controller('loanInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
             return false;
         }
 
+        if($scope.flex.collectionView.items[0].useLoanAmt == "" || $scope.flex.collectionView.items[0].useLoanAmt == null) {
+            $scope._popMsg(messages["loan.useLoanAmtChkAlert"]); // 여신사용액이 없습니다.
+            return false;
+        }
+
         $("#txtVaMny").val($scope.flex.collectionView.items[0].useLoanAmt); // 가상계좌 발급금액
     };
 
