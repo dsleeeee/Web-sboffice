@@ -208,8 +208,10 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#lblFileSizeMax").text(messages["media.fileSize.max2"]);
     } else if(s.selectedValue === "010") {
       $("#lblFileSizeMax").text(messages["media.fileSize.max3"]);
-    } else if(s.selectedValue === "014" || s.selectedValue === "015") {
+    } else if(s.selectedValue === "014") {
       $("#lblFileSizeMax").text(messages["media.fileSize.msg"]);
+    } else if(s.selectedValue === "015") {
+      $("#lblFileSizeMax").text(messages["media.fileSize.msg2"]);
     } else {
       $("#lblFileSizeMax").text("");
     }
