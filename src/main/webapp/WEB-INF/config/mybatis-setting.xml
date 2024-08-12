@@ -386,6 +386,11 @@
     <typeAlias alias="torderQtyDispVO" type="kr.co.solbipos.base.prod.torderQtyDisp.service.TorderQtyDispVO"/>
     <!-- 기초관리 > 상품관리 > 상품정보조회 -->
     <typeAlias alias="prodSearchVO" type="kr.co.solbipos.base.prod.prodSearch.service.ProdSearchVO"/>
+    <!-- 기초관리 > 상품관리 > (기준)사이드메뉴 (개발중지, 진행안함) -->
+    <typeAlias alias="basicSideMenuSelGroupVO" type="kr.co.solbipos.base.prod.basicSideMenu.service.BasicSideMenuSelGroupVO"/>
+    <typeAlias alias="basicSideMenuSelClassVO" type="kr.co.solbipos.base.prod.basicSideMenu.service.BasicSideMenuSelClassVO"/>
+    <typeAlias alias="basicSideMenuSelProdVO" type="kr.co.solbipos.base.prod.basicSideMenu.service.BasicSideMenuSelProdVO"/>
+
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
     <typeAlias alias="supplyVO" type="kr.co.solbipos.base.prod.supply.service.SupplyVO"/>

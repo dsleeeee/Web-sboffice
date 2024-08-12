@@ -25,8 +25,8 @@
     <ul class="subTab mt10">
       <%-- 속성 --%>
       <li><a id="sideMenuAttr" href="#" class="on" ng-click="changeTab('A');"><s:message code="sideMenu.tab.attr" /></a></li>
-      <%-- 선택메뉴 --%>
-      <li><a id="sideMenuSelectMenu" href="#" ng-click="changeTab('C');"><s:message code="sideMenu.tab.selectMenu" /></a></li>
+      <%-- 선택메뉴(세트) --%>
+      <li><a id="sideMenuSelectMenu" href="#" ng-click="changeTab('C');"><s:message code="sideMenu.tab.selectMenu(set)" /></a></li>
       <%-- 선택메뉴(싱글) --%>
       <li><a id="sideMenuSelectMenuSingle" href="#" ng-click="changeTab('S');"><s:message code="sideMenu.tab.selectMenu(single)" /></a></li>
       <%-- 사이드메뉴관리 --%>

@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    BseSideMenu.xml
+    (기준)사이드메뉴 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.08.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.basicSideMenu.service.impl.BasicSideMenuMapper">
+
+    <!-- 선택그룹 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        PARAM    : basicSideMenuSelGroupVO
+        COMMENTS : 사이드메뉴 선택그룹 목록을 조회한다.
+    -->
+    <select id="getMenuGrpList" parameterType="basicSideMenuSelGroupVO" resultType="DefaultMap">
+        /* USE : BasicSideMenuMapper.getMenuGrpList */
+        SELECT
+            thpsg.HQ_BRAND_CD,
+            thpsg.SDSEL_GRP_CD,
+            thpsg.SDSEL_GRP_NM,
+            (SELECT LISTAGG(PROD_CD, ',') WITHIN GROUP (ORDER BY PROD_CD) AS PROD_CD FROM TB_HQ_PRODUCT thp WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd} AND thp.SIDE_PROD_YN = 'Y' AND thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD ) AS PROD_CD,
+            (SELECT COUNT(*) FROM TB_HQ_PRODUCT_BASIC_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT,
+            NVL(thpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG,
+            NVL(thpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG
+        FROM
+            TB_HQ_PRODUCT_BASIC_SDSEL_GROUP thpsg
+        WHERE
+            thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thpsg.USE_YN = 'Y'
+            AND thpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
+            <if test='fixProdFg != null and fixProdFg != ""'>
+                AND thpsg.FIX_PROD_FG LIKE '%'||#{fixProdFg}||'%'
+            </if>
+            <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                AND thpsg.SDSEL_GRP_CD LIKE '%'||#{sdselGrpCd}||'%'
+            </if>
+            <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                AND thpsg.SDSEL_GRP_NM LIKE '%'||#{sdselGrpNm}||'%'
+            </if>
+            <if test='(sdselProdCd != null and sdselProdCd != "") or (sdselProdNm != null and sdselProdNm != "")'>
+                AND thpsg.SDSEL_GRP_CD IN (
+                                                SELECT DISTINCT(thpsc.SDSEL_GRP_CD)
+                                                FROM TB_HQ_PRODUCT_BASIC_SDSEL_PROD thpsp
+                                                INNER JOIN TB_HQ_PRODUCT thp ON thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                                                AND thpsp.PROD_CD = thp.PROD_CD
+                                                AND (
+                                                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                                                        OR
+                                                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                                                    )
+                                                INNER JOIN TB_HQ_PRODUCT_BASIC_SDSEL_CLASS thpsc ON thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                                                AND thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD
+                                                WHERE thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                <if test='sdselProdCd != null and sdselProdCd != ""'>
+                                                    AND thpsp.PROD_CD LIKE '%'||#{sdselProdCd}||'%'
+                                                </if>
+                                                <if test='sdselProdNm != null and sdselProdNm != ""'>
+                                                    AND thp.PROD_NM LIKE '%'||#{sdselProdNm}||'%'
+                                                </if>
+                                                AND thpsp.USE_YN = 'Y'
+                                                AND thpsc.USE_YN = 'Y'
+                                         )
+            </if>
+        ORDER BY
+            thpsg.SDSEL_GRP_CD
+
+    </select>
+
+    <!-- 선택그룹 생성 시 그룹코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        PARAM    : basicSideMenuSelGroupVO
+        COMMENTS : 선택그룹 생성 시 그룹코드를 생성한다.
+    -->
+    <select id="getMenuGrpCode" parameterType="basicSideMenuSelGroupVO" resultType="String">
+        /* USE : BasicSideMenuMapper.getMenuGrpCode */
+        SELECT LPAD(NVL(MAX(SDSEL_GRP_CD), '0') + 1, 6, '0')
+        FROM TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 선택그룹 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        PARAM    : basicSideMenuSelGroupVO
+        COMMENTS : 선택그룹을 생성한다.
+    -->
+    <insert id="insertMenuGrpList" parameterType="basicSideMenuSelGroupVO">
+        /* USE : BasicSideMenuMapper.insertMenuGrpList */
+        INSERT INTO TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        (
+            HQ_OFFICE_CD,
+            HQ_BRAND_CD,
+            SDSEL_GRP_CD,
+            SDSEL_GRP_NM,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            FIX_PROD_FG,
+            SDSEL_TYPE_FG
+        ) VALUES (
+            #{hqOfficeCd},
+            #{hqBrandCd},
+            #{sdselGrpCd},
+            #{sdselGrpNm},
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{fixProdFg},
+            #{sdselTypeFg}
+        )
+    </insert>
+
+    <!-- 선택그룹 수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        PARAM    : basicSideMenuSelGroupVO
+        COMMENTS : 선택그룹을 수정한다.
+    -->
+    <update id="updateMenuGrpList" parameterType="basicSideMenuSelGroupVO">
+        /* USE : BasicSideMenuMapper.updateMenuGrpList */
+        UPDATE TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        SET
+            SDSEL_GRP_NM = #{sdselGrpNm},
+            HQ_BRAND_CD = #{hqBrandCd},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId},
+            FIX_PROD_FG = #{fixProdFg},
+            SDSEL_TYPE_FG = #{sdselTypeFg}
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_GRP_CD = #{sdselGrpCd}
+    </update>
+
+    <!-- 선택그룹 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        PARAM    : basicSideMenuSelGroupVO
+        COMMENTS : 선택그룹을 삭제한다.
+    -->
+    <update id="deleteMenuGrpList" parameterType="basicSideMenuSelGroupVO">
+        /* USE : BasicSideMenuMapper.deleteMenuGrpList */
+        UPDATE TB_HQ_PRODUCT_BASIC_SDSEL_GROUP
+        SET
+            USE_YN = 'N',
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_GRP_CD = #{sdselGrpCd}
+    </update>
+
+    <!-- 선택분류 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        PARAM    : basicSideMenuSelClassVO
+        COMMENTS : 사이드메뉴 선택분류 목록을 조회한다.
+    -->
+    <select id="getMenuClassList" parameterType="basicSideMenuSelClassVO" resultType="DefaultMap">
+        /* USE : BasicSideMenuMapper.getMenuClassList */
+        SELECT
+            thpsc.SDSEL_CLASS_CD,
+            thpsc.SDSEL_CLASS_NM,
+            thpsc.SDSEL_GRP_CD,
+            thpsc.DISP_SEQ,
+            thpsc.SDSEL_QTY,
+            (SELECT COUNT(*) FROM TB_HQ_PRODUCT_BASIC_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT,
+            (SELECT SUM(ADD_PROD_QTY) FROM TB_HQ_PRODUCT_BASIC_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT,
+            NVL(thpsc.REQUIRE_YN, 'N') AS REQUIRE_YN,
+            NVL(thpsc.REG_STORE_FG, '0') AS REG_STORE_FG,
+            NVL(thpsc.REG_STORE_FG, '0') AS OLD_REG_STORE_FG
+        FROM
+            TB_HQ_PRODUCT_BASIC_SDSEL_CLASS thpsc
+        WHERE
+            thpsc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpsc.SDSEL_GRP_CD = #{sdselGrpCd}
+        AND thpsc.USE_YN = 'Y'
+        ORDER BY
+            thpsc.DISP_SEQ
+    </select>
+
+    <!-- 선택분류 생성 시 분류코드 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        PARAM    : basicSideMenuSelClassVO
+        COMMENTS : 선택분류 생성 시 분류코드를 생성한다.
+    -->
+    <select id="getMenuClassCode" parameterType="basicSideMenuSelClassVO" resultType="String">
+        /* USE : BasicSideMenuMapper.getMenuClassCode */
+        SELECT LPAD(NVL(MAX(SDSEL_CLASS_CD), '0') + 1, 6, '0')
+        FROM TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 선택분류 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        PARAM    : basicSideMenuSelClassVO
+        COMMENTS : 선택분류를 생성한다.
+    -->
+    <insert id="insertMenuClassList" parameterType="basicSideMenuSelClassVO">
+        /* USE : BasicSideMenuMapper.insertMenuClassList */
+        INSERT INTO TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        (
+            HQ_OFFICE_CD,
+            SDSEL_CLASS_CD,
+            SDSEL_CLASS_NM,
+            SDSEL_GRP_CD,
+            DISP_SEQ,
+            SDSEL_QTY,
+            USE_YN,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            REQUIRE_YN,
+            REG_STORE_FG
+        ) VALUES (
+            #{hqOfficeCd},
+            #{sdselClassCd},
+            #{sdselClassNm},
+            #{sdselGrpCd},
+            #{dispSeq},
+            #{sdselQty},
+            'Y',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{requireYn},
+            #{regStoreFg}
+        )
+    </insert>
+
+    <!-- 선택분류 수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        PARAM    : basicSideMenuSelClassVO
+        COMMENTS : 선택분류를 수정한다.
+    -->
+    <update id="updateMenuClassList" parameterType="basicSideMenuSelClassVO">
+        /* USE : BasicSideMenuMapper.updateMenuClassList */
+        UPDATE TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        SET
+            SDSEL_CLASS_NM = #{sdselClassNm},
+            DISP_SEQ = #{dispSeq},
+            SDSEL_QTY = #{sdselQty},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId},
+            REQUIRE_YN = #{requireYn},
+            REG_STORE_FG = #{regStoreFg}
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND SDSEL_GRP_CD = #{sdselGrpCd}
+    </update>
+
+    <!-- 선택분류 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        PARAM    : basicSideMenuSelClassVO
+        COMMENTS : 선택분류를 삭제한다.
+    -->
+    <update id="deleteMenuClassList" parameterType="basicSideMenuSelClassVO">
+        /* USE : BasicSideMenuMapper.deleteMenuClassList */
+        UPDATE TB_HQ_PRODUCT_BASIC_SDSEL_CLASS
+        SET
+            USE_YN = 'N',
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SDSEL_CLASS_CD = #{sdselClassCd}
+        AND SDSEL_GRP_CD = #{sdselGrpCd}
+    </update>
+
+    <!-- 선택상품 추가팝업 상품리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_PROD
+        PARAM    : basicSideMenuSelProdVO
+        COMMENTS : 선택상품 추가팝업 상품리스트 조회한다.
+    -->
+    <select id="getProdList" parameterType="basicSideMenuSelProdVO" resultType="DefaultMap">
+        /* USE : BasicSideMenuMapper.getProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+            thp.HQ_OFFICE_CD,
+            thp.PROD_CD,
+            thp.PROD_NM,
+            thp.PROD_CLASS_CD,
+            ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+            thp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
+            thp.PO_UNIT_FG,
+            thp.HQ_BRAND_CD,
+            thp.REMARK
+            <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+            TB_HQ_PRODUCT thp
+        WHERE
+            thp.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test="prodCd != null and prodCd != ''">
+            AND thp.PROD_CD = #{prodCd} --상품코드
+            </if>
+            <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+            </if>
+            AND thp.USE_YN = 'Y'
+            <!-- AND thp.SIDE_PROD_YN = 'N' -->
+            AND thp.PROD_CD NOT IN (
+                                    SELECT prod_cd
+                                      FROM TB_HQ_PRODUCT_BASIC_SDSEL_PROD thpsp
+                                     WHERE thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                                       AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                                       AND thpsp.USE_YN = 'Y'
+                                    )
+            AND FN_GET_SDSEL_TYPE_FG(#{hqOfficeCd}, thp.SDSEL_GRP_CD) = 'S'
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                            SELECT  PROD_CLASS_CD
+                                              FROM  TB_HQ_PRODUCT_CLASS
+                                             WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userProdBrands != null and userProdBrands != ""'>
+                -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND thp.HQ_BRAND_CD IN
+                <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        ORDER BY
+            thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 선택상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_PROD
+        PARAM    : basicSideMenuSelProdVO
+        COMMENTS : 사이드메뉴 선택상품 목록을 조회한다.
+    -->
+    <select id="getMenuProdList" parameterType="basicSideMenuSelProdVO" resultType="DefaultMap">
+        /* USE : BasicSideMenuMapper.getMenuProdList */
+        SELECT
+            thpsc.SDSEL_GRP_CD,
+            thpsp.SDSEL_CLASS_CD,
+        ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
+            thpsp.PROD_CD,
+            thp.PROD_NM,
+            thpsp.ADD_PROD_UPRC,
+            thpsp.ADD_PROD_QTY,
+            thpsp.DISP_SEQ,
+            NVL(thpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
+            NVL(thpsp.REG_STORE_FG, '0') AS REG_STORE_FG,
+            NVL(thpsp.REG_STORE_FG, '0') AS OLD_REG_STORE_FG,
+            NVL(thpsp.PRINT_YN, 'Y') AS PRINT_YN,
+            thp.HQ_BRAND_CD,
+            thp.REMARK
+        FROM
+            TB_HQ_PRODUCT_BASIC_SDSEL_PROD thpsp
+        LEFT OUTER JOIN TB_HQ_PRODUCT thp ON
+            thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+            AND thpsp.PROD_CD = thp.PROD_CD
+            AND (
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+        INNER JOIN TB_HQ_PRODUCT_BASIC_SDSEL_CLASS thpsc ON
+            thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+            AND thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD
+      WHERE
+            thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+            AND thpsp.USE_YN = 'Y'
+        ORDER BY
+            thpsp.DISP_SEQ
+    </select>
+
+    <!-- 선택상품 생성 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_PROD
+        PARAM    : basicSideMenuSelProdVO
+        COMMENTS : 선택상품을 생성한다.
+    -->
+    <insert id="insertMenuProdList" parameterType="basicSideMenuSelProdVO">
+        /* USE : BasicSideMenuMapper.insertMenuProdList */
+        MERGE INTO TB_HQ_PRODUCT_BASIC_SDSEL_PROD thpsp
+        USING DUAL
+            ON (
+                    thpsp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsp.SDSEL_CLASS_CD = #{sdselClassCd}
+                    AND thpsp.PROD_CD = #{prodCd}
+                )
+        WHEN MATCHED THEN
+            UPDATE
+            SET thpsp.USE_YN = 'Y',
+                thpsp.DISP_SEQ = #{dispSeq},
+                thpsp.MOD_DT = #{modDt},
+                thpsp.MOD_ID = #{modId},
+                thpsp.REG_STORE_FG = #{regStoreFg},
+                thpsp.PRINT_YN = #{printYn}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                HQ_OFFICE_CD,
+                SDSEL_CLASS_CD,
+                PROD_CD,
+                ADD_PROD_UPRC,
+                ADD_PROD_QTY,
+                DISP_SEQ,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                FIX_PROD_FG,
+                REG_STORE_FG,
+                PRINT_YN
+            ) VALUES (
+                #{hqOfficeCd},
+                #{sdselClassCd},
+                #{prodCd},
+                #{addProdUprc},
+                #{addProdQty},
+                #{dispSeq},
+                'Y',
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{fixProdFg},
+                #{regStoreFg},
+                #{printYn}
+            )
+    </insert>
+
+    <!-- 선택상품 수정 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_PROD
+        PARAM    : basicSideMenuSelProdVO
+        COMMENTS : 선택상품을 수정한다.
+    -->
+    <update id="updateMenuProdList" parameterType="basicSideMenuSelProdVO">
+        /* USE : BasicSideMenuMapper.updateMenuProdList */
+        UPDATE TB_HQ_PRODUCT_BASIC_SDSEL_PROD
+        SET
+            ADD_PROD_UPRC = #{addProdUprc},
+            ADD_PROD_QTY = #{addProdQty},
+            DISP_SEQ = #{dispSeq},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId},
+            FIX_PROD_FG = #{fixProdFg},
+            REG_STORE_FG = #{regStoreFg},
+            PRINT_YN = #{printYn}
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+            AND SDSEL_CLASS_CD = #{sdselClassCd}
+            AND PROD_CD = #{prodCd}
+    </update>
+
+    <!-- 선택상품 삭제 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_BASIC_SDSEL_PROD
+        PARAM    : basicSideMenuSelProdVO
+        COMMENTS : 선택상품을 삭제한다.
+    -->
+    <update id="deleteMenuProdList" parameterType="basicSideMenuSelProdVO">
+        /* USE : BasicSideMenuMapper.deleteMenuProdList */
+        UPDATE TB_HQ_PRODUCT_BASIC_SDSEL_PROD
+        SET
+            USE_YN = 'N',
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHERE
+            HQ_OFFICE_CD = #{hqOfficeCd}
+            AND SDSEL_CLASS_CD = #{sdselClassCd}
+            AND PROD_CD = #{prodCd}
+    </update>
+
+</mapper>
