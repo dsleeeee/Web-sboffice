@@ -140,12 +140,11 @@ app.controller('disuseInfoBonavieCtrl', ['$scope', '$http', '$timeout', function
                 includeColumns: function (column) {
                     return column.visible;
                 }
-            },
-                "폐기내역조회_" + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
-                    $timeout(function () {
-                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-                    }, 10);
-                });
+            }, "폐기내역조회_" + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime() +'.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
         }, 10);
     };
 
