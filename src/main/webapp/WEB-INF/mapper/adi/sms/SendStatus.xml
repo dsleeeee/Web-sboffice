@@ -321,6 +321,297 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 문자전송현황 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : SDK_SMS_SEND_ENC, SDK_MMS_SEND_ENC, SDK_SMS_REPORT, SDK_SMS_REPORT_DETAIL, SDK_MMS_REPORT, SDK_MMS_REPORT_DETAIL
+        COMMENTS : SMS 발송, LMS/MMS 발송, SMS 문자전송결과, LMS/MMS 문자전송결과
+    -->
+    <select id="getSendStatusExcelList" parameterType="SendStatusVO" resultType="DefaultMap">
+        /* SendStatusMapper.getSendStatusExcelList */
+        SELECT
+        hmt.MSG_ID,
+        hmt.REG_DT,
+        hmt.S_OGN_CD,
+        hmt.S_OGN_NM,
+        hmt.S_USER_NM,
+        hmt.CALLBACK AS S_PHONE_NUMBER,
+        hmt.R_OGN_CD,
+        hmt.R_OGN_NM,
+--         (CASE WHEN hmt.R_OGN_FG = 'C' THEN (SELECT SBPENC.D(MEMBR_NM) FROM TB_MB_MEMBER WHERE MEMBR_ORGN_CD = hmt.R_OGN_CD AND MEMBR_NO = hmt.CST_NO GROUP BY MEMBR_NM)
+--                WHEN hmt.R_OGN_FG NOT IN ('C') THEN (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = hmt.R_OGN_CD AND USER_ID = hmt.R_USER_ID GROUP BY USER_NM)
+--                ELSE null END
+--         ) AS R_USER_NM,
+        hmt.PHONE_NUMBER AS R_PHONE_NUMBER,
+        hmt.MSG_TYPE,
+        hmt.RESERVE_YN,
+        hmt.SEND_DATE,
+        hmt.READ_DATE,
+        hmt.SEND_STATUS,
+        (SELECT DECODE(RESULT_NM, NULL, RESULT_CD, RESULT_NM) FROM HCS_MSGCM_T WHERE RESULT_CD = hmt.RESULT_CD) AS RESULT_NM,
+        DECODE(hmt.COMPANY, '1', 'MONO', '2', 'SMTNT', NULL) AS COMPANY,
+        hmt.SUBJECT,
+        hmt.MSG_CONTENT,
+        hmt.SMS_SEND_SEQ,
+        hmt.GUBUN
+        FROM
+        (
+            SELECT *
+            FROM
+            (
+                (
+                    --SMS
+                    SELECT
+                    A.MSG_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.RESERVED7 AS S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.RESERVED8 AS S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
+                    SBPENC.D(A.CALLBACK) AS CALLBACK,
+                    A.RESERVED4 AS R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.RESERVED5 AS R_OGN_FG,
+                    A.RESERVED6 AS R_USER_ID,
+                    A.RESERVED3 AS CST_NO,
+                    SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER,
+                    1 AS MSG_TYPE,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.SEND_PROC_TIME AS READ_DATE,
+                    A.SEND_STATUS,
+                    '' AS RESULT_CD,
+                    '1' AS COMPANY, --1:KT, 2:SMTNT
+                    A.SUBJECT,
+                    A.SMS_MSG AS MSG_CONTENT,
+                    A.RESERVED9 AS SMS_SEND_SEQ,
+                    'SDK_SMS_SEND_ENC' AS GUBUN
+                    FROM SDK_SMS_SEND_ENC A
+                    WHERE 1=1
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND A.RESERVED7 LIKE '%' || #{ssOrgnCd} || '%' --S_OGN_CD
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
+                    </if>
+                    <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
+                        AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                    </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
+                    </if>
+                )
+                UNION ALL
+                (
+                    --LMS
+                    SELECT
+                    A.MSG_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.RESERVED7 AS S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.RESERVED8 AS S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
+                    SBPENC.D(A.CALLBACK) AS CALLBACK,
+                    A.RESERVED4 AS R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.RESERVED5 AS R_OGN_FG,
+                    A.RESERVED6 AS R_USER_ID,
+                    A.RESERVED3 AS CST_NO,
+                    SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER,
+                    (CASE WHEN A.CONTENT_COUNT = '0' THEN 2 ELSE 3 END) AS MSG_TYPE,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    A.SEND_PROC_TIME AS READ_DATE,
+                    A.SEND_STATUS,
+                    '' AS RESULT_CD,
+                    '1' AS COMPANY, --1:KT, 2:SMTNT
+                    A.SUBJECT,
+                    A.MMS_MSG AS MSG_CONTENT,
+                    A.RESERVED9 AS SMS_SEND_SEQ,
+                    (CASE WHEN A.CONTENT_COUNT = '0' THEN 'SDK_LMS_SEND_ENC' ELSE 'SDK_MMS_SEND_ENC' END) AS GUBUN
+                    FROM SDK_MMS_SEND_ENC A
+                    WHERE 1=1
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND A.RESERVED7 LIKE '%' || #{ssOrgnCd} || '%' --S_OGN_CD
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
+                    </if>
+                    <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
+                        AND SBPENC.D(A.CALLBACK) LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                    </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
+                    </if>
+                )
+                UNION ALL
+                (
+                    --SMS 문자 전송결과
+                    SELECT
+                    A.MSG_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.RESERVED7 AS S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.RESERVED8 AS S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
+                    A.CALLBACK,
+                    A.RESERVED4 AS R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.RESERVED5 AS R_OGN_FG,
+                    A.RESERVED6 AS R_USER_ID,
+                    A.RESERVED3 AS CST_NO,
+                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    1 AS MSG_TYPE,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    B.DELIVER_DATE AS READ_DATE,
+                    (CASE WHEN A.SUCC_COUNT = 0 THEN -1
+                    WHEN A.SUCC_COUNT = 1 THEN 3
+                    ELSE null END
+                    ) AS SEND_STATUS, --현재는 1건씩 전송해서
+                    ('1' || '_' || B.TCS_RESULT) AS RESULT_CD, --A.COMPANY || '_' || A.RESULT
+                    '1' AS COMPANY, --1:KT, 2:SMTNT
+                    A.SUBJECT,
+                    A.SMS_MSG AS MSG_CONTENT,
+                    A.RESERVED9 AS SMS_SEND_SEQ,
+                    'SDK_SMS_REPORT' AS GUBUN
+                    FROM SDK_SMS_REPORT A,
+                    SDK_SMS_REPORT_DETAIL B
+                    WHERE 1=1
+                    AND B.MSG_ID = A.MSG_ID
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND A.RESERVED7 LIKE '%' || #{ssOrgnCd} || '%' --S_OGN_CD
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
+                    </if>
+                    <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
+                        AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                    </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
+                    </if>
+                )
+                UNION ALL
+                (
+                    --LMS 문자 전송결과
+                    SELECT
+                    A.MSG_ID,
+                    A.NOW_DATE AS REG_DT,
+                    A.RESERVED7 AS S_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM,
+                    A.RESERVED8 AS S_USER_ID,
+                    (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM,
+                    A.CALLBACK,
+                    A.RESERVED4 AS R_OGN_CD,
+                    (SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM,
+                    A.RESERVED5 AS R_OGN_FG,
+                    A.RESERVED6 AS R_USER_ID,
+                    A.RESERVED3 AS CST_NO,
+                    SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER,
+                    (CASE WHEN A.CONTENT_COUNT = '0' THEN 2 ELSE 3 END) AS MSG_TYPE,
+                    A.SCHEDULE_TYPE AS RESERVE_YN,
+                    DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
+                    B.DELIVER_DATE AS READ_DATE,
+                    (CASE WHEN A.SUCC_COUNT = 0 THEN -1
+                    WHEN A.SUCC_COUNT = 1 THEN 3
+                    ELSE null END
+                    ) AS SEND_STATUS, --현재는 1건씩 전송해서
+                    ('1' || '_' || B.TCS_RESULT) AS RESULT_CD, --A.COMPANY || '_' || A.RESULT
+                    '1' AS COMPANY, --1:KT, 2:SMTNT
+                    A.SUBJECT,
+                    A.MMS_MSG AS MSG_CONTENT,
+                    A.RESERVED9 AS SMS_SEND_SEQ,
+                    'SDK_MMS_REPORT' AS GUBUN
+                    FROM SDK_MMS_REPORT A,
+                    SDK_MMS_REPORT_DETAIL B
+                    WHERE 1=1
+                    AND B.MSG_ID = A.MSG_ID
+                    AND A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    <if test="ssOrgnCd != null and ssOrgnCd != ''">
+                        AND A.RESERVED7 LIKE '%' || #{ssOrgnCd} || '%' --S_OGN_CD
+                    </if>
+                    <if test="rrOrgnCd != null and rrOrgnCd != ''">
+                        AND A.RESERVED4 LIKE '%' || #{rrOrgnCd} || '%' --R_OGN_CD
+                    </if>
+                    <if test="ssPhoneNumber != null and ssPhoneNumber != ''">
+                        AND A.CALLBACK LIKE '%' || #{ssPhoneNumber} || '%' --S_PHONE_NUMBER
+                    </if>
+                    <if test="reserveYn != null and reserveYn != ''">
+                        AND A.SCHEDULE_TYPE = #{reserveYn}
+                    </if>
+                )
+            )
+            WHERE 1=1
+            <if test="ssOrgnNm != null and ssOrgnNm != ''">
+                AND S_OGN_NM LIKE '%' || #{ssOrgnNm} || '%'
+            </if>
+            <if test="rrOrgnNm != null and rrOrgnNm != ''">
+                AND R_OGN_NM LIKE '%' || #{rrOrgnNm} || '%'
+            </if>
+        ) hmt,
+        (
+            SELECT
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                    WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                    ELSE twuidv01.ORGN_CD END
+            ) AS AGENCY_CD
+            FROM
+            (
+                SELECT
+                DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                twuidv01.ORGN_CD,
+                twuidv01.ORGN_NM,
+                twuidv01.HQ_OFFICE_CD,
+                twuidv01.STORE_CD
+                FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+            ) twuidv01
+            WHERE 1=1
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
+        WHERE 1=1
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                    ]]>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND twuidv01.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{orgnCd} OR P_AGENCY_CD = #{orgnCd})
+                    ]]>
+                </if>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                       AND twuidv01.STORE_CD = #{orgnCd}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        <if test="sendStatus != null and sendStatus != ''">
+            AND hmt.SEND_STATUS = #{sendStatus}
+        </if>
+        AND twuidv01.ORGN_CD = hmt.S_OGN_CD
+        ORDER BY hmt.REG_DT DESC
+    </select>
+
     <!-- 문자전송현황 - 예약취소 delete -->
     <!--
         TABLE    : SDK_SMS_SEND_ENC, SDK_MMS_SEND_ENC
@@ -501,6 +792,99 @@
             )
         ORDER BY hdt.OGN_CD, hdt.SMS_DATE DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 일자별 전송현황 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : HCS_DDSMS_T
+        COMMENTS : [공통_로그]SMS충전내역
+    -->
+    <select id="getDaySendStatusExcelList" parameterType="SendStatusVO" resultType="DefaultMap">
+        /* SendStatusMapper.getDaySendStatusExcelList */
+        SELECT
+        hdt.OGN_CD AS ORGN_CD,
+        twuidv01.ORGN_NM,
+        hdt.SMS_DATE,
+        hdt.SMS_CHARGE_AMT,
+        hdt.SMS_CHARGE_CNT,
+        (hdt.SMS_SEND_QTY + hdt.LMS_SEND_QTY + hdt.MMS_SEND_QTY) AS TOT_SEND_QTY,
+        (hdt.SMS_WAIT_QTY + hdt.LMS_WAIT_QTY + hdt.MMS_WAIT_QTY) AS TOT_WAIT_QTY,
+        (hdt.SMS_SUCCESS_QTY + hdt.LMS_SUCCESS_QTY + hdt.MMS_SUCCESS_QTY) AS TOT_SUCCESS_QTY,
+        (hdt.SMS_FAIL_QTY + hdt.LMS_FAIL_QTY + hdt.MMS_FAIL_QTY) AS TOT_FAIL_QTY,
+        hdt.SMS_SEND_QTY,
+        hdt.SMS_WAIT_QTY,
+        hdt.SMS_SUCCESS_QTY,
+        hdt.SMS_FAIL_QTY,
+        hdt.LMS_SEND_QTY,
+        hdt.LMS_WAIT_QTY,
+        hdt.LMS_SUCCESS_QTY,
+        hdt.LMS_FAIL_QTY,
+        hdt.MMS_SEND_QTY,
+        hdt.MMS_WAIT_QTY,
+        hdt.MMS_SUCCESS_QTY,
+        hdt.MMS_FAIL_QTY
+        FROM HCS_DDSMS_T hdt,
+        (
+            SELECT
+            twuidv01.ORGN_FG,
+            twuidv01.ORGN_CD,
+            twuidv01.ORGN_NM,
+            twuidv01.HQ_OFFICE_CD,
+            twuidv01.STORE_CD,
+            (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                    WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                    ELSE twuidv01.ORGN_CD END
+            ) AS AGENCY_CD
+            FROM
+            (
+                SELECT
+                DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG,
+                twuidv01.ORGN_CD,
+                twuidv01.ORGN_NM,
+                twuidv01.HQ_OFFICE_CD,
+                twuidv01.STORE_CD
+                FROM TB_WB_USER_INFO_DTL_V01 twuidv01
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+            ) twuidv01
+            WHERE 1=1
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
+        ) twuidv01
+        WHERE 1=1
+        AND hdt.SMS_DATE BETWEEN #{startDate} AND #{endDate}
+        <choose>
+            <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                    ]]>
+                </if>
+                <!-- 대리점 -->
+                <if test='orgnFg == "A"'>
+                    <![CDATA[
+                        AND twuidv01.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{orgnCd} OR P_AGENCY_CD = #{orgnCd})
+                    ]]>
+                </if>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                       AND twuidv01.STORE_CD = #{orgnCd}
+                    ]]>
+                </if>
+            </when>
+        </choose>
+        AND twuidv01.ORGN_CD = hdt.OGN_CD
+        AND (hdt.SMS_CHARGE_CNT != 0
+                OR hdt.SMS_SEND_QTY != 0 OR hdt.SMS_WAIT_QTY != 0 OR hdt.SMS_SUCCESS_QTY != 0 OR hdt.SMS_FAIL_QTY != 0
+                OR hdt.LMS_SEND_QTY != 0 OR hdt.LMS_WAIT_QTY != 0 OR hdt.LMS_SUCCESS_QTY != 0 OR hdt.LMS_FAIL_QTY != 0
+                OR hdt.MMS_SEND_QTY != 0 OR hdt.MMS_WAIT_QTY != 0 OR hdt.MMS_SUCCESS_QTY != 0 OR hdt.MMS_FAIL_QTY != 0
+            )
+        ORDER BY hdt.OGN_CD, hdt.SMS_DATE DESC
     </select>
 
     <!-- 기간별 전송현황 - 조회 -->

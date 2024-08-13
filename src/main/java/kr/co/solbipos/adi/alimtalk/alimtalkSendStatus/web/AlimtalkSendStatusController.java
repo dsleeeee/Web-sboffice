@@ -99,6 +99,29 @@ public class AlimtalkSendStatusController {
     }
 
     /**
+     * 알림톡 전송결과 - 엑셀다운로드 조회
+     *
+     * @param alimtalkSendStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 08. 12.
+     */
+    @RequestMapping(value = "/alimtalkSendStatus/getAlimtalkSendStatusExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAlimtalkSendStatusExcelList(AlimtalkSendStatusVO alimtalkSendStatusVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = alimtalkSendStatusService.getAlimtalkSendStatusExcelList(alimtalkSendStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, alimtalkSendStatusVO);
+    }
+
+    /**
      * 알림톡 전송결과 - 예약취소 (메세지발송 취소 API 호출 및 저장)
      *
      * @param
@@ -219,6 +242,29 @@ public class AlimtalkSendStatusController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         List<DefaultMap<Object>> result = alimtalkSendStatusService.getAlimtalkDaySendStatusList(alimtalkSendStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, alimtalkSendStatusVO);
+    }
+
+    /**
+     * 알림톡 일자별 전송현황 - 엑셀다운로드 조회
+     *
+     * @param alimtalkSendStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 08. 12.
+     */
+    @RequestMapping(value = "/alimtalkDaySendStatus/getAlimtalkDaySendStatusExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAlimtalkDaySendStatusExcelList(AlimtalkSendStatusVO alimtalkSendStatusVO, HttpServletRequest request,
+                                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = alimtalkSendStatusService.getAlimtalkDaySendStatusExcelList(alimtalkSendStatusVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, alimtalkSendStatusVO);
     }

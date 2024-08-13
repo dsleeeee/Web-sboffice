@@ -32,6 +32,9 @@ public interface SendStatusMapper {
     /** 문자전송현황 - 조회 */
     List<DefaultMap<Object>> getSendStatusList(SendStatusVO sendStatusVO);
 
+    /** 문자전송현황 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getSendStatusExcelList(SendStatusVO sendStatusVO);
+
     /** 문자전송현황 - 예약취소 */
     int getSendStatusReserveCancelSaveDelete(SendStatusVO sendStatusVO);
     int getSendStatusReserveCancelSaveDeleteLMS(SendStatusVO sendStatusVO);
@@ -47,6 +50,9 @@ public interface SendStatusMapper {
 
     /** 일자별 전송현황 - 조회 */
     List<DefaultMap<Object>> getDaySendStatusList(SendStatusVO sendStatusVO);
+
+    /** 일자별 전송현황 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getDaySendStatusExcelList(SendStatusVO sendStatusVO);
 
     /** 기간별 전송현황 - 조회 */
     List<DefaultMap<Object>> getPeriodSendStatusList(SendStatusVO sendStatusVO);

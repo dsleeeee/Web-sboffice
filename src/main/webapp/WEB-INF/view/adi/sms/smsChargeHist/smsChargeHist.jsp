@@ -107,10 +107,8 @@
                     is-editable="false"
                     initialized="initComboBox(s)">
             </wj-combo-box>
-            <%-- 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
-                <s:message code="cmm.excel.down" />
-            </button>
+            <%-- 조회조건 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
             <%-- 현재잔여금액 --%>
             <button class="btn_skyblue ml5 fr" id="btnRestSmsAmtPopup" ng-click="restSmsAmtPopup()"><s:message code="smsChargeHist.restSmsAmt" /></button>
             <c:if test="${orgnFg eq 'MASTER'}">
@@ -202,7 +200,7 @@
     var siteUrl = '<%=pay_site_url%>'; // 결제상세 URL
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20221215.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsChargeHist/smsChargeHist.js?ver=20240812.01" charset="utf-8"></script>
 
 <%-- SMS임의충전 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsChargeHist/smsChargeRegist.jsp">

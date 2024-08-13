@@ -61,6 +61,17 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
         return alimtalkSendStatusMapper.getAlimtalkSendStatusList(alimtalkSendStatusVO);
     }
 
+    /** 알림톡 전송결과 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getAlimtalkSendStatusExcelList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        alimtalkSendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        alimtalkSendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return alimtalkSendStatusMapper.getAlimtalkSendStatusExcelList(alimtalkSendStatusVO);
+    }
+
     /** 알림톡 전송결과 - 예약취소 */
     @Override
     public int getAlimtalkSendStatusReserveCancelSave(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO) {
@@ -126,6 +137,17 @@ public class AlimtalkSendStatusServiceImpl implements AlimtalkSendStatusService 
         alimtalkSendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
 
         return alimtalkSendStatusMapper.getAlimtalkDaySendStatusList(alimtalkSendStatusVO);
+    }
+
+    /** 알림톡 일자별 전송현황 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getAlimtalkDaySendStatusExcelList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        alimtalkSendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        alimtalkSendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return alimtalkSendStatusMapper.getAlimtalkDaySendStatusExcelList(alimtalkSendStatusVO);
     }
 
     /** 알림톡 기간별 전송현황 - 조회 */

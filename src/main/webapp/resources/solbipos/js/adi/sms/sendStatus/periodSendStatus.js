@@ -14,9 +14,9 @@
 var app = agrid.getApp();
 
 /**
- *  일자별 전송현황 조회 그리드 생성
+ *  기간별 전송현황 조회 그리드 생성
  */
-app.controller('periodSendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('periodSendStatusCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('periodSendStatusCtrl', $scope, $http, false));
@@ -122,17 +122,46 @@ app.controller('periodSendStatusCtrl', ['$scope', '$http', function ($scope, $ht
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 3달(93일) 제한
-        if (diffDay > 93) {
-            $scope._popMsg(messages['cmm.dateOver.3month.error']);
+
+        // 조회일자 최대 6달(186일) 제한
+        if (diffDay > 186) {
+            $scope._popMsg(messages['cmm.dateOver.6month.error']);
             return false;
         }
 
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.hqOfficeCd = $scope.hqOfficeCd;
+        params.hqOfficeNm = $scope.hqOfficeNm;
+        params.storeCd = $scope.storeCd;
+        params.storeNm = $scope.storeNm;
 
         $scope._inquiryMain("/adi/sms/sendStatus/periodSendStatus/getPeriodSendStatusList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
+
+    // <-- 엑셀다운로드 -->
+    $scope.excelDownload = function(){
+        if ($scope.periodSendStatusFlex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.periodSendStatusFlex, {
+                includeColumnHeaders: true,
+                includeCellStyles   : false,
+                includeColumns      : function (column) {
+                    return column.visible;
+                }
+            }, "기간별 전송현황_" + getCurDateTime() +'.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
+    };
+    // <-- //엑셀다운로드 -->
 }]);

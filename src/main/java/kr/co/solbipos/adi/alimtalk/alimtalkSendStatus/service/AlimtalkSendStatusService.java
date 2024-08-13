@@ -25,11 +25,17 @@ public interface AlimtalkSendStatusService {
     /** 알림톡 전송결과 - 조회 */
     List<DefaultMap<Object>> getAlimtalkSendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO);
 
+    /** 알림톡 전송결과 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getAlimtalkSendStatusExcelList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO);
+
     /** 알림톡 전송결과 - 예약취소 */
     int getAlimtalkSendStatusReserveCancelSave(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO);
 
     /** 알림톡 일자별 전송현황 - 조회 */
     List<DefaultMap<Object>> getAlimtalkDaySendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO);
+
+    /** 알림톡 일자별 전송현황 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getAlimtalkDaySendStatusExcelList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO);
 
     /** 알림톡 기간별 전송현황 - 조회 */
     List<DefaultMap<Object>> getAlimtalkPeriodSendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO, SessionInfoVO sessionInfoVO);

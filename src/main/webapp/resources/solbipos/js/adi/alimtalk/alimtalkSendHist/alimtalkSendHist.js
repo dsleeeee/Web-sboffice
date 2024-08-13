@@ -181,6 +181,22 @@ app.controller('alimtalkSendHistCtrl', ['$scope', '$http', '$timeout', function 
     });
 
     $scope.searchAlimtalkSendHist = function() {
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 6달(186일) 제한
+        if (diffDay > 186) {
+            $scope._popMsg(messages['cmm.dateOver.6month.error']);
+            return false;
+        }
+
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
@@ -262,7 +278,7 @@ app.controller('alimtalkSendHistCtrl', ['$scope', '$http', '$timeout', function 
 
 
 /**
- *  알림톡 전송이력 엑셀 조회 그리드 생성
+ *  엑셀다운로드 그리드 생성
  */
 app.controller('alimtalkSendHistExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
@@ -357,36 +373,33 @@ app.controller('alimtalkSendHistExcelCtrl', ['$scope', '$http', '$timeout', func
 
     // <-- 검색 호출 -->
     $scope.$on("alimtalkSendHistExcelCtrl", function(event, data) {
-        $scope.searchAlimtalkSendHistExcel(data);
+        $scope.searchExcelList(data);
         event.preventDefault();
     });
 
-    $scope.searchAlimtalkSendHistExcel = function(params) {
-        $scope._inquirySub("/adi/alimtalk/alimtalkSendHist/alimtalkSendHist/getAlimtalkSendHistExcelList.sb", params, function() {
+    $scope.searchExcelList = function (params) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/adi/alimtalk/alimtalkSendHist/alimtalkSendHist/getAlimtalkSendHistExcelList.sb", params, function() {
             if ($scope.alimtalkSendHistExcelFlex.rows.length <= 0) {
-                $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
             }
 
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-            $timeout(function()	{
-                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.alimtalkSendHistExcelFlex,
-                    {
-                        includeColumnHeaders: 	true,
-                        includeCellStyles	: 	false,
-                        includeColumns      :	function (column) {
-                            return column.visible;
-                        }
-                    },
-                    '알림톡 전송이력_'+getCurDate()+'.xlsx',
-                    function () {
-                        $timeout(function () {
-                            $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
-                        }, 10);
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.alimtalkSendHistExcelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        return column.visible;
                     }
-                );
+                }, "알림톡 전송이력_" + getCurDateTime() +'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
             }, 10);
-        }, false);
+        });
     };
     // <-- //검색 호출 -->
 }]);

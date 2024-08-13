@@ -36,7 +36,7 @@ var reserveYnDataMapData = [
 /**
  *  문자전송현황 조회 그리드 생성
  */
-app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('sendStatusCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('sendStatusCtrl', $scope, $http, false));
@@ -101,9 +101,32 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     $scope.searchSendStatus = function() {
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 6달(186일) 제한
+        if (diffDay > 186) {
+            $scope._popMsg(messages['cmm.dateOver.6month.error']);
+            return false;
+        }
+
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.ssPhoneNumber = $scope.ssPhoneNumber;
+        params.ssOrgnCd = $scope.ssOrgnCd;
+        params.ssOrgnNm = $scope.ssOrgnNm;
+        params.rrOrgnCd = $scope.rrOrgnCd;
+        params.rrOrgnNm = $scope.rrOrgnNm;
+        params.reserveYn = $scope.reserveYn;
+        params.sendStatus = $scope.sendStatus;
         params.listScale = 2000;
 
         $scope._inquiryMain("/adi/sms/sendStatus/sendStatus/getSendStatusList.sb", params, function() {
@@ -198,4 +221,97 @@ app.controller('sendStatusCtrl', ['$scope', '$http', function ($scope, $http) {
             }, 50)
         });
     });
+
+    // <-- 엑셀다운로드 -->
+    $scope.excelDownload = function(){
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        var params = {};
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.ssPhoneNumber = $scope.ssPhoneNumber;
+        params.ssOrgnCd = $scope.ssOrgnCd;
+        params.ssOrgnNm = $scope.ssOrgnNm;
+        params.rrOrgnCd = $scope.rrOrgnCd;
+        params.rrOrgnNm = $scope.rrOrgnNm;
+        params.reserveYn = $scope.reserveYn;
+        params.sendStatus = $scope.sendStatus;
+
+        $scope._broadcast('sendStatusExcelCtrl', params);
+    };
+    // <-- //엑셀다운로드 -->
+}]);
+
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('sendStatusExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('sendStatusExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
+        $scope.msgTypeDataMap = new wijmo.grid.DataMap(msgTypeDataMapData, 'value', 'name'); // 메세지타입
+        $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
+        $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
+
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                // 메세지
+                if (col.binding === "msgContent") {
+                    // var item = s.rows[e.row].dataItem;
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
+
+                if (col.format === "date") {
+                    e.cell.innerHTML = getFormatDate(e.cell.innerText);
+                } else if (col.format === "dateTime") {
+                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+                } else if (col.format === "time") {
+                    e.cell.innerHTML = getFormatTime(e.cell.innerText, 'hms');
+                }
+            }
+        });
+    };
+
+    // <-- 검색 호출 -->
+    $scope.$on("sendStatusExcelCtrl", function(event, data) {
+        $scope.searchExcelList(data);
+        event.preventDefault();
+    });
+
+    $scope.searchExcelList = function (params) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/adi/sms/sendStatus/sendStatus/getSendStatusExcelList.sb", params, function() {
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, "전송결과_" + getCurDateTime() +'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
+    // <-- //검색 호출 -->
 }]);

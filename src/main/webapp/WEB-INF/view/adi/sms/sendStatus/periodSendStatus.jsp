@@ -9,8 +9,8 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <div id="periodSendStatusView" class="subCon" style="display: none;padding: 10px 20px 40px;">
-    <div ng-controller="periodSendStatusCtrl">
 
+    <div ng-controller="periodSendStatusCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
             <a href="#" class="open fl"><s:message code="periodSendStatus.info"/></a>
@@ -71,12 +71,17 @@
             </tbody>
         </table>
 
+        <div class="mt10 oh sb-select dkbr">
+            <%-- 현재화면 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent" /></button>
+        </div>
+
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
             <div class="wj-gridWrap" style="height:420px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
-                        control="flex"
+                        control="periodSendStatusFlex"
                         initialized="initGrid(s,e)"
                         sticky-headers="true"
                         selection-mode="Row"
@@ -112,6 +117,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/periodSendStatus.js?ver=20220331.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/sendStatus/periodSendStatus.js?ver=20240812.01" charset="utf-8"></script>

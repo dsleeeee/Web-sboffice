@@ -98,6 +98,29 @@ public class SendStatusController {
     }
 
     /**
+     * 문자전송현황 - 엑셀다운로드 조회
+     *
+     * @param sendStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 08. 12.
+     */
+    @RequestMapping(value = "/sendStatus/getSendStatusExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSendStatusExcelList(SendStatusVO sendStatusVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sendStatusService.getSendStatusExcelList(sendStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sendStatusVO);
+    }
+
+    /**
      * 문자전송현황 - 예약취소
      *
      * @param sendStatusVOs
@@ -143,7 +166,28 @@ public class SendStatusController {
         return ReturnUtil.returnListJson(Status.OK, result, sendStatusVO);
     }
 
+    /**
+     * 일자별 전송현황 - 엑셀다운로드 조회
+     *
+     * @param sendStatusVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 08. 12.
+     */
+    @RequestMapping(value = "/daySendStatus/getDaySendStatusExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDaySendStatusExcelList(SendStatusVO sendStatusVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sendStatusService.getDaySendStatusExcelList(sendStatusVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, sendStatusVO);
+    }
 
     /**
      * 기간별 전송현황 - 조회
@@ -167,8 +211,6 @@ public class SendStatusController {
 
         return ReturnUtil.returnListJson(Status.OK, result, sendStatusVO);
     }
-
-
 
     /**
      * 공통 화면 상단 SMS전송(당일) 표시 - [125 SMS전송현황표시]에 등록된 본사 하위 매장인지 조회

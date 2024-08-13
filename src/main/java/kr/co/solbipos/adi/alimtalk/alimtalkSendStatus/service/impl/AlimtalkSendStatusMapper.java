@@ -29,6 +29,9 @@ public interface AlimtalkSendStatusMapper {
     /** 알림톡 전송결과 - 조회 */
     List<DefaultMap<Object>> getAlimtalkSendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO);
 
+    /** 알림톡 전송결과 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getAlimtalkSendStatusExcelList(AlimtalkSendStatusVO alimtalkSendStatusVO);
+
     /** 알림톡 전송결과 - 예약취소 */
     int getAlimtalkSendStatusReserveCancelSaveDelete(AlimtalkSendStatusVO alimtalkSendStatusVO);
 
@@ -40,6 +43,9 @@ public interface AlimtalkSendStatusMapper {
 
     /** 알림톡 일자별 전송현황 - 조회 */
     List<DefaultMap<Object>> getAlimtalkDaySendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO);
+
+    /** 알림톡 일자별 전송현황 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getAlimtalkDaySendStatusExcelList(AlimtalkSendStatusVO alimtalkSendStatusVO);
 
     /** 알림톡 기간별 전송현황 - 조회 */
     List<DefaultMap<Object>> getAlimtalkPeriodSendStatusList(AlimtalkSendStatusVO alimtalkSendStatusVO);

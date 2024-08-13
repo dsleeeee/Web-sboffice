@@ -9,8 +9,8 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <div id="alimtalkSendHistView" class="subCon" style="display: none;">
-    <div ng-controller="alimtalkSendHistCtrl">
 
+    <div ng-controller="alimtalkSendHistCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar">
             <a href="#" class="open fl"><s:message code="alimtalkSendHist.info"/></a>
@@ -124,9 +124,7 @@
                     initialized="initComboBox(s)">
             </wj-combo-box>
             <%-- 조회조건 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()">
-                <s:message code="cmm.excel.downCondition" />
-            </button>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
         </div>
 
         <%-- 그리드 --%>
@@ -212,7 +210,7 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20240702.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendHist/alimtalkSendHist.js?ver=20270812.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">--%>

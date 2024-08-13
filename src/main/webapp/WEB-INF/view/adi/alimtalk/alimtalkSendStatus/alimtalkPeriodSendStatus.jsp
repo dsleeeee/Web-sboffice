@@ -9,8 +9,8 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 
 <div id="alimtalkPeriodSendStatusView" class="subCon" style="display: none;">
-    <div ng-controller="alimtalkPeriodSendStatusCtrl">
 
+    <div ng-controller="alimtalkPeriodSendStatusCtrl">
         <%-- 조회조건 --%>
         <div class="searchBar flddUnfld">
             <a href="#" class="open fl"><s:message code="alimtalkPeriodSendStatus.info"/></a>
@@ -79,12 +79,17 @@
             </tbody>
         </table>
 
+        <div class="mt10 oh sb-select dkbr">
+            <%-- 현재화면 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent" /></button>
+        </div>
+
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
             <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         autoGenerateColumns="false"
-                        control="flex"
+                        control="alimtalkPeriodSendStatusFlex"
                         initialized="initGrid(s,e)"
                         sticky-headers="true"
                         selection-mode="Row"
@@ -105,6 +110,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkPeriodSendStatus.js?ver=20220401.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkPeriodSendStatus.js?ver=20240812.01" charset="utf-8"></script>

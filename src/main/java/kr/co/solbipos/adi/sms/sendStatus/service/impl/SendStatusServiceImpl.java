@@ -64,6 +64,17 @@ public class SendStatusServiceImpl implements SendStatusService {
         return sendStatusMapper.getSendStatusList(sendStatusVO);
     }
 
+    /** 문자전송현황 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSendStatusExcelList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        sendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return sendStatusMapper.getSendStatusExcelList(sendStatusVO);
+    }
+
     /** 문자전송현황 - 예약취소 */
     @Override
     public int getSendStatusReserveCancelSave(SendStatusVO[] sendStatusVOs, SessionInfoVO sessionInfoVO) {
@@ -119,6 +130,17 @@ public class SendStatusServiceImpl implements SendStatusService {
         return sendStatusMapper.getDaySendStatusList(sendStatusVO);
     }
 
+    /** 일자별 전송현황 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDaySendStatusExcelList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO) {
+
+        // 접속사용자의 권한(M : 시스템, A : 대리점, H : 본사, S : 매장)
+        sendStatusVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sendStatusVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+
+        return sendStatusMapper.getDaySendStatusExcelList(sendStatusVO);
+    }
+
     /** 기간별 전송현황 - 조회 */
     @Override
     public List<DefaultMap<Object>> getPeriodSendStatusList(SendStatusVO sendStatusVO, SessionInfoVO sessionInfoVO) {
@@ -133,7 +155,6 @@ public class SendStatusServiceImpl implements SendStatusService {
 
         return sendStatusMapper.getPeriodSendStatusList(sendStatusVO);
     }
-
 
 
     /** 공통 화면 상단 SMS전송(당일) 표시 - [125 SMS전송현황표시]에 등록된 본사 하위 매장인지 조회 */
