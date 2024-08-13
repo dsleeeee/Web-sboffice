@@ -301,7 +301,7 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
            params.branchCd = $scope.srchBranchCdCombo.selectedValue;
 
            // '전체' 일때
-           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
              var momsHqBrandCd = "";
              for(var i=0; i < momsHqBrandCdComboList.length; i++){
                if(momsHqBrandCdComboList[i].value !== null) {
@@ -319,7 +319,7 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         params.excelType = excelType;
-        
+
         // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
         $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
             $scope._broadcast('saleProdRankMomsExcelCtrl', params);
@@ -365,7 +365,7 @@ app.controller('saleProdRankMomsCtrl', ['$scope', '$http', '$timeout', function 
          });
         }, 10);
     };
-    
+
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
         if( $("#tblSearchAddShow").css("display") === 'none') {

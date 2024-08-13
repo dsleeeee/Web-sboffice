@@ -611,4 +611,4 @@
     var vDlvrOrderFg = ["stin", "dlvr", "pack"];
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRateMoms/prodSaleRateMoms.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRateMoms/prodSaleRateMoms.js?ver=20240813.01" charset="utf-8"></script>
