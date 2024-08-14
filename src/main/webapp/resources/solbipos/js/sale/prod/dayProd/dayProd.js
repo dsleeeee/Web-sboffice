@@ -194,7 +194,7 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.momsStoreManageType = $scope.momsStoreManageType;
         params.branchCd = $scope.branchCd;
         // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
             var momsHqBrandCd = "";
             for(var i=0; i < momsHqBrandCdComboList.length; i++){
                 if(momsHqBrandCdComboList[i].value !== null) {
@@ -349,7 +349,7 @@ app.controller('dayProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.momsStoreManageType = $scope.momsStoreManageType;
         params.branchCd = $scope.branchCd;
         // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
             var momsHqBrandCd = "";
             for(var i=0; i < momsHqBrandCdComboList.length; i++){
                 if(momsHqBrandCdComboList[i].value !== null) {

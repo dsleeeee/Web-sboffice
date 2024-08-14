@@ -407,7 +407,7 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
            params.branchCd = $scope.srchBranchCdCombo.selectedValue;
 
            // '전체' 일때
-           if(params.storeHqBrandCd === "" || params.prodHqBrandCd === null || params.prodHqBrandCd === "" || params.storeHqBrandCd === null) {
+           if(params.storeHqBrandCd === "" || params.prodHqBrandCd === null || params.prodHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
              var momsHqBrandCd = "";
              for(var i=0; i < momsHqBrandCdComboList.length; i++){
                if(momsHqBrandCdComboList[i].value !== null) {
@@ -511,7 +511,7 @@ app.controller('saleDtlChannelCtrl', ['$scope', '$http', '$timeout', function ($
            params.branchCd = $scope.srchBranchCdCombo.selectedValue;
 
            // '전체' 일때
-           if(params.storeHqBrandCd === "" || params.prodHqBrandCd === null || params.prodHqBrandCd === "" || params.storeHqBrandCd === null) {
+           if(params.storeHqBrandCd === "" || params.prodHqBrandCd === null || params.prodHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
              var momsHqBrandCd = "";
              for(var i=0; i < momsHqBrandCdComboList.length; i++){
                if(momsHqBrandCdComboList[i].value !== null) {

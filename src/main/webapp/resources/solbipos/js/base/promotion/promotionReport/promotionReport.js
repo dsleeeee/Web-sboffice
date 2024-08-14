@@ -220,7 +220,7 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
     params.branchCd = $scope.branchCd;
     params.storeHqBrandCd = $scope.storeHqBrandCd;
     // '전체' 일때
-    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
       var momsHqBrandCd = "";
       for(var i=0; i < momsHqBrandCdComboList.length; i++){
         if(momsHqBrandCdComboList[i].value !== null) {
@@ -292,7 +292,7 @@ app.controller('promotionReportCtrl', ['$scope', '$http', '$timeout', function (
     params.branchCd = $scope.branchCd;
     params.storeHqBrandCd = $scope.storeHqBrandCd;
     // '전체' 일때
-    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
       var momsHqBrandCd = "";
       for(var i=0; i < momsHqBrandCdComboList.length; i++){
         if(momsHqBrandCdComboList[i].value !== null) {

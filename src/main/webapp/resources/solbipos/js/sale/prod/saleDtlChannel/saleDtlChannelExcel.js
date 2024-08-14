@@ -243,7 +243,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
             params.momsStoreFg05 = $scope.momsStoreFg05;
 
             // '전체' 일때
-            if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 수정완료 1992
                 var momsHqBrandCd = "";
                 for (var i = 0; i < momsHqBrandCdComboList.length; i++) {
                     if (momsHqBrandCdComboList[i].value !== null) {
@@ -295,7 +295,7 @@ app.controller('saleDtlChannelExcelCtrl', ['$scope', '$http', '$timeout', functi
             params.momsStoreFg05 = $scope.momsStoreFg05;
 
             // '전체' 일때
-            // if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            // if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 수정완료 1992
                 var momsHqBrandCd = "";
                 for (var i = 0; i < momsHqBrandCdComboList.length; i++) {
                     if (momsHqBrandCdComboList[i].value !== null) {
