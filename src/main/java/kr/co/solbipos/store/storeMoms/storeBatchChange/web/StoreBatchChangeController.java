@@ -522,4 +522,16 @@ public class StoreBatchChangeController {
         return returnJson(Status.OK, result);
     }
 
+    /** 검증결과 조회 */
+    @RequestMapping(value = "storeBatchChange/getTmpStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTmpStoreList(StoreBatchChangeVO storeBatchChangeVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = storeBatchChangeService.getTmpStoreList(storeBatchChangeVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, storeBatchChangeVO);
+    }
+
 }

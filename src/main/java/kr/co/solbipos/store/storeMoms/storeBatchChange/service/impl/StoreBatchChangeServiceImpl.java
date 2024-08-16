@@ -270,9 +270,18 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
         storeCnt += storeBatchChangeMapper.getSimpleStoreInfoSave(storeBatchChangeVO);
 
         // 전체 삭제
-        storeBatchChangeMapper.getStoreExcelUploadCheckDeleteAll(storeBatchChangeVO);
+//        storeBatchChangeMapper.getStoreExcelUploadCheckDeleteAll(storeBatchChangeVO);
 
         return storeCnt;
+    }
+
+    /** 검증결과 조회 */
+    @Override
+    public List<DefaultMap<String>> getTmpStoreList(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO) {
+        storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+        storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return storeBatchChangeMapper.getTmpStoreList(storeBatchChangeVO);
     }
 
 }

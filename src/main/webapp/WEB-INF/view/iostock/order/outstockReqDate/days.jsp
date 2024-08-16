@@ -58,10 +58,13 @@
       >
       </wj-combo-box>
       <%--// 페이지 스케일  --%>
-      <div class="tr">
-        <%-- 신규등록 --%>
-        <button class="btn_skyblue" ng-click="saveDays()"><s:message code="cmm.save"/></button>
-      </div>
+
+      <c:if test="${orgnFg == 'HQ'}">
+        <div class="tr">
+          <%-- 신규등록 --%>
+          <button class="btn_skyblue" ng-click="saveDays()"><s:message code="cmm.save"/></button>
+        </div>
+      </c:if>
     </div>
 
     <%--위즈모 테이블--%>

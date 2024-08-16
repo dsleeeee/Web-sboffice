@@ -291,7 +291,7 @@
             MOMS_STORE_FG_05
         ) VALUES (
             #{sessionId},
-            #{seq},
+            (SELECT NVL(MAX(SEQ)+1,1) FROM TB_TMP_EXCEL_STORE_INFO WHERE SESSION_ID = #{sessionId} AND HQ_OFFICE_CD = #{hqOfficeCd}),
             #{hqOfficeCd},
             #{storeCd},
             #{branchCd},
@@ -363,6 +363,7 @@
             FROM TB_TMP_EXCEL_STORE_INFO C
             WHERE C.SESSION_ID = #{sessionId}
             AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND C.SEQ BETWEEN #{offset} AND #{limit}
         ) B
         ON (A.STORE_CD = B.STORE_CD)
         WHEN MATCHED THEN
@@ -403,6 +404,7 @@
                 WHERE 1=1
                 AND C.SESSION_ID = #{sessionId}
                 AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND C.SEQ BETWEEN #{offset} AND #{limit}
             ) B
         ON (
                 A.STORE_CD = B.STORE_CD
@@ -474,5 +476,45 @@
         AND     HQ_OFFICE_CD = #{hqOfficeCd}
         AND     STORE_CD = #{storeCd}
     </delete>
+
+    <!-- 검증결과 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_STORE_INFO
+        PARAM    : storeBatchChangeVO
+        COMMENTS : 엑셀업로드 검증결과를 조회한다.
+    -->
+    <select id="getTmpStoreList" parameterType="storeBatchChangeVO" resultType="DefaultMap">
+        /* USE : StoreBatchChangeMapper.getTmpStoreList  */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.SESSION_ID
+        ,       A.SEQ
+        ,       A.HQ_OFFICE_CD
+        ,       A.STORE_CD
+        ,       B.STORE_NM
+        ,       A.BRANCH_CD
+        ,       A.MOMS_TEAM
+        ,       A.MOMS_AC_SHOP
+        ,       A.MOMS_AREA_FG
+        ,       A.MOMS_COMMERCIAL
+        ,       A.MOMS_SHOP_TYPE
+        ,       A.MOMS_STORE_MANAGE_TYPE
+        ,       A.RESULT
+        ,       A.MOMS_STORE_FG_01
+        ,       A.MOMS_STORE_FG_02
+        ,       A.MOMS_STORE_FG_03
+        ,       A.MOMS_STORE_FG_04
+        ,       A.MOMS_STORE_FG_05
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_TMP_EXCEL_STORE_INFO A
+        ,       TB_MS_STORE B
+        WHERE   1=1
+        AND     A.SESSION_ID        = #{sessionId}
+        AND     A.HQ_OFFICE_CD      = #{hqOfficeCd}
+        AND     B.HQ_OFFICE_CD  (+) = A.HQ_OFFICE_CD
+        AND     B.STORE_CD      (+) = A.STORE_CD
+        ORDER
+        BY      A.SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
 
 </mapper>

@@ -56,16 +56,17 @@
         <div class="w400px fl" style="display: none;">
           <p class="tl s14 mt5 ml5 lh15">* 시작시간/마감시간은 요청여부 [가능] 일 경우만 동작합니다.</p>
         </div>
-
       <%--// 페이지 스케일  --%>
-      <div class="tr">
-        <%-- 신규등록 --%>
-        <button class="btn_skyblue" ng-click="newSpecificDate()"><s:message code="cmm.new.add"/></button>
-        <%-- 저장 --%>
-        <button class="btn_skyblue" ng-click="saveSpecificDate()"><s:message code="cmm.save"/></button>
-        <%-- 삭제 --%>
-        <button class="btn_skyblue" ng-click="deleteSpecificDate()"><s:message code="cmm.del"/></button>
-      </div>
+      <c:if test="${orgnFg == 'HQ'}">
+        <div class="tr">
+          <%-- 신규등록 --%>
+          <button class="btn_skyblue" ng-click="newSpecificDate()"><s:message code="cmm.new.add"/></button>
+          <%-- 저장 --%>
+          <button class="btn_skyblue" ng-click="saveSpecificDate()"><s:message code="cmm.save"/></button>
+          <%-- 삭제 --%>
+          <button class="btn_skyblue" ng-click="deleteSpecificDate()"><s:message code="cmm.del"/></button>
+        </div>
+      </c:if>
     </div>
 
     <%--위즈모 테이블--%>

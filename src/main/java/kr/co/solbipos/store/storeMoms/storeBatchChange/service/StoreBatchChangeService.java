@@ -45,4 +45,6 @@ public interface StoreBatchChangeService {
     /** 매장정보 저장 */
     int getSimpleSave(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO);
 
+    /** 검증결과 조회 */
+    List<DefaultMap<String>> getTmpStoreList(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO);
 }

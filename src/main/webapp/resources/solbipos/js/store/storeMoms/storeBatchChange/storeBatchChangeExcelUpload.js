@@ -151,6 +151,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // 저장
     $scope.save = function() {
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.excelUploadData"]);	// 엑셀업로드 된 데이터가 없습니다.
             return false;
@@ -183,19 +184,135 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
         // 파라미터 설정
         var params = new Array();
 
-        $scope._postJSONSave.withPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getSimpleSave.sb", params, function(response) {
-            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-            var result = response.data.data;
-            if(result < 1){
-                $scope._popMsg(messages["cmm.registFail"]);
-            }else{
-                $scope._popMsg(messages["cmm.saveSucc"]);
-                // 팝업 닫기
-                $scope.close();
-            }
-            // 검증결과 조회
-            $scope.searchStoreExcelUploadProd();
+        // 다운로드 시작이면 작업내역 로딩 팝업 오픈
+        $scope.excelUploadingPopup(true);
+        $("#totalRows").html(0);
+
+        // 전체 데이터 수
+        var listSize = 0;
+
+        // 전체 데이터 수 조회
+        params.limit = 1;
+        params.offset = 1;
+
+        $scope._postJSONQuery.withOutPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getTmpStoreList.sb", params, function(response){
+
+            listSize = response.data.data.list[0].totCnt;
+
+            if(listSize === 0){
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                $scope.excelUploadingPopup(false);
+                return false;
+            };
+
+            // 다운로드 될 전체 파일 갯수 셋팅
+            $("#totalRows").html(listSize);
+
+            // 엑셀다운로드 진행 사용자 저장 insert
+            params.downloadFileCount = listSize; // 다운로드 파일수
+            $scope._postJSONQuery.withOutPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getTmpStoreList.sb", params, function(response){
+
+                // 엑셀 분할 다운로드
+                function delay(x){
+                    return new Promise(function(resolve, reject){
+                        console.log("setTimeout  > i=" + x + " x=" + x);
+
+                        var proCnt = 0;
+                        if(((x+1)*10) > listSize){
+                            proCnt = listSize;
+                        }else{
+                            proCnt = (x+1) * 10
+                        }
+                        // 다운로드 진행중인 파일 숫자 변경
+                        $("#progressCnt").html(proCnt);
+
+                        // 페이징 50000개씩 지정해 분할 다운로드 진행
+                        params.limit = 10 * (x + 1);
+                        params.offset = (10 * (x + 1)) - 9;
+
+                        // 가상로그인 대응한 session id 설정
+                        if (document.getElementsByName('sessionId')[0]) {
+                            params['sid'] = document.getElementsByName('sessionId')[0].value;
+                        }
+
+
+                        // ajax 통신 설정
+                        $http({
+                            method: 'POST', //방식
+                            url: '/store/storeMoms/storeBatchChange/storeBatchChange/getSimpleSave.sb', /* 통신할 URL */
+                            params: params, /* 파라메터로 보낼 데이터 */
+                            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+                        }).then(function successCallback(response) {
+                            if ($scope._httpStatusCheck(response, true)) {
+                                // this callback will be called asynchronously
+                                // when the response is available
+
+                                if(listSize <= ((x+1) * 10)){
+                                    $scope._popMsg(messages['cmm.saveSucc']);
+                                    $scope.excelUploadingPopup(false);
+                                    return false;
+                                }
+                            }else if(response.data.status === 'SERVER_ERROR'){
+                                $scope.excelUploadingPopup(false);
+                                return false;
+                            }
+                        }, function errorCallback(response) {
+                            // 로딩팝업 hide
+                            $scope.excelUploadingPopup(false);
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                            if (response.data.message) {
+                                $scope._popMsg(response.data.message);
+                            } else {
+                                $scope._popMsg(messages['cmm.error']);
+                            }
+                            return false;
+                        }).then(function () {
+                            // 'complete' code here
+                            setTimeout(function() {
+                                getExcelFile(x+1);
+                            }, 1000);
+                        });
+                        resolve(x);
+                    });
+                };
+
+                async function getExcelFile(x) {
+                    if(listSize > (x * 10)){
+                        await delay(x);
+                    }else{
+                    }
+                };
+
+                // 엑셀 분할 다운로드 시작
+                getExcelFile(0);
+
+            });
         });
+    };
+
+    $scope.deleteTmpStoreList = function (){
+        var params = {};
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getStoreExcelUploadCheckDeleteAll.sb", params, function(){
+        });
+    };
+
+    // 작업내역 로딩 팝업
+    $scope.excelUploadingPopup = function (showFg) {
+        if (showFg) {
+            // 팝업내용 동적 생성
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.saving'] + '</p>';
+            innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 저장 진행 중...</div>';
+            innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+            // html 적용
+            $scope._loadingPopup.content.innerHTML = innerHtml;
+            // 팝업 show
+            $scope._loadingPopup.show(true);
+        } else {
+            $scope._loadingPopup.hide(true);
+        }
     };
 
     // <-- 엑셀다운로드 -->

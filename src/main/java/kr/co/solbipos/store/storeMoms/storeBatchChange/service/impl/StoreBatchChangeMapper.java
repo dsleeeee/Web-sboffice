@@ -59,4 +59,7 @@ public interface StoreBatchChangeMapper {
 
     /** 저장 완료된 검증결과 삭제 */
     int getStoreExcelUploadCheckDelete(StoreBatchChangeVO storeBatchChangeVO);
+
+    /** 검증결과 조회 */
+    List<DefaultMap<String>> getTmpStoreList(StoreBatchChangeVO storeBatchChangeVO);
 }
