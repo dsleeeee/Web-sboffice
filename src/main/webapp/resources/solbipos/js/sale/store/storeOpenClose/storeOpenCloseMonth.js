@@ -65,7 +65,7 @@ app.controller('storeOpenCloseMonthTimeCtrl', ['$scope', '$http', '$timeout', fu
             params.storeHqBrandCd = $scope.storeHqBrandCd2;
         }
         // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
             var momsHqBrandCd = "";
             for(var i=0; i < momsHqBrandCdComboList.length; i++){
                 if(momsHqBrandCdComboList[i].value !== null) {
@@ -141,7 +141,7 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
                     params.branchCd = scope.branchCd;
                     params.storeHqBrandCd = scope.storeHqBrandCd;
                     // '전체' 일때
-                    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+                    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
                         var momsHqBrandCd = "";
                         for(var i=0; i < momsHqBrandCdComboList.length; i++){
                             if(momsHqBrandCdComboList[i].value !== null) {
@@ -186,7 +186,7 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
         params.branchCd = data.branchCd;
         params.storeHqBrandCd = data.storeHqBrandCd;
         // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
             var momsHqBrandCd = "";
             for(var i=0; i < momsHqBrandCdComboList.length; i++){
                 if(momsHqBrandCdComboList[i].value !== null) {
@@ -389,7 +389,7 @@ app.controller('storeOpenCloseMonthDtlCtrl', ['$scope', '$http', '$timeout', fun
             params.storeHqBrandCd = data.storeHqBrandCd2;
         }
         // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
             var momsHqBrandCd = "";
             for(var i=0; i < momsHqBrandCdComboList.length; i++){
                 if(momsHqBrandCdComboList[i].value !== null) {
