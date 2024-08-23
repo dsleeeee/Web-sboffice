@@ -11,6 +11,7 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.pay.coupon.service.*;
+import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -413,5 +414,178 @@ public class CouponController {
         int result = service.getCouponSeqChgStoreRegistSave(couponVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 제외상품 등록/미등록 상품 조회
+     * @param   couponProdVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2024.08.14
+     */
+    @RequestMapping(value = "/prod/getExceptProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getExceptProdList(CouponProdVO couponProdVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> exceptProdList = service.getExceptProdList(couponProdVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, exceptProdList, couponProdVO);
+    }
+
+    /**
+     * 쿠폰 제외상품 등록
+     * @param   couponProdVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2024.08.14
+     */
+    @RequestMapping(value = "/prod/registCouponProdExcept.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registCouponProdExcept(@RequestBody CouponProdVO[] couponProdVOs, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result =  service.registCouponProdExcept(couponProdVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 쿠폰 제외상품 삭제
+     * @param   couponProdVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2024.08.14
+     */
+    @RequestMapping(value = "/prod/deleteCouponProdExcept.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteCouponProdExcept(@RequestBody CouponProdVO[] couponProdVOs, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.deleteCouponProdExcept(couponProdVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 적용대상소분류 등록/미등록 조회
+     * @param   couponProdVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2024.08.14
+     */
+    @RequestMapping(value = "/prod/getProdClsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClsList(CouponProdVO couponProdVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> exceptProdList = service.getProdClsList(couponProdVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, exceptProdList, couponProdVO);
+    }
+
+    /**
+     * 적용대상 소분류 등록
+     * @param   couponProdVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2024.08.16
+     */
+    @RequestMapping(value = "/prod/registCouponProdCls.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result registCouponProdCls(@RequestBody CouponProdVO[] couponProdVOs, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result =  service.registCouponProdCls(couponProdVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 적용대상 소분류 삭제
+     * @param   couponProdVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2024.08.16
+     */
+    @RequestMapping(value = "/prod/deleteCouponProdCls.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result deleteCouponProdCls(@RequestBody CouponProdVO[] couponProdVOs, HttpServletRequest request,
+                                         HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.deleteCouponProdCls(couponProdVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 엑셀 업로드
+     * @param   couponProdVOs
+     * @param   request
+     * @return  String
+     * @author  김유승
+     * @since   2024.08.16
+     */
+    @RequestMapping(value = "/prod/getExcelUploadSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getExcelUploadSave(@RequestBody CouponProdVO[] couponProdVOs, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.getExcelUploadSave(couponProdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 상품 양식다운로드
+     * @param   couponProdVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  String
+     * @author  김유승
+     * @since   2024.08.20
+     */
+    @RequestMapping(value = "/prod/getExcelProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getExcelProdList(CouponProdVO couponProdVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> prodList = service.getExcelProdList(couponProdVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, prodList, couponProdVO);
     }
 }

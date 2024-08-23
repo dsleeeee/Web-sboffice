@@ -64,4 +64,28 @@ public interface CouponService {
 
     /** 쿠폰순서 매장적용 팝업 - 저장 */
     int getCouponSeqChgStoreRegistSave(CouponVO[] couponVOs, SessionInfoVO sessionInfoVO);
+
+    /** 제외상품 등록/미등록 상품 조회 */
+    List<DefaultMap<String>> getExceptProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 쿠폰 제외상품 등록 */
+    int registCouponProdExcept(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 쿠폰 제외상품 삭제 */
+    int deleteCouponProdExcept(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 적용대상소분류 등록/미등록 조회 */
+    List<DefaultMap<String>> getProdClsList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 적용대상소분류 등록 */
+    int registCouponProdCls(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 적용대상소분류 삭제 */
+    int deleteCouponProdCls(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 엑셀 업로드 */
+    int getExcelUploadSave(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품 양식다운로드 */
+    List<DefaultMap<String>> getExcelProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO);
 }
