@@ -340,46 +340,46 @@
         FROM TB_MS_PRODUCT tmp,
         TB_HQ_PRODUCT thp,
         (
-        SELECT HQ_OFFICE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_HQ_PRODUCT_SALE_PRICE
-        WHERE 1 = 1
-        <![CDATA[
+            SELECT HQ_OFFICE_CD, PROD_CD,
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+            FROM TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1 = 1
+            <![CDATA[
                 AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY HQ_OFFICE_CD, PROD_CD
+            AND SALE_PRC_FG = '1'
+            GROUP BY HQ_OFFICE_CD, PROD_CD
         ) thpsp,
         (
-        SELECT STORE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_MS_PRODUCT_SALE_PRICE
-        WHERE 1 = 1
-        <![CDATA[
+            SELECT STORE_CD, PROD_CD,
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+            FROM TB_MS_PRODUCT_SALE_PRICE
+            WHERE 1 = 1
+            <![CDATA[
                 AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY STORE_CD, PROD_CD
+            AND SALE_PRC_FG = '1'
+            GROUP BY STORE_CD, PROD_CD
         ) tmpsp
         WHERE tmp.STORE_CD = #{storeCd}
         AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
-            SELECT PROD_CLASS_CD
-            FROM TB_HQ_PRODUCT_CLASS
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
-            )
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE 1=1
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -387,16 +387,28 @@
         <if test='prodNm != null and prodNm != ""'>
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userProdBrands != null and userProdBrands != ""'>
+                -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND thp.HQ_BRAND_CD IN
+                <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thp.PROD_CD = tmp.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
@@ -1255,46 +1267,46 @@
         FROM TB_MS_PRODUCT tmp,
         TB_HQ_PRODUCT thp,
         (
-        SELECT HQ_OFFICE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_HQ_PRODUCT_SALE_PRICE
-        WHERE 1 = 1
-        <![CDATA[
+            SELECT HQ_OFFICE_CD, PROD_CD,
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+            FROM TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1 = 1
+            <![CDATA[
                 AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY HQ_OFFICE_CD, PROD_CD
+            AND SALE_PRC_FG = '1'
+            GROUP BY HQ_OFFICE_CD, PROD_CD
         ) thpsp,
         (
-        SELECT STORE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_MS_PRODUCT_SALE_PRICE
-        WHERE 1 = 1
-        <![CDATA[
+            SELECT STORE_CD, PROD_CD,
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+            FROM TB_MS_PRODUCT_SALE_PRICE
+            WHERE 1 = 1
+            <![CDATA[
                 AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
             ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY STORE_CD, PROD_CD
+            AND SALE_PRC_FG = '1'
+            GROUP BY STORE_CD, PROD_CD
         ) tmpsp
         WHERE tmp.STORE_CD = #{storeCd}
         AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
-            SELECT PROD_CLASS_CD
-            FROM TB_HQ_PRODUCT_CLASS
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
-            )
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE 1=1
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -1302,16 +1314,28 @@
         <if test='prodNm != null and prodNm != ""'>
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND thp.HQ_BRAND_CD = #{prodHqBrandCd} -- 선택한 상품브랜드가 있을 때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userProdBrands != null and userProdBrands != ""'>
+                -- 선택한 상품브랜드가 없을 때('전체' 일때), 사용자 관리브랜드에 속한 정보만 조회
+                AND thp.HQ_BRAND_CD IN
+                <foreach collection="userProdBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thp.PROD_CD = tmp.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD

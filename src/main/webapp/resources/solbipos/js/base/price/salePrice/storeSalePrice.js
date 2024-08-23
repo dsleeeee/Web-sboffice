@@ -58,6 +58,9 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('storeSalePriceCtrl', $scope, $http, false));
 
+    // 상품브랜드 콤보박스
+    $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
@@ -190,10 +193,10 @@ $scope._setComboData("listScaleBox", gvListScaleBoxData);
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
     if(brandUseFg === "1" && orgnFg === "HQ"){
-        // 선택한 매장브랜드가 있을 때
-        params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-        // 선택한 매장브랜드가 없을 때('전체' 일때)
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
+        // 선택한 상품브랜드가 있을 때
+        params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+        // 선택한 상품브랜드가 없을 때('전체' 일때)
+        if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
             var userHqBrandCd = "";
             for(var i=0; i < userHqBrandCdComboList.length; i++){
                 if(userHqBrandCdComboList[i].value !== null) {
@@ -730,10 +733,10 @@ $scope._setComboData("listScaleBox", gvListScaleBoxData);
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         if(brandUseFg === "1" && orgnFg === "HQ"){
-            // 선택한 매장브랜드가 있을 때
-            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-            // 선택한 매장브랜드가 없을 때('전체' 일때)
-            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
+            // 선택한 상품브랜드가 있을 때
+            params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
+            // 선택한 상품브랜드가 없을 때('전체' 일때)
+            if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
                 var userHqBrandCd = "";
                 for(var i=0; i < userHqBrandCdComboList.length; i++){
                     if(userHqBrandCdComboList[i].value !== null) {
