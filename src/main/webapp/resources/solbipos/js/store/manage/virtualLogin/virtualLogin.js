@@ -133,7 +133,7 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
         params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
 
         // 선택한 매장브랜드가 없을 때('전체' 일때)
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
             var userHqBrandCd = "";
             for(var i=0; i < userHqBrandCdComboList.length; i++){
                 if(userHqBrandCdComboList[i].value !== null) {

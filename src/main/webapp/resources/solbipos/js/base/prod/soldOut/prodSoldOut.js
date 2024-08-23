@@ -237,7 +237,7 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
 
       // '전체' 일때
-      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
         var momsHqBrandCd = "";
         for (var i = 0; i < momsHqBrandCdComboList.length; i++) {
           if (momsHqBrandCdComboList[i].value !== null) {

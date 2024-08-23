@@ -71,7 +71,7 @@ app.controller('sideMenuProdSoldOutCtrl', ['$scope', '$http','$timeout', functio
             params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
 
             // 선택한 상품브랜드가 없을 때('전체' 일때)
-            if (params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+            if (params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
                 var userHqBrandCd = "";
                 for (var i = 0; i < userHqBrandCdComboList.length; i++) {
                     if (userHqBrandCdComboList[i].value !== null) {

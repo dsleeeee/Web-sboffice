@@ -255,7 +255,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
       params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
 
       // 매장 브랜드가 '전체' 일때
-      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
         var momsHqBrandCd = "";
         for (var i = 0; i < userHqBrandCdComboList.length; i++) {
           if (userHqBrandCdComboList[i].value !== null) {
@@ -266,7 +266,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
       }
 
       // 상품 브랜드가 '전체' 일때
-      if (params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+      if (params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
         var momsHqBrandCd = "";
         for (var i = 0; i < userHqStoreBrandCdComboList.length; i++) {
           if (userHqStoreBrandCdComboList[i].value !== null) {
@@ -475,7 +475,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
       params.prodHqBrandCd = $scope.srchProdHqBrandCdCombo.selectedValue;
 
       // 매장 브랜드가 '전체' 일때
-      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+      if (params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
         var momsHqBrandCd = "";
         for (var i = 0; i < userHqBrandCdComboList.length; i++) {
           if (userHqBrandCdComboList[i].value !== null) {
@@ -486,7 +486,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
       }
 
       // 상품 브랜드가 '전체' 일때
-      if (params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+      if (params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 확인완료 1992
         var momsHqBrandCd = "";
         for (var i = 0; i < userHqStoreBrandCdComboList.length; i++) {
           if (userHqStoreBrandCdComboList[i].value !== null) {

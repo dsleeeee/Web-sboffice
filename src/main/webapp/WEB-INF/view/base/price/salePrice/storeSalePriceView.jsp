@@ -82,7 +82,7 @@
       <c:if test="${brandUseFg == '1'}">
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <tr>
-              <%-- 매장브랜드 --%>
+            <%-- 매장브랜드 --%>
             <th><s:message code="kioskKeyMap.prodHqBrand" /></th>
             <td>
               <div class="sb-select">
