@@ -12,6 +12,7 @@ import kr.co.solbipos.base.pay.coupon.service.*;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnEnvFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.CoupnRegFg;
 import kr.co.solbipos.base.pay.coupon.service.enums.PayTypeFg;
+import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -579,5 +580,207 @@ public class CouponServiceImpl implements CouponService {
         }
 
         return procCnt;
+    }
+
+    /** 제외상품 등록/미등록 상품 조회 */
+    @Override
+    public List<DefaultMap<String>> getExceptProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO) {
+
+        List<DefaultMap<String>> resultProdList = null;
+
+        couponProdVO.setUserId(sessionInfoVO.getUserId());
+
+        // 본사
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            couponProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            resultProdList = couponMapper.getHqExceptProdList(couponProdVO);
+        }
+
+        return resultProdList;
+    }
+
+    /** 제외상품 등록 */
+    @Override
+    public int registCouponProdExcept(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+        String couponResult;
+        CouponProdVO resultVO = new CouponProdVO();
+
+        for (CouponProdVO couponProdVO : couponProdVOs) {
+            couponProdVO.setRegDt(currentDt);
+            couponProdVO.setRegId(sessionInfoVO.getUserId());
+            couponProdVO.setModDt(currentDt);
+            couponProdVO.setModId(sessionInfoVO.getUserId());
+
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                // 제외상품 등록
+                procCnt += couponMapper.insertHqCouponProdExcept(couponProdVO);
+
+                // 제외상품 등록 시, 쿠폰적용상품 삭제
+                procCnt += couponMapper.deleteHqCouponProd(couponProdVO);
+
+                // 제외상품 등록 시, 쿠폰등록상품에서 삭제
+                resultVO = new CouponProdVO();
+                couponResult = couponMapper.deleteHqCouponProdToStore01(couponProdVO);
+                resultVO.setResult(couponResult);
+
+            }
+        }
+        return procCnt;
+    }
+
+    /** 제외상품 삭제 */
+    @Override
+    public int deleteCouponProdExcept(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+        String couponResult;
+        CouponProdVO resultVO = new CouponProdVO();
+
+        for (CouponProdVO couponProdVO : couponProdVOs) {
+
+            couponProdVO.setRegDt(currentDt);
+            couponProdVO.setRegId(sessionInfoVO.getUserId());
+            couponProdVO.setModDt(currentDt);
+            couponProdVO.setModId(sessionInfoVO.getUserId());
+
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+
+                // 제외상품 삭제
+                procCnt += couponMapper.deleteHqCouponProdExcept(couponProdVO);
+
+                // 제외상품 삭제 시, 쿠폰등록상품에서 등록(본사)
+                procCnt += couponMapper.mergeHqCouponProd(couponProdVO);
+
+                // 제외상품 삭제 시, 쿠폰등록상품에서 등록(매장)
+                resultVO = new CouponProdVO();
+                procCnt = couponMapper.mergeMsCouponProd(couponProdVO);
+
+            }
+        }
+
+        return procCnt;
+    }
+
+    /** 적용대상소분류 등록/미등록 조회 */
+    @Override
+    public List<DefaultMap<String>> getProdClsList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO) {
+        List<DefaultMap<String>> resultProdList = null;
+
+        couponProdVO.setUserId(sessionInfoVO.getUserId());
+
+        // 본사
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            couponProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            resultProdList = couponMapper.getHqProdClsList(couponProdVO);
+        }
+
+        return resultProdList;
+    }
+
+    /** 적용대상소분류 등록 */
+    @Override
+    public int registCouponProdCls(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+        String couponResult;
+        CouponProdVO resultVO = new CouponProdVO();
+
+        for (CouponProdVO couponProdVO : couponProdVOs) {
+            couponProdVO.setRegDt(currentDt);
+            couponProdVO.setRegId(sessionInfoVO.getUserId());
+            couponProdVO.setModDt(currentDt);
+            couponProdVO.setModId(sessionInfoVO.getUserId());
+
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+
+                // 적용대상 소분류 등록
+                procCnt += couponMapper.insertHqCouponProdCls(couponProdVO);
+
+                // 적용대상 소분류 해당 상품 쿠폰적용(본사)
+                procCnt += couponMapper.insertHqCouponProd2(couponProdVO);
+
+                // 적용대상 소분류 해당 상품 쿠폰적용(매장)
+                resultVO = new CouponProdVO();
+                procCnt = couponMapper.insertHqCouponProdClsToStore(couponProdVO);
+//                resultVO.setResult(couponResult);
+
+            }
+        }
+        return procCnt;
+    }
+
+    /** 적용대상소분류 삭제 */
+    @Override
+    public int deleteCouponProdCls(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+        String couponResult;
+        CouponProdVO resultVO = new CouponProdVO();
+
+        for (CouponProdVO couponProdVO : couponProdVOs) {
+
+            couponProdVO.setModDt(currentDt);
+            couponProdVO.setModId(sessionInfoVO.getUserId());
+
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+
+                // 적용대상 소분류 삭제
+                procCnt += couponMapper.deleteHqCouponProdCls(couponProdVO);
+
+                // 적용대상 소분류 해당 상품 쿠폰삭제(본사)
+                procCnt += couponMapper.deleteHqCouponProd2(couponProdVO);
+
+                // 적용대상 소분류 해당 상품 쿠폰삭제(매장)
+                procCnt = couponMapper.deleteHqCouponProdClsToStore(couponProdVO);
+
+                // 본사통제여부가 'Y'일 경우, 매장에도 본사의 쿠폰 적용.
+//                resultVO = new CouponProdVO();
+//                couponResult = couponMapper.deleteHqCouponProdToStore01(couponProdVO);
+//                resultVO.setResult(couponResult);
+
+            }
+        }
+
+        return procCnt;
+    }
+
+    /** 쿠폰적용상품 엑셀 업로드 */
+    @Override
+    public int getExcelUploadSave(CouponProdVO[] couponProdVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+        String couponResult;
+
+        for (CouponProdVO couponProdVO : couponProdVOs) {
+            couponProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            couponProdVO.setRegDt(currentDt);
+            couponProdVO.setRegId(sessionInfoVO.getUserId());
+            couponProdVO.setModDt(currentDt);
+            couponProdVO.setModId(sessionInfoVO.getUserId());
+
+            // 본사 쿠폰적용상품 엑셀 업로드
+            result += couponMapper.mergeHqCouponProdExcelUpload(couponProdVO);
+
+            // 매장 쿠폰적용상품 엑셀 업로드
+            result = couponMapper.mergeMsCouponProdExcelUpload(couponProdVO);
+        }
+
+        return result;
+    }
+
+    /** 상품 양식다운로드 */
+    @Override
+    public List<DefaultMap<String>> getExcelProdList(CouponProdVO couponProdVO, SessionInfoVO sessionInfoVO) {
+        List<DefaultMap<String>> resultProdList = null;
+
+        couponProdVO.setUserId(sessionInfoVO.getUserId());
+
+        // 본사
+        couponProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        resultProdList = couponMapper.getHqExcelProdList(couponProdVO);
+
+        return resultProdList;
     }
 }

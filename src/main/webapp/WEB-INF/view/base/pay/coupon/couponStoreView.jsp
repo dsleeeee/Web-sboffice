@@ -30,9 +30,9 @@
           </tr>
           <tr>
             <th><s:message code="coupon.storeCd"/></th>
-            <td><input type="text" id="srchStoreCd" ng-model="storeCd" /></td>
+            <td><input type="text" id="srchCoupnStoreCd" ng-model="storeCd" /></td>
             <th><s:message code="coupon.storeNm"/></th>
-            <td><input type="text" id="srchStoreNm" ng-model="storeNm" /></td>
+            <td><input type="text" id="srchCoupnStoreNm" ng-model="storeNm" /></td>
           </tr>
           </tbody>
         </table>
@@ -98,4 +98,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20190122.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20240822.01" charset="utf-8"></script>

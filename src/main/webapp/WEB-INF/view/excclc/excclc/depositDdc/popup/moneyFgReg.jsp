@@ -56,4 +56,4 @@
     var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/depositDdc/popup/moneyFgReg.js?ver=20220421.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/depositDdc/popup/moneyFgReg.js?ver=20240822.01" charset="utf-8"></script>

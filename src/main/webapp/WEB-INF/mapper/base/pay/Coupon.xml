@@ -339,8 +339,10 @@
             thc.REG_ID,
             thc.COUPN_TARGET_FG,
             thc.COUPN_PROD_FG,
-            (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcp.COUPN_CD = thc.COUPN_CD ) AS PROD_CNT,
-            (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcs.COUPN_CD = thc.COUPN_CD ) AS STORE_CNT,
+            (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcp.COUPN_CD = thc.COUPN_CD )                  AS PROD_CNT,
+            (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcs.COUPN_CD = thc.COUPN_CD )                AS STORE_CNT,
+            (SELECT COUNT(thcpc.PROD_CLASS_CD) FROM TB_HQ_COUPON_PROD_CLS thcpc WHERE thcpc.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcpc.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcpc.COUPN_CD = thc.COUPN_CD )   AS PROD_CLS_CNT,
+            (SELECT COUNT(thcpe.PROD_CD) FROM TB_HQ_COUPON_PROD_EXCEPT thcpe WHERE thcpe.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcpe.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcpe.COUPN_CD = thc.COUPN_CD )      AS EXCEPT_PROD_CNT,
             thc.DISP_SEQ_NO AS DISP_SEQ
         FROM
             TB_HQ_COUPON thc
@@ -1275,5 +1277,720 @@
             A.MOD_DT = B.MOD_DT,
             A.MOD_ID = B.MOD_ID
     </update>
+
+    <!-- 쿠폰 제외 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_COUPON_PROD_EXCEPT
+        COMMENTS : 본사의 상품을 조회한다.
+    -->
+    <select id="getHqExceptProdList" parameterType="couponProdVO" resultType="DefaultMap">
+        /* USE : CouponMapper.getHqExceptProdList */
+        <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
+            SELECT  p.HQ_OFFICE_CD
+            ,       p.PROD_CLASS_CD
+            ,       p.PROD_CLASS_NM
+            ,       thcpe.PROD_CD
+            ,       NVL(p.PROD_NM,'삭제된 메뉴') AS PROD_NM
+            ,       p.COST_UPRC
+            ,       NVL2(thcpe.PROD_CD, 'Y', 'N') AS REG_YN
+            FROM TB_HQ_COUPON_PROD_EXCEPT thcpe 
+            ,   (
+                    SELECT  thp.HQ_OFFICE_CD
+                    ,       thp.PROD_CLASS_CD
+                    ,       thpc.PROD_CLASS_NM
+                    ,       thp.PROD_CD
+                    ,       thp.PROD_NM
+                    ,       thp.COST_UPRC
+                    FROM    TB_HQ_PRODUCT thp
+                    ,       TB_HQ_PRODUCT_CLASS thpc
+                    WHERE   thp.HQ_OFFICE_CD    = THPC.HQ_OFFICE_CD
+                    AND     thp.PROD_CLASS_CD   = THPC.PROD_CLASS_CD
+                    AND     THP.HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND (
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
+                ) p
+            WHERE   thcpe.HQ_OFFICE_CD (+) = p.HQ_OFFICE_CD
+            AND     thcpe.PROD_CD = p.prod_cd
+            AND     thcpe.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     thcpe.PAY_CLASS_CD = #{payClassCd}
+            AND     thcpe.COUPN_CD = #{coupnCd}
+            <if test='prodCd != null and prodCd != ""'>
+                AND p.PROD_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND p.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+        </if>
+        <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
+            SELECT  thp.HQ_OFFICE_CD
+            ,       thp.PROD_CLASS_CD
+            ,       thpc.PROD_CLASS_NM
+            ,       thp.PROD_CD
+            ,       thp.PROD_NM
+            ,       thp.COST_UPRC
+            ,       NVL2(thcpe.PROD_CD, 'Y', 'N') AS REG_YN
+            FROM    TB_HQ_PRODUCT thp
+            ,       TB_HQ_PRODUCT_CLASS thpc
+            ,       TB_HQ_COUPON_PROD_EXCEPT thcpe
+            WHERE   thp.USE_YN = 'Y'
+            AND     thp.HQ_OFFICE_CD        = #{hqOfficeCd}
+            AND     thp.HQ_OFFICE_CD        = thpc.HQ_OFFICE_CD
+            AND     thp.PROD_CLASS_CD       = thpc.PROD_CLASS_CD
+            AND     thcpe.HQ_OFFICE_CD  (+) = thp.HQ_OFFICE_CD
+            AND     thcpe.PAY_CLASS_CD  (+) =  #{payClassCd}
+            AND     thcpe.COUPN_CD      (+) = #{coupnCd}
+            AND     thcpe.PROD_CD       (+) = thp.PROD_CD
+            <if test='prodCd != null and prodCd != ""'>
+                AND thp.PROD_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            AND thcpe.PROD_CD IS NULL
+            AND (
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+            OR
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        </if>
+    </select>
+
+        <!-- 본사 제외상품 등록 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD_EXCEPT
+        COMMENTS : 본사 제외상품을 등록한다.
+    -->
+    <insert id="insertHqCouponProdExcept" parameterType="couponProdVO">
+        /* USE : CouponMapper.insertHqCouponProdExcept */
+        INSERT INTO TB_HQ_COUPON_PROD_EXCEPT
+        (
+            HQ_OFFICE_CD
+        ,   PAY_CLASS_CD
+        ,   COUPN_CD
+        ,   PROD_CD
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{payClassCd}
+        ,   #{coupnCd}
+        ,   #{prodCd}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 본사 제외상품 삭제 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD
+        COMMENTS : 본사 제외상품을 삭제한다.
+    -->
+    <delete id="deleteHqCouponProdExcept" parameterType="couponProdVO">
+        /* USE : CouponMapper.deleteHqCouponProdExcept */
+        DELETE  TB_HQ_COUPON_PROD_EXCEPT
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PAY_CLASS_CD    = #{payClassCd}
+        AND     COUPN_CD        = #{coupnCd}
+        AND     PROD_CD         = #{prodCd}
+    </delete>
+
+    <!-- 제외상품 삭제 시 본사 쿠폰적용상품 등록 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD
+        COMMENTS : 제외상품 삭제 시 본사 쿠폰적용상품 등록
+    -->
+    <insert id="mergeHqCouponProd" parameterType="couponProdVO">
+        /* USE : CouponMapper.mergeHqCouponProd */
+        MERGE INTO TB_HQ_COUPON_PROD A
+        USING   (
+                    SELECT  A.HQ_OFFICE_CD
+                    ,       #{payClassCd}   AS PAY_CLASS_CD
+                    ,       #{coupnCd}      AS COUPN_CD
+                    ,       A.PROD_CD
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_HQ_PRODUCT A
+                    ,       TB_HQ_COUPON_PROD_CLS B
+                    WHERE   A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                    AND     A.PROD_CD           = #{prodCd}
+                    AND     A.USE_YN            = 'Y'
+                    AND     B.HQ_OFFICE_CD      = A.HQ_OFFICE_CD
+                    AND     B.PROD_CLASS_CD     = A.PROD_CLASS_CD
+                    AND 	B.PAY_CLASS_CD 		= #{payClassCd}
+                    AND 	B.COUPN_CD 			= #{coupnCd}
+                ) B
+        ON  (
+                    A.HQ_OFFICE_CD    = B.HQ_OFFICE_CD
+                AND A.PAY_CLASS_CD    = B.PAY_CLASS_CD
+                AND A.COUPN_CD        = B.COUPN_CD
+                AND A.PROD_CD         = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            A.MOD_DT = B.MOD_DT
+        ,   A.MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.HQ_OFFICE_CD
+            ,   A.PAY_CLASS_CD
+            ,   A.COUPN_CD
+            ,   A.PROD_CD
+            ,   A.REG_DT
+            ,   A.REG_ID
+            ,   A.MOD_DT
+            ,   A.MOD_ID
+            )
+            VALUES
+            (
+                B.HQ_OFFICE_CD
+            ,   B.PAY_CLASS_CD
+            ,   B.COUPN_CD
+            ,   B.PROD_CD
+            ,   B.REG_DT
+            ,   B.REG_ID
+            ,   B.MOD_DT
+            ,   B.MOD_ID
+            )
+    </insert>
+
+    <!-- 적용대상소분류 상품 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_CLASS, TB_HQ_COUPON_PROD_EXCEPT
+        COMMENTS : 본사의 상품을 조회한다.
+    -->
+    <select id="getHqProdClsList" parameterType="couponProdVO" resultType="DefaultMap">
+        /* USE : CouponMapper.getHqProdClsList */
+        <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
+            SELECT 	DISTINCT
+                    L_CLASS_CD
+            ,		'[' || L_CLASS_CD || ']' || L_CLASS_NM     AS L_CLASS_NM
+            ,		M_CLASS_CD
+            ,		'[' || M_CLASS_CD || ']' || M_CLASS_NM     AS M_CLASS_NM
+            ,		S_CLASS_CD
+            ,		'[' || S_CLASS_CD || ']' || S_CLASS_NM     AS S_CLASS_NM
+            FROM 	TB_HQ_PRODUCT_CLASS_V02 thpcv
+            ,		TB_HQ_COUPON_PROD_CLS thcpc
+            ,		TB_HQ_PRODUCT thp
+            WHERE 	thpcv.HQ_OFFICE_CD 	= #{hqOfficeCd}
+            AND 	thcpc.HQ_OFFICE_CD 	= thpcv.HQ_OFFICE_CD
+            AND 	thcpc.PROD_CLASS_CD = thpcv.PROD_CLASS_CD
+            AND 	thcpc.PAY_CLASS_CD 	= #{payClassCd}
+            AND 	thcpc.COUPN_CD 		= #{coupnCd}
+            AND 	thp.HQ_OFFICE_CD 	= thpcv.HQ_OFFICE_CD
+            AND 	thp.PROD_CD 		= thpcv.PROD_CD
+            AND 	thp.USE_YN  		= 'Y'
+            <if test='prodCd != null and prodCd != ""'>
+                AND thpcv.S_CLASS_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND thpcv.S_CLASS_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            AND (
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+            OR
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        </if>
+        <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
+            SELECT 	DISTINCT
+                    thpcv.L_CLASS_CD
+            ,		'[' || thpcv.L_CLASS_CD || ']' || thpcv.L_CLASS_NM     AS L_CLASS_NM
+            ,		thpcv.M_CLASS_CD
+            ,		'[' || thpcv.M_CLASS_CD || ']' || thpcv.M_CLASS_NM     AS M_CLASS_NM
+            ,		thpcv.S_CLASS_CD
+            ,		'[' || thpcv.S_CLASS_CD || ']' || thpcv.S_CLASS_NM     AS S_CLASS_NM
+            FROM 	TB_HQ_PRODUCT_CLASS_V02 thpcv
+            ,		TB_HQ_PRODUCT thp
+            WHERE 	thpcv.HQ_OFFICE_CD 	= #{hqOfficeCd}
+            AND 	thp.HQ_OFFICE_CD    = thpcv.HQ_OFFICE_CD
+            AND 	thp.PROD_CD 		= thpcv.PROD_CD
+            AND     thp.USE_YN          = 'Y'
+            AND 	thpcv.S_CLASS_CD IS NOT NULL
+            <if test='prodCd != null and prodCd != ""'>
+                AND thpcv.S_CLASS_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND thpcv.S_CLASS_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            AND 	thpcv.S_CLASS_CD NOT IN (
+                                                SELECT PROD_CLASS_CD
+                                                FROM    TB_HQ_COUPON_PROD_CLS
+                                                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                                AND     PAY_CLASS_CD    = #{payClassCd}
+                                                AND     COUPN_CD        = #{coupnCd}
+                                            )
+            AND (
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+            OR
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        </if>
+    </select>
+
+    <!-- 적용대상 소분류 등록 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD_CLS
+        COMMENTS : 적용대상 소분류 등록
+    -->
+    <insert id="insertHqCouponProdCls" parameterType="couponProdVO">
+        /* USE : CouponMapper.insertHqCouponProdCls */
+        INSERT INTO TB_HQ_COUPON_PROD_CLS
+        (
+            HQ_OFFICE_CD
+        ,   PAY_CLASS_CD
+        ,   COUPN_CD
+        ,   PROD_CLASS_CD
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES 
+        (
+            #{hqOfficeCd}
+        ,   #{payClassCd}
+        ,   #{coupnCd}
+        ,   #{sClassCd}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{regDt}
+        ,   #{regId}
+        )
+    </insert>
+
+    <!-- 적용대상 소분류 본사 쿠폰적용상품 등록 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD_CLS
+        COMMENTS : 적용대상 소분류 본사 해당 쿠폰적용상품 등록
+    -->
+    <insert id="insertHqCouponProd2" parameterType="couponProdVO">
+        /* USE : CouponMapper.insertHqCouponProd2 */
+        MERGE INTO TB_HQ_COUPON_PROD A
+        USING 	(
+                    SELECT  #{hqOfficeCd}       AS HQ_OFFICE_CD
+                    ,       #{payClassCd}       AS PAY_CLASS_CD
+                    ,       #{coupnCd}          AS COUPN_CD
+                    ,       PROD_CD
+                    ,       #{regDt}            AS REG_DT
+                    ,       #{regId}            AS REG_ID
+                    ,       #{modDt}            AS MOD_DT
+                    ,       #{modId}            AS MOD_ID
+                    FROM    TB_HQ_PRODUCT
+                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND     PROD_CLASS_CD   = #{sClassCd}
+                    AND 	USE_YN			= 'Y'
+                    AND 	PROD_CD NOT IN 	(
+                                                SELECT 	PROD_CD
+                                                FROM 	TB_HQ_COUPON_PROD_EXCEPT
+                                                WHERE 	PAY_CLASS_CD    = #{payClassCd}
+                                                AND 	COUPN_CD        = #{coupnCd}
+                                            )
+            ) B
+        ON	(
+                        A.HQ_OFFICE_CD 	= B.HQ_OFFICE_CD
+                AND 	A.PAY_CLASS_CD	= B.PAY_CLASS_CD
+                AND 	A.COUPN_CD 		= B.COUPN_CD
+                AND 	A.PROD_CD 		= B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET 	A.MOD_DT = B.MOD_DT
+            ,		A.MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.HQ_OFFICE_CD
+            ,	A.PAY_CLASS_CD
+            ,	A.COUPN_CD
+            ,	A.PROD_CD
+            ,	A.REG_DT
+            ,	A.REG_ID
+            ,	A.MOD_DT
+            ,	A.MOD_ID
+            )
+        VALUES
+            (
+                B.HQ_OFFICE_CD
+            ,	B.PAY_CLASS_CD
+            ,	B.COUPN_CD
+            ,	B.PROD_CD
+            ,	B.REG_DT
+            ,	B.REG_ID
+            ,	B.MOD_DT
+            ,	B.MOD_ID
+            )
+
+    </insert>
+
+    <!-- 적용대상소분류 삭제 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD_CLS
+        COMMENTS : 적용대상소분류 삭제
+    -->
+    <delete id="deleteHqCouponProdCls" parameterType="couponProdVO">
+        /* USE : CouponMapper.deleteHqCouponProdCls */
+        DELETE  TB_HQ_COUPON_PROD_CLS
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PAY_CLASS_CD    = #{payClassCd}
+        AND     PROD_CLASS_CD   = #{sClassCd}
+        <if test='coupnCd != null and coupnCd != ""'>
+            AND COUPN_CD = #{coupnCd}
+        </if>
+    </delete>
+
+    <!-- 본사 적용대상소분류 상품 삭제 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD_CLS
+        COMMENTS : 본사 적용대상소분류 상품 삭제
+    -->
+    <delete id="deleteHqCouponProd2" parameterType="couponProdVO">
+        /* USE : CouponMapper.deleteHqCouponProd2 */
+        DELETE  TB_HQ_COUPON_PROD
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PAY_CLASS_CD    = #{payClassCd}
+        AND     PROD_CD IN	(
+                                SELECT  PROD_CD
+                                FROM    TB_HQ_PRODUCT
+                                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                AND     PROD_CLASS_CD   = #{sClassCd}
+                            )
+        <if test='coupnCd != null and coupnCd != ""'>
+            AND COUPN_CD = #{coupnCd}
+        </if>
+    </delete>
+
+    <!-- 소분류 등록 시 쿠폰적용상품 매장 등록 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD_CLS
+        COMMENTS : 소분류 등록 시 쿠폰적용상품 매장 등록
+    -->
+    <insert id="insertHqCouponProdClsToStore" parameterType="couponProdVO">
+        /* USE : CouponMapper.insertHqCouponProdClsToStore */
+        MERGE INTO TB_MS_COUPON_PROD A
+        USING 	(
+                    SELECT 	A.STORE_CD
+                    ,		'H' 	        AS COUPN_REG_FG
+                    ,		#{payClassCd}	AS PAY_CLASS_CD
+                    ,		#{coupnCd}	    AS COUPN_CD
+                    ,		B.PROD_CD
+                    ,		#{regDt}		AS REG_DT
+                    ,		#{regId}		AS REG_ID
+                    ,		#{modDt}		AS MOD_DT
+                    ,		#{modId}		AS MOD_ID
+                    FROM 	(
+                                SELECT 	STORE_CD
+                                FROM 	TB_HQ_COUPON_STORE
+                                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND 	PAY_CLASS_CD = #{payClassCd}
+                                AND  	COUPN_CD 	 = #{coupnCd}
+                            ) A
+                    ,		TB_HQ_PRODUCT B
+                    WHERE 	B.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND 	B.PROD_CLASS_CD = #{sClassCd}
+                    AND 	B.USE_YN		= 'Y'
+                    AND 	B.PROD_CD NOT IN 	(
+                                                    SELECT 	PROD_CD
+                                                    FROM 	TB_HQ_COUPON_PROD_EXCEPT
+                                                    WHERE 	PAY_CLASS_CD    = #{payClassCd}
+                                                    AND 	COUPN_CD        = #{coupnCd}
+                                                )
+                ) B
+        ON	(
+                    A.STORE_CD 		= B.STORE_CD
+                AND A.COUPN_REG_FG  = B.COUPN_REG_FG
+                AND A.PAY_CLASS_CD 	= B.PAY_CLASS_CD
+                AND A.COUPN_CD 		= B.COUPN_CD
+                AND A.PROD_CD 		= B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET 	A.MOD_DT = B.MOD_DT
+            ,		A.MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.STORE_CD
+            ,	A.COUPN_REG_FG
+            ,	A.PAY_CLASS_CD
+            ,	A.COUPN_CD
+            ,	A.PROD_CD
+            ,	A.REG_DT
+            ,	A.REG_ID
+            ,	A.MOD_DT
+            ,	A.MOD_ID
+            )
+            VALUES
+            (
+                B.STORE_CD
+            ,	B.COUPN_REG_FG
+            ,	B.PAY_CLASS_CD
+            ,	B.COUPN_CD
+            ,	B.PROD_CD
+            ,	B.REG_DT
+            ,	B.REG_ID
+            ,	B.MOD_DT
+            ,	B.MOD_ID
+            )
+    </insert>
+
+    <!-- 적용대상소분류 상품 매장 삭제 -->
+    <!--
+        TABLE    : TB_MS_COUPON_PROD
+        COMMENTS : 적용대상소분류 상품 매장 삭제
+    -->
+    <delete id="deleteHqCouponProdClsToStore" parameterType="couponProdVO">
+        /* USE : CouponMapper.deleteHqCouponProdClsToStore */
+        DELETE  TB_MS_COUPON_PROD
+        WHERE   STORE_CD    IN (
+                                    SELECT 	STORE_CD
+                                    FROM 	TB_HQ_COUPON_STORE
+                                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND 	PAY_CLASS_CD = #{payClassCd}
+                                    AND  	COUPN_CD 	 = #{coupnCd}
+                                )
+        AND     PROD_CD IN	(
+                                SELECT  PROD_CD
+                                FROM    TB_HQ_PRODUCT
+                                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                AND     PROD_CLASS_CD   = #{sClassCd}
+                            )
+        AND     PAY_CLASS_CD    = #{payClassCd}
+        AND 	COUPN_CD        = #{coupnCd}
+        AND     COUPN_REG_FG    = 'H'
+    </delete>
+
+    <!-- 제외상품 삭제 시 매장 쿠폰적용상품 등록 -->
+    <!--
+        TABLE    : TB_MS_COUPON_PROD
+        COMMENTS : 제외상품 삭제 시 매장 쿠폰적용상품 등록
+    -->
+    <insert id="mergeMsCouponProd" parameterType="couponProdVO">
+        /* USE : CouponMapper.mergeMsCouponProd */
+        MERGE INTO TB_MS_COUPON_PROD A
+        USING	(
+                    SELECT 	C.STORE_CD
+                    ,		'H'  		    AS COUPN_REG_FG
+                    ,		#{payClassCd}	AS PAY_CLASS_CD
+                    ,		#{coupnCd}		AS COUPN_CD
+                    ,		A.PROD_CD
+                    FROM 	TB_HQ_PRODUCT A
+                    ,		TB_HQ_COUPON_PROD_CLS B
+                    ,		(
+                                SELECT 	STORE_CD
+                                FROM 	TB_HQ_COUPON_STORE
+                                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND 	PAY_CLASS_CD = #{payClassCd}
+                                AND  	COUPN_CD 	 = #{coupnCd}
+                            ) C
+                    WHERE   A.PROD_CD       = #{prodCd}
+                    AND 	A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND 	B.PROD_CLASS_CD = A.PROD_CLASS_CD
+                    AND 	B.PAY_CLASS_CD  = #{payClassCd}
+                    AND 	B.COUPN_CD 		= #{coupnCd}
+                ) B
+            ON 	(
+                        A.STORE_CD 		= B.STORE_CD
+                    AND	A.COUPN_REG_FG 	= B.COUPN_REG_FG
+                    AND	A.PAY_CLASS_CD 	= B.PAY_CLASS_CD
+                    AND	A.COUPN_CD 		= B.COUPN_CD
+                    AND	A.PROD_CD 		= B.PROD_CD
+                )
+            WHEN MATCHED THEN
+                UPDATE
+                SET		A.MOD_DT = #{modDt}
+                ,   	A.MOD_ID = #{modId}
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                    STORE_CD
+                ,	COUPN_REG_FG
+                ,	PAY_CLASS_CD
+                ,	COUPN_CD
+                ,	PROD_CD
+                ,	REG_DT
+                ,	REG_ID
+                ,	MOD_DT
+                ,	MOD_ID
+                )
+                VALUES
+                (
+                    B.STORE_CD
+                ,	B.COUPN_REG_FG
+                ,	B.PAY_CLASS_CD
+                ,	B.COUPN_CD
+                ,	B.PROD_CD
+                ,	#{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+    </insert>
+
+    <!-- 상품 양식 다운로드 -->
+    <!--
+        TABLE    :
+        COMMENTS : 상품 양식 다운로드
+    -->
+    <select id="getHqExcelProdList" parameterType="couponProdVO" resultType="DefaultMap">
+        /* USE : CouponMapper.getHqExcelProdList */
+            SELECT  thp.HQ_OFFICE_CD
+            ,       thp.PROD_CLASS_CD
+            ,       thp.PROD_CD
+            ,       thp.PROD_NM
+            FROM    TB_HQ_PRODUCT thp
+            ,       TB_HQ_COUPON_PROD thcp
+            WHERE   thp.USE_YN = 'Y'
+            AND     thp.HQ_OFFICE_CD        = #{hqOfficeCd}
+            AND     thcp.HQ_OFFICE_CD   (+) = thp.HQ_OFFICE_CD
+            AND     thcp.PAY_CLASS_CD   (+) = #{payClassCd}
+            AND     thcp.COUPN_CD       (+) = #{coupnCd}
+            AND     thcp.PROD_CD        (+) = thp.PROD_CD
+            <if test='prodCd != null and prodCd != ""'>
+                AND thp.PROD_CD = #{prodCd}
+            </if>
+            <if test='prodNm != null and prodNm != ""'>
+                AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            AND (
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+            OR
+            ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+    </select>
+
+    <!-- 매장 쿠폰적용상품 엑셀업로드 -->
+    <!--
+        TABLE    : TB_MS_COUPON_PROD
+        COMMENTS : 매장 쿠폰적용상품 엑셀업로드한다.
+    -->
+    <insert id="mergeMsCouponProdExcelUpload" parameterType="couponProdVO">
+        /* USE : CouponMapper.mergeMsCouponProdExcelUpload */
+        MERGE INTO TB_MS_COUPON_PROD A
+        USING	(
+                    SELECT 	C.STORE_CD
+                    ,		'H'  		    AS COUPN_REG_FG
+                    ,		#{payClassCd}	AS PAY_CLASS_CD
+                    ,		#{coupnCd}		AS COUPN_CD
+                    ,		A.PROD_CD
+                    FROM 	TB_HQ_PRODUCT A
+                    ,		(
+                                SELECT 	STORE_CD
+                                FROM 	TB_HQ_COUPON_STORE
+                                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND 	PAY_CLASS_CD = #{payClassCd}
+                                AND  	COUPN_CD 	 = #{coupnCd}
+                            ) C
+                    WHERE   A.PROD_CD       = #{prodCd}
+                    AND 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                    AND     A.USE_YN        = 'Y'
+                ) B
+        ON 	(
+                    A.STORE_CD 		= B.STORE_CD
+                AND	A.COUPN_REG_FG 	= B.COUPN_REG_FG
+                AND	A.PAY_CLASS_CD 	= B.PAY_CLASS_CD
+                AND	A.COUPN_CD 		= B.COUPN_CD
+                AND	A.PROD_CD 		= B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET		A.MOD_DT = #{modDt}
+            ,   	A.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+                (
+                    STORE_CD
+                ,	COUPN_REG_FG
+                ,	PAY_CLASS_CD
+                ,	COUPN_CD
+                ,	PROD_CD
+                ,	REG_DT
+                ,	REG_ID
+                ,	MOD_DT
+                ,	MOD_ID
+                )
+            VALUES
+                (
+                    B.STORE_CD
+                ,	B.COUPN_REG_FG
+                ,	B.PAY_CLASS_CD
+                ,	B.COUPN_CD
+                ,	B.PROD_CD
+                ,	#{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+    </insert>
+
+    <!-- 본사 쿠폰적용상품 엑셀업로드 -->
+    <!--
+        TABLE    : TB_HQ_COUPON_PROD
+        COMMENTS : 본사 쿠폰적용상품 엑셀 업로드한다.
+    -->
+    <insert id="mergeHqCouponProdExcelUpload" parameterType="couponProdVO">
+        /* USE : CouponMapper.mergeHqCouponProdExcelUpload */
+        MERGE INTO TB_HQ_COUPON_PROD A
+        USING   (
+                    SELECT  A.HQ_OFFICE_CD
+                    ,       #{payClassCd}   AS PAY_CLASS_CD
+                    ,       #{coupnCd}      AS COUPN_CD
+                    ,       A.PROD_CD
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_HQ_PRODUCT A
+                    WHERE   A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                    AND     A.PROD_CD           = #{prodCd}
+                    AND     A.USE_YN            = 'Y'
+                ) B
+        ON  (
+                    A.HQ_OFFICE_CD    = B.HQ_OFFICE_CD
+                AND A.PAY_CLASS_CD    = B.PAY_CLASS_CD
+                AND A.COUPN_CD        = B.COUPN_CD
+                AND A.PROD_CD         = B.PROD_CD
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                A.MOD_DT = B.MOD_DT
+            ,   A.MOD_ID = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT
+                (
+                    A.HQ_OFFICE_CD
+                ,   A.PAY_CLASS_CD
+                ,   A.COUPN_CD
+                ,   A.PROD_CD
+                ,   A.REG_DT
+                ,   A.REG_ID
+                ,   A.MOD_DT
+                ,   A.MOD_ID
+                )
+            VALUES
+                (
+                    B.HQ_OFFICE_CD
+                ,   B.PAY_CLASS_CD
+                ,   B.COUPN_CD
+                ,   B.PROD_CD
+                ,   B.REG_DT
+                ,   B.REG_ID
+                ,   B.MOD_DT
+                ,   B.MOD_ID
+                )
+    </insert>
 
 </mapper>

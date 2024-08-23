@@ -106,11 +106,18 @@
                             id="wjGridStoreTotalDtl">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="depositDdc.date"/>" binding="moneyDt" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.date"/>" binding="moneyDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="depositDdc.moneyFg"/>" binding="moneyFgNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="depositDdc.moneyAmt"/>" binding="moneyAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.moneyAmt"/>" binding="moneyAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="depositDdc.remark"/>" binding="remark" width="150" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="depositDdc.userNm"/>" binding="userNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.tno"/>" binding="tno" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.deptTotlMnyx"/>" binding="deptTotlMnyx" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.deptIpgmTime"/>" binding="deptIpgmTime" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.deptBankCode"/>" binding="deptBankCode" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="depositDdc.deptBankCodeNm"/>" binding="deptBankCodeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
 
                         <wj-flex-grid-column header="<s:message code="depositDdc.date"/>" binding="moneyDate" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="depositDdc.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -122,7 +129,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/depositDdc/storeTotal.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/depositDdc/storeTotal.js?ver=20240823.01" charset="utf-8"></script>
 
 <%-- 입금/기타공제 등록 팝업 --%>
 <c:import url="/WEB-INF/view/excclc/excclc/depositDdc/popup/depositDdcReg.jsp">

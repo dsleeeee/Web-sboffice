@@ -154,4 +154,52 @@ public interface CouponMapper {
 
     /** 쿠폰순서 매장적용 팝업 - 저장 merge */
     int getCouponSeqChgStoreRegistSaveMerge(CouponVO couponVO);
+
+    /** 본사 제외상품 적용/미적용 상품 조회 */
+    List<DefaultMap<String>> getHqExceptProdList(CouponProdVO couponProdVO);
+
+    /** 본사 제외상품 적용/미적용 상품 조회 */
+    List<DefaultMap<String>> getStoreExceptProdList(CouponProdVO couponProdVO);
+
+    /** 본사 제외상품 등록 */
+    int insertHqCouponProdExcept(CouponProdVO couponProdVO);
+
+    /** 본사 제외상품 삭제 */
+    int deleteHqCouponProdExcept(CouponProdVO couponProdVO);
+
+    /** 본사 적용대상소분류 등록/미등록 조회 */
+    List<DefaultMap<String>> getHqProdClsList(CouponProdVO couponProdVO);
+
+    /** 본사 적용대상소분류 등록 */
+    int insertHqCouponProdCls(CouponProdVO couponProdVO);
+
+    /** 본사 적용대상소분류 쿠폰적용상품 등록 */
+    int insertHqCouponProd2(CouponProdVO couponProdVO);
+
+    /** 본사 적용대상소분류 삭제 */
+    int deleteHqCouponProdCls(CouponProdVO couponProdVO);
+
+    /** 본사 적용대상소분류 쿠폰적용상품 삭제 */
+    int deleteHqCouponProd2(CouponProdVO couponProdVO);
+
+    /** 소분류 등록 시 쿠폰적용상품 매장 등록 */
+    int insertHqCouponProdClsToStore(CouponProdVO couponProdVO);
+
+    /** 제외상품 삭제 시 본사 쿠폰적용상품 등록 */
+    int mergeHqCouponProd(CouponProdVO couponProdVO);
+
+    /** 본사 소분류 삭제 시 매장 상품 삭제 */
+    int deleteHqCouponProdClsToStore(CouponProdVO couponProdVO);
+
+    /** 제외상품 삭제 시 매장 쿠폰적용상품 등록 */
+    int mergeMsCouponProd(CouponProdVO couponProdVO);
+
+    /** 상품 양식다운로드 */
+    List<DefaultMap<String>> getHqExcelProdList(CouponProdVO couponProdVO);
+
+    /** 본사 상품 엑셀 업로드 */
+    int mergeHqCouponProdExcelUpload(CouponProdVO couponProdVO);
+
+    /** 매장 상품 엑셀 업로드 */
+    int mergeMsCouponProdExcelUpload(CouponProdVO couponProdVO);
 }

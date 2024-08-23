@@ -46,6 +46,8 @@ public class CouponProdVO extends PageVO {
 
     /** 사용자 아이디 */
     private String userId;
+    /** 소분류 코드 */
+    private String sClassCd;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -212,5 +214,13 @@ public class CouponProdVO extends PageVO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getsClassCd() {
+        return sClassCd;
+    }
+
+    public void setsClassCd(String sClassCd) {
+        this.sClassCd = sClassCd;
     }
 }

@@ -140,6 +140,10 @@
             <wj-flex-grid-column header="<s:message code="coupon.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
           </c:if>
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" data-map="useYnDataMap" width="80" align="center"></wj-flex-grid-column>
+          <c:if test="${orgnFg == 'HQ' and orgnCd == 'A0001'}">
+              <wj-flex-grid-column header="<s:message code="coupon.prodClsCnt"/>" binding="prodClsCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="coupon.exceptProdCnt"/>" binding="exceptProdCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+          </c:if>
           <wj-flex-grid-column header="<s:message code="cmm.regId"/>" binding="regId" width="80" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="" binding="dispSeq" width="*" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
@@ -164,7 +168,7 @@
   var couponSeqChgVal = "${couponSeqChgVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20240514.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20240814.01" charset="utf-8"></script>
 
 <%-- 쿠폰별 상품 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">
@@ -179,4 +183,16 @@
 <c:import url="/WEB-INF/view/base/pay/coupon/couponSeqChgStoreRegist.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 적용대상소분류등록 팝업 --%>
+<c:import url="/WEB-INF/view/base/pay/coupon/couponProdClsView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 제외상품등록 팝업 --%>
+<c:import url="/WEB-INF/view/base/pay/coupon/couponExceptProdView.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

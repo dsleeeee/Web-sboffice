@@ -78,12 +78,13 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
     var noRegProdGrid = agrid.getScope("noRegProdCtrl");
     noRegProdGrid._pageView('noRegProdCtrl', 1);
   };
+
 }]);
 
 /**
  *  쿠폰 미등록 상품 그리드 생성
  */
-app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http ) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('noRegProdCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -146,5 +147,75 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
     var regProdGrid = agrid.getScope("regProdCtrl");
     regProdGrid._pageView('regProdCtrl',1);
   };
+
+
+}]);
+
+app.controller('noRegProdExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+  // 상위 객체 상속 : T/F 는 picker
+  angular.extend(this, new RootController('noRegProdExcelCtrl', $scope, $http, true));
+  // grid 초기화 : 생성되기전 초기화되면서 생성된다
+  $scope.initGrid = function (s, e) {
+  };
+
+  $("#btnExcelDownload").click(function() {
+    $scope.sampleDownload();
+  });
+
+  // <-- 양식다운로드 -->
+  $scope.sampleDownload = function(){
+
+    var params = {};
+    params.payClassCd = selectedCouponClass.payClassCd;
+    params.coupnCd = selectedCoupon.coupnCd;
+    params.coupnEnvstVal = coupnEnvstVal;
+    params.prodRegFg = "N";
+
+    $scope._inquiryMain(baseUrl + "prod/getExcelProdList.sb", params, function (){
+      $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+
+      if ($scope.flex.rows.length <= 0) {
+        $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+        $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+        return false;
+      }
+
+      $timeout(function()	{
+        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flex,
+            {
+              includeColumnHeaders: 	true,
+              includeCellStyles	: 	false,
+              includeColumns      :	function (column) {
+                return column.visible;
+              }
+            },
+            '쿠폰적용상품엑셀업로드'+getCurDateTime()+'.xlsx',
+            function () {
+              $timeout(function () {
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+              }, 10);
+            }
+        );
+      }, 10);
+      $scope._broadcast('regProdCtrl');
+    });
+  };
+// <-- //양식다운로드 -->
+
+  $("#btnExcelUpload").click(function() {
+    $scope.excelUpload();
+  });
+
+  // 엑셀업로드
+  $scope.excelUpload = function () {
+    var msg = messages["coupon.excelUpload.confmMsg"];  // 정상상품코드만 등록됩니다.
+
+    $scope._popConfirm(msg, function() {
+      $("#excelUpFile").val('');
+      $("#excelUpFile").trigger('click');
+    });
+  };
+
 }]);
 
