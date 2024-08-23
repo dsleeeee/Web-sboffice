@@ -41,6 +41,12 @@ app.controller('coupnDcCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope.billNo   = nvl(data.billNo, '');
     $scope.dcCd     = data.dcCd;
 
+    var title = "쿠폰 할인내역";
+    if(data.dcCd == "12") {
+      title = "SKT 할인내역"
+    }
+    $("#coupnDcTitle").text(title);
+
     $scope.wjCoupnDcLayer.show(true);
 
     $scope.searchCoupnDcList();

@@ -10,7 +10,8 @@
   <div id="coupnDcLayer" class="wj-dialog wj-dialog-columns" ng-controller="coupnDcCtrl">
 
     <div class="wj-dialog-header wj-dialog-header-font">
-      <s:message code="coupnDc.coupnDcInfo"/>
+      <%--<s:message code="coupnDc.coupnDcInfo"/>--%>
+      <span id="coupnDcTitle"></span>
       <span id="spanDtlTitle"></span>
       <a href="#" class="wj-hide btn_close"></a>
     </div>
@@ -44,4 +45,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dcInfo/coupnDc.js?ver=20190212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dcInfo/coupnDc.js?ver=20240823.01" charset="utf-8"></script>

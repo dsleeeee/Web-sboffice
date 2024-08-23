@@ -38,13 +38,14 @@
     -->
     <select id="getDcColList" parameterType="todayDtlVO" resultType="DefaultMap">
         /* USE : TodayDtlMapper.getDcColList */
-        <![CDATA[
-        SELECT  tcn.NMCODE_CD AS DC_CD, tcn.NMCODE_NM AS DC_NM, tcn.NMCODE_ITEM_1 AS DC_METHOD
+        SELECT
+        tcn.NMCODE_CD AS DC_CD,
+        tcn.NMCODE_NM AS DC_NM,
+        (CASE WHEN tcn.NMCODE_CD = '12' THEN 'COUPN' ELSE tcn.NMCODE_ITEM_1 END) AS DC_METHOD
         FROM    TB_CM_NMCODE tcn
         WHERE   tcn.NMCODE_GRP_CD   =   '041'
         ORDER
         BY      tcn.NMCODE_CD
-        ]]>
     </select>
 
 
