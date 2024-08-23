@@ -263,7 +263,7 @@ app.controller('storePosVersionCtrl', ['$scope', '$http', '$timeout', function (
     params.selectVerCd = params.selectVer.substring(1,verCd);
     $scope.selectVerCd = params.selectVerCd;
     // '전체' 일때
-    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+    if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
       var momsHqBrandCd = "";
       for(var i=0; i < momsHqBrandCdComboList.length; i++){
         if(momsHqBrandCdComboList[i].value !== null) {

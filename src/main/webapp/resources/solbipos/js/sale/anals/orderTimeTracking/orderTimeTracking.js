@@ -97,7 +97,7 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
             // 선택한 매장브랜드가 없을 때('전체' 일때)
-            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
                 var momsHqBrandCd = "";
                 for(var i=0; i < momsHqBrandCdComboList.length; i++){
                     if(momsHqBrandCdComboList[i].value !== null) {
@@ -147,7 +147,7 @@ app.controller('orderTimeTrackingCtrl', ['$scope', '$http', function ($scope, $h
             params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
             params.branchCd = $scope.srchBranchCdCombo.selectedValue;
             // 선택한 매장브랜드가 없을 때('전체' 일때)
-            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
                 var momsHqBrandCd = "";
                 for(var i=0; i < momsHqBrandCdComboList.length; i++){
                     if(momsHqBrandCdComboList[i].value !== null) {
