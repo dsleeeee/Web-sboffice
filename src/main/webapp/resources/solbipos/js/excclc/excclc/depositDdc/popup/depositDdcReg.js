@@ -30,6 +30,9 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             $("#hdStoreCd").val(data.storeCd);
             $("#hdSeqNo").val(data.seqNo);
             $scope.moneyDate.value = data.moneyDt;
+            $scope.moneyFg = data.moneyFg;
+            $scope.startDt = data.startDate;
+            $scope.endDt  = data.endDate;
 
             // title 셋팅
             $("#lblTitle").text(messages["depositDdc.depositDdcMod"]);
@@ -40,9 +43,19 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             $("#moneyStoreNm").attr("disabled", true);
             $("#moneyStoreNm").css('background-color', '#F0F0F0');
             $("#moneyStoreSelectCancelBtn").css("display", "none");
-            $("#btnDel").css("display", "");
+            if(data.moneyFg === "VA") {
+                $("#btnDel").css("display", "none");
+                $("#btnSave").css("display", "none");
+                $("#moneyFg").attr("disabled", true);
+            }else{
+                $("#btnDel").css("display", "");
+                $("#btnSave").css("display", "");
+                $("#moneyFg").attr("disabled", false);
+            }
 
             $("#moneyStorebtnCancelStoreCd").css("display", "none");
+
+
 
             // 기존 임금/기타공제 정보 셋팅
             $scope.setCombo("Y");
@@ -59,6 +72,13 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             $("#moneyStoreNm").css('background-color', '#FFFFFF');
             $("#moneyStoreSelectCancelBtn").css("display", "");
             $("#btnDel").css("display", "none");
+            $("#btnSave").css("display", "");
+            $("#moneyFg").attr("disabled", false);
+            $("#moneyStoreCd").val("");
+            $("#moneyStoreNm").val("");
+            $("#moneyAmt").val("");
+            $("#moneyRemark").val("");
+            $scope.moneyDate.value = getCurDate('-');
 
             $("#moneyStorebtnCancelStoreCd").css("display", "");
 
@@ -125,15 +145,26 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             params.moneyAmt = $("#moneyAmt").val();
             params.remark = $("#moneyRemark").val();
             params.status = "U";
+            params.startDate = $scope.startDt;
+            params.endDate   = $scope.endDt;
         }
-
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/excclc/excclc/depositDdc/saveDepositDdc.sb", params, function () {
 
-            // 매장별집계 리스트 재조회
-            var scope = agrid.getScope('storeTotalCtrl');
-            scope.searchStoreTotal();
+            if(params.status === "U") {
+                // 상세내역 리스트 재조회
+                var scope = agrid.getScope('storeTotalDtlCtrl');
+                scope.searchStoreTotalDtl(params);
+
+                // 매장별집계 리스트 재조회
+                var scope = agrid.getScope('storeTotalCtrl');
+                scope.searchStoreTotal();
+            }else{
+                // 매장별집계 리스트 재조회
+                var scope = agrid.getScope('storeTotalCtrl');
+                scope.searchStoreTotal();
+            }
 
             $scope.closeDepositDdc();
 
@@ -152,12 +183,18 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
             params.storeCd = $("#hdStoreCd").val();
             params.seqNo = $("#hdSeqNo").val();
             params.status = "D";
+            params.startDate = $scope.startDt;
+            params.endDate   = $scope.endDt;
 
             $scope._postJSONSave.withPopUp("/excclc/excclc/depositDdc/saveDepositDdc.sb", params, function () {
 
                 // 매장별집계 리스트 재조회
                 var scope = agrid.getScope('storeTotalCtrl');
                 scope.searchStoreTotal();
+
+                // 상세내역 리스트 재조회
+                var scope = agrid.getScope('storeTotalDtlCtrl');
+                scope.searchStoreTotalDtl(params);
 
                 $scope.closeDepositDdc();
 
@@ -189,12 +226,23 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
                     comboData.value = "";
                     comboArray.push(comboData);
 
+                    var moneyFg = "";
+                    if(setDepositDdcYN === 'Y') {
+                        moneyFg = $scope.moneyFg.toString();
+                    }
+
                     // 계정 콤보박스 셋팅
                     for (var i = 0; i < list.length; i++) {
-                        comboData       = {};
-                        comboData.name  = list[i].nmcodeNm;
-                        comboData.value = list[i].nmcodeCd;
-                        comboArray.push(comboData);
+                        if(setDepositDdcYN === 'N' && list[i].nmcodeCd === "VA") {
+                        }else{
+                            if(moneyFg !== "VA" && list[i].nmcodeCd === "VA"){
+                            }else {
+                                comboData = {};
+                                comboData.name = list[i].nmcodeNm;
+                                comboData.value = list[i].nmcodeCd;
+                                comboArray.push(comboData);
+                            }
+                        }
                     }
                     $scope._setComboData("moneyFg", comboArray);
                     if(setDepositDdcYN == 'Y') $scope.setDepositDdc();
@@ -240,6 +288,7 @@ app.controller('depositDdcRegCtrl', ['$scope', '$http', function ($scope, $http)
         $("#moneyStoreNm").css('background-color', '#FFFFFF');
         $("#moneyStoreSelectCancelBtn").css("display", "");
         $("#btnDel").css("display", "none");
+        $("#moneyFg").attr("disabled", false);
 
         $scope.depositDdcRegLayer.hide();
     };

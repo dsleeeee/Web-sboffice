@@ -46,22 +46,31 @@
     -->
     <select id="getStoreTotalDtlList" parameterType="depositDdcVO" resultType="DefaultMap">
         /* DepositDdcMapper.getStoreTotalDtlList */
-        SELECT TO_CHAR(TO_DATE(A.MONEY_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS MONEY_DT,
-               A.MONEY_FG,
-               NVL((SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '133' AND NMCODE_CD = A.MONEY_FG), A.MONEY_FG) AS MONEY_FG_NM,
-               A.MONEY_AMT,
-               A.REMARK,
-               (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.REG_ID) AS USER_NM,
-               A.MONEY_DATE,
-               A.STORE_CD,
-               A.SEQ_NO
-          FROM TB_PO_HQ_STORE_MONEY A
-         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
-           AND A.STORE_CD = #{storeCd}
-           AND A.MONEY_DATE BETWEEN #{startDate} AND #{endDate}
-         ORDER
-            BY A.MONEY_DATE,
-               A.SEQ_NO
+        SELECT  B.STORE_CD
+        ,       B.STORE_NM
+        ,       TO_CHAR(TO_DATE(A.MONEY_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS MONEY_DT
+        ,       A.MONEY_FG
+        ,       NVL((SELECT NMCODE_NM FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '133' AND NMCODE_CD = A.MONEY_FG), A.MONEY_FG) AS MONEY_FG_NM
+        ,       A.MONEY_AMT
+        ,       A.REMARK
+        ,       (SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.REG_ID) AS USER_NM
+        ,       A.MONEY_DATE
+        ,       A.STORE_CD
+        ,       A.SEQ_NO
+        ,       A.TNO
+        ,       A.DEPT_TOTL_MNYX
+        ,       TO_CHAR(TO_DATE(A.DEPT_IPGM_TIME, 'yyyyMMddhh24miss'), 'yyyy-MM-dd hh24:mi')  AS DEPT_IPGM_TIME
+        ,       A.DEPT_BANK_CODE
+        ,       A.DEPT_BANK_CODE_NM
+        FROM    TB_PO_HQ_STORE_MONEY A
+        ,       TB_MS_STORE B
+        WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.MONEY_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     A.STORE_CD      = B.STORE_CD
+        ORDER
+        BY      A.MONEY_DATE
+        ,       A.SEQ_NO
     </select>
 
     <!-- 매장별집계 탭 - 입금/기타공제 계정 콤보박스 데이터 조회 -->

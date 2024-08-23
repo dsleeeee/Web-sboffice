@@ -92,8 +92,8 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchNoRegStore = function(){
     var regStoreScope  = agrid.getScope('regStoreCtrl');
     var params = {};
-    params.srchStoreCd = $("#srchStoreCd").val();
-    params.srchStoreNm = $("#srchStoreNm").val();
+    params.srchStoreCd = $("#srchCoupnStoreCd").val();
+    params.srchStoreNm = $("#srchCoupnStoreNm").val();
 
     params.payClassCd = selectedCouponClass.payClassCd;
     params.coupnCd = selectedCoupon.coupnCd;

@@ -80,7 +80,7 @@ app.controller('storeTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 상세내역 grid 초기화
         var scope = agrid.getScope('storeTotalDtlCtrl');
         scope._gridDataInit();
-        scope._broadcast('storeTotalDtlCtrl', null);
+        // scope._broadcast('storeTotalDtlCtrl', null);
     };
 
     // 입금/기타공제 등록 팝업
@@ -147,10 +147,13 @@ app.controller('storeTotalDtlCtrl', ['$scope', '$http', '$timeout', function ($s
                     $scope.depositDdcRegLayer.show(true);
 
                     var params = {};
-                    params.moneyDt = selectedRow.moneyDt;
-                    params.moneyDate = selectedRow.moneyDate;
-                    params.storeCd = selectedRow.storeCd;
-                    params.seqNo = selectedRow.seqNo;
+                    params.moneyDt      = selectedRow.moneyDt;
+                    params.moneyDate    = selectedRow.moneyDate;
+                    params.storeCd      = selectedRow.storeCd;
+                    params.seqNo        = selectedRow.seqNo;
+                    params.moneyFg      = selectedRow.moneyFg;
+                    params.startDate    = $scope.dtlStartDate;
+                    params.endDate      = $scope.dtlEndDate;
                     $scope._broadcast('depositDdcRegCtrl', params);
                 }
             }
@@ -168,6 +171,8 @@ app.controller('storeTotalDtlCtrl', ['$scope', '$http', '$timeout', function ($s
 
         // 상세내역 리스트 조회
         $scope.searchStoreTotalDtl(data);
+        $scope.dtlStartDate = data.startDate;
+        $scope.dtlEndDate = data.endDate;
         event.preventDefault();
 
     });

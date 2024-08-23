@@ -311,7 +311,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
         if (col.binding === "coupnCd") {
           wijmo.addClass(e.cell, 'wj-custom-readonly');
         }
-        else if (col.binding === "prodCnt" || col.binding === "storeCnt") {
+        else if (col.binding === "prodCnt" || col.binding === "storeCnt" || col.binding === "prodClsCnt" || col.binding === "exceptProdCnt") {
           wijmo.addClass(e.cell, 'wijLink');
         }
       }
@@ -370,6 +370,8 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
             var regProdGrid = agrid.getScope('regProdCtrl');
             regProdGrid.$apply(function(){
               regProdGrid._gridDataInit();
+              $("#srchProdCd").val('');
+              $("#srchProdNm").val('');
             });
             var noRegProdGrid = agrid.getScope('noRegProdCtrl');
             noRegProdGrid.$apply(function(){
@@ -387,10 +389,54 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
             var regStoreGrid = agrid.getScope('regStoreCtrl');
             regStoreGrid.$apply(function(){
               regStoreGrid._gridDataInit();
+              $("#srchCoupnStoreCd").val('');
+              $("#srchCoupnStoreNm").val('');
             });
             var noRegStoreGrid = agrid.getScope('noRegStoreCtrl');
             noRegStoreGrid.$apply(function(){
               noRegStoreGrid._gridDataInit();
+            });
+
+            $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
+          });
+
+        }
+        else if ( col.binding === "prodClsCnt" && selectedRow.status !== "I") {
+
+          $scope.setCouponGridCurr($scope._getPagingInfo('curr'));
+
+          // 소분류 등록 팝업
+          $scope.couponProdClsLayer.show(true, function (s) {
+            var regStoreClsGrid = agrid.getScope('regProdClsCtrl');
+            regStoreClsGrid.$apply(function(){
+              regStoreClsGrid._gridDataInit();
+              $("#srchProdClsCd").val('');
+              $("#srchProdClsNm").val('');
+            });
+            var noRegStoreClsGrid = agrid.getScope('noRegProdClsCtrl');
+            noRegStoreClsGrid.$apply(function(){
+              noRegStoreClsGrid._gridDataInit();
+            });
+
+            $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
+          });
+
+        }
+        else if ( col.binding === "exceptProdCnt" && selectedRow.status !== "I") {
+
+          $scope.setCouponGridCurr($scope._getPagingInfo('curr'));
+
+          // 제외상품 등록 팝업
+          $scope.couponExceptProdLayer.show(true, function (s) {
+            var regExceptProdCtrl = agrid.getScope('regExceptProdCtrl');
+            regExceptProdCtrl.$apply(function(){
+              regExceptProdCtrl._gridDataInit();
+              $("#srchExceptProdCd").val('');
+              $("#srchExceptProdNm").val('');
+            });
+            var noRegExceptProdCtrl = agrid.getScope('noRegExceptProdCtrl');
+            noRegExceptProdCtrl.$apply(function(){
+              noRegExceptProdCtrl._gridDataInit();
             });
 
             $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
@@ -582,6 +628,18 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.couponStoreLayer.shown.addHandler(function (s) {
       $("#couponStoreTitle").text('[' + selectedCouponClass.payClassCd + '] '
         + selectedCouponClass.payClassNm + ' > [' + selectedCoupon.coupnCd + '] ' + selectedCoupon.coupnNm);
+    });
+
+    // 적용대상소분류 팝업 핸들러 추가
+    $scope.couponProdClsLayer.shown.addHandler(function (s) {
+      $("#couponProdClsTitle").text('[' + selectedCouponClass.payClassCd + '] '
+          + selectedCouponClass.payClassNm + ' > [' + selectedCoupon.coupnCd + '] ' + selectedCoupon.coupnNm);
+    });
+
+    // 제외 상품 팝업 핸들러 추가
+    $scope.couponExceptProdLayer.shown.addHandler(function (s) {
+      $("#couponExceptProdTitle").text('[' + selectedCouponClass.payClassCd + '] '
+          + selectedCouponClass.payClassNm + ' > [' + selectedCoupon.coupnCd + '] ' + selectedCoupon.coupnNm);
     });
 
     // 쿠폰순서 매장적용 팝업 핸들러 추가

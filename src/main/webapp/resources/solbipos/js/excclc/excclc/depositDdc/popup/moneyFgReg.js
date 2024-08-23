@@ -62,7 +62,7 @@ app.controller('moneyFgRegCtrl', ['$scope', '$http', '$compile', '$timeout', fun
 
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 var item = $scope.flex.collectionView.items[i];
-                if(item.nmcodeCd === "00"){
+                if(item.nmcodeCd === "00" || item.nmcodeCd === "VA"){
                     item.gChk = false;
                     rows[i].isReadOnly = true;
                 }
@@ -138,8 +138,10 @@ app.controller('moneyFgRegCtrl', ['$scope', '$http', '$compile', '$timeout', fun
             }
 
             if (/[0-9]/g.test($scope.flex.collectionView.items[m].nmcodeCd) === false) {
-                $scope._popMsg(messages['depositDdc.num.require']); // 코드는 숫자로 입력하세요.
-                return;
+                if($scope.flex.collectionView.items[m].nmcodeCd !== "VA"){
+                    $scope._popMsg(messages['depositDdc.num.require']); // 코드는 숫자로 입력하세요.
+                    return;
+                }
             }
 
             if( $scope.flex.collectionView.items[m].nmcodeNm === null || $scope.flex.collectionView.items[m].nmcodeNm === '' || isEmptyObject($scope.flex.collectionView.items[m].nmcodeNm)) {
