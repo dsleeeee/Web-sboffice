@@ -1852,12 +1852,15 @@
             ,       thp.PROD_NM
             FROM    TB_HQ_PRODUCT thp
             ,       TB_HQ_COUPON_PROD thcp
+            ,		TB_HQ_PRODUCT_CLASS thpc
             WHERE   thp.USE_YN = 'Y'
             AND     thp.HQ_OFFICE_CD        = #{hqOfficeCd}
             AND     thcp.HQ_OFFICE_CD   (+) = thp.HQ_OFFICE_CD
             AND     thcp.PAY_CLASS_CD   (+) = #{payClassCd}
             AND     thcp.COUPN_CD       (+) = #{coupnCd}
             AND     thcp.PROD_CD        (+) = thp.PROD_CD
+            AND     thpc.HQ_OFFICE_CD       = thp.HQ_OFFICE_CD
+            AND     thpc.PROD_CLASS_CD      = thp.PROD_CLASS_CD
             <if test='prodCd != null and prodCd != ""'>
                 AND thp.PROD_CD = #{prodCd}
             </if>
