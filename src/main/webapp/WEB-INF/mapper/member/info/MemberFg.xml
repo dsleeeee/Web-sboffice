@@ -224,6 +224,9 @@
                 <if test='telNo != null and telNo != ""'>
                    AND  SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
+                <if test='hqOfficeCd != null and hqOfficeCd != "A0001"'>
+                   AND tmm.REG_STORE_CD = #{storeCd}
+                </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -411,6 +414,9 @@
                 </if>
                 <if test='telNo != null and telNo != ""'>
                    AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
+                </if>
+                <if test='hqOfficeCd != null and hqOfficeCd != "A0001"'>
+                   AND tmm.REG_STORE_CD = #{storeCd}
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
