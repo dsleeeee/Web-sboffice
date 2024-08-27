@@ -224,8 +224,15 @@
                 <if test='telNo != null and telNo != ""'>
                    AND  SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
-                <if test='hqOfficeCd != null and hqOfficeCd != "A0001"'>
-                   AND tmm.REG_STORE_CD = #{storeCd}
+                <!-- 단독매장 -->
+                <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                    AND tmm.REG_STORE_CD = #{storeCd}
+                </if>
+                <!-- 프랜매장 -->
+                <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                    <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                        AND tmm.REG_STORE_CD = #{storeCd}
+                    </if>
                 </if>
                  ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -415,10 +422,17 @@
                 <if test='telNo != null and telNo != ""'>
                    AND SBPENC.D(tmm.TEL_NO) LIKE '%'|| REPLACE(#{telNo}, '-','') ||'%'
                 </if>
-                <if test='hqOfficeCd != null and hqOfficeCd != "A0001"'>
-                   AND tmm.REG_STORE_CD = #{storeCd}
+                <!-- 단독매장 -->
+                <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                    AND tmm.REG_STORE_CD = #{storeCd}
                 </if>
-                 ORDER BY tmm.MEMBR_NO, tms.STORE_CD
+                <!-- 프랜매장 -->
+                <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+                    <if test='membrClassManageFg != null and membrClassManageFg == "0"'>
+                        AND tmm.REG_STORE_CD = #{storeCd}
+                    </if>
+                </if>
+                ORDER BY tmm.MEMBR_NO, tms.STORE_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>

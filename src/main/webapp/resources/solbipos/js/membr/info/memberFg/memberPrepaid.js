@@ -113,6 +113,7 @@ app.controller('memberPrepaidNoRegistCtrl', ['$scope', '$http', function ($scope
     params.membrClassCd = scope.membrClassCd;
     params.telNo = scope.telNo;
     params.storeCd = $("#prepaidStoreCd").val();
+    params.membrClassManageFg = membrClassManageFg;
     params.listScale = 500;
 
     $scope._inquirySub("/membr/info/memberFg/memberFg/getMemberNoPrepaid.sb", params, function () {});

@@ -176,4 +176,4 @@
   var orgnCd = "${orgnCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/memberFg/memberPostpaid.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/memberFg/memberPostpaid.js?ver=20240826.01" charset="utf-8"></script>

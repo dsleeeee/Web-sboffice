@@ -113,6 +113,7 @@ app.controller('memberPostpaidNoRegistCtrl', ['$scope', '$http', function ($scop
     params.membrClassCd = scope.membrClassCd;
     params.telNo = scope.telNo;
     params.storeCd = $("#postpaidStoreCd").val();
+    params.membrClassManageFg = membrClassManageFg;
     params.listScale = 500;
 
     $scope._inquirySub("/membr/info/memberFg/memberFg/getMemberNoPostpaid.sb", params, function () {});
