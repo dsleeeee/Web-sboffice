@@ -78,10 +78,9 @@
     -->
     <select id="getDcColList" parameterType="dayVO" resultType="DefaultMap">
         /* USE : DayMapper.getDcColList */
-        SELECT
-        tcn.NMCODE_CD AS DC_CD,
-        tcn.NMCODE_NM AS DC_NM,
-        (CASE WHEN tcn.NMCODE_CD = '12' THEN 'COUPN' ELSE tcn.NMCODE_ITEM_1 END) AS DC_METHOD
+        SELECT  tcn.NMCODE_CD AS DC_CD
+        ,        tcn.NMCODE_NM AS DC_NM
+        ,        (CASE WHEN tcn.NMCODE_CD = '12' THEN 'COUPN' ELSE tcn.NMCODE_ITEM_1 END) AS DC_METHOD
         FROM    TB_CM_NMCODE tcn
         WHERE   tcn.NMCODE_GRP_CD   =   '041'
         ORDER
@@ -98,7 +97,7 @@
         /* USE : DayMapper.getDcBbqColList */
         SELECT  tcn.NMCODE_CD AS DC_CD
         ,        tcn.NMCODE_NM AS DC_NM
-        ,        (CASE WHEN tcn.NMCODE_CD = '02' THEN 'COUPN_BBQ' ELSE tcn.NMCODE_ITEM_1 END) AS DC_METHOD
+        ,        (CASE WHEN tcn.NMCODE_CD = '02' THEN 'COUPN_BBQ' WHEN tcn.NMCODE_CD = '12' THEN 'COUPN' ELSE tcn.NMCODE_ITEM_1 END) AS DC_METHOD
         FROM    TB_CM_NMCODE tcn
         WHERE   tcn.NMCODE_GRP_CD   =   '041'
         UNION ALL
