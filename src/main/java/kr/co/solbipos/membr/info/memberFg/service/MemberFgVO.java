@@ -54,6 +54,10 @@ public class MemberFgVO extends PageVO {
     private String modId;
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+    /**
+     * [회원분류 관리구분]
+     */
+    private String membrClassManageFg;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -189,5 +193,13 @@ public class MemberFgVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getMembrClassManageFg() {
+        return membrClassManageFg;
+    }
+
+    public void setMembrClassManageFg(String membrClassManageFg) {
+        this.membrClassManageFg = membrClassManageFg;
     }
 }
