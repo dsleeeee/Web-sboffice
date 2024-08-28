@@ -35,6 +35,10 @@ public class CommonMethodVO extends PageVO {
     private String contents;
     /** 로그인 IP */
     private String loginIp;
+    /** 가상로그인ID */
+    private String vUserId;
+    /** 엑셀다운로드 마스킹 패스워드 */
+    private String excelPw;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -90,5 +94,21 @@ public class CommonMethodVO extends PageVO {
 
     public void setLoginIp(String loginIp) {
         this.loginIp = loginIp;
+    }
+
+    public String getvUserId() {
+        return vUserId;
+    }
+
+    public void setvUserId(String vUserId) {
+        this.vUserId = vUserId;
+    }
+
+    public String getExcelPw() {
+        return excelPw;
+    }
+
+    public void setExcelPw(String excelPw) {
+        this.excelPw = excelPw;
     }
 }

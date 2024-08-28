@@ -63,6 +63,10 @@ public class CouponVO extends PageVO {
     private String dispSeq;
     /** 매장상태 */
     private String sysStatFg;
+    /** 상품코드 */
+    private String prodCd;
+    /** 상품명 */
+    private String prodNm;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -302,4 +306,20 @@ public class CouponVO extends PageVO {
     public String getSysStatFg() { return sysStatFg; }
 
     public void setSysStatFg(String sysStatFg) { this.sysStatFg = sysStatFg; }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
+    }
 }

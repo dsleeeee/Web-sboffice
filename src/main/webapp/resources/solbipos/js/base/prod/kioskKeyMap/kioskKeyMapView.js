@@ -147,10 +147,16 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
         } else {
           tuKey = list;
           for (var i = 0; i < (12 > list.length ? list.length : 12); i++) {
+            var lineBr = "<br/>";
+            if(list[i].groupProdCd !== null && list[i].groupProdCd !== ""){
+            }else{
+              list[i].groupProdCd = '';
+              lineBr = '';
+            }
             if(list[i].soldOutYn === 'Y' && orgnFg === "STORE"){
-              $("#tuKey" + i).html(soldOut + "<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+list[i].prodNm+"<br/>"+list[i].saleUprc);
+              $("#tuKey" + i).html(soldOut + "<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 65%;'><br/>"+"["+list[i].prodCd+"]"+list[i].sideProdYn+lineBr+list[i].groupProdCd+"<br/>"+list[i].prodNm+"<br/>"+list[i].saleUprc);
             } else {
-              $("#tuKey" + i).html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+list[i].prodNm+"<br/>"+list[i].saleUprc);
+              $("#tuKey" + i).html("<img src='" + list[i].imgUrl + "/" + list[i].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 65%;'><br/>"+"["+list[i].prodCd+"]"+list[i].sideProdYn+lineBr+list[i].groupProdCd+"<br/>"+list[i].prodNm+"<br/>"+list[i].saleUprc);
             }
           }
         }
@@ -236,10 +242,16 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
       }
 
       for (var i = 0; i < 12; i++) {
+        var lineBr = "<br/>";
+        if(tuKey[index].groupProdCd !== null && tuKey[index].groupProdCd !== ""){
+        }else{
+          tuKey[index].groupProdCd = '';
+          lineBr = '';
+        }
         if(tuKey[index].soldOutYn === 'Y' && orgnFg === "STORE"){
-          $("#tuKey" + i).html(soldOut + "<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+          $("#tuKey" + i).html(soldOut + "<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 65%;'><br/>"+"["+tuKey[index].prodCd+"]"+tuKey[index].sideProdYn+lineBr+tuKey[index].groupProdCd+"<br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
         } else {
-          $("#tuKey" + i).html("<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+          $("#tuKey" + i).html("<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 65%;'><br/>"+"["+tuKey[index].prodCd+"]"+tuKey[index].sideProdYn+lineBr+tuKey[index].groupProdCd+"<br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
         }
         index ++;
       }
@@ -255,10 +267,16 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
       tuKeyPage++;
 
       for (var i = 0; index < (12*tuKeyPage > tuKey.length ? tuKey.length : 12*tuKeyPage); i++) {
+        var lineBr = "<br/>";
+        if(tuKey[index].groupProdCd !== null && tuKey[index].groupProdCd !== ""){
+        }else{
+          tuKey[index].groupProdCd = '';
+          lineBr = '';
+        }
         if(tuKey[index].soldOutYn === 'Y' && orgnFg === "STORE"){
-          $("#tuKey" + i).html(soldOut + "<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+          $("#tuKey" + i).html(soldOut + "<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 65%;'><br/>"+"["+tuKey[index].prodCd+"]"+tuKey[index].sideProdYn+lineBr+tuKey[index].groupProdCd+"<br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
         } else {
-          $("#tuKey" + i).html("<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 80%;'><br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
+          $("#tuKey" + i).html("<img src='" + tuKey[index].imgUrl + "/" + tuKey[index].imgFileNm + "' onerror='this.src=\"/resource/solbipos/css/img/NoImage.png\"' style='width: auto; height: 65%;'><br/>"+"["+tuKey[index].prodCd+"]"+tuKey[index].sideProdYn+lineBr+tuKey[index].groupProdCd+"<br/>"+tuKey[index].prodNm+"<br/>"+tuKey[index].saleUprc);
         }
         index ++;
       }

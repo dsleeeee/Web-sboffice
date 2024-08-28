@@ -106,8 +106,8 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http ) {
       var params = {};
 
       // params.listScale = "10";
-      params.prodCd = $("#srchProdCd").val();
-      params.prodNm = $("#srchProdNm").val();
+      params.prodCd = $("#srchApplyProdCd").val();
+      params.prodNm = $("#srchApplyProdNm").val();
       params.payClassCd = selectedCouponClass.payClassCd;
       params.coupnCd = selectedCoupon.coupnCd;
       params.coupnEnvstVal = coupnEnvstVal;

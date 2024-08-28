@@ -129,6 +129,7 @@ public class CouponController {
         HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        System.out.println(payMethodClassVO.getStoreCd() +"매장코드");
         List<DefaultMap<String>> list = service.getCouponClassList(payMethodClassVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, payMethodClassVO);

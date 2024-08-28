@@ -246,6 +246,7 @@ public class RegistServiceImpl implements RegistService {
 
             if(registVO.getExcelPw() != null && registVO.getExcelPw().equals("c08001")){
                 registVO.setUserId(sessionInfoVO.getUserId());
+                registVO.setvUserId(sessionInfoVO.getvUserId());
                 /** 마스킹 없는 엑셀다운로드 로그 저장 */
                 mapper.saveMemberExcelLog(registVO);
             }

@@ -343,14 +343,16 @@
             PROC_DT,
             USER_ID,
             HQ_OFFICE_CD,
-            STORE_CD
+            STORE_CD,
+            V_USER_ID
         )
         VALUES
         (
             TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS'),
             #{userId},
             #{hqOfficeCd},
-            #{storeCd}
+            #{storeCd},
+            #{vUserId}
         )
     </insert>
     <!-- 회원정보 조회(Excel 용) -->

@@ -28,9 +28,9 @@
         </tr>
         <tr>
           <th><s:message code="coupon.prodCd"/></th>
-          <td><input type="text" id="srchProdCd" ng-model="prodCd" /></td>
+          <td><input type="text" id="srchApplyProdCd" ng-model="applyProdCd" /></td>
           <th><s:message code="coupon.prodNm"/></th>
-          <td><input type="text" id="srchProdNm" ng-model="prodNm" /></td>
+          <td><input type="text" id="srchApplyProdNm" ng-model="applyProdNm" /></td>
         </tr>
         </tbody>
       </table>
@@ -136,7 +136,7 @@
 <script type="text/javascript">
   var coupnEnvstVal = "${coupnEnvstVal}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20240820.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponProd.js?ver=20240826.01" charset="utf-8"></script>
 
 <%-- 엑셀업로드 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdExcelUpload.jsp">

@@ -33,61 +33,122 @@
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg.toString() == "HQ"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
-                SELECT
-                    thpmc.HQ_OFFICE_CD,
-                    thpmc.PAY_CLASS_CD,
-                    thpmc.PAY_TYPE_FG,
-                    thpmc.PAY_CLASS_NM,
-                    thpmc.SER_NO_YN,
-                    thpmc.USE_YN,
-                    thpmc.REG_ID,
-                    thpmc.MAPPING_CODE,
-                    (
-                        SELECT
-                            COUNT(thc.COUPN_CD)
-                        FROM
-                            TB_HQ_COUPON thc
-                        WHERE
-                            thc.HQ_OFFICE_CD = thpmc.HQ_OFFICE_CD
-                            AND thc.PAY_CLASS_CD = thpmc.PAY_CLASS_CD
-                    ) AS COUPON_CNT
+                SELECT  thpmc.HQ_OFFICE_CD
+                ,       thpmc.PAY_CLASS_CD
+                ,       thpmc.PAY_TYPE_FG
+                ,       thpmc.PAY_CLASS_NM
+                ,       thpmc.SER_NO_YN
+                ,       thpmc.USE_YN
+                ,       thpmc.REG_ID
+                ,       thpmc.MAPPING_CODE
+                ,       (
+                            SELECT  COUNT(thc.COUPN_CD)
+                            FROM    TB_HQ_COUPON thc
+                            WHERE   thc.HQ_OFFICE_CD = thpmc.HQ_OFFICE_CD
+                            AND     thc.PAY_CLASS_CD = thpmc.PAY_CLASS_CD
+                        ) AS COUPON_CNT
                     <include refid="CmmSQL.PagingTemplateCount"/>
-                FROM
-                    TB_HQ_PAY_METHOD_CLASS thpmc
-                WHERE
-                    thpmc.HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND thpmc.PAY_TYPE_FG = #{payTypeFg}
-                    AND thpmc.PAY_CLASS_CD != '000'
+                FROM    TB_HQ_PAY_METHOD_CLASS thpmc
+                ,   (
+                        SELECT 	DISTINCT
+                                A.HQ_OFFICE_CD
+                        ,		A.PAY_CLASS_CD
+                        FROM 	TB_HQ_COUPON A
+                        , 		TB_HQ_COUPON_PROD B
+                        ,		TB_HQ_PRODUCT C
+                        ,		TB_HQ_COUPON_STORE D
+                        ,		TB_MS_STORE E
+                        WHERE 	A.HQ_OFFICE_CD  	= #{hqOfficeCd}
+                        AND 	B.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+                        AND 	B.PAY_CLASS_CD 	(+) = A.PAY_CLASS_CD
+                        AND 	B.COUPN_CD 	   	(+) = A.COUPN_CD
+                        AND 	C.HQ_OFFICE_CD 	(+)	= B.HQ_OFFICE_CD
+                        AND 	C.PROD_CD 		(+) = B.PROD_CD
+                        AND 	D.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+                        AND 	D.PAY_CLASS_CD 		= A.PAY_CLASS_CD
+                        AND		D.COUPN_CD 			= A.COUPN_CD
+                        AND 	E.STORE_CD 			= D.STORE_CD
+                        <if test="coupnNm != null and coupnNm != ''">
+                            AND A.COUPN_NM LIKE '%'||#{coupnNm}||'%'
+                        </if>
+                        <if test="prodCd != null and prodCd != ''">
+                            AND C.PROD_CD = #{prodCd}
+                        </if>
+                        <if test="prodNm != null and prodNm != ''">
+                            AND C.PROD_NM LIKE '%'||#{prodNm}||'%'
+                        </if>
+                        <if test="storeCd != null and storeCd != ''">
+                            AND E.STORE_CD = #{storeCd}
+                        </if>
+                        <if test="storeNm != null and storeNm != ''">
+                            AND E.STORE_NM LIKE '%'||#{storeNm}||'%'
+                        </if>
+                    ) A
+                WHERE   thpmc.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     thpmc.PAY_TYPE_FG   = #{payTypeFg}
+                AND     thpmc.PAY_CLASS_CD != '000'
+                AND     A.HQ_OFFICE_CD  = thpmc.HQ_OFFICE_CD
+                AND     A.PAY_CLASS_CD  = thpmc.PAY_CLASS_CD
+                <if test="payClassNm != null and payClassNm != ''">
+                    AND thpmc.PAY_CLASS_NM LIKE '%'||#{payClassNm}||'%'
+                </if>
+                ORDER
+                BY      thpmc.PAY_CLASS_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
                 <include refid="CmmSQL.PagingTemplateHeader"/>
-                SELECT
-                    tmpmc.STORE_CD,
-                    tmpmc.PAY_TYPE_FG,
-                    tmpmc.PAY_CLASS_CD,
-                    tmpmc.PAY_CLASS_NM,
-                    tmpmc.SER_NO_YN,
-                    tmpmc.USE_YN,
-                    tmpmc.REG_ID,
-                    tmpmc.MAPPING_CODE,
-                    (
-                        SELECT
-                            COUNT(tmc.COUPN_CD)
-                        FROM
-                            TB_MS_COUPON tmc
-                        WHERE
-                            tmc.STORE_CD = tmpmc.STORE_CD
-                            AND tmc.PAY_CLASS_CD = tmpmc.PAY_CLASS_CD
-                    ) AS COUPON_CNT
+                SELECT  tmpmc.STORE_CD
+                ,       tmpmc.PAY_TYPE_FG
+                ,       tmpmc.PAY_CLASS_CD
+                ,       tmpmc.PAY_CLASS_NM
+                ,       tmpmc.SER_NO_YN
+                ,       tmpmc.USE_YN
+                ,       tmpmc.REG_ID
+                ,       tmpmc.MAPPING_CODE
+                ,       (
+                            SELECT  COUNT(tmc.COUPN_CD)
+                            FROM    TB_MS_COUPON tmc
+                            WHERE   tmc.STORE_CD = tmpmc.STORE_CD
+                            AND     tmc.PAY_CLASS_CD = tmpmc.PAY_CLASS_CD
+                        ) AS COUPON_CNT
                     <include refid="CmmSQL.PagingTemplateCount"/>
-                FROM
-                    TB_MS_PAY_METHOD_CLASS tmpmc
-                WHERE
-                    tmpmc.STORE_CD = #{storeCd}
-                    AND tmpmc.PAY_TYPE_FG = #{payTypeFg}
-                    AND tmpmc.PAY_CLASS_CD != '000'
+                FROM    TB_MS_PAY_METHOD_CLASS tmpmc
+                ,	    (
+                            SELECT 	DISTINCT
+                                    A.STORE_CD
+                            ,		A.PAY_CLASS_CD
+                            FROM 	TB_MS_COUPON A
+                            , 		TB_MS_COUPON_PROD B
+                            ,		TB_MS_PRODUCT C
+                            WHERE 	A.STORE_CD          = #{storeCd}
+                            AND 	B.STORE_CD      (+) = A.STORE_CD
+                            AND 	B.COUPN_REG_FG  (+) = A.COUPN_REG_FG
+                            AND 	B.PAY_CLASS_CD  (+) = A.PAY_CLASS_CD
+                            AND 	B.COUPN_CD 	    (+)	= A.COUPN_CD
+                            AND 	C.PROD_CD 	    (+)	= B.PROD_CD
+                            AND 	C.STORE_CD 	    (+)	= B.STORE_CD
+                            <if test="coupnNm != null and coupnNm != ''">
+                                AND A.COUPN_NM LIKE '%'||#{coupnNm}||'%'
+                            </if>
+                            <if test="prodCd != null and prodCd != ''">
+                                AND C.PROD_CD = #{prodCd}
+                            </if>
+                            <if test="prodNm != null and prodNm != ''">
+                                AND C.PROD_NM LIKE '%'||#{prodNm}||'%'
+                            </if>
+                        ) A
+                WHERE   tmpmc.STORE_CD = #{storeCd}
+                AND     tmpmc.PAY_TYPE_FG = #{payTypeFg}
+                AND     tmpmc.PAY_CLASS_CD != '000'
+                AND     A.STORE_CD      = tmpmc.STORE_CD
+                AND     A.PAY_CLASS_CD  = tmpmc.PAY_CLASS_CD
+                <if test="payClassNm != null and payClassNm != ''">
+                    AND tmpmc.PAY_CLASS_NM LIKE '%'||#{payClassNm}||'%'
+                </if>
+                ORDER
+                BY      tmpmc.PAY_CLASS_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
         </choose>
@@ -326,31 +387,79 @@
     -->
     <select id="getHqCouponList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : CouponMapper.getHqCouponList */
-        SELECT
-            thc.HQ_OFFICE_CD,
-            thc.COUPN_CD,
-            thc.COUPN_NM,
-            thc.PAY_CLASS_CD,
-            thc.COUPN_DC_FG,
-            thc.COUPN_DC_RATE,
-            thc.COUPN_DC_AMT,
-            thc.COUPN_APPLY_FG,
-            thc.USE_YN,
-            thc.REG_ID,
-            thc.COUPN_TARGET_FG,
-            thc.COUPN_PROD_FG,
-            (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcp.COUPN_CD = thc.COUPN_CD )                  AS PROD_CNT,
-            (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcs.COUPN_CD = thc.COUPN_CD )                AS STORE_CNT,
-            (SELECT COUNT(thcpc.PROD_CLASS_CD) FROM TB_HQ_COUPON_PROD_CLS thcpc WHERE thcpc.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcpc.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcpc.COUPN_CD = thc.COUPN_CD )   AS PROD_CLS_CNT,
-            (SELECT COUNT(thcpe.PROD_CD) FROM TB_HQ_COUPON_PROD_EXCEPT thcpe WHERE thcpe.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcpe.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcpe.COUPN_CD = thc.COUPN_CD )      AS EXCEPT_PROD_CNT,
-            thc.DISP_SEQ_NO AS DISP_SEQ
-        FROM
-            TB_HQ_COUPON thc
-        WHERE
-            thc.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND thc.PAY_CLASS_CD = #{payClassCd}
+        SELECT  thc.HQ_OFFICE_CD
+        ,       thc.COUPN_CD
+        ,       thc.COUPN_NM
+        ,       thc.PAY_CLASS_CD
+        ,       thc.COUPN_DC_FG
+        ,       thc.COUPN_DC_RATE
+        ,       thc.COUPN_DC_AMT
+        ,       thc.COUPN_APPLY_FG
+        ,       thc.USE_YN
+        ,       thc.REG_ID
+        ,       thc.COUPN_TARGET_FG
+        ,       thc.COUPN_PROD_FG
+        ,       (SELECT COUNT(thcp.PROD_CD) FROM TB_HQ_COUPON_PROD thcp WHERE thcp.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcp.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcp.COUPN_CD = thc.COUPN_CD )                  AS PROD_CNT
+        ,       (SELECT COUNT(thcs.STORE_CD) FROM TB_HQ_COUPON_STORE thcs WHERE thcs.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcs.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcs.COUPN_CD = thc.COUPN_CD )                AS STORE_CNT
+        ,       (SELECT COUNT(thcpc.PROD_CLASS_CD) FROM TB_HQ_COUPON_PROD_CLS thcpc WHERE thcpc.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcpc.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcpc.COUPN_CD = thc.COUPN_CD )   AS PROD_CLS_CNT
+        ,       (SELECT COUNT(thcpe.PROD_CD) FROM TB_HQ_COUPON_PROD_EXCEPT thcpe WHERE thcpe.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcpe.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcpe.COUPN_CD = thc.COUPN_CD )      AS EXCEPT_PROD_CNT
+        ,       thc.DISP_SEQ_NO AS DISP_SEQ
+        FROM    TB_HQ_COUPON thc
+        <if test="(storeCd != null and storeCd != '') or (storeNm != null and storeNm != '')">
+        ,   (
+                SELECT 	DISTINCT
+                        A.HQ_OFFICE_CD
+                ,		A.PAY_CLASS_CD
+                ,       A.COUPN_CD
+                FROM 	TB_HQ_COUPON_STORE A
+                ,		TB_MS_STORE B
+                WHERE 	A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND     B.STORE_CD 	    = A.STORE_CD
+                <if test="storeCd != null and storeCd != ''">
+                    AND A.STORE_CD = #{storeCd}
+                </if>
+                <if test="storeNm != null and storeNm != ''">
+                    AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
+                </if>
+            ) A
+        </if>
+        <if test="(prodCd != null and prodCd != '') or (prodNm != null and prodNm != '')">
+        ,   (
+                SELECT	DISTINCT
+                        A.HQ_OFFICE_CD
+                ,		A.PAY_CLASS_CD
+                ,       A.COUPN_CD
+                FROM 	TB_HQ_COUPON_PROD A
+                ,		TB_HQ_PRODUCT B
+                WHERE 	A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND 	B.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+                AND 	B.PROD_CD 		= A.PROD_CD
+                <if test="prodCd != null and prodCd != ''">
+                    AND A.PROD_CD = #{prodCd}
+                </if>
+                <if test="prodNm != null and prodNm != ''">
+                    AND B.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+            ) B
+        </if>
+        WHERE   thc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thc.PAY_CLASS_CD = #{payClassCd}
+        <if test="coupnNm != null and coupnNm != ''">
+            AND thc.COUPN_NM LIKE '%'||#{coupnNm}||'%'
+        </if>
+        <if test="(storeCd != null and storeCd != '') or (storeNm != null and storeNm != '')">
+            AND A.HQ_OFFICE_CD  = thc.HQ_OFFICE_CD
+            AND A.PAY_CLASS_CD  = thc.PAY_CLASS_CD
+            AND A.COUPN_CD      = thc.COUPN_CD
+        </if>
+        <if test="(prodCd != null and prodCd != '') or (prodNm != null and prodNm != '')">
+            AND B.HQ_OFFICE_CD  = thc.HQ_OFFICE_CD
+            AND B.PAY_CLASS_CD  = thc.PAY_CLASS_CD
+            AND B.COUPN_CD      = thc.COUPN_CD
+        </if>
 --             AND thc.USE_YN = 'Y'
-        ORDER BY thc.DISP_SEQ_NO
+        ORDER
+        BY      thc.DISP_SEQ_NO
     </select>
 
     <!-- 매장 쿠폰 조회 -->
@@ -360,28 +469,53 @@
     -->
     <select id="getStoreCouponList" parameterType="DefaultMap" resultType="DefaultMap">
         /* USE : CouponMapper.getStoreCouponList */
-        SELECT
-            tmc.STORE_CD,
-            tmc.COUPN_CD,
-            tmc.COUPN_NM,
-            tmc.PAY_CLASS_CD,
-            tmc.COUPN_DC_FG,
-            tmc.COUPN_DC_RATE,
-            tmc.COUPN_DC_AMT,
-            tmc.COUPN_APPLY_FG,
-            tmc.USE_YN,
-            tmc.REG_ID,
-            tmc.COUPN_TARGET_FG,
-            tmc.COUPN_PROD_FG,
-            (SELECT COUNT(tmcp.PROD_CD) FROM TB_MS_COUPON_PROD tmcp WHERE tmcp.STORE_CD = tmc.STORE_CD AND tmcp.PAY_CLASS_CD = tmc.PAY_CLASS_CD AND tmcp.COUPN_CD = tmc.COUPN_CD ) AS PROD_CNT,
-            tmc.DISP_SEQ_NO
-        FROM
-            TB_MS_COUPON tmc
-        WHERE
-            tmc.STORE_CD = #{storeCd}
-            AND tmc.PAY_CLASS_CD = #{payClassCd}
+        SELECT  tmc.STORE_CD
+        ,       tmc.COUPN_CD
+        ,       tmc.COUPN_NM
+        ,       tmc.PAY_CLASS_CD
+        ,       tmc.COUPN_DC_FG
+        ,       tmc.COUPN_DC_RATE
+        ,       tmc.COUPN_DC_AMT
+        ,       tmc.COUPN_APPLY_FG
+        ,       tmc.USE_YN
+        ,       tmc.REG_ID
+        ,       tmc.COUPN_TARGET_FG
+        ,       tmc.COUPN_PROD_FG
+        ,       (SELECT COUNT(tmcp.PROD_CD) FROM TB_MS_COUPON_PROD tmcp WHERE tmcp.STORE_CD = tmc.STORE_CD AND tmcp.PAY_CLASS_CD = tmc.PAY_CLASS_CD AND tmcp.COUPN_CD = tmc.COUPN_CD ) AS PROD_CNT
+        ,       tmc.DISP_SEQ_NO
+        FROM    TB_MS_COUPON tmc
+        <if test="(prodCd != null and prodCd != '') or (prodNm != null and prodNm != '')">
+            ,   (
+                    SELECT	DISTINCT
+                            A.STORE_CD
+                    ,		A.PAY_CLASS_CD
+                    ,       A.COUPN_CD
+                    FROM 	TB_MS_COUPON_PROD A
+                    ,		TB_MS_PRODUCT B
+                    WHERE 	A.STORE_CD  = #{storeCd}
+                    AND 	B.STORE_CD  = A.STORE_CD
+                    AND 	B.PROD_CD 	= A.PROD_CD
+                    <if test="prodCd != null and prodCd != ''">
+                        AND A.PROD_CD = #{prodCd}
+                    </if>
+                    <if test="prodNm != null and prodNm != ''">
+                        AND B.PROD_NM LIKE '%'||#{prodNm}||'%'
+                    </if>
+                ) A
+        </if>
+        WHERE   tmc.STORE_CD = #{storeCd}
+        AND     tmc.PAY_CLASS_CD = #{payClassCd}
+        <if test="coupnNm != null and coupnNm != ''">
+            AND tmc.COUPN_NM LIKE '%'||#{coupnNm}||'%'
+        </if>
+        <if test="(prodCd != null and prodCd != '') or (prodNm != null and prodNm != '')">
+            AND A.STORE_CD      = tmc.STORE_CD
+            AND A.PAY_CLASS_CD  = tmc.PAY_CLASS_CD
+            AND A.COUPN_CD      = tmc.COUPN_CD
+        </if>
 --             AND tmc.USE_YN = 'Y'
-        ORDER BY tmc.DISP_SEQ_NO
+        ORDER
+        BY      tmc.DISP_SEQ_NO
     </select>
 
     <!-- 쿠폰 코드 조회 -->

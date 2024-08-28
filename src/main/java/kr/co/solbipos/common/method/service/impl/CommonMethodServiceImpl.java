@@ -53,6 +53,11 @@ public class CommonMethodServiceImpl implements CommonMethodService {
         commonMethodVO.setLoginIp(sessionInfoVO.getLoginIp());
         commonMethodVO.setRegDt(dt);
         commonMethodVO.setRegId(sessionInfoVO.getUserId());
+        commonMethodVO.setvUserId(sessionInfoVO.getvUserId());
+
+        if(commonMethodVO.getExcelPw() != null && commonMethodVO.getExcelPw().equals("c08001")){
+            commonMethodVO.setContents("[전체 엑셀다운로드-마스킹제거(TB_LG_MB_MEMBER_DOWNLOAD_LOG)] 버튼 클릭 시");
+        }
 
         return commonMethodMapper.saveUserAct(commonMethodVO);
     }
