@@ -328,52 +328,102 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                INSERT INTO TB_HQ_PRODUCT_DLVR_PROD_NM
+                MERGE INTO TB_HQ_PRODUCT_DLVR_PROD_NM A
+                USING
                 (
-                    HQ_OFFICE_CD,
-                    PROD_CD,
-                    DLVR_NAME_CD,
-                    DLVR_PROD_NM,
-                    REG_ID,
-                    REG_DT,
-                    MOD_ID,
-                    MOD_DT
+                        SELECT  #{hqOfficeCd}                                                     AS HQ_OFFICE_CD
+                        ,       #{prodCd}                                                         AS PROD_CD
+                        ,       #{dlvrNameCd}                                                     AS DLVR_NAME_CD
+                        ,       #{dlvrProdNm}                                                     AS DLVR_PROD_NM
+                        ,       #{regDt}                                                          AS REG_DT
+                        ,       #{regId}                                                          AS REG_ID
+                        ,       #{modDt}                                                          AS MOD_DT
+                        ,       #{modId}                                                          AS MOD_ID
+                        FROM    DUAL A
+                ) B
+                ON
+                (
+                        A.HQ_OFFICE_CD  =   B.HQ_OFFICE_CD
+                AND     A.PROD_CD       =   B.PROD_CD
+                AND     A.DLVR_NAME_CD  =   B.DLVR_NAME_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.DLVR_PROD_NM  =   B.DLVR_PROD_NM
+                ,       A.MOD_DT        =   B.MOD_DT
+                ,       A.MOD_ID        =   B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.HQ_OFFICE_CD
+                ,       A.PROD_CD
+                ,       A.DLVR_NAME_CD
+                ,       A.DLVR_PROD_NM
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
                 )
                 VALUES
                 (
-                    #{hqOfficeCd},
-                    #{prodCd},
-                    #{dlvrNameCd},
-                    #{dlvrProdNm},
-                    #{regId},
-                    #{regDt},
-                    #{modId},
-                    #{modDt}
+                        B.HQ_OFFICE_CD
+                ,       B.PROD_CD
+                ,       B.DLVR_NAME_CD
+                ,       B.DLVR_PROD_NM
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
                 )
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_MS_PRODUCT_DLVR_PROD_NM
+                MERGE INTO TB_MS_PRODUCT_DLVR_PROD_NM A
+                USING
                 (
-                    STORE_CD,
-                    PROD_CD,
-                    DLVR_NAME_CD,
-                    DLVR_PROD_NM,
-                    REG_ID,
-                    REG_DT,
-                    MOD_ID,
-                    MOD_DT
+                        SELECT  #{storeCd}                                                AS STORE_CD
+                        ,       #{prodCd}                                                 AS PROD_CD
+                        ,       #{dlvrNameCd}                                             AS DLVR_NAME_CD
+                        ,       #{dlvrProdNm}                                             AS DLVR_PROD_NM
+                        ,       #{regDt}                                                  AS REG_DT
+                        ,       #{regId}                                                  AS REG_ID
+                        ,       #{modDt}                                                  AS MOD_DT
+                        ,       #{modId}                                                  AS MOD_ID
+                        FROM    DUAL A
+                ) B
+                ON
+                (
+                        A.STORE_CD      =   B.STORE_CD
+                AND     A.PROD_CD       =   B.PROD_CD
+                AND     A.DLVR_NAME_CD  =   B.DLVR_NAME_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.DLVR_PROD_NM  =   B.DLVR_PROD_NM
+                ,       A.MOD_DT        =   B.MOD_DT
+                ,       A.MOD_ID        =   B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.STORE_CD
+                ,       A.PROD_CD
+                ,       A.DLVR_NAME_CD
+                ,       A.DLVR_PROD_NM
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
                 )
                 VALUES
                 (
-                    #{storeCd},
-                    #{prodCd},
-                    #{dlvrNameCd},
-                    #{dlvrProdNm},
-                    #{regId},
-                    #{regDt},
-                    #{modId},
-                    #{modDt}
+                        B.STORE_CD
+                ,       B.PROD_CD
+                ,       B.DLVR_NAME_CD
+                ,       B.DLVR_PROD_NM
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
                 )
             </when>
         </choose>
