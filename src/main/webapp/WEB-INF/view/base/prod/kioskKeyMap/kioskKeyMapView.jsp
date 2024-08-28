@@ -8,7 +8,7 @@
 <style>
 #thPre, #thNext { background-color: #d5d5d5; width: 28px; }
 #kioskKeyMapViewLayer table thead tr th div { height: 10px; width: 102px; text-align: center; }
-#kioskKeyMapViewLayer table tbody tr td div { height: 120px; width: 160px; text-align: center; }
+#kioskKeyMapViewLayer table tbody tr td div { height: 140px; width: 160px; text-align: center; }
 #kioskKeyMapViewLayer table thead tr th, table tbody tr td { border:1px solid #ddd; }
 </style>
 
@@ -96,4 +96,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapView.js?ver=20250427.04" charset="utf-8">1</script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapView.js?ver=20240826.01" charset="utf-8"></script>

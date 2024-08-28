@@ -937,6 +937,7 @@ app.controller('memberExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                                 actParams.contents = "[엑셀다운로드] 버튼 클릭 시";
                             } else if (data.excelGubun == 'T'){
                                 actParams.contents = "[전체 엑셀다운로드] 버튼 클릭 시";
+                                actParams.excelPw = $("#excelPw").val();
                             }
 
                             $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});

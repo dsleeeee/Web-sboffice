@@ -27,6 +27,54 @@
         </button>
       </div>
     </div>
+    <table class="searchTbl">
+      <colgroup>
+        <col class="w15"/>
+        <col class="w35"/>
+        <col class="w15"/>
+        <col class="w35"/>
+      </colgroup>
+      <tbody>
+      <tr>
+        <%-- 권종분류명 --%>
+        <th><s:message code="coupon.payClassNm" /></th>
+        <td>
+          <input type="text" class="sb-input w100" id="srchPayClassNm" ng-model="payClassNm" onkeyup="fnNxBtnSearch();"/>
+        </td>
+        <%-- 쿠폰명 --%>
+        <th><s:message code="coupon.coupnNm" /></th>
+        <td>
+          <input type="text" class="sb-input w100" id="srchCoupnNm" ng-model="coupnNm" onkeyup="fnNxBtnSearch();"/>
+        </td>
+      </tr>
+      <c:if test="${orgnFg == 'HQ'}">
+        <tr>
+          <%-- 적용매장코드 --%>
+          <th><s:message code="coupon.applyStoreCd" /></th>
+          <td>
+            <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" onkeyup="fnNxBtnSearch();"/>
+          </td>
+          <%-- 적용매장명 --%>
+          <th><s:message code="coupon.applyStoreNm" /></th>
+          <td>
+            <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch();"/>
+          </td>
+        </tr>
+      </c:if>
+      <tr>
+        <%-- 적용상품코드 --%>
+        <th><s:message code="coupon.applyProdCd" /></th>
+        <td>
+          <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"/>
+        </td>
+        <%-- 적용상품명 --%>
+        <th><s:message code="coupon.applyProdNm" /></th>
+        <td>
+          <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
     <%-- 쿠폰분류등록 --%>
     <div class="mt10">
@@ -140,7 +188,7 @@
             <wj-flex-grid-column header="<s:message code="coupon.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
           </c:if>
           <wj-flex-grid-column header="<s:message code="cmm.useYn"/>" binding="useYn" data-map="useYnDataMap" width="80" align="center"></wj-flex-grid-column>
-          <c:if test="${orgnFg == 'HQ' and orgnCd == 'A0001'}">
+          <c:if test="${orgnFg == 'HQ' && (orgnCd == 'A0001' || orgnCd == 'DS001')}">
               <wj-flex-grid-column header="<s:message code="coupon.prodClsCnt"/>" binding="prodClsCnt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="coupon.exceptProdCnt"/>" binding="exceptProdCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
           </c:if>
@@ -168,7 +216,7 @@
   var couponSeqChgVal = "${couponSeqChgVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20240814.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20240826.01" charset="utf-8"></script>
 
 <%-- 쿠폰별 상품 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">

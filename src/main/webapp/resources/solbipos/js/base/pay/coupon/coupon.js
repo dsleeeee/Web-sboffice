@@ -72,16 +72,24 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
         selectedCouponClass = selectedRow;
 
         if ( col.binding === "payClassCd" && selectedRow.status !== "I") {
+          var params = {};
+          params.payClassNm   = $scope.payClassNm;
+          params.coupnNm      = $scope.coupnNm;
+          params.storeCd      = $scope.storeCd;
+          params.storeNm      = $scope.storeNm;
+          params.prodCd       = $scope.prodCd;
+          params.prodNm       = $scope.prodNm;
           if(selectedRow.status === "I") {
             e.cancel = false;
           } else if(selectedRow.useYn === "N") {
             $("#couponSubTitle").html(" [" + selectedRow.payClassCd+ "]" + selectedRow.payClassNm + "<label style='color: red'>(미사용)</label>");
-            $scope._pageView('couponCtrl', 1);
+            // $scope._pageView('couponCtrl', 1);
+            $scope._broadcast('couponCtrl', params);
             return false;
           } else {
             $("#couponSubTitle").text(" [" + selectedRow.payClassCd+ "]" + selectedRow.payClassNm );
-            $scope._pageView('couponCtrl', 1);
-            // $scope._broadcast('couponCtrl', selectedRow);
+            // $scope._pageView('couponCtrl', 1);
+            $scope._broadcast('couponCtrl', params);
           }
         }
       }
@@ -118,7 +126,13 @@ app.controller('couponClassCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchCouponClass = function(){
     // 파라미터
     var params = {};
-    params.coupnEnvstVal = coupnEnvstVal;
+    params.coupnEnvstVal  = coupnEnvstVal;
+    params.payClassNm     = $scope.payClassNm;
+    params.coupnNm        = $scope.coupnNm;
+    params.storeCd        = $scope.storeCd;
+    params.storeNm        = $scope.storeNm;
+    params.prodCd         = $scope.prodCd;
+    params.prodNm         = $scope.prodNm;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquirySub(baseUrl + "class/getCouponClassList.sb", params, function() {
@@ -359,6 +373,12 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         selectedCoupon = selectedRow;
+        var params = {};
+        params.coupnNm = $scope.coupnCoupnNm;
+        params.storeCd = $scope.coupnStoreCd;
+        params.storeNm = $scope.coupnStoreNm;
+        params.prodCd  = $scope.coupnProdCd;
+        params.prodNm  = $scope.coupnProdNm;
 
         if (col.binding === "prodCnt" && selectedRow.status !== "I") {
 
@@ -370,14 +390,14 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
             var regProdGrid = agrid.getScope('regProdCtrl');
             regProdGrid.$apply(function(){
               regProdGrid._gridDataInit();
-              $("#srchProdCd").val('');
-              $("#srchProdNm").val('');
+              $("#srchApplyProdCd").val('');
+              $("#srchApplyProdNm").val('');
             });
             var noRegProdGrid = agrid.getScope('noRegProdCtrl');
             noRegProdGrid.$apply(function(){
               noRegProdGrid._gridDataInit();
             });
-            $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
+            $scope._broadcast('couponCtrl', params);
           });
         }
         else if ( col.binding === "storeCnt" && selectedRow.status !== "I") {
@@ -397,7 +417,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
               noRegStoreGrid._gridDataInit();
             });
 
-            $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
+            $scope._broadcast('couponCtrl', params);
           });
 
         }
@@ -418,7 +438,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
               noRegStoreClsGrid._gridDataInit();
             });
 
-            $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
+            $scope._broadcast('couponCtrl', params);
           });
 
         }
@@ -439,7 +459,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
               noRegExceptProdCtrl._gridDataInit();
             });
 
-            $scope._pageView('couponCtrl', $scope.getCouponGridCurr());
+            $scope._broadcast('couponCtrl', params);
           });
 
         }
@@ -449,16 +469,30 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope.$on("couponCtrl", function(event, data) {
     // if( !isEmptyObject(data) )  selectedCouponClass = data;
-    $scope.searchCoupon();
+    if(data !== null && data !== "" && data !== undefined) {
+      $scope.coupnCoupnNm = data.coupnNm;
+      $scope.coupnStoreCd = data.storeCd;
+      $scope.coupnStoreNm = data.storeNm;
+      $scope.coupnProdCd = data.prodCd;
+      $scope.coupnProdNm = data.prodNm;
+    }
+    $scope.searchCoupon(data);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
 
   // 쿠폰 그리드 조회
-  $scope.searchCoupon = function(){
+  $scope.searchCoupon = function(data){
     var params = {};
     params.coupnEnvstVal = coupnEnvstVal;
     params.payClassCd = selectedCouponClass.payClassCd;
+    if(data !== null && data !== "" && data !== undefined) {
+      params.coupnNm      = data.coupnNm;
+      params.storeCd      = data.storeCd;
+      params.storeNm      = data.storeNm;
+      params.prodCd       = data.prodCd;
+      params.prodNm       = data.prodNm;
+    }
 
     if((orgnFg != null && orgnFg == "STORE") && params.payClassCd <= 799) { // 본사에서 등록한 권종분류코드
       $('#btnCouponAdd').hide();
@@ -621,7 +655,6 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.couponProdLayer.shown.addHandler(function (s) {
       $("#couponProdTitle").text('[' + selectedCouponClass.payClassCd + '] '
         + selectedCouponClass.payClassNm + ' > [' + selectedCoupon.coupnCd + '] ' + selectedCoupon.coupnNm);
-      $("#payClasssCd").val(selectedCouponClass.payClassCd);
     });
 
     // 적용 매장 팝업 핸들러 추가

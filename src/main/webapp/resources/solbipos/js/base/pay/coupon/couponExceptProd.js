@@ -144,8 +144,6 @@ app.controller('noRegExceptProdCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.allSearch = function () {
         var regCouponGrid = agrid.getScope("regExceptProdCtrl");
         regCouponGrid._pageView('regExceptProdCtrl', 1);
-        var regProdGrid = agrid.getScope("regProdCtrl");
-        regProdGrid._pageView('regProdCtrl',1);
     };
 }]);
 

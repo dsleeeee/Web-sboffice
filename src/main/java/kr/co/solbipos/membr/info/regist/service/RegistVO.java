@@ -325,6 +325,9 @@ public class RegistVO extends PageVO {
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String regUseStoreCdQuery;
 
+    /** 가상로그인ID */
+    private String vUserId;
+
     /**
      * @return the orgnFg
      */
@@ -1568,6 +1571,14 @@ public class RegistVO extends PageVO {
 
     public void setRegUseStoreCdQuery(String regUseStoreCdQuery) {
         this.regUseStoreCdQuery = regUseStoreCdQuery;
+    }
+
+    public String getvUserId() {
+        return vUserId;
+    }
+
+    public void setvUserId(String vUserId) {
+        this.vUserId = vUserId;
     }
 
     @Override

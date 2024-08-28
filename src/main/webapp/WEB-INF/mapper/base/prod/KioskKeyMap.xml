@@ -3947,6 +3947,12 @@
                 ,		thp.PROD_NM
                 ,		thpi.IMG_URL
                 ,		thpi.IMG_FILE_NM
+                ,		DECODE(thp.SIDE_PROD_YN,'N','[단품]','Y',DECODE((
+                                                                            SELECT  thpsg2.SDSEL_TYPE_FG
+                                                                            FROM    TB_HQ_PRODUCT_SDSEL_GROUP thpsg2
+                                                                            WHERE   thpsg2.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                            AND     thpsg2.SDSEL_GRP_CD = thp.SDSEL_GRP_CD),'S','[단품]','C','[세트]',NULL,'[단품]')) AS SIDE_PROD_YN
+                ,       DECODE(thp.GROUP_PROD_CD, NULL,'','[키오스크-단품/세트선택팝업]') AS GROUP_PROD_CD
                 ,		TO_CHAR(decode(thpsp.SALE_UPRC, 0, (SELECT	thpsp.ADD_PROD_UPRC
                                                             FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                                                             ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
@@ -3996,6 +4002,12 @@
                 ,		thp.PROD_NM
                 ,		thpi.IMG_URL
                 ,		thpi.IMG_FILE_NM
+                ,		DECODE(thp.SIDE_PROD_YN,'N','[단품]','Y',DECODE((
+                                                                            SELECT  tmpsg.SDSEL_TYPE_FG
+                                                                            FROM    TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                                                                            WHERE   tmpsg.STORE_CD = #{storeCd}
+                                                                            AND     tmpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD),'S','[단품]','C','[세트]',NULL,'[단품]')) AS SIDE_PROD_YN
+                ,       DECODE(thp.GROUP_PROD_CD, NULL,'','[키오스크-단품/세트선택팝업]') AS GROUP_PROD_CD
                 ,		TO_CHAR(decode(thpsp.SALE_UPRC, 0, (SELECT	thpsp.ADD_PROD_UPRC
                                                             FROM 	TB_MS_PRODUCT_SDSEL_GROUP thpsg
                                                             ,		TB_MS_PRODUCT_SDSEL_CLASS thpsc

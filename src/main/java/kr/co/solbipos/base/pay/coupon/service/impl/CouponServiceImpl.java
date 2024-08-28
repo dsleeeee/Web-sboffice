@@ -64,7 +64,9 @@ public class CouponServiceImpl implements CouponService {
         // 소속구분 설정
         payMethodClassVO.setOrgnFg(sessionInfoVO.getOrgnFg());
         payMethodClassVO.setHqOfficeCd(hqOfficeCd);
-        payMethodClassVO.setStoreCd(storeCd);
+        if(payMethodClassVO.getOrgnFg() == OrgnFg.STORE){
+            payMethodClassVO.setStoreCd(storeCd);
+        }
 
         List<DefaultMap<String>> returnList = new ArrayList<DefaultMap<String>>();
         payMethodClassVO.setPayTypeFg(PayTypeFg.COUPON);

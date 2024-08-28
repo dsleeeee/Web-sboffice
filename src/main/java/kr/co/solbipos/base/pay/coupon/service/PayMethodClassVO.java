@@ -46,6 +46,14 @@ public class PayMethodClassVO extends PageVO {
     private String mappingCode;
     /** 프로시져 실행 결과 */
     private String result;
+    /** 매장명 */
+    private String storeNm;
+    /** 쿠폰명 */
+    private String coupnNm;
+    /** 상품코드 */
+    private String prodCd;
+    /** 상품명 */
+    private String prodNm;
 
     /**
      * @return the orgnFg
@@ -197,5 +205,37 @@ public class PayMethodClassVO extends PageVO {
      */
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getStoreNm() {
+        return storeNm;
+    }
+
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
+
+    public String getCoupnNm() {
+        return coupnNm;
+    }
+
+    public void setCoupnNm(String coupnNm) {
+        this.coupnNm = coupnNm;
+    }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
+    }
+
+    public String getProdNm() {
+        return prodNm;
+    }
+
+    public void setProdNm(String prodNm) {
+        this.prodNm = prodNm;
     }
 }
