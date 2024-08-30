@@ -22,6 +22,7 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  A.STORE_CD
         ,		E.STORE_NM
+        ,       E.SYS_STAT_FG
         ,		F.POS_NO
         ,		A.TUKEY_GRP_CD
         ,		B.TUKEY_GRP_NM
@@ -119,6 +120,7 @@
         SELECT  A.STORE_CD
         ,		E.STORE_NM
         <if test='downFg != null and downFg =="A"'>
+            ,       E.SYS_STAT_FG
             ,       F.POS_NO
         </if>
         ,		A.TUKEY_GRP_CD
@@ -234,6 +236,7 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT 	A.STORE_CD
         ,		E.STORE_NM
+        ,       E.SYS_STAT_FG
         ,		A.POS_NO
         ,		A.TU_CLS_TYPE
         ,		B.TU_CLS_TYPE_NM
@@ -336,6 +339,7 @@
         /* USE : LsmStoreMapper.getLsmKioskStoreExcelList */
         SELECT 	A.STORE_CD
         ,		E.STORE_NM
+        ,       E.SYS_STAT_FG
         ,		A.POS_NO
         ,		A.TU_CLS_TYPE
         ,		B.TU_CLS_TYPE_NM
@@ -487,7 +491,7 @@
         ,       #{tuClsType}
         ,       #{tuClsCd}
         ,       null
-        ,       PROD_CD
+        ,       DECODE(#{prodCd}, NULL, 'DEL', #{prodCd})
         ,       #{tuPage}
         ,       null
         ,       null
@@ -501,7 +505,7 @@
         ,       #{modId}
         FROM    TB_MS_PRODUCT
         WHERE 	STORE_CD = #{storeCd}
-        AND 	PROD_CD  = #{prodCd}
+        AND 	PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
     </insert>
 
     <!-- 키오스크 탭 엑셀 업로드 - 키맵 관련 코드 조회 -->
@@ -512,14 +516,17 @@
     -->
     <select id="getKioskKeyMapCode" parameterType="lsmStoreVO" resultType="DefaultMap">
         /* USE : LsmStoreMapper.getKioskKeyMapCode */
-            SELECT  LPAD(NVL(MAX(TU_KEY_CD),0)+1, 3, 0) AS TU_KEY_CD,
-                    NVL(MAX(INDEX_NO),0)+1 AS INDEX_NO
-            FROM    TB_TMP_LSM_STORE_MS_KIOSK_KEY
-            WHERE   STORE_CD    = #{storeCd}
-            AND     POS_NO      = #{posNo}
-            AND     TU_CLS_TYPE = #{tuClsType}
-            AND     TU_CLS_CD   = #{tuClsCd}
-            AND     SESSION_ID  = #{sessionId}
+            SELECT  LPAD(NVL(MAX(A.TU_KEY_CD),0)+1, 3, 0) AS TU_KEY_CD,
+                    NVL(MAX(A.INDEX_NO),0)+1 AS INDEX_NO
+            FROM    TB_TMP_LSM_STORE_MS_KIOSK_KEY A
+            ,       TB_MS_PRODUCT B
+            WHERE   A.STORE_CD      = #{storeCd}
+            AND     A.POS_NO        = #{posNo}
+            AND     A.TU_CLS_TYPE   = #{tuClsType}
+            AND     A.TU_CLS_CD     = #{tuClsCd}
+            AND     A.SESSION_ID    = #{sessionId}
+            AND     B.STORE_CD      = A.STORE_CD
+            AND     B.PROD_CD       = A.PROD_CD
     </select>
 
     <!-- 키오스크 탭 엑셀 업로드 - 키오스크키맵 삭제 -->
@@ -642,13 +649,19 @@
                             AND     STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
                         ) C
                 ,       TB_MS_STORE D
+                ,       TB_MS_PRODUCT E
                 WHERE 	A.SESSION_ID	= #{sessionId}
+                <![CDATA[
+                    AND     A.PROD_CD    <> 'DEL'
+                ]]>
                 AND     B.NMCODE_NM     = A.TU_CLS_TYPE
                 AND 	B.NMCODE_ITEM_1 = A.TU_CLS_CD
                 AND 	C.STORE_CD		= A.STORE_CD
                 AND 	C.POS_NO		= A.POS_NO
                 AND     D.HQ_OFFICE_CD  = #{hqOfficeCd}
                 AND     D.STORE_CD      = A.STORE_CD
+                AND		E.STORE_CD		= A.STORE_CD
+                AND 	E.PROD_CD		= A.PROD_CD
             ) B
         ON
             (
@@ -755,16 +768,19 @@
         ,       STORE_CD
         ,       #{tukeyClassCd}
         ,       (
-                    SELECT  LPAD(NVL(MAX(TUKEY_CD),0)+1, 3,'0')
-                    FROM    TB_TMP_TOUCH_KEY
-                    WHERE   SESSION_ID      = #{sessionId}
-                    AND     TUKEY_FG        = '01'
-                    AND     TUKEY_CLASS_CD  = #{tukeyClassCd}
-                    AND     TUKEY_GRP_CD    = #{tukeyGrpCd}
-                    AND     STORE_CD        = #{storeCd}
+                    SELECT  LPAD(NVL(MAX(A.TUKEY_CD),0)+1, 3,'0')
+                    FROM    TB_TMP_TOUCH_KEY A
+                    ,		TB_MS_PRODUCT B
+                    WHERE   A.SESSION_ID        = #{sessionId}
+                    AND     A.TUKEY_FG          = '01'
+                    AND     A.TUKEY_CLASS_CD    = #{tukeyClassCd}
+                    AND     A.TUKEY_GRP_CD      = #{tukeyGrpCd}
+                    AND     A.STORE_CD          = #{storeCd}
+                    AND  	B.STORE_CD 		    = A.STORE_CD
+                    AND 	B.PROD_CD 		    = A.PROD_CD
                 )
         ,       '01'
-        ,       PROD_CD
+        ,       DECODE(#{prodCd}, NULL, 'DEL', #{prodCd})
         ,       #{pageNo}
         ,       #{x}
         ,       #{y}
@@ -783,7 +799,7 @@
         ,       #{tukeyGrpCd}
         FROM    TB_MS_PRODUCT
         WHERE 	STORE_CD = #{storeCd}
-        AND 	PROD_CD  = #{prodCd}
+        AND 	PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
     </insert>
 
     <!-- 터치키 탭 엑셀 업로드 - 데이터 임시 저장(02: 상품명) -->
@@ -827,16 +843,19 @@
         ,       STORE_CD
         ,       #{tukeyClassCd}
         ,       (
-                    SELECT  LPAD(NVL(MAX(TUKEY_CD),0)+1,3,'0')
-                    FROM    TB_TMP_TOUCH_KEY
-                    WHERE   SESSION_ID      = #{sessionId}
-                    AND     TUKEY_FG        = '02'
-                    AND     TUKEY_CLASS_CD  = #{tukeyClassCd}
-                    AND     TUKEY_GRP_CD    = #{tukeyGrpCd}
-                    AND     STORE_CD        = #{storeCd}
+                    SELECT  LPAD(NVL(MAX(A.TUKEY_CD),0)+1, 3,'0')
+                    FROM    TB_TMP_TOUCH_KEY A
+                    ,		TB_MS_PRODUCT B
+                    WHERE   A.SESSION_ID        = #{sessionId}
+                    AND     A.TUKEY_FG          = '02'
+                    AND     A.TUKEY_CLASS_CD    = #{tukeyClassCd}
+                    AND     A.TUKEY_GRP_CD      = #{tukeyGrpCd}
+                    AND     A.STORE_CD          = #{storeCd}
+                    AND  	B.STORE_CD 		    = A.STORE_CD
+                    AND 	B.PROD_CD 		    = A.PROD_CD
                 )
         ,       '02'
-        ,       PROD_CD
+        ,       DECODE(#{prodCd}, NULL, 'DEL', #{prodCd})
         ,       #{pageNo}
         ,       #{x}
         ,       #{y}
@@ -855,7 +874,7 @@
         ,       #{tukeyGrpCd}
         FROM    TB_MS_PRODUCT
         WHERE 	STORE_CD = #{storeCd}
-        AND 	PROD_CD  = #{prodCd}
+        AND 	PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
     </insert>
 
     <!-- 터치키 탭 엑셀 업로드 - 데이터 임시 저장(03: 가격) -->
@@ -899,16 +918,19 @@
         ,       STORE_CD
         ,       #{tukeyClassCd}
         ,       (
-                    SELECT  LPAD(NVL(MAX(TUKEY_CD),0)+1,3,'0')
-                    FROM    TB_TMP_TOUCH_KEY
-                    WHERE   SESSION_ID = #{sessionId}
-                    AND     TUKEY_FG        = '03'
-                    AND     TUKEY_CLASS_CD  = #{tukeyClassCd}
-                    AND     TUKEY_GRP_CD    = #{tukeyGrpCd}
-                    AND     STORE_CD        = #{storeCd}
+                    SELECT  LPAD(NVL(MAX(A.TUKEY_CD),0)+1, 3,'0')
+                    FROM    TB_TMP_TOUCH_KEY A
+                    ,		TB_MS_PRODUCT B
+                    WHERE   A.SESSION_ID        = #{sessionId}
+                    AND     A.TUKEY_FG          = '03'
+                    AND     A.TUKEY_CLASS_CD    = #{tukeyClassCd}
+                    AND     A.TUKEY_GRP_CD      = #{tukeyGrpCd}
+                    AND     A.STORE_CD          = #{storeCd}
+                    AND  	B.STORE_CD 		    = A.STORE_CD
+                    AND 	B.PROD_CD 		    = A.PROD_CD
                 )
         ,       '03'
-        ,       PROD_CD
+        ,       DECODE(#{prodCd}, NULL, 'DEL', #{prodCd})
         ,       #{pageNo}
         ,       #{x}
         ,       #{y}
@@ -927,7 +949,7 @@
         ,       #{tukeyGrpCd}
         FROM    TB_MS_PRODUCT
         WHERE 	STORE_CD = #{storeCd}
-        AND 	PROD_CD  = #{prodCd}
+        AND 	PROD_CD  = DECODE(#{prodCd}, NULL, '0ADLVFEE0000', #{prodCd})
     </insert>
 
     <!-- 터치키 탭 엑셀 업로드 - 터치키 삭제 -->
@@ -1107,6 +1129,9 @@
                                 AND 	B.NMCODE_NM		= tttk.TUKEY_GRP_CD
                                 AND 	B.NMCODE_ITEM_1	= tttk.TUKEY_CLASS_CD
                                 AND     tttk.TUKEY_FG   = '01'
+                                <![CDATA[
+                                    AND     tttk.PROD_CD    <> 'DEL'
+                                ]]>
                                 AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     C.STORE_CD      = tttk.STORE_CD
                                 ORDER
@@ -1222,6 +1247,9 @@
                                 AND 	B.NMCODE_NM		= tttk.TUKEY_GRP_CD
                                 AND 	B.NMCODE_ITEM_1	= tttk.TUKEY_CLASS_CD
                                 AND     tttk.TUKEY_FG   = '02'
+                                <![CDATA[
+                                    AND     tttk.PROD_CD    <> 'DEL'
+                                ]]>
                                 AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     C.STORE_CD      = tttk.STORE_CD
                                 ORDER
@@ -1338,6 +1366,9 @@
                                 AND 	B.NMCODE_NM		= tttk.TUKEY_GRP_CD
                                 AND 	B.NMCODE_ITEM_1	= tttk.TUKEY_CLASS_CD
                                 AND     tttk.TUKEY_FG   = '03'
+                                <![CDATA[
+                                    AND     tttk.PROD_CD    <> 'DEL'
+                                ]]>
                                 AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
                                 AND     C.STORE_CD      = tttk.STORE_CD
                                 ORDER

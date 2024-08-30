@@ -13,6 +13,14 @@
  */
 var app = agrid.getApp();
 
+// 매장상태구분 DropBoxDataMap
+var sysStatFgComboData = [
+    {"name": "전체", "value": ""},
+    {"name": "오픈", "value": "1"},
+    {"name": "폐점", "value": "2"},
+    {"name": "중지", "value": "3"},
+    {"name": "데모", "value": "9"}
+];
 
 app.controller('lsmKioskStoreCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
@@ -22,6 +30,7 @@ app.controller('lsmKioskStoreCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFgComboData, 'value', 'name'); // 매장상태구분
     };
 
 
@@ -133,7 +142,10 @@ app.controller('lsmKioskStoreExcelCtrl', ['$scope', '$http', '$timeout', functio
                     includeCellStyles   : true,
                     includeColumns      : function (column) {
                         if(params.downFg === 'S') {
-                            return column.binding != 'saleUprc';
+                            if(column.binding == 'saleUprc' || column.binding == 'sysStatFg'){
+                            }else {
+                                return column.visible;
+                            }
                         }else{
                             return column.visible;
                         }

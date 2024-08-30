@@ -84,6 +84,14 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
 
     // 저장
     $scope.save = function(){
+
+        if($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["cmm.empty.data"]);
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.saving"]); // 데이터 처리중 메시지 팝업 열기
+
         var arr = dlvrCol.split(",");
 
         // 배달의민족앱[3] 상품명칭 입력값 전체 체크
@@ -101,6 +109,8 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
 
             if(str != null && str != undefined && str != ""){
                 if(str.indexOf("[채널사: (dlvrProdNm3)/") === -1 ){
+
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     // 배달의민족앱[3] 입력값이 없는 상품이 있습니다. <br>필수입력값이므로, 임의데이터라도 입력하세요.
                     $scope._popMsg(messages["dlvrProd.baemin.chk.msg"]);
                     return false;
@@ -129,9 +139,11 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
             var result = response.data.data;
 
             if(result === null || result === "") {
+                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 // 저장
                 $scope.saveSave(params);
             } else {
+                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 $scope._popMsg(result + " 명칭이 중복됩니다.");
                 return false;
             }
@@ -143,6 +155,8 @@ app.controller('dlvrProdNmMappingCtrl', ['$scope', '$http', function ($scope, $h
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/dlvrProd/dlvrProd/save.sb", params, function () {
+
+            $scope._popMsg("저장완료 후 조회하여"+"<br/>"+ "저장된 내역이 맞는지 확인하여 주십시오.");
             // 재조회
             $scope.searchProdList();
         });

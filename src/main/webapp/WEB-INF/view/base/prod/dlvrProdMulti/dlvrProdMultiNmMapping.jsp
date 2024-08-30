@@ -137,12 +137,11 @@
         </colgroup>
         <tbody>
             <tr class="brt">
-                <th class="oh gr fl w70" style="height: 90px;">
+                <th class="oh gr fl w70" style="height: 90px; padding-left: 10px">
                     <p class="s12 bk lh20">
-                        * 상품코드와 정상 매핑된 명칭만 저장됩니다.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        * 상품코드에 공백이 들어가지 않도록 주의하세요.<br />
+                        * 상품코드와 정상 매핑된 명칭만 저장됩니다.(저장완료 후 조회하여 저장된 내역이 맞는지 확인하여 주십시오.)<br />
                         * 매핑명칭은 최대 30자 입니다.(30자 이상 인 경우, 잘라서 저장됩니다.) <br />
-                        * 양식다운로드 문서로 업로드하여 주십시오.<br />
+                        * 상품코드에 공백이 들어가지 않도록 주의하세요. &nbsp; * 양식다운로드 문서로 업로드하여 주십시오.<br />
                         * 매핑값 적용: 업로드한 값 적용(기존데이터 삭제) &nbsp;
                         * 매핑값 추가: 업로드 하는 값에 새로운 값이 있으면 차수를 추가해서 등록
                     </p>
@@ -180,12 +179,12 @@
             </colgroup>
             <tbody>
                 <tr class="brt">
-                    <th class="oh gr fl w50" style="height: 40px;">
+                    <th class="oh gr fl w70" style="height: 40px;">
                         <p class="s12 bk lh20">
                             * 상품 체크 후, '상품명칭 매장적용'을 클릭해주세요. 선택된 상품 전체 차수가 매장적용됩니다.<br />
                         </p>
                     </th>
-                    <th class="oh gr fr w50" style="height: 40px; font-size:15px">
+                    <th class="oh gr fr w30" style="height: 40px; font-size:15px">
                             <%-- 상품명칭 매장적용 --%>
                         <button class="btn_skyblue ml5 fr" id="btnStoreApply" ng-click="storeApply()">
                             <s:message code="dlvrProdMulti.dlvrProdNmStoreRegist" />
@@ -295,7 +294,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProdMulti/dlvrProdMultiNmMapping.js?ver=20240213.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProdMulti/dlvrProdMultiNmMapping.js?ver=20240829.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

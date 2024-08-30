@@ -33,4 +33,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/excelUploadDlvrProdNm.js?ver=20231129.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/excelUploadDlvrProdNm.js?ver=20240830.01" charset="utf-8"></script>

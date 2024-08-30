@@ -98,6 +98,7 @@
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="lsmStore.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="lsmStore.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="lsmStore.sysStatFg"/>" binding="sysStatFg" width="70" data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="lsmStore.posNo"/>" binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="lsmStore.tukeyGrpCd"/>" binding="tukeyGrpCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="lsmStore.tukeyGrpNm"/>" binding="tukeyGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
@@ -133,6 +134,7 @@
           <!-- define columns -->
           <wj-flex-grid-column header="<s:message code="lsmStore.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="lsmStore.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="lsmStore.sysStatFg"/>" binding="sysStatFg" width="70" data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="lsmStore.posNo"/>" binding="posNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="lsmStore.tukeyGrpCd"/>" binding="tukeyGrpCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="lsmStore.tukeyGrpNm"/>" binding="tukeyGrpNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
@@ -148,7 +150,7 @@
   </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/lsmStore/lsmStore.js?ver=20240612.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/lsmStore/lsmStore.js?ver=20240829.01" charset="utf-8"></script>
 
 <%-- 엑셀업로드 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/lsmStore/excelUploadLsmTukeyStore.jsp">

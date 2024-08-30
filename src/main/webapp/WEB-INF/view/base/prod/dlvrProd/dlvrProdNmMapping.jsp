@@ -137,15 +137,15 @@
         </colgroup>
         <tbody>
         <tr class="brt">
-            <th class="oh gr fl w50" style="height: 90px;">
+            <th class="oh gr fl w75" style="height: 90px; padding-left: 10px">
                 <p class="s12 bk lh20">
-                    * 상품코드와 정상 매핑된 명칭만 저장됩니다.<br />
+                    * 상품코드와 정상 매핑된 명칭만 저장됩니다.(저장완료 후 조회하여 저장된 내역이 맞는지 확인하여 주십시오.)<br />
                     * 매핑명칭은 최대 30자 입니다.(30자 이상 인 경우, 잘라서 저장됩니다.)<br />
                     * 상품코드에 공백이 들어가지 않도록 주의하세요.<br />
                     * 양식다운로드 문서로 업로드하여 주십시오.<br />
                 </p>
             </th>
-            <th class="oh gr fr w50" style="height: 90px; font-size:15px">
+            <th class="oh gr fr w25" style="height: 90px; font-size:15px; padding-left: 0px">
                 <%-- 엑셀업로드 --%>
                 <button class="btn_skyblue ml5 fr" id="btnExcelUpload" ng-click="excelUpload()">
                     <s:message code="cmm.excel.excelUpload" />
@@ -279,7 +279,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20231129.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/dlvrProd/dlvrProdNmMapping.js?ver=20240830.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -111,6 +111,7 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
                             $timeout(function () {
                                 $scope.excelUploadToJsonConvert();
                             }, 10);
+
                         }
                     );
                 }, 10);
@@ -305,6 +306,7 @@ app.controller('excelUploadDlvrProdMultiNmCtrl', ['$scope', '$http','$timeout', 
 
                 $scope._popMsg(messages['cmm.saveSucc']);
                 if (nvl($scope.parentCtrl, '') !== '') {
+                    $scope._popMsg("저장완료 후 조회하여"+"<br/>"+ "저장된 내역이 맞는지 확인하여 주십시오.");
                     var parentScope = agrid.getScope($scope.parentCtrl);
                     parentScope.uploadCallBack();
                 }

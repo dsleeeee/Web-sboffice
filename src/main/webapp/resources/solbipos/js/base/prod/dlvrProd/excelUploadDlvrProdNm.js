@@ -291,6 +291,8 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
+
+                $scope._popMsg(messages['cmm.saveSucc']);
                 if (nvl($scope.parentCtrl, '') !== '') {
                     var parentScope = agrid.getScope($scope.parentCtrl);
                     parentScope.uploadCallBack();

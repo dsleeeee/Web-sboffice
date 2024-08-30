@@ -1,7 +1,7 @@
 /****************************************************************
  *
  * 파일명 : dlvrProdMultiNmMapping.js
- * 설  명 : 배달시스템 상품 명칭 맵핑2 JavaScript
+ * 설  명 : 배달시스템 상품 명칭 멀티매핑 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
@@ -93,6 +93,14 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
 
     // 저장
     $scope.save = function(){
+
+        if($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["cmm.empty.data"]);
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+
         var arr = dlvrCol.split(",");
 
         // 파라미터 설정
@@ -120,7 +128,6 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
 
         }
 
-        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         $timeout(function () {
             // 데이터 임시 저장
             $scope.tempInsert(params);
@@ -180,6 +187,7 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
                 $scope._popMsg(messages["dlvrProdMulti.baemin.chk.msg"]);
                 return false;
             }else{
+
                 //데이터 저장
                 $scope.saveSave();
             }
@@ -195,10 +203,13 @@ app.controller('dlvrProdMultiNmMappingCtrl', ['$scope', '$http', '$timeout', fun
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/dlvrProdMulti/dlvrProdMulti/save.sb", chkParams, function () {
+
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            $scope._popMsg("저장완료 후 조회하여"+"<br/>"+ "저장된 내역이 맞는지 확인하여 주십시오.");
             // 재조회
             $scope.searchProdList();
         });
-        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+
     };
 
     // 전체기간 체크박스 클릭이벤트
