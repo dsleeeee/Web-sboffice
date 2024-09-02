@@ -33,6 +33,15 @@ public class DcInfoServiceImpl implements DcInfoService {
         dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if(!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcInfoVO.getStoreCd(), 3900));
+            dcInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
         return dcInfoMapper.getGeneralDcList(dcInfoVO);
     }
 
