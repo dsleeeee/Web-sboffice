@@ -292,7 +292,7 @@ app.controller('excelUploadDlvrProdNmCtrl', ['$scope', '$http','$timeout', funct
         }).then(function successCallback(response) {
             if ($scope._httpStatusCheck(response, true)) {
 
-                $scope._popMsg(messages['cmm.saveSucc']);
+                $scope._popMsg("저장완료 후 조회하여"+"<br/>"+ "저장된 내역이 맞는지 확인하여 주십시오.");
                 if (nvl($scope.parentCtrl, '') !== '') {
                     var parentScope = agrid.getScope($scope.parentCtrl);
                     parentScope.uploadCallBack();
