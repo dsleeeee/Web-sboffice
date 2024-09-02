@@ -930,7 +930,7 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
 
         // indexNo 재설정
         // var editItems = [];
-        // for (var s = 0; s < $scope.flexM.collectionView.itemCount; s++) {
+        // for (var s = 0; s < $scope.flexM.collectionView.itemCount; s++) {IndexNo
         //     if($scope.flex.collectionView.items[s].indexNo !== (s+1)) {
         //         if (isEmptyObject($scope.flexM.collectionView.items[s].status) || $scope.flexM.collectionView.items[s].status === 'I') {
         //             editItems.push($scope.flexM.collectionView.items[s]);
@@ -943,10 +943,23 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         //     $scope.flexM.collectionView.editItem(editItems[s]);
         //     editItems[s].status = "U";
         //     $scope.flexM.collectionView.commitEdit();
+        // // }
+
+        // for(var s = 0; s < $scope.flexM.rows.length; s++) {
+        //     if ($scope.flexM.collectionView.items[s].indexNo !== $scope.flexM.rowNum) {
+        //         $scope.flexM.collectionView.items[s].indexNo = $scope.flexM.rowNum;
+        //     }
         // }
-        for(var s = 0; s < $scope.flexM.rows.length; s++) {
-            if ($scope.flexM.collectionView.items[s].indexNo !== $scope.flexM.rowNum) {
-                $scope.flexM.collectionView.items[s].indexNo = $scope.flexM.rowNum;
+
+        for(var s = 0, num = 1; s < $scope.flexM.rows.length; s++, num++) {
+            if ($scope.flexM.collectionView.items[s].indexNo !== num) {
+                $scope.flexM.collectionView.items[s].indexNo = num;
+                $scope.flexM.collectionView.editItem($scope.flexM.collectionView.items[s]);
+                $scope.flexM.collectionView.items[s].status = "U";
+                $scope.flexM.collectionView.commitEdit();
+            }
+            if($scope.flexM.rowNum == "" || $scope.flexM.rowNum == null || $scope.flexM.rowNum == undefined) {
+                $scope.flexM.rowNum = 0;
             }
         }
 
