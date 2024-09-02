@@ -51,34 +51,38 @@
                 FROM    TB_HQ_PAY_METHOD_CLASS thpmc
                 ,   (
                         SELECT 	DISTINCT
-                                A.HQ_OFFICE_CD
-                        ,		A.PAY_CLASS_CD
-                        FROM 	TB_HQ_COUPON A
+                                thpmc.HQ_OFFICE_CD
+                        ,       thpmc.PAY_CLASS_CD
+                        FROM 	TB_HQ_PAY_METHOD_CLASS thpmc
+                        ,		TB_HQ_COUPON A
                         , 		TB_HQ_COUPON_PROD B
                         ,		TB_HQ_PRODUCT C
                         ,		TB_HQ_COUPON_STORE D
                         ,		TB_MS_STORE E
-                        WHERE 	A.HQ_OFFICE_CD  	= #{hqOfficeCd}
-                        AND 	B.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
-                        AND 	B.PAY_CLASS_CD 	(+) = A.PAY_CLASS_CD
-                        AND 	B.COUPN_CD 	   	(+) = A.COUPN_CD
+                        WHERE 	thpmc.HQ_OFFICE_CD  = #{hqOfficeCd}
+                        AND 	A.HQ_OFFICE_CD 	(+) = thpmc.HQ_OFFICE_CD
+                        AND 	A.PAY_CLASS_CD 	(+) = thpmc.PAY_CLASS_CD
+                        AND 	B.HQ_OFFICE_CD 	(+)	= A.HQ_OFFICE_CD
+                        AND 	B.PAY_CLASS_CD 	(+)	= A.PAY_CLASS_CD
+                        AND 	B.COUPN_CD 		(+) = A.COUPN_CD
                         AND 	C.HQ_OFFICE_CD 	(+)	= B.HQ_OFFICE_CD
                         AND 	C.PROD_CD 		(+) = B.PROD_CD
-                        AND 	D.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
-                        AND 	D.PAY_CLASS_CD 		= A.PAY_CLASS_CD
-                        AND		D.COUPN_CD 			= A.COUPN_CD
-                        AND 	E.STORE_CD 			= D.STORE_CD
+                        AND 	D.HQ_OFFICE_CD 	(+)	= A.HQ_OFFICE_CD
+                        AND 	D.PAY_CLASS_CD 	(+)	= A.PAY_CLASS_CD
+                        AND		D.COUPN_CD 		(+)	= A.COUPN_CD
+                        AND 	E.HQ_OFFICE_CD 	(+) = D.HQ_OFFICE_CD
+                        AND 	E.STORE_CD 		(+)	= D.STORE_CD
                         <if test="coupnNm != null and coupnNm != ''">
                             AND A.COUPN_NM LIKE '%'||#{coupnNm}||'%'
                         </if>
                         <if test="prodCd != null and prodCd != ''">
-                            AND C.PROD_CD = #{prodCd}
+                            AND B.PROD_CD = #{prodCd}
                         </if>
                         <if test="prodNm != null and prodNm != ''">
                             AND C.PROD_NM LIKE '%'||#{prodNm}||'%'
                         </if>
                         <if test="storeCd != null and storeCd != ''">
-                            AND E.STORE_CD = #{storeCd}
+                            AND D.STORE_CD = #{storeCd}
                         </if>
                         <if test="storeNm != null and storeNm != ''">
                             AND E.STORE_NM LIKE '%'||#{storeNm}||'%'
@@ -117,12 +121,15 @@
                 FROM    TB_MS_PAY_METHOD_CLASS tmpmc
                 ,	    (
                             SELECT 	DISTINCT
-                                    A.STORE_CD
-                            ,		A.PAY_CLASS_CD
-                            FROM 	TB_MS_COUPON A
+                                    tmpmc.STORE_CD
+                            ,		tmpmc.PAY_CLASS_CD
+                            FROM 	TB_MS_PAY_METHOD_CLASS tmpmc
+                            ,		TB_MS_COUPON A
                             , 		TB_MS_COUPON_PROD B
                             ,		TB_MS_PRODUCT C
-                            WHERE 	A.STORE_CD          = #{storeCd}
+                            WHERE 	tmpmc.STORE_CD      = #{storeCd}
+                            AND 	A.STORE_CD      (+) = tmpmc.STORE_CD
+                            AND 	A.PAY_CLASS_CD 	(+) = tmpmc.PAY_CLASS_CD
                             AND 	B.STORE_CD      (+) = A.STORE_CD
                             AND 	B.COUPN_REG_FG  (+) = A.COUPN_REG_FG
                             AND 	B.PAY_CLASS_CD  (+) = A.PAY_CLASS_CD
@@ -133,7 +140,7 @@
                                 AND A.COUPN_NM LIKE '%'||#{coupnNm}||'%'
                             </if>
                             <if test="prodCd != null and prodCd != ''">
-                                AND C.PROD_CD = #{prodCd}
+                                AND B.PROD_CD = #{prodCd}
                             </if>
                             <if test="prodNm != null and prodNm != ''">
                                 AND C.PROD_NM LIKE '%'||#{prodNm}||'%'
