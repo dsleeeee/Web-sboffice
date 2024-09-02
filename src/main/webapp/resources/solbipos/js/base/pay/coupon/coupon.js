@@ -463,6 +463,22 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
           });
 
         }
+
+        if((col.binding === "prodCnt" || col.binding === "storeCnt" || col.binding === "prodClsCnt" || col.binding === "exceptProdCnt")
+        && selectedRow.status !== "I")
+        {
+            setTimeout(function() {
+                //alert("..[ht.row]:"+ht.row);
+                //s.rows[ht.row].isSelected = true;
+                s.select(ht.row, 0);
+            }, 100)
+            setTimeout(function() {
+                //alert("..[ht.row]:"+ht.row);
+                //s.rows[ht.row].isSelected = true;
+                s.select(ht.row, 0);
+            }, 500)
+        }
+
       }
     });
   };
