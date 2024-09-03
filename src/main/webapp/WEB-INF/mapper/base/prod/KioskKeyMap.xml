@@ -769,6 +769,60 @@
         </choose>
     </delete>
 
+    <!-- 키오스크 카테고리(분류) 저장 - 카테고리 삭제 시, (중분류 사용) 카테고리에 속한 상품도 삭제 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <delete id="deleteAllKioskKeyMapM" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.deleteAllKioskKeyMapM */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_KIOSK_KEY
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND TU_CLS_TYPE = #{tuClsType}
+                AND TU_CLS_CD IN (SELECT TU_M_CLS_CD FROM TB_HQ_KIOSK_M_CLS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND TU_CLS_TYPE = #{tuClsType} AND TU_CLS_CD = #{tuClsCd})
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_KIOSK_KEY
+                WHERE STORE_CD = #{storeCd}
+                AND POS_NO = #{posNo}
+                AND TU_CLS_TYPE = #{tuClsType}
+                AND TU_CLS_CD IN (SELECT TU_M_CLS_CD FROM TB_MS_KIOSK_M_CLS WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND TU_CLS_TYPE = #{tuClsType} AND TU_CLS_CD = #{tuClsCd})
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 키오스크 카테고리(분류) 저장 - 카테고리 삭제 시, (중분류 사용) 카테고리에 속한 중분류도 삭제 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <delete id="deleteAllKioskCategoryM" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.deleteAllKioskCategoryM */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE TB_HQ_KIOSK_M_CLS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                AND TU_CLS_TYPE = #{tuClsType}
+                AND TU_CLS_CD = #{tuClsCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE TB_MS_KIOSK_M_CLS
+                WHERE STORE_CD = #{storeCd}
+                AND POS_NO = #{posNo}
+                AND TU_CLS_TYPE = #{tuClsType}
+                AND TU_CLS_CD = #{tuClsCd}
+            </when>
+        </choose>
+    </delete>
+
     <!-- 키오스크 키맵 조회 -->
     <!--
         TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY

@@ -65,6 +65,12 @@ public interface KioskKeyMapMapper {
     /** 키오스크 카테고리(분류) 저장 - 카테고리 삭제 시, 카테고리에 속한 키맵도 삭제 */
     int deleteAllKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
 
+    /** 키오스크 카테고리(분류) 저장 - 카테고리 삭제 시, (중분류 사용) 카테고리에 속한 상품도 삭제 */
+    int deleteAllKioskKeyMapM(KioskKeyMapVO kioskKeyMapVO);
+
+    /** 키오스크 카테고리(분류) 저장 - 카테고리 삭제 시, (중분류 사용) 카테고리에 속한 중분류도 삭제 */
+    int deleteAllKioskCategoryM(KioskKeyMapVO kioskKeyMapVO);
+
     /** 키오스크 키맵 조회 */
     List<DefaultMap<Object>> getKioskKeyMap(KioskKeyMapVO kioskKeyMapVO);
 

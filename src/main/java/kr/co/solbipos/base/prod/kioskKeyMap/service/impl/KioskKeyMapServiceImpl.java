@@ -219,7 +219,19 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                 result += kioskKeyMapMapper.deleteKioskCategory(kioskKeyMapVO);
 
                 // 해당 카테고리(분류)에 해당하는 상품도 삭제
-                kioskKeyMapMapper.deleteAllKioskKeyMap(kioskKeyMapVO);
+                // 중분류 사용
+                if(kioskKeyMapVO.getTuMClsFg().equals("2")) {
+                    // 카테고리 삭제 시, (중분류 사용) 카테고리에 속한 상품도 삭제
+                    kioskKeyMapMapper.deleteAllKioskKeyMapM(kioskKeyMapVO);
+
+                    // 카테고리 삭제 시, (중분류 사용) 카테고리에 속한 중분류도 삭제
+                    kioskKeyMapMapper.deleteAllKioskCategoryM(kioskKeyMapVO);
+                }
+                // 중분류 미사용
+                else if (kioskKeyMapVO.getTuMClsFg().equals("0")) {
+                    // 카테고리 삭제 시, 카테고리에 속한 키맵도 삭제
+                    kioskKeyMapMapper.deleteAllKioskKeyMap(kioskKeyMapVO);
+                }
             }
         }
 
