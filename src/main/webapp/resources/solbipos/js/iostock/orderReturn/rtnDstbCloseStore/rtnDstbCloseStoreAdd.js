@@ -451,16 +451,16 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
       return false;
     }
 
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
     /** 업로드 구분. 해당값에 따라 엑셀 양식이 달라짐 */
-    var uploadFg = 'dstbCloseStore';
+    var uploadFg = 'rtnDstbCloseStore';
 
     // 엑셀 양식다운로드
     if (prcsFg === 'excelFormDown') {
       excelUploadScope.excelFormDownload(uploadFg);
     }
     else{
-      var msg = messages["excelUpload.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
+      var msg = messages["excelUploadMPS.confmMsg"]; // 정상업로드 된 데이터는 자동저장됩니다. 업로드 하시겠습니까?
       s_alert.popConf(msg, function () {
         excelUploadScope.uploadFg   = uploadFg;
         excelUploadScope.storeCd    = $("#rtnDstbCloseStoreAddSelectStoreCd").val();
@@ -484,18 +484,17 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
   /** 업로드 완료 후 callback 함수. 업로드 이후 로직 작성. */
   $scope.uploadCallBack = function () {
     var params      = {};
-    params.date     = $scope.reqDate;
-    params.slipFg   = $scope.slipFg;
-    params.hdRemark = $scope.regHdRemark;
-    params.addQtyFg = $scope.addQtyFg;
     params.storeCd  = $("#rtnDstbCloseStoreAddSelectStoreCd").val();
-    
+    params.slipFg  = $scope.slipFg;
+    params.date    = $scope.reqDate;
+    params.vendrCd = $scope.vendrCd;
+
     //가상로그인 session 설정
     if(document.getElementsByName('sessionId')[0]){
     	params.sid = document.getElementsByName('sessionId')[0].value;
     }
     
-    var excelUploadScope = agrid.getScope('excelUploadCtrl');
+    var excelUploadScope = agrid.getScope('excelUploadMPSCtrl');
 
     $http({
       method : 'POST', //방식
@@ -504,17 +503,14 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
       headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
     }).then(function successCallback(response) {
       if ($scope._httpStatusCheck(response, true)) {
-        // excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
-
         // 엑셀 에러내역 팝업 호출
         $scope.excelUploadErrInfo();
 
-        // 등록 그리드 및 여신, 부모 그리드 조회
-        $scope.saveRegistCallback();
+        // 엑셀업로드 후 그리드 조회
+        $scope.saveAddProdCallback();
       }
     }, function errorCallback(response) {
       $scope._popMsg(response.data.message);
-      // excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
       return false;
     }).then(function () {
       excelUploadScope.excelUploadingPopup(false); // 업로딩 팝업 닫기
@@ -525,7 +521,7 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
   // 에러내역 팝업 호출
   $scope.excelUploadErrInfo = function () {
     var params      = {};
-    params.uploadFg = 'dstbCloseStore';
+    params.uploadFg = 'rtnDstbCloseStore';
     $scope._broadcast('excelUploadErrInfoCtrl', params);
   };
 

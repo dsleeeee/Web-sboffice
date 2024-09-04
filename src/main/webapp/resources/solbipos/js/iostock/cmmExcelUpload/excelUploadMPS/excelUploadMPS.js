@@ -118,7 +118,7 @@ app.controller('excelUploadMPSCtrl', ['$scope', '$http','$timeout', function ($s
             params.etcQty      = 0;
         }
         // 분배마감, 반품마감
-        else if ($scope.uploadFg === 'dstbCloseStore') {
+        else if ($scope.uploadFg === 'dstbCloseStore' || $scope.uploadFg === 'rtnDstbCloseStore') {
             $scope.prodBarcdCdVisibleFg = true;  // 상품코드/바코드
             $scope.prodCdVisibleFg      = false; // 상품코드
             $scope.barcdCdVisibleFg     = false; // 바코드
@@ -451,7 +451,7 @@ app.controller('excelUploadMPSCtrl', ['$scope', '$http','$timeout', function ($s
             //if ($scope.excelTextFg === 'excel') {
             if ($scope.excelTextFg === 'excel'  ||  $scope.excelTextFg === 'text') {	//'Text'인 경우도 추가
                 // 주문등록, 반품등록, 분배마감, 반품마감, 거래처 발주등록, 거래처 입고등록
-                if ($scope.uploadFg === 'order' || $scope.uploadFg === 'dstbCloseStore' || $scope.uploadFg === 'vendr') {
+                if ($scope.uploadFg === 'order' || $scope.uploadFg === 'dstbCloseStore' || $scope.uploadFg === 'vendr' || $scope.uploadFg === 'rtnDstbCloseStore') {
                     // 단위수량
                     if (nvl(item.unitQty, '') === '') {
                         msg = messages["excelUploadMPS.unitQty"] + messages["excelUploadMPS.require.data"]; // 단위수량(이)가 없는 데이터가 존재합니다.

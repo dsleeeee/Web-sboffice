@@ -143,15 +143,15 @@
               <s:message code="rtnDstbCloseStore.add.txtOption2Sale"/></p>
           </td>
         </tr>
-<!--         <tr> -->
-<!--           <td colspan="4"> -->
-<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="rtnDstbCloseStore.add.excelFormDownload"/></a> --%>
-<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="rtnDstbCloseStore.add.excelFormUpload"/></a> --%>
-<%--             <a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="rtnDstbCloseStore.add.textFormUpload"/></a> --%>
-<%--             <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a> --%>
-<%--             <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="rtnDstbCloseStore.add.excelFormUploadErrorInfo"/></a> --%>
-<!--           </td> -->
-<!--         </tr> -->
+         <tr>
+           <td colspan="4">
+             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelFormDown')"><s:message code="rtnDstbCloseStore.add.excelFormDownload"/></a>
+             <a href="#" class="btn_grayS" ng-click="excelTextUpload('excelUp')"><s:message code="rtnDstbCloseStore.add.excelFormUpload"/></a>
+             <!--<a href="#" class="btn_grayS" ng-click="excelTextUpload('textUp')"><s:message code="rtnDstbCloseStore.add.textFormUpload"/></a>-->
+             <a href="#" class="btn_grayS" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></a>
+             <a href="#" class="btn_grayS" ng-click="excelUploadErrInfo()"><s:message code="rtnDstbCloseStore.add.excelFormUploadErrorInfo"/></a>
+           </td>
+         </tr>
         </tbody>
       </table>
 
@@ -274,7 +274,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnDstbCloseStore/rtnDstbCloseStoreAdd.js?ver=20240904.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

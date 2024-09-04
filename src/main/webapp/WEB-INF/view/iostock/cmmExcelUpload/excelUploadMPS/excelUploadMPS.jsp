@@ -45,7 +45,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS.js?ver=20200910.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPS.js?ver=20240904.01" charset="utf-8"></script>
 
 <%-- 공통팝업 수불/재고 엑셀업로드 에러내역 --%>
 <c:import url="/WEB-INF/view/iostock/cmmExcelUpload/excelUploadMPS/excelUploadMPSErrInfo.jsp">
