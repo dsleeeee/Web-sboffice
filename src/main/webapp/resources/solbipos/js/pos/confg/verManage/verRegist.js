@@ -118,6 +118,13 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
+    if($scope.version.progDetailFg === '4'){
+      if($scope.versionSystemTypeFgCombo.selectedValue !== "1" && $scope.versionSystemTypeFgCombo.selectedValue !== "2"){
+        $scope._popMsg(messages["verManage.systemType.msg"]);
+        return;
+      }
+    }
+
     // 신규등록은 버전일련번호 중복체크 후 저장
     if(isEmptyObject($scope.getSelectVersion())){
 
