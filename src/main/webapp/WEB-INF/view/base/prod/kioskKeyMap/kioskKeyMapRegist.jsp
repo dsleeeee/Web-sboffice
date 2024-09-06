@@ -295,6 +295,9 @@
                             <wj-flex-grid-column header="" binding="indexNo" width="*" visible="false"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <c:if test="${momsEnvstVal == '1'}">
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskSaleTimeSetting"/>" binding="saleTime" width="100" is-read-only="true"></wj-flex-grid-column>
+                        </c:if>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -467,6 +470,9 @@
                             <wj-flex-grid-column header="<s:message code="kioskKeyMap.channelSoldOutYn"/>" binding="channelSoldOutYn" align="center" width="90" is-read-only="true"></wj-flex-grid-column>
                         </c:if>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <c:if test="${momsEnvstVal == '1'}">
+                            <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskSaleTimeSetting"/>" binding="saleTime" width="100" is-read-only="true"></wj-flex-grid-column>
+                        </c:if>
                     </wj-flex-grid>
                 </div>
             </div>

@@ -852,7 +852,8 @@
                             thkk.MOD_DT,
                             thkk.MOD_ID,
                             (SELECT PROD_NM FROM TB_HQ_PRODUCT tmp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM,
-                            thp.REMARK
+                            thp.REMARK,
+                            (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                       FROM TB_HQ_KIOSK_KEY thkk,
                             TB_HQ_PRODUCT thp
                      WHERE thp.HQ_OFFICE_CD (+)= thkk.HQ_OFFICE_CD
@@ -885,7 +886,8 @@
                             DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN,
                             DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN,
                             tmp.REMARK,
-                            DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
+                            DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN,
+                            (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.HQ_OFFICE_CD = #{storeCd} AND tmpst.PROD_CD = tmp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                       FROM TB_MS_KIOSK_KEY tmkk,
                             TB_MS_PRODUCT tmp
                      WHERE tmp.STORE_CD (+)= tmkk.STORE_CD
@@ -993,7 +995,8 @@
                         NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
                         (CASE WHEN thkk.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN,
                         (SELECT PROD_NM FROM TB_HQ_PRODUCT thp2 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = thp.GROUP_PROD_CD) AS GROUP_PROD_NM,
-                        thp.REMARK
+                        thp.REMARK,
+                        (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_HQ_PRODUCT thp
                   LEFT OUTER JOIN (
@@ -1094,7 +1097,8 @@
                         DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN,
                         DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN,
                         tmp.REMARK,
-                        DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
+                        DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN,
+                        (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.HQ_OFFICE_CD = #{storeCd} AND tmpst.PROD_CD = tmp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_PRODUCT tmp
                   LEFT OUTER JOIN (
