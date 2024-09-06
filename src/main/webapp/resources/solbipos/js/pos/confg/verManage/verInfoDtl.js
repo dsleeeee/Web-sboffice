@@ -102,7 +102,7 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       if(data.progDetailFg == "1")          $scope.version.progDetailFg = "POS&KIOSK";
       else if(data.progDetailFg == "2")     $scope.version.progDetailFg = "KDS";
       else if(data.progDetailFg == "3")     $scope.version.progDetailFg = "DID";
-      else if(data.progDetailFg == "4")     $scope.version.progDetailFg = "T-오더";
+      else if(data.progDetailFg == "4")     $scope.version.progDetailFg = "테이블오더";
 
       if(data.systemTypeFg == "0")          $scope.version.systemTypeFg = "공통";
       else if(data.systemTypeFg == "1")     $scope.version.systemTypeFg = "32bit";
