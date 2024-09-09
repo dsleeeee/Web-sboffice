@@ -522,7 +522,7 @@ app.controller('rtnDstbCloseStoreAddCtrl', ['$scope', '$http', '$timeout', funct
   $scope.excelUploadErrInfo = function () {
     var params      = {};
     params.uploadFg = 'rtnDstbCloseStore';
-    $scope._broadcast('excelUploadErrInfoCtrl', params);
+    $scope._broadcast('excelUploadMPSErrInfoCtrl', params);
   };
 
 
