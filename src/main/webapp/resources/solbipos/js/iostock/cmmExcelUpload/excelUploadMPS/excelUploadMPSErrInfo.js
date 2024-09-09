@@ -107,7 +107,7 @@ app.controller('excelUploadMPSErrInfoCtrl', ['$scope', '$http', function ($scope
             $scope.remarkVisibleFg          = false; // 비고
         }
         // 분배마감, 반품마감
-        else if ($scope.uploadFg === 'dstbCloseStore') {
+        else if ($scope.uploadFg === 'dstbCloseStore' || $scope.uploadFg === 'rtnDstbCloseStore') {
             $scope.vendrProdStatusVisibleFg = false; // 상품거래처취급여부
             $scope.unitQtyVisibleFg         = true;  // 단위수량
             $scope.etcQtyVisibleFg          = true;  // 낱개수량
