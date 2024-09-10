@@ -95,12 +95,12 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
             rtnDstbCloseProdVO.setModId(sessionInfoVO.getUserId());
             rtnDstbCloseProdVO.setModDt(currentDt);
 
-            // 분배수량이 0 이나 null 인 경우 삭제
-//            if(rtnDstbCloseProdVO.getMgrTotQty() == 0 || rtnDstbCloseProdVO.getMgrTotQty() == null) {
-//                result = rtnDstbCloseProdMapper.deleteRtnDstbCloseProdDtl(rtnDstbCloseProdVO);
-//                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-//            }
-//            else {
+            // 분배수량이 0 이면서 주문전표번호가 없는 경우 삭제
+            if( (rtnDstbCloseProdVO.getMgrTotQty() == 0 && rtnDstbCloseProdVO.getOrderSlipNo() == "") || (rtnDstbCloseProdVO.getMgrTotQty() == 0 && rtnDstbCloseProdVO.getOrderSlipNo() == null) ) {
+                result = rtnDstbCloseProdMapper.deleteRtnDstbCloseProdDtl(rtnDstbCloseProdVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+            else {
                 result = rtnDstbCloseProdMapper.updateRtnDstbCloseProdDtl(rtnDstbCloseProdVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
@@ -109,7 +109,7 @@ public class RtnDstbCloseProdServiceImpl implements RtnDstbCloseProdService {
                     result = rtnDstbCloseProdMapper.updateRtnDstbCloseProdDtlConfirm(rtnDstbCloseProdVO);
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
-//            }
+            }
             returnResult += result;
         }
 

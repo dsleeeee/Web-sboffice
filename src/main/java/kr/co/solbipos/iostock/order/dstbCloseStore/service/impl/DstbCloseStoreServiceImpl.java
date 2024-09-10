@@ -91,12 +91,12 @@ public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
             dstbCloseStoreVO.setModId(sessionInfoVO.getUserId());
             dstbCloseStoreVO.setModDt(currentDt);
 
-//            // 분배수량이 0 이나 null 인 경우 삭제
-//            if(dstbCloseStoreVO.getMgrTotQty() == 0 || dstbCloseStoreVO.getMgrTotQty() == null) {
-//                result = dstbCloseStoreMapper.deleteDstbCloseDtl(dstbCloseStoreVO);
-//                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-//            }
-//            else {
+            // 분배수량이 0 이면서 주문전표번호가 없는 경우 삭제
+            if( (dstbCloseStoreVO.getMgrTotQty() == 0 && dstbCloseStoreVO.getOrderSlipNo() == "") || (dstbCloseStoreVO.getMgrTotQty() == 0 && dstbCloseStoreVO.getOrderSlipNo() == null) ) {
+                result = dstbCloseStoreMapper.deleteDstbCloseDtl(dstbCloseStoreVO);
+                if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+            }
+            else {
                 result = dstbCloseStoreMapper.updateDstbCloseDtl(dstbCloseStoreVO);
                 if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
@@ -105,7 +105,7 @@ public class DstbCloseStoreServiceImpl implements DstbCloseStoreService {
                     result = dstbCloseStoreMapper.updateDstbCloseDtlConfirm(dstbCloseStoreVO);
                     if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
-//            }
+            }
 
             returnResult += result;
         }
