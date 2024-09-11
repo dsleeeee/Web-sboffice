@@ -268,6 +268,13 @@ public class PayMonthController {
         String payCol = "";
         for(int i=0; i < payColList.size(); i++) {
             payCol += (payCol.equals("") ? "" : ",") + payColList.get(i).getStr("payCd");
+
+            // 맘스터치 결제수단 '식권' -> '식권대장' 으로 변경표기 (20240909)
+            if(sessionInfoVO.getHqOfficeCd().equals("DS021") || sessionInfoVO.getHqOfficeCd().equals("DS034") || sessionInfoVO.getHqOfficeCd().equals("H0393")){
+                if(payColList.get(i).getStr("payCd").equals("14")){
+                    payColList.get(i).put("payNm", "식권대장");
+                }
+            }
         }
         model.addAttribute("payColList", payColList);
         model.addAttribute("payCol", payCol);
