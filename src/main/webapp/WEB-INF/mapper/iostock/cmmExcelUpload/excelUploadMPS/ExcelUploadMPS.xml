@@ -19,42 +19,57 @@
     -->
     <insert id="insertExcelUpload" parameterType="excelUploadMPSVO">
         /* USE : ExcelUploadMPSMapper.insertExcelUpload */
-        INSERT INTO TB_PO_TEMP_EXCEL
-        (
-            SESSION_ID,
-            HQ_OFFICE_CD,
-            STORE_CD,
-            PROD_BARCD_CD,
-            PROD_CD,
-            BARCD_CD,
-            UPRC,
-            UNIT_QTY,
-            ETC_QTY,
-            QTY,
-            REMARK,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        )
-        VALUES
-        (
-            #{sessionId},
-            #{hqOfficeCd},
-            #{storeCd},
-            TRIM(REPLACE(REPLACE(#{prodBarcdCd}, CHR(10), NULL), CHR(13), NULL)),
-            TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
-            TRIM(REPLACE(REPLACE(#{barcdCd}, CHR(10), NULL), CHR(13), NULL)),
-            TRIM(REPLACE(REPLACE(#{uprc}, CHR(10), NULL), CHR(13), NULL)),
-            TRIM(REPLACE(REPLACE(#{unitQty}, CHR(10), NULL), CHR(13), NULL)),
-            TRIM(REPLACE(REPLACE(#{etcQty}, CHR(10), NULL), CHR(13), NULL)),
-            TRIM(REPLACE(REPLACE(#{qty}, CHR(10), NULL), CHR(13), NULL)),
-            #{remark},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
-        )
+        MERGE INTO TB_PO_TEMP_EXCEL
+        USING DUAL
+        ON  (
+                SESSION_ID = #{sessionId} AND HQ_OFFICE_CD = #{hqOfficeCd} AND STORE_CD = #{storeCd} AND PROD_BARCD_CD = TRIM(REPLACE(REPLACE(#{prodBarcdCd}, CHR(10), NULL), CHR(13), NULL))
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+            PROD_CD = TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
+            BARCD_CD = TRIM(REPLACE(REPLACE(#{barcdCd}, CHR(10), NULL), CHR(13), NULL)),
+            UPRC = TRIM(REPLACE(REPLACE(#{uprc}, CHR(10), NULL), CHR(13), NULL)),
+            UNIT_QTY = TRIM(REPLACE(REPLACE(#{unitQty}, CHR(10), NULL), CHR(13), NULL)),
+            ETC_QTY = TRIM(REPLACE(REPLACE(#{etcQty}, CHR(10), NULL), CHR(13), NULL)),
+            QTY = TRIM(REPLACE(REPLACE(#{qty}, CHR(10), NULL), CHR(13), NULL)),
+            REMARK = #{remark},
+            MOD_DT = #{modDt},
+            MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT (
+                SESSION_ID,
+                HQ_OFFICE_CD,
+                STORE_CD,
+                PROD_BARCD_CD,
+                PROD_CD,
+                BARCD_CD,
+                UPRC,
+                UNIT_QTY,
+                ETC_QTY,
+                QTY,
+                REMARK,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID
+            ) VALUES (
+                #{sessionId},
+                #{hqOfficeCd},
+                #{storeCd},
+                TRIM(REPLACE(REPLACE(#{prodBarcdCd}, CHR(10), NULL), CHR(13), NULL)),
+                TRIM(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL)),
+                TRIM(REPLACE(REPLACE(#{barcdCd}, CHR(10), NULL), CHR(13), NULL)),
+                TRIM(REPLACE(REPLACE(#{uprc}, CHR(10), NULL), CHR(13), NULL)),
+                TRIM(REPLACE(REPLACE(#{unitQty}, CHR(10), NULL), CHR(13), NULL)),
+                TRIM(REPLACE(REPLACE(#{etcQty}, CHR(10), NULL), CHR(13), NULL)),
+                TRIM(REPLACE(REPLACE(#{qty}, CHR(10), NULL), CHR(13), NULL)),
+                #{remark},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId}
+            )
     </insert>
 
     <!-- 엑셀업로드 - 엑셀업로드 데이터 중 PROD_BARCD_CD 의 값이 상품코드인 경우 PROD_CD 컬럼에 UPDATE -->
