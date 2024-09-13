@@ -155,4 +155,29 @@ public class PwdManageController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 비밀번호 임의변경 - 패스워드초기화
+     * @param   request
+     * @param   response
+     * @param   pwdManageVO
+     * @param   model
+     * @return  Result
+     * @author  김설아
+     * @since   2024. 09. 13.
+     */
+    @RequestMapping(value = "/pwdManage/getClearPwdSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getClearPwdSave(@RequestBody PwdManageVO pwdManageVO, HttpServletRequest request,
+                                 HttpServletResponse response,  Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        pwdManageVO.setRegId(sessionService.getSessionInfo().getUserId());
+        pwdManageVO.setModId(sessionService.getSessionInfo().getUserId());
+
+        // 패스워드 변경
+        PwChgResult result = pwdManageService.getClearPwdSave(pwdManageVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

@@ -39,6 +39,9 @@ public interface PwdManageMapper {
     /** 비밀번호 변경 */
     int updatePassword(PwdManageVO pwdManageVO);
 
+    /** 비밀번호 변경 (초기화) */
+    int updatePassword2(PwdManageVO pwdManageVO);
+
     /** 비밀번호 변경이력 저장 */
     int insertPasswordHistory(PwdManageVO pwdManageVO);
 

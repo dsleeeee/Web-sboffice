@@ -74,9 +74,14 @@
           <br>
           <br>
           <s:message code="pwdManage.layer.msg" />
+          <br>
+          <br>
+          <s:message code="login.pw.cannot2" />
         </p>
       </div>
       <div id="viewBtnArea" class="mt20 tc">
+        <%-- 패스워드초기화 --%>
+        <button class="btn_skyblue" id="btnClearPwd" ng-click="clearPwd()"><s:message code="login.pw.clearPwd" /></button>
         <%-- 변경하기 --%>
         <button class="btn_skyblue" id="btnModify" ng-click="modifyPwd()"><s:message code="pwdManage.layer.modifyBtn" /></button>
       </div>
@@ -85,4 +90,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdChange.js?ver=20240228.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManage/pwdChange.js?ver=20240913.01" charset="utf-8"></script>

@@ -13,7 +13,7 @@
 
     <div class="wj-dialog-body sc2" style="overflow-y: hidden;">
       <%-- 상세 --%>
-      <div style="height: 200px; overflow-y: auto;">
+      <div style="height: 205px; overflow-y: auto;">
         <table class="tblType01">
           <colgroup>
             <col class="w30" />
@@ -68,13 +68,21 @@
         </table>
         <p class="mt10 s12">
             <s:message code="login.pw.cannot"/>
+            <br>
+            <br>
+          <s:message code="login.pw.cannot2" />
         </p>
       </div>
     </div>
 
+    <div id="viewBtnArea" class="mt10 tl ml30">
+      <%-- 패스워드초기화 --%>
+      <button class="btn_skyblue" id="btnClearPwd" ng-click="clearPwd()"><s:message code="login.pw.clearPwd" /></button>
+    </div>
+
     <div class="wj-dialog-footer">
       <div class="btnSet">
-        <%-- 수정 --%>
+        <%-- 비밀번호 변경 --%>
         <span><a href="#" class="btn_blue" ng-click="change()"><s:message code="emp.change" /></a></span>
         <%-- 닫기 --%>
         <span><a href="#" class="btn_gray" ng-click="close()"><s:message code="cmm.close" /></a></span>
@@ -84,4 +92,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/changePassword.js?ver=20230511.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/changePassword.js?ver=20240913.01" charset="utf-8"></script>

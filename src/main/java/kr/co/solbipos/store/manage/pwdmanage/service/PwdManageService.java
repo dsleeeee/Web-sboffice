@@ -35,4 +35,6 @@ public interface PwdManageService {
     /** 로그인 잠금해제 */
     PwChgResult updatePasswordUnLock(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO);
 
+    /** 패스워드초기화 */
+    PwChgResult getClearPwdSave(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO);
 }

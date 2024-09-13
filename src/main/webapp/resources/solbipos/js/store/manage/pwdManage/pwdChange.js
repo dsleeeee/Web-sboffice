@@ -145,4 +145,29 @@ app.controller('pwdChangeCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.pwdChangePopupLayer.hide();
   };
 
+  // 패스워드초기화
+  $scope.clearPwd = function(){
+    // 웹(WEB) 비밀번호를 초기화합니다. 진행하시겠습니까?
+    var msg = $scope.layerPwdChgFgCombo.text + " " + messages["login.pw.msgClearPwd"];
+    $scope._popConfirm(msg, function() {
+
+      var params = $scope.pwdChange;
+      $scope._postJSONSave.withPopUp( "/store/manage/pwdManage/pwdManage/getClearPwdSave.sb", params, function(response){
+        // console.log("response", response);
+        var result = response.data.data;
+
+        if(result === 'SUCCESS' || result === 'CHECK_OK') { // 성공
+          $scope._popMsg(messages["cmm.registSucc"]);
+          $scope.closePopup();
+
+        } else { // 저장실패
+          $scope._popMsg(messages["cmm.registFail"]);
+          return false;
+        }
+
+      });
+
+    });
+  };
+
 }]);

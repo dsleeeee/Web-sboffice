@@ -175,4 +175,47 @@ public class PwdManageServiceImpl implements PwdManageService {
         }
     }
 
+    /** 패스워드초기화 */
+    @Override
+    public PwChgResult getClearPwdSave(PwdManageVO pwdManageVO , SessionInfoVO sessionInfoVO) {
+
+        /** 사용자 ID가 없는지 체크 */
+        if ((pwdManageVO.getUserId() == "" || pwdManageVO.getUserId() == null) && pwdManageVO.getPwdChgFg() == PwdChgFg.WEB){
+            return PwChgResult.ID_IS_NULL;
+        }
+
+        // 기존 비밀번호 조회
+        String oldPassword = pwdManageMapper.getOldPassword(pwdManageVO);
+
+        String newPassword = "";
+
+        if ( pwdManageVO.getPwdChgFg() == PwdChgFg.WEB ) {
+            // WEB
+            pwdManageVO.setNewPassword("123456");
+            pwdManageVO.setLastPwdChgDt(currentDateTimeString());
+            newPassword = EncUtil.setEncSHA256(pwdManageVO.getUserId() + pwdManageVO.getNewPassword());
+        }
+        else if ( pwdManageVO.getPwdChgFg() == PwdChgFg.POS ) {
+            // POS
+            pwdManageVO.setNewPassword("1234");
+            pwdManageVO.setModDt(currentDateTimeString());
+            newPassword = EncUtil.setEncSHA256(pwdManageVO.getEmpNo() + pwdManageVO.getNewPassword());
+        }
+
+        // 암호화된 비밀번호 Set 후 업데이트
+        pwdManageVO.setNewPassword(newPassword);
+        // 비밀번호 업데이트 (초기화)
+        int updateResult = pwdManageMapper.updatePassword2(pwdManageVO);
+
+        // 비밀번호 변경내역 저장
+        pwdManageVO.setPriorPwd(oldPassword);
+        pwdManageVO.setRegDt(currentDateTimeString());
+        pwdManageVO.setRegIp(HttpUtils.getClientIp(WebUtil.getRequest()));
+
+        if ( pwdManageVO.getPwdChgFg() == PwdChgFg.WEB ) {
+            int insertResult = pwdManageMapper.insertPasswordHistory(pwdManageVO);
+        }
+
+        return PwChgResult.CHECK_OK;
+    }
 }

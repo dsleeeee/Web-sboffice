@@ -347,6 +347,42 @@
         </choose>
     </update>
 
+    <!-- 비밀번호 변경 (초기화) -->
+    <!--
+        TABLE    : TB_WB_USER_INFO, TB_MS_EMPLOYEE
+        PARAM    : pwdManageVO
+        COMMENTS : 사용자의 비밀번호를 변경한다.
+    -->
+    <update id="updatePassword2" parameterType="pwdManageVO">
+        /* USE : PwdManageMapper.updatePassword2 */
+        <choose>
+            <when test='pwdChgFg != null and pwdChgFg.toString() == "WEB"'>
+                UPDATE
+                TB_WB_USER_INFO
+                SET
+                USER_PWD = #{newPassword},
+                MOB_LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
+                LAST_PWD_CHG_DT = #{lastPwdChgDt},
+                USER_STAT_FG = '99',
+                LOGIN_FAIL_CNT = '0'
+                WHERE
+                USER_ID = #{userId}
+            </when>
+            <otherwise>
+                UPDATE
+                TB_MS_EMPLOYEE
+                SET
+                EMP_PWD = #{newPassword},
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
+                WHERE
+                EMP_NO = #{empNo}
+                AND
+                USER_ID = #{userId}
+            </otherwise>
+        </choose>
+    </update>
+
     <!-- 비밀번호 변경이력 저장 -->
     <!--
         TABLE    : TB_WB_PWD_CHG_HIST
