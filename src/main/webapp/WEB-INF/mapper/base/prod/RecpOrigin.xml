@@ -392,7 +392,18 @@
                     AND thp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
-                    AND thpc.PROD_CLASS_CD = #{prodClassCd}
+                    AND thpc.PROD_CLASS_CD IN (
+                                                  SELECT
+                                                       PROD_CLASS_CD
+                                                   FROM
+                                                       TB_HQ_PRODUCT_CLASS
+                                                   WHERE
+                                                       HQ_OFFICE_CD = #{hqOfficeCd}
+                                                   START WITH
+                                                       PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                                   CONNECT BY
+                                                       PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                              )
                 </if>
                 <if test="hqBrandCd != null and hqBrandCd != ''">
                     AND thp.HQ_BRAND_CD = #{hqBrandCd}
@@ -450,7 +461,18 @@
                     AND tmp.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
-                    AND tmpc.PROD_CLASS_CD = #{prodClassCd}
+                    AND tmpc.PROD_CLASS_CD IN (
+                                                    SELECT
+                                                        PROD_CLASS_CD
+                                                    FROM
+                                                        TB_MS_PRODUCT_CLASS
+                                                    WHERE
+                                                        STORE_CD = #{storeCd}
+                                                    START WITH
+                                                        PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                    CONNECT BY
+                                                        PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                              )
                 </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
