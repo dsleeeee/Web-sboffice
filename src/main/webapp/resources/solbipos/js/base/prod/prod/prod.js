@@ -83,9 +83,9 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       $("#btnDelProd").css("display", "");
     }
     if(orgnFg === 'HQ' && hqOfficeCd== "A0001") {
-      $scope.btnShowFg = false;
-      $("#btnAddProd").css("display", "none");
-      $("#btnDelProd").css("display", "none");
+      $scope.btnShowFg = true;
+      $("#btnAddProd").css("display", "");
+      $("#btnDelProd").css("display", "");
     }
     if(orgnFg === 'HQ') {
       $("#btnStoreProdBatchList").css("display", "");
@@ -327,7 +327,16 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   // 신규상품 등록
   $scope.addProd = function() {
     $scope.setProdInfo({});
-    $scope.prodModifyLayer.show();
+
+    var params = {};
+    params.addDelFg = 'add';
+
+    if(orgnFg === "HQ" && hqOfficeCd === "A0001"){
+      $scope._broadcast('prodAddDelPwCtrl', params);
+      $scope.prodAddDelPwLayer.show();
+    }else {
+      $scope.prodModifyLayer.show();
+    }
 
     /*var modifyPopUp = $scope.prodModifyLayer;
     setTimeout(function() {
@@ -344,7 +353,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       });
     }, 50);*/
   };
-  
+
   // 상품 삭제
   $scope.delProd = function(){
 
@@ -375,10 +384,19 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       }
     }
 
-    $scope._broadcast('prodDeleteCtrl', params);
-    $scope.prodDeleteLayer.show(true);
-    event.preventDefault();
-    
+    if(orgnFg === "HQ" && hqOfficeCd === "A0001"){
+      var data = {};
+      data.addDelFg = 'del';
+      $scope._broadcast('prodAddDelPwCtrl', data);
+      $scope._broadcast('prodDeleteCtrl', params);
+      $scope.prodAddDelPwLayer.show(true);
+      event.preventDefault();
+    }else {
+      $scope._broadcast('prodDeleteCtrl', params);
+      $scope.prodDeleteLayer.show(true);
+      event.preventDefault();
+    }
+
   };
 
   // 매장 리스트 팝업(매장 상품 일괄적용을 위한)

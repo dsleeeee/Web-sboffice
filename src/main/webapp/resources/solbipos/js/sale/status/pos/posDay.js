@@ -342,10 +342,11 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
                 if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
                     params.storeCd   = storeCd;
-                    params.posNo	 = posNo;
+                    params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
                 }else if (col.binding === "totSaleCnt") { // 수량합계
                     params.storeCd   = $("#posDaySelectStoreCd").val();
+                    params.posNo	 = $("#posDaySelectPosCd").val();
                     $scope._broadcast('saleComProdCtrl', params);
                 }
             }

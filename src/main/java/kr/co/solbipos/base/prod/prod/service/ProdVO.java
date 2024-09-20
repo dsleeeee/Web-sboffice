@@ -420,6 +420,9 @@ public class ProdVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 등록 및 삭제 확인용 비밀번호 */
+    private String password;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1786,4 +1789,12 @@ public class ProdVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

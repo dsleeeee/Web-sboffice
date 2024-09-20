@@ -136,6 +136,16 @@ app.controller('dayMembrDetailCtrl', ['$scope', '$http', function ($scope, $http
         var params = {};
         params.saleDate = $scope.selectedStore.saleDate;
         params.membrNo = $scope.selectedStore.membrNo;
+        if($scope.selectedStore.minDate !== null && $scope.selectedStore.minDate !== "" && $scope.selectedStore.minDate !== undefined){
+            params.startDate = $scope.selectedStore.minDate;
+            params.endDate = $scope.selectedStore.maxDate;
+        }
+        if($scope.selectedStore.prodCd !== null && $scope.selectedStore.prodCd !== "" && $scope.selectedStore.prodCd !== undefined){
+            params.prodCd = $scope.selectedStore.prodCd;
+        }
+        if($scope.selectedStore.saleFg !== null && $scope.selectedStore.saleFg != "" && $scope.selectedStore.saleFg !== undefined){
+            params.saleFg = $scope.selectedStore.saleFg;
+        }
 
         $scope._inquirySub("/membr/anals/dayMembr/dayMembr/getDayMembrDetailPurchsList.sb", params, function() {}, false);
     };

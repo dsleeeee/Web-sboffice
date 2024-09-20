@@ -161,10 +161,10 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
                     grid.columns.removeAt(grid.columns.length-1);
                 }
             }
-        });
 
-        // 설정기간별(포스별 매출) 바 차트
-        $scope._broadcast("posDayOfWeekChartCtrl", params);
+            // 설정기간별(포스별 매출) 바 차트
+            $scope._broadcast("posDayOfWeekChartCtrl", params);
+        });
     };
 
     //전체기간 체크박스 클릭이벤트
@@ -322,7 +322,12 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
                 var selectedRow = grid.rows[ht.row].dataItem;
                 var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
                 var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
-                var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+                var posNo		= "";
+                if(grid.columnHeaders.getCellData(1,ht.col,true).indexOf('-') > -1){
+                    posNo =  grid.columnHeaders.getCellData(1,ht.col,true).split('-')[0];
+                }else{
+                    posNo = grid.columnHeaders.getCellData(1,ht.col,true);
+                }
 
                 var params      = {};
                 params.chkPop	= "posPop";
@@ -334,10 +339,11 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 
                 if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
                     params.storeCd   = storeCd;
-                    params.posNo	 = posNo;
+                    params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
                 }else if (col.binding === "totSaleCnt") { // 수량합계
                     params.storeCd   = $("#posDayOfWeekSelectStoreCd").val();
+                    params.posNo	 = $("#posDayOfWeekSelectPosCd").val();
                     $scope._broadcast('saleComProdCtrl', params);
                 }
             }

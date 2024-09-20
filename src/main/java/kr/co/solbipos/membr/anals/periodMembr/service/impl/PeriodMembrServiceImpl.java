@@ -49,6 +49,8 @@ public class PeriodMembrServiceImpl implements PeriodMembrService {
             periodMembrVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
 
+        System.out.println(periodMembrVO.getMembrOrgnCd());
+
         return mapper.getPeriodMembrList(periodMembrVO);
     }
 }

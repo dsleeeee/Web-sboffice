@@ -73,7 +73,8 @@
                 <wj-flex-grid-column header="<s:message code="periodMembr.maxRegDt"/>" binding="maxRegDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 <%--팝업 조회시 필요--%>
-                <wj-flex-grid-column header="<s:message code="periodMembr.saleDate"/>" binding="saleDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.minRegDt"/>" binding="minDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="periodMembr.maxRegDt"/>" binding="maxDate" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
@@ -81,7 +82,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/periodMembr/periodMembr.js?ver=20201203.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/periodMembr/periodMembr.js?ver=20240901.01" charset="utf-8"></script>
 
 <%-- 매출 상세정보 --%>
 <c:import url="/WEB-INF/view/membr/anals/dayMembr/dayMembrPurchsView.jsp">

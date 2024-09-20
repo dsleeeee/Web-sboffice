@@ -221,5 +221,5 @@
 
     });
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDayOfWeek.js?ver=20190125.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDayOfWeek.js?ver=20240905.01" charset="utf-8"></script>
 

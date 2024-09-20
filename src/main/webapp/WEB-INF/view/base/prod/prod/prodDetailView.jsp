@@ -675,6 +675,7 @@
                                 <div id="divSaleTime"></div>
                             </td>
                         </tr>
+                    </c:if>
                         <tr>
                             <%-- KIOSK 엣지 --%>
                             <th><s:message code="prod.momsKioskEdge"/></th>
@@ -690,12 +691,15 @@
                                 </wj-combo-box>
                                 {{_momsKioskEdge}}
                             </td>
-                            <%-- 상품옵션그룹 --%>
-                            <th><s:message code="prod.optionGrp"/></th>
-                            <td>
-                                {{prodDetail.optionGrpNm}}
-                            </td>
+                            <c:if test="${momsEnvstVal == '1'}">
+                                <%-- 상품옵션그룹 --%>
+                                <th><s:message code="prod.optionGrp"/></th>
+                                <td>
+                                    {{prodDetail.optionGrpNm}}
+                                </td>
+                            </c:if>
                         </tr>
+                    <c:if test="${momsEnvstVal == '1'}">
                         <tr>
                             <%-- 출시일 --%>
                             <th><s:message code="prod.releaseDate"/></th>

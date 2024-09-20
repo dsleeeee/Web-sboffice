@@ -206,6 +206,7 @@
     <typeAlias alias="cardCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.CardCmpnyVO"/>
     <typeAlias alias="vanCardVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCardVO"/>
     <typeAlias alias="vanCmpnyVO" type="kr.co.solbipos.sys.etc.vancard.service.VanCmpnyVO"/>
+    <typeAlias alias="vanManageVO" type="kr.co.solbipos.sys.etc.vanManage.service.VanManageVO"/>
 
     <!-- 시스템관리 > 코드관리 > 환경설정기능설명 -->
     <typeAlias alias="envstRemarkVO" type="kr.co.solbipos.sys.cd.envstRemark.service.EnvstRemarkVO"/>

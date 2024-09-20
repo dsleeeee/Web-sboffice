@@ -60,6 +60,8 @@ app.controller('membrProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         // 회원명 클릭시 상세정보 조회
         if (col.binding === "membrNm") {
+          s.rows[ht.row].dataItem.minDate = $scope.startDate;
+          s.rows[ht.row].dataItem.maxDate = $scope.endDate;
           $scope.setSelectedStore(s.rows[ht.row].dataItem);
           $scope.dayMembrDetailViewLayer.show(true);
           event.preventDefault();
@@ -83,6 +85,9 @@ app.controller('membrProdCtrl', ['$scope', '$http', '$timeout', function ($scope
     var params = {};
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
     params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
+
+    $scope.startDate  = params.startDate;
+    $scope.endDate    = params.endDate;
 
     $scope._inquiryMain("/membr/anals/membrProd/membrProd/getMembrProdList.sb", params, function () {}, false);
   };

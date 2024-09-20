@@ -465,7 +465,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }else{
                 params.saleTime = "";
             }
-            
+
+            // KIOSK 뱃지
+            params.momsKioskEdge = $scope.prodModifyInfo.momsKioskEdge;
+
             // 상품옵션그룹
             params.optionGrpCd = $("#_optionGrpCd").val();
 
@@ -505,7 +508,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.saleTimeFg = "N";
             params.saleTime = "";
             // KIOSK 엣지
-            params.momsKioskEdge = "0";
+            params.momsKioskEdge = $scope.prodModifyInfo.momsKioskEdge;
 
             // 상품옵션그룹
             params.optionGrpCd = "";
@@ -706,6 +709,15 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 if ($scope.prodModifyInfo.prodCd !== $scope.prodModifyInfo.prodCdChkFg) {
                     $scope._popMsg(msg);
                     return false;
+                }
+
+                if(orgnFg === "HQ" && hqOfficeCd === "A0001") {
+                    // 상품코드 앞 4자리는 LYNK 를 입력하여 주십시오.
+                    var msg = messages["prod.prodCdChkLynk.msg"];
+                    if ($scope.prodModifyInfo.prodCd.substr(0, 4) !== 'LYNK') {
+                        $scope._popMsg(msg);
+                        return false;
+                    }
                 }
             }
         }
@@ -1512,6 +1524,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 //     $("#_sdselGrpNmCd").val("[" + $scope.prodModifyInfo.sdselGrpCd + "] " + $scope.prodModifyInfo.sdselGrpNm);
                 // }
 
+                // KIOSK 엣지 - 다른 본사도 사용
+                if ($scope.prodModifyInfo.momsKioskEdge === null || $scope.prodModifyInfo.momsKioskEdge === "") {
+                    $scope.prodModifyInfo.momsKioskEdge = "0";
+                }
+
                 // [1250 맘스터치] 사용시 기존정보 셋팅
                 if(momsEnvstVal === "1") {
 
@@ -1537,11 +1554,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                         });
                     } else {
                         resetKioskTimeHtml();
-                    }
-
-                    // KIOSK 엣지
-                    if ($scope.prodModifyInfo.momsKioskEdge === null || $scope.prodModifyInfo.momsKioskEdge === "") {
-                        $scope.prodModifyInfo.momsKioskEdge = "0";
                     }
 
                     // 상품옵션그룹

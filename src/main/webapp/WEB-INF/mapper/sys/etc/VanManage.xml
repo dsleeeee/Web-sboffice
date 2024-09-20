@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    VanManage.xml
+    밴사정보관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.09.13      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.etc.vanManage.service.impl.VanManageMapper">
+
+
+    <!-- 밴사정보관리 - 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    :
+        COMMENTS : 밴사정보를 조회한다.
+    -->
+    <select id="getNmcodeGrpCdList" resultType="DefaultMap">
+        /* USE : VanManageMapper.getNmcodeGrpCdList */
+        SELECT  NMCODE_CD
+        ,       NMCODE_NM
+        FROM    TB_CM_NMCODE
+        WHERE   NMCODE_GRP_CD = #{nmcodeGrpCd}
+    </select>
+
+    <!-- 밴사정보관리 - 상세조회 -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    :
+        COMMENTS : 밴사 상세정보를 조회한다.
+    -->
+    <select id="getVanManageList" parameterType="vanManageVO" resultType="DefaultMap">
+        /* USE : VanManageMapper.getVanManageList */
+        SELECT  VAN_FG
+        ,       VAN_CD
+        ,       VAN_NM
+        ,       TEL_NO
+        ,       FAX_NO
+        ,       MAIN_IP
+        ,       MAIN_PORT
+        ,       SUB_IP
+        ,       SUB_PORT
+        FROM    TB_CM_VAN_CMPNY
+        WHERE   VAN_FG = #{vanFg}
+    </select>
+
+    <!-- 밴사정보관리 - 추가 및 수정 -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    :
+        COMMENTS :
+    -->
+    <insert id="getVanSave" parameterType="vanManageVO" >
+        /* USE : VanManageMapper.getVanSave */
+        MERGE INTO  TB_CM_VAN_CMPNY tcvc
+            USING   DUAL
+            ON (
+                        tcvc.VAN_FG = #{vanFg}
+                    AND tcvc.VAN_CD = #{vanCd}
+                )
+        WHEN MATCHED THEN
+            UPDATE
+            SET     VAN_NM      =   #{vanNm}
+            ,       TEL_NO      =   #{telNo}
+            ,       FAX_NO      =   #{faxNo,jdbcType=VARCHAR}
+            ,       MAIN_IP     =   #{mainIp}
+            ,       MAIN_PORT   =   #{mainPort}
+            ,       SUB_IP      =   #{subIp,jdbcType=VARCHAR}
+            ,       SUB_PORT    =   #{subPort,jdbcType=NUMERIC}
+            ,       MOD_DT      =   #{modDt}
+            ,       MOD_ID      =   #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+                (
+                    VAN_FG
+                ,   VAN_CD
+                ,   VAN_NM
+                ,   TEL_NO
+                ,   FAX_NO
+                ,   MAIN_IP
+                ,   MAIN_PORT
+                ,   SUB_IP
+                ,   SUB_PORT
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                )
+            VALUES
+                (
+                    #{vanFg}
+                ,   (SELECT LPAD(NVL(MAX(VAN_CD),0)+1,3,0) FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vanFg})
+                ,   #{vanNm}
+                ,   #{telNo}
+                ,   #{faxNo,jdbcType=VARCHAR}
+                ,   #{mainIp}
+                ,   #{mainPort}
+                ,   #{subIp,jdbcType=VARCHAR}
+                ,   #{subPort,jdbcType=NUMERIC}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                )
+    </insert>
+
+    <!-- 밴사정보관리 - 삭제 -->
+    <!--
+        TABLE    : TB_CM_VAN_CMPNY
+        PARAM    :
+        COMMENTS :
+    -->
+    <delete id="getVanDelete" parameterType="couponProdVO">
+        /* USE : VanManageMapper.getVanDelete */
+        DELETE  TB_CM_VAN_CMPNY
+        WHERE   VAN_FG    = #{vanFg}
+        AND     VAN_CD    = #{vanCd}
+    </delete>
+
+</mapper>

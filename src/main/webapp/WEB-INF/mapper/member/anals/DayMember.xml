@@ -124,7 +124,12 @@
                 OR	tsshm.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
-        AND tsshm.SALE_DATE = #{saleDate}
+        <if test='saleDate != null and saleDate != ""'>
+            AND tsshm.SALE_DATE = #{saleDate}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+            AND tsshm.SALE_DATE BETWEEN #{startDate} AND  #{endDate}
+        </if>
         AND tsshm.MEMBR_NO = #{membrNo}
         <if test='membrCardNo != null and membrCardNo != ""'>
             <![CDATA[
@@ -164,10 +169,16 @@
         SELECT
         tmm.MEMBR_NO,
         SBPENC.D ( tmm.MEMBR_NM ) AS MEMBR_NM,
-        TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_SALE_HDR_MEMBR WHERE MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
-        TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_SALE_HDR_MEMBR WHERE MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
+        <if test='hqOfficeCd != null and hqOfficeCd != "00000"'>
+        TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_DAILY_MEMBR WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD) AND MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
+        TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_DAILY_MEMBR WHERE STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD) AND MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+        TO_CHAR(TO_DATE((SELECT MIN(SALE_DATE) FROM TB_SL_DAILY_MEMBR WHERE STORE_CD = tmm.MEMBR_ORGN_CD AND MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MIN_SALE_DATE,
+        TO_CHAR(TO_DATE((SELECT MAX(SALE_DATE) FROM TB_SL_DAILY_MEMBR WHERE STORE_CD = tmm.MEMBR_ORGN_CD AND MEMBR_NO = tmm.MEMBR_NO), 'yyyymmdd'), 'yyyy-mm-dd') AS MAX_SALE_DATE,
+        </if>
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmm.REG_STORE_CD AND HQ_OFFICE_CD = tmm.MEMBR_ORGN_CD) AS STORE_NM,
-        (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = tmm.REG_STORE_CD AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_CD,
+        (SELECT MEMBR_CLASS_NM FROM TB_MB_MEMBER_CLASS WHERE MEMBR_ORGN_CD = tmm.MEMBR_ORGN_CD AND MEMBR_CLASS_CD = tmm.MEMBR_CLASS_CD) AS MEMBR_CLASS_CD,
         tmm.MEMBR_CARD_NO,
         --카드사용구분
         --카드발급횟수
@@ -217,7 +228,18 @@
                 OR	tsshm.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
                 )
         </if>
-        AND tsshm.SALE_DATE = #{saleDate}
+        <if test='saleDate != null and saleDate != ""'>
+            AND tsshm.SALE_DATE = #{saleDate}
+        </if>
+        <if test='startDate != null and startDate != ""'>
+            AND tsshm.SALE_DATE BETWEEN #{startDate} AND  #{endDate}
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tssd.PROD_CD = #{prodCd}
+        </if>
+        <if test='saleFg != null and saleFg != ""'>
+            AND tssd.SALE_FG = #{saleFg}
+        </if>
         AND tsshm.MEMBR_NO = #{membrNo}
         AND tssd.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
         AND tssd.HQ_BRAND_CD = tsshm.HQ_BRAND_CD

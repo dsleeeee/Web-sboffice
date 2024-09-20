@@ -364,7 +364,12 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 var selectedRow = grid.rows[ht.row].dataItem;
                 var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
                 var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
-                var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+                var posNo		= "";
+                if(grid.columnHeaders.getCellData(1,ht.col,true).indexOf('-') > -1){
+                    posNo =  grid.columnHeaders.getCellData(1,ht.col,true).split('-')[0];
+                }else{
+                    posNo = grid.columnHeaders.getCellData(1,ht.col,true);
+                }
 
                 var params       = {};
                 params.chkPop	= "posHourPop";
@@ -376,10 +381,11 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
                 if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt" && grid.getCellData(ht.row,ht.col,true) != "") {
                     params.storeCd   = storeCd;
-                    params.posNo	 = posNo;
+                    params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdHourCtrl', params); // 수량
                 }else if (col.binding === "totSaleCnt" && selectedRow.totSaleCnt != null) { // 수량합계
                     params.storeCd   = $("#posHourSelectStoreCd").val();
+                    params.posNo	 = $("#posHourSelectPosCd").val();
                     $scope._broadcast('saleComProdHourCtrl', params);
                 }
             }

@@ -178,4 +178,4 @@
     var smsRecvYnDataMap  = ${ccu.getCommCodeExcpAll("072")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembrDetail.js?ver=20240612.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/dayMembr/dayMembrDetail.js?ver=20240910.01" charset="utf-8"></script>
