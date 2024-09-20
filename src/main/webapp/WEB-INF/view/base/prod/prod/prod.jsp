@@ -325,7 +325,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20240603.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20240911.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
@@ -363,6 +363,12 @@
 
 <%-- 레이어 팝업 : 상품삭제 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDeleteView.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 레이어 팝업 : 상품등록 및 삭제 비밀번호 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/prodAddDelPw.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

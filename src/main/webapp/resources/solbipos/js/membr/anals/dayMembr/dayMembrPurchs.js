@@ -126,6 +126,11 @@ app.controller('dayMembrPurchsCtrl', ['$scope', '$http', function ($scope, $http
         params.membrCardNo = $scope.selectedStore.membrCardNo;
         params.gubun = $scope.selectedStore.gubun;
 
+        if($scope.selectedStore.minDate !== null && $scope.selectedStore.minDate !== "" && $scope.selectedStore.minDate !== undefined){
+            params.startDate = $scope.selectedStore.minDate;
+            params.endDate = $scope.selectedStore.maxDate;
+        }
+
         $scope._inquirySub("/membr/anals/dayMembr/dayMembr/getDayMembrPurchsList.sb", params, function() {}, false);
     };
 

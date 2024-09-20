@@ -270,7 +270,9 @@
                 <c:if test="${momsEnvstVal == '1'}">
                     <wj-flex-grid-column header="<s:message code="prod.kioskSaleTime"/>" binding="saleTimeFg" width="80" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prod.kioskSaleTimeSetting"/>" binding="saleTime" width="80" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
                     <wj-flex-grid-column header="<s:message code="prod.momsKioskEdge"/>" binding="momsKioskEdge" width="80" is-read-only="true" align="center" data-map="momsKioskEdgeDataMap"></wj-flex-grid-column>
+                <c:if test="${momsEnvstVal == '1'}">
                     <wj-flex-grid-column header="<s:message code="prod.optionGrp"/>" binding="optionGrpNm" width="80" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prod.releaseDate"/>" binding="releaseDate" width="80" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prod.discon"/>" binding="disconYn" width="80" is-read-only="true"></wj-flex-grid-column>

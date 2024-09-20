@@ -200,7 +200,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 기존 매장상태구분 값 hidden 초기화
     $("#hdSysStatFg").val("");
-    
+
     if($.isEmptyObject(storeScope.getSelectedStore()) ) {
       $scope.resetForm();
 
@@ -280,6 +280,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#storeCd").css("width", "100%");
     $("#btnChkStoreCd").css("display", "none");
     $("#additionalArea").css("display", "");
+    // 아트박스(운영H0345,H0094)(개발DS012)
+    if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
+      $("#addr").attr("readonly", false);
+    }else{
+      $("#addr").attr("readonly", true);
+    }
 
     $scope.store.vanCd = "";
     $scope.store.vanNm = "";
@@ -474,6 +480,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#prtFormChk").prop("checked", false);
       $("#promotionChk").prop("checked", false);
       $("#dlvrProdChk").prop("checked", false);
+
+      // 아트박스(운영H0345,H0094)(개발DS012)
+      if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
+        $("#addr").attr("readonly", false);
+      }else{
+        $("#addr").attr("readonly", true);
+      }
 
       $scope.store.siteCd = storeDetailInfo.siteCd;
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
@@ -1086,6 +1099,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
           $scope.envHqOfficeCdCombo.selectedValue = $scope.store.hqOfficeCd;
 
+          // 아트박스(운영H0345,H0094)(개발DS012)
+          if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
+            $("#addr").attr("readonly", false);
+          }else{
+            $("#addr").attr("readonly", true);
+          }
+
           // 매장코드 채번방식
           if (hqScope.getHq().envst0027 === '1') { //수동
             $scope.store.storeCd = '';
@@ -1623,6 +1643,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#btnErpStoreSet").css("display", "");
     }else{
       $("#btnErpStoreSet").css("display", "none");
+    }
+
+    // 아트박스(운영H0345,H0094)(개발DS012)
+    if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
+      $("#addr").attr("readonly", false);
+    }else{
+      $("#addr").attr("readonly", true);
     }
 
     // [1250 맘스터치]

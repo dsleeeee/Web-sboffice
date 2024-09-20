@@ -283,18 +283,27 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 var selectedRow = grid.rows[ht.row].dataItem;
                 var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
                 var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
-                var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+                var posNo		= "";
+                if(grid.columnHeaders.getCellData(1,ht.col,true).indexOf('-') > -1){
+                    posNo =  grid.columnHeaders.getCellData(1,ht.col,true).split('-')[0];
+                }else{
+                    posNo = grid.columnHeaders.getCellData(1,ht.col,true);
+                }
 
                 var params       = {};
                 params.chkPop	= "posPop";
                 params.prodCd   = selectedRow.prodCd;
 
+                params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+                params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+
                 if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
                     params.storeCd   = storeCd;
-                    params.posNo	 = posNo;
+                    params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
                 }else if (col.binding === "totSaleCnt") { // 수량합계
                     params.storeCd   = $("#posProdSelectStoreCd").val();
+                    params.posNo	 = $("#posProdSelectPosCd").val();
                     $scope._broadcast('saleComProdCtrl', params);
                 }
             }
@@ -643,11 +652,19 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
                 var selectedRow = grid.rows[ht.row].dataItem;
                 var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
                 var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
-                var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+                var posNo		= "";
+                if(grid.columnHeaders.getCellData(1,ht.col,true).indexOf('-') > -1){
+                    posNo =  grid.columnHeaders.getCellData(1,ht.col,true).split('-')[0];
+                }else{
+                    posNo = grid.columnHeaders.getCellData(1,ht.col,true);
+                }
 
                 var params       = {};
                 params.chkPop	= "posPop";
                 params.prodCd   = selectedRow.prodCd;
+
+                params.startDate = wijmo.Globalize.format($scope.startDateProd.value, 'yyyyMMdd');
+                params.endDate = wijmo.Globalize.format($scope.endDateProd.value, 'yyyyMMdd');
 
                 if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
                     params.storeCd   = storeCd;

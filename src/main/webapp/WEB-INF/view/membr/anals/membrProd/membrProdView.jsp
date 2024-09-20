@@ -90,7 +90,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrProd/membrProd.js?ver=2019052801.05"
+<script type="text/javascript" src="/resource/solbipos/js/membr/anals/membrProd/membrProd.js?ver=20240910.01"
         charset="utf-8"></script>
 
 <%-- 회원 상세정보 --%>

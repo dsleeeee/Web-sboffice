@@ -65,6 +65,9 @@ public class DayMembrVO extends PageVO {
     /** 사원번호 */
     private String empNo;
 
+    /** 상품코드 */
+    private String prodCd;
+
     public String getMembrOrgnCd() {
         return membrOrgnCd;
     }
@@ -183,5 +186,13 @@ public class DayMembrVO extends PageVO {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    public String getProdCd() {
+        return prodCd;
+    }
+
+    public void setProdCd(String prodCd) {
+        this.prodCd = prodCd;
     }
 }

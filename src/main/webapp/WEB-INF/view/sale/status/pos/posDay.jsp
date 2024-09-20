@@ -170,4 +170,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDay.js?ver=20231025.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDay.js?ver=20240909.01" charset="utf-8"></script>

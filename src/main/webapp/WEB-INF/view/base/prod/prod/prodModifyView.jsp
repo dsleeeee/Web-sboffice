@@ -857,8 +857,9 @@
                  </div>
               </td>
             </tr>
+          </c:if>
             <tr>
-              <%-- KIOSK 엣지 --%>
+              <%-- KIOSK 뱃지 --%>
               <th><s:message code="prod.momsKioskEdge"/></th>
               <td>
                   <div class="sb-select">
@@ -875,6 +876,7 @@
                       </wj-combo-box>
                   </div>
               </td>
+              <c:if test="${momsEnvstVal == '1'}">
               <%-- 상품옵션그룹 --%>
               <th><s:message code="prod.optionGrp"/></th>
               <td>
@@ -884,7 +886,9 @@
                 <input type="hidden" id="_optionGrpNm" name="optionGrpNm" ng-model="prodModifyInfo.optionGrpNm" disabled />
                 <button type="button" class="btn_skyblue fl mr5" id="btnCancelOptionGrp" style="margin-left: 5px;" ng-click="delOptionGrp()"><s:message code="cmm.selectCancel"/></button>
               </td>
+              </c:if>
             </tr>
+          <c:if test="${momsEnvstVal == '1'}">
             <tr>
               <%-- 출시일 --%>
               <th><s:message code="prod.releaseDate"/></th>
@@ -1169,7 +1173,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20240716.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20240911.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

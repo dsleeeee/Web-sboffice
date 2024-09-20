@@ -100,6 +100,11 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("posMonthCtrl", function (event, data) {
 
+        if( $("#posMonthSelectStoreCd").val() === ''){
+            $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
+            return false;
+        }
+
         $scope.searchPosMonthList(true);
 
         var storeCd = $("#posMonthSelectStoreCd").val();
@@ -319,7 +324,12 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 var selectedRow = grid.rows[ht.row].dataItem;
                 var storeNm		= grid.columnHeaders.getCellData(0,ht.col,true);
                 var storeCd 	= storeNm.match( /[^()]+(?=\))/g);
-                var posNo		= grid.columnHeaders.getCellData(1,ht.col,true);
+                var posNo		= "";
+                if(grid.columnHeaders.getCellData(1,ht.col,true).indexOf('-') > -1){
+                    posNo =  grid.columnHeaders.getCellData(1,ht.col,true).split('-')[0];
+                }else{
+                    posNo = grid.columnHeaders.getCellData(1,ht.col,true);
+                }
 
                 var params       = {};
                 params.chkPop	= "posMonthPop";
@@ -327,10 +337,23 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
                 if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
                     params.storeCd   = storeCd;
-                    params.posNo	 = posNo;
+                    params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
                 }else if (col.binding === "totSaleCnt") { // 수량합계
                     params.storeCd   = $("#posMonthSelectStoreCd").val();
+                    params.posNo	 = $("#posMonthSelectPosCd").val();
+                    // if($("#posMonthSelectPosNm").val() !== "전체"){
+                    //     var splPosNo = {};
+                    //     splPosNo = $("#posMonthSelectPosCd").val().split(',');
+                    //     for(var i = 0; i < splPosNo.length; i++){
+                    //
+                    //     }
+                    //     alert(splPosNo);
+                    //     alert(splPosNo[0]);
+                    //     alert(splPosNo.length);
+                    //     alert(splPosNo[0].substr(-2,2));
+                    //     alert(splPosNo[1].substr(-2,2));
+                    // }
                     $scope._broadcast('saleComProdCtrl', params);
                 }
             }

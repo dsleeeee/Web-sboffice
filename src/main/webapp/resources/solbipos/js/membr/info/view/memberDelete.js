@@ -81,17 +81,21 @@ app.controller('memberDeleteCtrl', ['$scope', '$http', function ($scope, $http) 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/membr/info/view/base/selectMemberDelete.sb", params, function () {
 
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "회원관리-회원정보-회원정보관리";
+                if ($("#chkForcedDelete").is(":checked")) {
+                    actParams.contents = "[회원삭제] - [선택회원삭제(강제삭제)] 버튼 클릭 시";
+                }else{
+                    actParams.contents = "[회원삭제] - [선택회원삭제] 버튼 클릭 시";
+                }
+
                 // 부모창 재조회 및 팝업닫기
                 var scope = agrid.getScope('memberCtrl');
                 scope.getMemberList();
                 $scope.wjMemberDeleteLayer.hide(true);
                 $scope.closeMemberDelete();
-
-                // 사용자 행위 기록
-                var actParams = {};
-                actParams.resrceCd = menuCd;
-                actParams.pathNm = "회원관리-회원정보-회원정보관리";
-                actParams.contents = "[회원삭제] - [선택회원삭제] 버튼 클릭 시";
 
                 $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
             });
@@ -126,17 +130,22 @@ app.controller('memberDeleteCtrl', ['$scope', '$http', function ($scope, $http) 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp("/membr/info/view/base/allMemberDelete.sb", params, function () {
 
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "회원관리-회원정보-회원정보관리";
+                if ($("#chkForcedDelete").is(":checked")) {
+                    actParams.contents = "[회원삭제] - [전체회원삭제(강제삭제)] 버튼 클릭 시";
+                }else{
+                    actParams.contents = "[회원삭제] - [전체회원삭제] 버튼 클릭 시";
+                }
+
                 // 부모창 재조회 및 팝업닫기
                 var scope = agrid.getScope('memberCtrl');
                 scope.getMemberList();
                 $scope.wjMemberDeleteLayer.hide(true);
                 $scope.closeMemberDelete();
 
-                // 사용자 행위 기록
-                var actParams = {};
-                actParams.resrceCd = menuCd;
-                actParams.pathNm = "회원관리-회원정보-회원정보관리";
-                actParams.contents = "[회원삭제] - [전체회원삭제] 버튼 클릭 시";
 
                 $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
             });

@@ -1080,4 +1080,33 @@ public class ProdController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 상품등록 및 삭제 비밀번호 확인
+     *
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  김유승
+     * @since   2024. 09. 11.
+     */
+    @RequestMapping(value = "/chkAddDelPw.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkAddDelPw(@RequestBody ProdVO prodVO, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = "";
+
+        if(prodVO.getPassword().equals("08002")){
+            result = "true";
+        }else{
+            result = "false";
+        }
+
+        return ReturnUtil.returnJson(Status.OK, result);
+    }
 }

@@ -54,5 +54,5 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberDelete.js?ver=20240213.01"
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberDelete.js?ver=20240910.01"
         charset="utf-8"></script>
