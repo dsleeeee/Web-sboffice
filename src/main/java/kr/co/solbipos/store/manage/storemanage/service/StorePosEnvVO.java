@@ -58,7 +58,9 @@ public class StorePosEnvVO extends CmmVO {
     private String envst;
     /** 환경설정사용등록 */
     private String envst1266;
-    
+    /** 본사코드 */
+    private String hqOfficeCd;
+
     /**
      * @return the storeCd
      */
@@ -266,5 +268,13 @@ public class StorePosEnvVO extends CmmVO {
 
     public void setEnvst1266(String envst1266) {
         this.envst1266 = envst1266;
+    }
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
     }
 }

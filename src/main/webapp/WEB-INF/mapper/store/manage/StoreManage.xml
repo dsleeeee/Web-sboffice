@@ -5599,11 +5599,17 @@
                     DECODE(tce.DIRCT_IN_YN, 'Y', 'Y', tcd.USE_YN) DTL_USE_YN
                FROM TB_CM_ENVST tce,
                     TB_CM_ENVST_DTL tcd
-              WHERE tce.TARGT_FG IN ('S','C','X')
+              WHERE 1=1
+               ]]>
+                <if test='hqOfficeCd != "00000"'>
+                    AND tce.TARGT_FG IN ('S','C','X')
+                </if>
+                <if test='hqOfficeCd == "00000"'>
+                    AND tce.TARGT_FG IN ('S','C','X','Z')
+                </if>
                 AND tce.ENVST_FG = #{envstFg}
                 AND tce.USE_YN = 'Y'
                 AND tcd.ENVST_CD (+)= tce.ENVST_CD
-             ]]>
                 <if test='envst1266 != null and envst1266 == "1"'>
                     AND tce.ENVST_CD IN (
                                         SELECT 	ENVST_CD
@@ -5618,13 +5624,19 @@
                 AND (tce2.ENVST_CD LIKE '%'|| #{envst} ||'%'
                 OR 	tce2.ENVST_NM LIKE '%'|| #{envst} ||'%')
            </if>
-        <![CDATA[
                ) tce2,
               (
           SELECT tce.ENVST_GRP_CD,
                  COUNT(*) AS ENVST_CD_CNT
             FROM TB_CM_ENVST tce
-           WHERE tce.TARGT_FG IN ('S','C','X')
+           WHERE 1=1
+              <if test='hqOfficeCd != "00000"'>
+                  AND tce.TARGT_FG IN ('S','C','X')
+              </if>
+              <if test='hqOfficeCd == "00000"'>
+                  AND tce.TARGT_FG IN ('S','C','X','Z')
+              </if>
+          <![CDATA[
              AND tce.ENVST_FG = #{envstFg}
              AND tce.USE_YN = 'Y'
            GROUP BY tce.ENVST_GRP_CD
@@ -5781,11 +5793,17 @@
                                       DECODE(tce.DIRCT_IN_YN, 'Y', 'Y', tcd.USE_YN) DTL_USE_YN
                                 FROM TB_CM_ENVST tce,
                                       TB_CM_ENVST_DTL tcd
-                               WHERE tce.TARGT_FG IN ('S','C','X')
+                               WHERE 1=1
+                              ]]>
+                                <if test="hqOfficeCd != '00000'">
+                                    AND tce.TARGT_FG IN ('S','C','X')
+                                </if>
+                                <if test="hqOfficeCd == '00000'">
+                                    AND tce.TARGT_FG IN ('S','C','X','Z')
+                                </if>
                                  AND tce.ENVST_FG = #{envstFg}
                                  AND tce.USE_YN = 'Y'
                                  AND tcd.ENVST_CD (+)= tce.ENVST_CD
-                              ]]>
                                 <if test='envst1266 != null and envst1266 == "1"'>
                                     AND tce.ENVST_CD IN (
                                                         SELECT 	ENVST_CD
@@ -5801,18 +5819,24 @@
                     OR 	tce2.ENVST_NM LIKE '%'|| #{envst} ||'%'
                     OR  tce2.ENVST_CD = '4021')
                   </if>
-                  <![CDATA[
                ) tce2,
               (
                      SELECT tce.ENVST_GRP_CD,
                              COUNT(*) AS ENVST_CD_CNT
                         FROM TB_CM_ENVST tce
-                       WHERE tce.TARGT_FG IN ('S','C','X')
+                       WHERE 1=1
+                        <if test="hqOfficeCd != '00000'">
+                            AND tce.TARGT_FG IN ('S','C','X')
+                        </if>
+                        <if test="hqOfficeCd == '00000'">
+                            AND tce.TARGT_FG IN ('S','C','X','Z')
+                        </if>
                          AND tce.ENVST_FG = #{envstFg}
                          AND tce.USE_YN = 'Y'
                        GROUP
                           BY tce.ENVST_GRP_CD
                ) tce3,
+        <![CDATA[
                TB_MS_POS_ENVST tms,
                TB_CM_NMCODE tcn,
                (
