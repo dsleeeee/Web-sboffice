@@ -33,7 +33,8 @@
         ,       TO_CHAR(TO_DATE(tpot.SALE_DATE,'yyyymmdd'),'yyyy-mm-dd')AS SALE_DATE
         ,       tpot.SERVICE_TYPE
         ,       tpot.CHANNEL_ORDER_NO
-        ,       tpot.CHANNEL_TYPE
+        ,       DECODE(tpot.CHANNEL_TYPE, 'DT', 'STORE', tpot.CHANNEL_TYPE) 	AS CHANNEL_TYPE
+        ,       DECODE(tpot.CHANNEL_TYPE, 'DT', 'DT', '') 						AS DT_ORDER
         ,       tpot.CHANNEL_SERVICE
         ,       TO_CHAR(TO_DATE(tpot.CHANNEL_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CHANNEL_REG_DT
         ,       tpot.VORDER_NO
@@ -146,7 +147,8 @@
         ,       TO_CHAR(TO_DATE(tpot.SALE_DATE,'yyyymmdd'),'yyyy-mm-dd')AS SALE_DATE
         ,       tpot.SERVICE_TYPE
         ,       tpot.CHANNEL_ORDER_NO
-        ,       tpot.CHANNEL_TYPE
+        ,      DECODE(tpot.CHANNEL_TYPE, 'DT', 'STORE', tpot.CHANNEL_TYPE) 	AS CHANNEL_TYPE
+        ,      DECODE(tpot.CHANNEL_TYPE, 'DT', 'DT', '') 					AS DT_ORDER
         ,       tpot.CHANNEL_SERVICE
         ,       TO_CHAR(TO_DATE(tpot.CHANNEL_REG_DT, 'YYYYMMDDHH24MISS'), 'yyyy-MM-dd HH24:MI:SS') AS CHANNEL_REG_DT
         ,       tpot.VORDER_NO
