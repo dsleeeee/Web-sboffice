@@ -165,7 +165,7 @@
     <select id="getLastLoginHistList" parameterType="sessionInfoVO" resultType="DefaultMap">
         /* userMapper.getLastLoginHistList */
         SELECT
-        USER_ID ,
+        USER_ID,
         LOGIN_ORGN,
         LOGIN_IP,
         TO_CHAR(TO_DATE(LOGIN_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS LOGIN_DT,
