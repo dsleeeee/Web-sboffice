@@ -144,6 +144,25 @@ public interface TouchKeyMapper {
     int insertTouchKeyToStore(TouchKeyVO touchKeyVO);
     int insertTouchKeyToStore2(TouchKeyVO touchKeyVO);
 
+    /** 본사 터치키그룹 매장 머지 */
+    int mergeTouchKeyGroupToStore(TouchKeyVO touchKeyVO);
+
+    /** 본사 터치키분류 매장 머지 */
+    int mergeTouchKeyClassToStore(TouchKeyVO touchKeyVO);
+
+    /** 본사 터치키 매장 머지*/
+    int mergeTouchKeyToStore(TouchKeyVO touchKeyVO);
+    int mergeTouchKeyToStore2(TouchKeyVO touchKeyVO);
+
+    /** 기존 데이터 중, 불필요한 매장 터치키 분류 정보 삭제 */
+    int deleteNotUseTouchKeyClassToStore(TouchKeyVO touchKeyVO);
+
+    /** 기존 데이터 중, 불필요한 매장 터치키 정보 삭제 */
+    int deleteNotUseTouchKeyToStore(TouchKeyVO touchKeyVO);
+
+    /** 기존 데이터 중, 불필요한 매장 터치키 정보 삭제2 */
+    int deleteNotUseTouchKeyToStore2(TouchKeyVO touchKeyVO);
+
     /** 판매터치키 그룹 조회 */
     List<DefaultMap<String>> getTouchKeyGrp(TouchKeyVO touchKeyVO);
 

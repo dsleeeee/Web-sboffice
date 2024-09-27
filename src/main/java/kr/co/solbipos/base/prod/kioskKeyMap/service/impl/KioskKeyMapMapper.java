@@ -217,6 +217,38 @@ public interface KioskKeyMapMapper {
     int deleteStoreTuClsTypeM(KioskKeyMapVO kioskKeyMapVO);
     int deleteStoreTuClsTypeM2(KioskKeyMapVO kioskKeyMapVO);
 
+    /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(분류) 저장 */
+    int mergeKioskCategoryStoreReg(KioskKeyMapVO kioskKeyMapVO);
+    int mergeKioskCategoryStoreRegStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
+
+    /**  키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 키맵그룹 저장 */
+    int mergeKioskStoreTuClsTypeNm(KioskKeyMapVO kioskKeyMapVO);
+    int mergeKioskStoreTuClsTypeNmStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
+
+    /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품 매장에도 복사 */
+    int mergeKioskKeyMapStoreReg(KioskKeyMapVO kioskKeyMapVO);
+    int mergeKioskKeyMapStoreReg2(KioskKeyMapVO kioskKeyMapVO);
+    int mergeKioskKeyMapStoreRegStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
+
+    /** 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장 */
+    int mergeKioskCategoryStoreRegM(KioskKeyMapVO kioskKeyMapVO);
+    int mergeKioskCategoryStoreRegM2(KioskKeyMapVO kioskKeyMapVO);
+    int mergeKioskCategoryStoreRegMStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
+
+    /** 키오스크 키맵매장적용 - 기존 데이터 중, 불필요한 매장 카테고리(분류) 정보 삭제 */
+    int deleteNotUseKioskCategoryToStore(KioskKeyMapVO kioskKeyMapVO);
+    int deleteNotUseKioskCategoryToStoreStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
+
+    /** 키오스크 키맵매장적용 - 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제 */
+    int deleteNotUseKioskKeyMapToStore(KioskKeyMapVO kioskKeyMapVO);
+    int deleteNotUseKioskKeyMapToStore2(KioskKeyMapVO kioskKeyMapVO);
+    int deleteNotUseKioskKeyMapToStoreStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
+
+    /** 키오스크 키맵매장적용 - 기존 데이터 중, 불필요한 매장 카테고리(중분류) 정보 삭제*/
+    int deleteNotUseKioskCategoryToStoreM(KioskKeyMapVO kioskKeyMapVO);
+    int deleteNotUseKioskCategoryToStoreM2(KioskKeyMapVO kioskKeyMapVO);
+    int deleteNotUseKioskCategoryToStoreMStore(KioskKeyMapVO kioskKeyMapVO); // 매장용
+
     /** 키오스크키맵 매장복사 - 매장 키오스크 포스 리스트 조회 */
     List<DefaultMap<String>> getStoreCopyKioskPosList(KioskKeyMapVO kioskKeyMapVO);
 
