@@ -289,26 +289,28 @@ public class ViewServiceImpl implements ViewService {
             if("".equals(copyStoreEnvVO.getTukeyGrpCd())){
 
                 // 터치키 클래스와 터치키 전체복사
+                // 터치키 그룹, 분류, 키 모두 프로시저 내에서 처리(2024.09.11)
                 procResult = viewMapper.copyTouchKey(copyStoreEnvVO);
 
                 // 터치키 XML 전체복사
-                copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
-//                procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO); //판매터치키 XML 데이터 미사용 처리 20230331
+                //copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
+                //procResult = viewMapper.copyTouchKeyXML(copyStoreEnvVO); //판매터치키 XML 데이터 미사용 처리 20230331
 
-                viewMapper.deleteTouchKeyGrpNm(copyStoreEnvVO);
-                viewMapper.copyTouchKeyGrpNm(copyStoreEnvVO);
+                //viewMapper.deleteTouchKeyGrpNm(copyStoreEnvVO);
+                //viewMapper.copyTouchKeyGrpNm(copyStoreEnvVO);
 
             }else{ // 선택그룹 복사
 
                 // 터치키 클래스와 터치키 선택그룹 복사
+                // 터치키 그룹, 분류, 키 모두 프로시저 내에서 처리(2024.09.11)
                 procResult = viewMapper.copyTouchKeyGrp(copyStoreEnvVO);
 
                 // 터치키 선택그룹 XML 복사
-                copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
-//                procResult = viewMapper.copyTouchKeyGrpXML(copyStoreEnvVO);//판매터치키 XML 데이터 미사용 처리 20230331
+                //copyStoreEnvVO.setConfgFg(ConfgFg.TOUCH_KEY.getCode());
+                //procResult = viewMapper.copyTouchKeyGrpXML(copyStoreEnvVO);//판매터치키 XML 데이터 미사용 처리 20230331
 
-                viewMapper.deleteTouchKeyGrpNm(copyStoreEnvVO);
-                viewMapper.copyTouchKeyGrpNm(copyStoreEnvVO);
+                //viewMapper.deleteTouchKeyGrpNm(copyStoreEnvVO);
+                //viewMapper.copyTouchKeyGrpNm(copyStoreEnvVO);
             }
         }
 

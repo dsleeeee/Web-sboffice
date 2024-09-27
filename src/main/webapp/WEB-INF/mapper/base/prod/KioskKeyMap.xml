@@ -1782,6 +1782,7 @@
         <if test="posNo != null and posNo != ''">
             AND POS_NO = #{posNo}
         </if>
+        AND TU_CLS_TYPE = #{tuClsType}
         AND TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
                                                 FROM 	TB_HQ_NMCODE thn
                                                 WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2096,6 +2097,7 @@
         #{modId}
         FROM TB_HQ_KIOSK_KEY
         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        AND TU_CLS_TYPE = #{tuClsType}
         AND TU_CLS_TYPE || TU_CLS_CD NOT IN (    SELECT 	NMCODE_NM || NMCODE_ITEM_1
                                                 FROM 	TB_HQ_NMCODE thn
                                                 WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3351,6 +3353,7 @@
                 FROM TB_HQ_KIOSK_M_CLS
                 WHERE 1=1
                 AND HQ_OFFICE_CD = #{hqOfficeCd}
+                AND TU_CLS_TYPE = #{orgTuClsType}
                 AND TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
                 FROM 	TB_HQ_NMCODE thn
                 WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3364,6 +3367,7 @@
                 WHERE 1=1
                 AND STORE_CD = #{storeCd}
                 AND POS_NO = #{posNo}
+                AND TU_CLS_TYPE = #{orgTuClsType}
                 AND TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
                 FROM 	TB_HQ_NMCODE thn
                 WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3579,6 +3583,7 @@
         M_CLS_MEMO
         FROM TB_HQ_KIOSK_M_CLS tmkc
         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+        AND TU_CLS_TYPE = #{tuClsType}
         AND TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
                                                 FROM 	TB_HQ_NMCODE thn
                                                 WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3642,7 +3647,7 @@
 
     <!-- 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제(중분류) -->
     <!--
-        TABLE    : TB_MS_KIOSK_CLS
+        TABLE    : TB_MS_KIOSK_M_CLS
         PARAM    : kioskKeyMapVO
         COMMENTS : 매장별 키맵그룹을 삭제한다.
     -->
@@ -3658,7 +3663,7 @@
 
     <!-- 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제(중분류) -->
     <!--
-        TABLE    : TB_MS_KIOSK_CLS
+        TABLE    : TB_MS_KIOSK_M_CLS
         PARAM    : kioskKeyMapVO
         COMMENTS : 매장별 키맵그룹을 삭제한다.
     -->
@@ -3669,11 +3674,1170 @@
         <if test="posNo != null and posNo != ''">
             AND POS_NO = #{posNo}
         </if>
+        AND TU_CLS_TYPE = #{tuClsType}
         AND TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
                                                 FROM 	TB_HQ_NMCODE thn
                                                 WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
                                                 AND     NMCODE_GRP_CD = '229'
                                                 AND 	NMCODE_ITEM_2 = 'Y')
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(분류) 저장 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS, TB_HQ_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 매장 카테고리(분류) 저장한다.
+    -->
+    <insert id="mergeKioskCategoryStoreReg" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskCategoryStoreReg */
+        MERGE INTO TB_MS_KIOSK_CLS A
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_CD       AS TU_CLS_CD
+                    ,       TU_CLS_NM       AS TU_CLS_NM
+                    ,       TU_PAGE         AS TU_PAGE
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       INDEX_NO        AS INDEX_NO
+                    ,       CLS_FG          AS CLS_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    ,       #{tuMClsFg}     AS TU_M_CLS_FG -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
+                    ,       TU_CLS_EN_NM    AS TU_CLS_EN_NM
+                    ,       TU_CLS_CN_NM    AS TU_CLS_CN_NM
+                    ,       TU_CLS_JP_NM    AS TU_CLS_JP_NM
+                    FROM    TB_HQ_KIOSK_CLS tmkc
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TU_CLS_TYPE  = #{tuClsType}
+                ) B
+        ON      (
+                    B.STORE_CD     = A.STORE_CD
+                AND B.POS_NO       = A.POS_NO
+                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TU_CLS_NM     = B.TU_CLS_NM
+        ,       A.TU_PAGE       = B.TU_PAGE
+        ,       A.X             = B.X
+        ,       A.Y             = B.Y
+        ,       A.WIDTH         = B.WIDTH
+        ,       A.HEIGHT        = B.HEIGHT
+        ,       A.INDEX_NO      = B.INDEX_NO
+        ,       A.CLS_FG        = B.CLS_FG
+        ,       A.MOD_DT        = B.MOD_DT
+        ,       A.MOD_ID        = B.MOD_ID
+        ,       A.TU_M_CLS_FG   = B.TU_M_CLS_FG
+        ,       A.TU_CLS_EN_NM  = B.TU_CLS_EN_NM
+        ,       A.TU_CLS_CN_NM  = B.TU_CLS_CN_NM
+        ,       A.TU_CLS_JP_NM  = B.TU_CLS_JP_NM
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.POS_NO
+        ,       A.TU_CLS_TYPE
+        ,       A.TU_CLS_CD
+        ,       A.TU_CLS_NM
+        ,       A.TU_PAGE
+        ,       A.X
+        ,       A.Y
+        ,       A.WIDTH
+        ,       A.HEIGHT
+        ,       A.INDEX_NO
+        ,       A.CLS_FG
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.TU_M_CLS_FG
+        ,       A.TU_CLS_EN_NM
+        ,       A.TU_CLS_CN_NM
+        ,       A.TU_CLS_JP_NM
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.POS_NO
+        ,       B.TU_CLS_TYPE
+        ,       B.TU_CLS_CD
+        ,       B.TU_CLS_NM
+        ,       B.TU_PAGE
+        ,       B.X
+        ,       B.Y
+        ,       B.WIDTH
+        ,       B.HEIGHT
+        ,       B.INDEX_NO
+        ,       B.CLS_FG
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        ,       B.TU_M_CLS_FG
+        ,       B.TU_CLS_EN_NM
+        ,       B.TU_CLS_CN_NM
+        ,       B.TU_CLS_JP_NM
+        )
+    </insert>
+
+    <!-- 키오스크키맵복사 - 매장 키오스크키맵 복사 시 매장 카테고리(분류) 저장 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장 키오스크키맵 복사 시 매장 카테고리(분류)를 저장한다.
+    -->
+    <insert id="mergeKioskCategoryStoreRegStore" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskCategoryStoreRegStore */
+        MERGE INTO TB_MS_KIOSK_CLS A
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_CD       AS TU_CLS_CD
+                    ,       TU_CLS_NM       AS TU_CLS_NM
+                    ,       TU_PAGE         AS TU_PAGE
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       INDEX_NO        AS INDEX_NO
+                    ,       CLS_FG          AS CLS_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    ,       #{tuMClsFg}     AS TU_M_CLS_FG -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
+                    ,       TU_CLS_EN_NM    AS TU_CLS_EN_NM
+                    ,       TU_CLS_CN_NM    AS TU_CLS_CN_NM
+                    ,       TU_CLS_JP_NM    AS TU_CLS_JP_NM
+                    FROM    TB_MS_KIOSK_CLS tmkc
+                    WHERE   STORE_CD = #{originalStoreCd}
+                    AND     POS_NO = #{orgPosNo}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                ) B
+        ON      (
+                    B.STORE_CD     = A.STORE_CD
+                AND B.POS_NO       = A.POS_NO
+                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TU_CLS_NM     = B.TU_CLS_NM
+        ,       A.TU_PAGE       = B.TU_PAGE
+        ,       A.X             = B.X
+        ,       A.Y             = B.Y
+        ,       A.WIDTH         = B.WIDTH
+        ,       A.HEIGHT        = B.HEIGHT
+        ,       A.INDEX_NO      = B.INDEX_NO
+        ,       A.CLS_FG        = B.CLS_FG
+        ,       A.MOD_DT        = B.MOD_DT
+        ,       A.MOD_ID        = B.MOD_ID
+        ,       A.TU_M_CLS_FG   = B.TU_M_CLS_FG
+        ,       A.TU_CLS_EN_NM  = B.TU_CLS_EN_NM
+        ,       A.TU_CLS_CN_NM  = B.TU_CLS_CN_NM
+        ,       A.TU_CLS_JP_NM  = B.TU_CLS_JP_NM
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.POS_NO
+        ,       A.TU_CLS_TYPE
+        ,       A.TU_CLS_CD
+        ,       A.TU_CLS_NM
+        ,       A.TU_PAGE
+        ,       A.X
+        ,       A.Y
+        ,       A.WIDTH
+        ,       A.HEIGHT
+        ,       A.INDEX_NO
+        ,       A.CLS_FG
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.TU_M_CLS_FG
+        ,       A.TU_CLS_EN_NM
+        ,       A.TU_CLS_CN_NM
+        ,       A.TU_CLS_JP_NM
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.POS_NO
+        ,       B.TU_CLS_TYPE
+        ,       B.TU_CLS_CD
+        ,       B.TU_CLS_NM
+        ,       B.TU_PAGE
+        ,       B.X
+        ,       B.Y
+        ,       B.WIDTH
+        ,       B.HEIGHT
+        ,       B.INDEX_NO
+        ,       B.CLS_FG
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        ,       B.TU_M_CLS_FG
+        ,       B.TU_CLS_EN_NM
+        ,       B.TU_CLS_CN_NM
+        ,       B.TU_CLS_JP_NM
+        )
+    </insert>
+
+    <!-- 키오스크 키맵명매장적용 - 본사 키맵그룹 매장적용 시 매장 키맵그룹 저장 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 매장 키맵그룹을 저장한다.
+    -->
+    <insert id="mergeKioskStoreTuClsTypeNm" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskStoreTuClsTypeNm */
+        MERGE INTO TB_MS_KIOSK_GROUP A
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_TYPE_NM  AS TU_CLS_TYPE_NM
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_HQ_KIOSK_GROUP
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                ) B
+        ON      (
+                        B.STORE_CD     = A.STORE_CD
+                    AND B.POS_NO       = A.POS_NO
+                    AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TU_CLS_TYPE_NM = B.TU_CLS_TYPE_NM
+        ,       A.MOD_DT         = B.MOD_DT
+        ,       A.MOD_ID         = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            A.STORE_CD
+        ,   A.POS_NO
+        ,   A.TU_CLS_TYPE
+        ,   A.TU_CLS_TYPE_NM
+        ,   A.REG_DT
+        ,   A.REG_ID
+        ,   A.MOD_DT
+        ,   A.MOD_ID
+        )
+        VALUES
+        (
+            B.STORE_CD
+        ,   B.POS_NO
+        ,   B.TU_CLS_TYPE
+        ,   B.TU_CLS_TYPE_NM
+        ,   B.REG_DT
+        ,   B.REG_ID
+        ,   B.MOD_DT
+        ,   B.MOD_ID
+        )
+    </insert>
+
+    <!-- 키오스크키맵복사 - 매장 키오스크키맵 복사 시 매장 키맵그룹 저장 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_GROUP
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장 키오스크키맵 복사 시 매장 키맵그룹을 저장한다.
+    -->
+    <insert id="mergeKioskStoreTuClsTypeNmStore" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskStoreTuClsTypeNmStore */
+        MERGE INTO TB_MS_KIOSK_GROUP A
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_TYPE_NM  AS TU_CLS_TYPE_NM
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_MS_KIOSK_GROUP
+                    WHERE   STORE_CD = #{originalStoreCd}
+                    AND     POS_NO = #{orgPosNo}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                ) B
+        ON      (
+                        B.STORE_CD     = A.STORE_CD
+                    AND B.POS_NO       = A.POS_NO
+                    AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TU_CLS_TYPE_NM = B.TU_CLS_TYPE_NM
+        ,       A.MOD_DT         = B.MOD_DT
+        ,       A.MOD_ID         = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            A.STORE_CD
+        ,   A.POS_NO
+        ,   A.TU_CLS_TYPE
+        ,   A.TU_CLS_TYPE_NM
+        ,   A.REG_DT
+        ,   A.REG_ID
+        ,   A.MOD_DT
+        ,   A.MOD_ID
+        )
+        VALUES
+        (
+            B.STORE_CD
+        ,   B.POS_NO
+        ,   B.TU_CLS_TYPE
+        ,   B.TU_CLS_TYPE_NM
+        ,   B.REG_DT
+        ,   B.REG_ID
+        ,   B.MOD_DT
+        ,   B.MOD_ID
+        )
+    </insert>
+
+    <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품 매장에도 복사 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품을 매장 키맵에도 복사한다.
+    -->
+    <insert id="mergeKioskKeyMapStoreReg" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskKeyMapStoreReg */
+        MERGE INTO TB_MS_KIOSK_KEY A
+        USING   (
+
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_CD       AS TU_CLS_CD
+                    ,       TU_KEY_CD       AS TU_KEY_CD
+                    ,       PROD_CD         AS PROD_CD
+                    ,       TU_PAGE         AS TU_PAGE
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       INDEX_NO        AS INDEX_NO
+                    ,       CLS_FG          AS CLS_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_HQ_KIOSK_KEY
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                ) B
+        ON      (
+                    B.STORE_CD     = A.STORE_CD
+                AND B.POS_NO       = A.POS_NO
+                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                AND B.TU_KEY_CD    = A.TU_KEY_CD
+                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.PROD_CD      = B.PROD_CD
+        ,       A.TU_PAGE      = B.TU_PAGE
+        ,       A.X            = B.X
+        ,       A.Y            = B.Y
+        ,       A.WIDTH        = B.WIDTH
+        ,       A.HEIGHT       = B.HEIGHT
+        ,       A.INDEX_NO     = B.INDEX_NO
+        ,       A.CLS_FG       = B.CLS_FG
+        ,       A.MOD_DT       = B.MOD_DT
+        ,       A.MOD_ID       = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.POS_NO
+        ,       A.TU_CLS_TYPE
+        ,       A.TU_CLS_CD
+        ,       A.TU_KEY_CD
+        ,       A.PROD_CD
+        ,       A.TU_PAGE
+        ,       A.X
+        ,       A.Y
+        ,       A.WIDTH
+        ,       A.HEIGHT
+        ,       A.INDEX_NO
+        ,       A.CLS_FG
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.POS_NO
+        ,       B.TU_CLS_TYPE
+        ,       B.TU_CLS_CD
+        ,       B.TU_KEY_CD
+        ,       B.PROD_CD
+        ,       B.TU_PAGE
+        ,       B.X
+        ,       B.Y
+        ,       B.WIDTH
+        ,       B.HEIGHT
+        ,       B.INDEX_NO
+        ,       B.CLS_FG
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        )
+    </insert>
+
+    <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품 매장에도 복사 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_KEY, TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 본사 키맵그룹에 엮여있는 상품을 매장 키맵에도 복사한다.
+    -->
+    <insert id="mergeKioskKeyMapStoreReg2" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskKeyMapStoreReg2 */
+        MERGE INTO TB_MS_KIOSK_KEY A
+        USING   (
+
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_CD       AS TU_CLS_CD
+                    ,       TU_KEY_CD       AS TU_KEY_CD
+                    ,       PROD_CD         AS PROD_CD
+                    ,       TU_PAGE         AS TU_PAGE
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       INDEX_NO        AS INDEX_NO
+                    ,       CLS_FG          AS CLS_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_HQ_KIOSK_KEY
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                    AND     TU_CLS_TYPE || TU_CLS_CD NOT IN (  SELECT  NMCODE_NM || NMCODE_ITEM_1
+                                                               FROM    TB_HQ_NMCODE thn
+                                                               WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                                               AND     NMCODE_GRP_CD = '229'
+                                                               AND 	   NMCODE_ITEM_2 = 'Y')
+                ) B
+        ON      (
+                    B.STORE_CD     = A.STORE_CD
+                AND B.POS_NO       = A.POS_NO
+                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                AND B.TU_KEY_CD    = A.TU_KEY_CD
+                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.PROD_CD      = B.PROD_CD
+        ,       A.TU_PAGE      = B.TU_PAGE
+        ,       A.X            = B.X
+        ,       A.Y            = B.Y
+        ,       A.WIDTH        = B.WIDTH
+        ,       A.HEIGHT       = B.HEIGHT
+        ,       A.INDEX_NO     = B.INDEX_NO
+        ,       A.CLS_FG       = B.CLS_FG
+        ,       A.MOD_DT       = B.MOD_DT
+        ,       A.MOD_ID       = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.POS_NO
+        ,       A.TU_CLS_TYPE
+        ,       A.TU_CLS_CD
+        ,       A.TU_KEY_CD
+        ,       A.PROD_CD
+        ,       A.TU_PAGE
+        ,       A.X
+        ,       A.Y
+        ,       A.WIDTH
+        ,       A.HEIGHT
+        ,       A.INDEX_NO
+        ,       A.CLS_FG
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.POS_NO
+        ,       B.TU_CLS_TYPE
+        ,       B.TU_CLS_CD
+        ,       B.TU_KEY_CD
+        ,       B.PROD_CD
+        ,       B.TU_PAGE
+        ,       B.X
+        ,       B.Y
+        ,       B.WIDTH
+        ,       B.HEIGHT
+        ,       B.INDEX_NO
+        ,       B.CLS_FG
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        )
+    </insert>
+
+    <!-- 키오스크키맵복사 - 매장 키오스크키맵 복사 시 키맵그룹에 엮여있는 상품 매장에도 저장  -->
+    <!--
+        TABLE    : TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 매장 키오스크키맵 복사 시 키맵그룹에 엮여있는 상품 매장에도 저장한다.
+    -->
+    <insert id="mergeKioskKeyMapStoreRegStore" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskKeyMapStoreRegStore */
+        MERGE INTO TB_MS_KIOSK_KEY A
+        USING   (
+
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_CD       AS TU_CLS_CD
+                    ,       TU_KEY_CD       AS TU_KEY_CD
+                    ,       PROD_CD         AS PROD_CD
+                    ,       TU_PAGE         AS TU_PAGE
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       INDEX_NO        AS INDEX_NO
+                    ,       CLS_FG          AS CLS_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_MS_KIOSK_KEY
+                    WHERE   STORE_CD = #{originalStoreCd}
+                    AND     POS_NO = #{orgPosNo}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                ) B
+        ON      (
+                    B.STORE_CD     = A.STORE_CD
+                AND B.POS_NO       = A.POS_NO
+                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                AND B.TU_KEY_CD    = A.TU_KEY_CD
+                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.PROD_CD      = B.PROD_CD
+        ,       A.TU_PAGE      = B.TU_PAGE
+        ,       A.X            = B.X
+        ,       A.Y            = B.Y
+        ,       A.WIDTH        = B.WIDTH
+        ,       A.HEIGHT       = B.HEIGHT
+        ,       A.INDEX_NO     = B.INDEX_NO
+        ,       A.CLS_FG       = B.CLS_FG
+        ,       A.MOD_DT       = B.MOD_DT
+        ,       A.MOD_ID       = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,       A.POS_NO
+        ,       A.TU_CLS_TYPE
+        ,       A.TU_CLS_CD
+        ,       A.TU_KEY_CD
+        ,       A.PROD_CD
+        ,       A.TU_PAGE
+        ,       A.X
+        ,       A.Y
+        ,       A.WIDTH
+        ,       A.HEIGHT
+        ,       A.INDEX_NO
+        ,       A.CLS_FG
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.POS_NO
+        ,       B.TU_CLS_TYPE
+        ,       B.TU_CLS_CD
+        ,       B.TU_KEY_CD
+        ,       B.PROD_CD
+        ,       B.TU_PAGE
+        ,       B.X
+        ,       B.Y
+        ,       B.WIDTH
+        ,       B.HEIGHT
+        ,       B.INDEX_NO
+        ,       B.CLS_FG
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        )
+    </insert>
+
+    <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS, TB_HQ_KIOSK_M_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장한다.
+    -->
+    <insert id="mergeKioskCategoryStoreRegM" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskCategoryStoreRegM */
+        MERGE INTO TB_MS_KIOSK_M_CLS A
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_CD       AS TU_CLS_CD
+                    ,       TU_M_CLS_CD     AS TU_M_CLS_CD
+                    ,       TU_M_CLS_NM     AS TU_M_CLS_NM
+                    ,       TU_PAGE         AS TU_PAGE
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       INDEX_NO        AS INDEX_NO
+                    ,       CLS_FG          AS CLS_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    ,       M_CLS_MEMO      AS M_CLS_MEMO
+                    FROM    TB_HQ_KIOSK_M_CLS
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                ) B
+        ON      (
+                    B.STORE_CD     = A.STORE_CD
+                AND B.POS_NO       = A.POS_NO
+                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                AND B.TU_M_CLS_CD  = A.TU_M_CLS_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TU_M_CLS_NM  = B.TU_M_CLS_NM
+        ,		A.TU_PAGE      = B.TU_PAGE
+        ,		A.X            = B.X
+        ,		A.Y            = B.Y
+        ,		A.WIDTH        = B.WIDTH
+        ,		A.HEIGHT       = B.HEIGHT
+        ,		A.INDEX_NO     = B.INDEX_NO
+        ,		A.CLS_FG       = B.CLS_FG
+        ,       A.MOD_DT       = B.MOD_DT
+        ,       A.MOD_ID       = B.MOD_ID
+        ,		A.M_CLS_MEMO   = B.M_CLS_MEMO
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,		A.POS_NO
+        ,		A.TU_CLS_TYPE
+        ,		A.TU_CLS_CD
+        ,		A.TU_M_CLS_CD
+        ,		A.TU_M_CLS_NM
+        ,		A.TU_PAGE
+        ,		A.X
+        ,		A.Y
+        ,		A.WIDTH
+        ,		A.HEIGHT
+        ,		A.INDEX_NO
+        ,		A.CLS_FG
+        ,		A.REG_DT
+        ,		A.REG_ID
+        ,		A.MOD_DT
+        ,		A.MOD_ID
+        ,		A.M_CLS_MEMO
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,		B.POS_NO
+        ,		B.TU_CLS_TYPE
+        ,		B.TU_CLS_CD
+        ,		B.TU_M_CLS_CD
+        ,		B.TU_M_CLS_NM
+        ,		B.TU_PAGE
+        ,		B.X
+        ,		B.Y
+        ,		B.WIDTH
+        ,		B.HEIGHT
+        ,		B.INDEX_NO
+        ,		B.CLS_FG
+        ,		B.REG_DT
+        ,		B.REG_ID
+        ,		B.MOD_DT
+        ,		B.MOD_ID
+        ,		B.M_CLS_MEMO
+        )
+    </insert>
+
+    <!-- 키오스크 키맵매장적용 - 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS, TB_HQ_KIOSK_M_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 매장 카테고리(중분류) 저장한다.
+    -->
+    <insert id="mergeKioskCategoryStoreRegM2" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskCategoryStoreRegM2 */
+        MERGE INTO TB_MS_KIOSK_M_CLS A
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_CD       AS TU_CLS_CD
+                    ,       TU_M_CLS_CD     AS TU_M_CLS_CD
+                    ,       TU_M_CLS_NM     AS TU_M_CLS_NM
+                    ,       TU_PAGE         AS TU_PAGE
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       INDEX_NO        AS INDEX_NO
+                    ,       CLS_FG          AS CLS_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    ,       M_CLS_MEMO      AS M_CLS_MEMO
+                    FROM    TB_HQ_KIOSK_M_CLS
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                    AND     TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                                FROM 	TB_HQ_NMCODE thn
+                                                                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                AND     NMCODE_GRP_CD = '229'
+                                                                AND 	NMCODE_ITEM_2 = 'Y')
+                ) B
+        ON      (
+                    B.STORE_CD     = A.STORE_CD
+                AND B.POS_NO       = A.POS_NO
+                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                AND B.TU_M_CLS_CD  = A.TU_M_CLS_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TU_M_CLS_NM  = B.TU_M_CLS_NM
+        ,		A.TU_PAGE      = B.TU_PAGE
+        ,		A.X            = B.X
+        ,		A.Y            = B.Y
+        ,		A.WIDTH        = B.WIDTH
+        ,		A.HEIGHT       = B.HEIGHT
+        ,		A.INDEX_NO     = B.INDEX_NO
+        ,		A.CLS_FG       = B.CLS_FG
+        ,       A.MOD_DT       = B.MOD_DT
+        ,       A.MOD_ID       = B.MOD_ID
+        ,		A.M_CLS_MEMO   = B.M_CLS_MEMO
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,		A.POS_NO
+        ,		A.TU_CLS_TYPE
+        ,		A.TU_CLS_CD
+        ,		A.TU_M_CLS_CD
+        ,		A.TU_M_CLS_NM
+        ,		A.TU_PAGE
+        ,		A.X
+        ,		A.Y
+        ,		A.WIDTH
+        ,		A.HEIGHT
+        ,		A.INDEX_NO
+        ,		A.CLS_FG
+        ,		A.REG_DT
+        ,		A.REG_ID
+        ,		A.MOD_DT
+        ,		A.MOD_ID
+        ,		A.M_CLS_MEMO
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,		B.POS_NO
+        ,		B.TU_CLS_TYPE
+        ,		B.TU_CLS_CD
+        ,		B.TU_M_CLS_CD
+        ,		B.TU_M_CLS_NM
+        ,		B.TU_PAGE
+        ,		B.X
+        ,		B.Y
+        ,		B.WIDTH
+        ,		B.HEIGHT
+        ,		B.INDEX_NO
+        ,		B.CLS_FG
+        ,		B.REG_DT
+        ,		B.REG_ID
+        ,		B.MOD_DT
+        ,		B.MOD_ID
+        ,		B.M_CLS_MEMO
+        )
+    </insert>
+
+    <!-- 키오스크키맵복사 - 매장 키오스크키맵 복사 시 매장 카테고리(중분류) 저장 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 본사 키맵그룹 매장적용 시 매장 카테고리(중분류)를 저장한다.
+    -->
+    <insert id="mergeKioskCategoryStoreRegMStore" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.mergeKioskCategoryStoreRegMStore */
+        MERGE INTO TB_MS_KIOSK_M_CLS A
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       #{posNo}        AS POS_NO
+                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       TU_CLS_CD       AS TU_CLS_CD
+                    ,       TU_M_CLS_CD     AS TU_M_CLS_CD
+                    ,       TU_M_CLS_NM     AS TU_M_CLS_NM
+                    ,       TU_PAGE         AS TU_PAGE
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       INDEX_NO        AS INDEX_NO
+                    ,       CLS_FG          AS CLS_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    ,       M_CLS_MEMO      AS M_CLS_MEMO
+                    FROM    TB_MS_KIOSK_M_CLS
+                    WHERE   STORE_CD = #{originalStoreCd}
+                    AND     POS_NO = #{orgPosNo}
+                    AND     TU_CLS_TYPE = #{tuClsType}
+                ) B
+        ON      (
+                    B.STORE_CD     = A.STORE_CD
+                AND B.POS_NO       = A.POS_NO
+                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                AND B.TU_M_CLS_CD  = A.TU_M_CLS_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.TU_M_CLS_NM  = B.TU_M_CLS_NM
+        ,		A.TU_PAGE      = B.TU_PAGE
+        ,		A.X            = B.X
+        ,		A.Y            = B.Y
+        ,		A.WIDTH        = B.WIDTH
+        ,		A.HEIGHT       = B.HEIGHT
+        ,		A.INDEX_NO     = B.INDEX_NO
+        ,		A.CLS_FG       = B.CLS_FG
+        ,       A.MOD_DT       = B.MOD_DT
+        ,       A.MOD_ID       = B.MOD_ID
+        ,		A.M_CLS_MEMO   = B.M_CLS_MEMO
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.STORE_CD
+        ,		A.POS_NO
+        ,		A.TU_CLS_TYPE
+        ,		A.TU_CLS_CD
+        ,		A.TU_M_CLS_CD
+        ,		A.TU_M_CLS_NM
+        ,		A.TU_PAGE
+        ,		A.X
+        ,		A.Y
+        ,		A.WIDTH
+        ,		A.HEIGHT
+        ,		A.INDEX_NO
+        ,		A.CLS_FG
+        ,		A.REG_DT
+        ,		A.REG_ID
+        ,		A.MOD_DT
+        ,		A.MOD_ID
+        ,		A.M_CLS_MEMO
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,		B.POS_NO
+        ,		B.TU_CLS_TYPE
+        ,		B.TU_CLS_CD
+        ,		B.TU_M_CLS_CD
+        ,		B.TU_M_CLS_NM
+        ,		B.TU_PAGE
+        ,		B.X
+        ,		B.Y
+        ,		B.WIDTH
+        ,		B.HEIGHT
+        ,		B.INDEX_NO
+        ,		B.CLS_FG
+        ,		B.REG_DT
+        ,		B.REG_ID
+        ,		B.MOD_DT
+        ,		B.MOD_ID
+        ,		B.M_CLS_MEMO
+        )
+    </insert>
+
+    <!-- 키오스크 키맵매장적용 - 기존 데이터 중, 불필요한 매장 카테고리(분류) 정보 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS, TB_HQ_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 기존 데이터 중, 불필요한 매장 카테고리(분류) 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseKioskCategoryToStore" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteNotUseKioskCategoryToStore */
+        DELETE
+        FROM   TB_MS_KIOSK_CLS
+        WHERE  STORE_CD    = #{storeCd}
+        AND    POS_NO      = #{posNo}
+        AND    TU_CLS_TYPE = #{tuClsType}
+        AND    TU_CLS_CD IN
+        (
+            SELECT TU_CLS_CD
+            FROM   TB_MS_KIOSK_CLS
+            WHERE  STORE_CD    = #{storeCd}
+            AND    POS_NO      = #{posNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            MINUS
+            SELECT TU_CLS_CD
+            FROM   TB_HQ_KIOSK_CLS
+            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    TU_CLS_TYPE = #{tuClsType}
+        )
+    </delete>
+
+    <!-- 키오스크키맵복사 - 기존 데이터 중, 불필요한 매장 카테고리(분류) 정보 삭제 -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 기존 데이터 중, 불필요한 매장 카테고리(분류) 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseKioskCategoryToStoreStore" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteNotUseKioskCategoryToStoreStore */
+        DELETE
+        FROM   TB_MS_KIOSK_CLS
+        WHERE  STORE_CD    = #{storeCd}
+        AND    POS_NO      = #{posNo}
+        AND    TU_CLS_TYPE = #{tuClsType}
+        AND    TU_CLS_CD IN
+        (
+            SELECT TU_CLS_CD
+            FROM   TB_MS_KIOSK_CLS
+            WHERE  STORE_CD    = #{storeCd}
+            AND    POS_NO      = #{posNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            MINUS
+            SELECT TU_CLS_CD
+            FROM   TB_MS_KIOSK_CLS
+            WHERE  STORE_CD    = #{originalStoreCd}
+            AND    POS_NO      = #{orgPosNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+        )
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제  -->
+    <!--
+        TABLE    : TB_MS_KIOSK_KEY, TB_HQ_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS :  기존 데이터 중, 불필요한 매장 맵핑상품 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseKioskKeyMapToStore" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteNotUseKioskKeyMapToStore */
+        DELETE
+        FROM   TB_MS_KIOSK_KEY
+        WHERE  STORE_CD    = #{storeCd}
+        AND    POS_NO      = #{posNo}
+        AND    TU_CLS_TYPE = #{tuClsType}
+        AND    TU_CLS_CD || TU_KEY_CD IN
+        (
+            SELECT TU_CLS_CD || TU_KEY_CD
+            FROM   TB_MS_KIOSK_KEY
+            WHERE  STORE_CD    = #{storeCd}
+            AND    POS_NO      = #{posNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            MINUS
+            SELECT TU_CLS_CD || TU_KEY_CD
+            FROM   TB_HQ_KIOSK_KEY
+            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    TU_CLS_TYPE = #{tuClsType}
+        )
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제  -->
+    <!--
+        TABLE    : TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS :  기존 데이터 중, 불필요한 매장 맵핑상품 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseKioskKeyMapToStore2" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteNotUseKioskKeyMapToStore2 */
+        DELETE
+        FROM   TB_MS_KIOSK_KEY
+        WHERE  STORE_CD    = #{storeCd}
+        AND    POS_NO      = #{posNo}
+        AND    TU_CLS_TYPE = #{tuClsType}
+        AND    TU_CLS_CD || TU_KEY_CD IN
+        (
+            SELECT TU_CLS_CD || TU_KEY_CD
+            FROM   TB_MS_KIOSK_KEY
+            WHERE  STORE_CD    = #{storeCd}
+            AND    POS_NO      = #{posNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                       FROM 	TB_HQ_NMCODE thn
+                                                       WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                       AND      NMCODE_GRP_CD = '229'
+                                                       AND 	    NMCODE_ITEM_2 = 'Y')
+            MINUS
+            SELECT TU_CLS_CD || TU_KEY_CD
+            FROM   TB_HQ_KIOSK_KEY
+            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                       FROM 	TB_HQ_NMCODE thn
+                                                       WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                       AND      NMCODE_GRP_CD = '229'
+                                                       AND 	    NMCODE_ITEM_2 = 'Y')
+        )
+    </delete>
+
+    <!-- 키오스크키맵복사 - 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제  -->
+    <!--
+        TABLE    : TB_MS_KIOSK_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS :  기존 데이터 중, 불필요한 매장 맵핑상품 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseKioskKeyMapToStoreStore" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteNotUseKioskKeyMapToStoreStore */
+        DELETE
+        FROM   TB_MS_KIOSK_KEY
+        WHERE  STORE_CD    = #{storeCd}
+        AND    POS_NO      = #{posNo}
+        AND    TU_CLS_TYPE = #{tuClsType}
+        AND    TU_CLS_CD || TU_KEY_CD IN
+        (
+            SELECT TU_CLS_CD || TU_KEY_CD
+            FROM   TB_MS_KIOSK_KEY
+            WHERE  STORE_CD    = #{storeCd}
+            AND    POS_NO      = #{posNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            MINUS
+            SELECT TU_CLS_CD || TU_KEY_CD
+            FROM   TB_MS_KIOSK_KEY
+            WHERE  STORE_CD    = #{originalStoreCd}
+            AND    POS_NO      = #{orgPosNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+        )
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 기존 데이터 중, 불필요한 매장 카테고리(중분류) 정보 삭제  -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS, TB_HQ_KIOSK_M_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS :  기존 데이터 중, 불필요한 매장 카테고리(중분류) 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseKioskCategoryToStoreM" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteNotUseKioskCategoryToStoreM */
+        DELETE
+        FROM   TB_MS_KIOSK_M_CLS
+        WHERE  STORE_CD    = #{storeCd}
+        AND    POS_NO      = #{posNo}
+        AND    TU_CLS_TYPE = #{tuClsType}
+        AND    TU_CLS_CD || TU_M_CLS_CD IN
+        (
+            SELECT TU_CLS_CD || TU_M_CLS_CD
+            FROM   TB_MS_KIOSK_M_CLS
+            WHERE  STORE_CD    = #{storeCd}
+            AND    POS_NO      = #{posNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            MINUS
+            SELECT TU_CLS_CD || TU_M_CLS_CD
+            FROM   TB_HQ_KIOSK_M_CLS
+            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    TU_CLS_TYPE = #{tuClsType}
+        )
+    </delete>
+
+    <!-- 키오스크 키맵매장적용 - 기존 데이터 중, 불필요한 매장 카테고리(중분류) 정보 삭제  -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS, TB_HQ_KIOSK_M_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS :  기존 데이터 중, 불필요한 매장 카테고리(중분류) 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseKioskCategoryToStoreM2" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteNotUseKioskCategoryToStoreM2 */
+        DELETE
+        FROM   TB_MS_KIOSK_M_CLS
+        WHERE  STORE_CD    = #{storeCd}
+        AND    POS_NO      = #{posNo}
+        AND    TU_CLS_TYPE = #{tuClsType}
+        AND    TU_CLS_CD || TU_M_CLS_CD IN
+        (
+            SELECT TU_CLS_CD || TU_M_CLS_CD
+            FROM   TB_MS_KIOSK_M_CLS
+            WHERE  STORE_CD    = #{storeCd}
+            AND    POS_NO      = #{posNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                                   FROM 	TB_HQ_NMCODE thn
+                                                                   WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                   AND      NMCODE_GRP_CD = '229'
+                                                                   AND 	    NMCODE_ITEM_2 = 'Y')
+            MINUS
+            SELECT TU_CLS_CD || TU_M_CLS_CD
+            FROM   TB_HQ_KIOSK_M_CLS
+            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                                   FROM 	TB_HQ_NMCODE thn
+                                                                   WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                   AND      NMCODE_GRP_CD = '229'
+                                                                   AND 	    NMCODE_ITEM_2 = 'Y')
+        )
+    </delete>
+
+    <!-- 키오스크키맵복사 - 기존 데이터 중, 불필요한 매장 카테고리(중분류) 정보 삭제  -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS :  기존 데이터 중, 불필요한 매장 카테고리(중분류) 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseKioskCategoryToStoreMStore" parameterType="kioskKeyMapVO" >
+        /* USE : KioskKeyMapMapper.deleteNotUseKioskCategoryToStoreMStore */
+        DELETE
+        FROM   TB_MS_KIOSK_M_CLS
+        WHERE  STORE_CD    = #{storeCd}
+        AND    POS_NO      = #{posNo}
+        AND    TU_CLS_TYPE = #{tuClsType}
+        AND    TU_CLS_CD || TU_M_CLS_CD IN
+        (
+            SELECT TU_CLS_CD || TU_M_CLS_CD
+            FROM   TB_MS_KIOSK_M_CLS
+            WHERE  STORE_CD    = #{storeCd}
+            AND    POS_NO      = #{posNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+            MINUS
+            SELECT TU_CLS_CD || TU_M_CLS_CD
+            FROM   TB_MS_KIOSK_M_CLS
+            WHERE  STORE_CD    = #{originalStoreCd}
+            AND    POS_NO      = #{orgPosNo}
+            AND    TU_CLS_TYPE = #{tuClsType}
+        )
     </delete>
 
     <!-- 키오스크키맵 매장복사 - 매장 키오스크 포스 리스트 조회 -->
@@ -3839,6 +5003,7 @@
             MOD_DT,
             MOD_ID,
             CLS_MEMO,
+            TU_M_CLS_FG,
             TU_CLS_EN_NM,
             TU_CLS_CN_NM,
             TU_CLS_JP_NM
@@ -3860,6 +5025,7 @@
                #{modDt},
                #{modId},
                CLS_MEMO,
+               TU_M_CLS_FG,
                TU_CLS_EN_NM,
                TU_CLS_CN_NM,
                TU_CLS_JP_NM

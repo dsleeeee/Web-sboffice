@@ -2103,6 +2103,472 @@
                                                            AND 	NMCODE_ITEM_2 = 'Y')
     </insert>
 
+    <!-- 본사 터치키 그룹 매장 머지 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_GROUP, TB_HQ_TOUCH_KEY_GROUP
+        PARAM    : touchKeyVO
+        COMMENTS : 본사 터치키 그룹 정보를 매장 터치키 그룹 정보와 머지한다.
+    -->
+    <insert id="mergeTouchKeyGroupToStore" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.mergeTouchKeyGroupToStore */
+            MERGE INTO TB_MS_TOUCH_KEY_GROUP A
+            USING   (
+                        SELECT  #{storeCd}      AS STORE_CD
+                        ,       TUKEY_GRP_CD    AS TUKEY_GRP_CD
+                        ,       TUKEY_GRP_NM    AS TUKEY_GRP_NM
+                        ,       #{regDt}        AS REG_DT
+                        ,       #{regId}        AS REG_ID
+                        ,       #{modDt}        AS MOD_DT
+                        ,       #{modId}        AS MOD_ID
+                        FROM    TB_HQ_TOUCH_KEY_GROUP
+                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND     TUKEY_GRP_CD = #{tukeyGrpCd}
+                    ) B
+            ON      (
+                        B.STORE_CD     = A.STORE_CD
+                    AND B.TUKEY_GRP_CD = A.TUKEY_GRP_CD
+                    )
+            WHEN MATCHED THEN
+            UPDATE
+            SET     A.TUKEY_GRP_NM = B.TUKEY_GRP_NM
+            ,       A.MOD_DT       = B.MOD_DT
+            ,       A.MOD_ID       = B.MOD_ID
+            WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.STORE_CD
+            ,   A.TUKEY_GRP_CD
+            ,   A.TUKEY_GRP_NM
+            ,   A.REG_DT
+            ,   A.REG_ID
+            ,   A.MOD_DT
+            ,   A.MOD_ID
+            )
+            VALUES
+            (
+                B.STORE_CD
+            ,   B.TUKEY_GRP_CD
+            ,   B.TUKEY_GRP_NM
+            ,   B.REG_DT
+            ,   B.REG_ID
+            ,   B.MOD_DT
+            ,   B.MOD_ID
+            )
+    </insert>
+
+    <!-- 본사 터치키 분류 매장 머지 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY_CLASS, TB_HQ_TOUCH_KEY_CLASS
+        PARAM    : touchKeyVO
+        COMMENTS : 본사 터치키 분류 정보를 매장 터치키 분류 정보와 머지한다.
+    -->
+    <insert id="mergeTouchKeyClassToStore" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.mergeTouchKeyClassToStore */
+        MERGE INTO TB_MS_TOUCH_KEY_CLASS tmtkc
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       TUKEY_GRP_CD    AS TUKEY_GRP_CD
+                    ,       TUKEY_CLASS_CD  AS TUKEY_CLASS_CD
+                    ,       TUKEY_CLASS_NM  AS TUKEY_CLASS_NM
+                    ,       PAGE_NO         AS PAGE_NO
+                    ,       PAGE_ROWS       AS PAGE_ROWS
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       STYLE_CD        AS STYLE_CD
+                    ,       FONT_SIZE       AS FONT_SIZE
+                    ,       FONT_COLOR      AS FONT_COLOR
+                    ,       FILL_COLOR      AS FILL_COLOR
+                    ,       IMG_NM          AS IMG_NM
+                    ,       'H'             AS IN_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_HQ_TOUCH_KEY_CLASS
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TUKEY_GRP_CD = #{tukeyGrpCd}
+                ) B
+        ON      (
+                    B.STORE_CD       = tmtkc.STORE_CD
+                AND B.TUKEY_GRP_CD   = tmtkc.TUKEY_GRP_CD
+                AND B.TUKEY_CLASS_CD = tmtkc.TUKEY_CLASS_CD
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     tmtkc.TUKEY_CLASS_NM = B.TUKEY_CLASS_NM
+        ,       tmtkc.PAGE_NO        = B.PAGE_NO
+        ,       tmtkc.PAGE_ROWS      = B.PAGE_ROWS
+        ,       tmtkc.X              = B.X
+        ,       tmtkc.Y              = B.Y
+        ,       tmtkc.WIDTH          = B.WIDTH
+        ,       tmtkc.HEIGHT         = B.HEIGHT
+        ,       tmtkc.STYLE_CD       = B.STYLE_CD
+        ,       tmtkc.FONT_SIZE      = B.FONT_SIZE
+        ,       tmtkc.FONT_COLOR     = B.FONT_COLOR
+        ,       tmtkc.FILL_COLOR     = B.FILL_COLOR
+        ,       tmtkc.IMG_NM         = B.IMG_NM
+        ,       tmtkc.IN_FG          = B.IN_FG
+        ,       tmtkc.MOD_DT         = B.MOD_DT
+        ,       tmtkc.MOD_ID         = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                tmtkc.STORE_CD
+        ,       tmtkc.TUKEY_GRP_CD
+        ,       tmtkc.TUKEY_CLASS_CD
+        ,       tmtkc.TUKEY_CLASS_NM
+        ,       tmtkc.PAGE_NO
+        ,       tmtkc.PAGE_ROWS
+        ,       tmtkc.X
+        ,       tmtkc.Y
+        ,       tmtkc.WIDTH
+        ,       tmtkc.HEIGHT
+        ,       tmtkc.STYLE_CD
+        ,       tmtkc.FONT_SIZE
+        ,       tmtkc.FONT_COLOR
+        ,       tmtkc.FILL_COLOR
+        ,       tmtkc.IMG_NM
+        ,       tmtkc.IN_FG
+        ,       tmtkc.REG_DT
+        ,       tmtkc.REG_ID
+        ,       tmtkc.MOD_DT
+        ,       tmtkc.MOD_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.TUKEY_GRP_CD
+        ,       B.TUKEY_CLASS_CD
+        ,       B.TUKEY_CLASS_NM
+        ,       B.PAGE_NO
+        ,       B.PAGE_ROWS
+        ,       B.X
+        ,       B.Y
+        ,       B.WIDTH
+        ,       B.HEIGHT
+        ,       B.STYLE_CD
+        ,       B.FONT_SIZE
+        ,       B.FONT_COLOR
+        ,       B.FILL_COLOR
+        ,       B.IMG_NM
+        ,       B.IN_FG
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        )
+    </insert>
+
+    <!-- 본사 터치키 매장 머지 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY, TB_HQ_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 본사 터치키 정보를 매장 터치키 정보와 머지한다.
+    -->
+    <insert id="mergeTouchKeyToStore" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.mergeTouchKeyToStore */
+        MERGE INTO TB_MS_TOUCH_KEY tmtk
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       TUKEY_CLASS_CD  AS TUKEY_CLASS_CD
+                    ,       TUKEY_CD        AS TUKEY_CD
+                    ,       TUKEY_FG        AS TUKEY_FG
+                    ,       PROD_CD         AS PROD_CD
+                    ,       PAGE_NO         AS PAGE_NO
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       STYLE_CD        AS STYLE_CD
+                    ,       FONT_SIZE       AS FONT_SIZE
+                    ,       FONT_COLOR      AS FONT_COLOR
+                    ,       FILL_COLOR      AS FILL_COLOR
+                    ,       IMG_NM          AS IMG_NM
+                    ,       'H'             AS IN_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    ,       TUKEY_GRP_CD    AS TUKEY_GRP_CD
+                    FROM    TB_HQ_TOUCH_KEY
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TUKEY_GRP_CD = #{tukeyGrpCd}
+                ) B
+        ON      (
+                    B.STORE_CD       = tmtk.STORE_CD
+                AND B.TUKEY_GRP_CD   = tmtk.TUKEY_GRP_CD
+                AND B.TUKEY_CLASS_CD = tmtk.TUKEY_CLASS_CD
+                AND B.TUKEY_CD       = tmtk.TUKEY_CD
+                AND B.TUKEY_FG       = tmtk.TUKEY_FG
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     tmtk.PROD_CD         = B.PROD_CD
+        ,       tmtk.PAGE_NO         = B.PAGE_NO
+        ,       tmtk.X               = B.X
+        ,       tmtk.Y               = B.Y
+        ,       tmtk.WIDTH           = B.WIDTH
+        ,       tmtk.HEIGHT          = B.HEIGHT
+        ,       tmtk.STYLE_CD        = B.STYLE_CD
+        ,       tmtk.FONT_SIZE       = B.FONT_SIZE
+        ,       tmtk.FONT_COLOR      = B.FONT_COLOR
+        ,       tmtk.FILL_COLOR      = B.FILL_COLOR
+        ,       tmtk.IMG_NM          = B.IMG_NM
+        ,       tmtk.IN_FG           = B.IN_FG
+        ,       tmtk.MOD_DT          = B.MOD_DT
+        ,       tmtk.MOD_ID          = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                tmtk.STORE_CD
+        ,       tmtk.TUKEY_CLASS_CD
+        ,       tmtk.TUKEY_CD
+        ,       tmtk.TUKEY_FG
+        ,       tmtk.PROD_CD
+        ,       tmtk.PAGE_NO
+        ,       tmtk.X
+        ,       tmtk.Y
+        ,       tmtk.WIDTH
+        ,       tmtk.HEIGHT
+        ,       tmtk.STYLE_CD
+        ,       tmtk.FONT_SIZE
+        ,       tmtk.FONT_COLOR
+        ,       tmtk.FILL_COLOR
+        ,       tmtk.IMG_NM
+        ,       tmtk.IN_FG
+        ,       tmtk.REG_DT
+        ,       tmtk.REG_ID
+        ,       tmtk.MOD_DT
+        ,       tmtk.MOD_ID
+        ,       tmtk.TUKEY_GRP_CD
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.TUKEY_CLASS_CD
+        ,       B.TUKEY_CD
+        ,       B.TUKEY_FG
+        ,       B.PROD_CD
+        ,       B.PAGE_NO
+        ,       B.X
+        ,       B.Y
+        ,       B.WIDTH
+        ,       B.HEIGHT
+        ,       B.STYLE_CD
+        ,       B.FONT_SIZE
+        ,       B.FONT_COLOR
+        ,       B.FILL_COLOR
+        ,       B.IMG_NM
+        ,       B.IN_FG
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        ,       B.TUKEY_GRP_CD
+        )
+    </insert>
+
+    <!-- 본사 터치키 매장 머지 -->
+    <!--
+        TABLE    : TB_MS_TOUCH_KEY, TB_HQ_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 본사 터치키 정보를 매장 터치키 정보와 머지한다.
+    -->
+    <insert id="mergeTouchKeyToStore2" parameterType="touchKeyVO">
+        /* USE : TouchkeyMapper.mergeTouchKeyToStore2 */
+        MERGE INTO TB_MS_TOUCH_KEY tmtk
+        USING   (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       TUKEY_CLASS_CD  AS TUKEY_CLASS_CD
+                    ,       TUKEY_CD        AS TUKEY_CD
+                    ,       TUKEY_FG        AS TUKEY_FG
+                    ,       PROD_CD         AS PROD_CD
+                    ,       PAGE_NO         AS PAGE_NO
+                    ,       X               AS X
+                    ,       Y               AS Y
+                    ,       WIDTH           AS WIDTH
+                    ,       HEIGHT          AS HEIGHT
+                    ,       STYLE_CD        AS STYLE_CD
+                    ,       FONT_SIZE       AS FONT_SIZE
+                    ,       FONT_COLOR      AS FONT_COLOR
+                    ,       FILL_COLOR      AS FILL_COLOR
+                    ,       IMG_NM          AS IMG_NM
+                    ,       'H'             AS IN_FG
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    ,       TUKEY_GRP_CD    AS TUKEY_GRP_CD
+                    FROM    TB_HQ_TOUCH_KEY
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     TUKEY_GRP_CD = #{tukeyGrpCd}
+                    AND 	TUKEY_GRP_CD || TUKEY_CLASS_CD NOT IN ( SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                                    FROM 	TB_HQ_NMCODE thn
+                                                                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                    AND     NMCODE_GRP_CD = '228'
+                                                                    AND 	NMCODE_ITEM_2 = 'Y')
+                ) B
+        ON      (
+                    B.STORE_CD       = tmtk.STORE_CD
+                AND B.TUKEY_GRP_CD   = tmtk.TUKEY_GRP_CD
+                AND B.TUKEY_CLASS_CD = tmtk.TUKEY_CLASS_CD
+                AND B.TUKEY_CD       = tmtk.TUKEY_CD
+                AND B.TUKEY_FG       = tmtk.TUKEY_FG
+                )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     tmtk.PROD_CD         = B.PROD_CD
+        ,       tmtk.PAGE_NO         = B.PAGE_NO
+        ,       tmtk.X               = B.X
+        ,       tmtk.Y               = B.Y
+        ,       tmtk.WIDTH           = B.WIDTH
+        ,       tmtk.HEIGHT          = B.HEIGHT
+        ,       tmtk.STYLE_CD        = B.STYLE_CD
+        ,       tmtk.FONT_SIZE       = B.FONT_SIZE
+        ,       tmtk.FONT_COLOR      = B.FONT_COLOR
+        ,       tmtk.FILL_COLOR      = B.FILL_COLOR
+        ,       tmtk.IMG_NM          = B.IMG_NM
+        ,       tmtk.IN_FG           = B.IN_FG
+        ,       tmtk.MOD_DT          = B.MOD_DT
+        ,       tmtk.MOD_ID          = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                tmtk.STORE_CD
+        ,       tmtk.TUKEY_CLASS_CD
+        ,       tmtk.TUKEY_CD
+        ,       tmtk.TUKEY_FG
+        ,       tmtk.PROD_CD
+        ,       tmtk.PAGE_NO
+        ,       tmtk.X
+        ,       tmtk.Y
+        ,       tmtk.WIDTH
+        ,       tmtk.HEIGHT
+        ,       tmtk.STYLE_CD
+        ,       tmtk.FONT_SIZE
+        ,       tmtk.FONT_COLOR
+        ,       tmtk.FILL_COLOR
+        ,       tmtk.IMG_NM
+        ,       tmtk.IN_FG
+        ,       tmtk.REG_DT
+        ,       tmtk.REG_ID
+        ,       tmtk.MOD_DT
+        ,       tmtk.MOD_ID
+        ,       tmtk.TUKEY_GRP_CD
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,       B.TUKEY_CLASS_CD
+        ,       B.TUKEY_CD
+        ,       B.TUKEY_FG
+        ,       B.PROD_CD
+        ,       B.PAGE_NO
+        ,       B.X
+        ,       B.Y
+        ,       B.WIDTH
+        ,       B.HEIGHT
+        ,       B.STYLE_CD
+        ,       B.FONT_SIZE
+        ,       B.FONT_COLOR
+        ,       B.FILL_COLOR
+        ,       B.IMG_NM
+        ,       B.IN_FG
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        ,       B.TUKEY_GRP_CD
+        )
+    </insert>
+
+    <!-- 기존 데이터 중, 불필요한 매장 터치키 분류 정보 삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY_CLASS, TB_MS_TOUCH_KEY_CLASS
+        PARAM    : touchKeyVO
+        COMMENTS : 기존 데이터 중, 불필요한 매장 터치키 분류 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseTouchKeyClassToStore" parameterType="touchKeyVO">
+        DELETE
+        FROM   TB_MS_TOUCH_KEY_CLASS
+        WHERE  STORE_CD     = #{storeCd}
+        AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+        AND    TUKEY_CLASS_CD IN
+        (
+            SELECT TUKEY_CLASS_CD
+            FROM   TB_MS_TOUCH_KEY_CLASS
+            WHERE  STORE_CD = #{storeCd}
+            AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+            MINUS
+            SELECT TUKEY_CLASS_CD
+            FROM   TB_HQ_TOUCH_KEY_CLASS
+            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+        )
+    </delete>
+
+    <!-- 기존 데이터 중, 불필요한 매장 터치키 정보 삭제 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY, TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 기존 데이터 중, 불필요한 매장 터치키 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseTouchKeyToStore" parameterType="touchKeyVO">
+        DELETE
+        FROM   TB_MS_TOUCH_KEY
+        WHERE  STORE_CD     = #{storeCd}
+        AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+        AND    TUKEY_CLASS_CD || TUKEY_CD || TUKEY_FG IN
+        (
+            SELECT TUKEY_CLASS_CD || TUKEY_CD || TUKEY_FG
+            FROM   TB_MS_TOUCH_KEY
+            WHERE  STORE_CD = #{storeCd}
+            AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+            MINUS
+            SELECT TUKEY_CLASS_CD || TUKEY_CD || TUKEY_FG
+            FROM   TB_HQ_TOUCH_KEY
+            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+        )
+    </delete>
+
+    <!-- 기존 데이터 중, 불필요한 매장 터치키 정보 삭제2 -->
+    <!--
+        TABLE    : TB_HQ_TOUCH_KEY, TB_MS_TOUCH_KEY
+        PARAM    : touchKeyVO
+        COMMENTS : 기존 데이터 중, 불필요한 매장 터치키 정보를 삭제한다.
+    -->
+    <delete id="deleteNotUseTouchKeyToStore2" parameterType="touchKeyVO">
+        DELETE
+        FROM   TB_MS_TOUCH_KEY
+        WHERE  STORE_CD     = #{storeCd}
+        AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+        AND    TUKEY_CLASS_CD || TUKEY_CD || TUKEY_FG IN
+        (
+            SELECT TUKEY_CLASS_CD || TUKEY_CD || TUKEY_FG
+            FROM   TB_MS_TOUCH_KEY
+            WHERE  STORE_CD = #{storeCd}
+            AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+            AND    TUKEY_GRP_CD || TUKEY_CLASS_CD NOT IN ( SELECT NMCODE_NM || NMCODE_ITEM_1
+                                                           FROM   TB_HQ_NMCODE thn
+                                                           WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                           AND    NMCODE_GRP_CD = '228'
+                                                           AND 	  NMCODE_ITEM_2 = 'Y')
+            MINUS
+            SELECT TUKEY_CLASS_CD || TUKEY_CD || TUKEY_FG
+            FROM   TB_HQ_TOUCH_KEY
+            WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+            AND    TUKEY_GRP_CD = #{tukeyGrpCd}
+            AND    TUKEY_GRP_CD || TUKEY_CLASS_CD NOT IN ( SELECT NMCODE_NM || NMCODE_ITEM_1
+                                                           FROM   TB_HQ_NMCODE thn
+                                                           WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                           AND    NMCODE_GRP_CD = '228'
+                                                           AND 	  NMCODE_ITEM_2 = 'Y')
+         )
+    </delete>
+
     <!-- 판매터치키 XML 정보생성 -->
     <!--
         TABLE    : TB_WB_STORE_CONFG_XML

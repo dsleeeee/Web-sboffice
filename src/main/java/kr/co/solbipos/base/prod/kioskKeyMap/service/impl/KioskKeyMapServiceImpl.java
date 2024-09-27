@@ -539,6 +539,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
             sessionInfoVO.setStoreCd(kioskKeyMapVO.getStoreCd());
 
+            // KIOSK-매장수정여부(0:미사용, 1:사용, 2:사용(특정카테고리))
             String envstVal1249 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1249"), "0");
 
             // 매장적용할 키맵그룹 코드를 담을 list 형태의 변수
@@ -562,74 +563,150 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                 // 키맵그룹 코드 셋팅
                 kioskKeyMapVO.setTuClsType(tuClsTypeEnvList.get(i).getStr("env40684069"));
 
-                // 기존 키맵분류명 삭제
-                kioskKeyMapMapper.deleteStoreTuClsTypeNm(kioskKeyMapVO);
+                // 맘스터치는 기존로직 적용(delete -> insert-select), 나머지 본사는 새 로직 적용(merge -> delete) (20240909)
+                if(kioskKeyMapVO.getHqOfficeCd().equals("DS021") || kioskKeyMapVO.getHqOfficeCd().equals("DS034") || kioskKeyMapVO.getHqOfficeCd().equals("H0393")){
 
-                // 기존 카테고리(분류) 삭제
-                kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
+                    // 기존 키맵분류명 삭제
+                    kioskKeyMapMapper.deleteStoreTuClsTypeNm(kioskKeyMapVO);
 
-                // 1249 0/1이면 전체 삭제
-                // 1249 2이면 229 Y 제외 삭제
-                if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
-                    // 기존 키맵상품삭제
-                    kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
-                    // 기존 카테고리(중분류) 삭제
-                    kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
-                } else  if(envstVal1249.equals("2")) {
-                    // 기존 키맵상품삭제
-                    kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd2(kioskKeyMapVO);
-                    // 기존 카테고리(중분류) 삭제
-                    kioskKeyMapMapper.deleteStoreTuClsTypeM2(kioskKeyMapVO);
-                }
+                    // 기존 카테고리(분류) 삭제
+                    kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
 
-
-                // posNo 조회
-                //            List<DefaultMap<String>> posList = kioskKeyMapMapper.getKioskPosList(kioskKeyMapVO);
-
-                //            if(posList.size() > 0){
-
-                //                for (int i = 0; i < posList.size(); i++) {
-
-                //                    kioskKeyMapVO.setPosNo(posList.get(i).getStr("value"));
-
-                // 새 키맵그룹과 카테고리(분류)코드로 INSERT
-                result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
-                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                result = kioskKeyMapMapper.copyKioskStoreTuClsTypeNm(kioskKeyMapVO);
-
-                // 1249 0/1이면 전체 삭제
-                // 1249 2이면 229 Y 제외 삭제
-                if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
-                    // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
-                    result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
-                    if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                    // 중분류 키맵그룹 row count 조회
-                    List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
-                    kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
-                    selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
-                    if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
-                        // 중분류도 복제
-                        result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
-                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    // 1249 0/1이면 전체 삭제
+                    // 1249 2이면 229 Y 제외 삭제
+                    if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
+                        // 기존 키맵상품삭제
+                        kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
+                        // 기존 카테고리(중분류) 삭제
+                        kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
+                    } else  if(envstVal1249.equals("2")) {
+                        // 기존 키맵상품삭제
+                        kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd2(kioskKeyMapVO);
+                        // 기존 카테고리(중분류) 삭제
+                        kioskKeyMapMapper.deleteStoreTuClsTypeM2(kioskKeyMapVO);
                     }
-                    //                }
-                    //            }
-                } else  if(envstVal1249.equals("2")) {
 
-                    // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
-                    result = kioskKeyMapMapper.copyKioskKeyMapStoreReg2(kioskKeyMapVO);
+
+                    // posNo 조회
+                    //            List<DefaultMap<String>> posList = kioskKeyMapMapper.getKioskPosList(kioskKeyMapVO);
+
+                    //            if(posList.size() > 0){
+
+                    //                for (int i = 0; i < posList.size(); i++) {
+
+                    //                    kioskKeyMapVO.setPosNo(posList.get(i).getStr("value"));
+
+                    // 새 키맵그룹과 카테고리(분류)코드로 INSERT
+                    result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    result = kioskKeyMapMapper.copyKioskStoreTuClsTypeNm(kioskKeyMapVO);
+
+                    // 1249 0/1이면 전체 삭제
+                    // 1249 2이면 229 Y 제외 삭제
+                    if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
+                        // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
+                        result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // 중분류 키맵그룹 row count 조회
+                        List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+                        kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                        selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
+                        if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                            // 중분류도 복제
+                            result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
+                            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+                        //                }
+                        //            }
+                    } else  if(envstVal1249.equals("2")) {
+
+                        // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
+                        result = kioskKeyMapMapper.copyKioskKeyMapStoreReg2(kioskKeyMapVO);
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // 중분류 키맵그룹 row count 조회
+                        List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+                        kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                        selectList = kioskKeyMapMapper.getKioskMClsCount2(kioskKeyMapVO);
+                        if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                            // 중분류도 복제
+                            result = kioskKeyMapMapper.insertKioskCategoryStoreRegM2(kioskKeyMapVO);
+                            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+                    }
+
+                }else{
+
+                    // 새 키맵그룹과 카테고리(분류)코드로 INSERT
+                    result = kioskKeyMapMapper.mergeKioskCategoryStoreReg(kioskKeyMapVO);
                     if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                    // 중분류 키맵그룹 row count 조회
+                    result = kioskKeyMapMapper.mergeKioskStoreTuClsTypeNm(kioskKeyMapVO);
+
+                    // 중분류 사용여부 조회를 위한 변수
                     List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
-                    kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
-                    selectList = kioskKeyMapMapper.getKioskMClsCount2(kioskKeyMapVO);
-                    if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
-                        // 중분류도 복제
-                        result = kioskKeyMapMapper.insertKioskCategoryStoreRegM2(kioskKeyMapVO);
-                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // 1249 0/1이면 전체 삭제
+                    // 1249 2이면 229 Y 제외 삭제
+                    if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
+                        // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
+                        result = kioskKeyMapMapper.mergeKioskKeyMapStoreReg(kioskKeyMapVO);
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // 중분류 키맵그룹 row count 조회
+                        kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                        selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
+                        if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                            // 중분류도 복제
+                            result = kioskKeyMapMapper.mergeKioskCategoryStoreRegM(kioskKeyMapVO);
+                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+                        //                }
+                        //            }
+                    } else  if(envstVal1249.equals("2")) {
+
+                        // 현재는 대분류만 사용할 경우만 가능, 중분류 사용은 '매장수정허용카테고리' 먼저 수정 후 개발 예정
+
+                        // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
+                        result = kioskKeyMapMapper.mergeKioskKeyMapStoreReg2(kioskKeyMapVO);
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        /*
+                        // 중분류 키맵그룹 row count 조회
+                        kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                        selectList = kioskKeyMapMapper.getKioskMClsCount2(kioskKeyMapVO);
+                        if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                            // 중분류도 복제
+                            result = kioskKeyMapMapper.mergeKioskCategoryStoreRegM2(kioskKeyMapVO);
+                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+                        */
+                    }
+
+                    // 기존 데이터 중, 불필요한 매장 카테고리(분류) 정보 삭제
+                    kioskKeyMapMapper.deleteNotUseKioskCategoryToStore(kioskKeyMapVO);
+                    if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
+                        // 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제
+                        kioskKeyMapMapper.deleteNotUseKioskKeyMapToStore(kioskKeyMapVO);
+                        if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                            // 중분류도 삭제
+                            kioskKeyMapMapper.deleteNotUseKioskCategoryToStoreM(kioskKeyMapVO);
+                        }
+                    } else  if(envstVal1249.equals("2")) {
+
+                        // 현재는 대분류만 사용할 경우만 가능, 중분류 사용은 '매장수정허용카테고리' 먼저 수정 후 개발 예정
+
+                        // 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제
+                        kioskKeyMapMapper.deleteNotUseKioskKeyMapToStore2(kioskKeyMapVO);
+
+                        /*
+                        if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                            // 중분류도 삭제
+                            kioskKeyMapMapper.deleteNotUseKioskCategoryToStoreM2(kioskKeyMapVO);
+                        }
+                        */
                     }
                 }
             }
@@ -690,6 +767,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         }*/
 
         // 매장 키오스크 포스 환경설정값 일괄 저장
+        // 맘스 : [매장/포장] 키맵적용 본사권한만 가능, 맘스제외 : [매장/포장] 키맵적용 본사권한 가능, 매장권한은 환경설정값만 바꿀 수 있음(2024.09.26)
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -709,9 +787,13 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             if("Y".equals(kioskKeyMapVO.getChkTuClsTypeStore())) {
                 /*if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ){*/
 
-                    sessionInfoVO.setStoreCd(kioskKeyMapVO.getStoreCd());
+                sessionInfoVO.setStoreCd(kioskKeyMapVO.getStoreCd());
 
-                    String envstVal1249 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1249"), "0");
+                // KIOSK-매장수정여부(0:미사용, 1:사용, 2:사용(특정카테고리))
+                String envstVal1249 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1249"), "0");
+
+                // 맘스터치는 기존로직 적용(delete -> insert-select), 나머지 본사는 새 로직 적용(merge -> delete) (20240909)
+                if (kioskKeyMapVO.getHqOfficeCd().equals("DS021") || kioskKeyMapVO.getHqOfficeCd().equals("DS034") || kioskKeyMapVO.getHqOfficeCd().equals("H0393")) {
 
                     // 기존 카테고리(분류) 삭제
                     kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
@@ -732,8 +814,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                         kioskKeyMapMapper.deleteStoreTuClsTypeM2(kioskKeyMapVO);
                     }
 
-                    if(sessionInfoVO.getOrgnFg().getCode() != null && sessionInfoVO.getOrgnFg().getCode() == "H") {
-                        System.out.println("본사"+sessionInfoVO.getOrgnFg().getCode());
+                    if (sessionInfoVO.getOrgnFg().getCode() != null && sessionInfoVO.getOrgnFg().getCode() == "H") {
+                        System.out.println("본사" + sessionInfoVO.getOrgnFg().getCode());
                         kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
                         // 매장그룹명 INSERT
                         result = kioskKeyMapMapper.insertStoreGrpNmReg(kioskKeyMapVO);
@@ -760,7 +842,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                         if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
                             // 중분류도 복제
                             result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
-                            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                            if (result <= 0)
+                                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                         }
                     } else if (envstVal1249.equals("2")) {
                         // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
@@ -776,40 +859,123 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                         if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
                             // 중분류도 복제
                             result = kioskKeyMapMapper.insertKioskCategoryStoreRegM2(kioskKeyMapVO);
-                            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                            if (result <= 0)
+                                throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                         }
                     }
-                /*} else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+                    /*} else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
 
-                    // 기존 카테고리(분류) 삭제
-                    kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
+                        // 기존 카테고리(분류) 삭제
+                        kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
 
-                    // 기존 키맵상품삭제
-                    kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
+                        // 기존 키맵상품삭제
+                        kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
 
-                    // 기존 카테고리(중분류) 삭제
-                    kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
+                        // 기존 카테고리(중분류) 삭제
+                        kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
 
-                    // 새 키맵그룹과 카테고리(분류)코드로 INSERT
-                    result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
-                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                    // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
-                    result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
-                    if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                    kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-
-                    // 중분류 키맵그룹 row count 조회
-                    List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
-                    kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
-                    selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
-                    if(Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
-                        // 중분류도 복제
-                        result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
+                        // 새 키맵그룹과 카테고리(분류)코드로 INSERT
+                        result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
                         if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
+                        result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+                        // 중분류 키맵그룹 row count 조회
+                        List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+                        kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                        selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
+                        if(Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                            // 중분류도 복제
+                            result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
+                            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+                    }*/
+                    }else{
+
+                        if (sessionInfoVO.getOrgnFg().getCode() != null && sessionInfoVO.getOrgnFg().getCode() == "H") {
+                            System.out.println("본사" + sessionInfoVO.getOrgnFg().getCode());
+                            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+                            // 매장그룹명 INSERT
+                            result = kioskKeyMapMapper.insertStoreGrpNmReg(kioskKeyMapVO);
+                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+
+                        // 새 키맵그룹과 카테고리(분류)코드로 INSERT
+                        result = kioskKeyMapMapper.mergeKioskCategoryStoreReg(kioskKeyMapVO);
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // 중분류 사용여부 조회를 위한 변수
+                        List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
+
+                        // 1249 0/1이면 전체 삭제
+                        // 1249 2이면 229 Y 제외 삭제
+                        if (envstVal1249.equals("0") || envstVal1249.equals("1")) {
+                            // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
+                            result = kioskKeyMapMapper.mergeKioskKeyMapStoreReg(kioskKeyMapVO);
+                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+                            // 중분류 키맵그룹 row count 조회
+                            kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                            selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO);
+                            if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                                // 중분류도 복제
+                                result = kioskKeyMapMapper.mergeKioskCategoryStoreRegM(kioskKeyMapVO);
+                                if (result < 0)
+                                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                            }
+                        } else if (envstVal1249.equals("2")) {
+
+                            // 현재는 대분류만 사용할 경우만 가능, 중분류 사용은 '매장수정허용카테고리' 먼저 수정 후 개발 예정
+
+                            // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
+                            result = kioskKeyMapMapper.mergeKioskKeyMapStoreReg2(kioskKeyMapVO);
+                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+
+                            /*
+                            // 중분류 키맵그룹 row count 조회
+                            kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+                            selectList = kioskKeyMapMapper.getKioskMClsCount2(kioskKeyMapVO);
+                            if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                                // 중분류도 복제
+                                result = kioskKeyMapMapper.mergeKioskCategoryStoreRegM2(kioskKeyMapVO);
+                                if (result <= 0)
+                                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                            }
+                            */
+                        }
+
+                        // 기존 데이터 중, 불필요한 매장 카테고리(분류) 정보 삭제
+                        kioskKeyMapMapper.deleteNotUseKioskCategoryToStore(kioskKeyMapVO);
+                        if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
+                            // 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제
+                            kioskKeyMapMapper.deleteNotUseKioskKeyMapToStore(kioskKeyMapVO);
+                            if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                                // 중분류도 삭제
+                                kioskKeyMapMapper.deleteNotUseKioskCategoryToStoreM(kioskKeyMapVO);
+                            }
+                        } else  if(envstVal1249.equals("2")) {
+
+                            // 현재는 대분류만 사용할 경우만 가능, 중분류 사용은 '매장수정허용카테고리' 먼저 수정 후 개발 예정
+
+                            // 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제
+                            kioskKeyMapMapper.deleteNotUseKioskKeyMapToStore2(kioskKeyMapVO);
+
+                            /*
+                            if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                                // 중분류도 삭제
+                                kioskKeyMapMapper.deleteNotUseKioskCategoryToStoreM2(kioskKeyMapVO);
+                            }
+                            */
+                        }
                     }
-                }*/
 
                 // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
                 kioskKeyMapVO.setTuClsType("");
@@ -1158,114 +1324,29 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapVO.setModDt(currentDt);
             kioskKeyMapVO.setModId(sessionInfoVO.getUserId());
 
-            // 본사
-            if(sessionInfoVO.getOrgnFg().getCode() == "H") {
+            // 매장에서 매장으로 복사하는 쿼리라 "S"값으로 고정(getKioskMClsCount, getKioskMClsCount2에서 사용)
+            kioskKeyMapVO.setOrgnFg("S");
 
-                // 매장에서 매장으로 복사하는 쿼리라 "S"값으로 고정(getKioskMClsCount, getKioskMClsCount2에서 사용)
-                kioskKeyMapVO.setOrgnFg("S");
+            // 매장, 포장 환경설정값
+            String [] arrEnvCd = kioskKeyMapVO.getEnvstCd().split(",");
+            String [] arrEnvVal = kioskKeyMapVO.getEnvstVal().split(",");
 
-                // 매장, 포장 환경설정값
-                String [] arrEnvCd = kioskKeyMapVO.getEnvstCd().split(",");
-                String [] arrEnvVal = kioskKeyMapVO.getEnvstVal().split(",");
+            for(int i = 0; i < arrEnvCd.length; i++) {
 
-                for(int i=0; i<arrEnvCd.length; i++){
-                    if (!"".equals(arrEnvVal[i])) {
+                if (!"".equals(arrEnvVal[i])) {
 
-                        kioskKeyMapVO.setEnvstCd(arrEnvCd[i]);
-                        kioskKeyMapVO.setEnvstVal(arrEnvVal[i]);
-                        kioskKeyMapVO.setTuClsType(arrEnvVal[i]);
+                    kioskKeyMapVO.setEnvstCd(arrEnvCd[i]);
+                    kioskKeyMapVO.setEnvstVal(arrEnvVal[i]);
+                    kioskKeyMapVO.setTuClsType(arrEnvVal[i]);
 
-                        // 매장 키오스크 포스 환경설정값 저장
-                        result = kioskKeyMapMapper.insertStoreKioskPosEnv(kioskKeyMapVO);
-                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                    // 매장 키오스크 포스 환경설정값 저장
+                    result = kioskKeyMapMapper.insertStoreKioskPosEnv(kioskKeyMapVO);
+                    if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                        sessionInfoVO.setStoreCd(kioskKeyMapVO.getStoreCd());
+                    sessionInfoVO.setStoreCd(kioskKeyMapVO.getStoreCd());
 
-                        String envstVal1249 = CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1249"), "0");
-
-                        // 기존 키맵분류명 삭제
-                        kioskKeyMapMapper.deleteStoreTuClsTypeNm(kioskKeyMapVO);
-
-                        // 기존 카테고리(분류) 삭제
-                        kioskKeyMapMapper.deleteStoreTuClsType(kioskKeyMapVO);
-
-                        // 1249 0/1이면 전체 삭제
-                        // 1249 2이면 229 Y 제외 삭제
-                        if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
-                            // 기존 키맵상품삭제
-                            kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
-                            // 기존 카테고리(중분류) 삭제
-                            kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
-                        } else  if(envstVal1249.equals("2")) {
-                            // 기존 키맵상품삭제
-                            kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd2(kioskKeyMapVO);
-                            // 기존 카테고리(중분류) 삭제
-                            kioskKeyMapMapper.deleteStoreTuClsTypeM2(kioskKeyMapVO);
-                        }
-
-                        // 새 키맵그룹과 카테고리(분류)코드로 INSERT
-                        result = kioskKeyMapMapper.insertKioskCategoryStoreReg(kioskKeyMapVO);
-                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                        result = kioskKeyMapMapper.copyKioskStoreTuClsTypeNm(kioskKeyMapVO);
-
-                        // 1249 0/1이면 전체 삭제
-                        // 1249 2이면 229 Y 제외 삭제
-                        if(envstVal1249.equals("0") || envstVal1249.equals("1")) {
-                            // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
-                            result = kioskKeyMapMapper.copyKioskKeyMapStoreReg(kioskKeyMapVO);
-                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                            // 중분류 키맵그룹 row count 조회
-                            List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
-                            kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
-                            selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO); // OrgnFg사용
-                            if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
-                                // 중분류도 복제
-                                result = kioskKeyMapMapper.insertKioskCategoryStoreRegM(kioskKeyMapVO);
-                                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                            }
-
-                        } else  if(envstVal1249.equals("2")) {
-
-                            // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
-                            result = kioskKeyMapMapper.copyKioskKeyMapStoreReg2(kioskKeyMapVO);
-                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                            // 중분류 키맵그룹 row count 조회
-                            List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
-                            kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
-                            selectList = kioskKeyMapMapper.getKioskMClsCount2(kioskKeyMapVO); // OrgnFg사용
-                            if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
-                                // 중분류도 복제
-                                result = kioskKeyMapMapper.insertKioskCategoryStoreRegM2(kioskKeyMapVO);
-                                if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                            }
-                        }
-                    }
-                }
-            }
-            //매장
-            else if(sessionInfoVO.getOrgnFg().getCode() == "S") {
-
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-
-                // 매장, 포장 환경설정값
-                String [] arrEnvCd = kioskKeyMapVO.getEnvstCd().split(",");
-                String [] arrEnvVal = kioskKeyMapVO.getEnvstVal().split(",");
-
-                for(int i=0; i<arrEnvCd.length; i++){
-                    if (!"".equals(arrEnvVal[i])) {
-
-                        kioskKeyMapVO.setEnvstCd(arrEnvCd[i]);
-                        kioskKeyMapVO.setEnvstVal(arrEnvVal[i]);
-                        kioskKeyMapVO.setTuClsType(arrEnvVal[i]);
-
-                        // 매장 키오스크 포스 환경설정값 저장
-                        result = kioskKeyMapMapper.insertStoreKioskPosEnv(kioskKeyMapVO);
-                        if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-
-                        sessionInfoVO.setStoreCd(kioskKeyMapVO.getStoreCd());
+                    // 맘스터치는 기존로직 적용(delete -> insert-select), 나머지 본사는 새 로직 적용(merge -> delete) (20240909)
+                    if (kioskKeyMapVO.getHqOfficeCd().equals("DS021") || kioskKeyMapVO.getHqOfficeCd().equals("DS034") || kioskKeyMapVO.getHqOfficeCd().equals("H0393")) {
 
                         // 기존 키맵분류명 삭제
                         kioskKeyMapMapper.deleteStoreTuClsTypeNm(kioskKeyMapVO);
@@ -1275,27 +1356,57 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
                         // 기존 키맵상품삭제
                         kioskKeyMapMapper.deleteKioskKeyMapByTuClsCd(kioskKeyMapVO);
+
                         // 기존 카테고리(중분류) 삭제
                         kioskKeyMapMapper.deleteStoreTuClsTypeM(kioskKeyMapVO);
 
                         // 새 키맵그룹과 카테고리(분류)코드로 INSERT
-                        result = kioskKeyMapMapper.insertKioskCategoryStoreRegStore(kioskKeyMapVO); // 매장용
-                        if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        result = kioskKeyMapMapper.copyStoreTuCls(kioskKeyMapVO); // 매장용
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
-                        result = kioskKeyMapMapper.copyKioskStoreTuClsTypeNmStore(kioskKeyMapVO); // 매장용
+                        result = kioskKeyMapMapper.copyStoreTuClsType(kioskKeyMapVO); // 매장용
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                         // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
-                        result = kioskKeyMapMapper.copyKioskKeyMapStoreRegStore(kioskKeyMapVO); // 매장용
+                        result = kioskKeyMapMapper.copyStoreTuKey(kioskKeyMapVO); // 매장용
                         if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
 
                         // 중분류 키맵그룹 row count 조회
-                        List<DefaultMap<Object>> selectList = new ArrayList<DefaultMap<Object>>();
-                        kioskKeyMapVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
-                        selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapVO); // OrgnFg사용
-                        if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                        int cnt = kioskKeyMapMapper.getStoreTuClsCount(kioskKeyMapVO);
+                        if (cnt > 0) {
                             // 중분류도 복제
-                            result = kioskKeyMapMapper.insertKioskCategoryStoreRegMStore(kioskKeyMapVO); // 매장용
-                            if (result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                            result = kioskKeyMapMapper.copyStoreTuClsM(kioskKeyMapVO); // 매장용
+                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+                    }else{
+
+                        // 새 키맵그룹과 카테고리(분류)코드로 INSERT
+                        result = kioskKeyMapMapper.mergeKioskCategoryStoreRegStore(kioskKeyMapVO); // 매장용
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        result = kioskKeyMapMapper.mergeKioskStoreTuClsTypeNmStore(kioskKeyMapVO); // 매장용
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // 기존 카테고리(분류)에 맵핑된 상품이 있으면 상품도 INSERT
+                        result = kioskKeyMapMapper.mergeKioskKeyMapStoreRegStore(kioskKeyMapVO); // 매장용
+                        if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                        // 중분류 키맵그룹 row count 조회
+                        int cnt = kioskKeyMapMapper.getStoreTuClsCount(kioskKeyMapVO);
+                        if (cnt > 0) {
+                            // 중분류도 복제
+                            result = kioskKeyMapMapper.mergeKioskCategoryStoreRegMStore(kioskKeyMapVO); // 매장용
+                            if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                        }
+
+                        // 기존 데이터 중, 불필요한 매장 카테고리(분류) 정보 삭제
+                        kioskKeyMapMapper.deleteNotUseKioskCategoryToStoreStore(kioskKeyMapVO);
+
+                        // 기존 데이터 중, 불필요한 매장 맵핑상품 정보 삭제
+                        kioskKeyMapMapper.deleteNotUseKioskKeyMapToStoreStore(kioskKeyMapVO);
+                        if (cnt > 0) {
+                            // 중분류도 삭제
+                            kioskKeyMapMapper.deleteNotUseKioskCategoryToStoreMStore(kioskKeyMapVO);
                         }
                     }
                 }
