@@ -114,12 +114,16 @@ public class AuthServiceImpl implements AuthService {
         }
 
         /** 패스워드 초기 변경 인지 체크 */
-        /*if(!inputPw.equals("kjsun_op1234567")) {
-            if (UserStatFg.PASSWORD_TEMPORARY.equals(result.getUserStatFg())) {
-                result.setLoginResult(LoginResult.PASSWORD_TEMPORARY);
-                return result;
+        // 포스 자동로그인 체크
+        if(inputPw.length() > 30) {
+        } else {
+            if(!"kjsun_op1234567".equals(inputPw)) {
+                if (UserStatFg.PASSWORD_TEMPORARY.equals(result.getUserStatFg())) {
+                    result.setLoginResult(LoginResult.PASSWORD_TEMPORARY);
+                    return result;
+                }
             }
-        }*/
+        }
 
         /** 로그인 횟수 오류 체크 */
         if (UserStatFg.LOGIN_FAIL_CNT_OVER.equals(result.getUserStatFg())) {
@@ -188,7 +192,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 관리자 임의 패스워드 들어온경우 로그인 운영 모니터링 완료 후 복구 예정
-        if(inputPw.equals("kjsun_op1234567"))
+        if("kjsun_op1234567".equals(inputPw))
         {
             System.out.println("WEB_kjsun_emp_pw_chk || user_id="+inputId);
             return true;
