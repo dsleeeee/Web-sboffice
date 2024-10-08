@@ -114,7 +114,7 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getStoreList.sb", params, function () {
 
             // 키오스크포스가 없는 매장은 선택 불가
-            var grid = wijmo.Control.getControl("#wjGridKioskKeyMapStoreReg");
+            /*var grid = wijmo.Control.getControl("#wjGridKioskKeyMapStoreReg");
             var rows = grid.rows;
 
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -123,7 +123,7 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
                     item.gChk = false;
                     rows[i].isReadOnly = true;
                 }
-            }
+            }*/
         });
     };
 
@@ -165,7 +165,7 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
         // <br/> (중분류 사용 키맵그룹은 중분류 사용 키오스크에만 적용됩니다.)
         var msg = "'" + $scope.applyTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreReg.msg"] + messages["kioskKeyMap.kioskTuMClsFg.msg"];
         // '[00]사용중인키맵매장적용'으로 선택하시면 자동으로 각 매장에 설정된 키맵 키 값이 적용됩니다.
-        msg += "<br><br><p style='color:red;'>'[00]사용중인키맵매장적용'</p>으로 선택하시면 자동으로 각 매장에 설정된 키맵 키 값이 적용됩니다.";
+        msg += "<br><br><p style='color:red;'>'[00]사용중인키맵매장적용'</p>으로 선택하시면 자동으로 각 매장에 설정된 키맵 키 값이 적용됩니다.(중분류사용여부체크안함)";
 
         $scope._popConfirm(msg, function() {
 
@@ -173,15 +173,16 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
 
                 var item = $scope.flex.collectionView.items[i];
 
-                if (item.gChk === true && item.kioskPosCnt > 0) {
+                if (item.gChk === true) {
 
-                    if($("#hdTuMClsFgStoreRegist").val() === item.tuMClsFg) {
+                    // 선택한 키맵그룹이 [00]사용중인키맵매장적용 이거나 또는 선택한 키맵그룹의 중분류사용여부가 선택한 포스의 KIOSK중분류사용과 동일한 경우 적용 진행
+                    if($scope.applyTuClsTypeCombo.selectedValue === "00" || ($("#hdTuMClsFgStoreRegist").val() === item.tuMClsFg)) {
 
                         var obj = {};
                         obj.storeCd = item.storeCd;
                         obj.tuClsType = $scope.applyTuClsTypeCombo.selectedValue;
                         obj.posNo = item.posNo;
-                        obj.tuMClsFg = $("#hdTuMClsFgStoreRegist").val(); // 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
+                        //obj.tuMClsFg = $("#hdTuMClsFgStoreRegist").val(); // 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
 
                         params.push(obj);
                     }
