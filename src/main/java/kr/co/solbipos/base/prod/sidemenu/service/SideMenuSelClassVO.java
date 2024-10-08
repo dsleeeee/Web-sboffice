@@ -114,6 +114,15 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 상단표기여부 */
+    private String topYn;
+
+    /** 펼치기여부 */
+    private String expandYn;
+
+    /** ERP상품맵핑여부 */
+    private String mappingYn;
+
     /**
      * @return the hqOfficeCd
      */
@@ -371,4 +380,16 @@ public class SideMenuSelClassVO extends CmmVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getTopYn() { return topYn; }
+
+    public void setTopYn(String topYn) { this.topYn = topYn; }
+
+    public String getExpandYn() { return expandYn; }
+
+    public void setExpandYn(String expandYn) { this.expandYn = expandYn; }
+
+    public String getMappingYn() { return mappingYn; }
+
+    public void setMappingYn(String mappingYn) { this.mappingYn = mappingYn; }
 }

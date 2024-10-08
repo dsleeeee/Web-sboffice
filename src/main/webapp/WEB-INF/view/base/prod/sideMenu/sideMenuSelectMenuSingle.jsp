@@ -154,7 +154,7 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassCd"/>" binding="sdselClassCd" width="70" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassNm"/>" binding="sdselClassNm" width="*"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassNm"/>" binding="sdselClassNm" width="100"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.requireYn"/>" binding="requireYn" data-map="requireYnDataMap" width="85" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="sdselQty" width="50" max-length="3"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
@@ -164,6 +164,11 @@
                         <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.oldRegStoreFg"/>" binding="oldRegStoreFg" data-map="oldRegStoreFgDataMap" width="85" visible="false"></wj-flex-grid-column>
+                        </c:if>
+                        <c:if test="${(orgnFg == 'HQ' and hqOfficeCd == 'A0001') or (orgnFg == 'HQ' and hqOfficeCd == 'DS019')}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.topYn"/>" binding="topYn" data-map="topYnDataMap" width="85"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.expandYn"/>" binding="expandYn" data-map="expandYnDataMap" width="75"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.mappingYn"/>" binding="mappingYn" data-map="mappingYnDataMap" width="110"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -253,7 +258,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20230714.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20240930.01" charset="utf-8"></script>
 
 <%-- 선택분류복사 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassCopySingle.jsp">
