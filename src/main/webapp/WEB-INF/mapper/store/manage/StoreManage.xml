@@ -3515,7 +3515,10 @@
             REQUIRE_YN,
             SDSEL_CLASS_EN_NM,
             SDSEL_CLASS_CN_NM,
-            SDSEL_CLASS_JP_NM
+            SDSEL_CLASS_JP_NM,
+            TOP_YN,
+            EXPAND_YN,
+            MAPPING_YN
             FROM TB_HQ_PRODUCT_SDSEL_CLASS
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3539,7 +3542,10 @@
             REQUIRE_YN = B.REQUIRE_YN,
             SDSEL_CLASS_EN_NM = B.SDSEL_CLASS_EN_NM,
             SDSEL_CLASS_CN_NM = B.SDSEL_CLASS_CN_NM,
-            SDSEL_CLASS_JP_NM = B.SDSEL_CLASS_JP_NM
+            SDSEL_CLASS_JP_NM = B.SDSEL_CLASS_JP_NM,
+            TOP_YN = B.TOP_YN,
+            EXPAND_YN = B.EXPAND_YN,
+            MAPPING_YN = B.MAPPING_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3558,7 +3564,10 @@
                 A.REQUIRE_YN,
                 A.SDSEL_CLASS_EN_NM,
                 A.SDSEL_CLASS_CN_NM,
-                A.SDSEL_CLASS_JP_NM
+                A.SDSEL_CLASS_JP_NM,
+                A.TOP_YN,
+                A.EXPAND_YN,
+                A.MAPPING_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3576,7 +3585,10 @@
                 B.REQUIRE_YN,
                 B.SDSEL_CLASS_EN_NM,
                 B.SDSEL_CLASS_CN_NM,
-                B.SDSEL_CLASS_JP_NM
+                B.SDSEL_CLASS_JP_NM,
+                B.TOP_YN,
+                B.EXPAND_YN,
+                B.MAPPING_YN
             )
     </insert>
 
@@ -3774,7 +3786,10 @@
             REQUIRE_YN,
             SDSEL_CLASS_EN_NM,
             SDSEL_CLASS_CN_NM,
-            SDSEL_CLASS_JP_NM
+            SDSEL_CLASS_JP_NM,
+            TOP_YN,
+            EXPAND_YN,
+            MAPPING_YN
             FROM TB_MS_PRODUCT_SDSEL_CLASS
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -3798,7 +3813,10 @@
             REQUIRE_YN = B.REQUIRE_YN,
             SDSEL_CLASS_EN_NM = B.SDSEL_CLASS_EN_NM,
             SDSEL_CLASS_CN_NM = B.SDSEL_CLASS_CN_NM,
-            SDSEL_CLASS_JP_NM = B.SDSEL_CLASS_JP_NM
+            SDSEL_CLASS_JP_NM = B.SDSEL_CLASS_JP_NM,
+            TOP_YN = B.TOP_YN,
+            EXPAND_YN = B.EXPAND_YN,
+            MAPPING_YN = B.MAPPING_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3817,7 +3835,10 @@
                 A.REQUIRE_YN,
                 A.SDSEL_CLASS_EN_NM,
                 A.SDSEL_CLASS_CN_NM,
-                A.SDSEL_CLASS_JP_NM
+                A.SDSEL_CLASS_JP_NM,
+                A.TOP_YN,
+                A.EXPAND_YN,
+                A.MAPPING_YN
             ) VALUES (
                 B.STORE_CD,
                 B.SDSEL_CLASS_CD,
@@ -3835,7 +3856,10 @@
                 B.REQUIRE_YN,
                 B.SDSEL_CLASS_EN_NM,
                 B.SDSEL_CLASS_CN_NM,
-                B.SDSEL_CLASS_JP_NM
+                B.SDSEL_CLASS_JP_NM,
+                B.TOP_YN,
+                B.EXPAND_YN,
+                B.MAPPING_YN
             )
     </insert>
 

@@ -52,7 +52,6 @@ var printYnData = [
   {"name":"미사용","value":"N"}
 ];
 
-
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -512,6 +511,9 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     $scope.requireYnDataMap = requireYnDataMap;
     $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
     $scope.oldRegStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+    $scope.topYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 상단표기여부
+    $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
+    $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -642,6 +644,9 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     params.sdselClassCd = '자동채번';
     params.requireYn = "N";
     params.regStoreFg = "0";
+    params.topYn = "N";
+    params.expandYn = "N";
+    params.mappingYn = "N";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);

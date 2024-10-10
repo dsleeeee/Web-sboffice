@@ -70,6 +70,9 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     dataItem.sdselClassNm   = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselQty       = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.requireYn      = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.topYn          = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.expandYn       = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.mappingYn      = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdCd    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselRemark    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdNm 	= messages["prodInfoSearch.prodInfo.sdsel"];
@@ -275,6 +278,9 @@ app.controller('prodInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($s
     dataItem.sdselClassNm   = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselQty       = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.requireYn      = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.topYn          = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.expandYn       = messages["prodInfoSearch.prodInfo.sdsel"];
+    dataItem.mappingYn      = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdCd    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselRemark    = messages["prodInfoSearch.prodInfo.sdsel"];
     dataItem.sdselProdNm 	= messages["prodInfoSearch.prodInfo.sdsel"];

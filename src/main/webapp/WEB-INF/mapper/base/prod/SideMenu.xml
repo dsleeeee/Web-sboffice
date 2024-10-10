@@ -882,7 +882,10 @@
                     (SELECT SUM(ADD_PROD_QTY) FROM TB_HQ_PRODUCT_SDSEL_PROD WHERE HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD AND SDSEL_CLASS_CD = thpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT,
                     NVL(thpsc.REQUIRE_YN, 'N') AS REQUIRE_YN,
                     NVL(thpsc.REG_STORE_FG, '0') AS REG_STORE_FG,
-                    NVL(thpsc.REG_STORE_FG, '0') AS OLD_REG_STORE_FG
+                    NVL(thpsc.REG_STORE_FG, '0') AS OLD_REG_STORE_FG,
+                    NVL(thpsc.TOP_YN, 'N') AS TOP_YN,
+                    NVL(thpsc.EXPAND_YN, 'N') AS EXPAND_YN,
+                    NVL(thpsc.MAPPING_YN, 'N') AS MAPPING_YN
                 FROM
                     TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 WHERE
@@ -902,7 +905,10 @@
                     tmpsc.SDSEL_QTY,
                     (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y') AS CNT,
                     (SELECT SUM(ADD_PROD_QTY) FROM TB_MS_PRODUCT_SDSEL_PROD WHERE STORE_CD = tmpsc.STORE_CD AND SDSEL_CLASS_CD = tmpsc.SDSEL_CLASS_CD AND USE_YN = 'Y' AND FIX_PROD_FG = '1') AS FIX_PROD_CNT,
-                    NVL(tmpsc.REQUIRE_YN, 'N') AS REQUIRE_YN
+                    NVL(tmpsc.REQUIRE_YN, 'N') AS REQUIRE_YN,
+                    NVL(tmpsc.TOP_YN, 'N') AS TOP_YN,
+                    NVL(tmpsc.EXPAND_YN, 'N') AS EXPAND_YN,
+                    NVL(tmpsc.MAPPING_YN, 'N') AS MAPPING_YN
                 FROM
                     TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                 WHERE
@@ -962,7 +968,10 @@
                     MOD_DT,
                     MOD_ID,
                     REQUIRE_YN,
-                    REG_STORE_FG
+                    REG_STORE_FG,
+                    TOP_YN,
+                    EXPAND_YN,
+                    MAPPING_YN
                 ) VALUES (
                     #{hqOfficeCd},
                     #{sdselClassCd},
@@ -976,7 +985,10 @@
                     #{modDt},
                     #{modId},
                     #{requireYn},
-                    #{regStoreFg}
+                    #{regStoreFg},
+                    #{topYn},
+                    #{expandYn},
+                    #{mappingYn}
                 )
             </when>
             <!-- 매장 -->
@@ -994,7 +1006,10 @@
                     REG_ID,
                     MOD_DT,
                     MOD_ID,
-                    REQUIRE_YN
+                    REQUIRE_YN,
+                    TOP_YN,
+                    EXPAND_YN,
+                    MAPPING_YN
                 ) VALUES (
                     #{storeCd},
                     #{sdselClassCd},
@@ -1007,7 +1022,10 @@
                     #{regId},
                     #{modDt},
                     #{modId},
-                    #{requireYn}
+                    #{requireYn},
+                    #{topYn},
+                    #{expandYn},
+                    #{mappingYn}
                 )
             </when>
         </choose>
@@ -1032,7 +1050,10 @@
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
                     REQUIRE_YN = #{requireYn},
-                    REG_STORE_FG = #{regStoreFg}
+                    REG_STORE_FG = #{regStoreFg},
+                    TOP_YN = #{topYn},
+                    EXPAND_YN = #{expandYn},
+                    MAPPING_YN = #{mappingYn}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -1047,7 +1068,10 @@
                     SDSEL_QTY = #{sdselQty},
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
-                    REQUIRE_YN = #{requireYn}
+                    REQUIRE_YN = #{requireYn},
+                    TOP_YN = #{topYn},
+                    EXPAND_YN = #{expandYn},
+                    MAPPING_YN = #{mappingYn}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -2034,7 +2058,10 @@
                     REQUIRE_YN,
                     SDSEL_CLASS_EN_NM,
                     SDSEL_CLASS_CN_NM,
-                    SDSEL_CLASS_JP_NM
+                    SDSEL_CLASS_JP_NM,
+                    TOP_YN,
+                    EXPAND_YN,
+                    MAPPING_YN
                 )
                 SELECT
                 A.HQ_OFFICE_CD,
@@ -2053,7 +2080,10 @@
                 A.REQUIRE_YN,
                 A.SDSEL_CLASS_EN_NM,
                 A.SDSEL_CLASS_CN_NM,
-                A.SDSEL_CLASS_JP_NM
+                A.SDSEL_CLASS_JP_NM,
+                A.TOP_YN,
+                A.EXPAND_YN,
+                A.MAPPING_YN
                 FROM TB_HQ_PRODUCT_SDSEL_CLASS A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2080,7 +2110,10 @@
                     REQUIRE_YN,
                     SDSEL_CLASS_EN_NM,
                     SDSEL_CLASS_CN_NM,
-                    SDSEL_CLASS_JP_NM
+                    SDSEL_CLASS_JP_NM,
+                    TOP_YN,
+                    EXPAND_YN,
+                    MAPPING_YN
                 )
                 SELECT
                 A.STORE_CD,
@@ -2099,7 +2132,10 @@
                 A.REQUIRE_YN,
                 A.SDSEL_CLASS_EN_NM,
                 A.SDSEL_CLASS_CN_NM,
-                A.SDSEL_CLASS_JP_NM
+                A.SDSEL_CLASS_JP_NM,
+                A.TOP_YN,
+                A.EXPAND_YN,
+                A.MAPPING_YN
                 FROM TB_MS_PRODUCT_SDSEL_CLASS A
                 WHERE 1=1
                 AND A.STORE_CD = #{storeCd}

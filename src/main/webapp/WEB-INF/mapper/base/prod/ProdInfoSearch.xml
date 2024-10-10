@@ -820,6 +820,9 @@
                 ,		thpsc.SDSEL_CLASS_NM
                 ,		thpsc.SDSEL_QTY
                 ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+                ,		DECODE(NVL(thpsc.TOP_YN, 'N'), 'Y', '사용', 'N', '미사용') AS TOP_YN
+                ,		DECODE(NVL(thpsc.EXPAND_YN, 'N'), 'Y', '사용', 'N', '미사용') AS EXPAND_YN
+                ,		DECODE(NVL(thpsc.MAPPING_YN, 'N'), 'Y', '사용', 'N', '미사용') AS MAPPING_YN
                 ,		thpsp.PROD_CD
                 ,		thp.PROD_NM
                 ,       thpsp.ADD_PROD_UPRC
@@ -857,6 +860,9 @@
                 ,		tmpsc.SDSEL_CLASS_NM
                 ,		tmpsc.SDSEL_QTY
                 ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+                ,		DECODE(NVL(tmpsc.TOP_YN, 'N'), 'Y', '사용', 'N', '미사용') AS TOP_YN
+                ,		DECODE(NVL(tmpsc.EXPAND_YN, 'N'), 'Y', '사용', 'N', '미사용') AS EXPAND_YN
+                ,		DECODE(NVL(tmpsc.MAPPING_YN, 'N'), 'Y', '사용', 'N', '미사용') AS MAPPING_YN
                 ,		tmpsp.PROD_CD
                 ,		tmp.PROD_NM
                 ,       tmpsp.ADD_PROD_UPRC
@@ -904,6 +910,9 @@
                 ,		thpsc.SDSEL_CLASS_NM
                 ,		thpsc.SDSEL_QTY
                 ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+                ,		DECODE(NVL(thpsc.TOP_YN, 'N'), 'Y', '사용', 'N', '미사용') AS TOP_YN
+                ,		DECODE(NVL(thpsc.EXPAND_YN, 'N'), 'Y', '사용', 'N', '미사용') AS EXPAND_YN
+                ,		DECODE(NVL(thpsc.MAPPING_YN, 'N'), 'Y', '사용', 'N', '미사용') AS MAPPING_YN
                 ,		thpsp.PROD_CD
                 ,		thp.PROD_NM
                 ,       thpsp.ADD_PROD_UPRC
@@ -938,6 +947,9 @@
                 ,		tmpsc.SDSEL_CLASS_NM
                 ,		tmpsc.SDSEL_QTY
                 ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+                ,		DECODE(NVL(tmpsc.TOP_YN, 'N'), 'Y', '사용', 'N', '미사용') AS TOP_YN
+                ,		DECODE(NVL(tmpsc.EXPAND_YN, 'N'), 'Y', '사용', 'N', '미사용') AS EXPAND_YN
+                ,		DECODE(NVL(tmpsc.MAPPING_YN, 'N'), 'Y', '사용', 'N', '미사용') AS MAPPING_YN
                 ,		tmpsp.PROD_CD
                 ,		tmp.PROD_NM
                 ,       tmpsp.ADD_PROD_UPRC
@@ -1111,6 +1123,9 @@
                         ,		0 AS SDSEL_CLASS_DISP_SEQ
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
+                        ,		'' AS TOP_YN
+                        ,		'' AS EXPAND_YN
+                        ,		'' AS MAPPING_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,       '' AS SDSEL_REMARK
                         ,		'' AS SDSEL_PROD_NM
@@ -1165,6 +1180,9 @@
                         ,		thpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
                         ,		thpsc.SDSEL_QTY
                         ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+                        ,		DECODE(NVL(thpsc.TOP_YN, 'N'), 'Y', '사용', 'N', '미사용') AS TOP_YN
+                        ,		DECODE(NVL(thpsc.EXPAND_YN, 'N'), 'Y', '사용', 'N', '미사용') AS EXPAND_YN
+                        ,		DECODE(NVL(thpsc.MAPPING_YN, 'N'), 'Y', '사용', 'N', '미사용') AS MAPPING_YN
                         ,		thpsp.PROD_CD AS SDSEL_PROD_CD
                         ,       thp2.REMARK AS SDSEL_REMARK
                         ,		thp2.PROD_NM AS SDSEL_PROD_NM
@@ -1228,6 +1246,9 @@
                         ,		0 AS SDSEL_CLASS_DISP_SEQ
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
+                        ,		'' AS TOP_YN
+                        ,		'' AS EXPAND_YN
+                        ,		'' AS MAPPING_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,       '' AS SDSEL_REMARK
                         ,		'' AS SDSEL_PROD_NM
@@ -1331,6 +1352,9 @@
                         ,		0 AS SDSEL_CLASS_DISP_SEQ
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
+                        ,		'' AS TOP_YN
+                        ,		'' AS EXPAND_YN
+                        ,		'' AS MAPPING_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,       '' AS SDSEL_REMARK
                         ,		'' AS SDSEL_PROD_NM
@@ -1384,6 +1408,9 @@
                         ,		tmpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
                         ,		tmpsc.SDSEL_QTY
                         ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+                        ,		DECODE(NVL(tmpsc.TOP_YN, 'N'), 'Y', '사용', 'N', '미사용') AS TOP_YN
+                        ,		DECODE(NVL(tmpsc.EXPAND_YN, 'N'), 'Y', '사용', 'N', '미사용') AS EXPAND_YN
+                        ,		DECODE(NVL(tmpsc.MAPPING_YN, 'N'), 'Y', '사용', 'N', '미사용') AS MAPPING_YN
                         ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
                         ,       tmp2.REMARK AS SDSEL_REMARK
                         ,		tmp2.PROD_NM AS SDSEL_PROD_NM
@@ -1446,6 +1473,9 @@
                         ,		0 AS SDSEL_CLASS_DISP_SEQ
                         ,		0 AS SDSEL_QTY
                         ,		'' AS REQUIRE_YN
+                        ,		'' AS TOP_YN
+                        ,		'' AS EXPAND_YN
+                        ,		'' AS MAPPING_YN
                         ,		'' AS SDSEL_PROD_CD
                         ,       '' AS SDSEL_REMARK
                         ,		'' AS SDSEL_PROD_NM
@@ -1546,6 +1576,9 @@
                 ,		0 AS SDSEL_CLASS_DISP_SEQ
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
+                ,		'' AS TOP_YN
+                ,		'' AS EXPAND_YN
+                ,		'' AS MAPPING_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,       '' AS SDSEL_REMARK
                 ,		'' AS SDSEL_PROD_NM
@@ -1600,6 +1633,9 @@
                 ,		thpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
                 ,		thpsc.SDSEL_QTY
                 ,		DECODE(thpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+                ,		DECODE(NVL(thpsc.TOP_YN, 'N'), 'Y', '사용', 'N', '미사용') AS TOP_YN
+                ,		DECODE(NVL(thpsc.EXPAND_YN, 'N'), 'Y', '사용', 'N', '미사용') AS EXPAND_YN
+                ,		DECODE(NVL(thpsc.MAPPING_YN, 'N'), 'Y', '사용', 'N', '미사용') AS MAPPING_YN
                 ,		thpsp.PROD_CD AS SDSEL_PROD_CD
                 ,       thp2.REMARK AS SDSEL_REMARK
                 ,		thp2.PROD_NM AS SDSEL_PROD_NM
@@ -1663,6 +1699,9 @@
                 ,		0 AS SDSEL_CLASS_DISP_SEQ
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
+                ,		'' AS TOP_YN
+                ,		'' AS EXPAND_YN
+                ,		'' AS MAPPING_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,       '' AS SDSEL_REMARK
                 ,		'' AS SDSEL_PROD_NM
@@ -1763,6 +1802,9 @@
                 ,		0 AS SDSEL_CLASS_DISP_SEQ
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
+                ,		'' AS TOP_YN
+                ,		'' AS EXPAND_YN
+                ,		'' AS MAPPING_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,       '' AS SDSEL_REMARK
                 ,		'' AS SDSEL_PROD_NM
@@ -1816,6 +1858,9 @@
                 ,		tmpsc.DISP_SEQ AS SDSEL_CLASS_DISP_SEQ
                 ,		tmpsc.SDSEL_QTY
                 ,		DECODE(tmpsc.REQUIRE_YN, 'Y', '필수선택', 'N', '선택안함') AS REQUIRE_YN
+                ,		DECODE(NVL(tmpsc.TOP_YN, 'N'), 'Y', '사용', 'N', '미사용') AS TOP_YN
+                ,		DECODE(NVL(tmpsc.EXPAND_YN, 'N'), 'Y', '사용', 'N', '미사용') AS EXPAND_YN
+                ,		DECODE(NVL(tmpsc.MAPPING_YN, 'N'), 'Y', '사용', 'N', '미사용') AS MAPPING_YN
                 ,		tmpsp.PROD_CD AS SDSEL_PROD_CD
                 ,       tmp2.REMARK AS SDSEL_REMARK
                 ,		tmp2.PROD_NM AS SDSEL_PROD_NM
@@ -1878,6 +1923,9 @@
                 ,		0 AS SDSEL_CLASS_DISP_SEQ
                 ,		0 AS SDSEL_QTY
                 ,		'' AS REQUIRE_YN
+                ,		'' AS TOP_YN
+                ,		'' AS EXPAND_YN
+                ,		'' AS MAPPING_YN
                 ,		'' AS SDSEL_PROD_CD
                 ,       '' AS SDSEL_REMARK
                 ,		'' AS SDSEL_PROD_NM
