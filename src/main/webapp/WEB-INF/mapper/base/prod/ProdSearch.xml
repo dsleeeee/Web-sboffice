@@ -286,6 +286,7 @@
                 ,       DECODE(NVL(thp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')             AS SOLD_OUT_YN
                 ,       DECODE(NVL(thp.KIOSK_DISPLAY_YN, 'N'), 'Y', '표시', 'N', '비표시')      AS KIOSK_DISPLAY_YN
                 ,       DECODE(NVL(thp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')     AS CHANNEL_SOLD_OUT_YN
+                ,       DECODE(NVL(thp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상')              AS SELFAPP_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_MS_PRODUCT thp
                 LEFT OUTER JOIN (
@@ -645,6 +646,7 @@
                 ,       DECODE(NVL(thp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')             AS SOLD_OUT_YN
                 ,       DECODE(NVL(thp.KIOSK_DISPLAY_YN, 'N'), 'Y', '표시', 'N', '비표시')      AS KIOSK_DISPLAY_YN
                 ,       DECODE(NVL(thp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')     AS CHANNEL_SOLD_OUT_YN
+                ,       DECODE(NVL(thp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상')              AS SELFAPP_YN
                 FROM    TB_MS_PRODUCT thp
                 LEFT OUTER JOIN (
                 SELECT

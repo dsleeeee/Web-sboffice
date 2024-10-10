@@ -1098,6 +1098,7 @@
                         DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN,
                         tmp.REMARK,
                         DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN,
+                        DECODE(NVL(tmp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상') AS SELFAPP_YN,
                         (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.STORE_CD = #{storeCd} AND tmpst.PROD_CD = tmp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 <include refid="CmmSQL.PagingTemplateCount"/>
                   FROM TB_MS_PRODUCT tmp

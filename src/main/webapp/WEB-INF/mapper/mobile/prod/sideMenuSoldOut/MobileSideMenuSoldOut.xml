@@ -79,7 +79,8 @@
                 tmpsp.DISP_SEQ,
                 NVL(tmpsp.FIX_PROD_FG, '0') AS FIX_PROD_FG,
                 NVL(tmpsp.SOLD_OUT_YN, 'N') AS SOLD_OUT_YN,
-                DECODE(NVL(tmpsp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
+                DECODE(NVL(tmpsp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN,
+                DECODE(NVL(tmpsp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상') AS SELFAPP_YN
         FROM    TB_MS_PRODUCT_SDSEL_PROD tmpsp
                     LEFT OUTER JOIN TB_MS_PRODUCT tmp ON
                 tmpsp.STORE_CD = tmp.STORE_CD

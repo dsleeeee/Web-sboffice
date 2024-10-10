@@ -195,6 +195,7 @@
                 <wj-flex-grid-column header="<s:message code="mobile.prodSoldOut.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.prodSoldOut.soldOutYn"/>" binding="soldOutYn" width="100" align="center" data-map="soldOutYnDataMap" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.prodSoldOut.channelSoldOutYn"/>" binding="channelSoldOutYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mobile.prodSoldOut.selfappYn"/>" binding="selfappYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mobile.prodSoldOut.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <c:if test="${brandUseFg == '1'}">
                     <wj-flex-grid-column header="<s:message code="prod.brandNm"/>" binding="hqBrandNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
