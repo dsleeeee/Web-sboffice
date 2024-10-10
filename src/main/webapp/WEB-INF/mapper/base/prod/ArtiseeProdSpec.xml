@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ArtiseeProdSpec.xml
+    아티제-상품특성관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2024.10.04     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.artiseeProdSpec.service.impl.ArtiseeProdSpecMapper">
+
+    <!-- 아티제-상품특성관리 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getArtiseeProdSpecList" parameterType="ArtiseeProdSpecVO" resultType="DefaultMap">
+        /* ArtiseeProdSpecMapper.getArtiseeProdSpecList */
+        SELECT
+        tcn.NMCODE_CD AS SPEC_CD,
+        tcn.NMCODE_NM AS SPEC_NM,
+        (SELECT COUNT(thps.PROD_CD) FROM TB_HQ_PRODUCT_SPEC thps WHERE thps.HQ_OFFICE_CD = #{hqOfficeCd} AND thps.SPEC_CD = tcn.NMCODE_CD) AS PROD_CNT
+        FROM TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND tcn.NMCODE_GRP_CD = '236'
+        ORDER BY tcn.NMCODE_CD
+    </select>
+
+    <!-- 아티제-상품특성관리 - 적용 상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getArtiseeProdSpecProdList" parameterType="ArtiseeProdSpecVO" resultType="DefaultMap">
+        /* ArtiseeProdSpecMapper.getArtiseeProdSpecProdList */
+        SELECT
+        thps.PROD_CD,
+        thp.PROD_NM
+        FROM TB_HQ_PRODUCT_SPEC thps,
+        TB_HQ_PRODUCT thp
+        WHERE 1=1
+        AND thps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thps.SPEC_CD = #{specCd}
+        AND thp.HQ_OFFICE_CD (+)= thps.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= thps.PROD_CD
+        ORDER BY thps.PROD_CD
+    </select>
+
+    <!-- 아티제-상품특성관리 - 미적용 상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getArtiseeProdSpecNoProdList" parameterType="ArtiseeProdSpecVO" resultType="DefaultMap">
+        /* ArtiseeProdSpecMapper.getArtiseeProdSpecNoProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        thp.PROD_CD,
+        thp.PROD_NM
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_HQ_PRODUCT thp
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                    AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+                                            SELECT PROD_CLASS_CD
+                                            FROM TB_HQ_PRODUCT_CLASS
+                                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        ) --상품분류
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn} --사용여부
+        </if>
+        AND thp.PROD_CD NOT IN (SELECT thps.PROD_CD FROM TB_HQ_PRODUCT_SPEC thps WHERE thps.HQ_OFFICE_CD = #{hqOfficeCd} AND thps.SPEC_CD = #{specCd})
+        ORDER BY thp.PROD_CD ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+    <!-- 아티제-상품특성관리 - 상품 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getArtiseeProdSpecProdSaveInsert" parameterType="ArtiseeProdSpecVO">
+        /* ArtiseeProdSpecMapper.getArtiseeProdSpecProdSaveInsert */
+        INSERT INTO TB_HQ_PRODUCT_SPEC
+        (
+            HQ_OFFICE_CD,
+            SPEC_CD,
+            PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{specCd},
+            #{prodCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 아티제-상품특성관리 - 상품 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getArtiseeProdSpecProdSaveDelete" parameterType="ArtiseeProdSpecVO">
+        /* ArtiseeProdSpecMapper.getArtiseeProdSpecProdSaveDelete */
+        DELETE
+        TB_HQ_PRODUCT_SPEC
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SPEC_CD = #{specCd}
+        AND PROD_CD = #{prodCd}
+    </delete>
+
+</mapper>

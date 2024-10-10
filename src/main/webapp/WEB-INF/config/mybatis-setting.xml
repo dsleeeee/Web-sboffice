@@ -391,6 +391,8 @@
     <typeAlias alias="basicSideMenuSelGroupVO" type="kr.co.solbipos.base.prod.basicSideMenu.service.BasicSideMenuSelGroupVO"/>
     <typeAlias alias="basicSideMenuSelClassVO" type="kr.co.solbipos.base.prod.basicSideMenu.service.BasicSideMenuSelClassVO"/>
     <typeAlias alias="basicSideMenuSelProdVO" type="kr.co.solbipos.base.prod.basicSideMenu.service.BasicSideMenuSelProdVO"/>
+    <!-- 보나비 > 상품관리 > 아티제-상품특성관리 -->
+    <typeAlias alias="artiseeProdSpecVO" type="kr.co.solbipos.base.prod.artiseeProdSpec.service.ArtiseeProdSpecVO"/>
 
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
