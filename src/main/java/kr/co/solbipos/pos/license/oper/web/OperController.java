@@ -21,6 +21,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * @Class Name : OperController.java
+ * @Description : 포스관리 > 라이선스관리 > 운영현황
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2019.10.28  김설아      최초생성
+ *
+ * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @since 2019.10.28
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
+
 @Controller
 @RequestMapping("/pos/license/oper")
 public class OperController {
