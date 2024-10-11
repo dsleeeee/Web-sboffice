@@ -12,7 +12,7 @@
 <div id="envConfgBatchChangeFnkeyView" class="subCon" ng-controller="envConfgBatchChangeFnkeyCtrl" style="display: none;padding: 10px 20px 40px;">
 
     <%-- 조회조건 --%>
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl"><s:message code="envConfgBatchChange.fnkey"/></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -119,6 +119,8 @@
                 <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.storeNm"/>" binding="storeNm" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyFg"/>" binding="fnkeyFg" width="90" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyNo"/>" binding="fnkeyNo" width="90" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyNm"/>" binding="fnkeyNm" width="100" align="center"></wj-flex-grid-column>
 
             </wj-flex-grid>

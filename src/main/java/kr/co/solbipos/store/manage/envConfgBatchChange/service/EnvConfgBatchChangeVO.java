@@ -78,6 +78,9 @@ public class EnvConfgBatchChangeVO extends PageVO {
     /** 기능키명 */
     private String fnkeyNm;
 
+    /** 기능키구분 */
+    private String fnkeyFg;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -160,5 +163,13 @@ public class EnvConfgBatchChangeVO extends PageVO {
 
     public void setFnkeyNm(String fnkeyNm) {
         this.fnkeyNm = fnkeyNm;
+    }
+
+    public String getFnkeyFg() {
+        return fnkeyFg;
+    }
+
+    public void setFnkeyFg(String fnkeyFg) {
+        this.fnkeyFg = fnkeyFg;
     }
 }

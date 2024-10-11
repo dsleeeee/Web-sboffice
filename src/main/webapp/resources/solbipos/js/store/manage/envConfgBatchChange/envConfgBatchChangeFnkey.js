@@ -41,6 +41,7 @@ app.controller('envConfgBatchChangeFnkeyCtrl', ['$scope', '$http', function ($sc
         }
 
         var params = {};
+        params.fnkeyFg = $scope.fnkeyFg;
         params.fnkeyNo = $scope.fnkeyNo;
 
         $scope._inquiryMain("/store/manage/envConfgBatchChange/envConfgBatchChangeFnkey/getEnvConfgBatchChangeFnkeyList.sb", params, function() {}, false);
@@ -65,6 +66,7 @@ app.controller('envConfgBatchChangeFnkeyCtrl', ['$scope', '$http', function ($sc
             popScope.$apply(function () {
                 popScope._gridDataInit();
                 if (!$.isEmptyObject(popScope.getSelectedFnkey())) {
+                    $scope.fnkeyFg = popScope.getSelectedFnkey().fnkeyFg;
                     $scope.fnkeyNo = popScope.getSelectedFnkey().fnkeyNo;
                     $scope.fnkeyNm = popScope.getSelectedFnkey().fnkeyNm;
 
@@ -85,6 +87,7 @@ app.controller('envConfgBatchChangeFnkeyCtrl', ['$scope', '$http', function ($sc
 
     // 기능키 선택취소
     $scope.delFnkey = function(){
+        $scope.fnkeyFg = "";
         $scope.fnkeyNo = "";
         $scope.fnkeyNm = "";
 
@@ -108,7 +111,7 @@ app.controller('envConfgBatchChangeFnkeyCtrl', ['$scope', '$http', function ($sc
         var batchFnkeyVal= "";
 
         if($scope.fnkeyNo === "" || $scope.fnkeyNo === undefined) {
-            $scope._popMsg(messages["envConfgBatchChange.fnkey.fnkeyBlank"]); // 환경설정을 선택해주세요.
+            $scope._popMsg(messages["envConfgBatchChange.fnkey.fnkeyBlank"]); // 기능키를 선택해주세요.
             return false;
 
         } else {
@@ -171,18 +174,24 @@ app.controller('envConfgBatchChangeFnkeyCtrl', ['$scope', '$http', function ($sc
 
         $scope._popConfirm(msg, function() {
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-                if($scope.flex.collectionView.itemsEdited[i].fnkeyVal == "") {
-                    $scope._popMsg( "[" + $scope.flex.collectionView.itemsEdited[i].storeCd + "]" + $scope.flex.collectionView.itemsEdited[i].storeNm + messages["envConfgBatchChange.store.saveAlert"]); // 에 공백은 저장할 수 없습니다.
-                    return false;
+                if ($scope.flex.collectionView.itemsEdited[i].gChk === true){
+                    if($scope.flex.collectionView.itemsEdited[i].fnkeyNm === null || $scope.flex.collectionView.itemsEdited[i].fnkeyNm === undefined || $scope.flex.collectionView.itemsEdited[i].fnkeyNm === "") {
+                        $scope._popMsg( "[" + $scope.flex.collectionView.itemsEdited[i].storeCd + "]" + $scope.flex.collectionView.itemsEdited[i].storeNm + messages["envConfgBatchChange.store.saveAlert"]); // 에 공백은 저장할 수 없습니다.
+                        return false;
+                    }
                 }
             }
 
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-                $scope.flex.collectionView.itemsEdited[i].status = "U";
-                $scope.flex.collectionView.itemsEdited[i].fnkeyNo = $scope.fnkeyNo;
-                params.push($scope.flex.collectionView.itemsEdited[i]);
+                if ($scope.flex.collectionView.itemsEdited[i].gChk === true){
+                    if($scope.flex.collectionView.itemsEdited[i].fnkeyNm !== null && $scope.flex.collectionView.itemsEdited[i].fnkeyNm !== undefined && $scope.flex.collectionView.itemsEdited[i].fnkeyNm !== "") {
+                        $scope.flex.collectionView.itemsEdited[i].status = "U";
+                        //$scope.flex.collectionView.itemsEdited[i].fnkeyNo = $scope.fnkeyNo;
+                        params.push($scope.flex.collectionView.itemsEdited[i]);
+                    }
+                }
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수

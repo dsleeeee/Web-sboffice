@@ -474,11 +474,23 @@
     -->
     <select id="getSearchFnkeyList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getSearchFnkeyList */
-        SELECT 	FNKEY_NO, FNKEY_NM
+        SELECT 	tcpf.FNKEY_FG
+        ,       A.NMCODE_NM AS FNKEY_FG_NM
+        ,       tcpf.FNKEY_NO
+        ,       tcpf.FNKEY_NM
         FROM 	TB_CM_POS_FNKEY tcpf
-        WHERE 	USE_YN ='Y'
-        AND 	FNKEY_FG = '6020'
-        ORDER BY FNKEY_NO
+        ,		(
+                    SELECT	NMCODE_CD
+                    ,		NMCODE_NM
+                    FROM	TB_CM_NMCODE
+                    WHERE	NMCODE_GRP_CD = '026'
+                ) A
+        WHERE 	tcpf.USE_YN ='Y'
+        AND 	tcpf.FNKEY_FG IN ('6020', '6021', '6030', '6031')
+        AND     tcpf.FNKEY_FG = A.NMCODE_CD
+        ORDER
+        BY      tcpf.FNKEY_FG
+        ,       tcpf.FNKEY_NO
     </select>
 
     <!-- 기능키명칭탭 - 조회 -->
@@ -492,13 +504,15 @@
                 tho.HQ_OFFICE_NM,
                 tmsf.STORE_CD,
                 tms.STORE_NM,
+                FNKEY_FG,
+                FNKEY_NO,
                 FNKEY_NM
         FROM 	TB_MS_STORE_FNKEY tmsf,
                 TB_MS_STORE tms,
                 TB_HQ_OFFICE tho
         WHERE 	tms.STORE_CD = tmsf.STORE_CD
         AND 	tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-        AND 	tmsf.FNKEY_FG ='6020' -- 결제메뉴(좌)
+        AND 	tmsf.FNKEY_FG = #{fnkeyFg}
         AND		tmsf.fnkey_no = #{fnkeyNo}
         <if test='orgnFg != null and orgnFg == "A"'>
             AND tms.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
@@ -529,7 +543,7 @@
         MERGE INTO TB_MS_STORE_FNKEY
             USING DUAL ON
                 (
-                    STORE_CD = #{storeCd} AND FNKEY_FG ='6020' AND FNKEY_NO = #{fnkeyNo}
+                    STORE_CD = #{storeCd} AND FNKEY_FG = #{fnkeyFg} AND FNKEY_NO = #{fnkeyNo}
                     )
             WHEN MATCHED THEN
                 UPDATE
@@ -537,7 +551,7 @@
                         FNKEY_NM = #{fnkeyNm},
                         MOD_DT = #{modDt},
                         MOD_ID = #{modId}
-            WHERE STORE_CD = #{storeCd} AND FNKEY_FG ='6020' AND FNKEY_NO = #{fnkeyNo}
+            WHERE STORE_CD = #{storeCd} AND FNKEY_FG = #{fnkeyFg} AND FNKEY_NO = #{fnkeyNo}
     </update>
 
     <!-- 환경설정관리 - 저장 update -->

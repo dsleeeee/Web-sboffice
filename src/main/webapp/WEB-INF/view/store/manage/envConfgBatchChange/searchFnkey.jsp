@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSearchFnkeyLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:350px;height:400px;">
+<wj-popup control="wjSearchFnkeyLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:500px;height:600px;">
 
     <div class="wj-dialog wj-dialog-columns" ng-controller="searchFnkeyCtrl">
         <%-- header --%>
@@ -18,9 +18,9 @@
             <%-- 그리드 --%>
             <div class="oh">
                 <div class="w100">
-                    <div class="wj-TblWrap" style="height:370px; overflow-y: hidden;">
+                    <div class="wj-TblWrap" style="height:580px; overflow-y: hidden;">
                         <div class="mt10">
-                            <div class="wj-TblWrap" style="height:300px; overflow-y:hidden;">
+                            <div class="wj-TblWrap" style="height:500px; overflow-y:hidden;">
                                 <wj-flex-grid
                                         autoGenerateColumns="false"
                                         control="flex"
@@ -31,8 +31,10 @@
                                         item-formatter="_itemFormatter">
 
                                     <!-- define columns -->
-                                    <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyNo"/>" binding="fnkeyNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                                    <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyNm"/>" binding="fnkeyNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyFg"/>" binding="fnkeyFg" width="95" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyFgNm"/>" binding="fnkeyFgNm" width="95" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyNo"/>" binding="fnkeyNo" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="envConfgBatchChange.fnkey.fnkeyNm"/>" binding="fnkeyNm" width="*" is-read-only="true" align="left"></wj-flex-grid-column>
 
                                 </wj-flex-grid>
                             </div>
