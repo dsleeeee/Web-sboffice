@@ -80,7 +80,7 @@
             </tr>
             <tr>
               <%--상품코드--%>
-              <th><s:message code="prod.prodCd"/></th>
+              <th><s:message code="prod.prodCd"/> <label id = "prodCdPreFg"></label></th>
               <td>
                 <input type="text" id="prodCd" numberAlphabet name="prodCd" class="sb-input w100"
                        ng-model="prodModifyInfo.prodCd"
@@ -1173,7 +1173,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20240911.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20240923.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

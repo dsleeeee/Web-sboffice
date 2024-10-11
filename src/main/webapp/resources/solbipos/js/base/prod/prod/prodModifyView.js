@@ -145,6 +145,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 브랜드 콤보박스 셋팅
             $scope._setComboData("hqBrandCd", brandList);
 
+            if ($("#prodCdInputType").val() === "1") { // 'MANUAL'
+                if (prodCdPreFg !== "0" && prodCdPreFg !== '*') {
+                    $("#prodCdPreFg").text("|" + prodCdPreFg);
+                } else {
+                    $("#prodCdPreFg").text("");
+                }
+            }
+
             var params = {};
 
             // 상품기본정보
@@ -370,10 +378,19 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope.prodModifyInfo.prodCd = $scope.prodModifyInfo.prodCd.trim().removeEnter();
             $("#prodCd").val($scope.prodModifyInfo.prodCd.trim().removeEnter());
 
-            // 최대길이 체크
-            if($scope.prodModifyInfo.prodCd.length > 13) {
-                $scope._popMsg(messages["prod.prodCdLengthChk.msg"]); // 상품코드 길이가 너무 깁니다.
-                return false;
+            if(prodCdPreFg !== null && prodCdPreFg !== "" && prodCdPreFg !== undefined && prodCdPreFg !== '*'){
+
+                // 최대길이 체크
+                if ($scope.prodModifyInfo.prodCd.length + prodCdPreFg.length > 13) {
+                    $scope._popMsg(messages["prod.prodCdLengthChk.msg"]); // 상품코드 길이가 너무 깁니다.
+                    return false;
+                }
+            }else {
+                // 최대길이 체크
+                if ($scope.prodModifyInfo.prodCd.length > 13) {
+                    $scope._popMsg(messages["prod.prodCdLengthChk.msg"]); // 상품코드 길이가 너무 깁니다.
+                    return false;
+                }
             }
         }
 
@@ -1455,6 +1472,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
                 // 상품정보 set
                 $scope.setProdModifyInfo(prodModify);
+
+                $("#prodCdPreFg").text("");
 
                 // 브랜드가 없는 경우, 가장 맨앞 브랜드로 셋팅
                 if($scope.prodModifyInfo.hqBrandCd === null || $scope.prodModifyInfo.hqBrandCd === ""){
