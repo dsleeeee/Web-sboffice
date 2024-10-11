@@ -291,9 +291,10 @@ public class ProdServiceImpl implements ProdService {
             String prodCd = "";
 
             // 프랜차이즈 매장의 경우, 본사 ([0002] 매장상품 prefix) 사용여부를 파악하여 상품코드를 생성
+
             if(prodVO.getOrgnFg() == "S" && prodVO.getHqOfficeCd() != "00000"){
 
-                String sPrefix = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0002"), "");
+                String sPrefix = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "");
 
                 // prefix 미사용시
                 if("*".equals(sPrefix) || "".equals(sPrefix)){
@@ -309,6 +310,21 @@ public class ProdServiceImpl implements ProdService {
             }
 
             prodVO.setProdCd(prodCd);
+        }else{
+
+            if(prodVO.getSaveMode().equals("REG")) {
+                String prodPrefix = "";
+
+                if (prodVO.getOrgnFg().equals("S") && prodVO.getHqOfficeCd().equals("00000")) {
+                    prodPrefix = cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0047");
+                } else {
+                    prodPrefix = cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047");
+                }
+
+                if (prodPrefix != null && !prodPrefix.equals("*")) {
+                    prodVO.setProdCd(prodPrefix + prodVO.getProdCd());
+                }
+            }
         }
 
         // WorkMode Flag 상품정보수정으로 기본 셋팅_2019.06.06
@@ -319,6 +335,7 @@ public class ProdServiceImpl implements ProdService {
             // 신규상품등록 인 경우 WorkMode Flag 변경_2019.06.06
             prodVO.setWorkMode(WorkModeFg.REG_PROD);
         }
+
         // 상품코드 체크
         if(prodVO.getProdCd() == "" || prodVO.getProdCd() == null){
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -983,6 +1000,17 @@ public class ProdServiceImpl implements ProdService {
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
             prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        String prodPrefix = "";
+        if (prodVO.getOrgnFg().equals("S") && prodVO.getHqOfficeCd().equals("00000")) {
+            prodPrefix = cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0047");
+        } else {
+            prodPrefix = cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047");
+        }
+
+        if (prodPrefix != null && !prodPrefix.equals("*")) {
+            prodVO.setPrefix(prodPrefix);
         }
 
         return prodMapper.getProdCdCnt(prodVO);

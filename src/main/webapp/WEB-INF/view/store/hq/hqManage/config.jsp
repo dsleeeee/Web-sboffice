@@ -137,7 +137,8 @@ function getConfigList(){
             envHtml += "      <td>";
 
             if(list[j].dirctInYn == "Y"){
-              envHtml += "        <input type='text' class='sb-input' name='envstValCd' id='env" + list[j].envstCd + "' >";
+              envHtml += "        <input type='text' class='sb-input' name='envstValCd' id='env" + list[j].envstCd + "'"
+                      + ( list[j].envstCd == "0047" ? "onkeyup=numberAlphabet()":"") + ">";
             } else {
               envHtml += "        <select class='sb-select' name='envstValCd' id='env" + list[j].envstCd + "' />";
             }
@@ -244,6 +245,12 @@ function getConfigList(){
   });
 }
 
+function numberAlphabet () {
+  if($("#env0047").val() !== "*") {
+    $("#env0047").val($("#env0047").val().replace(/[^A-za-z0-9]/g, ""));
+  }
+};
+
 // 매장환경설정 비고설명 팝업
 function envRemarkPop(envstCd) {
 
@@ -291,6 +298,21 @@ $("#envLayer #btnSave").click(function(){
 
       s_alert.pop(msgStr);
       return false;
+    }
+
+    if(objEnvstCd[i].value == "0047") {
+      if(objEnvstValCd[i].value.length > 6 ) {
+        s_alert.pop("[0047] 상품코드PREFIX 는 6자리 이하로 설정하여 주십시오.");
+        return false;
+      }
+
+      var numberAlphabet = /[^A-za-z0-9]/g;
+      if(objEnvstValCd[i].value !== "*") {
+        if (numberAlphabet.test(objEnvstValCd[i].value)) {
+          s_alert.pop("[0047] 상품코드PREFIX 는 영문, 숫자만 입력 가능합니다.");
+          return false;
+        }
+      }
     }
 
     // [0001] 사원별매장관리

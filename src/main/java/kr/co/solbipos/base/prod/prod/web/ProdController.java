@@ -134,6 +134,18 @@ public class ProdController {
             model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
         }
 
+        // 상품코드 PREFIX 값 사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("prodCdPreFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "0"));
+        }else{
+            if(sessionInfoVO.getHqOfficeCd().equals("00000")) {
+                model.addAttribute("prodCdPreFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0047"), "0"));
+            }else{
+                model.addAttribute("prodCdPreFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "0"));
+            }
+        }
+
+
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));

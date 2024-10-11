@@ -285,6 +285,7 @@
     var subPriceFg = "${subPriceFg}";
     // 프린터연결팝업창 여부(0:안띄움 1:띄움)
     var kitchenprintLink = "${kitchenprintLink}";
+    var prodCdPreFg     = "${prodCdPreFg}";
     // (상품관리)브랜드사용여부
     var brandUseFg = "${brandUseFg}";
     // 브랜드

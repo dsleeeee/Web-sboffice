@@ -2340,40 +2340,18 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT
-                COUNT(1) AS CNT
-                FROM (
-                SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}
-                UNION ALL
-                (
-                SELECT
-                tmp.PROD_CD
-                FROM TB_MS_PRODUCT tmp,
-                TB_MS_STORE tms
-                WHERE 1=1
-                AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND tmp.STORE_CD = tms.STORE_CD
-                AND tmp.PROD_CD = #{prodCd}
-                )
-                )
+                SELECT 	FN_GET_PROD_CD_DUP_CHK(#{hqOfficeCd}, #{prodCd}, #{prefix})
+                FROM	DUAL
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd != "00000"'>
-                SELECT
-                COUNT(1) AS CNT
-                FROM (
-                SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd}
-                UNION ALL
-                SELECT PROD_CD FROM TB_MS_PRODUCT WHERE STORE_CD = #{storeCd} AND PROD_CD = #{prodCd}
-                )
+                SELECT 	FN_GET_PROD_CD_DUP_CHK(#{hqOfficeCd}, #{prodCd}, #{prefix})
+                FROM	DUAL
             </when>
             <!--  단독매장 -->
             <when test='orgnFg != null and orgnFg == "S" and hqOfficeCd == "00000"'>
-                SELECT COUNT(1) AS CNT
-                FROM TB_MS_PRODUCT
-                WHERE 1=1
-                AND STORE_CD = #{storeCd}
-                AND PROD_CD = #{prodCd}
+                SELECT 	FN_GET_PROD_CD_DUP_CHK(#{storeCd}, #{prodCd}, #{prefix})
+                FROM	DUAL
             </when>
         </choose>
     </select>
