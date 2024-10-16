@@ -72,24 +72,25 @@ app.controller('posFuncAuthDtlCtrl', ['$scope', '$http', function ($scope, $http
         params.fnkeyFg = data.nmcodeCd;
 
         $scope._inquirySub("/base/store/posfunc/auth/getPosConfAuthDetail.sb", params, function() {}, false);
-
-    }
+    };
 
     // 저장
     $scope.save = function() {
 
-        // 파라미터 설정
-        var params = new Array();
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            // 파라미터 설정
+            var params = new Array();
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            $scope.flex.collectionView.items[i].status = 'U';
-            $scope.flex.collectionView.items[i].storeCd = $("#hdStoreCd").val();
-            params.push($scope.flex.collectionView.items[i]);
-        }
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                $scope.flex.collectionView.items[i].status = 'U';
+                $scope.flex.collectionView.items[i].storeCd = $("#hdStoreCd").val();
+                params.push($scope.flex.collectionView.items[i]);
+            }
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/store/posfunc/auth/savePosAuthConf.sb', params, function(){
-            $scope.posFuncAuthDtlLayer.hide(true);
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/base/store/posfunc/auth/savePosAuthConf.sb', params, function(){
+                $scope.posFuncAuthDtlLayer.hide(true);
+            });
         });
     }
 

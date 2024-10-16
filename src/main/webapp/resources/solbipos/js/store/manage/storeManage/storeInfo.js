@@ -997,52 +997,61 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 매장정보 저장
   $scope.storeSave = function(data){
-    var params         = data;
-
-    // [1250 맘스터치]
-    params.momsEnvstVal = nvl($("#hdMomsEnvstVal").val(), "0");
-    if($("#hdMomsEnvstVal").val() === "0" && $("#envst1114").val() === "0") {
-      params.hqBrandCd = bHdHqBrandCd;
+    // 저장하시겠습니까?
+    var msg = messages["cmm.choo.save"];
+    if($("#hdMomsEnvstVal").val() === "1") {
+      msg = msg + "<br/>처리량이 많아 오래 걸릴 수 있습니다.<br/>완료될때까지 창을 닫지말고 기다려 주십시오."
     }
-    if(params.hqBrandCd === "" || params.hqBrandCd === null) {
-      params.hqBrandCd = "0000000";
-    }
+    $scope._popConfirm(msg, function() {
 
-    var storeScope = agrid.getScope('storeManageCtrl');
+      var params         = data;
 
-    // 매장 신규 등록시
-    if($.isEmptyObject(storeScope.getSelectedStore()) ) {
+      // [1250 맘스터치]
+      params.momsEnvstVal = nvl($("#hdMomsEnvstVal").val(), "0");
+      if($("#hdMomsEnvstVal").val() === "0" && $("#envst1114").val() === "0") {
+        params.hqBrandCd = bHdHqBrandCd;
+      }
+      if(params.hqBrandCd === "" || params.hqBrandCd === null) {
+        params.hqBrandCd = "0000000";
+      }
 
-      var copyChkVal = "";
+      var storeScope = agrid.getScope('storeManageCtrl');
 
-      $("input[name=copyChk]:checked").each(function() {
-        copyChkVal += ($(this).val() + "|");
-      });
+      // 매장 신규 등록시
+      if($.isEmptyObject(storeScope.getSelectedStore()) ) {
 
-      params.copyChkVal = copyChkVal;
+        var copyChkVal = "";
 
-      $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function (response) {
+        $("input[name=copyChk]:checked").each(function() {
+          copyChkVal += ($(this).val() + "|");
+        });
 
-        var result = response.data.data;
+        params.copyChkVal = copyChkVal;
 
-        if(result === ""){
-          $scope._popMsg(messages["cmm.registFail"]);
-        }else{
+        $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/saveStoreInfo.sb", params, function (response) {
+
+          var result = response.data.data;
+
+          if(result === ""){
+            $scope._popMsg(messages["cmm.registFail"]);
+          }else{
+            $scope._popMsg(messages["cmm.saveSucc"]);
+            $scope.storeInfoLayer.hide();
+          }
+
+          $scope._broadcast('storeManageCtrl');
+        });
+      }
+      // 수정
+      else {
+        $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/updateStoreInfo.sb", params, function () {
           $scope._popMsg(messages["cmm.saveSucc"]);
           $scope.storeInfoLayer.hide();
-        }
+          $scope._broadcast('storeManageCtrl');
+        });
+      }
 
-        $scope._broadcast('storeManageCtrl');
-      });
-    }
-    // 수정
-    else {
-      $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/updateStoreInfo.sb", params, function () {
-        $scope._popMsg(messages["cmm.saveSucc"]);
-        $scope.storeInfoLayer.hide();
-        $scope._broadcast('storeManageCtrl');
-      });
-    }
+    });
   };
 
 

@@ -215,45 +215,46 @@ app.controller('posFuncUseFnKeyCtrl', ['$scope', '$http', function ($scope, $htt
 
     // 저장
     $scope.save = function() {
-
-        $scope.flex.collectionView.commitEdit();
-
-        // 파라미터 설정
-        var params = [];
-
-        // dispSeq 재설정
-        var editItems = [];
-        for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
-            if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
-                editItems.push($scope.flex.collectionView.items[s]);
-            }
-        }
-
-        for (var s = 0; s < editItems.length; s++) {
-            editItems[s].dispSeq = (s + 1);
-            console.log(editItems);
-            $scope.flex.collectionView.editItem(editItems[s]);
-            editItems[s].status = "U";
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
             $scope.flex.collectionView.commitEdit();
-        }
 
-        for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
-            $scope.flex.collectionView.itemsEdited[u].status = 'U';
-            $scope.flex.collectionView.itemsEdited[u].storeCd = $("#hdStoreCd").val();
-            $scope.flex.collectionView.itemsEdited[u].posNo = $("#hdPosNo").val();
-            $scope.flex.collectionView.itemsEdited[u].fnkeyFg = $("#hdFnkeyFg").val();
-            params.push($scope.flex.collectionView.itemsEdited[u]);
-        }
+            // 파라미터 설정
+            var params = [];
+
+            // dispSeq 재설정
+            var editItems = [];
+            for (var s = 0; s < $scope.flex.collectionView.itemCount; s++) {
+                if( isEmptyObject($scope.flex.collectionView.items[s].status) || $scope.flex.collectionView.items[s].status === 'I') {
+                    editItems.push($scope.flex.collectionView.items[s]);
+                }
+            }
+
+            for (var s = 0; s < editItems.length; s++) {
+                editItems[s].dispSeq = (s + 1);
+                console.log(editItems);
+                $scope.flex.collectionView.editItem(editItems[s]);
+                editItems[s].status = "U";
+                $scope.flex.collectionView.commitEdit();
+            }
+
+            for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+                $scope.flex.collectionView.itemsEdited[u].status = 'U';
+                $scope.flex.collectionView.itemsEdited[u].storeCd = $("#hdStoreCd").val();
+                $scope.flex.collectionView.itemsEdited[u].posNo = $("#hdPosNo").val();
+                $scope.flex.collectionView.itemsEdited[u].fnkeyFg = $("#hdFnkeyFg").val();
+                params.push($scope.flex.collectionView.itemsEdited[u]);
+            }
 
 
-        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/store/posfunc/use/savePosConf.sb', params, function() {
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/base/store/posfunc/use/savePosConf.sb', params, function() {
 
-            $scope.posFuncUseFnKeyLayer.hide(true);
+                $scope.posFuncUseFnKeyLayer.hide(true);
 
-            // 저장 후 부모창 그리드 재조회
-            showPosFuncList2($("#hdPosNo").val());
+                // 저장 후 부모창 그리드 재조회
+                showPosFuncList2($("#hdPosNo").val());
 
+            });
         });
     }
 

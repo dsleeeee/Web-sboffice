@@ -1142,49 +1142,51 @@ Format.prototype.save = function () {
     var funcKey = this.touchkey.funcKey;
     var scope = agrid.getScope("posFuncUseXmlCtrl");
 
-    if (funcKey.isEditing()) {
-        funcKey.stopEditing();
-    }
-
-    var node = null;
-    var enc = new mxCodec(mxUtils.createXmlDocument());
-    node = enc.encode(funcKey.getModel());
-    var funcKeyXml = mxUtils.getXml(node);
-
-    var storeCd = scope.getSaveInfo("storeCd");
-    var posNo = scope.getSaveInfo("posNo");
-    var fnkeyFg = scope.getSaveInfo("fnkeyFg");
-    var params = '&storeCd=' + storeCd + "&posNo=" + posNo + "&fnkeyFg=" + fnkeyFg;
-
-    var xml = encodeURIComponent(funcKeyXml);
-
-    try {
-        if (xml.length < MAX_REQUEST_SIZE) {
-            var onload = function (req) {
-                scope.$apply(function(){
-                    scope._popMsg(mxResources.get('saved'));
-                    scope.posFuncUseXmlLayer.hide(true);
-                });
-            };
-            var onerror = function (req) {
-                scope.$apply(function(){
-                    scope._popMsg("저장 중 오류가 발생하였습니다.");
-                });
-            };
-            new mxXmlRequest(FUNCKEY_SAVE_URL, 'xml=' + xml + params).send(onload, onerror);
+    scope._popConfirm(messages["cmm.choo.save"], function() {
+        if (funcKey.isEditing()) {
+            funcKey.stopEditing();
         }
-        else {
+
+        var node = null;
+        var enc = new mxCodec(mxUtils.createXmlDocument());
+        node = enc.encode(funcKey.getModel());
+        var funcKeyXml = mxUtils.getXml(node);
+
+        var storeCd = scope.getSaveInfo("storeCd");
+        var posNo = scope.getSaveInfo("posNo");
+        var fnkeyFg = scope.getSaveInfo("fnkeyFg");
+        var params = '&storeCd=' + storeCd + "&posNo=" + posNo + "&fnkeyFg=" + fnkeyFg;
+
+        var xml = encodeURIComponent(funcKeyXml);
+
+        try {
+            if (xml.length < MAX_REQUEST_SIZE) {
+                var onload = function (req) {
+                    scope.$apply(function(){
+                        scope._popMsg(mxResources.get('saved'));
+                        scope.posFuncUseXmlLayer.hide(true);
+                    });
+                };
+                var onerror = function (req) {
+                    scope.$apply(function(){
+                        scope._popMsg("저장 중 오류가 발생하였습니다.");
+                    });
+                };
+                new mxXmlRequest(FUNCKEY_SAVE_URL, 'xml=' + xml + params).send(onload, onerror);
+            }
+            else {
+                scope.$apply(function(){
+                    scope._popMsg(mxResources.get('drawingTooLarge'));
+                });
+                return false;
+            }
+        }
+        catch (e) {
             scope.$apply(function(){
-                scope._popMsg(mxResources.get('drawingTooLarge'));
+                scope._popMsg(mxResources.get('errorSavingFile'));
             });
-            return false;
         }
-    }
-    catch (e) {
-        scope.$apply(function(){
-            scope._popMsg(mxResources.get('errorSavingFile'));
-        });
-    }
+    });
 
 };
 

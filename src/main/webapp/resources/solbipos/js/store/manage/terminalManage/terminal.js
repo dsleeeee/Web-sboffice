@@ -620,146 +620,160 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 포스 정보 저장
     $scope.save = function () {
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            var terminalScope = agrid.getScope('terminalCtrl');
 
-        var terminalScope = agrid.getScope('terminalCtrl');
-
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            if($scope.flex.collectionView.itemsEdited[i].gChk) {
-                $scope.flex.collectionView.itemsEdited[i].status = "U";
-                $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
-                $scope.flex.collectionView.itemsEdited[i].posNo = terminalScope.getPosFgVal();
-                params.push($scope.flex.collectionView.itemsEdited[i]);
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                if($scope.flex.collectionView.itemsEdited[i].gChk) {
+                    $scope.flex.collectionView.itemsEdited[i].status = "U";
+                    $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
+                    $scope.flex.collectionView.itemsEdited[i].posNo = terminalScope.getPosFgVal();
+                    params.push($scope.flex.collectionView.itemsEdited[i]);
+                }
             }
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            if($scope.flex.collectionView.itemsAdded[i].gChk) {
-                $scope.flex.collectionView.itemsAdded[i].status = "I";
-                $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
-                $scope.flex.collectionView.itemsAdded[i].posNo = terminalScope.getPosFgVal();
-                params.push($scope.flex.collectionView.itemsAdded[i]);
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if($scope.flex.collectionView.itemsAdded[i].gChk) {
+                    $scope.flex.collectionView.itemsAdded[i].status = "I";
+                    $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
+                    $scope.flex.collectionView.itemsAdded[i].posNo = terminalScope.getPosFgVal();
+                    params.push($scope.flex.collectionView.itemsAdded[i]);
+                }
             }
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            if($scope.flex.collectionView.itemsRemoved[i].gChk) {
-                $scope.flex.collectionView.itemsRemoved[i].status = "D";
-                $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
-                $scope.flex.collectionView.itemsRemoved[i].posNo = terminalScope.getPosFgVal();
-                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+                if($scope.flex.collectionView.itemsRemoved[i].gChk) {
+                    $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                    $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
+                    $scope.flex.collectionView.itemsRemoved[i].posNo = terminalScope.getPosFgVal();
+                    params.push($scope.flex.collectionView.itemsRemoved[i]);
+                }
             }
-        }
 
-        // 필수값 체크
-        for (var i = 0; i < params.length; i++) {
+            // 필수값 체크
+            for (var i = 0; i < params.length; i++) {
 
-            if (params[i].status !== "D") {
+                if (params[i].status !== "D") {
 
-                if (params[i].vendorFg == "") {
-                    $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
-                    return false;
-                }
-
-                if (params[i].vendorCd == "") {
-                    $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
-                    return false;
-                }
-
-                if (params[i].vendorNm == "" || params[i].vendorNm == undefined) {
-                    $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
-                    return false;
-                }
-
-                if (params[i].vendorTermnlNo == "" || params[i].vendorTermnlNo == undefined) {
-                    $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
-                    return false;
-                } else {
-                    if (params[i].vendorFg === "01" && params[i].vendorNm === "KCP") {
-                        if (params[i].vendorTermnlNo.length != 10) {
-                            $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + "는 10자리로 입력하세요.");
-                            return false;
-                        }
-                    } else {
-                        if (params[i].vendorTermnlNo.length > 50) {
-                            $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
-                            return false;
-                        }
-                    }
-                }
-
-                if (params[i].vendorSerNo == "" || params[i].vendorSerNo == undefined) {
-                    $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
-                    return false;
-                } else {
-                    if (params[i].vendorSerNo.length > 20) {
-                        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
+                    if (params[i].vendorFg == "") {
+                        $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
                         return false;
                     }
-                }
 
-                // BBQ는 VAN - KCP 만 저장 가능
-                // 개발 DS011
-                // 운영 DS024 H0360
-                if (params[i].status !== "D") {
-                    if ($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
-                        if (params[i].vendorFg == "01") {
-                            if (params[i].vendorNm == "KCP") {
-                            } else {
-                                // BBQ 매장은 VAN - KCP 선택하여 주십시오.
-                                $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+                    if (params[i].vendorCd == "") {
+                        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
+                        return false;
+                    }
+
+                    if (params[i].vendorNm == "" || params[i].vendorNm == undefined) {
+                        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
+                        return false;
+                    }
+
+                    if (params[i].vendorTermnlNo == "" || params[i].vendorTermnlNo == undefined) {
+                        $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
+                        return false;
+                    } else {
+                        if (params[i].vendorFg === "01" && params[i].vendorNm === "KCP") {
+                            if (params[i].vendorTermnlNo.length != 10) {
+                                $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + "는 10자리로 입력하세요.");
+                                return false;
+                            }
+                        } else {
+                            if (params[i].vendorTermnlNo.length > 50) {
+                                $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (params[i].vendorSerNo == "" || params[i].vendorSerNo == undefined) {
+                        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
+                        return false;
+                    } else {
+                        if (params[i].vendorSerNo.length > 20) {
+                            $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
+                            return false;
+                        }
+                    }
+
+                    // BBQ는 VAN - KCP 만 저장 가능
+                    // 개발 DS011
+                    // 운영 DS024 H0360
+                    if (params[i].status !== "D") {
+                        if ($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
+                            if (params[i].vendorFg == "01") {
+                                if (params[i].vendorNm == "KCP") {
+                                } else {
+                                    // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+                                    $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    // 벤더구분 [01]VAN인 경우 벤더코드는 [008]KOCES 만 선택가능합니다
+                    if($("#lblVanFixFg").text() == "Y") {
+                        if (params[i].vendorFg === '01') {
+                            if (params[i].vendorNm !== 'KOCES') {
+                                $scope._popMsg(messages["terminalManage.vendorFg"]+"이 [01]VAN인 경우 " + messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
                                 return false;
                             }
                         }
                     }
                 }
-                // 벤더구분 [01]VAN인 경우 벤더코드는 [008]KOCES 만 선택가능합니다
-                if($("#lblVanFixFg").text() == "Y") {
-                    if (params[i].vendorFg === '01') {
-                        if (params[i].vendorNm !== 'KOCES') {
-                            $scope._popMsg(messages["terminalManage.vendorFg"]+"이 [01]VAN인 경우 " + messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
-                            return false;
+            }
+
+            // 벤더구분-벤더코드 중복체크
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+                for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                    var item2 = $scope.flex.collectionView.items[j];
+                    if(i !== j){
+                        if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
+                            && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
+                            if (item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()) {
+                                $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
+                                return false;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // 벤더구분-벤더코드 중복체크
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            var item = $scope.flex.collectionView.items[i];
-            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                var item2 = $scope.flex.collectionView.items[j];
-                if(i !== j){
-                    if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
-                        && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
-                        if (item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()) {
-                            $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
-                            return false;
-                        }
-                    }
-                }
+            var chkChanged = false;
+            // 현재 선택한 터미널 콤보값과 기존 터미널 환경설정값이 일치하는지 확인
+            if ($("#terminalFgVal").val() !== $("#orgTerminalEnvVal").val()) {
+                chkChanged = true;
             }
-        }
 
-        var chkChanged = false;
-        // 현재 선택한 터미널 콤보값과 기존 터미널 환경설정값이 일치하는지 확인
-        if ($("#terminalFgVal").val() !== $("#orgTerminalEnvVal").val()) {
-            chkChanged = true;
-        }
+            if (chkChanged) {
+                var params2 = {};
+                params2.storeCd = $("#lblStoreCd").text();
+                params2.envstCd = "2028"; //코너사용설정[2028]
+                params2.envstVal = $("#terminalFgVal").val();
 
-        if (chkChanged) {
-            var params2 = {};
-            params2.storeCd = $("#lblStoreCd").text();
-            params2.envstCd = "2028"; //코너사용설정[2028]
-            params2.envstVal = $("#terminalFgVal").val();
+                // 코너사용설정[2028] 환경설정값 변경
+                $scope._save("/store/manage/terminalManage/terminalManage/updateTerminalEnvst.sb", params2, function () {
 
-            // 코너사용설정[2028] 환경설정값 변경
-            $scope._save("/store/manage/terminalManage/terminalManage/updateTerminalEnvst.sb", params2, function () {
-
+                    // 리스트 변경사항이 있는지 확인
+                    if (params.length <= 0) {
+                        // 재조회
+                        terminalScope.search();
+                    } else {
+                        params = JSON.stringify(params);
+                        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+                        $scope._save(baseUrl + "pos/savePosTerminalInfo.sb", params, function () {
+                            // 재조회
+                            terminalScope.search();
+                        });
+                    }
+                });
+            } else {
                 // 리스트 변경사항이 있는지 확인
                 if (params.length <= 0) {
-                    // 재조회
-                    terminalScope.search();
+                    $scope._popMsg(messages["cmm.not.modify"]);
+                    return false;
                 } else {
                     params = JSON.stringify(params);
                     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -768,21 +782,8 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                         terminalScope.search();
                     });
                 }
-            });
-        } else {
-            // 리스트 변경사항이 있는지 확인
-            if (params.length <= 0) {
-                $scope._popMsg(messages["cmm.not.modify"]);
-                return false;
-            } else {
-                params = JSON.stringify(params);
-                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-                $scope._save(baseUrl + "pos/savePosTerminalInfo.sb", params, function () {
-                    // 재조회
-                    terminalScope.search();
-                });
             }
-        }
+        });
     };
 
     // 포스 정보 삭제
@@ -972,146 +973,160 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 코너 정보 저장
     $scope.save = function () {
+        $scope._popConfirm(messages["cmm.choo.save"], function() {
+            var terminalScope = agrid.getScope('terminalCtrl');
 
-        var terminalScope = agrid.getScope('terminalCtrl');
-
-        // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
-            if($scope.flex.collectionView.itemsEdited[i].gChk) {
-                $scope.flex.collectionView.itemsEdited[i].status = "U";
-                $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
-                $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
-                params.push($scope.flex.collectionView.itemsEdited[i]);
+            // 파라미터 설정
+            var params = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+                if($scope.flex.collectionView.itemsEdited[i].gChk) {
+                    $scope.flex.collectionView.itemsEdited[i].status = "U";
+                    $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
+                    $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
+                    params.push($scope.flex.collectionView.itemsEdited[i]);
+                }
             }
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            if($scope.flex.collectionView.itemsAdded[i].gChk) {
-                $scope.flex.collectionView.itemsAdded[i].status = "I";
-                $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
-                $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
-                params.push($scope.flex.collectionView.itemsAdded[i]);
+            for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+                if($scope.flex.collectionView.itemsAdded[i].gChk) {
+                    $scope.flex.collectionView.itemsAdded[i].status = "I";
+                    $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
+                    $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
+                    params.push($scope.flex.collectionView.itemsAdded[i]);
+                }
             }
-        }
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            if($scope.flex.collectionView.itemsRemoved[i].gChk) {
-                $scope.flex.collectionView.itemsRemoved[i].status = "D";
-                $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
-                $scope.flex.collectionView.itemsRemoved[i].cornrCd = terminalScope.getCornerFgVal();
-                params.push($scope.flex.collectionView.itemsRemoved[i]);
+            for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
+                if($scope.flex.collectionView.itemsRemoved[i].gChk) {
+                    $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                    $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
+                    $scope.flex.collectionView.itemsRemoved[i].cornrCd = terminalScope.getCornerFgVal();
+                    params.push($scope.flex.collectionView.itemsRemoved[i]);
+                }
             }
-        }
 
-        //필수값 체크
-        for (var i = 0; i < params.length; i++) {
+            //필수값 체크
+            for (var i = 0; i < params.length; i++) {
 
-            if (params[i].status !== "D") {
+                if (params[i].status !== "D") {
 
-                if (params[i].vendorFg == "") {
-                    $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
-                    return false;
-                }
-
-                if (params[i].vendorCd == "") {
-                    $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
-                    return false;
-                }
-
-                if (params[i].vendorNm == "" || params[i].vendorNm == undefined) {
-                    $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
-                    return false;
-                }
-
-                if (params[i].vendorTermnlNo == "" || params[i].vendorTermnlNo == undefined) {
-                    $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
-                    return false;
-                } else {
-                    if (params[i].vendorFg === "01" && params[i].vendorNm === "KCP") {
-                        if (params[i].vendorTermnlNo.length != 10) {
-                            $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + "는 10자리로 입력하세요.");
-                            return false;
-                        }
-                    } else {
-                        if (params[i].vendorTermnlNo.length > 50) {
-                            $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
-                            return false;
-                        }
-                    }
-                }
-
-                if (params[i].vendorSerNo == "" || params[i].vendorSerNo == undefined) {
-                    $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
-                    return false;
-                } else {
-                    if (params[i].vendorSerNo.length > 20) {
-                        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
+                    if (params[i].vendorFg == "") {
+                        $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
                         return false;
                     }
-                }
 
-                // BBQ는 VAN - KCP 만 저장 가능
-                // 개발 DS011
-                // 운영 DS024 H0360
-                if (params[i].status !== "D") {
-                    if ($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
-                        if (params[i].vendorFg == "01") {
-                            if (params[i].vendorNm == "KCP") {
-                            } else {
-                                // BBQ 매장은 VAN - KCP 선택하여 주십시오.
-                                $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+                    if (params[i].vendorCd == "") {
+                        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
+                        return false;
+                    }
+
+                    if (params[i].vendorNm == "" || params[i].vendorNm == undefined) {
+                        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
+                        return false;
+                    }
+
+                    if (params[i].vendorTermnlNo == "" || params[i].vendorTermnlNo == undefined) {
+                        $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.input"]);
+                        return false;
+                    } else {
+                        if (params[i].vendorFg === "01" && params[i].vendorNm === "KCP") {
+                            if (params[i].vendorTermnlNo.length != 10) {
+                                $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + "는 10자리로 입력하세요.");
+                                return false;
+                            }
+                        } else {
+                            if (params[i].vendorTermnlNo.length > 50) {
+                                $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
+                                return false;
+                            }
+                        }
+                    }
+
+                    if (params[i].vendorSerNo == "" || params[i].vendorSerNo == undefined) {
+                        $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
+                        return false;
+                    } else {
+                        if (params[i].vendorSerNo.length > 20) {
+                            $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
+                            return false;
+                        }
+                    }
+
+                    // BBQ는 VAN - KCP 만 저장 가능
+                    // 개발 DS011
+                    // 운영 DS024 H0360
+                    if (params[i].status !== "D") {
+                        if ($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
+                            if (params[i].vendorFg == "01") {
+                                if (params[i].vendorNm == "KCP") {
+                                } else {
+                                    // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+                                    $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    // KOCES 총판은 벤더코드 KOCES만 저장가능
+                    if($("#lblVanFixFg").text() == "Y") {
+                        if (params[i].vendorFg === '01') {
+                            if (params[i].vendorNm !== 'KOCES') {
+                                $scope._popMsg(messages["terminalManage.vendorFg"]+"이 [01]VAN인 경우 " + messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
                                 return false;
                             }
                         }
                     }
                 }
-                // KOCES 총판은 벤더코드 KOCES만 저장가능
-                if($("#lblVanFixFg").text() == "Y") {
-                    if (params[i].vendorFg === '01') {
-                        if (params[i].vendorNm !== 'KOCES') {
-                            $scope._popMsg(messages["terminalManage.vendorFg"]+"이 [01]VAN인 경우 " + messages["terminalManage.vendorCd"] + "는 [008] KOCES" + messages["terminalManage.require.select"]);
-                            return false;
+            }
+
+            // 벤더구분-벤더코드 중복체크
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+                for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                    var item2 = $scope.flex.collectionView.items[j];
+                    if(i !== j){
+                        if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
+                           && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
+                            if (item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()) {
+                                $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
+                                return false;
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // 벤더구분-벤더코드 중복체크
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            var item = $scope.flex.collectionView.items[i];
-            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                var item2 = $scope.flex.collectionView.items[j];
-                if(i !== j){
-                    if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
-                       && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
-                        if (item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()) {
-                            $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
-                            return false;
-                        }
-                    }
-                }
+            var chkChanged = false;
+            // 현재 선택한 터미널 콤보값과 기존 터미널 환경설정값이 일치하는지 확인
+            if ($("#terminalFgVal").val() !== $("#orgTerminalEnvVal").val()) {
+                chkChanged = true;
             }
-        }
 
-        var chkChanged = false;
-        // 현재 선택한 터미널 콤보값과 기존 터미널 환경설정값이 일치하는지 확인
-        if ($("#terminalFgVal").val() !== $("#orgTerminalEnvVal").val()) {
-            chkChanged = true;
-        }
+            if (chkChanged) {
+                var params2 = {};
+                params2.storeCd = $("#lblStoreCd").text();
+                params2.envstCd = "2028"; //코너사용설정[2028]
+                params2.envstVal = $("#terminalFgVal").val();
 
-        if (chkChanged) {
-            var params2 = {};
-            params2.storeCd = $("#lblStoreCd").text();
-            params2.envstCd = "2028"; //코너사용설정[2028]
-            params2.envstVal = $("#terminalFgVal").val();
+                // 코너사용설정[2028] 환경설정값 변경
+                $scope._save("/store/manage/terminalManage/terminalManage/updateTerminalEnvst.sb", params2, function () {
 
-            // 코너사용설정[2028] 환경설정값 변경
-            $scope._save("/store/manage/terminalManage/terminalManage/updateTerminalEnvst.sb", params2, function () {
-
+                    // 리스트 변경사항이 있는지 확인
+                    if (params.length <= 0) {
+                        // 재조회
+                        terminalScope.search();
+                    } else {
+                        params = JSON.stringify(params);
+                        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+                        $scope._save(baseUrl + "corner/saveCornerTerminalInfo.sb", params, function () {
+                            // 재조회
+                            terminalScope.search();
+                        });
+                    }
+                });
+            } else {
                 // 리스트 변경사항이 있는지 확인
                 if (params.length <= 0) {
-                    // 재조회
-                    terminalScope.search();
+                    $scope._popMsg(messages["cmm.not.modify"]);
+                    return false;
                 } else {
                     params = JSON.stringify(params);
                     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -1120,21 +1135,8 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                         terminalScope.search();
                     });
                 }
-            });
-        } else {
-            // 리스트 변경사항이 있는지 확인
-            if (params.length <= 0) {
-                $scope._popMsg(messages["cmm.not.modify"]);
-                return false;
-            } else {
-                params = JSON.stringify(params);
-                // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-                $scope._save(baseUrl + "corner/saveCornerTerminalInfo.sb", params, function () {
-                    // 재조회
-                    terminalScope.search();
-                });
             }
-        }
+        });
     };
 
     // 코너 정보 삭제

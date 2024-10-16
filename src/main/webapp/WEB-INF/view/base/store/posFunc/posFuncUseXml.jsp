@@ -81,4 +81,4 @@
 <script type="text/javascript" src="/resource/vendor/mxgraph/mxClient.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/graph/sanitizer/sanitizer.min.js" charset="utf-8"></script>
 <script type="text/javascript" src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500" charset="utf-8"></script>
-<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncUseXml.js?ver=20201013.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/posFunc/posFuncUseXml.js?ver=20241015.01" charset="utf-8"></script>
