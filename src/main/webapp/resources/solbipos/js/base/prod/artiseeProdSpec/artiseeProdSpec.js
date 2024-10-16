@@ -68,6 +68,9 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
                 }
             }
         });
+
+        // 조회
+        $scope.searchArtiseeProdSpec();
     };
 
     // <-- 검색 호출 -->
