@@ -399,60 +399,62 @@
     </c:if>
     <%--//searchTbl--%>
 
-    <%-- 일괄적용 --%>
-    <table class="searchTbl mt10">
-        <colgroup>
-            <col class="w15" />
-            <col class="w15" />
-            <col class="w15" />
-            <col class="*" />
-        </colgroup>
-        <tbody>
-        <tr class="brt">
-            <%-- 판매상품여부 --%>
-            <th>
-                <s:message code="soldOut.soldOutYn" />
-            </th>
-            <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                        id="srchSoldOutYnChg"
-                        ng-model="soldOutYnChg"
-                        items-source="_getComboData('soldOutYnComboChg')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </td>
-            <%-- 일괄적용 --%>
-            <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="cmm.batchChange" /></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <c:if test="${hqOfficeCd != 'DS021' and hqOfficeCd != 'DS034' and hqOfficeCd != 'H0393'}">
+        <%-- 일괄적용 --%>
+        <table class="searchTbl mt10">
+            <colgroup>
+                <col class="w15" />
+                <col class="w15" />
+                <col class="w15" />
+                <col class="*" />
+            </colgroup>
+            <tbody>
+            <tr class="brt">
+                <%-- 판매상품여부 --%>
+                <th>
+                    <s:message code="soldOut.soldOutYn" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                            id="srchSoldOutYnChg"
+                            ng-model="soldOutYnChg"
+                            items-source="_getComboData('soldOutYnComboChg')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 일괄적용 --%>
+                <td>
+                    <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="cmm.batchChange" /></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-    <table class="searchTbl mt10">
-        <colgroup>
-            <col class="w70" />
-            <col class="w30" />
-        </colgroup>
-        <tbody>
-        <tr class="brt">
-            <th>
-                - '품절여부전체저장' 클릭시 체크된 상품과 사이드상품까지 '품절' 처리됩니다.
-            </th>
-            <th>
-                <%-- 품절여부전체저장 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="soldOutAllSave()"><s:message code="soldOut.soldOutAllSave" /></button>
-                <%-- 저장 --%>
-                <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
-            </th>
-        </tr>
-        </tbody>
-    </table>
+        <table class="searchTbl mt10">
+            <colgroup>
+                <col class="w70" />
+                <col class="w30" />
+            </colgroup>
+            <tbody>
+            <tr class="brt">
+                <th>
+                    - '품절여부전체저장' 클릭시 체크된 상품과 사이드상품까지 '품절' 처리됩니다.
+                </th>
+                <th>
+                    <%-- 품절여부전체저장 --%>
+                    <button class="btn_skyblue ml5 fr" ng-click="soldOutAllSave()"><s:message code="soldOut.soldOutAllSave" /></button>
+                    <%-- 저장 --%>
+                    <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
+                </th>
+            </tr>
+            </tbody>
+        </table>
+    </c:if>
 
     <div class="mt10 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
@@ -479,7 +481,7 @@
                 <wj-flex-grid-column header="<s:message code="prod.storeNm"/>" binding="storeNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="170" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="soldOut.soldOutYn"/>" binding="soldOutYn" width="80" data-map="soldOutYnDataMap" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="soldOut.soldOutYn"/>" binding="soldOutYn" width="80" data-map="soldOutYnDataMap" align="center" <c:if test="${hqOfficeCd == 'DS021' or hqOfficeCd == 'DS034' or hqOfficeCd == 'H0393'}">is-read-only="true"</c:if>></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="soldOut.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="soldOut.selfappYn"/>" binding="selfappYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <c:if test="${brandUseFg == '1'}">

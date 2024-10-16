@@ -13,22 +13,22 @@
   <%--가상로그인 후 로고 클릭시 세션없어짐 2021.02.16 김설아--%>
   <h1>
 <c:if test="${(orgnFg != 'HQ' and orgnFg != 'STORE') or logoImg == 'N'}">
-  <a href="/main.sb?sid=${sessionId}" class="on"><span><img src="/resource/solbipos/css/img/TwoColor_logo.png" alt="" />
+  <a href="/main.sb?sid=${sessionId}" class="on"><span><img src="/resource/solbipos/css/img/LYNK_BI_white.png" alt="" />
 </c:if>
 <c:if test="${(orgnFg == 'HQ' or orgnFg == 'STORE') and logoImg == 'Y'}">
-  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}" onerror="this.src='/resource/solbipos/css/img/TwoColor_logo.png'" alt="" />
+  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}" onerror="this.src='/resource/solbipos/css/img/LYNK_BI_white.png'" alt="" />
 </c:if>
 <c:if test="${(orgnFg == 'HQ' or orgnFg == 'STORE') and logoImg == '.PNG'}">
-  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}.PNG" onerror="this.src='/resource/solbipos/css/img/TwoColor_logo.png'" alt="" />
+  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}.PNG" onerror="this.src='/resource/solbipos/css/img/LYNK_BI_white.png'" alt="" />
 </c:if>
 <c:if test="${(orgnFg == 'HQ' or orgnFg == 'STORE') and logoImg == '.JPG'}">
-  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}.JPG" onerror="this.src='/resource/solbipos/css/img/TwoColor_logo.png'" alt="" />
+  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}.JPG" onerror="this.src='/resource/solbipos/css/img/LYNK_BI_white.png'" alt="" />
 </c:if>
 <c:if test="${(orgnFg == 'HQ' or orgnFg == 'STORE') and logoImg == '.png'}">
-  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}.png" onerror="this.src='/resource/solbipos/css/img/TwoColor_logo.png'" alt="" />
+  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}.png" onerror="this.src='/resource/solbipos/css/img/LYNK_BI_white.png'" alt="" />
 </c:if>
 <c:if test="${(orgnFg == 'HQ' or orgnFg == 'STORE') and logoImg == '.jpg'}">
-  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}.jpg" onerror="this.src='/resource/solbipos/css/img/TwoColor_logo.png'" alt="" />
+  <a href="/main.sb?sid=${sessionId}" class="on" style="height:50px; width:220px; position:absolute; left:0px; top:0px;"><span><img src="http://neo.solbipos.com/LogoImg/${hqOfficeCd}.jpg" onerror="this.src='/resource/solbipos/css/img/LYNK_BI_white.png'" alt="" />
 </c:if>
     </span></a></h1><%-- 활성화 : class="on" --%>
       <%--//로고영역--%>

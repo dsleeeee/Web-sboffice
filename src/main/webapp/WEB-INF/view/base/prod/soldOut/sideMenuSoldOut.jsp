@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="subCon" id="sideMenuSoldOutView" ng-controller="soldOutChgCtrl" style="display: none; padding: 10px 20px 40px;">
   <%--searchTbl--%>
@@ -41,44 +42,46 @@
     </table>
     </c:if>
 
-    <%-- 일괄적용 --%>
-    <table class="searchTbl mt10">
-      <colgroup>
-        <col class="w15" />
-        <col class="w15" />
-        <col class="w15" />
-        <col class="*" />
-      </colgroup>
-      <tbody>
-      <tr class="brt">
-        <%-- 판매상품여부 --%>
-        <th>
-          <s:message code="soldOut.soldOutYn" />
-        </th>
-        <td>
-          <div class="sb-select">
-            <wj-combo-box
-                    id="srchSoldOutYnChg"
-                    ng-model="soldOutYnChg"
-                    items-source="_getComboData('soldOutYnComboChg')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="_initComboBox(s)">
-            </wj-combo-box>
-          </div>
-        </td>
+    <c:if test="${hqOfficeCd != 'DS021' and hqOfficeCd != 'DS034' and hqOfficeCd != 'H0393'}">
         <%-- 일괄적용 --%>
-        <td>
-          <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="prodBatchChange.batchChange" /></a>
-        </td>
-          <%-- 저장 --%>
-          <td>
-            <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
-          </td>
-      </tr>
-      </tbody>
-    </table>
+        <table class="searchTbl mt10">
+          <colgroup>
+            <col class="w15" />
+            <col class="w15" />
+            <col class="w15" />
+            <col class="*" />
+          </colgroup>
+          <tbody>
+          <tr class="brt">
+            <%-- 판매상품여부 --%>
+            <th>
+              <s:message code="soldOut.soldOutYn" />
+            </th>
+            <td>
+              <div class="sb-select">
+                <wj-combo-box
+                        id="srchSoldOutYnChg"
+                        ng-model="soldOutYnChg"
+                        items-source="_getComboData('soldOutYnComboChg')"
+                        display-member-path="name"
+                        selected-value-path="value"
+                        is-editable="false"
+                        initialized="_initComboBox(s)">
+                </wj-combo-box>
+              </div>
+            </td>
+            <%-- 일괄적용 --%>
+            <td>
+              <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="prodBatchChange.batchChange" /></a>
+            </td>
+              <%-- 저장 --%>
+              <td>
+                <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
+              </td>
+          </tr>
+          </tbody>
+        </table>
+    </c:if>
 
     <div class="w40 fl mt10">
     <div>
@@ -174,7 +177,7 @@
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselClassCd"/>" binding="sdselClassCd" width="70" visible="false"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="soldOut.soldOutYn"/>" binding="soldOutYn" width="80" data-map="soldOutYnDataMap" ></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="soldOut.soldOutYn"/>" binding="soldOutYn" width="80" data-map="soldOutYnDataMap" <c:if test="${hqOfficeCd == 'DS021' or hqOfficeCd == 'DS034' or hqOfficeCd == 'H0393'}">is-read-only="true"</c:if>></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="soldOut.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="soldOut.selfappYn"/>" binding="selfappYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.addProdUprc"/>" binding="addProdUprc" width="50" is-read-only="true"></wj-flex-grid-column>

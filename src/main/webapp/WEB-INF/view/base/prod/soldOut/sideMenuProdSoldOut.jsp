@@ -6,6 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div class="subCon" id="sideMenuProdSoldOutView" ng-controller="sideMenuProdSoldOutCtrl" style="display: none; padding: 10px 20px 40px;">
   <%--searchTbl--%>
@@ -147,44 +148,46 @@
       </tbody>
     </table>
 
-  <%-- 일괄적용 --%>
-  <table class="searchTbl mt10">
-      <colgroup>
-          <col class="w15" />
-          <col class="w15" />
-          <col class="w15" />
-          <col class="*" />
-      </colgroup>
-      <tbody>
-      <tr class="brt">
-          <%-- 판매상품여부 --%>
-          <th>
-              <s:message code="soldOut.soldOutYn" />
-          </th>
-          <td>
-              <div class="sb-select">
-                  <wj-combo-box
-                          id="srchSoldOutYnChg"
-                          ng-model="soldOutYnChg"
-                          items-source="_getComboData('soldOutYnComboChg')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false"
-                          initialized="_initComboBox(s)">
-                  </wj-combo-box>
-              </div>
-          </td>
-          <%-- 일괄적용 --%>
-          <td>
-              <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="prodBatchChange.batchChange" /></a>
-          </td>
-          <%-- 저장 --%>
-          <td>
-              <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="saveSideMenuProd()"><s:message code="cmm.save" /></button>
-          </td>
-      </tr>
-      </tbody>
-  </table>
+    <c:if test="${hqOfficeCd != 'DS021' and hqOfficeCd != 'DS034' and hqOfficeCd != 'H0393'}">
+      <%-- 일괄적용 --%>
+      <table class="searchTbl mt10">
+          <colgroup>
+              <col class="w15" />
+              <col class="w15" />
+              <col class="w15" />
+              <col class="*" />
+          </colgroup>
+          <tbody>
+          <tr class="brt">
+              <%-- 판매상품여부 --%>
+              <th>
+                  <s:message code="soldOut.soldOutYn" />
+              </th>
+              <td>
+                  <div class="sb-select">
+                      <wj-combo-box
+                              id="srchSoldOutYnChg"
+                              ng-model="soldOutYnChg"
+                              items-source="_getComboData('soldOutYnComboChg')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)">
+                      </wj-combo-box>
+                  </div>
+              </td>
+              <%-- 일괄적용 --%>
+              <td>
+                  <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="prodBatchChange.batchChange" /></a>
+              </td>
+              <%-- 저장 --%>
+              <td>
+                  <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="saveSideMenuProd()"><s:message code="cmm.save" /></button>
+              </td>
+          </tr>
+          </tbody>
+      </table>
+    </c:if>
 
   <div class="mt10 oh sb-select dkbr">
       <%-- 엑셀다운로드 --%>
@@ -221,7 +224,7 @@
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.addProdQty"/>" binding="addProdQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.fixProdFg"/>" binding="fixProdFg" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.soldOutYn"/>" binding="soldOutYn" data-map="soldOutYnDataMap" width="70" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.soldOutYn"/>" binding="soldOutYn" data-map="soldOutYnDataMap" width="70" align="center" <c:if test="${hqOfficeCd == 'DS021' or hqOfficeCd == 'DS034' or hqOfficeCd == 'H0393'}">is-read-only="true"</c:if>></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="sideMenuProdSoldOut.channelSoldOutYn"/>" binding="channelSoldOutYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="soldOut.selfappYn"/>" binding="selfappYn" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
