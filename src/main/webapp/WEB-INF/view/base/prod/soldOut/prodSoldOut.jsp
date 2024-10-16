@@ -399,60 +399,62 @@
     </c:if>
     <%--//searchTbl--%>
 
-    <%-- 일괄적용 --%>
-    <table class="searchTbl mt10">
-        <colgroup>
-            <col class="w15" />
-            <col class="w15" />
-            <col class="w15" />
-            <col class="*" />
-        </colgroup>
-        <tbody>
-        <tr class="brt">
-            <%-- 판매상품여부 --%>
-            <th>
-                <s:message code="soldOut.soldOutYn" />
-            </th>
-            <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                        id="srchSoldOutYnChg"
-                        ng-model="soldOutYnChg"
-                        items-source="_getComboData('soldOutYnComboChg')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="_initComboBox(s)">
-                    </wj-combo-box>
-                </div>
-            </td>
-            <%-- 일괄적용 --%>
-            <td>
-                <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="cmm.batchChange" /></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <c:if test="${sessionScope.sessionInfo.userId != 'ds021' and sessionScope.sessionInfo.userId != 'ds034' and sessionScope.sessionInfo.userId != 'h0393'}">
+        <%-- 일괄적용 --%>
+        <table class="searchTbl mt10">
+            <colgroup>
+                <col class="w15" />
+                <col class="w15" />
+                <col class="w15" />
+                <col class="*" />
+            </colgroup>
+            <tbody>
+            <tr class="brt">
+                <%-- 판매상품여부 --%>
+                <th>
+                    <s:message code="soldOut.soldOutYn" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                            id="srchSoldOutYnChg"
+                            ng-model="soldOutYnChg"
+                            items-source="_getComboData('soldOutYnComboChg')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 일괄적용 --%>
+                <td>
+                    <a href="#" class="btn_grayS ml10" ng-click="batchChange()"><s:message code="cmm.batchChange" /></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-    <table class="searchTbl mt10">
-        <colgroup>
-            <col class="w70" />
-            <col class="w30" />
-        </colgroup>
-        <tbody>
-        <tr class="brt">
-            <th>
-                - '품절여부전체저장' 클릭시 체크된 상품과 사이드상품까지 '품절' 처리됩니다.
-            </th>
-            <th>
-                <%-- 품절여부전체저장 --%>
-                <button class="btn_skyblue ml5 fr" ng-click="soldOutAllSave()"><s:message code="soldOut.soldOutAllSave" /></button>
-                <%-- 저장 --%>
-                <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
-            </th>
-        </tr>
-        </tbody>
-    </table>
+        <table class="searchTbl mt10">
+            <colgroup>
+                <col class="w70" />
+                <col class="w30" />
+            </colgroup>
+            <tbody>
+            <tr class="brt">
+                <th>
+                    - '품절여부전체저장' 클릭시 체크된 상품과 사이드상품까지 '품절' 처리됩니다.
+                </th>
+                <th>
+                    <%-- 품절여부전체저장 --%>
+                    <button class="btn_skyblue ml5 fr" ng-click="soldOutAllSave()"><s:message code="soldOut.soldOutAllSave" /></button>
+                    <%-- 저장 --%>
+                    <button class="btn_skyblue ml5 fr" id="btnSoldOutYnSave" ng-click="save()"><s:message code="cmm.save" /></button>
+                </th>
+            </tr>
+            </tbody>
+        </table>
+    </c:if>
 
     <div class="mt10 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
