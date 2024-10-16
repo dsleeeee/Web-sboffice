@@ -3523,7 +3523,7 @@
         <if test="storeNm != null and storeNm != ''">
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
         </if>
-        <if test="sysStatFg != null and sysStatFg != ''">
+        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
             AND tms.SYS_STAT_FG = #{sysStatFg} --매장상태구분
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>

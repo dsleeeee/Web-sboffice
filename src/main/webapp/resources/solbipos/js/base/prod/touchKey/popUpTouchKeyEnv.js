@@ -65,6 +65,7 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
         params.storeNm = $("#srchEnvStoreNm").val();
         params.momsEnvstVal = momsEnvstVal;
         params.tukeyGrpCd = $scope.tukeyGrp;
+        params.sysStatFg = $scope.sysStatFg;
         if(momsEnvstVal === "1" && orgnFg === "HQ") {
             params.momsTeam = $scope.momsTeam;
             params.momsAcShop = $scope.momsAcShop;

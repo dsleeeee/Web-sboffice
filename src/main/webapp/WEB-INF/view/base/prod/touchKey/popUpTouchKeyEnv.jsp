@@ -43,6 +43,7 @@
                             <div class="sb-select w100">
                                 <wj-combo-box
                                         id="srchEnvSysStatFg"
+                                        ng-model="sysStatFg"
                                         items-source="_getComboData('srchEnvSysStatFg')"
                                         display-member-path="name"
                                         selected-value-path="value"
@@ -399,4 +400,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20240522.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20241016.01" charset="utf-8"></script>
