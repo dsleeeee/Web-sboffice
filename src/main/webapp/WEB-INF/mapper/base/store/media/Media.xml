@@ -549,18 +549,19 @@
             AND tms.STORE_CD IN (
                                     SELECT 	A.STORE_CD
                                     FROM 	(
-                                    SELECT 	DISTINCT STORE_CD
+                                    SELECT 	DISTINCT STORE_CD, POS_NO
                                     FROM 	TB_MS_POS_ENVST
                                     WHERE 	STORE_CD IN (SELECT store_cd FROM tb_ms_store WHERE hQ_office_cd = #{hqOfficeCd})
-                                    AND 	(ENVST_CD = '4019' AND ENVST_VAL = '6')
+                                    AND 	(ENVST_CD = '4019' AND ENVST_VAL = '6') -- 키오스크
                                     ) A
                                     ,		(
-                                    SELECT 	DISTINCT STORE_CD
+                                    SELECT 	DISTINCT STORE_CD, POS_NO
                                     FROM 	TB_MS_POS_ENVST
                                     WHERE 	STORE_CD IN (SELECT store_cd FROM tb_ms_store WHERE hQ_office_cd = #{hqOfficeCd})
                                     AND		(ENVST_CD IN ('4068', '4069') AND ENVST_VAL = #{tuClsType})
                                     ) B
                                     WHERE	A.STORE_CD = B.STORE_CD
+                                    AND     A.POS_NO = B.POS_NO
             )
         </if>
         ORDER BY HQ_OFFICE_CD, STORE_CD
