@@ -35,8 +35,8 @@
             <wj-flex-grid-column header="<s:message code="payGift.giftSerNo"/>" binding="giftSerNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="payGift.giftUprc"/>" binding="giftUprc" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="payGift.giftQty"/>" binding="giftQty" width="80" align="right" is-read-only="true" data-type="Number" format="n0"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="payGift.giftTotAmt"/>" binding="giftTotAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="payGift.rtnPayAmt"/>" binding="rtnPayAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payGift.giftTotAmt"/>" binding="giftTotAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="payGift.rtnPayAmt"/>" binding="rtnPayAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum" visible="false"></wj-flex-grid-column>
 
           </wj-flex-grid>
         </div>
