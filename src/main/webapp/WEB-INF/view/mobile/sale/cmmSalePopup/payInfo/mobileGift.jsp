@@ -35,7 +35,7 @@
                         <wj-flex-grid-column header="<s:message code="mobile.payInfo.gift.storeCd"/>" binding="storeCd" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mobile.payInfo.gift.storeNm"/>" binding="storeNm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mobile.payInfo.gift.giftProcFgNm"/>" binding="giftProcFgNm" width="1.*" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="mobile.payInfo.gift.giftTotAmt"/>" binding="giftTotAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="mobile.payInfo.gift.giftUprc"/>" binding="giftTotAmt" width="1.*" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>

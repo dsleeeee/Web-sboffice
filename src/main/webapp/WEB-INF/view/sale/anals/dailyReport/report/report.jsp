@@ -474,16 +474,16 @@
 	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftUprc"         />"     binding="giftUprc"          width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 
 	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftOutQty"       />"     binding="giftOutQty"        width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
-	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftOutAmt"       />"     binding="giftOutAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftUprc"       />"     binding="giftOutAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 
 	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftSaleQty"      />"     binding="giftSaleQty"       width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
-	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftSaleAmt"      />"     binding="giftSaleAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftUprc"      />"     binding="giftSaleAmt"       width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 
 	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnQty"       />"     binding="giftRtnQty"        width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
-	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnAmt"       />"     binding="giftRtnAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftUprc"       />"     binding="giftRtnAmt"        width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 
 	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnCarryInQty"/>"     binding="giftRtnCarryInQty" width="100" is-read-only="true" align="center"	                ></wj-flex-grid-column>
-	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftRtnCarryInAmt"/>"     binding="giftRtnCarryInAmt" width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
+	                    <wj-flex-grid-column header="<s:message code="dailyReport.giftUprc"/>"     binding="giftRtnCarryInAmt" width="100" is-read-only="true" align="right"	                ></wj-flex-grid-column>
 		            </wj-flex-grid>
 
 			        <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

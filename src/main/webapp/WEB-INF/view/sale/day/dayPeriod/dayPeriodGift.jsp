@@ -77,9 +77,9 @@
                             <!-- define columns -->
                             <wj-flex-grid-column header="<s:message code="dayPeriod.payClassNm"/>" binding="payClassNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayPeriod.giftQtyUse"/>" binding="giftQtyUse" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayPeriod.giftUprcUse"/>" binding="giftUprcUse" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayPeriod.payClassUprc"/>" binding="giftUprcUse" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayPeriod.giftQtyRef"/>" binding="giftQtyRef" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="dayPeriod.giftUprcRef"/>" binding="giftUprcRef" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="dayPeriod.payClassUprc"/>" binding="giftUprcRef" width="100" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                             <wj-flex-grid-column header="<s:message code="dayPeriod.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="dayPeriod.payClassCd"/>" binding="payClassCd" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
@@ -126,7 +126,7 @@
                         <wj-flex-grid-column header="<s:message code="dayPeriod.giftProcFg"/>" binding="giftProcFg" data-map="giftProcFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayPeriod.giftCd"/>" binding="giftCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dayPeriod.giftQty"/>" binding="giftQty" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayPeriod.giftUprc"/>" binding="giftUprc" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayPeriod.payClassUprc"/>" binding="giftUprc" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
 
                     </wj-flex-grid>
 

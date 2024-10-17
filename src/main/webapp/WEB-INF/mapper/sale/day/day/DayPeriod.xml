@@ -355,9 +355,9 @@
         tmg.PAY_CLASS_CD,
         tmpmc.PAY_CLASS_NM,
         SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '1' THEN tsspgd.GIFT_QTY ELSE 0 END) AS GIFT_QTY_USE,
-        SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '1' THEN tsspgd.GIFT_UPRC ELSE 0 END) AS GIFT_UPRC_USE,
+        SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '1' THEN tsspgd.SALE_FG * NVL(tsspgd.GIFT_UPRC, 0) ELSE 0 END) AS GIFT_UPRC_USE, <!-- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL) -->
         SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '2' THEN tsspgd.GIFT_QTY ELSE 0 END) AS GIFT_QTY_REF,
-        SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '2' THEN tsspgd.GIFT_UPRC ELSE 0 END) AS GIFT_UPRC_REF
+        SUM(CASE WHEN tsspgd.GIFT_PROC_FG = '2' THEN tsspgd.SALE_FG * NVL(tsspgd.GIFT_UPRC, 0) ELSE 0 END) AS GIFT_UPRC_REF <!-- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL) -->
         FROM TB_SL_SALE_PAY_GIFT_DTL tsspgd,
         TB_MS_GIFT tmg,
         TB_MS_PAY_METHOD_CLASS tmpmc
@@ -397,7 +397,7 @@
         tsspgd.GIFT_PROC_FG,
         tsspgd.GIFT_CD,
         tsspgd.GIFT_QTY,
-        tsspgd.GIFT_UPRC
+        (tsspgd.SALE_FG * NVL(tsspgd.GIFT_UPRC, 0)) AS GIFT_UPRC  <!-- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL) -->
         FROM TB_SL_SALE_PAY_GIFT_DTL tsspgd,
         TB_MS_GIFT tmg
         WHERE 1=1
