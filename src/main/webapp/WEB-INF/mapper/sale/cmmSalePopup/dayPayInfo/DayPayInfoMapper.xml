@@ -616,7 +616,7 @@
         ,       tsspgd.GIFT_SER_NO
         ,       tsspgd.GIFT_UPRC
         ,       tsspgd.GIFT_QTY
-        ,       tsspgd.GIFT_UPRC * tsspgd.GIFT_QTY AS GIFT_TOT_AMT
+        ,       tsspgd.GIFT_UPRC * tsspgd.GIFT_QTY AS GIFT_TOT_AMT  -- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL)
         ,       tsspgr.RTN_PAY_AMT
         FROM    TB_SL_SALE_PAY_GIFT_DTL tsspgd
         ,       TB_SL_SALE_PAY_GIFT_RTN tsspgr

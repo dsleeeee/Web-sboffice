@@ -362,7 +362,7 @@
             A.VAT_AMT,
             B.GIFT_CD,
             C.GIFT_NM,
-            B.GIFT_UPRC,
+            B.GIFT_UPRC,    <!-- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL) -->
             B.APPR_DT,
             B.APPR_NO,
             B.GIFT_SER_NO

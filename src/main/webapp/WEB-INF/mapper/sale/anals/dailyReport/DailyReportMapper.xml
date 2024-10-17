@@ -492,9 +492,9 @@
 	            A.GIFT_UPRC,
 	            A.GIFT_PROC_FG,
 	            SUM( DECODE(A.SALE_FG, '1',  A.GIFT_QTY, 0) )   AS  GIFT_SALE_QTY,
-	            SUM( DECODE(A.SALE_FG, '1',  B.SALE_AMT, 0) )   AS  GIFT_SALE_AMT,
+	            SUM( DECODE(A.SALE_FG, '1',  A.GIFT_UPRC, 0) )   AS  GIFT_SALE_AMT,         <!-- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL) -->
 	            SUM( DECODE(A.SALE_FG, '-1', A.GIFT_QTY, 0) )   AS  GIFT_RTN_QTY,
-	            SUM( DECODE(A.SALE_FG, '-1', B.SALE_AMT, 0) )   AS  GIFT_RTN_AMT,
+	            SUM( DECODE(A.SALE_FG, '-1', A.GIFT_UPRC, 0) )   AS  GIFT_RTN_AMT,          <!-- 실제상품권매출액과 상품권액면가는 다를 수 있음. 현재 구조상 상품권별로 실제 매출액을 알수 없음(TB_SL_SALE_PAY_GIFT, TB_SL_SALE_PAY_GIFT_DTL) -->
 				0                                               AS  GIFT_OUT_QTY,			<!-- '출고/회수반입' 보여주기 위해 집계TB 사용 예정 -->
 				0                                               AS  GIFT_OUT_AMT,
 				0                                               AS  GIFT_RTN_CARRY_IN_QTY,
@@ -503,22 +503,11 @@
 	            	FROM 	TB_MS_GIFT
 	            	WHERE 	STORE_CD	= #{searchStoreCd}
 	            	AND 	GIFT_CD		= A.GIFT_CD) 			AS GIFT_NM
-	    FROM    TB_SL_SALE_PAY_GIFT_DTL A,
-	            TB_SL_SALE_PAY_GIFT     B
+	    FROM    TB_SL_SALE_PAY_GIFT_DTL A
 	    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
 	    AND     A.STORE_CD      = #{searchStoreCd}
 	    AND     A.SALE_DATE     BETWEEN #{startDate}
 	                            AND     #{endDate}
-	    AND     A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
-	    AND     A.HQ_BRAND_CD   = B.HQ_BRAND_CD
-	    AND     A.STORE_CD      = B.STORE_CD
-	    AND     A.SALE_DATE     = B.SALE_DATE
-	    AND     A.POS_NO        = B.POS_NO
-	    AND     A.BILL_NO       = B.BILL_NO
-	    AND     A.LINE_NO       = B.LINE_NO
-	    AND     A.REG_SEQ       = B.REG_SEQ
-	    AND     A.SALE_YN       = B.SALE_YN
-	    AND     A.SALE_FG       = B.SALE_FG
 	    GROUP BY A.GIFT_CD,
 	             A.GIFT_UPRC,
 	             A.GIFT_PROC_FG
