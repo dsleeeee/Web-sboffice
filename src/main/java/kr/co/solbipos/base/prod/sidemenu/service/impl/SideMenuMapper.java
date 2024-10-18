@@ -218,4 +218,7 @@ public interface SideMenuMapper {
 
     /** 선택상품 적용매장 전체 삭제 */
     int getSdselProdRegStoreDeleteAll(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 선택상품 저장 전, 선택그룹에 이미 등록된 상품인지 확인 */
+    List<DefaultMap<Object>> chkMenuProdUse(SideMenuSelProdVO sideMenuSelProdVO);
 }

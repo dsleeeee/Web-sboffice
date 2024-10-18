@@ -1010,6 +1010,7 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     var params = {};
     params.sdselClassCd = $scope.getSdselClassCd();
     params.sdselGrpBrandCd = $("#hdSdselGrpBrandCdSingle").val();
+    params.sdselGrpCd = agrid.getScope('sideMenuSelectClassSingleCtrl').getSdselGrpCd();
 
     $scope._broadcast('sideMenuProdCtrl', params);
 
@@ -1123,15 +1124,69 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
                 return false;
             }
 
-            if(orgnFg == 'HQ') {
-                // 적용매장 전체 삭제
-                $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuProd/getSdselProdRegStoreDeleteAll.sb", params, function(){
+            // 새로 등록하려는 상품이 선택그룹에 이미 등록되어 있는지 확인 로직 추가(아티제만 적용, 나머지 본사는 그대로)
+            if (hqOfficeCd === "A0001") {
+
+                // 새로 등록하는 선택상품 코드 셋팅
+                var str = "";
+                for (var m = 0; m < params.length; m++) {
+                    if (params[m].status === "I") {
+                        str += params[m].prodCd + ",";
+                    }
+                }
+
+                if (str.length > 0) {
+                    var vParams = {};
+                    vParams.sdselGrpCd = agrid.getScope('sideMenuSelectClassSingleCtrl').getSdselGrpCd();
+                    vParams.prodCd = str.substr(0, str.length - 1);
+                    $.postJSON("/base/prod/sideMenu/chkMenuProdUse.sb", vParams, function (result) {
+                        if (result.status === "OK") {
+                            if (result.data.list == null || result.data.list.length == 0) {
+                                if (orgnFg == 'HQ') {
+                                    // 적용매장 전체 삭제
+                                    $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuProd/getSdselProdRegStoreDeleteAll.sb", params, function () {
+                                        // 저장
+                                        $scope.save(params);
+                                    });
+                                } else {
+                                    // 저장
+                                    $scope.save(params);
+                                }
+                            } else {
+
+                                // 선택그룹에 이미 등록되어있는 상품 alert msg 띄우기
+                                var popMsg = "다른 선택분류에 이미 등록된 상품이 있습니다.</br></br>";
+                                for (var k = 0; k < result.data.list.length; k++) {
+                                    popMsg += "[" + result.data.list[k].prodCd + "]" + result.data.list[k].prodNm + " : 선택분류[" + result.data.list[k].sdselClassCd + "]에 등록" + "</br>"
+                                }
+                                $scope._popMsg(popMsg);
+                                return false;
+                            }
+                        }
+                    });
+                } else {
+                    if (orgnFg == 'HQ') {
+                        // 적용매장 전체 삭제
+                        $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuProd/getSdselProdRegStoreDeleteAll.sb", params, function () {
+                            // 저장
+                            $scope.save(params);
+                        });
+                    } else {
+                        // 저장
+                        $scope.save(params);
+                    }
+                }
+            } else {
+                if (orgnFg == 'HQ') {
+                    // 적용매장 전체 삭제
+                    $scope._postJSONSave.withOutPopUp("/base/prod/sideMenu/menuProd/getSdselProdRegStoreDeleteAll.sb", params, function () {
+                        // 저장
+                        $scope.save(params);
+                    });
+                } else {
                     // 저장
                     $scope.save(params);
-                });
-            } else {
-                // 저장
-                $scope.save(params);
+                }
             }
 
         });

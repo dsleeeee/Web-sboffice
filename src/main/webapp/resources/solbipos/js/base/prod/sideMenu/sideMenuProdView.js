@@ -43,6 +43,7 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
 
   var selSdselClassCd = "";
   var selSdselGrpBrandCd = "";
+  var selSdselGrpCd = "";
 
   // 사이드메뉴 상품선택 그리드 조회
   $scope.$on("sideMenuProdCtrl", function(event, data) {
@@ -52,9 +53,10 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
           // 상품브랜드 콤보박스 disabled 초기화
           $scope.srchProdHqBrandCdCombo.isDisabled = false;
 
-          // 선택그룹 브랜드 코드, 선택분류 코드 셋팅(hidden)
+          // 선택그룹 브랜드 코드, 선택분류 코드, 선택그룹 코드 셋팅(hidden)
           selSdselClassCd = data.sdselClassCd;
           selSdselGrpBrandCd = data.sdselGrpBrandCd;
+          selSdselGrpCd = data.sdselGrpCd;
 
           // 선택그룹의 브랜드 유무에 따른 상품브랜드 콤보박스 셋팅
           if (selSdselGrpBrandCd !== "" && selSdselGrpBrandCd !== null && selSdselGrpBrandCd !== undefined) {
@@ -88,6 +90,7 @@ app.controller('sideMenuProdCtrl', ['$scope', '$http', 'sdselClassCd', function 
   // 상품목록 조회
   $scope.srchProdList = function(){
     var params = {};
+    params.sdselGrpCd = selSdselGrpCd;
     params.sdselClassCd = selSdselClassCd;
     params.prodClassCd = $scope.prodClassCd;
     if(typeof gubun !== "undefined"){

@@ -924,4 +924,23 @@ public class SideMenuController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 선택상품 저장 전, 선택그룹에 이미 등록된 상품인지 확인
+     * @param sideMenuSelProdVO
+     * @param request
+     * @return
+     * @author  이다솜
+     * @since   2024. 10. 17.
+     */
+    @RequestMapping(value = "/chkMenuProdUse.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkMenuProdUse(SideMenuSelProdVO sideMenuSelProdVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = sideMenuService.chkMenuProdUse(sideMenuSelProdVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
 }

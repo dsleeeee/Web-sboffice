@@ -774,4 +774,17 @@ public class SideMenuServiceImpl implements SideMenuService {
 
         return result;
     }
+
+    /** 선택상품 저장 전, 선택그룹에 이미 등록된 상품인지 확인 */
+    @Override
+    public List<DefaultMap<Object>> chkMenuProdUse(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO) {
+
+        sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            sideMenuSelProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        sideMenuSelProdVO.setArrProdCd(sideMenuSelProdVO.getProdCd().split(","));
+        return sideMenuMapper.chkMenuProdUse(sideMenuSelProdVO);
+    }
 }

@@ -134,4 +134,4 @@
   // 사용자 브랜드
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=20230714.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuProdView.js?ver=20241018.01" charset="utf-8"></script>

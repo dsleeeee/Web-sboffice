@@ -123,6 +123,9 @@ public class SideMenuSelProdVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 다중 상품코드(배열형) */
+    private String[] arrProdCd;
+
     /**
      * @return the hqOfficeCd
      */
@@ -447,4 +450,12 @@ public class SideMenuSelProdVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String[] getArrProdCd() {
+        return arrProdCd;
+    }
+
+    public void setArrProdCd(String[] arrProdCd) {
+        this.arrProdCd = arrProdCd;
+    }
 }

@@ -103,4 +103,7 @@ public interface SideMenuService {
 
     /** 상품정보 저장 전 체크 - 선택한 선택메뉴코드가 세트('C')이면서, 나(현재 선택한 상품)를 가진 세트가 있는지 확인 */
     String getSideMenuChk(SideMenuManageVO[] sideMenuManageVOs, SessionInfoVO sessionInfoVO);
+
+    /** 선택상품 저장 전, 선택그룹에 이미 등록된 상품인지 확인 */
+    List<DefaultMap<Object>> chkMenuProdUse(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO);
 }
