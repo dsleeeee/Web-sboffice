@@ -294,16 +294,18 @@ public class ProdServiceImpl implements ProdService {
 
             if(prodVO.getOrgnFg() == "S" && prodVO.getHqOfficeCd() != "00000"){
 
-                String sPrefix = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "");
+//                String sPrefix = CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "");
+
+                prodCd = prodMapper.getProdCd(prodVO);
 
                 // prefix 미사용시
-                if("*".equals(sPrefix) || "".equals(sPrefix)){
-                    prodCd = prodMapper.getProdCd(prodVO);
-                }else{
-                    // prefix 사용시
-                    prodVO.setPrefix(sPrefix);
-                    prodCd = prodMapper.getPrefixProdCd(prodVO);
-                }
+//                if("*".equals(sPrefix) || "".equals(sPrefix)){
+//                    prodCd = prodMapper.getProdCd(prodVO);
+//                }else{
+//                    // prefix 사용시
+//                    prodVO.setPrefix(sPrefix);
+//                    prodCd = prodMapper.getPrefixProdCd(prodVO);
+//                }
 
             }else{
                 prodCd = prodMapper.getProdCd(prodVO);
