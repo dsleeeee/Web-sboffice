@@ -378,7 +378,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope.prodModifyInfo.prodCd = $scope.prodModifyInfo.prodCd.trim().removeEnter();
             $("#prodCd").val($scope.prodModifyInfo.prodCd.trim().removeEnter());
 
-            if(prodCdPreFg !== null && prodCdPreFg !== "" && prodCdPreFg !== undefined && prodCdPreFg !== '*'){
+            if(prodCdPreFg !== null && prodCdPreFg !== "0" && prodCdPreFg !== undefined && prodCdPreFg !== '*'){
 
                 // 최대길이 체크
                 if ($scope.prodModifyInfo.prodCd.length + prodCdPreFg.length > 13) {
