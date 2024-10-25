@@ -340,6 +340,28 @@
       date = date.substr(0, 4) + "-" + date.substr(4, 2) + "-" + date.substr(6, 2);
       dt.value = new Date(date);
       return dt;
+    },
+    genDateStart: function (div, ctrl, val) {
+        return new wijmo.input.InputDate(div, {
+            format: "yyyy-MM-dd",
+            valueChanged: function (s, e) {
+                var scope = agrid.getScope(ctrl);
+                if (eval("s.value >= scope." + val + ".value")) {
+                    eval("scope." + val + ".value = s.value;");
+                }
+            }
+        });
+    },
+    genDateEnd: function (div, ctrl, val) {
+        return new wijmo.input.InputDate(div, {
+            format: "yyyy-MM-dd",
+            valueChanged: function (s, e) {
+                var scope = agrid.getScope(ctrl);
+                if (eval("scope." + val + ".value > s.value")) {
+                    eval("scope." + val + ".value = s.value;");
+                }
+            }
+        });
     }
   };
 

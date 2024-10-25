@@ -8,9 +8,11 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('dayTotalCtrl', $scope, $http, true));
 
-  $scope.srchStartDate = wcombo.genDateVal("#srchDayTotalStartDate", gvStartDate);
-  $scope.srchEndDate   = wcombo.genDateVal("#srchDayTotalEndDate", gvEndDate);
-  $scope.orgnFg        = gvOrgnFg;
+  //$scope.srchStartDate = wcombo.genDateVal("#srchDayTotalStartDate", gvStartDate);
+  //$scope.srchEndDate   = wcombo.genDateVal("#srchDayTotalEndDate", gvEndDate);
+    $scope.srchStartDate = wcombo.genDateStart("#srchDayTotalStartDate", "dayTotalCtrl", "srchEndDate");
+    $scope.srchEndDate   = wcombo.genDateEnd("#srchDayTotalEndDate", "dayTotalCtrl", "srchStartDate");
+    $scope.orgnFg        = gvOrgnFg;
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {

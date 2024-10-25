@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    VerEnvMng.xml
+    버전별환경설정 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2024.10.23      최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.cd.verEnvMng.service.impl.VerEnvMngMapper">
+
+    <!-- 대표명칭 사용여부, 세부명칭 초기값여부 ListMap  -->
+    <resultMap id="verEnvMngMap" type="DefaultMap">
+        <result column="VS_USE_YN" property="vsUseYn" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="VS_DEFLT_YN" property="vsDefltYn" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
+    <!-- 버전 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_VS_CODE
+        PARAM    : verEnvMngVO
+        COMMENTS : 버전 리스트를 조회한다.
+    -->
+    <select id="getVerList" parameterType="verEnvMngVO" resultType="DefaultMap">
+        /* USE : VerEnvMngMapper.getVerList */
+        SELECT  VS_CD
+        ,       VS_NM
+        ,       USE_YN
+        FROM    TB_CM_VS_CODE
+        WHERE   1=1
+        ORDER
+        BY      VS_CD
+    </select>
+
+    <!-- 버전 등록 -->
+    <!--
+        TABLE    : TB_CM_VS_CODE
+        PARAM    : verEnvMngVO
+        COMMENTS : 버전 등록 및 수정한다.
+    -->
+    <insert id="saveVer" parameterType="verEnvMngVO">
+        /* USE : VerEnvMngMapper.saveVer */
+        MERGE INTO TB_CM_VS_CODE
+        USING DUAL
+        ON
+        (
+              VS_CD = #{vsCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     VS_NM   = #{vsNm}
+        ,       USE_YN  = #{useYn}
+        ,       MOD_DT  = #{modDt}
+        ,       MOD_ID  = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            VS_CD
+        ,   VS_NM
+        ,   USE_YN
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{vsCd}
+        ,   #{vsNm}
+        ,   #{useYn}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 대표명칭 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_VS_ENVST, TB_CM_ENVST, TB_CM_NMCODE
+        PARAM    : verEnvMngVO
+        COMMENTS : 대표명칭 리스트를 조회한다.
+    -->
+    <select id="getEnvstList" parameterType="verEnvMngVO" resultMap="verEnvMngMap">
+        /* USE : VerEnvMngMapper.getEnvstList */
+        SELECT  NVL(tcve.USE_YN, 'N') AS VS_USE_YN,
+                tce.ENVST_CD,
+                tce.ENVST_NM,
+                tce.ENVST_FG,
+                tcn_envst_fg.NMCODE_NM AS ENVST_FG_NM,
+                tce.ENVST_GRP_CD,
+                tcn_envst_grp_cd.NMCODE_NM AS ENVST_GRP_CD_NM,
+                tce.DIRCT_IN_YN,
+                tce.TARGT_FG,
+                tcn_targt_fg.NMCODE_NM AS TARGT_FG_NM,
+                tce.USE_YN,
+                tce.REMARK,
+                tce.ENVST_REMARK
+        FROM    TB_CM_ENVST tce
+        LEFT OUTER JOIN TB_CM_NMCODE tcn_envst_fg ON
+            tce.ENVST_FG = tcn_envst_fg.NMCODE_CD
+            AND tcn_envst_fg.NMCODE_GRP_CD = '003'
+        LEFT OUTER JOIN TB_CM_NMCODE tcn_envst_grp_cd ON
+            tce.ENVST_GRP_CD = tcn_envst_grp_cd.NMCODE_CD
+            AND tcn_envst_grp_cd.NMCODE_GRP_CD = '004'
+        LEFT OUTER JOIN TB_CM_NMCODE tcn_targt_fg ON
+            tce.TARGT_FG = tcn_targt_fg.NMCODE_CD
+            AND tcn_targt_fg.NMCODE_GRP_CD = '038'
+        LEFT OUTER JOIN TB_CM_VS_ENVST tcve ON
+        	tce.ENVST_CD = tcve.ENVST_CD
+        	AND tcve.VS_CD = #{vsCd}
+        ORDER BY
+            tce.ENVST_CD,
+            tce.ENVST_FG,
+            tce.ENVST_GRP_CD
+    </select>
+
+    <!-- 대표명칭 사용여부 저장 -->
+    <!--
+        TABLE    : TB_CM_VS_ENVST
+        PARAM    : verEnvMngVO
+        COMMENTS : 대표명칭 사용여부를 저장한다.
+    -->
+    <insert id="saveEnvst" parameterType="verEnvMngVO">
+        /* USE : VerEnvMngMapper.saveEnvst */
+        MERGE INTO TB_CM_VS_ENVST
+        USING DUAL
+        ON
+        (
+              VS_CD = #{vsCd}
+        AND   ENVST_CD = #{envstCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     USE_YN  = #{useYn}
+        ,       MOD_DT  = #{modDt}
+        ,       MOD_ID  = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            VS_CD
+        ,   ENVST_CD
+        ,   USE_YN
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{vsCd}
+        ,   #{envstCd}
+        ,   #{useYn}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 세부명칭 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_VS_ENVST_DTL, TB_CM_ENVST_DTL
+        PARAM    : verEnvMngVO
+        COMMENTS : 세부명칭 리스트를 조회한다.
+    -->
+    <select id="getEnvstDtlList" parameterType="verEnvMngVO" resultMap="verEnvMngMap">
+        /* USE : VerEnvMngMapper.getEnvstDtlList */
+        SELECT  NVL(tcved.DEFLT_YN, 'N') AS VS_DEFLT_YN,
+                tced.ENVST_CD,
+                tced.ENVST_VAL_CD,
+                tced.ENVST_VAL_NM,
+                tced.DEFLT_YN,
+                tced.USE_YN
+        FROM    TB_CM_ENVST_DTL tced
+        LEFT OUTER JOIN TB_CM_VS_ENVST_DTL tcved ON
+            tced.ENVST_CD = tcved.ENVST_CD
+            AND tced.ENVST_VAL_CD = tcved.ENVST_VAL_CD
+            AND tcved.VS_CD = #{vsCd}
+        WHERE   tced.ENVST_CD = #{envstCd}
+        ORDER
+        BY      tced.ENVST_VAL_CD
+    </select>
+
+    <!-- 세부명칭 초기값여부 저장 -->
+    <!--
+        TABLE    : TB_CM_VS_ENVST_DTL
+        PARAM    : verEnvMngVO
+        COMMENTS : 세부명칭 초기값여부를 저장한다.
+    -->
+    <insert id="saveEnvstDtl" parameterType="verEnvMngVO">
+        /* USE : VerEnvMngMapper.saveEnvstDtl */
+        MERGE INTO TB_CM_VS_ENVST_DTL
+        USING DUAL
+        ON
+        (
+              VS_CD = #{vsCd}
+        AND   ENVST_CD = #{envstCd}
+        AND   ENVST_VAL_CD = #{envstValCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     DEFLT_YN = #{defltYn}
+        ,       MOD_DT   = #{modDt}
+        ,       MOD_ID   = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            VS_CD
+        ,   ENVST_CD
+        ,   ENVST_VAL_CD
+        ,   DEFLT_YN
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{vsCd}
+        ,   #{envstCd}
+        ,   #{envstValCd}
+        ,   #{defltYn}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+</mapper>

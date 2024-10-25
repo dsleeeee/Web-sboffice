@@ -212,6 +212,8 @@
     <typeAlias alias="envstRemarkVO" type="kr.co.solbipos.sys.cd.envstRemark.service.EnvstRemarkVO"/>
     <!-- 시스템관리 > 코드관리 > 환경설정사용설정 -->
     <typeAlias alias="envstHqMsMngVO" type="kr.co.solbipos.sys.cd.envstHqMsMng.service.EnvstHqMsMngVO"/>
+    <!-- 시스템관리 > 코드관리 > 버전별환경설정 -->
+    <typeAlias alias="verEnvMngVO" type="kr.co.solbipos.sys.cd.verEnvMng.service.VerEnvMngVO"/>
 
 <!--
     <typeAlias alias="exceptStoreRemoveVO" type="kr.co.solbipos.sys.etc.exceptstoreremove.service.ExceptStoreRemoveVO"/>

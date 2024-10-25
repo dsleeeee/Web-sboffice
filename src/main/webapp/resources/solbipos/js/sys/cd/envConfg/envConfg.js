@@ -305,6 +305,20 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     };
     // 세부명칭 그리드 저장
     $scope.save = function () {
+
+        // 초기값여부 한개 '기본'으로 설정되어 있는지 확인
+        var cnt = 0;
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            var item = $scope.flex.collectionView.items[i];
+            if (item.defltYn === 'Y') {
+                cnt++;
+            }
+        }
+        if(cnt !== 1){
+            s_alert.pop(messages["envConfg.defltYn.chk.msg"]); // 세부명칭의 초기값여부는 한개만 '기본'으로 선택해주세요.
+            return false;
+        }
+
         // 파라미터 설정
         var params = [];
         for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
