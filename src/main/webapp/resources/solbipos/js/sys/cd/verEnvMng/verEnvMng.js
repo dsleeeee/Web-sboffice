@@ -122,6 +122,21 @@ app.controller('verCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.flex.collectionView.itemsAdded[i].status = "I";
             params.push($scope.flex.collectionView.itemsAdded[i]);
         }
+        
+        // 입력값 체크
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            var item = $scope.flex.collectionView.items[i];
+            if (item.vsCd === null || item.vsCd === undefined || item.vsCd === "") {
+                s_alert.pop(messages["verEnvMng.vsCd"] + messages["cmm.require.text"]); // 버전코드(을)를 입력하세요.
+                return false;
+            }
+
+            if (item.vsNm === null || item.vsNm === undefined || item.vsNm === "") {
+                s_alert.pop(messages["verEnvMng.vsNm"] + messages["cmm.require.text"]); // 버전명(을)를 입력하세요.
+                return false;
+            }
+        }
+
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/sys/cd/verEnvMng/saveVer.sb", params, function () {
             $scope._broadcast('verCtrl');

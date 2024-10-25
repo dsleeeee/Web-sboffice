@@ -123,4 +123,4 @@
     var targtFg = ${ccu.getCommCodeExcpAll("038")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/verEnvMng/verEnvMng.js?ver=20241025.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/verEnvMng/verEnvMng.js?ver=20241025.02" charset="utf-8"></script>
