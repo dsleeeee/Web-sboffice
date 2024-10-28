@@ -165,7 +165,7 @@
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.oldRegStoreFg"/>" binding="oldRegStoreFg" data-map="oldRegStoreFgDataMap" width="85" visible="false"></wj-flex-grid-column>
                         </c:if>
-                        <c:if test="${(orgnFg == 'HQ' and hqOfficeCd == 'A0001') or (orgnFg == 'HQ' and hqOfficeCd == 'DS019')}">
+                        <c:if test="${(orgnFg == 'HQ' and hqOfficeCd == 'A0001') or (orgnFg == 'HQ' and hqOfficeCd == 'DS019') or (orgnFg == 'HQ' and hqOfficeCd == 'DS001')}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.topYn"/>" binding="topYn" data-map="topYnDataMap" width="85"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.expandYn"/>" binding="expandYn" data-map="expandYnDataMap" width="75"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.mappingYn"/>" binding="mappingYn" data-map="mappingYnDataMap" width="110"></wj-flex-grid-column>
