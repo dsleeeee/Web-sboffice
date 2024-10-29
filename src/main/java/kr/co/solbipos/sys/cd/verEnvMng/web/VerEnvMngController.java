@@ -5,9 +5,9 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sys.cd.envconfg.service.EnvConfgService;
-import kr.co.solbipos.sys.cd.systemcd.service.SystemCdVO;
 import kr.co.solbipos.sys.cd.verEnvMng.service.VerEnvMngService;
 import kr.co.solbipos.sys.cd.verEnvMng.service.VerEnvMngVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -50,13 +49,15 @@ public class VerEnvMngController {
     private final VerEnvMngService verEnvMngService;
     private final SessionService sessionService;
     private final EnvConfgService envConfgService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /** Constructor Injection */
     @Autowired
-    public VerEnvMngController(VerEnvMngService verEnvMngService, SessionService sessionService, EnvConfgService envConfgService) {
+    public VerEnvMngController(VerEnvMngService verEnvMngService, SessionService sessionService, EnvConfgService envConfgService, CmmCodeUtil cmmCodeUtil) {
         this.verEnvMngService = verEnvMngService;
         this.sessionService = sessionService;
         this.envConfgService = envConfgService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -71,7 +72,7 @@ public class VerEnvMngController {
     @RequestMapping(value = "/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
-        //환경그룹 목록조회??
+        // 환경그룹 목록조회(대표명칭 리스트 조회)
         model.addAttribute("envstGrpList", convertToJson(envConfgService.getEnvstGrpList()));
 
         return "sys/cd/verEnvMng/verEnvMng";
@@ -204,4 +205,66 @@ public class VerEnvMngController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 기능구분 리스트 조회
+     * @param request
+     * @param response
+     * @param verEnvMngVO
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2024. 10. 28
+     */
+    @RequestMapping(value = "/getFuncFgList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getFuncFgList(HttpServletRequest request, HttpServletResponse response, VerEnvMngVO verEnvMngVO, Model model) {
+
+        // 기능구분 리스트 조회
+        List<DefaultMap<String>> list = verEnvMngService.getFuncFgList(verEnvMngVO);
+
+        return returnListJson(Status.OK, list, verEnvMngVO);
+
+    }
+
+    /**
+     * 기능 리스트 조회
+     * @param request
+     * @param response
+     * @param verEnvMngVO
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2024. 10. 28
+     */
+    @RequestMapping(value = "/getFuncList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getFuncList(HttpServletRequest request, HttpServletResponse response, VerEnvMngVO verEnvMngVO, Model model) {
+
+        // 기능 리스트 조회
+        List<DefaultMap<String>> list = verEnvMngService.getFuncList(verEnvMngVO);
+
+        return returnListJson(Status.OK, list, verEnvMngVO);
+
+    }
+
+    /**
+     * 기능 사용여부 저장
+     * @param verEnvMngVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2024. 10. 28
+     */
+    @RequestMapping(value = "/saveFunc.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveFunc(@RequestBody VerEnvMngVO[] verEnvMngVOs, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = verEnvMngService.saveFunc(verEnvMngVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

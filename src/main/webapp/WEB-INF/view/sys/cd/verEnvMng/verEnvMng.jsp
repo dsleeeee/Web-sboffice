@@ -14,8 +14,9 @@
         </div>
     </div>
 
-    <%-- 버전 --%>
+    <%-- 대 그리드 --%>
     <div class="wj-TblWrap mt20 w25 fl">
+        <%-- 버전 --%>
         <div ng-controller="verCtrl">
             <div class="updownSet mt5 mb5" style="font-size: 15px;">
                 <span class="fl bk lh30"><s:message code='verEnvMng.ver'/></span>
@@ -35,17 +36,21 @@
                     item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="verEnvMng.vsCd"/>" binding="vsCd" align="left" width="120" max-length="33"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="verEnvMng.vsNm"/>" binding="vsNm" align="left" width="160" max-length="33"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.vsCd"/>" binding="vsCd" align="left" width="70" max-length="33"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.vsNm"/>" binding="vsNm" align="left" width="100" max-length="33"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="verEnvMng.useYn"/>" binding="useYn" align="center" width="70" data-map="useYnDataMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.envSet"/>" binding="envSet" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.funcSet"/>" binding="funcSet" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
     </div>
 
-    <%-- 대표명칭 --%>
-    <div class="wj-TblWrap mt20 pdl10 w45 fl">
-        <div class="wj-dialog-body" ng-controller="representCtrl">
+    <%-- 중 그리드 --%>
+    <div class="wj-TblWrap mt20 pdl10 w45 fl" id="divMid">
+
+        <%-- 대표명칭 --%>
+        <div class="wj-dialog-body" id="divRepresent" ng-controller="representCtrl" style="display:none;">
             <div class="updownSet mt5 mb5" style="font-size: 15px;">
                 <span class="fl bk lh30"><s:message code='verEnvMng.grpGridNm'/></span>
                 <%-- 대표명칭 사용여부 저장 --%>
@@ -75,11 +80,36 @@
                 </wj-flex-grid>
             </div>
         </div>
+
+        <%-- 기능구분 --%>
+        <div class="wj-dialog-body" id="divFuncFg" ng-controller="funcFgCtrl" style="display:none;">
+            <div class="updownSet mt5 mb5" style="font-size: 15px;">
+                <span class="fl bk lh30"><s:message code='verEnvMng.funcFg'/></span>
+            </div>
+            <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                <wj-flex-grid
+                    control="flex"
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
+
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.funFgCd"/>" binding="nmcodeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.funcFg"/>" binding="nmcodeNm" width="180" is-read-only="true"></wj-flex-grid-column>
+                </wj-flex-grid>
+            </div>
+        </div>
+
     </div>
 
-    <%-- 세부명칭 --%>
-    <div class="wj-TblWrap mt20 pdl10 w30 fr">
-        <div ng-controller="detailCtrl">
+    <%-- 소 그리드 --%>
+    <div class="wj-TblWrap mt20 pdl10 w30 fr" id="divSmall">
+
+        <%-- 세부명칭 --%>
+        <div class="wj-dialog-body" id="divDetail" ng-controller="detailCtrl" style="display:none;">
             <div class="updownSet mt5 mb5" style="font-size: 15px;">
                 <span class="fl bk lh30"><s:message code='verEnvMng.gridNm'/></span>
                 <%-- 세부명칭 초기값여부 저장 --%>
@@ -104,11 +134,46 @@
                 </wj-flex-grid>
             </div>
         </div>
+
+        <%-- 기능 --%>
+        <div class="wj-dialog-body" id="divFunc" ng-controller="funcCtrl" style="display:none;">
+            <div class="updownSet mt5 mb5" style="font-size: 15px;">
+                <span class="fl bk lh30"><s:message code='verEnvMng.func'/></span>
+                <%-- 기능 사용여부 저장 --%>
+                <button class="btn_skyblue" id="btnFuncSave" ng-click="save()" style="display: none;"><s:message code='cmm.save'/></button>
+            </div>
+            <div class="wj-gridWrap" style="height:370px; overflow-x: hidden; overflow-y: hidden;">
+                <wj-flex-grid
+                    control="flex"
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    items-source="data"
+                    item-formatter="_itemFormatter">
+
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="vsUseYn" width="70" format="checkBoxText"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.fnkeyNo"/>" binding="fnkeyNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.fnkeyNm"/>" binding="fnkeyNm" width="120"align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.storeFg"/>" binding="storeFg" width="80" align="center" data-map="storeKindData" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.posFg"/>" binding="posFg" width="90" align="center" data-map="posFgData" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.posiAdjYn"/>" binding="posiAdjYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.useYn"/>" binding="fnkeyUseYn0" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.imgFileNm"/>" binding="imgFileNm0" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.useYn"/>" binding="fnkeyUseYn1" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.imgFileNm"/>" binding="imgFileNm1" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verEnvMng.useYn"/>" binding="fnkeyUseYn" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                </wj-flex-grid>--%>
+            </div>
+        </div>
+
     </div>
 
     <%-- 선택한 버전코드 hidden 변수 --%>
     <input type="hidden" id="hdVsCd">
     <input type="hidden" id="hdEnvstCd">
+    <input type="hidden" id="hdFnkeyFg">
 
 </div>
 
@@ -121,6 +186,10 @@
     var envstGrpCdNm = ${envstGrpList};
     // 대상구분
     var targtFg = ${ccu.getCommCodeExcpAll("038")};
+    // 매장종류
+    var storeKind = ${ccu.getCommCodeExcpAll("057")};
+    // 포스구분
+    var posFg = ${ccu.getCommCodeExcpAll("027")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/cd/verEnvMng/verEnvMng.js?ver=20241025.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/cd/verEnvMng/verEnvMng.js?ver=20241029.01" charset="utf-8"></script>
