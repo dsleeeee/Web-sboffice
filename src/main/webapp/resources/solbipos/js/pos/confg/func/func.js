@@ -51,14 +51,18 @@ app.controller('funcFgCtrl', ['$scope', '$http', function ($scope, $http) {
     });
 
     // 기능구분 선택
-    s.addEventListener(s.hostElement, 'mousedown', function(e) {
+    s.addEventListener(s.hostElement, 'click', function(e) {
+    // s.addEventListener(s.hostElement, 'mousedown', function(e) {
       var ht = s.hitTest(e);
       if( ht.cellType === wijmo.grid.CellType.Cell) {
         var col = ht.panel.columns[ht.col];
+        var selectedRow = s.rows[ht.row].dataItem;
 
         // 기능구분 클릭시 해당 기능 목록 조회
         if ( col.binding === "nmcodeCd" ) {
-          $scope.setSelectedFuncFg(s.rows[ht.row].dataItem);
+          $("#funcName").text(" / [" + selectedRow.nmcodeCd + "] " + selectedRow.nmcodeNm);
+
+          $scope.setSelectedFuncFg(selectedRow);
 
           var scope = agrid.getScope('funcCtrl');
           scope._broadcast('funcCtrl', $scope.getSelectedFuncFg());

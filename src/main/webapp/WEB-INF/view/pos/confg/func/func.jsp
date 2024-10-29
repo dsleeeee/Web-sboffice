@@ -25,15 +25,15 @@
 
         <div class="wj-gridWrap" style="height:400px; overflow-x: hidden; overflow-y: hidden;">
           <wj-flex-grid
-                  control="flex"
                   autoGenerateColumns="false"
-                  selection-mode="Row"
+                  control="flex"
                   initialized="initGrid(s,e)"
+                  selection-mode="Row"
                   items-source="data"
                   item-formatter="_itemFormatter">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="func.funFgCd"/>" binding="nmcodeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="func.funFgCd"/>" binding="nmcodeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="func.funFg"/>" binding="nmcodeNm" width="120" width="*" is-read-only="true"></wj-flex-grid-column>
           </wj-flex-grid>
         </div>
@@ -87,14 +87,15 @@
     </div>
   </div>
 </div>
+
 <script>
   var funcFgList  = ${fnkeyFgList};
   var storeKind   = ${ccu.getCommCodeExcpAll("057")};
   var posFg       = ${ccu.getCommCodeExcpAll("027")};
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20200518.08" charset="utf-8"></script>
 
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/func/func.js?ver=20241029.01" charset="utf-8"></script>
 
 <%-- 매장선택 --%>
 <c:import url="/WEB-INF/view/pos/confg/func/store.jsp">
@@ -115,5 +116,3 @@
 <%-- 일괄기능적용 팝업 --%>
 <c:import url="/WEB-INF/view/pos/confg/func/batchFunc.jsp">
 </c:import>
-
-
