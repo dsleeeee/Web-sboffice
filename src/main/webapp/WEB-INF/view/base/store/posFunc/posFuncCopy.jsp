@@ -38,18 +38,24 @@
 
 <script>
 
-var copyPosList;
-var targetPosList;
+var copyPosList = wcombo.genCommonBox("#copyPos", []);
+var targetPosList = wcombo.genCommonBox("#targetPos", []);
+
+// var copyPosList;
+// var targetPosList;
 
 <%--  기능복사 레이어 팝업 오픈 --%>
 function openCopyFuncLayer(){
   $("#funCopyDim").show();
   $("#funCopyLayer").show();
 
-  if(copyPosList == undefined){
-    copyPosList = wcombo.genCommonBox("#copyPos", posList);
-    targetPosList = wcombo.genCommonBox("#targetPos", posList);
-  }
+  copyPosList.itemsSource = posList;
+  targetPosList.itemsSource = posList;
+
+  // if(copyPosList == undefined){
+  //   copyPosList = wcombo.genCommonBox("#copyPos", posList);
+  //   targetPosList = wcombo.genCommonBox("#targetPos", posList);
+  // }
 }
 
 <%--포스 기능복사 버튼 클릭--%>
