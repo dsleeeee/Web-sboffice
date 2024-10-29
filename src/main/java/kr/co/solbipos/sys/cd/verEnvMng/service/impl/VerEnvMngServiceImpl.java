@@ -136,4 +136,41 @@ public class VerEnvMngServiceImpl implements VerEnvMngService {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
     }
+
+    /** 기능구분 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getFuncFgList(VerEnvMngVO verEnvMngVO) {
+        return verEnvMngMapper.getFuncFgList(verEnvMngVO);
+    }
+
+    /** 기능 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getFuncList(VerEnvMngVO verEnvMngVO) {
+        return verEnvMngMapper.getFuncList(verEnvMngVO);
+    }
+
+    /** 기능 사용여부 저장 */
+    @Override
+    public int saveFunc(VerEnvMngVO[] verEnvMngVOs, SessionInfoVO sessionInfoVO) {
+
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for (VerEnvMngVO verEnvMngVO : verEnvMngVOs) {
+
+            verEnvMngVO.setRegDt(currentDt);
+            verEnvMngVO.setRegId(sessionInfoVO.getUserId());
+            verEnvMngVO.setModDt(currentDt);
+            verEnvMngVO.setModId(sessionInfoVO.getUserId());
+
+            // 기능 사용여부 저장
+            result += verEnvMngMapper.saveFunc(verEnvMngVO);
+        }
+
+        if ( result == verEnvMngVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+    }
 }

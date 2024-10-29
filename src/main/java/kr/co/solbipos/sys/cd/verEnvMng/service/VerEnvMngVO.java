@@ -40,6 +40,15 @@ public class VerEnvMngVO extends CmmVO {
     /** 초기값여부 */
     private String defltYn;
 
+    /** 명칭코드그룹코드 */
+    private String nmcodeGrpCd;
+
+    /** 기능키구분 */
+    private String fnkeyFg;
+
+    /** 기능키번호 */
+    private String fnkeyNo;
+
     public String getVsCd() {
         return vsCd;
     }
@@ -86,5 +95,29 @@ public class VerEnvMngVO extends CmmVO {
 
     public void setDefltYn(String defltYn) {
         this.defltYn = defltYn;
+    }
+
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
+    }
+
+    public String getFnkeyFg() {
+        return fnkeyFg;
+    }
+
+    public void setFnkeyFg(String fnkeyFg) {
+        this.fnkeyFg = fnkeyFg;
+    }
+
+    public String getFnkeyNo() {
+        return fnkeyNo;
+    }
+
+    public void setFnkeyNo(String fnkeyNo) {
+        this.fnkeyNo = fnkeyNo;
     }
 }

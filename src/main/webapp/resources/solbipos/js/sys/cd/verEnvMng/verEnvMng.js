@@ -32,6 +32,8 @@ app.controller('verCtrl', ['$scope', '$http', function ($scope, $http) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
+
+                // 버전코드 컬럼 셋팅
                 if (col.binding === "vsCd") {
                     var item = s.rows[e.row].dataItem;
                     if (nvl(item.status, "") === "" && item.status !== "I") {
@@ -40,6 +42,30 @@ app.controller('verCtrl', ['$scope', '$http', function ($scope, $http) {
                     } else {
                         wijmo.removeClass(e.cell, 'wj-custom-readonly');
                     }
+                }
+
+                // 환경설정 컬럼 셋팅
+                if(col.binding === "envSet"){
+                    var item = s.rows[e.row].dataItem;
+                    if (nvl(item.status, "") === "" && item.status !== "I") {
+                        e.cell.innerHTML = messages["verEnvMng.envSet"];
+                    }else{
+                        e.cell.innerHTML = "";
+                    }
+                  wijmo.addClass(e.cell, 'wijLink'); // 링크효과
+                  wijmo.addClass(e.cell, 'wj-custom-readonly');
+                }
+                
+                // 기능설정 컬럼 셋팅
+                if(col.binding === "funcSet"){
+                    var item = s.rows[e.row].dataItem;
+                    if (nvl(item.status, "") === "" && item.status !== "I") {
+                        e.cell.innerHTML = messages["verEnvMng.funcSet"];
+                    }else{
+                        e.cell.innerHTML = "";
+                    }
+                  wijmo.addClass(e.cell, 'wijLink'); // 링크효과
+                  wijmo.addClass(e.cell, 'wj-custom-readonly');
                 }
             }
         });
@@ -62,11 +88,44 @@ app.controller('verCtrl', ['$scope', '$http', function ($scope, $http) {
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
 
-                // 버전코드 클릭시 대표명칭 조회
-                if (col.binding === "vsCd") {
+                // 버전코드 or 환경설정 클릭시 대표명칭 조회
+                if (col.binding === "vsCd" || col.binding === "envSet") {
                     if (selectedRow.status === undefined) {
+
+                        // 대표명칭 그리드 영역 show 나머지 hidden
+                        $("#divRepresent").css("display", "");
+                        $("#divDetail").css("display", "none");
+                        $("#divFuncFg").css("display", "none");
+                        $("#divFunc").css("display", "none");
+
+                        // 대표명칭, 세부명칭 그리드 영역 조정
+                        $("#divMid").css("width", "45%");
+                        $("#divSmall").css("width", "30%");
+                        
+                        // 대표명칭 그리드 조회
                         var scope = agrid.getScope('representCtrl');
                         scope.getRepresentList(selectedRow.vsCd);
+                        event.preventDefault();
+                    }
+                }
+                
+                // 기능설정 클릭시 기능구분 조회
+                if (col.binding === "funcSet") {
+                    if (selectedRow.status === undefined) {
+
+                        // 기능구분 그리드 영역 show 나머지 hidden
+                        $("#divRepresent").css("display", "none");
+                        $("#divDetail").css("display", "none");
+                        $("#divFuncFg").css("display", "");
+                        $("#divFunc").css("display", "none");
+
+                        // 기능구분, 기능 그리드 영역 조정
+                        $("#divMid").css("width", "25%");
+                        $("#divSmall").css("width", "50%");
+                        
+                        // 기능구분 그리드 조회
+                        var scope = agrid.getScope('funcFgCtrl');
+                        scope.getFuncFgList(selectedRow.vsCd);
                         event.preventDefault();
                     }
                 }
@@ -77,19 +136,32 @@ app.controller('verCtrl', ['$scope', '$http', function ($scope, $http) {
     // 버전 그리드 조회
     $scope.$on('verCtrl', function (event, data) {
 
-        // 대표명칭 초기화
+        // 대표명칭 그리드 초기화
         agrid.getScope('representCtrl')._gridDataInit();
         $("#btnRepresentSave").hide();
         
-        // 세부명칭 초기화
+        // 세부명칭 그리드 초기화
         agrid.getScope('detailCtrl')._gridDataInit();
         $("#btnDetailSave").hide();
+
+        // 기능구분 그리드 초기화
+        agrid.getScope('funcFgCtrl')._gridDataInit();
+
+        // 기능 그리드 초기화
+        agrid.getScope('funcCtrl')._gridDataInit();
+        $("#btnFuncSave").hide();
+
+        // 대표명칭, 세부명칭, 기능구분, 기능 그리드 영역 모두 숨기기
+        $("#divRepresent").css("display", "none");
+        $("#divDetail").css("display", "none");
+        $("#divFuncFg").css("display", "none");
+        $("#divFunc").css("display", "none");
 
         // 버전 그리드 조회
         var params = {};
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sys/cd/verEnvMng/getVerList.sb", params, function () {
-            // 버전 버튼 show
+            // 버전 추가, 저장 버튼 show
             $("#btnVerAdd").show();
             $("#btnVerSave").show();
         });
@@ -105,6 +177,8 @@ app.controller('verCtrl', ['$scope', '$http', function ($scope, $http) {
         params.vsCd = "";
         params.vsNm = "";
         params.useYn = "Y";
+        params.envSet = "";
+        params.funcSet = "";
 
         // 추가기능 수행 : 파라미터
         $scope._addRow(params, 0);
@@ -189,6 +263,14 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 // 설정코드 클릭시 세부명칭 조회
                 if (col.binding === "envstCd") {
+
+                    // 대표명칭, 세부명칭 그리드 영역 show 나머지 hidden
+                    $("#divRepresent").css("display", "");
+                    $("#divDetail").css("display", "");
+                    $("#divFuncFg").css("display", "none");
+                    $("#divFunc").css("display", "none");
+                    
+                    // 세부명칭 그리드 조회
                     var scope = agrid.getScope('detailCtrl');
                     scope.getDetailList(selectedRow.envstCd);
                     event.preventDefault();
@@ -333,6 +415,7 @@ app.controller('representCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/sys/cd/verEnvMng/saveEnvst.sb", params, function () {
+            // 대표명칭 그리드 재조회
             $scope.getRepresentList($("#hdVsCd").val());
         });
     };
@@ -508,7 +591,236 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/sys/cd/verEnvMng/saveEnvstDtl.sb", params, function () {
+            // 세부명칭 그리드 재조회
             $scope.getDetailList($("#hdEnvstCd").val());
+        });
+    };
+
+}]);
+
+/**
+ * 기능구분 그리드 생성
+ */
+app.controller('funcFgCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('funcFgCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
+        // ReadOnly 효과설정
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "nmcodeCd") {
+                    wijmo.addClass(e.cell, 'wijLink');
+                }
+            }
+        });
+
+        // 기능구분 선택
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            if (ht.cellType === wijmo.grid.CellType.Cell) {
+                var col = ht.panel.columns[ht.col];
+                var selectedRow = s.rows[ht.row].dataItem;
+
+                // 기능구분 코드 클릭시 기능 조회
+                if (col.binding === "nmcodeCd") {
+
+                    // 기능구분, 기능 그리드 영역 show 나머지 hidden
+                    $("#divRepresent").css("display", "none");
+                    $("#divDetail").css("display", "none");
+                    $("#divFuncFg").css("display", "");
+                    $("#divFunc").css("display", "");
+                    
+                    // 기능 그리드 조회
+                    var scope = agrid.getScope('funcCtrl');
+                    scope.getFuncList(selectedRow.nmcodeCd);
+                    event.preventDefault();
+                }
+            }
+        });
+    };
+
+    $scope.$on("funcFgCtrl", function(event, data) {
+
+    });
+
+    // 기능구분 그리드 조회
+    $scope.getFuncFgList = function(data){
+
+        // 선택한 버전코드 hidden 변수에 set
+        $("#hdVsCd").val(data);
+
+        var params = {};
+        params.nmcodeGrpCd = "026";
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/sys/cd/verEnvMng/getFuncFgList.sb", params, function () {
+        });
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    };
+
+}]);
+
+/**
+ * 기능 그리드 생성
+ */
+app.controller('funcCtrl', ['$scope', '$http', function ($scope, $http) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('funcCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
+        $scope.storeKindData = new wijmo.grid.DataMap(storeKind, 'value', 'name');  // 매장종류
+        $scope.posFgData = new wijmo.grid.DataMap(posFg, 'value', 'name');          // 포스구분
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.vsUseYn     = messages["verEnvMng.useYn"];
+        dataItem.fnkeyNo     = messages["verEnvMng.fnkeyNo"];
+        dataItem.fnkeyNm     = messages["verEnvMng.fnkeyNm"];
+        dataItem.storeFg     = messages["verEnvMng.storeFg"];
+        dataItem.posFg       = messages["verEnvMng.posFg"];
+        dataItem.posiAdjYn   = messages["verEnvMng.posiAdjYn"];
+        dataItem.fnkeyUseYn0 = messages["verEnvMng.comm"];
+        dataItem.imgFileNm0  = messages["verEnvMng.comm"];
+        dataItem.fnkeyUseYn1 = messages["verEnvMng.food"];
+        dataItem.imgFileNm1  = messages["verEnvMng.food"];
+        dataItem.fnkeyUseYn  = messages["verEnvMng.useYn"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+
+                if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+                    // 헤더의 전체선택 클릭 로직
+                    var flex   = panel.grid;
+                    var column = flex.columns[c];
+                    // check that this is a boolean column
+                    if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+                        // prevent sorting on click
+                        column.allowSorting = false;
+                        // count true values to initialize checkbox
+                        var cnt             = 0;
+                        for (var i = 0; i < flex.rows.length; i++) {
+                            if (flex.getCellData(i, c) === true) {
+                                cnt++;
+                            }
+                        }
+                        // create and initialize checkbox
+                        if (column.format === 'checkBoxText') {
+                            cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />';
+                        } else {
+                            cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+                        }
+                        var cb           = cell.firstChild;
+                        cb.checked       = cnt > 0;
+                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                        // apply checkbox value to cells
+                        cb.addEventListener('click', function (e) {
+                            flex.beginUpdate();
+                            for (var i = 0; i < flex.rows.length; i++) {
+                                if(!flex.rows[i].isReadOnly) {
+                                    flex.setCellData(i, c, cb.checked);
+                                }
+                            }
+                            flex.endUpdate();
+                        });
+                    }
+                }
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        };
+        // <-- //그리드 헤더2줄 -->
+
+        // 그리드 header 클릭시 정렬 이벤트 막기
+        s.addEventListener(s.hostElement, 'mousedown', function (e) {
+            var ht = s.hitTest(e);
+            s.allowSorting = false;
+        });
+    };
+
+    $scope.$on('funcCtrl', function (event, data) {
+
+    });
+    
+    // 기능 그리드 조회
+    $scope.getFuncList = function (data) {
+        
+        // 선택한 기능구분 코드 hidden 변수에 set
+        $("#hdFnkeyFg").val(data);
+        
+        var params = {};
+        params.vsCd = $("#hdVsCd").val();
+        params.fnkeyFg = data;
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/sys/cd/verEnvMng/getFuncList.sb", params, function () {
+            // 기능 사용여부 저장 버튼 show
+            $("#btnFuncSave").show();
+        });
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    };
+    
+    // 기능 그리드 저장
+    $scope.save = function () {
+
+        // 파라미터 설정
+        var params = [];
+        for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
+            $scope.flex.collectionView.itemsEdited[u].status = "U";
+            $scope.flex.collectionView.itemsEdited[u].useYn = $scope.flex.collectionView.itemsEdited[u].vsUseYn === true ? "Y" : "N";
+            $scope.flex.collectionView.itemsEdited[u].vsCd = $("#hdVsCd").val();
+            $scope.flex.collectionView.itemsEdited[u].fnkeyFg = $("#hdFnkeyFg").val();
+            params.push($scope.flex.collectionView.itemsEdited[u]);
+        }
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/sys/cd/verEnvMng/saveFunc.sb", params, function () {
+            // 기능 그리드 재조회
+            $scope.getFuncList($("#hdFnkeyFg").val());
         });
     };
 

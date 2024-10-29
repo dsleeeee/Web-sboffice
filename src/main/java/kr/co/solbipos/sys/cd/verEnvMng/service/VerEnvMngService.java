@@ -40,4 +40,13 @@ public interface VerEnvMngService {
 
     /** 세부명칭 초기값여부 저장 */
     int saveEnvstDtl(VerEnvMngVO[] verEnvMngVOs, SessionInfoVO sessionInfoVO);
+
+    /** 기능구분 리스트 조회 */
+    List<DefaultMap<String>> getFuncFgList(VerEnvMngVO verEnvMngVO);
+
+    /** 기능 리스트 조회 */
+    List<DefaultMap<String>> getFuncList(VerEnvMngVO verEnvMngVO);
+
+    /** 기능 사용여부 저장 */
+    int saveFunc(VerEnvMngVO[] verEnvMngVOs, SessionInfoVO sessionInfoVO);
 }

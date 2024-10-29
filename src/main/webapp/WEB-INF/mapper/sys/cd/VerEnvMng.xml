@@ -11,10 +11,14 @@
 -->
 <mapper namespace="kr.co.solbipos.sys.cd.verEnvMng.service.impl.VerEnvMngMapper">
 
-    <!-- 대표명칭 사용여부, 세부명칭 초기값여부 ListMap  -->
+    <!-- 대표명칭, 세부명칭, 기능 리스트 ListMap  -->
     <resultMap id="verEnvMngMap" type="DefaultMap">
         <result column="VS_USE_YN" property="vsUseYn" typeHandler="CustomBooleanTypeHandler"/>
         <result column="VS_DEFLT_YN" property="vsDefltYn" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="POSI_ADJ_YN" property="posiAdjYn" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="FNKEY_USE_YN_0" property="fnkeyUseYn0" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="FNKEY_USE_YN_1" property="fnkeyUseYn1" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="FNKEY_USE_YN" property="fnkeyUseYn" typeHandler="CustomBooleanTypeHandler"/>
     </resultMap>
 
     <!-- 버전 리스트 조회 -->
@@ -229,4 +233,111 @@
         ,   #{modId}
         )
     </insert>
+
+    <!-- 기능구분 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE
+        PARAM    : verEnvMngVO
+        COMMENTS : 기능구분 리스트를 조회한다.
+    -->
+    <select id="getFuncFgList" parameterType="verEnvMngVO" resultType="DefaultMap">
+        /* USE : VerEnvMngMapper.getFuncFgList */
+        SELECT  NMCODE_GRP_CD,
+                NMCODE_CD,
+                NMCODE_NM,
+                NMCODE_ITEM_1,
+                NMCODE_ITEM_2,
+                USE_COL_NM
+        FROM    TB_CM_NMCODE
+        WHERE   NMCODE_GRP_CD = #{nmcodeGrpCd}
+        ORDER
+        BY      NMCODE_CD ASC
+    </select>
+
+    <!-- 기능 리스트 조회 -->
+    <!--
+        TABLE    : TB_CM_POS_FNKEY, TB_CM_VS_POS_FNKEY
+        PARAM    : verEnvMngVO
+        COMMENTS : 기능 리스트를 조회한다.
+    -->
+    <select id="getFuncList" parameterType="verEnvMngVO" resultMap="verEnvMngMap">
+        /* USE : VerEnvMngMapper.getFuncList */
+        SELECT  NVL(tcvpf.USE_YN, 'N') AS VS_USE_YN,
+                tcpf.FNKEY_NO,
+                tcpf.FNKEY_NM,
+                tcpf.FNKEY_FG,
+                tcpf.STORE_FG,
+                tcpf.POS_FG,
+                tcpf.IMG_FILE_NM_0,
+                tcpf.IMG_FILE_NM_1,
+                NVL(tcpf.FNKEY_USE_YN_0, 'N') AS FNKEY_USE_YN_0,
+                NVL(tcpf.FNKEY_USE_YN_1, 'N') AS FNKEY_USE_YN_1,
+                tcpf.DISP_SEQ,
+                NVL(tcpf.POSI_ADJ_YN, 'N') AS POSI_ADJ_YN,
+                tcpf.COL_POSI,
+                tcpf.ROW_POSI,
+                tcpf.WIDTH,
+                tcpf.HEIGHT,
+                NVL(tcpf.USE_YN, 'N') AS FNKEY_USE_YN,
+                tcpf.REG_DT,
+                tcpf.REG_ID,
+                tcpf.MOD_DT,
+                tcpf.MOD_ID
+         FROM   TB_CM_POS_FNKEY tcpf
+         LEFT OUTER JOIN TB_CM_VS_POS_FNKEY tcvpf ON
+                tcpf.FNKEY_FG = tcvpf.FNKEY_FG
+         AND    tcpf.FNKEY_NO = tcvpf.FNKEY_NO
+         AND    tcvpf.VS_CD = #{vsCd}
+         WHERE  tcpf.FNKEY_FG = #{fnkeyFg}
+         ORDER
+         BY     tcpf.FNKEY_NO,
+                tcpf.DISP_SEQ ASC
+    </select>
+
+    <!-- 기능 사용여부 저장 -->
+    <!--
+        TABLE    : TB_CM_VS_POS_FNKEY
+        PARAM    : verEnvMngVO
+        COMMENTS : 기능 사용여부를 저장한다.
+    -->
+    <insert id="saveFunc" parameterType="verEnvMngVO">
+        /* USE : VerEnvMngMapper.saveFunc */
+        MERGE INTO TB_CM_VS_POS_FNKEY
+        USING DUAL
+        ON
+        (
+              VS_CD = #{vsCd}
+        AND   FNKEY_FG = #{fnkeyFg}
+        AND   FNKEY_NO = #{fnkeyNo}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     USE_YN = #{useYn}
+        ,       MOD_DT   = #{modDt}
+        ,       MOD_ID   = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            VS_CD
+        ,   FNKEY_FG
+        ,   FNKEY_NO
+        ,   USE_YN
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{vsCd}
+        ,   #{fnkeyFg}
+        ,   #{fnkeyNo}
+        ,   #{useYn}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
 </mapper>
