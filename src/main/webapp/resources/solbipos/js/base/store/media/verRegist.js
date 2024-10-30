@@ -212,6 +212,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#lblFileSizeMax").text(messages["media.fileSize.msg"]);
     } else if(s.selectedValue === "015") {
       $("#lblFileSizeMax").text(messages["media.fileSize.msg2"]);
+    } else if(s.selectedValue === "016") {
+      $("#lblFileSizeMax").text(messages["media.fileSize.max4"]);
     } else {
       $("#lblFileSizeMax").text("");
     }
