@@ -3526,7 +3526,6 @@
         ON  (
                 A.STORE_CD = B.STORE_CD
                 AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
-                AND A.SDSEL_GRP_CD = B.SDSEL_GRP_CD
             )
         WHEN MATCHED THEN
             UPDATE
@@ -3797,7 +3796,6 @@
         ON  (
                 A.STORE_CD = B.STORE_CD
                 AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
-                AND A.SDSEL_GRP_CD = B.SDSEL_GRP_CD
             )
         WHEN MATCHED THEN
             UPDATE
