@@ -686,54 +686,25 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 // 터치키그룹 코드 셋팅
                 touchKeyVO.setTukeyGrpCd(touchKeyEnvList.get(i).getStr("env4038"));
 
-                // 맘스터치는 기존로직 적용(delete -> insert-select), 나머지 본사는 새 로직 적용(merge -> delete) (20240909)
-                if(touchKeyVO.getHqOfficeCd().equals("DS021") || touchKeyVO.getHqOfficeCd().equals("DS034") || touchKeyVO.getHqOfficeCd().equals("H0393")){
+                // 터치키 매장적용
+                result  = keyMapper.mergeStoreEnvst(touchKeyVO);
+                result  = keyMapper.mergeTouchKeyGroupToStore(touchKeyVO);
+                result += keyMapper.mergeTouchKeyClassToStore(touchKeyVO);
+                // 1248이 0/1이면 전체 삽입
+                // 1248이 2이면 228 Y 제외 삽입
+                if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
+                    result += keyMapper.mergeTouchKeyToStore(touchKeyVO);
+                } else if(envstVal1248.equals("2")){
+                    result += keyMapper.mergeTouchKeyToStore2(touchKeyVO);
+                }
 
-                    // 기적용된 터치키 그룹 정보 삭제
-                    keyMapper.deleteTouchkeyGrp(touchKeyVO);
-                    // 기적용된 터치키 정보 삭제
-                    keyMapper.deleteTouchKeyClassToStore(touchKeyVO);
-                    // 1248이 0/1이면 전체 삭제
-                    // 1248이 2이면 228 Y 제외 삭제
-                    if (envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                        keyMapper.deleteTouchKeyToStore(touchKeyVO);
-                    } else if (envstVal1248.equals("2")) {
-                        keyMapper.deleteTouchKeyToStore2(touchKeyVO);
-                    }
-                    // 터치키 매장적용
-                    result = keyMapper.mergeStoreEnvst(touchKeyVO);
-                    result = keyMapper.insertTouchKeyGroupToStore(touchKeyVO);
-                    result += keyMapper.insertTouchKeyClassToStore(touchKeyVO);
-                    // 1248이 0/1이면 전체 삽입
-                    // 1248이 2이면 228 Y 제외 삽입
-                    if (envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                        result += keyMapper.insertTouchKeyToStore(touchKeyVO);
-                    } else if (envstVal1248.equals("2")) {
-                        result += keyMapper.insertTouchKeyToStore2(touchKeyVO);
-                    }
-
-                }else{
-
-                    // 터치키 매장적용
-                    result  = keyMapper.mergeStoreEnvst(touchKeyVO);
-                    result  = keyMapper.mergeTouchKeyGroupToStore(touchKeyVO);
-                    result += keyMapper.mergeTouchKeyClassToStore(touchKeyVO);
-                    // 1248이 0/1이면 전체 삽입
-                    // 1248이 2이면 228 Y 제외 삽입
-                    if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                        result += keyMapper.mergeTouchKeyToStore(touchKeyVO);
-                    } else if(envstVal1248.equals("2")){
-                        result += keyMapper.mergeTouchKeyToStore2(touchKeyVO);
-                    }
-
-                    // 기존 데이터 중, 불필요한 매장 터치키 분류 정보 삭제
-                    keyMapper.deleteNotUseTouchKeyClassToStore(touchKeyVO);
-                    // 기존 데이터 중, 불필요한 매장 터치키 정보 삭제
-                    if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                        keyMapper.deleteNotUseTouchKeyToStore(touchKeyVO);
-                    } else if(envstVal1248.equals("2")){
-                        keyMapper.deleteNotUseTouchKeyToStore2(touchKeyVO);
-                    }
+                // 기존 데이터 중, 불필요한 매장 터치키 분류 정보 삭제
+                keyMapper.deleteNotUseTouchKeyClassToStore(touchKeyVO);
+                // 기존 데이터 중, 불필요한 매장 터치키 정보 삭제
+                if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
+                    keyMapper.deleteNotUseTouchKeyToStore(touchKeyVO);
+                } else if(envstVal1248.equals("2")){
+                    keyMapper.deleteNotUseTouchKeyToStore2(touchKeyVO);
                 }
             }
         }
@@ -1232,54 +1203,25 @@ public class TouchKeyServiceImpl implements TouchKeyService {
                 //keyMapper.saveStoreConfgXml(touchKeyVO);//판매터치키 XML 데이터 미사용 처리 20230331
                 touchKeyVO.setOrgnFg("S");
 
-                // 맘스터치는 기존로직 적용(delete -> insert-select), 나머지 본사는 새 로직 적용(merge -> delete) (20240909)
-                if(touchKeyVO.getHqOfficeCd().equals("DS021") || touchKeyVO.getHqOfficeCd().equals("DS034") || touchKeyVO.getHqOfficeCd().equals("H0393")) {
+                // 터치키 매장적용
+                result  = keyMapper.mergeStoreEnvst(touchKeyVO);
+                result  = keyMapper.mergeTouchKeyGroupToStore(touchKeyVO);
+                result += keyMapper.mergeTouchKeyClassToStore(touchKeyVO);
+                // 1248이 0/1이면 전체 삽입
+                // 1248이 2이면 228 Y 제외 삽입
+                if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
+                    result += keyMapper.mergeTouchKeyToStore(touchKeyVO);
+                } else if(envstVal1248.equals("2")){
+                    result += keyMapper.mergeTouchKeyToStore2(touchKeyVO);
+                }
 
-                    // 기적용된 터치키 그룹 정보 삭제
-                    keyMapper.deleteTouchkeyGrp(touchKeyVO);
-                    // 기적용된 터치키 정보 삭제
-                    keyMapper.deleteTouchKeyClassToStore(touchKeyVO);
-                    // 1248이 0/1이면 전체 삭제
-                    // 1248이 2이면 228 Y 제외 삭제
-                    if (envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                        keyMapper.deleteTouchKeyToStore(touchKeyVO);
-                    } else if (envstVal1248.equals("2")) {
-                        keyMapper.deleteTouchKeyToStore2(touchKeyVO);
-                    }
-                    // 터치키 매장적용
-                    result = keyMapper.mergeStoreEnvst(touchKeyVO);
-                    result = keyMapper.insertTouchKeyGroupToStore(touchKeyVO);
-                    result += keyMapper.insertTouchKeyClassToStore(touchKeyVO);
-                    // 1248이 0/1이면 전체 삽입
-                    // 1248이 2이면 228 Y 제외 삽입
-                    if (envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                        result += keyMapper.insertTouchKeyToStore(touchKeyVO);
-                    } else if (envstVal1248.equals("2")) {
-                        result += keyMapper.insertTouchKeyToStore2(touchKeyVO);
-                    }
-
-                }else{
-
-                    // 터치키 매장적용
-                    result  = keyMapper.mergeStoreEnvst(touchKeyVO);
-                    result  = keyMapper.mergeTouchKeyGroupToStore(touchKeyVO);
-                    result += keyMapper.mergeTouchKeyClassToStore(touchKeyVO);
-                    // 1248이 0/1이면 전체 삽입
-                    // 1248이 2이면 228 Y 제외 삽입
-                    if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                        result += keyMapper.mergeTouchKeyToStore(touchKeyVO);
-                    } else if(envstVal1248.equals("2")){
-                        result += keyMapper.mergeTouchKeyToStore2(touchKeyVO);
-                    }
-
-                    // 기존 데이터 중, 불필요한 매장 터치키 분류 정보 삭제
-                    keyMapper.deleteNotUseTouchKeyClassToStore(touchKeyVO);
-                    // 기존 데이터 중, 불필요한 매장 터치키 정보 삭제
-                    if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
-                        keyMapper.deleteNotUseTouchKeyToStore(touchKeyVO);
-                    } else if(envstVal1248.equals("2")){
-                        keyMapper.deleteNotUseTouchKeyToStore2(touchKeyVO);
-                    }
+                // 기존 데이터 중, 불필요한 매장 터치키 분류 정보 삭제
+                keyMapper.deleteNotUseTouchKeyClassToStore(touchKeyVO);
+                // 기존 데이터 중, 불필요한 매장 터치키 정보 삭제
+                if(envstVal1248.equals("0") || envstVal1248.equals("1")) {
+                    keyMapper.deleteNotUseTouchKeyToStore(touchKeyVO);
+                } else if(envstVal1248.equals("2")){
+                    keyMapper.deleteNotUseTouchKeyToStore2(touchKeyVO);
                 }
             }
         }
