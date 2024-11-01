@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ArtiseeProdMapping.xml
+    아티제상품코드맵핑 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2024.09.02     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.artiseeProdMapping.service.impl.ArtiseeProdMappingMapper">
+
+    <!-- TMP테이블01 삭제 -->
+    <!--
+        TABLE    : LYNK_PROD_MAPPING_C01
+        COMMENTS :
+    -->
+    <delete id="deleteMappingTmp01" parameterType="artiseeProdMappingVO">
+        /* USE : ArtiseeProdMappingMapper.deleteMappingTmp01 */
+        DELETE  LYNK_PROD_MAPPING_C01
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+    </delete>
+
+    <!-- TMP테이블02 삭제 -->
+    <!--
+        TABLE    : LYNK_PROD_MAPPING_C02
+        COMMENTS :
+    -->
+    <delete id="deleteMappingTmp02" parameterType="artiseeProdMappingVO">
+        /* USE : ArtiseeProdMappingMapper.deleteMappingTmp02 */
+        DELETE  LYNK_PROD_MAPPING_C02
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+    </delete>
+
+    <!-- 아티제상품코드맵핑 - 매핑값 TMP테이블 저장 -->
+    <!--
+        TABLE    :  LYNK_PROD_MAPPING_C01
+                    LYNK_PROD_MAPPING_C02
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="insertMappingString" statementType="CALLABLE" parameterType="artiseeProdMappingVO" resultType="String">
+        /* USE : ArtiseeProdMappingMapper.insertMappingString */
+        {
+            CALL PKG_SET_LYNK_PROD_MAPPING.SP_LYNK_PROD_MAPPING_I
+            (
+                #{userId},
+                #{hqOfficeCd},
+                #{hqOfficeCd}
+            )
+        }
+    </select>
+
+    <!-- 아티제상품코드맵핑 - 조회 -->
+    <!--
+        TABLE    :  TB_HQ_ERP_PROD_MAPPING
+                    LYNK_PROD_MAPPING_C02
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getMapStrList" parameterType="artiseeProdMappingVO" resultType="DefaultMap">
+        /* USE : ArtiseeProdMappingMapper.getMapStrList */
+        SELECT 	A.HQ_OFFICE_CD
+        ,       B.MAPPING_CD
+        ,		A.PROD_CD
+        ,       A.PROD_NM
+        ,		A.SDSEL_GRP_CD
+        ,		A.SDSEL_GRP_NM
+        ,		A.MAPPING_STRING
+        ,		A.MAPPING_INFO
+        ,		B.ERP_PROD_CD
+        FROM 	LYNK_PROD_MAPPING_C02 A
+        ,		TB_HQ_ERP_PROD_MAPPING B
+        ,		TB_HQ_PRODUCT C
+        WHERE 	A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     B.HQ_OFFICE_CD   (+)=   A.HQ_OFFICE_CD
+        AND     B.MAPPING_STRING (+)=   A.MAPPING_STRING
+        AND     C.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
+        AND     C.PROD_CD           =   A.PROD_CD
+        <if test="chkDt == 'false'">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                    AND C.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND A.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND A.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND C.PROD_CLASS_CD IN  (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    ) --상품분류
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS  (
+                            SELECT  1
+                            FROM    TB_HQ_PRODUCT_BARCD
+                            WHERE   HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                            AND     PROD_CD = A.PROD_CD
+                            AND     BARCD_CD = #{barCd}
+                        ) --바코드
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND C.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="prodTypeFg != null and prodTypeFg != ''">
+            AND C.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+        </if>
+        <choose>
+            <when test='regYn != null and regYn == "Y"'>
+                AND B.ERP_PROD_CD IS NOT NULL
+            </when>
+            <when test='regYn != null and regYn == "N"'>
+                AND B.ERP_PROD_CD IS NULL
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        ORDER
+        BY 		A.PROD_CD
+        ,       A.MAPPING_STRING
+    </select>
+
+    <!-- 상품정보 - 조회  -->
+    <!--
+        TABLE    : TB_HQ_ERP_PROD_MAPPING
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getProdList" parameterType="artiseeProdMappingVO" resultType="DefaultMap">
+        /* USE : ArtiseeProdMappingMapper.getProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT 	A.PROD_CD
+        ,		A.PROD_NM
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM 	TB_HQ_PRODUCT A
+        ,       (
+                    SELECT 	DISTINCT HQ_OFFICE_CD
+                    ,		ERP_PROD_CD
+                    FROM	TB_HQ_ERP_PROD_MAPPING B
+                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                ) B
+        WHERE 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND 	A.PROD_CD 	    NOT LIKE 'LYNK%'
+        <if test="chkDt == 'false'">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND A.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND A.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND A.PROD_CLASS_CD IN  (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    ) --상품분류
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS  (
+                            SELECT  1
+                            FROM    TB_HQ_PRODUCT_BARCD
+                            WHERE   HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                            AND     PROD_CD = A.PROD_CD
+                            AND     BARCD_CD = #{barCd}
+                        ) --바코드
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND A.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="prodTypeFg != null and prodTypeFg != ''">
+            AND A.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+        </if>
+        <choose>
+            <when test='regYn != null and regYn == "Y"'>
+                AND B.ERP_PROD_CD IS NOT NULL
+            </when>
+            <when test='regYn != null and regYn == "N"'>
+                AND B.ERP_PROD_CD IS NULL
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        AND     B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+        AND     B.ERP_PROD_CD  (+) = A.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 상품코드 - 등록 insert, update -->
+    <!--
+        TABLE    : TB_HQ_ERP_PROD_MAPPING
+        COMMENTS :
+    -->
+    <update id="getSaveMappingProd" parameterType="artiseeProdMappingVO">
+        /* ArtiseeProdMappingMapper.getSaveMappingProd */
+        MERGE INTO  TB_HQ_ERP_PROD_MAPPING A
+        USING   DUAL
+        ON  (
+                    A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                AND A.MAPPING_CD        = #{mappingCd}
+                AND A.MAPPING_STRING    = #{mappingString}
+            )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                    A.ERP_PROD_CD   = #{erpProdCd}
+            ,       MOD_DT          = #{modDt}
+            ,       MOD_ID          = #{modId}
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                HQ_OFFICE_CD
+            ,   MAPPING_CD
+            ,   ERP_PROD_CD
+            ,   MAPPING_STRING
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
+            VALUES
+            (
+                #{hqOfficeCd}
+            ,   (
+                    SELECT  LPAD(NVL(MAX(MAPPING_CD),0)+1, 6, '0')
+                    FROM    TB_HQ_ERP_PROD_MAPPING
+                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                )
+            ,   #{erpProdCd}
+            ,   #{mappingString}
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
+    </update>
+
+    <!-- 매핑코드 삭제 -->
+    <!--
+        TABLE    : TB_HQ_ERP_PROD_MAPPING
+        COMMENTS :
+    -->
+    <delete id="getDeleteMappingProd" parameterType="artiseeProdMappingVO">
+        /* USE : ArtiseeProdMappingMapper.getDeleteMappingProd */
+        DELETE  TB_HQ_ERP_PROD_MAPPING
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     MAPPING_CD      = #{mappingCd}
+    </delete>
+
+    <!-- 아티제상품코드맵핑 - 엑셀다운로드 -->
+    <!--
+        TABLE    : TB_HQ_ERP_PROD_MAPPING
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getMapStrExcelList" parameterType="artiseeProdMappingVO" resultType="DefaultMap">
+        /* USE : ArtiseeProdMappingMapper.getMapStrExcelList */
+        SELECT 	A.HQ_OFFICE_CD
+        ,       B.MAPPING_CD
+        ,		A.PROD_CD
+        ,       A.PROD_NM
+        ,		A.SDSEL_GRP_CD
+        ,		A.SDSEL_GRP_NM
+        ,		A.MAPPING_STRING
+        ,		A.MAPPING_INFO
+        ,		B.ERP_PROD_CD
+        FROM 	LYNK_PROD_MAPPING_C02 A
+        ,		TB_HQ_ERP_PROD_MAPPING B
+        ,		TB_HQ_PRODUCT C
+        WHERE 	A.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     B.HQ_OFFICE_CD   (+)=   A.HQ_OFFICE_CD
+        AND     B.MAPPING_STRING (+)=   A.MAPPING_STRING
+        AND     C.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
+        AND     C.PROD_CD           =   A.PROD_CD
+        <if test="chkDt == 'false'">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                    AND C.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND A.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND A.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND C.PROD_CLASS_CD IN  (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    ) --상품분류
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS  (
+                            SELECT  1
+                            FROM    TB_HQ_PRODUCT_BARCD
+                            WHERE   HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                            AND     PROD_CD = A.PROD_CD
+                            AND     BARCD_CD = #{barCd}
+                            ) --바코드
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND C.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="prodTypeFg != null and prodTypeFg != ''">
+            AND C.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+        </if>
+        <choose>
+            <when test='regYn != null and regYn == "Y"'>
+                AND B.ERP_PROD_CD IS NOT NULL
+            </when>
+            <when test='regYn != null and regYn == "N"'>
+                AND B.ERP_PROD_CD IS NULL
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        ORDER
+        BY 		A.PROD_CD
+        ,       A.MAPPING_STRING
+    </select>
+
+    <!-- 상품정보 - 엑셀다운로드 -->
+    <!--
+        TABLE    : TB_HQ_ERP_PROD_MAPPING
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getProdExcelList" parameterType="artiseeProdMappingVO" resultType="DefaultMap">
+        /* USE : ArtiseeProdMappingMapper.getProdExcelList */
+        SELECT 	A.PROD_CD
+        ,		A.PROD_NM
+        FROM 	TB_HQ_PRODUCT A
+        ,       TB_HQ_ERP_PROD_MAPPING B
+        WHERE 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND 	A.PROD_CD 	    NOT LIKE 'LYNK%'
+        <if test="chkDt == 'false'">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                    AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND A.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND A.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND A.PROD_CLASS_CD IN  (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    ) --상품분류
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS  (
+                            SELECT  1
+                            FROM    TB_HQ_PRODUCT_BARCD
+                            WHERE   HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                            AND     PROD_CD = A.PROD_CD
+                            AND     BARCD_CD = #{barCd}
+                        ) --바코드
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND A.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="prodTypeFg != null and prodTypeFg != ''">
+            AND A.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+        </if>
+        <choose>
+            <when test='regYn != null and regYn == "Y"'>
+                AND B.ERP_PROD_CD IS NOT NULL
+            </when>
+            <when test='regYn != null and regYn == "N"'>
+                AND B.ERP_PROD_CD IS NULL
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        AND     B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
+        AND     B.ERP_PROD_CD  (+) = A.PROD_CD
+    </select>
+</mapper>
