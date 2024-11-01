@@ -1057,7 +1057,6 @@
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
-                    AND SDSEL_GRP_CD = #{sdselGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1075,7 +1074,6 @@
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
-                    AND SDSEL_GRP_CD = #{sdselGrpCd}
             </when>
         </choose>
     </update>
@@ -1099,7 +1097,6 @@
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
-                    AND SDSEL_GRP_CD = #{sdselGrpCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -1111,7 +1108,6 @@
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
-                    AND SDSEL_GRP_CD = #{sdselGrpCd}
             </when>
         </choose>
     </update>
