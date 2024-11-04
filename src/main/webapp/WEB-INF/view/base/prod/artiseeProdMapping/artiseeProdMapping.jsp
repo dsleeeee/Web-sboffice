@@ -166,13 +166,13 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingCd"/>" binding="mappingCd" width="0" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodCd"/>" binding="prodCd" width="105" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.prodNm"/>" binding="prodNm" width="80" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.grpCd"/>" binding="sdselGrpCd" width="70" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.grpNm"/>" binding="sdselGrpNm" width="60" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingInfo"/>" binding="mappingInfo" width="300" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingString"/>" binding="mappingString" width="200" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdCd"/>" binding="erpProdCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdCd"/>" binding="erpProdCd" align="center" width="105" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
