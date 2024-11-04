@@ -69,7 +69,9 @@
                     <label id="lblSpecNm"></label>
                 </span>
                 <%-- 삭제 --%>
-                <button class="btn_skyblue" id="btnArtiseeProdSpecDel" ng-click="del()"><s:message code='cmm.del' /></button>
+                <div id="divBtnProd2" style="visibility: hidden;">
+                    <button class="btn_skyblue" id="btnArtiseeProdSpecDel" ng-click="del()"><s:message code='cmm.del' /></button>
+                </div>
             </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:510px; overflow-x: hidden; overflow-y: hidden;">

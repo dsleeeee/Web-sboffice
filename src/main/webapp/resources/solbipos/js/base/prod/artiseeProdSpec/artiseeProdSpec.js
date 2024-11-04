@@ -69,6 +69,8 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
                     // 미적용 상품 버튼
                     var divBtnProd = document.getElementById('divBtnProd');
                     divBtnProd.style.visibility='visible';
+                    var divBtnProd2 = document.getElementById('divBtnProd2');
+                    divBtnProd2.style.visibility='visible';
                 }
             }
         });
@@ -106,6 +108,8 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
                 // 미적용 상품 버튼
                 var divBtnProd = document.getElementById('divBtnProd');
                 divBtnProd.style.visibility='hidden';
+                var divBtnProd2 = document.getElementById('divBtnProd2');
+                divBtnProd2.style.visibility='hidden';
             });
         }, false);
     };
