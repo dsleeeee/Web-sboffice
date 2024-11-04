@@ -65,6 +65,10 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
                     // paging 영역 보이도록
                     var artiseeProdSpecNoProdCtrlPager = document.getElementById('artiseeProdSpecNoProdCtrlPager');
                     artiseeProdSpecNoProdCtrlPager.style.visibility='visible';
+
+                    // 미적용 상품 버튼
+                    var divBtnProd = document.getElementById('divBtnProd');
+                    divBtnProd.style.visibility='visible';
                 }
             }
         });
@@ -84,7 +88,6 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
 
         $scope._inquiryMain("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecList.sb", params, function() {
             $scope.$apply(function() {
-                $("#lblSpecCd").text("");
                 $("#lblSpecNm").text("");
 
                 // 적용 상품
@@ -95,10 +98,14 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
                 // 미적용 상품
                 var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
                 storeScope2._gridDataInit();
-                // storeScope2._broadcast('artiseeProdSpecNoProdCtrl', null);
+                storeScope2._broadcast('artiseeProdSpecNoProdCtrl', null);
                 // paging 영역 보이도록
                 var artiseeProdSpecNoProdCtrlPager = document.getElementById('artiseeProdSpecNoProdCtrlPager');
                 artiseeProdSpecNoProdCtrlPager.style.visibility='hidden';
+
+                // 미적용 상품 버튼
+                var divBtnProd = document.getElementById('divBtnProd');
+                divBtnProd.style.visibility='hidden';
             });
         }, false);
     };
@@ -121,16 +128,15 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
 
     // <-- 검색 호출 -->
     $scope.$on("artiseeProdSpecProdCtrl", function(event, data) {
-        $("#lblSpecCd").text(data.specCd);
-        $("#lblSpecNm").text(" / " + data.specNm);
-
+        $("#lblSpecNm").text(data.specCd + " / " + data.specNm);
+        $scope.setSelectedProd(data);
         $scope.searchArtiseeProdSpecProd();
         event.preventDefault();
     });
 
     $scope.searchArtiseeProdSpecProd = function(){
         var params = {};
-        params.specCd = $("#lblSpecCd").text();
+        params.specCd = $scope.selectedProd.specCd;
 
         $scope._inquirySub("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdList.sb", params, function() {}, false);
     };
@@ -142,20 +148,34 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].specCd = $("#lblSpecCd").text();
+                $scope.flex.collectionView.items[i].specCd = $scope.selectedProd.specCd;
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveDelete.sb", params, function(){
-            // 특성
-            var storeScope = agrid.getScope('artiseeProdSpecCtrl');
-            storeScope._broadcast('artiseeProdSpecCtrl', null);
-            event.preventDefault();
+            // 적용 상품
+            var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
+            storeScope._gridDataInit();
+            storeScope._broadcast('artiseeProdSpecProdCtrl', $scope.getSelectedProd());
+
+            // 미적용 상품
+            var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+            storeScope2._gridDataInit();
+            storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
         });
     };
     // <-- //삭제 -->
+
+    // 선택 매장
+    $scope.selectedProd;
+    $scope.setSelectedProd = function(store) {
+        $scope.selectedProd = store;
+    };
+    $scope.getSelectedProd = function(){
+        return $scope.selectedProd;
+    };
 
 }]);
 
@@ -187,13 +207,14 @@ app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope
 
     // <-- 검색 호출 -->
     $scope.$on("artiseeProdSpecNoProdCtrl", function(event, data) {
+        $scope.setSelectedNoProd(data);
         $scope.searchArtiseeProdSpecNoProd();
         event.preventDefault();
     });
 
     $scope.searchArtiseeProdSpecNoProd = function(){
         var params = {};
-        params.specCd = $("#lblSpecCd").text();
+        params.specCd = $scope.selectedNoProd.specCd;
         params.chkDt = $scope.isChecked;
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
@@ -206,6 +227,15 @@ app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope
         $scope._inquiryMain("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecNoProdList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
+
+    // 선택 매장
+    $scope.selectedNoProd;
+    $scope.setSelectedNoProd = function(store) {
+        $scope.selectedNoProd = store;
+    };
+    $scope.getSelectedNoProd = function(){
+        return $scope.selectedNoProd;
+    };
 
     // 전체기간 체크박스 클릭이벤트
     $scope.isChkDt = function() {
@@ -246,17 +276,22 @@ app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
-                $scope.flex.collectionView.items[i].specCd = $("#lblSpecCd").text();
+                $scope.flex.collectionView.items[i].specCd = $scope.selectedNoProd.specCd;
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function(){
-            // 특성
-            var storeScope = agrid.getScope('artiseeProdSpecCtrl');
-            storeScope._broadcast('artiseeProdSpecCtrl', null);
-            event.preventDefault();
+            // 적용 상품
+            var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
+            storeScope._gridDataInit();
+            storeScope._broadcast('artiseeProdSpecProdCtrl', $scope.getSelectedNoProd());
+
+            // 미적용 상품
+            var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+            storeScope2._gridDataInit();
+            storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedNoProd());
         });
     };
     // <-- //추가 -->

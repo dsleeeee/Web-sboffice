@@ -66,7 +66,6 @@
         <div class="wj-TblWrapBr mr10 pd10" style="height:590px; overflow-y: hidden;">
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30">
-                    <label id="lblSpecCd"></label>
                     <label id="lblSpecNm"></label>
                 </span>
                 <%-- 삭제 --%>
@@ -163,10 +162,12 @@
                 </tr>
                 <tr>
                     <td colspan="4" align="right">
-                        <%-- 조회 --%>
-                        <button class="btn_skyblue" id="btnArtiseeProdSpecNoProd" ng-click="_pageView('artiseeProdSpecNoProdCtrl', 1)"><s:message code="cmm.search" /></button>
-                        <%-- 등록 --%>
-                        <button class="btn_skyblue" id="btnArtiseeProdSpecAdd" ng-click="add()"><s:message code='artiseeProdSpec.regist' /></button>
+                        <div id="divBtnProd" style="visibility: hidden;">
+                            <%-- 조회 --%>
+                            <button class="btn_skyblue" id="btnArtiseeProdSpecNoProd" ng-click="_pageView('artiseeProdSpecNoProdCtrl', 1)"><s:message code="cmm.search" /></button>
+                            <%-- 등록 --%>
+                            <button class="btn_skyblue" id="btnArtiseeProdSpecAdd" ng-click="add()"><s:message code='artiseeProdSpec.regist' /></button>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -205,7 +206,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdSpec/artiseeProdSpec.js?ver=20241015.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdSpec/artiseeProdSpec.js?ver=20241104.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
