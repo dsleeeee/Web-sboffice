@@ -81,6 +81,27 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
 
     // <-- 검색 호출 -->
     $scope.$on("artiseeProdSpecCtrl", function(event, data) {
+        $("#lblSpecNm").text("");
+
+        // 적용 상품
+        var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
+        storeScope._gridDataInit();
+        storeScope._broadcast('artiseeProdSpecProdCtrl', null);
+
+        // 미적용 상품
+        var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+        storeScope2._gridDataInit();
+        storeScope2._broadcast('artiseeProdSpecNoProdCtrl', null);
+        // paging 영역 보이도록
+        var artiseeProdSpecNoProdCtrlPager = document.getElementById('artiseeProdSpecNoProdCtrlPager');
+        artiseeProdSpecNoProdCtrlPager.style.visibility='hidden';
+
+        // 미적용 상품 버튼
+        var divBtnProd = document.getElementById('divBtnProd');
+        divBtnProd.style.visibility='hidden';
+        var divBtnProd2 = document.getElementById('divBtnProd2');
+        divBtnProd2.style.visibility='hidden';
+
         $scope.searchArtiseeProdSpec();
         event.preventDefault();
     });
@@ -88,30 +109,7 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
     $scope.searchArtiseeProdSpec = function(){
         var params = {};
 
-        $scope._inquiryMain("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecList.sb", params, function() {
-            $scope.$apply(function() {
-                $("#lblSpecNm").text("");
-
-                // 적용 상품
-                var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
-                storeScope._gridDataInit();
-                storeScope._broadcast('artiseeProdSpecProdCtrl', null);
-
-                // 미적용 상품
-                var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
-                storeScope2._gridDataInit();
-                storeScope2._broadcast('artiseeProdSpecNoProdCtrl', null);
-                // paging 영역 보이도록
-                var artiseeProdSpecNoProdCtrlPager = document.getElementById('artiseeProdSpecNoProdCtrlPager');
-                artiseeProdSpecNoProdCtrlPager.style.visibility='hidden';
-
-                // 미적용 상품 버튼
-                var divBtnProd = document.getElementById('divBtnProd');
-                divBtnProd.style.visibility='hidden';
-                var divBtnProd2 = document.getElementById('divBtnProd2');
-                divBtnProd2.style.visibility='hidden';
-            });
-        }, false);
+        $scope._inquiryMain("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
 
@@ -159,6 +157,10 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveDelete.sb", params, function(){
+            // 특성
+            var scope = agrid.getScope('artiseeProdSpecCtrl');
+            scope.searchArtiseeProdSpec();
+
             // 적용 상품
             var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
             storeScope._gridDataInit();
@@ -287,6 +289,10 @@ app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function(){
+            // 특성
+            var scope = agrid.getScope('artiseeProdSpecCtrl');
+            scope.searchArtiseeProdSpec();
+
             // 적용 상품
             var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
             storeScope._gridDataInit();
