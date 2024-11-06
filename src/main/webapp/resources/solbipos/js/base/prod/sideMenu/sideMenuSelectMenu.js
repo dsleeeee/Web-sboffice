@@ -621,6 +621,11 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
               }
             }
           }
+
+          // 아티제 전용 처리, 4개 확인 필요.....................................
+          if(orgnFg == 'HQ' && (hqOfficeCd == 'DS001' || hqOfficeCd == 'A0001')) {
+            columns[j].visible = true;
+          }
         }
         // <-- //그리드 visible -->
     }, false);
@@ -677,10 +682,10 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
         params.push($scope.flex.collectionView.itemsRemoved[d]);
       }
       $scope._save('/base/prod/sideMenu/menuClass/save.sb', params, function() {
-        
+
         // 선택그룹 리스트 재조회
         //$scope._broadcast("sideMenuSelectGroupCtrl");
-        
+
         // 선택분류 리스트 재조회
         var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
         var selectedSelGroup = grpGrid.getSelectedSelGroup();
@@ -1142,7 +1147,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
         params.sdselClassCd = $scope.getSdselClassCd();
         params.sdselQty = $scope.sdselQty;
         $scope._broadcast('sideMenuSelectProdCtrl', params);
-        
+
         // 선택분류 리스트 재조회
         var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
         var selectedSelGroup = grpGrid.getSelectedSelGroup();
@@ -1225,7 +1230,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
         return false;
       }
 
-        // 새로 등록하려는 상품이 선택그룹에 이미 등록되어 있는지 확인 로직 추가(아티제만 적용, 나머지 본사는 그대로) 
+        // 새로 등록하려는 상품이 선택그룹에 이미 등록되어 있는지 확인 로직 추가(아티제만 적용, 나머지 본사는 그대로)
         if (hqOfficeCd === "A0001") {
 
             // 새로 등록하는 선택상품 코드 셋팅
