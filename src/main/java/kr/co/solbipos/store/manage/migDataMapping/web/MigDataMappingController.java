@@ -74,7 +74,7 @@ public class MigDataMappingController {
         List<DefaultMap<String>> authHqList = storeManageService.authHqList(storeManageVO, sessionInfoVO);
         model.addAttribute("authHqList", convertToJson(authHqList));
 
-        return "store/manage/migDataMapping/migDataMapping";
+        return "store/manage/migDataMapping/migDataMappingTab";
     }
 
     /**
@@ -222,4 +222,72 @@ public class MigDataMappingController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * NXPOS1 탭 - 조회
+     *
+     * @param   migDataMappingVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 11. 04.
+     */
+    @RequestMapping(value = "/migDataMapping/getNxMigDataMappingList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getNxMigDataMappingList(MigDataMappingVO migDataMappingVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = migDataMappingService.getNxMigDataMappingList(migDataMappingVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, migDataMappingVO);
+    }
+
+    /**
+     * NXPOS1 탭 - 매장 조회
+     * @param   migDataMappingVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 11. 05.
+     */
+    @RequestMapping(value = "/migDataMappingInfo/getNxMigDataMappingInfoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getNxMigDataMappingInfoList(MigDataMappingVO migDataMappingVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = migDataMappingService.getNxMigDataMappingInfoList(migDataMappingVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, migDataMappingVO);
+    }
+
+    /**
+     * NXPOS1 탭 - 이관 등록
+     * @param   migDataMappingVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 11. 05.
+     */
+    @RequestMapping(value = "/migDataMappingInfo/getNxMigDataMappingInfoSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getNxMigDataMappingInfoSave(@RequestBody MigDataMappingVO[] migDataMappingVOs, HttpServletRequest request,
+                                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = migDataMappingService.getNxMigDataMappingInfoSave(migDataMappingVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

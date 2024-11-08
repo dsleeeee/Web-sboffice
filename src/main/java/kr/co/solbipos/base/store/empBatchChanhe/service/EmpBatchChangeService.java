@@ -48,4 +48,6 @@ public interface EmpBatchChangeService {
     /** 사원 권한 복사 */
     int copyAuthorExcept(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
 
+    /** 변경된 값만 임시테이블 저장 */
+    int getDiffValSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO);
 }

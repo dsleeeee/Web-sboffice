@@ -35,6 +35,18 @@
         ,		the.MOMS_STORE_FG_03
         ,		the.MOMS_STORE_FG_04
         ,		the.MOMS_STORE_FG_05
+        ,		the.BRANCH_CD                   AS OLD_BRANCH_CD
+        ,		the.MOMS_TEAM                   AS OLD_MOMS_TEAM
+        ,		the.MOMS_AC_SHOP                AS OLD_MOMS_AC_SHOP
+        ,		the.MOMS_AREA_FG                AS OLD_MOMS_AREA_FG
+        ,		the.MOMS_COMMERCIAL             AS OLD_MOMS_COMMERCIAL
+        ,		the.MOMS_SHOP_TYPE              AS OLD_MOMS_SHOP_TYPE
+        ,		the.MOMS_STORE_MANAGE_TYPE      AS OLD_MOMS_STORE_MANAGE_TYPE
+        ,       the.MOMS_STORE_FG_01            AS OLD_MOMS_STORE_FG_01
+        ,		the.MOMS_STORE_FG_02            AS OLD_MOMS_STORE_FG_02
+        ,		the.MOMS_STORE_FG_03            AS OLD_MOMS_STORE_FG_03
+        ,		the.MOMS_STORE_FG_04            AS OLD_MOMS_STORE_FG_04
+        ,		the.MOMS_STORE_FG_05            AS OLD_MOMS_STORE_FG_05
     <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_HQ_EMPLOYEE the
         WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -390,33 +402,45 @@
     -->
     <select id="getEmpExcelUploadCheckList" parameterType="empBatchChangeVO" resultType="DefaultMap">
         /* USE : EmpBatchChangeMapper.getEmpExcelUploadCheckList  */
-        SELECT
-        A.SESSION_ID,
-        A.SEQ,
-        A.HQ_OFFICE_CD,
-        A.EMP_NO,
-        B.EMP_NM,
-        A.BRANCH_CD,
-        A.MOMS_TEAM,
-        A.MOMS_AC_SHOP,
-        A.MOMS_AREA_FG,
-        A.MOMS_COMMERCIAL,
-        A.MOMS_SHOP_TYPE,
-        A.MOMS_STORE_MANAGE_TYPE,
-        A.RESULT,
-        A.MOMS_STORE_FG_01,
-        A.MOMS_STORE_FG_02,
-        A.MOMS_STORE_FG_03,
-        A.MOMS_STORE_FG_04,
-        A.MOMS_STORE_FG_05
-        FROM TB_TMP_EXCEL_EMPLOYEE A,
-        TB_HQ_EMPLOYEE B
-        WHERE 1=1
-        AND A.SESSION_ID = #{sessionId}
-        AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
-        AND B.EMP_NO (+)= A.EMP_NO
-        ORDER BY A.SEQ
+        SELECT	A.SESSION_ID
+        ,       A.SEQ
+        ,       A.HQ_OFFICE_CD
+        ,       A.EMP_NO
+        ,       B.EMP_NM
+        ,       A.BRANCH_CD
+        ,       A.MOMS_TEAM
+        ,       A.MOMS_AC_SHOP
+        ,       A.MOMS_AREA_FG
+        ,       A.MOMS_COMMERCIAL
+        ,       A.MOMS_SHOP_TYPE
+        ,       A.MOMS_STORE_MANAGE_TYPE
+        ,       A.RESULT
+        ,       A.MOMS_STORE_FG_01
+        ,       A.MOMS_STORE_FG_02
+        ,       A.MOMS_STORE_FG_03
+        ,       A.MOMS_STORE_FG_04
+        ,       A.MOMS_STORE_FG_05
+        ,		(SELECT thbm.BRANCH_NM FROM TB_HQ_BRANCH_MOMS thbm WHERE thbm.HQ_OFFICE_CD = #{hqOfficeCd} AND thbm.BRANCH_CD = B.BRANCH_CD) 									AS OLD_BRANCH_CD
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '151' AND thn.NMCODE_CD = B.MOMS_TEAM) 				AS OLD_MOMS_TEAM
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '152' AND thn.NMCODE_CD = B.MOMS_AC_SHOP) 			AS OLD_MOMS_AC_SHOP
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '153' AND thn.NMCODE_CD = B.MOMS_AREA_FG) 			AS OLD_MOMS_AREA_FG
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '154' AND thn.NMCODE_CD = B.MOMS_COMMERCIAL) 		AS OLD_MOMS_COMMERCIAL
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '155' AND thn.NMCODE_CD = B.MOMS_SHOP_TYPE) 			AS OLD_MOMS_SHOP_TYPE
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '156' AND thn.NMCODE_CD = B.MOMS_STORE_MANAGE_TYPE) 	AS OLD_MOMS_STORE_MANAGE_TYPE
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '167' AND thn.NMCODE_CD = B.MOMS_STORE_FG_01) 		AS OLD_MOMS_STORE_FG_01
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '169' AND thn.NMCODE_CD = B.MOMS_STORE_FG_02) 		AS OLD_MOMS_STORE_FG_02
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '170' AND thn.NMCODE_CD = B.MOMS_STORE_FG_03) 		AS OLD_MOMS_STORE_FG_03
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '171' AND thn.NMCODE_CD = B.MOMS_STORE_FG_04) 		AS OLD_MOMS_STORE_FG_04
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '172' AND thn.NMCODE_CD = B.MOMS_STORE_FG_05) 		AS OLD_MOMS_STORE_FG_05
+        FROM    TB_TMP_EXCEL_EMPLOYEE A
+        ,       TB_HQ_EMPLOYEE B
+        WHERE   1=1
+        AND     A.SESSION_ID        = #{sessionId}
+        AND     A.HQ_OFFICE_CD      = #{hqOfficeCd}
+        AND     B.HQ_OFFICE_CD  (+) = A.HQ_OFFICE_CD
+        AND     B.EMP_NO        (+) = A.EMP_NO
+        ORDER
+        BY      A.SEQ
     </select>
 
     <!-- 검증결과 삭제 -->

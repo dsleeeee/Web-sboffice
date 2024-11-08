@@ -152,6 +152,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
     // 저장
     $scope.save = function() {
 
+        var params = new Array();
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.excelUploadData"]);	// 엑셀업로드 된 데이터가 없습니다.
             return false;
@@ -163,6 +164,28 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                 $scope._popMsg(messages["storeBatchChange.noSaveConfirm"] + (i+1) + messages["storeBatchChange.noSaveConfirm2"]); // 검증성공이 아닌 데이터가 있습니다. <br/> 다시 업로드 해주세요. <br/> 3번째 줄
                 return false;
             }
+
+            if($scope.flex.collectionView.items[i].branchCd !== $scope.flex.collectionView.items[i].oldBranchCd
+                || $scope.flex.collectionView.items[i].momsTeam !== $scope.flex.collectionView.items[i].oldMomsTeam
+                || $scope.flex.collectionView.items[i].momsAcShop !== $scope.flex.collectionView.items[i].oldMomsAcShop
+                || $scope.flex.collectionView.items[i].momsAreaFg !== $scope.flex.collectionView.items[i].oldMomsAreaFg
+                || $scope.flex.collectionView.items[i].momsCommercial !== $scope.flex.collectionView.items[i].oldMomsCommercial
+                || $scope.flex.collectionView.items[i].momsShopType !== $scope.flex.collectionView.items[i].oldMomsShopType
+                || $scope.flex.collectionView.items[i].momsStoreManageType !== $scope.flex.collectionView.items[i].oldMomsStoreManageType
+                || $scope.flex.collectionView.items[i].momsStoreFg01 !== $scope.flex.collectionView.items[i].oldMomsStoreFg01
+                || $scope.flex.collectionView.items[i].momsStoreFg02 !== $scope.flex.collectionView.items[i].oldMomsStoreFg02
+                || $scope.flex.collectionView.items[i].momsStoreFg03 !== $scope.flex.collectionView.items[i].oldMomsStoreFg03
+                || $scope.flex.collectionView.items[i].momsStoreFg04 !== $scope.flex.collectionView.items[i].oldMomsStoreFg04
+                || $scope.flex.collectionView.items[i].momsStoreFg05 !== $scope.flex.collectionView.items[i].oldMomsStoreFg05) {
+
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        if (params.length <= 0) {
+            // 변경사항이 없습니다.
+            $scope._popMsg(messages['cmm.not.modify']);
+            return false;
         }
 
         // 그리드가 수정되면 저장 안함
@@ -173,6 +196,28 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
         // 검증을 통과한 매장정보를 저장하시겠습니까?
         $scope._popConfirm(messages["storeBatchChange.saveConfirm"], function() {
+            // 현재 세션ID 와 동일한 데이터 삭제
+            $scope.deleteExl(params);
+        });
+    };
+
+    // 현재 세션ID 와 동일한 데이터 삭제
+    $scope.deleteExl = function (data) {
+        var params = {};
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getStoreExcelUploadCheckDeleteAll.sb", params, function(){
+            // 변경된 값만 저장
+            $scope.getDiffValSave(data);
+        });
+    };
+
+    // 변경된 값만 저장
+    $scope.getDiffValSave = function(data) {
+        var params = data;
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getDiffValSave.sb", params, function(){
             // 매장등록 저장
             $scope.storeExcelUploadSave();
         });

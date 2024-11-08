@@ -534,4 +534,17 @@ public class StoreBatchChangeController {
         return returnListJson(Status.OK, list, storeBatchChangeVO);
     }
 
+    /** 변경된 값만 임시테이블 저장 */
+    @RequestMapping(value = "storeBatchChange/getDiffValSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDiffValSave(@RequestBody StoreBatchChangeVO[] storeBatchChangeVOs, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = storeBatchChangeService.getDiffValSave(storeBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
+    }
+
 }

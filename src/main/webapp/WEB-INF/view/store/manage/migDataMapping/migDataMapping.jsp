@@ -9,11 +9,11 @@
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
 <c:set var="authHqList" value="${authHqList}" />
 
-<div class="subCon" ng-controller="migDataMappingCtrl">
+<div id="okMigDataMappingView" class="subCon" ng-controller="migDataMappingCtrl">
 
     <%-- 조회조건 --%>
     <div class="searchBar flddUnfld">
-        <a href="#" class="open fl">${menuNm}</a>
+        <a href="#" class="open fl"><s:message code="migDataMapping.migDataMapping.title" /></a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" ng-click="_broadcast('migDataMappingCtrl',1)" id="nxBtnSearch">
@@ -108,7 +108,7 @@
 </div>
 
 <script>
-    var authHqList = ${authHqList};
+
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/migDataMapping.js?ver=20200814.04" charset="utf-8"></script>

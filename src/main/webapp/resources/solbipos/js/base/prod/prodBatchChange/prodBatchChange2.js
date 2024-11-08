@@ -39,7 +39,24 @@ app.controller('prodBatchChange2Ctrl', ['$scope', '$http', function ($scope, $ht
             var ht = s.hitTest(e);
             s.allowSorting = false;
         });
+
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 브랜드 변경시 체크박스 체크
+                if (col.binding === "hqBrandCd") {
+                    $scope.checked(item);
+                }
+            }
+            s.collectionView.commitEdit();
+        });
     };
+
+    // 브랜드 변경시 체크박스 체크
+    $scope.checked = function (item){
+        item.gChk = true;
+    }
 
     $scope.$on("prodBatchChange2Ctrl", function(event, data) {
         // 상품목록조회
@@ -176,8 +193,11 @@ app.controller('prodBatchChange2Ctrl', ['$scope', '$http', function ($scope, $ht
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
-                    $scope.flex.collectionView.items[i].status = "U";
-                    params.push($scope.flex.collectionView.items[i]);
+                    if(nvl($scope.flex.collectionView.items[i].hqBrandCd,'') !== nvl($scope.flex.collectionView.items[i].oldHqBrandCd,'')
+                    || nvl($scope.flex.collectionView.items[i].pathNm,'') !== nvl($scope.flex.collectionView.items[i].oldPathNm,'')) {
+                        $scope.flex.collectionView.items[i].status = "U";
+                        params.push($scope.flex.collectionView.items[i]);
+                    }
                 }
             }
 
