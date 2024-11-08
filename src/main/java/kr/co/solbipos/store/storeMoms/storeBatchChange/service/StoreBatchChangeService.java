@@ -47,4 +47,7 @@ public interface StoreBatchChangeService {
 
     /** 검증결과 조회 */
     List<DefaultMap<String>> getTmpStoreList(StoreBatchChangeVO storeBatchChangeVO, SessionInfoVO sessionInfoVO);
+
+    /** 변경된 값만 임시테이블 저장 */
+    int getDiffValSave(StoreBatchChangeVO[] storeBatchChangeVOs, SessionInfoVO sessionInfoVO);
 }

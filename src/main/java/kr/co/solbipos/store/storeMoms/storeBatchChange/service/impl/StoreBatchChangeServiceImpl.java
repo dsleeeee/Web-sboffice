@@ -284,4 +284,31 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
         return storeBatchChangeMapper.getTmpStoreList(storeBatchChangeVO);
     }
 
+    /** 변경된 값만 임시테이블 저장 */
+    @Override
+    public int getDiffValSave(StoreBatchChangeVO[] storeBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+        int storeCnt = 0;
+        int i = 1;
+        String currentDt = currentDateTimeString();
+
+        for(StoreBatchChangeVO storeBatchChangeVO : storeBatchChangeVOs) {
+
+            storeBatchChangeVO.setRegDt(currentDt);
+            storeBatchChangeVO.setRegId(sessionInfoVO.getUserId());
+            storeBatchChangeVO.setModDt(currentDt);
+            storeBatchChangeVO.setModId(sessionInfoVO.getUserId());
+
+            storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            storeBatchChangeVO.setSeq(i);
+
+            // 검증결과 저장
+            storeCnt += storeBatchChangeMapper.getStoreExcelUploadCheckSave(storeBatchChangeVO);
+            i++;
+
+        }
+
+        return storeCnt;
+    }
+
 }

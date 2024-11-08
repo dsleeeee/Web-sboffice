@@ -572,6 +572,11 @@
                 <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="emailRecvYn" data-map="emailRecvDataMap" width="75" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="smsRecvYn" data-map="smsRecvDataMap" width="75" align="center" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="useYn" data-map="useYnDataMap" width="75" align="center" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.class.cd"/>" binding="oldMembrClassCd" align="center" data-map="memberClassDataMap" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.membr.stortNo"/>" binding="oldShortNo" width="85" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.email.recv"/>" binding="oldEmailRecvYn" data-map="emailRecvDataMap" width="75" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.sms.recv"/>" binding="oldSmsRecvYn" data-map="smsRecvDataMap" width="75" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="regist.useYn"/>" binding="oldUseYn" data-map="useYnDataMap" width="75" align="center" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -609,7 +614,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20220308.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberChgBatch.js?ver=20241031.01" charset="utf-8"></script>
 
 <%-- 회원정보 상세 팝업 --%>
 <c:import url="/WEB-INF/view/membr/info/view/memberInfoDtl.jsp">

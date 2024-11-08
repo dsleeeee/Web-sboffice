@@ -354,11 +354,16 @@
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.saleProdYn"/>" binding="saleProdYn" data-map="saleProdYnDataMap" width="90" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.pointSaveYn"/>" binding="pointSaveYn" data-map="pointSaveYnDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.mapProdCd"/>" binding="mapProdCd" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.saleProdYn"/>" binding="oldSaleProdYn" data-map="saleProdYnDataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.pointSaveYn"/>" binding="oldPointSaveYn" data-map="pointSaveYnDataMap" width="100" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.mapProdCd"/>" binding="oldMapProdCd" width="90" align="center" visible="false"></wj-flex-grid-column>
                     <%-- 본사일때만 --%>
                     <c:if test="${orgnFg eq 'HQ'}">
                         <wj-flex-grid-column header="<s:message code="prodBatchChange.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="90" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodBatchChange.prcCtrlFg"/>" binding="oldPrcCtrlFg" data-map="prcCtrlFgDataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="90" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.vatFg"/>" binding="oldVatFg" data-map="vatFgDataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -376,14 +381,14 @@
     <div class="w100 mt10" style="display:none;" ng-controller="prodBatchChangeExcelCtrl">
         <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
-                id="wjGridExcelList"
-                autoGenerateColumns="false"
-                selection-mode="Row"
-                items-source="data"
-                control="excelFlex"
-                initialized="initGrid(s,e)"
-                is-read-only="true"
-                item-formatter="_itemFormatter">
+                    id="wjGridExcelList"
+                    autoGenerateColumns="false"
+                    selection-mode="Row"
+                    items-source="data"
+                    control="excelFlex"
+                    initialized="initGrid(s,e)"
+                    is-read-only="true"
+                    item-formatter="_itemFormatter">
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -424,7 +429,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20240621.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20241029.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

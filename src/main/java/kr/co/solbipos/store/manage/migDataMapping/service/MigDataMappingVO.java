@@ -159,6 +159,21 @@ public class MigDataMappingVO extends PageVO {
     /** 매장코드 채번방식 */
     private String storeCdInputType;
 
+    /** 컨버전 시작일자 */
+    private String fSaleDate;
+
+    /** 컨버전 종료일자 */
+    private String tSaleDate;
+
+    /** 컨버전 등록일자 */
+    private String convRegDate;
+
+    /** 이관여부 */
+    private String procYn;
+
+    /** 컨버전 순번 */
+    private String convSeq;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -363,5 +378,45 @@ public class MigDataMappingVO extends PageVO {
 
     public void setStoreCdInputType(String storeCdInputType) {
         this.storeCdInputType = storeCdInputType;
+    }
+
+    public String getfSaleDate() {
+        return fSaleDate;
+    }
+
+    public void setfSaleDate(String fSaleDate) {
+        this.fSaleDate = fSaleDate;
+    }
+
+    public String gettSaleDate() {
+        return tSaleDate;
+    }
+
+    public void settSaleDate(String tSaleDate) {
+        this.tSaleDate = tSaleDate;
+    }
+
+    public String getConvRegDate() {
+        return convRegDate;
+    }
+
+    public void setConvRegDate(String convRegDate) {
+        this.convRegDate = convRegDate;
+    }
+
+    public String getProcYn() {
+        return procYn;
+    }
+
+    public void setProcYn(String procYn) {
+        this.procYn = procYn;
+    }
+
+    public String getConvSeq() {
+        return convSeq;
+    }
+
+    public void setConvSeq(String convSeq) {
+        this.convSeq = convSeq;
     }
 }

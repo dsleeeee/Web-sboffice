@@ -341,4 +341,30 @@ public class EmpBatchChangeServiceImpl implements EmpBatchChangeService {
         return storeCnt;
     }
 
+    /** 변경된 값만 임시테이블 저장 */
+    @Override
+    public int getDiffValSave(EmpBatchChangeVO[] empBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+        int storeCnt = 0;
+        int i = 1;
+        String currentDt = currentDateTimeString();
+
+        for(EmpBatchChangeVO empBatchChangeVO : empBatchChangeVOs) {
+
+            empBatchChangeVO.setRegDt(currentDt);
+            empBatchChangeVO.setRegId(sessionInfoVO.getUserId());
+            empBatchChangeVO.setModDt(currentDt);
+            empBatchChangeVO.setModId(sessionInfoVO.getUserId());
+
+            empBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
+            empBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            empBatchChangeVO.setSeq(i);
+
+            // 검증결과 저장
+            storeCnt += empBatchChangeMapper.getEmpExcelUploadCheckSave(empBatchChangeVO);
+            i++;
+        }
+
+        return storeCnt;
+    }
+
 }

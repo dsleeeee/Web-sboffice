@@ -81,7 +81,25 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
             var ht = s.hitTest(e);
             s.allowSorting = false;
         });
+
+
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 값 변경시 체크박스 체크
+                if (col.binding === "saleProdYn" || col.binding === "pointSaveYn" || col.binding === "mapProdCd" || col.binding === "prcCtrlFg" || col.binding === "vatFg") {
+                    $scope.checked(item);
+                }
+            }
+            s.collectionView.commitEdit();
+        });
     };
+
+    //값 수정시 체크박스 체크
+    $scope.checked = function (item){
+        item.gChk = true;
+    }
 
     // <-- 검색 호출 -->
     $scope.$on("prodBatchChangeCtrl", function(event, data) {
@@ -193,7 +211,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
             return false;
         }
 
-        // 판매상품여부 변경으로 인한 배민 주문 차단
+        // 판매상품여부 변경으로 인한 배민 주문 차단
         var saleProdYnCntChk = 0;
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
@@ -203,7 +221,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
             }
         }
         if(saleProdYnCntChk > 0) {
-            if (!confirm("판매상품여부 미사용으로 변경 시 주문 앱에서 주문이 불가능해 집니다.\n그래도 변경 하시겠습니까?")) {
+            if (!confirm("판매상품여부 미사용으로 변경 시 주문 앱에서 주문이 불가능해 집니다.\n그래도 변경 하시겠습니까?")) {
                 return false;
             }
         }
@@ -225,15 +243,29 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+
                 if($scope.flex.collectionView.items[i].gChk) {
-                    $scope.flex.collectionView.items[i].status = "U";
+                    $scope.flex.collectionView.items[i].status  = "U";
 
                     // 매핑상품코드 앞뒤 공백 및 엔터값 제거
                     if ($scope.flex.collectionView.items[i].mapProdCd !== "" && $scope.flex.collectionView.items[i].mapProdCd !== null) {
                         $scope.flex.collectionView.items[i].mapProdCd = $scope.flex.collectionView.items[i].mapProdCd.trim().removeEnter();
+                        if ($scope.flex.collectionView.items[i].mapProdCd.length <= 0) {
+                            $scope.flex.collectionView.items[i].mapProdCd = null;
+                        }
+                    }else{
+                        $scope.flex.collectionView.items[i].mapProdCd = null;
                     }
 
-                    params.push($scope.flex.collectionView.items[i]);
+                    if(nvl($scope.flex.collectionView.items[i].saleProdYn,'') !== nvl($scope.flex.collectionView.items[i].oldSaleProdYn,'')
+                        || nvl($scope.flex.collectionView.items[i].pointSaveYn,'') !==nvl($scope.flex.collectionView.items[i].oldPointSaveYn,'')
+                        || nvl($scope.flex.collectionView.items[i].mapProdCd,'') !== nvl($scope.flex.collectionView.items[i].oldMapProdCd,'')
+                        || nvl($scope.flex.collectionView.items[i].prcCtrlFg,'') !== nvl($scope.flex.collectionView.items[i].oldPrcCtrlFg,'')
+                        || nvl($scope.flex.collectionView.items[i].vatFg,'') !== nvl($scope.flex.collectionView.items[i].oldVatFg,'')) {
+
+                        params.push($scope.flex.collectionView.items[i]);
+
+                    }
                 }
             }
 

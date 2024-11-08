@@ -2,6 +2,7 @@ package kr.co.solbipos.store.manage.migDataMapping.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingService;
 import kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,4 +114,51 @@ public class MigDataMappingServiceImpl implements MigDataMappingService {
 
         return procCnt;
     }
+
+    /** NXPOS1 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getNxMigDataMappingList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO) {
+
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.AGENCY)){
+            migDataMappingVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        migDataMappingVO.setUserId(sessionInfoVO.getUserId());
+
+        return migDataMappingMapper.getNxMigDataMappingList(migDataMappingVO);
+    }
+
+    /** NXPOS1 탭 - 매장 조회 */
+    @Override
+    public List<DefaultMap<Object>> getNxMigDataMappingInfoList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO) {
+
+        if(sessionInfoVO.getOrgnFg().equals(OrgnFg.AGENCY)){
+            migDataMappingVO.setAgencyCd(sessionInfoVO.getOrgnCd());
+        }
+
+        return migDataMappingMapper.getNxMigDataMappingInfoList(migDataMappingVO);
+    }
+
+    /** NXPOS1 탭 - 이관 등록 */
+    @Override
+    public int getNxMigDataMappingInfoSave(MigDataMappingVO[] migDataMappingVOs, SessionInfoVO sessionInfoVO) {
+        int storeCnt = 0;
+        String currentDt = currentDateTimeString();
+        String currentDay = currentDateString();
+
+        for(MigDataMappingVO migDataMappingVO : migDataMappingVOs) {
+
+            migDataMappingVO.setRegDt(currentDt);
+            migDataMappingVO.setRegId(sessionInfoVO.getUserId());
+            migDataMappingVO.setModDt(currentDt);
+            migDataMappingVO.setModId(sessionInfoVO.getUserId());
+            migDataMappingVO.settSaleDate(currentDay);
+            migDataMappingVO.setConvRegDate(currentDay);
+
+            storeCnt = migDataMappingMapper.getNxMigDataMappingInfoSave(migDataMappingVO);
+        }
+
+        return storeCnt;
+    }
+
 }

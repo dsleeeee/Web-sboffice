@@ -151,12 +151,37 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
     // 저장
     $scope.save = function() {
+
+        var params = new Array();
+
         // 검증성공 이 아닌 데이터가 1개라도 있으면 저장 안함
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].result !== "검증성공") {
                 $scope._popMsg(messages["empBatchChange.noSaveConfirm"] + (i+1) + messages["empBatchChange.noSaveConfirm2"]); // 검증성공이 아닌 데이터가 있습니다. <br/> 검증실패 항목은 수정 또는 삭제 후 진행해주세요. <br/> 3번째 줄
                 return false;
             }
+
+            if($scope.flex.collectionView.items[i].branchCd !== $scope.flex.collectionView.items[i].oldBranchCd
+                || $scope.flex.collectionView.items[i].momsTeam !== $scope.flex.collectionView.items[i].oldMomsTeam
+                || $scope.flex.collectionView.items[i].momsAcShop !== $scope.flex.collectionView.items[i].oldMomsAcShop
+                || $scope.flex.collectionView.items[i].momsAreaFg !== $scope.flex.collectionView.items[i].oldMomsAreaFg
+                || $scope.flex.collectionView.items[i].momsCommercial !== $scope.flex.collectionView.items[i].oldMomsCommercial
+                || $scope.flex.collectionView.items[i].momsShopType !== $scope.flex.collectionView.items[i].oldMomsShopType
+                || $scope.flex.collectionView.items[i].momsStoreManageType !== $scope.flex.collectionView.items[i].oldMomsStoreManageType
+                || $scope.flex.collectionView.items[i].momsStoreFg01 !== $scope.flex.collectionView.items[i].oldMomsStoreFg01
+                || $scope.flex.collectionView.items[i].momsStoreFg02 !== $scope.flex.collectionView.items[i].oldMomsStoreFg02
+                || $scope.flex.collectionView.items[i].momsStoreFg03 !== $scope.flex.collectionView.items[i].oldMomsStoreFg03
+                || $scope.flex.collectionView.items[i].momsStoreFg04 !== $scope.flex.collectionView.items[i].oldMomsStoreFg04
+                || $scope.flex.collectionView.items[i].momsStoreFg05 !== $scope.flex.collectionView.items[i].oldMomsStoreFg05) {
+
+                params.push($scope.flex.collectionView.items[i]);
+            }
+        }
+
+        if (params.length <= 0) {
+            // 변경사항이 없습니다.
+            $scope._popMsg(messages['cmm.not.modify']);
+            return false;
         }
 
         // 그리드가 수정되면 저장 안함
@@ -167,27 +192,49 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
 
         // 검증을 통과한 사원정보를 저장하시겠습니까?
         $scope._popConfirm(messages["empBatchChange.saveConfirm"], function() {
-            // 매장등록 저장
-            $scope.storeExcelUploadSave();
+            // 현재 세션ID 와 동일한 데이터 삭제
+            $scope.deleteExl(params);
         });
     };
 
-    // 매장등록 저장
-    $scope.storeExcelUploadSave = function() {
+    // 현재 세션ID 와 동일한 데이터 삭제
+    $scope.deleteExl = function (data) {
+        var params = {};
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/store/empBatchChange/empBatchChange/getEmpExcelUploadCheckDeleteAll.sb", params, function(){
+            // 변경된 값만 저장
+            $scope.getDiffValSave(data);
+        });
+    };
+
+    // 변경된 값만 저장
+    $scope.getDiffValSave = function(data) {
+        var params = data;
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/base/store/empBatchChange/empBatchChange/getDiffValSave.sb", params, function(){
+            // 매장등록 저장
+            $scope.storeExcelUploadSave(data);
+        });
+    };
+
+    // 등록 저장
+    $scope.storeExcelUploadSave = function(data) {
 
         $scope.stepCnt = 100;    // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
 
         // 파라미터 설정
-        var params = new Array();
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            params.push($scope.flex.collectionView.items[i]);
-        }
+        // var params = new Array();
+        // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        //     params.push($scope.flex.collectionView.items[i]);
+        // }
 
         $timeout(function () {
             setTimeout(function () {
                 // 저장
-                $scope.save2(params);
+                $scope.save2(data);
             }, 500);
         }, 10);
     };

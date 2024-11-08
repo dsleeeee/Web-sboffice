@@ -39,4 +39,14 @@ public interface MigDataMappingService {
 
     /** 매출재이관 */
     int getMigDataMappingSaleAgainSave(MigDataMappingVO[] migDataMappingVOs, SessionInfoVO sessionInfoVO);
+
+    /** NXPOS1 탭 - 조회 */
+    List<DefaultMap<Object>> getNxMigDataMappingList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO);
+
+    /** NXPOS1 탭 - 매장 조회 */
+    List<DefaultMap<Object>> getNxMigDataMappingInfoList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO);
+
+    /** NXPOS1 탭 - 이관 등록 */
+    int getNxMigDataMappingInfoSave(MigDataMappingVO[] migDataMappingVOs, SessionInfoVO sessionInfoVO);
+
 }

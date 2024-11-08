@@ -72,7 +72,12 @@
         tmmp.TOT_ADJ_POINT,
         tmmp.FIRST_SALE_DATE,
         tmmp.LAST_SALE_DATE,
-        tmm.REG_DT
+        tmm.REG_DT,
+        tmm.MEMBR_CLASS_CD      AS OLD_MEMBR_CLASS_CD,
+        tmm.SHORT_NO            AS OLD_SHORT_NO,
+        tmm.EMAIL_RECV_YN       AS OLD_EMAIL_RECV_YN,
+        tmm.SMS_RECV_YN         AS OLD_SMS_RECV_YN,
+        tmm.USE_YN              AS OLD_USE_YN
         FROM TB_MB_MEMBER tmm,
         TB_MB_MEMBER_CLASS tmmc,
         TB_MS_STORE tms,

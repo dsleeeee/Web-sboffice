@@ -13,6 +13,7 @@ import kr.co.solbipos.sale.day.day.service.DayVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import kr.co.solbipos.sale.store.storeChannel.service.StoreChannelVO;
+import kr.co.solbipos.store.storeMoms.storeBatchChange.service.StoreBatchChangeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -551,5 +552,18 @@ public class EmpBatchChangeController {
         int result = empBatchChangeService.copyAuthorExcept(empBatchChangeVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /** 변경된 값만 임시테이블 저장 */
+    @RequestMapping(value = "empBatchChange/getDiffValSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDiffValSave(@RequestBody EmpBatchChangeVO[] empBatchChangeVOs, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = empBatchChangeService.getDiffValSave(empBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+
     }
 }
