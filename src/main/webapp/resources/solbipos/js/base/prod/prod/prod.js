@@ -331,7 +331,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     var params = {};
     params.addDelFg = 'add';
 
-    if(orgnFg === "HQ" && hqOfficeCd === "A0001"){
+    if(orgnFg === "HQ" && hqOfficeCd === "A0001" && sUserId !== 'a0001'){
       $scope._broadcast('prodAddDelPwCtrl', params);
       $scope.prodAddDelPwLayer.show();
     }else {

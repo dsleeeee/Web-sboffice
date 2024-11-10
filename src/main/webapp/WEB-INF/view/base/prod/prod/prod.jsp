@@ -6,6 +6,7 @@
 <c:set var="menuCd">${sessionScope.sessionInfo.currentMenu.resrceCd}</c:set>
 <c:set var="menuNm">${sessionScope.sessionInfo.currentMenu.resrceNm}</c:set>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <%--<c:set var="prodEnvstVal" value="${prodEnvstVal}" />--%>
 <%--<c:set var="priceEnvstVal" value="${priceEnvstVal}" />--%>
@@ -280,6 +281,7 @@
     var prodAuthEnvstVal = "${prodAuthEnvstVal}";
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
+    var sUserId = "${userId}";
 
     // 내점/배달/포장 가격관리 사용여부 (0: 미사용 1: 사용)
     var subPriceFg = "${subPriceFg}";
@@ -326,7 +328,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20240911.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20241108.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
