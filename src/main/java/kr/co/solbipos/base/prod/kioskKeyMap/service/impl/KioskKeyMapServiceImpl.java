@@ -690,6 +690,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setDirctInYn("Y");
             kioskKeyMapVO.setPosFg("W"); // WEB
             kioskKeyMapVO.setUseYn("Y");
@@ -718,6 +719,10 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                     result = kioskKeyMapMapper.insertStoreGrpNmReg(kioskKeyMapVO);
                     if (result < 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 }
+
+                // 해당 키맵그룹의 중분류 사용여부 조회
+                List<DefaultMap<Object>> list = kioskKeyMapMapper.getKioskKeyMapGroupTuMClsFg(kioskKeyMapVO);
+                kioskKeyMapVO.setTuMClsFg(list.get(0).getStr("tuMClsFg"));
 
                 // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                 result = kioskKeyMapMapper.mergeKioskCategoryStoreReg(kioskKeyMapVO);
