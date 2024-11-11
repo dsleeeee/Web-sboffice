@@ -27,7 +27,7 @@
                 SELECT
                 thp.PROD_CD,
                 thp.PROD_NM,
-                FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS PATH_NM,
                 thp.PROD_CLASS_CD,
                 thpb.BARCD_CD       AS BAR_CD,
                 thp.SALE_PROD_YN,
@@ -41,7 +41,7 @@
                 thp.POINT_SAVE_YN   AS OLD_POINT_SAVE_YN,
                 thp.PRC_CTRL_FG     AS OLD_PRC_CTRL_FG,
                 thp.MAP_PROD_CD     AS OLD_MAP_PROD_CD,
-                FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS OLD_PATH_NM,
+                ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS OLD_PATH_NM,
                 thp.VAT_FG          AS OLD_VAT_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp,
@@ -100,7 +100,7 @@
                 SELECT
                 tmp.PROD_CD,
                 tmp.PROD_NM,
-                FN_GET_PROD_CLASS_CD_NM_STR(tmp.STORE_CD, tmp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+                (SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PATH_NM,
                 tmp.PROD_CLASS_CD,
                 tmpb.BARCD_CD       AS BAR_CD,
                 tmp.SALE_PROD_YN,
@@ -109,6 +109,7 @@
                 tmp.PRC_CTRL_FG,
                 tmp.REG_FG,
                 tmp.MAP_PROD_CD,
+                (SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS OLD_PATH_NM,
                 tmp.POINT_SAVE_YN   AS OLD_POINT_SAVE_YN,
                 tmp.PRC_CTRL_FG     AS OLD_PRC_CTRL_FG,
                 tmp.MAP_PROD_CD     AS OLD_MAP_PROD_CD,

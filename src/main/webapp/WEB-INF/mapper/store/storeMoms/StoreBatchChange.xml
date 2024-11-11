@@ -409,6 +409,12 @@
             FROM TB_TMP_EXCEL_STORE_INFO C
             WHERE C.SESSION_ID = #{sessionId}
             AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test='storeFg != null and storeFg != ""'>
+                AND C.STORE_CD IN
+                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
             AND C.SEQ BETWEEN #{offset} AND #{limit}
         ) B
         ON (A.STORE_CD = B.STORE_CD)
@@ -450,6 +456,12 @@
                 WHERE 1=1
                 AND C.SESSION_ID = #{sessionId}
                 AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test='storeInfoFg != null and storeInfoFg != ""'>
+                    AND C.STORE_CD IN
+                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
+                        #{item}
+                    </foreach>
+                </if>
                 AND C.SEQ BETWEEN #{offset} AND #{limit}
             ) B
         ON (
