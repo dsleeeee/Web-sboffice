@@ -93,6 +93,15 @@ public class StoreBatchChangeVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** BRANCH_CD 수정여부 확인 */
+    private String storeFg;
+
+    /** BRANCH_CD 수정여부 확인 */
+    private String storeInfoFg;
+
+    /** 매장 코드 */
+    private String[] storeCdList;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -280,4 +289,28 @@ public class StoreBatchChangeVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getStoreInfoFg() {
+        return storeInfoFg;
+    }
+
+    public void setStoreInfoFg(String storeInfoFg) {
+        this.storeInfoFg = storeInfoFg;
+    }
+
+    public String getStoreFg() {
+        return storeFg;
+    }
+
+    public void setStoreFg(String storeFg) {
+        this.storeFg = storeFg;
+    }
+
+    public String[] getStoreCdList() {
+        return storeCdList;
+    }
+
+    public void setStoreCdList(String[] storeCdList) {
+        this.storeCdList = storeCdList;
+    }
 }

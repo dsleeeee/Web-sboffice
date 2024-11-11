@@ -86,11 +86,16 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
 
 
             if(storeBatchChangeVO.getStatus() == GridDataFg.UPDATE) {
-                // TB_MS_STORE 저장
-                storeCnt += storeBatchChangeMapper.getStoreBatchChangeSave(storeBatchChangeVO);
 
-                // TB_MS_STORE_INFO 저장
-                storeCnt += storeBatchChangeMapper.getStoreInfoBatchChangeSave(storeBatchChangeVO);
+                if(storeBatchChangeVO.getStoreFg() != null && storeBatchChangeVO.getStoreFg().equals("1")) {
+
+                    // TB_MS_STORE 저장
+                    storeCnt += storeBatchChangeMapper.getStoreBatchChangeSave(storeBatchChangeVO);
+                }
+                if(storeBatchChangeVO.getStoreInfoFg() != null && storeBatchChangeVO.getStoreInfoFg().equals("1")) {
+                    // TB_MS_STORE_INFO 저장
+                    storeCnt += storeBatchChangeMapper.getStoreInfoBatchChangeSave(storeBatchChangeVO);
+                }
             }
         }
 
@@ -261,13 +266,23 @@ public class StoreBatchChangeServiceImpl implements StoreBatchChangeService {
         storeBatchChangeVO.setSessionId(sessionInfoVO.getUserId());
         storeBatchChangeVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        // TB_MS_STORE 저장
-        // branchCd
-        storeCnt += storeBatchChangeMapper.getStoreBatchChangeUploadSave(storeBatchChangeVO);
 
-        // TB_MS_STORE_INFO 저장
-        // momsTeam, momsAcShop, momsAreaFg, momsCommercial, momsShopType, momsStoreManageType, momsStoreFg01
-        storeCnt += storeBatchChangeMapper.getSimpleStoreInfoSave(storeBatchChangeVO);
+        if(storeBatchChangeVO.getStoreFg() != null && storeBatchChangeVO.getStoreFg() != "") {
+
+            String[] storeCdList = storeBatchChangeVO.getStoreFg().split(",");
+            storeBatchChangeVO.setStoreCdList(storeCdList);
+
+            // TB_MS_STORE 저장
+            storeCnt += storeBatchChangeMapper.getStoreBatchChangeUploadSave(storeBatchChangeVO);
+        }
+        if(storeBatchChangeVO.getStoreInfoFg() != null && storeBatchChangeVO.getStoreInfoFg() != "") {
+
+            String[] storeInfoCdList = storeBatchChangeVO.getStoreInfoFg().split(",");
+            storeBatchChangeVO.setStoreCdList(storeInfoCdList);
+
+            // TB_MS_STORE_INFO 저장
+            storeCnt += storeBatchChangeMapper.getSimpleStoreInfoSave(storeBatchChangeVO);
+        }
 
         // 전체 삭제
 //        storeBatchChangeMapper.getStoreExcelUploadCheckDeleteAll(storeBatchChangeVO);

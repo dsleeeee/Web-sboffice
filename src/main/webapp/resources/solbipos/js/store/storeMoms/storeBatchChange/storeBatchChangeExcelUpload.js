@@ -165,6 +165,25 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                 return false;
             }
 
+            if(nvl($scope.flex.collectionView.items[i].branchCd,'') !== nvl($scope.flex.collectionView.items[i].oldBranchCd,'')){
+                $scope.flex.collectionView.items[i].storeFg = '1';
+            }
+
+            if(nvl($scope.flex.collectionView.items[i].momsTeam,'') !== nvl($scope.flex.collectionView.items[i].oldMomsTeam,'')
+                || nvl($scope.flex.collectionView.items[i].momsAcShop,'') !== nvl($scope.flex.collectionView.items[i].oldMomsAcShop,'')
+                || nvl($scope.flex.collectionView.items[i].momsAreaFg,'') !== nvl($scope.flex.collectionView.items[i].oldMomsAreaFg,'')
+                || nvl($scope.flex.collectionView.items[i].momsCommercial,'') !== nvl($scope.flex.collectionView.items[i].oldMomsCommercial,'')
+                || nvl($scope.flex.collectionView.items[i].momsShopType,'') !== nvl($scope.flex.collectionView.items[i].oldMomsShopType,'')
+                || nvl($scope.flex.collectionView.items[i].momsStoreManageType,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreManageType,'')
+                || nvl($scope.flex.collectionView.items[i].momsStoreFg01,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg01,'')
+                || nvl($scope.flex.collectionView.items[i].momsStoreFg02,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg02,'')
+                || nvl($scope.flex.collectionView.items[i].momsStoreFg03,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg03,'')
+                || nvl($scope.flex.collectionView.items[i].momsStoreFg04,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg04,'')
+                || nvl($scope.flex.collectionView.items[i].momsStoreFg05,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg05,'')) {
+
+                $scope.flex.collectionView.items[i].storeInfoFg = '1';
+            }
+
             if($scope.flex.collectionView.items[i].branchCd !== $scope.flex.collectionView.items[i].oldBranchCd
                 || $scope.flex.collectionView.items[i].momsTeam !== $scope.flex.collectionView.items[i].oldMomsTeam
                 || $scope.flex.collectionView.items[i].momsAcShop !== $scope.flex.collectionView.items[i].oldMomsAcShop
@@ -219,12 +238,12 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withOutPopUp("/store/storeMoms/storeBatchChange/storeBatchChange/getDiffValSave.sb", params, function(){
             // 매장등록 저장
-            $scope.storeExcelUploadSave();
+            $scope.storeExcelUploadSave(data);
         });
     };
 
     // 매장등록 저장
-    $scope.storeExcelUploadSave = function() {
+    $scope.storeExcelUploadSave = function(data) {
 
         // 파라미터 설정
         var params = new Array();
@@ -274,6 +293,17 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                         // 페이징 50000개씩 지정해 분할 다운로드 진행
                         params.limit = 10 * (x + 1);
                         params.offset = (10 * (x + 1)) - 9;
+                        params.storeFg = "";
+                        params.storeInfoFg = "";
+
+                        for (var i = 0; i < data.length; i++) {
+                            if(data[i].storeFg === "1"){
+                                params.storeFg += data[i].storeCd + ",";
+                            }
+                            if(data[i].storeInfoFg === "1"){
+                                params.storeInfoFg += data[i].storeCd + ",";
+                            }
+                        }
 
                         // 가상로그인 대응한 session id 설정
                         if (document.getElementsByName('sessionId')[0]) {

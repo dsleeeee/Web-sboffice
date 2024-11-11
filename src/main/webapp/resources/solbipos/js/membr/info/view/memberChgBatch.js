@@ -445,6 +445,10 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
 
             if($scope.flex.collectionView.items[i].gChk) {
+                if($scope.flex.collectionView.items[i].membrClassCd === null || $scope.flex.collectionView.items[i].membrClassCd === ""){
+                    $scope._popMsg(messages['regist.class.cd.msg']);
+                    return false;
+                }
                 // 단축번호 앞뒤 공백 및 엔터값 제거
                 if ($scope.flex.collectionView.items[i].shortNo !== "" && $scope.flex.collectionView.items[i].shortNo !== null) {
                     $scope.flex.collectionView.items[i].shortNo = $scope.flex.collectionView.items[i].shortNo.trim().removeEnter();

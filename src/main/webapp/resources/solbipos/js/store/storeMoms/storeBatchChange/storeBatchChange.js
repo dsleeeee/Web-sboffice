@@ -227,6 +227,25 @@ app.controller('storeBatchChangeCtrl', ['$scope', '$http', function ($scope, $ht
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
 
+                    if(nvl($scope.flex.collectionView.items[i].branchCd,'') !== nvl($scope.flex.collectionView.items[i].oldBranchCd,'')){
+                        $scope.flex.collectionView.items[i].storeFg = '1';
+                    }
+
+                    if(nvl($scope.flex.collectionView.items[i].momsTeam,'') !== nvl($scope.flex.collectionView.items[i].oldMomsTeam,'')
+                        || nvl($scope.flex.collectionView.items[i].momsAcShop,'') !== nvl($scope.flex.collectionView.items[i].oldMomsAcShop,'')
+                        || nvl($scope.flex.collectionView.items[i].momsAreaFg,'') !== nvl($scope.flex.collectionView.items[i].oldMomsAreaFg,'')
+                        || nvl($scope.flex.collectionView.items[i].momsCommercial,'') !== nvl($scope.flex.collectionView.items[i].oldMomsCommercial,'')
+                        || nvl($scope.flex.collectionView.items[i].momsShopType,'') !== nvl($scope.flex.collectionView.items[i].oldMomsShopType,'')
+                        || nvl($scope.flex.collectionView.items[i].momsStoreManageType,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreManageType,'')
+                        || nvl($scope.flex.collectionView.items[i].momsStoreFg01,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg01,'')
+                        || nvl($scope.flex.collectionView.items[i].momsStoreFg02,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg02,'')
+                        || nvl($scope.flex.collectionView.items[i].momsStoreFg03,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg03,'')
+                        || nvl($scope.flex.collectionView.items[i].momsStoreFg04,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg04,'')
+                        || nvl($scope.flex.collectionView.items[i].momsStoreFg05,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg05,'')) {
+
+                        $scope.flex.collectionView.items[i].storeInfoFg = '1';
+                    }
+
                     if(nvl($scope.flex.collectionView.items[i].branchCd,'') !== nvl($scope.flex.collectionView.items[i].oldBranchCd,'')
                         || nvl($scope.flex.collectionView.items[i].momsTeam,'') !== nvl($scope.flex.collectionView.items[i].oldMomsTeam,'')
                         || nvl($scope.flex.collectionView.items[i].momsAcShop,'') !== nvl($scope.flex.collectionView.items[i].oldMomsAcShop,'')

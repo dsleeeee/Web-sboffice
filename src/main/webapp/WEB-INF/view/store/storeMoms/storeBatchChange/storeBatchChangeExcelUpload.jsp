@@ -131,10 +131,10 @@
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreManageType"/>" binding="oldMomsStoreManageType" data-map="momsStoreManageTypeDataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="oldMomsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
                     <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
-                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="momsStoreFg02" data-map="oldMomsStoreFg02DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg03"/>" binding="momsStoreFg03" data-map="oldMomsStoreFg03DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg04"/>" binding="momsStoreFg04" data-map="oldMomsStoreFg04DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg05"/>" binding="momsStoreFg05" data-map="oldMomsStoreFg05DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="oldMomsStoreFg02" data-map="oldMomsStoreFg02DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg03"/>" binding="oldMomsStoreFg03" data-map="oldMomsStoreFg03DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg04"/>" binding="oldMomsStoreFg04" data-map="oldMomsStoreFg04DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg05"/>" binding="oldMomsStoreFg05" data-map="oldMomsStoreFg05DataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
                     </c:if>
                 </wj-flex-grid>
             </div>
@@ -142,7 +142,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUpload.js?ver=20241031.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/storeMoms/storeBatchChange/storeBatchChangeExcelUpload.js?ver=20241111.01" charset="utf-8"></script>
 
 <%-- 상품엑셀업로드 팝업 --%>
 <c:import url="/WEB-INF/view/store/storeMoms/storeBatchChange/storeBatchChangeExcelUploadAdd.jsp">
