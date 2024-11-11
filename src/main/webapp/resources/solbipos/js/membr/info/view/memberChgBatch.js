@@ -455,6 +455,12 @@ app.controller('memberChgBatchCtrl', ['$scope', '$http', function ($scope, $http
                     if ($scope.flex.collectionView.items[i].shortNo.length <= 0) {
                         $scope.flex.collectionView.items[i].shortNo = null;
                     }
+
+                    var numChkexp = /[^0-9]/g;
+                    if($scope.flex.collectionView.items[i].shortNo.length > 4 || numChkexp.test($scope.flex.collectionView.items[i].shortNo)){
+                        $scope._popMsg(messages['regist.shortNo.msg']);
+                        return false;
+                    }
                 }else{
                         $scope.flex.collectionView.items[i].shortNo = null;
                 }
