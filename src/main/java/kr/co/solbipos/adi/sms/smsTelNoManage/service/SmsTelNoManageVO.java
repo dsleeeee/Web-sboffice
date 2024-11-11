@@ -63,6 +63,9 @@ public class SmsTelNoManageVO extends PageVO {
     /** 수정전 처리구분 */
     private String backAddProcFg;
 
+    /** 통화일시 */
+    private String telDt;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -118,4 +121,8 @@ public class SmsTelNoManageVO extends PageVO {
     public String getBackAddProcFg() { return backAddProcFg; }
 
     public void setBackAddProcFg(String backAddProcFg) { this.backAddProcFg = backAddProcFg; }
+
+    public String getTelDt() { return telDt; }
+
+    public void setTelDt(String telDt) { this.telDt = telDt; }
 }
