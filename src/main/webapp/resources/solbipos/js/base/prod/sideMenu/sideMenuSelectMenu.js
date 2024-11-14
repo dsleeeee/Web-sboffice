@@ -622,8 +622,8 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
             }
           }
 
-          // 아티제 전용 처리, 4개 확인 필요.....................................
-          if(orgnFg == 'HQ' && (hqOfficeCd == 'DS001' || hqOfficeCd == 'A0001')) {
+          // 아티제 전용 처리
+          if(columns[j].binding == "requireYn" && orgnFg == 'HQ' && (hqOfficeCd == 'DS001' || hqOfficeCd == 'A0001')) {
             columns[j].visible = true;
           }
         }
