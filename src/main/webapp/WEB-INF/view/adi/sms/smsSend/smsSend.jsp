@@ -110,6 +110,10 @@
                                 <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()">
                                     <s:message code="smsSend.telNoAdd" />
                                 </button>
+                                <%-- 발신번호추가2 --%>
+                                <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd2()" style="display: none;">
+                                    <s:message code="smsSend.telNoAdd2" />
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -289,10 +293,16 @@
     var orgnCd = "${orgnCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20220110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20241106.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 발신번호 사전등록2 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister2.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

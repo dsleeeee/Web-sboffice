@@ -792,6 +792,12 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         });
     };
 
+    // 발신번호추가2
+    $scope.telNoAdd2 = function() {
+        $scope.wjSmsTelNoRegister2Layer.show(true);
+        event.preventDefault();
+    };
+
     // 수신자추가
     $scope.addAddressee = function() {
         $scope.wjAddresseeAddLayer.show(true);
@@ -805,6 +811,13 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         $scope.wjSmsTelNoRegisterLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('smsTelNoRegisterCtrl', null);
+            }, 50)
+        });
+
+        // 발신번호 사전등록2 팝업 핸들러 추가
+        $scope.wjSmsTelNoRegister2Layer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('smsTelNoRegister2Ctrl', null);
             }, 50)
         });
 
