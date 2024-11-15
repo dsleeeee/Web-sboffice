@@ -1273,6 +1273,13 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapClassVO.setTuClsType(kioskKeyMapVO.getTuClsType());
             kioskKeyMapMapper.deleteAllKioskKeyClass(kioskKeyMapClassVO);
 
+            kioskKeyMapClassVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
+            List<DefaultMap<Object>> selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapClassVO);
+            if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+               // 키오스크 중분류 삭제
+               kioskKeyMapMapper.deleteAllKioskKeyMClass(kioskKeyMapClassVO);
+            }
+
             kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {

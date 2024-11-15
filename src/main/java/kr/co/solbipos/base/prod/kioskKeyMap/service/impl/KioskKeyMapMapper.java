@@ -300,6 +300,9 @@ public interface KioskKeyMapMapper {
     /** 키오스크키맵 삭제 팝업 - 키오스크 카테고리(분류) 삭제 */
     int deleteAllKioskKeyClass(KioskKeyMapVO kioskKeyMapVO);
 
+    /** 키오스크키맵 삭제 팝업 - 키오스크 카테고리(중분류) 삭제 */
+    int deleteAllKioskKeyMClass(KioskKeyMapVO kioskKeyMapVO);
+
     /** 키오스크키맵 삭제 팝업 - 매장수정허용분류 삭제 */
     int deleteKioskKeyLsm(KioskKeyMapVO kioskKeyMapVO);
 }
