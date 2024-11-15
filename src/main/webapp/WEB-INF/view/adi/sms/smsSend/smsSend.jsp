@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/> <%-- 20241115 테스트 임시--%>
 
 <wj-popup control="wjSmsSendLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:830px;height:730px;" fade-in="false" fade-out="false">
 
@@ -110,6 +111,13 @@
                                 <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()">
                                     <s:message code="smsSend.telNoAdd" />
                                 </button>
+                                <%-- 20241115 테스트 임시--%>
+                                <c:if test="${userId == 'sdffd2605' or userId == 'kjsun1117'}">
+                                    <%-- 발신번호추가2 --%>
+                                    <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd2()" style="display: block;">
+                                        <s:message code="smsSend.telNoAdd2" />
+                                    </button>
+                                </c:if>
                             </td>
                         </tr>
                         </tbody>
@@ -289,10 +297,16 @@
     var orgnCd = "${orgnCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20220110.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsSend.js?ver=20241106.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 발신번호 사전등록2 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister2.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -65,6 +65,12 @@ app.controller('smsTelNoStopCtrl', ['$scope', '$http', function ($scope, $http) 
         event.preventDefault();
     };
 
+    // 서류인증신청
+    $scope.smsGeneralNoManage2 = function() {
+        $scope.wjSmsGeneralNoManage2Layer.show(true);
+        event.preventDefault();
+    };
+
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
 
@@ -72,6 +78,13 @@ app.controller('smsTelNoStopCtrl', ['$scope', '$http', function ($scope, $http) 
         $scope.wjSmsGeneralNoManageLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('smsGeneralNoManageCtrl', null);
+            }, 50)
+        });
+
+        // 일반번호 인증요청 처리2 팝업 핸들러 추가
+        $scope.wjSmsGeneralNoManage2Layer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('smsGeneralNoManage2Ctrl', null);
             }, 50)
         });
     });

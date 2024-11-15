@@ -1060,6 +1060,12 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         });
     };
 
+    // 발신번호추가2
+    $scope.telNoAdd2 = function() {
+        $scope.wjSmsTelNoRegister2Layer.show(true);
+        event.preventDefault();
+    };
+
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
 
@@ -1067,6 +1073,13 @@ app.controller('marketingSmsSendCtrl', ['$scope', '$http', '$timeout', function 
         $scope.wjSmsTelNoRegisterLayer.shown.addHandler(function (s) {
             setTimeout(function() {
                 $scope._broadcast('smsTelNoRegisterCtrl', null);
+            }, 50)
+        });
+
+        // 발신번호 사전등록2 팝업 핸들러 추가
+        $scope.wjSmsTelNoRegister2Layer.shown.addHandler(function (s) {
+            setTimeout(function() {
+                $scope._broadcast('smsTelNoRegister2Ctrl', null);
             }, 50)
         });
 

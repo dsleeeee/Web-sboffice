@@ -224,6 +224,7 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
                 }
 
                 System.out.println("WEB_SMS >>> 일반번호 인증요청 처리 >>> 저장(수정) >>> 수정된 정보 저장");
+
                 // 일반번호 인증요청 처리 update
                 procCnt = smsTelNoManageMapper.getSmsGeneralNoManageSaveUpdate(smsTelNoManageVO);
             }
@@ -247,6 +248,75 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
             }
 
             procCnt = procCnt + chkTelNo; // 중복된 번호 건수
+        }
+
+        return procCnt;
+    }
+
+    /** 일반번호 인증요청 처리 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSmsGeneralNoManage2List(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
+
+        return smsTelNoManageMapper.getSmsGeneralNoManage2List(smsTelNoManageVO);
+    }
+
+    /** 일반번호 인증요청 처리 팝업 - 저장 */
+    @Override
+    public int getSmsGeneralNoManage2Save(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        String currentDt = currentDateTimeString();
+
+        for(SmsTelNoManageVO smsTelNoManageVO : smsTelNoManageVOs) {
+
+            // 수정된 내역이 있을때만
+            if(smsTelNoManageVO.getStatus() == GridDataFg.UPDATE) {
+
+                smsTelNoManageVO.setRegDt(currentDt);
+                smsTelNoManageVO.setRegId(sessionInfoVO.getUserId());
+                smsTelNoManageVO.setModDt(currentDt);
+                smsTelNoManageVO.setModId(sessionInfoVO.getUserId());
+
+                System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 관리요청번호 : " + smsTelNoManageVO.getCertId());
+                System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 수정전 처리구분 : " + smsTelNoManageVO.getBackAddProcFg());
+                System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 신규 처리구분 : " + smsTelNoManageVO.getAddProcFg());
+                System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 수정전 발신번호 : " + smsTelNoManageVO.getBackTelNo());
+                System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 신규 발신번호 : " + smsTelNoManageVO.getTelNo());
+
+                // 수정전 처리구분이 완료이면서
+                // && 수정전 처리구분 == 신규 처리구분
+                // && 수정전 발신번호 == 신규 발신번호
+                if ("2".equals(smsTelNoManageVO.getBackAddProcFg())
+                        && smsTelNoManageVO.getBackAddProcFg().equals(smsTelNoManageVO.getAddProcFg())
+                        && smsTelNoManageVO.getBackTelNo().equals(smsTelNoManageVO.getTelNo())) {
+
+                    System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 발신번호 삭제 및 등록 로직 안탐");
+
+                } else {
+                    System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 발신번호 삭제 및 등록 로직 start");
+
+                    // 수정전 발신번호 삭제
+                    procCnt = smsTelNoManageMapper.getGeneralNoSmsNoSaveDelete(smsTelNoManageVO);
+
+                    // 발신번호 등록 요청 저장(발신번호 등록전 상태로)
+                    procCnt = smsTelNoManageMapper.getSmsGeneralNoSmsNoSaveInsert(smsTelNoManageVO);
+
+                    // 완료
+                    if ("2".equals(smsTelNoManageVO.getAddProcFg())) {
+                        // 발신번호 등록 요청 승인(발신번호 등록)
+                        smsTelNoManageVO.setResCd("0000");
+                        procCnt = smsTelNoManageMapper.getSmsTelNoManageUpdate(smsTelNoManageVO);
+                    }
+
+                    System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 발신번호 삭제 및 등록 로직 end");
+                }
+
+                System.out.println("WEB_SMS >>> 일반번호 인증요청 처리2 >>> 저장(수정) >>> 수정된 정보 저장");
+
+                // 일반번호 인증요청 처리 update
+                procCnt = smsTelNoManageMapper.getSmsGeneralNoManage2SaveUpdate(smsTelNoManageVO);
+            }
         }
 
         return procCnt;

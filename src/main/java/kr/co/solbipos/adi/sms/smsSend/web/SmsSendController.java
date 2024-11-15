@@ -275,4 +275,68 @@ public class SmsSendController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 발신번호추가2 팝업 - 본인인증 여부 조회
+     *
+     * @param smsSendVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 11. 12.
+     */
+    @RequestMapping(value = "/smsTelNoRegister2/getVerifyChk2.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVerifyChk2(SmsSendVO smsSendVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsSendService.getVerifyChk2(smsSendVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 발신번호추가2 팝업 - 저장
+     *
+     * @param smsSendVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 11. 12.
+     */
+    @RequestMapping(value = "/smsTelNoRegister2/getSmsTelNoRegister2Save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsTelNoRegister2Save(@RequestBody SmsSendVO smsSendVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsSendService.getSmsTelNoRegister2Save(smsSendVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 발신번호추가2 팝업 - 첨부파일 저장
+     *
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 11. 12.
+     */
+    @RequestMapping(value = "/smsTelNoRegister2/getSmsTelNoRegister2FileSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsTelNoRegister2FileSave(MultipartHttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = smsSendService.getSmsTelNoRegister2FileSave(request, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
