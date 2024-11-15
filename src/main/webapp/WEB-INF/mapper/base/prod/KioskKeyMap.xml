@@ -6078,6 +6078,33 @@
         </choose>
     </delete>
 
+    <!-- 키오스크키맵 삭제 팝업 - 키오스크 카테고리(중분류) 삭제 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_M_CLS, TB_MS_KIOSK_M_CLS
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키오스크 카테고리(중분류) 삭제한다.
+    -->
+    <delete id="deleteAllKioskKeyMClass" parameterType="kioskKeyMapVO">
+        /* USE : KioskKeyMapMapper.deleteAllKioskKeyMClass */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM    TB_HQ_KIOSK_M_CLS
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     TU_CLS_TYPE = #{tuClsType}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM    TB_MS_KIOSK_M_CLS
+                WHERE   STORE_CD = #{storeCd}
+                AND     POS_NO = #{posNo}
+                AND     TU_CLS_TYPE = #{tuClsType}
+            </when>
+        </choose>
+    </delete>
+
     <!-- 키오스크키맵 삭제 팝업 - 매장수정허용분류 삭제 -->
     <!--
         TABLE    : TB_HQ_NMCODE
