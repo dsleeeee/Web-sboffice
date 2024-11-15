@@ -49,4 +49,13 @@ public interface SmsSendService {
 
     /** 일반번호 인증요청 팝업 - 첨부파일 저장 */
     String getSmsGeneralNoFileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO);
+
+    /** 발신번호추가2 팝업 - 본인인증 여부 조회 */
+    int getVerifyChk2(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** 발신번호추가2 팝업 - 저장 */
+    int getSmsTelNoRegister2Save(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO);
+
+    /** 발신번호추가2 팝업 - 첨부파일 저장 */
+    String getSmsTelNoRegister2FileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfoVO);
 }

@@ -470,7 +470,7 @@ public class SmsSendServiceImpl implements SmsSendService {
 
         try{
 
-            // 저장 경로 설정 (개발시 로컬)
+            // 저장 경로 설정 (개발시 로컬) (파일 저장용)
 //            String path = "D:\\Workspace\\javaWeb\\testBoardAtch\\addSmsNo\\";
 
             // 파일서버 대응 경로 지정 (운영) (파일 저장용)
@@ -511,6 +511,160 @@ public class SmsSendServiceImpl implements SmsSendService {
                     contentData = path_table + "^" + newFileName + "." + fileExt;
                 }
             }
+
+        }catch(Exception e){
+
+            isSuccess = false;
+        }
+
+        return contentData;
+    }
+
+    /** 발신번호추가2 팝업 - 본인인증 여부 조회 */
+    @Override
+    public int getVerifyChk2(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
+
+        smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsSendVO.setRegId(sessionInfoVO.getUserId());
+
+        return smsSendMapper.getVerifyChk2(smsSendVO);
+    }
+
+    /** 발신번호추가2 팝업 - 저장 */
+    @Override
+    public int getSmsTelNoRegister2Save(SmsSendVO smsSendVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        smsSendVO.setRegDt(currentDt);
+        smsSendVO.setRegId(sessionInfoVO.getUserId());
+        smsSendVO.setModDt(currentDt);
+        smsSendVO.setModId(sessionInfoVO.getUserId());
+
+        smsSendVO.setOrgnCd(sessionInfoVO.getOrgnCd());
+        smsSendVO.setUserId(sessionInfoVO.getUserId());
+
+        procCnt = smsSendMapper.getSmsTelNoRegister2SaveUpdate(smsSendVO);
+
+        return procCnt;
+    }
+
+    /** 발신번호추가2 팝업 - 첨부파일 저장 */
+    @Override
+    public String getSmsTelNoRegister2FileSave(MultipartHttpServletRequest multi, SessionInfoVO sessionInfo) {
+
+//        System.out.println("test1111");
+        boolean isSuccess = true;
+
+        // 저장할 컨텐츠(파일경로^파일명^원본파일명)
+        String contentData = "";
+
+        try{
+
+            String fileId = multi.getParameter("pageGubun");
+
+            // 저장 경로 설정 (개발시 로컬) (파일 저장용)
+//            String path = "D:\\Workspace\\javaWeb\\testBoardAtch\\addSmsNo\\";
+
+            // 파일서버 대응 경로 지정 (운영) (파일 저장용)
+            String path = BaseEnv.FILE_UPLOAD_DIR + "board/addSmsNo/";
+
+            LOGGER.info("WEB_SMS >>> 발신번호추가2 >>> 파일 저장 >>> 파일 저장 경로 : " + path);
+
+            // 저장 경로 설정 (디비 저장용)
+            String path_table = "board/addSmsNo/";
+
+            // 업로드 되는 파일명
+            String newFileName = "";
+            // 원본 파일명
+            String orgFileName = "";
+
+            // 경로에 폴도가 있는지 체크
+            File dir = new File(path);
+            if(!dir.isDirectory()){
+                dir.mkdir();
+            }
+
+            // 첨부파일1
+//            List<MultipartFile> fileList = multi.getFiles("smsTelNoFileTel1");
+            List<MultipartFile> fileList = multi.getFiles(fileId + "1");
+            // 선택한 파일이 있으면
+            for(MultipartFile mFile : fileList)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+                String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    // 파일 저장하는 부분
+                    try {
+//                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                        File destFile = new File(path+newFileName+"."+fileExt);
+                        mFile.transferTo(destFile);
+                        Runtime.getRuntime().exec("chmod -R 664 " + destFile); // 권한
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    contentData = contentData + path_table + "^" + newFileName + "." + fileExt + "^" + orgFileName + "^" + "1" +"|";
+                }
+            }
+
+            // 첨부파일2
+//            List<MultipartFile> fileList2 = multi.getFiles("smsTelNoFileTel2");
+            List<MultipartFile> fileList2 = multi.getFiles(fileId + "2");
+            // 선택한 파일이 있으면
+            for(MultipartFile mFile : fileList2)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+                String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    // 파일 저장하는 부분
+                    try {
+//                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                        File destFile = new File(path+newFileName+"."+fileExt);
+                        mFile.transferTo(destFile);
+                        Runtime.getRuntime().exec("chmod -R 664 " + destFile); // 권한
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    contentData = contentData + path_table + "^" + newFileName + "." + fileExt + "^" + orgFileName + "^" + "2" +"|";
+                }
+            }
+
+            // 첨부파일3
+//            List<MultipartFile> fileList3 = multi.getFiles("smsTelNoFileTel3");
+            List<MultipartFile> fileList3 = multi.getFiles(fileId + "3");
+            // 선택한 파일이 있으면
+            for(MultipartFile mFile : fileList3)
+            {
+                newFileName = String.valueOf(System.currentTimeMillis()); // 파일명 (물리적으로 저장되는 파일명)
+                orgFileName = mFile.getOriginalFilename(); // 원본 파일명
+                String fileExt = FilenameUtils.getExtension(orgFileName); // 파일확장자
+
+                if(mFile.getOriginalFilename().lastIndexOf('.') > 0) { // 파일명 최소 한글자 이상은 되어야함.
+
+                    // 파일 저장하는 부분
+                    try {
+//                        mFile.transferTo(new File(path+newFileName+"."+fileExt));
+                        File destFile = new File(path+newFileName+"."+fileExt);
+                        mFile.transferTo(destFile);
+                        Runtime.getRuntime().exec("chmod -R 664 " + destFile); // 권한
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    contentData = contentData + path_table + "^" + newFileName + "." + fileExt + "^" + orgFileName + "^" + "3" +"|";
+                }
+            }
+
+            LOGGER.info("WEB_SMS >>> 발신번호추가2 >>> 파일 저장 >>> 저장할 CONTENT_DATA 컬럼값 : " + contentData);
 
         }catch(Exception e){
 

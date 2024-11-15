@@ -698,4 +698,51 @@
         )
     </insert>
 
+
+    <!-- 발신번호추가2 팝업 - 본인인증 여부 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS : 본인인증을 하였는지 체크, 본인인증을 한 번호인지 체크
+    -->
+    <select id="getVerifyChk2" parameterType="SmsSendVO" resultType="Integer">
+        /* SmsSendMapper.getVerifyChk2 */
+        SELECT  COUNT(*)
+        FROM    TB_CM_ADD_SMS_NO
+        WHERE   ORGN_CD = #{orgnCd}
+        AND     USER_ID = #{regId}
+        AND     CERT_ID = #{certId}
+    </select>
+
+    <!-- 발신번호추가2 팝업 - 저장 update -->
+    <!--
+        TABLE    : CET_SMSPT_T
+        COMMENTS : [마스터-공용]SMS-본사/매장-SMS잔여수량
+    -->
+    <update id="getSmsTelNoRegister2SaveUpdate" parameterType="SmsSendVO">
+        /* SmsSendMapper.getSmsTelNoRegister2SaveUpdate */
+        UPDATE
+        TB_CM_ADD_SMS_NO
+        SET
+        ADD_PROC_FG = '0',
+        TEL_FG = #{telFg},
+        ADD_SMS_FG = #{addSmsFg},
+        ADD_SMS_USER_NM = SBPENC.E(#{addSmsUserNm}),
+        ADD_SMS_TEL_NO = SBPENC.E(#{addSmsTelNo}),
+        FILE_URL = #{fileUrl1},
+        FILE_NM = #{fileNm1},
+        FILE_ORG_NM = #{fileOrgNm1},
+        FILE_URL2 = #{fileUrl2},
+        FILE_NM2 = #{fileNm2},
+        FILE_ORG_NM2 = #{fileOrgNm2},
+        FILE_URL3 = #{fileUrl3},
+        FILE_NM3 = #{fileNm3},
+        FILE_ORG_NM3 = #{fileOrgNm3},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND ORGN_CD = #{orgnCd}
+        AND USER_ID = #{regId}
+        AND CERT_ID = #{certId}
+    </update>
+
 </mapper>
