@@ -4350,7 +4350,6 @@
                     B.STORE_CD     = A.STORE_CD
                 AND B.POS_NO       = A.POS_NO
                 AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
-                AND B.TU_CLS_CD    = A.TU_CLS_CD
                 AND B.TU_M_CLS_CD  = A.TU_M_CLS_CD
                 )
         WHEN MATCHED THEN
@@ -4452,7 +4451,6 @@
                     B.STORE_CD     = A.STORE_CD
                 AND B.POS_NO       = A.POS_NO
                 AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
-                AND B.TU_CLS_CD    = A.TU_CLS_CD
                 AND B.TU_M_CLS_CD  = A.TU_M_CLS_CD
                 )
         WHEN MATCHED THEN
@@ -4550,7 +4548,6 @@
                     B.STORE_CD     = A.STORE_CD
                 AND B.POS_NO       = A.POS_NO
                 AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
-                AND B.TU_CLS_CD    = A.TU_CLS_CD
                 AND B.TU_M_CLS_CD  = A.TU_M_CLS_CD
                 )
         WHEN MATCHED THEN
