@@ -23,18 +23,22 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-            SELECT thph.HQ_OFFICE_CD,
-                    thph.PROMOTION_CD,
-                    thph.PROMOTION_NM,
-                    thph.MEMO,
-                    thph.USE_YN,
-                    TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS START_YMD,
-                    TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd') AS END_YMD
-              FROM TB_HQ_PROMO_H thph,
-                    TB_HQ_PROMO_CONDI thpc
-             WHERE thph.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
-               AND thph.PROMOTION_CD = thpc.PROMOTION_CD
-               AND thph.HQ_OFFICE_CD = #{hqOfficeCd}
+            SELECT  thph.HQ_OFFICE_CD
+            ,       thph.PROMOTION_CD
+            ,       thph.PROMOTION_NM
+            ,       thph.MEMO
+            ,       thph.USE_YN
+            ,       TO_CHAR(TO_DATE(thpc.START_YMD, 'yyyymmdd'), 'yyyy-mm-dd')  AS START_YMD
+            ,       TO_CHAR(TO_DATE(thpc.END_YMD, 'yyyymmdd'), 'yyyy-mm-dd')    AS END_YMD
+            ,       TO_CHAR(TO_DATE(thpc.REG_DT, 'yyyymmddhh24miss'), 'yyyy-mm-dd') AS REG_DT
+            ,       twuidv.USER_NM  AS REG_NM
+            FROM    TB_HQ_PROMO_H thph
+            ,       TB_HQ_PROMO_CONDI thpc
+            ,       TB_WB_USER_INFO_DTL_V01 twuidv
+            WHERE   thph.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
+            AND     thph.PROMOTION_CD = thpc.PROMOTION_CD
+            AND 	twuidv.USER_ID    = thph.REG_ID
+            AND     thph.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test='promotionNm != null and promotionNm != ""'>
                     AND thph.PROMOTION_NM LIKE '%' || #{promotionNm} || '%'
                 </if>
@@ -45,8 +49,8 @@
                   AND thpc.DATE_YN = 'Y'
                   AND #{promotionDate} BETWEEN thpc.START_YMD  AND thpc.END_YMD
                </if>
-             ORDER
-                BY thph.PROMOTION_CD DESC
+            ORDER
+            BY      thph.PROMOTION_CD DESC
           </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>

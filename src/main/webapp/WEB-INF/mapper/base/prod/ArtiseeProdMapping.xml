@@ -68,16 +68,21 @@
         ,		A.SDSEL_GRP_CD
         ,		A.SDSEL_GRP_NM
         ,		A.MAPPING_STRING
+        ,       A.MAPPING_STRING_NM
         ,		A.MAPPING_INFO
         ,		B.ERP_PROD_CD
+        ,       D.PROD_NM       AS ERP_PROD_NM
         FROM 	LYNK_PROD_MAPPING_C02 A
         ,		TB_HQ_ERP_PROD_MAPPING B
         ,		TB_HQ_PRODUCT C
+        ,       TB_HQ_PRODUCT D
         WHERE 	A.HQ_OFFICE_CD      =   #{hqOfficeCd}
         AND     B.HQ_OFFICE_CD   (+)=   A.HQ_OFFICE_CD
         AND     B.MAPPING_STRING (+)=   A.MAPPING_STRING
         AND     C.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
         AND     C.PROD_CD           =   A.PROD_CD
+        AND     D.HQ_OFFICE_CD   (+)=   B.HQ_OFFICE_CD
+        AND     D.PROD_CD        (+)=   B.ERP_PROD_CD
         <if test="chkDt == 'false'">
             <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                 <![CDATA[
@@ -126,7 +131,7 @@
         </choose>
         ORDER
         BY 		A.PROD_CD
-        ,       A.MAPPING_STRING
+        ,       A.MAPPING_INFO
     </select>
 
     <!-- 상품정보 - 조회  -->
@@ -143,10 +148,13 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_HQ_PRODUCT A
         ,       (
-                    SELECT 	DISTINCT HQ_OFFICE_CD
-                    ,		ERP_PROD_CD
+                    SELECT 	DISTINCT B.HQ_OFFICE_CD
+                    ,		B.ERP_PROD_CD
                     FROM	TB_HQ_ERP_PROD_MAPPING B
-                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                    ,		LYNK_PROD_MAPPING_C02 C
+                    WHERE 	B.HQ_OFFICE_CD      = #{hqOfficeCd}
+                    AND 	C.MAPPING_STRING    = B.MAPPING_STRING
+                    AND     C.PROD_CD           = #{mapProdCd}
                 ) B
         WHERE 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
         AND 	A.PROD_CD 	    NOT LIKE 'LYNK%'
@@ -198,6 +206,8 @@
         </choose>
         AND     B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
         AND     B.ERP_PROD_CD  (+) = A.PROD_CD
+        ORDER
+        BY      A.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -335,7 +345,7 @@
         </choose>
         ORDER
         BY 		A.PROD_CD
-        ,       A.MAPPING_STRING
+        ,       A.MAPPING_INFO
     </select>
 
     <!-- 상품정보 - 엑셀다운로드 -->
@@ -349,7 +359,14 @@
         SELECT 	A.PROD_CD
         ,		A.PROD_NM
         FROM 	TB_HQ_PRODUCT A
-        ,       TB_HQ_ERP_PROD_MAPPING B
+        ,       (
+                    SELECT 	DISTINCT B.HQ_OFFICE_CD
+                    ,		B.ERP_PROD_CD
+                    FROM	TB_HQ_ERP_PROD_MAPPING B
+                    ,		LYNK_PROD_MAPPING_C02 C
+                    WHERE 	B.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND 	C.MAPPING_STRING = B.MAPPING_STRING
+                ) B
         WHERE 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
         AND 	A.PROD_CD 	    NOT LIKE 'LYNK%'
         <if test="chkDt == 'false'">
@@ -400,5 +417,7 @@
         </choose>
         AND     B.HQ_OFFICE_CD (+) = A.HQ_OFFICE_CD
         AND     B.ERP_PROD_CD  (+) = A.PROD_CD
+        ORDER
+        BY      A.PROD_CD
     </select>
 </mapper>

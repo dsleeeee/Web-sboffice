@@ -48,6 +48,7 @@ app.controller('mCoupnCalcDtlCtrl', ['$scope', '$http', '$timeout', function ($s
         dataItem.apprDt = messages["mCoupnCalc.apprDt"];
         dataItem.apprNo = messages["mCoupnCalc.apprNo"];
         dataItem.apprAmt = messages["mCoupnCalc.apprAmt"];
+        dataItem.mcoupnBarcdNo = messages["mCoupnCalc.mcoupnBarcdNo"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 

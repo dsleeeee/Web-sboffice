@@ -46,6 +46,7 @@
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.apprDt"/>" binding="apprDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.apprNo"/>" binding="apprNo" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnCalc.apprAmt"/>" binding="apprAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="mCoupnCalc.mcoupnBarcdNo"/>" binding="mcoupnBarcdNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -54,4 +55,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/mCoupnCalc/mCoupnCalcDtl.js?ver=20240117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/mCoupnCalc/mCoupnCalcDtl.js?ver=20241112.01" charset="utf-8"></script>

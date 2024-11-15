@@ -82,12 +82,10 @@
     </table>
 
     <div class="mt10 oh">
-        <c:if test="${orgnFg != 'MASTER'}">
         <div>
         <p class="tl s14 mt5 lh15">- 이관 대상 데이터는 매출정보만 해당되며</p>
         <p class="tl s14 mt5 lh15">- 그 외 정보는 <span class="red">[환경설정, 기능설정, 테이블정보]</span> 추가로 등록해야합니다.</p>
         </div>
-        </c:if>
         <%-- 신규등록 --%>
         <button class="btn_skyblue ml5 fr" id="btnAddRepresent" ng-click="addNxInfo()">
             <s:message code="migDataMapping.newInfo" />
@@ -130,7 +128,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/nxMigDataMapping.js?ver=20241104.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/nxMigDataMapping.js?ver=20241112.04" charset="utf-8"></script>
 
 <%-- OKPOS-KCP 데이터 이관 신규등록 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/migDataMapping/nxMigDataMappingInfo.jsp">

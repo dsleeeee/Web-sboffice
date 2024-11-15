@@ -14,7 +14,7 @@
         <div class="searchBar">
             <a href="#" class="open fl"><s:message code="artiseeProdMapping.artiseeProdMapping" /></a>
             <%-- 조회 --%>
-            <button class="btn_blue fr mt5 mr10" id="btnSearchCls" ng-click="_pageView('artiseeProdMappingCtrl', 1)"><s:message code="cmm.search"/></button>
+            <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('artiseeProdMappingCtrl', 1)"><s:message code="cmm.search"/></button>
         </div>
 
         <table class="searchTbl">
@@ -45,11 +45,11 @@
             <tr>
                 <th><s:message code="artiseeProdMapping.prodCd" /></th><%--상품코드--%>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+                    <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <th><s:message code="artiseeProdMapping.prodNm" /></th><%--상품명--%>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+                    <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch();"/>
                 </td>
             </tr>
             <tr>
@@ -61,7 +61,7 @@
                 </td>
                 <th><s:message code="artiseeProdMapping.barCd" /></th><%--바코드--%>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
+                    <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" onkeyup="fnNxBtnSearch();"/>
                 </td>
             </tr>
             <tr>
@@ -172,7 +172,9 @@
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.grpNm"/>" binding="sdselGrpNm" width="60" is-read-only="true" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingInfo"/>" binding="mappingInfo" width="300" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingString"/>" binding="mappingString" width="200" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingStringNm"/>" binding="mappingStringNm" width="100" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdCd"/>" binding="erpProdCd" align="center" width="105" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdNm"/>" binding="erpProdNm" width="105" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -264,7 +266,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr style="visibility: hidden">
+                <tr>
                     <th><s:message code="artiseeProdMapping.regYn" /></th><%--등록여부--%>
                     <td>
                         <div class="sb-select">
@@ -295,6 +297,9 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="mt10 mb10">
+                <label id="mapStrNm"></label>
+            </div>
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:290px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
@@ -352,7 +357,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdMapping/artiseeProdMapping.js?ver=20240927.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdMapping/artiseeProdMapping.js?ver=20241113.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

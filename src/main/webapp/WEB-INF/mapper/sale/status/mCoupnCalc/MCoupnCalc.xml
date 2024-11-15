@@ -422,6 +422,7 @@
         ,      TO_CHAR(TO_DATE(tsspm.APPR_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS APPR_DT
         ,      tsspm.APPR_NO
         ,      tsspm.SALE_AMT AS APPR_AMT
+        ,      tsspm.MCOUPN_BARCD_NO
         FROM   TB_SL_SALE_PAY_MCOUPN tsspm
         ,      TB_MS_STORE_INFO tmsi
         ,      TB_MS_STORE tms

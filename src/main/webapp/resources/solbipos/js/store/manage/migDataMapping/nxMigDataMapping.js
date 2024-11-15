@@ -18,7 +18,8 @@ var migYnData = [
     {"name":"전체","value":""},
     {"name":"처리완료","value":"Y"},
     {"name":"미처리","value":"N"},
-    {"name":"에러","value":"E"}
+    {"name":"에러","value":"E"},
+    {"name":"처리중","value":"P"}
 ];
 
 /**

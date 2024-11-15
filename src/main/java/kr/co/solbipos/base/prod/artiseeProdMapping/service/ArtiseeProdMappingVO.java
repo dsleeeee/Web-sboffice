@@ -83,6 +83,9 @@ public class ArtiseeProdMappingVO extends PageVO {
     /** 사용자별 브랜드코드(상품) */
     private String userProdBrands;
 
+    /** 매핑정보 상품코드 */
+    private String mapProdCd;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -261,5 +264,13 @@ public class ArtiseeProdMappingVO extends PageVO {
     @Override
     public void setModId(String modId) {
         this.modId = modId;
+    }
+
+    public String getMapProdCd() {
+        return mapProdCd;
+    }
+
+    public void setMapProdCd(String mapProdCd) {
+        this.mapProdCd = mapProdCd;
     }
 }

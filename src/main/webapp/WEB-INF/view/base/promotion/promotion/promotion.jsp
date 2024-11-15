@@ -78,7 +78,7 @@
 
     <%--위즈모 테이블--%>
     <div class="wj-TblWrapBr mt10">
-        <div class="wj-gridWrap" style="height: 150px;">
+        <div class="wj-gridWrap" style="height: 300px;">
             <wj-flex-grid
                     autoGenerateColumns="false"
                     control="flex"
@@ -97,6 +97,8 @@
                 <wj-flex-grid-column header="<s:message code="promotion.startDate"/>" binding="startYmd"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="promotion.endDate"/>" binding="endYmd"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="promotion.copy"/>" binding="" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="promotion.regDt"/>" binding="regDt"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="promotion.regNm"/>" binding="regNm"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>

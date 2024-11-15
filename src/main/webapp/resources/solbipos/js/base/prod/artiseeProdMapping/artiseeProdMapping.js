@@ -68,7 +68,7 @@ app.controller('artiseeProdMappingCtrl', ['$scope', '$http', '$timeout', functio
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "prodCd") {
                     var artiseeProdCtrl = agrid.getScope("artiseeProdCtrl");
-                    artiseeProdCtrl._pageView('artiseeProdCtrl', 1);
+                    artiseeProdCtrl._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
                     $scope._broadcast('artiseeProdCtrl', selectedRow);
                     var artiseeProdCtrlPager = document.getElementById('artiseeProdCtrlPager');
                     artiseeProdCtrlPager.style.visibility='visible'
@@ -180,6 +180,7 @@ app.controller('artiseeProdMappingCtrl', ['$scope', '$http', '$timeout', functio
         scope.useYnAllCombo.selectedIndex = 1;
         scope.prodTypeFgAllCombo.selectedIndex = 0;
         scope.regYnAllCombo.selectedIndex = 0;
+        $("#mapStrNm").text('');
 
         var divBtnProd = document.getElementById('divBtnProd');
         divBtnProd.style.visibility='hidden'
@@ -273,7 +274,8 @@ app.controller('artiseeProdCtrl', ['$scope', '$http', '$timeout', function ($sco
     $scope.$on("artiseeProdCtrl", function(event, data) {
 
         if(data !== null && data!== undefined) {
-            $scope.selectedRow    = data
+            $scope.selectedRow    = data;
+            $("#mapStrNm").text('[선택: ' + nvl($scope.selectedRow.mappingStringNm,'') + ']');
         }
 
         var divBtnProd = document.getElementById('divBtnProd');
@@ -331,6 +333,7 @@ app.controller('artiseeProdCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.useYn = $scope.useYn;
         params.prodTypeFg = $scope.prodTypeFg;
         params.regYn = $scope.regYn;
+        params.mapProdCd = $scope.selectedRow.prodCd;
 
         $scope._inquiryMain("/base/prod/artiseeProdMapping/artiseeProdMapping/getProdList.sb", params, function() {
 
