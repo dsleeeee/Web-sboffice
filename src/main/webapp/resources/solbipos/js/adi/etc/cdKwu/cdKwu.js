@@ -352,11 +352,11 @@ app.controller('cdKwuDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/adi/etc/cdKwu/cdKwu/getNmcodeCdKwuSave.sb", params, function(){ $scope.allSearch() });
+    };
 
-        // 재조회
-        $scope.allSearch = function () {
-            $scope.searchDetailCtrl();
-        };
+    // 재조회
+    $scope.allSearch = function () {
+        $scope.searchDetailCtrl();
     };
 
     // 세부명칭 그리드 행 삭제

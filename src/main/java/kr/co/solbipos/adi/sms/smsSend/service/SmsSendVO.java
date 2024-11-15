@@ -150,8 +150,50 @@ public class SmsSendVO extends PageVO {
     /** 파일명 */
     private String fileNm;
 
+    /** 원본파일명 */
+    private String fileOrgNm;
+
     /** 관리요청번호 */
     private String certId;
+
+    /** 발신번호구분 */
+    private String telFg;
+
+    /** 신청자 구분 */
+    private String addSmsFg;
+
+    /** 신청자 이름 */
+    private String addSmsUserNm;
+
+    /** 신청자 연락처 */
+    private String addSmsTelNo;
+
+    /** 파일경로1 */
+    private String fileUrl1;
+
+    /** 파일명1 */
+    private String fileNm1;
+
+    /** 원본파일명1 */
+    private String fileOrgNm1;
+
+    /** 파일경로2 */
+    private String fileUrl2;
+
+    /** 파일명2 */
+    private String fileNm2;
+
+    /** 원본파일명2 */
+    private String fileOrgNm2;
+
+    /** 파일경로3 */
+    private String fileUrl3;
+
+    /** 파일명3 */
+    private String fileNm3;
+
+    /** 원본파일명3 */
+    private String fileOrgNm3;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -317,7 +359,63 @@ public class SmsSendVO extends PageVO {
 
     public void setFileNm(String fileNm) { this.fileNm = fileNm; }
 
+    public String getFileOrgNm() { return fileOrgNm; }
+
+    public void setFileOrgNm(String fileOrgNm) { this.fileOrgNm = fileOrgNm; }
+
     public String getCertId() { return certId; }
 
     public void setCertId(String certId) { this.certId = certId; }
+
+    public String getTelFg() { return telFg; }
+
+    public void setTelFg(String telFg) { this.telFg = telFg; }
+
+    public String getAddSmsFg() { return addSmsFg; }
+
+    public void setAddSmsFg(String addSmsFg) { this.addSmsFg = addSmsFg; }
+
+    public String getAddSmsUserNm() { return addSmsUserNm; }
+
+    public void setAddSmsUserNm(String addSmsUserNm) { this.addSmsUserNm = addSmsUserNm; }
+
+    public String getAddSmsTelNo() { return addSmsTelNo; }
+
+    public void setAddSmsTelNo(String addSmsTelNo) { this.addSmsTelNo = addSmsTelNo; }
+
+    public String getFileUrl1() { return fileUrl1; }
+
+    public void setFileUrl1(String fileUrl1) { this.fileUrl1 = fileUrl1; }
+
+    public String getFileNm1() { return fileNm1; }
+
+    public void setFileNm1(String fileNm1) { this.fileNm1 = fileNm1; }
+
+    public String getFileOrgNm1() { return fileOrgNm1; }
+
+    public void setFileOrgNm1(String fileOrgNm1) { this.fileOrgNm1 = fileOrgNm1; }
+
+    public String getFileUrl2() { return fileUrl2; }
+
+    public void setFileUrl2(String fileUrl2) { this.fileUrl2 = fileUrl2; }
+
+    public String getFileNm2() { return fileNm2; }
+
+    public void setFileNm2(String fileNm2) { this.fileNm2 = fileNm2; }
+
+    public String getFileOrgNm2() { return fileOrgNm2; }
+
+    public void setFileOrgNm2(String fileOrgNm2) { this.fileOrgNm2 = fileOrgNm2; }
+
+    public String getFileUrl3() { return fileUrl3; }
+
+    public void setFileUrl3(String fileUrl3) { this.fileUrl3 = fileUrl3; }
+
+    public String getFileNm3() { return fileNm3; }
+
+    public void setFileNm3(String fileNm3) { this.fileNm3 = fileNm3; }
+
+    public String getFileOrgNm3() { return fileOrgNm3; }
+
+    public void setFileOrgNm3(String fileOrgNm3) { this.fileOrgNm3 = fileOrgNm3; }
 }
