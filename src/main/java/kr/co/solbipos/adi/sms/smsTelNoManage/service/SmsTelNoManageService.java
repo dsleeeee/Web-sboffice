@@ -54,4 +54,11 @@ public interface SmsTelNoManageService {
 
     /** 일반번호 인증요청 처리 팝업 - 발신번호 중복체크 */
     int getSmsGeneralNoManageCount(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO);
+
+    /** 일반번호 인증요청 처리2 팝업 - 조회 */
+    List<DefaultMap<Object>> getSmsGeneralNoManage2List(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 일반번호 인증요청 처리2 팝업 - 저장 */
+    int getSmsGeneralNoManage2Save(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO);
+
 }

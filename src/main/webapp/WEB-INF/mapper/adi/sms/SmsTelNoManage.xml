@@ -329,4 +329,79 @@
             )
     </insert>
 
+    <!-- 일반번호 인증요청 처리 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSmsGeneralNoManage2List" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getSmsGeneralNoManage2List */
+        SELECT
+        tcasn.ORGN_CD,
+        twuidv01.ORGN_NM,
+        twuidv01.ORGN_FG,
+        tcasn.VF_YN,
+        (CASE WHEN tcasn.FILE_NM  IS NOT NULL THEN '미리보기' ELSE '' END) AS PREVIEW1,
+        (CASE WHEN tcasn.FILE_NM2 IS NOT NULL THEN '미리보기' ELSE '' END) AS PREVIEW2,
+        (CASE WHEN tcasn.FILE_NM3 IS NOT NULL THEN '미리보기' ELSE '' END) AS PREVIEW3,
+        (CASE WHEN tcasn.FILE_NM  IS NOT NULL THEN '다운로드' ELSE '' END) AS DOWNLOAD1,
+        (CASE WHEN tcasn.FILE_NM2 IS NOT NULL THEN '다운로드' ELSE '' END) AS DOWNLOAD2,
+        (CASE WHEN tcasn.FILE_NM3 IS NOT NULL THEN '다운로드' ELSE '' END) AS DOWNLOAD3,
+        tcasn.ADD_PROC_FG,
+        SBPENC.D(tcasn.TEL_NO) AS TEL_NO,
+        SBPENC.D(tcasn.ADD_SMS_USER_NM) AS ADD_SMS_USER_NM,
+        SBPENC.D(tcasn.ADD_SMS_TEL_NO) AS ADD_SMS_TEL_NO,
+        tcasn.TEL_DT,
+        tcasn.RETURN_REMARK,
+        tcasn.REMARK,
+        tcasn.CERT_ID,
+        tcasn.USER_ID,
+        tcasn.FILE_NM AS FILE_NAME1,
+        tcasn.FILE_NM2 AS FILE_NAME2,
+        tcasn.FILE_NM3 AS FILE_NAME3,
+        tcasn.ADD_PROC_FG AS BACK_ADD_PROC_FG,
+        SBPENC.D(tcasn.TEL_NO) AS BACK_TEL_NO,
+        tcasn.TEL_DT AS BACK_TEL_DT,
+        tcasn.RETURN_REMARK AS BACK_RETURN_REMARK,
+        tcasn.REMARK AS BACK_REMARK
+        FROM TB_CM_ADD_SMS_NO tcasn,
+        TB_WB_USER_INFO_DTL_V01 twuidv01
+        WHERE 1=1
+        <if test="orgnCd != null and orgnCd != ''">
+            AND tcasn.ORGN_CD LIKE '%'||#{orgnCd}||'%'
+        </if>
+        <if test="orgnNm != null and orgnNm != ''">
+            AND twuidv01.ORGN_NM LIKE '%'||#{orgnNm}||'%'
+        </if>
+        <if test="addProcFg != null and addProcFg != ''">
+            AND tcasn.ADD_PROC_FG = #{addProcFg}
+        </if>
+        AND twuidv01.ORGN_CD = tcasn.ORGN_CD
+        AND twuidv01.USER_ID = tcasn.USER_ID
+        ORDER BY tcasn.CERT_ID DESC
+    </select>
+
+    <!-- 일반번호 인증요청 처리 팝업 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getSmsGeneralNoManage2SaveUpdate" parameterType="SmsTelNoManageVO">
+        /* SmsTelNoManageMapper.getSmsGeneralNoManage2SaveUpdate */
+        UPDATE
+        TB_CM_ADD_SMS_NO
+        SET
+        ADD_PROC_FG = #{addProcFg},
+        TEL_NO = SBPENC.E(#{telNo}),
+        TEL_DT = #{telDt},
+        RETURN_REMARK = #{returnRemark},
+        REMARK = #{remark},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND ORGN_CD = #{orgnCd}
+        AND USER_ID = #{userId}
+        AND CERT_ID = #{certId}
+    </update>
+
 </mapper>

@@ -31,6 +31,10 @@
                 <button id="request" class="btn_skyblue ml5 fr" ng-click="smsGeneralNoManage()">
                     <s:message code="smsTelNoStop.smsGeneralNoManage" />
                 </button>
+                <%-- 서류인증신청 --%>
+                <button id="request2" class="btn_skyblue ml5 fr" ng-click="smsGeneralNoManage2()" style="display: none;">
+                    <s:message code="smsTelNoStop.smsGeneralNoManage2" />
+                </button>
             </div>
             <div class="wj-gridWrap" style="height:450px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
@@ -64,6 +68,12 @@
 
 <%-- 일반번호 인증요청 처리 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsGeneralNoManage.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 일반번호 인증요청 처리2 팝업 --%>
+<c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsGeneralNoManage2.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

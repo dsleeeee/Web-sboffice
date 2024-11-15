@@ -484,4 +484,50 @@ public class SmsTelNoManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 일반번호 인증요청 처리2 팝업 - 조회
+     *
+     * @param smsTelNoManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 11. 15.
+     */
+    @RequestMapping(value = "/smsGeneralNoManage2/getSmsGeneralNoManage2List.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsGeneralNoManage2List(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = smsTelNoManageService.getSmsGeneralNoManage2List(smsTelNoManageVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, smsTelNoManageVO);
+    }
+
+    /**
+     * 일반번호 인증요청 처리2 팝업 - 저장
+     *
+     * @param smsTelNoManageVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 11. 15.
+     */
+    @RequestMapping(value = "/smsGeneralNoManage2/getSmsGeneralNoManage2Save.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsGeneralNoManage2Save(@RequestBody SmsTelNoManageVO[] smsTelNoManageVOs, HttpServletRequest request,
+                                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = smsTelNoManageService.getSmsGeneralNoManage2Save(smsTelNoManageVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }
