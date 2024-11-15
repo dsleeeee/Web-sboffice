@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="userId" value="${sessionScope.sessionInfo.userId}"/> <%-- 20241115 테스트 임시--%>
 
 <div id="smsTelNoStopView" class="subCon" style="display: none;padding: 10px 20px 40px;">
     <div ng-controller="smsTelNoStopCtrl">
@@ -31,10 +32,13 @@
                 <button id="request" class="btn_skyblue ml5 fr" ng-click="smsGeneralNoManage()">
                     <s:message code="smsTelNoStop.smsGeneralNoManage" />
                 </button>
-                <%-- 서류인증신청 --%>
-                <button id="request2" class="btn_skyblue ml5 fr" ng-click="smsGeneralNoManage2()" style="display: none;">
-                    <s:message code="smsTelNoStop.smsGeneralNoManage2" />
-                </button>
+                <%-- 20241115 테스트 임시--%>
+                <c:if test="${userId == 'sdffd2605' or userId == 'kjsun1117'}">
+                    <%-- 서류인증신청 --%>
+                    <button id="request2" class="btn_skyblue ml5 fr" ng-click="smsGeneralNoManage2()" style="display: block;">
+                        <s:message code="smsTelNoStop.smsGeneralNoManage2" />
+                    </button>
+                </c:if>
             </div>
             <div class="wj-gridWrap" style="height:450px; overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid

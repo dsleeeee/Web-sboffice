@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/> <%-- 20241115 테스트 임시--%>
 
 <div id="marketingSmsSendView" style="display: none;padding: 10px 20px 40px;">
 
@@ -542,10 +543,13 @@
                             <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()">
                                 <s:message code="marketingSmsSend.telNoAdd" />
                             </button>
-                            <%-- 발신번호추가2 --%>
-                            <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd2()" style="display: none;">
-                                <s:message code="marketingSmsSend.telNoAdd2" />
-                            </button>
+                            <%-- 20241115 테스트 임시--%>
+                            <c:if test="${hqOfficeCd == 'DS019' or hqOfficeCd == 'DS002'}">
+                                <%-- 발신번호추가2 --%>
+                                <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd2()" style="display: block;">
+                                    <s:message code="marketingSmsSend.telNoAdd2" />
+                                </button>
+                            </c:if>
                         </td>
                     </tr>
                     </tbody>
