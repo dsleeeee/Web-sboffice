@@ -4134,28 +4134,31 @@
                     FROM    TB_HQ_KIOSK_KEY
                     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                     AND     TU_CLS_TYPE = #{tuClsType}
-                    AND     TU_CLS_TYPE || TU_CLS_CD NOT IN (
-                                                                <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "0"'>
-                                                                   SELECT  NMCODE_NM || NMCODE_ITEM_1
-                                                                   FROM    TB_HQ_NMCODE thn
-                                                                   WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                   AND     NMCODE_GRP_CD = '229'
-                                                                   AND 	   NMCODE_ITEM_2 = 'Y'
-                                                                </if>
-                                                                <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "2"'>
-                                                                   SELECT   C.TU_CLS_TYPE || C.TU_M_CLS_CD
-                                                                   FROM     TB_HQ_KIOSK_M_CLS C
-                                                                   WHERE    C.HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                   AND      C.TU_CLS_TYPE = #{tuClsType}
-                                                                   AND      C.TU_CLS_TYPE || C.TU_CLS_CD IN (
-                                                                                                                SELECT  NMCODE_NM || NMCODE_ITEM_1
-                                                                                                                FROM    TB_HQ_NMCODE thn
-                                                                                                                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                                                                AND     NMCODE_GRP_CD = '229'
-                                                                                                                AND 	NMCODE_ITEM_2 = 'Y'
-                                                                                                            )
-                                                                </if>
-                                                            )
+                    <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "0"'>
+                        AND     TU_CLS_TYPE || TU_CLS_CD NOT IN (
+                                                                        SELECT NMCODE_NM || NMCODE_ITEM_1
+                                                                        FROM TB_HQ_NMCODE thn
+                                                                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                        AND NMCODE_GRP_CD = '229'
+                                                                        AND NMCODE_ITEM_2 = 'Y'
+                                                                )
+                    </if>
+                    <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "2"'>
+                        AND     TU_CLS_TYPE || TU_CLS_CD NOT IN (
+                                                                       SELECT   C.TU_CLS_TYPE || C.TU_M_CLS_CD
+                                                                       FROM     TB_HQ_KIOSK_M_CLS C
+                                                                       WHERE    C.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                       AND      C.TU_CLS_TYPE = #{tuClsType}
+                                                                       AND      C.TU_CLS_TYPE || C.TU_CLS_CD IN (
+                                                                                                                    SELECT  NMCODE_NM || NMCODE_ITEM_1
+                                                                                                                    FROM    TB_HQ_NMCODE thn
+                                                                                                                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                                                                    AND     NMCODE_GRP_CD = '229'
+                                                                                                                    AND 	NMCODE_ITEM_2 = 'Y'
+                                                                                                                )
+                                                                )
+                    </if>
+
                 ) B
         ON      (
                     B.STORE_CD     = A.STORE_CD
@@ -4713,15 +4716,17 @@
             WHERE  STORE_CD    = #{storeCd}
             AND    POS_NO      = #{posNo}
             AND    TU_CLS_TYPE = #{tuClsType}
-            AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (
-                                                        <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "0"'>
-                                                           SELECT  NMCODE_NM || NMCODE_ITEM_1
-                                                           FROM    TB_HQ_NMCODE thn
-                                                           WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                                                           AND     NMCODE_GRP_CD = '229'
-                                                           AND 	   NMCODE_ITEM_2 = 'Y'
-                                                        </if>
-                                                        <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "2"'>
+            <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "0"'>
+                AND TU_CLS_TYPE || TU_CLS_CD NOT IN (
+                                                            SELECT NMCODE_NM || NMCODE_ITEM_1
+                                                            FROM TB_HQ_NMCODE thn
+                                                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                                            AND NMCODE_GRP_CD = '229'
+                                                            AND NMCODE_ITEM_2 = 'Y'
+                                                    )
+            </if>
+            <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "2"'>
+                AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (
                                                            SELECT   C.TU_CLS_TYPE || C.TU_M_CLS_CD
                                                            FROM     TB_MS_KIOSK_M_CLS C
                                                            WHERE    C.STORE_CD = #{storeCd}
@@ -4734,22 +4739,24 @@
                                                                                                         AND     NMCODE_GRP_CD = '229'
                                                                                                         AND 	NMCODE_ITEM_2 = 'Y'
                                                                                                     )
-                                                        </if>
-                                                   )
+                                                       )
+            </if>
             MINUS
             SELECT TU_CLS_CD || TU_KEY_CD
             FROM   TB_HQ_KIOSK_KEY
             WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
             AND    TU_CLS_TYPE = #{tuClsType}
-            AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (
-                                                        <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "0"'>
+            <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "0"'>
+                AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (
                                                            SELECT  NMCODE_NM || NMCODE_ITEM_1
                                                            FROM    TB_HQ_NMCODE thn
                                                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                                                            AND     NMCODE_GRP_CD = '229'
                                                            AND 	   NMCODE_ITEM_2 = 'Y'
-                                                        </if>
-                                                        <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "2"'>
+                                                       )
+            </if>
+            <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "2"'>
+                AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (
                                                            SELECT   C.TU_CLS_TYPE || C.TU_M_CLS_CD
                                                            FROM     TB_HQ_KIOSK_M_CLS C
                                                            WHERE    C.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -4761,8 +4768,9 @@
                                                                                                         AND     NMCODE_GRP_CD = '229'
                                                                                                         AND 	NMCODE_ITEM_2 = 'Y'
                                                                                                     )
-                                                        </if>
-                                                   )
+                                                       )
+            </if>
+
         )
     </delete>
 

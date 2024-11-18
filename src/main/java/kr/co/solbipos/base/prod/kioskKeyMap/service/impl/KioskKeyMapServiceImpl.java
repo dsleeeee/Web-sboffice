@@ -565,7 +565,11 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
                 // 해당 키맵그룹의 중분류 사용여부 조회
                 List<DefaultMap<Object>> list = kioskKeyMapMapper.getKioskKeyMapGroupTuMClsFg(kioskKeyMapVO);
-                kioskKeyMapVO.setTuMClsFg(list.get(0).getStr("tuMClsFg"));
+                if(list.size() > 0){
+                    kioskKeyMapVO.setTuMClsFg(list.get(0).getStr("tuMClsFg"));
+                }else{
+                    kioskKeyMapVO.setTuMClsFg("0");
+                }
 
                 // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                 result = kioskKeyMapMapper.mergeKioskCategoryStoreReg(kioskKeyMapVO);
@@ -722,7 +726,11 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
                 // 해당 키맵그룹의 중분류 사용여부 조회
                 List<DefaultMap<Object>> list = kioskKeyMapMapper.getKioskKeyMapGroupTuMClsFg(kioskKeyMapVO);
-                kioskKeyMapVO.setTuMClsFg(list.get(0).getStr("tuMClsFg"));
+                if(list.size() > 0){
+                    kioskKeyMapVO.setTuMClsFg(list.get(0).getStr("tuMClsFg"));
+                }else{
+                    kioskKeyMapVO.setTuMClsFg("0");
+                }
 
                 // 새 키맵그룹과 카테고리(분류)코드로 INSERT
                 result = kioskKeyMapMapper.mergeKioskCategoryStoreReg(kioskKeyMapVO);
@@ -1275,9 +1283,11 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
             kioskKeyMapClassVO.setOrgTuClsType(kioskKeyMapVO.getTuClsType());
             List<DefaultMap<Object>> selectList = kioskKeyMapMapper.getKioskMClsCount(kioskKeyMapClassVO);
-            if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
-               // 키오스크 중분류 삭제
-               kioskKeyMapMapper.deleteAllKioskKeyMClass(kioskKeyMapClassVO);
+            if(selectList.size() > 0) {
+                if (Integer.parseInt(selectList.get(0).get("rowCount").toString()) > 0) {
+                    // 키오스크 중분류 삭제
+                    kioskKeyMapMapper.deleteAllKioskKeyMClass(kioskKeyMapClassVO);
+                }
             }
 
             kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());

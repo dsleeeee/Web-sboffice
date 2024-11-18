@@ -790,6 +790,9 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
 
             // 카테고리 관련 데이터 셋팅
             $("#hdTuClsCd").val(data.tuClsCd);
+            
+            // 선택한 대분류 키값 갖고 있기
+            $scope.selTuClsCd = data.tuClsCd;
         }
 
         // 중분류그리드 조회
@@ -801,7 +804,7 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         var params = {};
         if(orgnFg === "STORE") {params.posNo = $("#hdPosNo").val();}
         params.tuClsType = $("#hdTuClsType").val();
-        params.tuClsCd = $("#hdTuClsCd").val();
+        params.tuClsCd = $scope.selTuClsCd;
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategoryM.sb", params, function() {
             // 본사 : storeMod = N
@@ -923,7 +926,7 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         for (var d = 0; d < $scope.flexM.collectionView.itemsRemoved.length; d++) {
             if(orgnFg === "STORE") {$scope.flexM.collectionView.itemsRemoved[d].posNo = $scope.posNoCombo.selectedValue;}
             $scope.flexM.collectionView.itemsRemoved[d].tuClsType =  $("#hdTuClsType").val();
-            $scope.flexM.collectionView.itemsRemoved[d].tuClsCd = $("#hdTuClsCd").val();
+            $scope.flexM.collectionView.itemsRemoved[d].tuClsCd = $scope.selTuClsCd;
             $scope.flexM.collectionView.itemsRemoved[d].status = 'D';
             params.push($scope.flexM.collectionView.itemsRemoved[d]);
         }
@@ -966,7 +969,7 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         for (var u = 0; u < $scope.flexM.collectionView.itemsEdited.length; u++) {
             if(orgnFg === "STORE") {$scope.flexM.collectionView.itemsEdited[u].posNo = $scope.posNoCombo.selectedValue;}
             $scope.flexM.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
-            $scope.flexM.collectionView.itemsEdited[u].tuClsCd = $("#hdTuClsCd").val();
+            $scope.flexM.collectionView.itemsEdited[u].tuClsCd = $scope.selTuClsCd;
             $scope.flexM.collectionView.itemsEdited[u].status = 'U';
             params.push($scope.flexM.collectionView.itemsEdited[u]);
         }
@@ -974,7 +977,7 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         for (var i = 0; i < $scope.flexM.collectionView.itemsAdded.length; i++) {
             if(orgnFg === "STORE") {$scope.flexM.collectionView.itemsAdded[i].posNo = $scope.posNoCombo.selectedValue;}
             $scope.flexM.collectionView.itemsAdded[i].tuClsType = $("#hdTuClsType").val();
-            $scope.flexM.collectionView.itemsAdded[i].tuClsCd = $("#hdTuClsCd").val();
+            $scope.flexM.collectionView.itemsAdded[i].tuClsCd = $scope.selTuClsCd;
             $scope.flexM.collectionView.itemsAdded[i].status = 'I';
             params.push($scope.flexM.collectionView.itemsAdded[i]);
         }

@@ -360,6 +360,8 @@ app.controller('kioskKeyMapCopy2Ctrl', ['$scope', '$http', '$timeout', function 
                 if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
                     // 작업내역 로딩 팝업 닫기
                     $scope.excelUploadingPopup(false);
+                    // 기준매장 키오스크 포스 조회
+                    agrid.getScope('kioskKeyMapCopyCtrl').searchOrgStoreList();
                     // 적용대상매장 키오스크 포스 재조회
                     $scope.searchTargetStoreList();
                     // 저장되었습니다.
