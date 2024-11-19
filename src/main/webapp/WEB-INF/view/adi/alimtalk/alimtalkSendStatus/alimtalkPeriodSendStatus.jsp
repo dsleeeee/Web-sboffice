@@ -16,7 +16,7 @@
             <a href="#" class="open fl"><s:message code="alimtalkPeriodSendStatus.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_pageView('alimtalkPeriodSendStatusCtrl',1)">
+                <button class="btn_blue fr" ng-click="_pageView('alimtalkPeriodSendStatusCtrl',1)" id="nxBtnSearch3">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -42,38 +42,16 @@
                     </div>
                 </td>
             </tr>
-            <c:if test="${orgnFg != 'HQ'}">
-                <tr>
-                    <%-- 본사코드 --%>
-                    <th>
-                        <s:message code="alimtalkPeriodSendStatus.hqOfficeCd" />
-                    </th>
-                    <td>
-                        <input type="text" class="sb-input w100" id="srchHqOfficeCd" ng-model="hqOfficeCd" />
-                    </td>
-                    <%-- 본사명 --%>
-                    <th>
-                        <s:message code="alimtalkPeriodSendStatus.hqOfficeNm" />
-                    </th>
-                    <td>
-                        <input type="text" class="sb-input w100" id="srchHqOfficeNm" ng-model="hqOfficeNm" />
-                    </td>
-                </tr>
-            </c:if>
             <tr>
-                <%-- 매장코드 --%>
-                <th>
-                    <s:message code="alimtalkPeriodSendStatus.storeCd" />
-                </th>
+                <%-- 소속코드 --%>
+                <th><s:message code="daySendStatus.orgnCd" /></th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchStoreCd" ng-model="storeCd" />
+                    <input type="text" class="sb-input w100" id="srchOrgnCd" ng-model="srchOrgnCd" onkeyup="fnNxBtnSearch('3');"/>
                 </td>
-                <%-- 매장명 --%>
-                <th>
-                    <s:message code="alimtalkPeriodSendStatus.storeNm" />
-                </th>
+                <%-- 소속명 --%>
+                <th><s:message code="daySendStatus.orgnNm" /></th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" />
+                    <input type="text" class="sb-input w100" id="srchOrgnNm" ng-model="srchOrgnNm" onkeyup="fnNxBtnSearch('3');"/>
                 </td>
             </tr>
             </tbody>
@@ -113,4 +91,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkPeriodSendStatus.js?ver=20240812.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkPeriodSendStatus.js?ver=20241119.01" charset="utf-8"></script>

@@ -117,10 +117,8 @@ app.controller('alimtalkPeriodSendStatusCtrl', ['$scope', '$http', '$timeout', f
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
-        params.hqOfficeCd = $scope.hqOfficeCd;
-        params.hqOfficeNm = $scope.hqOfficeNm;
-        params.storeCd = $scope.storeCd;
-        params.storeNm = $scope.storeNm;
+        params.srchOrgnCd = $scope.srchOrgnCd;
+        params.srchOrgnNm = $scope.srchOrgnNm;
 
         $scope._inquiryMain("/adi/alimtalk/alimtalkSendStatus/alimtalkPeriodSendStatus/getAlimtalkPeriodSendStatusList.sb", params, function() {}, false);
     };
