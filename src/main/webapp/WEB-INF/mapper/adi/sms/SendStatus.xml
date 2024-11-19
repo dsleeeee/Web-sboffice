@@ -108,6 +108,7 @@
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
                     </if>
+                    AND A.SEND_STATUS NOT IN ('1', '2')
                 )
                 UNION ALL
                 (
@@ -152,6 +153,7 @@
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
                     </if>
+                    AND A.SEND_STATUS NOT IN ('1', '2')
                 )
                 UNION ALL
                 (
@@ -174,8 +176,10 @@
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     B.DELIVER_DATE AS READ_DATE,
-                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN -1
-                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 3
+                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 0) THEN 4
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 5
+                           WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN 6
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 1) THEN 7
                            ELSE null END
                     ) AS SEND_STATUS, --현재는 1건씩 전송해서
                     ('1' || '_' || B.TCS_RESULT) AS RESULT_CD, --A.COMPANY || '_' || A.RESULT
@@ -223,8 +227,10 @@
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     B.DELIVER_DATE AS READ_DATE,
-                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN -1
-                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 3
+                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 0) THEN 4
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 5
+                           WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN 6
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 1) THEN 7
                            ELSE null END
                     ) AS SEND_STATUS, --현재는 1건씩 전송해서
                     ('1' || '_' || B.TCS_RESULT) AS RESULT_CD, --A.COMPANY || '_' || A.RESULT
@@ -400,6 +406,7 @@
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
                     </if>
+                    AND A.SEND_STATUS NOT IN ('1', '2')
                 )
                 UNION ALL
                 (
@@ -444,6 +451,7 @@
                     <if test="reserveYn != null and reserveYn != ''">
                         AND A.SCHEDULE_TYPE = #{reserveYn}
                     </if>
+                    AND A.SEND_STATUS NOT IN ('1', '2')
                 )
                 UNION ALL
                 (
@@ -466,8 +474,10 @@
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     B.DELIVER_DATE AS READ_DATE,
-                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN -1
-                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 3
+                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 0) THEN 4
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 5
+                           WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN 6
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 1) THEN 7
                            ELSE null END
                     ) AS SEND_STATUS, --현재는 1건씩 전송해서
                     ('1' || '_' || B.TCS_RESULT) AS RESULT_CD, --A.COMPANY || '_' || A.RESULT
@@ -515,8 +525,10 @@
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     B.DELIVER_DATE AS READ_DATE,
-                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN -1
-                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 3
+                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 0) THEN 4
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 5
+                           WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN 6
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 1) THEN 7
                            ELSE null END
                     ) AS SEND_STATUS, --현재는 1건씩 전송해서
                     ('1' || '_' || B.TCS_RESULT) AS RESULT_CD, --A.COMPANY || '_' || A.RESULT
