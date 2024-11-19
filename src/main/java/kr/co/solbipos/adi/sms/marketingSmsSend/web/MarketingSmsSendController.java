@@ -287,7 +287,7 @@ public class MarketingSmsSendController {
     }
 
     /**
-     * 발신번호관리 - 발신번호 등록 요청 결과 저장
+     * 발신번호관리 - 본인인증 등록 요청 결과 저장
      *
      * @param request
      * @param response
