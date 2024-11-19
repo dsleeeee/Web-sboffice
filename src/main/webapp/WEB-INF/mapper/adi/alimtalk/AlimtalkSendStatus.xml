@@ -132,9 +132,9 @@
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     A.RECEIVE_DATE AS READ_DATE,
-                    (CASE WHEN A.SUCC_COUNT = 0 THEN -1
-                          WHEN A.SUCC_COUNT = 1 THEN 3
-                          ELSE null END
+                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN -1
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 3
+                           ELSE null END
                     ) AS SEND_STATUS, --현재는 1건씩 전송해서
                     A.RESULT_CD,
 --                     '1' AS COMPANY, --1:KT, 2:SMTNT
@@ -356,9 +356,9 @@
                     A.SCHEDULE_TYPE AS RESERVE_YN,
                     DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE,
                     A.RECEIVE_DATE AS READ_DATE,
-                    (CASE WHEN A.SUCC_COUNT = 0 THEN -1
-                            WHEN A.SUCC_COUNT = 1 THEN 3
-                            ELSE null END
+                    (CASE WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN -1
+                           WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 3
+                           ELSE null END
                     ) AS SEND_STATUS, --현재는 1건씩 전송해서
                     A.RESULT_CD,
 --                     '1' AS COMPANY, --1:KT, 2:SMTNT

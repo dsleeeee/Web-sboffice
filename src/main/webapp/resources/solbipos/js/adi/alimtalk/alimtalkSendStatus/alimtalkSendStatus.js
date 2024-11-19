@@ -27,9 +27,9 @@ var alkMsgTypeDataMapData = [
 // 결과
 var sendStatusFgData = [
     {"name":"전체","value":""},
-    {"name":"발송대기","value":"0"},
-    {"name":"발송완료","value":"3"},
-    {"name":"발송실패","value":"-1"}
+    {"name":"전송대기","value":"0"},
+    {"name":"전송완료","value":"3"},
+    {"name":"전송실패","value":"-1"}
 ];
 // 예약여부
 var reserveYnDataMapData = [
