@@ -802,6 +802,12 @@
                 OR hdt.LMS_SEND_QTY != 0 OR hdt.LMS_WAIT_QTY != 0 OR hdt.LMS_SUCCESS_QTY != 0 OR hdt.LMS_FAIL_QTY != 0
                 OR hdt.MMS_SEND_QTY != 0 OR hdt.MMS_WAIT_QTY != 0 OR hdt.MMS_SUCCESS_QTY != 0 OR hdt.MMS_FAIL_QTY != 0
             )
+        <if test='srchOrgnCd != null and srchOrgnCd !=""'>
+            AND twuidv01.ORGN_CD LIKE '%' || #{srchOrgnCd} || '%'
+        </if>
+        <if test='srchOrgnNm != null and srchOrgnNm !=""'>
+            AND twuidv01.ORGN_NM LIKE '%' || #{srchOrgnNm} || '%'
+        </if>
         ORDER BY hdt.OGN_CD, hdt.SMS_DATE DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -896,6 +902,12 @@
                 OR hdt.LMS_SEND_QTY != 0 OR hdt.LMS_WAIT_QTY != 0 OR hdt.LMS_SUCCESS_QTY != 0 OR hdt.LMS_FAIL_QTY != 0
                 OR hdt.MMS_SEND_QTY != 0 OR hdt.MMS_WAIT_QTY != 0 OR hdt.MMS_SUCCESS_QTY != 0 OR hdt.MMS_FAIL_QTY != 0
             )
+        <if test='srchOrgnCd != null and srchOrgnCd !=""'>
+            AND twuidv01.ORGN_CD LIKE '%' || #{srchOrgnCd} || '%'
+        </if>
+        <if test='srchOrgnNm != null and srchOrgnNm !=""'>
+            AND twuidv01.ORGN_NM LIKE '%' || #{srchOrgnNm} || '%'
+        </if>
         ORDER BY hdt.OGN_CD, hdt.SMS_DATE DESC
     </select>
 
@@ -938,9 +950,7 @@
             twuidv01.ORGN_CD,
             twuidv01.ORGN_NM,
             twuidv01.HQ_OFFICE_CD,
-            twuidv01.HQ_OFFICE_NM,
             twuidv01.STORE_CD,
-            twuidv01.STORE_NM,
             (CASE WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
                    WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
                    ELSE twuidv01.ORGN_CD END
@@ -956,8 +966,7 @@
                 twuidv01.STORE_CD,
                 twuidv01.STORE_NM
                 FROM TB_WB_USER_INFO_DTL_V01 twuidv01
-                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.HQ_OFFICE_NM,
-                twuidv01.STORE_CD, twuidv01.STORE_NM
+                GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.HQ_OFFICE_NM, twuidv01.STORE_CD, twuidv01.STORE_NM
             ) twuidv01
             WHERE 1=1
             <if test='hqOfficeCd != null and hqOfficeCd !=""'>
@@ -972,7 +981,7 @@
             <if test='storeNm != null and storeNm !=""'>
                 AND twuidv01.STORE_NM LIKE '%' || #{storeNm} || '%'
             </if>
-            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.HQ_OFFICE_NM, twuidv01.STORE_CD, twuidv01.STORE_NM
+            GROUP BY twuidv01.ORGN_FG, twuidv01.ORGN_CD, twuidv01.ORGN_NM, twuidv01.HQ_OFFICE_CD, twuidv01.STORE_CD
         ) twuidv01
         WHERE 1=1
         AND hdt.SMS_DATE BETWEEN #{startDate} AND #{endDate}

@@ -16,7 +16,7 @@
             <a href="#" class="open fl"><s:message code="alimtalkDaySendStatus.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_pageView('alimtalkDaySendStatusCtrl',1)">
+                <button class="btn_blue fr" ng-click="_pageView('alimtalkDaySendStatusCtrl',1)" id="nxBtnSearch2">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -40,6 +40,18 @@
                         <span class="rg">~</span>
                         <span class="txtIn"><input id="alimtalkDaySendStatusEndDate" name="endDate" class="w110px" /></span>
                     </div>
+                </td>
+            </tr>
+            <tr>
+                <%-- 소속코드 --%>
+                <th><s:message code="daySendStatus.orgnCd" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchOrgnCd" ng-model="srchOrgnCd" onkeyup="fnNxBtnSearch('2');"/>
+                </td>
+                <%-- 소속명 --%>
+                <th><s:message code="daySendStatus.orgnNm" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchOrgnNm" ng-model="srchOrgnNm" onkeyup="fnNxBtnSearch('2');"/>
                 </td>
             </tr>
             </tbody>
@@ -124,4 +136,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkDaySendStatus.js?ver=20240812.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkDaySendStatus.js?ver=20241119.01" charset="utf-8"></script>

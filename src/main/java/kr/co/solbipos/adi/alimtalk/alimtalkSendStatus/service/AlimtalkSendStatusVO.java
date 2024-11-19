@@ -102,6 +102,12 @@ public class AlimtalkSendStatusVO extends PageVO {
     /** 예약일시 */
     private String sendDate;
 
+    /** 소속코드 */
+    private String srchOrgnCd;
+
+    /** 소속명 */
+    private String srchOrgnNm;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -229,4 +235,12 @@ public class AlimtalkSendStatusVO extends PageVO {
     public void setSendDate(String sendDate) {
         this.sendDate = sendDate;
     }
+
+    public String getSrchOrgnCd() { return srchOrgnCd; }
+
+    public void setSrchOrgnCd(String srchOrgnCd) { this.srchOrgnCd = srchOrgnCd; }
+
+    public String getSrchOrgnNm() { return srchOrgnNm; }
+
+    public void setSrchOrgnNm(String srchOrgnNm) { this.srchOrgnNm = srchOrgnNm; }
 }

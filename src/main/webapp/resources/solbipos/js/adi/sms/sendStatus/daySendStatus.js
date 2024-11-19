@@ -147,6 +147,8 @@ app.controller('daySendStatusCtrl', ['$scope', '$http', '$timeout', function ($s
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.srchOrgnCd = $scope.srchOrgnCd;
+        params.srchOrgnNm = $scope.srchOrgnNm;
         params.listScale = $scope.daySendStatusListScale;
 
         $scope._inquiryMain("/adi/sms/sendStatus/daySendStatus/getDaySendStatusList.sb", params, function() {}, false);
@@ -163,6 +165,8 @@ app.controller('daySendStatusCtrl', ['$scope', '$http', '$timeout', function ($s
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.srchOrgnCd = $scope.srchOrgnCd;
+        params.srchOrgnNm = $scope.srchOrgnNm;
 
         $scope._broadcast('daySendStatusExcelCtrl', params);
     };

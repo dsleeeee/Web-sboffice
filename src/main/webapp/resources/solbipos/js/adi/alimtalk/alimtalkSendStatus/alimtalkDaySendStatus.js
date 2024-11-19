@@ -135,6 +135,8 @@ app.controller('alimtalkDaySendStatusCtrl', ['$scope', '$http', '$timeout', func
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.srchOrgnCd = $scope.srchOrgnCd;
+        params.srchOrgnNm = $scope.srchOrgnNm;
         params.listScale = $scope.alimtalkDaySendStatusListScale;
 
         $scope._inquiryMain("/adi/alimtalk/alimtalkSendStatus/alimtalkDaySendStatus/getAlimtalkDaySendStatusList.sb", params, function() {}, false);
@@ -151,6 +153,8 @@ app.controller('alimtalkDaySendStatusCtrl', ['$scope', '$http', '$timeout', func
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+        params.srchOrgnCd = $scope.srchOrgnCd;
+        params.srchOrgnNm = $scope.srchOrgnNm;
 
         $scope._broadcast('alimtalkDaySendStatusExcelCtrl', params);
     };
