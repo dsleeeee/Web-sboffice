@@ -584,4 +584,365 @@
                     POS_FG  = 'W'
             WHERE   ENVST_CD = #{envstCd}
     </update>
+
+    <!-- 공통코드 조회 팝업 - 조회 -->
+    <!--
+        TABLE    : TB_CM_NMCODE, TB_HQ_NMCODE
+        COMMENTS : 공통코드 리스트를 조회한다.(본사 또는 매장생성시 자동생성되는 공통코드들, PKG_CM_NMCODE 참조)
+    -->
+    <select id="getSearchCommCodeList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getSearchCommCodeList */
+        SELECT NMCODE_GRP_CD
+        ,      NMCODE_GRP_NM
+        ,      NMCODE_CD
+        ,      NMCODE_NM
+        ,      PARENT_CD
+        ,      USE_TARGET_FG
+        ,      HQ_OFFICE_CD
+        ,      HQ_OFFICE_NM
+        FROM (
+        		SELECT NMCODE_GRP_CD
+        		, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '000' AND NMCODE_CD = A.NMCODE_GRP_CD) AS NMCODE_GRP_NM
+        		, NMCODE_CD
+        		, NMCODE_NM
+                , PARENT_CD
+        		, 'H' AS USE_TARGET_FG
+        		, '' AS HQ_OFFICE_CD
+        		, '' AS HQ_OFFICE_NM
+        		FROM TB_CM_NMCODE A
+        		WHERE NMCODE_GRP_CD IN (
+        		                            SELECT  NMCODE_CD
+        		                            FROM    TB_CM_NMCODE
+        		                            WHERE   NMCODE_GRP_CD   =   '999'
+        		                            AND     NMCODE_ITEM_1   IN  ('C', 'H')
+        		                            AND     USE_TARGET_FG   IN  ('C', 'H')
+        		                        )
+        		UNION ALL
+        		SELECT
+        		A.NMCODE_GRP_CD
+        		, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '000' AND NMCODE_CD = A.NMCODE_GRP_CD) AS NMCODE_GRP_NM
+        		, A.NMCODE_CD
+        		, A.NMCODE_NM
+                , A.PARENT_CD
+        		, 'S' AS USE_TARGET_FG
+        		, '' AS HQ_OFFICE_CD
+        		, '' AS HQ_OFFICE_NM
+        		FROM TB_CM_NMCODE A
+        		WHERE A.USE_TARGET_FG IN ('C', 'S')
+        		UNION ALL
+        		SELECT
+        		A.NMCODE_GRP_CD
+        		, (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '000' AND NMCODE_CD = A.NMCODE_GRP_CD) AS NMCODE_GRP_NM
+        		, A.NMCODE_CD
+        		, A.NMCODE_NM
+                , A.PARENT_CD
+        		, 'HS' AS USE_TARGET_FG
+        		, A.HQ_OFFICE_CD
+        		, B.HQ_OFFICE_NM
+        		FROM    TB_HQ_NMCODE A
+        		,       TB_HQ_OFFICE B
+        		WHERE   A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        		AND     A.HQ_OFFICE_CD    IN  (SELECT HQ_OFFICE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD != '00000' GROUP BY HQ_OFFICE_CD)
+        		AND     A.NMCODE_GRP_CD   IN  (
+        		                                SELECT  NMCODE_CD
+        		                                FROM    TB_CM_NMCODE
+        		                                WHERE   NMCODE_GRP_CD   =   '999'
+        		                                AND     NMCODE_ITEM_1   =   'C'
+        		                               )
+        	)
+        	ORDER
+            BY HQ_OFFICE_CD ASC NULLS FIRST, USE_TARGET_FG
+    </select>
+
+    <!-- 공통코드관리탭 - 본사리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_OFFICE
+        COMMENTS : 공통코드를 적용할 본사리스트를 조회한다.
+    -->
+    <select id="getHqList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getHqList */
+        SELECT HQ_OFFICE_CD
+        ,      HQ_OFFICE_NM
+        FROM   TB_HQ_OFFICE
+        WHERE  HQ_OFFICE_CD != '00000'
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+        </if>
+        ORDER
+        BY      HQ_OFFICE_CD
+    </select>
+
+    <!-- 공통코드관리탭 - 매장리스트 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE, TB_HQ_OFFICE
+        COMMENTS : 공통코드를 적용할 매장리스트를 조회한다.
+    -->
+    <select id="getStoreList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* EnvConfgBatchChangeMapper.getStoreList */
+        SELECT A.STORE_CD
+        ,      A.STORE_NM
+        ,      B.HQ_OFFICE_CD
+        ,      B.HQ_OFFICE_NM
+        FROM   TB_MS_STORE A
+        ,      TB_HQ_OFFICE B
+        WHERE  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        <if test='selHqOfficeCd != null and selHqOfficeCd != ""'>
+            AND A.HQ_OFFICE_CD = #{selHqOfficeCd}
+        </if>
+        <if test='hqOfficeCd != null and hqOfficeCd != ""'>
+            AND A.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+        </if>
+        <if test='hqOfficeNm != null and hqOfficeNm != ""'>
+            AND B.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND A.STORE_CD LIKE '%' || #{storeCd} || '%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND A.STORE_NM LIKE '%' || #{storeNm} || '%'
+        </if>
+        ORDER
+        BY      A.STORE_CD
+    </select>
+
+    <!-- 공통코드관리탭 - 본사 명칭코드에 공통코드 정보 저장 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE, TB_CM_NMCODE
+        COMMENTS : 본사 명칭코드에 공통코드 정보를 저장한다.
+    -->
+    <insert id="saveHqNmcode" parameterType="EnvConfgBatchChangeVO">
+        /* USE : EnvConfgBatchChangeMapper.saveHqNmcode */
+        MERGE INTO TB_HQ_NMCODE thn
+        USING (
+                  SELECT  #{hqOfficeCd}   AS HQ_OFFICE_CD
+                  ,       NMCODE_GRP_CD   AS NMCODE_GRP_CD
+                  ,       NMCODE_CD       AS NMCODE_CD
+                  ,       NMCODE_GRP_CD   AS PARENT_CD
+                  ,       NMCODE_NM       AS NMCODE_NM
+                  ,       NMCODE_ITEM_1   AS NMCODE_ITEM_1
+                  ,       NMCODE_ITEM_2   AS NMCODE_ITEM_2
+                  ,       'Y'             AS USE_YN
+                  ,       #{regDt}        AS REG_DT
+                  ,       #{regId}        AS REG_ID
+                  ,       #{modDt}        AS MOD_DT
+                  ,       #{modId}        AS MOD_ID
+                  FROM    TB_CM_NMCODE
+                  WHERE   NMCODE_GRP_CD = #{nmcodeGrpCd}
+                  AND     NMCODE_CD     = #{nmcodeCd}
+                  AND     PARENT_CD     = #{parentCd}
+                  AND     NMCODE_GRP_CD IN (
+                                                SELECT  NMCODE_CD
+                                                FROM    TB_CM_NMCODE
+                                                WHERE   NMCODE_GRP_CD   =   '999'
+                                                AND     NMCODE_ITEM_1   IN  ('C', 'H')
+                                                AND     USE_TARGET_FG   IN  ('C', 'H')
+                                            )
+        ) B
+        ON (
+                thn.HQ_OFFICE_CD      = B.HQ_OFFICE_CD
+                AND thn.NMCODE_GRP_CD = B.NMCODE_GRP_CD
+                AND thn.NMCODE_CD     = B.NMCODE_CD
+                AND thn.PARENT_CD     = B.PARENT_CD
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                thn.NMCODE_NM       = B.NMCODE_NM
+            ,   thn.NMCODE_ITEM_1   = B.NMCODE_ITEM_1
+            ,   thn.NMCODE_ITEM_2   = B.NMCODE_ITEM_2
+            ,   thn.USE_YN          = B.USE_YN
+            ,   thn.MOD_DT          = B.MOD_DT
+            ,   thn.MOD_ID          = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                thn.HQ_OFFICE_CD
+            ,   thn.NMCODE_GRP_CD
+            ,   thn.NMCODE_CD
+            ,   thn.PARENT_CD
+            ,   thn.NMCODE_NM
+            ,   thn.NMCODE_ITEM_1
+            ,   thn.NMCODE_ITEM_2
+            ,   thn.USE_YN
+            ,   thn.REG_DT
+            ,   thn.REG_ID
+            ,   thn.MOD_DT
+            ,   thn.MOD_ID
+            )
+            VALUES
+            (
+                B.HQ_OFFICE_CD
+            ,   B.NMCODE_GRP_CD
+            ,   B.NMCODE_CD
+            ,   B.PARENT_CD
+            ,   B.NMCODE_NM
+            ,   B.NMCODE_ITEM_1
+            ,   B.NMCODE_ITEM_2
+            ,   B.USE_YN
+            ,   B.REG_DT
+            ,   B.REG_ID
+            ,   B.MOD_DT
+            ,   B.MOD_ID
+            )
+    </insert>
+
+    <!-- 공통코드관리탭 - 매장 명칭코드에 공통코드 정보 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE, TB_CM_NMCODE
+        COMMENTS : 매장 명칭코드에 공통코드 정보를 저장한다.
+    -->
+    <insert id="saveStoreNmcode" parameterType="EnvConfgBatchChangeVO">
+        /* USE : EnvConfgBatchChangeMapper.saveStoreNmcode */
+        MERGE INTO TB_MS_STORE_NMCODE tmsn
+        USING (
+                    SELECT  #{storeCd}   AS STORE_CD
+                    ,       NMCODE_GRP_CD   AS NMCODE_GRP_CD
+                    ,       NMCODE_CD       AS NMCODE_CD
+                    ,       NMCODE_GRP_CD   AS PARENT_CD
+                    ,       NMCODE_NM       AS NMCODE_NM
+                    ,       NMCODE_ITEM_1   AS NMCODE_ITEM_1
+                    ,       NMCODE_ITEM_2   AS NMCODE_ITEM_2
+                    ,       'Y'             AS USE_YN
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_CM_NMCODE
+                    WHERE   NMCODE_GRP_CD = #{nmcodeGrpCd}
+                    AND     NMCODE_CD     = #{nmcodeCd}
+                    AND     PARENT_CD     = #{parentCd}
+                    AND     USE_TARGET_FG IN ('C', 'S')
+        ) B
+        ON (
+                tmsn.STORE_CD          = B.STORE_CD
+                AND tmsn.NMCODE_GRP_CD = B.NMCODE_GRP_CD
+                AND tmsn.NMCODE_CD     = B.NMCODE_CD
+                AND tmsn.PARENT_CD     = B.PARENT_CD
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                tmsn.NMCODE_NM       = B.NMCODE_NM
+            ,   tmsn.NMCODE_ITEM_1   = B.NMCODE_ITEM_1
+            ,   tmsn.NMCODE_ITEM_2   = B.NMCODE_ITEM_2
+            ,   tmsn.USE_YN          = B.USE_YN
+            ,   tmsn.MOD_DT          = B.MOD_DT
+            ,   tmsn.MOD_ID          = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                tmsn.STORE_CD
+            ,   tmsn.NMCODE_GRP_CD
+            ,   tmsn.NMCODE_CD
+            ,   tmsn.PARENT_CD
+            ,   tmsn.NMCODE_NM
+            ,   tmsn.NMCODE_ITEM_1
+            ,   tmsn.NMCODE_ITEM_2
+            ,   tmsn.USE_YN
+            ,   tmsn.REG_DT
+            ,   tmsn.REG_ID
+            ,   tmsn.MOD_DT
+            ,   tmsn.MOD_ID
+            )
+            VALUES
+            (
+                B.STORE_CD
+            ,   B.NMCODE_GRP_CD
+            ,   B.NMCODE_CD
+            ,   B.PARENT_CD
+            ,   B.NMCODE_NM
+            ,   B.NMCODE_ITEM_1
+            ,   B.NMCODE_ITEM_2
+            ,   B.USE_YN
+            ,   B.REG_DT
+            ,   B.REG_ID
+            ,   B.MOD_DT
+            ,   B.MOD_ID
+            )
+    </insert>
+
+    <!-- 공통코드관리탭 - 매장 명칭코드에 본사 명칭코드 정보 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE, TB_HQ_NMCODE
+        COMMENTS : 매장 명칭코드에 본사 명칭코드 정보를 저장한다.
+    -->
+    <insert id="saveHqToStoreNmcode" parameterType="EnvConfgBatchChangeVO">
+        /* USE : EnvConfgBatchChangeMapper.saveHqToStoreNmcode */
+        MERGE INTO TB_MS_STORE_NMCODE tmsn
+        USING (
+                    SELECT  #{storeCd}      AS STORE_CD
+                    ,       NMCODE_GRP_CD   AS NMCODE_GRP_CD
+                    ,       NMCODE_CD       AS NMCODE_CD
+                    ,       PARENT_CD       AS PARENT_CD
+                    ,       NMCODE_NM       AS NMCODE_NM
+                    ,       NMCODE_ITEM_1   AS NMCODE_ITEM_1
+                    ,       NMCODE_ITEM_2   AS NMCODE_ITEM_2
+                    ,       USE_YN          AS USE_YN
+                    ,       #{regDt}        AS REG_DT
+                    ,       #{regId}        AS REG_ID
+                    ,       #{modDt}        AS MOD_DT
+                    ,       #{modId}        AS MOD_ID
+                    FROM    TB_HQ_NMCODE
+                    WHERE   NMCODE_GRP_CD = #{nmcodeGrpCd}
+                    AND     NMCODE_CD     = #{nmcodeCd}
+                    AND     PARENT_CD     = #{parentCd}
+                    AND     HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     NMCODE_GRP_CD  IN  (
+                                                    SELECT  NMCODE_CD
+                                                    FROM    TB_CM_NMCODE
+                                                    WHERE   NMCODE_GRP_CD   =   '999'
+                                                    AND     NMCODE_ITEM_1   =   'C'
+                                               )
+        ) B
+        ON (
+                tmsn.STORE_CD          = B.STORE_CD
+                AND tmsn.NMCODE_GRP_CD = B.NMCODE_GRP_CD
+                AND tmsn.NMCODE_CD     = B.NMCODE_CD
+                AND tmsn.PARENT_CD     = B.PARENT_CD
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                tmsn.NMCODE_NM       = B.NMCODE_NM
+            ,   tmsn.NMCODE_ITEM_1   = B.NMCODE_ITEM_1
+            ,   tmsn.NMCODE_ITEM_2   = B.NMCODE_ITEM_2
+            ,   tmsn.USE_YN          = B.USE_YN
+            ,   tmsn.MOD_DT          = B.MOD_DT
+            ,   tmsn.MOD_ID          = B.MOD_ID
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                tmsn.STORE_CD
+            ,   tmsn.NMCODE_GRP_CD
+            ,   tmsn.NMCODE_CD
+            ,   tmsn.PARENT_CD
+            ,   tmsn.NMCODE_NM
+            ,   tmsn.NMCODE_ITEM_1
+            ,   tmsn.NMCODE_ITEM_2
+            ,   tmsn.USE_YN
+            ,   tmsn.REG_DT
+            ,   tmsn.REG_ID
+            ,   tmsn.MOD_DT
+            ,   tmsn.MOD_ID
+            )
+            VALUES
+            (
+                B.STORE_CD
+            ,   B.NMCODE_GRP_CD
+            ,   B.NMCODE_CD
+            ,   B.PARENT_CD
+            ,   B.NMCODE_NM
+            ,   B.NMCODE_ITEM_1
+            ,   B.NMCODE_ITEM_2
+            ,   B.USE_YN
+            ,   B.REG_DT
+            ,   B.REG_ID
+            ,   B.MOD_DT
+            ,   B.MOD_ID
+            )
+    </insert>
+
 </mapper>

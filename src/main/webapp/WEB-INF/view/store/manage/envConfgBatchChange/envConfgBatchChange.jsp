@@ -29,11 +29,15 @@
             <li>
                 <a id="envSettingTab" href="#" ng-click="envSettingShow()"><s:message code="envConfgBatchChange.envSetting"/></a>
             </li>
+            <%-- 공통코드관리 --%>
+            <li>
+                <a id="commCodeTab" href="#" ng-click="commCodeShow()"><s:message code="envConfgBatchChange.commCode"/></a>
+            </li>
         </ul>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChange.js?ver=20210322.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChange.js?ver=20241120.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 본사환경 레이어 --%>
@@ -53,17 +57,21 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-<%-- 탭페이지 레이어 끝 --%>
 
 <%-- 기능키명칭 레이어 --%>
 <c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/envConfgBatchChangeFnkey.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-<%-- 탭페이지 레이어 끝 --%>
 
 <%-- 환경설정관리 레이어 --%>
 <c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/envConfgBatchChangeEnvSetting.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%--공통코드관리 레이어--%>
+<c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/envConfgBatchChangeCommCode.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
@@ -77,6 +85,12 @@
 
 <%-- 터치키 조회 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/searchFnkey.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 공통코드 조회 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/envConfgBatchChange/searchCommCode.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

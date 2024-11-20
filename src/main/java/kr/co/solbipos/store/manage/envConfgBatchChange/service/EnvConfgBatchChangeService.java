@@ -58,4 +58,15 @@ public interface EnvConfgBatchChangeService {
     /** 환경설정관리 - 저장 */
     int getEnvConfgBatchChangeEnvSettingSave(EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, SessionInfoVO sessionInfoVO);
 
+    /** 공통코드 조회 팝업 - 조회 */
+    List<DefaultMap<Object>> getSearchCommCodeList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO);
+
+    /** 공통코드관리탭 - 조회 */
+    List<DefaultMap<Object>> getEnvConfgBatchChangeCommCodeList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO);
+
+    /** 공통코드관리탭 - 저장 */
+    int getEnvConfgBatchChangeCommCodeSave(EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, SessionInfoVO sessionInfoVO);
+
+
+
 }

@@ -349,4 +349,71 @@ public class EnvConfgBatchChangeController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 공통코드 조회 팝업 - 조회
+     * @param envConfgBatchChangeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2024.11.14
+     *
+     */
+    @RequestMapping(value = "/searchCommCode/getSearchCommCodeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchCommCodeList(EnvConfgBatchChangeVO envConfgBatchChangeVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = envConfgBatchChangeService.getSearchCommCodeList(envConfgBatchChangeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, envConfgBatchChangeVO);
+    }
+
+    /**
+     * 공통코드관리탭 - 조회
+     * @param envConfgBatchChangeVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2024.11.14
+     */
+    @RequestMapping(value = "/envConfgBatchChangeCommCode/getEnvConfgBatchChangeCommCodeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEnvConfgBatchChangeCommCodeList(EnvConfgBatchChangeVO envConfgBatchChangeVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = envConfgBatchChangeService.getEnvConfgBatchChangeCommCodeList(envConfgBatchChangeVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, envConfgBatchChangeVO);
+    }
+
+    /**
+     * 공통코드관리탭 - 저장
+     * @param envConfgBatchChangeVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2024.11.14
+     */
+    @RequestMapping(value = "/envConfgBatchChangeCommCode/getEnvConfgBatchChangeCommCodeSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getEnvConfgBatchChangeCommCodeSave(@RequestBody EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, HttpServletRequest request,
+                                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = envConfgBatchChangeService.getEnvConfgBatchChangeCommCodeSave(envConfgBatchChangeVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

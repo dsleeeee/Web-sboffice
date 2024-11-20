@@ -73,4 +73,22 @@ public interface EnvConfgBatchChangeMapper {
     int getEnvConfgBatchChangeEnvSettingSaveMs(EnvConfgBatchChangeVO envConfgBatchChangeVO);
     int getEnvConfgBatchChangeEnvSettingSavePos(EnvConfgBatchChangeVO envConfgBatchChangeVO);
 
+    /** 공통코드 조회 팝업 - 조회 */
+    List<DefaultMap<Object>> getSearchCommCodeList(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
+    /** 공통코드관리탭 - 본사리스트 조회 */
+    List<DefaultMap<Object>> getHqList(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
+    /** 공통코드관리탭 - 매장리스트 조회 */
+    List<DefaultMap<Object>> getStoreList(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
+    /** 공통코드관리탭 - 저장  */
+    // 본사 명칭코드에 공통코드 정보 저장
+    int saveHqNmcode(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+    // 매장 명칭코드에 공통코드 정보 저장
+    int saveStoreNmcode(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+    // 매장 명칭코드에 본사 명칭코드 정보 저장
+    int saveHqToStoreNmcode(EnvConfgBatchChangeVO envConfgBatchChangeVO);
+
+
 }

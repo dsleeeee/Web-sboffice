@@ -81,9 +81,28 @@ public class EnvConfgBatchChangeVO extends PageVO {
     /** 기능키구분 */
     private String fnkeyFg;
 
-    public String getOrgnFg() { return orgnFg; }
+    /** 사용대상구분 */
+    private String useTargetFg;
 
-    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
+    /** 명칭코드그룹코드 */
+    private String nmcodeGrpCd;
+
+    /** 명칭코드코드 */
+    private String nmcodeCd;
+
+    /** 본사코드 (검색용) */
+    private String selHqOfficeCd;
+
+    /** 부모코드 */
+    private String parentCd;
+
+    public String getOrgnFg() {
+        return orgnFg;
+    }
+
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -93,13 +112,21 @@ public class EnvConfgBatchChangeVO extends PageVO {
         this.hqOfficeCd = hqOfficeCd;
     }
 
-    public String getHqOfficeNm() { return hqOfficeNm; }
+    public String getHqOfficeNm() {
+        return hqOfficeNm;
+    }
 
-    public void setHqOfficeNm(String hqOfficeNm) { this.hqOfficeNm = hqOfficeNm; }
+    public void setHqOfficeNm(String hqOfficeNm) {
+        this.hqOfficeNm = hqOfficeNm;
+    }
 
-    public String getStoreCd() { return storeCd; }
+    public String getStoreCd() {
+        return storeCd;
+    }
 
-    public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
 
     public String[] getStoreCdList() {
         return storeCdList;
@@ -109,45 +136,85 @@ public class EnvConfgBatchChangeVO extends PageVO {
         this.storeCdList = storeCdList;
     }
 
-    public String getStoreNm() { return storeNm; }
+    public String getStoreNm() {
+        return storeNm;
+    }
 
-    public void setStoreNm(String storeNm) { this.storeNm = storeNm; }
+    public void setStoreNm(String storeNm) {
+        this.storeNm = storeNm;
+    }
 
-    public String getUseYn() { return useYn; }
+    public String getUseYn() {
+        return useYn;
+    }
 
-    public void setUseYn(String useYn) { this.useYn = useYn; }
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
 
-    public String getEnvstCd() { return envstCd; }
+    public String getEnvstCd() {
+        return envstCd;
+    }
 
-    public void setEnvstCd(String envstCd) { this.envstCd = envstCd; }
+    public void setEnvstCd(String envstCd) {
+        this.envstCd = envstCd;
+    }
 
-    public String getEnvstVal() { return envstVal; }
+    public String getEnvstVal() {
+        return envstVal;
+    }
 
-    public void setEnvstVal(String envstVal) { this.envstVal = envstVal; }
+    public void setEnvstVal(String envstVal) {
+        this.envstVal = envstVal;
+    }
 
-    public String getSystemPw() { return systemPw; }
+    public String getSystemPw() {
+        return systemPw;
+    }
 
-    public void setSystemPw(String systemPw) { this.systemPw = systemPw; }
+    public void setSystemPw(String systemPw) {
+        this.systemPw = systemPw;
+    }
 
-    public String getDirctInYn() { return dirctInYn; }
+    public String getDirctInYn() {
+        return dirctInYn;
+    }
 
-    public void setDirctInYn(String dirctInYn) { this.dirctInYn = dirctInYn; }
+    public void setDirctInYn(String dirctInYn) {
+        this.dirctInYn = dirctInYn;
+    }
 
-    public String getTargtFg() { return targtFg; }
+    public String getTargtFg() {
+        return targtFg;
+    }
 
-    public void setTargtFg(String targtFg) { this.targtFg = targtFg; }
+    public void setTargtFg(String targtFg) {
+        this.targtFg = targtFg;
+    }
 
-    public String getGubun() { return gubun; }
+    public String getGubun() {
+        return gubun;
+    }
 
-    public void setGubun(String gubun) { this.gubun = gubun; }
+    public void setGubun(String gubun) {
+        this.gubun = gubun;
+    }
 
-    public String getAgencyCd() { return agencyCd; }
+    public String getAgencyCd() {
+        return agencyCd;
+    }
 
-    public void setAgencyCd(String agencyCd) { this.agencyCd = agencyCd; }
+    public void setAgencyCd(String agencyCd) {
+        this.agencyCd = agencyCd;
+    }
 
-    public String getPosNo() { return posNo; }
+    public String getPosNo() {
+        return posNo;
+    }
 
-    public void setPosNo(String posNo) { this.posNo = posNo; }
+    public void setPosNo(String posNo) {
+        this.posNo = posNo;
+    }
 
     public String getFnkeyNo() {
         return fnkeyNo;
@@ -171,5 +238,45 @@ public class EnvConfgBatchChangeVO extends PageVO {
 
     public void setFnkeyFg(String fnkeyFg) {
         this.fnkeyFg = fnkeyFg;
+    }
+
+    public String getUseTargetFg() {
+        return useTargetFg;
+    }
+
+    public void setUseTargetFg(String useTargetFg) {
+        this.useTargetFg = useTargetFg;
+    }
+
+    public String getNmcodeGrpCd() {
+        return nmcodeGrpCd;
+    }
+
+    public void setNmcodeGrpCd(String nmcodeGrpCd) {
+        this.nmcodeGrpCd = nmcodeGrpCd;
+    }
+
+    public String getNmcodeCd() {
+        return nmcodeCd;
+    }
+
+    public void setNmcodeCd(String nmcodeCd) {
+        this.nmcodeCd = nmcodeCd;
+    }
+
+    public String getSelHqOfficeCd() {
+        return selHqOfficeCd;
+    }
+
+    public void setSelHqOfficeCd(String selHqOfficeCd) {
+        this.selHqOfficeCd = selHqOfficeCd;
+    }
+
+    public String getParentCd() {
+        return parentCd;
+    }
+
+    public void setParentCd(String parentCd) {
+        this.parentCd = parentCd;
     }
 }

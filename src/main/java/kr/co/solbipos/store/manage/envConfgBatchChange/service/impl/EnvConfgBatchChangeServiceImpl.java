@@ -245,4 +245,59 @@ public class EnvConfgBatchChangeServiceImpl implements EnvConfgBatchChangeServic
 
         return procCnt;
     }
+
+    /** 공통코드 조회 팝업 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSearchCommCodeList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO) {
+
+        List<DefaultMap<Object>> result  = envConfgBatchChangeMapper.getSearchCommCodeList(envConfgBatchChangeVO);
+
+        return result;
+    }
+
+    /** 공통코드관리탭 - 조회*/
+    @Override
+    public List<DefaultMap<Object>> getEnvConfgBatchChangeCommCodeList(EnvConfgBatchChangeVO envConfgBatchChangeVO, SessionInfoVO sessionInfoVO) {
+
+        List<DefaultMap<Object>> list = new ArrayList<DefaultMap<Object>>();
+
+        if("H".equals(envConfgBatchChangeVO.getUseTargetFg())) {
+            list = envConfgBatchChangeMapper.getHqList(envConfgBatchChangeVO);
+        } else if ("S".equals(envConfgBatchChangeVO.getUseTargetFg())) {
+            list = envConfgBatchChangeMapper.getStoreList(envConfgBatchChangeVO);
+        } else if ("HS".equals(envConfgBatchChangeVO.getUseTargetFg())) {
+            list = envConfgBatchChangeMapper.getStoreList(envConfgBatchChangeVO);
+        }
+
+        return list;
+    }
+
+    /** 공통코드관리탭 - 저장 */
+    @Override
+    public int getEnvConfgBatchChangeCommCodeSave(EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(EnvConfgBatchChangeVO envConfgBatchChangeVO : envConfgBatchChangeVOs) {
+
+            envConfgBatchChangeVO.setModDt(currentDt);
+            envConfgBatchChangeVO.setModId(sessionInfoVO.getUserId());
+            envConfgBatchChangeVO.setRegDt(currentDt);
+            envConfgBatchChangeVO.setRegId(sessionInfoVO.getUserId());
+
+            if("H".equals(envConfgBatchChangeVO.getUseTargetFg())) {
+                // 본사 명칭코드에 공통코드 정보 저장
+                procCnt = envConfgBatchChangeMapper.saveHqNmcode(envConfgBatchChangeVO);
+            } else if ("S".equals(envConfgBatchChangeVO.getUseTargetFg())) {
+                // 매장 명칭코드에 공통코드 정보 저장
+                procCnt = envConfgBatchChangeMapper.saveStoreNmcode(envConfgBatchChangeVO);
+            } else if ("HS".equals(envConfgBatchChangeVO.getUseTargetFg())) {
+                // 매장 명칭코드에 본사 명칭코드 정보 저장
+                procCnt = envConfgBatchChangeMapper.saveHqToStoreNmcode(envConfgBatchChangeVO);
+            }
+        }
+
+        return procCnt;
+    }
 }

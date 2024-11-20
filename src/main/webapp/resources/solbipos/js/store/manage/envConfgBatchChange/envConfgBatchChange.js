@@ -21,6 +21,7 @@ app.controller('envConfgBatchChangeCtrl', ['$scope', function ($scope) {
         $("#envConfgBatchChangeStorePosView").hide();
         $("#envConfgBatchChangeFnkeyView").hide();
         $("#envConfgBatchChangeEnvSettingView").hide();
+        $("#envConfgBatchChangeCommCodeView").hide();
     };
 
     // 본사환경 탭 보이기
@@ -30,12 +31,14 @@ app.controller('envConfgBatchChangeCtrl', ['$scope', function ($scope) {
         $("#storePosTab").removeClass("on");
         $("#fnkeyTab").removeClass("on");
         $("#envSettingTab").removeClass("on");
+        $("#commCodeTab").removeClass("on");
 
         $("#envConfgBatchChangeHqView").show();
         $("#envConfgBatchChangeStoreView").hide();
         $("#envConfgBatchChangeStorePosView").hide();
         $("#envConfgBatchChangeFnkeyView").hide();
         $("#envConfgBatchChangeEnvSettingView").hide();
+        $("#envConfgBatchChangeCommCodeView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("envConfgBatchChangeHqCtrl");
@@ -49,12 +52,14 @@ app.controller('envConfgBatchChangeCtrl', ['$scope', function ($scope) {
         $("#storePosTab").removeClass("on");
         $("#fnkeyTab").removeClass("on");
         $("#envSettingTab").removeClass("on");
+        $("#commCodeTab").removeClass("on");
 
         $("#envConfgBatchChangeHqView").hide();
         $("#envConfgBatchChangeStoreView").show();
         $("#envConfgBatchChangeStorePosView").hide();
         $("#envConfgBatchChangeFnkeyView").hide();
         $("#envConfgBatchChangeEnvSettingView").hide();
+        $("#envConfgBatchChangeCommCodeView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("envConfgBatchChangeStoreCtrl");
@@ -68,12 +73,14 @@ app.controller('envConfgBatchChangeCtrl', ['$scope', function ($scope) {
         $("#storePosTab").addClass("on");
         $("#fnkeyTab").removeClass("on");
         $("#envSettingTab").removeClass("on");
+        $("#commCodeTab").removeClass("on");
 
         $("#envConfgBatchChangeHqView").hide();
         $("#envConfgBatchChangeStoreView").hide();
         $("#envConfgBatchChangeStorePosView").show();
         $("#envConfgBatchChangeFnkeyView").hide();
         $("#envConfgBatchChangeEnvSettingView").hide();
+        $("#envConfgBatchChangeCommCodeView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("envConfgBatchChangeStorePosCtrl");
@@ -87,12 +94,14 @@ app.controller('envConfgBatchChangeCtrl', ['$scope', function ($scope) {
         $("#storePosTab").removeClass("on");
         $("#fnkeyTab").addClass("on");
         $("#envSettingTab").removeClass("on");
+        $("#commCodeTab").removeClass("on");
 
         $("#envConfgBatchChangeHqView").hide();
         $("#envConfgBatchChangeStoreView").hide();
         $("#envConfgBatchChangeStorePosView").hide();
         $("#envConfgBatchChangeFnkeyView").show();
         $("#envConfgBatchChangeEnvSettingView").hide();
+        $("#envConfgBatchChangeCommCodeView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("envConfgBatchChangeFnkeyCtrl");
@@ -106,18 +115,41 @@ app.controller('envConfgBatchChangeCtrl', ['$scope', function ($scope) {
         $("#storePosTab").removeClass("on");
         $("#fnkeyTab").removeClass("on");
         $("#envSettingTab").addClass("on");
+        $("#commCodeTab").removeClass("on");
 
         $("#envConfgBatchChangeHqView").hide();
         $("#envConfgBatchChangeStoreView").hide();
         $("#envConfgBatchChangeStorePosView").hide();
         $("#envConfgBatchChangeFnkeyView").hide();
         $("#envConfgBatchChangeEnvSettingView").show();
+        $("#envConfgBatchChangeCommCodeView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("envConfgBatchChangeEnvSettingCtrl");
         scope.flex.refresh();
         var scope2 = agrid.getScope("detailCtrl");
         scope2.flex.refresh();
+    };
+
+    // 공통코드관리 탭 보이기
+    $scope.commCodeShow = function () {
+        $("#hqTab").removeClass("on");
+        $("#storeTab").removeClass("on");
+        $("#storePosTab").removeClass("on");
+        $("#fnkeyTab").removeClass("on");
+        $("#envSettingTab").removeClass("on");
+        $("#commCodeTab").addClass("on");
+
+        $("#envConfgBatchChangeHqView").hide();
+        $("#envConfgBatchChangeStoreView").hide();
+        $("#envConfgBatchChangeStorePosView").hide();
+        $("#envConfgBatchChangeFnkeyView").hide();
+        $("#envConfgBatchChangeEnvSettingView").hide();
+        $("#envConfgBatchChangeCommCodeView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("envConfgBatchChangeCommCodeCtrl");
+        scope.flex.refresh();
     };
 
 }]);
