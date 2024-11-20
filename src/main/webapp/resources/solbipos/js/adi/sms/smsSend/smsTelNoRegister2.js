@@ -123,7 +123,7 @@ app.controller('smsTelNoRegister2Ctrl', ['$scope', '$http', function ($scope, $h
 
     // 본인인증
     $scope.verify = function(){
-        $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal.sb", null, function(result) {
+        $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal2.sb", null, function(result) {
             var data = result.data;
             console.log(data);
 

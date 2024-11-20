@@ -311,7 +311,7 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsTelNoRegister2.js?ver=20241106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsSend/smsTelNoRegister2.js?ver=20241120.01" charset="utf-8"></script>
 
 <%-- SMS 개인정보취급방침 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsSend/contentPop1.jsp">
