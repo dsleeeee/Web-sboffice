@@ -106,7 +106,7 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("fileName1")], '') !== '') {
                         // 다운로드
-                        smsGeneralNo_download(selectedRow.fileName1);
+                        smsGeneralNo_download2(selectedRow.fileName1);
                     }
                 }
 
@@ -115,7 +115,7 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("fileName2")], '') !== '') {
                         // 다운로드
-                        smsGeneralNo_download(selectedRow.fileName2);
+                        smsGeneralNo_download2(selectedRow.fileName2);
                     }
                 }
 
@@ -124,7 +124,7 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("fileName3")], '') !== '') {
                         // 다운로드
-                        smsGeneralNo_download(selectedRow.fileName3);
+                        smsGeneralNo_download2(selectedRow.fileName3);
                     }
                 }
 

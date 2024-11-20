@@ -124,21 +124,21 @@
     </div>
 </wj-popup>
 
-<form id="smsGeneralNo_info" name="smsGeneralNo_info" method="post" action="/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageDownload.sb" target="smsGeneralNoFrm">
-    <iframe name="smsGeneralNoFrm" style="display:none;"></iframe>
+<form id="smsGeneralNo_info2" name="smsGeneralNo_info2" method="post" action="/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageDownload.sb" target="smsGeneralNoFrm2">
+    <iframe name="smsGeneralNoFrm2" style="display:none;"></iframe>
 
     <input type="hidden" name="fileName" value="" /> <%--파일명--%>
 </form>
 
 <script type="text/javascript">
-    function smsGeneralNo_download(fileName)
+    function smsGeneralNo_download2(fileName)
     {
-        document.smsGeneralNo_info.fileName.value = fileName;
-        document.smsGeneralNo_info.submit();
+        document.smsGeneralNo_info2.fileName.value = fileName;
+        document.smsGeneralNo_info2.submit();
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20241115.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20241120.01" charset="utf-8"></script>
 
 <%-- SMS 발신번호 서류인증 미리보기 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsPreview.jsp">
