@@ -131,7 +131,12 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 // 미리보기 클릭시 상세정보 조회
                 if (col.binding === "preview1") {
                     if (nvl(selectedRow[("fileName1")], '') !== '') {
-                        $scope._broadcast('smsPreviewCtrl', selectedRow.fileName1);
+                        var params = {};
+                        params.orgnCd = selectedRow.orgnCd;
+                        params.userId = selectedRow.userId;
+                        params.certId = selectedRow.certId;
+                        params.gubun = "1";
+                        $scope._broadcast('smsPreviewCtrl', params);
                         $scope.wjSmsPreviewLayer.show(true);
                         event.preventDefault();
                     }
@@ -141,7 +146,12 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 if (col.binding === "preview2") {
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("fileName2")], '') !== '') {
-                        $scope._broadcast('smsPreviewCtrl', selectedRow.fileName2);
+                        var params = {};
+                        params.orgnCd = selectedRow.orgnCd;
+                        params.userId = selectedRow.userId;
+                        params.certId = selectedRow.certId;
+                        params.gubun = "2";
+                        $scope._broadcast('smsPreviewCtrl', params);
                         $scope.wjSmsPreviewLayer.show(true);
                         event.preventDefault();
                     }
@@ -151,7 +161,12 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 if (col.binding === "preview3") {
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("fileName3")], '') !== '') {
-                        $scope._broadcast('smsPreviewCtrl', selectedRow.fileName3);
+                        var params = {};
+                        params.orgnCd = selectedRow.orgnCd;
+                        params.userId = selectedRow.userId;
+                        params.certId = selectedRow.certId;
+                        params.gubun = "3";
+                        $scope._broadcast('smsPreviewCtrl', params);
                         $scope.wjSmsPreviewLayer.show(true);
                         event.preventDefault();
                     }

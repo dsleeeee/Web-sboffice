@@ -29,11 +29,41 @@ app.controller('smsPreviewCtrl', ['$scope', '$http', function ($scope, $http) {
     // <-- 검색 호출 -->
     $scope.$on("smsPreviewCtrl", function(event, data) {
         if(data !== undefined && !isEmptyObject(data)) {
-            // 이미지 셋팅
-            $("#imgPreview").attr("src", "http://" + window.location.host + "/board/addSmsNo/" + data);
+            var params = {};
+            params.orgnCd = data.orgnCd;
+            params.userId = data.userId;
+            params.certId = data.certId;
+            params.gubun = data.gubun;
+
+            // 조회 수행 : 조회URL, 파라미터, 콜백함수
+            $scope._postJSONQuery.withOutPopUp("/adi/sms/smsTelNoManage/smsPreview/getSmsPreviewList.sb", params, function (response) {
+                var fileInfo = response.data.data;
+
+                var fileNm = "";
+                if(params.gubun == "1") {
+                    fileNm = fileInfo.fileName1;
+                } else if(params.gubun == "2") {
+                    fileNm = fileInfo.fileName2;
+                } else if(params.gubun == "3") {
+                    fileNm = fileInfo.fileName3;
+                }
+
+                // 이미지 셋팅
+                // $("#imgPreview").attr("src", "http://neo.solbipos.com/Board/addSmsNo/" + fileNm);
+                $("#imgPreview").attr("src", "http://" + window.location.host + "/Board/addSmsNo/" + fileNm);
+            });
+        } else {
+            $("#imgPreview").attr("src", "");
         }
+
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
+
+    // 팝업 닫기
+    $scope.close = function() {
+        // 이미지 초기화
+        $("#imgPreview").attr("src", "");
+    };
 
 }]);

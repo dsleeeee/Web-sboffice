@@ -531,4 +531,26 @@ public class SmsTelNoManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * SMS 발신번호 서류인증 미리보기 팝업 - 조회
+     *
+     * @param smsTelNoManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 11. 20.
+     */
+    @RequestMapping(value = "/smsPreview//getSmsPreviewList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSmsPreviewList(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = smsTelNoManageService.getSmsPreviewList(smsTelNoManageVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

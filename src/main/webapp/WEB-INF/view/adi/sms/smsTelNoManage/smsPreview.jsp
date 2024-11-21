@@ -22,4 +22,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsPreview.js?ver=20241106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsPreview.js?ver=20241121.01" charset="utf-8"></script>

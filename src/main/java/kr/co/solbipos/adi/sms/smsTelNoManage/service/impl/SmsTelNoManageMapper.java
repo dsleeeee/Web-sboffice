@@ -67,4 +67,7 @@ public interface SmsTelNoManageMapper {
 
     /** 일반번호 인증요청 처리2 팝업 - 저장 update */
     int getSmsGeneralNoManage2SaveUpdate(SmsTelNoManageVO smsTelNoManageVO);
+
+    /** SMS 발신번호 서류인증 미리보기 팝업 - 조회 */
+    DefaultMap<String> getSmsPreviewList(SmsTelNoManageVO smsTelNoManageVO);
 }

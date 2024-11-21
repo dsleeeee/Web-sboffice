@@ -404,4 +404,22 @@
         AND CERT_ID = #{certId}
     </update>
 
+    <!-- SMS 발신번호 서류인증 미리보기 팝업 - 조회  -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSmsPreviewList" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getSmsPreviewList */
+        SELECT
+        tcasn.FILE_NM AS FILE_NAME1,
+        tcasn.FILE_NM2 AS FILE_NAME2,
+        tcasn.FILE_NM3 AS FILE_NAME3
+        FROM TB_CM_ADD_SMS_NO tcasn
+        WHERE 1=1
+        AND tcasn.ORGN_CD = #{orgnCd}
+        AND tcasn.USER_ID = #{userId}
+        AND tcasn.CERT_ID = #{certId}
+    </select>
+
 </mapper>

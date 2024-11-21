@@ -138,7 +138,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20241120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsGeneralNoManage2.js?ver=20241121.01" charset="utf-8"></script>
 
 <%-- SMS 발신번호 서류인증 미리보기 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsPreview.jsp">
