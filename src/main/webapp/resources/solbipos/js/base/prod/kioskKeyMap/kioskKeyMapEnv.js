@@ -55,7 +55,7 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 팝업 오픈 시, 매장리스트 조회
     $scope.$on("kioskKeyMapEnvCtrl", function(event, key) {
-        $scope._setComboData("tuClsTypeCombo2", kioskTuClsTypeListAll);
+        //$scope._setComboData("tuClsTypeCombo2", kioskTuClsTypeListAll);
 
         // 매장적용(매장/포장) 키값 hidden에 갖고 있기
         $("#hdEnvstCd").val(key);
@@ -128,15 +128,15 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', '$timeout', function ($
 
             // 환경설정 코드에 따라 보이는 컬럼이 다름
             if($("#hdEnvstCd").val() === "4068") {
-                columns[6].visible = true;
-                columns[7].visible = false;
                 columns[8].visible = true;
                 columns[9].visible = false;
+                columns[10].visible = true;
+                columns[11].visible = false;
             }else{
-                columns[6].visible = false;
-                columns[7].visible = true;
                 columns[8].visible = false;
                 columns[9].visible = true;
+                columns[10].visible = false;
+                columns[11].visible = true;
             }
 
             // 키오스크포스가 없는 매장은 선택 불가

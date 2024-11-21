@@ -356,8 +356,10 @@
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.sysStatFg"/>" binding="sysStatFg" width="85"  data-map="sysStatFgDataMap" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskPosNo"/>" binding="posNo" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.kioskTuMClsFg"/>" binding="tuMClsFg" data-map="tuMClsFgDataMap" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4068" width="85" align="center" is-read-only="true" data-map="kioskTuClsTypeDataMap"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4069" width="85" align="center" is-read-only="true" data-map="kioskTuClsTypeDataMap"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4068" width="85" align="center" is-read-only="true" data-map="kioskTuClsTypeDataMap" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4069" width="85" align="center" is-read-only="true" data-map="kioskTuClsTypeDataMap" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4068Nm" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="kioskKeyMap.envstVal"/>" binding="env4069Nm" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.modDt"/>" binding="modDt4068" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="kioskKeyMap.modDt"/>" binding="modDt4069" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
@@ -416,4 +418,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnv.js?ver=20241008.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnv.js?ver=20241121.01" charset="utf-8"></script>
