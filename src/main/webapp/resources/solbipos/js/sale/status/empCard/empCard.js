@@ -1,3 +1,13 @@
+/****************************************************************
+ *
+ * 파일명 : smsSend.js
+ * 설  명 : 매출관리 > 매출현황2 > 사원카드매출 JavaScript
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2022.12.05     권지현      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
@@ -5,6 +15,7 @@ var app = agrid.getApp();
 
 /** 승인 controller */
 app.controller('empCardCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('empCardCtrl', $scope, $http, true));
 
