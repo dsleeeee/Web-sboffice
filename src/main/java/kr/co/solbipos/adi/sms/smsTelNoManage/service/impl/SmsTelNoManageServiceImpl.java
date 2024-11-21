@@ -323,8 +323,8 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
     }
 
     /** SMS 발신번호 서류인증 미리보기 팝업 - 조회 */
-    public DefaultMap<String> getSmsPreviewList(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfo) {
+    public DefaultMap<String> getSmsPreviewFileNm(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfo) {
 
-        return smsTelNoManageMapper.getSmsPreviewList(smsTelNoManageVO);
+        return smsTelNoManageMapper.getSmsPreviewFileNm(smsTelNoManageVO);
     }
 }

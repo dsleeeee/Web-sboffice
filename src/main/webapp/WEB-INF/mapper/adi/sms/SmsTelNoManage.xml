@@ -409,8 +409,8 @@
         TABLE    :
         COMMENTS :
     -->
-    <select id="getSmsPreviewList" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
-        /* SmsTelNoManageMapper.getSmsPreviewList */
+    <select id="getSmsPreviewFileNm" parameterType="SmsTelNoManageVO" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getSmsPreviewFileNm */
         SELECT
         tcasn.FILE_NM AS FILE_NAME1,
         tcasn.FILE_NM2 AS FILE_NAME2,

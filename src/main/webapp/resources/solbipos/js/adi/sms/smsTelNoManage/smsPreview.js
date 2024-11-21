@@ -36,7 +36,7 @@ app.controller('smsPreviewCtrl', ['$scope', '$http', function ($scope, $http) {
             params.gubun = data.gubun;
 
             // 조회 수행 : 조회URL, 파라미터, 콜백함수
-            $scope._postJSONQuery.withOutPopUp("/adi/sms/smsTelNoManage/smsPreview/getSmsPreviewList.sb", params, function (response) {
+            $scope._postJSONQuery.withOutPopUp("/adi/sms/smsTelNoManage/smsPreview/getSmsPreviewFileNm.sb", params, function (response) {
                 var fileInfo = response.data.data;
 
                 var fileNm = "";

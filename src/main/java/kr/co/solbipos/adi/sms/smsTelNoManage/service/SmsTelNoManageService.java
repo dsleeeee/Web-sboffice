@@ -62,5 +62,5 @@ public interface SmsTelNoManageService {
     int getSmsGeneralNoManage2Save(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO);
 
     /** SMS 발신번호 서류인증 미리보기 팝업 - 조회 */
-    DefaultMap<String> getSmsPreviewList(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfo);
+    DefaultMap<String> getSmsPreviewFileNm(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfo);
 }

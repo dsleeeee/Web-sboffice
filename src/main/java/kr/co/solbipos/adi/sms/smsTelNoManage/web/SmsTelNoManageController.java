@@ -543,13 +543,13 @@ public class SmsTelNoManageController {
      * @author  김설아
      * @since   2024. 11. 20.
      */
-    @RequestMapping(value = "/smsPreview//getSmsPreviewList.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/smsPreview/getSmsPreviewFileNm.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getSmsPreviewList(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+    public Result getSmsPreviewFileNm(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
                           HttpServletResponse response, Model model) {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        DefaultMap<String> result = smsTelNoManageService.getSmsPreviewList(smsTelNoManageVO, sessionInfoVO);
+        DefaultMap<String> result = smsTelNoManageService.getSmsPreviewFileNm(smsTelNoManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
