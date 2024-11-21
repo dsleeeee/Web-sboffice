@@ -2166,10 +2166,22 @@
     -->
     <select id="getStoreKioskPosList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
         /* KioskKeyMapMapper.getStoreKioskPosList */
-        SELECT *
+        SELECT  A.HQ_OFFICE_CD
+        ,		A.STORE_NM
+        , 		A.STORE_CD
+        , 		A.POS_NO
+        , 		A.SYS_STAT_FG
+        , 		A.ENV_4068
+        ,		A.ENV_4069
+        ,		(SELECT '['|| TU_CLS_TYPE || ']' || TU_CLS_TYPE_NM FROM TB_HQ_KIOSK_GROUP WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND TU_CLS_TYPE = A.ENV_4068) AS ENV_4068_NM
+        ,		(SELECT '['|| TU_CLS_TYPE || ']' || TU_CLS_TYPE_NM FROM TB_HQ_KIOSK_GROUP WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND TU_CLS_TYPE = A.ENV_4069) AS ENV_4069_NM
+        ,       A.TU_M_CLS_FG
+        ,       A.MOD_DT_4068
+        ,       A.MOD_DT_4069
         FROM
         (
             SELECT
+            tms.HQ_OFFICE_CD,
             tms.STORE_NM,
             tms.STORE_CD,
             tmp.POS_NO,
@@ -2252,16 +2264,16 @@
                 </if>
             </if>
             ORDER BY tms.STORE_CD, tmp.POS_NO ASC
-        )
+        ) A
         WHERE 1=1
         <if test="tuMClsFg != null and tuMClsFg != ''">
-            AND TU_M_CLS_FG = #{tuMClsFg}
+            AND A.TU_M_CLS_FG = #{tuMClsFg}
         </if>
         <if test="tuClsType != null and tuClsType != '' and envstCd == '4068'">
-            AND ENV_4068 = #{tuClsType}
+            AND A.ENV_4068 = #{tuClsType}
         </if>
         <if test="tuClsType != null and tuClsType != '' and envstCd == '4069'">
-            AND ENV_4069 = #{tuClsType}
+            AND A.ENV_4069 = #{tuClsType}
         </if>
     </select>
 

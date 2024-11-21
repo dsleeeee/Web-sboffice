@@ -46,7 +46,8 @@ public class SideMenuManageVO extends PageVO {
     private String sdattrClassNone;
     /** 사이드선택그룹 선택메뉴없음*/
     private String sdSelGrpNone;
-
+    /** 사용 여부 */
+    private String useYn;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -142,5 +143,13 @@ public class SideMenuManageVO extends PageVO {
 
     public void setSdSelGrpNone(String sdSelGrpNone) {
         this.sdSelGrpNone = sdSelGrpNone;
+    }
+
+    public String getUseYn() {
+        return useYn;
+    }
+
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
     }
 }

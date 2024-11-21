@@ -422,7 +422,7 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
             // 카테고리(분류)를 모두 삭제하는지 파악하기 위해
             var gridLength = $scope.flex.collectionView.items.length;
-console.log(params);
+
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskCategory.sb', params, function () {
 
@@ -661,8 +661,9 @@ console.log(params);
                     $scope._setComboData("tuClsType", comboArray);
                     $scope._setComboData("tuClsTypeView", comboArray);
                     if(orgnFg === "HQ") {
-                        $scope._setComboData("applyTuClsType", comboArray00);
-                        $scope._setComboData("envTuClsType", comboArray);
+                        $scope._setComboData("applyTuClsType", comboArray00);   // 키오스크키맵 매장적용 - 키맵그룹 콤보
+                        $scope._setComboData("tuClsTypeCombo2", comboArrayAll); // [매장/포장]키맵적용 - 검색조건 '키맵그룹' 콤보
+                        $scope._setComboData("envTuClsType", comboArray);       // [매장/포장]키맵적용 - 키맵그룹 콤보 (적용 버튼 옆)
                     }
                     if(orgnFg === "STORE"){
                         $scope._setComboData("envStoreTuClsType", comboArray);
@@ -875,6 +876,7 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
         // 행추가
         // $scope._addRow(params, 2);
         var flex = $scope.flexM;
+        var pos = 2;
         if (!flex.collectionView) {
             flex.itemsSource = new wijmo.collections.CollectionView();
         }
@@ -982,16 +984,11 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
             params.push($scope.flexM.collectionView.itemsAdded[i]);
         }
 
-        // 카테고리(분류)를 모두 삭제하는지 파악하기 위해
-        var gridLength = $scope.flexM.collectionView.items.length;
-
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskCategoryM.sb', params, function() {
 
-            if(gridLength > 0 ){
-                // 카테고리분류 재조회
-                $scope.searchCategoryClsM();
-            }
+            // 카테고리분류 재조회
+            $scope.searchCategoryClsM();
         });
     };
 
