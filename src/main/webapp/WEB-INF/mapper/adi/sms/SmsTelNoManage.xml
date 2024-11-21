@@ -224,7 +224,7 @@
         twuidv01.ORGN_NM,
         twuidv01.ORGN_FG,
         tcasn.ADD_FG,
-        (CASE WHEN tcasn.ADD_FG = '1' THEN '다운로드' ELSE null END) AS DOWNLOAD,
+        (CASE WHEN tcasn.ADD_FG = '1' THEN '다운로드' ELSE '' END) AS DOWNLOAD,
         tcasn.ADD_PROC_FG,
         SBPENC.D(tcasn.TEL_NO) AS TEL_NO,
         tcasn.RETURN_REMARK,

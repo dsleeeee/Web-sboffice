@@ -71,7 +71,10 @@ app.controller('smsGeneralNoManageCtrl', ['$scope', '$http', function ($scope, $
                     var item = s.rows[e.row].dataItem;
                     // 값이 있으면 링크 효과
                     if (nvl(item[("addFg")], '') == '1') {
-                        wijmo.addClass(e.cell, 'wijLink');
+                        // 값이 있으면 링크 효과
+                        if (nvl(item[("fileName")], '') !== '') {
+                            wijmo.addClass(e.cell, 'wijLink');
+                        }
                     }
                 }
             }
@@ -88,8 +91,11 @@ app.controller('smsGeneralNoManageCtrl', ['$scope', '$http', function ($scope, $
                     var selectedRow = s.rows[ht.row].dataItem;
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("addFg")], '') == '1') {
-                        // 다운로드
-                        smsGeneralNo_download(selectedRow.fileName);
+                        // 값이 있으면 링크
+                        if (nvl(selectedRow[("fileName")], '') !== '') {
+                            // 다운로드
+                            smsGeneralNo_download(selectedRow.fileName);
+                        }
                     }
                 }
             }
