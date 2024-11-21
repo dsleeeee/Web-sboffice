@@ -23,7 +23,7 @@
         DISTINCT tssdd.DC_CD AS DC_CD,
         tcn.NMCODE_NM AS DC_NM,
         (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tssdd.STORE_CD) AS STORE_NM
-        FROM TB_SL_SALE_DTL_DC tssdd,
+        FROM TB_SL_DAILY_DC tssdd, -- 매출데이터에서 할인유형 찾는 이슈, 차후 사용중인 할인유형 마스터에서 처리예정
         TB_CM_NMCODE tcn
         WHERE 1=1
         AND tssdd.DC_CD = tcn.NMCODE_CD
