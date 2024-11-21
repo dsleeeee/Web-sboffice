@@ -45,4 +45,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dcInfo/coupnDc.js?ver=20240823.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dcInfo/coupnDc.js?ver=20241121.01" charset="utf-8"></script>

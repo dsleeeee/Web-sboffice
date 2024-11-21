@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+
 /**
  * @Class Name : DcInfoController.java
  * @Description : 매출공통팝업 - 할인 상세 팝업
@@ -73,7 +75,7 @@ public class DcInfoController {
 
 
     /**
-     * 당일매출상세현황 - 쿠폰할인 상세 리스트 조회
+     * 매출공통팝업 - 쿠폰할인 상세 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -277,7 +279,7 @@ public class DcInfoController {
     }
 
     /**
-     * 당일매출상세현황 - 쿠폰할인(BBQ용) 상세 리스트 조회
+     * 매출공통팝업 - 쿠폰할인(BBQ용) 상세 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -299,7 +301,7 @@ public class DcInfoController {
     }
 
     /**
-     * 당일매출상세현황 - 땡겨요정산할인 상세 리스트 조회
+     * 매출공통팝업 - 땡겨요정산할인 상세 리스트 조회
      * @param   request
      * @param   response
      * @param   model
@@ -318,5 +320,28 @@ public class DcInfoController {
         List<DefaultMap<String>> list = dcInfoService.getDdangyoBbqDcList(dcInfoVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
+    }
+
+
+    /**
+     * 매출공통팝업 - 쿠폰할인 명칭 조회
+     *
+     * @param dcInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2024. 11. 21.
+     */
+    @RequestMapping(value = "/coupnDc/getCoupnDcNm.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDcCdNm(DcInfoVO dcInfoVO, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<String> result = dcInfoService.getCoupnDcNm(dcInfoVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

@@ -41,4 +41,7 @@ public interface DcInfoService {
 
     /** 매출공통팝업 - 땡겨요정산할인 상세 리스트 조회 */
     List<DefaultMap<String>> getDdangyoBbqDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 매출공통팝업 - 쿠폰할인 명칭 조회 */
+    DefaultMap<String> getCoupnDcNm(DcInfoVO dcInfoVO, SessionInfoVO sessionInfo);
 }

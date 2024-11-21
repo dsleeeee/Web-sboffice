@@ -200,4 +200,11 @@ public class DcInfoServiceImpl implements DcInfoService {
 
         return dcInfoMapper.getDdangyoBbqDcList(dcInfoVO);
     }
+
+    /** 매출공통팝업 - 쿠폰할인 명칭 조회 */
+    public DefaultMap<String> getCoupnDcNm(DcInfoVO dcInfoVO, SessionInfoVO sessionInfo) {
+
+        return dcInfoMapper.getCoupnDcNm(dcInfoVO);
+    }
+
 }

@@ -41,11 +41,10 @@ app.controller('coupnDcCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     $scope.billNo   = nvl(data.billNo, '');
     $scope.dcCd     = data.dcCd;
 
-    var title = "쿠폰 할인내역";
-    if(data.dcCd == "12") {
-      title = "SKT 할인내역"
-    }
-    $("#coupnDcTitle").text(title);
+    // $("#coupnDcTitle").text("쿠폰 할인내역");
+
+    // 팝업 타이틀
+    $scope.titleDcNm(data);
 
     $scope.wjCoupnDcLayer.show(true);
 
@@ -55,6 +54,24 @@ app.controller('coupnDcCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     event.preventDefault();
   });
 
+  // 팝업 타이틀
+  $scope.titleDcNm = function (data) {
+    var params = {};
+    params.dcCd = data.dcCd;
+
+    // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    $scope._postJSONQuery.withOutPopUp("/sale/cmmSalePopup/dcInfo/coupnDc/getCoupnDcNm.sb", params, function (response) {
+      var dcCdNmInfo = response.data.data;
+
+      // 12: SKT 할인, 13: 텀블러할인
+      if(dcCdNmInfo.dcCd == "12" || dcCdNmInfo.dcCd == "13") {
+        $("#coupnDcTitle").text(dcCdNmInfo.dcNm + "내역");
+      } else {
+        $("#coupnDcTitle").text("쿠폰 할인내역");
+      }
+
+    });
+  };
 
   // 쿠폰할인 내역 리스트 조회
   $scope.searchCoupnDcList = function () {

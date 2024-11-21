@@ -539,4 +539,20 @@
         BY      tmc.COUPN_NM, tssd.PROD_CD
     </select>
 
+    <!-- 매출공통팝업 - 쿠폰할인 명칭 조회  -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCoupnDcNm" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* DcInfoMapper.getCoupnDcNm */
+        SELECT  tcn.NMCODE_CD AS DC_CD
+        ,        tcn.NMCODE_NM AS DC_NM
+        FROM    TB_CM_NMCODE tcn
+        WHERE   tcn.NMCODE_GRP_CD   =   '041'
+        AND     tcn.NMCODE_CD       = #{dcCd}
+        ORDER
+        BY      tcn.NMCODE_CD
+    </select>
+
 </mapper>
