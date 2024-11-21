@@ -112,6 +112,29 @@
                 <%--// 선택메뉴 선택 모듈 사용시 include --%>
             </td>
         </tr>
+        <tr>
+            <%-- 사용여부 --%>
+            <th>
+                <s:message code="sideMenu.manage.useYn"/>
+            </th>
+            <td>
+                <div class="sb-select w70">
+                    <wj-combo-box
+                            id="useYn"
+                            ng-model="useYn"
+                            control="useYnCombo"
+                            items-source="_getComboData('useYn')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            selected-index="1">
+                    </wj-combo-box>
+                </div>
+            </td>
+            <th></th>
+            <td></td>
+        </tr>
         </tbody>
     </table>
 
@@ -287,4 +310,4 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuManage.js?ver=20231117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuManage.js?ver=20241121.01" charset="utf-8"></script>

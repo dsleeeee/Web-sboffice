@@ -1200,7 +1200,7 @@
                 WHERE
                     thp.HQ_OFFICE_CD = #{hqOfficeCd}
                     <if test="prodCd != null and prodCd != ''">
-                    AND thp.PROD_CD = #{prodCd} --상품코드
+                    AND thp.PROD_CD LIKE '%'|| #{prodCd} ||'%' --상품코드
                     </if>
                     <if test="prodNm != null and prodNm != ''">
                     AND thp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
@@ -1284,7 +1284,7 @@
                 WHERE
                     tmp.STORE_CD = #{storeCd}
                     <if test="prodCd != null and prodCd != ''">
-                    AND tmp.PROD_CD = #{prodCd} --상품코드
+                    AND tmp.PROD_CD LIKE '%'|| #{prodCd} ||'%' --상품코드
                     </if>
                     <if test="prodNm != null and prodNm != ''">
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
@@ -1808,6 +1808,9 @@
                 <if test="sdselGrpCd != null and sdselGrpCd != ''">
                     AND thp.SDSEL_GRP_CD = #{sdselGrpCd}
                 </if>
+                <if test="useYn != null and useYn != ''">
+                    AND thp.USE_YN = #{useYn}
+                </if>
                     AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                     AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
                     AND thb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
@@ -1884,6 +1887,9 @@
                 </if>
                 <if test="sdselGrpCd != null and sdselGrpCd != ''">
                     AND tmp.SDSEL_GRP_CD = #{sdselGrpCd}
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN = #{useYn}
                 </if>
                     AND tmpc.STORE_CD = tmp.STORE_CD
                     AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD

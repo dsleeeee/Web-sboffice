@@ -38,6 +38,8 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
     // 사이드메뉴여부 콤보박스 셋팅
     $scope._setComboData("sideProdYnComboData", sideProdYnData);
     $scope._setComboData("chgSideProdYn", useYnData);
+    // 검색조건 '사용여부' 콤보박스 셋팅
+    $scope._setComboData("useYn", useYnComboData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -84,6 +86,7 @@ app.controller('sideMenuManageCtrl', ['$scope', '$http', function ($scope, $http
         params.sdselGrpCd = $("#sdselGrpCd").val();
         params.sdattrClassNone = $("#chkSdattrClassNone").is(":checked") === true ? 'Y' : 'N';
         params.sdSelGrpNone = $("#chkSdSelGrpNone").is(":checked") === true ? 'Y' : 'N';
+        params.useYn = $scope.useYnCombo.selectedValue;
 
         $scope._inquiryMain("/base/prod/sideMenu/menuProd/getSideMenuManageProdList.sb", params, function() {
 
