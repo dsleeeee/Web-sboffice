@@ -741,7 +741,7 @@
                 '[' || A.HQ_OFFICE_CD || '] ' || A.HQ_OFFICE_NM AS NAME
         FROM    TB_HQ_OFFICE A
         ,		TB_CM_AGENCY B
-        WHERE   A.HQ_OFFICE_CD != 'DS001'
+        WHERE   A.HQ_OFFICE_CD != #{hqOfficeCd}
         AND     A.SYS_CLOSURE_DATE > SYSDATE
         AND     B.AGENCY_CD = A.AGENCY_CD
         AND     (A.AGENCY_CD = #{agencyCd} OR B.P_AGENCY_CD= #{agencyCd} OR A.HQ_OFFICE_CD = '00000')
