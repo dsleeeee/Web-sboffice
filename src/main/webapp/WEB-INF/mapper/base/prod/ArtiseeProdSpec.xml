@@ -37,7 +37,13 @@
         /* ArtiseeProdSpecMapper.getArtiseeProdSpecProdList */
         SELECT
         thps.PROD_CD,
-        thp.PROD_NM
+        thp.PROD_NM,
+        thps.SPEC_CD,
+        thps.OPTION_1,
+        thps.OPTION_2,
+        thps.OPTION_3,
+        thps.OPTION_4,
+        thps.OPTION_5
         FROM TB_HQ_PRODUCT_SPEC thps,
         TB_HQ_PRODUCT thp
         WHERE 1=1
@@ -101,23 +107,53 @@
     -->
     <insert id="getArtiseeProdSpecProdSaveInsert" parameterType="ArtiseeProdSpecVO">
         /* ArtiseeProdSpecMapper.getArtiseeProdSpecProdSaveInsert */
-        INSERT INTO TB_HQ_PRODUCT_SPEC
+        MERGE INTO  TB_HQ_PRODUCT_SPEC A
+        USING DUAL
+        ON  (
+                    A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND A.SPEC_CD       = #{specCd}
+                AND A.PROD_CD       = #{prodCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+                A.OPTION_1  = #{option1}
+        ,       A.OPTION_2  = #{option2}
+        ,       A.OPTION_3  = #{option3}
+        ,       A.OPTION_4  = #{option4}
+        ,       A.OPTION_5  = #{option5}
+        ,       A.MOD_DT    = #{modDt}
+        ,       A.MOD_ID    = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
         (
-            HQ_OFFICE_CD,
-            SPEC_CD,
-            PROD_CD,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
-        ) VALUES (
-            #{hqOfficeCd},
-            #{specCd},
-            #{prodCd},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId}
+            HQ_OFFICE_CD
+        ,   SPEC_CD
+        ,   PROD_CD
+        ,   OPTION_1
+        ,   OPTION_2
+        ,   OPTION_3
+        ,   OPTION_4
+        ,   OPTION_5
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{specCd}
+        ,   #{prodCd}
+        ,   #{option1}
+        ,   #{option2}
+        ,   #{option3}
+        ,   #{option4}
+        ,   #{option5}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
         )
     </insert>
 

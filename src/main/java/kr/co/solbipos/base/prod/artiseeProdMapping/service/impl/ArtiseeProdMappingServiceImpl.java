@@ -41,6 +41,7 @@ public class ArtiseeProdMappingServiceImpl implements ArtiseeProdMappingService 
     public List<DefaultMap<String>> getMapStrList(ArtiseeProdMappingVO artiseeProdMappingVO, SessionInfoVO sessionInfoVO) {
 
         artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
         artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
 
         // TMP테이블 삭제
@@ -58,6 +59,7 @@ public class ArtiseeProdMappingServiceImpl implements ArtiseeProdMappingService 
     public List<DefaultMap<String>> getProdList(ArtiseeProdMappingVO artiseeProdMappingVO, SessionInfoVO sessionInfoVO) {
 
         artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
 
         return artiseeProdMappingMapper.getProdList(artiseeProdMappingVO);
     }
@@ -93,15 +95,8 @@ public class ArtiseeProdMappingServiceImpl implements ArtiseeProdMappingService 
         return artiseeProdMappingMapper.getSaveMappingProd(artiseeProdMappingVO);
     }
 
-    /** 맵핑정보 - 조회 */
-    @Override
-    public List<DefaultMap<String>> getMapStrExcelList(ArtiseeProdMappingVO artiseeProdMappingVO, SessionInfoVO sessionInfoVO) {
-        artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        return artiseeProdMappingMapper.getMapStrExcelList(artiseeProdMappingVO);
-    }
-
-    /** 상품정보 - 등록 */
+    /** 상품정보 - 엑셀다운로드 */
     @Override
     public List<DefaultMap<String>> getProdExcelList(ArtiseeProdMappingVO artiseeProdMappingVO, SessionInfoVO sessionInfoVO) {
         artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

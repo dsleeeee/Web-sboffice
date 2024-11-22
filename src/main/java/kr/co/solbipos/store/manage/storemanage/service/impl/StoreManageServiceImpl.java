@@ -1692,4 +1692,125 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         return mapper.chkVanFix(storeManageVO);
     }
+
+    /** 모바일 사용메뉴 조회 */
+    @Override
+    public List<DefaultMap<String>> avlblMobileMenu(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+
+        storeManageVO.setUserId(sessionInfoVO.getUserId());
+        return mapper.avlblMobileMenu(storeManageVO);
+    }
+
+    /** 모바일 미사용메뉴 조회 */
+    @Override
+    public List<DefaultMap<String>> beUseMobileMenu(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO) {
+        return mapper.beUseMobileMenu(storeManageVO);
+    }
+
+    /** 모바일 사용메뉴 삭제 */
+    @Override
+    public int removeMobileAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String insertDt = currentDateTimeString();
+
+        for(StoreMenuVO storeMenu : storeMenus){
+            storeMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            storeMenu.setRegDt(insertDt);
+            storeMenu.setRegId(sessionInfoVO.getUserId());
+            storeMenu.setModDt(insertDt);
+            storeMenu.setModId(sessionInfoVO.getUserId());
+
+            // 권한 예외 테이블에 있는지 조회 후, 예외로 들어간 권한이 있으면 삭제
+            int isAuth = mapper.isAuth(storeMenu);
+
+            if(isAuth > 0) {
+                procCnt = mapper.removeAuth(storeMenu);
+            }
+
+            // 권한 삭제 처리
+            storeMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            procCnt = mapper.addAuth(storeMenu);
+
+        }
+        return procCnt;
+    }
+
+    /** 모바일 사용메뉴 추가 */
+    @Override
+    public int addMobileAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String insertDt = currentDateTimeString();
+
+        for(StoreMenuVO storeMenu : storeMenus){
+
+            storeMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            storeMenu.setRegDt(insertDt);
+            storeMenu.setRegId(sessionInfoVO.getUserId());
+            storeMenu.setModDt(insertDt);
+            storeMenu.setModId(sessionInfoVO.getUserId());
+
+            // 권한 추가 테이블에 있는지 조회 후, 사용중인 권한이 있으면 삭제
+            int isAuth = mapper.isAuth(storeMenu);
+
+            if(isAuth > 0) {
+                procCnt = mapper.removeAuth(storeMenu);
+            }
+        }
+
+        return procCnt;
+    }
+
+    /** 메뉴권한복사 */
+    @Override
+    public int copyMobileAuth(StoreMenuVO storeMenuVO, SessionInfoVO sessionInfoVO) {
+
+        String dt = currentDateTimeString();
+
+        storeMenuVO.setRegDt(dt);
+        storeMenuVO.setRegId(sessionInfoVO.getUserId());
+        storeMenuVO.setModDt(dt);
+        storeMenuVO.setModId(sessionInfoVO.getUserId());
+
+        // storeCd : 복사 대상이 되는 매장
+        // copyStoreCd : 복사할 기준이 되는 매장
+
+        // 1. 메뉴 권한 복사
+//        int authGrpCopy = mapper.copyAuth(storeMenuVO);
+//        if(authGrpCopy <= 0) {copyAuth
+//            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
+
+        // 2. 기존 메뉴권한 예외값 삭제
+        mapper.removeMobileAuthAll(storeMenuVO);
+
+        // 3. 메뉴 권한 예외값이 있는지 확인 후, 복사
+        int authExpCopy = 0;
+        List<DefaultMap<String>> excepList = mapper.exceptMobileMenu(storeMenuVO);
+
+        if(excepList != null && excepList.size() > 0){
+
+            for (int i = 0; i < excepList.size(); i++) {
+
+                storeMenuVO.setResrceCd(excepList.get(i).getStr("resrceCd"));
+
+                if("E".equals(excepList.get(i).getStr("incldExcldFg"))){
+                    storeMenuVO.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+                }else{
+                    storeMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
+                }
+                storeMenuVO.setUseYn(excepList.get(i).getStr("useYn"));
+
+                int result = mapper.copyAuthExcp(storeMenuVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    authExpCopy ++;
+                }
+            }
+        }else{
+            authExpCopy ++;
+        }
+
+        return authExpCopy;
+    }
 }

@@ -737,16 +737,16 @@
     -->
     <select id="authHqList" parameterType="hqManageVO" resultType="DefaultMap">
         /* USE : HqManageMapper.authHqList */
-        SELECT HQ_OFFICE_CD AS VALUE,
-               '[' || HQ_OFFICE_CD || '] ' || HQ_OFFICE_NM AS NAME
-          FROM TB_HQ_OFFICE
-         WHERE HQ_OFFICE_CD != #{hqOfficeCd}
-           <!-- AND SYS_STAT_FG = '1' -->
-           AND SYS_CLOSURE_DATE > SYSDATE
-        <if test='orgnFg != null and orgnFg == "A"'>
-            AND (AGENCY_CD = #{agencyCd} OR HQ_OFFICE_CD = '00000')
-        </if>
-     ORDER BY HQ_OFFICE_CD
+        SELECT  A.HQ_OFFICE_CD AS VALUE,
+                '[' || A.HQ_OFFICE_CD || '] ' || A.HQ_OFFICE_NM AS NAME
+        FROM    TB_HQ_OFFICE A
+        ,		TB_CM_AGENCY B
+        WHERE   A.HQ_OFFICE_CD != 'DS001'
+        AND     A.SYS_CLOSURE_DATE > SYSDATE
+        AND     B.AGENCY_CD = A.AGENCY_CD
+        AND     (A.AGENCY_CD = #{agencyCd} OR B.P_AGENCY_CD= #{agencyCd} OR A.HQ_OFFICE_CD = '00000')
+        ORDER
+        BY      A.HQ_OFFICE_CD
     </select>
 
     <!-- 사용 메뉴 조회 -->
@@ -1776,4 +1776,187 @@
         AND    ADVER_FILE_NO   =   '8000'
     </insert>
 
+
+    <!-- 사용 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : hqManageVO
+        COMMENTS : 사용 메뉴를 조회한다.
+    -->
+    <select id="avlblMobileMenu" parameterType="hqManageVO" resultType="DefaultMap">
+        /* USE : HqManageMapper.avlblMobileMenu */
+        SELECT twr.*
+        FROM
+            (
+                SELECT  twr.RESRCE_CD   AS RESRCE_CD_LARGE
+                ,       twr.RESRCE_NM   AS RESRCE_NM_LARGE
+                ,       twri.RESRCE_CD  AS RESRCE_CD_MID
+                ,       twri.RESRCE_NM  AS RESRCE_NM_MID
+                FROM    TB_WB_RESRCE_INFO twr
+                ,       TB_WB_RESRCE_INFO twri
+                WHERE   1=1
+                AND     twr.USE_YN      = 'Y'
+                AND     twri.USE_YN     = 'Y'
+                AND     twri.P_RESRCE   = twr.RESRCE_CD
+                AND     twri.DISP_LEVEL = '2'
+                AND     twri.RESRCE_CD NOT IN   (
+                                                    SELECT 	P_RESRCE
+                                                    FROM 	TB_WB_RESRCE_INFO
+                                                    WHERE 	USE_YN = 'Y'
+                                                    AND 	DISP_LEVEL = '3'
+                                                )
+                AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                ORDER
+                BY      twr.RESRCE_CD
+                ,       twri.RESRCE_CD
+            ) twr
+        ,   (
+                SELECT  twa.RESRCE_CD
+                FROM    TB_HQ_EMPLOYEE the
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_GRP_RESRCE twa
+                WHERE   the.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     the.EMP_NO          = '0000'
+                AND     twu.USER_ID         = the.USER_ID
+                AND 	twa.AUTH_GRP_CD IN (SELECT FN_TB_WB_AUTHOR_GRP_USE_CD(( SELECT USER_ID FROM TB_HQ_EMPLOYEE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO ='0000'), 'MOB') FROM DUAL)
+                AND     twa.USE_YN          = 'Y'
+                MINUS
+                SELECT  twa.RESRCE_CD
+                FROM    TB_HQ_EMPLOYEE the
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                WHERE   the.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     the.EMP_NO          = '0000'
+                AND     twu.USER_ID         = the.USER_ID
+                AND     twa.USER_ID         = twu.USER_ID
+                AND     twa.INCLD_EXCLD_FG  = 'E'
+                AND     twa.USE_YN          = 'Y'
+            ) the
+        WHERE the.RESRCE_CD = twr.RESRCE_CD_MID
+    </select>
+
+    <!-- 미사용 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_HQ_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : hqManageVO
+        COMMENTS : 미사용 메뉴를 조회한다.
+    -->
+    <select id="beUseMobileMenu" parameterType="hqManageVO" resultType="DefaultMap">
+        /* USE : HqManageMapper.beUseMobileMenu */
+        SELECT twr.*
+        FROM
+            (
+                SELECT  twr.RESRCE_CD   AS RESRCE_CD_LARGE
+                ,       twr.RESRCE_NM   AS RESRCE_NM_LARGE
+                ,       twri.RESRCE_CD  AS RESRCE_CD_MID
+                ,       twri.RESRCE_NM  AS RESRCE_NM_MID
+                FROM    TB_WB_RESRCE_INFO twr
+                ,       TB_WB_RESRCE_INFO twri
+                WHERE   1=1
+                AND     twr.USE_YN      = 'Y'
+                AND     twri.USE_YN     = 'Y'
+                AND     twri.P_RESRCE   = twr.RESRCE_CD
+                AND     twri.DISP_LEVEL = '2'
+                AND     twri.RESRCE_CD NOT IN   (
+                                                    SELECT 	P_RESRCE
+                                                    FROM 	TB_WB_RESRCE_INFO
+                                                    WHERE 	USE_YN = 'Y'
+                                                    AND 	DISP_LEVEL = '3'
+                                                )
+                AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                ORDER
+                BY      twr.RESRCE_CD
+                ,       twri.RESRCE_CD
+            ) twr
+        ,   (
+                SELECT  twa.RESRCE_CD
+                FROM    TB_HQ_EMPLOYEE the
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                WHERE   the.HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     the.EMP_NO          = '0000'
+                AND     twu.USER_ID         = the.USER_ID
+                AND     twa.USER_ID         = twu.USER_ID
+                AND     twa.INCLD_EXCLD_FG  = 'E'
+                AND     twa.USE_YN          = 'Y'
+            ) the
+        WHERE   the.RESRCE_CD = twr.RESRCE_CD_MID
+    </select>
+
+    <!-- 메뉴권한 전체삭제-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : hqManageVO
+        COMMENTS : 해당 본사의 메뉴권한 전체를 삭제한다.
+    -->
+    <delete id="removeMobileAuthAll" parameterType="DefaultMap">
+        /* HqManageMapper.removeMobileAuthAll */
+        DELETE  TB_WB_AUTHOR_EXCEPT
+        WHERE   USER_ID =   (
+                                SELECT  twu.USER_ID
+                                FROM    TB_HQ_EMPLOYEE the
+                                ,       TB_WB_USER_INFO twu
+                                WHERE   the.HQ_OFFICE_CD    = #{hqOfficeCd}
+                                AND     the.EMP_NO          = '0000'
+                                AND     twu.USER_ID         = the.USER_ID
+                            )
+        AND     RESRCE_CD IN    (
+                                    SELECT 	twri.RESRCE_CD AS RESRCE_CD
+                                    FROM 	TB_WB_RESRCE_INFO twr
+                                    , 	    TB_WB_RESRCE_INFO twri
+                                    WHERE 	1=1
+                                    AND 	twr.USE_YN      = 'Y'
+                                    AND 	twri.USE_YN     = 'Y'
+                                    AND 	twri.P_RESRCE   = twr.RESRCE_CD
+                                    AND 	twri.DISP_LEVEL = '2'
+                                    AND 	twri.RESRCE_CD NOT IN 	(
+                                                                        SELECT 	P_RESRCE
+                                                                        FROM 	TB_WB_RESRCE_INFO
+                                                                        WHERE 	USE_YN = 'Y'
+                                                                        AND 	DISP_LEVEL = '3'
+                                                                    )
+                                    AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                )
+    </delete>
+
+    <!-- 모바일 권한예외 복사 시, 복사기준본사의 모바일 권한예외 값 조회 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : hqManageVO
+        COMMENTS : 모바일 권한예외 복사 시, 복사기준본사의 모바일 권한예외 값 조회한다.
+    -->
+    <select id="exceptMobileMenu" parameterType="hqMenuVO" resultType="DefaultMap">
+        /* USE : HqManageMapper.exceptMobileMenu */
+        SELECT  USER_ID
+        ,       RESRCE_CD
+        ,       INCLD_EXCLD_FG
+        ,       USE_YN
+        FROM    TB_WB_AUTHOR_EXCEPT_V01
+        WHERE   USER_ID =   (
+                                SELECT  twu.USER_ID
+                                FROM    TB_HQ_EMPLOYEE the
+                                ,       TB_WB_USER_INFO twu
+                                WHERE   the.HQ_OFFICE_CD    = #{copyHqOfficeCd}
+                                AND     the.EMP_NO          = '0000'
+                                AND     twu.USER_ID         = the.USER_ID
+                            )
+        AND     RESRCE_CD IN    (
+                                    SELECT 	twri.RESRCE_CD AS RESRCE_CD
+                                    FROM 	TB_WB_RESRCE_INFO twr
+                                    , 	    TB_WB_RESRCE_INFO twri
+                                    WHERE 	1=1
+                                    AND 	twr.USE_YN      = 'Y'
+                                    AND 	twri.USE_YN     = 'Y'
+                                    AND 	twri.P_RESRCE   = twr.RESRCE_CD
+                                    AND 	twri.DISP_LEVEL = '2'
+                                    AND 	twri.RESRCE_CD NOT IN 	(
+                                                                        SELECT 	P_RESRCE
+                                                                        FROM 	TB_WB_RESRCE_INFO
+                                                                        WHERE 	USE_YN      = 'Y'
+                                                                        AND 	DISP_LEVEL  = '3'
+                                                                    )
+                                    AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                )
+          AND USE_YN = 'Y'
+    </select>
 </mapper>

@@ -60,4 +60,19 @@ public interface StoreEmpService
 
     /** 메뉴 권한 삭제 */
     int removeAuth(StoreEmpMenuVO[] storeEmpMenu, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMobileMenu(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMobileMenu(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 사용메뉴 삭제 */
+    int removeMobileAuth(StoreEmpMenuVO[] storeEmpMenus, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 사용메뉴 추가 */
+    int addMobileAuth(StoreEmpMenuVO[] storeEmpMenus, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 메뉴권한복사 */
+    int copyMobileAuth(StoreEmpMenuVO storeEmpMenuVO, SessionInfoVO sessionInfoVO);
 }

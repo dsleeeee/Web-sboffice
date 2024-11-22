@@ -37,9 +37,6 @@ public interface ArtiseeProdMappingMapper {
     /** 상품정보 - 등록 */
     int getSaveMappingProd(ArtiseeProdMappingVO artiseeProdMappingVO);
 
-    /** 매핑정보 - 엑셀다운로드 */
-    List<DefaultMap<String>> getMapStrExcelList(ArtiseeProdMappingVO artiseeProdMappingVO);
-
     /** 상품정보 - 엑셀다운로드 */
     List<DefaultMap<String>> getProdExcelList(ArtiseeProdMappingVO artiseeProdMappingVO);
 

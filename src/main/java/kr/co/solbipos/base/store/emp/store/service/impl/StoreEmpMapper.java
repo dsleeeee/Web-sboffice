@@ -92,4 +92,17 @@ public interface StoreEmpMapper {
     /** 권한 전체 삭제 */
     int removeAuthAll(StoreEmpMenuVO storeEmpMenus);
 
+    /** 모바일 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMobileMenu(StoreEmpVO storeEmpVO);
+
+    /** 모바일 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMobileMenu(StoreEmpVO storeEmpVO);
+
+    /** 모바일 권한 전제 삭제 */
+    int removeMobileAuthAll(StoreEmpMenuVO storeEmpMenuVO);
+
+    /** 모바일 권한예외 복사 시, 복사기준본사의 모바일 권한예외 값 조회  */
+    List<DefaultMap<String>> exceptMobileMenu(StoreEmpMenuVO storeEmpMenuVO);
+
+
 }

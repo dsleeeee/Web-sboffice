@@ -550,4 +550,16 @@ public interface StoreManageMapper {
 
     /** 관리업체 코드 조회 */
     String getAgencyCd(StoreManageVO storeManageVO);
+
+    /** 모바일 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMobileMenu(StoreManageVO storeManageVO);
+
+    /** 모바일 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMobileMenu(StoreManageVO storeManageVO);
+
+    /** 모바일 권한 전체 삭제 */
+    int removeMobileAuthAll(StoreMenuVO storeMenuVO);
+
+    /** 모바일 메뉴 예외값 조회 */
+    List<DefaultMap<String>> exceptMobileMenu(StoreMenuVO storeMenuVO);
 }

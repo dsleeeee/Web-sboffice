@@ -320,4 +320,117 @@ public class StoreEmpController {
 
         return returnJson(Status.OK, cnt);
     }
+
+    /**
+     * 모바일 사용메뉴 조회
+     * @param   storeEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2024.11.18
+     */
+    @RequestMapping(value = "/avlblMobileMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result avlblMobileMenu(StoreEmpVO storeEmpVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 사용메뉴 조회
+        List<DefaultMap<String>> avlblMobileMenu = storeEmpService.avlblMobileMenu(storeEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, avlblMobileMenu);
+    }
+
+    /**
+     * 모바일 미사용메뉴 조회
+     * @param   storeEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2024.11.18
+     */
+    @RequestMapping(value = "/beUseMobileMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result beUseMobileMenu(StoreEmpVO storeEmpVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 미사용메뉴 조회
+        List<DefaultMap<String>> beUseMobileMenu = storeEmpService.beUseMobileMenu(storeEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, beUseMobileMenu);
+    }
+
+    /**
+     * 모바일 사용메뉴 삭제
+     * @param   storeEmpMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2024.11.18
+     */
+    @RequestMapping(value = "/removeMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeMobileAuth(@RequestBody StoreEmpMenuVO[] storeEmpMenus, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = storeEmpService.removeMobileAuth(storeEmpMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 모바일 사용메뉴 추가
+     * @param   storeEmpMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2024.11.18
+     */
+    @RequestMapping(value = "/addMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addMobileAuth(@RequestBody StoreEmpMenuVO[] storeEmpMenus, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = storeEmpService.addMobileAuth(storeEmpMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 모바일 메뉴권한복사
+     * @param   storeEmpMenuVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024.11.18
+     */
+    @RequestMapping(value = "/copyMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyMobileAuth(@RequestBody StoreEmpMenuVO storeEmpMenuVO, HttpServletRequest request,
+                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = storeEmpService.copyMobileAuth(storeEmpMenuVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
 }

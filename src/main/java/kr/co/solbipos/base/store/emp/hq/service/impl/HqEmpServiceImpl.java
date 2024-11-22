@@ -464,4 +464,136 @@ public class HqEmpServiceImpl implements HqEmpService {
 
         return hqEmpMapper.getHqNmcodeComboList(hqEmpVO);
     }
+
+    /** 모바일 사용메뉴 조회 */
+    @Override
+    public List<DefaultMap<String>> avlblMobileMenu(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
+
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEmpVO.setUserId(sessionInfoVO.getUserId());
+
+        return hqEmpMapper.avlblMobileMenu(hqEmpVO);
+    }
+
+    /** 모바일 미사용메뉴 조회 */
+    @Override
+    public List<DefaultMap<String>> beUseMobileMenu(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO) {
+        hqEmpVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return hqEmpMapper.beUseMobileMenu(hqEmpVO);
+    }
+
+    /** 모바일 사용등록 */
+    @Override
+    public int addMobileAuth(HqEmpMenuVO[] hqEmpMenus, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String insertDt = currentDateTimeString();
+
+        for(HqEmpMenuVO hqEmpMenu : hqEmpMenus){
+
+            hqEmpMenu.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            hqEmpMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            hqEmpMenu.setRegDt(insertDt);
+            hqEmpMenu.setRegId(sessionInfoVO.getUserId());
+            hqEmpMenu.setModDt(insertDt);
+            hqEmpMenu.setModId(sessionInfoVO.getUserId());
+
+            // 권한 추가 테이블에 있는지 조회 후, 사용중인 권한이 있으면 삭제
+            int isMobileAuth = hqEmpMapper.isAuth(hqEmpMenu);
+
+            if(isMobileAuth > 0) {
+                procCnt = hqEmpMapper.removeAuth(hqEmpMenu);
+            }
+
+            /*// 권한 추가 처리
+            hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            procCnt = mapper.addAuth(hqMenu);*/
+        }
+        return procCnt;
+    }
+
+    /** 모바일 미사용등록 */
+    @Override
+    public int removeMobileAuth(HqEmpMenuVO[] hqEmpMenus, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String insertDt = currentDateTimeString();
+
+        for(HqEmpMenuVO hqEmpMenu : hqEmpMenus){
+
+            hqEmpMenu.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            hqEmpMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            hqEmpMenu.setRegDt(insertDt);
+            hqEmpMenu.setRegId(sessionInfoVO.getUserId());
+            hqEmpMenu.setModDt(insertDt);
+            hqEmpMenu.setModId(sessionInfoVO.getUserId());
+
+            // 권한 예외 테이블에 있는지 조회 후, 예외로 들어간 권한이 있으면 삭제
+            int isMobileAuth = hqEmpMapper.isAuth(hqEmpMenu);
+
+            if(isMobileAuth > 0) {
+                procCnt = hqEmpMapper.removeAuth(hqEmpMenu);
+            }
+
+            // 권한 삭제 처리
+            hqEmpMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            procCnt = hqEmpMapper.addAuth(hqEmpMenu);
+
+        }
+        return procCnt;
+    }
+
+    /** 모바일 메뉴권한복사 */
+    @Override
+    public int copyMobileAuth(HqEmpMenuVO hqEmpMenuVO, SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
+
+        hqEmpMenuVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEmpMenuVO.setRegDt(dt);
+        hqEmpMenuVO.setRegId(sessionInfoVO.getUserId());
+        hqEmpMenuVO.setModDt(dt);
+        hqEmpMenuVO.setModId(sessionInfoVO.getUserId());
+
+        // empCd : 복사 대상이 되는 사원
+        // copyEmpCd : 복사할 기준이 되는 사원
+
+        // 1. 메뉴 권한 복사
+//        int authGrpCopy = hqEmpMapper.copyAuth(hqEmpMenuVO);
+//        if(authGrpCopy <= 0) {
+//            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
+
+        // 2. 기존 메뉴권한 예외값 삭제
+        hqEmpMapper.removeMobileAuthAll(hqEmpMenuVO);
+
+        // 3. 메뉴 권한 예외값이 있는지 확인 후, 복사
+        int authExpCopy = 0;
+        List<DefaultMap<String>> excepList = hqEmpMapper.exceptMobileMenu(hqEmpMenuVO);
+
+        if(excepList != null && excepList.size() > 0){
+
+            for (int i = 0; i < excepList.size(); i++) {
+
+                hqEmpMenuVO.setResrceCd(excepList.get(i).getStr("resrceCd"));
+
+                if("E".equals(excepList.get(i).getStr("incldExcldFg"))){
+                    hqEmpMenuVO.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+                }else{
+                    hqEmpMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
+                }
+                hqEmpMenuVO.setUseYn(excepList.get(i).getStr("useYn"));
+
+                int result = hqEmpMapper.copyAuthExcp(hqEmpMenuVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    authExpCopy ++;
+                }
+            }
+        }else{
+            authExpCopy ++;
+        }
+
+        return authExpCopy;
+    }
 }

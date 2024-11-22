@@ -12,9 +12,9 @@
     <div class="subTab2 mt20 mb10">
         <ul>
             <%-- 웹사이트 메뉴 --%>
-            <li><a href="#" id="webMenu" class="on"><s:message code="storeManage.webMenu" /></a></li>
+            <li><a href="#" id="webMenu" class="on" onclick="changeWebTab();"><s:message code="storeManage.webMenu" /></a></li>
             <%-- 모바일 메뉴 --%>
-<%--            <li><a href="#" id="mobileMenu" onclick="changeMobileTab();"><s:message code="storeManage.mobMenu" /></a></li>--%>
+            <li><a href="#" id="mobileMenu" onclick="changeMobileTab();"><s:message code="storeManage.mobMenu" /></a></li>
         </ul>
     </div>
 
@@ -131,9 +131,119 @@
         </div>
     </div>
 
+
+    <%-- 모바일 메뉴 --%>
+    <div id="mobileArea" ng-controller="mobileMenuCtrl">
+        <%-- 권한복사 영역 --%>
+        <table class="tblType01 moreDark mb10 mt10">
+            <colgroup>
+                <col class="w20" />
+                <col class="w55" />
+            </colgroup>
+            <tbody>
+            <tr>
+                <%-- 메뉴권한복사 --%>
+                <th><s:message code="storeManage.copy.authorExcept" /></th>
+                <td colspan="3">
+                    <div class="sb-select fl w60 mr10">
+                        <wj-combo-box
+                                id="hqOfficeCdMobileCombo"
+                                ng-model="hqOfficeCdMobile"
+                                control="hqOfficeCdMobileCombo"
+                                items-source="_getComboData('hqOfficeCdMobileCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                selected-index-changed="setStoreCdMobile(s)">
+                        </wj-combo-box>
+                    </div>
+                    <div class="sb-select fl w60 mr10">
+                        <wj-combo-box
+                                id="storeCdMobileCombo"
+                                ng-model="storeCdMobile"
+                                control="storeCdMobileCombo"
+                                items-source="_getComboData('storeCdMobileCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                    <%-- 메뉴권한복사 버튼  --%>
+                    <div class="fl">
+                        <a href="#" class="btn_grayS" id="btnCopyMobileAuth" ng-click="copyMobileAuth()"><s:message code="storeManage.copy.auth" /></a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <%-- 사용 메뉴 --%>
+        <div class="oh mt10" style="padding-bottom: 25px;">
+            <div class="wj-TblWrap mr10" style="height:200px;">
+                <div class="oh mb10">
+                    <span class="fl bk lh20 s14"><s:message code="storeManage.use.menu" /> </span>
+                    <%-- 미사용등록 버튼 --%>
+                    <span class="fr"><a id="btnRemoveMobileMenu" href="#" class="btn_grayS2" ng-click="notUseRegMobile()"><s:message code="storeManage.exceptReg" /></a></span>
+                </div>
+                <%-- 위즈모 --%>
+                <wj-flex-grid
+                        style="height:160px"
+                        id="avlblMenuGrid"
+                        autoGenerateColumns="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter"
+                        allow-merging="Cells">
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="storeManage.lMenuCd"/>" binding="resrceCdLarge" width="*" visible="false" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeManage.lMenuNm"/>" binding="resrceNmLarge" width="120" is-read-only="true"  allow-merging="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeManage.chk.menu"/>" binding="gChk" width="60"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeManage.mMenuCd"/>" binding="resrceCdMid" width="*" visible="false" allow></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeManage.mMenuNm"/>" binding="resrceNmMid" width="200" is-read-only="true" allow-merging="true"></wj-flex-grid-column>
+                </wj-flex-grid>
+            </div>
+        </div>
+    </div>
+
+    <%-- 미사용 모바일 메뉴 --%>
+    <div id="mobileArea2" ng-controller="notUseMobileMenuCtrl">
+        <div class="oh mt10">
+            <div class="wj-TblWrap mr10" style="height:200px;">
+                <div class="oh mb10">
+                    <span class="fl bk lh20 s14"><s:message code="storeManage.except.menu" /> </span>
+                    <%-- 사용등록 버튼 --%>
+                    <span class="fr"><a id="btnAddMobileMenu" href="#" class="btn_grayS2"  ng-click="useRegMobile()"><s:message code="storeManage.useReg" /></a></span>
+                </div>
+                <%-- 위즈모 --%>
+                <wj-flex-grid
+                        style="height:160px"
+                        id="beUseMenuGrid"
+                        autoGenerateColumns="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter"
+                        allow-merging="Cells">
+                    <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="storeManage.lMenuCd"/>" binding="resrceCdLarge" width="*" visible="false" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeManage.lMenuNm"/>" binding="resrceNmLarge" width="120" is-read-only="true"  allow-merging="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeManage.chk.menu"/>" binding="gChk" width="60"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeManage.mMenuCd"/>" binding="resrceCdMid" width="*" visible="false" allow></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeManage.mMenuNm"/>" binding="resrceNmMid" width="200" is-read-only="true" allow-merging="true"></wj-flex-grid-column>
+                </wj-flex-grid>
+            </div>
+        </div>
+    </div>
+
 </div>
 <script>
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeWebMenu.js?ver=20200514.29" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeWebMenu.js?ver=20241118.29" charset="utf-8"></script>

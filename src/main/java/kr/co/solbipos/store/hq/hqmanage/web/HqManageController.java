@@ -374,4 +374,104 @@ public class HqManageController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 모바일 메뉴권한 조회
+     * @param   hqManage
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024. 11. 19.
+     */
+    @RequestMapping(value = "authorExcept/getAuthMobileHqList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result authMobileHqList(HqManageVO hqManage, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+
+        // 복사할 본사 조회
+        List<DefaultMap<String>> authMobileHqList = service.authHqList(hqManage, sessionInfoVO);
+
+        // 사용가능한 메뉴 조회
+        List<DefaultMap<String>> avlblMobileMenu = service.avlblMobileMenu(hqManage);
+
+        // 사용중인 메뉴 조회
+        List<DefaultMap<String>> beUseMobileMenu = service.beUseMobileMenu(hqManage);
+
+        resultMap.put("authMobileHqList", authMobileHqList);
+        resultMap.put("avlblMobileMenu", avlblMobileMenu);    // 사용메뉴
+        resultMap.put("beUseMobileMenu", beUseMobileMenu);    // 미사용메뉴
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 모바일 사용메뉴 추가
+     * @param   hqMenu
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024. 11. 19.
+     */
+    @RequestMapping(value = "authorExcept/addMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addMobileAuth(@RequestBody HqMenuVO[] hqMenu, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.addMobileAuth(hqMenu, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 모바일 사용메뉴 삭제
+     * @param   hqMenu
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024. 11. 19.
+     */
+    @RequestMapping(value = "authorExcept/removeMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeMobileAuth(@RequestBody HqMenuVO[] hqMenu, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.removeMobileAuth(hqMenu, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 모바일 메뉴권한복사
+     * @param   hqMenu
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024. 11. 19.
+     */
+    @RequestMapping(value = "authorExcept/copyMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyMobileAuth(@RequestBody HqMenuVO hqMenu, HttpServletRequest request,
+                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.copyMobileAuth(hqMenu, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
 }

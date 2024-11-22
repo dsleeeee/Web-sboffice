@@ -408,6 +408,138 @@ public class StoreEmpServiceImpl implements StoreEmpService {
         }
         return procCnt;
     }
+
+    /** 모바일 사용메뉴 조회 */
+    @Override
+    public List<DefaultMap<String>> avlblMobileMenu(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO) {
+
+        storeEmpVO.setStoreCd(sessionInfoVO.getStoreCd());
+        storeEmpVO.setUserId(sessionInfoVO.getUserId());
+
+        return storeEmpMapper.avlblMobileMenu(storeEmpVO);
+    }
+
+    /** 모바일 미사용메뉴 조회 */
+    @Override
+    public List<DefaultMap<String>> beUseMobileMenu(StoreEmpVO storeEmpVO, SessionInfoVO sessionInfoVO) {
+
+        storeEmpVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return storeEmpMapper.beUseMobileMenu(storeEmpVO);
+    }
+
+    /** 모바일 사용메뉴 삭제 */
+    @Override
+    public int removeMobileAuth(StoreEmpMenuVO[] storeEmpMenus, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String insertDt = currentDateTimeString();
+
+        for(StoreEmpMenuVO storeEmpMenu : storeEmpMenus){
+
+            storeEmpMenu.setStoreCd(sessionInfoVO.getStoreCd());
+            storeEmpMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            storeEmpMenu.setRegDt(insertDt);
+            storeEmpMenu.setRegId(sessionInfoVO.getUserId());
+            storeEmpMenu.setModDt(insertDt);
+            storeEmpMenu.setModId(sessionInfoVO.getUserId());
+
+            // 권한 예외 테이블에 있는지 조회 후, 예외로 들어간 권한이 있으면 삭제
+            int isAuth = storeEmpMapper.isAuth(storeEmpMenu);
+
+            if(isAuth > 0) {
+                procCnt = storeEmpMapper.removeAuth(storeEmpMenu);
+            }
+
+            // 권한 삭제 처리
+            storeEmpMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            procCnt = storeEmpMapper.addAuth(storeEmpMenu);
+
+        }
+        return procCnt;
+    }
+
+    /** 모바일 사용메뉴 추가 */
+    @Override
+    public int addMobileAuth(StoreEmpMenuVO[] storeEmpMenus, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String insertDt = currentDateTimeString();
+
+        for(StoreEmpMenuVO storeEmpMenu : storeEmpMenus){
+
+            storeEmpMenu.setStoreCd(sessionInfoVO.getStoreCd());
+            storeEmpMenu.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+            storeEmpMenu.setRegDt(insertDt);
+            storeEmpMenu.setRegId(sessionInfoVO.getUserId());
+            storeEmpMenu.setModDt(insertDt);
+            storeEmpMenu.setModId(sessionInfoVO.getUserId());
+
+            // 권한 추가 테이블에 있는지 조회 후, 사용중인 권한이 있으면 삭제
+            int isAuth = storeEmpMapper.isAuth(storeEmpMenu);
+
+            if(isAuth > 0) {
+                procCnt = storeEmpMapper.removeAuth(storeEmpMenu);
+            }
+
+            /*// 권한 추가 처리
+            hqMenu.setIncldExcldFg(IncldExcldFg.INCLUDE);
+            procCnt = mapper.addAuth(hqMenu);*/
+        }
+        return procCnt;
+    }
+
+    /** 모바일 메뉴권한복사 */
+    @Override
+    public int copyMobileAuth(StoreEmpMenuVO storeEmpMenuVO, SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
+
+        storeEmpMenuVO.setStoreCd(sessionInfoVO.getStoreCd());
+        storeEmpMenuVO.setRegDt(dt);
+        storeEmpMenuVO.setRegId(sessionInfoVO.getUserId());
+        storeEmpMenuVO.setModDt(dt);
+        storeEmpMenuVO.setModId(sessionInfoVO.getUserId());
+
+        // empCd : 복사 대상이 되는 사원
+        // copyEmpCd : 복사할 기준이 되는 사원
+
+        // 1. 메뉴 권한 복사
+//        int authGrpCopy = storeEmpMapper.copyAuth(storeEmpMenuVO);
+//        if(authGrpCopy <= 0) {
+//            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+//        }
+
+        // 2. 기존 메뉴권한 예외값 삭제
+        storeEmpMapper.removeMobileAuthAll(storeEmpMenuVO);
+
+        // 3. 메뉴 권한 예외값이 있는지 확인 후, 복사
+        int authExpCopy = 0;
+        List<DefaultMap<String>> excepList = storeEmpMapper.exceptMobileMenu(storeEmpMenuVO);
+
+        if(excepList != null && excepList.size() > 0){
+
+            for (int i = 0; i < excepList.size(); i++) {
+
+                storeEmpMenuVO.setResrceCd(excepList.get(i).getStr("resrceCd"));
+
+                if("E".equals(excepList.get(i).getStr("incldExcldFg"))){
+                    storeEmpMenuVO.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+                }else{
+                    storeEmpMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
+                }
+                storeEmpMenuVO.setUseYn(excepList.get(i).getStr("useYn"));
+
+                int result = storeEmpMapper.copyAuthExcp(storeEmpMenuVO);
+                if(result <= 0){
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    authExpCopy ++;
+                }
+            }
+        }else{
+            authExpCopy ++;
+        }
+
+        return authExpCopy;
+    }
 }
 
 
