@@ -677,4 +677,198 @@
            AND RESRCE_CD = #{resrceCd}
     </delete>
 
+    <!-- 모바일 사용 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_MS_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : storeEmpVO
+        COMMENTS : 사용 메뉴를 조회한다.
+    -->
+    <select id="avlblMobileMenu" parameterType="storeEmpVO" resultType="DefaultMap">
+        /* USE : StoreEmpMapper.avlblMobileMenu */
+        SELECT twr.*
+        FROM
+             (
+                SELECT  twr.RESRCE_CD   AS RESRCE_CD_LARGE
+                ,       twr.RESRCE_NM   AS RESRCE_NM_LARGE
+                ,       twri.RESRCE_CD  AS RESRCE_CD_MID
+                ,       twri.RESRCE_NM  AS RESRCE_NM_MID
+                FROM    TB_WB_RESRCE_INFO twr
+                ,       TB_WB_RESRCE_INFO twri
+                WHERE   1=1
+                AND     twr.USE_YN      = 'Y'
+                AND     twri.USE_YN     = 'Y'
+                AND     twri.P_RESRCE   = twr.RESRCE_CD
+                AND     twri.DISP_LEVEL = '2'
+                AND     twri.RESRCE_CD NOT IN   (
+                                                    SELECT 	P_RESRCE
+                                                    FROM 	TB_WB_RESRCE_INFO
+                                                    WHERE 	USE_YN = 'Y'
+                                                    AND 	DISP_LEVEL = '3'
+                                                )
+                AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                ORDER
+                BY      twr.RESRCE_CD
+                ,       twri.RESRCE_CD
+            ) twr
+        ,   (
+                SELECT  twa.RESRCE_CD
+                FROM    TB_MS_EMPLOYEE tme
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_GRP_RESRCE twa
+                WHERE   tme.STORE_CD    = #{storeCd}
+                AND     tme.EMP_NO      = '0000'
+                AND     twu.USER_ID     = tme.USER_ID
+                AND 	twa.AUTH_GRP_CD IN (SELECT FN_TB_WB_AUTHOR_GRP_USE_CD(#{userId}, 'MOB') FROM DUAL)
+                AND     twa.USE_YN      = 'Y'
+                MINUS
+                SELECT  twa.RESRCE_CD
+                FROM    TB_MS_EMPLOYEE tme
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                WHERE   tme.STORE_CD = #{storeCd}
+                AND     tme.EMP_NO          = '0000'
+                AND     twu.USER_ID         = tme.USER_ID
+                AND     twa.USER_ID         = twu.USER_ID
+                AND     twa.INCLD_EXCLD_FG  = 'E'
+                AND     twa.USE_YN          = 'Y'
+                MINUS
+                SELECT  twa.RESRCE_CD
+                FROM    TB_MS_EMPLOYEE tme
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                WHERE   tme.STORE_CD        = #{storeCd}
+                AND     tme.EMP_NO          = #{empNo}
+                AND     twu.USER_ID         = tme.USER_ID
+                AND     twa.USER_ID         = twu.USER_ID
+                AND     twa.INCLD_EXCLD_FG  = 'E'
+                AND     twa.USE_YN          = 'Y'
+            ) tme
+        WHERE   tme.RESRCE_CD = twr.RESRCE_CD_MID
+    </select>
+
+    <!-- 미사용 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_MS_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : storeEmpVO
+        COMMENTS : 미사용 메뉴를 조회한다.
+    -->
+    <select id="beUseMobileMenu" parameterType="storeEmpVO" resultType="DefaultMap">
+        /* USE : StoreEmpMapper.beUseMobileMenu */
+        SELECT twr.*
+        FROM
+             (
+                SELECT  twr.RESRCE_CD   AS RESRCE_CD_LARGE
+                ,       twr.RESRCE_NM   AS RESRCE_NM_LARGE
+                ,       twri.RESRCE_CD  AS RESRCE_CD_MID
+                ,       twri.RESRCE_NM  AS RESRCE_NM_MID
+                FROM    TB_WB_RESRCE_INFO twr
+                ,       TB_WB_RESRCE_INFO twri
+                WHERE   1=1
+                AND     twr.USE_YN      = 'Y'
+                AND     twri.USE_YN     = 'Y'
+                AND     twri.P_RESRCE   = twr.RESRCE_CD
+                AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                AND     twri.DISP_LEVEL = '2'
+                AND     twri.RESRCE_CD NOT IN   (
+                                                    SELECT 	P_RESRCE
+                                                    FROM 	TB_WB_RESRCE_INFO
+                                                    WHERE 	USE_YN      = 'Y'
+                                                    AND 	DISP_LEVEL  = '3'
+                                                )
+                ORDER
+                BY      twr.RESRCE_CD
+                ,       twri.RESRCE_CD
+             ) twr,
+             (
+                SELECT  twa.RESRCE_CD
+                FROM    TB_MS_EMPLOYEE tme
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                WHERE   tme.STORE_CD        = #{storeCd}
+                AND     tme.EMP_NO          = #{empNo}
+                AND     twu.USER_ID         = tme.USER_ID
+                AND     twa.USER_ID         = twu.USER_ID
+                AND     twa.INCLD_EXCLD_FG  = 'E'
+                AND     twa.USE_YN          = 'Y'
+             ) the
+        WHERE the.RESRCE_CD = twr.RESRCE_CD_MID
+    </select>
+
+    <!-- 권한예외 복사 시, 복사기준본사의 권한예외 값 조회 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : storeEmpMenuVO
+        COMMENTS : 권한예외 복사 시, 복사기준본사의 권한예외 값을 조회한다.
+    -->
+    <select id="exceptMobileMenu" parameterType="storeEmpMenuVO" resultType="DefaultMap">
+        /* USE : StoreEmpMapper.exceptMobileMenu */
+        SELECT  USER_ID
+        ,       RESRCE_CD
+        ,       INCLD_EXCLD_FG
+        ,       USE_YN
+        FROM    TB_WB_AUTHOR_EXCEPT_V01
+        WHERE   USER_ID =   (
+                                SELECT  twu.USER_ID
+                                FROM    TB_MS_EMPLOYEE tme
+                                ,       TB_WB_USER_INFO twu
+                                WHERE   tme.STORE_CD = #{storeCd}
+                                AND     tme.EMP_NO  != '0000'              <!-- 본사 기본계정 제외 -->
+                                AND     tme.EMP_NO   = #{copyEmpNo}
+                                AND     twu.USER_ID  = tme.USER_ID
+                            )
+        AND     RESRCE_CD IN    (
+                                    SELECT 	twri.RESRCE_CD AS RESRCE_CD
+                                    FROM 	TB_WB_RESRCE_INFO twr
+                                    , 	    TB_WB_RESRCE_INFO twri
+                                    WHERE 	1=1
+                                    AND 	twr.USE_YN      = 'Y'
+                                    AND 	twri.USE_YN     = 'Y'
+                                    AND 	twri.P_RESRCE   = twr.RESRCE_CD
+                                    AND 	twri.DISP_LEVEL = '2'
+                                    AND 	twri.RESRCE_CD NOT IN 	(
+                                    SELECT 	P_RESRCE
+                                    FROM 	TB_WB_RESRCE_INFO
+                                    WHERE 	USE_YN = 'Y'
+                                    AND 	DISP_LEVEL = '3'
+                                    )
+                                    AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                )
+        AND USE_YN = 'Y'
+    </select>
+
+    <!-- 메뉴권한 전체삭제-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        COMMENTS : 해당 사원의 메뉴권한 전체를 삭제한다.
+    -->
+    <delete id="removeMobileAuthAll" parameterType="DefaultMap">
+        /* StoreEmpMapper.removeMobileAuthAll */
+        DELETE  TB_WB_AUTHOR_EXCEPT
+        WHERE   USER_ID =   (
+                                SELECT  twu.USER_ID
+                                FROM    TB_MS_EMPLOYEE tme
+                                ,       TB_WB_USER_INFO twu
+                                WHERE   tme.STORE_CD    = #{storeCd}
+                                AND     tme.EMP_NO      = #{empNo}
+                                AND     twu.USER_ID     = tme.USER_ID
+                            )
+        AND     RESRCE_CD IN    (
+                                    SELECT 	twri.RESRCE_CD AS RESRCE_CD
+                                    FROM 	TB_WB_RESRCE_INFO twr
+                                    , 	    TB_WB_RESRCE_INFO twri
+                                    WHERE 	1=1
+                                    AND 	twr.USE_YN      = 'Y'
+                                    AND 	twri.USE_YN     = 'Y'
+                                    AND 	twri.P_RESRCE   = twr.RESRCE_CD
+                                    AND 	twri.DISP_LEVEL = '2'
+                                    AND 	twri.RESRCE_CD NOT IN 	(
+                                                                        SELECT 	P_RESRCE
+                                                                        FROM 	TB_WB_RESRCE_INFO
+                                                                        WHERE 	USE_YN = 'Y'
+                                                                        AND 	DISP_LEVEL = '3'
+                                                                    )
+                                    AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                )
+    </delete>
+
 </mapper>

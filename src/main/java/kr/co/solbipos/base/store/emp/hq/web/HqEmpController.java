@@ -532,4 +532,116 @@ public class HqEmpController {
 
         return ReturnUtil.returnListJson(Status.OK, result, hqEmpVO);
     }
+
+    /**
+     * 모바일 사용메뉴 조회
+     * @param   hqEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2024.11.15
+     */
+    @RequestMapping(value = "/avlblMobileMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result avlblMobileMenu(HqEmpVO hqEmpVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 사용메뉴 조회
+        List<DefaultMap<String>> avlblMobileMenu = hqEmpService.avlblMobileMenu(hqEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, avlblMobileMenu);
+    }
+
+    /**
+     * 모바일 미사용메뉴 조회
+     * @param   hqEmpVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2024.11.15
+     */
+    @RequestMapping(value = "/beUseMobileMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result beUseMobileMenu(HqEmpVO hqEmpVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 미사용메뉴 조회
+        List<DefaultMap<String>> beUseMobileMenu = hqEmpService.beUseMobileMenu(hqEmpVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, beUseMobileMenu);
+    }
+
+    /**
+     * 모바일 사용 등록
+     * @param   hqEmpMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024.11.15
+     */
+    @RequestMapping(value = "/addMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addMobileAuth(@RequestBody HqEmpMenuVO[] hqEmpMenus, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = hqEmpService.addMobileAuth(hqEmpMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 모바일 미사용 등록
+     * @param   hqEmpMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024.11.15
+     */
+    @RequestMapping(value = "/removeMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeMobileAuth(@RequestBody HqEmpMenuVO[] hqEmpMenus, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = hqEmpService.removeMobileAuth(hqEmpMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 모바일 메뉴권한복사
+     * @param   hqEmpMenuVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024.11.15
+     */
+    @RequestMapping(value = "/copyMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyMobileAuth(@RequestBody HqEmpMenuVO hqEmpMenuVO, HttpServletRequest request,
+                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = hqEmpService.copyMobileAuth(hqEmpMenuVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
 }

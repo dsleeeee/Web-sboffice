@@ -72,4 +72,19 @@ public interface HqEmpService {
 
     /** 코드별 본사 공통코드 콤보박스 조회 */
     List<DefaultMap<Object>> getHqNmcodeComboList(SessionInfoVO sessionInfoVO, String nmcodeGrpCd);
+
+    /** 모바일 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMobileMenu(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMobileMenu(HqEmpVO hqEmpVO, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 사용 등록 */
+    int addMobileAuth(HqEmpMenuVO[] hqEmpMenus, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 미사용 등록*/
+    int removeMobileAuth(HqEmpMenuVO[] hqEmpMenus, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 메뉴권한복사 */
+    int copyMobileAuth(HqEmpMenuVO hqEmpMenuVO, SessionInfoVO sessionInfoVO);
 }

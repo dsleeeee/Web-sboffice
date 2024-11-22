@@ -71,4 +71,19 @@ public interface HqManageService {
 
     /** 업체 목록 조회 */
     List<DefaultMap<String>> getAgencyCd(HqManageVO hqManage, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMobileMenu(HqManageVO hqManage);
+
+    /** 모바일 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMobileMenu(HqManageVO hqManage);
+
+    /** 모바일 메뉴 권한 추가 */
+    int addMobileAuth(HqMenuVO[] hqMenu, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 메뉴 권한 삭제 */
+    int removeMobileAuth(HqMenuVO[] hqMenu, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 메뉴 권한 복사 */
+    int copyMobileAuth(HqMenuVO hqMenu, SessionInfoVO sessionInfoVO);
 }

@@ -70,7 +70,9 @@
                 </span>
                 <%-- 삭제 --%>
                 <div id="divBtnProd2" style="visibility: hidden;">
-                    <button class="btn_skyblue" id="btnArtiseeProdSpecDel" ng-click="del()"><s:message code='cmm.del' /></button>
+                    <button class="btn_skyblue" id="btnArtiseeProdSpecAddRow"  ng-click="addRow()"><s:message code='cmm.add' /></button>
+                    <button class="btn_skyblue" id="btnArtiseeProdSpecSave" ng-click="save()"><s:message code='cmm.save' /></button>
+                    <button class="btn_skyblue" id="btnArtiseeProdSpecDel"  ng-click="del()"><s:message code='cmm.del' /></button>
                 </div>
             </div>
             <div class="w100 mt10 mb20">
@@ -85,8 +87,14 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodNm"/>" binding="prodNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodCd"/>"  binding="prodCd"  width="100" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodNm"/>"  binding="prodNm"  width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.specCd"/>"  binding="specCd"  width="100" align="center" visible="false"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option1"/>" binding="option1" width="90"  align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option2"/>" binding="option2" width="90"  align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option3"/>" binding="option3" width="90"  align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option4"/>" binding="option4" width="90"  align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option5"/>" binding="option5" width="90"  align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -208,7 +216,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdSpec/artiseeProdSpec.js?ver=20241105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdSpec/artiseeProdSpec.js?ver=20241119.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

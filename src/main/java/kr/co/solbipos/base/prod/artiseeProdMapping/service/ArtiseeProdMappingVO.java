@@ -19,7 +19,10 @@ import kr.co.solbipos.application.common.service.PageVO;
 public class ArtiseeProdMappingVO extends PageVO {
 
     private static final long serialVersionUID = -6162850453091635524L;
-    
+
+    /** 세션ID */
+    private String sessionId;
+
     /** 본사코드 */
     private String hqOfficeCd;
     
@@ -85,6 +88,14 @@ public class ArtiseeProdMappingVO extends PageVO {
 
     /** 매핑정보 상품코드 */
     private String mapProdCd;
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;

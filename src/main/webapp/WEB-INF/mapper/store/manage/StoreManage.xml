@@ -6858,16 +6858,18 @@
     -->
     <select id="authStoreList" parameterType="storeManageVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.authStoreList */
-        SELECT STORE_CD AS VALUE,
-               '[' || STORE_CD || '] ' || STORE_NM AS NAME
-          FROM TB_MS_STORE
-         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-           AND STORE_CD != #{storeCd}
-           <!-- AND SYS_STAT_FG = '1' -->
-         <if test='orgnFg != null and orgnFg == "A"'>
-           AND AGENCY_CD = #{agencyCd}
+        SELECT  A.STORE_CD AS VALUE,
+                '[' || A.STORE_CD || '] ' || A.STORE_NM AS NAME
+        FROM    TB_MS_STORE A
+        ,		TB_CM_AGENCY B
+        WHERE   A.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     A.STORE_CD != #{storeCd}
+        AND     B.AGENCY_CD = A.AGENCY_CD
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND (A.AGENCY_CD = #{agencyCd} OR B.P_AGENCY_CD = #{agencyCd})
         </if>
-     ORDER BY STORE_CD
+        ORDER
+        BY      A.STORE_CD
     </select>
 
     <!-- 사용 메뉴 조회 -->
@@ -9009,5 +9011,184 @@
         WHERE 	STORE_CD = #{storeCd}
     </select>
 
+    <!-- 사용 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_MS_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : storeManageVO
+        COMMENTS : 사용 메뉴를 조회한다.
+    -->
+    <select id="avlblMobileMenu" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.avlblMobileMenu */
+        SELECT twr.*
+        FROM
+             (
+                SELECT  twr.RESRCE_CD   AS RESRCE_CD_LARGE
+                ,       twr.RESRCE_NM   AS RESRCE_NM_LARGE
+                ,       twri.RESRCE_CD  AS RESRCE_CD_MID
+                ,       twri.RESRCE_NM  AS RESRCE_NM_MID
+                FROM    TB_WB_RESRCE_INFO twr
+                ,       TB_WB_RESRCE_INFO twri
+                WHERE   1=1
+                AND     twr.USE_YN      = 'Y'
+                AND     twri.USE_YN     = 'Y'
+                AND     twri.P_RESRCE   = twr.RESRCE_CD
+                AND     twri.DISP_LEVEL = '2'
+                AND     twri.RESRCE_CD NOT IN   (
+                                                    SELECT 	P_RESRCE
+                                                    FROM 	TB_WB_RESRCE_INFO
+                                                    WHERE 	USE_YN = 'Y'
+                                                    AND 	DISP_LEVEL = '3'
+                                                )
+                AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                ORDER
+                BY      twr.RESRCE_CD
+                ,       twri.RESRCE_CD
+            ) twr
+        ,   (
+                SELECT  twa.RESRCE_CD
+                FROM    TB_MS_EMPLOYEE tme
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_GRP_RESRCE twa
+                WHERE   tme.STORE_CD    = #{storeCd}
+                AND     tme.EMP_NO      = '0000'
+                AND     twu.USER_ID     = tme.USER_ID
+                AND 	twa.AUTH_GRP_CD IN (SELECT FN_TB_WB_AUTHOR_GRP_USE_CD(( SELECT USER_ID FROM TB_MS_EMPLOYEE WHERE STORE_CD = #{storeCd} AND EMP_NO ='0000'), 'MOB') FROM DUAL)
+                AND     twa.USE_YN      = 'Y'
+                MINUS
+                SELECT  twa.RESRCE_CD
+                FROM    TB_MS_EMPLOYEE tme
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                WHERE   tme.STORE_CD        = #{storeCd}
+                AND     tme.EMP_NO          = '0000'
+                AND     twu.USER_ID         = tme.USER_ID
+                AND     twa.USER_ID         = twu.USER_ID
+                AND     twa.INCLD_EXCLD_FG  = 'E'
+                AND     twa.USE_YN          = 'Y'
+            ) tme
+        WHERE   tme.RESRCE_CD = twr.RESRCE_CD_MID
+    </select>
 
+    <!-- 미사용 메뉴 조회 -->
+    <!--
+        TABLE    : TB_WB_RESRCE_INFO, TB_MS_EMPLOYEE, TB_WB_USER_INFO, TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : storeManageVO
+        COMMENTS : 미사용 메뉴를 조회한다.
+    -->
+    <select id="beUseMobileMenu" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.beUseMobileMenu */
+        SELECT twr.*
+        FROM (
+                SELECT  twr.RESRCE_CD   AS RESRCE_CD_LARGE
+                ,       twr.RESRCE_NM   AS RESRCE_NM_LARGE
+                ,       twri.RESRCE_CD  AS RESRCE_CD_MID
+                ,       twri.RESRCE_NM  AS RESRCE_NM_MID
+                FROM    TB_WB_RESRCE_INFO twr
+                ,       TB_WB_RESRCE_INFO twri
+                WHERE   1=1
+                AND     twr.USE_YN      = 'Y'
+                AND     twri.USE_YN     = 'Y'
+                AND     twri.P_RESRCE   = twr.RESRCE_CD
+                AND     twri.DISP_LEVEL = '2'
+                AND     twri.RESRCE_CD NOT IN   (
+                                                     SELECT P_RESRCE
+                                                     FROM 	TB_WB_RESRCE_INFO
+                                                     WHERE 	USE_YN = 'Y'
+                                                     AND 	DISP_LEVEL = '3'
+                                                 )
+                AND     (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                ORDER
+                BY      twr.RESRCE_CD
+                ,       twri.RESRCE_CD
+             ) twr
+        ,    (
+                SELECT  twa.RESRCE_CD
+                FROM    TB_MS_EMPLOYEE tme
+                ,       TB_WB_USER_INFO twu
+                ,       TB_WB_AUTHOR_EXCEPT_V01 twa
+                WHERE   tme.STORE_CD = #{storeCd}
+                AND     tme.EMP_NO          = '0000'
+                AND     twu.USER_ID         = tme.USER_ID
+                AND     twa.USER_ID         = twu.USER_ID
+                AND     twa.INCLD_EXCLD_FG  = 'E'
+                AND     twa.USE_YN          = 'Y'
+             ) tme
+        WHERE   tme.RESRCE_CD = twr.RESRCE_CD_MID
+    </select>
+
+    <!-- 메뉴권한 전체삭제-->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT
+        PARAM    : storeMenuVO
+        COMMENTS : 해당 본사의 메뉴권한 전체를 삭제한다.
+    -->
+    <delete id="removeMobileAuthAll" parameterType="DefaultMap">
+        /* HqManageMapper.removeMobileAuthAll */
+        DELETE  TB_WB_AUTHOR_EXCEPT
+        WHERE   USER_ID =   (
+                                SELECT  twu.USER_ID
+                                FROM    TB_MS_EMPLOYEE tme
+                                ,       TB_WB_USER_INFO twu
+                                WHERE   tme.STORE_CD    = #{storeCd}
+                                AND     tme.EMP_NO      = '0000'
+                                AND     twu.USER_ID     = tme.USER_ID
+                            )
+        AND     RESRCE_CD IN    (
+                                    SELECT 	twri.RESRCE_CD AS RESRCE_CD
+                                    FROM 	TB_WB_RESRCE_INFO twr
+                                    , 	    TB_WB_RESRCE_INFO twri
+                                    WHERE 	1=1
+                                    AND 	twr.USE_YN      = 'Y'
+                                    AND 	twri.USE_YN     = 'Y'
+                                    AND 	twri.P_RESRCE   = twr.RESRCE_CD
+                                    AND 	twri.DISP_LEVEL = '2'
+                                    AND 	twri.RESRCE_CD NOT IN 	(
+                                                                        SELECT 	P_RESRCE
+                                                                        FROM 	TB_WB_RESRCE_INFO
+                                                                        WHERE 	USE_YN = 'Y'
+                                                                        AND 	DISP_LEVEL = '3'
+                                                                    )
+                                    AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                )
+    </delete>
+
+    <!-- 권한예외 복사 시, 복사기준매장의 권한예외 값 조회 -->
+    <!--
+        TABLE    : TB_WB_AUTHOR_EXCEPT_V01
+        PARAM    : storeMenuVO
+        COMMENTS : 권한예외 복사 시, 복사기준매장의 권한예외 값을 조회한다.
+    -->
+    <select id="exceptMobileMenu" parameterType="storeMenuVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.exceptMobileMenu */
+        SELECT  USER_ID
+        ,       RESRCE_CD
+        ,       INCLD_EXCLD_FG
+        ,       USE_YN
+        FROM    TB_WB_AUTHOR_EXCEPT_V01
+        WHERE   USER_ID =   (
+                                SELECT  twu.USER_ID
+                                FROM    TB_MS_EMPLOYEE tme
+                                ,       TB_WB_USER_INFO twu
+                                WHERE   tme.STORE_CD    = #{copyStoreCd}
+                                AND     tme.EMP_NO      = '0000'
+                                AND     twu.USER_ID     = tme.USER_ID)
+        AND     RESRCE_CD IN    (
+                                    SELECT 	twri.RESRCE_CD AS RESRCE_CD
+                                    FROM 	TB_WB_RESRCE_INFO twr
+                                    , 	    TB_WB_RESRCE_INFO twri
+                                    WHERE 	1=1
+                                    AND 	twr.USE_YN      = 'Y'
+                                    AND 	twri.USE_YN     = 'Y'
+                                    AND 	twri.P_RESRCE   = twr.RESRCE_CD
+                                    AND 	twri.DISP_LEVEL = '2'
+                                    AND 	twri.RESRCE_CD NOT IN 	(
+                                                                        SELECT 	P_RESRCE
+                                                                        FROM 	TB_WB_RESRCE_INFO
+                                                                        WHERE 	USE_YN      = 'Y'
+                                                                        AND 	DISP_LEVEL  = '3'
+                                                                    )
+                                    AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                )
+        AND USE_YN = 'Y'
+    </select>
 </mapper>

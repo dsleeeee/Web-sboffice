@@ -9,9 +9,9 @@
     <div class="subTab2 mt20 mb10">
         <ul>
             <%-- 웹사이트 메뉴 --%>
-            <li><a href="#" id="webMenu" class="on"><s:message code="hqEmp.webMenu" /></a></li>
+            <li><a href="#" id="webMenu" class="on" onclick="changeWebTab();"><s:message code="hqEmp.webMenu" /></a></li>
             <%-- 모바일 메뉴 --%>
-<%--            <li><a href="#" id="mobileMenu" onclick="changeMobileTab();"><s:message code="hqEmp.mobMenu" /></a></li>--%>
+            <li><a href="#" id="mobileMenu" onclick="changeMobileTab();"><s:message code="hqEmp.mobMenu" /></a></li>
         </ul>
     </div>
 
@@ -39,7 +39,7 @@
             </tr>
             </tbody>
         </table>
-        <%-- 사용 메뉴 --%>
+        <%-- 사용 웹사이트 메뉴 --%>
         <div class="oh mt10" style="padding-bottom: 10px;">
             <div class="wj-TblWrap mr10" style="height:220px;">
                 <div class="oh mb10">
@@ -70,10 +70,10 @@
                 </wj-flex-grid>
             </div>
         </div>
-        <%-- //사용 메뉴 --%>
+        <%-- //사용 웹사이트 메뉴 --%>
     </div>
 
-    <%-- 미사용 메뉴 --%>
+    <%-- 미사용 웹사이트 메뉴 --%>
     <div id="webArea2" ng-controller="notUseHqEmpWebMenuCtrl">
         <div class="oh mt10">
             <div class="wj-TblWrap mr10" style="height:220px;">
@@ -107,8 +107,98 @@
         </div>
 
     </div>
-    <%-- //미사용 메뉴 --%>
+    <%-- //미사용 웹사이트 메뉴 --%>
+
+        <%-- 모바일 메뉴 --%>
+        <div id="mobileArea" ng-controller="hqEmpMobileMenuCtrl">
+            <%-- 권한복사 영역 --%>
+            <table id="tableCopyMobile" class="tblType01 moreDark mb10 mt10">
+                <colgroup>
+                    <col class="w20" />
+                    <col class="w55" />
+                </colgroup>
+                <tbody>
+                <tr>
+                    <%-- 메뉴권한복사 --%>
+                    <th><s:message code="hqEmp.copy.authorExcept" /></th>
+                    <td colspan="3">
+                        <jsp:include page="/WEB-INF/view/sale/com/popup/selectEmpS.jsp" flush="true">
+                            <jsp:param name="targetId" value="copyEmpMobile"/>
+                        </jsp:include>
+                        <%-- 메뉴권한복사 버튼  --%>
+                        <div class="fl">
+                            <a href="#" class="btn_grayS" id="btnCopyMobileAuth" ng-click="copyMobileAuth()"><s:message code="hqEmp.copy.auth" /></a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <%-- 사용 모바일 메뉴 --%>
+            <div class="oh mt10" style="padding-bottom: 10px;">
+                <div class="wj-TblWrap mr10" style="height:220px;">
+                    <div class="oh mb10">
+                        <span class="fl bk lh20 s14"><s:message code="hqEmp.use.menu" /> </span>
+                        <%-- 미사용등록 버튼 --%>
+                        <span class="fr"><a id="btnRemoveMobileMenu" href="#" class="btn_grayS2" ng-click="notUseRegMobile()"><s:message code="hqEmp.exceptReg" /></a></span>
+                    </div>
+                    <%-- 위즈모 --%>
+                    <wj-flex-grid
+                            style="height:180px"
+                            id="avlblMenuGrid"
+                            autoGenerateColumns="false"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            sticky-headers="true"
+                            selection-mode="Row"
+                            items-source="data"
+                            item-formatter="_itemFormatter"
+                            allow-merging="Cells">
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="hqEmp.lMenuCd"/>" binding="resrceCdLarge" width="*" visible="false" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqEmp.lMenuNm"/>" binding="resrceNmLarge" width="120" is-read-only="true"  allow-merging="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqEmp.chk.menu"/>" binding="gChk" width="60"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqEmp.mMenuCd"/>" binding="resrceCdMid" width="*" visible="false" allow></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqEmp.mMenuNm"/>" binding="resrceNmMid" width="200" is-read-only="true" allow-merging="true"></wj-flex-grid-column>
+                    </wj-flex-grid>
+                </div>
+            </div>
+            <%-- //사용 모바일 메뉴 --%>
+        </div>
+
+        <%-- 미사용 모바일 메뉴 --%>
+        <div id="mobileArea2" ng-controller="notUseHqEmpMobileMenuCtrl">
+            <div class="oh mt10">
+                <div class="wj-TblWrap mr10" style="height:220px;">
+                    <div class="oh mb10">
+                        <span class="fl bk lh20 s14"><s:message code="hqEmp.except.menu" /> </span>
+                        <%-- 사용등록 버튼 --%>
+                        <span class="fr"><a id="btnAddMobileMenu" href="#" class="btn_grayS2"  ng-click="useRegMobile()"><s:message code="hqEmp.useReg" /></a></span>
+                    </div>
+                    <%-- 위즈모 --%>
+                    <wj-flex-grid
+                            style="height:180px"
+                            id="beUseMenuGrid"
+                            autoGenerateColumns="false"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            sticky-headers="true"
+                            selection-mode="Row"
+                            items-source="data"
+                            item-formatter="_itemFormatter"
+                            allow-merging="Cells">
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="hqEmp.lMenuCd"/>" binding="resrceCdLarge" width="*" visible="false" ></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqEmp.lMenuNm"/>" binding="resrceNmLarge" width="120" is-read-only="true"  allow-merging="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqEmp.chk.menu"/>" binding="gChk" width="60"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqEmp.mMenuCd"/>" binding="resrceCdMid" width="*" visible="false" allow></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="hqEmp.mMenuNm"/>" binding="resrceNmMid" width="200" is-read-only="true" allow-merging="true"></wj-flex-grid-column>
+                    </wj-flex-grid>
+                </div>
+            </div>
+
+        </div>
+        <%-- //미사용 모바일 메뉴 --%>
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpWebMenu.js?ver=20200529.19" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmpWebMenu.js?ver=20241115.01" charset="utf-8"></script>

@@ -166,4 +166,15 @@ public interface HqManageMapper {
     /** 기준테이블바탕화면 이미지 등록*/
     int insertHqBaseTblBgImg(HqManageVO hqManageVO);
 
+    /** 모바일 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMobileMenu(HqManageVO hqManage);
+
+    /** 모바일 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMobileMenu(HqManageVO hqManage);
+
+    /** 모바일 메뉴권한 전체 삭제 */
+    int removeMobileAuthAll(HqMenuVO hqMenuVO);
+
+    /** 모바일 권한예외 복사 시, 복사기준본사의 모바일 권한예외 값 조회  */
+    List<DefaultMap<String>> exceptMobileMenu(HqMenuVO hqMenuVO);
 }

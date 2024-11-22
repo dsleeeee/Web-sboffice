@@ -1139,10 +1139,10 @@ public class StoreManageController {
     /**
      * VAN사 변경허용 체크
      *
-     * @param storeManageVO
-     * @param request
-     * @param response
-     * @param model
+     * @param   storeManageVO
+     * @param   request
+     * @param   response
+     * @param   model
      * @return  Object
      * @author  김유승
      * @since   2024. 04. 16.
@@ -1157,5 +1157,116 @@ public class StoreManageController {
         String result = service.chkVanFix(storeManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 모바일 사용메뉴 조회
+     * @param   storeManageVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2024. 11. 18.
+     */
+    @RequestMapping(value = "storeManage/avlblMobileMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result avlblMobileMenu(StoreManageVO storeManageVO, HttpServletRequest request,
+                            HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        // 사용메뉴 조회
+        List<DefaultMap<String>> avlblMobileMenu = service.avlblMobileMenu(storeManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, avlblMobileMenu);
+    }
+
+    /**
+     * 모바일 미사용메뉴 조회
+     * @param   storeManageVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2024. 11. 18.
+     */
+    @RequestMapping(value = "storeManage/beUseMobileMenu.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result beUseMobileMenu (StoreManageVO storeManageVO, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 미사용메뉴 조회
+        List<DefaultMap<String>> beUseMobileMenu  = service.beUseMobileMenu(storeManageVO,sessionInfoVO);
+
+        return returnListJson(Status.OK, beUseMobileMenu );
+    }
+
+    /**
+     * 모바일 사용메뉴 삭제
+     * @param   storeMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024. 11. 18.
+     */
+    @RequestMapping(value = "storeManage/removeMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result removeMobileAuth(@RequestBody StoreMenuVO[] storeMenus, HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.removeMobileAuth(storeMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 모바일 사용메뉴 추가
+     * @param   storeMenus
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024. 11. 18.
+     */
+    @RequestMapping(value = "storeManage/addMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result addMobileAuth(@RequestBody StoreMenuVO[] storeMenus, HttpServletRequest request,
+                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.addMobileAuth(storeMenus, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     * 모바일 메뉴권한복사
+     * @param   storeMenuVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Result
+     * @author  김유승
+     * @since   2024. 11. 18.
+     */
+    @RequestMapping(value = "storeManage/copyMobileAuth.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result copyMobileAuth(@RequestBody StoreMenuVO storeMenuVO, HttpServletRequest request,
+                           HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        int cnt = service.copyMobileAuth(storeMenuVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
     }
 }

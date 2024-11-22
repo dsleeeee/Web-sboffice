@@ -184,4 +184,19 @@ public interface StoreManageService {
 
     /** VAN사 변경허용 체크 */
     String chkVanFix(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMobileMenu(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+    
+    /** 모바일 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMobileMenu(StoreManageVO storeManageVO, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 사용메뉴 삭제 */
+    int removeMobileAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 사용메뉴 추가 */
+    int addMobileAuth(StoreMenuVO[] storeMenus, SessionInfoVO sessionInfoVO);
+
+    /** 모바일 메뉴권한복사 */
+    int copyMobileAuth(StoreMenuVO storeMenuVO, SessionInfoVO sessionInfoVO);
 }

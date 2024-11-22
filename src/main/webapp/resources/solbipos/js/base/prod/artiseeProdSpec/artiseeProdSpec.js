@@ -26,7 +26,7 @@ var useYnAllComboData = [
 app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('artiseeProdSpecCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('artiseeProdSpecCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -60,6 +60,7 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
 
                     // 미적용 상품
                     var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+                    storeScope2._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
                     storeScope2._broadcast('artiseeProdSpecNoProdCtrl', selectedRow);
                     event.preventDefault();
                     // paging 영역 보이도록
@@ -86,12 +87,12 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
         // 적용 상품
         var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
         storeScope._gridDataInit();
-        storeScope._broadcast('artiseeProdSpecProdCtrl', null);
+        // storeScope._broadcast('artiseeProdSpecProdCtrl', null);
 
         // 미적용 상품
         var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
         storeScope2._gridDataInit();
-        storeScope2._broadcast('artiseeProdSpecNoProdCtrl', null);
+        // storeScope2._broadcast('artiseeProdSpecNoProdCtrl', null);
         // paging 영역 보이도록
         var artiseeProdSpecNoProdCtrlPager = document.getElementById('artiseeProdSpecNoProdCtrlPager');
         artiseeProdSpecNoProdCtrlPager.style.visibility='hidden';
@@ -122,11 +123,55 @@ app.controller('artiseeProdSpecCtrl', ['$scope', '$http', function ($scope, $htt
 app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('artiseeProdSpecProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('artiseeProdSpecProdCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                if (col.binding === "prodCd") {
+                    var item = s.rows[e.row].dataItem;
+                    if (item.status !== "I") {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    } else {
+                        wijmo.removeClass(e.cell, 'wj-custom-readonly');
+                    }
+                }
+            }
+        });
+
+        // 대표명칭 그리드 에디팅 방지
+        s.beginningEdit.addHandler(function (sender, elements) {
+            var col = sender.columns[elements.col];
+            if (col.binding === "prodCd") {
+                var dataItem = s.rows[elements.row].dataItem;
+                if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+                    elements.cancel = true;
+                }
+            }
+        });
+
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 추가옵션 변경시 체크박스 체크
+                if (col.binding === "option1" || col.binding === "option2" || col.binding === "option3" || col.binding === "option4" || col.binding === "option5") {
+                    $scope.checked(item);
+                }
+            }
+            s.collectionView.commitEdit();
+        });
+
     };
+
+    // 브랜드 변경시 체크박스 체크
+    $scope.checked = function (item){
+        item.gChk = true;
+    };
+
 
     // <-- 검색 호출 -->
     $scope.$on("artiseeProdSpecProdCtrl", function(event, data) {
@@ -143,6 +188,86 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
         $scope._inquirySub("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
+
+    // <-- 로우 추가 -->
+    $scope.addRow = function() {
+        // 파라미터 설정
+        var params = {};
+        params.status = 'I';
+        params.specCd = $scope.selectedProd.specCd;
+
+        // 추가기능 수행 : 파라미터
+        $scope._addRow(params);
+    };
+    // <-- //로우 추가 -->
+
+
+    // <-- 저장 -->
+    $scope.save = function() {
+
+        if($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["cmm.empty.data"]);
+            return false;
+        }
+
+        var params = new Array();
+        var arr = [];
+        var arr2 = [];
+        var inputProdCd = "";
+
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            arr[i] = $scope.flex.collectionView.items[i].prodCd.trim().removeEnter();
+        }
+
+        arr.forEach(function(element){
+            if(!arr2.includes(element)){
+                arr2.push(element);
+            }else{
+                inputProdCd += element + ",";
+            }
+        });
+
+        if(inputProdCd !== ""){
+            $scope._popMsg(messages["artiseeProdSpec.prodCdDuplicate.msg"] + "<br>(" + inputProdCd.substr(0, inputProdCd.length - 1) + ")"); // 중복된 상품코드입니다.
+            return false;
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            if ($scope.flex.collectionView.itemsAdded[i].gChk === true) {
+                $scope.flex.collectionView.itemsAdded[i].prodCd = $scope.flex.collectionView.itemsAdded[i].prodCd.trim().removeEnter();
+                if($scope.flex.collectionView.itemsAdded[i].prodCd !== null && $scope.flex.collectionView.itemsAdded[i].prodCd !== ""){
+                    params.push($scope.flex.collectionView.itemsAdded[i]);
+                }else{
+                    $scope._popMsg(messages["artiseeProdSpec.prodCdChk.msg"]); // 상품코드를 입력하세요.
+                    return false;
+                }
+            }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if ($scope.flex.collectionView.itemsEdited[i].gChk === true) {
+                params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
+        }
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function(){
+            // 특성
+            var scope = agrid.getScope('artiseeProdSpecCtrl');
+            scope.searchArtiseeProdSpec();
+
+            // 적용 상품
+            $scope.searchArtiseeProdSpecProd();
+
+            // 미적용 상품
+            var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+            storeScope2._gridDataInit();
+            storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+        });
+
+    };
+    // <-- //저장 -->
+
 
     // <-- 삭제 -->
     $scope.del = function() {
@@ -162,9 +287,7 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
             scope.searchArtiseeProdSpec();
 
             // 적용 상품
-            var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
-            storeScope._gridDataInit();
-            storeScope._broadcast('artiseeProdSpecProdCtrl', $scope.getSelectedProd());
+            $scope.searchArtiseeProdSpecProd();
 
             // 미적용 상품
             var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
@@ -192,7 +315,7 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
 app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('artiseeProdSpecNoProdCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('artiseeProdSpecNoProdCtrl', $scope, $http, false));
 
     // 등록일자 셋팅
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
@@ -213,7 +336,10 @@ app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope
 
     // <-- 검색 호출 -->
     $scope.$on("artiseeProdSpecNoProdCtrl", function(event, data) {
-        $scope.setSelectedNoProd(data);
+
+        if(data !== null && data!== undefined) {
+            $scope.setSelectedNoProd(data);
+        }
         $scope.searchArtiseeProdSpecNoProd();
         event.preventDefault();
     });

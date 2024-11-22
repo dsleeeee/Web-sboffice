@@ -156,28 +156,6 @@ public class ArtiseeProdMappingController {
     }
 
     /**
-     * 아티제상품코드맵핑 매핑정보 엑셀다운로드
-     *
-     * @param   artiseeProdMappingVO
-     * @param   request
-     * @param   response
-     * @param   model
-     * @author  김유승
-     * @since   2024.09.27
-     * @return
-     */
-    @RequestMapping(value = "/artiseeProdMapping/getMapStrExcelList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getMapStrExcelList(ArtiseeProdMappingVO artiseeProdMappingVO, HttpServletRequest request, HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<String>> list = artiseeProdMappingService.getMapStrExcelList(artiseeProdMappingVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, list, artiseeProdMappingVO);
-    }
-
-    /**
      * 아티제상품코드맵핑 상품정보 엑셀다운로드
      *
      * @param   artiseeProdMappingVO

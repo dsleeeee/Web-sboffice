@@ -107,4 +107,25 @@ public interface HqEmpMapper {
 
     /** 코드별 본사 공통코드 콤보박스 조회 */
     List<DefaultMap<Object>> getHqNmcodeComboList(HqEmpVO hqEmpVO);
+
+    /** 모바일 사용메뉴 조회 */
+    List<DefaultMap<String>> avlblMobileMenu(HqEmpVO hqEmpVO);
+
+    /** 모바일 미사용메뉴 조회 */
+    List<DefaultMap<String>> beUseMobileMenu(HqEmpVO hqEmpVO);
+
+    /** 모바일 권한확인 */
+    int isMobileAuth(HqEmpMenuVO hqEmpMenu);
+
+    /** 모바일 미사용등록 */
+    int removeMobileAuth(HqEmpMenuVO hqEmpMenu);
+
+    /** 모바일 사용등록 */
+    int addMobileAuth(HqEmpMenuVO hqEmpMenu);
+
+    /** 모바일 권한예외 복사 시, 복사기준본사의 모바일 권한예외 값 조회  */
+    List<DefaultMap<String>> exceptMobileMenu(HqEmpMenuVO hqEmpMenuVO);
+
+    /** 권한 전체 삭제 */
+    int removeMobileAuthAll(HqEmpMenuVO hqEmpMenuVO);
 }
