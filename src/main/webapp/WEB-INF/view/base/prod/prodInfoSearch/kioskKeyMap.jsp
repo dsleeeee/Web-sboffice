@@ -94,6 +94,8 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.kioskKeyMap.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.kioskKeyMap.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -130,6 +132,8 @@
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.kioskKeyMap.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.kioskKeyMap.prodNm"/>" binding="prodNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.kioskKeyMap.remark"/>" binding="remark" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>

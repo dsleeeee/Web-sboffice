@@ -198,6 +198,8 @@
         <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.storeNm"/>" binding="storeNm" width="90" align="left" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNo"/>" binding="prterNo" width="75" align="center" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.prterNm"/>" binding="prterNm" width="90" align="left" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.modDt"/>"   binding="modDt"   width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prodKitchenprintLink.userNm"/>"  binding="userNm"  width="80" align="center" is-read-only="true"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>

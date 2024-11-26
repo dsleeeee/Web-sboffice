@@ -175,6 +175,8 @@
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.mappingStringNm"/>" binding="mappingStringNm" width="100" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdCd"/>" binding="erpProdCd" align="center" width="105" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdMapping.erpProdNm"/>" binding="erpProdNm" width="105" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdMapping.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

@@ -95,6 +95,8 @@
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option3"/>" binding="option3" width="90"  align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option4"/>" binding="option4" width="90"  align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option5"/>" binding="option5" width="90"  align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>

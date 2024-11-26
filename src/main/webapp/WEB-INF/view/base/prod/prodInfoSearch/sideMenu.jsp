@@ -63,6 +63,9 @@
             <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.regStoreFg"/>" binding="regStoreFg" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
           </c:if>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.printYn"/>" binding="printYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.rcvkind"/>" binding="rcvkind" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
       <%--//위즈모 테이블--%>
@@ -112,6 +115,9 @@
             <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.regStoreFg"/>" binding="regStoreFg" width="85" align="center" is-read-only="true"></wj-flex-grid-column>
           </c:if>
           <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.printYn"/>" binding="printYn" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.modDt"/>"  binding="modDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.prodInfo2.userNm"/>" binding="userNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodInfoSearch.sideMenu.rcvkind"/>" binding="rcvkind" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
         </wj-flex-grid>
       </div>
     </div>
