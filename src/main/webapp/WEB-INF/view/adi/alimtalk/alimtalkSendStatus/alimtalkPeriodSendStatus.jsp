@@ -16,7 +16,7 @@
             <a href="#" class="open fl"><s:message code="alimtalkPeriodSendStatus.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_pageView('alimtalkPeriodSendStatusCtrl',1)" id="nxBtnSearch3">
+                <button class="btn_blue fr" ng-click="_pageView('alimtalkPeriodSendStatusCtrl',1)" id="nxBtnSearch4">
                     <s:message code="cmm.search" />
                 </button>
             </div>
@@ -46,12 +46,12 @@
                 <%-- 소속코드 --%>
                 <th><s:message code="daySendStatus.orgnCd" /></th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchOrgnCd" ng-model="srchOrgnCd" onkeyup="fnNxBtnSearch('3');"/>
+                    <input type="text" class="sb-input w100" id="srchOrgnCd" ng-model="srchOrgnCd" onkeyup="fnNxBtnSearch('4');"/>
                 </td>
                 <%-- 소속명 --%>
                 <th><s:message code="daySendStatus.orgnNm" /></th>
                 <td>
-                    <input type="text" class="sb-input w100" id="srchOrgnNm" ng-model="srchOrgnNm" onkeyup="fnNxBtnSearch('3');"/>
+                    <input type="text" class="sb-input w100" id="srchOrgnNm" ng-model="srchOrgnNm" onkeyup="fnNxBtnSearch('4');"/>
                 </td>
             </tr>
             </tbody>
