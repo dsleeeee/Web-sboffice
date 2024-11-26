@@ -64,10 +64,10 @@ app.controller('alimtalkSendStatusCtrl', ['$scope', '$http', '$timeout', functio
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.msgTypeDataMap = new wijmo.grid.DataMap(alkMsgTypeDataMapData, 'value', 'name'); // 메세지타입
+        $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
         $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
         $scope.rmTypeDataMap = new wijmo.grid.DataMap(rmTypeDataMapData, 'value', 'name'); // 대체발송 메세지타입
         $scope.rmSendYnDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); // 대체발송 사용여부
-        $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -341,10 +341,10 @@ app.controller('alimtalkSendStatusExcelCtrl', ['$scope', '$http', '$timeout', fu
     $scope.initGrid = function (s, e) {
         // 그리드 DataMap 설정
         $scope.msgTypeDataMap = new wijmo.grid.DataMap(alkMsgTypeDataMapData, 'value', 'name'); // 메세지타입
+        $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
         $scope.sendStatusFgDataMap = new wijmo.grid.DataMap(sendStatusFgData, 'value', 'name'); // 결과
         $scope.rmTypeDataMap = new wijmo.grid.DataMap(rmTypeDataMapData, 'value', 'name'); // 대체발송 메세지타입
         $scope.rmSendYnDataMap = new wijmo.grid.DataMap(useYnFgData, 'value', 'name'); // 대체발송 사용여부
-        $scope.reserveYnDataMap = new wijmo.grid.DataMap(reserveYnDataMapData, 'value', 'name'); // 예약여부
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {

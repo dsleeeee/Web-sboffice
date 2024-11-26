@@ -145,8 +145,10 @@
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.regDt"/>" binding="regDt" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sOrgnCd"/>" binding="sOgnCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sOrgnNm"/>" binding="sOgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sUserNm"/>" binding="sUserNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rOrgnCd"/>" binding="rOgnCd" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rOrgnNm"/>" binding="rOgnNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rTelNo"/>" binding="rPhoneNumber" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -156,11 +158,14 @@
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendStatus"/>" binding="sendStatus" data-map="sendStatusFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.resultNm"/>" binding="resultNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgContent"/>" binding="msgContent" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendOrgnCd"/>" binding="sendOrgnCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendOrgnNm"/>" binding="sendOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.payOrgnCd"/>" binding="payOrgnCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.payOrgnNm"/>" binding="payOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnCd"/>" binding="senderKeyOrgnCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnNm"/>" binding="senderKeyOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendYn"/>" binding="rmSendYn" data-map="rmSendYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendYn"/>" binding="rmSendYn" data-map="rmSendYnDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmTitle"/>" binding="rmTitle" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmContent"/>" binding="rmContent" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendNo"/>" binding="rmSendNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -198,8 +203,10 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.regDt"/>" binding="regDt" width="125" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sOrgnCd"/>" binding="sOgnCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sOrgnNm"/>" binding="sOgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sUserNm"/>" binding="sUserNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rOrgnCd"/>" binding="rOgnCd" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rOrgnNm"/>" binding="rOgnNm" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rTelNo"/>" binding="rPhoneNumber" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgType"/>" binding="msgType" data-map="msgTypeDataMap" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -209,11 +216,14 @@
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendStatus"/>" binding="sendStatus" data-map="sendStatusFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.resultNm"/>" binding="resultNm" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.msgContent"/>" binding="msgContent" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendOrgnCd"/>" binding="sendOrgnCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.sendOrgnNm"/>" binding="sendOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.payOrgnCd"/>" binding="payOrgnCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.payOrgnNm"/>" binding="payOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnCd"/>" binding="senderKeyOrgnCd" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnNm"/>" binding="senderKeyOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendYn"/>" binding="rmSendYn" data-map="rmSendYnDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendYn"/>" binding="rmSendYn" data-map="rmSendYnDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmTitle"/>" binding="rmTitle" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmContent"/>" binding="rmContent" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendNo"/>" binding="rmSendNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -246,7 +256,7 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20241119.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkSendStatus.js?ver=20241126.01" charset="utf-8"></script>
 
 <%-- 알림톡 메세지 팝업 --%>
 <c:import url="/WEB-INF/view/adi/alimtalk/alimtalkSendStatus/alimtalkMessageDtl.jsp">
