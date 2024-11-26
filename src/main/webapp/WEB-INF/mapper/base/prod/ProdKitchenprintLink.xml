@@ -105,16 +105,22 @@
     -->
     <select id="getLinkedList" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
         /* USE : ProdKitchenprintLinkMapper.getLinkedList */
-        SELECT tms.STORE_CD,
-               tms.STORE_NM,
-               tmpp.PRTER_NO,
-               TMP.PRTER_NM
-        FROM TB_MS_PRINTER_PROD tmpp, TB_MS_STORE tms, TB_MS_PRINTER tmp
-        WHERE tmpp.STORE_CD = tms.STORE_CD
-          AND tmpp.STORE_CD = tmp.STORE_CD
-          AND tmpp.PRTER_no = tmp.PRTER_no
-          AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
-          AND PROD_CD = #{prodCd}
+        SELECT  tms.STORE_CD
+        ,       tms.STORE_NM
+        ,       tmpp.PRTER_NO
+        ,       TMP.PRTER_NM
+        ,		TO_CHAR(TO_DATE(tmpp.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        ,       twuidv.USER_NM
+        FROM    TB_MS_PRINTER_PROD tmpp
+        ,       TB_MS_STORE tms
+        ,       TB_MS_PRINTER tmp
+        ,		TB_WB_USER_INFO_DTL_V01 twuidv
+        WHERE   tmpp.STORE_CD       = tms.STORE_CD
+        AND     tmpp.STORE_CD       = tmp.STORE_CD
+        AND     tmpp.PRTER_no       = tmp.PRTER_no
+        AND     tmpp.MOD_ID         = TWUIDV.USER_ID
+        AND     tms.HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PROD_CD             = #{prodCd}
       <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tms.STORE_CD IN (${storeCdQuery})
       </if>

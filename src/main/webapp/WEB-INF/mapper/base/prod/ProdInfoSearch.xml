@@ -831,22 +831,28 @@
                 ,       DECODE(NVL(thpsp.REG_STORE_FG, '0'), '0', '미사용', '1', '제외매장', '2', '허용매장') AS REG_STORE_FG
                 ,       DECODE(NVL(thpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,       thp.REMARK
+                ,		TO_CHAR(TO_DATE(thpsp.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                ,		twuidv.USER_NM
+                ,		thpsp.RCVKIND
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 ,		TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 ,		TB_HQ_PRODUCT thp
-                WHERE 	thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     thpsg.USE_YN = 'Y'
-                AND     thpsc.USE_YN = 'Y'
-                AND     thpsp.USE_YN = 'Y'
-                AND 	thpsg.HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD (+)
-                AND 	thpsg.SDSEL_GRP_CD = thpsc.SDSEL_GRP_CD (+)
-                AND 	thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD (+)
-                AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
-                AND 	thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD (+)
-                AND 	thpsp.PROD_CD = thp.PROD_CD (+)
-                ORDER BY thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
+                ,		TB_WB_USER_INFO_DTL_V01 twuidv
+                WHERE 	thpsg.HQ_OFFICE_CD      = #{hqOfficeCd}
+                AND     thpsg.USE_YN            = 'Y'
+                AND     thpsc.USE_YN            = 'Y'
+                AND     thpsp.USE_YN            = 'Y'
+                AND 	thpsg.HQ_OFFICE_CD      = thpsc.HQ_OFFICE_CD (+)
+                AND 	thpsg.SDSEL_GRP_CD      = thpsc.SDSEL_GRP_CD (+)
+                AND 	thpsc.HQ_OFFICE_CD      = thpsp.HQ_OFFICE_CD (+)
+                AND 	thpsc.SDSEL_CLASS_CD    = thpsp.SDSEL_CLASS_CD (+)
+                AND 	thpsp.HQ_OFFICE_CD      = thp.HQ_OFFICE_CD (+)
+                AND 	thpsp.PROD_CD           = thp.PROD_CD (+)
+                AND 	thpsp.MOD_ID 		    = twuidv.USER_ID (+)
+                ORDER
+                BY      thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
             <!-- 매장 -->
@@ -870,21 +876,26 @@
                 ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                 ,       DECODE(NVL(tmpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,       tmp.REMARK
+                ,		TO_CHAR(TO_DATE(tmpsp.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                ,		twuidv.USER_NM
+                ,		tmpsp.RCVKIND
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                 ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 ,		TB_MS_PRODUCT tmp
-                WHERE 	tmpsg.STORE_CD = #{storeCd}
-                AND     tmpsg.USE_YN = 'Y'
-                AND     tmpsc.USE_YN = 'Y'
-                AND     tmpsp.USE_YN = 'Y'
-                AND 	tmpsg.STORE_CD = tmpsc.STORE_CD (+)
-                AND 	tmpsg.SDSEL_GRP_CD = tmpsc.SDSEL_GRP_CD (+)
-                AND 	tmpsc.STORE_CD = tmpsp.STORE_CD (+)
-                AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
-                AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
-                AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
+                ,		TB_WB_USER_INFO_DTL_V01 twuidv
+                WHERE 	tmpsg.STORE_CD          = #{storeCd}
+                AND     tmpsg.USE_YN            = 'Y'
+                AND     tmpsc.USE_YN            = 'Y'
+                AND     tmpsp.USE_YN            = 'Y'
+                AND 	tmpsg.STORE_CD          = tmpsc.STORE_CD (+)
+                AND 	tmpsg.SDSEL_GRP_CD      = tmpsc.SDSEL_GRP_CD (+)
+                AND 	tmpsc.STORE_CD          = tmpsp.STORE_CD (+)
+                AND 	tmpsc.SDSEL_CLASS_CD    = tmpsp.SDSEL_CLASS_CD (+)
+                AND 	tmpsp.STORE_CD          = tmp.STORE_CD (+)
+                AND 	tmpsp.PROD_CD           = tmp.PROD_CD (+)
+                AND 	tmpsp.MOD_ID 		    = twuidv.USER_ID (+)
                 ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -921,20 +932,25 @@
                 ,       DECODE(NVL(thpsp.REG_STORE_FG, '0'), '0', '미사용', '1', '제외매장', '2', '허용매장') AS REG_STORE_FG
                 ,       DECODE(NVL(thpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,       thp.REMARK
+                ,		TO_CHAR(TO_DATE(thpsp.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                ,		twuidv.USER_NM
+                ,		thpsp.RCVKIND
                 FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 ,		TB_HQ_PRODUCT_SDSEL_PROD thpsp
                 ,		TB_HQ_PRODUCT thp
-                WHERE 	thpsg.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     thpsg.USE_YN = 'Y'
-                AND     thpsc.USE_YN = 'Y'
-                AND     thpsp.USE_YN = 'Y'
-                AND 	thpsg.HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD (+)
-                AND 	thpsg.SDSEL_GRP_CD = thpsc.SDSEL_GRP_CD (+)
-                AND 	thpsc.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD (+)
-                AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD (+)
-                AND 	thpsp.HQ_OFFICE_CD (+) = thp.HQ_OFFICE_CD
-                AND 	thpsp.PROD_CD (+) = thp.PROD_CD
+                ,		TB_WB_USER_INFO_DTL_V01 twuidv
+                WHERE 	thpsg.HQ_OFFICE_CD      = #{hqOfficeCd}
+                AND     thpsg.USE_YN            = 'Y'
+                AND     thpsc.USE_YN            = 'Y'
+                AND     thpsp.USE_YN            = 'Y'
+                AND 	thpsg.HQ_OFFICE_CD      = thpsc.HQ_OFFICE_CD (+)
+                AND 	thpsg.SDSEL_GRP_CD      = thpsc.SDSEL_GRP_CD (+)
+                AND 	thpsc.HQ_OFFICE_CD      = thpsp.HQ_OFFICE_CD (+)
+                AND 	thpsc.SDSEL_CLASS_CD    = thpsp.SDSEL_CLASS_CD (+)
+                AND 	thpsp.HQ_OFFICE_CD (+)  = thp.HQ_OFFICE_CD
+                AND 	thpsp.PROD_CD (+)       = thp.PROD_CD
+                AND 	thpsp.MOD_ID 		    = twuidv.USER_ID (+)
                 ORDER BY thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
             </when>
             <!-- 매장 -->
@@ -957,20 +973,25 @@
                 ,       DECODE(tmpsp.FIX_PROD_FG, '0', '선택', '1', '고정') AS FIX_PROD_FG
                 ,       DECODE(NVL(tmpsp.PRINT_YN, 'Y'), 'Y', '사용', 'N', '미사용') AS PRINT_YN
                 ,       tmp.REMARK
+                ,		TO_CHAR(TO_DATE(tmpsp.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                ,		twuidv.USER_NM
+                ,		tmpsp.RCVKIND
                 FROM 	TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 ,		TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                 ,		TB_MS_PRODUCT_SDSEL_PROD tmpsp
                 ,		TB_MS_PRODUCT tmp
-                WHERE 	tmpsg.STORE_CD = #{storeCd}
-                AND     tmpsg.USE_YN = 'Y'
-                AND     tmpsc.USE_YN = 'Y'
-                AND     tmpsp.USE_YN = 'Y'
-                AND 	tmpsg.STORE_CD = tmpsc.STORE_CD (+)
-                AND 	tmpsg.SDSEL_GRP_CD = tmpsc.SDSEL_GRP_CD (+)
-                AND 	tmpsc.STORE_CD = tmpsp.STORE_CD (+)
-                AND 	tmpsc.SDSEL_CLASS_CD = tmpsp.SDSEL_CLASS_CD (+)
-                AND 	tmpsp.STORE_CD = tmp.STORE_CD (+)
-                AND 	tmpsp.PROD_CD = tmp.PROD_CD (+)
+                ,		TB_WB_USER_INFO_DTL_V01 twuidv
+                WHERE 	tmpsg.STORE_CD          = #{storeCd}
+                AND     tmpsg.USE_YN            = 'Y'
+                AND     tmpsc.USE_YN            = 'Y'
+                AND     tmpsp.USE_YN            = 'Y'
+                AND 	tmpsg.STORE_CD          = tmpsc.STORE_CD (+)
+                AND 	tmpsg.SDSEL_GRP_CD      = tmpsc.SDSEL_GRP_CD (+)
+                AND 	tmpsc.STORE_CD          = tmpsp.STORE_CD (+)
+                AND 	tmpsc.SDSEL_CLASS_CD    = tmpsp.SDSEL_CLASS_CD (+)
+                AND 	tmpsp.STORE_CD          = tmp.STORE_CD (+)
+                AND 	tmpsp.PROD_CD           = tmp.PROD_CD (+)
+                AND 	tmpsp.MOD_ID 		    = twuidv.USER_ID (+)
                 ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
             </when>
         </choose>
@@ -2574,12 +2595,15 @@
                 ,       D.PROD_CD
                 ,		E.PROD_NM
                 ,       E.REMARK
+                ,		TO_CHAR(TO_DATE(D.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                ,		F.USER_NM
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_HQ_KIOSK_CLS A
                 ,       TB_HQ_KIOSK_GROUP B
                 ,       TB_HQ_KIOSK_M_CLS C
                 ,       TB_HQ_KIOSK_KEY D
                 ,		TB_HQ_PRODUCT E
+                ,		TB_WB_USER_INFO_DTL_V01 F
                 WHERE   A.HQ_OFFICE_CD      =   #{hqOfficeCd}
                 AND     B.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
                 AND     B.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
@@ -2591,6 +2615,7 @@
                 AND     D.TU_CLS_CD     (+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_CD, '2', C.TU_M_CLS_CD, A.TU_CLS_CD)
                 AND 	E.HQ_OFFICE_CD  (+) = 	A.HQ_OFFICE_CD
                 AND 	E.PROD_CD  		(+) = 	D.PROD_CD
+                AND 	F.USER_ID 		(+) = 	D.MOD_ID
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
@@ -2611,12 +2636,15 @@
                 ,       D.PROD_CD
                 ,		E.PROD_NM
                 ,       E.REMARK
+                ,		TO_CHAR(TO_DATE(D.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                ,		F.USER_NM
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_MS_KIOSK_CLS A
                 ,       TB_MS_KIOSK_GROUP B
                 ,       TB_MS_KIOSK_M_CLS C
                 ,       TB_MS_KIOSK_KEY D
                 ,		TB_MS_PRODUCT E
+                ,		TB_WB_USER_INFO_DTL_V01 F
                 WHERE   A.STORE_CD          =   #{storeCd}
                 AND     A.POS_NO            =   #{posNo}
                 AND     B.STORE_CD      (+) =   A.STORE_CD
@@ -2632,6 +2660,7 @@
                 AND     D.TU_CLS_CD     (+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_CD, '2', C.TU_M_CLS_CD, A.TU_CLS_CD)
                 AND 	E.STORE_CD      (+) = 	A.STORE_CD
                 AND 	E.PROD_CD  		(+) = 	D.PROD_CD
+                AND 	F.USER_ID 		(+) = 	D.MOD_ID
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
@@ -2663,11 +2692,14 @@
                 ,       D.PROD_CD
                 ,		E.PROD_NM
                 ,       E.REMARK
+                ,		TO_CHAR(TO_DATE(D.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                ,		F.USER_NM
                 FROM    TB_HQ_KIOSK_CLS A
                 ,       TB_HQ_KIOSK_GROUP B
                 ,       TB_HQ_KIOSK_M_CLS C
                 ,       TB_HQ_KIOSK_KEY D
                 ,		TB_HQ_PRODUCT E
+                ,		TB_WB_USER_INFO_DTL_V01 F
                 WHERE   A.HQ_OFFICE_CD      =   #{hqOfficeCd}
                 AND     B.HQ_OFFICE_CD  (+) =   A.HQ_OFFICE_CD
                 AND     B.TU_CLS_TYPE   (+) =   A.TU_CLS_TYPE
@@ -2679,6 +2711,7 @@
                 AND     D.TU_CLS_CD     (+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_CD, '2', C.TU_M_CLS_CD, A.TU_CLS_CD)
                 AND 	E.HQ_OFFICE_CD  (+) = 	A.HQ_OFFICE_CD
                 AND 	E.PROD_CD  		(+) = 	D.PROD_CD
+                AND 	F.USER_ID 		(+) = 	D.MOD_ID
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
@@ -2697,11 +2730,14 @@
                 ,       D.PROD_CD
                 ,		E.PROD_NM
                 ,       E.REMARK
+                ,		TO_CHAR(TO_DATE(D.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+                ,		F.USER_NM
                 FROM    TB_MS_KIOSK_CLS A
                 ,       TB_MS_KIOSK_GROUP B
                 ,       TB_MS_KIOSK_M_CLS C
                 ,       TB_MS_KIOSK_KEY D
                 ,		TB_MS_PRODUCT E
+                ,		TB_WB_USER_INFO_DTL_V01 F
                 WHERE   A.STORE_CD          =   #{storeCd}
                 AND     A.POS_NO            =   #{posNo}
                 AND     B.STORE_CD      (+) =   A.STORE_CD
@@ -2717,6 +2753,7 @@
                 AND     D.TU_CLS_CD     (+) =   DECODE(A.TU_M_CLS_FG, '0', A.TU_CLS_CD, '2', C.TU_M_CLS_CD, A.TU_CLS_CD)
                 AND 	E.STORE_CD      (+) = 	A.STORE_CD
                 AND 	E.PROD_CD  		(+) = 	D.PROD_CD
+                AND 	F.USER_ID 		(+) = 	D.MOD_ID
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
