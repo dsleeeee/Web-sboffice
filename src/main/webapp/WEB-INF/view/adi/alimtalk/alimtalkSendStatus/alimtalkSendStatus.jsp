@@ -166,7 +166,6 @@
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnNm"/>" binding="senderKeyOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendYn"/>" binding="rmSendYn" data-map="rmSendYnDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmTitle"/>" binding="rmTitle" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmContent"/>" binding="rmContent" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendNo"/>" binding="rmSendNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
@@ -224,7 +223,6 @@
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.senderKeyOrgnNm"/>" binding="senderKeyOrgnNm" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendYn"/>" binding="rmSendYn" data-map="rmSendYnDataMap" width="115" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmType"/>" binding="rmType" data-map="rmTypeDataMap" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmTitle"/>" binding="rmTitle" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmContent"/>" binding="rmContent" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkSendStatus.rmSendNo"/>" binding="rmSendNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
 
