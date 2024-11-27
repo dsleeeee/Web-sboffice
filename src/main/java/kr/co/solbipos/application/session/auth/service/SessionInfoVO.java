@@ -174,6 +174,9 @@ public class SessionInfoVO extends CmmVO {
 
     /** 웹사용여부 */
     private String webUseYn;
+    
+    /** 소속구분 String형 */
+    private String orgnFgCode;
 
 	/**
      * @return the sessionId
@@ -697,5 +700,13 @@ public class SessionInfoVO extends CmmVO {
 
     public void setWebUseYn(String webUseYn) {
         this.webUseYn = webUseYn;
+    }
+
+    public String getOrgnFgCode() {
+        return orgnFgCode;
+    }
+
+    public void setOrgnFgCode(String orgnFgCode) {
+        this.orgnFgCode = orgnFgCode;
     }
 }

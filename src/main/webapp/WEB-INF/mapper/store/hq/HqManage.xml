@@ -1146,17 +1146,34 @@
     -->
     <select id="exceptMenu" parameterType="hqMenuVO" resultType="DefaultMap">
        /* USE : HqManageMapper.exceptMenu */
-        SELECT USER_ID,
-   	            RESRCE_CD,
-	            INCLD_EXCLD_FG,
-	            USE_YN
-          FROM TB_WB_AUTHOR_EXCEPT_V01
-         WHERE USER_ID = (SELECT twu.USER_ID
-                             FROM TB_HQ_EMPLOYEE the,
-                                   TB_WB_USER_INFO twu
-                            WHERE the.HQ_OFFICE_CD = #{copyHqOfficeCd}
-                               AND the.EMP_NO = '0000'
-                               AND twu.USER_ID = the.USER_ID)
+        SELECT  USER_ID
+   	    ,       RESRCE_CD
+	    ,       INCLD_EXCLD_FG
+	    ,       USE_YN
+        FROM    TB_WB_AUTHOR_EXCEPT_V01
+        WHERE   USER_ID = ( SELECT  twu.USER_ID
+                            FROM    TB_HQ_EMPLOYEE the
+                            ,       TB_WB_USER_INFO twu
+                            WHERE   the.HQ_OFFICE_CD    = #{copyHqOfficeCd}
+                            AND     the.EMP_NO          = '0000'
+                            AND     twu.USER_ID         = the.USER_ID)
+        AND    RESRCE_CD NOT IN (
+                                    SELECT 	twri.RESRCE_CD AS RESRCE_CD
+                                    FROM 	TB_WB_RESRCE_INFO twr
+                                    , 	    TB_WB_RESRCE_INFO twri
+                                    WHERE 	1=1
+                                    AND 	twr.USE_YN      = 'Y'
+                                    AND 	twri.USE_YN     = 'Y'
+                                    AND 	twri.P_RESRCE   = twr.RESRCE_CD
+                                    AND 	twri.DISP_LEVEL = '2'
+                                    AND 	twri.RESRCE_CD NOT IN 	(
+                                                                         SELECT P_RESRCE
+                                                                         FROM 	TB_WB_RESRCE_INFO
+                                                                         WHERE 	USE_YN      = 'Y'
+                                                                         AND 	DISP_LEVEL  = '3'
+                                                                     )
+                                    AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                 )
            AND USE_YN = 'Y'
     </select>
 
@@ -1168,13 +1185,30 @@
     -->
     <delete id="removeAuthAll" parameterType="DefaultMap">
         /* HqManageMapper.removeAuthAll */
-        DELETE TB_WB_AUTHOR_EXCEPT
-         WHERE USER_ID = (SELECT twu.USER_ID
-                            FROM TB_HQ_EMPLOYEE the,
-                                 TB_WB_USER_INFO twu
-                           WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
-                             AND the.EMP_NO = '0000'
-                             AND twu.USER_ID = the.USER_ID)
+        DELETE  TB_WB_AUTHOR_EXCEPT
+        WHERE   USER_ID = ( SELECT  twu.USER_ID
+                            FROM    TB_HQ_EMPLOYEE the
+                            ,       TB_WB_USER_INFO twu
+                            WHERE   the.HQ_OFFICE_CD    = #{hqOfficeCd}
+                            AND     the.EMP_NO          = '0000'
+                            AND     twu.USER_ID         = the.USER_ID)
+        AND     RESRCE_CD NOT IN    (
+                                        SELECT 	twri.RESRCE_CD AS RESRCE_CD
+                                        FROM 	TB_WB_RESRCE_INFO twr
+                                        , 	    TB_WB_RESRCE_INFO twri
+                                        WHERE 	1=1
+                                        AND 	twr.USE_YN      = 'Y'
+                                        AND 	twri.USE_YN     = 'Y'
+                                        AND 	twri.P_RESRCE   = twr.RESRCE_CD
+                                        AND 	twri.DISP_LEVEL = '2'
+                                        AND 	twri.RESRCE_CD NOT IN 	(
+                                                                            SELECT 	P_RESRCE
+                                                                            FROM 	TB_WB_RESRCE_INFO
+                                                                            WHERE 	USE_YN = 'Y'
+                                                                            AND 	DISP_LEVEL = '3'
+                                                                        )
+                                        AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                    )
     </delete>
 
     <!-- 업체 목록 조회 -->
