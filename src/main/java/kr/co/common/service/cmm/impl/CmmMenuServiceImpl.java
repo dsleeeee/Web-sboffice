@@ -84,6 +84,15 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     /** 메뉴목록 조회 : 사용자의 권한있는 메뉴 목록 */
     @Override
     public List<ResrceInfoBaseVO> getUserMenuList(SessionInfoVO sessionInfoVO) {
+        System.out.println(sessionInfoVO.getOrgnFg() + "구분");
+        System.out.println(sessionInfoVO.getOrgnFg().getCode() + "구분코드");
+        System.out.println(sessionInfoVO.getHqOfficeCd() + "본사코드");
+        System.out.println(sessionInfoVO.getStoreCd() + "매장코드");
+
+        sessionInfoVO.setOrgnFgCode(sessionInfoVO.getOrgnFg().getCode());
+
+        System.out.println(sessionInfoVO.getOrgnFgCode() + "구분코드2");
+
         return cmmMenuMapper.getUserMenuList(sessionInfoVO);
     }
 
