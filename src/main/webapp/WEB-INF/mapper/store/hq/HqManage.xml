@@ -741,9 +741,13 @@
                 '[' || A.HQ_OFFICE_CD || '] ' || A.HQ_OFFICE_NM AS NAME
         FROM    TB_HQ_OFFICE A
         ,		TB_CM_AGENCY B
-        WHERE   A.HQ_OFFICE_CD != #{hqOfficeCd}
-        AND     A.SYS_CLOSURE_DATE > SYSDATE
-        AND     B.AGENCY_CD = A.AGENCY_CD
+        ,       TB_HQ_EMPLOYEE C
+        WHERE   A.HQ_OFFICE_CD     != #{hqOfficeCd}
+        AND     A.SYS_CLOSURE_DATE  > SYSDATE
+        AND     B.AGENCY_CD         = A.AGENCY_CD
+        AND     C.HQ_OFFICE_CD      = A.HQ_OFFICE_CD
+        AND     C.EMP_NO            = '0000'
+        AND     C.USER_ID IS NOT NULL
         AND     (A.AGENCY_CD = #{agencyCd} OR B.P_AGENCY_CD= #{agencyCd} OR A.HQ_OFFICE_CD = '00000')
         ORDER
         BY      A.HQ_OFFICE_CD

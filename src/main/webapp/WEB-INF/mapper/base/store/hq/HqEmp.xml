@@ -439,13 +439,15 @@
     -->
     <select id="authHqEmpList" parameterType="hqEmpVO" resultType="DefaultMap">
         /* USE : HqEmpMapper.authHqEmpList */
-        SELECT EMP_NO AS VALUE,
-               '[' || EMP_NO || '] ' || EMP_NM AS NAME
-          FROM TB_HQ_EMPLOYEE
-         WHERE USE_YN = 'Y'
-           AND HQ_OFFICE_CD = #{hqOfficeCd}
-           AND EMP_NO != #{empNo}
-         ORDER BY EMP_NO
+        SELECT  EMP_NO AS VALUE
+        ,       '[' || EMP_NO || '] ' || EMP_NM AS NAME
+        FROM    TB_HQ_EMPLOYEE
+        WHERE   USE_YN = 'Y'
+        AND     HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     EMP_NO != #{empNo}
+        AND     USER_ID IS NOT NULL
+        ORDER
+        BY      EMP_NO
     </select>
 
     <!-- 사용 메뉴 조회 -->

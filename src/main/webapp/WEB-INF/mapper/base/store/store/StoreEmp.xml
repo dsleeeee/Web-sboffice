@@ -384,14 +384,16 @@
           COMMENTS : 매장 사원을 조회한다.
     -->
     <select id="authStoreEmpList" parameterType="storeEmpVO" resultType="DefaultMap">
-            /* USE : StoreEmpMapper.authStoreEmpList */
-            SELECT EMP_NO AS VALUE,
-                   '[' || EMP_NO || '] ' || EMP_NM AS NAME
-              FROM TB_MS_EMPLOYEE
-             WHERE USE_YN = 'Y'
-               AND STORE_CD = #{storeCd}
-               AND EMP_NO != #{empNo}
-         ORDER BY EMP_NO
+        /* USE : StoreEmpMapper.authStoreEmpList */
+        SELECT  EMP_NO AS VALUE
+        ,       '[' || EMP_NO || '] ' || EMP_NM AS NAME
+        FROM    TB_MS_EMPLOYEE
+        WHERE   USE_YN      = 'Y'
+        AND     STORE_CD    = #{storeCd}
+        AND     EMP_NO     != #{empNo}
+        AND     USER_ID IS NOT NULL
+        ORDER
+        BY      EMP_NO
     </select>
 
     <!-- 사용 메뉴 조회 -->
