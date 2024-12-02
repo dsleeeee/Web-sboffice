@@ -6862,9 +6862,13 @@
                 '[' || A.STORE_CD || '] ' || A.STORE_NM AS NAME
         FROM    TB_MS_STORE A
         ,		TB_CM_AGENCY B
-        WHERE   A.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     A.STORE_CD != #{storeCd}
-        AND     B.AGENCY_CD = A.AGENCY_CD
+        ,       TB_MS_EMPLOYEE C
+        WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     A.STORE_CD     != #{storeCd}
+        AND     B.AGENCY_CD     = A.AGENCY_CD
+        AND     C.STORE_CD      = A.STORE_CD
+        AND     C.EMP_NO        = '0000'
+        AND     C.USER_ID IS NOT NULL
         <if test='orgnFg != null and orgnFg == "A"'>
             AND (A.AGENCY_CD = #{agencyCd} OR B.P_AGENCY_CD = #{agencyCd})
         </if>
