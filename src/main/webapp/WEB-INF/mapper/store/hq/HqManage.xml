@@ -748,7 +748,9 @@
         AND     C.HQ_OFFICE_CD      = A.HQ_OFFICE_CD
         AND     C.EMP_NO            = '0000'
         AND     C.USER_ID IS NOT NULL
-        AND     (A.AGENCY_CD = #{agencyCd} OR B.P_AGENCY_CD= #{agencyCd} OR A.HQ_OFFICE_CD = '00000')
+        <if test='orgnFg != null and orgnFg == "A"'>
+            AND (A.AGENCY_CD = #{agencyCd} OR B.P_AGENCY_CD= #{agencyCd} OR A.HQ_OFFICE_CD = '00000')
+        </if>
         ORDER
         BY      A.HQ_OFFICE_CD
     </select>
