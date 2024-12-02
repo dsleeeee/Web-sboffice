@@ -27,8 +27,8 @@ var sendStatusFgData = [
     {"name":"실패","value":"-1"}, // _ENC 발송실패
     {"name":"전송","value":"4"}, // _REPORT 대기
     {"name":"전송성공","value":"5"}, // _REPORT 성공
-    {"name":"전송실패","value":"6"}, // _REPORT 실패
-    {"name":"","value":"7"} // _REPORT 오류
+    {"name":"전송실패","value":"6"} // _REPORT 실패
+    // {"name":"","value":"7"} // _REPORT 오류
 ];
 // 예약여부
 var reserveYnDataMapData = [
