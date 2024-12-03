@@ -99,12 +99,32 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._postJSONQuery.withPopUp( '/store/manage/storeManage/storeManage/getStoreConfigList.sb', params, function(response){
       if (!$.isEmptyObject(response.data)) {
         var list = response.data.data.list;
+        var arr = [];     // 세부명칭 순서 재배치용 배열
+        var arr1320 = []; // [1320]트래킹전송주기 환경설정코드 세부명칭 배열
+
+        for (var i = 0; i < list.length; i++) {
+            // [1320]트래킹전송주기 세부명칭 따로 분리
+            if (list[i].envstCd === "1320") {
+                arr1320.push(list[i]);
+            } else {
+                arr.push(list[i]);
+            }
+        }
+
+        // 기존: [0]10분, [1]3분, [2]7분, [3]20분, [4]30분, [5]60분, [6]피크타임제외
+        // 변경: [1]3분, [2]7분, [0]10분, [3]20분, [4]30분, [5]60분, [6]피크타임제외 으로 순서 변경(분 순서대로)
+        var chgItem = arr1320.splice(0, 1); // [0]10분 값 갖고 있기
+        arr1320.splice(2, 0, chgItem[0]);  // 해당 위치에 삽입
+
+        // 순서 변경한 [1320]트래킹전송주기 세부명칭 재배치용 배열에 추가
+        for (var i = 0; i < arr1320.length; i++) {
+            arr.push(arr1320[i]);
+        }
 
         $scope.$broadcast('loadingPopupInactive');
-        // setEnvContents("S", list);
 
         var envScope = agrid.getScope('storeEnvCtrl');
-        envScope.setEnvContents("S", list);
+        envScope.setEnvContents("S", arr);
       }
     });
   };
