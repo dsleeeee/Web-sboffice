@@ -59,7 +59,8 @@
             <button class="btn_down" id="btnDownKeyMapGrp" ng-click="rowMoveDownKeyMap()">
                 <s:message code="mobile.cmm.down" />
             </button>
-            <button class="btn_skyblue ml5 fr" id="btnSaveGrp" ng-click="save()">
+            <%-- 저장 --%>
+            <button class="btn_skyblue ml5 fr" id="btnSaveGrp" ng-click="save()" style="display: none;">
                 <s:message code="mobile.cmm.save"/>
             </button>
         </div>
@@ -102,7 +103,8 @@
             <button class="btn_down" id="btnDownKeyMapMGrp" ng-click="rowMoveDownKeyMap()">
                 <s:message code="mobile.cmm.down" />
             </button>
-            <button class="btn_skyblue ml5 fr" id="btnSaveMGrp" ng-click="save()">
+            <%-- 저장 --%>
+            <button class="btn_skyblue ml5 fr" id="btnSaveMGrp" ng-click="save()" style="display: none;">
                 <s:message code="mobile.cmm.save"/>
             </button>
         </div>
@@ -144,7 +146,8 @@
             <button class="btn_down" id="btnDownKeyMap" ng-click="rowMoveDownKeyMapProd()">
                 <s:message code="mobile.cmm.down" />
             </button>
-            <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveProd()">
+            <%-- 저장 --%>
+            <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveProd()" style="display: none;">
                 <s:message code="mobile.cmm.save"/>
             </button>
         </div>

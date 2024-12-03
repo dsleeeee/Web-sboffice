@@ -48,8 +48,10 @@
         </c:if>
         </tbody>
     </table>
+
     <div class="mt5 oh sb-select dkbr">
-        <button class="btn_blue fr" id="btnSave" ng-click="save()">
+        <%-- 저장 --%>
+        <button class="btn_blue fr" id="btnSave" ng-click="save()" style="display: none;">
             <s:message code="mobile.cmm.save"/>
         </button>
     </div>
@@ -162,6 +164,8 @@
 
 </div>
 <script>
+
     var orgnFg = "${orgnFg}";
 </script>
+
 <script type="text/javascript" src="/resource/solbipos/js/mobile/prod/sideMenuSoldOut/mobileSideMenuSoldOut.js?ver=20220303.01" charset="utf-8"></script>

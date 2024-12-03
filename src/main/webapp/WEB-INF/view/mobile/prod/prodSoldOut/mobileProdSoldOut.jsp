@@ -16,7 +16,7 @@
         <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('mobileProdSoldOutCtrl', 1)">
             <s:message code="mobile.cmm.search"/>
         </button>
-
+        <%-- 확장조회 --%>
         <button class="btn_blue fr mt5 mr10" id="btnSearchAddShow" ng-click="searchAddShowChange()">
             <s:message code="mobile.cmm.search.addShow"/>
         </button>
@@ -145,7 +145,8 @@
     </table>
 
     <div class="mt5 oh sb-select dkbr">
-        <button class="btn_blue fr" id="btnSave" ng-click="save()">
+        <%-- 저장 --%>
+        <button class="btn_blue fr" id="btnSave" ng-click="save()" style="display: none;">
             <s:message code="mobile.cmm.save"/>
         </button>
     </div>
