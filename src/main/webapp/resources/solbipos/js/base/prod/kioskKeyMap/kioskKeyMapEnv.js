@@ -22,9 +22,10 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', '$timeout', function ($
 
     angular.extend(this, new RootController('kioskKeyMapEnvCtrl', $scope, $http, false));
 
-    $scope._setComboData("srchEnvSysStatFg", sysStatFg);
-    $scope._setComboData("envTuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
-    $scope._setComboData("tuMClsFgMapEnv", tuMClsFgMapEnvComboData); // KIOSK중분류사용
+    $scope._setComboData("srchEnvSysStatFg", sysStatFg);             // 검색조건 매장상태구분
+    $scope._setComboData("envTuClsType", kioskTuClsTypeList);        // 적용 키오스크용 키맵그룹
+    $scope._setComboData("tuMClsFgMapEnv", tuMClsFgMapEnvComboData); // 검색조건 KIOSK중분류사용
+    $scope._setComboData("tuClsTypeCombo2", kioskTuClsTypeListAll);  // 검색조건 키맵그룹
 
     // 브랜드 콤보박스 셋팅
     $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
@@ -55,7 +56,6 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 팝업 오픈 시, 매장리스트 조회
     $scope.$on("kioskKeyMapEnvCtrl", function(event, key) {
-        //$scope._setComboData("tuClsTypeCombo2", kioskTuClsTypeListAll);
 
         // 매장적용(매장/포장) 키값 hidden에 갖고 있기
         $("#hdEnvstCd").val(key);
