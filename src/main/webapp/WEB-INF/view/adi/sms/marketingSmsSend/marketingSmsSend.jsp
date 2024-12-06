@@ -7,7 +7,6 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
-<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/> <%-- 20241115 테스트 임시--%>
 
 <div id="marketingSmsSendView" style="display: none;padding: 10px 20px 40px;">
 
@@ -32,9 +31,9 @@
                     <s:message code="cmm.search" />
                 </button>
                 <%-- 본인인증 --%>
-                <button class="btn_blue mr5 fl" id="btnVerify" ng-click="verify()">
-                    <s:message code="marketingSmsSend.verify" />
-                </button>
+                <%--<button class="btn_blue mr5 fl" id="btnVerify" ng-click="verify()">--%>
+                    <%--<s:message code="marketingSmsSend.verify" />--%>
+                <%--</button>--%>
                 <%-- 확장조회 --%>
                 <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
                     <s:message code="cmm.search.addShow" />
@@ -540,16 +539,13 @@
                                 <s:message code="marketingSmsSend.reserve" />
                             </button>
                             <%-- 발신번호추가 --%>
-                            <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()">
+                            <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd()" style="display: none;">
                                 <s:message code="marketingSmsSend.telNoAdd" />
                             </button>
-                            <%-- 20241115 테스트 임시--%>
-                            <c:if test="${hqOfficeCd == 'DS019' or hqOfficeCd == 'DS002'}">
-                                <%-- 발신번호추가2 --%>
-                                <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd2()" style="display: block;">
-                                    <s:message code="marketingSmsSend.telNoAdd2" />
-                                </button>
-                            </c:if>
+                            <%-- 발신번호추가2 --%>
+                            <button class="btn_skyblue ml5 fl" id="btnTelNoAdd" ng-click="telNoAdd2()">
+                                <s:message code="marketingSmsSend.telNoAdd2" />
+                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -742,7 +738,7 @@
     var memberClassList = ${memberClassList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20241106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/marketingSmsSend/marketingSmsSend.js?ver=20241206.01" charset="utf-8"></script>
 
 <%-- 발신번호 사전등록 팝업 --%>
 <%--<c:import url="/WEB-INF/view/adi/sms/smsSend/smsTelNoRegister.jsp">--%>

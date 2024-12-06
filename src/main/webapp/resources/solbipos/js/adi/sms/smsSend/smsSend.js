@@ -105,7 +105,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
 
         // 본인인증 여부 체크
-        $scope.verifyChk();
+        // $scope.verifyChk();
 
         // 관리자/총판/본사/매장 명칭
         $scope.storeNmInfo();
@@ -132,86 +132,86 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     };
 
     // 본인인증 여부 체크
-    $scope.verifyChk = function() {
-        var params = {};
-
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-            if (response.data.data.list === 0) {
-                $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function() {
-                    // 본인인증 팝업창 띄우기
-                    $scope.verify();
-                });
-            } else {
-                // 발신번호 유무 체크
-                $scope.tellNumChk();
-            }
-        });
-    };
+    // $scope.verifyChk = function() {
+    //     var params = {};
+    //
+    //     $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+    //         if (response.data.data.list === 0) {
+    //             $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function() {
+    //                 // 본인인증 팝업창 띄우기
+    //                 $scope.verify();
+    //             });
+    //         } else {
+    //             // 발신번호 유무 체크
+    //             $scope.tellNumChk();
+    //         }
+    //     });
+    // };
 
     // 본인인증
-    $scope.verify = function(){
-        var params = {};
-
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-            if (response.data.data.list !== 0) {
-                $scope._popMsg(messages["marketingSmsSend.verifyChk"]);
-                return false;
-
-            } else {
-                $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal.sb", null, function(result) {
-                    var data = result.data;
-                    console.log(data);
-
-                    var auth_form = document.form_auth;
-
-                    var return_gubun;
-                    var width = 410;
-                    var height = 500;
-
-                    var leftpos = screen.width / 2 - (width / 2);
-                    var toppos = screen.height / 2 - (height / 2);
-
-                    var winopts = "width=" + width + ", height=" + height + ", toolbar=no,status=no,statusbar=no,menubar=no,scrollbars=no,resizable=no";
-                    var position = ",left=" + leftpos + ", top=" + toppos;
-
-                    var url = data.gwUrl + '?' +                        // KCP 인증창
-                        'site_cd=' + data.siteCd + '&' +                // 상점코드
-                        'ordr_idxx=' + data.ordrIdxx + '&' +            // 상점관리요청번호
-                        'req_tx=cert' + '&' +                                   // 요청의 종류를 구분하는 변수
-                        'cert_method=01' + '&' +                                // 01-휴대폰인증 02-공인인증(추후제공)
-                        'up_hash=' + data.upHash + '&' +                // 요청 hash data
-                        'Ret_URL=' + data.retUrl + '?sid=' + data.sessionId + '&' +                // 본인인증 결과 리턴페이지
-                        'cert_otp_use=Y' + '&' +                                // 인요청시 OTP승인 여부
-                        'cert_enc_use_ext=Y'
-                    ;
-
-                    console.log("JH");
-                    console.log("site_cd : " + data.siteCd);
-                    console.log("web_siteid : " + data.webSiteid);
-                    console.log("gw_url : " + data.gwUrl);
-                    console.log("Ret_URL : " + data.retUrl);
-                    console.log("ordr_idxx : " + data.ordrIdxx);
-                    console.log("up_hash : " + data.upHash);
-                    console.log("sessionID : " + data.sessionId);
-                    console.log("url : " + url);
-
-                    // 저장기능 수행
-                    var params = {};
-                    params.certId = data.ordrIdxx;
-
-                    $.postJSONArray("/adi/sms/marketingSmsSend/marketingSmsSend/saveVerify.sb", params, function (result) {
-                            console.log("JH : 결과");
-                            var AUTH_POP =  window.open(url, 'auth_popup', winopts + position);
-                            console.log('1111');
-                        },
-                        function (result) {
-                            s_alert.pop("JH : 결과msg" + result.message);
-                            s_alert.pop(result.message);
-                        });
-                });
-            }
-        });
-    };
+    // $scope.verify = function(){
+    //     var params = {};
+    //
+    //     $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+    //         if (response.data.data.list !== 0) {
+    //             $scope._popMsg(messages["marketingSmsSend.verifyChk"]);
+    //             return false;
+    //
+    //         } else {
+    //             $.postJSON("/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyVal.sb", null, function(result) {
+    //                 var data = result.data;
+    //                 console.log(data);
+    //
+    //                 var auth_form = document.form_auth;
+    //
+    //                 var return_gubun;
+    //                 var width = 410;
+    //                 var height = 500;
+    //
+    //                 var leftpos = screen.width / 2 - (width / 2);
+    //                 var toppos = screen.height / 2 - (height / 2);
+    //
+    //                 var winopts = "width=" + width + ", height=" + height + ", toolbar=no,status=no,statusbar=no,menubar=no,scrollbars=no,resizable=no";
+    //                 var position = ",left=" + leftpos + ", top=" + toppos;
+    //
+    //                 var url = data.gwUrl + '?' +                        // KCP 인증창
+    //                     'site_cd=' + data.siteCd + '&' +                // 상점코드
+    //                     'ordr_idxx=' + data.ordrIdxx + '&' +            // 상점관리요청번호
+    //                     'req_tx=cert' + '&' +                                   // 요청의 종류를 구분하는 변수
+    //                     'cert_method=01' + '&' +                                // 01-휴대폰인증 02-공인인증(추후제공)
+    //                     'up_hash=' + data.upHash + '&' +                // 요청 hash data
+    //                     'Ret_URL=' + data.retUrl + '?sid=' + data.sessionId + '&' +                // 본인인증 결과 리턴페이지
+    //                     'cert_otp_use=Y' + '&' +                                // 인요청시 OTP승인 여부
+    //                     'cert_enc_use_ext=Y'
+    //                 ;
+    //
+    //                 console.log("JH");
+    //                 console.log("site_cd : " + data.siteCd);
+    //                 console.log("web_siteid : " + data.webSiteid);
+    //                 console.log("gw_url : " + data.gwUrl);
+    //                 console.log("Ret_URL : " + data.retUrl);
+    //                 console.log("ordr_idxx : " + data.ordrIdxx);
+    //                 console.log("up_hash : " + data.upHash);
+    //                 console.log("sessionID : " + data.sessionId);
+    //                 console.log("url : " + url);
+    //
+    //                 // 저장기능 수행
+    //                 var params = {};
+    //                 params.certId = data.ordrIdxx;
+    //
+    //                 $.postJSONArray("/adi/sms/marketingSmsSend/marketingSmsSend/saveVerify.sb", params, function (result) {
+    //                         console.log("JH : 결과");
+    //                         var AUTH_POP =  window.open(url, 'auth_popup', winopts + position);
+    //                         console.log('1111');
+    //                     },
+    //                     function (result) {
+    //                         s_alert.pop("JH : 결과msg" + result.message);
+    //                         s_alert.pop(result.message);
+    //                     });
+    //             });
+    //         }
+    //     });
+    // };
 
     // 발신번호 유무 체크
     $scope.tellNumChk = function() {
@@ -387,13 +387,13 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
         var params = {};
 
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-            if (response.data.data.list === 0) {
-                $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function () {
-                    // 본인인증 팝업창 띄우기
-                    $scope.verify();
-                });
-            } else {
+        // $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+        //     if (response.data.data.list === 0) {
+        //         $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function () {
+        //             // 본인인증 팝업창 띄우기
+        //             $scope.verify();
+        //         });
+        //     } else {
                 // 전송,예약시 그리드가 없는지 체크(추가,조회를 하지않으면 그리드 생성안됨)
                 if (gridYn == "N") {
                     s_alert.pop(messages["cmm.not.select"]);
@@ -489,8 +489,8 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                     // 전송 저장
                     $scope.smsSendSave(reserveYn, "", msgType, msgOneAmt, smsSendListCnt);
                 }
-            }
-        });
+            // }
+        // });
     };
 
     // 전송 저장
@@ -781,7 +781,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             if (response.data.data.list === 0) {
                 $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function () {
                     // 본인인증 팝업창 띄우기
-                    $scope.verify();
+                    // $scope.verify();
                 });
             } else {
                 $scope.wjSmsTelNoRegisterLayer.show(true);
