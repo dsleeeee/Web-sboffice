@@ -396,6 +396,7 @@
         /* USE : CouponMapper.getHqCouponList */
         SELECT  thc.HQ_OFFICE_CD
         ,       thc.COUPN_CD
+        ,       B.CD_DISC
         ,       thc.COUPN_NM
         ,       thc.PAY_CLASS_CD
         ,       thc.COUPN_DC_FG
@@ -412,6 +413,7 @@
         ,       (SELECT COUNT(thcpe.PROD_CD) FROM TB_HQ_COUPON_PROD_EXCEPT thcpe WHERE thcpe.HQ_OFFICE_CD = thc.HQ_OFFICE_CD AND thcpe.PAY_CLASS_CD = thc.PAY_CLASS_CD AND thcpe.COUPN_CD = thc.COUPN_CD )      AS EXCEPT_PROD_CNT
         ,       thc.DISP_SEQ_NO AS DISP_SEQ
         FROM    TB_HQ_COUPON thc
+        ,       TB_NEOE_SPOS_DISCOUNT B
         <if test="(storeCd != null and storeCd != '') or (storeNm != null and storeNm != '')">
         ,   (
                 SELECT 	DISTINCT
@@ -451,6 +453,8 @@
         </if>
         WHERE   thc.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     thc.PAY_CLASS_CD = #{payClassCd}
+        AND     B.PAY_CLASS_CD (+)= thc.PAY_CLASS_CD
+        AND     B.COUPN_CD (+)= thc.COUPN_CD
         <if test="coupnNm != null and coupnNm != ''">
             AND thc.COUPN_NM LIKE '%'||#{coupnNm}||'%'
         </if>

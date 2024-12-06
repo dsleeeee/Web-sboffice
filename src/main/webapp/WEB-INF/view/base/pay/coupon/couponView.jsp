@@ -175,6 +175,9 @@
           <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.hqOfficeCd"/>" binding="hqOfficeCd" width="80" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnCd"/>" binding="coupnCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+          <c:if test="${hqOfficeCd == 'A0001' and orgnFg == 'HQ'}">
+              <wj-flex-grid-column header="<s:message code="coupon.erpCoupnCd"/>" binding="cdDisc" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+           </c:if>
           <wj-flex-grid-column header="<s:message code="coupon.coupnNm"/>" binding="coupnNm" width="100" maxLength="15"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.payClassCd"/>" binding="payClassCd" width="80" visible="false"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="coupon.coupnDcFg"/>" binding="coupnDcFg" width="90" data-map="coupnDcFgDataMap"></wj-flex-grid-column>
