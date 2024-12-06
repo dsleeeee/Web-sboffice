@@ -5246,25 +5246,31 @@
                                                                             FROM    TB_HQ_PRODUCT_SDSEL_GROUP thpsg2
                                                                             WHERE   thpsg2.HQ_OFFICE_CD = #{hqOfficeCd}
                                                                             AND     thpsg2.SDSEL_GRP_CD = thp.SDSEL_GRP_CD),'S','[단품]','C','[세트]',NULL,'[단품]')) AS SIDE_PROD_YN
-                ,       DECODE(thp.GROUP_PROD_CD, NULL,'','[키오스크-단품/세트선택팝업]') AS GROUP_PROD_CD
-                ,		TO_CHAR(decode(thpsp.SALE_UPRC, 0, (SELECT	thpsp.ADD_PROD_UPRC
+                ,       DECODE(thp.GROUP_PROD_CD, NULL,'','[키오스크-단품/세트선택팝업]') AS GROUP_PROD_CD_FG
+                ,		TO_CHAR(decode(thpsp.SALE_UPRC, 0, (SELECT	NVL(MAX(thpsp.ADD_PROD_UPRC), 0)
                                                             FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                                                             ,		TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                                                             ,		TB_HQ_PRODUCT_SDSEL_PROD thpsp
-                                                            WHERE  	thpsg.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                                                            AND 	thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
-                                                            AND 	thpsg.HQ_OFFICE_CD = thpsc.HQ_OFFICE_CD
-                                                            AND 	thpsg.SDSEL_GRP_CD = thpsc.SDSEL_GRP_CD
-                                                            AND 	thpsg.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                                                            AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD
-                                                            AND 	thpsc.DISP_SEQ = '1'
-                                                            AND 	thpsc.USE_YN = 'Y'
-                                                            AND 	thpsp.DISP_SEQ = '1'
-                                                            AND 	thpsp.USE_YN = 'Y'
-                                                            AND 	thp.SIDE_PROD_YN = 'Y'), thpsp.SALE_UPRC),'999,999,999,999') AS SALE_UPRC
+                                                            WHERE  	thpsg.HQ_OFFICE_CD      = thp.HQ_OFFICE_CD
+                                                            AND 	thpsg.SDSEL_GRP_CD      = thp.SDSEL_GRP_CD
+                                                            AND 	thpsg.HQ_OFFICE_CD      = thpsc.HQ_OFFICE_CD
+                                                            AND 	thpsg.SDSEL_GRP_CD      = thpsc.SDSEL_GRP_CD
+                                                            AND 	thpsg.HQ_OFFICE_CD      = thpsp.HQ_OFFICE_CD
+                                                            AND 	thpsc.SDSEL_CLASS_CD    = thpsp.SDSEL_CLASS_CD
+                                                            AND     thpsg.USE_YN            = 'Y'
+                                                            AND 	thpsc.DISP_SEQ          = '1'
+                                                            AND 	thpsc.USE_YN            = 'Y'
+                                                            AND 	thpsp.DISP_SEQ          = '1'
+                                                            AND 	thpsp.USE_YN            = 'Y'
+                                                            AND 	thp.SIDE_PROD_YN        = 'Y'), thpsp.SALE_UPRC),'999,999,999,999') AS SALE_UPRC
+                ,		thp.GROUP_PROD_CD
+                ,		thp2.PROD_NM        AS GROUP_PROD_NM
+                ,		DECODE(thpi2.MOMS_KIOSK_EDGE,'1','NEW','2','BEST','3','EVENT','0') AS MOMS_KIOSK_EDGE
                 FROM 	TB_HQ_KIOSK_KEY thkk
                 ,		TB_HQ_PRODUCT thp
                 ,		TB_HQ_PRODUCT_IMAGE thpi
+                ,		TB_HQ_PRODUCT thp2
+                ,		TB_HQ_PRODUCT_INFO thpi2
                 ,		(
                             SELECT	PROD_CD
                             ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
@@ -5278,15 +5284,19 @@
                             GROUP
                             BY 		PROD_CD
                         ) thpsp
-                WHERE 	thkk.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND 	thkk.TU_CLS_TYPE = #{tuClsType}
-                AND 	thkk.TU_CLS_CD = #{tuClsCd}
-                AND 	thkk.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND 	thkk.PROD_CD = thp.PROD_CD
-                AND 	thkk.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD(+)
-                AND 	thkk.PROD_CD = thpi.PROD_CD(+)
-                AND 	'002' = thpi.IMG_FG(+)
-                AND 	thkk.PROD_CD = thpsp.PROD_CD
+                WHERE 	thkk.HQ_OFFICE_CD   = #{hqOfficeCd}
+                AND 	thkk.TU_CLS_TYPE    = #{tuClsType}
+                AND 	thkk.TU_CLS_CD      = #{tuClsCd}
+                AND 	thkk.HQ_OFFICE_CD   = thp.HQ_OFFICE_CD
+                AND 	thkk.PROD_CD        = thp.PROD_CD
+                AND 	thkk.HQ_OFFICE_CD   = thpi.HQ_OFFICE_CD(+)
+                AND 	thkk.PROD_CD        = thpi.PROD_CD(+)
+                AND 	thp.HQ_OFFICE_CD    = thp2.HQ_OFFICE_CD (+)
+                AND 	thp.GROUP_PROD_CD   = thp2.PROD_CD (+)
+                AND 	thkk.HQ_OFFICE_CD   = thpi2.HQ_OFFICE_CD(+)
+                AND 	thkk.PROD_CD        = thpi2.PROD_CD(+)
+                AND 	'002'               = thpi.IMG_FG(+)
+                AND 	thkk.PROD_CD        = thpsp.PROD_CD
                 ORDER
                 BY 		thkk.INDEX_NO
             </when>
@@ -5301,26 +5311,32 @@
                                                                             FROM    TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                                                                             WHERE   tmpsg.STORE_CD = #{storeCd}
                                                                             AND     tmpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD),'S','[단품]','C','[세트]',NULL,'[단품]')) AS SIDE_PROD_YN
-                ,       DECODE(thp.GROUP_PROD_CD, NULL,'','[키오스크-단품/세트선택팝업]') AS GROUP_PROD_CD
-                ,		TO_CHAR(decode(thpsp.SALE_UPRC, 0, (SELECT	thpsp.ADD_PROD_UPRC
+                ,       DECODE(thp.GROUP_PROD_CD, NULL,'','[키오스크-단품/세트선택팝업]') AS GROUP_PROD_CD_FG
+                ,		TO_CHAR(decode(thpsp.SALE_UPRC, 0, (SELECT	NVL(MAX(thpsp.ADD_PROD_UPRC), 0)
                                                             FROM 	TB_MS_PRODUCT_SDSEL_GROUP thpsg
                                                             ,		TB_MS_PRODUCT_SDSEL_CLASS thpsc
                                                             ,		TB_MS_PRODUCT_SDSEL_PROD thpsp
-                                                            WHERE  	thpsg.STORE_CD = thp.STORE_CD
-                                                            AND 	thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
-                                                            AND 	thpsg.STORE_CD = thpsc.STORE_CD
-                                                            AND 	thpsg.SDSEL_GRP_CD = thpsc.SDSEL_GRP_CD
-                                                            AND 	thpsg.STORE_CD = thpsp.STORE_CD
-                                                            AND 	thpsc.SDSEL_CLASS_CD = thpsp.SDSEL_CLASS_CD
-                                                            AND 	thpsc.DISP_SEQ = '1'
-                                                            AND 	thpsc.USE_YN = 'Y'
-                                                            AND 	thpsp.DISP_SEQ = '1'
-                                                            AND 	thpsp.USE_YN = 'Y'
-                                                            AND 	thp.SIDE_PROD_YN = 'Y'), thpsp.SALE_UPRC),'999,999,999,999') AS SALE_UPRC
+                                                            WHERE  	thpsg.STORE_CD          = thp.STORE_CD
+                                                            AND 	thpsg.SDSEL_GRP_CD      = thp.SDSEL_GRP_CD
+                                                            AND 	thpsg.STORE_CD          = thpsc.STORE_CD
+                                                            AND 	thpsg.SDSEL_GRP_CD      = thpsc.SDSEL_GRP_CD
+                                                            AND 	thpsg.STORE_CD          = thpsp.STORE_CD
+                                                            AND 	thpsc.SDSEL_CLASS_CD    = thpsp.SDSEL_CLASS_CD
+                                                            AND     thpsg.USE_YN            = 'Y'
+                                                            AND 	thpsc.DISP_SEQ          = '1'
+                                                            AND 	thpsc.USE_YN            = 'Y'
+                                                            AND 	thpsp.DISP_SEQ          = '1'
+                                                            AND 	thpsp.USE_YN            = 'Y'
+                                                            AND 	thp.SIDE_PROD_YN        = 'Y'), thpsp.SALE_UPRC),'999,999,999,999') AS SALE_UPRC
                 ,       thp.SOLD_OUT_YN
+                ,		thp.GROUP_PROD_CD
+                ,		thp2.PROD_NM        AS GROUP_PROD_NM
+                ,		DECODE(thpi2.MOMS_KIOSK_EDGE,'1','NEW','2','BEST','3','EVENT','0') AS MOMS_KIOSK_EDGE
                 FROM 	TB_MS_KIOSK_KEY thkk
                 ,		TB_MS_PRODUCT thp
                 ,		TB_MS_PRODUCT_IMAGE thpi
+                ,		TB_MS_PRODUCT thp2
+                ,		TB_MS_PRODUCT_INFO thpi2
                 ,		(
                 SELECT	PROD_CD
                 ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
@@ -5334,16 +5350,20 @@
                 GROUP
                 BY 		PROD_CD
                 ) thpsp
-                WHERE 	thkk.STORE_CD = #{storeCd}
-                AND 	thkk.POS_NO = #{posNo}
-                AND 	thkk.TU_CLS_TYPE = #{tuClsType}
-                AND 	thkk.TU_CLS_CD = #{tuClsCd}
-                AND 	thkk.STORE_CD = thp.STORE_CD
-                AND 	thkk.PROD_CD = thp.PROD_CD
-                AND 	thkk.STORE_CD = thpi.STORE_CD(+)
-                AND 	thkk.PROD_CD = thpi.PROD_CD(+)
-                AND 	'002' = thpi.IMG_FG(+)
-                AND 	thkk.PROD_CD = thpsp.PROD_CD
+                WHERE 	thkk.STORE_CD       = #{storeCd}
+                AND 	thkk.POS_NO         = #{posNo}
+                AND 	thkk.TU_CLS_TYPE    = #{tuClsType}
+                AND 	thkk.TU_CLS_CD      = #{tuClsCd}
+                AND 	thkk.STORE_CD       = thp.STORE_CD
+                AND 	thkk.PROD_CD        = thp.PROD_CD
+                AND 	thkk.STORE_CD       = thpi.STORE_CD(+)
+                AND 	thkk.PROD_CD        = thpi.PROD_CD(+)
+                AND 	thp.STORE_CD        = thp2.STORE_CD (+)
+                AND 	thp.GROUP_PROD_CD   = thp2.PROD_CD (+)
+                AND 	thkk.STORE_CD       = thpi2.STORE_CD(+)
+                AND 	thkk.PROD_CD        = thpi2.PROD_CD(+)
+                AND 	'002'               = thpi.IMG_FG(+)
+                AND 	thkk.PROD_CD        = thpsp.PROD_CD
                 AND     (thp.KIOSK_DISPLAY_YN = 'Y' OR thp.KIOSK_DISPLAY_YN IS NULL)
                 ORDER
                 BY 		thkk.INDEX_NO

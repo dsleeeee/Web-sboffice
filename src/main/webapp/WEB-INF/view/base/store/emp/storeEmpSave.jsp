@@ -20,7 +20,7 @@
               <%-- 사원기초정보 탭 --%>
               <li><a id="storeEmpInfoTab" href="#" class="on"><s:message code="storeEmp.storeEmpInfo" /></a></li>
               <%-- 메뉴권한 탭 --%>
-              <li><a id="storeEmpMenuAuthTab" href="#" ng-click="changeTab()"><s:message code="storeEmp.menuSetting" /></a></li>
+<%--              <li><a id="storeEmpMenuAuthTab" href="#" ng-click="changeTab()"><s:message code="storeEmp.menuSetting" /></a></li>--%>
             </ul>
           </div>
 

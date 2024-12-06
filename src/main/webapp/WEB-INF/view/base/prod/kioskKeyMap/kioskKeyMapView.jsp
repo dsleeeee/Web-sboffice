@@ -71,29 +71,29 @@
                 <tbody>
                 <tr>
                     <td id="tdPre" rowspan="4" ng-click="tdPre()">◀</td>
-                    <td><div id="tuKey0"></div></td>
-                    <td><div id="tuKey1"></div></td>
-                    <td><div id="tuKey2"></div></td>
+                    <td><div id="tuKey0" ng-click="tuKeyClick('0')"></div></td>
+                    <td><div id="tuKey1" ng-click="tuKeyClick('1')"></div></td>
+                    <td><div id="tuKey2" ng-click="tuKeyClick('2')"></div></td>
                     <td id="tdNext" rowspan="4" ng-click="tdNext()">▶</td>
                 </tr>
                 <tr>
-                    <td><div id="tuKey3"></div></td>
-                    <td><div id="tuKey4"></div></td>
-                    <td><div id="tuKey5"></div></td>
+                    <td><div id="tuKey3" ng-click="tuKeyClick('3')"></div></td>
+                    <td><div id="tuKey4" ng-click="tuKeyClick('4')"></div></td>
+                    <td><div id="tuKey5" ng-click="tuKeyClick('5')"></div></td>
                 </tr>
                 <tr>
-                    <td><div id="tuKey6"></div></td>
-                    <td><div id="tuKey7"></div></td>
-                    <td><div id="tuKey8"></div></td>
+                    <td><div id="tuKey6" ng-click="tuKeyClick('6')"></div></td>
+                    <td><div id="tuKey7" ng-click="tuKeyClick('7')"></div></td>
+                    <td><div id="tuKey8" ng-click="tuKeyClick('8')"></div></td>
                 </tr>
                 <tr>
-                    <td><div id="tuKey9"></div></td>
-                    <td><div id="tuKey10"></div></td>
-                    <td><div id="tuKey11"></div></td>
+                    <td><div id="tuKey9"  ng-click="tuKeyClick('9')"></div></td>
+                    <td><div id="tuKey10" ng-click="tuKeyClick('10')"></div></td>
+                    <td><div id="tuKey11" ng-click="tuKeyClick('11')"></div></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapView.js?ver=20240826.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapView.js?ver=20241127.01" charset="utf-8"></script>

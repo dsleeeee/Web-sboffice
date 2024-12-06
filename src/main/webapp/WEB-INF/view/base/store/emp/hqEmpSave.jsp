@@ -21,7 +21,7 @@
           <%-- 사원기초정보 탭 --%>
           <li><a id="hqEmpInfoTab" href="#" class="on"><s:message code="hqEmp.hqEmpInfo" /></a></li>
           <%-- 메뉴권한 탭 --%>
-          <li><a id="hqEmpMenuAuthTab" href="#" ng-click="changeTab()"><s:message code="hqEmp.menuSetting" /></a></li>
+<%--          <li><a id="hqEmpMenuAuthTab" href="#" ng-click="changeTab()"><s:message code="hqEmp.menuSetting" /></a></li>--%>
         </ul>
       </div>
 
