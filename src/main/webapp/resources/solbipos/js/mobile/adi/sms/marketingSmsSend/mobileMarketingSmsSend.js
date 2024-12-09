@@ -356,21 +356,21 @@ app.controller('mobileMarketingSmsSendCtrl', ['$scope', '$http', '$timeout', fun
 
     // 본인인증 여부 체크
     $scope.verifyChk = function() {
-        var params = {};
-
-        $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-            if (response.data.data.list === 0) {
-                $scope._popConfirm(messages["mobile.marketingSmsSend.verifyConfirm"], function() {
-                    // 본인인증 팝업창 띄우기
-                    // $scope.verify();
-                    $scope._popMsg(messages["mobile.marketingSmsSend.verifyAlert"]); // 본인인증은 웹화면에서 진행하여 주십시오.
-                    return;
-                });
-            } else {
+        // var params = {};
+        //
+        // $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+        //     if (response.data.data.list === 0) {
+        //         $scope._popConfirm(messages["mobile.marketingSmsSend.verifyConfirm"], function() {
+        //             // 본인인증 팝업창 띄우기
+        //             // $scope.verify();
+        //             $scope._popMsg(messages["mobile.marketingSmsSend.verifyAlert"]); // 본인인증은 웹화면에서 진행하여 주십시오.
+        //             return;
+        //         });
+        //     } else {
                 // 발신번호 유무 체크
                 $scope.tellNumChk();
-            }
-        });
+        //     }
+        // });
     };
 
     // 본인인증

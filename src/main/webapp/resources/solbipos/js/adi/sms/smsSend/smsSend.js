@@ -105,7 +105,7 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         }
 
         // 본인인증 여부 체크
-        // $scope.verifyChk();
+        $scope.verifyChk();
 
         // 관리자/총판/본사/매장 명칭
         $scope.storeNmInfo();
@@ -132,21 +132,21 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     };
 
     // 본인인증 여부 체크
-    // $scope.verifyChk = function() {
-    //     var params = {};
-    //
-    //     $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
-    //         if (response.data.data.list === 0) {
-    //             $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function() {
-    //                 // 본인인증 팝업창 띄우기
-    //                 $scope.verify();
-    //             });
-    //         } else {
-    //             // 발신번호 유무 체크
-    //             $scope.tellNumChk();
-    //         }
-    //     });
-    // };
+    $scope.verifyChk = function() {
+        // var params = {};
+        //
+        // $scope._postJSONQuery.withOutPopUp('/adi/sms/marketingSmsSend/marketingSmsSend/getVerifyChk.sb', params, function (response) {
+        //     if (response.data.data.list === 0) {
+        //         $scope._popConfirm(messages["marketingSmsSend.verifyConfirm"], function() {
+        //             // 본인인증 팝업창 띄우기
+        //             $scope.verify();
+        //         });
+        //     } else {
+                // 발신번호 유무 체크
+                $scope.tellNumChk();
+        //     }
+        // });
+    };
 
     // 본인인증
     // $scope.verify = function(){
@@ -226,18 +226,18 @@ app.controller('smsSendCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 $scope._setComboData("telNoCombo", telNoComboData); // 전송자번호
 
                 // 등록된 발신번호가 없습니다. <br/> 문자메세지 발송을 위해서는 <br/> 발신번호를 사전 등록하셔야 합니다. <br/> 등록을 진행하시겠습니까?
-                if (confirm(messages["smsSend.telNoConfirm"])) {
-                    // 발신번호 사전등록 팝업
-                    $scope.wjSmsTelNoRegisterLayer.show(true);
-                    var scope = agrid.getScope("smsTelNoRegisterCtrl");
-                    scope.getVal();
-                    event.preventDefault();
-
-                } else {
+                // if (confirm(messages["smsSend.telNoConfirm"])) {
+                //     // 발신번호 사전등록 팝업
+                //     $scope.wjSmsTelNoRegisterLayer.show(true);
+                //     var scope = agrid.getScope("smsTelNoRegisterCtrl");
+                //     scope.getVal();
+                //     event.preventDefault();
+                //
+                // } else {
                     // 화면
                     // $("#divSmsSendPage").css("display", "none");
                     // $("#divSmsSendPageAuth").css("display", "");
-                }
+                // }
             }
         });
     };
