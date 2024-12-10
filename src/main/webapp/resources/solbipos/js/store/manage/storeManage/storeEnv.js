@@ -28,6 +28,10 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.setEnvGroupCd("00"); // 초기 환경변수 그룹코드는 매장환경[00]
     $scope.showStoreEnv();
+
+    // [조회] 버튼을 이용한 환경설정 조회 확인 값 초기화
+    $("#hdSrchYn").val("");
+
     event.preventDefault();
   });
 
@@ -93,10 +97,18 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 조회버튼 클릭 시 검색어를 포함한 설정값 조회
   $scope.srchEnvst = function(){
+
+    // "Y" 는 조회버튼을 클릭하여 환경설정값을 조회하였다는 의미
+    // [포스환경] 탭 포스명칭이 바뀌는것을 방지하기 위해
+    $("#hdSrchYn").val("Y");
+
     $("#envGroupTab li a").each(function(index, item){
       if($(item).attr("class") === "on") {
         var cmmEnvScope = agrid.getScope('cmmEnvCtrl');
         cmmEnvScope.changeEnvGroup($(item).attr("envstFg"));
+
+        // 탭 class가 === "on" 인것만 실행되지 않고, 여러번?? 실행되어 한번만 실행되도록 하기위해 추가
+        return false;
       }
     });
   }

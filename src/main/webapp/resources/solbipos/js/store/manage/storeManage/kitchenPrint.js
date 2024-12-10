@@ -43,6 +43,9 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
 
   $scope.changeTabSrch = function (){
     $("#srchConfig").val('');
+
+    // "" 는 탭을 클릭하여 환경설정값을 조회하였다는 의미
+    $("#hdSrchYn").val("");
   };
 
   /*********************************************************
