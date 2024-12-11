@@ -66,6 +66,15 @@ public class SmsTelNoManageVO extends PageVO {
     /** 통화일시 */
     private String telDt;
 
+    /** 신청자 이름 */
+    private String addSmsUserNm;
+
+    /** 신청자 연락처 */
+    private String addSmsTelNo;
+
+    /** 다운로드 파일명 */
+    private String downloadFileName;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -125,4 +134,16 @@ public class SmsTelNoManageVO extends PageVO {
     public String getTelDt() { return telDt; }
 
     public void setTelDt(String telDt) { this.telDt = telDt; }
+
+    public String getAddSmsUserNm() { return addSmsUserNm; }
+
+    public void setAddSmsUserNm(String addSmsUserNm) { this.addSmsUserNm = addSmsUserNm; }
+
+    public String getAddSmsTelNo() { return addSmsTelNo; }
+
+    public void setAddSmsTelNo(String addSmsTelNo) { this.addSmsTelNo = addSmsTelNo; }
+
+    public String getDownloadFileName() { return downloadFileName; }
+
+    public void setDownloadFileName(String downloadFileName) { this.downloadFileName = downloadFileName; }
 }

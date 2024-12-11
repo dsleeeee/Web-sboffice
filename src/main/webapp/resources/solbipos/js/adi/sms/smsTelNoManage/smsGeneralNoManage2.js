@@ -21,6 +21,21 @@ var orgnFgComboData = [
     {"name":"본사","value":"H"},
     {"name":"매장","value":"S"}
 ];
+// 본인인증 여부
+var vfYnData = [
+    {"name":"완료","value":"Y"},
+    {"name":"미완료","value":"N"}
+];
+// 발신번호 유형
+var telFgData = [
+    {"name":"휴대폰번호","value":"0"},
+    {"name":"유선번호","value":"1"}
+];
+// 발신번호 명의자
+var addSmsFgData = [
+    {"name":"대표자본인","value":"0"},
+    {"name":"대표자본인","value":"1"}
+];
 // 처리구분
 var addProcFgComboData = [
     {"name":"전체","value":""},
@@ -28,11 +43,6 @@ var addProcFgComboData = [
     {"name":"처리중","value":"1"},
     {"name":"완료","value":"2"},
     {"name":"반려","value":"3"}
-];
-// 본인인증 여부
-var vfYnData = [
-    {"name":"완료","value":"Y"},
-    {"name":"미완료","value":"N"}
 ];
 
 /**
@@ -50,6 +60,8 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
     $scope.initGrid = function (s, e) {
         $scope.orgnFgDataMap = new wijmo.grid.DataMap(orgnFgComboData, 'value', 'name'); // 소속구분
         $scope.vfYnDataMap = new wijmo.grid.DataMap(vfYnData, 'value', 'name'); // 본인인증 여부
+        $scope.telFgDataMap = new wijmo.grid.DataMap(telFgData, 'value', 'name'); // 발신번호 유형
+        $scope.addSmsFgDataMap = new wijmo.grid.DataMap(addSmsFgData, 'value', 'name'); // 발신번호 명의자
         $scope.addProcFgDataMap = new wijmo.grid.DataMap(addProcFgComboData, 'value', 'name'); // 처리구분
 
         // 그리드 링크 효과
@@ -101,12 +113,18 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
 
+                // 다운로드 파일명
+                var downloadFileName = selectedRow.orgnCd + "_" + selectedRow.orgnNm + "_" + selectedRow.regDt + "_" + selectedRow.addSmsUserNm + "_";
+
                 // 다운로드 클릭시 상세정보 조회
                 if (col.binding === "download1") {
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("fileName1")], '') !== '') {
+                        // 다운로드 파일명
+                        downloadFileName += "이용증명원." + selectedRow.fileName1.substring(selectedRow.fileName1.indexOf("."), selectedRow.fileName1.length);
+
                         // 다운로드
-                        smsGeneralNo_download2(selectedRow.fileName1);
+                        smsGeneralNo_download2(selectedRow.fileName1, downloadFileName);
                     }
                 }
 
@@ -114,8 +132,11 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 if (col.binding === "download2") {
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("fileName2")], '') !== '') {
+                        // 다운로드 파일명
+                        downloadFileName += "사업자등록증." + selectedRow.fileName2.substring(selectedRow.fileName2.indexOf("."), selectedRow.fileName2.length);
+
                         // 다운로드
-                        smsGeneralNo_download2(selectedRow.fileName2);
+                        smsGeneralNo_download2(selectedRow.fileName2, downloadFileName);
                     }
                 }
 
@@ -123,8 +144,11 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 if (col.binding === "download3") {
                     // 값이 있으면 링크
                     if (nvl(selectedRow[("fileName3")], '') !== '') {
+                        // 다운로드 파일명
+                        downloadFileName += "재직증명서." + selectedRow.fileName3.substring(selectedRow.fileName3.indexOf("."), selectedRow.fileName3.length);
+
                         // 다운로드
-                        smsGeneralNo_download2(selectedRow.fileName3);
+                        smsGeneralNo_download2(selectedRow.fileName3, downloadFileName);
                     }
                 }
 
