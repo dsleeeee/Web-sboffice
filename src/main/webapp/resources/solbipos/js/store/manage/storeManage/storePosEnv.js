@@ -49,6 +49,9 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
   $scope.changeTabSrch = function (){
     $("#srchConfig").val('');
+
+    // "" 는 탭을 클릭하여 환경설정값을 조회하였다는 의미
+    $("#hdSrchYn").val("");
   };
 
   /*********************************************************
@@ -86,7 +89,12 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#kitchenPrintArea").hide();
       $("#kitchenPrintProductArea").hide();
 
-      $scope.getStorePosList();
+      // 조회버튼을 클릭하여 환경설정값을 조회하였다면, 포스명칭 콤보박스 조회는 제외하고 환경설정값만 조회
+      if ($("#hdSrchYn").val() === "Y") {
+          $scope.searchPosEnv();
+      } else { // 탭 클릭하여 환경설정값을 조회하였다면, 포스명칭 콤보박스 셋팅부터 하고 환경설정값 조회
+          $scope.getStorePosList();
+      }
 
     } else if(envGroupCd === "10") { // 포스기능키
 

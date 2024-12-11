@@ -30,8 +30,11 @@
           <div class="mt20">
               <input type="text" class="sb-input w200px" id="srchConfig"/>
               <%-- 조회버튼 --%>
-              <button type="button" class="btn_skyblue ml5" ng-click="srchEnvst();">
-                  <s:message code="cmm.search"/></button>
+              <button type="button" class="btn_skyblue ml5" ng-click="srchEnvst();"><s:message code="cmm.search"/></button>
+
+              <%-- 환경설정값 조회 시, 조회버튼 클릭으로 조회하는 것인지 또는 탭 클릭으로 조회하는 것인지 확인을 위한 값 --%>
+              <%-- [포스환경]탭 에서 [조회] 버튼을 클릭하여 환경설정을 조회할 경우, 포스명칭이 바뀌는것을 방지하기 위해 사용 --%>
+              <input type="hidden" id="hdSrchYn"/>
           </div>
       </div>
 
@@ -71,5 +74,5 @@
     var orgEnv4021 = "";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20230830.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20241210.01" charset="utf-8"></script>
 
