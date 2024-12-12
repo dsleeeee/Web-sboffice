@@ -103,8 +103,9 @@
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.orgnNm"/>" binding="orgnNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.orgnFg"/>" binding="orgnFg" data-map="orgnFgDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.vfYn"/>" binding="vfYn" data-map="vfYnDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.telFg"/>" binding="telFg" data-map="telFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.addSmsFg"/>" binding="addSmsFg" data-map="addSmsFgDataMap" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.telFg"/>" binding="telFg" data-map="telFgDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.addSmsFg"/>" binding="addSmsFg" data-map="addSmsFgDataMap" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.certifyFg"/>" binding="certifyFg" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.preview1"/>" binding="preview1" width="75" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.preview2"/>" binding="preview2" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="smsGeneralNoManage2.preview3"/>" binding="preview3" width="80" is-read-only="true" align="center"></wj-flex-grid-column>

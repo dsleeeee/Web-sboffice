@@ -344,6 +344,11 @@
         tcasn.VF_YN,
         tcasn.TEL_FG,
         tcasn.ADD_SMS_FG,
+        (CASE WHEN tcasn.TEL_FG = '0' AND tcasn.TEL_FG = '0' THEN '휴대폰인증'
+               WHEN tcasn.TEL_FG = '0' AND tcasn.TEL_FG = '1' THEN '서류인증'
+               WHEN tcasn.TEL_FG = '1' AND tcasn.TEL_FG = '0' THEN '서류인증'
+               WHEN tcasn.TEL_FG = '1' AND tcasn.TEL_FG = '1' THEN '서류인증'
+               ELSE '' END) AS CERTIFY_FG,
         (CASE WHEN tcasn.FILE_NM  IS NOT NULL THEN '미리보기' ELSE '' END) AS PREVIEW1,
         (CASE WHEN tcasn.FILE_NM2 IS NOT NULL THEN '미리보기' ELSE '' END) AS PREVIEW2,
         (CASE WHEN tcasn.FILE_NM3 IS NOT NULL THEN '미리보기' ELSE '' END) AS PREVIEW3,
@@ -387,7 +392,7 @@
         </if>
         AND twuidv01.ORGN_CD = tcasn.ORGN_CD
         AND twuidv01.USER_ID = tcasn.USER_ID
-        ORDER BY tcasn.CERT_ID DESC
+        ORDER BY tcasn.REG_DT DESC
     </select>
 
     <!-- 일반번호 인증요청 처리 팝업 - 저장 update -->
