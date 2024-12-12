@@ -390,6 +390,7 @@
         <if test="addProcFg != null and addProcFg != ''">
             AND tcasn.ADD_PROC_FG = #{addProcFg}
         </if>
+        AND tcasn.ADD_PROC_FG NOT IN ('A')
         AND twuidv01.ORGN_CD = tcasn.ORGN_CD
         AND twuidv01.USER_ID = tcasn.USER_ID
         ORDER BY tcasn.REG_DT DESC
