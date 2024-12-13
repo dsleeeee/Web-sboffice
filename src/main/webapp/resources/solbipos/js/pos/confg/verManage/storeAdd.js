@@ -213,12 +213,10 @@ app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // NXPOS_V1/V2 외에 적용매장등록된 내역이 있습니다.<br>[포스관리] - [POS 설정관리] - [매장별 POS 버전 삭제] 에서 관리 후 진행하여 주십시오.
     for (var i = 0; i < sScope.flex.collectionView.items.length; i++) {
       if (sScope.flex.collectionView.items[i].gChk) {
-          if(sScope.flex.collectionView.items[i].storeCd !== "DS89117") { // DS89117은 예외 처리
-              if (sScope.flex.collectionView.items[i].diffVerCnt > 0) {
-                  sScope._popMsg("NXPOS_V" + manageVer + messages["verManage.store.diffVerCnt.chk.msg"]);
-                  return false;
-              }
-          }
+        if(sScope.flex.collectionView.items[i].diffVerCnt > 0){
+          sScope._popMsg( "NXPOS_V" + manageVer + messages["verManage.store.diffVerCnt.chk.msg"]);
+          return false;
+        }
       }
     }
 
