@@ -5266,6 +5266,7 @@
                 ,		thp.GROUP_PROD_CD
                 ,		thp2.PROD_NM        AS GROUP_PROD_NM
                 ,		DECODE(thpi2.MOMS_KIOSK_EDGE,'1','NEW','2','BEST','3','EVENT','0') AS MOMS_KIOSK_EDGE
+                ,		thkk.TU_CLS_CD
                 FROM 	TB_HQ_KIOSK_KEY thkk
                 ,		TB_HQ_PRODUCT thp
                 ,		TB_HQ_PRODUCT_IMAGE thpi
@@ -5332,6 +5333,7 @@
                 ,		thp.GROUP_PROD_CD
                 ,		thp2.PROD_NM        AS GROUP_PROD_NM
                 ,		DECODE(thpi2.MOMS_KIOSK_EDGE,'1','NEW','2','BEST','3','EVENT','0') AS MOMS_KIOSK_EDGE
+                ,		thkk.TU_CLS_CD
                 FROM 	TB_MS_KIOSK_KEY thkk
                 ,		TB_MS_PRODUCT thp
                 ,		TB_MS_PRODUCT_IMAGE thpi

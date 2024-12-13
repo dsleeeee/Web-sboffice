@@ -53,10 +53,12 @@
                     <th id="thNext" rowspan="2" ng-click="thNext()">▶</th>
                 </tr>
                 <tr>
+                    <th id="thPre2" rowspan="2" ng-click="thMPre()" style="display: none;background-color: #BCCCDC">◀</th>
                     <th id="th4"><div id="tuCls4" ng-click="thClick('4')"></div></th>
                     <th id="th5"><div id="tuCls5" ng-click="thClick('5')"></div></th>
                     <th id="th6"><div id="tuCls6" ng-click="thClick('6')"></div></th>
                     <th id="th7"><div id="tuCls7" ng-click="thClick('7')"></div></th>
+                    <th id="thNext2" rowspan="2" ng-click="thMNext()" style="display: none;background-color: #BCCCDC">▶</th>
                 </tr>
                 </thead>
             </table>
@@ -96,4 +98,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapView.js?ver=20241127.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapView.js?ver=20241210.01" charset="utf-8"></script>
