@@ -42,7 +42,8 @@
                 thp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,      -- 본사포장-판매가
                 tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
                 tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
-                tmp.PRC_CTRL_FG
+                tmp.PRC_CTRL_FG,
+                tmp.USE_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 (
@@ -108,6 +109,9 @@
                 <if test='prodNm != null and prodNm != ""'>
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
                 </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN = #{useYn}
+                </if>
                 AND tmpsp.STORE_CD = tmp.STORE_CD
                 AND tmpsp.PROD_CD = tmp.PROD_CD
                 AND thp.PROD_CD (+)= tmp.PROD_CD
@@ -131,7 +135,8 @@
                 tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,       -- 변경배달-판매가
                 tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
                 tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
-                tmp.PRC_CTRL_FG
+                tmp.PRC_CTRL_FG,
+                tmp.USE_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 (
@@ -166,6 +171,9 @@
                 </if>
                 <if test='prodNm != null and prodNm != ""'>
                     AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+                </if>
+                <if test="useYn != null and useYn != ''">
+                    AND tmp.USE_YN = #{useYn}
                 </if>
                 AND tmpsp.STORE_CD = tmp.STORE_CD
                 AND tmpsp.PROD_CD = tmp.PROD_CD

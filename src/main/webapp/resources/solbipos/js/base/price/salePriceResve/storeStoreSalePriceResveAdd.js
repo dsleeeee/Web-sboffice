@@ -22,9 +22,13 @@ app.controller('storeStoreSalePriceResveAddCtrl', ['$scope', '$http', function (
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('storeStoreSalePriceResveAddCtrl', $scope, $http, false));
 
+    $scope._setComboData("useYn", useYnData); // 사용여부
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name');
 
         // 예약일시 날짜셋팅
         $scope.startDateCombo.value = getTomorrow('-');
@@ -76,6 +80,7 @@ app.controller('storeStoreSalePriceResveAddCtrl', ['$scope', '$http', function (
         dataItem.storePackSaleUprc    = messages["salePriceResve.packSaleUprc"];
         dataItem.packSaleUprc         = messages["salePriceResve.packSaleUprc"];
         dataItem.prcCtrlFg            = messages["salePriceResve.prcCtrlFg"];
+        dataItem.useYn                = messages["salePriceResve.useYn"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -142,6 +147,7 @@ app.controller('storeStoreSalePriceResveAddCtrl', ['$scope', '$http', function (
         params.listScale = $scope.listScaleCombo4.text;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
+        params.useYn = $scope.useYnCombo.selectedValue;
 
         console.log('params', params);
 
@@ -443,6 +449,7 @@ app.controller('storeStoreSalePriceResveAddCtrl', ['$scope', '$http', function (
         $scope.endDateCombo.value = "9999-12-31";
         $("input:checkbox[id='popProdSaleUprcApply']").prop("checked", true);
         $scope.popStoreSaleUprcApply = true;
+        $scope.useYnCombo.selectedValue = "Y";
 
         // 그리드 초기화
         var scope = agrid.getScope('storeStoreSalePriceResveAddCtrl');

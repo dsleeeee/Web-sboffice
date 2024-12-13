@@ -60,6 +60,9 @@ public class SalePriceManageVO extends PageVO {
     /** 포장가 */
     private String packSaleUprc;
 
+    /** 사용 여부 */
+    private String useYn;
+
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -133,5 +136,13 @@ public class SalePriceManageVO extends PageVO {
 
     public void setPackSaleUprc(String packSaleUprc) {
         this.packSaleUprc = packSaleUprc;
+    }
+
+    public String getUseYn() {
+        return useYn;
+    }
+
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
     }
 }

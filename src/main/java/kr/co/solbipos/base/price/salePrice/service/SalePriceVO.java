@@ -181,6 +181,9 @@ public class SalePriceVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 사용여부 */
+    private String useYn;
+
     /**
      * @return the hqOfficeCd
      */
@@ -687,4 +690,12 @@ public class SalePriceVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getUseYn() {
+        return useYn;
+    }
+
+    public void setUseYn(String useYn) {
+        this.useYn = useYn;
+    }
 }

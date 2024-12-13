@@ -53,6 +53,26 @@
                         <input type="text" class="sb-input w100" id="srchPopProdNm" ng-model="prodNm" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                 </tr>
+                <tr>
+                    <%-- 사용 여부 --%>
+                    <th><s:message code="salePriceResve.useYn" /></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="useYn"
+                                    ng-model="useYn"
+                                    items-source="_getComboData('useYn')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="useYnCombo"
+                                    selected-index="2">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
                 <c:if test="${subPriceFg == '1'}">
                     <tr>
                         <th><input type="checkbox" id="popSaleUprcApply" ng-model="popSaleUprcApply"/> <s:message code="salePriceResve.batchChange"/></th>
@@ -131,6 +151,8 @@
                             <wj-flex-grid-column header="<s:message code="salePriceManage.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
                         </c:if>
 
+                        <wj-flex-grid-column header="<s:message code="salePriceResve.useYn"/>" binding="useYn" data-map="useYnDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+
                     </wj-flex-grid>
                 </div>
             </div>
@@ -198,4 +220,9 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResveAdd.js?ver=20220427.02" charset="utf-8"></script>
+<script>
+    // 사용여부
+    var useYnData = ${ccu.getCommCode("067")};
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/salePriceResveAdd.js?ver=20241211.01" charset="utf-8"></script>

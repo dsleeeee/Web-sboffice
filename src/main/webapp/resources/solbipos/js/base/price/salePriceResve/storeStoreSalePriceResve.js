@@ -60,10 +60,10 @@ app.controller('storeStoreSalePriceResveCtrl', ['$scope', '$http', function ($sc
 
     // 조회일자 셋팅
     $scope.srchStartDate2 = wcombo.genDateVal("#srchTimeStartDate2", gvStartDate);
-    $scope.srchEndDate2   = wcombo.genDateVal("#srchTimeEndDate2", gvEndDate);
+    $scope.srchEndDate2   = wcombo.genDateVal("#srchTimeEndDate2", getOneMonthLater());
 
     // 전체기간 체크박스
-    $scope.isChecked2 = true;
+    $scope.isChecked2 = false;
 
     // 오늘날짜
     var date = new Date();

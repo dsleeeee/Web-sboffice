@@ -335,7 +335,8 @@
         thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,    -- 본사포장-판매가
         tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
         tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
-        tmp.PRC_CTRL_FG
+        tmp.PRC_CTRL_FG,
+        tmp.USE_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_MS_PRODUCT tmp,
         TB_HQ_PRODUCT thp,
@@ -399,6 +400,9 @@
                 </foreach>
             </if>
         </if>
+        <if test="useYn != null and useYn != ''">
+            AND tmp.USE_YN = #{useYn}
+        </if>
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
@@ -442,7 +446,8 @@
         thpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,       -- 변경배달-판매가
         thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,    -- 본사포장-판매가
         thpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
-        thp.PRC_CTRL_FG
+        thp.PRC_CTRL_FG,
+        thp.USE_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_PRODUCT thp,
         (
@@ -488,6 +493,9 @@
                     #{item}
                 </foreach>
             </if>
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn}
         </if>
         AND (
         ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )

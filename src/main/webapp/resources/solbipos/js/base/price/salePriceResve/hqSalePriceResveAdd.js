@@ -32,6 +32,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
     $scope._setComboData("listScaleBox2", gvListScaleBoxData);
     $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
     $scope._setComboData("addStoreSaveFg", addStoreSaveFg);
+    $scope._setComboData("useYn", useYnData); // 사용여부
 
     $scope.popSaleUprcApply = true;
 
@@ -39,6 +40,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
     $scope.initGrid = function (s, e) {
 
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name');
 
         // 예약일시 날짜셋팅
         $scope.startDateCombo.value = getTomorrow('-');
@@ -86,6 +88,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         dataItem.hqPackSaleUprc       = messages["salePriceResve.packSaleUprc"];
         dataItem.packSaleUprc         = messages["salePriceResve.packSaleUprc"];
         dataItem.prcCtrlFg            = messages["salePriceResve.prcCtrlFg"];
+        dataItem.useYn                = messages["salePriceResve.useYn"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -144,6 +147,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         params.listScale = $scope.listScaleCombo2.text;
         params.prodCd = $("#srchPopProdCd").val();
         params.prodNm = $("#srchPopProdNm").val();
+        params.useYn = $scope.useYnCombo.selectedValue;
 
         if(brandUseFg === "1" && orgnFg === "HQ"){
             // 선택한 상품브랜드가 있을 때
@@ -460,6 +464,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
         $scope.endDateCombo.value = "9999-12-31";
         $("input:checkbox[id='popSaleUprcApply']").prop("checked", true);
         $scope.popSaleUprcApply = true;
+        $scope.useYnCombo.selectedValue = "Y";
 
     };
 
