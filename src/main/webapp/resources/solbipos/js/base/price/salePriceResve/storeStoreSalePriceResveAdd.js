@@ -427,6 +427,9 @@ app.controller('storeStoreSalePriceResveAddCtrl', ['$scope', '$http', function (
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save('/base/price/salePriceResve/storeSalePriceResve/saveStoreProdSalePriceResve.sb', params, function(){
 
+            // 부모창 재조회
+            $scope._pageView('storeStoreSalePriceResveCtrl',1);
+
             // 팝업 닫기
             $scope.storeStoreSalePriceResveAddLayer.hide(true);
             $scope.close2();

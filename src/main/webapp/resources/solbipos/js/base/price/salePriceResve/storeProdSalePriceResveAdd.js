@@ -413,8 +413,7 @@ app.controller('storeProdSalePriceResveAddCtrl', ['$scope', '$http', function ($
         $scope._save('/base/price/salePriceResve/storeSalePriceResve/saveStoreProdSalePriceResve.sb', params, function(){
 
             // 부모창 재조회
-            //var vScope = agrid.getScope("storeProdSalePriceResveCtrl");
-            //vScope.searchSalePriceInfo();
+            $scope._pageView('storeProdSalePriceResveCtrl',1);
 
             // 팝업 닫기
             $scope.storeProdSalePriceResveAddLayer.hide(true);
