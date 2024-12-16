@@ -427,8 +427,7 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
                 $scope._save('/base/price/salePriceResve/hqSalePriceResve/saveHqSalePriceResve.sb', params, function(){
 
                     // 부모창 재조회
-                    var vScope = agrid.getScope("hqSalePriceResveCtrl");
-                    vScope.searchHqSalePriceResveList();
+                    $scope._pageView('hqSalePriceResveCtrl',1);
 
                     // 팝업 닫기
                     $scope.hqSalePriceResveAddLayer.hide(true);
