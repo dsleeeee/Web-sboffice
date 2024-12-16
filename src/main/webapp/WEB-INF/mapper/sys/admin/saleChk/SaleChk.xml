@@ -78,17 +78,17 @@
         <if test='checkNm != null and checkNm !=""'>    -- 체크항목
             AND A.CHECK_NM = #{checkNm}
         </if>
-        <if test='saleYn != null and saleYn =="1"'>    -- 오류타입1
+        <if test='remark != null and remark =="1"'>    -- 오류타입1
             AND A.REMARK LIKE '%NOT FOUND%'
         </if>
-        <if test='saleYn != null and saleYn =="2"'>    -- 오류타입2
+        <if test='remark != null and remark =="2"'>    -- 오류타입2
             AND A.REMARK NOT LIKE '%NOT FOUND%'
         </if>
         <if test='resultMsg != null and resultMsg !=""'>    -- 처리메시지
             AND A.RESULT_MSG LIKE '%' || #{resultMsg} || '%'
         </if>
         <if test='procYn != null and procYn !=""'>    -- 처리구분
-            AND A.PROC_YN = #{saleYn}
+            AND A.PROC_YN = #{procYn}
         </if>
         <if test='checkCd != null and checkCd !=""'>    -- 체크항목코드
             AND A.CHECK_CD = #{checkCd}

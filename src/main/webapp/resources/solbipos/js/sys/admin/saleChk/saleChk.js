@@ -33,7 +33,7 @@ var remarkData = [
 // 처리구분 필터
 var procYnData = [
   {"name":"전체","value":""},
-  {"name":"YEW","value":"Y"},
+  {"name":"YES","value":"Y"},
   {"name":"NO","value":"N"}
 ];
 // 체크항목코드 필터
