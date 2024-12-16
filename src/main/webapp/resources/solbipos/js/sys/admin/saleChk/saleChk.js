@@ -123,6 +123,15 @@ app.controller('saleChkCtrl',  ['$scope', '$http', function ($scope, $http) {
     $scope._save("/sys/admin/saleChk/saleChk/updateResultMsg.sb", params, function(){
       $scope.getSaleList();
     });
-  }
+  };
+
+    // 확장조회 숨김/보임
+    $scope.searchAddShowChange = function () {
+        if ($("#tblSearchAddShow").css("display") === 'none') {
+            $("#tblSearchAddShow").show();
+        } else {
+            $("#tblSearchAddShow").hide();
+        }
+    };
 
 }]);
