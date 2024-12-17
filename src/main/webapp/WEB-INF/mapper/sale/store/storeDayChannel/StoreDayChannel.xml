@@ -66,8 +66,9 @@
         ,       tsshp.PAY02 AS PAY02 -- 현금
         ,       tsshp.PAY021 AS PAY021 -- 현금영수증
         ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                    tsdto.SALE_QTY${item} AS SALE_QTY${item}
-                ,       tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
+                    tsdto.REAL_SALE_CNT${item} AS REAL_SALE_CNT${item}
+        ,           tsdto.SALE_QTY${item} AS SALE_QTY${item}
+        ,           tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
                 </foreach>
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    (
@@ -178,7 +179,8 @@
                     ,       tsdto.STORE_CD
                     </if>
                     ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_CNT END) AS REAL_SALE_CNT${item}
+                        ,       SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
                         ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                             </foreach>
                     FROM    TB_SL_DAILY_TOTAL_ORDAPP tsdto
@@ -310,9 +312,10 @@
         ,       tsshp.PAY02 AS PAY02 -- 현금
         ,       tsshp.PAY021 AS PAY021 -- 현금영수증
         ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                tsdto.SALE_QTY${item} AS SALE_QTY${item}
-        ,       tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
-            </foreach>
+                    tsdto.REAL_SALE_CNT${item} AS REAL_SALE_CNT${item}
+        ,           tsdto.SALE_QTY${item} AS SALE_QTY${item}
+        ,           tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
+                </foreach>
         FROM    (
                     SELECT  tsdt.SALE_DATE
                     ,       TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
@@ -421,7 +424,8 @@
                     ,       tsdto.STORE_CD
                     </if>
             ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                        SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                        SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_CNT END) AS REAL_SALE_CNT${item}
+                ,       SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
                 ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                     </foreach>
                     FROM    TB_SL_DAILY_TOTAL_ORDAPP tsdto

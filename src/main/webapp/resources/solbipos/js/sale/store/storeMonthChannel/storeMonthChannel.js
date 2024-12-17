@@ -116,6 +116,7 @@ app.controller('storeMonthChannelCtrl', ['$scope', '$http', '$timeout', function
 
         // 주문채널별 header 셋팅
         for (var i = 0; i < arrDlvrInFgCol.length; i++) {
+            dataItem['realSaleCnt' + arrDlvrInFgCol[i]] = dlvrInFgColList[i].dlvrInFgNm;
             dataItem['saleQty' + arrDlvrInFgCol[i]] = dlvrInFgColList[i].dlvrInFgNm;
             dataItem['realSaleAmt' + arrDlvrInFgCol[i]] = dlvrInFgColList[i].dlvrInFgNm;
         }
@@ -501,6 +502,7 @@ app.controller('storeMonthChannelExcelCtrl', ['$scope', '$http', '$timeout', fun
 
         // 주문채널별 header 셋팅
         for (var i = 0; i < arrDlvrInFgCol.length; i++) {
+            dataItem['realSaleCnt' + arrDlvrInFgCol[i]] = dlvrInFgColList[i].dlvrInFgNm;
             dataItem['saleQty' + arrDlvrInFgCol[i]] = dlvrInFgColList[i].dlvrInFgNm;
             dataItem['realSaleAmt' + arrDlvrInFgCol[i]] = dlvrInFgColList[i].dlvrInFgNm;
         }

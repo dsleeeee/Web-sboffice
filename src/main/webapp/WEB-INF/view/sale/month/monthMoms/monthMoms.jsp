@@ -343,7 +343,8 @@
           <wj-flex-grid-column header="<s:message code="month.packRealSaleAmtPer"/>" binding="packRealSaleRate" width="100" is-read-only="true" align="right"></wj-flex-grid-column>
           <%-- 채널 컬럼 생성--%>
           <c:forEach var="dlvrInFgCol" items="${dlvrInFgColList}">
-            <wj-flex-grid-column header="<s:message code="monthMoms.prodSaleQty"/>"     binding="saleQty${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="monthMoms.billCnt"/>" binding="realSaleCnt${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="monthMoms.prodSaleQty"/>" binding="saleQty${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="monthMoms.realSaleAmt"/>" binding="realSaleAmt${dlvrInFgCol.dlvrInFg}" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
           </c:forEach>
         </wj-flex-grid>
@@ -426,7 +427,7 @@
   var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/month/monthMoms/monthMoms.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/month/monthMoms/monthMoms.js?ver=20241217.01" charset="utf-8"></script>
 
 <%-- 팝업 레이어 시작 --%>
 <%-- 매장별 매출현황 팝업 레이어 --%>
