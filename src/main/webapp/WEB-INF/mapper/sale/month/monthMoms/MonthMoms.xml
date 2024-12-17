@@ -47,7 +47,8 @@
                 tsdt.PACK_REAL_SALE_AMT,
                 DECODE(tsdt.REAL_SALE_AMT, 0, 0, (tsdt.PACK_REAL_SALE_AMT / tsdt.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
         ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                    tsdto.SALE_QTY${item} AS SALE_QTY${item}
+                    tsdto.REAL_SALE_CNT${item} AS REAL_SALE_CNT${item}
+        ,           tsdto.SALE_QTY${item} AS SALE_QTY${item}
         ,           tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
                 </foreach>
         FROM    (
@@ -142,7 +143,8 @@
         ,       (
                     SELECT  tsdto.SALE_YM
                     ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
-                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_CNT END) AS REAL_SALE_CNT${item}
+                        ,       SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
                         ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
                             </foreach>
                     FROM    TB_SL_MONTHLY_TOTAL_ORDAPP tsdto
