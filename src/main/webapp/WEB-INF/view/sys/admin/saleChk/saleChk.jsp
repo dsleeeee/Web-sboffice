@@ -261,4 +261,4 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/saleChk/saleChk.js?ver=20241216.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/saleChk/saleChk.js?ver=20241217.01" charset="utf-8"></script>
