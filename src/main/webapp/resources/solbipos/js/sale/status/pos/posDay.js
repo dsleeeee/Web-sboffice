@@ -32,7 +32,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
 
-                if (col.binding.substring(col.binding.length, col.binding.length-7) === "SaleCnt") { // 수량합계
+                if (col.binding.substring(col.binding.length, col.binding.length-7) === "SaleQty") { // 수량합계
                     var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wijLink');
                     wijmo.addClass(e.cell, 'wj-custom-readonly');
@@ -60,7 +60,8 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
             s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
             s.columnHeaders.setCellData(i, "totDcAmt", messages["pos.totDcAmt"]);
             s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["pos.totRealSaleAmt"]);
-            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleQty"]);
+            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleCnt"]);
+            s.columnHeaders.setCellData(i, "totSaleQty", messages["pos.totSaleQty"]);
         }
 
         //그리드 아이템포멧 생성
@@ -178,7 +179,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
                 var grid = wijmo.Control.getControl("#posDayGrid")
                 //컬럼 삭제
-                while(grid.columns.length > 7){
+                while(grid.columns.length > 8){
                     grid.columns.removeAt(grid.columns.length-1);
                 }
             }
@@ -278,8 +279,8 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
         var colLength = grid.columns.length;
 
-        if (grid.columns.length > 7) {
-            for(var i = 7; i < colLength; i++) {
+        if (grid.columns.length > 8) {
+            for(var i = 8; i < colLength; i++) {
                 grid.columns.removeAt(grid.columns.length-1);
             }
         }
@@ -296,25 +297,29 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 var colSplit = colName.split('||');
                 var colSplit2 = colValue.split('||');
 
-                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'DcAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'RealSaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleCnt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleAmt", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'DcAmt", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'RealSaleAmt", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleCnt", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleQty", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 
                 grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]+"("+colSplit2[0]+")");
                 grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]+"("+colSplit2[0]+")");
                 grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]+"("+colSplit2[0]+")");
                 grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[0]+"("+colSplit2[0]+")");
+                grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleQty", colSplit[0]+"("+colSplit2[0]+")");
 
                 grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[1]);
                 grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[1]);
                 grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[1]);
                 grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[1]);
+                grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleQty", colSplit[1]);
 
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleAmt", messages["pos.SaleAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
-                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
+                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleCnt"]);
+                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleQty", messages["pos.saleQty"]);
 
             }
         }
@@ -340,11 +345,11 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                 params.chkPop	= "posPop";
                 params.saleDate   = selectedRow.saleDate;
 
-                if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
+                if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleQty") {
                     params.storeCd   = storeCd;
                     params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
-                }else if (col.binding === "totSaleCnt") { // 수량합계
+                }else if (col.binding === "totSaleQty") { // 수량합계
                     params.storeCd   = $("#posDaySelectStoreCd").val();
                     params.posNo	 = $("#posDaySelectPosCd").val();
                     $scope._broadcast('saleComProdCtrl', params);
@@ -427,21 +432,22 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                     var dcAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", false);
                     var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
                     var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
+                    var saleQty = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleQty", false);
 
                     if (saleAmt == null || saleAmt == "") {
                         s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
                     }
-
                     if (dcAmt == null || dcAmt == "") {
                         s.setCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", "0");
                     }
-
                     if (realSaleAmt == null || realSaleAmt == "") {
                         s.setCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", "0");
                     }
-
                     if (saleCnt == null || saleCnt == "") {
                         s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
+                    }
+                    if (saleQty == null || saleQty == "") {
+                        s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleQty", "0");
                     }
                 }
             }
@@ -479,7 +485,8 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
             s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
             s.columnHeaders.setCellData(i, "totDcAmt", messages["pos.totDcAmt"]);
             s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["pos.totRealSaleAmt"]);
-            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleQty"]);
+            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleCnt"]);
+            s.columnHeaders.setCellData(i, "totSaleQty", messages["pos.totSaleQty"]);
         }
 
         //그리드 아이템포멧 생성
@@ -559,7 +566,7 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
                 var grid = wijmo.Control.getControl("#posDayExcelGrid")
                 //컬럼 삭제
-                while(grid.columns.length > 7){
+                while(grid.columns.length > 8){
                     grid.columns.removeAt(grid.columns.length-1);
                 }
             }
@@ -577,7 +584,7 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.day"]+'_'+getToday()+'.xlsx', function () {
+                }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.day"]+'_'+getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -641,8 +648,8 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         var colLength = grid.columns.length;
 
-        if (grid.columns.length > 7) {
-            for(var i = 7; i < colLength; i++) {
+        if (grid.columns.length > 8) {
+            for(var i = 8; i < colLength; i++) {
                 grid.columns.removeAt(grid.columns.length-1);
             }
         }
@@ -659,25 +666,29 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                 var colSplit = colName.split('||');
                 var colSplit2 = colValue.split('||');
 
-                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'DcAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'RealSaleAmt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
-                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleCnt", width: 100, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleAmt", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'DcAmt", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'RealSaleAmt", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleCnt", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
+                grid.columns.push(new wijmo.grid.Column({binding: "'"+colValue.toLowerCase()+"'SaleQty", width: 80, align: "right", isReadOnly: "true", aggregate: "Sum"}));
 
                 grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[0]+"("+colSplit2[0]+")");
                 grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[0]+"("+colSplit2[0]+")");
                 grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[0]+"("+colSplit2[0]+")");
                 grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[0]+"("+colSplit2[0]+")");
+                grid.columnHeaders.setCellData(0, "'"+colValue.toLowerCase()+"'SaleQty", colSplit[0]+"("+colSplit2[0]+")");
 
                 grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleAmt", colSplit[1]);
                 grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'DcAmt", colSplit[1]);
                 grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'RealSaleAmt", colSplit[1]);
                 grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleCnt", colSplit[1]);
+                grid.columnHeaders.setCellData(1, "'"+colValue.toLowerCase()+"'SaleQty", colSplit[1]);
 
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleAmt", messages["pos.SaleAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
-                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
+                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleCnt"]);
+                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleQty", messages["pos.saleQty"]);
 
             }
         }
@@ -749,21 +760,22 @@ app.controller('posDayExcelCtrl', ['$scope', '$http', '$timeout', function ($sco
                     var dcAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", false);
                     var realSaleAmt = s.getCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", false);
                     var saleCnt = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", false);
+                    var saleQty = s.getCellData(j, "'"+colValue.toLowerCase()+"'SaleQty", false);
 
                     if (saleAmt == null || saleAmt == "") {
                         s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleAmt", "0");
                     }
-
                     if (dcAmt == null || dcAmt == "") {
                         s.setCellData(j, "'"+colValue.toLowerCase()+"'DcAmt", "0");
                     }
-
                     if (realSaleAmt == null || realSaleAmt == "") {
                         s.setCellData(j, "'"+colValue.toLowerCase()+"'RealSaleAmt", "0");
                     }
-
                     if (saleCnt == null || saleCnt == "") {
                         s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleCnt", "0");
+                    }
+                    if (saleQty == null || saleQty == "") {
+                        s.setCellData(j, "'"+colValue.toLowerCase()+"'SaleQty", "0");
                     }
                 }
             }

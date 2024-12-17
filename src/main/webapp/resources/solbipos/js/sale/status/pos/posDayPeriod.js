@@ -417,7 +417,7 @@ app.controller('posDayPeriodDtlExcelCtrl', ['$scope', '$http','$timeout', functi
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.dayPeriod"]+'_DETAIL_'+getToday()+'.xlsx', function () {
+                }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.dayPeriod"]+'_DETAIL_'+getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

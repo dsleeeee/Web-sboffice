@@ -106,8 +106,9 @@
                         is-read-only="true"
                         item-formatter="_itemFormatter">
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="pos.pos"/>"                 binding="storeNmPosNo"          width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="saleCnt"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pos.pos"/>"           binding="storeNmPosNo"   width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pos.saleCnt"/>"       binding="saleCnt"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pos.saleQty"/>"       binding="saleQty"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
                 <%-- ColumnPicker 사용시 include --%>
@@ -137,8 +138,9 @@
                         is-read-only="true"
                         item-formatter="_itemFormatter">
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="pos.pos"/>"                 binding="storeNmPosNo"          width="200" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>"     binding="saleCnt"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pos.pos"/>"           binding="storeNmPosNo"   width="200" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pos.saleCnt"/>"       binding="saleCnt"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pos.saleQty"/>"       binding="saleQty"        width="80" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleDtl.realSaleAmt"/>" binding="realSaleAmt"    width="100" align="right"  is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
@@ -229,4 +231,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDayPeriod.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posDayPeriod.js?ver=20241209.01" charset="utf-8"></script>

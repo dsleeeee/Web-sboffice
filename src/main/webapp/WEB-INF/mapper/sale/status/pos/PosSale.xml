@@ -28,6 +28,7 @@
                 , A.TOT_DC_AMT
                 , A.TOT_REAL_SALE_AMT
                 , A.TOT_SALE_CNT
+                , A.TOT_SALE_QTY
                 , B.*
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM	(
@@ -37,6 +38,7 @@
                     , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
                     , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
                     , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+                    , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS TOT_SALE_QTY
             FROM	TB_SL_DAILY_POS TSDP
             WHERE	1 = 1
             AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -63,6 +65,7 @@
                     , TSDP.TOT_DC_AMT AS DC_AMT
                     , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
                     , TSDP.SALE_CNT AS SALE_CNT
+                    , (TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
                 FROM    TB_SL_DAILY_POS TSDP
                 WHERE   1 = 1
                 AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -82,7 +85,7 @@
             SELECT  *
             FROM    T
             PIVOT	(
-                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
+                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT, MAX(SALE_QTY) AS SALE_QTY
                         FOR STORE_CD IN (
                                             <foreach collection="arrStorePos" item="item" separator=",">
                                                 '${item}'
@@ -104,6 +107,7 @@
                 , A.TOT_DC_AMT
                 , A.TOT_REAL_SALE_AMT
                 , A.TOT_SALE_CNT
+                , A.TOT_SALE_QTY
                 , B.*
         FROM	(
                 SELECT	TSDP.SALE_DATE
@@ -112,6 +116,7 @@
                         , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
                         , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
                         , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+                        , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0))  AS TOT_SALE_QTY
                 FROM	TB_SL_DAILY_POS TSDP
                 WHERE	1 = 1
                 AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -138,6 +143,7 @@
                         , TSDP.TOT_DC_AMT AS DC_AMT
                         , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
                         , TSDP.SALE_CNT AS SALE_CNT
+                        , (TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0))  AS SALE_QTY
                 FROM    TB_SL_DAILY_POS TSDP
                 WHERE   1 = 1
                 AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -157,7 +163,7 @@
             SELECT  *
             FROM    T
             PIVOT	(
-                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
+                        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT, MAX(SALE_QTY) AS SALE_QTY
                         FOR STORE_CD IN (
                                         <foreach collection="arrStorePos" item="item" separator=",">
                                             '${item}'
@@ -237,6 +243,7 @@
                 , A.TOT_DC_AMT
                 , A.TOT_REAL_SALE_AMT
                 , A.TOT_SALE_CNT
+                , A.TOT_SALE_QTY
                 , B.*
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM	(
@@ -255,6 +262,7 @@
                     , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
                     , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
                     , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+                    , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS TOT_SALE_QTY
             FROM	TB_SL_DAILY_POS TSDP
             WHERE	1 = 1
             AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -281,6 +289,7 @@
                 , TSDP.TOT_DC_AMT AS DC_AMT
                 , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
                 , TSDP.SALE_CNT AS SALE_CNT
+                , (TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
                 FROM    TB_SL_DAILY_POS TSDP
                 , TB_SL_DAILY_POS_PROD TSDPP
                 WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
@@ -305,7 +314,7 @@
             SELECT  *
             FROM    T
             PIVOT	(
-                        SUM(SALE_AMT) AS SALE_AMT, SUM(DC_AMT) AS DC_AMT, SUM(REAL_SALE_AMT) AS REAL_SALE_AMT, SUM(SALE_CNT) AS SALE_CNT
+                        SUM(SALE_AMT) AS SALE_AMT, SUM(DC_AMT) AS DC_AMT, SUM(REAL_SALE_AMT) AS REAL_SALE_AMT, SUM(SALE_CNT) AS SALE_CNT, SUM(SALE_QTY) AS SALE_QTY
                         FOR STORE_CD IN (
                                             <foreach collection="arrStorePos" item="item" separator=",">
                                                 '${item}'
@@ -395,6 +404,7 @@
         , A.TOT_DC_AMT
         , A.TOT_REAL_SALE_AMT
         , A.TOT_SALE_CNT
+        , A.TOT_SALE_QTY
         , B.*
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM	(
@@ -404,6 +414,7 @@
         , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
         , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
         , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+        , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS TOT_SALE_QTY
         FROM	TB_SL_MONTHLY_POS TSDP
         WHERE	1 = 1
         AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -430,6 +441,7 @@
         , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
         , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
         , SUM(TSDP.SALE_CNT) AS SALE_CNT
+        , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
         FROM    TB_SL_MONTHLY_POS TSDP
         WHERE   1 = 1
         AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -450,7 +462,7 @@
         SELECT  *
         FROM    T
         PIVOT	(
-        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
+        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT, MAX(SALE_QTY) AS SALE_QTY
         FOR STORE_CD IN (
         <foreach collection="arrStorePos" item="item" separator=",">
             '${item}'
@@ -477,6 +489,7 @@
         , A.TOT_DC_AMT
         , A.TOT_REAL_SALE_AMT
         , A.TOT_SALE_CNT
+        , A.TOT_SALE_QTY
         , B.*
         FROM    (
         SELECT  TO_CHAR(TO_DATE(TSDP.SALE_YM, 'YYYY-MM'),'YYYY-MM') AS YEAR_MONTH
@@ -485,6 +498,7 @@
         , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
         , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
         , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+        , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS TOT_SALE_QTY
         FROM    TB_SL_MONTHLY_POS TSDP
         WHERE   1 = 1
         AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -511,6 +525,7 @@
         , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
         , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
         , SUM(TSDP.SALE_CNT) AS SALE_CNT
+        , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
         FROM    TB_SL_MONTHLY_POS TSDP
         WHERE   1 = 1
         AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -531,7 +546,7 @@
         SELECT  *
         FROM    T
         PIVOT   (
-        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT
+        MAX(SALE_AMT) AS SALE_AMT, MAX(DC_AMT) AS DC_AMT, MAX(REAL_SALE_AMT) AS REAL_SALE_AMT, MAX(SALE_CNT) AS SALE_CNT, MAX(SALE_QTY) AS SALE_QTY
         FOR STORE_CD IN (
         <foreach collection="arrStorePos" item="item" separator=",">
             '${item}'
@@ -754,6 +769,7 @@
         , TSDP.STORE_CD
         , SUM(TSDP.SALE_CNT) AS SALE_CNT
         , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+        , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_SL_DAILY_POS TSDP
         , TB_MS_STORE TMS
@@ -793,6 +809,7 @@
         , TSDP.STORE_CD
         , SUM(TSDP.SALE_CNT) AS SALE_CNT
         , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
+        , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
         FROM TB_SL_DAILY_POS TSDP
         , TB_MS_STORE TMS
         WHERE  1=1

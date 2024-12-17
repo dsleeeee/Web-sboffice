@@ -87,7 +87,7 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
             s.columnHeaders.setCellData(i, "totDcAmt", messages["pos.totDcAmt"]);
             s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["pos.totRealSaleAmt"]);
-            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleQty"]);
+            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleCnt"]);
         }
 
         //그리드 아이템포멧 생성
@@ -245,7 +245,7 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 includeColumns      : function (column) {
                     return column.visible;
                 }
-            }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.hour"]+'_'+getToday()+'.xlsx', function () {
+            }, messages["month.sale"]+'_'+messages["empsale.pos"]+'_'+messages["pos.hour"]+'_'+getCurDateTime()+'.xlsx', function () {
                 $timeout(function () {
                     $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                 }, 10);
@@ -350,7 +350,7 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleAmt", messages["pos.SaleAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
-                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
+                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleCnt"]);
 
             }
         }

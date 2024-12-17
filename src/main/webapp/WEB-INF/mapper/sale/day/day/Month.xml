@@ -955,7 +955,7 @@
                         SUM(TOT_SALE_AMT) AS SALE_AMT,
                         SUM(TOT_DC_AMT) AS DC_AMT,
                         SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-                        SUM(SALE_QTY) AS SALE_QTY
+                        SUM(SALE_QTY + NVL(SIDE_SALE_QTY,0)) AS SALE_QTY
                 FROM 	TB_SL_MONTHLY_POS tssd
                 WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     SALE_YM BETWEEN #{startMonth} AND #{endMonth}
