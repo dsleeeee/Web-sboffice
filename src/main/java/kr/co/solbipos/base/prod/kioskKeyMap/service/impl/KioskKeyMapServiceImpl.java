@@ -213,7 +213,13 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                 result += kioskKeyMapMapper.insertKioskCategory(kioskKeyMapVO);
 
             } else if ( kioskKeyMapVO.getStatus() == GridDataFg.UPDATE ) { // 수정
-                result += kioskKeyMapMapper.updateKioskCategory(kioskKeyMapVO);
+
+                if(kioskKeyMapVO.getOrgnFg() == "S" && (kioskKeyMapVO.getHqOfficeCd().equals("A0001") || kioskKeyMapVO.getHqOfficeCd().equals("DS021")
+                        || kioskKeyMapVO.getHqOfficeCd().equals("DS034") || kioskKeyMapVO.getHqOfficeCd().equals("DS062"))) {
+                    result += kioskKeyMapMapper.insertKioskCategory(kioskKeyMapVO);
+                }else{
+                    result += kioskKeyMapMapper.updateKioskCategory(kioskKeyMapVO);
+                }
 
             } else if ( kioskKeyMapVO.getStatus() == GridDataFg.DELETE ) { // 삭제
                 result += kioskKeyMapMapper.deleteKioskCategory(kioskKeyMapVO);
@@ -245,7 +251,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
         }
 
-        if ( result == kioskKeyMapVOs.length) {
+        if ( result >= 0) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -305,7 +311,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
         }
 
-        if ( result == kioskKeyMapVOs.length) {
+        if ( result >= 0) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
@@ -1060,7 +1066,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             // 페이지 수 계산
             int indexNo = Integer.parseInt(kioskKeyMapVO.getIndexNo());
             kioskKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 4) + 1)));
-
+    
             if ( kioskKeyMapVO.getStatus() == GridDataFg.INSERT ) { // 생성
 
                 // 중분류코드 생성
@@ -1069,7 +1075,12 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                 result += kioskKeyMapMapper.insertKioskCategoryM(kioskKeyMapVO);
 
             } else if ( kioskKeyMapVO.getStatus() == GridDataFg.UPDATE ) { // 수정
-                result += kioskKeyMapMapper.updateKioskCategoryM(kioskKeyMapVO);
+                if(kioskKeyMapVO.getOrgnFg() == "S" && (kioskKeyMapVO.getHqOfficeCd().equals("A0001") || kioskKeyMapVO.getHqOfficeCd().equals("DS021")
+                        || kioskKeyMapVO.getHqOfficeCd().equals("DS034") || kioskKeyMapVO.getHqOfficeCd().equals("DS062"))) {
+                    result += kioskKeyMapMapper.insertKioskCategoryM(kioskKeyMapVO);
+                }else{
+                    result += kioskKeyMapMapper.updateKioskCategoryM(kioskKeyMapVO);
+                }
 
             } else if ( kioskKeyMapVO.getStatus() == GridDataFg.DELETE ) { // 삭제
                 result += kioskKeyMapMapper.deleteKioskCategoryM(kioskKeyMapVO);
@@ -1080,7 +1091,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             }
         }
 
-        if ( result == kioskKeyMapVOs.length) {
+        if ( result >= 0) {
             return result;
         } else {
             throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));

@@ -292,42 +292,59 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                MERGE INTO TB_MS_KIOSK_GROUP tmkg
-                USING DUAL
-                ON (
-                    STORE_CD = #{storeCd}
-                AND POS_NO = #{posNo}
-                AND TU_CLS_TYPE = #{tuClsType}
-                )
+                MERGE INTO TB_MS_KIOSK_GROUP A
+                USING
+                    (
+                        SELECT 	STORE_CD
+                        ,		POS_NO
+                        ,		#{tuClsType} 	AS TU_CLS_TYPE
+                        ,   	#{tuClsTypeNm}	AS TU_CLS_TYPE_NM
+                        ,   	#{regDt}	    AS REG_DT
+                        ,   	#{regId}	    AS REG_ID
+                        ,   	#{modDt}	    AS MOD_DT
+                        ,   	#{modId}	    AS MOD_ID
+                        FROM 	TB_MS_POS_ENVST
+                        WHERE 	STORE_CD 	= #{storeCd}
+                        AND 	ENVST_CD 	= '4019'
+                        AND 	ENVST_VAL 	= '6'
+                        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                            AND POS_NO      = #{posNo}
+                        </if>
+                    ) B
+                ON  (
+                            B.STORE_CD      = A.STORE_CD
+                        AND B.POS_NO        = A.POS_NO
+                        AND B.TU_CLS_TYPE   = A.TU_CLS_TYPE
+                    )
                 WHEN MATCHED THEN
                 UPDATE
                 SET
-                TU_CLS_TYPE_NM   = #{tuClsTypeNm}
-                ,   MOD_DT      = #{modDt}
-                ,   MOD_ID      = #{modId}
+                        A.TU_CLS_TYPE_NM    = B.TU_CLS_TYPE_NM
+                ,       A.MOD_DT            = B.MOD_DT
+                ,       A.MOD_ID            = B.MOD_ID
                 WHEN NOT MATCHED THEN
                 INSERT
-                (
-                STORE_CD
-                ,   POS_NO
-                ,   TU_CLS_TYPE
-                ,   TU_CLS_TYPE_NM
-                ,   REG_DT
-                ,   REG_ID
-                ,   MOD_DT
-                ,   MOD_ID
-                )
+                    (
+                        A.STORE_CD
+                    ,   A.POS_NO
+                    ,   A.TU_CLS_TYPE
+                    ,   A.TU_CLS_TYPE_NM
+                    ,   A.REG_DT
+                    ,   A.REG_ID
+                    ,   A.MOD_DT
+                    ,   A.MOD_ID
+                    )
                 VALUES
-                (
-                #{storeCd}
-                ,   #{posNo}
-                ,   #{tuClsType}
-                ,   #{tuClsTypeNm}
-                ,   #{regDt}
-                ,   #{regId}
-                ,   #{modDt}
-                ,   #{modId}
-                )
+                    (
+                        B.STORE_CD
+                    ,   B.POS_NO
+                    ,   B.TU_CLS_TYPE
+                    ,   B.TU_CLS_TYPE_NM
+                    ,   B.REG_DT
+                    ,   B.REG_ID
+                    ,   B.MOD_DT
+                    ,   B.MOD_ID
+                    )
             </when>
         </choose>
     </insert>
@@ -575,93 +592,142 @@
         COMMENTS : 새로운 키오스크 카테고리(분류) 생성한다.
     -->
     <insert id="insertKioskCategory" parameterType="kioskKeyMapVO">
-      /* USE : KioskKeyMapMapper.insertKioskCategory */
+        /* USE : KioskKeyMapMapper.insertKioskCategory */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
                     INSERT INTO TB_HQ_KIOSK_CLS
                     (
-                        HQ_OFFICE_CD,
-                        TU_CLS_TYPE,
-                        TU_CLS_CD,
-                        TU_CLS_NM,
-                        TU_PAGE,
-                        X,
-                        Y,
-                        WIDTH,
-                        HEIGHT,
-                        INDEX_NO,
-                        CLS_FG,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID,
-                        CLS_MEMO,
-                        TU_M_CLS_FG
+                        HQ_OFFICE_CD
+                    ,   TU_CLS_TYPE
+                    ,   TU_CLS_CD
+                    ,   TU_CLS_NM
+                    ,   TU_PAGE
+                    ,   X
+                    ,   Y
+                    ,   WIDTH
+                    ,   HEIGHT
+                    ,   INDEX_NO
+                    ,   CLS_FG
+                    ,   REG_DT
+                    ,   REG_ID
+                    ,   MOD_DT
+                    ,   MOD_ID
+                    ,   CLS_MEMO
+                    ,   TU_M_CLS_FG
                     )
                     VALUES
                     (
-                        #{hqOfficeCd},
-                        #{tuClsType},
-                        #{tuClsCd},
-                        #{tuClsNm},
-                        #{tuPage},
-                        #{x},
-                        #{y},
-                        #{width},
-                        #{height},
-                        #{indexNo},
-                        #{clsFg},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId},
-                        #{clsMemo},
-                        #{tuMClsFg}
+                        #{hqOfficeCd}
+                    ,   #{tuClsType}
+                    ,   #{tuClsCd}
+                    ,   #{tuClsNm}
+                    ,   #{tuPage}
+                    ,   #{x}
+                    ,   #{y}
+                    ,   #{width}
+                    ,   #{height}
+                    ,   #{indexNo}
+                    ,   #{clsFg}
+                    ,   #{regDt}
+                    ,   #{regId}
+                    ,   #{modDt}
+                    ,   #{modId}
+                    ,   #{clsMemo}
+                    ,   #{tuMClsFg}
                     )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                  INSERT INTO TB_MS_KIOSK_CLS
-                  (
-                        STORE_CD,
-                        POS_NO,
-                        TU_CLS_TYPE,
-                        TU_CLS_CD,
-                        TU_CLS_NM,
-                        TU_PAGE,
-                        X,
-                        Y,
-                        WIDTH,
-                        HEIGHT,
-                        INDEX_NO,
-                        CLS_FG,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID,
-                        CLS_MEMO
-                  )
-                  VALUES
-                  (
-                        #{storeCd},
-                        #{posNo},
-                        #{tuClsType},
-                        #{tuClsCd},
-                        #{tuClsNm},
-                        #{tuPage},
-                        #{x},
-                        #{y},
-                        #{width},
-                        #{height},
-                        #{indexNo},
-                        #{clsFg},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId},
-                        #{clsMemo}
-                  )
+                MERGE INTO TB_MS_KIOSK_CLS A
+                USING
+                    (
+                        SELECT 	STORE_CD
+                        ,		POS_NO
+                        ,		#{tuClsType}    AS TU_CLS_TYPE
+                        ,		#{tuClsCd}	    AS TU_CLS_CD
+                        ,		#{tuClsNm}	    AS TU_CLS_NM
+                        ,		#{tuPage}	    AS TU_PAGE
+                        ,		#{x}            AS X
+                        ,		#{y}            AS Y
+                        ,		#{width}        AS WIDTH
+                        ,		#{height}       AS HEIGHT
+                        ,		#{indexNo}      AS INDEX_NO
+                        ,		#{clsFg}        AS CLS_FG
+                        ,		#{regDt}	    AS REG_DT
+                        ,		#{regId}	    AS REG_ID
+                        ,		#{modDt}	    AS MOD_DT
+                        ,		#{modId}	    AS MOD_ID
+                        ,		#{clsMemo}	    AS CLS_MEMO
+                        FROM 	TB_MS_POS_ENVST
+                        WHERE 	STORE_CD    = #{storeCd}
+                        AND 	ENVST_CD    = '4019'
+                        AND 	ENVST_VAL   = '6'
+                        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                            AND POS_NO      = #{posNo}
+                        </if>
+                    ) B
+                ON
+                    (
+                            B.STORE_CD 		= A.STORE_CD
+                        AND B.POS_NO		= A.POS_NO
+                        AND B.TU_CLS_TYPE 	= A.TU_CLS_TYPE
+                        AND B.TU_CLS_CD 	= A.TU_CLS_CD
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET		A.TU_CLS_NM     = B.TU_CLS_NM
+                ,       A.TU_PAGE       = B.TU_PAGE
+                ,       A.X             = B.X
+                ,       A.Y             = B.Y
+                ,       A.WIDTH         = B.WIDTH
+                ,       A.HEIGHT        = B.HEIGHT
+                ,       A.INDEX_NO      = B.INDEX_NO
+                ,       A.CLS_FG        = B.CLS_FG
+                ,       A.MOD_DT        = B.MOD_DT
+                ,       A.MOD_ID        = B.MOD_ID
+                ,       A.CLS_MEMO      = B.CLS_MEMO
+                WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                            STORE_CD
+                    ,       POS_NO
+                    ,       TU_CLS_TYPE
+                    ,       TU_CLS_CD
+                    ,       TU_CLS_NM
+                    ,       TU_PAGE
+                    ,       X
+                    ,       Y
+                    ,       WIDTH
+                    ,       HEIGHT
+                    ,       INDEX_NO
+                    ,       CLS_FG
+                    ,       REG_DT
+                    ,       REG_ID
+                    ,       MOD_DT
+                    ,       MOD_ID
+                    ,       CLS_MEMO
+                    )
+                VALUES
+                    (
+                            B.STORE_CD
+                    ,       B.POS_NO
+                    ,       B.TU_CLS_TYPE
+                    ,       B.TU_CLS_CD
+                    ,       B.TU_CLS_NM
+                    ,       B.TU_PAGE
+                    ,       B.X
+                    ,       B.Y
+                    ,       B.WIDTH
+                    ,       B.HEIGHT
+                    ,       B.INDEX_NO
+                    ,       B.CLS_FG
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    ,       B.CLS_MEMO
+                    )
             </when>
         </choose>
     </insert>
@@ -726,18 +792,20 @@
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                DELETE TB_HQ_KIOSK_CLS
-                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                   AND TU_CLS_TYPE = #{tuClsType}
-                   AND TU_CLS_CD = #{tuClsCd}
+                DELETE  TB_HQ_KIOSK_CLS
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     TU_CLS_TYPE     = #{tuClsType}
+                AND     TU_CLS_CD       = #{tuClsCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                DELETE TB_MS_KIOSK_CLS
-                 WHERE STORE_CD = #{storeCd}
-                   AND POS_NO = #{posNo}
-                   AND TU_CLS_TYPE = #{tuClsType}
-                   AND TU_CLS_CD = #{tuClsCd}
+                DELETE  TB_MS_KIOSK_CLS
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
+                AND     TU_CLS_TYPE = #{tuClsType}
+                AND     TU_CLS_CD   = #{tuClsCd}
             </when>
         </choose>
     </delete>
@@ -760,11 +828,13 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                DELETE TB_MS_KIOSK_KEY
-                 WHERE STORE_CD = #{storeCd}
-                   AND POS_NO = #{posNo}
-                   AND TU_CLS_TYPE = #{tuClsType}
-                   AND TU_CLS_CD = #{tuClsCd}
+                DELETE  TB_MS_KIOSK_KEY
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
+                AND     TU_CLS_TYPE = #{tuClsType}
+                AND     TU_CLS_CD   = #{tuClsCd}
             </when>
         </choose>
     </delete>
@@ -787,11 +857,13 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                DELETE TB_MS_KIOSK_KEY
-                WHERE STORE_CD = #{storeCd}
-                AND POS_NO = #{posNo}
-                AND TU_CLS_TYPE = #{tuClsType}
-                AND TU_CLS_CD IN (SELECT TU_M_CLS_CD FROM TB_MS_KIOSK_M_CLS WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND TU_CLS_TYPE = #{tuClsType} AND TU_CLS_CD = #{tuClsCd})
+                DELETE  TB_MS_KIOSK_KEY
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
+                AND     TU_CLS_TYPE = #{tuClsType}
+                AND     TU_CLS_CD   IN (SELECT TU_M_CLS_CD FROM TB_MS_KIOSK_M_CLS WHERE STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND TU_CLS_TYPE = #{tuClsType} AND TU_CLS_CD = #{tuClsCd})
             </when>
         </choose>
     </delete>
@@ -814,11 +886,13 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                DELETE TB_MS_KIOSK_M_CLS
-                WHERE STORE_CD = #{storeCd}
-                AND POS_NO = #{posNo}
-                AND TU_CLS_TYPE = #{tuClsType}
-                AND TU_CLS_CD = #{tuClsCd}
+                DELETE  TB_MS_KIOSK_M_CLS
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
+                AND     TU_CLS_TYPE = #{tuClsType}
+                AND     TU_CLS_CD   = #{tuClsCd}
             </when>
         </choose>
     </delete>
@@ -940,7 +1014,9 @@
                           MOD_DT = #{modDt},
                           MOD_ID = #{modId}
                    WHERE STORE_CD = #{storeCd}
-                     AND POS_NO = #{posNo}
+                    <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND POS_NO   = #{posNo}
+                    </if>
                      AND TU_CLS_TYPE = #{tuClsType}
                      AND TU_CLS_CD = #{tuClsCd}
                      AND TU_KEY_CD = #{tuKeyCd}
@@ -969,7 +1045,9 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE TB_MS_KIOSK_KEY
                  WHERE STORE_CD = #{storeCd}
-                   AND POS_NO = #{posNo}
+                    <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND POS_NO      = #{posNo}
+                    </if>
                    AND TU_CLS_TYPE = #{tuClsType}
                    AND TU_CLS_CD = #{tuClsCd}
                    AND TU_KEY_CD = #{tuKeyCd}
@@ -1219,91 +1297,140 @@
         COMMENTS : 상품을 키맵에 등록한다. ( 본사/매장 )
     -->
     <insert id="saveKioskKeyMap" parameterType="kioskKeyMapVO">
-      /* USE : KioskKeyMapMapper.saveKioskKeyMap */
+        /* USE : KioskKeyMapMapper.saveKioskKeyMap */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
-                    INSERT INTO TB_HQ_KIOSK_KEY
-                    (
-                        HQ_OFFICE_CD,
-                        TU_CLS_TYPE,
-                        TU_CLS_CD,
-                        TU_KEY_CD,
-                        PROD_CD,
-                        TU_PAGE,
-                        X,
-                        Y,
-                        WIDTH,
-                        HEIGHT,
-                        INDEX_NO,
-                        CLS_FG,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                    )
-                    VALUES
-                    (
-                        #{hqOfficeCd},
-                        #{tuClsType},
-                        #{tuClsCd},
-                        #{tuKeyCd},
-                        #{prodCd},
-                        #{tuPage},
-                        #{x},
-                        #{y},
-                        #{width},
-                        #{height},
-                        #{indexNo},
-                        #{clsFg},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                    )
+                INSERT INTO TB_HQ_KIOSK_KEY
+                (
+                    HQ_OFFICE_CD,
+                    TU_CLS_TYPE,
+                    TU_CLS_CD,
+                    TU_KEY_CD,
+                    PROD_CD,
+                    TU_PAGE,
+                    X,
+                    Y,
+                    WIDTH,
+                    HEIGHT,
+                    INDEX_NO,
+                    CLS_FG,
+                    REG_DT,
+                    REG_ID,
+                    MOD_DT,
+                    MOD_ID
+                )
+                VALUES
+                (
+                    #{hqOfficeCd},
+                    #{tuClsType},
+                    #{tuClsCd},
+                    #{tuKeyCd},
+                    #{prodCd},
+                    #{tuPage},
+                    #{x},
+                    #{y},
+                    #{width},
+                    #{height},
+                    #{indexNo},
+                    #{clsFg},
+                    #{regDt},
+                    #{regId},
+                    #{modDt},
+                    #{modId}
+                )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                  INSERT INTO TB_MS_KIOSK_KEY
-                  (
-                        STORE_CD,
-                        POS_NO,
-                        TU_CLS_TYPE,
-                        TU_CLS_CD,
-                        TU_KEY_CD,
-                        PROD_CD,
-                        TU_PAGE,
-                        X,
-                        Y,
-                        WIDTH,
-                        HEIGHT,
-                        INDEX_NO,
-                        CLS_FG,
-                        REG_DT,
-                        REG_ID,
-                        MOD_DT,
-                        MOD_ID
-                  )
-                  VALUES
-                  (
-                        #{storeCd},
-                        #{posNo},
-                        #{tuClsType},
-                        #{tuClsCd},
-                        #{tuKeyCd},
-                        #{prodCd},
-                        #{tuPage},
-                        #{x},
-                        #{y},
-                        #{width},
-                        #{height},
-                        #{indexNo},
-                        #{clsFg},
-                        #{regDt},
-                        #{regId},
-                        #{modDt},
-                        #{modId}
-                  )
+                MERGE INTO TB_MS_KIOSK_KEY A
+                USING
+                    (
+                        SELECT  #{storeCd}      AS STORE_CD
+                        ,       POS_NO
+                        ,       #{tuClsType}    AS TU_CLS_TYPE
+                        ,       #{tuClsCd}      AS TU_CLS_CD
+                        ,       #{tuKeyCd}      AS TU_KEY_CD
+                        ,       #{prodCd}       AS PROD_CD
+                        ,       #{tuPage}       AS TU_PAGE
+                        ,       #{x}            AS X
+                        ,       #{y}            AS Y
+                        ,       #{width}        AS WIDTH
+                        ,       #{height}       AS HEIGHT
+                        ,       #{indexNo}      AS INDEX_NO
+                        ,       #{clsFg}        AS CLS_FG
+                        ,       #{regDt}        AS REG_DT
+                        ,       #{regId}        AS REG_ID
+                        ,       #{modDt}        AS MOD_DT
+                        ,       #{modId}        AS MOD_ID
+                        FROM 	TB_MS_POS_ENVST
+                        WHERE 	STORE_CD    = #{storeCd}
+                        AND 	ENVST_CD    = '4019'
+                        AND 	ENVST_VAL   = '6'
+                        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                            AND POS_NO      = #{posNo}
+                        </if>
+                    ) B
+                ON
+                    (
+                            B.STORE_CD     = A.STORE_CD
+                        AND B.POS_NO       = A.POS_NO
+                        AND B.TU_CLS_CD    = A.TU_CLS_CD
+                        AND B.TU_KEY_CD    = A.TU_KEY_CD
+                        AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.PROD_CD      = B.PROD_CD
+                ,       A.TU_PAGE      = B.TU_PAGE
+                ,       A.X            = B.X
+                ,       A.Y            = B.Y
+                ,       A.WIDTH        = B.WIDTH
+                ,       A.HEIGHT       = B.HEIGHT
+                ,       A.INDEX_NO     = B.INDEX_NO
+                ,       A.CLS_FG       = B.CLS_FG
+                ,       A.MOD_DT       = B.MOD_DT
+                ,       A.MOD_ID       = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                    (
+                            A.STORE_CD
+                    ,       A.POS_NO
+                    ,       A.TU_CLS_TYPE
+                    ,       A.TU_CLS_CD
+                    ,       A.TU_KEY_CD
+                    ,       A.PROD_CD
+                    ,       A.TU_PAGE
+                    ,       A.X
+                    ,       A.Y
+                    ,       A.WIDTH
+                    ,       A.HEIGHT
+                    ,       A.INDEX_NO
+                    ,       A.CLS_FG
+                    ,       A.REG_DT
+                    ,       A.REG_ID
+                    ,       A.MOD_DT
+                    ,       A.MOD_ID
+                    )
+                VALUES
+                    (
+                            B.STORE_CD
+                    ,       B.POS_NO
+                    ,       B.TU_CLS_TYPE
+                    ,       B.TU_CLS_CD
+                    ,       B.TU_KEY_CD
+                    ,       B.PROD_CD
+                    ,       B.TU_PAGE
+                    ,       B.X
+                    ,       B.Y
+                    ,       B.WIDTH
+                    ,       B.HEIGHT
+                    ,       B.INDEX_NO
+                    ,       B.CLS_FG
+                    ,       B.REG_DT
+                    ,       B.REG_ID
+                    ,       B.MOD_DT
+                    ,       B.MOD_ID
+                    )
             </when>
         </choose>
     </insert>
@@ -1630,7 +1757,8 @@
     -->
     <select id="getStoreList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
         /* KioskKeyMapMapper.getStoreList */
-        SELECT *
+        SELECT
+               *
         FROM
         (
             SELECT
@@ -1645,14 +1773,25 @@
                  TB_MS_STORE_INFO tmsi,
             (
                 SELECT
-                tmp.STORE_CD,
-                tmp.POS_NO
+                tmp.STORE_CD
+                <choose>
+                    <when test='hqOfficeCd != null and (hqOfficeCd == "A0001" or hqOfficeCd == "DS021" or hqOfficeCd == "DS034" or hqOfficeCd == "DS062")'>
+                    ,   MIN(tmp.POS_NO) AS POS_NO
+                    </when>
+                    <otherwise>
+                    ,   tmp.POS_NO
+                    </otherwise>
+                </choose>
                 FROM TB_MS_POS_ENVST tmpe,
                 TB_MS_POS tmp
                 WHERE tmpe.STORE_CD = tmp.STORE_CD
                 AND tmpe.POS_NO = tmp.POS_NO
                 AND tmpe.ENVST_CD = '4019'
                 AND tmpe.ENVST_VAL = '6'
+                <if test='hqOfficeCd != null and (hqOfficeCd == "A0001" or hqOfficeCd == "DS021" or hqOfficeCd == "DS034" or hqOfficeCd == "DS062")'>
+                    GROUP
+                    BY      tmp.STORE_CD
+                </if>
             ) tmp
             WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tmp.STORE_CD = tms.STORE_CD
@@ -1720,6 +1859,10 @@
         <if test="tuMClsFg != null and tuMClsFg != ''">
             AND TU_M_CLS_FG = #{tuMClsFg}
         </if>
+        <if test='hqOfficeCd != null and (hqOfficeCd == "A0001" or hqOfficeCd == "DS021" or hqOfficeCd == "DS034" or hqOfficeCd == "DS062")'>
+            ORDER
+            BY 	    STORE_CD
+        </if>
     </select>
 
     <!-- 키오스크 키맵매장적용 - 매장에서 사용중인 기존 키맵그룹 삭제 -->
@@ -1762,10 +1905,10 @@
     -->
     <delete id="deleteKioskKeyMapByTuClsCd" parameterType="kioskKeyMapVO" >
         /* USE : KioskKeyMapMapper.deleteKioskKeyMapByTuClsCd */
-        DELETE TB_MS_KIOSK_KEY
-        WHERE STORE_CD = #{storeCd}
+        DELETE  TB_MS_KIOSK_KEY
+        WHERE   STORE_CD = #{storeCd}
         <if test="posNo != null and posNo != ''">
-            AND POS_NO = #{posNo}
+            AND POS_NO  = #{posNo}
         </if>
         AND TU_CLS_TYPE = #{tuClsType}
     </delete>
@@ -2194,14 +2337,26 @@
             FROM TB_MS_STORE tms,
                  TB_MS_STORE_INFO tmsi,
             (
-                SELECT tmp.STORE_CD,
-                tmp.POS_NO
+                SELECT
+                tmp.STORE_CD
+                <choose>
+                    <when test='hqOfficeCd != null and (hqOfficeCd == "A0001" or hqOfficeCd == "DS021" or hqOfficeCd == "DS034" or hqOfficeCd == "DS062")'>
+                    ,   MIN(tmp.POS_NO) AS POS_NO
+                    </when>
+                    <otherwise>
+                    ,   tmp.POS_NO
+                    </otherwise>
+                </choose>
                 FROM TB_MS_POS_ENVST tmpe,
                 TB_MS_POS tmp
                 WHERE tmpe.STORE_CD = tmp.STORE_CD
                 AND tmpe.POS_NO = tmp.POS_NO
                 AND tmpe.ENVST_CD = '4019'
                 AND tmpe.ENVST_VAL = '6'
+                <if test='hqOfficeCd != null and (hqOfficeCd == "A0001" or hqOfficeCd == "DS021" or hqOfficeCd == "DS034" or hqOfficeCd == "DS062")'>
+                    GROUP
+                    BY      tmp.STORE_CD
+                </if>
             ) tmp
             WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
             AND tmp.STORE_CD = tms.STORE_CD
@@ -2330,46 +2485,60 @@
     -->
     <insert id="insertStoreKioskPosEnv" parameterType="kioskKeyMapVO">
         /* USE : KioskKeyMapMapper.insertStoreKioskPosEnv */
-        MERGE INTO TB_MS_POS_ENVST
-        USING DUAL ON
-        (
-            STORE_CD = #{storeCd} AND POS_NO = #{posNo} AND ENVST_CD = #{envstCd}
-        )
+        MERGE INTO TB_MS_POS_ENVST A
+        USING
+            (
+                SELECT 	STORE_CD
+                ,		POS_NO
+                ,		#{envstCd} AS ENVST_CD
+                FROM 	TB_MS_POS_ENVST A
+                WHERE 	STORE_CD    = #{storeCd}
+                AND 	ENVST_CD    = '4019'
+                AND 	ENVST_VAL   = '6'
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND    POS_NO   = #{posNo}
+                </if>
+            ) B
+        ON  (
+                    B.STORE_CD  = A.STORE_CD
+                AND B.POS_NO    = A.POS_NO
+                AND B.ENVST_CD  = A.ENVST_CD
+            )
         WHEN MATCHED THEN
         UPDATE
-           SET ENVST_VAL = #{envstVal},
-                MOD_DT = #{modDt},
-                MOD_ID = #{modId},
-                POS_FG  = 'W'
+        SET     A.ENVST_VAL   = #{envstVal}
+        ,       A.MOD_DT      = #{modDt}
+        ,       A.MOD_ID      = #{modId}
+        ,       A.POS_FG      = 'W'
         WHEN NOT MATCHED THEN
         INSERT
-         (
-                STORE_CD,
-                POS_NO,
-                ENVST_CD,
-                ENVST_VAL,
-                DIRCT_IN_YN,
-                POS_FG,
-                USE_YN,
-                REG_DT,
-                REG_ID,
-                MOD_DT,
-                MOD_ID
-          )
+            (
+                STORE_CD
+            ,   POS_NO
+            ,   ENVST_CD
+            ,   ENVST_VAL
+            ,   DIRCT_IN_YN
+            ,   POS_FG
+            ,   USE_YN
+            ,   REG_DT
+            ,   REG_ID
+            ,   MOD_DT
+            ,   MOD_ID
+            )
         VALUES
-         (
-                #{storeCd},
-                #{posNo},
-                #{envstCd},
-                #{envstVal},
-                #{dirctInYn},
-                'W',
-                #{useYn},
-                #{regDt},
-                #{regId},
-                #{modDt},
-                #{modId}
-         )
+            (
+                B.STORE_CD
+            ,   B.POS_NO
+            ,   B.ENVST_CD
+            ,   #{envstVal}
+            ,   #{dirctInYn}
+            ,   'W'
+            ,   #{useYn}
+            ,   #{regDt}
+            ,   #{regId}
+            ,   #{modDt}
+            ,   #{modId}
+            )
     </insert>
 
     <!-- 키오스크 매장적용(매장/포장) - 키오스크 환경설정 값 가져오기 -->
@@ -3105,88 +3274,139 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 INSERT INTO TB_HQ_KIOSK_M_CLS
                 (
-                    HQ_OFFICE_CD,
-                    TU_CLS_TYPE,
-                    TU_CLS_CD,
-                    TU_M_CLS_CD,
-                    TU_M_CLS_NM,
-                    TU_PAGE,
-                    X,
-                    Y,
-                    WIDTH,
-                    HEIGHT,
-                    INDEX_NO,
-                    CLS_FG,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID,
-                    M_CLS_MEMO
+                    HQ_OFFICE_CD
+                ,   TU_CLS_TYPE
+                ,   TU_CLS_CD
+                ,   TU_M_CLS_CD
+                ,   TU_M_CLS_NM
+                ,   TU_PAGE
+                ,   X
+                ,   Y
+                ,   WIDTH
+                ,   HEIGHT
+                ,   INDEX_NO
+                ,   CLS_FG
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ,   M_CLS_MEMO
                 )
                 VALUES
                 (
-                    #{hqOfficeCd},
-                    #{tuClsType},
-                    #{tuClsCd},
-                    #{tuMClsCd},
-                    #{tuMClsNm},
-                    #{tuPage},
-                    #{x},
-                    #{y},
-                    #{width},
-                    #{height},
-                    #{indexNo},
-                    #{clsFg},
-                    #{regDt},
-                    #{regId},
-                    #{modDt},
-                    #{modId},
-                    #{mmClsMemo}
+                    #{hqOfficeCd}
+                ,   #{tuClsType}
+                ,   #{tuClsCd}
+                ,   #{tuMClsCd}
+                ,   #{tuMClsNm}
+                ,   #{tuPage}
+                ,   #{x}
+                ,   #{y}
+                ,   #{width}
+                ,   #{height}
+                ,   #{indexNo}
+                ,   #{clsFg}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                ,   #{mmClsMemo}
                 )
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                INSERT INTO TB_MS_KIOSK_M_CLS
+                MERGE INTO TB_MS_KIOSK_M_CLS A
+                USING
+                    (
+                        SELECT 	#{storeCd}      AS STORE_CD
+                        ,		POS_NO          AS POS_NO
+                        ,		#{tuClsType}    AS TU_CLS_TYPE
+                        ,		#{tuClsCd}      AS TU_CLS_CD
+                        ,		#{tuMClsCd}     AS TU_M_CLS_CD
+                        ,		#{tuMClsNm}     AS TU_M_CLS_NM
+                        ,		#{tuPage}       AS TU_PAGE
+                        ,		#{x}            AS X
+                        ,		#{y}            AS Y
+                        ,		#{width}        AS WIDTH
+                        ,		#{height}       AS HEIGHT
+                        ,		#{indexNo}      AS INDEX_NO
+                        ,		#{clsFg}        AS CLS_FG
+                        ,		#{regDt}        AS REG_DT
+                        ,		#{regId}        AS REG_ID
+                        ,		#{modDt}        AS MOD_DT
+                        ,		#{modId}        AS MOD_ID
+                        ,       #{mmClsMemo}    AS M_CLS_MEMO
+                        FROM 	TB_MS_POS_ENVST
+                        WHERE 	STORE_CD    = #{storeCd}
+                        AND 	ENVST_CD    = '4019'
+                        AND 	ENVST_VAL   = '6'
+                        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                            AND POS_NO      = #{posNo}
+                        </if>
+                    ) B
+                ON
+                    (
+                            B.STORE_CD 		= A.STORE_CD
+                        AND B.POS_NO		= A.POS_NO
+                        AND B.TU_CLS_TYPE 	= A.TU_CLS_TYPE
+                        AND B.TU_M_CLS_CD 	= A.TU_M_CLS_CD
+                        AND B.TU_CLS_CD      = A.TU_CLS_CD
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET		A.TU_M_CLS_NM   = B.TU_M_CLS_NM
+                ,       A.TU_PAGE       = B.TU_PAGE
+                ,       A.X             = B.X
+                ,       A.Y             = B.Y
+                ,       A.WIDTH         = B.WIDTH
+                ,       A.HEIGHT        = B.HEIGHT
+                ,       A.INDEX_NO      = B.INDEX_NO
+                ,       A.CLS_FG        = B.CLS_FG
+                ,       A.MOD_DT        = B.MOD_DT
+                ,       A.MOD_ID        = B.MOD_ID
+                ,       A.M_CLS_MEMO    = B.M_CLS_MEMO
+                WHEN NOT MATCHED THEN
+                INSERT
                 (
-                    STORE_CD,
-                    POS_NO,
-                    TU_CLS_TYPE,
-                    TU_CLS_CD,
-                    TU_M_CLS_CD,
-                    TU_M_CLS_NM,
-                    TU_PAGE,
-                    X,
-                    Y,
-                    WIDTH,
-                    HEIGHT,
-                    INDEX_NO,
-                    CLS_FG,
-                    REG_DT,
-                    REG_ID,
-                    MOD_DT,
-                    MOD_ID,
-                    M_CLS_MEMO
+                        STORE_CD
+                ,       POS_NO
+                ,       TU_CLS_TYPE
+                ,       TU_CLS_CD
+                ,       TU_M_CLS_CD
+                ,       TU_M_CLS_NM
+                ,       TU_PAGE
+                ,       X
+                ,       Y
+                ,       WIDTH
+                ,       HEIGHT
+                ,       INDEX_NO
+                ,       CLS_FG
+                ,       REG_DT
+                ,       REG_ID
+                ,       MOD_DT
+                ,       MOD_ID
+                ,       M_CLS_MEMO
                 )
                 VALUES
                 (
-                    #{storeCd},
-                    #{posNo},
-                    #{tuClsType},
-                    #{tuClsCd},
-                    #{tuMClsCd},
-                    #{tuMClsNm},
-                    #{tuPage},
-                    #{x},
-                    #{y},
-                    #{width},
-                    #{height},
-                    #{indexNo},
-                    #{clsFg},
-                    #{regDt},
-                    #{regId},
-                    #{modDt},
-                    #{modId},
-                    #{mmClsMemo}
+                        B.STORE_CD
+                ,       B.POS_NO
+                ,       B.TU_CLS_TYPE
+                ,       B.TU_CLS_CD
+                ,       B.TU_M_CLS_CD
+                ,       B.TU_M_CLS_NM
+                ,       B.TU_PAGE
+                ,       B.X
+                ,       B.Y
+                ,       B.WIDTH
+                ,       B.HEIGHT
+                ,       B.INDEX_NO
+                ,       B.CLS_FG
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.M_CLS_MEMO
                 )
             </when>
         </choose>
@@ -3262,12 +3482,14 @@
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
-                DELETE TB_MS_KIOSK_M_CLS
-                WHERE STORE_CD = #{storeCd}
-                AND POS_NO = #{posNo}
-                AND TU_CLS_TYPE = #{tuClsType}
-                AND TU_CLS_CD = #{tuClsCd}
-                AND TU_M_CLS_CD = #{tuMClsCd}
+                DELETE  TB_MS_KIOSK_M_CLS
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
+                AND     TU_CLS_TYPE = #{tuClsType}
+                AND     TU_CLS_CD   = #{tuClsCd}
+                AND     TU_M_CLS_CD = #{tuMClsCd}
             </when>
         </choose>
     </delete>
@@ -3706,34 +3928,44 @@
         MERGE INTO TB_MS_KIOSK_CLS A
         USING   (
                     SELECT  #{storeCd}      AS STORE_CD
-                    ,       #{posNo}        AS POS_NO
-                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
-                    ,       TU_CLS_CD       AS TU_CLS_CD
-                    ,       TU_CLS_NM       AS TU_CLS_NM
-                    ,       TU_PAGE         AS TU_PAGE
+                    ,       B.POS_NO        AS POS_NO
+                    ,       tmkc.TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       tmkc.TU_CLS_CD       AS TU_CLS_CD
+                    ,       tmkc.TU_CLS_NM       AS TU_CLS_NM
+                    ,       tmkc.TU_PAGE         AS TU_PAGE
                     ,       X               AS X
                     ,       Y               AS Y
-                    ,       WIDTH           AS WIDTH
-                    ,       HEIGHT          AS HEIGHT
-                    ,       INDEX_NO        AS INDEX_NO
-                    ,       CLS_FG          AS CLS_FG
+                    ,       tmkc.WIDTH           AS WIDTH
+                    ,       tmkc.HEIGHT          AS HEIGHT
+                    ,       tmkc.INDEX_NO        AS INDEX_NO
+                    ,       tmkc.CLS_FG          AS CLS_FG
                     ,       #{regDt}        AS REG_DT
                     ,       #{regId}        AS REG_ID
                     ,       #{modDt}        AS MOD_DT
                     ,       #{modId}        AS MOD_ID
                     ,       #{tuMClsFg}     AS TU_M_CLS_FG -- 매장 적용시에만 UPDATE / 매장 해당컬럼 사용안함 / 수정 기록 확인용 / 매장은 [4101 KIOSK중분류사용] 사용
-                    ,       TU_CLS_EN_NM    AS TU_CLS_EN_NM
-                    ,       TU_CLS_CN_NM    AS TU_CLS_CN_NM
-                    ,       TU_CLS_JP_NM    AS TU_CLS_JP_NM
+                    ,       tmkc.TU_CLS_EN_NM    AS TU_CLS_EN_NM
+                    ,       tmkc.TU_CLS_CN_NM    AS TU_CLS_CN_NM
+                    ,       tmkc.TU_CLS_JP_NM    AS TU_CLS_JP_NM
                     FROM    TB_HQ_KIOSK_CLS tmkc
-                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND     TU_CLS_TYPE  = #{tuClsType}
+                    ,		TB_MS_POS_ENVST B
+                    ,		TB_MS_STORE C
+                    WHERE   tmkc.HQ_OFFICE_CD   = #{hqOfficeCd}
+                    AND     tmkc.TU_CLS_TYPE    = #{tuClsType}
+                    AND 	B.STORE_CD 		    = #{storeCd}
+                    AND 	B.ENVST_CD          = '4019'
+                    AND 	B.ENVST_VAL         = '6'
+                    AND 	C.HQ_OFFICE_CD      = tmkc.HQ_OFFICE_CD
+                    AND 	C.STORE_CD 	        = B.STORE_CD
+                    <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND B.POS_NO            = #{posNo}
+                    </if>
                 ) B
         ON      (
-                    B.STORE_CD     = A.STORE_CD
-                AND B.POS_NO       = A.POS_NO
-                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
-                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                        B.STORE_CD     = A.STORE_CD
+                    AND B.POS_NO       = A.POS_NO
+                    AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                    AND B.TU_CLS_CD    = A.TU_CLS_CD
                 )
         WHEN MATCHED THEN
         UPDATE
@@ -3836,10 +4068,10 @@
                     AND     TU_CLS_TYPE = #{tuClsType}
                 ) B
         ON      (
-                    B.STORE_CD     = A.STORE_CD
-                AND B.POS_NO       = A.POS_NO
-                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
-                AND B.TU_CLS_CD    = A.TU_CLS_CD
+                        B.STORE_CD     = A.STORE_CD
+                    AND B.POS_NO       = A.POS_NO
+                    AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                    AND B.TU_CLS_CD    = A.TU_CLS_CD
                 )
         WHEN MATCHED THEN
         UPDATE
@@ -3917,16 +4149,26 @@
         MERGE INTO TB_MS_KIOSK_GROUP A
         USING   (
                     SELECT  #{storeCd}      AS STORE_CD
-                    ,       #{posNo}        AS POS_NO
-                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
-                    ,       TU_CLS_TYPE_NM  AS TU_CLS_TYPE_NM
+                    ,       B.POS_NO        AS POS_NO
+                    ,       A.TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       A.TU_CLS_TYPE_NM  AS TU_CLS_TYPE_NM
                     ,       #{regDt}        AS REG_DT
                     ,       #{regId}        AS REG_ID
                     ,       #{modDt}        AS MOD_DT
                     ,       #{modId}        AS MOD_ID
-                    FROM    TB_HQ_KIOSK_GROUP
-                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND     TU_CLS_TYPE = #{tuClsType}
+                    FROM    TB_HQ_KIOSK_GROUP A
+                    ,		TB_MS_POS_ENVST B
+                    ,		TB_MS_STORE C
+                    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     A.TU_CLS_TYPE   = #{tuClsType}
+                    AND 	B.STORE_CD 		= #{storeCd}
+                    AND 	B.ENVST_CD      = '4019'
+                    AND 	B.ENVST_VAL     = '6'
+                    AND 	C.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+                    AND 	C.STORE_CD 	    = B.STORE_CD
+                    <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND B.POS_NO        = #{posNo}
+                    </if>
                 ) B
         ON      (
                         B.STORE_CD     = A.STORE_CD
@@ -4031,34 +4273,43 @@
         /* USE : KioskKeyMapMapper.mergeKioskKeyMapStoreReg */
         MERGE INTO TB_MS_KIOSK_KEY A
         USING   (
-
                     SELECT  #{storeCd}      AS STORE_CD
-                    ,       #{posNo}        AS POS_NO
-                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
-                    ,       TU_CLS_CD       AS TU_CLS_CD
-                    ,       TU_KEY_CD       AS TU_KEY_CD
-                    ,       PROD_CD         AS PROD_CD
-                    ,       TU_PAGE         AS TU_PAGE
-                    ,       X               AS X
-                    ,       Y               AS Y
-                    ,       WIDTH           AS WIDTH
-                    ,       HEIGHT          AS HEIGHT
-                    ,       INDEX_NO        AS INDEX_NO
-                    ,       CLS_FG          AS CLS_FG
+                    ,       B.POS_NO        AS POS_NO
+                    ,       A.TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       A.TU_CLS_CD       AS TU_CLS_CD
+                    ,       A.TU_KEY_CD       AS TU_KEY_CD
+                    ,       A.PROD_CD         AS PROD_CD
+                    ,       A.TU_PAGE         AS TU_PAGE
+                    ,       A.X               AS X
+                    ,       A.Y               AS Y
+                    ,       A.WIDTH           AS WIDTH
+                    ,       A.HEIGHT          AS HEIGHT
+                    ,       A.INDEX_NO        AS INDEX_NO
+                    ,       A.CLS_FG          AS CLS_FG
                     ,       #{regDt}        AS REG_DT
                     ,       #{regId}        AS REG_ID
                     ,       #{modDt}        AS MOD_DT
                     ,       #{modId}        AS MOD_ID
-                    FROM    TB_HQ_KIOSK_KEY
-                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND     TU_CLS_TYPE = #{tuClsType}
+                    FROM    TB_HQ_KIOSK_KEY A
+                    ,		TB_MS_POS_ENVST B
+                    ,		TB_MS_STORE C
+                    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     A.TU_CLS_TYPE   = #{tuClsType}
+                    AND 	B.STORE_CD 		= #{storeCd}
+                    AND 	B.ENVST_CD      = '4019'
+                    AND 	B.ENVST_VAL     = '6'
+                    AND 	C.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+                    AND 	C.STORE_CD 	    = B.STORE_CD
+                    <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND B.POS_NO        = #{posNo}
+                    </if>
                 ) B
         ON      (
-                    B.STORE_CD     = A.STORE_CD
-                AND B.POS_NO       = A.POS_NO
-                AND B.TU_CLS_CD    = A.TU_CLS_CD
-                AND B.TU_KEY_CD    = A.TU_KEY_CD
-                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                        B.STORE_CD     = A.STORE_CD
+                    AND B.POS_NO       = A.POS_NO
+                    AND B.TU_CLS_CD    = A.TU_CLS_CD
+                    AND B.TU_KEY_CD    = A.TU_KEY_CD
+                    AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
                 )
         WHEN MATCHED THEN
         UPDATE
@@ -4125,38 +4376,47 @@
         /* USE : KioskKeyMapMapper.mergeKioskKeyMapStoreReg2 */
         MERGE INTO TB_MS_KIOSK_KEY A
         USING   (
-
-                    SELECT  #{storeCd}      AS STORE_CD
-                    ,       #{posNo}        AS POS_NO
-                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
-                    ,       TU_CLS_CD       AS TU_CLS_CD
-                    ,       TU_KEY_CD       AS TU_KEY_CD
-                    ,       PROD_CD         AS PROD_CD
-                    ,       TU_PAGE         AS TU_PAGE
-                    ,       X               AS X
-                    ,       Y               AS Y
-                    ,       WIDTH           AS WIDTH
-                    ,       HEIGHT          AS HEIGHT
-                    ,       INDEX_NO        AS INDEX_NO
-                    ,       CLS_FG          AS CLS_FG
-                    ,       #{regDt}        AS REG_DT
-                    ,       #{regId}        AS REG_ID
-                    ,       #{modDt}        AS MOD_DT
-                    ,       #{modId}        AS MOD_ID
-                    FROM    TB_HQ_KIOSK_KEY
-                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND     TU_CLS_TYPE = #{tuClsType}
+                    SELECT  #{storeCd}          AS STORE_CD
+                    ,       B.POS_NO            AS POS_NO
+                    ,       A.TU_CLS_TYPE       AS TU_CLS_TYPE
+                    ,       A.TU_CLS_CD         AS TU_CLS_CD
+                    ,       A.TU_KEY_CD         AS TU_KEY_CD
+                    ,       A.PROD_CD           AS PROD_CD
+                    ,       A.TU_PAGE           AS TU_PAGE
+                    ,       A.X                 AS X
+                    ,       A.Y                 AS Y
+                    ,       A.WIDTH             AS WIDTH
+                    ,       A.HEIGHT            AS HEIGHT
+                    ,       A.INDEX_NO          AS INDEX_NO
+                    ,       A.CLS_FG            AS CLS_FG
+                    ,       #{regDt}            AS REG_DT
+                    ,       #{regId}            AS REG_ID
+                    ,       #{modDt}            AS MOD_DT
+                    ,       #{modId}            AS MOD_ID
+                    FROM    TB_HQ_KIOSK_KEY A
+                    ,		TB_MS_POS_ENVST B
+                    ,		TB_MS_STORE C
+                    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     A.TU_CLS_TYPE   = #{tuClsType}
+                    AND 	B.STORE_CD 		= #{storeCd}
+                    AND 	B.ENVST_CD      = '4019'
+                    AND 	B.ENVST_VAL     = '6'
+                    AND 	C.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+                    AND 	C.STORE_CD 	    = B.STORE_CD
+                    <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND B.POS_NO        = #{posNo}
+                    </if>
                     <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "0"'>
-                        AND     TU_CLS_TYPE || TU_CLS_CD NOT IN (
+                        AND     A.TU_CLS_TYPE || A.TU_CLS_CD NOT IN (
                                                                         SELECT NMCODE_NM || NMCODE_ITEM_1
                                                                         FROM TB_HQ_NMCODE thn
                                                                         WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                                                                         AND NMCODE_GRP_CD = '229'
                                                                         AND NMCODE_ITEM_2 = 'Y'
-                                                                )
+                                                                    )
                     </if>
                     <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "2"'>
-                        AND     TU_CLS_TYPE || TU_CLS_CD NOT IN (
+                        AND     A.TU_CLS_TYPE || A.TU_CLS_CD NOT IN (
                                                                        SELECT   C.TU_CLS_TYPE || C.TU_M_CLS_CD
                                                                        FROM     TB_HQ_KIOSK_M_CLS C
                                                                        WHERE    C.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -4168,16 +4428,15 @@
                                                                                                                     AND     NMCODE_GRP_CD = '229'
                                                                                                                     AND 	NMCODE_ITEM_2 = 'Y'
                                                                                                                 )
-                                                                )
+                                                                    )
                     </if>
-
                 ) B
         ON      (
-                    B.STORE_CD     = A.STORE_CD
-                AND B.POS_NO       = A.POS_NO
-                AND B.TU_CLS_CD    = A.TU_CLS_CD
-                AND B.TU_KEY_CD    = A.TU_KEY_CD
-                AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
+                        B.STORE_CD     = A.STORE_CD
+                    AND B.POS_NO       = A.POS_NO
+                    AND B.TU_CLS_CD    = A.TU_CLS_CD
+                    AND B.TU_KEY_CD    = A.TU_KEY_CD
+                    AND B.TU_CLS_TYPE  = A.TU_CLS_TYPE
                 )
         WHEN MATCHED THEN
         UPDATE
@@ -4244,7 +4503,6 @@
         /* USE : KioskKeyMapMapper.mergeKioskKeyMapStoreRegStore */
         MERGE INTO TB_MS_KIOSK_KEY A
         USING   (
-
                     SELECT  #{storeCd}      AS STORE_CD
                     ,       #{posNo}        AS POS_NO
                     ,       TU_CLS_TYPE     AS TU_CLS_TYPE
@@ -4340,26 +4598,36 @@
         MERGE INTO TB_MS_KIOSK_M_CLS A
         USING   (
                     SELECT  #{storeCd}      AS STORE_CD
-                    ,       #{posNo}        AS POS_NO
-                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
-                    ,       TU_CLS_CD       AS TU_CLS_CD
-                    ,       TU_M_CLS_CD     AS TU_M_CLS_CD
-                    ,       TU_M_CLS_NM     AS TU_M_CLS_NM
-                    ,       TU_PAGE         AS TU_PAGE
-                    ,       X               AS X
-                    ,       Y               AS Y
-                    ,       WIDTH           AS WIDTH
-                    ,       HEIGHT          AS HEIGHT
-                    ,       INDEX_NO        AS INDEX_NO
-                    ,       CLS_FG          AS CLS_FG
+                    ,       B.POS_NO       AS POS_NO
+                    ,       A.TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       A.TU_CLS_CD       AS TU_CLS_CD
+                    ,       A.TU_M_CLS_CD     AS TU_M_CLS_CD
+                    ,       A.TU_M_CLS_NM     AS TU_M_CLS_NM
+                    ,       A.TU_PAGE         AS TU_PAGE
+                    ,       A.X               AS X
+                    ,       A.Y               AS Y
+                    ,       A.WIDTH           AS WIDTH
+                    ,       A.HEIGHT          AS HEIGHT
+                    ,       A.INDEX_NO        AS INDEX_NO
+                    ,       A.CLS_FG          AS CLS_FG
                     ,       #{regDt}        AS REG_DT
                     ,       #{regId}        AS REG_ID
                     ,       #{modDt}        AS MOD_DT
                     ,       #{modId}        AS MOD_ID
-                    ,       M_CLS_MEMO      AS M_CLS_MEMO
-                    FROM    TB_HQ_KIOSK_M_CLS
-                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND     TU_CLS_TYPE = #{tuClsType}
+                    ,       A.M_CLS_MEMO      AS M_CLS_MEMO
+                    FROM    TB_HQ_KIOSK_M_CLS A
+                    ,		TB_MS_POS_ENVST B
+                    ,		TB_MS_STORE C
+                    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     A.TU_CLS_TYPE   = #{tuClsType}
+                    AND 	B.STORE_CD 		= #{storeCd}
+                    AND 	B.ENVST_CD      = '4019'
+                    AND 	B.ENVST_VAL     = '6'
+                    AND 	C.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+                    AND 	C.STORE_CD 	    = B.STORE_CD
+                    <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND B.POS_NO        = #{posNo}
+                    </if>
                 ) B
         ON      (
                     B.STORE_CD     = A.STORE_CD
@@ -4436,31 +4704,41 @@
         MERGE INTO TB_MS_KIOSK_M_CLS A
         USING   (
                     SELECT  #{storeCd}      AS STORE_CD
-                    ,       #{posNo}        AS POS_NO
-                    ,       TU_CLS_TYPE     AS TU_CLS_TYPE
-                    ,       TU_CLS_CD       AS TU_CLS_CD
-                    ,       TU_M_CLS_CD     AS TU_M_CLS_CD
-                    ,       TU_M_CLS_NM     AS TU_M_CLS_NM
-                    ,       TU_PAGE         AS TU_PAGE
-                    ,       X               AS X
-                    ,       Y               AS Y
-                    ,       WIDTH           AS WIDTH
-                    ,       HEIGHT          AS HEIGHT
-                    ,       INDEX_NO        AS INDEX_NO
-                    ,       CLS_FG          AS CLS_FG
+                    ,       B.POS_NO        AS POS_NO
+                    ,       A.TU_CLS_TYPE     AS TU_CLS_TYPE
+                    ,       A.TU_CLS_CD       AS TU_CLS_CD
+                    ,       A.TU_M_CLS_CD     AS TU_M_CLS_CD
+                    ,       A.TU_M_CLS_NM     AS TU_M_CLS_NM
+                    ,       A.TU_PAGE         AS TU_PAGE
+                    ,       A.X               AS X
+                    ,       A.Y               AS Y
+                    ,       A.WIDTH           AS WIDTH
+                    ,       A.HEIGHT          AS HEIGHT
+                    ,       A.INDEX_NO        AS INDEX_NO
+                    ,       A.CLS_FG          AS CLS_FG
                     ,       #{regDt}        AS REG_DT
                     ,       #{regId}        AS REG_ID
                     ,       #{modDt}        AS MOD_DT
                     ,       #{modId}        AS MOD_ID
-                    ,       M_CLS_MEMO      AS M_CLS_MEMO
-                    FROM    TB_HQ_KIOSK_M_CLS
-                    WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                    AND     TU_CLS_TYPE = #{tuClsType}
-                    AND     TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
-                                                                FROM 	TB_HQ_NMCODE thn
-                                                                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                AND     NMCODE_GRP_CD = '229'
-                                                                AND 	NMCODE_ITEM_2 = 'Y')
+                    ,       A.M_CLS_MEMO      AS M_CLS_MEMO
+                    FROM    TB_HQ_KIOSK_M_CLS A
+                    ,		TB_MS_POS_ENVST B
+                    ,		TB_MS_STORE C
+                    WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    AND     A.TU_CLS_TYPE   = #{tuClsType}
+                    AND 	B.STORE_CD 		= #{storeCd}
+                    AND 	B.ENVST_CD      = '4019'
+                    AND 	B.ENVST_VAL     = '6'
+                    AND 	C.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+                    AND 	C.STORE_CD 	    = B.STORE_CD
+                    <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND B.POS_NO        = #{posNo}
+                    </if>
+                    AND     A.TU_CLS_TYPE || A.TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
+                                                                    FROM 	TB_HQ_NMCODE thn
+                                                                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                    AND     NMCODE_GRP_CD = '229'
+                                                                    AND 	NMCODE_ITEM_2 = 'Y')
                 ) B
         ON      (
                     B.STORE_CD     = A.STORE_CD
@@ -4634,14 +4912,18 @@
         DELETE
         FROM   TB_MS_KIOSK_CLS
         WHERE  STORE_CD    = #{storeCd}
-        AND    POS_NO      = #{posNo}
+        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+            AND    POS_NO      = #{posNo}
+        </if>
         AND    TU_CLS_TYPE = #{tuClsType}
         AND    TU_CLS_CD IN
         (
             SELECT TU_CLS_CD
             FROM   TB_MS_KIOSK_CLS
             WHERE  STORE_CD    = #{storeCd}
-            AND    POS_NO      = #{posNo}
+            <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                AND    POS_NO      = #{posNo}
+            </if>
             AND    TU_CLS_TYPE = #{tuClsType}
             MINUS
             SELECT TU_CLS_CD
@@ -4691,14 +4973,18 @@
         DELETE
         FROM   TB_MS_KIOSK_KEY
         WHERE  STORE_CD    = #{storeCd}
-        AND    POS_NO      = #{posNo}
+        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+            AND    POS_NO      = #{posNo}
+        </if>
         AND    TU_CLS_TYPE = #{tuClsType}
         AND    TU_CLS_CD || TU_KEY_CD IN
         (
             SELECT TU_CLS_CD || TU_KEY_CD
             FROM   TB_MS_KIOSK_KEY
             WHERE  STORE_CD    = #{storeCd}
-            AND    POS_NO      = #{posNo}
+            <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                AND    POS_NO      = #{posNo}
+            </if>
             AND    TU_CLS_TYPE = #{tuClsType}
             MINUS
             SELECT TU_CLS_CD || TU_KEY_CD
@@ -4719,14 +5005,18 @@
         DELETE
         FROM   TB_MS_KIOSK_KEY
         WHERE  STORE_CD    = #{storeCd}
-        AND    POS_NO      = #{posNo}
+        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+            AND    POS_NO      = #{posNo}
+        </if>
         AND    TU_CLS_TYPE = #{tuClsType}
         AND    TU_CLS_CD || TU_KEY_CD IN
         (
             SELECT TU_CLS_CD || TU_KEY_CD
             FROM   TB_MS_KIOSK_KEY
             WHERE  STORE_CD    = #{storeCd}
-            AND    POS_NO      = #{posNo}
+            <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                AND    POS_NO      = #{posNo}
+            </if>
             AND    TU_CLS_TYPE = #{tuClsType}
             <if test='tuMClsFg != null and tuMClsFg != "" and tuMClsFg == "0"'>
                 AND TU_CLS_TYPE || TU_CLS_CD NOT IN (
@@ -4742,7 +5032,9 @@
                                                            SELECT   C.TU_CLS_TYPE || C.TU_M_CLS_CD
                                                            FROM     TB_MS_KIOSK_M_CLS C
                                                            WHERE    C.STORE_CD = #{storeCd}
-                                                           AND      C.POS_NO = #{posNo}
+                                                            <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                                                                AND    C.POS_NO      = #{posNo}
+                                                            </if>
                                                            AND      C.TU_CLS_TYPE = #{tuClsType}
                                                            AND      C.TU_CLS_TYPE || C.TU_CLS_CD IN (
                                                                                                         SELECT  NMCODE_NM || NMCODE_ITEM_1
@@ -4782,7 +5074,6 @@
                                                                                                     )
                                                        )
             </if>
-
         )
     </delete>
 
@@ -4826,14 +5117,18 @@
         DELETE
         FROM   TB_MS_KIOSK_M_CLS
         WHERE  STORE_CD    = #{storeCd}
-        AND    POS_NO      = #{posNo}
+        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+            AND    POS_NO      = #{posNo}
+        </if>
         AND    TU_CLS_TYPE = #{tuClsType}
         AND    TU_CLS_CD || TU_M_CLS_CD IN
         (
             SELECT TU_CLS_CD || TU_M_CLS_CD
             FROM   TB_MS_KIOSK_M_CLS
             WHERE  STORE_CD    = #{storeCd}
-            AND    POS_NO      = #{posNo}
+            <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                AND    POS_NO      = #{posNo}
+            </if>
             AND    TU_CLS_TYPE = #{tuClsType}
             MINUS
             SELECT TU_CLS_CD || TU_M_CLS_CD
@@ -4854,30 +5149,34 @@
         DELETE
         FROM   TB_MS_KIOSK_M_CLS
         WHERE  STORE_CD    = #{storeCd}
-        AND    POS_NO      = #{posNo}
+        <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+            AND    POS_NO      = #{posNo}
+        </if>
         AND    TU_CLS_TYPE = #{tuClsType}
         AND    TU_CLS_CD || TU_M_CLS_CD IN
         (
             SELECT TU_CLS_CD || TU_M_CLS_CD
             FROM   TB_MS_KIOSK_M_CLS
             WHERE  STORE_CD    = #{storeCd}
-            AND    POS_NO      = #{posNo}
+            <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                AND    POS_NO      = #{posNo}
+            </if>
             AND    TU_CLS_TYPE = #{tuClsType}
             AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
-                                                                   FROM 	TB_HQ_NMCODE thn
-                                                                   WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                   AND      NMCODE_GRP_CD = '229'
-                                                                   AND 	    NMCODE_ITEM_2 = 'Y')
+                                                       FROM 	TB_HQ_NMCODE thn
+                                                       WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                       AND      NMCODE_GRP_CD = '229'
+                                                       AND 	    NMCODE_ITEM_2 = 'Y')
             MINUS
             SELECT TU_CLS_CD || TU_M_CLS_CD
             FROM   TB_HQ_KIOSK_M_CLS
             WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
             AND    TU_CLS_TYPE = #{tuClsType}
             AND    TU_CLS_TYPE || TU_CLS_CD NOT IN (   SELECT 	NMCODE_NM || NMCODE_ITEM_1
-                                                                   FROM 	TB_HQ_NMCODE thn
-                                                                   WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                   AND      NMCODE_GRP_CD = '229'
-                                                                   AND 	    NMCODE_ITEM_2 = 'Y')
+                                                       FROM 	TB_HQ_NMCODE thn
+                                                       WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                       AND      NMCODE_GRP_CD = '229'
+                                                       AND 	    NMCODE_ITEM_2 = 'Y')
         )
     </delete>
 
@@ -5987,27 +6286,38 @@
     -->
     <update id="insertStoreGrpNmReg" parameterType="kioskKeyMapVO">
         /* KioskKeyMapper.insertStoreGrpNmReg */
-        MERGE INTO TB_MS_KIOSK_GROUP
-        USING	DUAL
+        MERGE INTO TB_MS_KIOSK_GROUP A
+        USING
+            (
+                SELECT 	A.STORE_CD
+                ,		A.POS_NO
+                ,		#{tuClsType} AS TU_CLS_TYPE
+                FROM 	TB_MS_POS_ENVST A
+                WHERE 	A.STORE_CD      = #{storeCd}
+                AND 	A.ENVST_CD      = '4019'
+                AND 	A.ENVST_VAL     = '6'
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND 	A.POS_NO    = #{posNo}
+                </if>
+            ) B
         ON	(
-                    STORE_CD    = #{storeCd}
-                AND POS_NO 	    = #{posNo}
-                AND TU_CLS_TYPE = #{tuClsType}
+                    B.STORE_CD      = A.STORE_CD
+                AND B.POS_NO 	    = A.POS_NO
+                AND B.TU_CLS_TYPE   = A.TU_CLS_TYPE
             )
         WHEN MATCHED THEN
-            UPDATE
-                SET
-
-                    TU_CLS_TYPE_NM  =   (
-                                            SELECT  TU_CLS_TYPE_NM
-                                            FROM    TB_HQ_KIOSK_GROUP
-                                            WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-                                            AND     TU_CLS_TYPE     = #{tuClsType}
-                                        )
-                ,   MOD_DT          = #{modDt}
-                ,   MOD_ID          = #{modId}
+        UPDATE
+        SET
+                A.TU_CLS_TYPE_NM  = (
+                                        SELECT  TU_CLS_TYPE_NM
+                                        FROM    TB_HQ_KIOSK_GROUP
+                                        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                                        AND     TU_CLS_TYPE     = #{tuClsType}
+                                    )
+        ,       A.MOD_DT          = #{modDt}
+        ,       A.MOD_ID          = #{modId}
         WHEN NOT MATCHED  THEN
-            INSERT
+        INSERT
             (
                 STORE_CD
             ,   POS_NO
@@ -6018,17 +6328,17 @@
             ,   MOD_DT
             ,   MOD_ID
             )
-            VALUES
+        VALUES
             (
-                #{storeCd}
-            ,   #{posNo}
-            ,   #{tuClsType}
-            ,    (
-                            SELECT TU_CLS_TYPE_NM
-                            FROM TB_HQ_KIOSK_GROUP
-                            WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                            AND TU_CLS_TYPE = #{tuClsType}
-                 )
+                B.STORE_CD
+            ,   B.POS_NO
+            ,   B.TU_CLS_TYPE
+            ,   (
+                    SELECT  TU_CLS_TYPE_NM
+                    FROM    TB_HQ_KIOSK_GROUP
+                    WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND     TU_CLS_TYPE     = #{tuClsType}
+                )
             ,   #{regDt}
             ,   #{regId}
             ,   #{modDt}
@@ -6056,8 +6366,10 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM    TB_MS_KIOSK_GROUP
-                WHERE   STORE_CD = #{storeCd}
-                AND     POS_NO = #{posNo}
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
                 AND     TU_CLS_TYPE = #{tuClsType}
             </when>
         </choose>
@@ -6083,8 +6395,10 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM    TB_MS_KIOSK_KEY
-                WHERE   STORE_CD = #{storeCd}
-                AND     POS_NO = #{posNo}
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
                 AND     TU_CLS_TYPE = #{tuClsType}
             </when>
         </choose>
@@ -6110,8 +6424,10 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM    TB_MS_KIOSK_CLS
-                WHERE   STORE_CD = #{storeCd}
-                AND     POS_NO = #{posNo}
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
                 AND     TU_CLS_TYPE = #{tuClsType}
             </when>
         </choose>
@@ -6137,8 +6453,10 @@
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM    TB_MS_KIOSK_M_CLS
-                WHERE   STORE_CD = #{storeCd}
-                AND     POS_NO = #{posNo}
+                WHERE   STORE_CD    = #{storeCd}
+                <if test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                    AND POS_NO      = #{posNo}
+                </if>
                 AND     TU_CLS_TYPE = #{tuClsType}
             </when>
         </choose>

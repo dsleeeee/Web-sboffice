@@ -25,7 +25,7 @@
                         <col width="w80" />
                     </colgroup>
                     <tbody>
-                    <tr>
+                    <tr id="envStorePosNo">
                         <th><s:message code="kioskKeyMap.posNo" /></th>
                         <td style="padding-left: 15px;">
                             <label id="lblPosNo"></label>
@@ -62,4 +62,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnvStore.js?ver=20240522.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapEnvStore.js?ver=20241213.01" charset="utf-8"></script>
