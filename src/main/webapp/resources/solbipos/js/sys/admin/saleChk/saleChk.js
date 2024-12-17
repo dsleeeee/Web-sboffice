@@ -69,8 +69,6 @@ app.controller('saleChkCtrl',  ['$scope', '$http', function ($scope, $http) {
     $scope.procYnDataMap = new wijmo.grid.DataMap(procYnData, 'value', 'name');
   };
 
-  $scope.hqOfficeCd = "A0001";
-
   // 가상로그인 그리드 조회
   $scope.$on("saleChkCtrl", function(event, data) {
     $scope.getSaleList();
