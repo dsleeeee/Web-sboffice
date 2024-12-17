@@ -24,7 +24,7 @@
             </colgroup>
             <tbody>
             <c:if test="${orgnFg == 'STORE'}">
-                <tr>
+                <tr id="posNoTr">
                     <%-- 포스번호 --%>
                 <th><s:message code="kioskKeyMap.posNo" /></th>
                 <td colspan="3">
@@ -517,7 +517,7 @@
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20241121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20241212.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
