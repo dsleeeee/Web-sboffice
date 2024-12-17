@@ -1328,10 +1328,13 @@
                 // }
 
                 var numChkregexp = /[^-|^0-9]/g;
-                if (numChkregexp.test(item.totAdjPoint)) {
+                if (numChkregexp.test(item.tmpTotAdjPoint)) {
                     // return false;
-                    item.totAdjPoint = 0;
+                    //item.totAdjPoint = 0;
+                    item.memberResult = '조정포인트오류';
                 }
+
+                item.totAdjPoint = item.tmpTotAdjPoint;
 
                 if (item.memberResult != messages["cmm.excel.result"]) {
                     item.totAdjPointAfter = Number(item.avablPoint) + Number(item.totAdjPoint);
