@@ -66,7 +66,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
             s.columnHeaders.setCellData(i, "totDcAmt", messages["pos.totDcAmt"]);
             s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["pos.totRealSaleAmt"]);
-            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleQty"]);
+            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleCnt"]);
         }
 
         //그리드 아이템포멧 생성
@@ -270,7 +270,7 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleAmt", messages["pos.SaleAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
-                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
+                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleCnt"]);
             }
         }
 
@@ -449,7 +449,7 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
             s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
             s.columnHeaders.setCellData(i, "totDcAmt", messages["pos.totDcAmt"]);
             s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["pos.totRealSaleAmt"]);
-            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleQty"]);
+            s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleCnt"]);
         }
 
         //그리드 아이템포멧 생성
@@ -535,7 +535,7 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
                     includeColumns      : function (column) {
                         return column.visible;
                     }
-                }, '매출현황_포스별_상품별별_'+getToday()+'.xlsx', function () {
+                }, '매출현황_포스별_상품별_'+getCurDateTime()+'.xlsx', function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
@@ -639,7 +639,7 @@ app.controller('posProdExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleAmt", messages["pos.SaleAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
                 grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
-                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
+                grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleCnt"]);
             }
         }
 

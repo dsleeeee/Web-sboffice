@@ -56,7 +56,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 			s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
 			s.columnHeaders.setCellData(i, "totDcAmt", messages["pos.totDcAmt"]);
 			s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["pos.totRealSaleAmt"]);
-			s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleQty"]);
+			s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleCnt"]);
 		}
 
 		//그리드 아이템포멧 생성
@@ -280,7 +280,7 @@ app.controller('prodPosCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleAmt", messages["pos.SaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
-				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
+				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleCnt"]);
 			  }
 		  }
 
@@ -410,7 +410,7 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 			s.columnHeaders.setCellData(i, "totSaleAmt", messages["pos.totSaleAmt"]);
 			s.columnHeaders.setCellData(i, "totDcAmt", messages["pos.totDcAmt"]);
 			s.columnHeaders.setCellData(i, "totRealSaleAmt", messages["pos.totRealSaleAmt"]);
-			s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleQty"]);
+			s.columnHeaders.setCellData(i, "totSaleCnt", messages["pos.totSaleCnt"]);
 		}
 
 		//그리드 아이템포멧 생성
@@ -591,7 +591,7 @@ app.controller('prodPosExcelCtrl', ['$scope', '$http', '$timeout', function ($sc
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleAmt", messages["pos.SaleAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'DcAmt", messages["pos.DcAmt"]);
 				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'RealSaleAmt", messages["pos.realSaleAmt"]);
-				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleQty"]);
+				  grid.columnHeaders.setCellData(2, "'"+colValue.toLowerCase()+"'SaleCnt", messages["pos.saleCnt"]);
 			  }
 		  }
 

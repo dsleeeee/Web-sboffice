@@ -124,7 +124,7 @@
 				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleCnt"/>"		binding="totSaleCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 			</wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
 			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -165,7 +165,7 @@
 				<wj-flex-grid-column header="<s:message code="pos.totSaleAmt"/>"		binding="totSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totDcAmt"/>"			binding="totDcAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 				<wj-flex-grid-column header="<s:message code="pos.totRealSaleAmt"/>"	binding="totRealSaleAmt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-				<wj-flex-grid-column header="<s:message code="pos.totSaleQty"/>"		binding="totSaleCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+				<wj-flex-grid-column header="<s:message code="pos.totSaleCnt"/>"		binding="totSaleCnt" width="80" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 			</wj-flex-grid>
 			<%-- ColumnPicker 사용시 include --%>
 			<jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -177,4 +177,4 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/pos/prodPos.js?ver=20240116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/pos/prodPos.js?ver=20241209.01" charset="utf-8"></script>

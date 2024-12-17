@@ -23,6 +23,10 @@ app.controller('kioskKeyMapEnvStoreCtrl', ['$scope', '$http', function ($scope, 
         $("#hdStoreEnvstCd").val(data.envstCd);
         $("#lblPosNo").text(data.posNo);
 
+        if(hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062'){
+            $("#envStorePosNo").css("display",'none');
+        }
+
         // 제목셋팅
         if(data.envstCd === "4068") {
             $("#popStoreTitle").text(messages["kioskKeymap.envConfgStore"]);
@@ -82,8 +86,14 @@ app.controller('kioskKeyMapEnvStoreCtrl', ['$scope', '$http', function ($scope, 
         // 프랜차이즈 매장에서 키맵적용시
         if (orgnFg === "STORE" && hqOfficeCd !== "00000") {
 
+            var msg = "'" + $scope.envStoreTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"];
+
+            if(hqOfficeCd != null && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
+                msg += "<br>" + messages["kioskKeyMap.keyMapStoreRegAll.msg"] // 저장 시 전체 키오스크의 정보가 변경됩니다.
+            }
+
             // '01' 키맵그룹을 매장포스환경에 적용하시겠습니까?
-            $scope._popConfirm("'" + $scope.envStoreTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"], function() {
+            $scope._popConfirm(msg, function() {
 
                 // 맘스터치 매장인 경우 별도 처리
                 if(hqOfficeCd === "DS034" || hqOfficeCd === "H0393" || hqOfficeCd === "DS021") {

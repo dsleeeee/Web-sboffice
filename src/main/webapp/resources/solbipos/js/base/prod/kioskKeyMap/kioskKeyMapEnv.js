@@ -128,11 +128,17 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', '$timeout', function ($
 
             // 환경설정 코드에 따라 보이는 컬럼이 다름
             if($("#hdEnvstCd").val() === "4068") {
+                if(hqOfficeCd != null && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
+                    columns[4].visible = false;
+                }
                 columns[8].visible = true;
                 columns[9].visible = false;
                 columns[10].visible = true;
                 columns[11].visible = false;
             }else{
+                if(hqOfficeCd != null && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
+                    columns[4].visible = false;
+                }
                 columns[8].visible = false;
                 columns[9].visible = true;
                 columns[10].visible = false;
@@ -208,7 +214,13 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', '$timeout', function ($
 
         // '01' 키맵그룹을 매장포스환경에 적용하시겠습니까?
         // <br/> (중분류 사용 키맵그룹은 중분류 사용 키오스크에만 적용됩니다.)
-        $scope._popConfirm("'" + $scope.envTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"] + messages["kioskKeyMap.kioskTuMClsFg.msg"], function() {
+        var msg = "'" + $scope.envTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"] + messages["kioskKeyMap.kioskTuMClsFg.msg"];
+
+        if(hqOfficeCd != null && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
+            msg += "<br>" + messages["kioskKeyMap.keyMapStoreRegAll.msg"] // 저장 시 전체 키오스크의 정보가 변경됩니다.
+        }
+
+        $scope._popConfirm(msg, function() {
 
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
 

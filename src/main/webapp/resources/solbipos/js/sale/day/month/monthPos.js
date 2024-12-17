@@ -54,7 +54,7 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
         dataItem.totSaleAmt    = messages["month.pos.totSaleAmt"];
         dataItem.totDcAmt    = messages["month.pos.totDcAmt"];
         dataItem.totRealSaleAmt    = messages["month.pos.totRealSaleAmt"];
-        dataItem.totSaleQty    = messages["month.pos.totSaleQty"];
+        dataItem.totSaleQty    = messages["month.pos.totSaleCnt"];
 
         var larr = {};
         // 포스구분 헤더머지 컬럼 생성
@@ -76,7 +76,7 @@ app.controller('monthPosCtrl', ['$scope', '$http', '$timeout', function ($scope,
         dataItem1.totSaleAmt    = messages["month.pos.totSaleAmt"];
         dataItem1.totDcAmt    = messages["month.pos.totDcAmt"];
         dataItem1.totRealSaleAmt    = messages["month.pos.totRealSaleAmt"];
-        dataItem1.totSaleQty    = messages["month.pos.totSaleQty"];
+        dataItem1.totSaleQty    = messages["month.pos.totSaleCnt"];
 
         // 포스구분 헤더머지 컬럼 생성
         for (var i = 0; i < arrPosCol.length; i++) {
