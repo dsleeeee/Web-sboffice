@@ -1150,6 +1150,8 @@
     <typeAlias alias="daySaleMomsVO" type="kr.co.solbipos.sale.moms.daySaleMoms.service.DaySaleMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 일별매출(매장) -->
     <typeAlias alias="daySaleStoreMomsVO" type="kr.co.solbipos.sale.moms.daySaleStoreMoms.service.DaySaleStoreMomsVO"/>
+    <!-- 맘스터치 > 간소화화면 > 월별매출(매장) -->
+    <!--<typeAlias alias="monthSaleStoreMomsVO" type="kr.co.solbipos.sale.moms.monthSaleStoreMoms.service.MonthSaleStoreMomsVO"/>-->
     <!-- 맘스터치 > 간소화화면 > 시간대매출 -->
     <typeAlias alias="timeSaleMomsVO" type="kr.co.solbipos.sale.moms.timeSaleMoms.service.TimeSaleMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 시간대매출(매장) -->
