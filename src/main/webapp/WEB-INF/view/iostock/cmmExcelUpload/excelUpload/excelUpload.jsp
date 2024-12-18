@@ -4,7 +4,7 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/iostock/cmmExcelUpload/excelUpload/excelUpload/"/>
+<c:set var="baseUrl" value="/iostock/cmmExcelUpload/excelUpload/excelUpload/"/> <%-- 20241218 사용화면체크 (회원포인트조정, 회원엑셀업로드) --%>
 
 <div style="display: none;" ng-controller="excelUploadCtrl">
     <input type="file" class="form-control" id="excelUpFile"
