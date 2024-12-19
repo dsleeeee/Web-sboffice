@@ -53,6 +53,16 @@ app.controller('momsBatchCtrl',  ['$scope', '$http', function ($scope, $http) {
         $scope._postJSONSave.withPopUp("/sys/admin/momsBatch/momsBatch/batchProc.sb", params, function (response) {
             alert(response.data.data);
             console.log(response.data.data);
+
+            var responseData = document.getElementById('response_data');
+            responseData.value = response.data.data;
+            responseData.style.display   = 'block';                          // 숨겨둔 input 태그 block처리
+            responseData.select();                                           // 복사할 text 블럭
+            document.execCommand('copy');                           // 드레그된 text 클립보드에 복사
+            responseData.style.display='none';                               // 다시 숨기기
+            alert('처리결과 복사');
+            responseData.value = '';
+
         });
     });
 
