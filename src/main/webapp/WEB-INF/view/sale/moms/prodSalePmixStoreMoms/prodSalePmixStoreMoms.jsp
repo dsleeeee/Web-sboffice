@@ -14,7 +14,7 @@
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodSalePmixStoreMomsCtrl', 1)">
+                <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodSalePmixStoreMomsCtrl', 1)">
                     <s:message code="cmm.search"/>
                 </button>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
