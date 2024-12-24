@@ -11,7 +11,7 @@
         <div class="searchBar">
           <a href="#" class="open fl"><s:message code="saleDtlChannel.saleDtlChannel"/></a>
           <%-- 조회 --%>
-          <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('saleDtlChannelCtrl')">
+          <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('saleDtlChannelCtrl', 1)">
             <s:message code="cmm.search"/>
           </button>
           <c:if test="${sessionInfo.orgnFg == 'HQ'}">

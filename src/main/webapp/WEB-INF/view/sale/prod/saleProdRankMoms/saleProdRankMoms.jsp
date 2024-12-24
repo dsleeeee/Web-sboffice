@@ -13,7 +13,7 @@
         <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
-            <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('saleProdRankMomsCtrl')">
+            <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('saleProdRankMomsCtrl', 1)">
                 <s:message code="cmm.search"/>
             </button>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">

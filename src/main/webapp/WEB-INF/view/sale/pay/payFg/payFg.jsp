@@ -13,7 +13,7 @@
       <a href="#" class="open fl">${menuNm}</a>
       <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
         <%-- 조회 --%>
-        <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('payFgCtrl')">
+        <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('payFgCtrl', 1)">
           <s:message code="cmm.search"/>
         </button>
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
