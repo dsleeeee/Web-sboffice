@@ -2110,13 +2110,24 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     });
   };
 
-  // 매장환경복사 항목 전체선택/해제
+// 매장환경복사 항목 전체선택/해제
   $scope.allChkYn = function (val) {
-      if (val === 'Y') {
-          $("input:checkbox[name='copyChk']").prop("checked", true);
-      } else {
-          $("input:checkbox[name='copyChk']").prop("checked", false);
+    if (val === 'Y') {
+      $("input:checkbox[name='copyChk']").prop("checked", true);
+
+      // 신규등록할 매장이 단독매장일 경우, 일부 매장환경 복사 금지
+      if ($scope.store.hqOfficeCd === "00000") {
+        $("input:checkbox[id='productChk']").prop("checked", false);
+        $("input:checkbox[id='salePriceChk']").prop("checked", false);
+        $("input:checkbox[id='supplyPriceChk']").prop("checked", false);
+        $("input:checkbox[id='touchKeyChk']").prop("checked", false);
+        $("input:checkbox[id='promotionChk']").prop("checked", false);
+        $("input:checkbox[id='dlvrProdChk']").prop("checked", false);
       }
+
+    } else {
+      $("input:checkbox[name='copyChk']").prop("checked", false);
+    }
   };
 
 }]);
