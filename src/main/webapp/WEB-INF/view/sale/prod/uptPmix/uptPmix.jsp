@@ -12,17 +12,17 @@
 
     <div ng-controller="uptPmixCtrl">
         <div class="searchBar">
-          <a href="#" class="open fl"><s:message code="uptPmix.uptPmix"/></a>
-          <%-- 조회 --%>
-          <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_broadcast('uptPmixCtrl')">
-            <s:message code="cmm.search"/>
-          </button>
-          <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-            <%-- 확장조회 --%>
-            <button class="btn_blue fr mt5 mr5" id="btnSearchAddShow" ng-click="searchAddShowChange()">
-              <s:message code="cmm.search.addShow" />
+            <a href="#" class="open fl"><s:message code="uptPmix.uptPmix"/></a>
+            <%-- 조회 --%>
+            <button class="btn_blue fr mt5 mr10" id="btnSearch" ng-click="_pageView('uptPmixCtrl', 1)">
+                <s:message code="cmm.search"/>
             </button>
-          </c:if>
+            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                <%-- 확장조회 --%>
+                <button class="btn_blue fr mt5 mr5" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                    <s:message code="cmm.search.addShow" />
+                </button>
+            </c:if>
         </div>
         <table class="searchTbl">
             <colgroup>
