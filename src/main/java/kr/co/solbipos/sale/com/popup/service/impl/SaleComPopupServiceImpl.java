@@ -114,6 +114,8 @@ public class SaleComPopupServiceImpl implements SaleComPopupService {
 
     	if(saleComPopupVO.getChkPop().equals("cardApprPop")) {				//카드
 				saleComPopupVO.setEmpNo(sessionInfoVO.getEmpNo());
+				String[] storeCds = saleComPopupVO.getStoreCd().split(",");
+				saleComPopupVO.setArrStoreCd(storeCds);
     		return saleComPopupMapper.getCardApprPopList(saleComPopupVO);
     	}else if(saleComPopupVO.getChkPop().equals("cashApprPop")) {		//현금
     		return saleComPopupMapper.getCashApprPopList(saleComPopupVO);

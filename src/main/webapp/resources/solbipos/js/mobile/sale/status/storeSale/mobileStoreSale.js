@@ -64,18 +64,18 @@ app.controller('mobileStoreSaleCtrl', ['$scope', '$http', '$timeout', function (
                     var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
 
                     // 시작일자가 종료일자보다 빠른지 확인
-                    if(startDt.getTime() > endDt.getTime()){
-                        s_alert.pop(messages['mobile.cmm.dateChk.error']);
-                        return false;
-                    }
+                    // if(startDt.getTime() > endDt.getTime()){
+                    //     s_alert.pop(messages['mobile.cmm.dateChk.error']);
+                    //     return false;
+                    // }
                     // 조회일자 최대 한달(31일) 제한
-                    if (diffDay > 31) {
-                        s_alert.pop(messages['mobile.cmm.dateOver.1month.error']);
-                        return false;
-                    }
+                    // if (diffDay > 31) {
+                    //     s_alert.pop(messages['mobile.cmm.dateOver.1month.error']);
+                    //     return false;
+                    // }
 
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
-                    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); // 조회기간
+                    params.startDate = $scope.srchStartDate;
+                    params.endDate = $scope.srchEndDate;
 
                     $scope.wjStoreSaleDtlLayer.show(true);
                     $scope._broadcast('storeSaleDtlCtrl', params);
@@ -119,6 +119,9 @@ app.controller('mobileStoreSaleCtrl', ['$scope', '$http', '$timeout', function (
 
         var diffTime = parseInt($scope.endTime) - parseInt($scope.startTime) + 1;
         params.diffTime = diffTime; // 조회시간 차이(차트 높이 때문에)
+
+        $scope.srchStartDate = params.startDate;
+        $scope.srchEndDate = params.endDate;
 
         $scope._inquirySub("/mobile/sale/status/storeSale/storeSale/getMobileStoreSaleList.sb", params, function() {
             

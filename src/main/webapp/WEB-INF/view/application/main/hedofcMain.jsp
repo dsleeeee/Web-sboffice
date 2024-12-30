@@ -405,6 +405,8 @@
 <script type="text/javascript">
     var userId = "${userId}";
 
+    var erpProdCdNullCnt = "${erpProdCdNullCnt}";
+
     // 공지사항 more 페이지 이동시 권한체크
     var board_auth = "${board_auth}";
 
@@ -796,7 +798,7 @@
     }]);
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/application/main/hedofcMain.js?ver=20240620.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/application/main/hedofcMain.js?ver=20241226.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">

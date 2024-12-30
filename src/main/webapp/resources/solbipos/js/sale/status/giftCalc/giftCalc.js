@@ -82,11 +82,11 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "storeNm") {
                     var params = {};
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+                    params.startDate = $scope.startDate;
+                    params.endDate = $scope.endDate;
                     params.storeCd = selectedRow.storeCd;
-                    params.posNo = $("#giftCalcSelectPosCd").val();
-                    params.saleFg = $scope.saleFg;
+                    params.posNo = $scope.posNo;
+                    params.saleFg = $scope.srchSaleFg;
                     params.momsTeam = selectedRow.momsTeam;
                     params.momsAcShop = selectedRow.momsAcShop;
                     params.momsAreaFg = $scope.momsAreaFg;
@@ -94,8 +94,8 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     params.momsShopType = $scope.momsShopType;
                     params.momsStoreManageType = $scope.momsStoreManageType;
                     params.branchCd = selectedRow.branchCd;
-                    params.storeHqBrandCd = $scope.storeHqBrandCd;
-                    params.giftSerNo    = $scope.giftSerNo;
+                    params.storeHqBrandCd = $scope.srchStoreHqBrandCd;
+                    params.giftSerNo    = $scope.srchGiftSerNo;
                     // '전체' 일때
                     if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) { // 확인완료 1992
                         var momsHqBrandCd = "";
@@ -240,6 +240,13 @@ app.controller('giftCalcCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.momsStoreFg04 = $scope.momsStoreFg04;
         params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
+
+        $scope.startDate = params.startDate;
+        $scope.endDate = params.endDate;
+        $scope.posNo = params.posNo;
+        $scope.srchGiftSerNo = params.giftSerNo;
+        $scope.srchSaleFg = params.saleFg;
+        $scope.srchStoreHqBrandCd = params.storeHqBrandCd;
 
         $scope._inquiryMain("/sale/status/giftCalc/giftCalc/getGiftCalcList.sb", params, function() {
             // <-- 그리드 visible -->

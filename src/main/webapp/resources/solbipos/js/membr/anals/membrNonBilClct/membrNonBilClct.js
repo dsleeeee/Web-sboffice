@@ -112,8 +112,8 @@ app.controller('membrNonBilClctCtrl', ['$scope', '$http','$timeout', function ($
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.membrNo  = selectedRow.membrNo;
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+                    params.startDate = $scope.srchStartDate;
+                    params.endDate = $scope.srchEndDate;
 
                     var storeScope = agrid.getScope('membrNonBilClctDetailCtrl');
                     storeScope._broadcast('membrNonBilClctDetailCtrl', params);
@@ -134,6 +134,9 @@ app.controller('membrNonBilClctCtrl', ['$scope', '$http','$timeout', function ($
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+
+        $scope.srchStartDate = params.startDate;
+        $scope.srchEndDate = params.endDate;
 
         $scope._inquiryMain("/membr/anals/membrNonBilClct/membrNonBilClct/getMembrNonBilClctList.sb", params, function() {
             $scope.$apply(function() {

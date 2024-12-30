@@ -55,7 +55,7 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 	        var selectedRow = s.rows[ht.row].dataItem;
 	        var params       = {};
 	        	params.chkPop	= "empPop";
-	        	params.storeCd   = $("#empDaySelectStoreCd").val();
+	        	params.storeCd   = $scope.excelStoreCd;
 	        	params.saleDate   = selectedRow.saleDate;
 	        	
 	        if (col.binding === "totBillCnt") { // 수량
@@ -292,7 +292,7 @@ app.controller('empDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 			   		params.chkPop	= "empPop";
 			   		params.empNo    = empNoCd;
 //		        	params.storeCd   = storeCd;
-		        	params.storeCd   = $("#empDaySelectStoreCd").val();
+		        	params.storeCd   = $scope.excelStoreCd;
 
 		        	params.saleDate   = selectedRow.saleDate;
 

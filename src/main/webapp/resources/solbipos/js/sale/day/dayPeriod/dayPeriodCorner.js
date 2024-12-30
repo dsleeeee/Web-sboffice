@@ -60,8 +60,8 @@ app.controller('dayPeriodCornerCtrl', ['$scope', '$http', '$timeout', function (
                     var params      = {};
                     params.storeCd  = selectedRow.storeCd;
                     params.cornrCd  = selectedRow.cornrCd;
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+                    params.startDate = $scope.startDate;
+                    params.endDate = $scope.endDate;
 
                     var storeScope = agrid.getScope('dayPeriodCornerDetailCtrl');
                     storeScope._broadcast('dayPeriodCornerDetailCtrl', params);
@@ -97,6 +97,9 @@ app.controller('dayPeriodCornerCtrl', ['$scope', '$http', '$timeout', function (
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.storeCds = $("#dayPeriodCornerStoreCd").val();
+
+        $scope.startDate    = params.startDate;
+        $scope.endDate      = params.endDate;
 
         $scope._inquiryMain("/sale/day/dayPeriod/dayPeriod/getDayPeriodCornerList.sb", params, function() {
             $scope.$apply(function() {

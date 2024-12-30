@@ -71,7 +71,9 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
         	params.prodCd	 = selectedRow.prodCd;
-        	params.storeCd	 = $("#barcdSelectStoreCd").val();
+        	params.storeCd	 = $scope.excelStoreCd;
+        	params.startDate = $scope.excelStartDate;
+        	params.endDate	 = $scope.excelEndDate;
         if (col.binding === "barcdCd") { // 바코드
             $scope._broadcast('barcdDtlCtrlSrch', params);
         }
@@ -158,6 +160,8 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
         if(rows.length > 0){
         	params.prodCd    = rows[0].dataItem.prodCd;
     	    params.storeCd	 = $scope.storeCd;
+    	    params.startDate = $scope.excelStartDate;
+    	    params.endDate	 = $scope.excelEndDate;
 
     	    // 코너별 매출현황 상세조회.
     	    $scope._broadcast("barcdDtlCtrlSrch", params);
@@ -230,6 +234,8 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 			$scope.saleDate   = data.saleDate;
 			$scope.prodCd	  = data.prodCd;
 			$scope.storeCd	  = data.storeCd;
+			$scope.srchStartDate  = data.startDate;
+			$scope.srchEndDate	  = data.endDate;
 		  }
 
 	    $scope.searchBarcdDtlList(false);
@@ -247,8 +253,8 @@ app.controller('barcdDtlCtrl', ['$scope', '$http','$timeout', function ($scope, 
 
 	    // 등록일자 '전체기간' 선택에 따른 params
 	    if(!$scope.isChecked){
-	      params.startDate = wijmo.Globalize.format($scope.srchBarcdStartDate.value, 'yyyyMMdd');
-	      params.endDate = wijmo.Globalize.format($scope.srchBarcdEndDate.value, 'yyyyMMdd');
+	      params.startDate = $scope.srchStartDate;
+	      params.endDate = $scope.srchEndDate;
 	    }
 	    params.prodCd		= $scope.prodCd;
 	    params.storeCd		= $scope.storeCd;

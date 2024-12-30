@@ -194,7 +194,7 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posHour.js?ver=20241209.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/pos/posHour.js?ver=20241219.03" charset="utf-8"></script>
 
 <%-- 수량합계 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/prodHour.jsp">

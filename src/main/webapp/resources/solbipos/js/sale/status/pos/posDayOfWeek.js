@@ -149,6 +149,11 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
             return false;
         }
 
+        $scope.srchStoreCd = params.storeCd;
+        $scope.startDate = params.startDate;
+        $scope.endDate  = params.endDate;
+        $scope.srchPosNo = params.posNo;
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/pos/dayOfWeek/getPosDayOfWeekList.sb", params, function() {
 
@@ -337,8 +342,8 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
                 var params      = {};
                 params.chkPop	= "posPop";
                 if(!$scope.isChecked){
-                    params.startDate = wijmo.Globalize.format($scope.srchPosDayOfWeekStartDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format($scope.srchPosDayOfWeekEndDate.value, 'yyyyMMdd');
+                    params.startDate = $scope.startDate;
+                    params.endDate = $scope.endDate;
                 }
                 params.yoil     = selectedRow.dayName;
 
@@ -347,8 +352,8 @@ app.controller('posDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
                     params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
                 }else if (col.binding === "totSaleQty") { // 수량합계
-                    params.storeCd   = $("#posDayOfWeekSelectStoreCd").val();
-                    params.posNo	 = $("#posDayOfWeekSelectPosCd").val();
+                    params.storeCd   = $scope.srchStoreCd;
+                    params.posNo	 = $scope.srchPosNo;
                     $scope._broadcast('saleComProdCtrl', params);
                 }
             }

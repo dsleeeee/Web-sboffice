@@ -72,8 +72,8 @@ app.controller('apprNcardCtrl', ['$scope', '$http', '$timeout', function ($scope
 	        	params.storeCd   = selectedRow.storeCd;
 	        }
 	    	if(!$scope.isChecked){
-	    		  params.startDate = wijmo.Globalize.format($scope.srchApprNcardStartDate.value, 'yyyyMMdd');
-	    		  params.endDate = wijmo.Globalize.format($scope.srchApprNcardEndDate.value, 'yyyyMMdd');
+				params.startDate = $scope.excelStartDate;
+				params.endDate = $scope.excelEndDate;
 	    	}
 	    	params.chkPop    = "ncardApprPop";
 	    if (col.binding === "storeNm") { // 매장명

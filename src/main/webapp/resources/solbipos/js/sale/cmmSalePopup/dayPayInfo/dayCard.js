@@ -42,9 +42,7 @@ app.controller('dayCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params       = {};
-        if(orgnFg === "STORE"){
-          params.storeCd  = storeCd;
-        }
+        params.storeCd  = $scope.srchStoreCd;
         params.chkPop = 'cardApprPop';
         params.acquireNm = selectedRow.cardNm;
         params.startDate = startDate;
@@ -92,6 +90,8 @@ app.controller('dayCardCtrl', ['$scope', '$http', '$timeout', function ($scope, 
     }
     params.storeCd  = data.storeCd;
     params.gubun  = data.gubun;
+
+    $scope.srchStoreCd = params.storeCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/cmmSalePopup/dayPayInfo/dayCard/list.sb", params);

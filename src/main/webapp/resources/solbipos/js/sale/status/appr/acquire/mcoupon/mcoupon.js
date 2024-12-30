@@ -77,8 +77,8 @@ app.controller('apprAcquireMcouponCtrl', ['$scope', '$http', '$timeout', functio
 	        }
 	    	params.mcoupnCd  = selectedRow.mcoupnCd;
 	    	if(!$scope.isChecked){
-	    		  params.startDate = wijmo.Globalize.format($scope.srchApprAcquireMcouponStartDate.value, 'yyyyMMdd');
-	    		  params.endDate = wijmo.Globalize.format($scope.srchApprAcquireMcouponEndDate.value, 'yyyyMMdd');
+				params.startDate = $scope.excelStartDate;
+				params.endDate = $scope.excelEndDate;
 	    	}
 	    	params.chkPop    = "mcouponApprPop";
 	    if (col.binding === "storeNm") { // 매장명

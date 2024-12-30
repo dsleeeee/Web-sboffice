@@ -60,6 +60,7 @@ app.controller('saleAnalsMonthlyCtrl', ['$scope', '$http', '$sce', function ($sc
 		params.storeCd = $("#saleAnalsMonthlySelectStoreCd").val();
 		params.hqOfficeCd = gvHqOfficeCd;
 		params.empNo = empNo;
+		$("#saleAnalsMonthlySelectStoreCdPopUp").val(params.storeCd);
 
 		var url = "/sale/anals/monthly/SaleAnalsMonthly/list.sb";
 
@@ -449,7 +450,7 @@ function saleAnalsMonthlyPop(saleDate) {
 		var params       = {};
 		params.saleDate	= saleDate;
 		params.hqOfficeCd = gvHqOfficeCd;
-		params.storeCd	= $("#saleAnalsMonthlySelectStoreCd").val();
+		params.storeCd	= $("#saleAnalsMonthlySelectStoreCdPopUp").val();
 		scope._broadcast('saleAnalsMonthlyPayFgCtrl', params);
 	});
 };

@@ -149,12 +149,12 @@ app.controller('monthProdClassCtrl', ['$scope', '$http', '$timeout', function ($
                     var params      = {};
                     params.yearMonth = selectedRow.yearMonth.replace("-", "");
                     params.strProdClassCd = $("#hdMonthProdClassCd").val();
-                    params.level = $scope.level;
-                    params.prodCd = $scope.prodCd;
-                    params.prodNm = $scope.prodNm;
-                    params.barCd = $scope.barCd;
-                    params.prodClassCd = $scope.prodClassCd;
-                    params.storeCd = $("#monthProdClassStoreCd").val();
+                    params.level = $scope.srchLevel;
+                    params.prodCd = $scope.srchProdCd;
+                    params.prodNm = $scope.srchProdNm;
+                    params.barCd = $scope.srchBarCd;
+                    params.prodClassCd = $scope.srchProdClassCd;
+                    params.storeCd = $scope.storeCds;
                     params.gubun = "monthProdClass";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
@@ -170,13 +170,12 @@ app.controller('monthProdClassCtrl', ['$scope', '$http', '$timeout', function ($
                         params.yearMonth = selectedRow.yearMonth.replace("-", "");
                         // params.strProdClassCd = $("#hdMonthProdClassCd").val();
                         params.strProdClassCd = arr[i];
-                        params.level = $scope.level;
-                        params.prodCd = $scope.prodCd;
-                        params.prodNm = $scope.prodNm;
-                        params.barCd = $scope.barCd;
-                        // params.prodClassCd = arr[i];
-                        params.prodClassCd = $scope.prodClassCd;
-                        params.storeCd = $("#monthProdClassStoreCd").val();
+                        params.level = $scope.srchLevel;
+                        params.prodCd = $scope.srchProdCd;
+                        params.prodNm = $scope.srchProdNm;
+                        params.barCd = $scope.srchBarCd;
+                        params.prodClassCd = $scope.srchProdClassCd;
+                        params.storeCd = $scope.storeCds;
                         params.gubun = "monthProdClass";
 
                         // 값이 있으면 링크
@@ -239,6 +238,13 @@ app.controller('monthProdClassCtrl', ['$scope', '$http', '$timeout', function ($
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.storeCds = $("#monthProdClassStoreCd").val();
         params.strProdClassCd = $("#hdMonthProdClassCd").val();
+
+        $scope.storeCds = params.storeCds;
+        $scope.srchProdCd = $scope.prodCd;
+        $scope.srchProdNm = $scope.prodNm;
+        $scope.srchBarCd = $scope.barCd;
+        $scope.srchProdClassCd = $scope.prodClassCd;
+        $scope.srchLevel = $scope.level;
 
         $scope._inquiryMain("/sale/day/month/month/getMonthProdClassList.sb", params, function() {});
 

@@ -125,4 +125,4 @@
 <script>
   var orgnFg = "${orgnFg}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20241023.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/day/dayTotal.js?ver=20241219.01" charset="utf-8"></script>

@@ -317,6 +317,12 @@ public class ContentController {
         String lastPwdChgDtChk = contentService.getLastPwdChgDtChk(sessionInfoVO);
         model.addAttribute("lastPwdChgDtChk", lastPwdChgDtChk);
 
+        /** USER_ID = 'a0001'일 시 미등록 매핑정보 표시 */
+        if(sessionInfoVO.getUserId().equals("a0001") || sessionInfoVO.getUserId().equals("ds001") ) {
+            int erpProdCdNullCnt = contentService.getErpProdCdNullCnt(sessionInfoVO);
+            model.addAttribute("erpProdCdNullCnt", erpProdCdNullCnt);
+        }
+
         /** 메인화면 진입인지 체크 */
         model.addAttribute("mainYn", "Y");
 

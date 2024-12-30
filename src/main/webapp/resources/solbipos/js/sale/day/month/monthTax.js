@@ -125,7 +125,7 @@ app.controller('monthTaxCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.yearMonth = selectedRow.yearMonth.replace("-", "");
-                    params.storeCd = $("#monthTaxStoreCd").val();
+                    params.storeCd = $scope.storeCds;
                     params.gubun = "month";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
@@ -145,6 +145,8 @@ app.controller('monthTaxCtrl', ['$scope', '$http', '$timeout', function ($scope,
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.storeCds = $("#monthTaxStoreCd").val();
+
+        $scope.storeCds = params.storeCds;
 
         $scope._inquiryMain("/sale/day/month/month/getMonthTaxList.sb", params, function() {}, false);
     };

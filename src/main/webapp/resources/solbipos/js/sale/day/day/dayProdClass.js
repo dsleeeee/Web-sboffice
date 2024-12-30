@@ -139,12 +139,12 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
                     var params = {};
                     params.saleDate = selectedRow.saleDate.replaceAll("-","");
                     params.strProdClassCd = $("#hdProdClassCd").val();
-                    params.level = $scope.level;
-                    params.prodCd = $scope.prodCd;
-                    params.prodNm = $scope.prodNm;
-                    params.barCd = $scope.barCd;
-                    params.prodClassCd = $scope.prodClassCd;
-                    params.storeCd = $("#dayProdClassSelectStoreCd").val();
+                    params.level    = $scope.srchLevel;
+                    params.prodCd   = $scope.srchProdCd;
+                    params.prodNm   = $scope.srchProdNm;
+                    params.barCd    = $scope.srchBarCd;
+                    params.prodClassCd = $scope.srchProdClassCd;
+                    params.storeCd = $scope.searchedStoreCd;
                     params.gubun = "dayProdClass";
 
                     $scope._broadcast('prodSaleDtlCtrl', params);
@@ -160,13 +160,13 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
                         params.saleDate = selectedRow.saleDate.replaceAll("-","");
                         // params.strProdClassCd = $("#hdProdClassCd").val();
                         params.strProdClassCd = arr[i];
-                        params.level = $scope.level;
-                        params.prodCd = $scope.prodCd;
-                        params.prodNm = $scope.prodNm;
-                        params.barCd = $scope.barCd;
+                        params.level    = $scope.srchLevel;
+                        params.prodCd   = $scope.srchProdCd;
+                        params.prodNm   = $scope.srchProdNm;
+                        params.barCd    = $scope.srchBarCd;
                         // params.prodClassCd = arr[i];
-                        params.prodClassCd = $scope.prodClassCd;
-                        params.storeCd = $("#dayProdClassSelectStoreCd").val();
+                        params.prodClassCd = $scope.srchProdClassCd
+                        params.storeCd = $scope.searchedStoreCd;
                         params.gubun = "dayProdClass";
 
                         // 값이 있으면 링크
@@ -262,6 +262,12 @@ app.controller('dayProdClassCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.storeCd = $("#dayProdClassSelectStoreCd").val();
         params.strProdClassCd = $("#hdProdClassCd").val();
         //params.prodClassCd = "";
+
+        $scope.srchProdClassCd = $scope.prodClassCd;
+        $scope.srchLevel    = $scope.level;
+        $scope.srchProdCd   = $scope.prodCd;
+        $scope.srchProdNm   = $scope.prodNm;
+        $scope.srchBarCd    = $scope.barCd;
 
         $scope._inquiryMain("/sale/day/day/dayProdClass/list.sb", params, function() {});
 

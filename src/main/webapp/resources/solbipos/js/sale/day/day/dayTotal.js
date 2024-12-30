@@ -67,7 +67,7 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
         var col         = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         var params      = {};
-        params.storeCd  = $("#dayTotalSelectStoreCd").val();
+        params.storeCd  = $scope.searchedStoreCd;
         params.saleDate = selectedRow.saleDate.replaceAll("-","");
         params.gubun = "day";
 

@@ -243,9 +243,9 @@ app.controller('dlvrFgProdProdCtrl', ['$scope', '$http', '$timeout', function ($
         params.dlvrPackFg = selectedRow.dlvrPackFg;
         params.prodCd = selectedRow.prodCd;
         params.prodNm = selectedRow.prodNm;
-        params.startDate = wijmo.Globalize.format($scope.startDate.value, 'yyyyMMdd');
-        params.endDate = wijmo.Globalize.format($scope.endDate.value, 'yyyyMMdd');
-        params.storeCd = $("#dlvrFgProdStoreCd").val();
+        params.startDate = $scope.srchStartDate;
+        params.endDate = $scope.srchEndDate;
+        params.storeCd = $scope.srchStoreCd;
         if (col.binding === "prodCd") {
           // 매출상세 팝업
           $scope._broadcast('dlvrFgSaleDtlPopCtrl', params);
@@ -345,6 +345,10 @@ app.controller('dlvrFgProdProdCtrl', ['$scope', '$http', '$timeout', function ($
     params.dlvrInFg     = $scope.dlvrInFg;
     params.payCol       = payCol;
 
+    $scope.srchStartDate = params.startDate;
+    $scope.srchEndDate = params.endDate;
+    $scope.srchStoreCd = params.storeCd;
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/dlvr/dlvrFg/dlvrFgProd/getProd.sb", params);
   };
@@ -415,9 +419,9 @@ app.controller('dlvrFgProdProdDtlCtrl', ['$scope', '$http', '$timeout', function
         params.dlvrInFg = selectedRow.dlvrInFg;
         params.prodCd = selectedRow.prodCd;
         params.prodNm = selectedRow.prodNm;
-        params.startDate = wijmo.Globalize.format($scope.startDate.value, 'yyyyMMdd');
-        params.endDate = wijmo.Globalize.format($scope.endDate.value, 'yyyyMMdd');
-        params.storeCd = $("#dlvrFgProdStoreCd").val();
+        params.startDate = $scope.srchStartDate;
+        params.endDate = $scope.srchEndDate;
+        params.storeCd = $scope.srchStoreCd;
         if (col.binding === "prodCd") {
           // 매출상세 팝업
           $scope._broadcast('dlvrFgSaleDtlPopCtrl', params);
@@ -517,6 +521,10 @@ app.controller('dlvrFgProdProdDtlCtrl', ['$scope', '$http', '$timeout', function
     params.dlvrPackFg   = $scope.packFg;
     params.dlvrInFg     = $scope.dlvrInFg;
     params.payCol       = payCol;
+
+    $scope.srchStartDate = params.startDate;
+    $scope.srchEndDate = params.endDate;
+    $scope.srchStoreCd = params.storeCd;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquirySub("/sale/dlvr/dlvrFg/dlvrFgProd/getProdDtl.sb", params);

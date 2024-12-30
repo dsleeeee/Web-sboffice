@@ -1057,7 +1057,9 @@
   }
 </style>
 <script type="text/javascript">
-  var orgnFg = "${orgnFg}";
+  $(document).ready(function() {
+    var orgnFg = "${orgnFg}";
+  });
   var hqOfficeCd = "${hqOfficeCd}";
   var storeCd = "${storeCd}";
   var gubun = "${param.gubun}";

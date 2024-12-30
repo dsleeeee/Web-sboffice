@@ -37,7 +37,7 @@
                     , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
                     , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
                     , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-                    , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+                    , SUM(TSDP.REAL_SALE_CNT) AS TOT_SALE_CNT
                     , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS TOT_SALE_QTY
             FROM	TB_SL_DAILY_POS TSDP
             WHERE	1 = 1
@@ -64,7 +64,7 @@
                     , TSDP.TOT_SALE_AMT AS SALE_AMT
                     , TSDP.TOT_DC_AMT AS DC_AMT
                     , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
-                    , TSDP.SALE_CNT AS SALE_CNT
+                    , TSDP.REAL_SALE_CNT AS SALE_CNT
                     , (TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
                 FROM    TB_SL_DAILY_POS TSDP
                 WHERE   1 = 1
@@ -115,7 +115,7 @@
                         , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
                         , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
                         , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-                        , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+                        , SUM(TSDP.REAL_SALE_CNT) AS TOT_SALE_CNT
                         , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0))  AS TOT_SALE_QTY
                 FROM	TB_SL_DAILY_POS TSDP
                 WHERE	1 = 1
@@ -142,7 +142,7 @@
                         , TSDP.TOT_SALE_AMT AS SALE_AMT
                         , TSDP.TOT_DC_AMT AS DC_AMT
                         , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
-                        , TSDP.SALE_CNT AS SALE_CNT
+                        , TSDP.REAL_SALE_CNT AS SALE_CNT
                         , (TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0))  AS SALE_QTY
                 FROM    TB_SL_DAILY_POS TSDP
                 WHERE   1 = 1
@@ -261,7 +261,7 @@
                     , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
                     , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
                     , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-                    , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+                    , SUM(TSDP.REAL_SALE_CNT) AS TOT_SALE_CNT
                     , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS TOT_SALE_QTY
             FROM	TB_SL_DAILY_POS TSDP
             WHERE	1 = 1
@@ -288,7 +288,7 @@
                 , TSDP.TOT_SALE_AMT AS SALE_AMT
                 , TSDP.TOT_DC_AMT AS DC_AMT
                 , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
-                , TSDP.SALE_CNT AS SALE_CNT
+                , TSDP.REAL_SALE_CNT AS SALE_CNT
                 , (TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
                 FROM    TB_SL_DAILY_POS TSDP
                 , TB_SL_DAILY_POS_PROD TSDPP
@@ -363,7 +363,7 @@
                     , TSDP.TOT_SALE_AMT AS SALE_AMT
                     , TSDP.TOT_DC_AMT AS DC_AMT
                     , TSDP.REAL_SALE_AMT AS REAL_SALE_AMT
-                    , TSDP.SALE_CNT AS SALE_CNT
+                    , TSDP.REAL_SALE_CNT AS SALE_CNT
             FROM	TB_SL_DAILY_POS TSDP
                   , TB_SL_DAILY_POS_PROD TSDPP
             WHERE   TSDP.HQ_OFFICE_CD = TSDPP.HQ_OFFICE_CD
@@ -413,7 +413,7 @@
         , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
         , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
         , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-        , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+        , SUM(TSDP.REAL_SALE_CNT) AS TOT_SALE_CNT
         , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS TOT_SALE_QTY
         FROM	TB_SL_MONTHLY_POS TSDP
         WHERE	1 = 1
@@ -440,7 +440,7 @@
         , SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
         , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
         , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
-        , SUM(TSDP.SALE_CNT) AS SALE_CNT
+        , SUM(TSDP.REAL_SALE_CNT) AS SALE_CNT
         , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
         FROM    TB_SL_MONTHLY_POS TSDP
         WHERE   1 = 1
@@ -497,7 +497,7 @@
         , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
         , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
         , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-        , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+        , SUM(TSDP.REAL_SALE_CNT) AS TOT_SALE_CNT
         , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS TOT_SALE_QTY
         FROM    TB_SL_MONTHLY_POS TSDP
         WHERE   1 = 1
@@ -524,7 +524,7 @@
         , SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
         , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
         , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
-        , SUM(TSDP.SALE_CNT) AS SALE_CNT
+        , SUM(TSDP.REAL_SALE_CNT) AS SALE_CNT
         , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
         FROM    TB_SL_MONTHLY_POS TSDP
         WHERE   1 = 1
@@ -767,7 +767,7 @@
         SELECT CONCAT(CONCAT(TMS.STORE_NM,' - POS '), TSDP.POS_NO) STORE_NM_POS_NO
         , TSDP.POS_NO
         , TSDP.STORE_CD
-        , SUM(TSDP.SALE_CNT) AS SALE_CNT
+        , SUM(TSDP.REAL_SALE_CNT) AS SALE_CNT
         , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
         , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
         <include refid="CmmSQL.PagingTemplateCount"/>
@@ -807,7 +807,7 @@
         SELECT CONCAT(CONCAT(TMS.STORE_NM,' - POS '), TSDP.POS_NO) STORE_NM_POS_NO
         , TSDP.POS_NO
         , TSDP.STORE_CD
-        , SUM(TSDP.SALE_CNT) AS SALE_CNT
+        , SUM(TSDP.REAL_SALE_CNT) AS SALE_CNT
         , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
         , SUM(TSDP.SALE_QTY + NVL(TSDP.SIDE_SALE_QTY,0)) AS SALE_QTY
         FROM TB_SL_DAILY_POS TSDP
@@ -933,7 +933,7 @@
             , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
             , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
             , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-            , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+            , SUM(TSDP.REAL_SALE_CNT) AS TOT_SALE_CNT
             FROM	TB_SL_DAILY_POS_TIME TSDP
             WHERE	1 = 1
             AND TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -959,7 +959,7 @@
             , SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
             , SUM(TSDP.TOT_DC_AMT) AS DC_AMT
             , SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
-            , SUM(TSDP.SALE_CNT) AS SALE_CNT
+            , SUM(TSDP.REAL_SALE_CNT) AS SALE_CNT
             FROM    TB_SL_DAILY_POS_TIME TSDP
             WHERE   TSDP.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='arrStorePos != null and arrStorePos.length >= 0'>
@@ -1034,7 +1034,7 @@
             , SUM(TSDP.TOT_SALE_AMT) AS TOT_SALE_AMT
             , SUM(TSDP.TOT_DC_AMT) AS TOT_DC_AMT
             , SUM(TSDP.REAL_SALE_AMT) AS TOT_REAL_SALE_AMT
-            , SUM(TSDP.SALE_CNT) AS TOT_SALE_CNT
+            , SUM(TSDP.REAL_SALE_CNT) AS TOT_SALE_CNT
             FROM TB_SL_DAILY_POS_TIME TSDP,
             (
             SELECT 	MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD)
@@ -1079,7 +1079,7 @@
             , 		SUM(TSDP.TOT_SALE_AMT) AS SALE_AMT
             , 		SUM(TSDP.TOT_DC_AMT) AS DC_AMT
             , 		SUM(TSDP.REAL_SALE_AMT) AS REAL_SALE_AMT
-            , 		SUM(TSDP.SALE_CNT) AS SALE_CNT
+            , 		SUM(TSDP.REAL_SALE_CNT) AS SALE_CNT
             FROM    TB_SL_DAILY_POS_TIME TSDP,
             (
             SELECT  MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || '~' || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT,

@@ -78,6 +78,7 @@
 		<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 			<input type="hidden" id="saleAnalsMonthlyMomsSelectStoreCd" value="${sessionInfo.storeCd}"/>
 		</c:if>
+		<input type="hidden" id="saleAnalsMonthlyMomsSelectStoreCdPopUp"/>
 		</tbody>
 	</table>
 	<table class="searchTbl" id="tblSearchAddShow" style="display: none;">
@@ -382,7 +383,7 @@
 	var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthlyMoms/saleAnalsMonthlyMoms.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthlyMoms/saleAnalsMonthlyMoms.js?ver=20241219.01" charset="utf-8"></script>
 
 <%-- 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/anals/monthlyMoms/saleAnalsMonthlyMomsStore.jsp">

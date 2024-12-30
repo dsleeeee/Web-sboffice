@@ -51,6 +51,7 @@
 	<c:if test="${sessionInfo.orgnFg == 'STORE'}">
 		<input type="hidden" id="saleAnalsMonthlySelectStoreCd" value="${sessionInfo.storeCd}"/>
 	</c:if>
+	<input type="hidden" id="saleAnalsMonthlySelectStoreCdPopUp"/>
     <%-- <tr>
       조회조건
       <th><s:message code="saleAnalsMonthly.reqCondition"/></th>
@@ -131,7 +132,7 @@
   
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthly/saleAnalsMonthly.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthly/saleAnalsMonthly.js?ver=20241219.01" charset="utf-8"></script>
 
 
 <%-- 상품코드 상세 레이어 --%>

@@ -59,9 +59,9 @@ app.controller('dayPeriodProdClassCtrl', ['$scope', '$http', '$timeout', functio
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.prodClassCd  = selectedRow.prodClassCd;
-                    params.storeCds = $("#dayPeriodProdClassStoreCd").val();
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+                    params.storeCds = $scope.storeCds;
+                    params.startDate = $scope.startDate;
+                    params.endDate = $scope.endDate;
 
                     var storeScope = agrid.getScope('dayPeriodProdClassDetailCtrl');
                     storeScope._broadcast('dayPeriodProdClassDetailCtrl', params);
@@ -82,6 +82,10 @@ app.controller('dayPeriodProdClassCtrl', ['$scope', '$http', '$timeout', functio
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.storeCds = $("#dayPeriodProdClassStoreCd").val();
+
+        $scope.startDate    = params.startDate;
+        $scope.endDate      = params.endDate;
+        $scope.storeCds     = params.storeCds;
 
         $scope._inquiryMain("/sale/day/dayPeriod/dayPeriod/getDayPeriodProdClassList.sb", params, function() {
             $scope.$apply(function() {

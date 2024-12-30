@@ -131,6 +131,11 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
         params.arrPosCd = $scope.comboArray; //-포스정보
         params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
 
+        $scope.srchStoreCd      = params.storeCd;
+        $scope.srchStartDate    = params.startDate;
+        $scope.srchEndDate      = params.endDate;
+        $scope.srchPosNo        = params.posNo;
+
         if(params.startDate > params.endDate){
             $scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
             return false;
@@ -294,16 +299,16 @@ app.controller('posProdCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 params.chkPop	= "posPop";
                 params.prodCd   = selectedRow.prodCd;
 
-                params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+                params.startDate = $scope.srchStartDate;
+                params.endDate = $scope.srchEndDate;
 
                 if (col.binding.substring(col.binding.length, col.binding.length-8) === "'SaleCnt") {
                     params.storeCd   = storeCd;
                     params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
                 }else if (col.binding === "totSaleCnt") { // 수량합계
-                    params.storeCd   = $("#posProdSelectStoreCd").val();
-                    params.posNo	 = $("#posProdSelectPosCd").val();
+                    params.storeCd   = $scope.srchStoreCd;
+                    params.posNo	 = $scope.srchPosNo;
                     $scope._broadcast('saleComProdCtrl', params);
                 }
             }

@@ -156,5 +156,5 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/emp/pos/empPos.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/emp/pos/empPos.js?ver=20241219.01" charset="utf-8"></script>
 
