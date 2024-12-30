@@ -1141,7 +1141,7 @@
     <!-- 맘스터치 > 간소화화면 > 상품매출일별(매장) -->
     <typeAlias alias="prodSaleDayStoreMomsVO" type="kr.co.solbipos.sale.moms.prodSaleDayStoreMoms.service.ProdSaleDayStoreMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 상품매출월별(매장) -->
-    <typeAlias alias="prodSaleMonthStoreMomsVO" type="kr.co.solbipos.sale.moms.prodSaleMonthStoreMoms.service.ProdSaleMonthStoreMomsVO"/>
+<!--    <typeAlias alias="prodSaleMonthStoreMomsVO" type="kr.co.solbipos.sale.moms.prodSaleMonthStoreMoms.service.ProdSaleMonthStoreMomsVO"/>-->
     <!-- 맘스터치 > 간소화화면 > 상품매출일별(영수) -->
     <typeAlias alias="prodSaleDayBillMomsVO" type="kr.co.solbipos.sale.moms.prodSaleDayBillMoms.service.ProdSaleDayBillMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 상품매출(P.MIX) -->
