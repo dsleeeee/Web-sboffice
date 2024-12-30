@@ -12,7 +12,7 @@
             <a href="#" class="open fl"><s:message code="storePosVersion.posPatchLog" /></a>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
                 <%-- 조회 --%>
-                <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_broadcast('posPatchLogCtrl')">
+                <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('posPatchLogCtrl', 1)">
                     <s:message code="cmm.search"/>
                 </button>
                 <%-- 확장조회 --%>

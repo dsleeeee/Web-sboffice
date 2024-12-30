@@ -17,7 +17,7 @@
             <a href="#" class="open fl"><s:message code="payTemporaryGift.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('payTemporaryGiftCtrl',1)">
+                <button class="btn_blue fr" ng-click="_pageView('payTemporaryGiftCtrl', 1)">
                     <s:message code="cmm.search" />
                 </button>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
