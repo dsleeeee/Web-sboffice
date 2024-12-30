@@ -51,7 +51,7 @@ app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	        var selectedRow = s.rows[ht.row].dataItem;
 	        var params       = {};
 	        	params.chkPop	= "empPop";
-	        	params.storeCd   = $("#empMonthSelectStoreCd").val();
+	        	params.storeCd   = $scope.excelStoreCd;
 	        	params.saleMonth   = selectedRow.saleDate;
 	        if (col.binding === "totBillCnt") { // 수량
 	          $scope._broadcast('saleComProdCtrl', params);
@@ -277,7 +277,7 @@ app.controller('empMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 			   		params.chkPop	= "empPop";
 			   		params.empNo    = empNoCd;
 //			   		params.storeCd   = storeCd;
-			   		params.storeCd   = $("#empMonthSelectStoreCd").val();
+			   		params.storeCd   = $scope.excelStoreCd;
 			   		params.saleMonth   = selectedRow.saleDate;
 
 			   		if (col.binding.substring(0, 7) === "billCnt") { //영수건수 클릭

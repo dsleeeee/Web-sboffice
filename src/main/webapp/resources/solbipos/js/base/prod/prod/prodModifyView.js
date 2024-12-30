@@ -123,6 +123,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 상품정보 조회
     $scope.$on("prodModifyCtrl", function(event, data) {
+
         // data 조회하지 않고 상세정보와 동일하므로 파라미터로 처리
         $scope.$broadcast('loadingPopupActive');
 

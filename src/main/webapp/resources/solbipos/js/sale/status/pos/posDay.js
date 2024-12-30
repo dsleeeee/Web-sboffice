@@ -150,6 +150,7 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
         $scope.searchPosNo = params.posNo;
         $scope.searchArrPosCd = params.arrPosCd; //-포스정보
         $scope.searchChecked = $scope.isChecked;
+        $scope.searchPosNo = params.posNo;
 
         /*if( params.arrPosCd == null || params.arrPosCd == undefined || params.arrPosCd == ""){
                 $scope._popMsg(messages["pos.require.arrPosCd"]); // 포스 정보가 존재하지 않습니다.
@@ -350,8 +351,8 @@ app.controller('posDayCtrl', ['$scope', '$http', '$timeout', function ($scope, $
                     params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
                 }else if (col.binding === "totSaleQty") { // 수량합계
-                    params.storeCd   = $("#posDaySelectStoreCd").val();
-                    params.posNo	 = $("#posDaySelectPosCd").val();
+                    params.storeCd   = $scope.searchStoreCd
+                    params.posNo	 = $scope.searchPosNo;
                     $scope._broadcast('saleComProdCtrl', params);
                 }
             }

@@ -181,6 +181,11 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
             return false;
         }
 
+        $scope.srchStoreCd = params.storeCd;
+        $scope.srchStartDate = params.startDate;
+        $scope.srchEndDate = params.endDate;
+        $scope.srchPosNo = params.posNo;
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/pos/hour/list.sb", params, function() {
 
@@ -374,8 +379,8 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                 var params       = {};
                 params.chkPop	= "posHourPop";
                 if(!$scope.isChecked){
-                    params.startDate = wijmo.Globalize.format($scope.srchPosHourStartDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format($scope.srchPosHourEndDate.value, 'yyyyMMdd');
+                    params.startDate = $scope.srchStartDate;
+                    params.endDate = $scope.srchEndDate;
                 }
                 params.saleHour   = selectedRow.saleHour;
 
@@ -384,8 +389,8 @@ app.controller('posHourCtrl', ['$scope', '$http', '$timeout', function ($scope, 
                     params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdHourCtrl', params); // 수량
                 }else if (col.binding === "totSaleCnt" && selectedRow.totSaleCnt != null) { // 수량합계
-                    params.storeCd   = $("#posHourSelectStoreCd").val();
-                    params.posNo	 = $("#posHourSelectPosCd").val();
+                    params.storeCd   = $scope.srchStoreCd;
+                    params.posNo	 = $scope.srchPosNo;
                     $scope._broadcast('saleComProdHourCtrl', params);
                 }
             }

@@ -71,8 +71,8 @@ app.controller('saleMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "storeCd" || col.binding === "saleDate") {
-                    selectedRow.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    selectedRow.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+                    selectedRow.startDate = $scope.startDate;
+                    selectedRow.endDate = $scope.endDate;
 
                     $scope.setSelectedSaleMcoupon(selectedRow);
                     $scope.wjSaleMcouponDtlLayer.show(true);
@@ -145,6 +145,9 @@ app.controller('saleMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.momsStoreFg04 = $scope.momsStoreFg04;
         params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
+
+        $scope.startDate = params.startDate;
+        $scope.endDate  = params.endDate;
 
         $scope._inquiryMain("/sale/status/saleMcoupon/saleMcoupon/getSaleMcouponList.sb", params, function() {}, false);
     };

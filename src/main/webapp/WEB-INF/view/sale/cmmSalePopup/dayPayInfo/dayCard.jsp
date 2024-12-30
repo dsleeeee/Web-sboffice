@@ -56,7 +56,7 @@
   var orgnFg = "${orgnFg}";
   var storeCd = "${storeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayCard.js?ver=20210719.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/cmmSalePopup/dayPayInfo/dayCard.js?ver=20241220.01" charset="utf-8"></script>
 
 <%-- 신용카드 승인현황 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/appr/apprCard.jsp">

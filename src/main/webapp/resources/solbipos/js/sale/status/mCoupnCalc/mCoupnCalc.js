@@ -87,14 +87,14 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
             var selectedRow = s.rows[ht.row].dataItem;
 
               var params = {};
-              params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-              params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+              params.startDate = $scope.startDate;
+              params.endDate = $scope.endDate;
               params.storeHqBrandCd = selectedRow.brandCd;
               params.storeCd = selectedRow.storeCd;
-              params.posNo = $("#mCoupnCalcSelectPosCd").val();
+              params.posNo = $scope.posNo;
               params.mcoupnCd = selectedRow.mcoupnCd;
-              params.saleFg = $scope.srchSaleFgCombo.selectedValue;
-              params.cashBillApprProcFg = $scope.srchApprProcFgCombo.selectedValue;
+              params.saleFg = $scope.srchSaleFg;
+              params.cashBillApprProcFg = $scope.srchCashBillApprProcFg;
               //params.aprProcFg = $scope.srchApprProcFgCombo.selectedValue;
 
               if(momsEnvstVal === "1" && orgnFg === "HQ"){ // 확장조회는 본사권한이면서 맘스터치만 사용
@@ -264,6 +264,12 @@ app.controller('mCoupnCalcCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.userBrands = momsHqBrandCd;
         }
         params.listScale = 500;
+
+        $scope.startDate = params.startDate;
+        $scope.endDate  = params.endDate;
+        $scope.posNo    = params.posNo;
+        $scope.srchSaleFg = params.saleFg;
+        $scope.srchCashBillApprProcFg = params.cashBillApprProcFg;
 
         $scope._inquiryMain("/sale/status/mCoupnCalc/mCoupnCalc/getMCoupnCalcList.sb", params, function() {
 

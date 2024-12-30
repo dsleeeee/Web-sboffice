@@ -78,7 +78,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeSale/mobileStoreSale.js?ver=20220427.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/storeSale/mobileStoreSale.js?ver=20241219.01" charset="utf-8"></script>
 
 <%-- 상세 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/sale/status/storeSale/mobileStoreSaleDtl.jsp">

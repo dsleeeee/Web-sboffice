@@ -76,8 +76,8 @@ app.controller('apprMcouponCtrl', ['$scope', '$http', '$timeout', function ($sco
 	        	params.storeCd   = selectedRow.storeCd;
 	        }
 	    	if(!$scope.isChecked){
-	    		  params.startDate = wijmo.Globalize.format($scope.srchApprMcouponStartDate.value, 'yyyyMMdd');
-	    		  params.endDate = wijmo.Globalize.format($scope.srchApprMcouponEndDate.value, 'yyyyMMdd');
+				params.startDate = $scope.excelStartDate;
+				params.endDate = $scope.excelEndDate;
 	    	}
 	    	params.chkPop    = "mcouponApprPop";
 	    if (col.binding === "storeNm") { // 매장명

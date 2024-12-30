@@ -55,12 +55,12 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http, $timeo
 	        var selectedRow = s.rows[ht.row].dataItem;
 	        var params       = {};
 	        	params.chkPop	= "empPop";
-	        	params.storeCd   = $("#empPosSelectStoreCd").val();
-		   		params.posNo	= selectedRow.posNo;
-		   		if(!$scope.isChecked){
-		   			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-		   			params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-		   		}
+	        	params.storeCd   = $scope.excelStoreCd;
+	        	params.posNo	= selectedRow.posNo;
+	        	if(!$scope.isChecked){
+	        		params.startDate = $scope.excelStartDate;
+	        		params.endDate = $scope.excelEndDate;
+	        	}
 	        if (col.binding === "totBillCnt") { // 수량
 	          $scope._broadcast('saleComProdCtrl', params);
 	        }
@@ -289,11 +289,11 @@ app.controller('empPosCtrl', ['$scope', '$http', function ($scope, $http, $timeo
 			   		params.chkPop	= "empPop";
 			   		params.empNo    = empNoCd;
 //			   		params.storeCd  = storeCd;
-			   		params.storeCd   = $("#empPosSelectStoreCd").val();
+			   		params.storeCd   = $scope.excelStoreCd;
 			   		params.posNo	= selectedRow.posNo;
 			   		if(!$scope.isChecked){
-			   			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-			   			params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+			   			params.startDate = $scope.excelStartDate;
+			   			params.endDate = $scope.excelEndDate;
 			   		}
 			   		if (col.binding.substring(0, 7) === "billCnt") { //영수건수 클릭
 			   			$scope._broadcast('saleComProdCtrl', params);

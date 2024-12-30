@@ -50,10 +50,10 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 	        var selectedRow = s.rows[ht.row].dataItem;
 	        var params       = {};
 	        	params.chkPop	= "empPop";
-	        	params.storeCd   = $("#empDayOfWeekSelectStoreCd").val();
+	        	params.storeCd   = $scope.srchStoreCd;
 	        	if(!$scope.isChecked){
-	        		params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-	        		params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+	        		params.startDate = $scope.srchStartDate;
+	        		params.endDate = $scope.srchEndDate;
 	        	}
 	    	    params.yoil   = selectedRow.yoil;
 	        if (col.binding === "totBillCnt") { // 수량
@@ -178,6 +178,10 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
     }
     params.isPageChk = isPageChk;
 	params.listScale = $scope.empDayOfWeeklistScale; //-페이지 스케일 갯수
+
+	$scope.srchStoreCd = params.storeCd;
+	$scope.srchStartDate = params.startDate;
+	$scope.srchEndDate = params.endDate;
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/status/emp/dayOfWeek/list.sb", params, function() {
 		var flex = $scope.flex;
@@ -276,10 +280,10 @@ app.controller('empDayOfWeekCtrl', ['$scope', '$http', '$timeout', function ($sc
 				   		params.chkPop	= "empPop";
 				   		params.empNo    = empNoCd;
 //				   		params.storeCd   = storeCd;
-				   		params.storeCd   = $("#empDayOfWeekSelectStoreCd").val();
+				   		params.storeCd   = $scope.srchStoreCd;
 				   		if(!$scope.isChecked){
-				   			params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-				   			params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+				   			params.startDate = $scope.srchStartDate;
+				   			params.endDate = $scope.srchEndDate;
 				   		}
 			    	    params.yoil   = selectedRow.yoil;
 				    		

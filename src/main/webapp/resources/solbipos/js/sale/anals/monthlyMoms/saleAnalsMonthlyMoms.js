@@ -128,6 +128,8 @@ app.controller('saleAnalsMonthlyMomsCtrl', ['$scope', '$http', '$sce', function 
 			}
 		}
 
+		$("#saleAnalsMonthlyMomsSelectStoreCdPopUp").val(params.storeCd);
+
 		var url = "/sale/anals/monthlyMoms/SaleAnalsMonthlyMoms/list.sb";
 
 		$http({
@@ -516,7 +518,7 @@ function saleAnalsMonthlyMomsPop(saleDate) {
 		var params       = {};
 		params.saleDate	= saleDate;
 		params.hqOfficeCd = gvHqOfficeCd;
-		params.storeCd	= $("#saleAnalsMonthlyMomsSelectStoreCd").val();
+		params.storeCd	= $("#saleAnalsMonthlyMomsSelectStoreCdPopUp").val();
 		scope._broadcast('saleAnalsMonthlyMomsStoreCtrl', params);
 	});
 };

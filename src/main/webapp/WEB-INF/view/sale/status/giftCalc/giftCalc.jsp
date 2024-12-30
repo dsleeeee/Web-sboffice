@@ -445,7 +445,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/giftCalc/giftCalc.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/giftCalc/giftCalc.js?ver=20241219.01" charset="utf-8"></script>
 
 <%-- 지류상품권 정산 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/giftCalc/giftCalcDtl.jsp">

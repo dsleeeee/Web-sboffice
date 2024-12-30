@@ -74,8 +74,8 @@ app.controller('apprNcashCtrl', ['$scope', '$http', '$timeout', function ($scope
 	        }
 
 	    	if(!$scope.isChecked){
-	    		  params.startDate = wijmo.Globalize.format($scope.srchApprNcashStartDate.value, 'yyyyMMdd');
-	    		  params.endDate = wijmo.Globalize.format($scope.srchApprNcashEndDate.value, 'yyyyMMdd');
+				params.startDate = $scope.excelStartDate;
+				params.endDate = $scope.excelEndDate;
 	    	}
 	    	params.chkPop    = "ncashApprPop";
 	    if (col.binding === "storeNm") { // 매장명

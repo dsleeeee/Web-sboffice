@@ -1516,4 +1516,21 @@
         AND USER_ID = #{userId}
     </select>
 
+    <!-- USER_ID = 'a0001'일 시 미등록 매핑정보 표시 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getErpProdCdNullCnt" parameterType="sessionInfoVO" resultType="integer">
+        /* ContentMapper.getErpProdCdNullCnt */
+        SELECT 	COUNT(*)
+        FROM 	LYNK_PROD_MAPPING_C02 A
+        ,		TB_HQ_ERP_PROD_MAPPING B
+        WHERE 	A.HQ_OFFICE_CD 			= #{hqOfficeCd}
+        AND     A.SESSION_ID            = #{sessionId}
+        AND 	B.HQ_OFFICE_CD		(+) = A.HQ_OFFICE_CD
+        AND 	B.MAPPING_STRING 	(+) = A.MAPPING_STRING
+        AND 	B.ERP_PROD_CD IS NULL
+    </select>
+
 </mapper>

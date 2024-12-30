@@ -150,7 +150,7 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
                 var selectedRow = s.rows[ht.row].dataItem;
                 var params      = {};
                 params.yearMonth = selectedRow.yearMonth.replace("-", "");
-                params.storeCd = $("#monthTotalStoreCd").val();
+                params.storeCd = $scope.storeCds;
                 if(orgnFg == "STORE") {
                     params.storeCd = storeCd;
                 }
@@ -243,6 +243,8 @@ app.controller('monthTotalCtrl', ['$scope', '$http', '$timeout', function ($scop
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.storeCds = $("#monthTotalStoreCd").val();
         params.payCol    = payCol;
+
+        $scope.storeCds = params.storeCds;
 
         $scope._inquiryMain("/sale/day/month/month/getMonthTotalList.sb", params, function() {}, false);
     };

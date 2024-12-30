@@ -75,8 +75,8 @@ app.controller('apprMpayCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	    		params.storeCd   = selectedRow.storeCd;
 	        }
 	    	if(!$scope.isChecked){
-	    		  params.startDate = wijmo.Globalize.format($scope.srchApprMpayStartDate.value, 'yyyyMMdd');
-	    		  params.endDate = wijmo.Globalize.format($scope.srchApprMpayEndDate.value, 'yyyyMMdd');
+				params.startDate = $scope.excelStartDate;
+				params.endDate = $scope.excelEndDate;
 	    	}
 	    	params.chkPop    = "mpayApprPop";
 	    if (col.binding === "storeNm") { // 매장명

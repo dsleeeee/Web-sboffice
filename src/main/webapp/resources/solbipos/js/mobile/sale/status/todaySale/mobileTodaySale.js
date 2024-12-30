@@ -132,8 +132,8 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', '$timeout', function (
                     var selectedRow = s.rows[ht.row].dataItem;
 
                     var params = {};
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+                    params.startDate = $scope.srchStartDate;
+                    params.endDate = $scope.srchStartDate;
                     params.srchStoreCd = $("#mobileTodaySaleStoreCd").val();
 
                     var mobileCallCtrl = "";
@@ -181,6 +181,8 @@ app.controller('mobileTodaySaleCtrl', ['$scope', '$http', '$timeout', function (
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); // 조회기간
         params.srchStoreCd = $("#mobileTodaySaleStoreCd").val();
+
+        $scope.srchStartDate = params.startDate;
 
         $scope._inquirySub("/mobile/sale/status/todaySale/todaySale/getMobileTodaySalePayList.sb", params, function() {
             // 조회 결과가 없으면 grid에'조회 결과 없음' Msg 띄우기

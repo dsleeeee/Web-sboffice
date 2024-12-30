@@ -130,8 +130,8 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', '$timeout', function (
                     var selectedRow = s.rows[ht.row].dataItem;
 
                     var params = {};
-                    params.startDate = wijmo.Globalize.format(startMonth.value, 'yyyyMM') + '01';
-                    params.endDate = wijmo.Globalize.format(endMonth.value, 'yyyyMM') + '31';
+                    params.startDate = $scope.srchStartDate + '01';
+                    params.endDate = $scope.srchEndDate + '31';
                     params.srchStoreCd = $("#mobileMonthSaleStoreCd").val();
 
                     var mobileCallCtrl = "";
@@ -238,6 +238,9 @@ app.controller('mobileMonthSaleCtrl', ['$scope', '$http', '$timeout', function (
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.srchStoreCd = $("#mobileMonthSaleStoreCd").val();
+
+        $scope.srchStartDate = params.startMonth;
+        $scope.srchEndDate = params.endMonth;
         // 소수점 입력안됨
         var numchkexp1 = /^\d*[.]\d*$/;
         if(numchkexp1.test(diffMonth) == true) {

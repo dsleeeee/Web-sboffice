@@ -144,4 +144,7 @@ public interface ContentMapper {
 
     /** 6개월이상 비밀번호 미수정시 알림 팝업 */
     String getLastPwdChgDtChk(SessionInfoVO sessionInfoVO);
+
+    /** USER_ID = 'a0001'일 시 미등록 매핑정보 표시 */
+    int getErpProdCdNullCnt(SessionInfoVO sessionInfoVO);
 }

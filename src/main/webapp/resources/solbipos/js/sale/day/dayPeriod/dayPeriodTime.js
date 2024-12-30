@@ -86,10 +86,10 @@ app.controller('dayPeriodTimeCtrl', ['$scope', '$http', '$timeout', function ($s
                     var selectedRow = s.rows[ht.row].dataItem;
                     var params      = {};
                     params.saleTime  = selectedRow.saleTime;
-                    params.storeCds = $("#dayPeriodTimeStoreCd").val();
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-                    params.optionFg = $("input[name=optionFg]:checked").val();
+                    params.storeCds = $scope.storeCds;
+                    params.startDate = $scope.startDate;
+                    params.endDate = $scope.endDate;
+                    params.optionFg = $scope.optionFg;
 
                     var storeScope = agrid.getScope('dayPeriodTimeDetailCtrl');
                     storeScope._broadcast('dayPeriodTimeDetailCtrl', params);
@@ -114,6 +114,11 @@ app.controller('dayPeriodTimeCtrl', ['$scope', '$http', '$timeout', function ($s
         params.endTime = $scope.endTime;
         params.optionFg = $("input[name=optionFg]:checked").val();
         params.timeSlot = $scope.timeSlot;
+
+        $scope.startDate    = params.startDate;
+        $scope.endDate      = params.endDate;
+        $scope.storeCds     = params.storeCds;
+        $scope.optionFg     = params.optionFg;
 
         $scope._inquiryMain("/sale/day/dayPeriod/dayPeriod/getDayPeriodTimeList.sb", params, function() {
             $scope.$apply(function() {

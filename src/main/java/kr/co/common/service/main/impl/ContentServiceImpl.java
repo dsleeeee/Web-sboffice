@@ -7,6 +7,8 @@ import kr.co.solbipos.application.common.enums.MainSrchFg;
 import kr.co.solbipos.application.main.content.service.impl.ContentMapper;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.artiseeProdMapping.service.ArtiseeProdMappingVO;
+import kr.co.solbipos.base.prod.artiseeProdMapping.service.impl.ArtiseeProdMappingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +21,13 @@ import java.util.Map;
 public class ContentServiceImpl implements ContentService {
 
     private final ContentMapper contentMapper;
+    private final ArtiseeProdMappingMapper artiseeProdMappingMapper;
 
     /** Constructor Injection */
     @Autowired
-    public ContentServiceImpl(ContentMapper contentMapper) {
+    public ContentServiceImpl(ContentMapper contentMapper, ArtiseeProdMappingMapper artiseeProdMappingMapper) {
         this.contentMapper = contentMapper;
+        this.artiseeProdMappingMapper = artiseeProdMappingMapper;
     }
 
     //    @Override
@@ -333,5 +337,25 @@ public class ContentServiceImpl implements ContentService {
     @Override
     public String getLastPwdChgDtChk(SessionInfoVO sessionInfoVO) {
         return contentMapper.getLastPwdChgDtChk(sessionInfoVO);
+    }
+
+    /** USER_ID = 'a0001'일 시 미등록 매핑정보 표시 */
+    @Override
+    public int getErpProdCdNullCnt(SessionInfoVO sessionInfoVO) {
+
+        ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
+
+        artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
+        artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
+
+        // TMP테이블 삭제
+        artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
+        artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
+
+        // 맵핑스트링 저장
+        artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
+
+        return contentMapper.getErpProdCdNullCnt(sessionInfoVO);
     }
 }

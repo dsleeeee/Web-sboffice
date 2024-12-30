@@ -131,7 +131,7 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
                     params.startDate = selectedRow.startMonth;
                     params.endDate = selectedRow.endMonth;
                     params.saleDate = selectedRow.yyyymmdd;
-                    params.storeCds = $("#storeOpenCloseMonthStoreCd").val();
+                    params.storeCds = $scope.storeCds;
                     params.momsTeam = scope.momsTeam;
                     params.momsAcShop = scope.momsAcShop;
                     params.momsAreaFg = scope.momsAreaFg;
@@ -200,6 +200,8 @@ app.controller('storeOpenCloseMonthCtrl', ['$scope', '$http', '$timeout', functi
         params.momsStoreFg03 = data.momsStoreFg03;
         params.momsStoreFg04 = data.momsStoreFg04;
         params.momsStoreFg05 = data.momsStoreFg05;
+
+        $scope.storeCds = params.storeCds;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/store/storeOpenClose/storeOpenClose/getStoreOpenCloseMonthList.sb", params, function () {

@@ -345,8 +345,8 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
                     params.posNo	 = storeCd + "||" + posNo;
                     $scope._broadcast('saleComProdCtrl', params); // 수량
                 }else if (col.binding === "totSaleQty") { // 수량합계
-                    params.storeCd   = $("#posMonthSelectStoreCd").val();
-                    params.posNo	 = $("#posMonthSelectPosCd").val();
+                    params.storeCd   = $scope.searchStoreCd;
+                    params.posNo	 = $scope.searchPosNo;
                     // if($("#posMonthSelectPosNm").val() !== "전체"){
                     //     var splPosNo = {};
                     //     splPosNo = $("#posMonthSelectPosCd").val().split(',');

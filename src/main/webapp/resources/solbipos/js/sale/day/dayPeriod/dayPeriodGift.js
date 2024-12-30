@@ -114,8 +114,8 @@ app.controller('dayPeriodGiftCtrl', ['$scope', '$http', '$timeout', function ($s
                     var params      = {};
                     params.storeCd = selectedRow.storeCd;
                     params.payClassCd = selectedRow.payClassCd;
-                    params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
-                    params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+                    params.startDate = $scope.startDate;
+                    params.endDate = $scope.endDate;
 
                     var storeScope = agrid.getScope('dayPeriodGiftDetailCtrl');
                     storeScope._broadcast('dayPeriodGiftDetailCtrl', params);
@@ -136,6 +136,9 @@ app.controller('dayPeriodGiftCtrl', ['$scope', '$http', '$timeout', function ($s
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.storeCds = $("#dayPeriodGiftStoreCd").val();
+
+        $scope.startDate    = params.startDate;
+        $scope.endDate      = params.endDate;
 
         $scope._inquiryMain("/sale/day/dayPeriod/dayPeriod/getDayPeriodGiftList.sb", params, function() {
             $scope.$apply(function() {
