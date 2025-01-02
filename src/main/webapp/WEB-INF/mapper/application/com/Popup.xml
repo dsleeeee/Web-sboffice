@@ -305,7 +305,8 @@
               SELECT thp.HQ_OFFICE_CD,
                      thp.PROD_CLASS_CD,
                      thp.PROD_CD,
-                     thp.PROD_NM
+                     thp.PROD_NM,
+                     thp.USE_YN
                 FROM TB_HQ_PRODUCT thp
                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test='prodClassCd != null and prodClassCd != ""'>
@@ -337,6 +338,9 @@
                   </foreach>
               </if>
             </if>
+            <if test='useYn != null and useYn != ""'>
+                AND thp.USE_YN = #{useYn}
+            </if>
             AND (
                     ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                     OR
@@ -348,7 +352,8 @@
               SELECT tmp.STORE_CD,
                      tmp.PROD_CLASS_CD,
                      tmp.PROD_CD,
-                     tmp.PROD_NM
+                     tmp.PROD_NM,
+                     tmp.USE_YN
                 FROM TB_MS_PRODUCT tmp
                WHERE tmp.STORE_CD = #{storeCd}
               <if test='prodClassCd != null and prodClassCd != "" '>
@@ -367,6 +372,9 @@
               </if>
               <if test='prodNm != null and prodNm != "" and prodNm.toString() != "선택"'>
                  AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
+              </if>
+              <if test='useYn != null and useYn != ""'>
+                  AND tmp.USE_YN = #{useYn}
               </if>
               AND (
                       ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )

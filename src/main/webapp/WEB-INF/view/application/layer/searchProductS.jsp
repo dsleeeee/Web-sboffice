@@ -14,7 +14,7 @@
   <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
     <div class="wj-dialog-header wj-dialog-header-font">
       <s:message code="popup.product.select"/>
-      <a href="#" class="wj-hide btn_close"></a>
+      <a href="#" class="wj-hide btn_close" ng-click="popClose()"></a>
     </div>
     <div class="wj-dialog-body">
 
@@ -51,8 +51,22 @@
               </wj-combo-box>
             </div>
           </td>
-          <th></th>
-          <td></td>
+          <%-- 사용여부 --%>
+          <th><s:message code="popup.product.usesYn" /></th>
+          <td>
+              <div class="sb-select">
+                  <wj-combo-box
+                          id="srchUseYnCombo"
+                          ng-model="popUseYn"
+                          items-source="_getComboData('srchUseYnCombo')"
+                          display-member-path="name"
+                          selected-value-path="value"
+                          is-editable="false"
+                          control="srchUseYnCombo"
+                          selected-index="1">
+                  </wj-combo-box>
+              </div>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -119,7 +133,8 @@
 
                   <!-- define columns -->
                   <wj-flex-grid-column header="<s:message code="popup.product.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                  <wj-flex-grid-column header="<s:message code="popup.product.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="popup.product.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="popup.product.usesYn"/>" binding="useYn" data-map="useYnDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
 
                 </wj-flex-grid>
               </div>
@@ -153,6 +168,8 @@
   var pSBrandUseFg = "";
   // 사용자 브랜드
   var pSUserHqBrandCdComboList = "";
+  // 사용여부
+  var useYnFg = ${ccu.getCommCodeExcpAll("067")};
 
   /** 매장선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
@@ -163,8 +180,13 @@
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController($scope.targetId + 'Ctrl', $scope, $http, true));
 
+    $scope._setComboData("srchUseYnCombo", useYnFg); // 사용여부 콤보박스 셋팅
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // 그리드 DataMap 설정
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
 
       // 브랜드 사용여부
       var params = {};
@@ -292,7 +314,7 @@
 
     $scope.searchProd = function(){
 
-      if( (isEmptyObject($("#"+$scope.targetId+"ProdCd").val()) && isEmptyObject($("#"+$scope.targetId+"ProdNm").val() ) && isEmptyObject($scope.srchPopSProdeHqBrandCdCombo.selectedValue))
+      if( (isEmptyObject($("#"+$scope.targetId+"ProdCd").val()) && isEmptyObject($("#"+$scope.targetId+"ProdNm").val() ) && isEmptyObject($scope.srchPopSProdeHqBrandCdCombo.selectedValue) && isEmptyObject($scope.srchUseYnCombo.selectedValue))
        || $("#"+$scope.targetId+"ProdNm").val() === '선택'){
         $scope._popMsg("검색조건을 입력해주세요");
         return false;
@@ -306,6 +328,7 @@
       params.prodClassCd = $scope.getSelectedClass();
       params.prodCd = $("#"+$scope.targetId+"ProdCd").val();
       params.prodNm = $("#"+$scope.targetId+"ProdNm").val();
+      params.useYn = $scope.srchUseYnCombo.selectedValue;
 
       if(pSBrandUseFg === "1" && orgnFg === "HQ"){
         // 선택한 상품브랜드가 있을 때
@@ -328,6 +351,13 @@
       // console.log('params', params);
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
       $scope._inquirySub("/popup/getProductList.sb", params);
+    };
+
+    $scope.popClose = function () {
+        $("#${param.targetId}ProdCd").val("");
+        $("#${param.targetId}ProdNm").val("");
+        $scope.srchPopSProdeHqBrandCdCombo.selectedIndex = 0;
+        $scope.srchUseYnCombo.selectedValue = "Y";
     };
 
   }]);
