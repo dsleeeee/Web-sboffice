@@ -57,7 +57,7 @@
         GROUP
         BY      tphsd.SLIP_FG, tphsd.STORE_CD, tms.STORE_NM, tms.SYS_STAT_FG, tphsl.CURR_LOAN_AMT, tphsl.AVAILABLE_ORDER_AMT,tphsd.REQ_DATE, tphsd.ORDER_SLIP_NO
         ORDER
-        BY      tphsd.STORE_CD
+        BY      tphsd.STORE_CD, tphsd.ORDER_SLIP_NO
     </select>
 
     <!-- 반품자료생성 상세 리스트 조회 -->
@@ -205,9 +205,24 @@
         AND     SLIP_FG       = #{slipFg}
         AND     STORE_CD      = #{storeCd}
         AND     PROC_FG       = #{procFg}
-        <if test='orderSlipNo != null and orderSlipNo != ""'>
-            AND ORDER_SLIP_NO = #{orderSlipNo}
-        </if>
+        <choose>
+            <when test='orderSlipNo != null and orderSlipNo != ""'>
+                AND
+                <foreach collection="orderSlipNoList" item="item" open=" (" separator="OR" close=")" >
+                    <choose>
+                        <when test='item != null and item != "" and item != "null"'>
+                            ORDER_SLIP_NO = #{item}
+                        </when>
+                        <otherwise>
+                            ORDER_SLIP_NO IS NULL
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </when>
+            <otherwise>
+                AND ORDER_SLIP_NO IS NULL
+            </otherwise>
+        </choose>
         <if test='dateFg == "req"'>
            AND REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
@@ -223,11 +238,9 @@
                                 WHERE   STORE_CD   = #{storeCd}
                                 AND     PROD_CD   IN  (   SELECT  PROD_CD
                                                           FROM    TB_HQ_VENDOR_PROD thvp
-                                                          ,       TB_HQ_BRAND thb
                                                           WHERE   thvp.VENDR_CD     =   #{vendrCd}
-                                                          AND     thb.HQ_OFFICE_CD  =   #{hqOfficeCd}
-                                                          AND     thb.HQ_BRAND_CD   =   thvp.HQ_BRAND_CD
-                                                          AND     thb.USE_YN = 'Y'
+                                                          AND     thvp.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                          AND     thvp.USE_YN = 'Y'
                                                       )
                             )
         </if>
@@ -272,9 +285,24 @@
                     AND     SLIP_FG         =   #{slipFg}
                     AND     SLIP_NO         =   #{slipNo}
                     AND     PROC_FG         =   '30'
-                    <if test='orderSlipNo != null and orderSlipNo != ""'>
-                        AND ORDER_SLIP_NO = #{orderSlipNo}
-                    </if>
+                    <choose>
+                        <when test='orderSlipNo != null and orderSlipNo != ""'>
+                            AND
+                            <foreach collection="orderSlipNoList" item="item" open=" (" separator="OR" close=")" >
+                                <choose>
+                                    <when test='item != null and item != "" and item != "null"'>
+                                        ORDER_SLIP_NO = #{item}
+                                    </when>
+                                    <otherwise>
+                                        ORDER_SLIP_NO IS NULL
+                                    </otherwise>
+                                </choose>
+                            </foreach>
+                        </when>
+                        <otherwise>
+                            AND ORDER_SLIP_NO IS NULL
+                        </otherwise>
+                    </choose>
                     ORDER
                     BY      PROD_CD, DSTB_FG, MGR_SPLY_UPRC DESC, SEQ
                 )
@@ -366,4 +394,69 @@
         GROUP
         BY      PROD_CD, STORE_CD
     </insert>
+
+    <!-- 반품자료생성 직배송거래처 조회 -->
+    <!--
+        TABLE    : TB_PO_HQ_STORE_OUTSTOCK
+        PARAM    : rtnOutstockDataVO
+        COMMENTS : 반품자료생성 직배송거래처를 조회를 조회한다.
+    -->
+    <select id="getStoreVendr" parameterType="rtnOutstockDataVO" resultType="DefaultMap">
+        /* USE : RtnOutstockDataMapper.getStoreVendr */
+        SELECT  tphsd.STORE_CD
+        ,       tphsd.SLIP_FG
+        ,       thvp.VENDR_CD
+        FROM    TB_PO_HQ_STORE_DISTRIBUTE tphsd
+        ,       (   SELECT  thvp.PROD_CD
+                    ,       MIN(thvp.VENDR_CD) AS VENDR_CD
+                    FROM    TB_HQ_VENDOR_PROD thvp
+                    WHERE   thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     thvp.VENDR_CD IN    (
+                                                    SELECT  thv.VENDR_CD
+                                                    FROM    TB_HQ_VENDOR thv
+                                                    WHERE   thv.HQ_OFFICE_CD   =   #{hqOfficeCd}
+                                                    AND     thv.USE_YN         =   'Y'
+                                                    AND     thv.SHIP_FG        =   'Y'
+                                                )
+                    AND     thvp.USE_YN = 'Y'
+                    GROUP
+                    BY      thvp.PROD_CD
+                )   thvp
+        WHERE   tphsd.HQ_OFFICE_CD      =   #{hqOfficeCd}
+        AND     tphsd.PROC_FG           =   '20'
+        AND     tphsd.STORE_CD          =   #{storeCd}
+        AND     tphsd.SLIP_FG           =   #{slipFg}
+        AND     thvp.PROD_CD        (+) =   tphsd.PROD_CD
+        <choose>
+            <when test='orderSlipNo != null and orderSlipNo != ""'>
+                AND
+                <foreach collection="orderSlipNoList" item="item" open=" (" separator="OR" close=")" >
+                    <choose>
+                        <when test='item != null and item != "" and item != "null"'>
+                            tphsd.ORDER_SLIP_NO = #{item}
+                        </when>
+                        <otherwise>
+                            tphsd.ORDER_SLIP_NO IS NULL
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </when>
+            <otherwise>
+                AND tphsd.ORDER_SLIP_NO IS NULL
+            </otherwise>
+        </choose>
+        <if test='dateFg == "req"'>
+            AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test='dateFg == "reg"'>
+            AND tphsd.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        <if test='dateFg == "mod"'>
+            AND tphsd.MOD_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        </if>
+        GROUP
+        BY      tphsd.STORE_CD, tphsd.SLIP_FG, thvp.VENDR_CD
+        ORDER
+        BY      tphsd.STORE_CD, tphsd.SLIP_FG, thvp.VENDR_CD
+    </select>
 </mapper>

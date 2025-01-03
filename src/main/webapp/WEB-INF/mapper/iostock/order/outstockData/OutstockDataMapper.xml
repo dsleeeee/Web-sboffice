@@ -57,7 +57,7 @@
         GROUP
         BY      tphsd.SLIP_FG, tphsd.STORE_CD, tms.STORE_NM, tms.SYS_STAT_FG, tphsl.CURR_LOAN_AMT, tphsl.AVAILABLE_ORDER_AMT, tphsd.ORDER_SLIP_NO
         ORDER
-        BY      tphsd.STORE_CD
+        BY      tphsd.STORE_CD, tphsd.ORDER_SLIP_NO
     </select>
 
     <!-- 출고자료생성 상세 리스트 조회 -->
@@ -219,7 +219,24 @@
         AND     tphsd.STORE_CD          =   #{storeCd}
         AND     tphsd.SLIP_FG           =   #{slipFg}
         AND     thvp.PROD_CD        (+) =   tphsd.PROD_CD
-        AND     tphsd.ORDER_SLIP_NO     =   #{orderSlipNo}
+        <choose>
+            <when test='orderSlipNo != null and orderSlipNo != ""'>
+                AND
+                <foreach collection="orderSlipNoList" item="item" open=" (" separator="OR" close=")" >
+                    <choose>
+                        <when test='item != null and item != "" and item != "null"'>
+                            tphsd.ORDER_SLIP_NO = #{item}
+                        </when>
+                        <otherwise>
+                            tphsd.ORDER_SLIP_NO IS NULL
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </when>
+            <otherwise>
+                AND tphsd.ORDER_SLIP_NO IS NULL
+            </otherwise>
+        </choose>
         <if test='dateFg == "req"'>
             AND tphsd.REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
@@ -252,9 +269,24 @@
         AND     SLIP_FG       = #{slipFg}
         AND     STORE_CD      = #{storeCd}
         AND     PROC_FG       = #{procFg}
-        <if test='orderSlipNo != null and orderSlipNo != ""'>
-            AND ORDER_SLIP_NO = #{orderSlipNo}
-        </if>
+        <choose>
+            <when test='orderSlipNo != null and orderSlipNo != ""'>
+                AND
+                <foreach collection="orderSlipNoList" item="item" open=" (" separator="OR" close=")" >
+                    <choose>
+                        <when test='item != null and item != "" and item != "null"'>
+                            ORDER_SLIP_NO = #{item}
+                        </when>
+                        <otherwise>
+                            ORDER_SLIP_NO IS NULL
+                        </otherwise>
+                    </choose>
+                </foreach>
+            </when>
+            <otherwise>
+                AND ORDER_SLIP_NO IS NULL
+            </otherwise>
+        </choose>
         <if test='dateFg == "req"'>
             AND REQ_DATE BETWEEN #{startDate} AND #{endDate}
         </if>
@@ -317,9 +349,24 @@
                     AND     SLIP_FG         =   #{slipFg}
                     AND     SLIP_NO         =   #{slipNo}
                     AND     PROC_FG         =   '30'
-                    <if test='orderSlipNo != null and orderSlipNo != ""'>
-                        AND ORDER_SLIP_NO = #{orderSlipNo}
-                    </if>
+                    <choose>
+                        <when test='orderSlipNo != null and orderSlipNo != ""'>
+                            AND
+                            <foreach collection="orderSlipNoList" item="item" open=" (" separator="OR" close=")" >
+                                <choose>
+                                    <when test='item != null and item != "" and item != "null"'>
+                                        ORDER_SLIP_NO = #{item}
+                                    </when>
+                                    <otherwise>
+                                        ORDER_SLIP_NO IS NULL
+                                    </otherwise>
+                                </choose>
+                            </foreach>
+                        </when>
+                        <otherwise>
+                            AND ORDER_SLIP_NO IS NULL
+                        </otherwise>
+                    </choose>
                     ORDER
                     BY      PROD_CD, DSTB_FG, MGR_SPLY_UPRC DESC, SEQ
                 )

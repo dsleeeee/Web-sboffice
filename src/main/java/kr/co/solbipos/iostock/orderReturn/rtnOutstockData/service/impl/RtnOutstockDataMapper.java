@@ -34,4 +34,7 @@ public interface RtnOutstockDataMapper {
     
     /** 반품자료생성 - TB_PO_HQ_STORE_OUTSTOCK_PROD 자료입력*/
     int insertRtnStoreOutStockProd(RtnOutstockDataVO rtnOutstockDataVO);
+
+    /** 반품자료생성 - 직배송거래처 조회 */
+    List<DefaultMap<String>> getStoreVendr(RtnOutstockDataVO rtnOutstockDataVO);
 }

@@ -127,7 +127,7 @@
   var sysStatFg     = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockData/rtnOutstockData.js?ver=20240711.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/iostock/orderReturn/rtnOutstockData/rtnOutstockData.js?ver=20250103.01" charset="utf-8"></script>
 
 <%-- 반품자료생성 상세 레이어 --%>
 <c:import url="/WEB-INF/view/iostock/orderReturn/rtnOutstockData/rtnOutstockDataDtl.jsp">

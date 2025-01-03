@@ -68,8 +68,13 @@ public class OutstockDataServiceImpl implements OutstockDataService {
             outstockDataVO.setRegDt(currentDt);
             outstockDataVO.setModId(sessionInfoVO.getUserId());
             outstockDataVO.setModDt(currentDt);
+            if(outstockDataVO.getOrderSlipNo() != null && !"".equals(outstockDataVO.getOrderSlipNo())) {
+                String[] orderSlipNoList = outstockDataVO.getOrderSlipNo().split(",");
+                outstockDataVO.setOrderSlipNoList(orderSlipNoList);
+            }
 
-            if ("2".equals(envst1042) && "2".equals(envst1242)) { // 1042(수발주옵션) - [2] 매장확정(출고자료생성) && 1242(거래처출고구분) - [2] 거래처별출고전표자동생성 인 경우, 거래처별 출고전표 자동생성
+
+            if ("2".equals(envst1242)) { // 1042(수발주옵션) - [2] 매장확정(출고자료생성) && 1242(거래처출고구분)(로직과 무관 - 제외) - [2] 거래처별출고전표자동생성 인 경우, 거래처별 출고전표 자동생성
 
                 // 직배송거래처 조회
                 List<DefaultMap<String>> storeVendrList = outstockDataMapper.getStoreVendr(outstockDataVO);

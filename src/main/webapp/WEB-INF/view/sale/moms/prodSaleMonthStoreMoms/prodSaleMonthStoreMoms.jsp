@@ -9,12 +9,12 @@
 
 <div class="subCon">
 
-    <div ng-controller="prodSaleDayStoreMomsCtrl">
+    <div ng-controller="prodSaleMonthStoreMomsCtrl">
         <div class="searchBar">
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodSaleDayStoreMomsCtrl', 1)">
+                <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodSaleMonthStoreMomsCtrl', 1)">
                     <s:message code="cmm.search"/>
                 </button>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -34,13 +34,15 @@
             </colgroup>
             <tbody>
             <tr>
-                <%-- 조회일자 --%>
-                <th><s:message code="cmm.search.date"/></th>
+                <%-- 조회월 --%>
+                <th>
+                    <s:message code="cmm.search.month" />
+                </th>
                 <td>
                     <div class="sb-select">
-                        <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
+                        <span class="txtIn"> <input id="startMonth" name="startMonth" class="w100px" /></span>
                         <span class="rg">~</span>
-                        <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
+                        <span class="txtIn"> <input id="endMonth" name="endMonth" class="w100px" /></span>
                     </div>
                 </td>
                 <%-- 분류조회 --%>
@@ -53,37 +55,20 @@
                 </td>
             </tr>
             <tr>
-                <%-- 일자표시옵션 --%>
-                <th><s:message code="prodSaleDayStoreMoms.dayOption"/></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchDayOptionCombo"
-                                ng-model="dayOption"
-                                items-source="_getComboData('dayOptionCombo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                control="srchDayOptionCombo">
-                        </wj-combo-box>
-                    </div>
-                </td>
-            </tr>
-            <tr>
                 <%-- 상품코드 --%>
-                <th><s:message code="prodSaleDayStoreMoms.prodCd" /></th>
+                <th><s:message code="prodSaleMonthStoreMoms.prodCd" /></th>
                 <td>
                     <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 상품명 --%>
-                <th><s:message code="prodSaleDayStoreMoms.prodNm" /></th>
+                <th><s:message code="prodSaleMonthStoreMoms.prodNm" /></th>
                 <td>
                     <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                 </td>
             </tr>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <tr>
-                    <%-- 매장브랜드 --%>
+                        <%-- 매장브랜드 --%>
                     <th><s:message code="cmm.moms.storeHqBrand"/></th>
                     <td>
                         <div class="sb-select">
@@ -98,20 +83,20 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <%-- 매장선택 --%>
+                        <%-- 매장선택 --%>
                     <th><s:message code="cmm.store.select"/></th>
                     <td>
-                        <%-- 매장선택 모듈 사용시 include --%>
+                            <%-- 매장선택 모듈 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
                             <jsp:param name="targetTypeFg" value="M"/>
-                            <jsp:param name="targetId" value="prodSaleDayStoreMomsStore"/>
+                            <jsp:param name="targetId" value="prodSaleMonthStoreMomsStore"/>
                         </jsp:include>
-                        <%--// 매장선택 모듈 사용시 include --%>
+                            <%--// 매장선택 모듈 사용시 include --%>
                     </td>
                 </tr>
             </c:if>
             <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                <input type="hidden" id="prodSaleDayStoreMomsStoreCd" value="${sessionInfo.storeCd}"/>
+                <input type="hidden" id="prodSaleMonthStoreMomsStoreCd" value="${sessionInfo.storeCd}"/>
             </c:if>
             <tr>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
@@ -140,7 +125,7 @@
                                      modiFg - 수정여부(변수 없을 경우 기본값으로 수정가능)
                                      closeFunc - 팝업 닫기시 호출할 함수--%>
                     <jsp:include page="/WEB-INF/view/sale/com/popup/selectProdMMoms.jsp" flush="true">
-                        <jsp:param name="targetId" value="prodSaleDayStoreMomsSelect"/>
+                        <jsp:param name="targetId" value="prodSaleMonthStoreMomsSelect"/>
                     </jsp:include>
                     <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
                 </td>
@@ -297,7 +282,7 @@
             </tr>
             <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                 <tr>
-                    <%-- 매장그룹2 --%>
+                        <%-- 매장그룹2 --%>
                     <th><s:message code="cmm.moms.momsStoreFg02"/></th>
                     <td>
                         <div class="sb-select">
@@ -313,7 +298,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <%-- 매장그룹3 --%>
+                        <%-- 매장그룹3 --%>
                     <th><s:message code="cmm.moms.momsStoreFg03"/></th>
                     <td>
                         <div class="sb-select">
@@ -331,7 +316,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <%-- 매장그룹4 --%>
+                        <%-- 매장그룹4 --%>
                     <th><s:message code="cmm.moms.momsStoreFg04"/></th>
                     <td>
                         <div class="sb-select">
@@ -347,7 +332,7 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                    <%-- 매장그룹5 --%>
+                        <%-- 매장그룹5 --%>
                     <th><s:message code="cmm.moms.momsStoreFg05"/></th>
                     <td>
                         <div class="sb-select">
@@ -390,29 +375,27 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.dayFrom"/>" binding="dayFrom" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.dayTo"/>" binding="dayTo" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleQty"/>" binding="saleQty1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.totSaleAmt"/>" binding="totSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.realSaleAmt"/>" binding="realSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.saleYm"/>" binding="saleYm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.saleQty"/>" binding="saleQty1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.totSaleAmt"/>" binding="totSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.realSaleAmt"/>" binding="realSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
         <%-- 페이지 리스트 --%>
         <div class="pageNum mt20">
             <%-- id --%>
-            <ul id="prodSaleDayStoreMomsCtrlPager" data-size="10">
+            <ul id="prodSaleMonthStoreMomsCtrlPager" data-size="10">
             </ul>
         </div>
         <%-- //페이지 리스트 --%>
     </div>
 
     <%-- 엑셀 리스트 --%>
-    <div class="w100 mt10" style="display:none;" ng-controller="prodSaleDayStoreMomsExcelCtrl">
+    <div class="w100 mt10" style="display:none;" ng-controller="prodSaleMonthStoreMomsExcelCtrl">
         <div class="wj-gridWrap" style="height: 370px; overflow-x: hidden; overflow-y: hidden;">
             <wj-flex-grid
                     id="wjGridExcelList"
@@ -425,15 +408,13 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.dayFrom"/>" binding="dayFrom" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.dayTo"/>" binding="dayTo" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.saleQty"/>" binding="saleQty1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.totSaleAmt"/>" binding="totSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSaleDayStoreMoms.realSaleAmt"/>" binding="realSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.saleYm"/>" binding="saleYm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.saleQty"/>" binding="saleQty1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.totSaleAmt"/>" binding="totSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.realSaleAmt"/>" binding="realSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -464,4 +445,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms.js?ver=20250103.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleMonthStoreMoms/prodSaleMonthStoreMoms.js?ver=20241220.01" charset="utf-8"></script>

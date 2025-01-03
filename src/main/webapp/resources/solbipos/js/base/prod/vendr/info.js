@@ -145,8 +145,12 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             }else{
                 $scope.wjVendrInfoLayer.hide();
                 $scope.wjVendrTrtmntLayer.show(true);
+                $("#sProdCd").val('');
+                $("#sProdNm").val('');
+                $("#sProdClassCd").val('');
+                $("#sProdClassNm").val('');
 
-                // $scope._broadcast('vendrTrtmntCtrl', valVendrCd);
+                $scope._broadcast('vendrTrtmntCtrl', valVendrCd);
                 event.preventDefault();
 
             }

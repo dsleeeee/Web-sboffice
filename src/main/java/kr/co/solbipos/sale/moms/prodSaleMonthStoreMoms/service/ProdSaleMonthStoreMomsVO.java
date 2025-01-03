@@ -1,25 +1,25 @@
-package kr.co.solbipos.sale.moms.prodSaleDayStoreMoms.service;
+package kr.co.solbipos.sale.moms.prodSaleMonthStoreMoms.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
 /**
- * @Class Name : ProdSaleDayStoreMomsVO.java
- * @Description : 맘스터치 > 간소화화면 > 상품매출일별(매장)
+ * @Class Name : ProdSaleMonthStoreMomsVO.java
+ * @Description : 맘스터치 > 간소화화면 > 상품매출월별(매장)
  * @Modification Information
  * @
  * @  수정일      수정자              수정내용
  * @ ----------  ---------   -------------------------------
- * @ 2023.12.07  김설아      최초생성
+ * @ 2024.12.20  김유승      최초생성
  *
- * @author 솔비포스 개발본부 WEB개발팀 김설아
- * @since 2023.12.07
+ * @author 솔비포스 개발본부 WEB개발팀 김유승
+ * @since 2024.12.20
  * @version 1.0
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-public class ProdSaleDayStoreMomsVO extends PageVO {
+public class ProdSaleMonthStoreMomsVO extends PageVO {
 
-    private static final long serialVersionUID = 4567094904301269212L;
+    private static final long serialVersionUID = -7804513725649878916L;
 
     /**
      * 소속구분
@@ -141,16 +141,25 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
     /** 순번 */
     private String seq;
 
-    /** 일자표시옵션 */
-    private String dayOption;
+    /** 조회월 */
+    private String startMonth;
+    private String endMonth;
 
-    public String getOrgnFg() { return orgnFg; }
+    public String getOrgnFg() {
+        return orgnFg;
+    }
 
-    public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
+    public void setOrgnFg(String orgnFg) {
+        this.orgnFg = orgnFg;
+    }
 
-    public String getOrgnCd() { return orgnCd; }
+    public String getOrgnCd() {
+        return orgnCd;
+    }
 
-    public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
+    public void setOrgnCd(String orgnCd) {
+        this.orgnCd = orgnCd;
+    }
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -160,9 +169,13 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
         this.hqOfficeCd = hqOfficeCd;
     }
 
-    public String getStoreCd() { return storeCd; }
+    public String getStoreCd() {
+        return storeCd;
+    }
 
-    public void setStoreCd(String storeCd) { this.storeCd = storeCd; }
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
 
     public String[] getStoreCdList() {
         return storeCdList;
@@ -244,25 +257,45 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
         this.branchCd = branchCd;
     }
 
-    public String getMomsStoreFg01() { return momsStoreFg01; }
+    public String getMomsStoreFg01() {
+        return momsStoreFg01;
+    }
 
-    public void setMomsStoreFg01(String momsStoreFg01) { this.momsStoreFg01 = momsStoreFg01; }
+    public void setMomsStoreFg01(String momsStoreFg01) {
+        this.momsStoreFg01 = momsStoreFg01;
+    }
 
-    public String getMomsStoreFg02() { return momsStoreFg02; }
+    public String getMomsStoreFg02() {
+        return momsStoreFg02;
+    }
 
-    public void setMomsStoreFg02(String momsStoreFg02) { this.momsStoreFg02 = momsStoreFg02; }
+    public void setMomsStoreFg02(String momsStoreFg02) {
+        this.momsStoreFg02 = momsStoreFg02;
+    }
 
-    public String getMomsStoreFg03() { return momsStoreFg03; }
+    public String getMomsStoreFg03() {
+        return momsStoreFg03;
+    }
 
-    public void setMomsStoreFg03(String momsStoreFg03) { this.momsStoreFg03 = momsStoreFg03; }
+    public void setMomsStoreFg03(String momsStoreFg03) {
+        this.momsStoreFg03 = momsStoreFg03;
+    }
 
-    public String getMomsStoreFg04() { return momsStoreFg04; }
+    public String getMomsStoreFg04() {
+        return momsStoreFg04;
+    }
 
-    public void setMomsStoreFg04(String momsStoreFg04) { this.momsStoreFg04 = momsStoreFg04; }
+    public void setMomsStoreFg04(String momsStoreFg04) {
+        this.momsStoreFg04 = momsStoreFg04;
+    }
 
-    public String getMomsStoreFg05() { return momsStoreFg05; }
+    public String getMomsStoreFg05() {
+        return momsStoreFg05;
+    }
 
-    public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+    public void setMomsStoreFg05(String momsStoreFg05) {
+        this.momsStoreFg05 = momsStoreFg05;
+    }
 
     public String[] getUserBrandList() {
         return userBrandList;
@@ -316,13 +349,17 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
         return userId;
     }
 
-    public void setUserId(String userId) { this.userId = userId; }
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getProdHqBrandCd() {
         return prodHqBrandCd;
     }
 
-    public void setProdHqBrandCd(String prodHqBrandCd) { this.prodHqBrandCd = prodHqBrandCd; }
+    public void setProdHqBrandCd(String prodHqBrandCd) {
+        this.prodHqBrandCd = prodHqBrandCd;
+    }
 
     public String[] getProdCdList() {
         return prodCdList;
@@ -336,7 +373,9 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
         return prodCds;
     }
 
-    public void setProdCds(String prodCds) { this.prodCds = prodCds; }
+    public void setProdCds(String prodCds) {
+        this.prodCds = prodCds;
+    }
 
     public String getResrceCd() {
         return resrceCd;
@@ -354,39 +393,75 @@ public class ProdSaleDayStoreMomsVO extends PageVO {
         this.resrceNm = resrceNm;
     }
 
-    public String getDownloadFg() { return downloadFg; }
-
-    public void setDownloadFg(String downloadFg) { this.downloadFg = downloadFg; }
-
-    public String getDownloadUseFg() { return downloadUseFg; }
-
-    public void setDownloadUseFg(String downloadUseFg) { this.downloadUseFg = downloadUseFg; }
-
-    public int getDownloadFileCount() { return downloadFileCount; }
-
-    public void setDownloadFileCount(int downloadFileCount) { this.downloadFileCount = downloadFileCount; }
-
-    public String getDownloadExpectedEndDt() { return downloadExpectedEndDt; }
-
-    public void setDownloadExpectedEndDt(String downloadExpectedEndDt) { this.downloadExpectedEndDt = downloadExpectedEndDt; }
-
-    public String getExpectedTimeSecond() { return expectedTimeSecond; }
-
-    public void setExpectedTimeSecond(String expectedTimeSecond) { this.expectedTimeSecond = expectedTimeSecond; }
-
-    public String getDownloadNo() { return downloadNo; }
-
-    public void setDownloadNo(String downloadNo) { this.downloadNo = downloadNo; }
-
-    public String getSeq() { return seq; }
-
-    public void setSeq(String seq) { this.seq = seq; }
-
-    public String getDayOption() {
-        return dayOption;
+    public String getDownloadFg() {
+        return downloadFg;
     }
 
-    public void setDayOption(String dayOption) {
-        this.dayOption = dayOption;
+    public void setDownloadFg(String downloadFg) {
+        this.downloadFg = downloadFg;
+    }
+
+    public String getDownloadUseFg() {
+        return downloadUseFg;
+    }
+
+    public void setDownloadUseFg(String downloadUseFg) {
+        this.downloadUseFg = downloadUseFg;
+    }
+
+    public int getDownloadFileCount() {
+        return downloadFileCount;
+    }
+
+    public void setDownloadFileCount(int downloadFileCount) {
+        this.downloadFileCount = downloadFileCount;
+    }
+
+    public String getDownloadExpectedEndDt() {
+        return downloadExpectedEndDt;
+    }
+
+    public void setDownloadExpectedEndDt(String downloadExpectedEndDt) {
+        this.downloadExpectedEndDt = downloadExpectedEndDt;
+    }
+
+    public String getExpectedTimeSecond() {
+        return expectedTimeSecond;
+    }
+
+    public void setExpectedTimeSecond(String expectedTimeSecond) {
+        this.expectedTimeSecond = expectedTimeSecond;
+    }
+
+    public String getDownloadNo() {
+        return downloadNo;
+    }
+
+    public void setDownloadNo(String downloadNo) {
+        this.downloadNo = downloadNo;
+    }
+
+    public String getSeq() {
+        return seq;
+    }
+
+    public void setSeq(String seq) {
+        this.seq = seq;
+    }
+
+    public String getStartMonth() {
+        return startMonth;
+    }
+
+    public void setStartMonth(String startMonth) {
+        this.startMonth = startMonth;
+    }
+
+    public String getEndMonth() {
+        return endMonth;
+    }
+
+    public void setEndMonth(String endMonth) {
+        this.endMonth = endMonth;
     }
 }

@@ -93,6 +93,7 @@
                 AND A.VENDR_CD IS NULL
             </otherwise>
         </choose>
+        ORDER BY A.SLIP_NO
          <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

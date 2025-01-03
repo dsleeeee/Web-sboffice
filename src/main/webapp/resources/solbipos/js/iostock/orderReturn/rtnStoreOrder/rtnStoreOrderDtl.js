@@ -384,20 +384,35 @@ app.controller('rtnStoreOrderDtlCtrl', ['$scope', '$http', '$timeout', function 
       params.push(item);
     }
 
+    if (params.length <= 0) {
+      // 저장시, 변경사항이 없으면 return
+      if(saveFg === "save") {
+        $scope._popMsg(messages["cmm.not.modify"]); //cmm.not.modify=변경 사항이 없습니다.
+        return false;
+      }
+    }
 
-    if (saveFg === "confirm") {
-    	$scope.confirm();
+    if (params.length <= 0) {
+      if (saveFg === "confirm") {
+        $scope.confirm();
+      }
+    } else {
+
+      // 주문 저장
+      $scope._postJSONSave.withPopUp("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/save.sb", params, function (response) {
+        if (response.data.data !== null) {
+          $scope.flex.collectionView.clearChanges();
+
+          // 확정버튼 클릭했다면, 주문 저장 후, 확정 진행
+          if (saveFg === "confirm") {
+            $scope.confirm();
+          } else if (saveFg === "save") {
+            $scope.saveOrderDtlCallback();
+          }
+        }
+      });
     }
-      
-    //가상로그인 session 설정
-    if(document.getElementsByName('sessionId')[0]){
-        params['sid'] = document.getElementsByName('sessionId')[0].value;
-    }
-    
-    $scope._save("/iostock/orderReturn/rtnStoreOrder/rtnStoreOrderDtl/save.sb", params, function () {
-        $scope.saveOrderDtlCallback();
-    });
-   
+
   };
 
 
