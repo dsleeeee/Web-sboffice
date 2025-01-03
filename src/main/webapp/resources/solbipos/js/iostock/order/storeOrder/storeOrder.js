@@ -34,7 +34,11 @@ app.controller('storeOrderCtrl', ['$scope', '$http', '$timeout', function ($scop
   $scope._setComboData('vendrCd', vendrList);
 
   // 출고가능일자 세팅
-  $scope.reqDate.value = new Date(getFormatDate(gReqDate, "-"));
+  if(gReqDate !== null && gReqDate !== undefined && gReqDate !== ''){
+    $scope.reqDate.value = new Date(getFormatDate(gReqDate, "-"));
+  }else{
+    $scope.reqDate.value = new Date(getFormatDate(getToday(), "-"));
+  }
   // 출고요청일자 선택가능여부에 따라 출고요청일자 선택여부 처리
   if (gEnvst1044 === "N") {
     $scope.reqDate.isReadOnly = true;

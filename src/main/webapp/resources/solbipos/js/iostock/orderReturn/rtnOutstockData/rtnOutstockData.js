@@ -136,28 +136,36 @@ app.controller('rtnOutstockDataCtrl', ['$scope', '$http', function ($scope, $htt
         item.storageCd = "999";
         item.hqBrandCd = "00"; // TODO 브랜드코드 가져오는건 우선 하드코딩으로 처리. 2018-09-13 안동관
         item.vendrCd   = $scope.vendrCdCombo.selectedValue;
-        item.orderSlipNo = ""; // 주문전표번호 제거 (주문전표번호 기준으로 전표번호를 생성하지 않기 때문에)
+        // item.orderSlipNo = ""; // 주문전표번호 제거 (주문전표번호 기준으로 전표번호를 생성하지 않기 때문에)
         params.push(item);
       }
     }
 
       // 선택한 주문전표 중, 매장이 같으면 하나의 전표로 묶기 위해 중복 매장값 제거
-      var resultArr = [];
-      var flag = true;
-      for (var i = 0; i < params.length; i++) {
-        flag = true;
+    var resultArr = [];
+    var flag = true;
+    var slipNoFlag = false;
+    var tmpNo = '';
+    for (var i = 0; i < params.length; i++) {
+      flag = true;
+      slipNoFlag = false;
 
-        for (var value in resultArr) {
-            if (resultArr[value].storeCd === params[i].storeCd) {
-                flag = false;
-            }
-        }
-
-        if (flag) {
-            resultArr.push(params[i]);
+      for (var value in resultArr) {
+        if (resultArr[value].storeCd === params[i].storeCd) {
+          flag = false;
+          slipNoFlag = true;
         }
       }
-      console.log("반품 중복 제거 후 : " + JSON.stringify(resultArr));
+
+      if (flag) {
+          resultArr.push(params[i]);
+          tmpNo = i;
+      }
+      if (slipNoFlag) {
+        resultArr[tmpNo].orderSlipNo += ',' + params[i].orderSlipNo;
+      }
+    }
+    console.log("반품 중복 제거 후 : " + JSON.stringify(resultArr));
 
     if (!sysStatFgCheck) {
       /** 선택하신 자료 중 매장상태가 오픈이 아닌 매장이 있습니다. 계속하시겠습니까? */

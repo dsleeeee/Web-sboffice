@@ -3,7 +3,9 @@ package kr.co.solbipos.iostock.order.storeOrder.service.impl;
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
+import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.DateUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -16,6 +18,7 @@ import kr.co.solbipos.iostock.order.outstockData.service.impl.OutstockDataMapper
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderDtlVO;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderService;
 import kr.co.solbipos.iostock.order.storeOrder.service.StoreOrderVO;
+import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +54,15 @@ public class StoreOrderServiceImpl implements StoreOrderService {
     private final DstbCloseStoreMapper dstbCloseStoreMapper;
     private final OutstockDataMapper outstockDataMapper;
     private final MessageService messageService;
+    private final CmmEnvService cmmEnvService;
 
     @Autowired
-    public StoreOrderServiceImpl(StoreOrderMapper storeOrderMapper, DstbCloseStoreMapper dstbCloseStoreMapper, OutstockDataMapper outstockDataMapper, MessageService messageService) {
+    public StoreOrderServiceImpl(StoreOrderMapper storeOrderMapper, DstbCloseStoreMapper dstbCloseStoreMapper, OutstockDataMapper outstockDataMapper, MessageService messageService, CmmEnvService cmmEnvService) {
         this.storeOrderMapper = storeOrderMapper;
         this.dstbCloseStoreMapper = dstbCloseStoreMapper;
         this.outstockDataMapper = outstockDataMapper;
         this.messageService = messageService;
+        this.cmmEnvService = cmmEnvService;
     }
 
     /** 주문등록 HD 리스트 조회 */
@@ -363,69 +368,109 @@ public class StoreOrderServiceImpl implements StoreOrderService {
 
         //수발주옵션 환경변수
         String envst1042 = storeOrderVO.getEnvst1042();
+        //거래처출고구분 환경변수
+        HqEnvstVO hqEnvstVO = new HqEnvstVO();
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEnvstVO.setEnvstCd("1242");
+        String envst1242 = CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0");
 
         //매장확정시 출고 환경변수가 출고자료생성인 경우 출고자료를 생성한다.
         if(StringUtil.getOrBlank(envst1042).equals("2")) {				//1042 수발주옵션 - 0:매장확정안함, 1:매장확정(분배마감), 2:매장확정(출고자료생성)
-            //전표번호 조회
-            String 			yymm 		= DateUtil.currentDateString().substring(2,6); //새로운 전표번호 생성을 위한 년월(YYMM)
 
-            OutstockDataVO 	maxSlipNoVO = new OutstockDataVO();
-				            maxSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-				            maxSlipNoVO.setYymm(yymm);
+            String yymm = DateUtil.currentDateString().substring(2, 6); //새로운 전표번호 생성을 위한 년월(YYMM)
+            OutstockDataVO maxSlipNoVO = new OutstockDataVO();
+            maxSlipNoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            maxSlipNoVO.setYymm(yymm);
 
-            String 			maxSlipNo 	= outstockDataMapper.getMaxSlipNo(maxSlipNoVO);
-            Long 			maxSlipNoIdx= Long.valueOf(maxSlipNo.substring(4));
-            int 			slipNoIdx 	= 0;
+            String maxSlipNo = outstockDataMapper.getMaxSlipNo(maxSlipNoVO);
+            Long maxSlipNoIdx = Long.valueOf(maxSlipNo.substring(4));
+            int slipNoIdx = 0;
 
-            OutstockDataVO 	outstockDataVO = new OutstockDataVO();
-            outstockDataVO.setHqOfficeCd(dstbCloseStoreVO.getHqOfficeCd	() );
-            outstockDataVO.setStoreCd	(dstbCloseStoreVO.getStoreCd	() );
-            outstockDataVO.setSlipFg	(dstbCloseStoreVO.getSlipFg		() );
-            outstockDataVO.setEmpNo		(dstbCloseStoreVO.getEmpNo   	() );
-            outstockDataVO.setRegId		(dstbCloseStoreVO.getRegId		() );
-            outstockDataVO.setRegDt		(dstbCloseStoreVO.getRegDt		() );
-            outstockDataVO.setModId		(dstbCloseStoreVO.getModId		() );
-            outstockDataVO.setModDt		(dstbCloseStoreVO.getModDt		() );
+            OutstockDataVO outstockDataVO = new OutstockDataVO();
+            outstockDataVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            outstockDataVO.setRegId(sessionInfoVO.getUserId());
+            outstockDataVO.setRegDt(currentDt);
+            outstockDataVO.setModId(sessionInfoVO.getUserId());
+            outstockDataVO.setModDt(currentDt);
+            outstockDataVO.setOrderSlipNo(dstbCloseStoreVO.getOrderSlipNo());
+            outstockDataVO.setSlipFg(dstbCloseStoreVO.getSlipFg());
+            outstockDataVO.setStoreCd(dstbCloseStoreVO.getStoreCd());
+            outstockDataVO.setEmpNo(dstbCloseStoreVO.getEmpNo());
             outstockDataVO.setReqDate(dstbCloseStoreVO.getReqDate());
-            outstockDataVO.setVendrCd(dstbCloseStoreVO.getVendrCd());
             outstockDataVO.setDateFg("req");
             outstockDataVO.setStartDate(dstbCloseStoreVO.getReqDate());
             outstockDataVO.setEndDate(dstbCloseStoreVO.getReqDate());
-            outstockDataVO.setOrderSlipNo(dstbCloseStoreVO.getOrderSlipNo());
+            if(outstockDataVO.getOrderSlipNo() != null && !"".equals(outstockDataVO.getOrderSlipNo())) {
+                String[] orderSlipNoList = outstockDataVO.getOrderSlipNo().split(",");
+                outstockDataVO.setOrderSlipNoList(orderSlipNoList);
+            }
 
-            //직배송거래처 및 배송기사 조회
-            //List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
-            //LOGGER.debug("### storeVendrDlvrList.size(): " + storeVendrDlvrList.size());
+            if(StringUtil.getOrBlank(envst1242).equals("2")){       //거래처출고구분 2 : 거래처별출고전표생성
 
-            //for(int i=0; i < storeVendrDlvrList.size(); i++) {
+                List<DefaultMap<String>> storeVendrList = outstockDataMapper.getStoreVendr(outstockDataVO);
+                for (int i = 0; i < storeVendrList.size(); i++) {
+
+                    slipNoIdx++;
+                    String slipNo = yymm + StringUtil.lpad(String.valueOf(maxSlipNoIdx + slipNoIdx), 6, "0");
+                    String vendrCd = StringUtil.getOrBlank(storeVendrList.get(i).get("vendrCd"));
+
+                    // TB_PO_HQ_STORE_DISTRIBUTE 수정
+                    outstockDataVO.setProcFg("20");
+                    outstockDataVO.setUpdateProcFg("30");
+                    outstockDataVO.setSlipNo(slipNo);
+                    outstockDataVO.setVendrCd(vendrCd);
+                    result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
+                    //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
+                    outstockDataVO.setOutDate(storeOrderVO.getReqDate());    //출고일자 (수불기준일자)
+                    result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);
+                    //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+
+                    // TB_PO_HQ_STORE_OUTSTOCK 자료입력
+                    outstockDataVO.setSlipKind("0");                            //전표종류	0:일반 1:물량오류 2:이동
+                    outstockDataVO.setRemark(storeOrderVO.getRemark());    //비고
+                    result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);
+                    //if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                }
+
+            }else {
+
+                outstockDataVO.setVendrCd(dstbCloseStoreVO.getVendrCd());
+
+                //직배송거래처 및 배송기사 조회
+                //List<DefaultMap<String>> storeVendrDlvrList = outstockDataMapper.getStoreVendrDlvr(outstockDataVO);
+                //LOGGER.debug("### storeVendrDlvrList.size(): " + storeVendrDlvrList.size());
+
+                //for(int i=0; i < storeVendrDlvrList.size(); i++) {
                 slipNoIdx++;
-                String slipNo    = yymm + StringUtil.lpad(String.valueOf(maxSlipNoIdx + slipNoIdx), 6, "0");
+                String slipNo = yymm + StringUtil.lpad(String.valueOf(maxSlipNoIdx + slipNoIdx), 6, "0");
                 //String vendrCd   = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("vendrCd"));
                 //String dlvrCd    = StringUtil.getOrBlank(storeVendrDlvrList.get(i).get("dlvrCd"));
 
                 //TB_PO_HQ_STORE_DISTRIBUTE 수정
-                outstockDataVO.setProcFg		("20");	//00:등록, 10:MD확정, 20:분배마감, 30:전표수거
-                outstockDataVO.setUpdateProcFg	("30");	//00:등록, 10:MD확정, 20:분배마감, 30:전표수거
-                outstockDataVO.setSlipNo		(slipNo);
+                outstockDataVO.setProcFg("20");    //00:등록, 10:MD확정, 20:분배마감, 30:전표수거
+                outstockDataVO.setUpdateProcFg("30");    //00:등록, 10:MD확정, 20:분배마감, 30:전표수거
+                outstockDataVO.setSlipNo(slipNo);
                 //outstockDataVO.setVendrCd		(vendrCd);
                 result = outstockDataMapper.updateDstbDataCreate(outstockDataVO);
                 //if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-                
-                outstockDataVO.setOutDate	(storeOrderVO.getReqDate());	//출고일자 (수불기준일자)
+
+                outstockDataVO.setOutDate(storeOrderVO.getReqDate());    //출고일자 (수불기준일자)
                 //TB_PO_HQ_STORE_OUTSTOCK_DTL 자료입력
-                result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);	//TB_PO_HQ_STORE_DISTRIBUTE의 '전표수거(PROC_FG='30')인 자료를, TB_PO_HQ_STORE_OUTSTOCK_DTL에 Insert
+                result = outstockDataMapper.insertOutstockDtlDataCreate(outstockDataVO);    //TB_PO_HQ_STORE_DISTRIBUTE의 '전표수거(PROC_FG='30')인 자료를, TB_PO_HQ_STORE_OUTSTOCK_DTL에 Insert
                 //if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
 
                 //TB_PO_HQ_STORE_OUTSTOCK 자료입력
                 //outstockDataVO.setDlvrCd	(dlvrCd);
-                outstockDataVO.setSlipKind	("0");							//전표종류	0:일반 1:물량오류 2:이동
+                outstockDataVO.setSlipKind("0");                            //전표종류	0:일반 1:물량오류 2:이동
 //                outstockDataVO.setOutDate	(storeOrderVO.getReqDate());	//출고일자 (수불기준일자)
-                outstockDataVO.setRemark	(storeOrderVO.getRemark ());	//비고
-              //outstockDataVO.setHqRemark	();								//본사비고 (매장은 열람불가)
-                result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);		//TB_PO_HQ_STORE_OUTSTOCK_DTL SUM값등을 Insert
+                outstockDataVO.setRemark(storeOrderVO.getRemark());    //비고
+                //outstockDataVO.setHqRemark	();								//본사비고 (매장은 열람불가)
+                result = outstockDataMapper.insertOutstockDataCreate(outstockDataVO);        //TB_PO_HQ_STORE_OUTSTOCK_DTL SUM값등을 Insert
                 //if(result <= 0) throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.saveFail"));
-            //}
-
+                //}
+            }
         }
 
         //For TEST

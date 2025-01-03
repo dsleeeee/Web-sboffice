@@ -122,6 +122,8 @@ public class RtnOutstockDataVO extends PageVO {
     private String reqDate;
     /** 주문전표번호*/
     private String orderSlipNo;
+    /** 주문전표번호*/
+    private String[] orderSlipNoList;
 
     /**
      * @return the hqOfficeCd
@@ -921,5 +923,13 @@ public class RtnOutstockDataVO extends PageVO {
 
     public void setOrderSlipNo(String orderSlipNo) {
         this.orderSlipNo = orderSlipNo;
+    }
+
+    public String[] getOrderSlipNoList() {
+        return orderSlipNoList;
+    }
+
+    public void setOrderSlipNoList(String[] orderSlipNoList) {
+        this.orderSlipNoList = orderSlipNoList;
     }
 }

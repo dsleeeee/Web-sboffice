@@ -409,7 +409,6 @@
     <select id="getHqVendrProdList" parameterType="vendrVO" resultType="DefaultMap">
         /* USE : VendrMapper.getHqVendrProdList */
         SELECT
-        ROWNUM AS RNUM,
         thvp.PROD_CD,
         thp.PROD_NM,
         thp.SPLY_UPRC,
@@ -437,6 +436,7 @@
                                         CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
             )
         </if>
+        ORDER BY PROD_CD
     </select>
 
     <!-- 취급상품(매장) -->
@@ -448,7 +448,6 @@
     <select id="getMsVendrProdList" parameterType="vendrVO" resultType="DefaultMap">
         /* USE : VendrMapper.getMsVendrProdList */
         SELECT
-        ROWNUM AS RNUM,
         tmvp.PROD_CD,
         tmp.PROD_NM,
         tmp.SPLY_UPRC,
@@ -488,7 +487,6 @@
     <select id="getHqProdList" parameterType="vendrVO" resultType="DefaultMap">
         /* USE : VendrMapper.getHqProdList */
         SELECT
-        ROWNUM AS RNUM,
         PROD_CD,
         PROD_NM,
         SPLY_UPRC
@@ -522,6 +520,7 @@
             AND thvp.VENDR_CD = #{vendrCd}
             AND thvp.USE_YN = 'Y'
         )
+        ORDER BY PROD_CD
     </select>
 
     <!-- 미취급상품(매장) -->
@@ -533,7 +532,6 @@
     <select id="getMsProdList" parameterType="vendrVO" resultType="DefaultMap">
         /* USE : VendrMapper.getMsProdList */
         SELECT
-        ROWNUM AS RNUM,
         PROD_CD,
         PROD_NM,
         SPLY_UPRC

@@ -136,6 +136,6 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/info.js?ver=20240328.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/info.js?ver=20241231.01" charset="utf-8"></script>
 
 
