@@ -35,6 +35,7 @@
 	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.saleDate"/>" 		binding="saleDate" 		width="100" align="center"></wj-flex-grid-column>
 	          <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.billCnt"/>" 		binding="billCnt" 		width="100" align="center" aggregate="Sum"></wj-flex-grid-column>
           	  <wj-flex-grid-column header="<s:message code="saleAnalsMonthly.realSaleAmt"/>"	binding="realSaleAmt" 	width="130" align="right" aggregate="Sum"></wj-flex-grid-column>
+			</wj-flex-grid>
 	      </div>
 	      <%-- ColumnPicker 사용시 include --%>
           <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
@@ -48,7 +49,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthlyMoms/saleAnalsMonthlyMomsStore.js?ver=20230413.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/monthlyMoms/saleAnalsMonthlyMomsStore.js?ver=20250106.01" charset="utf-8"></script>
 
 <%-- 영수증 팝업 상세 레이어 --%>
 <%-- <c:import url="/WEB-INF/view/sale/com/popup/billSalePop.jsp">--%>

@@ -50,11 +50,11 @@ app.controller('saleAnalsMonthlyMomsStoreCtrl', ['$scope', '$http', '$timeout', 
 
   // 다른 컨트롤러의 broadcast 받기
   $scope.$on("saleAnalsMonthlyMomsStoreCtrl", function (event, data) {
-    $("#spanTitle").text(data.saleDate + " 매출현황");
+
 	$scope.storeCd  	= data.storeCd;
 	$scope.saleDate  	= data.saleDate;
 	$scope.hqOfficeCd  	= data.hqOfficeCd;
-	
+
     $scope.monthlyMomsStoreLayer.show(true);
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
@@ -70,6 +70,7 @@ app.controller('saleAnalsMonthlyMomsStoreCtrl', ['$scope', '$http', '$timeout', 
     params.storeCd   = $scope.storeCd;
     params.saleDate = $scope.saleDate;
     params.hqOfficeCd = $scope.hqOfficeCd;
+    $("#spanTitle").text($scope.saleDate + " 매출현황");
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/sale/anals/monthlyMoms/monthlyMoms/getSaleAnalsMonthlyMomsStoreList.sb", params);
