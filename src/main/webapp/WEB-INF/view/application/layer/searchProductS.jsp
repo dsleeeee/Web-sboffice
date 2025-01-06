@@ -51,22 +51,24 @@
               </wj-combo-box>
             </div>
           </td>
-          <%-- 사용여부 --%>
-          <th><s:message code="popup.product.usesYn" /></th>
-          <td>
-              <div class="sb-select">
-                  <wj-combo-box
-                          id="srchUseYnCombo"
-                          ng-model="popUseYn"
-                          items-source="_getComboData('srchUseYnCombo')"
-                          display-member-path="name"
-                          selected-value-path="value"
-                          is-editable="false"
-                          control="srchUseYnCombo"
-                          selected-index="1">
-                  </wj-combo-box>
-              </div>
-          </td>
+        </tr>
+        <tr>
+            <%-- 사용여부 --%>
+            <th><s:message code="popup.product.usesYn"/></th>
+            <td>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchUseYnCombo"
+                            ng-model="popUseYn"
+                            items-source="_getComboData('srchUseYnCombo')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            control="srchUseYnCombo"
+                            selected-index="1">
+                    </wj-combo-box>
+                </div>
+            </td>
         </tr>
         </tbody>
       </table>
@@ -169,7 +171,7 @@
   // 사용자 브랜드
   var pSUserHqBrandCdComboList = "";
   // 사용여부
-  var useYnFg = ${ccu.getCommCodeExcpAll("067")};
+  var useYnFg = ${ccu.getCommCode("067")};
 
   /** 매장선택 controller */
   app.controller('${param.targetId}Ctrl', ['$scope', '$http', function ($scope, $http) {
