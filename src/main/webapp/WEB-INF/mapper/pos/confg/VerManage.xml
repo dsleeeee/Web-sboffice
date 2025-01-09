@@ -327,8 +327,43 @@
                     ,       COUNT(POS_NO) AS POS_CNT
                     FROM    TB_MS_POS
                     WHERE   USE_YN ='Y'
+                    AND     STORE_CD NOT IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
                     GROUP
-                    by      STORE_CD
+                    BY      STORE_CD
+                <if test='progFg != null and progFg == "1"'>
+                    UNION
+                    SELECT  STORE_CD
+                    ,       COUNT(POS_NO) AS POS_CNT
+                    FROM    TB_MS_POS
+                    WHERE   USE_YN ='Y'
+                    AND     STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+                    AND     STORE_CD || POS_NO NOT IN (
+                                                            SELECT 	STORE_CD || POS_NO AS POS_NO
+                                                            FROM 	TB_MS_POS_ENVST
+                                                            WHERE 	ENVST_CD = '4019'
+                                                            AND 	ENVST_VAL = '6'
+                                                            AND     STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+                                                      )
+                    GROUP
+                    BY      STORE_CD
+                </if>
+                <if test='progFg != null and progFg == "2"'>
+                    UNION
+                    SELECT  STORE_CD
+                    ,       COUNT(POS_NO) AS POS_CNT
+                    FROM    TB_MS_POS
+                    WHERE   USE_YN ='Y'
+                    AND     STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+                    AND     STORE_CD || POS_NO IN (
+                                                            SELECT 	STORE_CD || POS_NO AS POS_NO
+                                                            FROM 	TB_MS_POS_ENVST
+                                                            WHERE 	ENVST_CD = '4019'
+                                                            AND 	ENVST_VAL = '6'
+                                                            AND     STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+                                                      )
+                    GROUP
+                    BY      STORE_CD
+                </if>
                 ) tmp
                 <if test='searchSatus != null and searchSatus == "N"'>
         ,       (
@@ -336,6 +371,16 @@
                     FROM    TB_MS_STORE_ENVST
                     WHERE   ENVST_CD = '1014'
                     AND     ENVST_VAL = #{progFg}
+                    <if test='progFg != null and progFg == "2"'>
+                    UNION
+                    SELECT 	STORE_CD
+                    FROM 	TB_MS_POS_ENVST
+                    WHERE 	ENVST_CD = '4019'
+                    AND 	ENVST_VAL = '6'
+                    AND     STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+                    GROUP
+                    BY      STORE_CD
+                    </if>
                 ) tmse
                 </if>
         ,       (
@@ -409,12 +454,14 @@
             CALL PKG_CM_VERSN_STORE.SP_CM_VERSN_STORE_I
             (
                 #{verSerNo},
+                #{hqOfficeCd},
                 #{storeCd},
                 #{regDt},
                 #{regId},
                 #{modDt},
                 #{modId},
                 #{resveDate},
+                #{progFg},
                 #{result, mode=OUT, jdbcType=VARCHAR}
             )
         }

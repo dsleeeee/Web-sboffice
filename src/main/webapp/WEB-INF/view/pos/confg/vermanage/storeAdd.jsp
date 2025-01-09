@@ -7,7 +7,7 @@
 <c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <%-- 매장추가 레이어 --%>
-<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:710px;">
+<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:730px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -272,7 +272,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20241213.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20250109.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

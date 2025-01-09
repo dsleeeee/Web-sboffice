@@ -213,10 +213,12 @@ app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // NXPOS_V1/V2 외에 적용매장등록된 내역이 있습니다.<br>[포스관리] - [POS 설정관리] - [매장별 POS 버전 삭제] 에서 관리 후 진행하여 주십시오.
     for (var i = 0; i < sScope.flex.collectionView.items.length; i++) {
       if (sScope.flex.collectionView.items[i].gChk) {
-        if(sScope.flex.collectionView.items[i].diffVerCnt > 0){
-          sScope._popMsg( "NXPOS_V" + manageVer + messages["verManage.store.diffVerCnt.chk.msg"]);
-          return false;
-        }
+          if(sScope.flex.collectionView.items[i].hqOfficeCd !== "A0001") { // A0001보나비 예외처리(키오스크 포스는 다른버전 사용 가능)
+              if (sScope.flex.collectionView.items[i].diffVerCnt > 0) {
+                  sScope._popMsg("NXPOS_V" + manageVer + messages["verManage.store.diffVerCnt.chk.msg"]);
+                  return false;
+              }
+          }
       }
     }
 
@@ -225,6 +227,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     for (var i = 0; i < sScope.flex.collectionView.items.length; i++) {
       if(sScope.flex.collectionView.items[i].gChk) {
         sScope.flex.collectionView.items[i].verSerNo = ver;
+        sScope.flex.collectionView.items[i].progFg = manageVer;
         sScope.flex.collectionView.items[i].resveDate = resveDate;
         params.push(sScope.flex.collectionView.items[i]);
       }
@@ -351,7 +354,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // NXPOS_V1/V2 외에 적용매장등록된 내역이 있습니다.<br>[포스관리] - [POS 설정관리] - [매장별 POS 버전 삭제] 에서 관리 후 진행하여 주십시오.
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
         if ($scope.flex.collectionView.items[i].gChk) {
-            if($scope.flex.collectionView.items[i].storeCd !== "DS89117") { // DS89117은 예외 처리
+            if($scope.flex.collectionView.items[i].storeCd !== "DS89117" && $scope.flex.collectionView.items[i].hqOfficeCd !== "A0001") { // DS89117, A0001보나비 예외처리(키오스크 포스는 다른버전 사용 가능)
                 if ($scope.flex.collectionView.items[i].diffVerCnt > 0) {
                     $scope._popMsg("NXPOS_V" + manageVer + messages["verManage.store.diffVerCnt.chk.msg"]);
                     return false;
@@ -363,6 +366,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {
         $scope.flex.collectionView.items[i].verSerNo = ver;
+        $scope.flex.collectionView.items[i].progFg = manageVer;
         params.push($scope.flex.collectionView.items[i]);
       }
     }
