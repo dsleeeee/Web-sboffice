@@ -10,6 +10,7 @@ import kr.co.kcp.CT_CLI;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageService;
 import kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO;
+import kr.co.solbipos.base.price.chgCostPrice.service.ChgCostPriceVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 
 /**
  * @Class Name : SmsTelNoManageController.java
@@ -597,5 +599,28 @@ public class SmsTelNoManageController {
         DefaultMap<String> result = smsTelNoManageService.getSmsPreviewFileNm(smsTelNoManageVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 일반번호 인증요청 처리2 팝업 - 중복체크
+     *
+     * @param   smsTelNoManageVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 01. 07.
+     */
+    @RequestMapping(value = "/smsGeneralNoManage2/getDupChkTelNo.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDupChkTelNo(SmsTelNoManageVO smsTelNoManageVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = smsTelNoManageService.getDupChkTelNo(smsTelNoManageVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, smsTelNoManageVO);
     }
 }

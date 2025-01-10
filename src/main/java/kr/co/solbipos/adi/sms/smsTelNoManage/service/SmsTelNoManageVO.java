@@ -75,6 +75,18 @@ public class SmsTelNoManageVO extends PageVO {
     /** 다운로드 파일명 */
     private String downloadFileName;
 
+    /** 전화번호 */
+    private String chkTelNo;
+
+    /** 전화번호 */
+    private String[] chkTelNoList;
+
+    /** 전화번호 */
+    private String modTelNo;
+
+    /** 전화번호 */
+    private String[] modTelNoList;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -146,4 +158,34 @@ public class SmsTelNoManageVO extends PageVO {
     public String getDownloadFileName() { return downloadFileName; }
 
     public void setDownloadFileName(String downloadFileName) { this.downloadFileName = downloadFileName; }
+
+    public String getChkTelNo() { return chkTelNo; }
+
+    public void setChkTelNo(String chkTelNo) {
+        this.chkTelNo = chkTelNo;
+    }
+
+    public String[] getChkTelNoList() {
+        return chkTelNoList;
+    }
+
+    public void setChkTelNoList(String[] chkTelNoList) {
+        this.chkTelNoList = chkTelNoList;
+    }
+
+    public String getModTelNo() {
+        return modTelNo;
+    }
+
+    public void setModTelNo(String modTelNo) {
+        this.modTelNo = modTelNo;
+    }
+
+    public String[] getModTelNoList() {
+        return modTelNoList;
+    }
+
+    public void setModTelNoList(String[] modTelNoList) {
+        this.modTelNoList = modTelNoList;
+    }
 }

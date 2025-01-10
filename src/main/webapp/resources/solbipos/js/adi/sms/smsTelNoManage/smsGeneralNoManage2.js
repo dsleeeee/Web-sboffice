@@ -45,6 +45,13 @@ var addProcFgComboData = [
     {"name":"반려","value":"3"}
 ];
 
+var addProcFgComboData2 = [
+    {"name":"접수","value":"0"},
+    {"name":"처리중","value":"1"},
+    {"name":"완료","value":"2"},
+    {"name":"반려","value":"3"}
+];
+
 /**
  *  일반번호 인증요청 처리2 팝업 조회 그리드 생성
  */
@@ -62,7 +69,7 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
         $scope.vfYnDataMap = new wijmo.grid.DataMap(vfYnData, 'value', 'name'); // 본인인증 여부
         $scope.telFgDataMap = new wijmo.grid.DataMap(telFgData, 'value', 'name'); // 발신번호 유형
         $scope.addSmsFgDataMap = new wijmo.grid.DataMap(addSmsFgData, 'value', 'name'); // 발신번호 명의자
-        $scope.addProcFgDataMap = new wijmo.grid.DataMap(addProcFgComboData, 'value', 'name'); // 처리구분
+        $scope.addProcFgDataMap = new wijmo.grid.DataMap(addProcFgComboData2, 'value', 'name'); // 처리구분
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -326,6 +333,9 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
         }
 
         $scope._popConfirm(messages["cmm.choo.save"], function() {
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -335,27 +345,124 @@ app.controller('smsGeneralNoManage2Ctrl', ['$scope', '$http', function ($scope, 
                 }
             }
             if (params.length <= 0) {
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
                 $scope._popMsg(messages["cmm.not.modify"]);
                 return;
             }
 
-            // 신규 발신번호 중복체크
-            $scope._postJSONSave.withPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageCount.sb", params, function (response) {
-                var result = response.data.data;
-                if(result < 1) {
-                    $scope.saveSmsGeneralNoManage(params);
-                } else {
-                    $scope._popMsg(messages["smsGeneralNoManage2.sameTelNoAlert"]); // 기존에 등록된 전화번호입니다.
-                    return false;
+            // 중복체크
+            var chkTelNo = '';
+            var modTelNo = '';
+            var chkParams = {};
+            var msg = '';
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                // 처리구분 = 완료이고 수정 시
+                if(nvl($scope.flex.collectionView.items[i].addProcFg, "") === "2" && nvl($scope.flex.collectionView.items[i].status, "") === "U") {
+                    if (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") !== "2") {
+                        chkTelNo += $scope.flex.collectionView.items[i].telNo + ",";
+                    } else if (nvl($scope.flex.collectionView.items[i].backAddProcFg, "") === "2") {
+                        if(nvl($scope.flex.collectionView.items[i].telNo, "") !== nvl($scope.flex.collectionView.items[i].backTelNo, "")) {
+                            chkTelNo += $scope.flex.collectionView.items[i].telNo + ",";
+                            modTelNo += $scope.flex.collectionView.items[i].backTelNo + ",";
+                        }
+                    }
                 }
-            });
+                // 처리구분 != 완료이고 수정 시
+                else if(nvl($scope.flex.collectionView.items[i].addProcFg, "") !== "2" && nvl($scope.flex.collectionView.items[i].status, "") === "U") {
+                    if(nvl($scope.flex.collectionView.items[i].backAddProcFg, "") === "2") {
+                        modTelNo += $scope.flex.collectionView.items[i].backTelNo + ",";
+                    }
+                }
+            }
+
+            chkParams.chkTelNo = chkTelNo.substr(0 , chkTelNo.length-1);
+            chkParams.modTelNo = modTelNo.substr(0 , modTelNo.length-1);
+
+            // 수정 값 중복체크
+            var chkTelNoArr = {};
+            var dupTelNo = '';
+            chkTelNoArr = chkParams.chkTelNo.split(",");
+            for(var i=0; i<chkTelNoArr.length; i++){
+                for(var j=0; j<chkTelNoArr.length; j++){
+                    if(i !== j){
+                        if(chkTelNoArr[i] == chkTelNoArr[j]){
+                            dupTelNo += chkTelNoArr[j] + ",";
+                        }
+                    }
+                }
+            }
+
+
+            if(dupTelNo !== null && dupTelNo !== ""){
+                var msg = messages["smsTelNoStop.dupTelNo"] + "<br/> (";
+                msg += dupTelNo;
+                msg = msg.substr(0,msg.length - 1);
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                $scope._popMsg(msg + ")");  //  중복되는 전화번호가 존재합니다. 확인하여 주십시오.
+            }else{
+                if(chkParams.chkTelNo !== null && chkParams.chkTelNo !== ""){
+                    $scope.dupChkTelNo(chkParams,params);
+                }else{
+                    $scope.saveSmsGeneralNoManage(params);
+                }
+            }
+
+
+            // 신규 발신번호 중복체크
+            // $scope._postJSONSave.withOutPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageCount.sb", params, function (response) {
+            //     var result = response.data.data;
+            //     if(result < 1) {
+            //         $scope.saveSmsGeneralNoManage(params);
+            //     } else {
+            //         $scope._popMsg(messages["smsGeneralNoManage2.sameTelNoAlert"]); // 기존에 등록된 전화번호입니다.
+            //         return false;
+            //     }
+            // });
         });
     });
+
+    $scope.dupChkTelNo = function(chkParams,params){
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONQuery.withOutPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage2/getDupChkTelNo.sb", chkParams, function(response){
+            var list = response.data.data.list;
+            var msg = '';
+            if(list.length > 0){
+                msg = messages["smsTelNoStop.dupTelNo"] + "<br/> (";
+                for(var i=0; i<list.length; i++){
+                    msg += list[i].telNo + ",";
+                }
+                msg = msg.substr(0,msg.length - 1);
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                $scope._popMsg(msg + ")");  //  중복되는 전화번호가 존재합니다. 확인하여 주십시오.
+            }else{
+                $scope.saveSmsGeneralNoManage(params);
+            }
+
+        });
+    };
+
+    // $scope.getSmsGeneralNoManageCount= function (params){
+    //
+    //     // 신규 발신번호 중복체크
+    //     $scope._postJSONSave.withOutPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage/getSmsGeneralNoManageCount.sb", params, function (response) {
+    //         var result = response.data.data;
+    //         if(result < 1) {
+    //             $scope.saveSmsGeneralNoManage(params);
+    //         } else {
+    //             $scope._popMsg(messages["smsGeneralNoManage2.sameTelNoAlert"]); // 기존에 등록된 전화번호입니다.
+    //             $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+    //             return false;
+    //         }
+    //     });
+    // }
 
     $scope.saveSmsGeneralNoManage = function(params){
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/adi/sms/smsTelNoManage/smsGeneralNoManage2/getSmsGeneralNoManage2Save.sb", params, function(){
             $scope.searchSmsGeneralNoManage();
+            var scope = agrid.getScope('smsTelNoStopCtrl');
+            scope.searchSmsTelNoStop();
         });
     };
     // <-- //저장 호출 -->

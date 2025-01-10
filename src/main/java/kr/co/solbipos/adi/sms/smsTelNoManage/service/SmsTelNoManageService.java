@@ -63,4 +63,8 @@ public interface SmsTelNoManageService {
 
     /** SMS 발신번호 서류인증 미리보기 팝업 - 조회 */
     DefaultMap<String> getSmsPreviewFileNm(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfo);
+
+    /** 일반번호 인증요청 처리2 팝업 - 중복체크 */
+    List<DefaultMap<String>> getDupChkTelNo(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO);
+
 }

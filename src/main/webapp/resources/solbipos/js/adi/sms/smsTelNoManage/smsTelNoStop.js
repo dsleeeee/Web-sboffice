@@ -42,11 +42,41 @@ app.controller('smsTelNoStopCtrl', ['$scope', '$http', function ($scope, $http) 
     // 저장
     $scope.save = function() {
         $scope._popConfirm(messages["cmm.choo.save"], function() {
+
             // 파라미터 설정
             var params = new Array();
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
                 $scope.flex.collectionView.itemsEdited[i].telNo = $scope.flex.collectionView.itemsEdited[i].telNo.replaceAll("-", "");
                 params.push($scope.flex.collectionView.itemsEdited[i]);
+            }
+
+            // 전화번호 중복 값 확인
+            var chkParams = new Array();
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                if($scope.flex.collectionView.items[i].useYn === 'Y') {
+                    chkParams.push($scope.flex.collectionView.items[i]);
+                }
+            }
+
+            var chkTelNo = '';
+            for(var i=0; i <chkParams.length; i++){
+                for(var j=0; j<chkParams.length; j++){
+                    if(i !== j) {
+                        if (chkParams[i].telNo == chkParams[j].telNo) {
+                            if (chkTelNo.indexOf(chkParams[j].telNo) === -1) {
+                                chkTelNo += chkParams[j].telNo + ",";
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(chkTelNo !== ''){
+                chkTelNo = chkTelNo.substr(0 , chkTelNo.length-1);
+                var msg = messages["smsTelNoStop.dupTelNo"];
+                msg += '<br/>' + "(" + chkTelNo + ")";
+                $scope._popMsg(msg);
+                return false;
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
