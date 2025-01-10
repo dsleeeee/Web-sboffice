@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<script type="text/javascript" src="/resource/vendor/angularjs/mutation_events.min.js?ver=1"></script>
+
 <%-- favicon 요청시 404 에러를 피하기 위한 설정 : TODO 추후 favicon 등록할것 --%>
 <link rel="shortcut icon" href="data:image/x-icon" type="image/x-icon">
 

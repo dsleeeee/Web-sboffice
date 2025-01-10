@@ -98,7 +98,6 @@
         FROM    HCS_SENDM_T
         WHERE   SBPENC.D(TEL_NO) = #{telNo}
         AND     OGN_CD = #{orgnCd}
-        AND     USE_YN = 'Y'
     </select>
 
     <!-- 발신번호관리 수정 -->
@@ -162,7 +161,8 @@
         hst.OGN_CD AS ORGN_CD,
         twuidv01.ORGN_NM,
         SBPENC.D(hst.TEL_NO) AS TEL_NO,
-        hst.USE_YN
+        hst.USE_YN,
+        hst.CERT_ID
         FROM HCS_SENDM_T hst,
         (
             SELECT
@@ -287,6 +287,7 @@
         WHERE 1=1
         AND OGN_CD = #{orgnCd}
         AND SBPENC.D(TEL_NO) = #{backTelNo}
+        AND CERT_ID = #{certId}
     </delete>
 
     <!-- 일반번호 인증요청 처리 팝업 - 발신번호 등록 요청 저장(발신번호 등록전 상태로) -->
@@ -437,4 +438,31 @@
         AND tcasn.CERT_ID = #{certId}
     </select>
 
+    <!-- 일반번호 인증요청 처리2 팝업 - 중복체크  -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getDupChkTelNo" resultType="DefaultMap">
+        /* SmsTelNoManageMapper.getDupChkTelNo */
+        SELECT  SBPENC.D(A.TEL_NO) AS TEL_NO
+        FROM    HCS_SENDM_T A
+        ,		TB_CM_ADD_SMS_NO B
+        WHERE   A.USE_YN 			= 'Y'
+        AND 	B.TEL_NO 	 	(+) = A.TEL_NO
+        AND 	B.CERT_ID 	 	(+) = A.CERT_ID
+        AND 	B.ADD_PROC_FG	(+) = '2'
+        <if test='chkTelNo != null and chkTelNo != ""'>
+            AND SBPENC.D(A.TEL_NO) IN
+            <foreach collection="chkTelNoList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test='modTelNo != null and modTelNo != ""'>
+            AND SBPENC.D(A.TEL_NO) NOT IN
+            <foreach collection="modTelNoList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
+        </if>
+    </select>
 </mapper>

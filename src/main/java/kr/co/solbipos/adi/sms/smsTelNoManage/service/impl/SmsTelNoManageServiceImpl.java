@@ -260,7 +260,7 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
         return smsTelNoManageMapper.getSmsGeneralNoManage2List(smsTelNoManageVO);
     }
 
-    /** 일반번호 인증요청 처리 팝업 - 저장 */
+    /** 일반번호 인증요청 처리 팝업2 - 저장 */
     @Override
     public int getSmsGeneralNoManage2Save(SmsTelNoManageVO[] smsTelNoManageVOs, SessionInfoVO sessionInfoVO) {
 
@@ -327,4 +327,23 @@ public class SmsTelNoManageServiceImpl implements SmsTelNoManageService {
 
         return smsTelNoManageMapper.getSmsPreviewFileNm(smsTelNoManageVO);
     }
+
+    /** 일반번호 인증요청 처리2 팝업 - 중복체크 */
+    @Override
+    public List<DefaultMap<String>> getDupChkTelNo(SmsTelNoManageVO smsTelNoManageVO, SessionInfoVO sessionInfoVO) {
+
+        if(smsTelNoManageVO.getChkTelNo() != null && smsTelNoManageVO.getChkTelNo() != "") {
+            String[] chkTelNoList = smsTelNoManageVO.getChkTelNo().split(",");
+            smsTelNoManageVO.setChkTelNoList(chkTelNoList);
+        }
+
+        if(smsTelNoManageVO.getModTelNo() != null && smsTelNoManageVO.getModTelNo() != "") {
+            String[] modTelNoList = smsTelNoManageVO.getModTelNo().split(",");
+            smsTelNoManageVO.setModTelNoList(modTelNoList);
+        }
+
+        return smsTelNoManageMapper.getDupChkTelNo(smsTelNoManageVO);
+    }
+
+
 }

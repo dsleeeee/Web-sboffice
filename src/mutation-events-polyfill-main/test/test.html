@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<script>
+// Test settings
+const testInsertedRemovedDocument = true; // Set to true to test DOMNodeInsertedIntoDocument and DOMNodeRemovedFromDocument events (false for Firefox)
+const testEventOrder = false; // Set to true to test the order of events
+</script>
+
+<h3>Mutation Events Polyfill Test</h3>
+<ul>
+  <li><p><label>
+    <select id="polyfill_select">
+      <option id="option_use_polyfill">Test using the polyfill</option>
+      <option id="option_use_min_polyfill">Test using the minified polyfill</option>
+      <option id="option_use_native">Test the native feature</option>
+    </select>
+  <li><p>Mutation Events are <u id="native_support"></u> in this browser. (In Chromium, see <code>chrome://flags/#mutation-events</code>.)</p>
+  <li><p>This test will test the <u id="what_to_test"></u>.</p>
+  <li><p>To cleanly re-test different cases (removing all polyfill traces), reload the page.</p></li>
+</ul>
+<button id="go">Run the test</button>
+<div id=results class="hide">
+  <h3>Results:</h3>
+  <table id=log></table>
+  <h3>Detailed event logs:</h3>
+  <table id=details>
+    <tr><th>Case</th><th>Actual Events</th><th>Expected Events</th></tr>
+  </table>
+</div>
+<div id=parent class="hide">
+  <div id=target></div>
+  <div id=other></div>
+</div>
+
+<style>
+  #log td:nth-child(1) {
+    padding: 0 2em 0 0;
+  }
+  #log td:nth-child(2) {
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    padding-left: 2em;
+    text-indent: -2em;
+    width:100%;
+  }
+  #details {
+    border-collapse:collapse;
+  }
+  #details td {
+    white-space: pre-wrap;
+  }
+  #details th, #details td {
+    border: 1px solid black;
+  }
+  td.pass {
+    background-color: lightgreen;
+  }
+  td.fail {
+    background-color: red;
+  }
+  html,body {
+    width: 100%;
+  }
+  .hide {
+    display:none;
+  }
+</style>
+
+<script>
+const nativelySupported = "MutationEvent" in window;
+const polyfillSelect = document.querySelector('#polyfill_select');
+const goButton = document.querySelector('#go');
+const whatToTest = document.querySelector('#what_to_test');
+if (!nativelySupported) {
+  const useNativeOption = document.querySelector('#option_use_native');
+  useNativeOption.textContent = 'Test the native feature (Unavailable)';
+  useNativeOption.disabled = true;
+}
+document.querySelector('#native_support').textContent = nativelySupported ? 'Supported' : 'NOT supported';
+polyfillSelect.onchange = () => updateWhatToTest();
+updateWhatToTest();
+function updateWhatToTest() {
+  if (document.querySelector('#option_use_native').selected) {
+    whatToTest.textContent = 'NATIVE IMPLEMENTATION';
+  } else if (document.querySelector('#option_use_polyfill').selected) {
+    whatToTest.textContent = 'POLYFILL';
+  } else if (document.querySelector('#option_use_min_polyfill').selected) {
+    whatToTest.textContent = 'POLYFILL (minified)';
+  }
+}
+goButton.onclick = async () => {
+  goButton.disabled = true;
+  polyfillSelect.disabled = true;
+  const normalPolyfill = document.querySelector('#option_use_polyfill').selected;
+  const minPolyfill = document.querySelector('#option_use_min_polyfill').selected;
+  if (normalPolyfill || minPolyfill) {
+    // This will tell the polyfill to load even if natively supported:
+    window.mutationEventsUsePolyfillAlways = true;
+    const polyfill = document.createElement('script');
+    polyfill.src = "../src/mutation_events." + (minPolyfill ? "min.js" : "js")
+    const loaded = new Promise(resolve => polyfill.onload = resolve);
+    document.body.appendChild(polyfill);
+    await loaded;
+  }
+  document.querySelector('#results').classList.remove('hide');
+  document.querySelector('#parent').classList.remove('hide');
+  // Run the tests
+  testHarness();
+};
+
+function getDescription(n) {
+  if (typeof n !== 'object' || n === null) {
+    return String(n);
+  } else if (n.nodeType === 3) {
+    return `Text node ${n.textContent}`;
+  } else if (n.hasAttribute('id')) {
+    return n.id;
+  } else {
+    return n.outerHTML;
+  }
+}
+function addResult(success,msg) {
+  const newRow = document.createElement('tr');
+  newRow.innerHTML = `<td class=${success ? 'pass' : 'fail'}>${success ? 'PASS' : 'FAIL'}</td><td>${msg}</td>`;
+  document.getElementById('log').appendChild(newRow);
+}
+const eventProperties = [
+  'type',
+  'target',
+  'isTrusted',
+  'capture',
+  'currentTarget',
+  'bubbles',
+  'cancelable',
+  'attrChange',
+  'newValue',
+  'prevValue',
+  // The relatedNode field is not often set correctly by the polyfill:
+  // 'relatedNode',
+]
+function assert(val,msg) {
+  if (!val) {
+    console.log('=====> FAIL! ',msg);
+    addResult(false,msg);
+  }
+  return val;
+}
+function compareTwoEvents(description,eventDescription,actual,expected) {
+  let pass=true;
+  for(let property of eventProperties) {
+    if (property !== 'type') {
+      eventDescription += ` (${expected.type})`;
+    }
+    pass = assert(property in actual,`${description}: ${eventDescription} actual should have property ${property}`) && pass;
+    pass = assert(property in expected,`${description}: ${eventDescription} expected should have property ${property}`) && pass;
+    const actualDescription = getDescription(actual[property]);
+    const expectedDescription = getDescription(expected[property]);
+    pass = assert(actualDescription === expectedDescription,`${description}: ${eventDescription} mismatch for ${property}, actual ${actualDescription} vs. expected ${expectedDescription}`) && pass;
+  };
+  return pass;
+}
+function assert_events_equal(actualEvents,expectedEvents,description) {
+  if (!assert(Array.isArray(actualEvents) && Array.isArray(expectedEvents),`${description}: Both must be arrays`))
+    return false;
+  const detailsTable = document.getElementById('details');
+  const row = detailsTable.appendChild(document.createElement('tr'));
+  const eventToDescription = (e) => `${e.capture ? '\u2b07\ufe0f' : '\u2b06\ufe0f'}<code>${e.type}</code> on <code>${e.target}</code> at <code>${e.currentTarget}</code>`;
+  const eventsToDescription = (es) => es.map(eventToDescription).join('\n');
+  row.innerHTML = `<td>${description}</td><td>${eventsToDescription(actualEvents)}</td><td>${eventsToDescription(expectedEvents)}</td>`;
+  pass = true;
+  if (actualEvents.length < expectedEvents.length) {
+    pass = assert(false,`${description}: Not enough events received. actual ${actualEvents.length} vs expected ${expectedEvents.length}`) && pass;
+  } else if (actualEvents.length > expectedEvents.length) {
+    pass = assert(false,`${description}: Too many events received. actual ${actualEvents.length} vs expected ${expectedEvents.length}`) && pass;
+  }
+  if (testEventOrder) {
+    const len = Math.min(actualEvents.length,expectedEvents.length);
+    for(let i=0;i<len;++i) {
+      if (!compareTwoEvents(description, `event #${i}`, actualEvents[i], expectedEvents[i]))
+        return false;
+    }
+  } else {
+    let pass = true;
+    for(let expected of expectedEvents) {
+      const actual = actualEvents.find(e => e.type == expected.type && e.capture == expected.capture && e.currentTarget == expected.currentTarget && e.target == expected.target);
+      pass = assert(!!actual,`${description}: Missing ${expected.type} on ${getDescription(expected.currentTarget)} (target: ${getDescription(expected.target)})`);
+      if (actual) {
+        pass = compareTwoEvents(description, `${expected.capture ? 'capture' : 'bubble'} on ${getDescription(expected.target)}`, actual, expected) && pass;
+      }
+    }
+    for(let actual of actualEvents) {
+      if (!expectedEvents.some(e => e.type == actual.type && e.capture == actual.capture && e.currentTarget == actual.currentTarget && e.target == actual.target)) {
+        pass = assert(false,`${description}: Extra event received, ${actual.type} on ${getDescription(actual.currentTarget)} (target: ${getDescription(actual.target)})`);
+      }
+    }
+  }
+  return pass;
+}
+
+const target = document.getElementById('target');
+target.textContent = "Hello";
+const parent = document.getElementById('parent');
+const events = [
+  'DOMCharacterDataModified',
+  'DOMNodeInserted',
+  'DOMNodeInsertedIntoDocument',
+  'DOMNodeRemoved',
+  'DOMNodeRemovedFromDocument',
+  'DOMSubtreeModified',
+];
+
+let eventLog = [];
+let expectAllEmpty = false;
+
+async function waitFrame() {
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+}
+async function waitAndCheck(expected, description) {
+  await waitFrame();
+  if (!testInsertedRemovedDocument) {
+    const filter = e => (e.type !== 'DOMNodeInsertedIntoDocument' && e.type !== 'DOMNodeRemovedFromDocument');
+    eventLog = eventLog.filter(filter);
+    expected = expected.filter(filter);
+  }
+  const success = assert_events_equal(eventLog,expectAllEmpty ? [] : expected,description);
+  eventLog = [];
+  return success;
+}
+async function testOne(state, description, eventsList, expectedEventOrder, action) {
+  description = `(${state}) ${description}`;
+  console.log(`--> ${description}`);
+  let expectedEvents = [];
+  for(let eventItem of expectedEventOrder) {
+    const event = Object.assign({},eventsList[eventItem[0]]);
+    expectedEvents.push(Object.assign(event,{currentTarget: eventItem[1], capture: eventItem[2]==='capture'}));
+  }
+  await action();
+  const success = await waitAndCheck(expectedEvents, description);
+  if (success) {
+    addResult(true,description);
+  }
+}
+
+async function testHarness() {
+  // Test for mutation events, with and without polyfill
+
+  let listenersAdded = [];
+  function addListener(element,eventName,listener,options) {
+    listenersAdded.push([element,eventName,listener,options]);
+    element.addEventListener(eventName,listener,options);
+  }
+  function removeAllListeners() {
+    for(let row of listenersAdded) {
+      row[0].removeEventListener(row[1],row[2],row[3]);
+    }
+  }
+  events.forEach(evt => {
+    function listener(capture) {
+      return (e) => {
+        console.log(`Received ${e.type} (${capture ? 'capture' : 'bubble'}) on ${getDescription(e.currentTarget)}, target is ${getDescription(e.target)}`);
+        let eventCopy = {};
+        for (property of eventProperties) {
+          eventCopy[property] = property.toLowerCase().includes('target') ? getDescription(e[property]) : e[property];
+        }
+        eventCopy.capture = capture;
+        eventLog.push(eventCopy);
+      }
+    }
+    addListener(target,evt,listener(false),{capture: false});
+    addListener(target,evt,listener(true), {capture: true});
+    addListener(parent,evt,listener(false),{capture: false});
+    addListener(parent,evt,listener(true), {capture: true});
+  });
+
+  let left=2;
+  let state = document.querySelector('#option_use_native').selected ? 'Native feature' : 'Polyfill ENABLED';
+  while (left) {
+    // Run all of the tests:
+    await runAllTests(state);
+
+    // Cleanup
+    parent.appendChild(target);
+    target.removeAttribute('test');
+    target.replaceChildren(document.createTextNode('Hello'));
+    assert(target.parentNode === parent,'target wasn\'t put back after tests');
+    assert(target.outerHTML === '<div id="target">Hello</div>','target has extra attributes: ' + target.outerHTML);
+    eventLog = [];
+
+    if (left) {
+      // Now remove event listeners and make sure we don't get any events.
+      removeAllListeners();
+      console.log('Listeners removed - verifying no events');
+      state = 'Listeners removed';
+      expectAllEmpty = true;
+      --left;
+    }
+  }
+  parent.remove();
+}
+
+const baseEventObj = {
+  attrChange: 0, bubbles: true, cancelable: false, newValue: '', prevValue: '', relatedNode: null
+}
+function eventObj(type, target, overrides) {
+  let newEvent = Object.assign({}, baseEventObj);
+  newEvent.type = type;
+  newEvent.target = target;
+  // Expect trusted events if using the native feature.
+  newEvent.isTrusted = document.querySelector('#option_use_native').selected;
+  for(prop in overrides) {
+    newEvent[prop] = overrides[prop];
+  }
+  return newEvent;
+}
+
+// testOne tests a single kind of mutation, and looks for the expected set of
+// events.
+//   testOne(state,description_of_test_case,[
+//       // list of unique event types fired, e.g.
+//       eventObj(event_name,target,{event_settings}),
+//       eventObj('DOMNodeRemoved','target',{relatedNode: parent}),
+//     ],[
+//       // list of actual events fired, at which targets, in what phase, e.g.
+//       [index_into_unique_events_list, currentTarget, eventPhase],
+//       [0, 'parent', 'capture'],
+//       [0, 'target'],
+//     ],
+//       // DOM mutation lambda, e.g.
+//       () => target.remove()
+//   );
+
+async function runAllTests(state) {
+  await testOne(state,'Node removal',[
+      eventObj('DOMNodeRemoved','target',{relatedNode: parent}),
+      eventObj('DOMNodeRemovedFromDocument','target',{bubbles:false}),
+      eventObj('DOMNodeRemovedFromDocument','Text node Hello',{bubbles:false}),
+      eventObj('DOMSubtreeModified','parent'),
+    ],[
+      [0, 'parent', 'capture'],
+      [0, 'target', 'capture'],
+      [0, 'target'],
+      [0, 'parent'],
+      [1, 'parent', 'capture'],
+      [1, 'target', 'capture'],
+      [1, 'target'], // DOMNodeRemovedFromDocument doesn't bubble
+      [2, 'parent', 'capture'],
+      [2, 'target', 'capture'],
+      [3, 'parent', 'capture'],
+      [3, 'parent'],
+    ],
+    () => target.remove());
+
+  await testOne(state,'Node append',[
+      eventObj('DOMNodeInserted','target',{relatedNode: other}),
+      eventObj('DOMNodeInsertedIntoDocument','target',{bubbles:false}),
+      eventObj('DOMNodeInsertedIntoDocument','Text node Hello',{bubbles:false}),
+      eventObj('DOMSubtreeModified','other'),
+    ], [
+      [0, 'parent', 'capture'],
+      [0, 'target', 'capture'],
+      [0, 'target'],
+      [0, 'parent'],
+      [1, 'parent', 'capture'],
+      [1, 'target', 'capture'],
+      [1, 'target'], // DOMNodeInsertedIntoDocument doesn't bubble
+      [2, 'parent', 'capture'],
+      [2, 'target', 'capture'],
+      [3, 'parent', 'capture'],
+      [3, 'parent'],
+    ],
+    () => other.appendChild(target));
+
+  await testOne(state,'Create attribute',[
+      eventObj('DOMSubtreeModified','target'),
+    ], [
+      [0, 'parent', 'capture'],
+      [0, 'target', 'capture'],
+      [0, 'target'],
+      [0, 'parent'],
+    ],
+    () => target.setAttribute('test','foo'));
+
+  await testOne(state,'Change attribute value',[], [],
+    () => target.setAttribute('test','bar'));
+
+  await testOne(state, 'Change attribute value (direct)',[], [],
+    () => {target.attributes[1].value = 'bar'});
+
+  await testOne(state,'Remove attribute',[
+      eventObj('DOMSubtreeModified','target'),
+    ], [
+      [0, 'parent', 'capture'],
+      [0, 'target', 'capture'],
+      [0, 'target'],
+      [0, 'parent'],
+    ],
+    () => target.removeAttribute('test'));
+
+  await testOne(state,'Replace children',[
+      eventObj('DOMNodeRemoved','Text node Hello',{relatedNode: target}),
+      eventObj('DOMNodeRemovedFromDocument','Text node Hello',{bubbles:false}),
+      eventObj('DOMSubtreeModified','target'),
+      eventObj('DOMNodeInserted','Text node Hello there',{relatedNode: target}),
+      eventObj('DOMNodeInsertedIntoDocument','Text node Hello there',{bubbles:false}),
+      eventObj('DOMSubtreeModified','target'),
+    ], [
+      [0, 'parent', 'capture'],
+      [0, 'target', 'capture'],
+      [0, 'target'],
+      [0, 'parent'],
+      [1, 'parent', 'capture'],
+      [1, 'target', 'capture'],
+      [2, 'parent', 'capture'],
+      [2, 'target', 'capture'],
+      [2, 'target'],
+      [2, 'parent'],
+      [3, 'parent', 'capture'],
+      [3, 'target', 'capture'],
+      [3, 'target'],
+      [3, 'parent'],
+      [4, 'parent', 'capture'],
+      [4, 'target', 'capture'],
+      [5, 'parent', 'capture'],
+      [5, 'target', 'capture'],
+      [5, 'target'],
+      [5, 'parent'],
+    ],
+    () => target.replaceChildren(document.createTextNode('Hello there')));
+
+  await testOne(state, 'Replace text content',[
+      eventObj('DOMCharacterDataModified','Text node foo',{newValue: 'foo', prevValue: 'Hello there'}),
+      eventObj('DOMSubtreeModified','Text node foo',{}),
+    ], [
+      [0, 'parent', 'capture'],
+      [0, 'target', 'capture'],
+      [0, 'target'],
+      [0, 'parent'],
+      [1, 'parent', 'capture'],
+      [1, 'target', 'capture'],
+      [1, 'target'],
+      [1, 'parent'],
+    ],
+    () => target.firstChild.textContent = "foo");
+
+  await testOne(state, 'Append child node',[
+      eventObj('DOMNodeInserted','div', {relatedNode: target}),
+      eventObj('DOMNodeInsertedIntoDocument','div', {bubbles: false}),
+      eventObj('DOMSubtreeModified','target'),
+    ], [
+      [0, 'parent', 'capture'],
+      [0, 'target', 'capture'],
+      [0, 'target'],
+      [0, 'parent'],
+      [1, 'parent', 'capture'],
+      [1, 'target', 'capture'],
+      [2, 'parent', 'capture'],
+      [2, 'target', 'capture'],
+      [2, 'target'],
+      [2, 'parent'],
+    ],
+    () => {
+      const div = document.createElement('div');
+      div.id = 'div';
+      target.appendChild(div);
+    });
+
+  await testOne(state, 'Create child node attribute',[
+      eventObj('DOMSubtreeModified','div',{currentTarget: target}),
+    ], [
+      [0, 'parent', 'capture'],
+      [0, 'target', 'capture'],
+      [0, 'target'],
+      [0, 'parent'],
+    ],
+    () => div.setAttribute('foo','bar'));
+
+  // Manual test of MutationEvent interface
+  function testInterface(fn,desc) {
+    try {
+      result = fn();
+    } catch {
+      result = false;
+    }
+    addResult(result,desc);
+  }
+  testInterface(() => {return "MutationEvent" in window},"MutationEvent exists");
+  testInterface(() => {
+    try {
+      new MutationEvent('DOMNodeRemoved');
+      return false; // Explicit constructor should throw
+    } catch {
+      return true;
+    }
+  },"MutationEvent cannot be constructed");
+  testInterface(() => {return MutationEvent.MODIFICATION === 1},"MutationEvent.MODIFICATION exists");
+  testInterface(() => {return MutationEvent.ADDITION === 2},"MutationEvent.ADDITION exists");
+  testInterface(() => {return MutationEvent.REMOVAL === 3},"MutationEvent.REMOVAL exists");
+  testInterface(() => {return document.createEvent("MutationEvent") instanceof MutationEvent},"document.createEvent");
+  testInterface(() => {return document.createEvent("Event") instanceof Event},"document.createEvent doesn't break stuff");
+  testInterface(() => {return document.createEvent("MouseEvent") instanceof MouseEvent},"document.createEvent doesn't break stuff");
+  testInterface(() => {return document.createEvent("MouseEvents") instanceof MouseEvent},"document.createEvent doesn't break stuff");
+  testInterface(() => {return document.createEvent("MutationEvent").type === ""},"document.createEvent returns empty type");
+  testInterface(() => {
+    const evt = document.createEvent("MutationEvent");
+    evt.initMutationEvent('DOMNodeRemoved',true,true,null,"foo","bar","baz",1);
+    return evt.type === 'DOMNodeRemoved';
+  },"MutationEvent.initMutationEvent() exists");
+}
+
+</script>

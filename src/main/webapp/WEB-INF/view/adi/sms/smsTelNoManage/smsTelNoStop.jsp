@@ -52,6 +52,7 @@
                     <wj-flex-grid-column header="<s:message code="smsTelNoStop.orgnNm"/>" binding="orgnNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsTelNoStop.telNo"/>" binding="telNo" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="smsTelNoStop.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="100" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="smsTelNoStop.certId"/>" binding="certId" width="160" is-read-only="true" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -64,7 +65,7 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20241120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20250107.01" charset="utf-8"></script>
 
 <%-- 일반번호 인증요청 처리 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsGeneralNoManage.jsp">
