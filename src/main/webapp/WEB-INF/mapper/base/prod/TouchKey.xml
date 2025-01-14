@@ -146,7 +146,6 @@
                 <if test="hqBrandCd != null and hqBrandCd != ''">
                     AND tmp.HQ_BRAND_CD = #{hqBrandCd} -- 브랜드
                 </if>
-                    AND tmp.PROD_CD NOT LIKE (SELECT NVL(MAX(PRE_PROD_CD), '♪') FROM TB_MS_PRODUCT_TOUCH_EX_PROD EX WHERE EX.STORE_CD = #{storeCd})||'%'
                 ORDER BY tmpc.PROD_CLASS_CD, tmp.PROD_CD
             </when>
         </choose>
