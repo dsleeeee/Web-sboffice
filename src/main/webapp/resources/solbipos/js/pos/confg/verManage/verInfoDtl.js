@@ -153,6 +153,16 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       sScope.sysStatFgCombo.selectedIndex = 0;
       $("input:checkbox[id='chkMulti']").prop("checked", false);
 
+      // 대리점관리매장 초기화
+      if (orgnFg == "AGENCY") {
+          if(orgnCd === "00607" || orgnCd === "00608"){
+              sScope.agencyStoreYnCombo.selectedValue = "Y";
+          }else{
+              sScope.agencyStoreYnCombo.selectedValue = "N";
+          }
+      } else {
+          sScope.agencyStoreYnCombo.selectedValue = "N";
+      }
     });
     var scope = agrid.getScope("allStoreCtrl");
     scope.progDetailFg = $scope.version.progDetailFg;

@@ -74,6 +74,12 @@ function comma(num){
   return str;
 }
 
+// 대리점관리매장
+var agencyStoreYnData = [
+    {"name":"미포함","value":"N"},
+    {"name":"포함","value":"Y"},
+];
+
 /**********************************************************************
  *  적용매장 그리드
  **********************************************************************/
@@ -88,12 +94,23 @@ app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
   $scope._setComboData("hqOffice", hqList);
   $scope._setComboData("commuteInDtHhCombo", Hh);
   $scope._setComboData("commuteInDtMmCombo", MmSs);
+  $scope._setComboData("agencyStoreYn", agencyStoreYnData);
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
     $scope.clsFgDataMap = new wijmo.grid.DataMap(clsFg, 'value', 'name');
     $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
 
+    // 대리점관리매장 초기화
+    if (orgnFg == "AGENCY") {
+        if(orgnCd === "00607" || orgnCd === "00608"){
+            $scope.agencyStoreYnCombo.selectedValue = "Y";
+        }else{
+            $scope.agencyStoreYnCombo.selectedValue = "N";
+        }
+    } else {
+        $scope.agencyStoreYnCombo.selectedValue = "N";
+    }
   };
 
   // 조회 버튼 클릭
@@ -145,6 +162,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
     params.agencyCd = orgnCd;
     params.progFg = manageVer;
     params.addr = $("#srchAddr").val();
+    params.agencyStoreYn = $scope.agencyStoreYnCombo.selectedValue;
     $scope._inquirySub("/pos/confg/verManage/applcStore/srchStoreList.sb", params, function() {
       // 적용매장 조회 후, 미적용 매장 조회
       var allStoreScope = agrid.getScope("allStoreCtrl");
@@ -327,6 +345,7 @@ app.controller('allStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
       params.orgnFg = orgnFg;
       params.agencyCd = orgnCd;
       params.addr = $("#srchAddr").val();
+      params.agencyStoreYn = addStoreScope.agencyStoreYnCombo.selectedValue;
 
       // 복수검색 기능 사용여부
       if ($("#chkMulti").prop("checked")) {
