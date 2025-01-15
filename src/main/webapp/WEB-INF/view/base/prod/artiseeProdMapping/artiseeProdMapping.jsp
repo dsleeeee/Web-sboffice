@@ -235,8 +235,8 @@
                 </tr>
                 <tr>
                     <%-- 사용여부 --%>
-                    <th><s:message code="artiseeProdMapping.useYn" /></th>
-                    <td>
+                    <th style='display:none'><s:message code="artiseeProdMapping.useYn" /></th>
+                    <td style='display:none'>
                         <div class="sb-select">
                             <wj-combo-box
                                     id="srchUseYn"
@@ -359,7 +359,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdMapping/artiseeProdMapping.js?ver=20241113.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdMapping/artiseeProdMapping.js?ver=20250114.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
