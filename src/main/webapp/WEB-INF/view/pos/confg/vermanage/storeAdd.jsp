@@ -7,7 +7,7 @@
 <c:set var="gvHqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <%-- 매장추가 레이어 --%>
-<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:730px;">
+<wj-popup control="storeAddLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:750px;height:760px;">
   <div class="wj-dialog wj-dialog-columns title">
 
     <%-- header --%>
@@ -122,6 +122,25 @@
                 <button class="btn_skyblue ml2 " ng-click="excelUpload()"><s:message code="cmm.excel.excelUpload" /></button>
               </td>
             </tr>
+            <tr <c:if test="${orgnFg != 'AGENCY'}">style="display:none"</c:if>>
+                <%-- 대리점관리매장 --%>
+                <th><s:message code="verManage.agencyStore"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                ng-model="agencyStoreYn"
+                                items-source="_getComboData('agencyStoreYn')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="agencyStoreYnCombo"
+                                selected-index="0">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <th></th>
+                <td></td>
+            </tr>
             </tbody>
           </table>
           <div class="mt10 tr">
@@ -199,6 +218,10 @@
                 <wj-flex-grid-column header="<s:message code="verManage.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="40" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.addr"/>" binding="addr"  width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <c:if test="${orgnFg == 'AGENCY'}">
+                    <wj-flex-grid-column header="<s:message code="verManage.store.agencyCd"/>" binding="agencyCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verManage.store.agencyNm"/>" binding="agencyNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
               </wj-flex-grid>
             </div>
           </div>
@@ -239,6 +262,10 @@
                 <wj-flex-grid-column header="<s:message code="verManage.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.diffVerCnt"/>" binding="diffVerCnt"  width="90" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="verManage.store.addr"/>" binding="addr"  width="150" align="center" is-read-only="true" ></wj-flex-grid-column>
+                <c:if test="${orgnFg == 'AGENCY'}">
+                    <wj-flex-grid-column header="<s:message code="verManage.store.agencyCd"/>" binding="agencyCd" align="center" width="55" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="verManage.store.agencyNm"/>" binding="agencyNm" align="left" width="60" is-read-only="true"></wj-flex-grid-column>
+                </c:if>
               </wj-flex-grid>
             </div>
           </div>
@@ -272,7 +299,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20250109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/storeAdd.js?ver=20250115.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){
