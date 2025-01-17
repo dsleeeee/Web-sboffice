@@ -33,6 +33,10 @@ app.controller('clsTypeNmCtrl', ['$scope', '$http', '$timeout', function ($scope
     // 파라미터
     var params = {};
     params.posNo = data;
+    if(pageFg === '1'){
+      params.pageFg = '1';
+      params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+    }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getClsTypeList.sb", params, function() {});
   };
@@ -44,6 +48,10 @@ app.controller('clsTypeNmCtrl', ['$scope', '$http', '$timeout', function ($scope
       // 파라미터 설정
       var params = new Array();
       for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+        if(pageFg === '1'){
+          $scope.flex.collectionView.itemsEdited[i].pageFg = '1';
+          $scope.flex.collectionView.itemsEdited[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+        }
         params.push($scope.flex.collectionView.itemsEdited[i]);
       }
 

@@ -486,6 +486,10 @@
                         if (col.binding === "storeCd") {
                             $("#" + targetId + "Cd").val(selectedRow.storeCd);
                             $("#" + targetId + "Nm").val("[" + selectedRow.storeCd + "] " + selectedRow.storeNm);
+                            if(targetId === 'kioskKeyMapSelectStore'){
+                                var scope = agrid.getScope('kioskKeyMapRegistCtrl');
+                                scope.kioskKeyMapSelectStore(selectedRow.storeCd);
+                            }
                             eval('$scope.wj' + targetId + 'Layer.hide(true)');
                         }
                     }

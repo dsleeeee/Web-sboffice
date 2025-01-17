@@ -255,7 +255,12 @@
       eval('$scope.wj' + $scope.targetId + 'LayerS.show(true)');
 
       if ($scope.searchFg == "N") {
-        $scope.searchProdClass();
+        if(paramObj!== null && paramObj === '1'){
+          $scope.pageFg = '1';
+          $scope.searchProdClass();
+        }else {
+          $scope.searchProdClass();
+        }
       }
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -264,6 +269,11 @@
     // 상품 분류 조회
     $scope.searchProdClass = function(){
       var params = {};
+
+      if($scope.pageFg !== undefined && $scope.pageFg !== null && $scope.pageFg === '1'){
+        params.pageFg = '1';
+        params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+      }
 
       $scope._postJSONQuery.withOutPopUp('/popup/getProdClassTree.sb', params, function (response) {
         // console.log('tree response', response);
@@ -349,6 +359,11 @@
       }
 
       console.log(params);
+
+      if($scope.pageFg !== undefined && $scope.pageFg !== null && $scope.pageFg === '1'){
+        params.pageFg = '1';
+        params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+      }
 
       // console.log('params', params);
       // 조회 수행 : 조회URL, 파라미터, 콜백함수

@@ -33,6 +33,9 @@ app.controller('storeModCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 팝업 그리드 조회
   $scope.$on("storeModCtrl", function(event, data) {
+    if(pageFg === '1'){
+      $("#btnSaveStoreModGrp").css("display",'none');
+    }
     $scope._setComboData("tuClsTypeCombo", kioskTuClsTypeListAll);
     $scope.getStoreModGrpList();
     event.preventDefault();
@@ -42,6 +45,10 @@ app.controller('storeModCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 파라미터
     var params = {};
     params.tukeyGrpCd = $scope.tukeyGrp;
+    if(pageFg === '1'){
+      params.pageFg = '1';
+      params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+    }
     // 조회 수행 : 조회URL, 파라미터, 콜백함수
     $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getStoreModGrpList.sb", params, function() {});
   };

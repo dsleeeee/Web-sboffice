@@ -268,7 +268,7 @@
 <script type="text/javascript">
     var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20220111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20250114.01" charset="utf-8"></script>
 
 
 <%-- 상품선택 모듈 멀티 선택 사용시 include --%>

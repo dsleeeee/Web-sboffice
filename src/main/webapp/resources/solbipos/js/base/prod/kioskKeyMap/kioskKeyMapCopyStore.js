@@ -20,6 +20,7 @@ app.controller('kioskKeyMapCopyStoreCtrl', ['$scope', '$http', function ($scope,
 
     // 팝업 오픈 시, 매장리스트 조회
     $scope.$on("kioskKeyMapCopyStoreCtrl", function(event, data) {
+
         $scope.setOrgTuClsType();
         event.preventDefault();
     });
@@ -27,15 +28,21 @@ app.controller('kioskKeyMapCopyStoreCtrl', ['$scope', '$http', function ($scope,
     // copy : POS번호 선택 시, 키맵그룹 dropdown 조회
     $scope.setOrgTuClsType = function (s) {
         // 키맵그룹 dropdown 재조회
-        $scope.setTuClsDropdownList();
+        $scope.setTuClsDropdownListCopy();
     }
 
     // 키맵그룹 dropdownLIst 재조회
-    $scope.setTuClsDropdownList = function (type){
+    $scope.setTuClsDropdownListCopy = function (type){
 
         var url = '/base/prod/kioskKeyMap/kioskKeyMap/getKioskTuClsTypeList.sb';
         var params = {};
         params.posNo = $scope.orgStorePosNoCombo.selectedValue;
+        if(pageFg === "1"){
+            params.pageFg = '1';
+            if($("#kioskKeyMapSelectStoreCd").val() !== null && $("#kioskKeyMapSelectStoreCd").val() !== ""){
+                params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+            }
+        }
 
         //가상로그인 session 설정
         if(document.getElementsByName('sessionId')[0]){
@@ -92,7 +99,12 @@ app.controller('kioskKeyMapCopyStoreCtrl', ['$scope', '$http', function ($scope,
                 // 파라미터 설정
                 var params = {};
                 params.posNo = $scope.orgStorePosNoCombo.selectedValue;
+                params.orgPosNo = $scope.orgStorePosNoCombo.selectedValue;
                 params.tuClsType = $scope.orgStoreTuClsTypeCombo.selectedValue;
+                params.storeCd = storeCd;
+                if(pageFg === '1'){
+                    params.pageFg = '1'
+                }
 
                 $scope._postJSONSave.withPopUp("/base/prod/kioskKeyMap/kioskKeyMap/copyKioskTuClsType.sb", params, function (response) {
 
@@ -114,6 +126,9 @@ app.controller('kioskKeyMapCopyStoreCtrl', ['$scope', '$http', function ($scope,
                 params.orgPosNo = $scope.orgStorePosNoCombo.selectedValue;
                 params.orgTuClsType = $scope.orgStoreTuClsTypeCombo.selectedValue;
                 params.posNo = $scope.storePosNoCombo.selectedValue;
+                if(pageFg === '1'){
+                    params.pageFg = '1'
+                }
 
                 // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
                 $scope._postJSONSave.withPopUp("/base/prod/kioskKeyMap/kioskKeyMap/copyStoreKioskTuClsType.sb", params, function () {

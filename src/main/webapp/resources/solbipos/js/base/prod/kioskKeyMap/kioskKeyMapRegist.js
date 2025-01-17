@@ -31,16 +31,30 @@ var tuMClsFgComboData = [
     {"name":"중분류사용","value":"2"}
 ];
 
+if(pageFg === '1'){
+    orgnFg = 'STORE';
+};
+
+
 // 키오스크 카테고리(분류)
 app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('kioskKeyMapRegistCtrl', $scope, $http, true));
 
-    $scope._setComboData("posNo", kioskPosList); // 키오스크용 포스 목록
-    $scope._setComboData("tuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
+    if(pageFg === '0') {
+        $scope._setComboData("posNo", kioskPosList); // 키오스크용 포스 목록
+        $scope._setComboData("tuClsType", kioskTuClsTypeList); // 키오스크용 키맵그룹 목록
+    }
     $scope._setComboData("tuMClsFg", tuMClsFgComboData); // KIOSK중분류사용
 
     $scope.initGrid = function (s, e) {
+
+        if(pageFg === '1'){
+            $("#kioskKeyMapSelectStore").css("display",'block');
+            if(sessionStorage.getItem('reloaded')){
+                $scope._broadcast('kioskKeyMapRegistCtrl');
+            };
+        }
 
         if(hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062'){
             $("#posNoTr").css("display",'none');
@@ -97,7 +111,18 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
     };
 
     $scope.$on("kioskKeyMapRegistCtrl", function(event, data) {
-        $scope.btnSearchCls();
+
+        if(sessionStorage.getItem('reloaded')){
+            $("#kioskKeyMapSelectStoreCd").val(sessionStorage.getItem('selectStoreCd'));
+            $("#kioskKeyMapSelectStoreNm").val(sessionStorage.getItem('selectStoreNm'));
+            $("#kioskKeyMapSelectStoreNm").text(sessionStorage.getItem('selectStoreNm'));
+            sessionStorage.removeItem('reloaded');
+            sessionStorage.removeItem('selectStoreCd');
+            sessionStorage.removeItem('selectStoreNm');
+            $scope.kioskKeyMapSelectStore();
+        }else{
+            $scope.btnSearchCls();
+        }
         event.preventDefault();
     });
 
@@ -143,6 +168,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
         var params = {};
         if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
+        if(pageFg === '1'){
+            params.pageFg = '1';
+            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+        }
         params.tuClsType = $scope.tuClsTypeCombo.selectedValue;
 
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategory.sb", params, function() {
@@ -179,6 +208,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
     $scope.kioskKeyMapGroupTuMClsFg = function(){
         var params = {};
         if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
+        if(pageFg === '1'){
+            params.pageFg = '1';
+            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+        }
         params.tuClsType = $scope.tuClsTypeCombo.selectedValue;
 
         $scope._postJSONQuery.withOutPopUp("/base/prod/kioskKeyMap/kioskKeyMap/getKioskKeyMapGroupTuMClsFg.sb", params, function(response) {
@@ -228,10 +261,13 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         scope.regYnAllCombo.selectedIndex = 0;
 
         // 키맵 grid 초기화
-        var wjGridKeyMap = wijmo.Control.getControl("#wjGridKeyMap");
-        while(wjGridKeyMap.rows.length > 0){
-            wjGridKeyMap.rows.removeAt(wjGridKeyMap.rows.length-1);
-        }
+        // var wjGridKeyMap = wijmo.Control.getControl("#wjGridKeyMap");
+        // while(wjGridKeyMap.rows.length > 0){
+        //     wjGridKeyMap.rows.removeAt(wjGridKeyMap.rows.length-1);
+        // }
+        var flex = $scope.flex;
+        flex.itemsSource = new wijmo.collections.CollectionView();
+        flex.collectionView.trackChanges = true;
 
         // 상품 grid 초기화
         var wjGridProd = wijmo.Control.getControl("#wjGridProd");
@@ -388,6 +424,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                 if (orgnFg === "STORE") {
                     $scope.flex.collectionView.itemsRemoved[d].posNo = $scope.posNoCombo.selectedValue;
                 }
+                if(pageFg === '1'){
+                    $scope.flex.collectionView.itemsRemoved[d].pageFg = '1';
+                    $scope.flex.collectionView.itemsRemoved[d].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
                 $scope.flex.collectionView.itemsRemoved[d].tuClsType = $("#hdTuClsType").val();
                 $scope.flex.collectionView.itemsRemoved[d].status = 'D';
                 params.push($scope.flex.collectionView.itemsRemoved[d]);
@@ -420,6 +460,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                 if (orgnFg === "STORE") {
                     $scope.flex.collectionView.itemsEdited[u].posNo = $scope.posNoCombo.selectedValue;
                 }
+                if(pageFg === '1'){
+                    $scope.flex.collectionView.itemsEdited[u].pageFg = '1';
+                    $scope.flex.collectionView.itemsEdited[u].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
                 $scope.flex.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
                 $scope.flex.collectionView.itemsEdited[u].status = 'U';
                 params.push($scope.flex.collectionView.itemsEdited[u]);
@@ -428,6 +472,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
             for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
                 if (orgnFg === "STORE") {
                     $scope.flex.collectionView.itemsAdded[i].posNo = $scope.posNoCombo.selectedValue;
+                }
+                if(pageFg === '1'){
+                    $scope.flex.collectionView.itemsAdded[i].pageFg = '1';
+                    $scope.flex.collectionView.itemsAdded[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
                 }
                 $scope.flex.collectionView.itemsAdded[i].tuClsType = $("#hdTuClsType").val();
                 $scope.flex.collectionView.itemsAdded[i].status = 'I';
@@ -484,7 +532,13 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
             var tuClsTypeNm = prompt('그룹명을 입력하세요','그룹명');
             // 파라미터 설정
             var params = {};
-            if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
+            if(orgnFg === "STORE") {
+                params.posNo = $scope.posNoCombo.selectedValue;
+                params.pageFg = '1';
+                if($("#kioskKeyMapSelectStoreCd").val() !== null && $("#kioskKeyMapSelectStoreCd").val() !== ""){
+                    params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
+            }
             params.tuClsNm = "기본";
             params.indexNo = "1";
             params.tuClsTypeNm = tuClsTypeNm;
@@ -634,7 +688,13 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         var newGrp = 0; // 새로 생성된 그룹의 index 번호(dropdown 셋팅을 위해)
         var url = '/base/prod/kioskKeyMap/kioskKeyMap/getKioskTuClsTypeList.sb';
         var params = {};
-        if(orgnFg === "STORE") {params.posNo = $scope.posNoCombo.selectedValue;}
+        if(orgnFg === "STORE") {
+            params.posNo = $scope.posNoCombo.selectedValue;
+            params.pageFg = '1';
+            if($("#kioskKeyMapSelectStoreCd").val() !== null && $("#kioskKeyMapSelectStoreCd").val() !== ""){
+                params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+            }
+        }
 
         //가상로그인 session 설정
         if(document.getElementsByName('sessionId')[0]){
@@ -670,6 +730,9 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                     //
                     // if(type === "L"){
                     //     kioskTuClsTypeListAll = comboArrayAll;
+                    }
+                    if(pageFg === '1'){
+                        kioskTuClsTypeListAll = comboArrayAll;
                     }
 
                     $scope._setComboData("tuClsType", comboArray);
@@ -756,6 +819,95 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         }
     }
 
+    // 매장 선택
+    $scope.kioskKeyMapSelectStore = function(selectStoreCd) {
+
+        var params = {};
+        if(selectStoreCd !== null && selectStoreCd !== "" && selectStoreCd !== undefined){
+            params.storeCd = selectStoreCd;
+            storeCd = selectStoreCd;
+        }else {
+            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+            storeCd = $("#kioskKeyMapSelectStoreCd").val();
+        }
+
+        if( isEmptyObject( params.storeCd) ) {
+            $scope._popMsg("매장을 선택해주세요.");
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.loading"]); // 데이터 처리중 메시지 팝업 열기
+
+        $scope._postJSONQuery.withOutPopUp( "/base/prod/kioskKeyMap/kioskKeyMap/kioskKeyMapSelectStore.sb", params, function(response){
+            var data = response.data.data;
+
+            var flex = $scope.flex;
+            flex.itemsSource = new wijmo.collections.CollectionView();
+            flex.collectionView.trackChanges = true;
+
+            var comboArray = [];
+            var comboData  = {};
+
+            var buttons = [
+                'btnCol', 'btnTuClsTypeAdd', 'btnTuClsTypeCopyHq', 'btnTuClsTypeStore',
+                'btnRecmd', 'btnDelKioskKey', 'btnStoreMod', 'btnClsTypeNm',
+                'btnKioskKeyMapView', 'btnHqSalePrice', 'btnStoreSalePrice', 'btnSalePrice'
+            ];
+
+            buttons.forEach(function(id) {
+                if(!isEmptyObject($("#"+id))){
+                    $("#"+id).css("display", 'none');
+                }
+            });
+
+            if(data.kioskKeyEnvstVal === '1'){
+                $("#btnCol").css("display", '');
+                $("#btnRecmd").css("display", '');
+                $("#btnTuClsTypeAdd").css("display", '');
+                $("#btnDelKioskKey").css("display", '');
+                $("#btnClsTypeNm").css("display", '');
+
+                if(kioskKeyMapGrpFg === '1'){
+                    $("#btnTuClsTypeCopyHq").css("display", '');
+                }
+            }else if(data.kioskKeyEnvstVal === '2'){
+                $("#btnCol").css("display", '');
+                $("#btnRecmd").css("display", '');
+                if(hqOfficeCd !== '00000'){
+                    $("#btnStoreMod").css("display", '');
+                }
+            }
+            if(data.momsEnvstVal === '1'){
+                $("#btnKioskKeyMapView").css("display", '');
+            }
+            if(userId === 'ds021' || userId === 'ds024' || userId === 'h0360'){
+                $("#btnSalePrice").css("display", '');
+            }
+
+            kioskPosList = data.kioskPosList;
+            kioskKeyEnvstVal = data.kioskKeyEnvstVal;
+            kioskKeyMapGrpFg = data.kioskKeyMapGrpFg;
+            userHqBrandCdComboList = data.userHqBrandCdComboList;
+            momsEnvstVal = data.momsEnvstVal;
+
+            $scope._setComboData("posNo", kioskPosList);
+            $scope._setComboData("orgStorePosNo", kioskPosList); // 키오스크용 포스 목록
+            $scope._setComboData("storePosNo", kioskPosList); // 키오스크용 포스 목록
+            $scope._setComboData("popUpPosNo", kioskPosList); // 키오스크용 포스 목록
+            $scope._broadcast('prodClassPopUpCtrl','1');
+
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+
+        });
+    }
+
+    // 매장선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
+    $scope.kioskKeyMapSelectStoreShow = function () {
+        $scope._broadcast('kioskKeyMapSelectStoreCtrl');
+    };
+
 }]);
 
 
@@ -818,6 +970,10 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
     $scope.searchCategoryClsM = function () {
         var params = {};
         if(orgnFg === "STORE") {params.posNo = $("#hdPosNo").val();}
+        if(pageFg === '1'){
+            params.pageFg = '1';
+            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+        }
         params.tuClsType = $("#hdTuClsType").val();
         params.tuClsCd = $scope.selTuClsCd;
 
@@ -948,6 +1104,10 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
 
             for (var d = 0; d < $scope.flexM.collectionView.itemsRemoved.length; d++) {
                 if(orgnFg === "STORE") {$scope.flexM.collectionView.itemsRemoved[d].posNo = $scope.posNoCombo.selectedValue;}
+                if(pageFg === '1'){
+                    $scope.flexM.collectionView.itemsRemoved[d].pageFg = '1';
+                    $scope.flexM.collectionView.itemsRemoved[d].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
                 $scope.flexM.collectionView.itemsRemoved[d].tuClsType =  $("#hdTuClsType").val();
                 $scope.flexM.collectionView.itemsRemoved[d].tuClsCd = $scope.selTuClsCd;
                 $scope.flexM.collectionView.itemsRemoved[d].status = 'D';
@@ -994,6 +1154,10 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
                 $scope.flexM.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
                 $scope.flexM.collectionView.itemsEdited[u].tuClsCd = $scope.selTuClsCd;
                 $scope.flexM.collectionView.itemsEdited[u].status = 'U';
+                if(pageFg === '1'){
+                    $scope.flexM.collectionView.itemsEdited[u].pageFg = '1';
+                    $scope.flexM.collectionView.itemsEdited[u].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
                 params.push($scope.flexM.collectionView.itemsEdited[u]);
             }
 
@@ -1002,6 +1166,10 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
                 $scope.flexM.collectionView.itemsAdded[i].tuClsType = $("#hdTuClsType").val();
                 $scope.flexM.collectionView.itemsAdded[i].tuClsCd = $scope.selTuClsCd;
                 $scope.flexM.collectionView.itemsAdded[i].status = 'I';
+                if(pageFg === '1'){
+                    $scope.flexM.collectionView.itemsAdded[i].pageFg = '1';
+                    $scope.flexM.collectionView.itemsAdded[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
                 params.push($scope.flexM.collectionView.itemsAdded[i]);
             }
 
@@ -1057,6 +1225,10 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
 
         var params = {};
         if(orgnFg === "STORE") {params.posNo = $("#hdPosNo").val();}
+        if(pageFg === '1'){
+            params.pageFg = '1';
+            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+        }
         params.tuClsType = $("#hdTuClsType").val();
         params.tuClsCd = $("#hdTuClsCd").val();
 
@@ -1169,6 +1341,10 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
                 $scope.flex.collectionView.itemsRemoved[d].tuClsType = $("#hdTuClsType").val();
                 $scope.flex.collectionView.itemsRemoved[d].tuClsCd = $("#hdTuClsCd").val();
                 $scope.flex.collectionView.itemsRemoved[d].status = 'D';
+                if(pageFg === '1'){
+                    $scope.flex.collectionView.itemsRemoved[d].pageFg = '1';
+                    $scope.flex.collectionView.itemsRemoved[d].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
                 params.push($scope.flex.collectionView.itemsRemoved[d]);
             }
 
@@ -1204,6 +1380,10 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', '$timeout', function ($sco
                 $scope.flex.collectionView.itemsEdited[u].tuClsType = $("#hdTuClsType").val();
                 $scope.flex.collectionView.itemsEdited[u].tuClsCd = $("#hdTuClsCd").val();
                 $scope.flex.collectionView.itemsEdited[u].status = 'U';
+                if(pageFg === '1'){
+                    $scope.flex.collectionView.itemsEdited[u].pageFg = '1';
+                    $scope.flex.collectionView.itemsEdited[u].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
                 params.push($scope.flex.collectionView.itemsEdited[u]);
             }
 
@@ -1269,6 +1449,10 @@ app.controller('kioskProdCtrl', ['$scope', '$http', '$timeout', function ($scope
                 var prodClassCd = scope.getSelectedClass();
                 var params = {};
                 params.prodClassCd = prodClassCd;
+                if(pageFg === '1'){
+                    params.pageFg = '1';
+                    params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                }
                 // 조회 수행 : 조회URL, 파라미터, 콜백함수
                 $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
                     function(response){
@@ -1291,6 +1475,10 @@ app.controller('kioskProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         var params = {};
         if(orgnFg === "STORE") {params.posNo = $("#hdPosNo").val();}
+        if(pageFg === '1'){
+            params.pageFg = '1';
+            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+        }
         params.tuClsType = $("#hdTuClsType").val();
         params.tuClsCd = $("#hdTuClsCd").val();
         params.chkDt = $scope.isChecked;
@@ -1368,6 +1556,10 @@ app.controller('kioskProdCtrl', ['$scope', '$http', '$timeout', function ($scope
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
                     if(orgnFg === "STORE") {$scope.flex.collectionView.items[i].posNo = $("#hdPosNo").val();}
+                    if(pageFg === '1'){
+                        $scope.flex.collectionView.items[i].pageFg = '1';
+                        $scope.flex.collectionView.items[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                    }
                     $scope.flex.collectionView.items[i].tuClsType = $("#hdTuClsType").val();
                     $scope.flex.collectionView.items[i].tuClsCd = $("#hdTuClsCd").val();
                     params.push($scope.flex.collectionView.items[i]);
