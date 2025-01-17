@@ -68,18 +68,34 @@ app.controller('posNmCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var params     = new Array();
     var storeScope = agrid.getScope('storeManageCtrl');
+    var cnt        = 0;
 
     $("#posNmContent input").each(function(index){
 
       var obj     = {};
       var id      = $(this).attr("id");
+      cnt++;
 
       obj.storeCd = storeScope.getSelectedStore().storeCd;
       obj.posNo   = id.substring(3, id.length);
       obj.posNm   = $("#"+ id).val();
+      if(isNull(obj.posNm)){
+        var msg = "포스명칭을 " + messages["cmm.require.text"];
+        $scope._popMsg(msg);
+        return false;
+      }
+      if(nvl(obj.posNm, '') !== '' && nvl(obj.posNm+ '', '').getByteLengthForOracle() > 50){
+        var msg = "포스명칭은 " + messages["cmm.overLength"] + "50" + ", 현재 : " + obj.posNm.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+        $scope._popMsg(msg);
+        return false;
+      }
 
       params.push(obj);
     });
+
+    if(params.length < cnt){
+      return false;
+    }
 
     // console.log(params);
 

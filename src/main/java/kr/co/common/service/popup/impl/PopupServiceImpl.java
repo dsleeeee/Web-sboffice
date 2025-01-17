@@ -124,10 +124,13 @@ public class PopupServiceImpl implements PopupService{
     @Override
     public List<ProductClassVO> getProdClassTree(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정
-        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
-        prodVO.setOrgnFg(orgnFg);
+        if(prodVO.getPageFg() != null && prodVO.getPageFg().equals("1")) {
+            prodVO.setOrgnFg("S");
+        }else{
+            prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return popupMapper.getProdClassTree(prodVO);
     }
@@ -136,10 +139,13 @@ public class PopupServiceImpl implements PopupService{
     @Override
     public String getProdClassCdNm(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정
-        String orgnFg = sessionInfoVO.getOrgnFg().getCode();
-        prodVO.setOrgnFg(orgnFg);
+        if(prodVO.getPageFg() != null && prodVO.getPageFg().equals("1")) {
+            prodVO.setOrgnFg("S");
+        }else{
+            prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
         prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return popupMapper.getProdClassCdNm(prodVO);
     }
@@ -154,6 +160,12 @@ public class PopupServiceImpl implements PopupService{
 
         if(StringUtil.isEmpty(storeCd)) prodVO.setOrgnFg(OrgnFg.HQ.getCode());
         else                            prodVO.setOrgnFg(OrgnFg.STORE.getCode());
+
+        // 소속구분 설정
+        if(prodVO.getPageFg() != null && prodVO.getPageFg().equals("1")) {
+            prodVO.setOrgnFg("S");
+            storeCd = prodVO.getStoreCd();
+        }
 
         prodVO.setHqOfficeCd(hqOfficeCd);
         prodVO.setStoreCd(storeCd);
