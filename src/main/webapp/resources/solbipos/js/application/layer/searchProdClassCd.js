@@ -32,10 +32,6 @@ app.controller('prodClassPopUpCtrl', ['$scope', '$http', function ($scope, $http
   $scope.$on('prodClassPopUpCtrl', function (event, data) {
     // data 조회하지 않고 상세정보와 동일하므로 파라미터로 처리
     var params = {};
-    if(data !== undefined && data !== null && data === '1'){
-      params.pageFg = '1';
-      params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-    }
     $scope._postJSONQuery.withOutPopUp('/popup/getProdClassTree.sb', params, function (response) {
       if (response.data.status === 'OK') {
         if (response.data.data.length > 0) {

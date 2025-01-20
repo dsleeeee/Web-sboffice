@@ -40,10 +40,6 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
     angular.extend(this, new RootController('kioskRecmdCtrl', $scope, $http, true));
 
     $scope.initGrid = function (s, e) {
-        if(pageFg === '1'){
-            $("#btnRecmdStoreReg").css("display",'none');
-        }
-
         $("#recmdProdPopupNm").hide(); // 상품단일선택 팝업 사용시 밖 화면에 선택한 상품명이 떠서 그거 hide처리
 
         // 그리드에서 사용하는 dataMap 초기화
@@ -112,11 +108,7 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
                         popup.shown.addHandler(function (s) {
                             // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
                             setTimeout(function() {
-                                if(pageFg === '1'){
-                                    $scope._broadcast('recmdProdPopupCtrl','1');
-                                }else {
-                                    $scope._broadcast('recmdProdPopupCtrl');
-                                }
+                                $scope._broadcast('recmdProdPopupCtrl');
                             }, 50)
                         });
                         // 팝업 닫을때
@@ -164,11 +156,6 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 키오스크 추천메뉴 조회
     $scope.btnSearchRecmd = function(){
         var params = {};
-
-        if(pageFg === '1'){
-            params.pageFg = '1';
-            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-        }
         // 초기화
         $scope.reset();
 
@@ -222,26 +209,14 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
                 $scope.flex.collectionView.itemsAdded[i].status = "I";
-                if(pageFg === '1'){
-                    $scope.flex.collectionView.itemsAdded[i].pageFg = '1';
-                    $scope.flex.collectionView.itemsAdded[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
-                }
                 params.push($scope.flex.collectionView.itemsAdded[i]);
             }
             for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
                 $scope.flex.collectionView.itemsEdited[u].status = "U";
-                if(pageFg === '1'){
-                    $scope.flex.collectionView.itemsEdited[u].pageFg = '1';
-                    $scope.flex.collectionView.itemsEdited[u].storeCd = $("#kioskKeyMapSelectStoreCd").val();
-                }
                 params.push($scope.flex.collectionView.itemsEdited[u]);
             }
             for (var d = 0; d < $scope.flex.collectionView.itemsRemoved.length; d++) {
                 $scope.flex.collectionView.itemsRemoved[d].status = "D";
-                if(pageFg === '1'){
-                    $scope.flex.collectionView.itemsRemoved[d].pageFg = '1';
-                    $scope.flex.collectionView.itemsRemoved[d].storeCd = $("#kioskKeyMapSelectStoreCd").val();
-                }
                 params.push($scope.flex.collectionView.itemsRemoved[d]);
             }
 
@@ -291,7 +266,7 @@ app.controller('kioskRecmdCtrl', ['$scope', '$http', '$timeout', function ($scop
         var recmdProdListCtrlPager = document.getElementById('recmdProdListCtrlPager');
         recmdProdListCtrlPager.style.visibility='hidden'
     };
-    
+
     // 추천메뉴매장적용 팝업
     $scope.recmdStoreReg = function () {
         $scope.kioskRecmdStoreRegLayer.show(true);
@@ -317,7 +292,7 @@ app.controller('recmdProdCtrl', ['$scope', '$http', '$timeout', function ($scope
             $("#spanRecmd").text("[" + data.recmdCd + "] ")
             $("#recmdCd").val(data.recmdCd);
         }
-        
+
         // 추천상품 조회
         $scope.searchRecmdProdCd();
 
@@ -328,10 +303,6 @@ app.controller('recmdProdCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         var params = {};
         params.recmdCd = $("#recmdCd").val();
-        if(pageFg === '1'){
-            params.pageFg = '1';
-            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-        }
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getRecmdProd.sb", params, function() {
 
@@ -406,13 +377,9 @@ app.controller('recmdProdCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.saveRecmdProd = function () {
         var params = new Array();
 
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            if(pageFg === '1'){
-                $scope.flex.collectionView.itemsRemoved[i].pageFg = '1';
-                $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
-            }
-            $scope.flex.collectionView.itemsRemoved[i].recmdCd = $("#recmdCd").val();
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
+        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+            $scope.flex.collectionView.items[i].recmdCd = $("#recmdCd").val();
+            params.push($scope.flex.collectionView.items[i]);
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -441,7 +408,7 @@ app.controller('recmdProdListCtrl', ['$scope', '$http', '$timeout', function ($s
     // $scope._setComboData('prodTypeFg', prodTypeFg);
     // $scope._setComboData('regYn', regYn);
     $scope._setComboData("srchRmProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
-    
+
     // 등록일자 기본 '전체기간'으로
     $scope.isChecked = true;
 
@@ -476,10 +443,6 @@ app.controller('recmdProdListCtrl', ['$scope', '$http', '$timeout', function ($s
                 var prodClassCd = scope.getSelectedClass();
                 var params = {};
                 params.prodClassCd = prodClassCd;
-                if(pageFg === '1'){
-                    params.pageFg = '1';
-                    params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-                }
                 // 조회 수행 : 조회URL, 파라미터, 콜백함수
                 $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
                     function(response){
@@ -496,7 +459,7 @@ app.controller('recmdProdListCtrl', ['$scope', '$http', '$timeout', function ($s
         $scope.prodClassCd = "";
         $scope.prodClassCdNm = "";
     }
-    
+
     // 상품 조회
     $scope.searchProd = function () {
 
@@ -512,31 +475,27 @@ app.controller('recmdProdListCtrl', ['$scope', '$http', '$timeout', function ($s
         params.useYn = $scope.useYn;
         params.prodTypeFg = $scope.prodTypeFg;
         params.regYn = $scope.regYn;
-        if(pageFg === '1'){
-            params.pageFg = '1';
-            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-        }
 
         if(brandUseFg === "1" && orgnFg === "HQ"){
-          // 선택한 상품브랜드가 있을 때
-          params.prodHqBrandCd = $scope.srchRmProdHqBrandCdCombo.selectedValue;
+            // 선택한 상품브랜드가 있을 때
+            params.prodHqBrandCd = $scope.srchRmProdHqBrandCdCombo.selectedValue;
 
-          // 선택한 상품브랜드가 없을 때('전체' 일때)
-          if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
-              var userHqBrandCd = "";
-              for(var i=0; i < userHqBrandCdComboList.length; i++){
-                  if(userHqBrandCdComboList[i].value !== null) {
-                      userHqBrandCd += userHqBrandCdComboList[i].value + ","
-                  }
-              }
-              params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
-          }
+            // 선택한 상품브랜드가 없을 때('전체' 일때)
+            if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
+                var userHqBrandCd = "";
+                for(var i=0; i < userHqBrandCdComboList.length; i++){
+                    if(userHqBrandCdComboList[i].value !== null) {
+                        userHqBrandCd += userHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+            }
         }
 
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getRecmdProdList.sb", params);
 
     }
-    
+
     // 추천상품 등록
     $scope.regRecmdProd = function () {
 
@@ -544,10 +503,6 @@ app.controller('recmdProdListCtrl', ['$scope', '$http', '$timeout', function ($s
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].recmdCd = $("#recmdCd").val();
-                if(pageFg === '1'){
-                    $scope.flex.collectionView.items[i].pageFg = '1';
-                    $scope.flex.collectionView.items[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
-                }
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
@@ -561,7 +516,7 @@ app.controller('recmdProdListCtrl', ['$scope', '$http', '$timeout', function ($s
             // 추천메뉴 재조회
             var kioskKeyMapGrid = agrid.getScope("recmdProdCtrl");
             kioskKeyMapGrid._pageView('recmdProdCtrl', 1);
-            
+
         });
     }
 }]);

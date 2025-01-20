@@ -11,36 +11,6 @@
 <div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="kioskKeyMapRegistCtrl">
-        <div class="mb10" id="kioskKeyMapSelectStore" style="display:none">
-            <div class="searchBar">
-                <a href="#" class="open fl"><s:message code="cmm.store.select"/></a>
-                <%-- 조회 --%>
-                <button class="btn_blue fr mt5 mr10" id="btnSearchStore" ng-click="kioskKeyMapSelectStore()"><s:message code="cmm.search"/></button>
-            </div>
-
-            <table class="searchTbl">
-                <colgroup>
-                    <col class="w10" />
-                    <col class="w90" />
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <th><s:message code="cmm.store.select"/></th>
-                        <td>
-                            <%-- 매장선택 모듈 사용시 include --%>
-                            <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                                <jsp:param name="targetTypeFg" value="S"/>
-                                <jsp:param name="targetId" value="kioskKeyMapSelectStore"/>
-                            </jsp:include>
-                            <%--// 매장선택 모듈 사용시 include --%>
-                        </td>
-                        <input type="hidden" id="kioskKeyMapSelectStoreCd" value="" />
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-
         <div class="searchBar">
             <a href="#" class="open fl"><s:message code="kioskKeyMap.kioskKeyMapRegist" /></a>
             <%-- 조회 --%>
@@ -53,25 +23,25 @@
                 <col class="w90" />
             </colgroup>
             <tbody>
-            <c:if test="${orgnFg == 'STORE' || pageFg == '1'}">
+            <c:if test="${orgnFg == 'STORE'}">
                 <tr id="posNoTr">
-                    <%-- 포스번호 --%>
-                <th><s:message code="kioskKeyMap.posNo" /></th>
-                <td colspan="3">
-                    <div class="sb-select" style="width:200px; float:left;">
-                        <wj-combo-box
-                                id="posNo"
-                                ng-model="posNo"
-                                items-source="_getComboData('posNo')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                control="posNoCombo"
-                                selected-index-changed="setTuClsType(s)">
-                        </wj-combo-box>
-                    </div>
-                </td>
-            </tr>
+                        <%-- 포스번호 --%>
+                    <th><s:message code="kioskKeyMap.posNo" /></th>
+                    <td colspan="3">
+                        <div class="sb-select" style="width:200px; float:left;">
+                            <wj-combo-box
+                                    id="posNo"
+                                    ng-model="posNo"
+                                    items-source="_getComboData('posNo')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    control="posNoCombo"
+                                    selected-index-changed="setTuClsType(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
             </c:if>
             <tr>
                 <%-- 키맵그룹 --%>
@@ -102,7 +72,7 @@
                             </wj-combo-box>
                         </div>
                     </c:if>
-                    <div id="btnCol"<c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
+                    <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && kioskKeyEnvstVal == '1')}">
                             <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
                                 <s:message code="kioskKeyMap.tuClsTypeAdd" />
@@ -127,17 +97,17 @@
                         </c:if>
                         <%-- 키오스크키맵삭제 --%>
                         <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && kioskKeyEnvstVal == '1')}">
-                        <button class="btn_skyblue" id="btnDelKioskKey" ng-click="kioskKeyDel()">
-                            <s:message code="kioskKeyMap.kioskKeyDel" />
-                        </button>
+                            <button class="btn_skyblue" id="btnDelKioskKey" ng-click="kioskKeyDel()">
+                                <s:message code="kioskKeyMap.kioskKeyDel" />
+                            </button>
                         </c:if>
-                        <button class="btn_skyblue" id="btnRecmd" ng-click="tuRecmd()">
+                        <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
                             <s:message code="kioskKeyMap.tuRecmd" />
                         </button>
                         <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && hqOfficeCd != '00000' && kioskKeyEnvstVal == '2')}">
-                        <button class="btn_skyblue" id="btnStoreMod" ng-click="storeMod()">
-                            <s:message code="kioskKeyMap.storeMod" />
-                        </button>
+                            <button class="btn_skyblue" id="btnStoreMod" ng-click="storeMod()">
+                                <s:message code="kioskKeyMap.storeMod" />
+                            </button>
                         </c:if>
                         <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && kioskKeyEnvstVal == '1')}">
                             <button class="btn_skyblue" id="btnClsTypeNm" ng-click="clsTypeNm()">
@@ -158,13 +128,13 @@
                                     <s:message code="kioskKeyMap.storeSalePrice" />
                                 </button>
                             </c:if>
-                            <c:if test="${orgnFg == 'STORE' || pageFg == '1'}">
+                            <c:if test="${orgnFg == 'STORE'}">
                                 <button class="btn_skyblue" id="btnSalePrice" ng-click="salePriceView()">
                                     <s:message code="kioskKeyMap.salePrice" />
                                 </button>
                             </c:if>
                         </c:if>
-                       </div>
+                    </div>
                 </td>
             </tr>
             </tbody>
@@ -182,7 +152,7 @@
                     <input type="hidden" id="tuClsTypeInfo"/>
                 </div>
                 <div class="updownSet oh mb10 pd5" id="divBtnCls" style="visibility: hidden;">
-                    <div id="btnClsCol"<c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
+                    <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <button class="btn_up" id="btnUpCls" ng-click="rowMoveUpCls()" >
                             <s:message code="cmm.up" />
                         </button>
@@ -345,131 +315,131 @@
                     <col class="w35" />
                 </colgroup>
                 <tbody>
-                    <tr>
-                        <th><s:message code="kioskKeyMap.regDate" /></th><%--등록일자--%>
-                        <td colspan="3">
-                            <div class="sb-select">
-                                <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w110px"></span>
-                                <span class="rg">~</span>
-                                <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w110px"></span>
-                                <%--전체기간--%>
-                                <span class="chk ml10">
+                <tr>
+                    <th><s:message code="kioskKeyMap.regDate" /></th><%--등록일자--%>
+                    <td colspan="3">
+                        <div class="sb-select">
+                            <span class="txtIn"><input id="srchTimeStartDate" ng-model="startDate" class="w110px"></span>
+                            <span class="rg">~</span>
+                            <span class="txtIn"><input id="srchTimeEndDate" ng-model="endDate" class="w110px"></span>
+                            <%--전체기간--%>
+                            <span class="chk ml10">
                                   <input type="checkbox" id="chkDt" ng-model="isChecked" ng-change="isChkDt()" />
                                   <label for="chkDt">
                                     <s:message code="cmm.all.day" />
                                   </label>
                                 </span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><s:message code="kioskKeyMap.prodCd" /></th><%--상품코드--%>
-                        <td>
-                            <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
-                        </td>
-                        <th><s:message code="kioskKeyMap.prodNm" /></th><%--상품명--%>
-                        <td>
-                            <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><s:message code="kioskKeyMap.srchClass" /></th><%--분류조회--%>
-                        <td>
-                            <input type="text" class="sb-input w" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left; width:69%;" placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-                            <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
-                            <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.cancel"/></button>
-                        </td>
-                        <th><s:message code="kioskKeyMap.barCd" /></th><%--바코드--%>
-                        <td>
-                            <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <%-- 사용여부 --%>
-                        <th><s:message code="kioskKeyMap.useYn" /></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchUseYn"
-                                        ng-model="useYn"
-                                        control="useYnAllCombo"
-                                        items-source="_getComboData('useYnAllComboData')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)"
-                                        selected-index="1">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                        <%--상품유형--%>
-                        <th><s:message code="kioskKeymap.prodTypeFg" /></th>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchProdTypeFg"
-                                        ng-model="prodTypeFg"
-                                        control="prodTypeFgAllCombo"
-                                        items-source="_getComboData('prodTypeFg')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><s:message code="kioskKeyMap.regYn" /></th><%--등록여부--%>
-                        <td>
-                            <div class="sb-select">
-                                <wj-combo-box
-                                        id="srchRegYn"
-                                        ng-model="regYn"
-                                        control="regYnAllCombo"
-                                        items-source="_getComboData('regYn')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false"
-                                        initialized="_initComboBox(s)">
-                                </wj-combo-box>
-                            </div>
-                        </td>
-                        <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
-                            <th></th>
-                            <td></td>
-                        </c:if>
-                        <c:if test="${brandUseFg == '1'}">
-                            <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                                <%-- 상품브랜드 --%>
-                                <th><s:message code="prod.prodHqBrand"/></th>
-                                <td>
-                                    <div class="sb-select">
-                                        <wj-combo-box
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><s:message code="kioskKeyMap.prodCd" /></th><%--상품코드--%>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchProdCd" ng-model="prodCd" />
+                    </td>
+                    <th><s:message code="kioskKeyMap.prodNm" /></th><%--상품명--%>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchProdNm" ng-model="prodNm" />
+                    </td>
+                </tr>
+                <tr>
+                    <th><s:message code="kioskKeyMap.srchClass" /></th><%--분류조회--%>
+                    <td>
+                        <input type="text" class="sb-input w" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left; width:69%;" placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                        <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.cancel"/></button>
+                    </td>
+                    <th><s:message code="kioskKeyMap.barCd" /></th><%--바코드--%>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchBarCd" ng-model="barCd" />
+                    </td>
+                </tr>
+                <tr>
+                    <%-- 사용여부 --%>
+                    <th><s:message code="kioskKeyMap.useYn" /></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchUseYn"
+                                    ng-model="useYn"
+                                    control="useYnAllCombo"
+                                    items-source="_getComboData('useYnAllComboData')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    selected-index="1">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <%--상품유형--%>
+                    <th><s:message code="kioskKeymap.prodTypeFg" /></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchProdTypeFg"
+                                    ng-model="prodTypeFg"
+                                    control="prodTypeFgAllCombo"
+                                    items-source="_getComboData('prodTypeFg')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><s:message code="kioskKeyMap.regYn" /></th><%--등록여부--%>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchRegYn"
+                                    ng-model="regYn"
+                                    control="regYnAllCombo"
+                                    items-source="_getComboData('regYn')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <c:if test="${brandUseFg != '1' or sessionInfo.orgnFg != 'HQ'}">
+                        <th></th>
+                        <td></td>
+                    </c:if>
+                    <c:if test="${brandUseFg == '1'}">
+                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                            <%-- 상품브랜드 --%>
+                            <th><s:message code="prod.prodHqBrand"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
                                             id="srchProdHqBrandCd"
                                             items-source="_getComboData('srchProdHqBrandCd')"
                                             display-member-path="name"
                                             selected-value-path="value"
                                             is-editable="false"
                                             control="srchProdHqBrandCdCombo">
-                                        </wj-combo-box>
-                                    </div>
-                                </td>
-                            </c:if>
+                                    </wj-combo-box>
+                                </div>
+                            </td>
                         </c:if>
-                    </tr>
-                    <tr>
-                        <td colspan="4" align="right">
-                            <div id="divBtnProd" style="visibility: hidden;">
-                                <button class="btn_skyblue" id="btnSearchProd" ng-click="_pageView('kioskProdCtrl', 1)">
-                                    <s:message code="cmm.search" />
-                                </button>
-                                <button class="btn_skyblue" id="btnRegProd" ng-click="regProd()">
-                                    <s:message code="kioskKeyMap.prodReg" />
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    </c:if>
+                </tr>
+                <tr>
+                    <td colspan="4" align="right">
+                        <div id="divBtnProd" style="visibility: hidden;">
+                            <button class="btn_skyblue" id="btnSearchProd" ng-click="_pageView('kioskProdCtrl', 1)">
+                                <s:message code="cmm.search" />
+                            </button>
+                            <button class="btn_skyblue" id="btnRegProd" ng-click="regProd()">
+                                <s:message code="kioskKeyMap.prodReg" />
+                            </button>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
             <div class="w100 mt10 mb20">
@@ -545,12 +515,9 @@
 
     // KIOSK-매장수정여부 0:미사용 1:사용
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
-
-    var pageFg = "${pageFg}";
-    var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20250120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20241212.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

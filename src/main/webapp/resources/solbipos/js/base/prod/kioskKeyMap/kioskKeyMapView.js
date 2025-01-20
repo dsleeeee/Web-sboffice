@@ -78,10 +78,6 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
     tuMClsPage = 1;
     var params = {};
     params.tuClsType = $scope.tuClsTypeViewCombo.selectedValue;
-    if(pageFg === '1'){
-      params.pageFg = '1';
-      params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-    }
 
     // 중분류 사용 여부 조회
     $scope._postJSONQuery.withOutPopUp('/base/prod/kioskKeyMap/kioskKeyMap/getKioskCategory.sb', params, function (response) {
@@ -105,10 +101,6 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
     if(orgnFg==='STORE'){
       var scope = agrid.getScope('kioskKeyMapRegistCtrl');
       params.posNo = scope.posNoCombo.selectedValue;
-    }
-    if(pageFg === '1'){
-      params.pageFg = '1';
-      params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
     }
 
     if(document.getElementsByName('sessionId')[0]){
@@ -184,11 +176,6 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
     //   params.posNo = scope.posNoCombo.selectedValue;
     // }
 
-    if(pageFg === '1'){
-      params.pageFg = '1';
-      params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-    }
-
     if(document.getElementsByName('sessionId')[0]){
       params.sid = document.getElementsByName('sessionId')[0].value;
     }
@@ -215,8 +202,8 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
           for (var i = 0; i < (4 > list.length ? list.length : 4); i++) {
             $("#tuCls" + (i+4)).html("<span id='tuClsCd" + (i+4) + "' style='display: none'>" + list[i].tuMClsCd + "</span>" + list[i].tuMClsNm);
           }
-            $("#th4").css('background-color', '#D9EAFD');
-            $scope.getTuKeyList(list[0].tuMClsCd);
+          $("#th4").css('background-color', '#D9EAFD');
+          $scope.getTuKeyList(list[0].tuMClsCd);
         }
       }
     }, function errorCallback(response) {
@@ -251,10 +238,6 @@ app.controller('kioskKeyMapViewCtrl', ['$scope', '$http', function ($scope, $htt
     if(orgnFg==='STORE'){
       var scope = agrid.getScope('kioskKeyMapRegistCtrl');
       params.posNo = scope.posNoCombo.selectedValue;
-    }
-    if(pageFg === '1'){
-      params.pageFg = '1';
-      params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
     }
 
     if(document.getElementsByName('sessionId')[0]){

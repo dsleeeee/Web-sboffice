@@ -157,12 +157,12 @@
                                         <td>
                                             <div class="sb-select">
                                                 <wj-combo-box
-                                                    id="srchRmProdHqBrandCd"
-                                                    items-source="_getComboData('srchRmProdHqBrandCd')"
-                                                    display-member-path="name"
-                                                    selected-value-path="value"
-                                                    is-editable="false"
-                                                    control="srchRmProdHqBrandCdCombo">
+                                                        id="srchRmProdHqBrandCd"
+                                                        items-source="_getComboData('srchRmProdHqBrandCd')"
+                                                        display-member-path="name"
+                                                        selected-value-path="value"
+                                                        is-editable="false"
+                                                        control="srchRmProdHqBrandCdCombo">
                                                 </wj-combo-box>
                                             </div>
                                         </td>
@@ -183,53 +183,53 @@
                                     </div>
                                 </td>
                             </tr>
-<%--                            <tr>--%>
-<%--                                <th><s:message code="kioskKeyMap.useYn" /></th>&lt;%&ndash;사용여부&ndash;%&gt;--%>
-<%--                                <td>--%>
-<%--                                    <div class="sb-select">--%>
-<%--                                        <wj-combo-box--%>
-<%--                                                id="srchUseYn"--%>
-<%--                                                ng-model="useYn"--%>
-<%--                                                control="useYnAllCombo"--%>
-<%--                                                items-source="_getComboData('useYnAllComboData')"--%>
-<%--                                                display-member-path="name"--%>
-<%--                                                selected-value-path="value"--%>
-<%--                                                is-editable="false"--%>
-<%--                                                initialized="_initComboBox(s)">--%>
-<%--                                        </wj-combo-box>--%>
-<%--                                    </div>--%>
-<%--                                </td>--%>
-<%--                                <th><s:message code="kioskKeymap.prodTypeFg" /></th>&lt;%&ndash;상품유형&ndash;%&gt;--%>
-<%--                                <td>--%>
-<%--                                    <div class="sb-select">--%>
-<%--                                        <wj-combo-box--%>
-<%--                                                id="srchProdTypeFg"--%>
-<%--                                                ng-model="prodTypeFg"--%>
-<%--                                                control="prodTypeFgAllCombo"--%>
-<%--                                                items-source="_getComboData('prodTypeFg')"--%>
-<%--                                                display-member-path="name"--%>
-<%--                                                selected-value-path="value"--%>
-<%--                                                is-editable="false"--%>
-<%--                                                initialized="_initComboBox(s)">--%>
-<%--                                        </wj-combo-box>--%>
-<%--                                    </div>--%>
-<%--                                </td>--%>
-<%--                            </tr>--%>
-<%--                                <th><s:message code="kioskKeyMap.regYn" /></th>&lt;%&ndash;등록여부&ndash;%&gt;--%>
-<%--                                <td>--%>
-<%--                                    <div class="sb-select">--%>
-<%--                                        <wj-combo-box--%>
-<%--                                                id="srchRegYn"--%>
-<%--                                                ng-model="regYn"--%>
-<%--                                                control="regYnAllCombo"--%>
-<%--                                                items-source="_getComboData('regYn')"--%>
-<%--                                                display-member-path="name"--%>
-<%--                                                selected-value-path="value"--%>
-<%--                                                is-editable="false"--%>
-<%--                                                initialized="_initComboBox(s)">--%>
-<%--                                        </wj-combo-box>--%>
-<%--                                    </div>--%>
-<%--                                </td>--%>
+                            <%--                            <tr>--%>
+                            <%--                                <th><s:message code="kioskKeyMap.useYn" /></th>&lt;%&ndash;사용여부&ndash;%&gt;--%>
+                            <%--                                <td>--%>
+                            <%--                                    <div class="sb-select">--%>
+                            <%--                                        <wj-combo-box--%>
+                            <%--                                                id="srchUseYn"--%>
+                            <%--                                                ng-model="useYn"--%>
+                            <%--                                                control="useYnAllCombo"--%>
+                            <%--                                                items-source="_getComboData('useYnAllComboData')"--%>
+                            <%--                                                display-member-path="name"--%>
+                            <%--                                                selected-value-path="value"--%>
+                            <%--                                                is-editable="false"--%>
+                            <%--                                                initialized="_initComboBox(s)">--%>
+                            <%--                                        </wj-combo-box>--%>
+                            <%--                                    </div>--%>
+                            <%--                                </td>--%>
+                            <%--                                <th><s:message code="kioskKeymap.prodTypeFg" /></th>&lt;%&ndash;상품유형&ndash;%&gt;--%>
+                            <%--                                <td>--%>
+                            <%--                                    <div class="sb-select">--%>
+                            <%--                                        <wj-combo-box--%>
+                            <%--                                                id="srchProdTypeFg"--%>
+                            <%--                                                ng-model="prodTypeFg"--%>
+                            <%--                                                control="prodTypeFgAllCombo"--%>
+                            <%--                                                items-source="_getComboData('prodTypeFg')"--%>
+                            <%--                                                display-member-path="name"--%>
+                            <%--                                                selected-value-path="value"--%>
+                            <%--                                                is-editable="false"--%>
+                            <%--                                                initialized="_initComboBox(s)">--%>
+                            <%--                                        </wj-combo-box>--%>
+                            <%--                                    </div>--%>
+                            <%--                                </td>--%>
+                            <%--                            </tr>--%>
+                            <%--                                <th><s:message code="kioskKeyMap.regYn" /></th>&lt;%&ndash;등록여부&ndash;%&gt;--%>
+                            <%--                                <td>--%>
+                            <%--                                    <div class="sb-select">--%>
+                            <%--                                        <wj-combo-box--%>
+                            <%--                                                id="srchRegYn"--%>
+                            <%--                                                ng-model="regYn"--%>
+                            <%--                                                control="regYnAllCombo"--%>
+                            <%--                                                items-source="_getComboData('regYn')"--%>
+                            <%--                                                display-member-path="name"--%>
+                            <%--                                                selected-value-path="value"--%>
+                            <%--                                                is-editable="false"--%>
+                            <%--                                                initialized="_initComboBox(s)">--%>
+                            <%--                                        </wj-combo-box>--%>
+                            <%--                                    </div>--%>
+                            <%--                                </td>--%>
                             </tbody>
                         </table>
                         <div class="w100 mt10 mb20">
@@ -268,7 +268,7 @@
 <script type="text/javascript">
     var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20250120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskRecmd.js?ver=20220111.01" charset="utf-8"></script>
 
 
 <%-- 상품선택 모듈 멀티 선택 사용시 include --%>

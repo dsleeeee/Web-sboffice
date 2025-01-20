@@ -8,8 +8,8 @@
        class="sb-input fl"
        style="cursor:pointer; width:200px;"
        value=<c:choose><c:when test="${param.targetTypeFg == 'M'}"><s:message code="cmm.all"/></c:when><c:otherwise><s:message code="cmm.select"/></c:otherwise></c:choose>
-       ng-click="_pageView('<c:out value="${param.targetId}"/>Ctrl', 1)"
-       readonly/>
+               ng-click="_pageView('<c:out value="${param.targetId}"/>Ctrl', 1)"
+readonly/>
 <button type="button" class="btn_skyblue fl" id="<c:out value="${param.targetId}"/>btnCancelStoreCd" style="margin-left: 5px;" onclick="delStore('<c:out value="${param.targetId}"/>', '<c:out value="${param.targetTypeFg}"/>')"><s:message code="cmm.selectCancel"/></button>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:630px;">
@@ -107,7 +107,7 @@
                     </tr>
                     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                         <tr>
-                            <%-- 팀별 --%>
+                                <%-- 팀별 --%>
                             <th><s:message code="cmm.moms.momsTeam"/></th>
                             <td>
                                 <div class="sb-select">
@@ -123,7 +123,7 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                            <%-- AC점포별 --%>
+                                <%-- AC점포별 --%>
                             <th><s:message code="cmm.moms.momsAcShop"/></th>
                             <td>
                                 <div class="sb-select">
@@ -141,7 +141,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <%-- 지역구분 --%>
+                                <%-- 지역구분 --%>
                             <th><s:message code="cmm.moms.momsAreaFg"/></th>
                             <td>
                                 <div class="sb-select">
@@ -157,7 +157,7 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                            <%-- 상권 --%>
+                                <%-- 상권 --%>
                             <th><s:message code="cmm.moms.momsCommercial"/></th>
                             <td>
                                 <div class="sb-select">
@@ -175,7 +175,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <%-- 점포유형 --%>
+                                <%-- 점포유형 --%>
                             <th><s:message code="cmm.moms.momsShopType"/></th>
                             <td>
                                 <div class="sb-select">
@@ -191,7 +191,7 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                            <%-- 매장관리타입 --%>
+                                <%-- 매장관리타입 --%>
                             <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                             <td>
                                 <div class="sb-select">
@@ -251,7 +251,7 @@
                     </tr>
                     <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                         <tr>
-                            <%-- 매장그룹3 --%>
+                                <%-- 매장그룹3 --%>
                             <th><s:message code="cmm.moms.momsStoreFg03"/></th>
                             <td>
                                 <div class="sb-select">
@@ -267,7 +267,7 @@
                                     </wj-combo-box>
                                 </div>
                             </td>
-                            <%-- 매장그룹4 --%>
+                                <%-- 매장그룹4 --%>
                             <th><s:message code="cmm.moms.momsStoreFg04"/></th>
                             <td>
                                 <div class="sb-select">
@@ -285,7 +285,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <%-- 매장그룹5 --%>
+                                <%-- 매장그룹5 --%>
                             <th><s:message code="cmm.moms.momsStoreFg05"/></th>
                             <td>
                                 <div class="sb-select">
@@ -331,7 +331,7 @@
                     </tr>
                     <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                         <tr>
-                            <%-- 업로드매장 --%>
+                                <%-- 업로드매장 --%>
                             <th><s:message code="selectStore.uploadStore" /></th>
                             <td>
                                 <input type="text" id="popUploadStore" ng-model="popUploadStore" readonly/>
@@ -486,10 +486,6 @@
                         if (col.binding === "storeCd") {
                             $("#" + targetId + "Cd").val(selectedRow.storeCd);
                             $("#" + targetId + "Nm").val("[" + selectedRow.storeCd + "] " + selectedRow.storeNm);
-                            if(targetId === 'kioskKeyMapSelectStore'){
-                                var scope = agrid.getScope('kioskKeyMapRegistCtrl');
-                                scope.kioskKeyMapSelectStore(selectedRow.storeCd);
-                            }
                             eval('$scope.wj' + targetId + 'Layer.hide(true)');
                         }
                     }

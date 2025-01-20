@@ -160,10 +160,6 @@ app.controller('popUpSalePriceCtrl', ['$scope', '$http', '$timeout', function ($
         var url = '/base/prod/kioskKeyMap/kioskKeyMap/getKioskTuClsTypeList.sb';
         var params = {};
         if(orgnFg === "STORE") {params.posNo = $scope.popUpPosNoCombo.selectedValue;}
-        if(pageFg !== undefined && pageFg !== null && pageFg === '1'){
-            params.pageFg = '1';
-            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-        }
 
         //가상로그인 session 설정
         if(document.getElementsByName('sessionId')[0]){
@@ -234,10 +230,6 @@ app.controller('popUpSalePriceCtrl', ['$scope', '$http', '$timeout', function ($
             params.posNo = $scope.popUpPosNoCombo.selectedValue;
             params.tuClsType = $scope.popUpTuClsTypeCombo.selectedValue;
         }
-        if(pageFg !== undefined && pageFg !== null && pageFg === '1'){
-            params.pageFg = '1';
-            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-        }
         console.log(params);
 
         $scope._inquirySub("/base/prod/kioskKeyMap/kioskKeyMap/getSalePrice.sb", params, function () {
@@ -247,7 +239,7 @@ app.controller('popUpSalePriceCtrl', ['$scope', '$http', '$timeout', function ($
                 $scope.popUpTuClsTypeCombo.selectedValue = tuClsType;
             }
             // 프랜차이즈매장은 본사에서 등록한 상품 선택 불가
-            if((orgnFg == "STORE" && hqOfficeCd != "00000") || (pageFg == "1" && hqOfficeCd != "00000")) {
+            if(orgnFg == "STORE" && hqOfficeCd != "00000") {
 
                 var grid = wijmo.Control.getControl("#wjSalePrice");
                 var rows = grid.rows;
@@ -278,10 +270,6 @@ app.controller('popUpSalePriceCtrl', ['$scope', '$http', '$timeout', function ($
                 var prodClassCd = scope.getSelectedClass();
                 var params = {};
                 params.prodClassCd = prodClassCd;
-                if(pageFg !== undefined && pageFg !== null && pageFg === '1'){
-                    params.pageFg = '1';
-                    params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-                }
                 // 조회 수행 : 조회URL, 파라미터, 콜백함수
                 $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
                     function(response){
@@ -442,10 +430,6 @@ app.controller('popUpSalePriceCtrl', ['$scope', '$http', '$timeout', function ($
                             }
                         }
 
-                    }
-
-                    if(pageFg !== undefined && pageFg !== null && pageFg === '1'){
-                        $scope.flex.collectionView.items[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
                     }
 
                     params.push($scope.flex.collectionView.items[i]);

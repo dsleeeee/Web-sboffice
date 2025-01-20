@@ -89,15 +89,15 @@
                 <%--위즈모 테이블--%>
                 <div class="wj-gridWrap" style="height: 450px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
-                          id="wjSalePrice"
-                          autoGenerateColumns="false"
-                          control="flex"
-                          initialized="initGrid(s,e)"
-                          sticky-headers="true"
-                          selection-mode="Row"
-                          items-source="data"
-                          item-formatter="_itemFormatter"
-                          id="wjGridList">
+                            id="wjSalePrice"
+                            autoGenerateColumns="false"
+                            control="flex"
+                            initialized="initGrid(s,e)"
+                            sticky-headers="true"
+                            selection-mode="Row"
+                            items-source="data"
+                            item-formatter="_itemFormatter"
+                            id="wjGridList">
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
@@ -143,13 +143,13 @@
                     </wj-flex-grid>
                 </div>
 
-                    <%-- 페이지 리스트 --%>
-                    <div class="pageNum mt20">
-                        <%-- id --%>
-                        <ul id="popUpSalePriceCtrlPager" data-size="10">
-                        </ul>
-                    </div>
-                    <%--//페이지 리스트--%>
+                <%-- 페이지 리스트 --%>
+                <div class="pageNum mt20">
+                    <%-- id --%>
+                    <ul id="popUpSalePriceCtrlPager" data-size="10">
+                    </ul>
+                </div>
+                <%--//페이지 리스트--%>
             </div>
         </div>
     </div>
@@ -160,4 +160,4 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/popUpSalePrice.js?ver=20250117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/popUpSalePrice.js?ver=20240611.01" charset="utf-8"></script>

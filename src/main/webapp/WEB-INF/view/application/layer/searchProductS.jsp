@@ -53,22 +53,22 @@
           </td>
         </tr>
         <tr>
-            <%-- 사용여부 --%>
-            <th><s:message code="popup.product.usesYn"/></th>
-            <td>
-                <div class="sb-select">
-                    <wj-combo-box
-                            id="srchUseYnCombo"
-                            ng-model="popUseYn"
-                            items-source="_getComboData('srchUseYnCombo')"
-                            display-member-path="name"
-                            selected-value-path="value"
-                            is-editable="false"
-                            control="srchUseYnCombo"
-                            selected-index="1">
-                    </wj-combo-box>
-                </div>
-            </td>
+          <%-- 사용여부 --%>
+          <th><s:message code="popup.product.usesYn"/></th>
+          <td>
+            <div class="sb-select">
+              <wj-combo-box
+                      id="srchUseYnCombo"
+                      ng-model="popUseYn"
+                      items-source="_getComboData('srchUseYnCombo')"
+                      display-member-path="name"
+                      selected-value-path="value"
+                      is-editable="false"
+                      control="srchUseYnCombo"
+                      selected-index="1">
+              </wj-combo-box>
+            </div>
+          </td>
         </tr>
         </tbody>
       </table>
@@ -135,8 +135,8 @@
 
                   <!-- define columns -->
                   <wj-flex-grid-column header="<s:message code="popup.product.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="popup.product.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="popup.product.usesYn"/>" binding="useYn" data-map="useYnDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="popup.product.prodNm"/>" binding="prodNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="popup.product.usesYn"/>" binding="useYn" data-map="useYnDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
 
                 </wj-flex-grid>
               </div>
@@ -187,8 +187,8 @@
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
-        // 그리드 DataMap 설정
-        $scope.useYnDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
+      // 그리드 DataMap 설정
+      $scope.useYnDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
 
       // 브랜드 사용여부
       var params = {};
@@ -205,13 +205,13 @@
           // 상품브랜드
           params = {};
           $scope._postJSONQuery.withOutPopUp('/iostock/cmm/iostockCmm/selectBrandMomsList.sb', params, function (response) {
-              if (response.data.data.list.length > 0) {
-                  var list = response.data.data.list;
-                  $scope._setComboData("popSProdeHqBrandCdCombo", list);
+            if (response.data.data.list.length > 0) {
+              var list = response.data.data.list;
+              $scope._setComboData("popSProdeHqBrandCdCombo", list);
 
-                  // 상품브랜드 콤보박스 항목 저장시 쓰려고
-                  pSUserHqBrandCdComboList = list;
-              }
+              // 상품브랜드 콤보박스 항목 저장시 쓰려고
+              pSUserHqBrandCdComboList = list;
+            }
           });
 
         }else{
@@ -255,12 +255,7 @@
       eval('$scope.wj' + $scope.targetId + 'LayerS.show(true)');
 
       if ($scope.searchFg == "N") {
-        if(paramObj!== null && paramObj === '1'){
-          $scope.pageFg = '1';
-          $scope.searchProdClass();
-        }else {
-          $scope.searchProdClass();
-        }
+        $scope.searchProdClass();
       }
       // 기능수행 종료 : 반드시 추가
       event.preventDefault();
@@ -269,11 +264,6 @@
     // 상품 분류 조회
     $scope.searchProdClass = function(){
       var params = {};
-
-      if($scope.pageFg !== undefined && $scope.pageFg !== null && $scope.pageFg === '1'){
-        params.pageFg = '1';
-        params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-      }
 
       $scope._postJSONQuery.withOutPopUp('/popup/getProdClassTree.sb', params, function (response) {
         // console.log('tree response', response);
@@ -327,7 +317,7 @@
     $scope.searchProd = function(){
 
       if( (isEmptyObject($("#"+$scope.targetId+"ProdCd").val()) && isEmptyObject($("#"+$scope.targetId+"ProdNm").val() ) && isEmptyObject($scope.srchPopSProdeHqBrandCdCombo.selectedValue) && isEmptyObject($scope.srchUseYnCombo.selectedValue))
-       || $("#"+$scope.targetId+"ProdNm").val() === '선택'){
+              || $("#"+$scope.targetId+"ProdNm").val() === '선택'){
         $scope._popMsg("검색조건을 입력해주세요");
         return false;
       }
@@ -348,22 +338,17 @@
 
         // 선택한 상품브랜드가 없을 때('전체' 일때)
         if(params.prodHqBrandCd === "" || params.prodHqBrandCd === null) {
-            var userHqBrandCd = "";
-            for(var i=0; i < pSUserHqBrandCdComboList.length; i++){
-                if(pSUserHqBrandCdComboList[i].value !== null) {
-                    userHqBrandCd += pSUserHqBrandCdComboList[i].value + ","
-                }
+          var userHqBrandCd = "";
+          for(var i=0; i < pSUserHqBrandCdComboList.length; i++){
+            if(pSUserHqBrandCdComboList[i].value !== null) {
+              userHqBrandCd += pSUserHqBrandCdComboList[i].value + ","
             }
-            params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
+          }
+          params.userProdBrands = userHqBrandCd; // 사용자별 관리브랜드만 조회(관리브랜드가 따로 없으면, 모든 브랜드 조회)
         }
       }
 
       console.log(params);
-
-      if($scope.pageFg !== undefined && $scope.pageFg !== null && $scope.pageFg === '1'){
-        params.pageFg = '1';
-        params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-      }
 
       // console.log('params', params);
       // 조회 수행 : 조회URL, 파라미터, 콜백함수
@@ -371,10 +356,10 @@
     };
 
     $scope.popClose = function () {
-        $("#${param.targetId}ProdCd").val("");
-        $("#${param.targetId}ProdNm").val("");
-        $scope.srchPopSProdeHqBrandCdCombo.selectedIndex = 0;
-        $scope.srchUseYnCombo.selectedValue = "Y";
+      $("#${param.targetId}ProdCd").val("");
+      $("#${param.targetId}ProdNm").val("");
+      $scope.srchPopSProdeHqBrandCdCombo.selectedIndex = 0;
+      $scope.srchUseYnCombo.selectedValue = "Y";
     };
 
   }]);

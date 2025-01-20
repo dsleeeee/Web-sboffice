@@ -74,12 +74,12 @@
 
             <div class="wj-gridWrap" style="height:400px;">
                 <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter">
+                        autoGenerateColumns="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.tuClsType"/>"     binding="tuClsType" width="*" align="center" is-read-only="true" ></wj-flex-grid-column>
@@ -93,9 +93,9 @@
         </div>
         <div class="wj-dialog-footer">
             <c:if test="${orgnFg == 'HQ'}">
-                <button class="btn_blue" id="btnSaveStoreModGrp" ng-click="saveStoreModGrp()"><s:message code="cmm.save" /></button>
+                <button class="btn_blue" ng-click="saveStoreModGrp()"><s:message code="cmm.save" /></button>
             </c:if>
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapStoreMod.js?ver=20250114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapStoreMod.js?ver=20240105.01" charset="utf-8"></script>

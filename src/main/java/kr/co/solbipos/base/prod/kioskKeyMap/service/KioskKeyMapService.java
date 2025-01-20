@@ -93,7 +93,7 @@ public interface KioskKeyMapService {
     int saveRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 
     /** 키오스크 추천메뉴 - 추천메뉴 기존메뉴 삭제 */
-    int deleteRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+    int deleteRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 
     /** 키오스크 추천메뉴 - 추천메뉴 저장(하위 오른쪽 그리드) */
     int addRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
@@ -115,7 +115,7 @@ public interface KioskKeyMapService {
 
     /** 키오스크키맵 매장복사 - 기준매장 키맵그룹 매장적용 */
     int saveKioskKeyMapStoreCopy(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
-    
+
     /** 키맵미리보기 판매터치키 */
     List<DefaultMap<Object>> getTuKeyList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
 

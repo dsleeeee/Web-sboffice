@@ -81,7 +81,7 @@
             <div class="tr">
                 <button class="btn_blue ml10 fr" id="btnInsertEnvStore" ng-click="btnInsertEnvStore()"><s:message code="cmm.copy"/></button>
             </div>
-         </div>
+        </div>
     </div>
 </wj-popup>
 
@@ -90,4 +90,4 @@
     var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapCopyStore.js?ver=20250113.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapCopyStore.js?ver=20210609.05" charset="utf-8"></script>

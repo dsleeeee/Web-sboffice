@@ -38,12 +38,6 @@ app.controller('kioskKeyDelCtrl', ['$scope', '$http', '$timeout', function ($sco
         params.posNo = $("#kioskKeyPosNo").text();
         params.tuClsType = $scope.kioKeyGrpCd;
         params.tuClsTypeNm = $scope.kioKeyGrpNm;
-        if(pageFg === '1'){
-            params.pageFg = '1';
-            if($("#kioskKeyMapSelectStoreCd").val() !== null && $("#kioskKeyMapSelectStoreCd").val() !== ""){
-                params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
-            }
-        }
         $scope._inquiryMain("/base/prod/kioskKeyMap/kioskKeyMap/getClsTypeList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->
@@ -64,10 +58,6 @@ app.controller('kioskKeyDelCtrl', ['$scope', '$http', '$timeout', function ($sco
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 if($scope.flex.collectionView.items[i].gChk) {
                     $scope.flex.collectionView.items[i].posNo = $("#kioskKeyPosNo").text();
-                    if(pageFg === '1'){
-                        $scope.flex.collectionView.items[i].pageFg = '1';
-                        $scope.flex.collectionView.items[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
-                    }
                     params.push($scope.flex.collectionView.items[i]);
                 }
             }
@@ -131,14 +121,8 @@ app.controller('kioskKeyDelCtrl', ['$scope', '$http', '$timeout', function ($sco
                     $scope._gridDataInit();
                     // 저장되었습니다.
                     $scope._popMsg(messages["cmm.saveSucc"]);
-                    var selectStoreCd = $("#kioskKeyMapSelectStoreCd").val();
                     // 화면 리플레시
                     setTimeout(function() {
-                        if(pageFg === '1'){
-                            sessionStorage.setItem('reloaded', 'true');  // 새로 고침 여부 기록
-                            sessionStorage.setItem('selectStoreCd', $("#kioskKeyMapSelectStoreCd").val());  // 새로 고침 여부 기록
-                            sessionStorage.setItem('selectStoreNm', $("#kioskKeyMapSelectStoreNm").val());  // 새로 고침 여부 기록
-                        }
                         location.reload();
                     }, 100);
                 }

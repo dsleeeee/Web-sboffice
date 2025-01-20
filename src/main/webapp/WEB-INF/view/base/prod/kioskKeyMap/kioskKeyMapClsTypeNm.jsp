@@ -20,12 +20,12 @@
         <div class="wj-dialog-body">
             <div class="wj-gridWrap" style="height:400px;">
                 <wj-flex-grid
-                    autoGenerateColumns="false"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    selection-mode="Row"
-                    items-source="data"
-                    item-formatter="_itemFormatter">
+                        autoGenerateColumns="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter">
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="kioskKeyMap.posNo"/>"         binding="posNo" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -40,4 +40,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.js?ver=20250117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.js?ver=20221228.01" charset="utf-8"></script>

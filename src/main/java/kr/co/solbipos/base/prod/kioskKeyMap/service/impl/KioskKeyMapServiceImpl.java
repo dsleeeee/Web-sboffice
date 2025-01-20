@@ -70,11 +70,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<String>> getKioskTuClsTypeList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -87,11 +83,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<String>> getStoreModGrpList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -133,14 +125,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<String>> getClsTypeList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
+        kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return kioskKeyMapMapper.getClsTypeList(kioskKeyMapVO);
     }
@@ -153,14 +140,10 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         String currentDt = currentDateTimeString();
 
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs ) {
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             // 소속구분 설정
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
             // 기본입력정보 설정
             kioskKeyMapVO.setRegDt(currentDt);
             kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
@@ -173,10 +156,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             System.out.println("본사"+sessionInfoVO.getOrgnFg().getCode());
             // 그룹명 추가 및 수정
             if(sessionInfoVO.getOrgnFg().getCode() != null && sessionInfoVO.getOrgnFg().getCode() == "H"){
-                if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                }else {
-                    result = kioskKeyMapMapper.updateStoreGrpNm(kioskKeyMapVO);
-                }
+                result = kioskKeyMapMapper.updateStoreGrpNm(kioskKeyMapVO);
             }
 
         }
@@ -192,11 +172,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<Object>> getKioskCategory(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -213,11 +189,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
                 kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -290,11 +262,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<Object>> getKioskKeyMap(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -308,16 +276,10 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     public int updateKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
         String currentDt = currentDateTimeString();
-        String pageFg = "";
 
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-                pageFg = kioskKeyMapVO.getPageFg();
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
                 kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -339,7 +301,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             }
         }
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE || pageFg.equals("1")) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
             KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -360,11 +322,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<String>> getKioskProdList(@RequestBody KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -393,16 +351,10 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         String dt = currentDateTimeString();
 
         int procCnt = 0;
-        String pageFg = "";
 
         for(KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-                pageFg = kioskKeyMapVO.getPageFg();
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
                 kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -428,7 +380,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE || pageFg.equals("1")) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
             KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -449,11 +401,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -490,13 +438,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
         }
@@ -538,12 +481,8 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         int result = 0;
         String currentDt = currentDateTimeString();
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
         kioskKeyMapVO.setRegDt(currentDt);
         kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
         kioskKeyMapVO.setModDt(currentDt);
@@ -761,11 +700,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setDirctInYn("Y");
             kioskKeyMapVO.setPosFg("W"); // WEB
             kioskKeyMapVO.setUseYn("Y");
@@ -882,11 +817,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public String getKioskEnv(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO){
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -899,11 +830,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<Object>> getRecmd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -920,12 +847,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         // 매장 키오스크 포스 환경설정값 일괄 저장
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-                kioskKeyMapVO.setRegFg("S");
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
                 kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -968,11 +890,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<Object>> getRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -985,11 +903,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<Object>> getRecmdProdList(@RequestBody KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -1019,12 +933,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         // 추천메뉴 일괄저장
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-                kioskKeyMapVO.setRegFg("S");
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
                 kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -1044,24 +953,17 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     }
 
     @Override
-    public int deleteRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
+    public int deleteRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
 
-        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
-
-            if (kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-            } else {
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
-            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
-            }
-            if (kioskKeyMapMapper.getIndex(kioskKeyMapVO) != "1") {
-                result = kioskKeyMapMapper.deleteRecmdProd(kioskKeyMapVO);
-            }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        if (kioskKeyMapMapper.getIndex(kioskKeyMapVO) != "1") {
+            result = kioskKeyMapMapper.deleteRecmdProd(kioskKeyMapVO);
         }
 
         return result;
@@ -1077,12 +979,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         // 추천메뉴 저장
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-                kioskKeyMapVO.setRegFg("S");
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
                 kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -1137,11 +1034,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     /** 키오스크 카테고리(중분류) 조회 */
     public List<DefaultMap<Object>> getKioskCategoryM(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -1158,11 +1051,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
                 kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -1177,7 +1066,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             // 페이지 수 계산
             int indexNo = Integer.parseInt(kioskKeyMapVO.getIndexNo());
             kioskKeyMapVO.setTuPage(Integer.toString((int)(Math.floor((indexNo - 1) / 4) + 1)));
-    
+
             if ( kioskKeyMapVO.getStatus() == GridDataFg.INSERT ) { // 생성
 
                 // 중분류코드 생성
@@ -1213,11 +1102,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<Object>> getKioskKeyMapGroupTuMClsFg(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -1334,11 +1219,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<Object>> getTuKeyList(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
             kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -1386,13 +1267,9 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     @Override
     public List<DefaultMap<Object>> getSalePrice(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
+        kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
         kioskKeyMapVO.setUserId(sessionInfoVO.getUserId());
 
         return kioskKeyMapMapper.getSalePrice(kioskKeyMapVO);
@@ -1406,12 +1283,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         for(KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
             KioskKeyMapVO kioskKeyMapClassVO = new KioskKeyMapVO();
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapClassVO.setOrgnFg("S");
-                kioskKeyMapClassVO.setStoreCd(kioskKeyMapVO.getStoreCd());
-            }else{
-                kioskKeyMapClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapClassVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             kioskKeyMapClassVO.setPosNo(kioskKeyMapVO.getPosNo());
             if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
@@ -1429,11 +1301,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
                 }
             }
 
-            if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                kioskKeyMapVO.setOrgnFg("S");
-            }else{
-                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-            }
+            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                 kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
@@ -1441,10 +1309,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             kioskKeyMapMapper.deleteKioskkeyGrp(kioskKeyMapVO);
             kioskKeyMapMapper.deleteAllKioskKey(kioskKeyMapVO);
             if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-                }else {
-                    kioskKeyMapMapper.deleteKioskKeyLsm(kioskKeyMapVO);
-                }
+                kioskKeyMapMapper.deleteKioskKeyLsm(kioskKeyMapVO);
             }
         }
 

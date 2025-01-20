@@ -370,7 +370,7 @@ public class ProdVO extends PageVO {
     private String prodHqBrandCd;
 
     /** 사용자별 브랜드코드(매장) */
-        private String[] userBrandList;
+    private String[] userBrandList;
 
     /** 사용자별 브랜드코드(매장) */
     private String userBrands;
@@ -422,9 +422,6 @@ public class ProdVO extends PageVO {
 
     /** 등록 및 삭제 확인용 비밀번호 */
     private String password;
-
-    /** 페이지 구분 */
-    private String pageFg;
 
     /**
      * @return the hqOfficeCd
@@ -1799,13 +1796,5 @@ public class ProdVO extends PageVO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPageFg() {
-        return pageFg;
-    }
-
-    public void setPageFg(String pageFg) {
-        this.pageFg = pageFg;
     }
 }
