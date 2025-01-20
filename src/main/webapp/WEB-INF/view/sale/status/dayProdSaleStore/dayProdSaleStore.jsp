@@ -122,10 +122,10 @@
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.storeNm"/>" binding="storeNm" width="140" align="left" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodClass"/>" binding="prodClassNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodNm"/>" binding="prodNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.sideProdClass"/>" binding="sideProdClassNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayProdSaleStore.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayProdSaleStore.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.sideProdNm"/>" binding="sideProdNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.selTypeFg"/>" binding="selTypeFg" data-map="selTypeFgMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.totSaleQty"/>" binding="totSaleQty" width="55" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -164,10 +164,10 @@
                 <wj-flex-grid-column header="<s:message code="dayProdSaleStore.storeNm"/>" binding="storeNm" width="140" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayProdSaleStore.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodClass"/>" binding="prodClassNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodNm"/>" binding="prodNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayProdSaleStore.sideProdClass"/>" binding="sideProdClassNm" width="200" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="dayProdSaleStore.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="dayProdSaleStore.sideProdCd"/>" binding="sideProdCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayProdSaleStore.sideProdNm"/>" binding="sideProdNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayProdSaleStore.selTypeFg"/>" binding="selTypeFg" data-map="selTypeFgMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dayProdSaleStore.totSaleQty"/>" binding="totSaleQty" width="55" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -185,7 +185,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/dayProdSaleStore/dayProdSaleStore.js?ver=20250114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dayProdSaleStore/dayProdSaleStore.js?ver=20250120.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

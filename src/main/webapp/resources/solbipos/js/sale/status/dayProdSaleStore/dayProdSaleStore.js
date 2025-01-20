@@ -238,6 +238,8 @@ app.controller('dayProdSaleStoreExcelCtrl', ['$scope', '$http', '$timeout', func
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        // 상품 구분
+        $scope.selTypeFgMap = new wijmo.grid.DataMap(selTypeFgData, 'value', 'name');
     };
 
     // 다른 컨트롤러의 broadcast 받기

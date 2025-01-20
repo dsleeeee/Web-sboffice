@@ -39,7 +39,7 @@
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.posNo"/>" binding="posNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.billNo"/>" binding="billNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodCd"/>" binding="prodCd" width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.totSaleQty"/>" binding="saleQty" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.totSaleAmt"/>" binding="saleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -47,8 +47,8 @@
                     <wj-flex-grid-column header="<s:message code="dayProdSaleStore.realSaleAmt"/>" binding="realSaleAmt" width="70" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
                     <c:if test="${orgnFg eq 'HQ' and hqOfficeCd eq 'A0001'}">
-                        <wj-flex-grid-column header="<s:message code="dayProdSaleStore.erpSendProdCd"/>" binding="erpSendProdCd" data-map="packFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dayProdSaleStore.erpSendYn"/>" binding="erpSendYn" data-map="dlvrInFgDataMap" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayProdSaleStore.erpSendProdCd"/>" binding="erpSendProdCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dayProdSaleStore.erpSendYn"/>" binding="erpSendYn" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     </c:if>
                 </wj-flex-grid>
             </div>
@@ -63,4 +63,4 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/dayProdSaleStore/dayProdSaleStoreDtl.js?ver=20250114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dayProdSaleStore/dayProdSaleStoreDtl.js?ver=20250120.01" charset="utf-8"></script>
