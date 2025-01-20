@@ -1044,21 +1044,24 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     }
 
     @Override
-    public int deleteRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO) {
+    public int deleteRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
 
         int result = 0;
 
-        if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
-            kioskKeyMapVO.setOrgnFg("S");
-        }else{
-            kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        }
-        kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
-            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-        if (kioskKeyMapMapper.getIndex(kioskKeyMapVO) != "1") {
-            result = kioskKeyMapMapper.deleteRecmdProd(kioskKeyMapVO);
+        for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
+
+            if (kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
+                kioskKeyMapVO.setOrgnFg("S");
+            } else {
+                kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            }
+            kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            if (kioskKeyMapMapper.getIndex(kioskKeyMapVO) != "1") {
+                result = kioskKeyMapMapper.deleteRecmdProd(kioskKeyMapVO);
+            }
         }
 
         return result;

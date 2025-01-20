@@ -112,6 +112,14 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
 
     $scope.$on("kioskKeyMapRegistCtrl", function(event, data) {
 
+        if(pageFg === '1'){
+            if( $("#kioskKeyMapSelectStoreCd").val() !== null && $("#kioskKeyMapSelectStoreCd").val() !== '') {
+            }else{
+                $scope._popMsg("매장을 선택해주세요.");
+                return false;
+            }
+        }
+
         if(sessionStorage.getItem('reloaded')){
             $("#kioskKeyMapSelectStoreCd").val(sessionStorage.getItem('selectStoreCd'));
             $("#kioskKeyMapSelectStoreNm").val(sessionStorage.getItem('selectStoreNm'));
@@ -261,13 +269,10 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
         scope.regYnAllCombo.selectedIndex = 0;
 
         // 키맵 grid 초기화
-        // var wjGridKeyMap = wijmo.Control.getControl("#wjGridKeyMap");
-        // while(wjGridKeyMap.rows.length > 0){
-        //     wjGridKeyMap.rows.removeAt(wjGridKeyMap.rows.length-1);
-        // }
-        var flex = $scope.flex;
-        flex.itemsSource = new wijmo.collections.CollectionView();
-        flex.collectionView.trackChanges = true;
+        var wjGridKeyMap = wijmo.Control.getControl("#wjGridKeyMap");
+        while(wjGridKeyMap.rows.length > 0){
+            wjGridKeyMap.rows.removeAt(wjGridKeyMap.rows.length-1);
+        }
 
         // 상품 grid 초기화
         var wjGridProd = wijmo.Control.getControl("#wjGridProd");
@@ -1175,6 +1180,23 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskCategoryM.sb', params, function() {
+
+                // 키맵 grid 초기화
+                var wjGridKeyMap = wijmo.Control.getControl("#wjGridKeyMap");
+                while(wjGridKeyMap.rows.length > 0){
+                    wjGridKeyMap.rows.removeAt(wjGridKeyMap.rows.length-1);
+                }
+                $("#spanTuKeyCls").text('');
+
+                // 상품 grid 초기화
+                var wjGridProd = wijmo.Control.getControl("#wjGridProd");
+                while(wjGridProd.rows.length > 0){
+                    wjGridProd.rows.removeAt(wjGridProd.rows.length-1);
+                }
+
+                // 상품 grid paging 초기화(숨기기.. 아예 없애는거 모름..)
+                var kioskProdCtrlPager = document.getElementById('kioskProdCtrlPager');
+                kioskProdCtrlPager.style.visibility='hidden'
 
                 // 카테고리분류 재조회
                 $scope.searchCategoryClsM();

@@ -224,6 +224,15 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         }
       }
 
+      // TCP/포트 최대길이 체크
+      if (nvl($scope.flex.collectionView.itemsEdited[i].prterNetIp, '') !== '' &&
+          nvl($scope.flex.collectionView.itemsEdited[i].prterNetIp + '', '').getByteLengthForOracle() > 15) {
+        var msg = messages["storeManage.prterNetIp"] + messages["cmm.overLength"] + " 15 " +
+            ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].prterNetIp.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; //  데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 100 현재 : (영문:1yte, 한글:3byte)
+        $scope._popMsg(msg);
+        return false;
+      }
+
       if($scope.flex.collectionView.itemsEdited[i].prterNetPort !== "" && $scope.flex.collectionView.itemsEdited[i].prterNetPort !== null && $scope.flex.collectionView.itemsEdited[i].prterNetPort !== undefined){
         var numChkexp = /[^0-9]/g;
         if (numChkexp.test($scope.flex.collectionView.itemsEdited[i].prterNetPort)) {
@@ -253,6 +262,15 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
           $scope._popMsg(messages["storeManage.kitchenPrint.prterNmLengthChk"]); // 이름 길이가 너무 깁니다.
           return false;
         }
+      }
+
+      // TCP/IP 최대길이 체크
+      if (nvl($scope.flex.collectionView.itemsAdded[i].prterNetIp, '') !== '' &&
+          nvl($scope.flex.collectionView.itemsAdded[i].prterNetIp + '', '').getByteLengthForOracle() > 15) {
+        var msg = messages["storeManage.prterNetIp"] + messages["cmm.overLength"] + " 15 " +
+            ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].prterNetIp.getByteLengthForOracle() + messages["cmm.bateLengthInfo"]; //  데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 100 현재 : (영문:1yte, 한글:3byte)
+        $scope._popMsg(msg);
+        return false;
       }
 
       if($scope.flex.collectionView.itemsAdded[i].prterNetPort !== "" && $scope.flex.collectionView.itemsAdded[i].prterNetPort !== null && $scope.flex.collectionView.itemsAdded[i].prterNetPort !== undefined){

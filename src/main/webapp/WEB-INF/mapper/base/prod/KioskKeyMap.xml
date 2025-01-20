@@ -3001,15 +3001,17 @@
             <when test='orgnFg != null and orgnFg == "H"'>
                 DELETE
                 FROM    TB_HQ_KIOSK_RECMD_PROD
-                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                AND     RECMD_CD = #{recmdCd}
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     RECMD_CD        = #{recmdCd}
+                AND     RECMD_PROD_CD   = #{recmdProdCd}
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
                 DELETE
                 FROM    TB_MS_KIOSK_RECMD_PROD
-                WHERE   STORE_CD = #{storeCd}
-                AND     RECMD_CD = #{recmdCd}
+                WHERE   STORE_CD        = #{storeCd}
+                AND     RECMD_CD        = #{recmdCd}
+                AND     RECMD_PROD_CD   = #{recmdProdCd}
             </when>
         </choose>
     </delete>

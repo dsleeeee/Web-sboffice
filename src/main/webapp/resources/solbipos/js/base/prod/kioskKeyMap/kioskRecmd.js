@@ -406,13 +406,13 @@ app.controller('recmdProdCtrl', ['$scope', '$http', '$timeout', function ($scope
     $scope.saveRecmdProd = function () {
         var params = new Array();
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
             if(pageFg === '1'){
-                $scope.flex.collectionView.items[i].pageFg = '1';
-                $scope.flex.collectionView.items[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                $scope.flex.collectionView.itemsRemoved[i].pageFg = '1';
+                $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#kioskKeyMapSelectStoreCd").val();
             }
-            $scope.flex.collectionView.items[i].recmdCd = $("#recmdCd").val();
-            params.push($scope.flex.collectionView.items[i]);
+            $scope.flex.collectionView.itemsRemoved[i].recmdCd = $("#recmdCd").val();
+            params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
