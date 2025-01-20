@@ -1091,16 +1091,16 @@ public class KioskKeyMapController {
                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
-        kioskKeyMapVO.setRecmdCd(kioskKeyMapVOs[0].getRecmdCd());
-        if(kioskKeyMapVOs[0].getPageFg() != null && kioskKeyMapVOs[0].getPageFg().equals("1")) {
-            kioskKeyMapVO.setPageFg("1");
-            kioskKeyMapVO.setStoreCd(kioskKeyMapVOs[0].getStoreCd());
-        }
+//        KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+//        kioskKeyMapVO.setRecmdCd(kioskKeyMapVOs[0].getRecmdCd());
+//        if(kioskKeyMapVOs[0].getPageFg() != null && kioskKeyMapVOs[0].getPageFg().equals("1")) {
+//            kioskKeyMapVO.setPageFg("1");
+//            kioskKeyMapVO.setStoreCd(kioskKeyMapVOs[0].getStoreCd());
+//        }
 
-        kioskKeyMapService.deleteRecmdProd(kioskKeyMapVO, sessionInfoVO);
+        int result = kioskKeyMapService.deleteRecmdProd(kioskKeyMapVOs, sessionInfoVO);
 
-        int result = kioskKeyMapService.saveRecmdProd(kioskKeyMapVOs, sessionInfoVO);
+//        int result = kioskKeyMapService.saveRecmdProd(kioskKeyMapVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

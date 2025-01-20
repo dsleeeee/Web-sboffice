@@ -73,4 +73,4 @@
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20241210.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20250120.01" charset="utf-8"></script>
