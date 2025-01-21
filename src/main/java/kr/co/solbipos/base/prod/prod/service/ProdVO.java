@@ -423,6 +423,9 @@ public class ProdVO extends PageVO {
     /** 등록 및 삭제 확인용 비밀번호 */
     private String password;
 
+    /** 부가세포함여부 */
+    private String vatIncldYn;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1796,5 +1799,13 @@ public class ProdVO extends PageVO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getVatIncldYn() {
+        return vatIncldYn;
+    }
+
+    public void setVatIncldYn(String vatIncldYn) {
+        this.vatIncldYn = vatIncldYn;
     }
 }
