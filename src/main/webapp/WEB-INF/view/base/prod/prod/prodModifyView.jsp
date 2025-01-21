@@ -220,6 +220,27 @@
                   </wj-combo-box>
                 </div>
               </td>
+              <%--부가세포함여부--%>
+              <th><s:message code="prod.vatIncldYn"/></th>
+              <td>
+                <div class="sb-select">
+                  <wj-combo-box id="_vatIncldYn" name="vatIncldYn"
+                                ng-model="prodModifyInfo.vatIncldYn"
+                                items-source="_getComboData('vatIncldYnComboData')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                required
+                                popover-enable="myForm.vatIncldYn.$invalid"
+                                popover-placement="bottom-left"
+                                popover-trigger="'mouseenter'"
+                                uib-popover="<s:message code="prod.vatIncldYn" />은(는) 필수 입력항목 입니다.">
+                  </wj-combo-box>
+                </div>
+              </td>
+            </tr>
+            <tr <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
                 <%--사용여부--%>
                 <th <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>><s:message code="cmm.useYn"/></th>
                 <td <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
@@ -239,6 +260,8 @@
                     </wj-combo-box>
                   </div>
                 </td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <%-- 바코드 --%>
@@ -1175,7 +1198,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20241018.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20250116.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

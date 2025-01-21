@@ -163,6 +163,8 @@ public class SimpleProdVO extends PageVO {
     private String pointUseYn;
     /** 할인여부 */
     private String dcYn;
+    /** 부가세포함여부 */
+    private String vatIncldYn;
 
     public String getOrgnFg() { return orgnFg; }
 
@@ -422,5 +424,13 @@ public class SimpleProdVO extends PageVO {
 
     public void setDcYn(String dcYn) {
         this.dcYn = dcYn;
+    }
+
+    public String getVatIncldYn() {
+        return vatIncldYn;
+    }
+
+    public void setVatIncldYn(String vatIncldYn) {
+        this.vatIncldYn = vatIncldYn;
     }
 }

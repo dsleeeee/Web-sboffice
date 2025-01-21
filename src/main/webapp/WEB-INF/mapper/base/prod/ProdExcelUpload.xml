@@ -146,7 +146,8 @@
         NVL(PACK_SALE_UPRC, '') AS PACK_SALE_UPRC,
         NVL(DEPOSIT_CUP_FG, '') AS DEPOSIT_CUP_FG,
         CASE PROD_TYPE_FG WHEN '4' THEN 'N' ELSE POINT_USE_YN END AS POINT_USE_YN,
-        CASE PROD_TYPE_FG WHEN '4' THEN 'N' ELSE DC_YN END AS DC_YN
+        CASE PROD_TYPE_FG WHEN '4' THEN 'N' ELSE DC_YN END AS DC_YN,
+        VAT_INCLD_YN
         FROM TB_TMP_EXCEL_PRODUCT
         WHERE 1=1
         AND SESSION_ID = #{sessionId}
@@ -218,7 +219,8 @@
             PACK_SALE_UPRC,
             DEPOSIT_CUP_FG,
             POINT_USE_YN,
-            DC_YN
+            DC_YN,
+            VAT_INCLD_YN
         ) VALUES (
             #{sessionId},
             #{seq},
@@ -271,7 +273,8 @@
             REPLACE(NVL(#{packSaleUprc}, #{saleUprc}), ',',''),
             #{depositCupFg},
             #{pointUseYn},
-            #{dcYn}
+            #{dcYn},
+            #{vatIncldYn}
          )
     </insert>
 

@@ -49,6 +49,12 @@ var momsKioskEdgeComboData = [
   {"name": "EVENT", "value": "3"}
 ];
 
+// 부가세포함여부
+var vatIncldYnComboData = [
+  {"name": "포함", "value": "Y"},
+  {"name": "별도", "value": "N"}
+];
+
 /**
  * 상품정보관리 그리드 생성
  */
@@ -134,6 +140,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._getComboDataQueryByAuth('093', 'poUnitFgComboData', 'poUnitFgComboDataMap');
   // 과세여부 콤보박스
   $scope._getComboDataQuery('039', 'vatFgComboData');
+  // 부가세포함여부
+  $scope._setComboData("vatIncldYnComboData", vatIncldYnComboData);
   // 품절여부 콤보박스
   $scope._getComboDataQuery('094', 'soldOutYnComboData');
   // 세트상품구분 콤보박스

@@ -349,6 +349,7 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 }
                 prodVO.setPointUseYn(simpleProdVO.getPointUseYn());
                 prodVO.setDcYn(simpleProdVO.getDcYn());
+                prodVO.setVatIncldYn(simpleProdVO.getVatIncldYn());
 
                 // 자동채번인 경우 상품코드 조회
                 if(simpleProdVO.getProdNoEnv() == ProdNoEnvFg.AUTO) {

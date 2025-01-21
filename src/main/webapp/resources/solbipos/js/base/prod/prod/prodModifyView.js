@@ -170,6 +170,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
             params.prodTipYn = "N"; // 봉사료 포함 여부
             params.vatFg = "1"; // 과세여부
+            params.vatIncldYn = "Y"; // 부가세포함여부
             params.useYn = "Y"; // 사용여부
             params.barCd = ""; // 바코드
             // 가격관리구분
@@ -1497,6 +1498,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     } catch (e) {
                         alert(e);
                     }
+                }
+
+                // 부가세포함여부 값 없으면 '포함'으로 셋팅
+                if ($scope.prodModifyInfo.vatIncldYn === null || $scope.prodModifyInfo.vatIncldYn === "") {
+                    $scope.prodModifyInfo.vatIncldYn = "Y";
                 }
 
                 // 세트구성상품 등록버튼 visible 처리

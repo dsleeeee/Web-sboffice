@@ -13,6 +13,7 @@
  */
 var app = agrid.getApp();
 
+// 부가세포함여부
 var vatIncldYnData = [
     {"name":"별도","value":"N"},
     {"name":"포함","value":"Y"}

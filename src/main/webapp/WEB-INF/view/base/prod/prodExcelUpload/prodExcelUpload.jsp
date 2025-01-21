@@ -91,6 +91,7 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poMinQty"/>" binding="poMinQty" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.barCd"/>" binding="barCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="75" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.vatIncldYn"/>" binding="vatIncldYn" data-map="vatIncldYnDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.stockProdYn"/>" binding="stockProdYn" data-map="stockProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.costUprc"/>" binding="costUprc" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.safeStockQty"/>" binding="safeStockQty" width="85" is-read-only="true" align="center"></wj-flex-grid-column>
@@ -177,6 +178,7 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.poMinQty"/>" binding="poMinQty" width="90" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.barCd"/>" binding="barCd" width="80" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="75" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.vatIncldYn"/>" binding="vatIncldYn" data-map="vatIncldYnDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.stockProdYn"/>" binding="stockProdYn" data-map="stockProdYnDataMap" width="85" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.costUprc"/>" binding="costUprc" width="70" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.safeStockQty"/>" binding="safeStockQty" width="85" align="center"></wj-flex-grid-column>
@@ -249,7 +251,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20240717.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20250116.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

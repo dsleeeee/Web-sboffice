@@ -303,6 +303,18 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 String dcYn = prodExcelUploadMapper.getDcYnCheck(prodExcelUploadVO);
                 prodExcelUploadVO.setDcYn(dcYn);
             }
+
+            // 부가세포함여부
+            if(prodExcelUploadVO.getVatIncldYn() != null && !"".equals(prodExcelUploadVO.getVatIncldYn())) {
+
+                DefaultMap<String> vatIncldYnMap = new DefaultMap<>();
+                vatIncldYnMap.put("별도", "N");
+                vatIncldYnMap.put("포함", "Y");
+
+                String vatIncldYn = (String)vatIncldYnMap.get(prodExcelUploadVO.getVatIncldYn());
+
+                prodExcelUploadVO.setVatIncldYn(vatIncldYn);
+            }
             // <-- //업로할때는 전부 명칭으로 들어간다 -->
 
             // 상품코드
@@ -432,6 +444,12 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
             if (prodExcelUploadVO.getVatFg() != null && !"".equals(prodExcelUploadVO.getVatFg())) {
             } else {
                 prodExcelUploadVO.setResult("과세여부를 선택해주세요.");
+            }
+
+            // 부가세포함여부
+            if (prodExcelUploadVO.getVatIncldYn() != null && !"".equals(prodExcelUploadVO.getVatIncldYn())) {
+            } else {
+                prodExcelUploadVO.setResult("부가세포함여부를 선택해주세요.");
             }
 
             // 최소발주수량

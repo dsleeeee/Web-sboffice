@@ -23,6 +23,12 @@ var depositCupFgData = [
     {"name": "보증컵기타", "value": "4"}
 ];
 
+// 부가세포함여부
+var vatIncldYnDataMap2 = [
+    {"name":"별도","value":"N"},
+    {"name":"포함","value":"Y"}
+];
+
 /**
  *  상품목록 샘플양식 조회 그리드 생성
  */
@@ -68,6 +74,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
         $scope.poUnitFgDataMap = new wijmo.grid.DataMap(poUnitFgData, 'value', 'name'); // 발주단위구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
+        $scope.vatIncldYnDataMap = new wijmo.grid.DataMap(vatIncldYnDataMap2, 'value', 'name'); // 부가세포함여부
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(stockProdYnData, 'value', 'name'); // 재고관리여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
         $scope.prodClassCdDataMap = new wijmo.grid.DataMap(prodClassComboList, 'value', 'name'); // 상품분류
@@ -119,6 +126,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         params.poMinQty = "1";
         params.barCd = "";
         params.vatFg = "1";
+        params.vatIncldYn = "Y";
         params.stockProdYn = "Y";
         params.costUprc = "0";
         params.safeStockQty = "0";
@@ -208,6 +216,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
         $scope.poUnitFgDataMap = new wijmo.grid.DataMap(poUnitFgData, 'value', 'name'); // 발주단위구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
+        $scope.vatIncldYnDataMap = new wijmo.grid.DataMap(vatIncldYnDataMap2, 'value', 'name'); // 부가세포함여부
         $scope.stockProdYnDataMap = new wijmo.grid.DataMap(stockProdYnData, 'value', 'name'); // 재고관리여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
         $scope.prodClassCdDataMap = new wijmo.grid.DataMap(prodClassComboList, 'value', 'name'); // 상품분류

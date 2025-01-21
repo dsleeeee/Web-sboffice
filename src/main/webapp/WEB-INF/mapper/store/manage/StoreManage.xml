@@ -2018,7 +2018,8 @@
             KIOSK_DISPLAY_YN,
             PROD_EN_NM,
             PROD_CN_NM,
-            PROD_JP_NM
+            PROD_JP_NM,
+            VAT_INCLD_YN
             FROM TB_MS_PRODUCT
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -2081,7 +2082,8 @@
             KIOSK_DISPLAY_YN = B.KIOSK_DISPLAY_YN,
             PROD_EN_NM = B.PROD_EN_NM,
             PROD_CN_NM = B.PROD_CN_NM,
-            PROD_JP_NM = B.PROD_JP_NM
+            PROD_JP_NM = B.PROD_JP_NM,
+            VAT_INCLD_YN = B.VAT_INCLD_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -2139,7 +2141,8 @@
                 A.KIOSK_DISPLAY_YN,
                 A.PROD_EN_NM,
                 A.PROD_CN_NM,
-                A.PROD_JP_NM
+                A.PROD_JP_NM,
+                A.VAT_INCLD_YN
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2196,7 +2199,8 @@
                 B.KIOSK_DISPLAY_YN,
                 B.PROD_EN_NM,
                 B.PROD_CN_NM,
-                B.PROD_JP_NM
+                B.PROD_JP_NM,
+                B.VAT_INCLD_YN
             )
     </insert>
 
@@ -2265,7 +2269,8 @@
             ADD_GRP_CD,
             PROD_EN_NM,
             PROD_CN_NM,
-            PROD_JP_NM
+            PROD_JP_NM,
+            VAT_INCLD_YN
             FROM TB_HQ_PRODUCT
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2324,7 +2329,8 @@
             ADD_GRP_CD = B.ADD_GRP_CD,
             PROD_EN_NM = B.PROD_EN_NM,
             PROD_CN_NM = B.PROD_CN_NM,
-            PROD_JP_NM = B.PROD_JP_NM
+            PROD_JP_NM = B.PROD_JP_NM,
+            VAT_INCLD_YN = B.VAT_INCLD_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -2380,7 +2386,8 @@
                 A.ADD_GRP_CD,
                 A.PROD_EN_NM,
                 A.PROD_CN_NM,
-                A.PROD_JP_NM
+                A.PROD_JP_NM,
+                A.VAT_INCLD_YN
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -2435,7 +2442,8 @@
                 B.ADD_GRP_CD,
                 B.PROD_EN_NM,
                 B.PROD_CN_NM,
-                B.PROD_JP_NM
+                B.PROD_JP_NM,
+                B.VAT_INCLD_YN
             )
     </insert>
 

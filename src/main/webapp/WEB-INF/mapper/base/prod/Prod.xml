@@ -530,7 +530,8 @@
                 thpi.SALE_CHN_YN_DDN,
                 thpi.PROD_EN_INFO,
                 thpi.PROD_CN_INFO,
-                thpi.PROD_JP_INFO
+                thpi.PROD_JP_INFO,
+                thp.VAT_INCLD_YN
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
@@ -682,7 +683,8 @@
                 tmpi.SALE_CHN_YN_DDN,
                 tmpi.PROD_EN_INFO,
                 tmpi.PROD_CN_INFO,
-                tmpi.PROD_JP_INFO
+                tmpi.PROD_JP_INFO,
+                tmp.VAT_INCLD_YN
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_BRAND tmb ON
@@ -904,7 +906,8 @@
                 DISCON_DATE = #{disconDate},
                 DISCON_YN =  #{disconYn},
                 GROUP_PROD_CD =  #{groupProdCd},
-                DEPOSIT_PROD_CD =  #{depositProdCd}
+                DEPOSIT_PROD_CD =  #{depositProdCd},
+                VAT_INCLD_YN = #{vatIncldYn}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -956,7 +959,8 @@
                 DISCON_DATE,
                 DISCON_YN,
                 GROUP_PROD_CD,
-                DEPOSIT_PROD_CD
+                DEPOSIT_PROD_CD,
+                VAT_INCLD_YN
                 ) VALUES (
                 #{hqOfficeCd},
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
@@ -1006,7 +1010,8 @@
                 #{disconDate},
                 #{disconYn},
                 #{groupProdCd},
-                #{depositProdCd}
+                #{depositProdCd},
+                #{vatIncldYn}
                 )
             </when>
             <!-- 매장 -->
@@ -1065,7 +1070,8 @@
                 DISCON_DATE = #{disconDate},
                 DISCON_YN =  #{disconYn},
                 GROUP_PROD_CD =  #{groupProdCd},
-                DEPOSIT_PROD_CD =  #{depositProdCd}
+                DEPOSIT_PROD_CD =  #{depositProdCd},
+                VAT_INCLD_YN = #{vatIncldYn}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -1118,7 +1124,8 @@
                 DISCON_DATE,
                 DISCON_YN,
                 GROUP_PROD_CD,
-                DEPOSIT_PROD_CD
+                DEPOSIT_PROD_CD,
+                VAT_INCLD_YN
                 ) VALUES (
                 #{storeCd},
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodCd}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
@@ -1169,7 +1176,8 @@
                 #{disconDate},
                 #{disconYn},
                 #{groupProdCd},
-                #{depositProdCd}
+                #{depositProdCd},
+                #{vatIncldYn}
                 )
             </when>
         </choose>
@@ -1953,7 +1961,8 @@
                     thp.ADD_GRP_CD,
                     thp.PROD_EN_NM,
                     thp.PROD_CN_NM,
-                    thp.PROD_JP_NM
+                    thp.PROD_JP_NM,
+                    thp.VAT_INCLD_YN
                 FROM
                    TB_HQ_PRODUCT thp
                WHERE
@@ -2012,7 +2021,8 @@
                tmp.ADD_GRP_CD          = thp.ADD_GRP_CD,
                tmp.PROD_EN_NM          = thp.PROD_EN_NM,
                tmp.PROD_CN_NM          = thp.PROD_CN_NM,
-               tmp.PROD_JP_NM          = thp.PROD_JP_NM
+               tmp.PROD_JP_NM          = thp.PROD_JP_NM,
+               tmp.VAT_INCLD_YN        = thp.VAT_INCLD_YN
         WHEN NOT MATCHED THEN
             INSERT
             (
@@ -2069,7 +2079,8 @@
                 tmp.ADD_GRP_CD,
                 tmp.PROD_EN_NM,
                 tmp.PROD_CN_NM,
-                tmp.PROD_JP_NM
+                tmp.PROD_JP_NM,
+                tmp.VAT_INCLD_YN
             )
             VALUES
             (
@@ -2127,7 +2138,8 @@
                 thp.ADD_GRP_CD,
                 thp.PROD_EN_NM,
                 thp.PROD_CN_NM,
-                thp.PROD_JP_NM
+                thp.PROD_JP_NM,
+                thp.VAT_INCLD_YN
             )
     </insert>
 
@@ -3784,7 +3796,8 @@
             thp.DC_YN,
             thp.PROD_EN_NM,
             thp.PROD_CN_NM,
-            thp.PROD_JP_NM
+            thp.PROD_JP_NM,
+            thp.VAT_INCLD_YN
             FROM
             (
                   SELECT *
@@ -3844,7 +3857,8 @@
             DC_YN = B.DC_YN,
             PROD_EN_NM = B.PROD_EN_NM,
             PROD_CN_NM = B.PROD_CN_NM,
-            PROD_JP_NM = B.PROD_JP_NM
+            PROD_JP_NM = B.PROD_JP_NM,
+            VAT_INCLD_YN = B.VAT_INCLD_YN
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3892,7 +3906,8 @@
                 A.DC_YN,
                 A.PROD_EN_NM,
                 A.PROD_CN_NM,
-                A.PROD_JP_NM
+                A.PROD_JP_NM,
+                A.VAT_INCLD_YN
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -3939,7 +3954,8 @@
                 B.DC_YN,
                 B.PROD_EN_NM,
                 B.PROD_CN_NM,
-                B.PROD_JP_NM
+                B.PROD_JP_NM,
+                B.VAT_INCLD_YN
             )
     </insert>
 
