@@ -47,6 +47,10 @@ app.controller('kioskKeyMapEnvStoreCtrl', ['$scope', '$http', function ($scope, 
         var params = {};
         params.posNo = $("#hdStorePosNo").val();
         params.envstCd = $("#hdStoreEnvstCd").val();
+        if(pageFg === '1'){
+            params.pageFg = '1';
+            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+        }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._postJSONQuery.withPopUp("/base/prod/kioskKeyMap/kioskKeyMap/getKioskEnv.sb", params,
@@ -88,7 +92,7 @@ app.controller('kioskKeyMapEnvStoreCtrl', ['$scope', '$http', function ($scope, 
 
             var msg = "'" + $scope.envStoreTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"];
 
-            if(hqOfficeCd != null && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
+            if(orgnFg === "STORE" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
                 msg += "<br>" + messages["kioskKeyMap.keyMapStoreRegAll.msg"] // 저장 시 전체 키오스크의 정보가 변경됩니다.
             }
 
@@ -153,6 +157,9 @@ app.controller('kioskKeyMapEnvStoreCtrl', ['$scope', '$http', function ($scope, 
         obj.envstCd = $("#hdStoreEnvstCd").val();
         obj.envstVal = $scope.envStoreTuClsTypeCombo.selectedValue;
         obj.tuClsType = $scope.envStoreTuClsTypeCombo.selectedValue;
+        if(pageFg === '1'){
+            obj.pageFg = '1';
+        }
 
         // 키맵매장적용 여부
         obj.chkTuClsTypeStore = applyYn;

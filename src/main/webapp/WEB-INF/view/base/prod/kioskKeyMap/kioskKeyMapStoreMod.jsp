@@ -93,9 +93,9 @@
         </div>
         <div class="wj-dialog-footer">
             <c:if test="${orgnFg == 'HQ'}">
-                <button class="btn_blue" ng-click="saveStoreModGrp()"><s:message code="cmm.save" /></button>
+                <button class="btn_blue" id="btnSaveStoreModGrp" ng-click="saveStoreModGrp()"><s:message code="cmm.save" /></button>
             </c:if>
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapStoreMod.js?ver=20240105.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapStoreMod.js?ver=20250124.01" charset="utf-8"></script>

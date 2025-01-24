@@ -82,7 +82,11 @@ public class SalePriceManageServiceImpl implements SalePriceManageService {
             SalePriceVO salePriceVO = new SalePriceVO();
 
             salePriceVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            salePriceVO.setStoreCd(sessionInfoVO.getStoreCd());
+            if(sessionInfoVO.getStoreCd() != null && sessionInfoVO.getStoreCd() != "") {
+                salePriceVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }else{
+                salePriceVO.setStoreCd(salePriceManageVO.getStoreCd());
+            }
 //            salePriceVO.setPrcCtrlFg("2"); // 매장에서 등록
             salePriceVO.setStartDate(currentDate);
             salePriceVO.setEndDate("99991231");

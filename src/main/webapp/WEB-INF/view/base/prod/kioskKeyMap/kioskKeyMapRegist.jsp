@@ -11,6 +11,36 @@
 <div id="kioskKeyMapRegistView" name="kioskKeyMapRegistView" class="subCon" style="display: none;padding: 10px 20px 40px;">
 
     <div ng-controller="kioskKeyMapRegistCtrl">
+        <div class="mb10" id="kioskKeyMapSelectStore" style="display:none">
+            <div class="searchBar">
+                <a href="#" class="open fl"><s:message code="cmm.store.select"/></a>
+                <%-- 조회 --%>
+                <button class="btn_blue fr mt5 mr10" id="btnSearchStore" ng-click="kioskKeyMapSelectStore()"><s:message code="cmm.search"/></button>
+            </div>
+
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w10" />
+                    <col class="w90" />
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th><s:message code="cmm.store.select"/></th>
+                    <td>
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="S"/>
+                            <jsp:param name="targetId" value="kioskKeyMapSelectStore"/>
+                        </jsp:include>
+                        <%--// 매장선택 모듈 사용시 include --%>
+                    </td>
+                    <input type="hidden" id="kioskKeyMapSelectStoreCd" value="" />
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
         <div class="searchBar">
             <a href="#" class="open fl"><s:message code="kioskKeyMap.kioskKeyMapRegist" /></a>
             <%-- 조회 --%>
@@ -23,7 +53,7 @@
                 <col class="w90" />
             </colgroup>
             <tbody>
-            <c:if test="${orgnFg == 'STORE'}">
+            <c:if test="${orgnFg == 'STORE' || pageFg == '1'}">
                 <tr id="posNoTr">
                         <%-- 포스번호 --%>
                     <th><s:message code="kioskKeyMap.posNo" /></th>
@@ -72,7 +102,7 @@
                             </wj-combo-box>
                         </div>
                     </c:if>
-                    <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
+                    <div id="btnCol"<c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && kioskKeyEnvstVal == '1')}">
                             <button class="btn_skyblue" id="btnTuClsTypeAdd" ng-click="tuClsTypeAdd()">
                                 <s:message code="kioskKeyMap.tuClsTypeAdd" />
@@ -101,7 +131,7 @@
                                 <s:message code="kioskKeyMap.kioskKeyDel" />
                             </button>
                         </c:if>
-                        <button class="btn_skyblue" id="btnTuClsTypeStore" ng-click="tuRecmd()">
+                        <button class="btn_skyblue" id="btnRecmd" ng-click="tuRecmd()">
                             <s:message code="kioskKeyMap.tuRecmd" />
                         </button>
                         <c:if test="${orgnFg == 'HQ' || (orgnFg == 'STORE' && hqOfficeCd != '00000' && kioskKeyEnvstVal == '2')}">
@@ -128,7 +158,7 @@
                                     <s:message code="kioskKeyMap.storeSalePrice" />
                                 </button>
                             </c:if>
-                            <c:if test="${orgnFg == 'STORE'}">
+                            <c:if test="${orgnFg == 'STORE' || pageFg == '1'}">
                                 <button class="btn_skyblue" id="btnSalePrice" ng-click="salePriceView()">
                                     <s:message code="kioskKeyMap.salePrice" />
                                 </button>
@@ -152,7 +182,7 @@
                     <input type="hidden" id="tuClsTypeInfo"/>
                 </div>
                 <div class="updownSet oh mb10 pd5" id="divBtnCls" style="visibility: hidden;">
-                    <div <c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
+                    <div id="btnClsCol"<c:choose><c:when test="${orgnFg == 'STORE' && kioskKeyEnvstVal == '0'}">style="visibility: hidden"</c:when><c:otherwise></c:otherwise></c:choose>>
                         <button class="btn_up" id="btnUpCls" ng-click="rowMoveUpCls()" >
                             <s:message code="cmm.up" />
                         </button>
@@ -515,9 +545,12 @@
 
     // KIOSK-매장수정여부 0:미사용 1:사용
     var kioskKeyEnvstVal = "${kioskKeyEnvstVal}";
+
+    var pageFg = "${pageFg}";
+    var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20241212.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20250124.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

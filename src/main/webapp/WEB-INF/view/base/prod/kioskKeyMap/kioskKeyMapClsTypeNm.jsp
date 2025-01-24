@@ -40,4 +40,4 @@
         </div>
     </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.js?ver=20221228.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapClsTypeNm.js?ver=20250124.01" charset="utf-8"></script>

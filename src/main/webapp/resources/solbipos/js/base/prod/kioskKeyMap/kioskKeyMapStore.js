@@ -21,9 +21,9 @@ app.controller('kioskKeyMapStoreCtrl', ['$scope', '$http', function ($scope, $ht
     angular.extend(this, new RootController('kioskKeyMapStoreCtrl', $scope, $http, false));
 
     $scope.init = function () {
-        // $("#kioskKeyMapRegistView").show();
-        // $("#kioskKeyMapCopyView").hide();
-        // $("kioskKeyMapCopyTab").css("display", 'none');
+        $("#kioskKeyMapRegistView").show();
+        $("#kioskKeyMapCopyView").hide();
+        $("kioskKeyMapCopyTab").css("display", 'none');
     };
 
 }]);

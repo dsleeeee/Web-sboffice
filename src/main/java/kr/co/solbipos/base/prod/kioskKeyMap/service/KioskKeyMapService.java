@@ -93,7 +93,7 @@ public interface KioskKeyMapService {
     int saveRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 
     /** 키오스크 추천메뉴 - 추천메뉴 기존메뉴 삭제 */
-    int deleteRecmdProd(KioskKeyMapVO kioskKeyMapVO, SessionInfoVO sessionInfoVO);
+    int deleteRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 
     /** 키오스크 추천메뉴 - 추천메뉴 저장(하위 오른쪽 그리드) */
     int addRecmdProd(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);

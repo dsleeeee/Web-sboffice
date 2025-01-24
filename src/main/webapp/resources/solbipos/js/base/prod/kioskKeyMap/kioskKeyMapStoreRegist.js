@@ -167,7 +167,7 @@ app.controller('kioskKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', functi
         // '[00]사용중인키맵매장적용'으로 선택하시면 자동으로 각 매장에 설정된 키맵 키 값이 적용됩니다.
         msg += "<br><br><p style='color:red;'>'[00]사용중인키맵매장적용'</p>으로 선택하시면 자동으로 각 매장에 설정된 키맵 키 값이 적용됩니다.(중분류사용여부체크안함)";
 
-        if(hqOfficeCd != null && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
+        if(orgnFg === "STORE" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
             msg += "<br>" + messages["kioskKeyMap.keyMapStoreRegAll.msg"]; // 저장 시 전체 키오스크의 정보가 변경됩니다.
         }
 

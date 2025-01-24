@@ -216,7 +216,7 @@ app.controller('kioskKeyMapEnvCtrl', ['$scope', '$http', '$timeout', function ($
         // <br/> (중분류 사용 키맵그룹은 중분류 사용 키오스크에만 적용됩니다.)
         var msg = "'" + $scope.envTuClsTypeCombo.selectedValue + "' " + messages["kioskKeyMap.keyMapStoreKioskPosEnv.msg"] + messages["kioskKeyMap.kioskTuMClsFg.msg"];
 
-        if(hqOfficeCd != null && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
+        if(orgnFg === "STORE" && (hqOfficeCd === 'A0001' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'DS062')){
             msg += "<br>" + messages["kioskKeyMap.keyMapStoreRegAll.msg"] // 저장 시 전체 키오스크의 정보가 변경됩니다.
         }
 

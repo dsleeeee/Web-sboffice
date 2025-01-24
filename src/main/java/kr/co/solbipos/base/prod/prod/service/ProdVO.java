@@ -426,6 +426,9 @@ public class ProdVO extends PageVO {
     /** 부가세포함여부 */
     private String vatIncldYn;
 
+    /** 페이지 구분 */
+    private String pageFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -1807,5 +1810,13 @@ public class ProdVO extends PageVO {
 
     public void setVatIncldYn(String vatIncldYn) {
         this.vatIncldYn = vatIncldYn;
+    }
+
+    public String getPageFg() {
+        return pageFg;
+    }
+
+    public void setPageFg(String pageFg) {
+        this.pageFg = pageFg;
     }
 }

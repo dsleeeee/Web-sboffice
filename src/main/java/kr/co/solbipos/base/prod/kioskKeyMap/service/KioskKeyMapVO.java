@@ -177,6 +177,8 @@ public class KioskKeyMapVO extends PageVO {
     /** 프로시져 실행 결과 */
     private String result;
 
+    private String pageFg;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -697,5 +699,13 @@ public class KioskKeyMapVO extends PageVO {
 
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getPageFg() {
+        return pageFg;
+    }
+
+    public void setPageFg(String pageFg) {
+        this.pageFg = pageFg;
     }
 }
