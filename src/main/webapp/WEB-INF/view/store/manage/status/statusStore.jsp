@@ -103,16 +103,18 @@
                     <s:message code="statusStore.srchAgencyNm" />
                 </th>
                 <td>
-                    <input type="text" id="agencyNm" value="선택" class="sb-input w100" ng-readonly="true" ng-click="searchAgency()">
+                    <input type="text" id="agencyNm" value="선택" class="sb-input w75" ng-readonly="true" ng-click="searchAgency()">
                     <input type="hidden" id="agencyCd" ng-hide="true">
+                    <button type="button" class="btn_skyblue ml5" id="btnCancelAgency" style="margin-left: 5px;" ng-click="cancelAgencyDel()"><s:message code="cmm.selectCancel"/></button>
                 </td>
                 <%-- 밴사 --%>
                 <th>
                     <s:message code="statusStore.srchVan" />
                 </th>
                 <td>
-                    <input type="text" name="manageVanNm" id="manageVanNm" ng-model="vanNm" class="sb-input w100" readonly="readonly" ng-click="searchManageVan()">
-                    <input type="hidden" name="manageVanCd" id="manageVanCd" ng-model="vanCd">
+                    <input type="text" name="manageVanNm" value="선택" id="manageVanNm" class="sb-input w75" readonly="readonly" ng-click="searchManageVan()">
+                    <input type="hidden" name="manageVanCd" id="manageVanCd">
+                    <button type="button" class="btn_skyblue ml5" id="btnCancelVan" style="margin-left: 5px;" ng-click="cancelVanDel()"><s:message code="cmm.selectCancel"/></button>
                 </td>
             </tr>
             <tr>
@@ -255,7 +257,7 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStore.js?ver=20220503.13" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusStore.js?ver=20250123.13" charset="utf-8"></script>
 
 <%-- 대리점 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/searchAgency.jsp">

@@ -74,6 +74,9 @@ app.controller('statusVanCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('statusVanDetailCtrl');
                 storeScope._gridDataInit();
+                // 매장 grid 보이도록
+                var statusVanDetailCtrlPager = document.getElementById('statusVanDetailCtrlPager');
+                statusVanDetailCtrlPager.style.visibility='hidden'
             });
         }, false);
     };
@@ -127,7 +130,10 @@ app.controller('statusVanDetailCtrl', ['$scope', '$http', function ($scope, $htt
         }
         params.listScale = 30;
 
-        $scope._inquiryMain("/store/manage/status/van/getStatusVanDetailList.sb", params, function() {}, false);
+        $scope._inquiryMain("/store/manage/status/van/getStatusVanDetailList.sb", params, function() {
+            var statusVanDetailCtrlPager = document.getElementById('statusVanDetailCtrlPager');
+            statusVanDetailCtrlPager.style.visibility='visible'
+        }, false);
     };
     // <-- //검색 호출 -->
 

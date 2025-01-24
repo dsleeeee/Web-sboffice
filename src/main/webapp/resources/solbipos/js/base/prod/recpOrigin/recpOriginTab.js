@@ -18,15 +18,22 @@ app.controller('recpOriginTabCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
         $("#prodRecpOriginView").show();
         $("#recpOriginView").hide();
+        $("#recpOriginInfoView").hide();
+
+        if(orgnFg === "HQ" && (hqOfficeCd === 'H0393' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034')){
+            $("#recpOriginInfoTab").css("display",'block');
+        }
     };
 
     // 원산지 탭 보이기
     $scope.recpOriginShow = function () {
         $("#prodRecpOriginTab").removeClass("on");
         $("#recpOriginTab").addClass("on");
+        $("#recpOriginInfoTab").removeClass("on");
 
         $("#prodRecpOriginView").hide();
         $("#recpOriginView").show();
+        $("#recpOriginInfoView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("recpOriginCtrl");
@@ -37,15 +44,32 @@ app.controller('recpOriginTabCtrl', ['$scope', function ($scope) {
     $scope.prodRecpOriginShow = function () {
         $("#prodRecpOriginTab").addClass("on");
         $("#recpOriginTab").removeClass("on");
+        $("#recpOriginInfoTab").removeClass("on");
 
         $("#prodRecpOriginView").show();
         $("#recpOriginView").hide();
+        $("#recpOriginInfoView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodRecpOriginCtrl");
         scope.flex.refresh();
         var scope1 = agrid.getScope("prodRecpOriginDetailCtrl");
         scope1.flex.refresh();
+    };
+
+    // 원산지관리 - 정보입력 탭 보이기
+    $scope.recpOriginInfoShow = function () {
+        $("#prodRecpOriginTab").removeClass("on");
+        $("#recpOriginTab").removeClass("on");
+        $("#recpOriginInfoTab").addClass("on");
+
+        $("#prodRecpOriginView").hide();
+        $("#recpOriginView").hide();
+        $("#recpOriginInfoView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("recpOriginInfoCtrl");
+        scope.flex.refresh();
     };
 
 }]);

@@ -93,6 +93,22 @@ public class RecpOriginVO extends PageVO {
     /** 상품브랜드코드 */
     private String prodHqBrandCd;
 
+    /** 원산지관리코드 */
+    private String originCd;
+
+    /** 출력물코드 */
+    private String prtCd;
+    
+    /** 원산지관리명 */
+    private String originNm;
+
+    /** 원산지 정보 TEXT */
+    private String originTxt1;
+    private String originTxt2;
+    private String originTxt3;
+    private String originTxt4;
+    private String originTxt5;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -203,5 +219,69 @@ public class RecpOriginVO extends PageVO {
 
     public void setProdHqBrandCd(String prodHqBrandCd) {
         this.prodHqBrandCd = prodHqBrandCd;
+    }
+
+    public String getOriginCd() {
+        return originCd;
+    }
+
+    public void setOriginCd(String originCd) {
+        this.originCd = originCd;
+    }
+
+    public String getPrtCd() {
+        return prtCd;
+    }
+
+    public void setPrtCd(String prtCd) {
+        this.prtCd = prtCd;
+    }
+
+    public String getOriginNm() {
+        return originNm;
+    }
+
+    public void setOriginNm(String originNm) {
+        this.originNm = originNm;
+    }
+
+    public String getOriginTxt1() {
+        return originTxt1;
+    }
+
+    public void setOriginTxt1(String originTxt1) {
+        this.originTxt1 = originTxt1;
+    }
+
+    public String getOriginTxt2() {
+        return originTxt2;
+    }
+
+    public void setOriginTxt2(String originTxt2) {
+        this.originTxt2 = originTxt2;
+    }
+
+    public String getOriginTxt3() {
+        return originTxt3;
+    }
+
+    public void setOriginTxt3(String originTxt3) {
+        this.originTxt3 = originTxt3;
+    }
+
+    public String getOriginTxt4() {
+        return originTxt4;
+    }
+
+    public void setOriginTxt4(String originTxt4) {
+        this.originTxt4 = originTxt4;
+    }
+
+    public String getOriginTxt5() {
+        return originTxt5;
+    }
+
+    public void setOriginTxt5(String originTxt5) {
+        this.originTxt5 = originTxt5;
     }
 }

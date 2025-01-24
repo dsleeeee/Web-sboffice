@@ -147,6 +147,13 @@
                             </wj-flex-grid>
                         </div>
                     </div>
+                    <%-- 페이지 리스트 --%>
+                    <div class="pageNum2 mt20">
+                        <%-- id --%>
+                        <ul id="statusAgencyCtrlPager" data-size="10">
+                        </ul>
+                    </div>
+                    <%--//페이지 리스트--%>
                 </div>
             </div>
         <%--left--%>
@@ -202,4 +209,4 @@
     var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusAgency.js?ver=2019052802.23" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/status/statusAgency.js?ver=20250123.01" charset="utf-8"></script>
