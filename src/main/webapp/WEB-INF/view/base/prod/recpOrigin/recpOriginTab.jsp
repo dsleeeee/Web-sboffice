@@ -17,11 +17,15 @@
             <li>
                  <a id="recpOriginTab" href="#" ng-click="recpOriginShow()"><s:message code="recpOriginTab.recpOrigin"/></a>
             </li>
+            <%-- 원산지관리-정보입력 --%>
+            <li>
+                <a id="recpOriginInfoTab" href="#" ng-click="recpOriginInfoShow()" style="display:none;"><s:message code="recpOriginTab.recpOriginInfo"/></a>
+            </li>
         </ul>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginTab.js?ver=20210326.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginTab.js?ver=20250120.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 원산지 레이어 --%>
@@ -32,6 +36,11 @@
 
 <%-- 상품-원산지관리 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/prodRecpOrigin.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+<%-- 상품-원산지관리 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/recpOrigin/recpOriginInfo.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

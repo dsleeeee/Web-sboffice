@@ -228,9 +228,17 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
             }
             $scope.comboDt.posCombo.itemsSource = new wijmo.collections.CollectionView($scope.posFgArr);
 
+            var allData = {};
+            allData.gChk = false;
+            allData.name = "전체";
+            allData.value = "";
+
+            $scope.cornerFgArr.push(allData);
+
             for (var j = 0; j <= cornerList.length; j++) {
                 $scope.cornerFgArr.push(cornerList[j]);
             }
+
             $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView($scope.cornerFgArr);
 
             // 코너 보여주기
@@ -275,6 +283,8 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 코너 보여주기
     $scope.showCorner = function () {
+
+        $scope.comboDt.cornerCombo.itemsSource;
         $("#lblToolTip").text("* 코너를 선택하세요.");
         $("#terminalListArea").show();
 
@@ -326,6 +336,9 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 코너 보여주기
         if (selectedTerminalFgVal === "1" || selectedTerminalFgVal === "2") {
+            if(selectedTerminalFgVal === "2"){
+
+            }
             $scope.showCorner();
         }
         // 포스 보여주기

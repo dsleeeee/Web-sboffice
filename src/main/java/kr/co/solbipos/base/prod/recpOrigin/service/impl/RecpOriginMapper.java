@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.recpOrigin.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.base.prod.recpOrigin.service.RecpOriginVO;
+import kr.co.solbipos.common.popup.selectStore.service.SelectStoreVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -76,4 +77,34 @@ public interface RecpOriginMapper {
 
    /** 상품-원산지관리탭 - 저장 update */
    int getProdRecpOriginSave(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 조회 */
+   List<DefaultMap<Object>> getRecpOriginInfoList(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 - TEXT 조회 */
+   List<DefaultMap<Object>> getRecpOriginInfoDetailList(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 - 관리코드(자동채번) */
+   String getRecpOriginInfoOriginCd(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 - 관리코드 저장 */
+   int getRecpOriginInfoSaveInsert(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 - 관리코드 수정 */
+   int getRecpOriginInfoSaveUpdate(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 - 관리코드 삭제 */
+   int getRecpOriginInfoSaveDelete(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 - 정보 TEXT 수정 */
+   int getRecpOriginTxtUpdate(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 매장적용 팝업 원산지 코드 조회 */
+    List<DefaultMap<String>> getSelectOriginCdList(RecpOriginVO recpOriginVO);
+
+   /** 원산지관리-정보입력 매장적용 팝업 매장리스트 조회 */
+   List<DefaultMap<String>> getOriginInfoStoreList(SelectStoreVO selectStoreVO);
+
+   /** 원산지관리-정보입력 매장적용 팝업 매장적용 */
+   int getOriginInfoRegStore(RecpOriginVO recpOriginVO);
 }

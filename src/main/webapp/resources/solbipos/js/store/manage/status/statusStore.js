@@ -133,10 +133,25 @@ app.controller('statusStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
                 if( !$.isEmptyObject(vanScope.getVan())  ){
                     $scope.vanCd = vanScope.getVan().vanCd;
                     $scope.vanNm = vanScope.getVan().vanNm;
+                    $("#manageVanCd").val(vanScope.getVan().vanCd);
+                    $("#manageVanNm").val(vanScope.getVan().vanNm);
                 }
             });
         });
     };
+
+    // 관리밴사 선택취소
+    $scope.cancelAgencyDel = function(){
+        $("#agencyCd").val("");
+        $("#agencyNm").val(messages["cmm.all"]);
+    }
+
+    // 관리밴사 선택취소
+    $scope.cancelVanDel = function(){
+        $scope.vanCd = '';
+        $("#manageVanCd").val("");
+        $("#manageVanNm").val(messages["cmm.all"]);
+    }
 
     // 선택 매장
     $scope.selectedStore;
@@ -187,6 +202,8 @@ app.controller('storeTotalExcelCtrl', ['$scope', '$http', '$timeout', function (
     $scope.searchExcelList = function (data) {
         // 파라미터
         var params       = {};
+        params.agencyCd = $("#agencyCd").val();
+        params.agencyNm = $("#agencyNm").val();
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/store/manage/status/store/getStatusStoreExcelList.sb", params, function() {

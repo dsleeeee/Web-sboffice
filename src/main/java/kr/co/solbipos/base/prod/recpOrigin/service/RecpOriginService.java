@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.recpOrigin.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.common.popup.selectStore.service.SelectStoreVO;
 
 import java.util.List;
 
@@ -54,4 +55,25 @@ public interface RecpOriginService {
 
     /** 상품-원산지관리탭 - 저장 */
     int getProdRecpOriginSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO);
+
+    /** 원산지관리-정보입력 조회 */
+    List<DefaultMap<Object>> getRecpOriginInfoList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
+
+    /** 원산지관리-정보입력 - TEXT 조회 */
+    List<DefaultMap<Object>> getRecpOriginInfoDetailList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
+
+    /** 원산지관리-정보입력 원산지관리 저장 */
+    int getRecpOriginInfoSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO);
+
+    /** 원산지관리-정보입력 원산지정보 TEXT 저장 */
+    int getRecpOriginInfoDetailSave(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
+
+    /** 원산지관리-정보입력 매장적용 팝업 원산지 코드 조회 */
+    List<DefaultMap<String>> getSelectOriginCdList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO);
+
+    /** 원산지관리-정보입력 매장적용 팝업 매장리스트 조회 */
+    List<DefaultMap<String>> getOriginInfoStoreList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO);
+
+    /** 원산지관리-정보입력 매장적용 팝업 매장적용 */
+    int getOriginInfoRegStore(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO);
 }

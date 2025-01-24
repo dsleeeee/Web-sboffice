@@ -5,6 +5,7 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.recpOrigin.service.RecpOriginService;
 import kr.co.solbipos.base.prod.recpOrigin.service.RecpOriginVO;
+import kr.co.solbipos.common.popup.selectStore.service.SelectStoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -289,6 +290,131 @@ public class RecpOriginServiceImpl implements RecpOriginService {
             recpOriginVO.setModId(sessionInfoVO.getUserId());
 
             procCnt = recpOriginMapper.getProdRecpOriginSave(recpOriginVO);
+        }
+
+        return procCnt;
+    }
+
+    /** 원산지관리-정보입력 조회 */
+    @Override
+    public List<DefaultMap<Object>> getRecpOriginInfoList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return recpOriginMapper.getRecpOriginInfoList(recpOriginVO);
+    }
+
+    /** 원산지관리-정보입력 - TEXT 조회 */
+    @Override
+    public List<DefaultMap<Object>> getRecpOriginInfoDetailList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return recpOriginMapper.getRecpOriginInfoDetailList(recpOriginVO);
+    }
+
+    /** 원산지관리-정보입력 원산지관리 저장 */
+    @Override
+    public int getRecpOriginInfoSave(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(RecpOriginVO recpOriginVO : recpOriginVOs) {
+
+            recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            recpOriginVO.setRegDt(currentDt);
+            recpOriginVO.setRegId(sessionInfoVO.getUserId());
+            recpOriginVO.setModDt(currentDt);
+            recpOriginVO.setModId(sessionInfoVO.getUserId());
+            recpOriginVO.setPrtCd("{원산지관리-정보입력}");
+
+            if (recpOriginVO.getStatus() == GridDataFg.INSERT) {
+
+                // 관리코드 (자동 채번)
+                String originCd = recpOriginMapper.getRecpOriginInfoOriginCd(recpOriginVO);
+                recpOriginVO.setOriginCd(originCd);
+
+                procCnt = recpOriginMapper.getRecpOriginInfoSaveInsert(recpOriginVO);
+
+            } else if(recpOriginVO.getStatus() == GridDataFg.UPDATE) {
+                procCnt = recpOriginMapper.getRecpOriginInfoSaveUpdate(recpOriginVO);
+
+            } else if (recpOriginVO.getStatus() == GridDataFg.DELETE) {
+                procCnt = recpOriginMapper.getRecpOriginInfoSaveDelete(recpOriginVO);
+
+            }
+        }
+
+        return procCnt;
+    }
+
+    /** 원산지관리-정보입력 원산지정보 TEXT 저장 */
+    @Override
+    public int getRecpOriginInfoDetailSave(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
+
+        String currentDt = currentDateTimeString();
+
+        recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        recpOriginVO.setModDt(currentDt);
+        recpOriginVO.setModId(sessionInfoVO.getUserId());
+        recpOriginVO.setPrtCd("{원산지관리-정보입력}");
+
+        return recpOriginMapper.getRecpOriginTxtUpdate(recpOriginVO);
+    }
+
+    /** 원산지관리-정보입력 매장적용 팝업 원산지 코드 조회 */
+    @Override
+    public List<DefaultMap<String>> getSelectOriginCdList(RecpOriginVO recpOriginVO, SessionInfoVO sessionInfoVO) {
+
+        recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        recpOriginVO.setPrtCd("{원산지관리-정보입력}");
+
+        return recpOriginMapper.getSelectOriginCdList(recpOriginVO);
+    }
+
+    /** 원산지관리-정보입력 매장적용 팝업 매장리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getOriginInfoStoreList(SelectStoreVO selectStoreVO, SessionInfoVO sessionInfoVO) {
+
+        selectStoreVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        selectStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        selectStoreVO.setEmpNo(sessionInfoVO.getEmpNo());
+        selectStoreVO.setUserId(sessionInfoVO.getUserId());
+        // 매장브랜드가 '전체' 일때
+        if (selectStoreVO.getStoreHqBrandCd() == "" || selectStoreVO.getStoreHqBrandCd() == null) {
+            // 사용자별 브랜드 array 값 세팅
+            String[] userBrandList = selectStoreVO.getUserBrands().split(",");
+            selectStoreVO.setUserBrandList(userBrandList);
+        }
+
+        return recpOriginMapper.getOriginInfoStoreList(selectStoreVO);
+    }
+
+    /** 원산지관리-정보입력 매장적용 팝업 매장적용 */
+    @Override
+    public int getOriginInfoRegStore(RecpOriginVO[] recpOriginVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(RecpOriginVO recpOriginVO : recpOriginVOs) {
+
+            recpOriginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            recpOriginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                recpOriginVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+            recpOriginVO.setRegDt(currentDt);
+            recpOriginVO.setRegId(sessionInfoVO.getUserId());
+            recpOriginVO.setModDt(currentDt);
+            recpOriginVO.setModId(sessionInfoVO.getUserId());
+            recpOriginVO.setPrtCd("{원산지관리-정보입력}");
+
+            procCnt = recpOriginMapper.getOriginInfoRegStore(recpOriginVO);
+
         }
 
         return procCnt;

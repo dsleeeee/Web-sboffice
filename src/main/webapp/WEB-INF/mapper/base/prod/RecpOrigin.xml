@@ -1015,4 +1015,343 @@
         AND PROD_CD = #{prodCd}
     </update>
 
+    <!-- 원산지관리-정보입력 원산지 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEXT
+        COMMENTS :
+    -->
+    <select id="getRecpOriginInfoList" parameterType="RecpOriginVO" resultType="DefaultMap">
+        /* RecpOriginMapper.getRecpOriginInfoList */
+        SELECT	PRT_CD
+        ,		ORIGIN_CD
+        ,		ORIGIN_NM
+        FROM 	TB_HQ_PRINT_TEXT
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+    </select>
+
+    <!-- 원산지관리-정보입력 TEXT 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEXT
+        COMMENTS :
+    -->
+    <select id="getRecpOriginInfoDetailList" parameterType="RecpOriginVO" resultType="DefaultMap">
+        /* RecpOriginMapper.getRecpOriginInfoDetailList */
+        SELECT	PRT_CD
+        ,		ORIGIN_CD
+        ,		ORIGIN_NM
+        ,       ORIGIN_TXT_1
+        ,       ORIGIN_TXT_2
+        ,       ORIGIN_TXT_3
+        ,       ORIGIN_TXT_4
+        ,       ORIGIN_TXT_5
+        FROM 	TB_HQ_PRINT_TEXT
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     ORIGIN_CD       = #{originCd}
+    </select>
+
+    <!-- 원산지관리 - 정보입력 관리코드(자동채번) -->
+    <!--
+        TABLE    :  TB_HQ_PRINT_TEXT
+        COMMENTS :
+    -->
+    <select id="getRecpOriginInfoOriginCd" parameterType="RecpOriginVO" resultType="String">
+        /* RecpOriginMapper.getRecpOriginInfoOriginCd */
+        SELECT  LPAD(NVL(MAX(ORIGIN_CD), 0) + 1, 4, '0')
+        FROM    TB_HQ_PRINT_TEXT
+        WHERE   1=1
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PRT_CD          = #{prtCd}
+    </select>
+
+    <!-- 원산지관리-정보입력 저장 insert -->
+    <!--
+        TABLE    :  TB_HQ_PRINT_TEXT
+        COMMENTS :
+    -->
+    <insert id="getRecpOriginInfoSaveInsert" parameterType="RecpOriginVO">
+        /* RecpOriginMapper.getRecpOriginInfoSaveInsert */
+        INSERT INTO TB_HQ_PRINT_TEXT
+        (
+            HQ_OFFICE_CD
+        ,   PRT_CD
+        ,   ORIGIN_CD
+        ,   ORIGIN_NM
+        ,   ORIGIN_TXT_1
+        ,   ORIGIN_TXT_2
+        ,   ORIGIN_TXT_3
+        ,   ORIGIN_TXT_4
+        ,   ORIGIN_TXT_5
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{prtCd}
+        ,   #{originCd}
+        ,   #{originNm}
+        ,   null
+        ,   null
+        ,   null
+        ,   null
+        ,   null
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 원산지관리-정보입력 저장 update -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEXT
+        COMMENTS :
+    -->
+    <update id="getRecpOriginInfoSaveUpdate" parameterType="RecpOriginVO">
+        /* RecpOriginMapper.getRecpOriginInfoSaveUpdate */
+        UPDATE  TB_HQ_PRINT_TEXT
+        SET     ORIGIN_NM   = #{originNm}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   1=1
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     ORIGIN_CD       = #{originCd}
+        AND     PRT_CD          = #{prtCd}
+    </update>
+
+    <!-- 원산지관리-정보입력 저장 delete -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEXT
+        COMMENTS :
+    -->
+    <delete id="getRecpOriginInfoSaveDelete" parameterType="RecpOriginVO">
+        /* RecpOriginMapper.getRecpOriginInfoSaveDelete */
+        DELETE  TB_HQ_PRINT_TEXT
+        WHERE   1=1
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     ORIGIN_CD       = #{originCd}
+        AND     PRT_CD          = #{prtCd}
+    </delete>
+
+    <!-- 원산지관리-정보입력 저장 update -->
+    <!--
+        TABLE    : TB_HQ_PRINT_TEXT
+        COMMENTS :
+    -->
+    <update id="getRecpOriginTxtUpdate" parameterType="RecpOriginVO">
+        /* RecpOriginMapper.getRecpOriginTxtUpdate */
+        UPDATE  TB_HQ_PRINT_TEXT
+        SET     ORIGIN_TXT_1    = #{originTxt1}
+        ,       ORIGIN_TXT_2    = #{originTxt2}
+        ,       ORIGIN_TXT_3    = #{originTxt3}
+        ,       ORIGIN_TXT_4    = #{originTxt4}
+        ,       ORIGIN_TXT_5    = #{originTxt5}
+        ,       MOD_DT          = #{modDt}
+        ,       MOD_ID          = #{modId}
+        WHERE   1=1
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     ORIGIN_CD       = #{originCd}
+        AND     PRT_CD          = #{prtCd}
+    </update>
+
+    <!-- 원산지관리-정보입력 원산지코드 리스트 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSelectOriginCdList" parameterType="selectStoreVO" resultType="DefaultMap">
+        /* USE : RecpOriginMapper.getSelectOriginCdList */
+        SELECT  ORIGIN_CD   AS VALUE
+        ,       '[' || ORIGIN_CD || ']' || ORIGIN_NM   AS NAME
+        FROM    TB_HQ_PRINT_TEXT
+        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+        ORDER
+        BY      ORIGIN_CD
+    </select>
+
+    <!-- 원산지관리-정보입력 - 매장 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getOriginInfoStoreList" parameterType="selectStoreVO" resultType="DefaultMap">
+        /* USE : RecpOriginMapper.getOriginInfoStoreList */
+        SELECT  tms.HQ_OFFICE_CD
+        ,       tms.STORE_CD
+        ,       tms.STORE_NM
+        ,       thn.STORE_CHG_NOT
+        ,       tmpt.ORIGIN_CD
+        ,       TO_CHAR(TO_DATE(tmpt.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        FROM    TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        ,       (
+                    SELECT  NMCODE_NM       AS STORE_CD
+                    ,       '변경제한매장'    AS STORE_CHG_NOT
+                    FROM    TB_HQ_NMCODE
+                    WHERE   1=1
+                    AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND     NMCODE_GRP_CD   = '164'
+                    AND     USE_YN          = 'Y'
+                ) thn
+        ,       TB_MS_PRINT_TEXT tmpt
+        WHERE   1=1
+        AND     tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+            OR tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+            )
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='storeChgNot != null and storeChgNot != ""'>
+            <if test='storeChgNot == "1"'>
+                AND thn.STORE_CHG_NOT IS NOT NULL
+            </if>
+            <if test='storeChgNot == "2"'>
+                AND thn.STORE_CHG_NOT IS NULL
+            </if>
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        AND (
+        ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) != 0) AND (tms.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId})) )
+        OR
+        ( ((SELECT COUNT(STORE_CD) FROM TB_HQ_SEARCH_UPLOAD_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND USER_ID = #{userId}) = 0) AND 1=1 )
+        )
+        AND     tmsi.STORE_CD   (+) = tms.STORE_CD
+        AND     thn.STORE_CD    (+) = tms.STORE_CD
+        AND     tmpt.STORE_CD   (+) = tms.STORE_CD
+        ORDER
+        BY      tms.STORE_CD
+    </select>
+
+    <!-- 원산지관리 저장 insert -->
+    <!--
+        TABLE    :  TB_HQ_PRINT_TEXT
+        COMMENTS :
+    -->
+    <insert id="getOriginInfoRegStore" parameterType="RecpOriginVO">
+        /* RecpOriginMapper.getOriginInfoRegStore */
+        MERGE INTO TB_MS_PRINT_TEXT A
+        USING
+            (
+                SELECT  #{storeCd}      AS STORE_CD
+                ,       PRT_CD
+                ,       ORIGIN_CD
+                ,       ORIGIN_NM
+                ,       ORIGIN_TXT_1
+                ,       ORIGIN_TXT_2
+                ,       ORIGIN_TXT_3
+                ,       ORIGIN_TXT_4
+                ,       ORIGIN_TXT_5
+                FROM    TB_HQ_PRINT_TEXT
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     ORIGIN_CD       = #{originCd}
+                AND     PRT_CD          = #{prtCd}
+            ) B
+        ON
+            (
+                    B.STORE_CD  = A.STORE_CD
+                AND B.PRT_CD    = A.PRT_CD
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+                A.ORIGIN_CD     = B.ORIGIN_CD
+        ,       A.ORIGIN_NM     = B.ORIGIN_NM
+        ,       A.ORIGIN_TXT_1  = B.ORIGIN_TXT_1
+        ,       A.ORIGIN_TXT_2  = B.ORIGIN_TXT_2
+        ,       A.ORIGIN_TXT_3  = B.ORIGIN_TXT_3
+        ,       A.ORIGIN_TXT_4  = B.ORIGIN_TXT_4
+        ,       A.ORIGIN_TXT_5  = B.ORIGIN_TXT_5
+        ,       A.MOD_DT        = #{modDt}
+        ,       A.MOD_ID        = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            STORE_CD
+        ,   PRT_CD
+        ,   ORIGIN_CD
+        ,   ORIGIN_NM
+        ,   ORIGIN_TXT_1
+        ,   ORIGIN_TXT_2
+        ,   ORIGIN_TXT_3
+        ,   ORIGIN_TXT_4
+        ,   ORIGIN_TXT_5
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            B.STORE_CD
+        ,   B.PRT_CD
+        ,   B.ORIGIN_CD
+        ,   B.ORIGIN_NM
+        ,   B.ORIGIN_TXT_1
+        ,   B.ORIGIN_TXT_2
+        ,   B.ORIGIN_TXT_3
+        ,   B.ORIGIN_TXT_4
+        ,   B.ORIGIN_TXT_5
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
 </mapper>

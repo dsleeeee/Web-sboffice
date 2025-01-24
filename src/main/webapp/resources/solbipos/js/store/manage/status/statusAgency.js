@@ -92,6 +92,10 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('statusAgencyDetailCtrl');
                 storeScope._gridDataInit();
+
+                // 매장 grid paging 초기화(숨기기.. 아예 없애는거 모름..)
+                var statusAgencyDetailCtrlPager = document.getElementById('statusAgencyDetailCtrlPager');
+                statusAgencyDetailCtrlPager.style.visibility='hidden'
             });
         }, false);
     };
@@ -140,7 +144,11 @@ app.controller('statusAgencyDetailCtrl', ['$scope', '$http', function ($scope, $
         params.sysStatFg = $scope.selectedStoreDetail.sysStatFg;
         params.listScale = 30;
 
-        $scope._inquiryMain("/store/manage/status/agency/getStatusAgencyDetailList.sb", params, function() {}, false);
+        $scope._inquiryMain("/store/manage/status/agency/getStatusAgencyDetailList.sb", params, function() {
+            // 매장 grid 보이도록
+            var statusAgencyDetailCtrlPager = document.getElementById('statusAgencyDetailCtrlPager');
+            statusAgencyDetailCtrlPager.style.visibility='visible'
+        }, false);
     };
     // <-- //검색 호출 -->
 
