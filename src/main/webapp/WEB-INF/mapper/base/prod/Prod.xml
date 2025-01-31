@@ -2191,7 +2191,9 @@
     <update id="deleteProdStoreDetail" parameterType="prodVO">
         /* USE : ProdMapper.deleteProdStoreDetail */
         UPDATE TB_MS_PRODUCT
-           SET USE_YN = 'N'
+           SET USE_YN = 'N',
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
          WHERE STORE_CD = #{storeCd}
            AND PROD_CD = #{prodCd}
     </update>
