@@ -155,17 +155,26 @@
     -->
     <select id="getCornerTerminalList" parameterType="storeTerminalVO" resultType="DefaultMap">
         /* TerminalManageMapper.getCornerTerminalList */
-        SELECT tmct.STORE_CD,
-               tmct.CORNR_CD,
-               tmct.VENDOR_FG,
-               (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '078' AND NMCODE_CD = tmct.VENDOR_FG ) AS VENDOR_FG_NM,
-               tmct.VENDOR_CD,
-               tmct.VENDOR_NM,
-               tmct.VENDOR_TERMNL_NO,
-               tmct.VENDOR_SER_NO
-          FROM TB_MS_CORNER_TERMNL tmct
-         WHERE tmct.STORE_CD = #{storeCd}
-           AND tmct.CORNR_CD = #{cornrCd}
+        SELECT  tmct.STORE_CD
+        ,       tmct.CORNR_CD
+        ,       '[' || tmct.CORNR_CD || '] ' || B.CORNR_NM AS CORNR_NM
+        ,       tmct.VENDOR_FG
+        ,       (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '078' AND NMCODE_CD = tmct.VENDOR_FG ) AS VENDOR_FG_NM
+        ,       tmct.VENDOR_CD
+        ,       tmct.VENDOR_NM
+        ,       tmct.VENDOR_TERMNL_NO
+        ,       tmct.VENDOR_SER_NO
+        FROM    TB_MS_CORNER_TERMNL tmct
+        ,       TB_MS_CORNER B
+        WHERE   tmct.STORE_CD   = #{storeCd}
+        <if test="cornrCd != null and cornrCd != ''">
+        AND     tmct.CORNR_CD   = #{cornrCd}
+        </if>
+        AND     B.STORE_CD      = tmct.STORE_CD
+        AND     B.CORNR_CD      = tmct.CORNR_CD
+        ORDER
+        BY      tmct.CORNR_CD
+        ,       tmct.VENDOR_CD
     </select>
 
     <!-- 매장 환경변수 값 변경 -->
