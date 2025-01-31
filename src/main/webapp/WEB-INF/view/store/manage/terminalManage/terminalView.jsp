@@ -237,6 +237,7 @@
     <%-- 코너 설정 --%>
     <div class="wj-gridWrap" style="height:150px; overflow-y: hidden; display: none;" ng-controller="cornerCtrl" id="cornerArea" >
       <wj-flex-grid
+              id="wjCornerGrid"
               autoGbeginning-editenerateColumns="false"
               control="flex"
               initialized="initGrid(s,e)"
@@ -248,6 +249,7 @@
               ime-enabled="true">
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.corner"/>" binding="cornrNm" width="*" data-map="cornerFgDataMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorFgNm"/>" binding="vendorFgNm" visible="false" width="*"></wj-flex-grid-column>
@@ -276,7 +278,7 @@
   var arrAgencyCol = agencyCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20250124.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20250124.03" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <%--<c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">--%>

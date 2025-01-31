@@ -22,6 +22,7 @@ var mcoupnList = new Array();
 var paperVoucherList = new Array();
 var taxRefundList = new Array();
 var sktList = new Array();
+var cornerFgList = [];
 
 for (var i in vandorList) {
     if (vandorList[i].vanFg === '01') {
@@ -159,14 +160,12 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.cornerFgVal = "01";
     $scope.setCornerFgVal = function (s, e) {
 
-        if (isNull(s.selectedValue)) {
-            return false;
-        }
-
         $scope.cornerFgVal = s.selectedValue;
 
-        var cornerScope = agrid.getScope('cornerCtrl');
-        cornerScope.getCornerSetting();
+        if (!isNull($("#lblStoreCd").text())) {
+            var cornerScope = agrid.getScope('cornerCtrl');
+            cornerScope.getCornerSetting();
+        }
     };
     $scope.getCornerFgVal = function () {
         return $scope.cornerFgVal;
@@ -208,6 +207,8 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
             var posList = result.data.data.posList;
             var cornerList = result.data.data.cornerList;
 
+            cornerFgList = cornerList;
+
             // 터미널 정보 set(터미널 콤보박스 변경에 따라 값 변함)
             $scope.setTerminalEnvVal(terminalEnvVal);
 
@@ -228,9 +229,19 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
             }
             $scope.comboDt.posCombo.itemsSource = new wijmo.collections.CollectionView($scope.posFgArr);
 
-            for (var j = 0; j <= cornerList.length; j++) {
+            if(cornerList.length > 0) {
+                var allData = {};
+                allData.gChk = false;
+                allData.name = "-전체-";
+                allData.value = "";
+
+                $scope.cornerFgArr.push(allData);
+            }
+
+            for (var j = 0; j < cornerList.length; j++) {
                 $scope.cornerFgArr.push(cornerList[j]);
             }
+
             $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView($scope.cornerFgArr);
 
             // 코너 보여주기
@@ -275,6 +286,41 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 코너 보여주기
     $scope.showCorner = function () {
+
+        if ($scope.terminalFg === "1") {
+
+            $scope.cornerFgArr2 = $scope.cornerFgArr;
+            if($scope.cornerFgArr2.length > 0 && $scope.cornerFgArr2[0].name === "-전체-"){
+                $scope.cornerFgArr2.splice(0, 1);
+                $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView($scope.cornerFgArr2);
+            }
+        }else if($scope.terminalFg === "2") {
+
+            $scope.cornerFgArr2 = $scope.cornerFgArr;
+            if($scope.cornerFgArr2.length > 0 && $scope.cornerFgArr2[0].name !== "-전체-"){
+                var allData = {};
+                allData.gChk = false;
+                allData.name = "-전체-";
+                allData.value = "";
+
+                $scope.cornerFgArr2.unshift(allData);
+                $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView($scope.cornerFgArr2);
+            }
+        }
+        $scope.comboDt.cornerCombo.itemsSource.selectedIndex = 0;
+
+        var grid = wijmo.Control.getControl("#wjCornerGrid");
+        var columns = grid.columns;
+        for(var i=0; i<columns.length-1; i++){
+            if(columns[i].binding === "cornrNm"){
+                if($scope.terminalFg === "2") {
+                    columns[i].visible = true;
+                }else{
+                    columns[i].visible = false;
+                }
+            }
+        }
+
         $("#lblToolTip").text("* 코너를 선택하세요.");
         $("#terminalListArea").show();
 
@@ -384,8 +430,10 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.cornerAddRow = function () {
 
         if ($scope.comboDt.cornerCombo.selectedValue === null || $scope.comboDt.cornerCombo.selectedValue === undefined || $scope.comboDt.cornerCombo.selectedValue === '') {
-            $scope._popMsg("코너를 선택해주세요.");
-            return false;
+            if($scope.comboDt.cornerCombo.selectedItem === null) {
+                $scope._popMsg("코너를 선택해주세요.");
+                return false;
+            }
         }
 
         var cornerScope = agrid.getScope('cornerCtrl');
@@ -427,10 +475,21 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._postJSONQuery.withOutPopUp(baseUrl + "terminalManage/getTerminalEnv.sb", params, function (result) {
 
             var cornerList = result.data.data.cornerList;
+            cornerFgList = cornerList;
 
-            for (var j = 0; j <= cornerList.length; j++) {
+            if(cornerList.length > 0) {
+                var allData = {};
+                allData.gChk = false;
+                allData.name = "-전체-";
+                allData.value = "";
+
+                $scope.cornerFgArr.push(allData);
+            }
+
+            for (var j = 0; j < cornerList.length; j++) {
                 $scope.cornerFgArr.push(cornerList[j]);
             }
+
             $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView($scope.cornerFgArr);
 
             // 코너 그리드 초기화
@@ -470,7 +529,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "vendorNm") {
+                if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "vendorNm" ) {
                     var item = s.rows[e.row].dataItem;
                     if (col.binding === "vendorFg" || col.binding === "vendorCd") {
                         if (item.status !== "I") {
@@ -822,14 +881,23 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.vanCdDataMap = allVanList;
         $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
 
+
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "vendorNm") {
-                    var item = s.rows[e.row].dataItem;
-                    if (col.binding === "vendorFg" || col.binding === "vendorCd") {
-                        if (item.status !== "I") {
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "cornrNm") {
+                    if (item.status !== "I") {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
+                }else if(col.binding === "vendorNm") {
+                    if ($("#lblVanFixFg").text() == "Y") {
+                        if (item.vendorFg === "01") {
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                             wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
@@ -837,30 +905,25 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                             e.cell.outerHTML = e.cell.outerHTML;
                         }
                     }
-                    if($("#lblVanFixFg").text() == "Y") {
-                        if (col.binding === "vendorNm") {
-                            if (item.vendorFg === "01") {
-                                wijmo.addClass(e.cell, 'wj-custom-readonly');
-                                wijmo.setAttribute(e.cell, 'aria-readonly', true);
-
-                                // Attribute 의 변경사항을 적용.
-                                e.cell.outerHTML = e.cell.outerHTML;
-                            }
-                        }
-                    }
                 }
             }
         });
 
+        var terminalScope = agrid.getScope('terminalCtrl');
+
         // 벤더구분, 벤더코드 그리드 에디팅 방지
         s.beginningEdit.addHandler(function (sender, elements) {
             var col = sender.columns[elements.col];
-            if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+            if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "cornrNm") {
                 var dataItem = s.rows[elements.row].dataItem;
                 if(dataItem.status === "U"){
                     elements.cancel = true;
                 }else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
                     elements.cancel = true;
+                }else if (dataItem.status === "I"){
+                    if(col.binding === "cornrNm" && !isNull(terminalScope.getCornerFgVal())){
+                        elements.cancel = true;
+                    }
                 }
             }else if (col.binding === "vendorNm"){
                 if($("#lblVanFixFg").text() == "Y") {
@@ -953,13 +1016,24 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         params.cornrCd = terminalScope.getCornerFgVal();
 
         $scope._inquirySub(baseUrl + "corner/getCornerTerminalList.sb", params, function () {
+            $scope.cornerFgDataMap = new wijmo.grid.DataMap(cornerFgList, 'value', 'name');
+
         }, false);
     };
 
     // 행 추가
     $scope.addRow = function () {
+
         var params = {};
+
+        var terminalScope = agrid.getScope('terminalCtrl');
+
         params.status = "I";
+        if(isNull(terminalScope.getCornerFgVal())) {
+            params.cornrNm = "01";
+        }else{
+            params.cornrNm = terminalScope.getCornerFgVal();
+        }
         params.vendorFg = "01";
         params.vendorCd = "001";
         if($("#lblVanFixFg").text() == "Y") {
@@ -982,7 +1056,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 if($scope.flex.collectionView.itemsEdited[i].gChk) {
                     $scope.flex.collectionView.itemsEdited[i].status = "U";
                     $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
-                    $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
+                    if(!isNull(terminalScope.getCornerFgVal())){
+                        $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
+                    }
                     params.push($scope.flex.collectionView.itemsEdited[i]);
                 }
             }
@@ -990,7 +1066,11 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 if($scope.flex.collectionView.itemsAdded[i].gChk) {
                     $scope.flex.collectionView.itemsAdded[i].status = "I";
                     $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
-                    $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
+                    if(isNull(terminalScope.getCornerFgVal())){
+                        $scope.flex.collectionView.itemsAdded[i].cornrCd = $scope.flex.collectionView.itemsAdded[i].cornrNm;
+                    }else {
+                        $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
+                    }
                     params.push($scope.flex.collectionView.itemsAdded[i]);
                 }
             }
@@ -998,7 +1078,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 if($scope.flex.collectionView.itemsRemoved[i].gChk) {
                     $scope.flex.collectionView.itemsRemoved[i].status = "D";
                     $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
-                    $scope.flex.collectionView.itemsRemoved[i].cornrCd = terminalScope.getCornerFgVal();
+                    if(!isNull(terminalScope.getCornerFgVal())){
+                        $scope.flex.collectionView.itemsRemoved[i].cornrCd = terminalScope.getCornerFgVal();
+                    }
                     params.push($scope.flex.collectionView.itemsRemoved[i]);
                 }
             }
@@ -1007,6 +1089,11 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
             for (var i = 0; i < params.length; i++) {
 
                 if (params[i].status !== "D") {
+
+                    if (params[i].cornrNm == "") {
+                        $scope._popMsg(messages["terminalManage.corner"] + messages["terminalManage.require.select"]);
+                        return false;
+                    }
 
                     if (params[i].vendorFg == "") {
                         $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
@@ -1084,8 +1171,8 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                     var item2 = $scope.flex.collectionView.items[j];
                     if(i !== j){
                         if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
-                            && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
-                            if (item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()) {
+                           && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
+                            if (item.cornrCd.toString() + item.vendorFg.toString() + item.vendorNm.toString() === item2.cornrCd.toString() + item2.vendorFg.toString() + item2.vendorNm.toString()) {
                                 $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
                                 return false;
                             }
