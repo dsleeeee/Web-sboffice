@@ -519,6 +519,7 @@
                 <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodTipYn"/>" binding="prodTipYn" width="100" is-read-only="true" align="center" data-map="prodTipYnDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.vatFg"/>" binding="vatFg" width="100" is-read-only="true" align="center" data-map="vatFgDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.vatIncldYn"/>" binding="vatIncldYn" data-map="vatIncldYnDataMap" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <c:if test="${momsEnvstVal == '0'}">
                     <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="100" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 </c:if>
@@ -672,6 +673,7 @@
                 <wj-flex-grid-column header="<s:message code="prod.saleUprc"/>" binding="saleUprc" width="100" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodTipYn"/>" binding="prodTipYn" width="100" is-read-only="true" align="center" data-map="prodTipYnDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.vatFg"/>" binding="vatFg" width="100" is-read-only="true" align="center" data-map="vatFgDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.vatIncldYn"/>" binding="vatIncldYn" data-map="vatIncldYnDataMap" width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
                 <c:if test="${momsEnvstVal == '0'}">
                     <wj-flex-grid-column header="<s:message code="prod.useYn"/>" binding="useYn" width="100" is-read-only="true" align="center" data-map="useYnComboDataMap"></wj-flex-grid-column>
                 </c:if>
@@ -814,7 +816,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodSearch/prodSearch2.js?ver=20240118.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodSearch/prodSearch2.js?ver=20250122.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

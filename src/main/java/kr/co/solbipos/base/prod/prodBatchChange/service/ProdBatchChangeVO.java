@@ -81,6 +81,9 @@ public class ProdBatchChangeVO extends PageVO {
     /** 부가세구분 */
     private String vatFg;
 
+    /** 부가세포함여부 */
+    private String vatIncldYn;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -171,5 +174,13 @@ public class ProdBatchChangeVO extends PageVO {
 
     public void setVatFg(String vatFg) {
         this.vatFg = vatFg;
+    }
+
+    public String getVatIncldYn() {
+        return vatIncldYn;
+    }
+
+    public void setVatIncldYn(String vatIncldYn) {
+        this.vatIncldYn = vatIncldYn;
     }
 }

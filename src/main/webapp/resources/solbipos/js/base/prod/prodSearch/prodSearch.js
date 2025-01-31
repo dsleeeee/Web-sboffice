@@ -54,6 +54,11 @@ var momsKioskEdgeComboData = [
   {"name": "EVENT", "value": "3"}
 ];
 
+// 부가세포함여부
+var vatIncldYnData = [
+    {"name":"별도","value":"N"},
+    {"name":"포함","value":"Y"}
+];
 /**
  * 상품정보관리 그리드 생성
  */
@@ -168,6 +173,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFgData, 'value', 'name'); // 상품유형
     $scope.prodTipYnDataMap = new wijmo.grid.DataMap(prodTipYnComboData, 'value', 'name'); // 봉사료포함여부
     $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
+    $scope.vatIncldYnDataMap = new wijmo.grid.DataMap(vatIncldYnData, 'value', 'name'); // 부가세포함여부
     $scope.setProdFgDataMap = new wijmo.grid.DataMap(setProdFgData, 'value', 'name'); // 세트상품구분
     $scope.depositCupFgDataMap = new wijmo.grid.DataMap(depositCupFgComboData, 'value', 'name'); // 보증금상품유형
     $scope.momsKioskEdgeDataMap = new wijmo.grid.DataMap(momsKioskEdgeComboData, 'value', 'name'); // KIOSK 뱃지
@@ -507,6 +513,7 @@ app.controller('totalExcelCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFgData, 'value', 'name'); // 상품유형
     $scope.prodTipYnDataMap = new wijmo.grid.DataMap(prodTipYnComboData, 'value', 'name'); // 봉사료포함여부
     $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
+    $scope.vatIncldYnDataMap = new wijmo.grid.DataMap(vatIncldYnData, 'value', 'name'); // 부가세포함여부
     $scope.setProdFgDataMap = new wijmo.grid.DataMap(setProdFgData, 'value', 'name'); // 세트상품구분
     $scope.depositCupFgDataMap = new wijmo.grid.DataMap(depositCupFgComboData, 'value', 'name'); // 보증금상품유형
     $scope.momsKioskEdgeDataMap = new wijmo.grid.DataMap(momsKioskEdgeComboData, 'value', 'name'); // KIOSK 뱃지

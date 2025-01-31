@@ -101,6 +101,7 @@
                     <wj-flex-grid-column header="<s:message code="simpleProd.splyUprc"/>" binding="splyUprc" width="80" align="center" data-type="Number"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.costUprc"/>" binding="costUprc" width="80" align="center" data-type="Number"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="80" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="simpleProd.vatIncldYn"/>" binding="vatIncldYn" data-map="vatIncldYnDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="simpleProd.barCd"/>" binding="barCd" width="100" align="center"></wj-flex-grid-column>
                     <c:if test="${orgnFg == 'HQ'}">
                         <wj-flex-grid-column header="<s:message code="simpleProd.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="85" align="center"></wj-flex-grid-column>
@@ -169,7 +170,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20240716.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20250122.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -171,6 +171,21 @@
                         </wj-combo-box>
                     </div>
                 </td>
+                <%-- 부가세포함여부 --%>
+                <th><s:message code="prodBatchChange.vatIncldYn" /></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchVatIncldYn"
+                                ng-model="vatIncldYn"
+                                items-source="_getComboData('vatIncldYnCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -300,6 +315,7 @@
                 </c:if>
             </tr>
             <tr>
+                <%-- 과세여부 --%>
                 <th>
                     <s:message code="prodBatchChange.vatFg" />
                 </th>
@@ -320,9 +336,28 @@
                 <td>
                     <a href="#" class="btn_grayS ml10" ng-click="batchChange('vatFgChg')"><s:message code="prodBatchChange.batchChange" /></a>
                 </td>
-                <th></th>
-                <td></td>
-                <td></td>
+                <%-- 부가세포함여부 --%>
+                <th>
+                    <s:message code="prodBatchChange.vatIncldYn" />
+                </th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchVatIncldYnChg"
+                                ng-model="vatIncldYnChg"
+                                items-source="_getComboData('vatIncldYnChgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)"
+                                selected-index="1">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%-- 일괄적용 --%>
+                <td>
+                    <a href="#" class="btn_grayS ml10" ng-click="batchChange('vatIncldYnChg')"><s:message code="prodBatchChange.batchChange" /></a>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -364,6 +399,8 @@
                     </c:if>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="90" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.vatFg"/>" binding="oldVatFg" data-map="vatFgDataMap" width="90" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.vatIncldYn"/>" binding="vatIncldYn" data-map="vatIncldYnDataMap" width="100" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodBatchChange.vatIncldYn"/>" binding="oldVatIncldYn" data-map="vatIncldYnDataMap" width="100" align="center" visible="false"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -408,6 +445,7 @@
                     <wj-flex-grid-column header="<s:message code="prodBatchChange.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 </c:if>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.vatFg"/>" binding="vatFg" data-map="vatFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodBatchChange.vatIncldYn"/>" binding="vatIncldYn" data-map="vatIncldYnDataMap" width="100" align="center"></wj-flex-grid-column>
 
                 <%--저장시 필요--%>
                 <wj-flex-grid-column header="<s:message code="prodBatchChange.saleProdYn"/>" binding="oldSaleProdYn" width="90" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -429,7 +467,7 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20241029.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodBatchChange/prodBatchChange.js?ver=20250122.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

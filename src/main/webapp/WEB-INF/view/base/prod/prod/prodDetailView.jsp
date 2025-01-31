@@ -160,7 +160,7 @@
                             <s:message code="prod.vatIncldYn"/>
                         </th>
                         <td>
-                            <wj-combo-box
+                            <%--<wj-combo-box
                                     ng-model="prodDetail.vatIncldYn"
                                     ng-hide="true"
                                     text="_vatIncldYn"
@@ -169,7 +169,8 @@
                                     selected-value-path="value"
                                     is-editable="false">
                             </wj-combo-box>
-                            {{_vatIncldYn}}
+                            {{_vatIncldYn}}--%>
+                            {{prodDetail.vatIncldYn}}
                         </td>
                     </tr>
                     <tr <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>

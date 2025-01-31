@@ -109,6 +109,7 @@
                 ,		DECODE(thpi.SALE_CHN_YN_DDN , 'N', NULL, thpi.SALE_CHN_YN_DDN ) AS DDANGYO -- 판매채널:떙겨요
                 ,		thp.REMARK -- 비고
                 ,		thpi.PROD_INFO -- 상품상세설명
+                ,       thp.VAT_INCLD_YN -- 과세여부
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_HQ_PRODUCT thp
                         LEFT OUTER JOIN (
@@ -287,6 +288,7 @@
                 ,       DECODE(NVL(thp.KIOSK_DISPLAY_YN, 'N'), 'Y', '표시', 'N', '비표시')      AS KIOSK_DISPLAY_YN
                 ,       DECODE(NVL(thp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')     AS CHANNEL_SOLD_OUT_YN
                 ,       DECODE(NVL(thp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상')              AS SELFAPP_YN
+                ,       thp.VAT_INCLD_YN -- 과세여부
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_MS_PRODUCT thp
                 LEFT OUTER JOIN (
@@ -472,6 +474,7 @@
                 ,		DECODE(thpi.SALE_CHN_YN_DDN , 'N', NULL, thpi.SALE_CHN_YN_DDN ) AS DDANGYO -- 판매채널:떙겨요
                 ,		thp.REMARK -- 비고
                 ,		thpi.PROD_INFO -- 상품상세설명
+                ,       thp.VAT_INCLD_YN -- 과세여부
                 FROM    TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN (
                 SELECT
@@ -647,6 +650,7 @@
                 ,       DECODE(NVL(thp.KIOSK_DISPLAY_YN, 'N'), 'Y', '표시', 'N', '비표시')      AS KIOSK_DISPLAY_YN
                 ,       DECODE(NVL(thp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')     AS CHANNEL_SOLD_OUT_YN
                 ,       DECODE(NVL(thp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상')              AS SELFAPP_YN
+                ,       thp.VAT_INCLD_YN -- 과세여부
                 FROM    TB_MS_PRODUCT thp
                 LEFT OUTER JOIN (
                 SELECT
@@ -854,6 +858,7 @@
                 ,       DECODE(thpi.SALE_CHN_YN_DDN , 'N', NULL, thpi.SALE_CHN_YN_DDN ) AS DDANGYO -- 판매채널:떙겨요
                 ,       thp.REMARK -- 비고
                 ,       thpi.PROD_INFO -- 상품상세설명
+                ,       thp.VAT_INCLD_YN -- 과세여부
                 FROM    TB_HQ_PRODUCT thp
                 ,       TB_HQ_PRODUCT_INFO thpi
                 ,       TB_HQ_BRAND thb
@@ -1349,6 +1354,7 @@
             ,       DECODE(NVL(thp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')             AS SOLD_OUT_YN
             ,       DECODE(NVL(thp.KIOSK_DISPLAY_YN, 'N'), 'Y', '표시', 'N', '비표시')      AS KIOSK_DISPLAY_YN
             ,       DECODE(NVL(thp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상')     AS CHANNEL_SOLD_OUT_YN
+            ,       thp.VAT_INCLD_YN -- 과세여부
             FROM    TB_MS_PRODUCT thp
             ,       TB_MS_PRODUCT_INFO thpi
             ,       TB_MS_BRAND thb

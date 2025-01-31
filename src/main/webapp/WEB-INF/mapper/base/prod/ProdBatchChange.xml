@@ -37,12 +37,14 @@
                 thp.MAP_PROD_CD,
                 thp.HQ_BRAND_CD,
                 thp.VAT_FG,
+                thp.VAT_INCLD_YN,
                 thp.HQ_BRAND_CD     AS OLD_HQ_BRAND_CD,
                 thp.POINT_SAVE_YN   AS OLD_POINT_SAVE_YN,
                 thp.PRC_CTRL_FG     AS OLD_PRC_CTRL_FG,
                 thp.MAP_PROD_CD     AS OLD_MAP_PROD_CD,
                 ( SELECT SF_GET_PROD_CLASSES('H', thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD) FROM DUAL ) AS OLD_PATH_NM,
-                thp.VAT_FG          AS OLD_VAT_FG
+                thp.VAT_FG          AS OLD_VAT_FG,
+                thp.VAT_INCLD_YN    AS OLD_VAT_INCLD_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp,
                 TB_HQ_PRODUCT_CLASS thpc,
@@ -87,6 +89,9 @@
                 <if test="vatFg != null and vatFg != ''">
                    AND thp.VAT_FG = #{vatFg}
                 </if>
+                <if test="vatIncldYn != null and vatIncldYn != ''">
+                   AND thp.VAT_INCLD_YN = #{vatIncldYn}
+                </if>
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
                 AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
@@ -116,7 +121,9 @@
                 tmp.HQ_BRAND_CD,
                 tmp.HQ_BRAND_CD     AS OLD_HQ_BRAND_CD,
                 tmp.VAT_FG,
-                tmp.VAT_FG          AS OLD_VAT_FG
+                tmp.VAT_FG          AS OLD_VAT_FG,
+                tmp.VAT_INCLD_YN,
+                tmp.VAT_INCLD_YN    AS OLD_VAT_INCLD_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
                 TB_MS_PRODUCT_CLASS tmpc,
@@ -164,6 +171,9 @@
                 <if test="vatFg != null and vatFg != ''">
                    AND tmp.VAT_FG = #{vatFg}
                 </if>
+                <if test="vatIncldYn != null and vatIncldYn != ''">
+                   AND tmp.VAT_INCLD_YN = #{vatIncldYn}
+                </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
@@ -192,6 +202,7 @@
                 PRC_CTRL_FG = #{prcCtrlFg},
                 MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
                 VAT_FG = #{vatFg},
+                VAT_INCLD_YN = #{vatIncldYn},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -208,6 +219,7 @@
                 PRC_CTRL_FG = #{prcCtrlFg},
                 MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
                 VAT_FG = #{vatFg},
+                VAT_INCLD_YN = #{vatIncldYn},
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -232,6 +244,7 @@
             PRC_CTRL_FG = #{prcCtrlFg},
             MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
             VAT_FG = #{vatFg},
+            VAT_INCLD_YN = #{vatIncldYn},
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
             WHERE 1=1
@@ -326,7 +339,8 @@
                 thp.PRC_CTRL_FG,
                 thp.MAP_PROD_CD,
                 thp.HQ_BRAND_CD,
-                thp.VAT_FG
+                thp.VAT_FG,
+                thp.VAT_INCLD_YN
                 FROM TB_HQ_PRODUCT thp,
                 TB_HQ_PRODUCT_CLASS thpc,
                 TB_HQ_PRODUCT_BARCD thpb
@@ -370,6 +384,9 @@
                 <if test="vatFg != null and vatFg != ''">
                    AND thp.VAT_FG = #{vatFg}
                 </if>
+                <if test="vatIncldYn != null and vatIncldYn != ''">
+                   AND thp.VAT_INCLD_YN = #{vatIncldYn}
+                </if>
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
                 AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
@@ -390,7 +407,8 @@
                 tmp.REG_FG,
                 tmp.MAP_PROD_CD,
                 tmp.HQ_BRAND_CD,
-                tmp.VAT_FG
+                tmp.VAT_FG,
+                tmp.VAT_INCLD_YN
                 FROM TB_MS_PRODUCT tmp,
                 TB_MS_PRODUCT_CLASS tmpc,
                 TB_MS_PRODUCT_BARCD tmpb
@@ -436,6 +454,9 @@
                 </if>
                 <if test="vatFg != null and vatFg != ''">
                    AND tmp.VAT_FG = #{vatFg}
+                </if>
+                <if test="vatIncldYn != null and vatIncldYn != ''">
+                   AND tmp.VAT_INCLD_YN = #{vatIncldYn}
                 </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD

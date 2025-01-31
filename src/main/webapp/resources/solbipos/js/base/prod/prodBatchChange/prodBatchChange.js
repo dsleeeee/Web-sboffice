@@ -42,6 +42,18 @@ var prcCtrlFgTotData = [
     {"name":"본사","value":"H"},
     {"name":"매장","value":"S"}
 ];
+// 부가세포함여부
+var vatIncldYnData = [
+    {"name":"전체","value":""},
+    {"name":"별도","value":"N"},
+    {"name":"포함","value":"Y"}
+];
+// 부가세포함여부
+var vatIncldYnData2 = [
+    {"name":"별도","value":"N"},
+    {"name":"포함","value":"Y"}
+];
+
 
 /**
  *  상품정보일괄변경 그리드 생성
@@ -60,12 +72,14 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
     $scope._setComboData("prcCtrlFgCombo", prcCtrlFgTotData); // 가격관리구분
     $scope._setComboData("regFgCombo", regFgTotData); // 상품등록구분
     $scope._setComboData("vatFgCombo", vatFgData); // 과세여부
+    $scope._setComboData("vatIncldYnCombo", vatIncldYnData); // 부가세포함여부
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("saleProdYnChgCombo", saleProdYnData); // 판매상품여부
     $scope._setComboData("pointSaveYnChgCombo", pointSaveYnData); // 포인트적립여부
     $scope._setComboData("prcCtrlFgChgCombo", prcCtrlFgData); // 가격관리구분
     $scope._setComboData("vatFgChgCombo", vatFgData2); // 과세여부
+    $scope._setComboData("vatIncldYnChgCombo", vatIncldYnData2); // 부가세포함여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -75,6 +89,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
         $scope.regFgDataMap = new wijmo.grid.DataMap(regFgData, 'value', 'name'); // 상품등록구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData2, 'value', 'name'); // 과제여부구분
+        $scope.vatIncldYnDataMap = new wijmo.grid.DataMap(vatIncldYnData2, 'value', 'name'); // 부가세포함여부
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {
@@ -88,7 +103,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
                 // 값 변경시 체크박스 체크
-                if (col.binding === "saleProdYn" || col.binding === "pointSaveYn" || col.binding === "mapProdCd" || col.binding === "prcCtrlFg" || col.binding === "vatFg") {
+                if (col.binding === "saleProdYn" || col.binding === "pointSaveYn" || col.binding === "mapProdCd" || col.binding === "prcCtrlFg" || col.binding === "vatFg" || col.binding === "vatIncldYn") {
                     $scope.checked(item);
                 }
             }
@@ -99,7 +114,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
     //값 수정시 체크박스 체크
     $scope.checked = function (item){
         item.gChk = true;
-    }
+    };
 
     // <-- 검색 호출 -->
     $scope.$on("prodBatchChangeCtrl", function(event, data) {
@@ -199,6 +214,10 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
                 else if(chgGubun == "vatFgChg") {
                     $scope.flex.collectionView.items[i].vatFg = $scope.vatFgChg;
                 }
+                // 부가세포함여부
+                else if(chgGubun == "vatIncldYnChg") {
+                    $scope.flex.collectionView.items[i].vatIncldYn = $scope.vatIncldYnChg;
+                }
             }
         }
         $scope.flex.refresh();
@@ -261,7 +280,8 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
                         || nvl($scope.flex.collectionView.items[i].pointSaveYn,'') !==nvl($scope.flex.collectionView.items[i].oldPointSaveYn,'')
                         || nvl($scope.flex.collectionView.items[i].mapProdCd,'') !== nvl($scope.flex.collectionView.items[i].oldMapProdCd,'')
                         || nvl($scope.flex.collectionView.items[i].prcCtrlFg,'') !== nvl($scope.flex.collectionView.items[i].oldPrcCtrlFg,'')
-                        || nvl($scope.flex.collectionView.items[i].vatFg,'') !== nvl($scope.flex.collectionView.items[i].oldVatFg,'')) {
+                        || nvl($scope.flex.collectionView.items[i].vatFg,'') !== nvl($scope.flex.collectionView.items[i].oldVatFg,'')
+                        || nvl($scope.flex.collectionView.items[i].vatIncldYn,'') !== nvl($scope.flex.collectionView.items[i].oldVatIncldYn,'')) {
 
                         params.push($scope.flex.collectionView.items[i]);
 
@@ -302,6 +322,7 @@ app.controller('prodBatchChangeCtrl', ['$scope', '$http', function ($scope, $htt
             params.regFg = $scope.regFg;
         }
         params.vatFg = $scope.vatFg;
+        params.vatIncldYn = $scope.vatIncldYn;
 
         $scope._broadcast('prodBatchChangeExcelCtrl', params);
     };
@@ -323,7 +344,7 @@ app.controller('prodBatchChangeExcelCtrl', ['$scope', '$http', '$timeout', funct
         $scope.pointSaveYnDataMap = new wijmo.grid.DataMap(pointSaveYnData, 'value', 'name'); // 포인트적립여부
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
         $scope.regFgDataMap = new wijmo.grid.DataMap(regFgData, 'value', 'name'); // 상품등록구분
-        $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData2, 'value', 'name'); // 과제여부구분
+        $scope.vatIncldYnDataMap = new wijmo.grid.DataMap(vatIncldYnData2, 'value', 'name'); // 과제여부구분
 
         // 그리드 header 클릭시 정렬 이벤트 막기
         s.addEventListener(s.hostElement, 'mousedown', function (e) {

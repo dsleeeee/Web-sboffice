@@ -67,7 +67,16 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                     $("#goodsYesProdDetail").css('display', 'block');
                     $("#imgProdImageProdDetail").attr("src", prodDetail.imgUrl);
                 }
-                
+
+                // 부가세포함여부 값 셋팅
+                if (prodDetail.vatIncldYn === "N") {
+                    prodDetail.vatIncldYn = "별도";
+                } else if (prodDetail.vatIncldYn === "Y") {
+                    prodDetail.vatIncldYn = "포함";
+                } else {
+                    prodDetail.vatIncldYn = "";
+                }
+
                 // 세트구성상품 팝업버튼 visible 처리
                 if(prodDetail.setProdFg === "1"){
                     $("#btnDtlSetConfigProd").css("display", "none");

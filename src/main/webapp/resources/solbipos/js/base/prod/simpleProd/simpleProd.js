@@ -23,6 +23,12 @@ var depositCupFgData = [
     {"name": "보증컵기타", "value": "4"}
 ];
 
+// 부가세포함여부
+var vatIncldYnData = [
+    {"name":"별도","value":"N"},
+    {"name":"포함","value":"Y"}
+];
+
 /**
  *  상품목록 조회 그리드 생성
  */
@@ -64,6 +70,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFgData, 'value', 'name'); // 상품유형구분
         $scope.poProdFgDataMap = new wijmo.grid.DataMap(poProdFgData, 'value', 'name'); // 발주상품구분
         $scope.vatFgDataMap = new wijmo.grid.DataMap(vatFgData, 'value', 'name'); // 과세여부
+        $scope.vatIncldYnDataMap = new wijmo.grid.DataMap(vatIncldYnData, 'value', 'name'); // 부가세포함여부
         $scope.vendrCdDataMap = new wijmo.grid.DataMap(vendrComboList, 'value', 'name'); // 거래처
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
         $scope.depositCupFgDataMap = new wijmo.grid.DataMap(depositCupFgData, 'value', 'name'); // 보증금상품유형
@@ -142,6 +149,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.splyUprc = "0";
         params.costUprc = "0";
         params.vatFg = "1";
+        params.vatIncldYn = "Y";
         params.barCd = "";
         // 가격관리구분
         if(orgnFg == "HQ") {
@@ -217,6 +225,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.flex.collectionView.items[i].splyUprc = "0";
             $scope.flex.collectionView.items[i].costUprc = "0";
             $scope.flex.collectionView.items[i].vatFg = "1";
+            $scope.flex.collectionView.items[i].vatIncldYn = "Y";
             $scope.flex.collectionView.items[i].barCd = "";
             if(orgnFg == "HQ") {
                 $scope.flex.collectionView.items[i].prcCtrlFg = "H";
@@ -311,6 +320,9 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
             // 과세여부
             if($scope.flex.collectionView.items[i].vatFg === "" || $scope.flex.collectionView.items[i].vatFg === null) { result = messages["simpleProd.vatFgBlank"]; } // 과세여부를 선택하세요.
+
+            // 부가세포함여부
+            if($scope.flex.collectionView.items[i].vatIncldYn === "" || $scope.flex.collectionView.items[i].vatIncldYn === null) { result = messages["simpleProd.vatIncldYn"]; } // 부가세포함여부를 선택하세요.
 
             // 원가단가
             if($scope.flex.collectionView.items[i].costUprc === "" || $scope.flex.collectionView.items[i].costUprc === null) {

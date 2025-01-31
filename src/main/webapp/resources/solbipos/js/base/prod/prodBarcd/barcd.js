@@ -57,9 +57,9 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
         var item = s.rows[e.row].dataItem;
-        if( col.binding === "prodCd") {
+        /*if( col.binding === "prodCd") {
           wijmo.addClass(e.cell, 'wijLink');
-        }
+        }*/
 
         // 검증결과
         if (col.binding === "result") {
@@ -88,11 +88,11 @@ app.controller('barcdCtrl', ['$scope', '$http', '$timeout', function ($scope, $h
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         // 상품코드
-        if( col.binding === "prodCd") {
+        /*if( col.binding === "prodCd") {
           $scope.setProdInfo(selectedRow);
           // 상품정보 상세 팝업
           $scope.prodDetailLayer.show();
-        }
+        }*/
       }
     });
 

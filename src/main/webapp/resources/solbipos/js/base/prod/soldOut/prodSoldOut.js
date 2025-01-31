@@ -142,9 +142,9 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
     s.formatItem.addHandler(function (s, e) {
       if (e.panel === s.cells) {
         var col = s.columns[e.col];
-        if( col.binding === "prodCd" || col.binding === "storeCnt") {
+        /*if( col.binding === "prodCd" || col.binding === "storeCnt") {
           wijmo.addClass(e.cell, 'wijLink');
-        }
+        }*/
       }
     });
 
@@ -155,14 +155,14 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         // 상품코드
-        if( col.binding === "prodCd") {
+        /*if( col.binding === "prodCd") {
           $scope.setProdInfo(selectedRow);
           // 수정권한이 있을때
           // 매장일땐 상품등록구분이 S인 것만 수정가능
           // 상품정보 상세 팝업
           $scope.prodDetailLayer.show();
           // 등록매장수
-        }
+        }*/
       }
     });
 
