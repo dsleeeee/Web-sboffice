@@ -189,7 +189,7 @@
         <%-- 조회조건내역엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadCondition()" ><s:message code="cmm.excel.downCondition"/></button>
         <%-- 상품엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.downCurrent"/></button>
     </div>
 
     <%--위즈모 테이블--%>

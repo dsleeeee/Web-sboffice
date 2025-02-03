@@ -203,7 +203,7 @@ public class ProdSearchServiceImpl implements ProdSearchService {
         }
         prodSearchVO.setUserId(sessionInfoVO.getUserId());
 
-        return prodSearchMapper.getProdList2(prodSearchVO);
+        return prodSearchMapper.getProdExcelList2(prodSearchVO);
     }
 
 }

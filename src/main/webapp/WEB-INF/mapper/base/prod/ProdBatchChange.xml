@@ -37,7 +37,7 @@
                 thp.MAP_PROD_CD,
                 thp.HQ_BRAND_CD,
                 thp.VAT_FG,
-                thp.VAT_INCLD_YN,
+                NVL(thp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN,
                 thp.HQ_BRAND_CD     AS OLD_HQ_BRAND_CD,
                 thp.POINT_SAVE_YN   AS OLD_POINT_SAVE_YN,
                 thp.PRC_CTRL_FG     AS OLD_PRC_CTRL_FG,
@@ -122,7 +122,7 @@
                 tmp.HQ_BRAND_CD     AS OLD_HQ_BRAND_CD,
                 tmp.VAT_FG,
                 tmp.VAT_FG          AS OLD_VAT_FG,
-                tmp.VAT_INCLD_YN,
+                NVL(tmp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN,
                 tmp.VAT_INCLD_YN    AS OLD_VAT_INCLD_YN
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp,
@@ -202,7 +202,7 @@
                 PRC_CTRL_FG = #{prcCtrlFg},
                 MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
                 VAT_FG = #{vatFg},
-                VAT_INCLD_YN = #{vatIncldYn},
+                VAT_INCLD_YN = NVL(#{vatIncldYn}, 'Y'),
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -219,7 +219,7 @@
                 PRC_CTRL_FG = #{prcCtrlFg},
                 MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
                 VAT_FG = #{vatFg},
-                VAT_INCLD_YN = #{vatIncldYn},
+                VAT_INCLD_YN = NVL(#{vatIncldYn}, 'Y'),
                 MOD_DT = #{modDt},
                 MOD_ID = #{modId}
                 WHERE 1=1
@@ -244,7 +244,7 @@
             PRC_CTRL_FG = #{prcCtrlFg},
             MAP_PROD_CD = TRIM(REPLACE(REPLACE(#{mapProdCd}, CHR(10), NULL), CHR(13), NULL)),
             VAT_FG = #{vatFg},
-            VAT_INCLD_YN = #{vatIncldYn},
+            VAT_INCLD_YN = NVL(#{vatIncldYn}, 'Y'),
             MOD_DT = #{modDt},
             MOD_ID = #{modId}
             WHERE 1=1
@@ -340,7 +340,7 @@
                 thp.MAP_PROD_CD,
                 thp.HQ_BRAND_CD,
                 thp.VAT_FG,
-                thp.VAT_INCLD_YN
+                NVL(thp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN
                 FROM TB_HQ_PRODUCT thp,
                 TB_HQ_PRODUCT_CLASS thpc,
                 TB_HQ_PRODUCT_BARCD thpb
@@ -408,7 +408,7 @@
                 tmp.MAP_PROD_CD,
                 tmp.HQ_BRAND_CD,
                 tmp.VAT_FG,
-                tmp.VAT_INCLD_YN
+                NVL(tmp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN
                 FROM TB_MS_PRODUCT tmp,
                 TB_MS_PRODUCT_CLASS tmpc,
                 TB_MS_PRODUCT_BARCD tmpb
