@@ -72,10 +72,8 @@ app.controller('originInfoRegStoreCtrl', ['$scope', '$http', '$timeout', functio
 
         var params = {};
         $scope._postJSONQuery.withOutPopUp('/base/prod/recpOrigin/recpOrigin/getSelectOriginCdList.sb', params, function (response) {
-            if (response.data.data.list.length > 0) {
-                var list = response.data.data.list;
-                $scope._setComboData("originCdListCombo", list); // 관리코드리스트
-            }
+            var list = response.data.data.list;
+            $scope._setComboData("originCdListCombo", list); // 관리코드리스트
 
             $scope.searchStore();
         });
@@ -121,6 +119,11 @@ app.controller('originInfoRegStoreCtrl', ['$scope', '$http', '$timeout', functio
     // 적용
     $scope.originInfoRegStore = function () {
 
+        if($scope.originCdList === null || $scope.originCdList === '' || $scope.originCdList === undefined){
+            $scope._popMsg(messages["recpOriginInfo.originCd"] + messages["cmm.require.select"]);
+            return false;
+        }
+
         $scope.stepCnt = 10;    // 한번에 DB에 저장할 숫자 세팅
         $scope.progressCnt = 0; // 처리된 숫자
 
@@ -133,6 +136,12 @@ app.controller('originInfoRegStoreCtrl', ['$scope', '$http', '$timeout', functio
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
+
+        if(params.length <= 0) {
+            s_alert.pop(messages["cmm.require.selectStore"]);
+            return;
+        }
+
 
 
         $scope.save(params);

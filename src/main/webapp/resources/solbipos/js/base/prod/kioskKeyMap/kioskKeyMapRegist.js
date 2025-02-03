@@ -758,6 +758,11 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                         params.posNo = $scope.posNoCombo.selectedValue;
                         params.envstCd = '4068';
 
+                        if(pageFg === '1'){
+                            params.pageFg = '1';
+                            params.storeCd = $("#kioskKeyMapSelectStoreCd").val();
+                        }
+
                         // 조회 수행 : 조회URL, 파라미터, 콜백함수
                         $scope._postJSONQuery.withPopUp("/base/prod/kioskKeyMap/kioskKeyMap/getKioskEnv.sb", params, function(response){
 

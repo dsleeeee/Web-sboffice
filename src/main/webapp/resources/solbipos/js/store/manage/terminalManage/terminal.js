@@ -163,8 +163,10 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.cornerFgVal = s.selectedValue;
 
         if (!isNull($("#lblStoreCd").text())) {
-            var cornerScope = agrid.getScope('cornerCtrl');
-            cornerScope.getCornerSetting();
+            setTimeout(function () {
+                var cornerScope = agrid.getScope('cornerCtrl');
+                cornerScope.getCornerSetting();
+            }, 10);
         }
     };
     $scope.getCornerFgVal = function () {
@@ -739,7 +741,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                                 return false;
                             }
                         } else {
-                            if (params[i].vendorTermnlNo.length > 50) {
+                            if (nvl(params[i].vendorTermnlNo.getByteLengthForOracle(),'') > 20) {
                                 $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
                                 return false;
                             }
@@ -750,7 +752,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                         $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
                         return false;
                     } else {
-                        if (params[i].vendorSerNo.length > 20) {
+                        if (nvl(params[i].vendorSerNo.getByteLengthForOracle(),'') > 20) {
                             $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
                             return false;
                         }
@@ -1120,7 +1122,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                                 return false;
                             }
                         } else {
-                            if (params[i].vendorTermnlNo.length > 50) {
+                            if (nvl(params[i].vendorTermnlNo.getByteLengthForOracle(),'') > 20) {
                                 $scope._popMsg(messages["terminalManage.vendorTermnlNo"] + messages["terminalManage.require.exact.data"]);
                                 return false;
                             }
@@ -1131,7 +1133,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                         $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.input"]);
                         return false;
                     } else {
-                        if (params[i].vendorSerNo.length > 20) {
+                        if (nvl(params[i].vendorSerNo.getByteLengthForOracle(),'') > 20) {
                             $scope._popMsg(messages["terminalManage.vendorSerNo"] + messages["terminalManage.require.exact.data"]);
                             return false;
                         }

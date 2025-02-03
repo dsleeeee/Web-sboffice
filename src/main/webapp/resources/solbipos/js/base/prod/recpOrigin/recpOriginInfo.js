@@ -63,6 +63,18 @@ app.controller('recpOriginInfoCtrl', ['$scope', '$http', function ($scope, $http
             }
         });
 
+        s.cellEditEnded.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                // 가격 변경시 체크박스 체크
+                if (col.binding === "originNm") {
+                    $scope.checked(item);
+                }
+            }
+            s.collectionView.commitEdit();
+        });
+
         // 조회
         $scope.searchRecpOriginInfo();
     };
@@ -82,6 +94,11 @@ app.controller('recpOriginInfoCtrl', ['$scope', '$http', function ($scope, $http
             $scope.detailReset();
 
         }, false);
+    };
+
+    // 관리명 수정 시 체크박스 체크
+    $scope.checked = function (item){
+        item.gChk = true;
     };
 
 

@@ -88,7 +88,7 @@
                                 control="tuClsTypeCombo">
                         </wj-combo-box>
                     </div>
-                    <c:if test="${orgnFg == 'HQ'}">
+                    <c:if test="${orgnFg == 'HQ' && pageFg == '0'}">
                         <%-- KIOSK중분류사용 --%>
                         <div class="sb-select mr5" style="width:110px; float:left;">
                             <wj-combo-box
@@ -550,7 +550,7 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20250124.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskKeyMap/kioskKeyMapRegist.js?ver=20250203.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -39,7 +39,7 @@
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
-<%-- 상품-원산지관리 레이어 --%>
+<%-- 원산지관리-정보입력 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/recpOriginInfo.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>

@@ -370,4 +370,4 @@
     var momsHqBrandCdComboList;
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/originInfoRegStore.js?ver=20250121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/originInfoRegStore.js?ver=20250203.01" charset="utf-8"></script>

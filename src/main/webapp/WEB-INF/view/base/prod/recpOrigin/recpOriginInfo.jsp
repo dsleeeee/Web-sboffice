@@ -32,7 +32,7 @@
             </colgroup>
             <tbody>
             <tr>
-                <td></td>
+                <td style="border-left: 1px solid #ccc;"></td>
                 <td></td>
                 <td></td>
                 <td>
@@ -142,7 +142,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginInfo.js?ver=20250121.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginInfo.js?ver=20250203.01" charset="utf-8"></script>
 
 <%-- 매장적용 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/recpOrigin/originInfoRegStore.jsp">
