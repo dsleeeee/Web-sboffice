@@ -117,17 +117,17 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
-          if (e.panel == s.cells) {
-            var col = s.columns[e.col];
-            var item = s.rows[e.row].dataItem;
-            if (col.binding === "yoil") {
-              if(item.yoil === "토") {
-                wijmo.addClass(e.cell, 'blue');
-              } else if(item.yoil === "일") {
-                wijmo.addClass(e.cell, 'red');
-              }
+            if (e.panel == s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "yoil") {
+                    if(item.yoil === "토") {
+                        wijmo.addClass(e.cell, 'blue');
+                    } else if(item.yoil === "일") {
+                        wijmo.addClass(e.cell, 'red');
+                    }
+                }
             }
-          }
         });
 
         // <-- 그리드 헤더3줄 -->
@@ -165,12 +165,12 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
 
         // header 셋팅
         for (var i = 0; i < vDlvrOrderFg.length; i++) {
-          dataItem[vDlvrOrderFg[i] + "SaleQty1"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "SaleQty2"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "SaleQty3"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "RealSaleAmt1"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "RealSaleAmt2"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "RealSaleAmt3"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "SaleQty1"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "SaleQty2"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "SaleQty3"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "RealSaleAmt1"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "RealSaleAmt2"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "RealSaleAmt3"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
         }
 
         // header 셋팅
@@ -242,79 +242,79 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
         s.columnHeaders.rows[1].dataItem = dataItem1;
 
         s.itemFormatter = function (panel, r, c, cell) {
-          if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-            //align in center horizontally and vertically
-            panel.rows[r].allowMerging    = true;
-            panel.columns[c].allowMerging = true;
-            wijmo.setCss(cell, {
-              display    : 'table',
-              tableLayout: 'fixed'
-            });
-            cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-            wijmo.setCss(cell.children[0], {
-              display      : 'table-cell',
-              verticalAlign: 'middle',
-              textAlign    : 'center'
-            });
-
-            if ((panel.grid.columnHeaders.rows.length - 1) === r) {
-              // 헤더의 전체선택 클릭 로직
-              var flex   = panel.grid;
-              var column = flex.columns[c];
-              // check that this is a boolean column
-              if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
-                // prevent sorting on click
-                column.allowSorting = false;
-                // count true values to initialize checkbox
-                var cnt             = 0;
-                for (var i = 0; i < flex.rows.length; i++) {
-                  if (flex.getCellData(i, c) === true) {
-                    cnt++;
-                  }
-                }
-                // create and initialize checkbox
-                if (column.format === 'checkBoxText') {
-                  cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
-                      + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
-                } else {
-                  cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
-                }
-                var cb           = cell.firstChild;
-                cb.checked       = cnt > 0;
-                cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
-                // apply checkbox value to cells
-                cb.addEventListener('click', function (e) {
-                  flex.beginUpdate();
-                  for (var i = 0; i < flex.rows.length; i++) {
-                    if(!flex.rows[i].isReadOnly) {
-                      flex.setCellData(i, c, cb.checked);
-                    }
-                  }
-                  flex.endUpdate();
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
                 });
-              }
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+
+                if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+                    // 헤더의 전체선택 클릭 로직
+                    var flex   = panel.grid;
+                    var column = flex.columns[c];
+                    // check that this is a boolean column
+                    if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+                        // prevent sorting on click
+                        column.allowSorting = false;
+                        // count true values to initialize checkbox
+                        var cnt             = 0;
+                        for (var i = 0; i < flex.rows.length; i++) {
+                            if (flex.getCellData(i, c) === true) {
+                                cnt++;
+                            }
+                        }
+                        // create and initialize checkbox
+                        if (column.format === 'checkBoxText') {
+                            cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+                        } else {
+                            cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+                        }
+                        var cb           = cell.firstChild;
+                        cb.checked       = cnt > 0;
+                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                        // apply checkbox value to cells
+                        cb.addEventListener('click', function (e) {
+                            flex.beginUpdate();
+                            for (var i = 0; i < flex.rows.length; i++) {
+                                if(!flex.rows[i].isReadOnly) {
+                                    flex.setCellData(i, c, cb.checked);
+                                }
+                            }
+                            flex.endUpdate();
+                        });
+                    }
+                }
             }
-          }
-          // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-          else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-            // GroupRow 인 경우에는 표시하지 않는다.
-            if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-              cell.textContent = '';
-            } else {
-              if (!isEmpty(panel._rows[r]._data.rnum)) {
-                cell.textContent = (panel._rows[r]._data.rnum).toString();
-              } else {
-                cell.textContent = (r + 1).toString();
-              }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
             }
-          }
-          // readOnly 배경색 표시
-          else if (panel.cellType === wijmo.grid.CellType.Cell) {
-            var col = panel.columns[c];
-            if (col.isReadOnly) {
-              wijmo.addClass(cell, 'wj-custom-readonly');
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
             }
-          }
         }
         // <-- //그리드 헤더3줄 -->
 
@@ -338,199 +338,207 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
     // 조회
     $scope.searchList = function(){
 
-       // 조회기간
-       var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
-       var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
-       var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+        // 조회기간
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
 
-       // 시작일자가 종료일자보다 빠른지 확인
-       if(startDt.getTime() > endDt.getTime()){
-           $scope._popMsg(messages['cmm.dateChk.error']);
-           return false;
-       }
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
 
-       // 조회일자 최대 3일 제한
+        // 조회일자 최대 3일 제한
+        if (diffDay > 2) {
+            s_alert.pop(messages['cmm.dateOver.3day.error']);
+            return false;
+        }
 
-       // 파라미터
-       var params = {};
-       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-       params.prodClassCd = $scope.prodClassCd;
-       params.dayOption = $scope.srchDayOptionCombo.selectedValue;
-       params.prodOption = $scope.srchProdOptionCombo.selectedValue;
-       params.prodCd = $("#srchProdCd").val();
-       params.prodNm = $("#srchProdNm").val();
-       params.storeCds = $("#prodSaleRateMomsStoreCd").val();
-       params.prodCds = $("#prodSaleRateMomsSelectCd").val();
-       params.dlvrInFgCol = dlvrInFgCol;
-       params.listScale = 500; //-페이지 스케일 갯수
+        // 파라미터
+        var params = {};
+        params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        params.prodClassCd = $scope.prodClassCd;
+        params.dayOption = $scope.srchDayOptionCombo.selectedValue;
+        params.prodOption = $scope.srchProdOptionCombo.selectedValue;
+        params.prodCd = $("#srchProdCd").val();
+        params.prodNm = $("#srchProdNm").val();
+        params.storeCds = $("#prodSaleRateMomsStoreCd").val();
+        params.prodCds = $("#prodSaleRateMomsSelectCd").val();
+        params.dlvrInFgCol = dlvrInFgCol;
+        params.listScale = 500; //-페이지 스케일 갯수
 
-       if(orgnFg === "HQ"){
-           params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-           params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
-           params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
-           params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
-           params.momsAreaFg = $scope.srchMomsAreaFgCombo.selectedValue;
-           params.momsCommercial = $scope.srchMomsCommercialCombo.selectedValue;
-           params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
-           params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
-           params.branchCd = $scope.srchBranchCdCombo.selectedValue;
+        if(orgnFg === "HQ"){
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+            params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
+            params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
+            params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
+            params.momsAreaFg = $scope.srchMomsAreaFgCombo.selectedValue;
+            params.momsCommercial = $scope.srchMomsCommercialCombo.selectedValue;
+            params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
+            params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
+            params.branchCd = $scope.srchBranchCdCombo.selectedValue;
 
-           // '전체' 일때
-           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 수정완료 1992
-             var momsHqBrandCd = "";
-             for(var i=0; i < momsHqBrandCdComboList.length; i++){
-               if(momsHqBrandCdComboList[i].value !== null) {
-                 momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
-               }
-             }
-             params.userBrands = momsHqBrandCd;
-           }
+            // '전체' 일때
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 수정완료 1992
+                var momsHqBrandCd = "";
+                for(var i=0; i < momsHqBrandCdComboList.length; i++){
+                    if(momsHqBrandCdComboList[i].value !== null) {
+                        momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = momsHqBrandCd;
+            }
 
-           params.momsStoreFg01 = $scope.momsStoreFg01;
-           params.momsStoreFg02 = $scope.momsStoreFg02;
-           params.momsStoreFg03 = $scope.momsStoreFg03;
-           params.momsStoreFg04 = $scope.momsStoreFg04;
-           params.momsStoreFg05 = $scope.momsStoreFg05;
-       }
+            params.momsStoreFg01 = $scope.momsStoreFg01;
+            params.momsStoreFg02 = $scope.momsStoreFg02;
+            params.momsStoreFg03 = $scope.momsStoreFg03;
+            params.momsStoreFg04 = $scope.momsStoreFg04;
+            params.momsStoreFg05 = $scope.momsStoreFg05;
+        }
 
-       // 조회 수행 : 조회URL, 파라미터, 콜백함수
-       $scope._inquiryMain("/sale/prod/prodSaleRateMoms/prodSaleRateMoms/getProdSaleRateList.sb", params, function (){
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/sale/prod/prodSaleRateMoms/prodSaleRateMoms/getProdSaleRateList.sb", params, function (){
 
-           // 선택한 테이블에 따른 리스트 항목 visible
-           var grid = wijmo.Control.getControl("#wjGridList");
-           var columns = grid.columns;
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridList");
+            var columns = grid.columns;
 
-           // 컬럼 총갯수
-           var columnsCnt = columns.length;
+            // 컬럼 총갯수
+            var columnsCnt = columns.length;
 
-           for (var i = 0; i < columnsCnt; i++) {
-               columns[i].visible = true;
-           }
+            for (var i = 0; i < columnsCnt; i++) {
+                columns[i].visible = true;
+            }
 
-           // 일자표시옵션
-           if(params.dayOption === "1"){  // 일자별
-             columns[0].visible = true;
-             columns[1].visible = true;
-             columns[2].visible = false;
-             columns[3].visible = false;
-           } else if(params.dayOption === "2"){  // 기간합
-             columns[0].visible = false;
-             columns[1].visible = false;
-             columns[2].visible = true;
-             columns[3].visible = true;
-           }
+            // 일자표시옵션
+            if(params.dayOption === "1"){  // 일자별
+                columns[0].visible = true;
+                columns[1].visible = true;
+                columns[2].visible = false;
+                columns[3].visible = false;
+            } else if(params.dayOption === "2"){  // 기간합
+                columns[0].visible = false;
+                columns[1].visible = false;
+                columns[2].visible = true;
+                columns[3].visible = true;
+            }
 
-           // 상품표시옵션에 따른 컬럼 제어
-           if(params.prodOption === "1"){  // 단품+세트
+            // 상품표시옵션에 따른 컬럼 제어
+            if(params.prodOption === "1"){  // 단품+세트
 
-               // 총계
-               columns[18].visible = false;
-               columns[19].visible = false;
-               columns[23].visible = false;
-               columns[24].visible = false;
+                // 총계
+                columns[18].visible = false;
+                columns[19].visible = false;
+                columns[23].visible = false;
+                columns[24].visible = false;
 
-               // 내점,포장,배달 계
-               for(j = 25 ; j < columnsCnt; j++){
-                   if(j%3 !== 1){
-                       columns[j].visible = false;
-                   }
-               }
+                // 내점,포장,배달 계
+                for(j = 25 ; j < columnsCnt; j++){
+                    if(j%3 !== 1){
+                        columns[j].visible = false;
+                    }
+                }
 
-           }else if(params.prodOption === "2"){   // 단품+구성
+            }else if(params.prodOption === "2"){   // 단품+구성
 
-               // 총계
-               columns[17].visible = false;
-               columns[19].visible = false;
-               columns[22].visible = false;
-               columns[24].visible = false;
+                // 총계
+                columns[17].visible = false;
+                columns[19].visible = false;
+                columns[22].visible = false;
+                columns[24].visible = false;
 
-               // 내점,포장,배달 계
-               for(j = 25 ; j < columnsCnt; j++){
-                   if(j%3 < 2){
-                       columns[j].visible = false;
-                   }
-               }
+                // 내점,포장,배달 계
+                for(j = 25 ; j < columnsCnt; j++){
+                    if(j%3 < 2){
+                        columns[j].visible = false;
+                    }
+                }
 
-           }else if(params.prodOption === "3") {  // 단품+세트+구성
+            }else if(params.prodOption === "3") {  // 단품+세트+구성
 
-               // 총계
-               columns[17].visible = false;
-               columns[18].visible = false;
-               columns[22].visible = false;
-               columns[23].visible = false;
+                // 총계
+                columns[17].visible = false;
+                columns[18].visible = false;
+                columns[22].visible = false;
+                columns[23].visible = false;
 
-               // 내점,포장,배달 계
-               for(j = 25 ; j < columnsCnt; j++){
-                   if(0 < j%3){
-                       columns[j].visible = false;
-                   }
-               }
-           }
+                // 내점,포장,배달 계
+                for(j = 25 ; j < columnsCnt; j++){
+                    if(0 < j%3){
+                        columns[j].visible = false;
+                    }
+                }
+            }
 
-       });
+        });
     };
 
     // 조회조건/분할 엑셀다운로드
     $scope.excelDownload = function(excelType){
 
         // 조회기간
-       var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
-       var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
-       var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
 
-       // 시작일자가 종료일자보다 빠른지 확인
-       if(startDt.getTime() > endDt.getTime()){
-           $scope._popMsg(messages['cmm.dateChk.error']);
-           return false;
-       }
-       // 조회일자 최대 1일 제한
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+        // 조회일자 최대 1일 제한
+        if (diffDay > 0) {
+            s_alert.pop(messages['cmm.dateOver.1day.error']);
+            return false;
+        }
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
         }
 
-       // 파라미터
-       var params = {};
-       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-       params.prodClassCd = $scope.prodClassCd;
-       params.dayOption = $scope.srchDayOptionCombo.selectedValue;
-       params.prodOption = $scope.srchProdOptionCombo.selectedValue;
-       params.prodCd = $("#srchProdCd").val();
-       params.prodNm = $("#srchProdNm").val();
-       params.storeCds = $("#prodSaleRateMomsStoreCd").val();
-       params.prodCds = $("#prodSaleRateMomsSelectCd").val();
-       params.dlvrInFgCol = dlvrInFgCol;
+        // 파라미터
+        var params = {};
+        params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        params.prodClassCd = $scope.prodClassCd;
+        params.dayOption = $scope.srchDayOptionCombo.selectedValue;
+        params.prodOption = $scope.srchProdOptionCombo.selectedValue;
+        params.prodCd = $("#srchProdCd").val();
+        params.prodNm = $("#srchProdNm").val();
+        params.storeCds = $("#prodSaleRateMomsStoreCd").val();
+        params.prodCds = $("#prodSaleRateMomsSelectCd").val();
+        params.dlvrInFgCol = dlvrInFgCol;
 
-       if(orgnFg === "HQ"){
-           params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
-           params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
-           params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
-           params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
-           params.momsAreaFg = $scope.srchMomsAreaFgCombo.selectedValue;
-           params.momsCommercial = $scope.srchMomsCommercialCombo.selectedValue;
-           params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
-           params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
-           params.branchCd = $scope.srchBranchCdCombo.selectedValue;
+        if(orgnFg === "HQ"){
+            params.storeHqBrandCd = $scope.srchStoreHqBrandCdCombo.selectedValue;
+            params.prodHqBrandCd = $scope.srchProdHqBrandCombo.selectedValue;
+            params.momsTeam = $scope.srchMomsTeamCombo.selectedValue;
+            params.momsAcShop = $scope.srchMomsAcShopCombo.selectedValue;
+            params.momsAreaFg = $scope.srchMomsAreaFgCombo.selectedValue;
+            params.momsCommercial = $scope.srchMomsCommercialCombo.selectedValue;
+            params.momsShopType = $scope.srchMomsShopTypeCombo.selectedValue;
+            params.momsStoreManageType = $scope.srchMomsStoreManageTypeCombo.selectedValue;
+            params.branchCd = $scope.srchBranchCdCombo.selectedValue;
 
-           // '전체' 일때
-           if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 수정완료 1992
-             var momsHqBrandCd = "";
-             for(var i=0; i < momsHqBrandCdComboList.length; i++){
-               if(momsHqBrandCdComboList[i].value !== null) {
-                 momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
-               }
-             }
-             params.userBrands = momsHqBrandCd;
-           }
+            // '전체' 일때
+            if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null || params.prodHqBrandCd === "" || params.prodHqBrandCd === null) { // 수정완료 1992
+                var momsHqBrandCd = "";
+                for(var i=0; i < momsHqBrandCdComboList.length; i++){
+                    if(momsHqBrandCdComboList[i].value !== null) {
+                        momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
+                    }
+                }
+                params.userBrands = momsHqBrandCd;
+            }
 
-           params.momsStoreFg01 = $scope.momsStoreFg01;
-           params.momsStoreFg02 = $scope.momsStoreFg02;
-           params.momsStoreFg03 = $scope.momsStoreFg03;
-           params.momsStoreFg04 = $scope.momsStoreFg04;
-           params.momsStoreFg05 = $scope.momsStoreFg05;
-       }
+            params.momsStoreFg01 = $scope.momsStoreFg01;
+            params.momsStoreFg02 = $scope.momsStoreFg02;
+            params.momsStoreFg03 = $scope.momsStoreFg03;
+            params.momsStoreFg04 = $scope.momsStoreFg04;
+            params.momsStoreFg05 = $scope.momsStoreFg05;
+        }
 
         params.excelType = excelType;
 
@@ -550,10 +558,14 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
 
         // 시작일자가 종료일자보다 빠른지 확인
         if(startDt.getTime() > endDt.getTime()){
-          $scope._popMsg(messages['cmm.dateChk.error']);
-          return false;
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
         }
         // 조회일자 최대 1일 제한
+        if (diffDay > 0) {
+            s_alert.pop(messages['cmm.dateOver.1day.error']);
+            return false;
+        }
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -561,27 +573,27 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         $timeout(function () {
-         wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-           includeColumnHeaders: true,
-           includeCellStyles: false,
-           includeColumns: function (column) {
-             return column.visible;
-           }
-         },
-           messages["prodSaleRateMoms.prodSaleRateMoms"] + '_' +  wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
-           $timeout(function () {
-             $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-           }, 10);
-         });
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },
+                messages["prodSaleRateMoms.prodSaleRateMoms"] + '_' +  wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd') + '_' + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
         }, 10);
     };
 
     // 확장조회 숨김/보임
     $scope.searchAddShowChange = function(){
         if( $("#tblSearchAddShow").css("display") === 'none') {
-          $("#tblSearchAddShow").show();
+            $("#tblSearchAddShow").show();
         } else {
-          $("#tblSearchAddShow").hide();
+            $("#tblSearchAddShow").hide();
         }
     };
 
@@ -605,8 +617,8 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
                 // 조회 수행 : 조회URL, 파라미터, 콜백함수
                 $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
                     function(response){
-                      $scope.prodClassCd = prodClassCd;
-                      $scope.prodClassNm = response.data.data;
+                        $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassNm = response.data.data;
                     }
                 );
             }
@@ -634,17 +646,17 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
-          if (e.panel == s.cells) {
-            var col = s.columns[e.col];
-            var item = s.rows[e.row].dataItem;
-            if (col.binding === "yoil") {
-              if(item.yoil === "토") {
-                wijmo.addClass(e.cell, 'blue');
-              } else if(item.yoil === "일") {
-                wijmo.addClass(e.cell, 'red');
-              }
+            if (e.panel == s.cells) {
+                var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "yoil") {
+                    if(item.yoil === "토") {
+                        wijmo.addClass(e.cell, 'blue');
+                    } else if(item.yoil === "일") {
+                        wijmo.addClass(e.cell, 'red');
+                    }
+                }
             }
-          }
         });
 
         // <-- 그리드 헤더3줄 -->
@@ -682,12 +694,12 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
 
         // header 셋팅
         for (var i = 0; i < vDlvrOrderFg.length; i++) {
-          dataItem[vDlvrOrderFg[i] + "SaleQty1"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "SaleQty2"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "SaleQty3"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "RealSaleAmt1"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "RealSaleAmt2"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
-          dataItem[vDlvrOrderFg[i] + "RealSaleAmt3"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "SaleQty1"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "SaleQty2"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "SaleQty3"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "RealSaleAmt1"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "RealSaleAmt2"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
+            dataItem[vDlvrOrderFg[i] + "RealSaleAmt3"] = messages["prodRankMoms." + vDlvrOrderFg[i]];
         }
 
         // header 셋팅
@@ -759,79 +771,79 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
         s.columnHeaders.rows[1].dataItem = dataItem1;
 
         s.itemFormatter = function (panel, r, c, cell) {
-          if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
-            //align in center horizontally and vertically
-            panel.rows[r].allowMerging    = true;
-            panel.columns[c].allowMerging = true;
-            wijmo.setCss(cell, {
-              display    : 'table',
-              tableLayout: 'fixed'
-            });
-            cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
-            wijmo.setCss(cell.children[0], {
-              display      : 'table-cell',
-              verticalAlign: 'middle',
-              textAlign    : 'center'
-            });
-
-            if ((panel.grid.columnHeaders.rows.length - 1) === r) {
-              // 헤더의 전체선택 클릭 로직
-              var flex   = panel.grid;
-              var column = flex.columns[c];
-              // check that this is a boolean column
-              if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
-                // prevent sorting on click
-                column.allowSorting = false;
-                // count true values to initialize checkbox
-                var cnt             = 0;
-                for (var i = 0; i < flex.rows.length; i++) {
-                  if (flex.getCellData(i, c) === true) {
-                    cnt++;
-                  }
-                }
-                // create and initialize checkbox
-                if (column.format === 'checkBoxText') {
-                  cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
-                      + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
-                } else {
-                  cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
-                }
-                var cb           = cell.firstChild;
-                cb.checked       = cnt > 0;
-                cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
-                // apply checkbox value to cells
-                cb.addEventListener('click', function (e) {
-                  flex.beginUpdate();
-                  for (var i = 0; i < flex.rows.length; i++) {
-                    if(!flex.rows[i].isReadOnly) {
-                      flex.setCellData(i, c, cb.checked);
-                    }
-                  }
-                  flex.endUpdate();
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
                 });
-              }
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+
+                if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+                    // 헤더의 전체선택 클릭 로직
+                    var flex   = panel.grid;
+                    var column = flex.columns[c];
+                    // check that this is a boolean column
+                    if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+                        // prevent sorting on click
+                        column.allowSorting = false;
+                        // count true values to initialize checkbox
+                        var cnt             = 0;
+                        for (var i = 0; i < flex.rows.length; i++) {
+                            if (flex.getCellData(i, c) === true) {
+                                cnt++;
+                            }
+                        }
+                        // create and initialize checkbox
+                        if (column.format === 'checkBoxText') {
+                            cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+                        } else {
+                            cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+                        }
+                        var cb           = cell.firstChild;
+                        cb.checked       = cnt > 0;
+                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                        // apply checkbox value to cells
+                        cb.addEventListener('click', function (e) {
+                            flex.beginUpdate();
+                            for (var i = 0; i < flex.rows.length; i++) {
+                                if(!flex.rows[i].isReadOnly) {
+                                    flex.setCellData(i, c, cb.checked);
+                                }
+                            }
+                            flex.endUpdate();
+                        });
+                    }
+                }
             }
-          }
-          // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
-          else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
-            // GroupRow 인 경우에는 표시하지 않는다.
-            if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
-              cell.textContent = '';
-            } else {
-              if (!isEmpty(panel._rows[r]._data.rnum)) {
-                cell.textContent = (panel._rows[r]._data.rnum).toString();
-              } else {
-                cell.textContent = (r + 1).toString();
-              }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
             }
-          }
-          // readOnly 배경색 표시
-          else if (panel.cellType === wijmo.grid.CellType.Cell) {
-            var col = panel.columns[c];
-            if (col.isReadOnly) {
-              wijmo.addClass(cell, 'wj-custom-readonly');
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
             }
-          }
         }
         // <-- //그리드 헤더3줄 -->
 
@@ -888,76 +900,76 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                 return false;
             }
 
-           // 선택한 테이블에 따른 리스트 항목 visible
-           var grid = wijmo.Control.getControl("#wjGridExcelList");
-           var columns = grid.columns;
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridExcelList");
+            var columns = grid.columns;
 
-           // 컬럼 총갯수
+            // 컬럼 총갯수
             var columnsCnt = columns.length;
 
-           for (var i = 0; i < columnsCnt; i++) {
-               columns[i].visible = true;
-           }
+            for (var i = 0; i < columnsCnt; i++) {
+                columns[i].visible = true;
+            }
 
-           // 일자표시옵션
-           if(params.dayOption === "1"){  // 일자별
-               columns[0].visible = true;
-               columns[1].visible = true;
-               columns[2].visible = false;
-               columns[3].visible = false;
-           } else if(params.dayOption === "2"){  // 기간합
-               columns[0].visible = false;
-               columns[1].visible = false;
-               columns[2].visible = true;
-               columns[3].visible = true;
-           }
+            // 일자표시옵션
+            if(params.dayOption === "1"){  // 일자별
+                columns[0].visible = true;
+                columns[1].visible = true;
+                columns[2].visible = false;
+                columns[3].visible = false;
+            } else if(params.dayOption === "2"){  // 기간합
+                columns[0].visible = false;
+                columns[1].visible = false;
+                columns[2].visible = true;
+                columns[3].visible = true;
+            }
 
             // 상품표시옵션에 따른 컬럼 제어
-           if(params.prodOption === "1"){  // 단품+세트
+            if(params.prodOption === "1"){  // 단품+세트
 
-               // 총계
-               columns[18].visible = false;
-               columns[19].visible = false;
-               columns[23].visible = false;
-               columns[24].visible = false;
+                // 총계
+                columns[18].visible = false;
+                columns[19].visible = false;
+                columns[23].visible = false;
+                columns[24].visible = false;
 
-               // 내점,포장,배달 계
-               for(j = 25 ; j < columnsCnt; j++){
-                   if(j%3 !== 1){
-                       columns[j].visible = false;
-                   }
-               }
+                // 내점,포장,배달 계
+                for(j = 25 ; j < columnsCnt; j++){
+                    if(j%3 !== 1){
+                        columns[j].visible = false;
+                    }
+                }
 
-           }else if(params.prodOption === "2"){   // 단품+구성
+            }else if(params.prodOption === "2"){   // 단품+구성
 
-               // 총계
-               columns[17].visible = false;
-               columns[19].visible = false;
-               columns[22].visible = false;
-               columns[24].visible = false;
+                // 총계
+                columns[17].visible = false;
+                columns[19].visible = false;
+                columns[22].visible = false;
+                columns[24].visible = false;
 
-               // 내점,포장,배달 계
-               for(j = 25 ; j < columnsCnt; j++){
-                   if(j%3 < 2){
-                       columns[j].visible = false;
-                   }
-               }
+                // 내점,포장,배달 계
+                for(j = 25 ; j < columnsCnt; j++){
+                    if(j%3 < 2){
+                        columns[j].visible = false;
+                    }
+                }
 
-           }else if(params.prodOption === "3") {  // 단품+세트+구성
+            }else if(params.prodOption === "3") {  // 단품+세트+구성
 
-               // 총계
-               columns[17].visible = false;
-               columns[18].visible = false;
-               columns[22].visible = false;
-               columns[23].visible = false;
+                // 총계
+                columns[17].visible = false;
+                columns[18].visible = false;
+                columns[22].visible = false;
+                columns[23].visible = false;
 
-               // 내점,포장,배달 계
-               for(j = 25 ; j < columnsCnt; j++){
-                   if(0 < j%3){
-                       columns[j].visible = false;
-                   }
-               }
-           }
+                // 내점,포장,배달 계
+                for(j = 25 ; j < columnsCnt; j++){
+                    if(0 < j%3){
+                        columns[j].visible = false;
+                    }
+                }
+            }
 
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
             $timeout(function () {
@@ -1014,159 +1026,159 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                 function delay(x){
                     return new Promise(function(resolve, reject){
                         //setTimeout(function() {
-                            console.log("setTimeout  > i=" + x + " x=" + x);
+                        console.log("setTimeout  > i=" + x + " x=" + x);
 
-                            // 다운로드 진행중인 파일 숫자 변경
-                            $("#progressCnt").html(x + 1);
+                        // 다운로드 진행중인 파일 숫자 변경
+                        $("#progressCnt").html(x + 1);
 
-                            // 페이징 5000개씩 지정해 분할 다운로드 진행
-                            params.limit = 5000 * (x + 1);
-                            params.offset = (5000 * (x + 1)) - 4999;
+                        // 페이징 5000개씩 지정해 분할 다운로드 진행
+                        params.limit = 5000 * (x + 1);
+                        params.offset = (5000 * (x + 1)) - 4999;
 
-                            // 가상로그인 대응한 session id 설정
-                            if (document.getElementsByName('sessionId')[0]) {
-                                params['sid'] = document.getElementsByName('sessionId')[0].value;
-                            }
+                        // 가상로그인 대응한 session id 설정
+                        if (document.getElementsByName('sessionId')[0]) {
+                            params['sid'] = document.getElementsByName('sessionId')[0].value;
+                        }
 
-                            // 엑셀다운로드 진행 사용자 저장 update
-                            params.seq = seq;
-                            $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveUpdate.sb", params, function(response){
+                        // 엑셀다운로드 진행 사용자 저장 update
+                        params.seq = seq;
+                        $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveUpdate.sb", params, function(response){
 
-                                // ajax 통신 설정
-                                $http({
-                                    method: 'POST', //방식
-                                    url: '/sale/prod/prodSaleRateMoms/prodSaleRateMoms/getProdSaleRateList.sb', /* 통신할 URL */
-                                    params: params, /* 파라메터로 보낼 데이터 */
-                                    headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-                                }).then(function successCallback(response) {
-                                    if ($scope._httpStatusCheck(response, true)) {
-                                        // this callback will be called asynchronously
-                                        // when the response is available
-                                        var list = response.data.data.list;
-                                        if (list.length === undefined || list.length === 0) {
-                                            $scope.data = new wijmo.collections.CollectionView([]);
-                                            $scope.excelUploadingPopup(false);
-                                            return false;
-                                        }
-
-                                        var data = new wijmo.collections.CollectionView(list);
-                                        data.trackChanges = true;
-                                        $scope.data = data;
+                            // ajax 통신 설정
+                            $http({
+                                method: 'POST', //방식
+                                url: '/sale/prod/prodSaleRateMoms/prodSaleRateMoms/getProdSaleRateList.sb', /* 통신할 URL */
+                                params: params, /* 파라메터로 보낼 데이터 */
+                                headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+                            }).then(function successCallback(response) {
+                                if ($scope._httpStatusCheck(response, true)) {
+                                    // this callback will be called asynchronously
+                                    // when the response is available
+                                    var list = response.data.data.list;
+                                    if (list.length === undefined || list.length === 0) {
+                                        $scope.data = new wijmo.collections.CollectionView([]);
+                                        $scope.excelUploadingPopup(false);
+                                        return false;
                                     }
-                                }, function errorCallback(response) {
-                                    // 로딩팝업 hide
-                                    $scope.excelUploadingPopup(false);
-                                    // called asynchronously if an error occurs
-                                    // or server returns response with an error status.
-                                    if (response.data.message) {
-                                        $scope._popMsg(response.data.message);
-                                    } else {
-                                        $scope._popMsg(messages['cmm.error']);
+
+                                    var data = new wijmo.collections.CollectionView(list);
+                                    data.trackChanges = true;
+                                    $scope.data = data;
+                                }
+                            }, function errorCallback(response) {
+                                // 로딩팝업 hide
+                                $scope.excelUploadingPopup(false);
+                                // called asynchronously if an error occurs
+                                // or server returns response with an error status.
+                                if (response.data.message) {
+                                    $scope._popMsg(response.data.message);
+                                } else {
+                                    $scope._popMsg(messages['cmm.error']);
+                                }
+                                return false;
+                            }).then(function () {
+                                // 'complete' code here
+                                setTimeout(function() {
+                                    if ($scope.excelFlex.rows.length <= 0) {
+                                        $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                                        $scope.excelUploadingPopup(false);
+                                        return false;
                                     }
-                                    return false;
-                                }).then(function () {
-                                    // 'complete' code here
-                                    setTimeout(function() {
-                                        if ($scope.excelFlex.rows.length <= 0) {
-                                            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-                                            $scope.excelUploadingPopup(false);
-                                            return false;
-                                        }
 
-                                        // <-- 그리드 visible -->
-                                        // 선택한 테이블에 따른 리스트 항목 visible
-                                        var grid = wijmo.Control.getControl("#wjGridExcelList");
-                                        var columns = grid.columns;
+                                    // <-- 그리드 visible -->
+                                    // 선택한 테이블에 따른 리스트 항목 visible
+                                    var grid = wijmo.Control.getControl("#wjGridExcelList");
+                                    var columns = grid.columns;
 
-                                        // 컬럼 총갯수
-                                        var columnsCnt = columns.length;
+                                    // 컬럼 총갯수
+                                    var columnsCnt = columns.length;
 
-                                        for (var i = 0; i < columnsCnt; i++) {
-                                           columns[i].visible = true;
-                                        }
+                                    for (var i = 0; i < columnsCnt; i++) {
+                                        columns[i].visible = true;
+                                    }
 
-                                        // 일자표시옵션
-                                        if(params.dayOption === "1"){  // 일자별
-                                           columns[0].visible = true;
-                                           columns[1].visible = true;
-                                           columns[2].visible = false;
-                                           columns[3].visible = false;
-                                        } else if(params.dayOption === "2"){  // 기간합
-                                           columns[0].visible = false;
-                                           columns[1].visible = false;
-                                           columns[2].visible = true;
-                                           columns[3].visible = true;
-                                        }
+                                    // 일자표시옵션
+                                    if(params.dayOption === "1"){  // 일자별
+                                        columns[0].visible = true;
+                                        columns[1].visible = true;
+                                        columns[2].visible = false;
+                                        columns[3].visible = false;
+                                    } else if(params.dayOption === "2"){  // 기간합
+                                        columns[0].visible = false;
+                                        columns[1].visible = false;
+                                        columns[2].visible = true;
+                                        columns[3].visible = true;
+                                    }
 
-                                        // 상품표시옵션에 따른 컬럼 제어
-                                        if(params.prodOption === "1"){  // 단품+세트
+                                    // 상품표시옵션에 따른 컬럼 제어
+                                    if(params.prodOption === "1"){  // 단품+세트
 
-                                           // 총계
-                                           columns[18].visible = false;
-                                           columns[19].visible = false;
-                                           columns[23].visible = false;
-                                           columns[24].visible = false;
+                                        // 총계
+                                        columns[18].visible = false;
+                                        columns[19].visible = false;
+                                        columns[23].visible = false;
+                                        columns[24].visible = false;
 
-                                           // 내점,포장,배달 계
-                                           for(var j = 25 ; j < columnsCnt; j++){
-                                               if(j%3 !== 1){
-                                                   columns[j].visible = false;
-                                               }
-                                           }
-
-                                        }else if(params.prodOption === "2"){   // 단품+구성
-
-                                           // 총계
-                                           columns[17].visible = false;
-                                           columns[19].visible = false;
-                                           columns[22].visible = false;
-                                           columns[24].visible = false;
-
-                                           // 내점,포장,배달 계
-                                           for(var j = 25 ; j < columnsCnt; j++){
-                                               if(j%3 < 2){
-                                                   columns[j].visible = false;
-                                               }
-                                           }
-
-                                        }else if(params.prodOption === "3") {  // 단품+세트+구성
-
-                                           // 총계
-                                           columns[17].visible = false;
-                                           columns[18].visible = false;
-                                           columns[22].visible = false;
-                                           columns[23].visible = false;
-
-                                           // 내점,포장,배달 계
-                                           for(var j = 25 ; j < columnsCnt; j++){
-                                               if(0 < j%3){
-                                                   columns[j].visible = false;
-                                               }
-                                           }
-                                        }
-                                        // <-- //그리드 visible -->
-
-                                        wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
-                                            includeColumnHeaders: true,
-                                            includeCellStyles: false,
-                                            includeColumns: function (column) {
-                                                return column.visible;
+                                        // 내점,포장,배달 계
+                                        for(var j = 25 ; j < columnsCnt; j++){
+                                            if(j%3 !== 1){
+                                                columns[j].visible = false;
                                             }
-                                        }, messages["prodSaleRateMoms.prodSaleRateMoms"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() + '_' + (x + 1) +'.xlsx', function () {
-                                            $timeout(function () {
-                                                console.log("Export complete start. _" + (x + 1));
-                                                getExcelFile(x + 1);
-                                            }, 500);
-                                        }, function (reason) { // onError
-                                            // User can catch the failure reason in this callback.
-                                            console.log('The reason of save failure is ' + reason + "_" + (x + 1));
-                                            $scope.excelUploadingPopup(false);
-                                        });
-                                    }, 1000);
-                                });
-                                resolve();
+                                        }
 
+                                    }else if(params.prodOption === "2"){   // 단품+구성
+
+                                        // 총계
+                                        columns[17].visible = false;
+                                        columns[19].visible = false;
+                                        columns[22].visible = false;
+                                        columns[24].visible = false;
+
+                                        // 내점,포장,배달 계
+                                        for(var j = 25 ; j < columnsCnt; j++){
+                                            if(j%3 < 2){
+                                                columns[j].visible = false;
+                                            }
+                                        }
+
+                                    }else if(params.prodOption === "3") {  // 단품+세트+구성
+
+                                        // 총계
+                                        columns[17].visible = false;
+                                        columns[18].visible = false;
+                                        columns[22].visible = false;
+                                        columns[23].visible = false;
+
+                                        // 내점,포장,배달 계
+                                        for(var j = 25 ; j < columnsCnt; j++){
+                                            if(0 < j%3){
+                                                columns[j].visible = false;
+                                            }
+                                        }
+                                    }
+                                    // <-- //그리드 visible -->
+
+                                    wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                                        includeColumnHeaders: true,
+                                        includeCellStyles: false,
+                                        includeColumns: function (column) {
+                                            return column.visible;
+                                        }
+                                    }, messages["prodSaleRateMoms.prodSaleRateMoms"] + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime() + '_' + (x + 1) +'.xlsx', function () {
+                                        $timeout(function () {
+                                            console.log("Export complete start. _" + (x + 1));
+                                            getExcelFile(x + 1);
+                                        }, 500);
+                                    }, function (reason) { // onError
+                                        // User can catch the failure reason in this callback.
+                                        console.log('The reason of save failure is ' + reason + "_" + (x + 1));
+                                        $scope.excelUploadingPopup(false);
+                                    });
+                                }, 1000);
                             });
+                            resolve();
+
+                        });
                         //}, 3000*x);
                     });
                 };
@@ -1188,18 +1200,18 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
 
     // 작업내역 로딩 팝업
     $scope.excelUploadingPopup = function (showFg) {
-      if (showFg) {
-          // 팝업내용 동적 생성
-          var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.progress'] + '</p>';
-          innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 다운로드 진행 중...</div>';
-          innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
-          // html 적용
-          $scope._loadingPopup.content.innerHTML = innerHtml;
-          // 팝업 show
-          $scope._loadingPopup.show(true);
-      } else {
-          $scope._loadingPopup.hide(true);
-      }
+        if (showFg) {
+            // 팝업내용 동적 생성
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['cmm.progress'] + '</p>';
+            innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 다운로드 진행 중...</div>';
+            innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
+            // html 적용
+            $scope._loadingPopup.content.innerHTML = innerHtml;
+            // 팝업 show
+            $scope._loadingPopup.show(true);
+        } else {
+            $scope._loadingPopup.hide(true);
+        }
     };
 
 }]);
