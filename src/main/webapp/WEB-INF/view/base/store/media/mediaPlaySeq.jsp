@@ -77,6 +77,7 @@
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.useDate"/>" binding="useDate" align="center" width="160" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.fileNm"/>" binding="fileOrgNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.fileType"/>" binding="fileUseType" data-map="fileTypeDataMap" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="mediaPlaySeq.dispSeq"/>" binding="dispSeq" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.langFg"/>" binding="langFg" data-map="langFgDataMap" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.fileSize"/>" binding="fileSize" width="100" align="right" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="mediaPlaySeq.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
@@ -92,4 +93,4 @@
     var useYn = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaPlaySeq.js?ver=20231102.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/mediaPlaySeq.js?ver=20250223.01" charset="utf-8"></script>
