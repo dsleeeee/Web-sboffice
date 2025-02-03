@@ -90,7 +90,7 @@
                    AND thp.VAT_FG = #{vatFg}
                 </if>
                 <if test="vatIncldYn != null and vatIncldYn != ''">
-                   AND thp.VAT_INCLD_YN = #{vatIncldYn}
+                    AND NVL(thp.VAT_INCLD_YN, 'Y') = #{vatIncldYn}
                 </if>
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
@@ -172,7 +172,7 @@
                    AND tmp.VAT_FG = #{vatFg}
                 </if>
                 <if test="vatIncldYn != null and vatIncldYn != ''">
-                   AND tmp.VAT_INCLD_YN = #{vatIncldYn}
+                    AND NVL(tmp.VAT_INCLD_YN, 'Y') = #{vatIncldYn}
                 </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD
@@ -385,7 +385,7 @@
                    AND thp.VAT_FG = #{vatFg}
                 </if>
                 <if test="vatIncldYn != null and vatIncldYn != ''">
-                   AND thp.VAT_INCLD_YN = #{vatIncldYn}
+                    AND NVL(thp.VAT_INCLD_YN, 'Y') = #{vatIncldYn}
                 </if>
                 AND thpc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 AND thpc.PROD_CLASS_CD = thp.PROD_CLASS_CD
@@ -456,7 +456,7 @@
                    AND tmp.VAT_FG = #{vatFg}
                 </if>
                 <if test="vatIncldYn != null and vatIncldYn != ''">
-                   AND tmp.VAT_INCLD_YN = #{vatIncldYn}
+                    AND NVL(tmp.VAT_INCLD_YN, 'Y')  = #{vatIncldYn}
                 </if>
                 AND tmpc.STORE_CD = tmp.STORE_CD
                 AND tmpc.PROD_CLASS_CD = tmp.PROD_CLASS_CD

@@ -478,6 +478,10 @@ app.controller('prodctrl2', ['$scope', '$http', '$timeout', function ($scope, $h
 
     // 조회조건내역 엑셀 다운로드
     $scope.excelDownloadCondition = function () {
+
+        $scope._popMsg("수정 중 입니다.");
+        return false;
+
         // 파라미터
         var params = {};
         // 등록일자 '전체기간' 선택에 따른 params
@@ -536,6 +540,10 @@ app.controller('prodctrl2', ['$scope', '$http', '$timeout', function ($scope, $h
 
     // 전체 엑셀 다운로드
     $scope.excelDownloadTotal = function () {
+
+        $scope._popMsg("수정 중 입니다.");
+        return false;
+
         // 파라미터
         var params = {};
         // 등록일자 '전체기간' 선택에 따른 params
