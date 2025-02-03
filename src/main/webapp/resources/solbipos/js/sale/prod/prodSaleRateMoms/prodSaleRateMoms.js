@@ -350,10 +350,6 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
        }
 
        // 조회일자 최대 3일 제한
-       if (diffDay > 2) {
-           s_alert.pop(messages['cmm.dateOver.3day.error']);
-           return false;
-       }
 
        // 파라미터
        var params = {};
@@ -489,10 +485,6 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
            return false;
        }
        // 조회일자 최대 1일 제한
-       if (diffDay > 0) {
-           s_alert.pop(messages['cmm.dateOver.1day.error']);
-           return false;
-       }
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
@@ -562,10 +554,6 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
           return false;
         }
         // 조회일자 최대 1일 제한
-        if (diffDay > 0) {
-          s_alert.pop(messages['cmm.dateOver.1day.error']);
-          return false;
-        }
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;

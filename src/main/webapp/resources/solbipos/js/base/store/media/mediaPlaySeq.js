@@ -21,7 +21,8 @@ var fileTypeMediaPlaySeqComboData = [
     {"name":"DID","value":"004"},
     {"name":"POS테이블 바탕화면","value":"005"},
     {"name":"로그인로고","value":"006"},
-    {"name":"POS (인트로)","value":"007"}
+    {"name":"POS (인트로)","value":"007"},
+    {"name":"영양정보(낮은화면)","value":"017"}
 ];
 
 /**
