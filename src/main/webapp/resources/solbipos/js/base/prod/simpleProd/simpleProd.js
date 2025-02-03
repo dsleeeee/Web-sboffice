@@ -322,7 +322,7 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
             if($scope.flex.collectionView.items[i].vatFg === "" || $scope.flex.collectionView.items[i].vatFg === null) { result = messages["simpleProd.vatFgBlank"]; } // 과세여부를 선택하세요.
 
             // 부가세포함여부
-            if($scope.flex.collectionView.items[i].vatIncldYn === "" || $scope.flex.collectionView.items[i].vatIncldYn === null) { result = messages["simpleProd.vatIncldYn"]; } // 부가세포함여부를 선택하세요.
+            if($scope.flex.collectionView.items[i].vatIncldYn === "" || $scope.flex.collectionView.items[i].vatIncldYn === null) { result = messages["simpleProd.vatIncldYn"] + messages["cmm.require.select"]; } // 부가세포함여부(을)를 선택해주세요.
 
             // 원가단가
             if($scope.flex.collectionView.items[i].costUprc === "" || $scope.flex.collectionView.items[i].costUprc === null) {
@@ -490,6 +490,13 @@ app.controller('simpleProdCtrl', ['$scope', '$http', function ($scope, $http) {
                     }
                 }
             }
+
+            // 포인트사용여부
+            if($scope.flex.collectionView.items[i].pointUseYn === "" || $scope.flex.collectionView.items[i].pointUseYn === null) { result = messages["simpleProd.pointUseYn"] + messages["cmm.require.select"]; } // 포인트사용여부(을)를 선택해주세요.
+            
+            // 할인여부
+            if($scope.flex.collectionView.items[i].dcYn === "" || $scope.flex.collectionView.items[i].dcYn === null) { result = messages["simpleProd.dcYn"] + messages["cmm.require.select"]; } // 할인여부(을)를 선택해주세요.
+            
 
 
             $scope.flex.collectionView.items[i].result = result;

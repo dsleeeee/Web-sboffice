@@ -462,7 +462,7 @@
         <%-- 조회조건내역엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownloadCondition()" ><s:message code="cmm.excel.downCondition"/></button>
         <%-- 상품엑셀다운로드 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.down"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()" ><s:message code="cmm.excel.downCurrent"/></button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -490,10 +490,10 @@
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prodSearch2.regDt"/>" binding="regDt" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.regDt"/>" binding="regDt" width="120" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.regId"/>" binding="regId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.regNm"/>" binding="regNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.modDt"/>" binding="modDt" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.modDt"/>" binding="modDt" width="120" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modId"/>" binding="modId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modNm"/>" binding="modNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.tuKey"/>" binding="prodTukNm" width="150" is-read-only="true"></wj-flex-grid-column>
@@ -646,10 +646,10 @@
                 <wj-flex-grid-column header="<s:message code="prod.prodCd"/>" binding="prodCd" width="100" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prod.prodNm"/>" binding="prodNm" width="150" is-read-only="true"></wj-flex-grid-column>
 
-                <wj-flex-grid-column header="<s:message code="prodSearch2.regDt"/>" binding="regDt" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.regDt"/>" binding="regDt" width="120" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.regId"/>" binding="regId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.regNm"/>" binding="regNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="prodSearch2.modDt"/>" binding="modDt" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSearch2.modDt"/>" binding="modDt" width="120" is-read-only="true" align="center" format="dateTime"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modId"/>" binding="modId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.modNm"/>" binding="modNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSearch2.tuKey"/>" binding="prodTukNm" width="150" is-read-only="true"></wj-flex-grid-column>
@@ -816,7 +816,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodSearch/prodSearch2.js?ver=20250122.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodSearch/prodSearch2.js?ver=20250122.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

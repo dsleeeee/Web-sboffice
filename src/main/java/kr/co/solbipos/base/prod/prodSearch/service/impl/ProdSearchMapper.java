@@ -46,4 +46,11 @@ public interface ProdSearchMapper {
      * @return List
      */
     List<DefaultMap<String>> getProdList2(ProdSearchVO prodSearchVO);
+
+    /**
+     * 상품 조회2(엑셀다운로드용)
+     * @param prodSearchVO
+     * @return List
+     */
+    List<DefaultMap<String>> getProdExcelList2(ProdSearchVO prodSearchVO);
 }
