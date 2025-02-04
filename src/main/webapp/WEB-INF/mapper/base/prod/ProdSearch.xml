@@ -1761,7 +1761,7 @@
         PARAM    : prodSearchVO
         COMMENTS : 상품의 목록을 조회한다. ( 본사/매장 )
     -->
-    <select id="getProdExcelList2" parameterType="prodSearchVO" resultType="DefaultMap">
+    <select id="getProdExcelList2" parameterType="prodSearchVO" resultMap="ProdListMap">
         /* USE : ProdMapper.getProdExcelList2 */
         <choose>
             <!-- 본사 -->

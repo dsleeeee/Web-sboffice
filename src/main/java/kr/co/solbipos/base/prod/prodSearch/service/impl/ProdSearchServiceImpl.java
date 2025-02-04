@@ -148,7 +148,7 @@ public class ProdSearchServiceImpl implements ProdSearchService {
 
     /** 상품목록 조회(엑셀다운로드용) */
     @Override
-    public List<DefaultMap<String>> getProdExcelList2(@RequestBody ProdSearchVO prodSearchVO, SessionInfoVO sessionInfoVO) {
+    public List<DefaultMap<String>> getProdExcelList2(ProdSearchVO prodSearchVO, SessionInfoVO sessionInfoVO) {
 
         String orgnFg = sessionInfoVO.getOrgnFg().getCode();
         String hqOfficeCd = sessionInfoVO.getHqOfficeCd();
