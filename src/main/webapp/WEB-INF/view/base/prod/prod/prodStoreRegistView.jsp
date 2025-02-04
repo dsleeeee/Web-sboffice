@@ -53,7 +53,8 @@
                           display-member-path="name"
                           selected-value-path="value"
                           is-editable="false"
-                          initialized="_initComboBox(s)">
+                          initialized="_initComboBox(s)"
+                          control="srchSysStatFgCombo">
                   </wj-combo-box>
                 </div>
               </td>
@@ -68,7 +69,8 @@
                           display-member-path="name"
                           selected-value-path="value"
                           is-editable="false"
-                          initialized="_initComboBox(s)">
+                          initialized="_initComboBox(s)"
+                          control="srchHqBrandCombo">
                   </wj-combo-box>
                 </div>
               </td>
@@ -464,4 +466,4 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20240531.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodStoreRegist.js?ver=20250204.01" charset="utf-8"></script>
