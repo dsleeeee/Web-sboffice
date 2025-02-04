@@ -39,6 +39,8 @@ public class StoreCornerVO extends CmmVO {
     private String vanSerNo;
     /** [사용여부] 사용:Y 사용안함:N */
     private String useYn;
+    /** [대표코너구분] 대표:Y 미대표:N */
+    private String baseYn;
 
     /**
      * @return the storeCd
@@ -188,5 +190,13 @@ public class StoreCornerVO extends CmmVO {
      */
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    public String getBaseYn() {
+        return baseYn;
+    }
+
+    public void setBaseYn(String baseYn) {
+        this.baseYn = baseYn;
     }
 }

@@ -11,6 +11,10 @@
 
 var app = agrid.getApp();
 
+var baseYnData = [
+    {"name":"대표","value":"Y"},
+    {"name":"미대표","value":"N"}
+];
 app.controller('cornerAddCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
@@ -19,12 +23,14 @@ app.controller('cornerAddCtrl', ['$scope', '$http', function ($scope, $http) {
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        $scope.baseYnDataMap = new wijmo.grid.DataMap(baseYnData, 'value', 'name'); // 용도
+
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
+                var item = s.rows[e.row].dataItem;
                 if (col.binding === "cornrCd") {
-                    var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wj-custom-readonly');
                     wijmo.setAttribute(e.cell, 'aria-readonly', true);
                 }
@@ -45,8 +51,8 @@ app.controller('cornerAddCtrl', ['$scope', '$http', function ($scope, $http) {
                 var item = s.rows[e.row].dataItem;
                 // 변경시 체크박스 체크
                 if (col.binding === "cornrNm" || col.binding === "ownerNm" || col.binding === "bizNo" ||
-                    col.binding === "telNo" || col.binding === "vanCd" || col.binding === "vanTermnlNo" ||
-                    col.binding === "vanSerNo") {
+                    col.binding === "baseYn" || col.binding === "telNo" || col.binding === "vanCd" ||
+                    col.binding === "vanTermnlNo" || col.binding === "vanSerNo") {
                     $scope.checked(item);
                 }
             }
@@ -87,6 +93,7 @@ app.controller('cornerAddCtrl', ['$scope', '$http', function ($scope, $http) {
         params.vanTermnlNo = "";
         params.vanSerNo = "";
         params.termnlCnt = 0;
+        params.baseYn = "N";
         params.gChk = true;
 
         // 추가기능 수행 : 파라미터
@@ -99,6 +106,20 @@ app.controller('cornerAddCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popConfirm(messages["cmm.choo.save"], function() {
 
             $scope.flex.collectionView.commitEdit();
+
+            var chkBaseCnt = 0;
+
+            // 대표코너 갯수 체크 (수정-대기)
+            // for(var i = 0; i<$scope.flex.collectionView.items.length; i++){
+            //     if($scope.flex.collectionView.items[i].baseYn === 'Y'){
+            //         chkBaseCnt += 1;
+            //     }
+            // }
+            //
+            // if(chkBaseCnt !== 1 ){
+            //     $scope._popMsg(messages["terminalManage.require.select.baseYn"]);
+            //     return false;
+            // }
 
             // 파라미터 설정
             var params = new Array();

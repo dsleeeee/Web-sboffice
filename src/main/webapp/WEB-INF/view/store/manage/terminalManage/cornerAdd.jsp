@@ -49,6 +49,7 @@
                     <wj-flex-grid-column header="<s:message code="terminalManage.cornrNm"/>" binding="cornrNm" width="100" max-length="15"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="terminalManage.owner"/>" binding="ownerNm" width="100" max-length="15"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="terminalManage.bizNo"/>" binding="bizNo" width="150" max-length="10"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="terminalManage.baseYn"/>" binding="baseYn" width="80" data-map="baseYnDataMap" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="terminalManage.telNo"/>" binding="telNo" width="150" max-length="14"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="terminalManage.vanCd"/>" binding="vanCd" width="150" max-length="3"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="terminalManage.vanTermnlNo"/>" binding="vanTermnlNo" width="150" max-length="20"></wj-flex-grid-column>
@@ -60,4 +61,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/cornerAdd.js?ver=20240404.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/cornerAdd.js?ver=20250131.01" charset="utf-8"></script>
