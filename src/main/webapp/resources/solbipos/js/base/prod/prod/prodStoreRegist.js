@@ -88,13 +88,18 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchRegStore = function(){
 
     var prodScope     = agrid.getScope("prodCtrl");
+    var regStoreScope = agrid.getScope("regStoreCtrl");
     var params        = {};
 
     params.storeCd    = '';
     params.storeNm    = '';
     params.prodCd     = prodScope.getProdInfo().prodCd;
-    params.sysStatFg  = $scope.sysStatFg;
-    params.hqBrandCd  = $scope.hqBrandCd;
+    if(hqOfficeCd == 'A0001') {
+        if(orgnFg === "HQ"){
+            params.sysStatFg = regStoreScope.srchSysStatFgCombo.selectedValue;
+            params.hqBrandCd = regStoreScope.srchHqBrandCombo.selectedValue;
+        }
+    }
     // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'Y';
     params.momsTeam = $("#hdSrchPsrMomsTeam").val();
@@ -343,13 +348,18 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchNoRegStore = function(){
 
     var prodScope     = agrid.getScope("prodCtrl");
+    var regStoreScope = agrid.getScope("regStoreCtrl");
     var params        = {};
 
     params.storeCd    = $("#srchRegStoreCd").val();
     params.storeNm    = $("#srchRegStoreNm").val();
     params.prodCd     = prodScope.getProdInfo().prodCd;
-    params.sysStatFg  = $scope.sysStatFg;
-    params.hqBrandCd  = $scope.hqBrandCd;
+    if(hqOfficeCd == 'A0001') {
+      if (orgnFg === "HQ") {
+          params.sysStatFg = regStoreScope.srchSysStatFgCombo.selectedValue;
+          params.hqBrandCd = regStoreScope.srchHqBrandCombo.selectedValue;
+      }
+    }
     // params.hqBrandCd     = prodScope.getProdInfo().hqBrandCd;
     params.storeRegFg = 'N';
     params.momsTeam = $("#hdSrchPsrMomsTeam").val();
