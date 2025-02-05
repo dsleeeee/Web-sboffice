@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginTab.js?ver=20250120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/recpOrigin/recpOriginTab.js?ver=20250120.02" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 원산지 레이어 --%>

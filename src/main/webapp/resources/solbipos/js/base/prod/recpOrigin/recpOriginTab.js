@@ -20,7 +20,7 @@ app.controller('recpOriginTabCtrl', ['$scope', function ($scope) {
         $("#recpOriginView").hide();
         $("#recpOriginInfoView").hide();
 
-        if(orgnFg === "HQ" && (hqOfficeCd === 'H0393' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034')){
+        if(orgnFg === "HQ" && (hqOfficeCd === 'H0393' || hqOfficeCd === 'DS021' || hqOfficeCd === 'DS034' || hqOfficeCd === 'H0514')){
             $("#recpOriginInfoTab").css("display",'block');
         }
     };
