@@ -109,17 +109,17 @@ app.controller('cornerAddCtrl', ['$scope', '$http', function ($scope, $http) {
 
             var chkBaseCnt = 0;
 
-            // 대표코너 갯수 체크 (수정-대기)
-            // for(var i = 0; i<$scope.flex.collectionView.items.length; i++){
-            //     if($scope.flex.collectionView.items[i].baseYn === 'Y'){
-            //         chkBaseCnt += 1;
-            //     }
-            // }
-            //
-            // if(chkBaseCnt !== 1 ){
-            //     $scope._popMsg(messages["terminalManage.require.select.baseYn"]);
-            //     return false;
-            // }
+            // 대표코너 갯수 체크
+            for(var i = 0; i<$scope.flex.collectionView.items.length; i++){
+                if($scope.flex.collectionView.items[i].baseYn === 'Y'){
+                    chkBaseCnt += 1;
+                }
+            }
+
+            if(chkBaseCnt !== 1 && $scope.flex.collectionView.items.length > 0){
+                $scope._popMsg(messages["terminalManage.require.select.baseYn"]);
+                return false;
+            }
 
             // 파라미터 설정
             var params = new Array();

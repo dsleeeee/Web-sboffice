@@ -6,6 +6,7 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingService;
 import kr.co.solbipos.store.manage.migDataMapping.service.MigDataMappingVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageService;
@@ -286,6 +287,94 @@ public class MigDataMappingController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = migDataMappingService.getNxMigDataMappingInfoSave(migDataMappingVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 제우스 탭 - 매장 조회
+     * @param   migDataMappingVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 02. 04.
+     */
+    @RequestMapping(value = "/migDataMapping/getZeusDataMappingList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getZeusDataMappingList(MigDataMappingVO migDataMappingVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = migDataMappingService.getZeusDataMappingList(migDataMappingVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, migDataMappingVO);
+    }
+
+    /***
+     * 제우스 탭 - 연동 매장 삭제
+     * @param   migDataMappingVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 11. 05.
+     */
+    @RequestMapping(value = "/migDataMapping/getDeleteStoreMapping.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDeleteStoreMapping(@RequestBody MigDataMappingVO migDataMappingVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = migDataMappingService.getDeleteStoreMapping(migDataMappingVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 제우스 탭 - 매장연동신청팝업 매장 조회
+     * @param   migDataMappingVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 02. 05.
+     */
+    @RequestMapping(value = "/migDataMapping/getSearchZeusStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchZeusStoreList(MigDataMappingVO migDataMappingVO, HttpServletRequest request,
+                                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = migDataMappingService.getSearchZeusStoreList(migDataMappingVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, migDataMappingVO);
+    }
+
+    /***
+     * 제우스 탭 - 매장연동신청팝업 매장 등록
+     * @param   migDataMappingVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2024. 11. 05.
+     */
+    @RequestMapping(value = "/migDataMapping/getStoreMappingReg.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreMappingReg(@RequestBody MigDataMappingVO[] migDataMappingVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = migDataMappingService.getStoreMappingReg(migDataMappingVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
