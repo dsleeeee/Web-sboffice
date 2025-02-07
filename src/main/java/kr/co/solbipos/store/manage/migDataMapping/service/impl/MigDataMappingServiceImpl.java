@@ -161,4 +161,48 @@ public class MigDataMappingServiceImpl implements MigDataMappingService {
         return storeCnt;
     }
 
+    /** 제우스 탭 - 매장 조회 */
+    @Override
+    public List<DefaultMap<Object>> getZeusDataMappingList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO) {
+        return migDataMappingMapper.getZeusDataMappingList(migDataMappingVO);
+    }
+
+    /** 제우스 탭 - 연동 매장 삭제 */
+    @Override
+    public int getDeleteStoreMapping(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO) {
+        int storeCnt = 0;
+
+        storeCnt = migDataMappingMapper.getDeleteZeusStoreMapping(migDataMappingVO);
+        storeCnt = migDataMappingMapper.getDeleteLynkStoreMapping(migDataMappingVO);
+
+        return storeCnt;
+    }
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 조회 */
+    @Override
+    public List<DefaultMap<Object>> getSearchZeusStoreList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO) {
+        return migDataMappingMapper.getSearchZeusStoreList(migDataMappingVO);
+    }
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 등록 */
+    @Override
+    public int getStoreMappingReg(MigDataMappingVO[] migDataMappingVOs, SessionInfoVO sessionInfoVO) {
+        int storeCnt = 0;
+        String currentDt = currentDateTimeString();
+        String currentDay = currentDateString();
+
+        for(MigDataMappingVO migDataMappingVO : migDataMappingVOs) {
+
+            migDataMappingVO.setRegDt(currentDt);
+            migDataMappingVO.setRegId(sessionInfoVO.getUserId());
+            migDataMappingVO.setModDt(currentDt);
+            migDataMappingVO.setModId(sessionInfoVO.getUserId());
+
+            storeCnt = migDataMappingMapper.getZeusStoreMappingReg(migDataMappingVO);
+            storeCnt = migDataMappingMapper.getLynkStoreMappingReg(migDataMappingVO);
+        }
+
+        return storeCnt;
+    }
+
 }

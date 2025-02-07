@@ -54,4 +54,21 @@ public interface MigDataMappingMapper {
     /** NXPOS1 탭 - 이관 등록 */
     int getNxMigDataMappingInfoSave(MigDataMappingVO migDataMappingVO);
 
+    /** 제우스 탭 - 매장 조회 */
+    List<DefaultMap<Object>> getZeusDataMappingList(MigDataMappingVO migDataMappingVO);
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 조회 */
+    List<DefaultMap<Object>> getSearchZeusStoreList(MigDataMappingVO migDataMappingVO);
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 제우스DB 등록 */
+    int getZeusStoreMappingReg(MigDataMappingVO migDataMappingVO);
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 링크DB 등록 */
+    int getLynkStoreMappingReg(MigDataMappingVO migDataMappingVO);
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 제우스DB 삭제 */
+    int getDeleteZeusStoreMapping(MigDataMappingVO migDataMappingVO);
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 링크DB 삭제 */
+    int getDeleteLynkStoreMapping(MigDataMappingVO migDataMappingVO);
 }

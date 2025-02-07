@@ -18,31 +18,51 @@ app.controller('migDataMappingTabCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
         $("#okMigDataMappingView").show();
         $("#nxMigDataMappingView").hide();
+        $("#zeusDataMappingView").hide();
     };
 
     // OKPOS 탭 보이기
     $scope.okMigDataMapping = function () {
         $("#okMigDataMappingTab").addClass("on");
         $("#nxMigDataMappingTab").removeClass("on");
+        $("#zeusDataMappingTab").removeClass("on");
 
         $("#okMigDataMappingView").show();
         $("#nxMigDataMappingView").hide();
+        $("#zeusDataMappingView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("migDataMappingCtrl");
-        scope.refresh();
+        scope.flex.refresh();
     };
 
     // NXPOS 탭 보이기
     $scope.nxMigDataMapping = function () {
         $("#okMigDataMappingTab").removeClass("on");
         $("#nxMigDataMappingTab").addClass("on");
+        $("#zeusDataMappingTab").removeClass("on");
 
         $("#okMigDataMappingView").hide();
         $("#nxMigDataMappingView").show();
+        $("#zeusDataMappingView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope2 = agrid.getScope("nxMigDataMappingCtrl");
+        scope2.flex.refresh();
+    };
+
+    // NXPOS 탭 보이기
+    $scope.zeusDataMapping = function () {
+        $("#okMigDataMappingTab").removeClass("on");
+        $("#nxMigDataMappingTab").removeClass("on");
+        $("#zeusDataMappingTab").addClass("on");
+
+        $("#okMigDataMappingView").hide();
+        $("#nxMigDataMappingView").hide();
+        $("#zeusDataMappingView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope2 = agrid.getScope("zeusDataMappingCtrl");
         scope2.flex.refresh();
     };
 

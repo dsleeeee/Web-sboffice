@@ -205,8 +205,6 @@ public class TerminalManageServiceImpl implements TerminalManageService{
             storeCornerVO.setRegId(sessionInfoVO.getUserId());
             storeCornerVO.setModDt(dt);
             storeCornerVO.setModId(sessionInfoVO.getUserId());
-            // 기획 확인 (수정-대기)
-            storeCornerVO.setBaseYn(null);
 
             if(storeCornerVO.getStatus() == GridDataFg.INSERT) {
                 result += mapper.insertCorner(storeCornerVO); // 등록

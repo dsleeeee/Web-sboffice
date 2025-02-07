@@ -174,6 +174,19 @@ public class MigDataMappingVO extends PageVO {
     /** 컨버전 순번 */
     private String convSeq;
 
+    /** 연동상태 */
+    private String mappingFg;
+
+    /** 제우스 매장 연동 신청 - 검색조건 1,2,3 */
+    private String zeusFg;
+    private String hqStoreFg;
+    private String hqStoreCd;
+
+    /** 제우스 본사코드 */
+    private String cocd;
+    /** 제우스 매장코드 */
+    private String buut;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -418,5 +431,53 @@ public class MigDataMappingVO extends PageVO {
 
     public void setConvSeq(String convSeq) {
         this.convSeq = convSeq;
+    }
+
+    public String getMappingFg() {
+        return mappingFg;
+    }
+
+    public void setMappingFg(String mappingFg) {
+        this.mappingFg = mappingFg;
+    }
+
+    public String getZeusFg() {
+        return zeusFg;
+    }
+
+    public void setZeusFg(String zeusFg) {
+        this.zeusFg = zeusFg;
+    }
+
+    public String getHqStoreFg() {
+        return hqStoreFg;
+    }
+
+    public void setHqStoreFg(String hqStoreFg) {
+        this.hqStoreFg = hqStoreFg;
+    }
+
+    public String getHqStoreCd() {
+        return hqStoreCd;
+    }
+
+    public void setHqStoreCd(String hqStoreCd) {
+        this.hqStoreCd = hqStoreCd;
+    }
+
+    public String getCocd() {
+        return cocd;
+    }
+
+    public void setCocd(String cocd) {
+        this.cocd = cocd;
+    }
+
+    public String getBuut() {
+        return buut;
+    }
+
+    public void setBuut(String buut) {
+        this.buut = buut;
     }
 }

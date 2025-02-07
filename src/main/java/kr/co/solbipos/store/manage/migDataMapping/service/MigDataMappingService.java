@@ -49,4 +49,16 @@ public interface MigDataMappingService {
     /** NXPOS1 탭 - 이관 등록 */
     int getNxMigDataMappingInfoSave(MigDataMappingVO[] migDataMappingVOs, SessionInfoVO sessionInfoVO);
 
+    /** 제우스 탭 - 매장 조회 */
+    List<DefaultMap<Object>> getZeusDataMappingList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO);
+
+    /** 제우스 탭 - 연동 매장 삭제 */
+    int getDeleteStoreMapping(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO);
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 조회 */
+    List<DefaultMap<Object>> getSearchZeusStoreList(MigDataMappingVO migDataMappingVO, SessionInfoVO sessionInfoVO);
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 등록 */
+    int getStoreMappingReg(MigDataMappingVO[] migDataMappingVOs, SessionInfoVO sessionInfoVO);
+
 }

@@ -361,4 +361,213 @@
         )
     </insert>
 
+    <!-- 제우스 탭 - 조회 -->
+    <!--
+        TABLE    : TB_ZEUS_TO_LYNK_STORE_MAPPING
+        COMMENTS :
+    -->
+    <select id="getZeusDataMappingList" parameterType="MigDataMappingVO" resultType="DefaultMap">
+        /* MigDataMappingMapper.getZeusDataMappingList */
+        SELECT  A.COCD
+        ,       A.BUUT
+        ,       (SELECT B.BUNAME1 FROM F1400@ZEUSDB B WHERE B.BUCOCD = A.COCD AND B.BUBUUT = A.BUUT)    AS BUNAME1
+        ,       A.HQ_OFFICE_CD
+        ,       A.STORE_CD
+        ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.STORE_CD)                    AS STORE_NM
+        ,       A.MAPPING_FG                                                                            AS MAPPING_FG
+        ,       TO_CHAR(TO_DATE(A.MAPPING_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD HH24:MI:SS')                   AS MAPPING_DT
+        ,       TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')            AS REG_DT
+        ,       '연동삭제'                                                                               AS DEL_DT
+        ,       A.REMARK                                                                                AS REMARK
+        FROM    TB_ZEUS_TO_LYNK_STORE_MAPPING A
+        WHERE   1=1
+        <if test="startDate != null and startDate != ''">
+            AND A.MAPPING_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+        </if>
+        <if test="storeCd != null and storeCd != ''">
+            AND A.BUUT LIKE '%'|| #{storeCd} || '%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND A.COCD || A.BUUT IN (SELECT B.BUCOCD || B.BUBUUT FROM F1400@ZEUSDB B WHERE B.BUNAME1 LIKE '%'|| #{storeNm} || '%')
+        </if>
+        <if test="mappingFg != null and mappingFg != ''">
+            AND A.MAPPING_FG = #{mappingFg}
+        </if>
+        UNION ALL
+        SELECT  A.COCD
+        ,       A.BUUT
+        ,       (SELECT B.BUNAME1 FROM F1400@ZEUSDB B WHERE B.BUCOCD = A.COCD AND B.BUBUUT = A.BUUT)    AS BUNAME1
+        ,       A.B_HQ_OFFICE_CD
+        ,       A.B_STORE_CD
+        ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.B_STORE_CD)                  AS STORE_NM
+        ,       A.B_MAPPING_FG                                                                          AS MAPPING_FG
+        ,       TO_CHAR(TO_DATE(A.B_MAPPING_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD HH24:MI:SS')                 AS MAPPING_DT
+        ,       TO_CHAR(TO_DATE(A.B_REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')          AS REG_DT
+        ,       TO_CHAR(TO_DATE(A.PROC_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')           AS DEL_DT
+        ,       A.B_REMARK                                                                              AS REMARK
+        FROM    TB_LG_ZEUS_TO_LYNK_STORE_MAPPING_LOG A
+        WHERE   1=1
+        AND 	A.PROC_FG = 'D'
+        <if test="startDate != null and startDate != ''">
+            AND A.B_MAPPING_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+        </if>
+        <if test="storeCd != null and storeCd != ''">
+            AND A.BUUT LIKE '%'|| #{storeCd} || '%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND A.COCD || A.BUUT IN (SELECT B.BUCOCD || B.BUBUUT FROM F1400@ZEUSDB B WHERE B.BUNAME1 LIKE '%'|| #{storeNm} || '%')
+        </if>
+        <if test="mappingFg != null and mappingFg != ''">
+            AND A.B_MAPPING_FG = #{mappingFg}
+        </if>
+    </select>
+
+    <!-- 제우스 탭 - 매장연동신청 팝업 조회 -->
+    <!--
+        TABLE    : TB_ZEUS_TO_LYNK_STORE_MAPPING
+        COMMENTS :
+    -->
+    <select id="getSearchZeusStoreList" parameterType="MigDataMappingVO" resultType="DefaultMap">
+        /* MigDataMappingMapper.getSearchZeusStoreList */
+        <choose>
+            <when test='zeusFg != null and zeusFg == "1"'>
+                SELECT 	A.BUCOCD      AS HQ_OFFICE_CD
+                ,		A.BUBUUT      AS STORE_CD
+                ,		A.BUNAME1     AS STORE_NM
+                FROM 	F1400@ZEUSDB A
+                WHERE 	A.BUCOCD || A.BUBUUT NOT IN (SELECT B.COCD || B.BUUT FROM TB_ZEUS_TO_LYNK_STORE_MAPPING B)
+                <if test='hqStoreCd != null and hqStoreCd !=""'>
+                    <choose>
+                        <when test='hqStoreFg != null and hqStoreFg == "1"'>
+                            AND A.BUCOCD LIKE '%'||#{hqStoreCd}||'%'
+                        </when>
+                        <when test='hqStoreFg != null and hqStoreFg == "2"'>
+                            AND A.BUBUUT LIKE '%'||#{hqStoreCd}||'%'
+                        </when>
+                        <when test='hqStoreFg != null and hqStoreFg == "3"'>
+                            AND A.BUNAME1 LIKE '%'||#{hqStoreCd}||'%'
+                        </when>
+                    </choose>
+                </if>
+                ORDER
+                BY      A.BUCOCD
+                ,       A.BUBUUT
+            </when>
+            <when test='zeusFg != null and zeusFg == "2"'>
+                SELECT	A.HQ_OFFICE_CD
+                ,		A.STORE_CD
+                ,		A.STORE_NM
+                FROM	TB_MS_STORE A
+                WHERE   A.STORE_CD NOT IN (SELECT B.STORE_CD FROM TB_ZEUS_TO_LYNK_STORE_MAPPING B)
+                AND     A.STORE_CD IN (SELECT DISTINCT C.STORE_CD FROM TB_MS_STORE_ZEUS_V01 C)
+                <if test='hqStoreCd != null and hqStoreCd !=""'>
+                    <choose>
+                        <when test='hqStoreFg != null and hqStoreFg == "1"'>
+                            AND A.HQ_OFFICE_CD LIKE '%'||#{hqStoreCd}||'%'
+                        </when>
+                        <when test='hqStoreFg != null and hqStoreFg == "2"'>
+                            AND A.STORE_CD LIKE '%'||#{hqStoreCd}||'%'
+                        </when>
+                        <when test='hqStoreFg != null and hqStoreFg == "3"'>
+                            AND A.STORE_NM LIKE '%'||#{hqStoreCd}||'%'
+                        </when>
+                    </choose>
+                </if>
+                ORDER
+                BY      A.HQ_OFFICE_CD
+                ,       A.STORE_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 제우스 탭 - 매장연동신청 팝업 제우스DB 등록 -->
+    <!--
+        TABLE    : TB_ZEUS_TO_LYNK_STORE@ZEUSDB
+        COMMENTS :
+    -->
+    <insert id="getZeusStoreMappingReg" parameterType="MigDataMappingVO">
+        /* MigDataMappingMapper.getZeusStoreMappingReg */
+        INSERT INTO TB_ZEUS_TO_LYNK_STORE@ZEUSDB
+        (
+            COCD
+        ,   BUUT
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ,   HQ_OFFICE_CD
+        ,   STORE_CD
+        )
+        VALUES
+        (
+            #{cocd}
+        ,   #{buut}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        ,   #{hqOfficeCd}
+        ,   #{storeCd}
+        )
+    </insert>
+
+    <!-- 제우스 탭 - 매장연동신청 팝업 링크DB 등록 -->
+    <!--
+        TABLE    : TB_ZEUS_TO_LYNK_STORE_MAPPING
+        COMMENTS :
+    -->
+    <insert id="getLynkStoreMappingReg" parameterType="MigDataMappingVO">
+        /* MigDataMappingMapper.getLynkStoreMappingReg */
+        INSERT INTO TB_ZEUS_TO_LYNK_STORE_MAPPING
+        (
+            COCD
+        ,   BUUT
+        ,   HQ_OFFICE_CD
+        ,   STORE_CD
+        ,   MAPPING_FG
+        ,   USE_YN
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{cocd}
+        ,   #{buut}
+        ,   #{hqOfficeCd}
+        ,   #{storeCd}
+        ,   '0'
+        ,   'Y'
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 제우스 탭 - 매장연동신청 팝업 제우스DB 삭제 -->
+    <!--
+        TABLE    : TB_ZEUS_TO_LYNK_STORE@ZEUSDB
+        COMMENTS :
+    -->
+    <delete id="getDeleteZeusStoreMapping" parameterType="MigDataMappingVO">
+        /* MigDataMappingMapper.getDeleteZeusStoreMapping */
+        DELETE  TB_ZEUS_TO_LYNK_STORE@ZEUSDB
+        WHERE   COCD = #{cocd}
+        AND     BUUT = #{buut}
+    </delete>
+
+    <!-- 제우스 탭 - 매장연동신청 팝업 링크DB 삭제 -->
+    <!--
+        TABLE    : TB_ZEUS_TO_LYNK_STORE_MAPPING
+        COMMENTS :
+    -->
+    <delete id="getDeleteLynkStoreMapping" parameterType="MigDataMappingVO">
+        /* MigDataMappingMapper.getDeleteLynkStoreMapping */
+        DELETE  TB_ZEUS_TO_LYNK_STORE_MAPPING
+        WHERE   COCD = #{cocd}
+        AND     BUUT = #{buut}
+    </delete>
+
 </mapper>
