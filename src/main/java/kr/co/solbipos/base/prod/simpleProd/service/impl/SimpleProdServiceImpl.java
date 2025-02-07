@@ -341,7 +341,11 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setStinSaleUprc(simpleProdVO.getStinSaleUprc());
                 prodVO.setDlvrSaleUprc(simpleProdVO.getDlvrSaleUprc());
                 prodVO.setPackSaleUprc(simpleProdVO.getPackSaleUprc());
-                prodVO.setCornrCd("00");
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    prodVO.setCornrCd(simpleProdVO.getCornrCd());
+                }else{
+                    prodVO.setCornrCd("00");
+                }
                 prodVO.setHqBrandCd(simpleProdVO.getHqBrandCd());
                 prodVO.setRemark(simpleProdVO.getRemark());
                 if(simpleProdVO.getDepositCupFg() != null && !simpleProdVO.getDepositCupFg().equals("선택")){

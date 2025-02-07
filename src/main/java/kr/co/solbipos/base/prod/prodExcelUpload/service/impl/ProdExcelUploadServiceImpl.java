@@ -315,6 +315,14 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
 
                 prodExcelUploadVO.setVatIncldYn(vatIncldYn);
             }
+
+            // 코너
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ) {
+                if (prodExcelUploadVO.getCornrCd() != null && !"".equals(prodExcelUploadVO.getCornrCd())) {
+                    String cornerCd = prodExcelUploadMapper.getCornerCheck(prodExcelUploadVO);
+                    prodExcelUploadVO.setCornrCd(cornerCd);
+                }
+            }
             // <-- //업로할때는 전부 명칭으로 들어간다 -->
 
             // 상품코드
@@ -628,6 +636,14 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 } else {
                     String vendrCd = prodExcelUploadMapper.getVendrCdCheck(prodExcelUploadVO);
                     prodExcelUploadVO.setVendrCd(vendrCd);
+                }
+            }
+
+            // 코너
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                if (prodExcelUploadVO.getCornrCd() != null && !"".equals(prodExcelUploadVO.getCornrCd())) {
+                } else {
+                    prodExcelUploadVO.setResult("코너를 선택해주세요.");
                 }
             }
 

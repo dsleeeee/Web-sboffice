@@ -78,6 +78,9 @@ public interface ProdExcelUploadMapper {
     /** 할인여부 체크 */
     String getDcYnCheck(ProdExcelUploadVO prodExcelUploadVO);
 
+    /** 코너 체크 */
+    String getCornerCheck(ProdExcelUploadVO prodExcelUploadVO);
+
     /** 기초 마스터 체크 */
     DefaultMap<Object> getMasterChk(ProdExcelUploadVO prodExcelUploadVO);
 

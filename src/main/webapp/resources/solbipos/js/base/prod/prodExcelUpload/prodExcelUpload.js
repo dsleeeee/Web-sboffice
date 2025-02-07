@@ -82,6 +82,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         $scope.depositCupFgDataMap = new wijmo.grid.DataMap(depositCupFgData, 'value', 'name'); // 보증금상품유형
         $scope.pointUseYnDataMap = new wijmo.grid.DataMap(pointUseYnData, 'value', 'name'); // 재고관리여부
         $scope.dcYnDataMap = new wijmo.grid.DataMap(dcYnData, 'value', 'name'); // 재고관리여부
+        $scope.cornerDatamap = new wijmo.grid.DataMap(cornerList, 'value', 'name'); // 코너
 
         // 전체삭제
         $scope.delAll();
@@ -140,6 +141,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         params.depositCupFg="";
         params.pointUseYn="Y";
         params.dcYn="Y";
+        params.cornrCd = "00";
         params.remark = "";
 
         // 추가기능 수행 : 파라미터
@@ -224,6 +226,7 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
         $scope.depositCupFgDataMap = new wijmo.grid.DataMap(depositCupFgData, 'value', 'name'); // 보증금상품유형
         $scope.pointUseYnDataMap = new wijmo.grid.DataMap(pointUseYnData, 'value', 'name'); // 재고관리여부
         $scope.dcYnDataMap = new wijmo.grid.DataMap(dcYnData, 'value', 'name'); // 재고관리여부
+        $scope.cornerDatamap = new wijmo.grid.DataMap(cornerList, 'value', 'name'); // 코너
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {

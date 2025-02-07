@@ -1132,7 +1132,7 @@
                 TRIM(REPLACE(REPLACE(REPLACE(#{prodNm}, CHR(10), NULL), CHR(13), NULL), CHR(9), NULL)),
                 NVL(#{hqBrandCd}, '0000000'),
                 #{prodClassCd},
-                '00',
+                #{cornrCd},
                 #{orgplceCd},
                 #{sdattrClassCd},
                 #{sdselGrpCd},
@@ -4300,6 +4300,23 @@
                    BY A.VALUE
             </when>
         </choose>
+    </select>
+
+    <!-- 코너 리스트 조회(선택 콤보박스용) -->
+    <!--
+        TABLE    : TB_MS_CORNER
+        PARAM    : prodVO
+        COMMENTS : 상품등록시 선택할 코너 목록을 가져온다.
+    -->
+    <select id="getCornerList" parameterType="prodVO" resultType="DefaultMap">
+        /* ProdMapper.getCornerList */
+        SELECT CORNR_CD AS VALUE,
+               CORNR_NM AS NAME
+        FROM   TB_MS_CORNER
+        WHERE  STORE_CD = #{storeCd}
+        AND    USE_YN = 'Y'
+        ORDER
+        BY     CORNR_CD
     </select>
 
     <!-- 세트구성상품 팝업 - 구성내역 리스트 조회 -->

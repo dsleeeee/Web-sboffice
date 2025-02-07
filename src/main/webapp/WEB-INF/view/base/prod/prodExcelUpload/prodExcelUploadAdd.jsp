@@ -60,6 +60,7 @@
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.depositCupFg"/>" binding="depositCupFg" data-map="depositCupFgDataMap" width="100" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.pointUseYn"/>" binding="pointUseYn" data-map="pointUseYnDataMap" width="85" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.dcYn"/>" binding="dcYn" data-map="dcYnDataMap" width="85" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodExcelUpload.corner"/>" binding="cornrCd" width="100" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
 
             </wj-flex-grid>
@@ -77,4 +78,4 @@
     var brandUseFg = "${brandUseFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20250116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20250206.01" charset="utf-8"></script>

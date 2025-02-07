@@ -252,7 +252,7 @@
             #{prodNm},
             NVL(#{hqBrandCd}, '0000000'),
             #{prodClassCd},
-            '', --CORNR_CD
+            #{cornrCd}, --CORNR_CD
             '', --ORGPLCE_CD
             '', --SDATTR_CLASS_CD
             '', --SDSEL_GRP_CD

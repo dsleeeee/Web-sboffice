@@ -848,6 +848,27 @@
               <input type="text" id="_mapProdCd" name="mapProdCd" class="sb-input w100" ng-model="prodModifyInfo.mapProdCd"/>
             </td>
           </tr>
+          <tr id="trCorner">
+            <%-- 코너 --%>
+              <th><s:message code="prod.corner"/></th>
+              <td>
+                  <div class="sb-select">
+                      <wj-combo-box
+                              id="_cornrCd"
+                              name="cornrCd"
+                              ng-model="prodModifyInfo.cornrCd"
+                              items-source="_getComboData('cornrCdComboData')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)"
+                              control="cornrCdCombo">
+                      </wj-combo-box>
+                  </div>
+              </td>
+              <td></td>
+              <td></td>
+          </tr>
           <%-- [1250 맘스터치] --%>
           <c:if test="${momsEnvstVal == '1'}">
             <tr>
@@ -1198,7 +1219,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20250116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20250206.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

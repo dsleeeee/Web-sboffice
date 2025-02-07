@@ -109,6 +109,9 @@
                     <wj-flex-grid-column header="<s:message code="simpleProd.depositCupFg"/>" binding="depositCupFg" data-map="depositCupFgDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.pointUseYn"/>" binding="pointUseYn" data-map="pointUseYnDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.dcYn"/>" binding="dcYn" data-map="dcYnDataMap" width="85" align="center"></wj-flex-grid-column>
+                    <c:if test="${orgnFg == 'STORE'}">
+                        <wj-flex-grid-column header="<s:message code="simpleProd.corner"/>" binding="cornrCd" data-map="cornerDatamap" width="100" align="center"></wj-flex-grid-column>
+                    </c:if>
 
                     <%--상품 저장시 필요--%>
                     <wj-flex-grid-column header="<s:message code="simpleProd.chkProdNm"/>" binding="chkProdNm" width="100" align="center" visible="false"></wj-flex-grid-column>
@@ -167,10 +170,12 @@
     var brandUseFg = "${brandUseFg}";
     <%-- 브랜드 --%>
     var brandList = ${brandList};
+    <%-- 코너 콤보박스 --%>
+    var cornerList = ${cornerList};
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20250203.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/simpleProd/simpleProd.js?ver=20250206.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

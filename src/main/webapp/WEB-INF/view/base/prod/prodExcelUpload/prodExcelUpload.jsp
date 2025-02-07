@@ -102,6 +102,9 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.depositCupFg"/>" binding="depositCupFg" data-map="depositCupFgDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.pointUseYn"/>" binding="pointUseYn" data-map="pointUseYnDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.dcYn"/>" binding="dcYn" data-map="dcYnDataMap" width="85" align="center"></wj-flex-grid-column>
+                    <c:if test="${orgnFg == 'STORE'}">
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.corner"/>" binding="cornrCd" data-map="cornerDatamap" width="85" align="center"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
 
                 </wj-flex-grid>
@@ -189,6 +192,9 @@
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.depositCupFg"/>" binding="depositCupFg" data-map="depositCupFgDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.pointUseYn"/>" binding="pointUseYn" data-map="pointUseYnDataMap" width="100" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.dcYn"/>" binding="dcYn" data-map="dcYnDataMap" width="85" align="center"></wj-flex-grid-column>
+                    <c:if test="${orgnFg == 'STORE'}">
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.corner"/>" binding="cornrCd" data-map="cornerDatamap" width="85" align="center"></wj-flex-grid-column>
+                    </c:if>
                     <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60"  align="center"></wj-flex-grid-column>
 
                     <%--상품 저장시 필요--%>
@@ -248,10 +254,12 @@
     var brandUseFg = "${brandUseFg}";
     <%-- 브랜드 --%>
     var brandList = ${brandList};
+    <%-- 코너--%>
+    var cornerList = ${cornerList};
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20250116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUpload.js?ver=20250206.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

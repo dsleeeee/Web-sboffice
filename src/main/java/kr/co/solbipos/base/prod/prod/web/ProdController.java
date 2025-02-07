@@ -159,6 +159,13 @@ public class ProdController {
         model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
         model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
+        // 코너 리스트 조회(선택 콤보박스용)
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            List cornerList = prodService.getCornerList(prodVO, sessionInfoVO);
+            model.addAttribute("cornerList", cornerList.isEmpty() ? CmmUtil.comboListAll2("기본코너","00") : cmmCodeUtil.assmblObj(cornerList, "name", "value", UseYn.N));
+        }else {
+            model.addAttribute("cornerList", CmmUtil.comboListAll2("기본코너","00"));
+        }
 
         /** 맘스터치 */
         // [1250 맘스터치] 환경설정값 조회

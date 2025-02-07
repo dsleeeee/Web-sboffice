@@ -150,6 +150,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._getComboDataQuery('058', 'prodTipYnComboData');
   // 가격관리구분 콤보박스
   $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
+  // 코너 콤보박스
+  $scope._setComboData("cornrCdComboData", cornerList);
   // KIOSK 엣지 콤보박스
   $scope._setComboData('momsKioskEdgeComboData', momsKioskEdgeComboData);
   // 상품브랜드
