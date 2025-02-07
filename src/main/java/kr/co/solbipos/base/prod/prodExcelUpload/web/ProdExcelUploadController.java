@@ -152,6 +152,14 @@ public class ProdExcelUploadController {
         String poUnitFgData = cmmCodeUtil.assmblObj(poUnitFgDataList, "name", "value", UseYn.N);
         model.addAttribute("poUnitFgData", poUnitFgData);
 
+        // 코너 리스트 조회(선택 콤보박스용)
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            List cornerList = prodService.getCornerList(prodVO, sessionInfoVO);
+            model.addAttribute("cornerList", cornerList.isEmpty() ? CmmUtil.comboListAll2("기본코너","00") : cmmCodeUtil.assmblObj(cornerList, "name", "value", UseYn.N));
+        }else {
+            model.addAttribute("cornerList", CmmUtil.comboListAll2("기본코너","00"));
+        }
+
         return "base/prod/prodExcelUpload/prodExcelUpload";
     }
 

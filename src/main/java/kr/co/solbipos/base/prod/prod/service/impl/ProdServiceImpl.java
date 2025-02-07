@@ -1466,6 +1466,19 @@ public class ProdServiceImpl implements ProdService {
         return prodMapper.getBrandList2(prodVO);
     }
 
+    /** 코너 리스트 조회(선택 콤보박스용) */
+    @Override
+    public List<DefaultMap<Object>> getCornerList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return prodMapper.getCornerList(prodVO);
+    }
+
     /** 세트구성상품 팝업 - 구성내역 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getSetConfigProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {

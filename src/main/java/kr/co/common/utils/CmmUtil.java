@@ -491,6 +491,21 @@ public class CmmUtil {
     }
 
     /**
+     * 빈 콤보박스 셋팅(원하는 값 설정 가능)
+     * @return
+     */
+    public static String comboListAll2(String name, String value){
+
+        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> m = new HashMap<>();
+        m.put("name", name);
+        m.put("value", value);
+        list.add(m);
+
+        return convertToJson(list);
+    }
+
+    /**
      * 문자열 특정길이만큼 잘라 배열로 return
      */
     public static String[] splitText(String text, int maxLength){

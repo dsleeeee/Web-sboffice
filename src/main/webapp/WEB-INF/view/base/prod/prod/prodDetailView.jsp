@@ -671,6 +671,13 @@
                             {{prodDetail.mapProdCd}}
                         </td>
                     </tr>
+                    <tr style="display: none">
+                        <%-- 코너 --%>
+                        <th><s:message code="prod.corner"/></th>
+                        <td colspan="3">
+                            {{prodDetail.cornrCd}}
+                        </td>
+                    </tr>
                     <%-- [1250 맘스터치] --%>
                     <c:if test="${momsEnvstVal == '1'}">
                         <tr>

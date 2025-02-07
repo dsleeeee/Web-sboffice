@@ -218,6 +218,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 비고
             params.remark = ""; // 비고
             params.prodInfo = ""; // 상품 상세 설명
+            params.cornrCd = "00"; // 코너
 
             // [1250 맘스터치] 사용시 기본 셋팅
             // 기타정보
@@ -1404,11 +1405,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 등록/수정 모드에 따른 VIEW 변경
     $scope.chkSaveMode = function(data){
 
-        // 가격관리구분
+        // 권한에 따른 화면셋팅(가격관리구분, 코너)
         if(orgnFg == "HQ") {
             $("#_prcCtrlFg").attr("disabled", false);
+            $("#trCorner").css("display", "none");
         } else {
             $("#_prcCtrlFg").attr("disabled", true);
+            $("#trCorner").css("display", "");
         }
         
         // KIOSK 시간설정 초기화
@@ -1549,6 +1552,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 //     $("#_sdselGrpCd").val($scope.prodModifyInfo.sdselGrpCd);
                 //     $("#_sdselGrpNmCd").val("[" + $scope.prodModifyInfo.sdselGrpCd + "] " + $scope.prodModifyInfo.sdselGrpNm);
                 // }
+
+                // 코너 값 없으면 '기본코너(00)'으로 셋팅
+                if ($scope.prodModifyInfo.cornrCd === null || $scope.prodModifyInfo.cornrCd === "") {
+                    $scope.prodModifyInfo.cornrCd = "00";
+                }
 
                 // KIOSK 엣지 - 다른 본사도 사용
                 if ($scope.prodModifyInfo.momsKioskEdge === null || $scope.prodModifyInfo.momsKioskEdge === "") {

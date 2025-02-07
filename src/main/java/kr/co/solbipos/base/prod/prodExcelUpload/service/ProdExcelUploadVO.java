@@ -179,6 +179,9 @@ public class ProdExcelUploadVO extends PageVO {
     /** 부가세포함여부 */
     private String vatIncldYn;
 
+    /** 코너코드 */
+    private String cornrCd;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -545,5 +548,13 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setVatIncldYn(String vatIncldYn) {
         this.vatIncldYn = vatIncldYn;
+    }
+
+    public String getCornrCd() {
+        return cornrCd;
+    }
+
+    public void setCornrCd(String cornrCd) {
+        this.cornrCd = cornrCd;
     }
 }

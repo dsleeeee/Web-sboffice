@@ -231,7 +231,7 @@
             #{prodNm},
             NVL(#{hqBrandCd}, '0000000'),
             #{prodClassCd},
-            '', --CORNR_CD
+            #{cornrCd}, --CORNR_CD
             '', --ORGPLCE_CD
             '', --SDATTR_CLASS_CD
             '', --SDSEL_GRP_CD
@@ -507,6 +507,20 @@
         WHERE NMCODE_GRP_CD = '067'
           AND NMCODE_NM = #{dcYn}
         GROUP BY NMCODE_CD
+    </select>
+
+    <!-- 코너 검증 조회 -->
+    <!--
+        TABLE    : TB_MS_CORNER
+        COMMENTS :  [매장]코너, 매장권한으로 상품 등록시에만 사용
+    -->
+    <select id="getCornerCheck" parameterType="ProdExcelUploadVO" resultType="String">
+        /* ProdExcelUploadMapper.getCornerCheck */
+        SELECT NVL(MAX(CORNR_CD), '00') AS CORNR_CD
+        FROM   TB_MS_CORNER
+        WHERE  STORE_CD = #{storeCd}
+        AND    CORNR_NM = #{cornrCd}
+        AND    USE_YN = 'Y'
     </select>
 
     <!-- 기초마스터 체크 -->
