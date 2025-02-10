@@ -89,7 +89,7 @@
             </td>
         </tr>
         <tr>
-            <%-- 이관여부 --%>
+            <%-- 연동상태 --%>
             <th>
                 <s:message code="migDataMapping.mappingFg" />
             </th>
@@ -154,7 +154,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/zeusDataMapping.js?ver=20250204.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/migDataMapping/zeusDataMapping.js?ver=20250210.01" charset="utf-8"></script>
 
 <%-- OKPOS-KCP 데이터 이관 신규등록 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/migDataMapping/zeusDataMappingStore.jsp">

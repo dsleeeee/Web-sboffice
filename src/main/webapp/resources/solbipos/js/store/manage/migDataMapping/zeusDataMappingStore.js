@@ -205,6 +205,9 @@ app.controller('zeusDataMappingSelectStoreCtrl', ['$scope', '$http', function ($
 
     $scope.delRow = function (rowNum){
         $scope.flex.collectionView.removeAt(rowNum);
+        var scope = agrid.getScope('zeusDataMappingStoreCtrl');
+        scope.srchZeusFgCombo.selectedIndex = 0;
+        scope.getSearchZeusStoreList();
     };
 
 }]);
@@ -261,6 +264,9 @@ app.controller('lynkDataMappingSelectStoreCtrl', ['$scope', '$http', function ($
 
     $scope.delRow = function (rowNum){
         $scope.flex.collectionView.removeAt(rowNum);
+        var scope = agrid.getScope('zeusDataMappingStoreCtrl');
+        scope.srchZeusFgCombo.selectedIndex = 1;
+        scope.getSearchZeusStoreList();
     }
 
     $scope.storeMappingReg = function() {

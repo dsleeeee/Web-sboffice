@@ -19,7 +19,8 @@ var mapFgData = [
     {"name":"등록","value":"0"},
     {"name":"연동중","value":"1"},
     {"name":"해지","value":"9"},
-    {"name":"ERROR 관리자문의","value":"E"}
+    {"name":"ERROR 관리자문의","value":"E"},
+    {"name":"삭제","value":"D"}
 ];
 
 /**

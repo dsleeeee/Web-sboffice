@@ -1032,7 +1032,9 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
         params.status = "I";
         if(isNull(terminalScope.getCornerFgVal())) {
-            params.cornrNm = "01";
+            if(cornerFgList !== null && cornerFgList !== '') {
+                params.cornrNm = cornerFgList[0].name;
+            }
         }else{
             params.cornrNm = terminalScope.getCornerFgVal();
         }
