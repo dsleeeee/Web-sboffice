@@ -464,6 +464,10 @@
         <if test="mappingFg != null and mappingFg != ''">
             AND A.MAPPING_FG = #{mappingFg}
         </if>
+        ORDER
+        BY 		CASE WHEN A.DEL_DT = '연동삭제' THEN 0 ELSE 1 END
+        ,		A.COCD
+        ,		A.BUUT
     </select>
 
     <!-- 제우스 탭 - 매장연동신청 팝업 조회 -->
