@@ -375,7 +375,7 @@
         ,       A.STORE_CD
         ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.STORE_CD)                    AS STORE_NM
         ,       A.MAPPING_FG                                                                            AS MAPPING_FG
-        ,       TO_CHAR(TO_DATE(A.MAPPING_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD HH24:MI:SS')                   AS MAPPING_DT
+        ,       TO_CHAR(TO_DATE(A.MAPPING_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')        AS MAPPING_DT
         ,       TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')            AS REG_DT
         ,       '연동삭제'                                                                               AS DEL_DT
         ,       A.REMARK                                                                                AS REMARK
@@ -401,7 +401,7 @@
         ,       A.B_STORE_CD
         ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.B_STORE_CD)                  AS STORE_NM
         ,       A.B_MAPPING_FG                                                                          AS MAPPING_FG
-        ,       TO_CHAR(TO_DATE(A.B_MAPPING_DT, 'YYYY-MM-DD'), 'YYYY-MM-DD HH24:MI:SS')                 AS MAPPING_DT
+        ,       TO_CHAR(TO_DATE(A.B_MAPPING_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')      AS MAPPING_DT
         ,       TO_CHAR(TO_DATE(A.B_REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')          AS REG_DT
         ,       TO_CHAR(TO_DATE(A.PROC_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')           AS DEL_DT
         ,       A.B_REMARK                                                                              AS REMARK
