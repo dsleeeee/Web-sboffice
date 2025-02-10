@@ -370,88 +370,99 @@
         /* MigDataMappingMapper.getZeusDataMappingList */
         SELECT  A.COCD
         ,       A.BUUT
-        ,       (SELECT B.BUNAME1 FROM F1400@ZEUSDB B WHERE B.BUCOCD = A.COCD AND B.BUBUUT = A.BUUT)    AS BUNAME1
+        ,       A.BUNAME1
         ,       A.HQ_OFFICE_CD
         ,       A.STORE_CD
-        ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.STORE_CD)                    AS STORE_NM
-        ,       (
-                    SELECT  DECODE(MIN(F.CNT), 0, '9', A.MAPPING_FG)        -- 9 해지 체크(제우스/링크 매장이 사용중지가 되면 해지로 표시)
-                    FROM    (
-                                <![CDATA[
-                                    SELECT COUNT(*) CNT FROM TB_MS_STORE D WHERE D.STORE_CD = A.STORE_CD AND D.SYS_STAT_FG IN ('1', '9')   -- 오픈, 데모
-                                    UNION ALL
-                                    SELECT COUNT(*) CNT FROM F1400@ZEUSDB E WHERE E.BUCOCD = A.COCD AND E.BUBUUT = A.BUUT AND (E.BUUSFL <> 0 AND E.BUGSST <> 'D') -- 사용중지가가 아니거나 삭제되지 않은 경우
-                                ]]>
-                            ) F
-                )   AS MAPPING_FG
-        ,       TO_CHAR(TO_DATE(A.MAPPING_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')        AS MAPPING_DT
-        ,       TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')            AS REG_DT
-        ,       '연동삭제'                                                                               AS DEL_DT
-        ,       A.REMARK                                                                                AS REMARK
-        FROM    TB_ZEUS_TO_LYNK_STORE_MAPPING A
+        ,       A.STORE_NM
+        ,       A.MAPPING_FG
+        ,       A.MAPPING_DT
+        ,       A.REG_DT
+        ,       A.DEL_DT
+        ,       A.REMARK
+        FROM    (
+                    SELECT  A.COCD
+                    ,       A.BUUT
+                    ,       (SELECT B.BUNAME1 FROM F1400@ZEUSDB B WHERE B.BUCOCD = A.COCD AND B.BUBUUT = A.BUUT)    AS BUNAME1
+                    ,       A.HQ_OFFICE_CD
+                    ,       A.STORE_CD
+                    ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.STORE_CD)                    AS STORE_NM
+                    ,       (
+                                SELECT  DECODE(MIN(F.CNT), 0, '9', A.MAPPING_FG)        -- 9 해지 체크(제우스/링크 매장이 사용중지가 되면 해지로 표시)
+                                FROM    (
+                                            <![CDATA[
+                                                SELECT COUNT(*) CNT FROM TB_MS_STORE D WHERE D.STORE_CD = A.STORE_CD AND D.SYS_STAT_FG IN ('1', '9')   -- 오픈, 데모
+                                                UNION ALL
+                                                SELECT COUNT(*) CNT FROM F1400@ZEUSDB E WHERE E.BUCOCD = A.COCD AND E.BUBUUT = A.BUUT AND (E.BUUSFL <> 0 AND E.BUGSST <> 'D') -- 사용중지가가 아니거나 삭제되지 않은 경우
+                                            ]]>
+                                        ) F
+                            )   AS MAPPING_FG
+                    ,       TO_CHAR(TO_DATE(A.MAPPING_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')        AS MAPPING_DT
+                    ,       TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')            AS REG_DT
+                    ,       '연동삭제'                                                                               AS DEL_DT
+                    ,       A.REMARK                                                                                AS REMARK
+                    FROM    TB_ZEUS_TO_LYNK_STORE_MAPPING A
+                    WHERE   1=1
+                    <if test="startDate != null and startDate != ''">
+                        AND (
+                                A.MAPPING_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+                                or
+                                A.REG_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+                            )
+                    </if>
+                    <if test="storeCd != null and storeCd != ''">
+                        AND (
+                                A.BUUT LIKE '%'|| #{storeCd} || '%'
+                                or
+                                A.STORE_CD LIKE '%'|| #{storeCd} || '%'
+                            )
+                    </if>
+                    <if test="storeNm != null and storeNm != ''">
+                        AND (
+                                A.COCD || A.BUUT IN (SELECT B.BUCOCD || B.BUBUUT FROM F1400@ZEUSDB B WHERE B.BUNAME1 LIKE '%'|| #{storeNm} || '%')
+                                or
+                                A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE STORE_NM LIKE '%'||#{storeNm}|| '%')
+                            )
+                    </if>
+                    UNION ALL
+                    SELECT  A.COCD
+                    ,       A.BUUT
+                    ,       (SELECT B.BUNAME1 FROM F1400@ZEUSDB B WHERE B.BUCOCD = A.COCD AND B.BUBUUT = A.BUUT)    AS BUNAME1
+                    ,       A.B_HQ_OFFICE_CD
+                    ,       A.B_STORE_CD
+                    ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.B_STORE_CD)                  AS STORE_NM
+                    ,       A.B_MAPPING_FG                                                                          AS MAPPING_FG
+                    ,       TO_CHAR(TO_DATE(A.B_MAPPING_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')      AS MAPPING_DT
+                    ,       TO_CHAR(TO_DATE(A.B_REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')          AS REG_DT
+                    ,       TO_CHAR(TO_DATE(A.PROC_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')           AS DEL_DT
+                    ,       A.B_REMARK                                                                              AS REMARK
+                    FROM    TB_LG_ZEUS_TO_LYNK_STORE_MAPPING_D_LOG A
+                    WHERE   1=1
+                    AND 	A.PROC_FG = 'D'
+                    <if test="startDate != null and startDate != ''">
+                        AND (
+                                A.B_MAPPING_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+                                or
+                                A.B_REG_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
+                            )
+                    </if>
+                    <if test="storeCd != null and storeCd != ''">
+                        AND (
+                                A.BUUT LIKE '%'|| #{storeCd} || '%'
+                                or
+                                A.B_STORE_CD LIKE '%'|| #{storeCd} || '%'
+                            )
+                    </if>
+                    <if test="storeNm != null and storeNm != ''">
+                        AND (
+                                A.COCD || A.BUUT IN (SELECT B.BUCOCD || B.BUBUUT FROM F1400@ZEUSDB B WHERE B.BUNAME1 LIKE '%'|| #{storeNm} || '%')
+                                or
+                                A.B_STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE STORE_NM LIKE '%'||#{storeNm}|| '%')
+                            )
+                    </if>
+                ) A
         WHERE   1=1
-        <if test="startDate != null and startDate != ''">
-            AND (
-                    A.MAPPING_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
-                    or
-                    A.REG_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
-                )
-        </if>
-        <if test="storeCd != null and storeCd != ''">
-            AND (
-                    A.BUUT LIKE '%'|| #{storeCd} || '%'
-                    or
-                    A.STORE_CD LIKE '%'|| #{storeCd} || '%'
-                )
-        </if>
-        <if test="storeNm != null and storeNm != ''">
-            AND (
-                    A.COCD || A.BUUT IN (SELECT B.BUCOCD || B.BUBUUT FROM F1400@ZEUSDB B WHERE B.BUNAME1 LIKE '%'|| #{storeNm} || '%')
-                    or
-                    A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE STORE_NM LIKE '%'||#{storeNm}|| '%')
-                )
-        </if>
         <if test="mappingFg != null and mappingFg != ''">
             AND A.MAPPING_FG = #{mappingFg}
-        </if>
-        UNION ALL
-        SELECT  A.COCD
-        ,       A.BUUT
-        ,       (SELECT B.BUNAME1 FROM F1400@ZEUSDB B WHERE B.BUCOCD = A.COCD AND B.BUBUUT = A.BUUT)    AS BUNAME1
-        ,       A.B_HQ_OFFICE_CD
-        ,       A.B_STORE_CD
-        ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.B_STORE_CD)                  AS STORE_NM
-        ,       A.B_MAPPING_FG                                                                          AS MAPPING_FG
-        ,       TO_CHAR(TO_DATE(A.B_MAPPING_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')      AS MAPPING_DT
-        ,       TO_CHAR(TO_DATE(A.B_REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')          AS REG_DT
-        ,       TO_CHAR(TO_DATE(A.PROC_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')           AS DEL_DT
-        ,       A.B_REMARK                                                                              AS REMARK
-        FROM    TB_LG_ZEUS_TO_LYNK_STORE_MAPPING_D_LOG A
-        WHERE   1=1
-        AND 	A.PROC_FG = 'D'
-        <if test="startDate != null and startDate != ''">
-            AND (
-                    A.B_MAPPING_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
-                    or
-                    A.B_REG_DT BETWEEN #{startDate} || '000000' AND #{endDate} || '235959'
-                )
-        </if>
-        <if test="storeCd != null and storeCd != ''">
-            AND (
-                    A.BUUT LIKE '%'|| #{storeCd} || '%'
-                    or
-                    A.B_STORE_CD LIKE '%'|| #{storeCd} || '%'
-                )
-        </if>
-        <if test="storeNm != null and storeNm != ''">
-            AND (
-                    A.COCD || A.BUUT IN (SELECT B.BUCOCD || B.BUBUUT FROM F1400@ZEUSDB B WHERE B.BUNAME1 LIKE '%'|| #{storeNm} || '%')
-                    or
-                    A.B_STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE STORE_NM LIKE '%'||#{storeNm}|| '%')
-                )
-        </if>
-        <if test="mappingFg != null and mappingFg != ''">
-            AND A.B_MAPPING_FG = #{mappingFg}
         </if>
     </select>
 
