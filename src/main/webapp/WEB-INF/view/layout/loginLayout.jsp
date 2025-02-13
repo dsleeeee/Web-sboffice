@@ -19,7 +19,7 @@
   <div class="login">
     <header>
       <a href="/">
-        <img src="/resource/solbipos/css/img/LYNK_BI_black.png?v=20210624" alt="링크" style="width:180px;"/>
+        <img src="/resource/solbipos/css/img/링크_BI_black.png?v=20210624" alt="링크" style="width:180px;"/>
       </a>
       <%--<h1><s:message code="title.web"/></h1>--%>
     </header>
