@@ -198,6 +198,8 @@ public class MigDataMappingServiceImpl implements MigDataMappingService {
             migDataMappingVO.setModDt(currentDt);
             migDataMappingVO.setModId(sessionInfoVO.getUserId());
 
+            migDataMappingMapper.getStoreEnvstReg(migDataMappingVO);
+
             storeCnt = migDataMappingMapper.getZeusStoreMappingReg(migDataMappingVO);
             storeCnt = migDataMappingMapper.getLynkStoreMappingReg(migDataMappingVO);
         }

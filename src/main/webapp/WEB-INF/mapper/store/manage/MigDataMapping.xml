@@ -618,4 +618,23 @@
         AND     BUUT = #{buut}
     </delete>
 
+    <!-- 제우스 탭 - 매장연동신청 팝업 링크DB 등록 -->
+    <!--
+        TABLE    : TB_ZEUS_TO_LYNK_STORE_MAPPING
+        COMMENTS :
+    -->
+    <select id="getStoreEnvstReg" statementType="CALLABLE" parameterType="MigDataMappingVO" resultType="String">
+        /* MigDataMappingMapper.getStoreEnvstReg */
+        {
+            CALL PKG_MS_ZEUS_STORE_REG_INFO.SP_ZEUS_STORE_REG_INFO_0001
+            (
+                #{cocd}
+            ,   #{buut}
+            ,   #{storeCd}
+            ,   #{regId}
+            ,   #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
 </mapper>

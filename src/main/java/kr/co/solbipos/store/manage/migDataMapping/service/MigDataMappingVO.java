@@ -187,6 +187,9 @@ public class MigDataMappingVO extends PageVO {
     /** 제우스 매장코드 */
     private String buut;
 
+    /** 출력물 관련 프로시져 실행 결과 */
+    private String result;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -479,5 +482,13 @@ public class MigDataMappingVO extends PageVO {
 
     public void setBuut(String buut) {
         this.buut = buut;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }
