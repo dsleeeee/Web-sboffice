@@ -71,4 +71,7 @@ public interface MigDataMappingMapper {
 
     /** 제우스 탭 - 매장연동신청팝업 매장 링크DB 삭제 */
     int getDeleteLynkStoreMapping(MigDataMappingVO migDataMappingVO);
+
+    /** 제우스 탭 - 매장연동신청팝업 매장 환경설정 등록 */
+    String getStoreEnvstReg(MigDataMappingVO migDataMappingVO);
 }
