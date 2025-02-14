@@ -41,4 +41,10 @@ public interface BoardMasterMapper {
 
     /** 게시판관리 저장 delete */
     int getBoardMasterSaveDelete(BoardMasterVO boardMasterVO);
+
+    /** 제우스 PKG 호출 01 */
+    String getZeusPkg01(BoardMasterVO boardMasterVO);
+
+    /** 제우스 PKG 호출 02 */
+    String getZeusPkg02(BoardMasterVO boardMasterVO);
 }

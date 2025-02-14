@@ -95,4 +95,50 @@ public class BoardMasterController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 제우스 PKG 호출 01
+     *
+     * @param boardMasterVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 02. 06.
+     */
+    @RequestMapping(value = "/boardMaster/getZeusPkg01.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getZeusPkg01(@RequestBody BoardMasterVO boardMasterVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = boardMasterService.getZeusPkg01(boardMasterVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 제우스 PKG 호출 02
+     *
+     * @param boardMasterVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 02. 06.
+     */
+    @RequestMapping(value = "/boardMaster/getZeusPkg02.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getZeusPkg02(@RequestBody BoardMasterVO boardMasterVO, HttpServletRequest request,
+                               HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String result = boardMasterService.getZeusPkg02(boardMasterVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

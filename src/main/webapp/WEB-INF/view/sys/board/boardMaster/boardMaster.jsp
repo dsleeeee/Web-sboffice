@@ -25,6 +25,8 @@
     <div class="mt10">
         <div class="wj-TblWrapBr pd10" style="height:440px;">
             <div class="updownSet oh mb10">
+                <button class="btn_skyblue" ng-click="zeusPkg01()">제우스 PKG 호출 01</button>
+                <button class="btn_skyblue" ng-click="zeusPkg02()">제우스 PKG 호출 02</button>
                 <button class="btn_skyblue" ng-click="addRow()"><s:message code='cmm.add' /></button>
                 <button class="btn_skyblue" ng-click="del()"><s:message code='cmm.del' /></button>
                 <button class="btn_skyblue" ng-click="save()"><s:message code='cmm.save' /></button>
@@ -65,8 +67,8 @@
     var boardFgData = [
         {"name":"본사전용","value":"1"},
         {"name":"매장전용","value":"2"},
-        {"name":"본사/매장공용","value":"3"},
+        {"name":"본사/매장공용","value":"3"}
     ];
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/board/boardMaster/boardMaster.js?ver=20200210.06" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/board/boardMaster/boardMaster.js?ver=20250214.01" charset="utf-8"></script>

@@ -36,6 +36,9 @@ public class BoardMasterVO extends PageVO {
     /** 자동승인여부 */
     private String autoApprFg;
 
+    /** 프로시져 실행 결과 */
+    private String result;
+
     public String getBoardCd() {
         return boardCd;
     }
@@ -61,4 +64,12 @@ public class BoardMasterVO extends PageVO {
     public String getAutoApprFg() { return autoApprFg; }
 
     public void setAutoApprFg(String autoApprFg) { this.autoApprFg = autoApprFg; }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

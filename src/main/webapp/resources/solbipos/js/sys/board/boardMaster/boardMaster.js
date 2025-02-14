@@ -108,4 +108,21 @@ app.controller('boardMasterCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.searchBoardMaster();
     };
     // <-- //그리드 저장 -->
+
+    // 제우스 PKG 호출 01
+    $scope.zeusPkg01 = function() {
+        var params = {};
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withPopUp("/sys/board/boardMaster/boardMaster/getZeusPkg01.sb", params, function(response){});
+    };
+
+    // 제우스 PKG 호출 02
+    $scope.zeusPkg02 = function() {
+        var params = {};
+
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withPopUp("/sys/board/boardMaster/boardMaster/getZeusPkg02.sb", params, function(response){});
+    };
+
 }]);
