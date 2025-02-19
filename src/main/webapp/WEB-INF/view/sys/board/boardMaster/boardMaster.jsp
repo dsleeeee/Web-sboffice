@@ -25,6 +25,7 @@
     <div class="mt10">
         <div class="wj-TblWrapBr pd10" style="height:440px;">
             <div class="updownSet oh mb10">
+                <input type="password" class="sb-input w200px" id="srchSystemPw" ng-model="systemPw" />
                 <button class="btn_skyblue" ng-click="zeusPkg01()">제우스 PKG 호출 01</button>
                 <button class="btn_skyblue" ng-click="zeusPkg02()">제우스 PKG 호출 02</button>
                 <button class="btn_skyblue" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -71,4 +72,4 @@
     ];
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/board/boardMaster/boardMaster.js?ver=20250214.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/board/boardMaster/boardMaster.js?ver=20250214.02" charset="utf-8"></script>

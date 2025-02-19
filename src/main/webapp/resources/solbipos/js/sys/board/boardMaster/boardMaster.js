@@ -111,6 +111,17 @@ app.controller('boardMasterCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 제우스 PKG 호출 01
     $scope.zeusPkg01 = function() {
+        if($scope.systemPw === "" || $scope.systemPw === undefined) {
+            $scope._popMsg("시스템패스워드를 입력해주세요.");
+            return false;
+
+        } else {
+            if($scope.systemPw !== "0000") {
+                $scope._popMsg("시스템패스워드를 틀렸습니다. 다시확인해주세요.");
+                return false;
+            }
+        }
+
         var params = {};
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
@@ -119,6 +130,17 @@ app.controller('boardMasterCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 제우스 PKG 호출 02
     $scope.zeusPkg02 = function() {
+        if($scope.systemPw === "" || $scope.systemPw === undefined) {
+            $scope._popMsg("시스템패스워드를 입력해주세요.");
+            return false;
+
+        } else {
+            if($scope.systemPw !== "0000") {
+                $scope._popMsg("시스템패스워드를 틀렸습니다. 다시확인해주세요.");
+                return false;
+            }
+        }
+
         var params = {};
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
