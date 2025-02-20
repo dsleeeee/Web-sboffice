@@ -695,7 +695,11 @@ public class ProdServiceImpl implements ProdService {
 
                             // 적용 매장 등록
                             // 매장 상품저장시 등록매장 테이블에도 저장 TB_HQ_PRODUCT_STORE
-                            prodMapper.insertHqProdStoreTotal(prodVO);
+                            if (prodVO.getHqOfficeCd().equals("A0001")) {
+                                System.out.println("2246 A0001 TB_HQ_PRODUCT_STORE 제외처리 4 5 CASE");
+                            } else {
+                                prodMapper.insertHqProdStoreTotal(prodVO);
+                            }
 
                             // 해당 매장에 본사상품 상품분류 등록
                             // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 분류 매장에 저장
@@ -703,7 +707,12 @@ public class ProdServiceImpl implements ProdService {
 
                             // 해당 매장에 본사 상품 등록
                             // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
-                            prodMapper.insertHqSdselProdStoreTotal(prodVO);
+                            if (prodVO.getHqOfficeCd().equals("A0001")) {
+                                System.out.println("2246 A0001 USE_YN U: 유지 I: N 처리 4 5 CASE");
+                                prodMapper.insertHqSdselProdStoreTotalSide(prodVO);
+                            } else {
+                                prodMapper.insertHqSdselProdStoreTotal(prodVO);
+                            }
 
                             // 본사 상품이 바코드를 사용하는 경우, 매장에도 바코드를 넣어준다.
                             if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
@@ -865,7 +874,11 @@ public class ProdServiceImpl implements ProdService {
 
                         // 적용 매장 등록
                         // 매장 상품저장시 등록매장 테이블에도 저장 TB_HQ_PRODUCT_STORE
-                        prodMapper.insertHqProdStore(prodVO);
+                        if (prodVO.getHqOfficeCd().equals("A0001")) {
+                            System.out.println("2246 A0001 TB_HQ_PRODUCT_STORE 제외처리 6 CASE");
+                        } else {
+                            prodMapper.insertHqProdStore(prodVO);
+                        }
 
                         // 해당 매장에 본사상품 상품분류 등록
                         // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
@@ -873,7 +886,13 @@ public class ProdServiceImpl implements ProdService {
 
                         // 해당 매장에 본사 상품 등록
                         // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
-                        prodMapper.insertProdStoreDetail(prodVO);
+                        if (prodVO.getHqOfficeCd().equals("A0001")) {
+                            System.out.println("2246 A0001 USE_YN U: 유지 I: N 처리 6 CASE");
+                            prodMapper.insertProdStoreDetailSide(prodVO);
+                        } else {
+                            prodMapper.insertProdStoreDetail(prodVO);
+                        }
+
 
                         // 본사 상품이 바코드를 사용하는 경우, 매장에도 바코드를 넣어준다.
                         if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {
@@ -1180,7 +1199,11 @@ public class ProdServiceImpl implements ProdService {
 
                         // 적용 매장 등록
                         // 매장 상품저장시 등록매장 테이블에도 저장 TB_HQ_PRODUCT_STORE
-                        prodMapper.insertHqProdStore(prodVO);
+                        if (prodVO.getHqOfficeCd().equals("A0001")) {
+                            System.out.println("2246 A0001 TB_HQ_PRODUCT_STORE 제외처리 7 CASE");
+                        } else {
+                            prodMapper.insertHqProdStore(prodVO);
+                        }
 
                         // 해당 매장에 본사상품 상품분류 등록
                         // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
@@ -1188,7 +1211,12 @@ public class ProdServiceImpl implements ProdService {
 
                         // 해당 매장에 본사 상품 등록
                         // 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장
-                        prodMapper.insertHqSdselProdStoreTotal(prodVO);
+                        if (prodVO.getHqOfficeCd().equals("A0001")) {
+                            System.out.println("2246 A0001 USE_YN U: 유지 I: N 처리 7 CASE");
+                            prodMapper.insertHqSdselProdStoreTotalSide(prodVO);
+                        } else {
+                            prodMapper.insertHqSdselProdStoreTotal(prodVO);
+                        }
 
                         // 본사 상품이 바코드를 사용하는 경우, 매장에도 바코드를 넣어준다.
                         if (prodVO.getBarCd() != null && prodVO.getBarCd().length() > 0) {

@@ -99,6 +99,9 @@ public interface ProdMapper {
     /** 상품등록 본사통제여부가 본사인 경우, 본사 상품 등록시 매장 상품 등록 */
     int insertProdStoreDetail(ProdVO prodVO);
 
+    /** 상품등록 본사통제여부가 본사인 경우, 본사 상품 등록시 매장 상품 등록 - 사이드의 구성상품 등록 분리 - 2246 A0001 사이드 상품 등록 시 USE_YN = N 처리용 */
+    int insertProdStoreDetailSide(ProdVO prodVO);
+
     /** 상품판매가 본사통제여부가 본사인 경우, 본사 판매가 등록시 매장 판매가 등록 */
     String saveStoreSalePrice(ProdVO prodVO);
 
@@ -211,6 +214,9 @@ public interface ProdMapper {
 
     /** 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장 */
     int insertHqSdselProdStoreTotal(ProdVO prodVO);
+
+    /** 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 매장에 저장 - 사이드의 구성상품 등록 분리 - 2246 A0001 사이드 상품 등록 시 USE_YN = N 처리용 */
+    int insertHqSdselProdStoreTotalSide(ProdVO prodVO);
 
     /** 본사 상품등록시 선택한 사이드메뉴에 걸린 상품 바코드 매장에 저장 */
     int insertHqSdselProdStoreBarcdTotal(ProdVO prodVO);
