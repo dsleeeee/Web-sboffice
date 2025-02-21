@@ -296,10 +296,9 @@
                 <wj-flex-grid-column header="<s:message code="storeStatus.apprDt"/>" binding="apprDt" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.apprNo"/>" binding="apprNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="storeStatus.van"/>" binding="vanNm" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeStatus.issueNm"/>" binding="issueNm" width="80" align="center" is-read-only="true"visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeStatus.acquireNm"/>" binding="acquireNm" width="80" align="center" is-read-only="true"visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeStatus.orgApprDt"/>" binding="orgApprDt" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeStatus.orgApprNo"/>" binding="orgApprNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.issueNm"/>" binding="issueNm" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.acquireNm"/>" binding="acquireNm" width="80" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeStatus.orgBillNo"/>" binding="orgBillNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             </wj-flex-grid>
             </div>
         </div>

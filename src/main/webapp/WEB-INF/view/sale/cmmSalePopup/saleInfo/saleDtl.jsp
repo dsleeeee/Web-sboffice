@@ -345,9 +345,7 @@
                         <wj-flex-grid-column header="<s:message code="saleDtl.vanNm"/>" binding="vanNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleDtl.issueNm"/>" binding="issueNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="saleDtl.acquireNm"/>" binding="acquireNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="saleDtl.orgApprDt"/>" binding="orgApprDt" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="saleDtl.orgApprNo"/>" binding="orgApprNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-
+                        <wj-flex-grid-column header="<s:message code="saleDtl.orgBillNo"/>" binding="orgBillNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
             </div>
