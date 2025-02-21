@@ -160,7 +160,7 @@
                             <s:message code="prod.vatIncldYn"/>
                         </th>
                         <td>
-                            <%--<wj-combo-box
+                            <wj-combo-box
                                     ng-model="prodDetail.vatIncldYn"
                                     ng-hide="true"
                                     text="_vatIncldYn"
@@ -169,8 +169,7 @@
                                     selected-value-path="value"
                                     is-editable="false">
                             </wj-combo-box>
-                            {{_vatIncldYn}}--%>
-                            {{prodDetail.vatIncldYn}}
+                            {{_vatIncldYn}}
                         </td>
                     </tr>
                     <tr <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
@@ -221,7 +220,7 @@
             </div>
             <%-- 내점/배달/포장 가격 --%>
             <c:if test="${subPriceFg == '1'}">
-                <h3 class="h3_tbl"><s:message code="prod.title.saleUprc"/></h3>
+                <h3 class="h3_tbl"><s:message code="prod.title.saleUprc"/>&nbsp;&nbsp;<input type="checkbox" id="saleUprcApplyProdDetail" ng-model="saleUprcApply" />&nbsp;<s:message code="prod.saleUprcApply"/></h3>
                 <div class="tblBr">
                 <table class="tblType01">
                     <colgroup>
@@ -312,6 +311,10 @@
                             &nbsp;&nbsp;
                             <a href="#" id="btnDtlSetConfigProd" class="btn_grayS" ng-click="dtlSetConfigProd()" style="display: none;"><s:message code="prod.configProd"/></a>
                         </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <%--포인트적립여부--%>
                         <th>
                             <s:message code="prod.pointSaveYn"/>
@@ -328,8 +331,6 @@
                             </wj-combo-box>
                             {{_pointSaveYn}}
                         </td>
-                    </tr>
-                    <tr>
                         <%--사이드상품여부--%>
                         <th><s:message code="prod.sideProdYn"/></th>
                         <td>
@@ -385,8 +386,8 @@
                     </tr>
                     <%-- [1250 맘스터치] --%>
                     <c:if test="${momsEnvstVal == '1'}">
-                        <tr ng-if="prodDetail.sideProdYn === 'N'">
-                            <%--사이드속성분류코드(속성) --%>
+                        <tr>
+                            <%-- 단품/세트선택설정 --%>
                             <th><s:message code="prod.groupProdCd"/></th>
                             <td>
                                 {{prodDetail.groupProdNm}}
@@ -394,19 +395,20 @@
                         </tr>
                     </c:if>
                     <tr>
+                        <!-- 보증금상품코드 -->
                         <th><s:message code="prod.depositProdCd"/></th>
                         <td>
                             {{prodDetail.depositProdNm}}
                         </td>
                     </tr>
                     <tr>
-                        <!-- 보증컵유형 -->
+                        <!-- 보증금상품유형 -->
                         <th><s:message code="prod.depositCupFg"/></th>
                         <td>
                             <wj-combo-box ng-model="prodDetail.depositCupFg"
                                           ng-hide="true"
                                           text="_depositCupFg"
-                                          items-source="_getComboData('depositCupFgComboData')"
+                                          items-source="_getComboData('depositCupFgComboData2')"
                                           display-member-path="name"
                                           selected-value-path="value"
                                           is-editable="false">
@@ -675,7 +677,18 @@
                         <%-- 코너 --%>
                         <th><s:message code="prod.corner"/></th>
                         <td colspan="3">
-                            {{prodDetail.cornrCd}}
+                            <div class="sb-select">
+                                <wj-combo-box ng-model="prodDetail.cornrCd"
+                                      ng-hide="true"
+                                      text="_cornrCd"
+                                      items-source="_getComboData('cornrCdComboData')"
+                                      display-member-path="name"
+                                      selected-value-path="value"
+                                      is-editable="false">
+                                </wj-combo-box>
+
+                            </div>
+                            {{_cornrCd}}
                         </td>
                     </tr>
                     <%-- [1250 맘스터치] --%>
@@ -767,7 +780,7 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th class="gr lh20" id="_remark">
+                        <th class="gr lh20" id="_remark" style="height:25px;">
                             {{prodDetail.remark}}
                         </th>
                     </tr>
@@ -824,9 +837,9 @@
                         <col class="w15"/>
                         <col class="w85"/>
                     </colgroup>
-                    <tbody id="_linkedProdInfo">
+                    <tbody id="_linkedProdInfoProdDetail">
                     <tr>
-                        <th class="gr lh20">
+                        <th class="gr lh20" colspan="2">
                             연결상품정보 준비중 입니다.
                         </th>
                     </tr>
@@ -841,4 +854,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20250116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20250221.01" charset="utf-8"></script>

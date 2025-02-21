@@ -19,10 +19,6 @@ var useYnAllComboData = [
   {"name": "사용", "value": "Y"},
   {"name": "미사용", "value": "N"}
 ];
-var useYnComboData = [
-  {"name": "사용", "value": "Y"},
-  {"name": "미사용", "value": "N"}
-];
 
 // 상품등록주체 (본사/매장)
 var regOrgnFgComboData = [
@@ -34,6 +30,23 @@ var regOrgnFgComboData = [
 // 보증금상품유형
 var depositCupFgComboData = [
   {"name": "선택", "value": ""},
+  // {"name": "일반", "value": "0"},
+  {"name": "종이", "value": "1"},
+  {"name": "플라스틱", "value": "2"},
+  {"name": "다회용", "value": "3"},
+  {"name": "보증컵기타", "value": "4"}
+];
+
+/* 상품상세 필수 START */
+// 사용여부
+var useYnComboData = [
+    {"name": "사용", "value": "Y"},
+    {"name": "미사용", "value": "N"}
+];
+
+// 보증금상품유형2(상세조회용)
+var depositCupFgComboData2 = [
+  {"name": "", "value": ""},
   // {"name": "일반", "value": "0"},
   {"name": "종이", "value": "1"},
   {"name": "플라스틱", "value": "2"},
@@ -54,6 +67,7 @@ var vatIncldYnComboData = [
   {"name": "포함", "value": "Y"},
   {"name": "별도", "value": "N"}
 ];
+/* 상품상세 필수 END */
 
 /**
  * 상품정보관리 그리드 생성
@@ -120,6 +134,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope._getComboDataQueryCustom('getSideMenuSdselGrpCdCombo', 'sdselGrpCdComboData', 'S');
   // 커스텀콤보 : 보증금상품유형
   $scope._setComboData('depositCupFgComboData', depositCupFgComboData);
+  // 커스텀콤보 : 보증금상품유형2(상세조회용)
+  $scope._setComboData('depositCupFgComboData2', depositCupFgComboData2);
   // 콤보박스 데이터 Set
   $scope._setComboData('listScaleBox', gvListScaleBoxData);
   // 사용여부를 쓰는 콤보박스의 데이터 (조회용)

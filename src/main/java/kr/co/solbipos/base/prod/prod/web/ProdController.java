@@ -12,6 +12,8 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayService;
+import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
@@ -63,15 +65,17 @@ public class ProdController {
     private final DayProdService dayProdService;
     private final CmmEnvUtil cmmEnvUtil;
     private final CmmCodeUtil cmmCodeUtil;
+    private final KioskDisplayService kioskDisplayService;
 
     /** Constructor Injection */
     @Autowired
-    public ProdController(SessionService sessionService, ProdService prodService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
+    public ProdController(SessionService sessionService, ProdService prodService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil, KioskDisplayService kioskDisplayService) {
         this.sessionService = sessionService;
         this.prodService = prodService;
         this.dayProdService = dayProdService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.kioskDisplayService = kioskDisplayService;
     }
 
     /**
@@ -95,6 +99,7 @@ public class ProdController {
 
         // 상품생성설정
         ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
+        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
 
         // 상품코드 채번방식
         ProdNoEnvFg prodNoEnvFg;
@@ -103,13 +108,7 @@ public class ProdController {
         }else{
             prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0028"));
         }
-
-        // 내점/배달/포장 가격관리 사용여부
-        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
-        }else{
-            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
-        }
+        model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
         // 본사
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -118,20 +117,6 @@ public class ProdController {
             }
         } else {
             model.addAttribute("kitchenprintLink", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1110") , "0")); // 1110상품생성시주방프린터연결여부
-        }
-
-        // (상품관리)브랜드사용여부
-//        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
-//        }else{
-//            model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1114") , "0"));
-//        }
-
-        // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
-        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
-            model.addAttribute("storeProdUseFg", "0");
-        } else {
-            model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
         }
 
         // 상품코드 PREFIX 값 사용여부
@@ -145,19 +130,35 @@ public class ProdController {
             }
         }
 
+        // 상품상세 필수 START
+        // 내점/배달/포장 가격관리 사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+        }else{
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+        }
+
+        // (상품관리)브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+
+        // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            model.addAttribute("storeProdUseFg", "0");
+        } else {
+            model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
+        }
 
         // 브랜드 리스트 조회(선택 콤보박스용)
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
-        // 사용자별 브랜드 콤보박스 조회(조회용)
+        // 매장별 브랜드 콤보박스 조회(사용자 상관없이 전체 브랜드 표시)
+        KioskDisplayVO kioskDisplayVO = new KioskDisplayVO();
+        model.addAttribute("userHqStoreBrandCdComboList", convertToJson(kioskDisplayService.getUserBrandComboListAll(kioskDisplayVO, sessionInfoVO)));
+
+        // 사용자별 브랜드 콤보박스 조회
         DayProdVO dayProdVO = new DayProdVO();
         model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
-
-//        model.addAttribute("prodEnvstVal", prodEnvstVal);
-//        model.addAttribute("priceEnvstVal", priceEnvstVal);
-        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
-        model.addAttribute("prodNoEnvFg", prodNoEnvFg);
 
         // 코너 리스트 조회(선택 콤보박스용)
         if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
@@ -171,185 +172,61 @@ public class ProdController {
         // [1250 맘스터치] 환경설정값 조회
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
-            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
-            System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
         }
-
 
         // 사용자별 코드별 공통코드 콤보박스 조회
-        // 팀별
+        // - 팀별
         List momsTeamComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "151");
-        String momsTeamComboListAll = "";
-        if (momsTeamComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsTeamComboListAll = convertToJson(list);
-        } else {
-            momsTeamComboListAll = cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsTeamComboList", momsTeamComboListAll);
-        // AC점포별
-        List momsAcShopComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "152");
-        String momsAcShopComboListAll = "";
-        if (momsAcShopComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsAcShopComboListAll = convertToJson(list);
-        } else {
-            momsAcShopComboListAll = cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsAcShopComboList", momsAcShopComboListAll);
-        // 지역구분
-        List momsAreaFgComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "153");
-        String momsAreaFgComboListAll = "";
-        if (momsAreaFgComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsAreaFgComboListAll = convertToJson(list);
-        } else {
-            momsAreaFgComboListAll = cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsAreaFgComboList", momsAreaFgComboListAll);
-        // 상권
-        List momsCommercialComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "154");
-        String momsCommercialComboListAll = "";
-        if (momsCommercialComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsCommercialComboListAll = convertToJson(list);
-        } else {
-            momsCommercialComboListAll = cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsCommercialComboList", momsCommercialComboListAll);
-        // 점포유형
-        List momsShopTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "155");
-        String momsShopTypeComboListAll = "";
-        if (momsShopTypeComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsShopTypeComboListAll = convertToJson(list);
-        } else {
-            momsShopTypeComboListAll = cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsShopTypeComboList", momsShopTypeComboListAll);
-        // 매장관리타입
-        List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
-        String momsStoreManageTypeComboListAll = "";
-        if (momsStoreManageTypeComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsStoreManageTypeComboListAll = convertToJson(list);
-        } else {
-            momsStoreManageTypeComboListAll = cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboListAll);
+        model.addAttribute("momsTeamComboList", momsTeamComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N));
 
-        // 사용자별 그룹 콤보박스 조회
-        // 그룹
+        // - AC점포별
+        List momsAcShopComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "152");
+        model.addAttribute("momsAcShopComboList", momsAcShopComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N));
+
+        // - 지역구분
+        List momsAreaFgComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "153");
+        model.addAttribute("momsAreaFgComboList", momsAreaFgComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N));
+
+        // - 상권
+        List momsCommercialComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "154");
+        model.addAttribute("momsCommercialComboList", momsCommercialComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N));
+
+        // - 점포유형
+        List momsShopTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "155");
+        model.addAttribute("momsShopTypeComboList", momsShopTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N));
+
+        // - 매장관리타입
+        List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
+        model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N));
+
+        // - 사용자별 그룹 콤보박스 조회
         List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
-        String branchCdComboListAll = "";
-        if (branchCdComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            branchCdComboListAll = convertToJson(list);
-        } else {
-            branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("branchCdComboList", branchCdComboListAll);
-        // 매장그룹
+        model.addAttribute("branchCdComboList", branchCdComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹
         List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
-        String momsStoreFg01ComboListAll = "";
-        if (momsStoreFg01ComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsStoreFg01ComboListAll = convertToJson(list);
-        } else {
-            momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
-        // 매장그룹2
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹2
         List momsStoreFg02ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "169");
-        String momsStoreFg02ComboListAll = "";
-        if (momsStoreFg02ComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsStoreFg02ComboListAll = convertToJson(list);
-        } else {
-            momsStoreFg02ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg02ComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsStoreFg02ComboList", momsStoreFg02ComboListAll);
-        // 매장그룹3
+        model.addAttribute("momsStoreFg02ComboList", momsStoreFg02ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg02ComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹3
         List momsStoreFg03ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "170");
-        String momsStoreFg03ComboListAll = "";
-        if (momsStoreFg03ComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsStoreFg03ComboListAll = convertToJson(list);
-        } else {
-            momsStoreFg03ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg03ComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsStoreFg03ComboList", momsStoreFg03ComboListAll);
-        // 매장그룹4
+        model.addAttribute("momsStoreFg03ComboList", momsStoreFg03ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg03ComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹4
         List momsStoreFg04ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "171");
-        String momsStoreFg04ComboListAll = "";
-        if (momsStoreFg04ComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsStoreFg04ComboListAll = convertToJson(list);
-        } else {
-            momsStoreFg04ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg04ComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsStoreFg04ComboList", momsStoreFg04ComboListAll);
-        // 매장그룹5
+        model.addAttribute("momsStoreFg04ComboList", momsStoreFg04ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg04ComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹5
         List momsStoreFg05ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "172");
-        String momsStoreFg05ComboListAll = "";
-        if (momsStoreFg05ComboList.isEmpty()) {
-            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            HashMap<String, String> m = new HashMap<>();
-            m.put("name", "전체");
-            m.put("value", "");
-            list.add(m);
-            momsStoreFg05ComboListAll = convertToJson(list);
-        } else {
-            momsStoreFg05ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.N);
-        }
-        model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboListAll);
+        model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.N));
+
         /** //맘스터치 */
+        // 상품상세 필수 END
 
 
         // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리

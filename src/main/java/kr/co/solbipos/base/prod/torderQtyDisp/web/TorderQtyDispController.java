@@ -89,6 +89,7 @@ public class TorderQtyDispController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // 상품상세 필수 START
         // 내점/배달/포장 가격관리 사용여부
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
@@ -118,6 +119,14 @@ public class TorderQtyDispController {
         DayProdVO dayProdVO = new DayProdVO();
         model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
+        // 코너 리스트 조회(선택 콤보박스용)
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            List cornerList = prodService.getCornerList(prodVO, sessionInfoVO);
+            model.addAttribute("cornerList", cornerList.isEmpty() ? CmmUtil.comboListAll2("기본코너","00") : cmmCodeUtil.assmblObj(cornerList, "name", "value", UseYn.N));
+        }else {
+            model.addAttribute("cornerList", CmmUtil.comboListAll2("기본코너","00"));
+        }
+
         /** 맘스터치 */
         // [1250 맘스터치] 환경설정값 조회
         if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
@@ -125,7 +134,6 @@ public class TorderQtyDispController {
         } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
             model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
         }
-        /** //맘스터치 */
 
         // 사용자별 코드별 공통코드 콤보박스 조회
         // - 팀별
@@ -175,6 +183,9 @@ public class TorderQtyDispController {
         // - 매장그룹5
         List momsStoreFg05ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "172");
         model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.N));
+
+        /** //맘스터치 */
+        // 상품상세 필수 END
 
         return "base/prod/torderQtyDisp/torderQtyDisp";
     }

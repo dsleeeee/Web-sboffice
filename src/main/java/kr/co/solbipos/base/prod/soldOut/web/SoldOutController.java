@@ -11,6 +11,8 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayService;
+import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.soldOut.service.SoldOutService;
@@ -58,17 +60,19 @@ public class SoldOutController {
     private final CmmEnvUtil cmmEnvUtil;
     private final DayProdService dayProdService;
     private final CmmCodeUtil cmmCodeUtil;
+    private final KioskDisplayService kioskDisplayService;
 
 
     /** Constructor Injection */
     @Autowired
-    public SoldOutController(SessionService sessionService, SoldOutService soldOutService, ProdService prodService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
+    public SoldOutController(SessionService sessionService, SoldOutService soldOutService, ProdService prodService, CmmEnvUtil cmmEnvUtil, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil, KioskDisplayService kioskDisplayService) {
         this.sessionService = sessionService;
         this.soldOutService = soldOutService;
         this.prodService = prodService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.dayProdService = dayProdService;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.kioskDisplayService = kioskDisplayService;
     }
 
     /**
@@ -84,6 +88,7 @@ public class SoldOutController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
+        // 상품상세 필수 START
         // 내점/배달/포장 가격관리 사용여부
         if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
             model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
@@ -105,9 +110,21 @@ public class SoldOutController {
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
+        // 매장별 브랜드 콤보박스 조회(사용자 상관없이 전체 브랜드 표시)
+        KioskDisplayVO kioskDisplayVO = new KioskDisplayVO();
+        model.addAttribute("userHqStoreBrandCdComboList", convertToJson(kioskDisplayService.getUserBrandComboListAll(kioskDisplayVO, sessionInfoVO)));
+
         // 사용자별 브랜드 콤보박스 조회
         DayProdVO dayProdVO = new DayProdVO();
         model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+
+        // 코너 리스트 조회(선택 콤보박스용)
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            List cornerList = prodService.getCornerList(prodVO, sessionInfoVO);
+            model.addAttribute("cornerList", cornerList.isEmpty() ? CmmUtil.comboListAll2("기본코너","00") : cmmCodeUtil.assmblObj(cornerList, "name", "value", UseYn.N));
+        }else {
+            model.addAttribute("cornerList", CmmUtil.comboListAll2("기본코너","00"));
+        }
 
         /** 맘스터치 */
         // [1250 맘스터치] 환경설정값 조회
@@ -167,6 +184,7 @@ public class SoldOutController {
         model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.N));
 
         /** //맘스터치 */
+        // 상품상세 필수 END
 
         return "base/prod/soldOut/soldOutTab";
     }

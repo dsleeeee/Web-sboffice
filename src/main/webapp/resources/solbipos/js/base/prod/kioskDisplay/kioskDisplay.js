@@ -19,10 +19,6 @@ var useYnAllComboData = [
   {"name": "사용", "value": "Y"},
   {"name": "미사용", "value": "N"}
 ];
-var useYnComboData = [
-  {"name": "사용", "value": "Y"},
-  {"name": "미사용", "value": "N"}
-];
 
 // 상품등록주체 (본사/매장)
 var regOrgnFgComboData = [
@@ -57,6 +53,38 @@ var kioskDisplayYnAllData = [
   {"name": "비노출", "value": "N"}
 ];
 
+/* 상품상세 필수 START */
+// 사용여부
+var useYnComboData = [
+    {"name": "사용", "value": "Y"},
+    {"name": "미사용", "value": "N"}
+];
+
+// 보증금상품유형
+var depositCupFgComboData2 = [
+  {"name": "", "value": ""},
+  // {"name": "일반", "value": "0"},
+  {"name": "종이", "value": "1"},
+  {"name": "플라스틱", "value": "2"},
+  {"name": "다회용", "value": "3"},
+  {"name": "보증컵기타", "value": "4"}
+];
+
+// KIOSK 엣지
+var momsKioskEdgeComboData = [
+  {"name": "미사용", "value": "0"},
+  {"name": "NEW", "value": "1"},
+  {"name": "BEST", "value": "2"},
+  {"name": "EVENT", "value": "3"}
+];
+
+// 부가세포함여부
+var vatIncldYnComboData = [
+  {"name": "포함", "value": "Y"},
+  {"name": "별도", "value": "N"}
+];
+/* 상품상세 필수 END */
+
 /**
  * 상품정보관리 그리드 생성
  */
@@ -76,61 +104,71 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
 
   // 전체기간 체크박스
   $scope.isChecked = true;
-  // 커스텀콤보 : 사이드메뉴-속성
-  $scope._getComboDataQueryCustom('getSideMenuAttrClassCombo', 'sdattrClassCdComboData', 'S');
-  // 커스텀콤보 : 사이드메뉴-선택메뉴
-  $scope._getComboDataQueryCustom('getSideMenuSdselGrpCdCombo', 'sdselGrpCdComboData', 'S');
-  // 콤보박스 데이터 Set
-  $scope._setComboData('listScaleBox', gvListScaleBoxData);
-  // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
-  $scope._setComboData('useYnAllComboData', useYnAllComboData);
-  $scope._setComboData('kioskUseYnAllComboData', useYnAllComboData);
-  // 상품등록주체 (본사/매장구분)
-  $scope._setComboData('regOrgnFgComboData', regOrgnFgComboData);
-  // 사용여부를 쓰는 콤보박스의 데이터
-  $scope._setComboData('useYnComboData', useYnComboData);
-  // 브랜드명 콤보박스
-  //$scope._setComboData('hqBrandCd', brandList);
-  // 상품유형 콤보박스
-  $scope._getComboDataQuery('008', 'prodTypeFgComboData');
-  // 판매상품여부 콤보박스
-  $scope._getComboDataQuery('091', 'saleProdYnComboData');
-  // 주문상품구분 콤보박스
-  $scope._getComboDataQuery('092', 'poProdFgComboData');
-  // 주문단위 콤보박스와 data-map
-  $scope._getComboDataQueryByAuth('093', 'poUnitFgComboData', 'poUnitFgComboDataMap');
-  // 과세여부 콤보박스
-  $scope._getComboDataQuery('039', 'vatFgComboData');
-  // 비노출여부 콤보박스
-  $scope._getComboDataQuery('094', 'kioskDisplayYnComboData');
-  // 세트상품구분 콤보박스
-  $scope._getComboDataQuery('095', 'setProdFgComboData');
-  // 봉사료포함여부 콤보박스
-  $scope._getComboDataQuery('058', 'prodTipYnComboData');
-  // 가격관리구분 콤보박스
-  $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
-  // 품절여부 콤보박스
-  $scope._getComboDataQuery('094', 'soldOutYnComboData');
-  // 비노출여부 콤보박스
-  $scope._setComboData("kioskDisplayYnCombo", kioskDisplayYnAllData); // 판매상품여부
-  $scope._setComboData("kioskDisplayYnComboChg", kioskDisplayYnData); // 판매상품여부
-  // 매장브랜드 콤보박스
-  $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList);
-  // 상품브랜드 콤보박스
-  $scope._setComboData("srchProdHqBrandCd", userHqStoreBrandCdComboList);
 
-  $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
-  $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
-  $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
-  $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
-  $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
-  $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
-  $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
-  $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
-  $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
-  $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
-  $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
-  $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
+    // 사용여부를 쓰는 콤보박스의 데이터 (조회용)
+    $scope._setComboData('useYnAllComboData', useYnAllComboData);
+    $scope._setComboData('kioskUseYnAllComboData', useYnAllComboData);
+    // 상품등록주체 (본사/매장구분)
+    $scope._setComboData('regOrgnFgComboData', regOrgnFgComboData);
+    // 비노출여부 콤보박스
+    $scope._getComboDataQuery('094', 'kioskDisplayYnComboData');
+    // 품절여부 콤보박스
+    $scope._getComboDataQuery('094', 'soldOutYnComboData');
+    // 비노출여부 콤보박스
+    $scope._setComboData("kioskDisplayYnCombo", kioskDisplayYnAllData); // 판매상품여부
+    $scope._setComboData("kioskDisplayYnComboChg", kioskDisplayYnData); // 판매상품여부
+    // 매장브랜드 콤보박스
+    $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList);
+    // 상품브랜드 콤보박스
+    $scope._setComboData("srchProdHqBrandCd", userHqStoreBrandCdComboList);
+
+    /* 상품상세 필수 START */
+    // 커스텀콤보 : 사이드메뉴-속성
+    $scope._getComboDataQueryCustom('getSideMenuAttrClassCombo', 'sdattrClassCdComboData', 'S');
+    // 커스텀콤보 : 사이드메뉴-선택메뉴
+    $scope._getComboDataQueryCustom('getSideMenuSdselGrpCdCombo', 'sdselGrpCdComboData', 'S');
+    // 콤보박스 데이터 Set
+    $scope._setComboData('listScaleBox', gvListScaleBoxData);
+    // 사용여부를 쓰는 콤보박스의 데이터
+    $scope._setComboData('useYnComboData', useYnComboData);
+    // 상품유형 콤보박스
+    $scope._getComboDataQuery('008', 'prodTypeFgComboData');
+    // 판매상품여부 콤보박스
+    $scope._getComboDataQuery('091', 'saleProdYnComboData');
+    // 주문상품구분 콤보박스
+    $scope._getComboDataQuery('092', 'poProdFgComboData');
+    // 주문단위 콤보박스와 data-map
+    $scope._getComboDataQueryByAuth('093', 'poUnitFgComboData', 'poUnitFgComboDataMap');
+    // 세트상품구분 콤보박스
+    $scope._getComboDataQuery('095', 'setProdFgComboData');
+    // 봉사료포함여부 콤보박스
+    $scope._getComboDataQuery('058', 'prodTipYnComboData');
+    // 가격관리구분 콤보박스
+    $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
+    // 과세여부 콤보박스
+    $scope._getComboDataQuery('039', 'vatFgComboData');
+    // 부가세포함여부 콤보박스
+    $scope._setComboData("vatIncldYnComboData", vatIncldYnComboData);
+    // 보증금상품유형 콤보박스
+    $scope._setComboData('depositCupFgComboData2', depositCupFgComboData2);
+    // 코너 콤보박스
+    $scope._setComboData("cornrCdComboData", cornerList);
+    // KIOSK 엣지 콤보박스
+    $scope._setComboData('momsKioskEdgeComboData', momsKioskEdgeComboData);
+
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
+    /* 상품상세 필수 END */
 
   // 등록일자 셋팅
   $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);

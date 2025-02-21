@@ -28,6 +28,9 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     //   $scope.btnShowFg = true;
     // }
 
+    // 판매가 내점/배달/포장에 적용
+    $scope.saleUprcApply = true;
+
     // 상품상세정보
     $scope.prodDetail = {};
     // 상품정보관리 그리드 조회
@@ -42,7 +45,10 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 // 상품상세정보 Set
                 $scope.prodDetail = prodDetail;
                 var scope = agrid.getScope("prodCtrl");
-                scope.setProdInfo(prodDetail);
+
+                if(scope !== null && scope !== "" && scope !== undefined){ // 상품정보관리 화면 외에 다른 화면에서도 사용할 때 에러 발생
+                    scope.setProdInfo(prodDetail);
+                }
 
                 // 연결상품정보
                 var linkedProdList = prodDetail.linkedProdList;
@@ -55,7 +61,7 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 } else {
                     linkedProdInfo = '<tr><th colspan=\"2\">' + messages['cmm.empty.data'] + '</th></tr>';
                 }
-                $("#_linkedProdInfo").html(linkedProdInfo);
+                $("#_linkedProdInfoProdDetail").html(linkedProdInfo);
 
                 // 상품 이미지
                 if(prodDetail.imgUrl === null) {
@@ -66,15 +72,6 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                     $("#goodsNoProdDetail").css('display', 'none');
                     $("#goodsYesProdDetail").css('display', 'block');
                     $("#imgProdImageProdDetail").attr("src", prodDetail.imgUrl);
-                }
-
-                // 부가세포함여부 값 셋팅
-                if (prodDetail.vatIncldYn === "N") {
-                    prodDetail.vatIncldYn = "별도";
-                } else if (prodDetail.vatIncldYn === "Y") {
-                    prodDetail.vatIncldYn = "포함";
-                } else {
-                    prodDetail.vatIncldYn = "";
                 }
 
                 // 세트구성상품 팝업버튼 visible 처리
