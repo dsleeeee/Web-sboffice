@@ -531,7 +531,7 @@
                 thpi.PROD_EN_INFO,
                 thpi.PROD_CN_INFO,
                 thpi.PROD_JP_INFO,
-                thp.VAT_INCLD_YN
+                NVL(thp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
@@ -684,7 +684,7 @@
                 tmpi.PROD_EN_INFO,
                 tmpi.PROD_CN_INFO,
                 tmpi.PROD_JP_INFO,
-                tmp.VAT_INCLD_YN
+                NVL(tmp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_BRAND tmb ON

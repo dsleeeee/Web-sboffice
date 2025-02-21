@@ -8,23 +8,55 @@ var vSortFg = [
     {"name":"수량순","value":"2"}
 ];
 
+/* 상품상세 필수 START */
+// 사용여부
+var useYnComboData = [
+    {"name": "사용", "value": "Y"},
+    {"name": "미사용", "value": "N"}
+];
+
+// 보증금상품유형
+var depositCupFgComboData2 = [
+  {"name": "", "value": ""},
+  // {"name": "일반", "value": "0"},
+  {"name": "종이", "value": "1"},
+  {"name": "플라스틱", "value": "2"},
+  {"name": "다회용", "value": "3"},
+  {"name": "보증컵기타", "value": "4"}
+];
+
+// KIOSK 엣지
+var momsKioskEdgeComboData = [
+  {"name": "미사용", "value": "0"},
+  {"name": "NEW", "value": "1"},
+  {"name": "BEST", "value": "2"},
+  {"name": "EVENT", "value": "3"}
+];
+
+// 부가세포함여부
+var vatIncldYnComboData = [
+  {"name": "포함", "value": "Y"},
+  {"name": "별도", "value": "N"}
+];
+/* 상품상세 필수 END */
+
 /** 할인구분별(매출리스트) controller */
 app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('abcCtrl', $scope, $http, $timeout, true));
 
     // 상품 본사통제구분 (H : 본사, S: 매장)
-    $scope.prodEnvstVal = prodEnvstVal;
-    $scope.userOrgnFg = gvOrgnFg;
+    // $scope.prodEnvstVal = prodEnvstVal;
+    // $scope.userOrgnFg = gvOrgnFg;
 
     // 본사에서 들어왔을때는 매장코드가 없다. (가상로그인 후, 세로고침 몇번 하면 gvOrgnFg가 바뀌는 것 예방)
-    $scope.userStoreCd = gvStoreCd;
-    $scope.btnShowFg = false;
+    // $scope.userStoreCd = gvStoreCd;
+    // $scope.btnShowFg = false;
 
-    if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
-        || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
-        $scope.btnShowFg = true;
-    }
+    // if(($scope.prodEnvstVal === 'HQ' && isEmptyObject($scope.userStoreCd))
+    //     || ($scope.prodEnvstVal === 'STORE' &&  !isEmptyObject($scope.userStoreCd))) {
+    //     $scope.btnShowFg = true;
+    // }
 
     // 상품 상세 정보
     $scope.prodInfo = {};
@@ -40,6 +72,54 @@ app.controller('abcCtrl', ['$scope', '$http', '$timeout', function ($scope, $htt
 
     $scope.orgnFg = gvOrgnFg;
     $scope.hqOfficeCd = gvHqOfficeCd;
+
+    /* 상품상세 필수 START */
+    // 커스텀콤보 : 사이드메뉴-속성
+    $scope._getComboDataQueryCustom('getSideMenuAttrClassCombo', 'sdattrClassCdComboData', 'S');
+    // 커스텀콤보 : 사이드메뉴-선택메뉴
+    $scope._getComboDataQueryCustom('getSideMenuSdselGrpCdCombo', 'sdselGrpCdComboData', 'S');
+    // 콤보박스 데이터 Set
+    $scope._setComboData('listScaleBox', gvListScaleBoxData);
+    // 사용여부를 쓰는 콤보박스의 데이터
+    $scope._setComboData('useYnComboData', useYnComboData);
+    // 상품유형 콤보박스
+    $scope._getComboDataQuery('008', 'prodTypeFgComboData');
+    // 판매상품여부 콤보박스
+    $scope._getComboDataQuery('091', 'saleProdYnComboData');
+    // 주문상품구분 콤보박스
+    $scope._getComboDataQuery('092', 'poProdFgComboData');
+    // 주문단위 콤보박스와 data-map
+    $scope._getComboDataQueryByAuth('093', 'poUnitFgComboData', 'poUnitFgComboDataMap');
+    // 세트상품구분 콤보박스
+    $scope._getComboDataQuery('095', 'setProdFgComboData');
+    // 봉사료포함여부 콤보박스
+    $scope._getComboDataQuery('058', 'prodTipYnComboData');
+    // 가격관리구분 콤보박스
+    $scope._getComboDataQuery('045', 'prcCtrlFgComboData');
+    // 과세여부 콤보박스
+    $scope._getComboDataQuery('039', 'vatFgComboData');
+    // 부가세포함여부 콤보박스
+    $scope._setComboData("vatIncldYnComboData", vatIncldYnComboData);
+    // 보증금상품유형 콤보박스
+    $scope._setComboData('depositCupFgComboData2', depositCupFgComboData2);
+    // 코너 콤보박스
+    $scope._setComboData("cornrCdComboData", cornerList);
+    // KIOSK 엣지 콤보박스
+    $scope._setComboData('momsKioskEdgeComboData', momsKioskEdgeComboData);
+
+    $scope._setComboData("momsTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("momsAcShopCombo", momsAcShopComboList); // AC점포별
+    $scope._setComboData("momsAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("momsCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("momsShopTypeCombo", momsShopTypeComboList); // 점포유형
+    $scope._setComboData("momsStoreManageTypeCombo", momsStoreManageTypeComboList); // 매장관리타입
+    $scope._setComboData("branchCdCombo", branchCdComboList); // 그룹
+    $scope._setComboData("momsStoreFg01Combo", momsStoreFg01ComboList); // 매장그룹
+    $scope._setComboData("momsStoreFg02Combo", momsStoreFg02ComboList); // 매장그룹2
+    $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
+    $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
+    $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
+    /* 상품상세 필수 END */
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

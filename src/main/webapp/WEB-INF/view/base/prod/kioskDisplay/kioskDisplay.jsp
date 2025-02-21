@@ -544,33 +544,42 @@
 
 <script>
     var orgnFg = "${orgnFg}";
+
+    /* 상품상세 필수 START */
     // 내점/배달/포장 가격관리 사용여부 (0: 미사용 1: 사용)
     var subPriceFg = "${subPriceFg}";
     // (상품관리)브랜드사용여부
     var brandUseFg = "${brandUseFg}";
+    // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
+    var storeProdUseFg = "${storeProdUseFg}";
     // 브랜드
     var brandList = ${brandList};
+    // 매장별 브랜드 콤보박스 조회(사용자 상관없이 전체 브랜드 표시)
+    var userHqStoreBrandCdComboList = ${userHqStoreBrandCdComboList};
+    // 사용자 매장브랜드(조회용)
+    var userHqBrandCdComboList = ${userHqBrandCdComboList};
+    // 코너 콤보박스
+    var cornerList = ${cornerList};
     // [1250 맘스터치] 환경설정값
     var momsEnvstVal = "${momsEnvstVal}";
 
-    // List 형식("" 안붙임)
-    var userHqStoreBrandCdComboList = ${userHqStoreBrandCdComboList};
-    var userHqBrandCdComboList = ${userHqBrandCdComboList};
+    var branchCdComboList = ${branchCdComboList};
     var momsTeamComboList = ${momsTeamComboList};
     var momsAcShopComboList = ${momsAcShopComboList};
     var momsAreaFgComboList = ${momsAreaFgComboList};
     var momsCommercialComboList = ${momsCommercialComboList};
     var momsShopTypeComboList = ${momsShopTypeComboList};
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
-    var branchCdComboList = ${branchCdComboList};
     var momsStoreFg01ComboList = ${momsStoreFg01ComboList};
     var momsStoreFg02ComboList = ${momsStoreFg02ComboList};
     var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
     var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
+    /* 상품상세 필수 END */
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20240624.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/kioskDisplay/kioskDisplay.js?ver=20250221.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
