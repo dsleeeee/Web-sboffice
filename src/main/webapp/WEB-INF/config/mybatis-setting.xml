@@ -192,6 +192,7 @@
     <typeAlias alias="virtualLoginVO" type="kr.co.solbipos.store.manage.virtuallogin.service.VirtualLoginVO"/>
     <!-- 기초관리 > 총판/대리점 가상로그인 -->
     <typeAlias alias="virtualLoginAgencyVO" type="kr.co.solbipos.store.manage.virtualLoginAgency.service.VirtualLoginAgencyVO"/>
+    <typeAlias alias="virtualLoginByIdVO" type="kr.co.solbipos.store.manage.virtualLoginById.service.VirtualLoginByIdVO"/>
 
     <typeAlias alias="pwdManageVO" type="kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO"/>
 <!--
@@ -290,6 +291,8 @@
     <typeAlias alias="multistoreGroupVO" type="kr.co.solbipos.base.store.multistoreGroup.service.MultistoreGroupVO" />
 <!-- 기초관리 매장관리 시간대분류관리 -->
     <typeAlias alias="timeSlotVO" type="kr.co.solbipos.base.store.timeSlot.service.TimeSlotVO" />
+    <!-- 기초관리 > 매장관리 > 키오스크 직원대화 -->
+    <typeAlias alias="empTalkVO" type="kr.co.solbipos.base.store.empTalk.service.EmpTalkVO"/>
 
     <!-- 기초관리 > 매장관리 > 회원약관관리 -->
     <typeAlias alias="memberTermsVO" type="kr.co.solbipos.base.store.memberTerms.service.MemberTermsVO"/>
@@ -1235,6 +1238,8 @@
 
 
     <!-- ====================================== 모바일 시작 ====================================== -->
+    <!-- (모바일) 기초관리 > 가상로그인 -->
+    <typeAlias alias="mobileVirtualLoginVO" type="kr.co.solbipos.mobile.base.virtualLogin.service.MobileVirtualLoginVO"/>
     <!-- (모바일) 매출현황 > 상품별매출현황 -->
     <typeAlias alias="mobileProdSaleVO" type="kr.co.solbipos.mobile.sale.status.prod.service.MobileProdSaleVO"/>
     <!-- (모바일) 매출현황 > 당일매출현황 -->

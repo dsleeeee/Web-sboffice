@@ -322,6 +322,7 @@
             AND tmse.STORE_CD (+)= tms.STORE_CD
             AND tmse.ENVST_CD (+)= tce.ENVST_CD
             AND tce.ENVST_CD = #{envstCd}
+            AND tms.STORE_CD NOT IN (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '178')
             ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD
         )
         WHERE 1=1
@@ -398,6 +399,7 @@
             AND tmpe.ENVST_CD (+)= tce.ENVST_CD
             AND tmpe.POS_NO (+)= tmp.POS_NO
             AND tce.ENVST_CD = #{envstCd}
+            AND tms.STORE_CD NOT IN (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '178')
             ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD, tmp.POS_NO
         )
         WHERE 1=1

@@ -60,7 +60,17 @@
         tca.AGENCY_NM,
         tms.ADDR,
         tms.LATITUDE,
-        tms.LONGITUDE
+        tms.LONGITUDE,
+        DECODE((
+                    SELECT 	COUNT(A.NMCODE_GRP_CD)
+                    -		COUNT(B.NMCODE_GRP_CD)
+                    FROM 	TB_CM_NMCODE A
+                    LEFT JOIN TB_CM_NMCODE B
+                    ON 		B.NMCODE_GRP_CD = '179'
+                    AND 	B.NMCODE_NM     = #{userId}
+                    WHERE 	A.NMCODE_GRP_CD = '178'
+                    AND 	A.NMCODE_NM     = tms.STORE_CD
+                ),0, 'Y','N') AS STORE_MOD_YN
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_OFFICE tho,
         TB_MS_STORE tms,

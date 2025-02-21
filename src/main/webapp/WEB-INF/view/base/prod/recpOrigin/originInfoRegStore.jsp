@@ -356,7 +356,9 @@
                         <wj-flex-grid-column header="<s:message code="selectStore.storeNm"/>" binding="storeNm" width="100" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="selectStore.storeChgNot"/>" binding="storeChgNot" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpOriginInfo.originCd"/>" binding="originCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="recpOriginInfo.originNm"/>" binding="originNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="recpOriginInfo.lastModDt"/>" binding="modDt" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="recpOriginInfo.lastModId"/>" binding="modId" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>

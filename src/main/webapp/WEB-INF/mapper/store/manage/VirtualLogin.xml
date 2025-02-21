@@ -39,7 +39,17 @@
             tce.USER_ID AS CM_USER_ID,
             TO_CHAR(TO_DATE(tms.SYS_OPEN_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_OPEN_DATE,
             TO_CHAR(TO_DATE(tms.SYS_CLOSURE_DATE, 'YYYYMMDD') , 'YYYY/MM/DD') AS SYS_CLOSURE_DATE,
-            #{orgnFg} AS ORGN_FG
+            #{orgnFg} AS ORGN_FG,
+            DECODE((
+                        SELECT 	COUNT(A.NMCODE_GRP_CD)
+                        -		COUNT(B.NMCODE_GRP_CD)
+                        FROM 	TB_CM_NMCODE A
+                        LEFT JOIN TB_CM_NMCODE B
+                        ON 		B.NMCODE_GRP_CD = '179'
+                        AND 	B.NMCODE_NM     = #{systemId}
+                        WHERE 	A.NMCODE_GRP_CD = '178'
+                        AND 	A.NMCODE_NM     = tms.STORE_CD
+                    ),0, 'Y','N') AS STORE_MOD_YN
             <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
             (

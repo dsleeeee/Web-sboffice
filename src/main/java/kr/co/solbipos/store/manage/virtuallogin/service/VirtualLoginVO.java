@@ -103,6 +103,9 @@ public class VirtualLoginVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 관리자 아이디 */
+    private String systemId;
+
     /**
      * @return the hqOfficeCd
      */
@@ -459,4 +462,12 @@ public class VirtualLoginVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(String systemId) {
+        this.systemId = systemId;
+    }
 }

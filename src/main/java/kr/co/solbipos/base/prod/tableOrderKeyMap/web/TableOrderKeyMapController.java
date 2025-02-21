@@ -11,6 +11,7 @@ import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 import kr.co.solbipos.base.prod.tableOrderKeyMap.service.TableOrderKeyMapService;
 import kr.co.solbipos.base.prod.tableOrderKeyMap.service.TableOrderKeyMapVO;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
@@ -300,5 +301,71 @@ public class TableOrderKeyMapController {
         List<DefaultMap<Object>> result = tableOrderKeyMapService.getTableOrderKeyMapStoreRegistList(tableOrderKeyMapVO, sessionInfoVO);
 
         return ReturnUtil.returnListJson(Status.OK, result, tableOrderKeyMapVO);
+    }
+
+    /**
+     * 테이블오더 - 키오스크 카테고리(분류) 저장
+     *
+     * @param   kioskKeyMapVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @author  김유승
+     * @since   2025. 02. 19.
+     */
+    @RequestMapping(value = "/tableOrderKeyMapStoreRegist/saveKioskCategory.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskCategory(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = tableOrderKeyMapService.saveKioskCategory(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 테이블오더 - 키오스크 키맵 수정
+     *
+     * @param   kioskKeyMapVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @author  김유승
+     * @since   2025. 02. 19.
+     */
+    @RequestMapping(value = "/tableOrderKeyMapStoreRegist/updateKioskKeyMap.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result updateKioskKeyMap(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                    HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = tableOrderKeyMapService.updateKioskKeyMap(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 테이블오더 - 키오스크 키맵 등록
+     *
+     * @param   kioskKeyMapVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @author  김유승
+     * @since   2025. 02. 19.
+     */
+    @RequestMapping(value = "/tableOrderKeyMapStoreRegist/saveKioskKeyMap.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskKeyMap(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                  HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = tableOrderKeyMapService.saveKioskKeyMap(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

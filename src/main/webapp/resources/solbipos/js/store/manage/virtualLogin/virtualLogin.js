@@ -97,7 +97,12 @@ app.controller('gridCtrl',  ['$scope', '$http', function ($scope, $http) {
           }
         } else if (col.binding === "storeCd" && selectedRow.storeCd !== "00000") {
           if ( selectedRow.orgnFg !== "S" ) {
-            $scope.vLoginProcess(selectedRow.msUserId);
+            if(selectedRow.storeModYn === 'N'){
+              $scope._popMsg(messages["virtualLogin.msg.storeModYn"]); // 변경제한매장 입니다.
+              return false;
+            }else {
+              $scope.vLoginProcess(selectedRow.msUserId);
+            }
           }
         } else if (col.binding === "agencyNm") {
           if ( selectedRow.orgnFg === "M" ) {
