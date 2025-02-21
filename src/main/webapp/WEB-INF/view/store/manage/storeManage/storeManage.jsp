@@ -166,6 +166,7 @@
         <wj-flex-grid-column header="<s:message code="storeManage.addr"/>" binding="addr" align="center" width="0" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeManage.latitude"/>" binding="latitude" align="center" width="0" is-read-only="true" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="storeManage.longitude"/>" binding="longitude" align="center" width="0" is-read-only="true" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeManage.storeModYn"/>" binding="storeModYn" align="center" width="0" is-read-only="true" visible="false"></wj-flex-grid-column>
 
       </wj-flex-grid>
     </div>
@@ -239,7 +240,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20230109.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeManage.js?ver=20250211.01" charset="utf-8"></script>
 
 <%-- 매장정보 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/storeInfo.jsp">

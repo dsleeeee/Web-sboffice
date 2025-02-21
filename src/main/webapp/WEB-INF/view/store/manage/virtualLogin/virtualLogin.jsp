@@ -392,6 +392,7 @@
           <wj-flex-grid-column header="<s:message code="virtualLogin.sysOpenDate"/>" binding="sysOpenDate" width="110" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.sysClosureDate"/>" binding="sysClosureDate" width="110" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="virtualLogin.orgnFg"/>" binding="orgnFg" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="virtualLogin.storeModYn"/>" binding="storeModYn" visible="false"></wj-flex-grid-column>
 
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
@@ -443,4 +444,4 @@
   var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/virtualLogin/virtualLogin.js?ver=20250211.01" charset="utf-8"></script>

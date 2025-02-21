@@ -202,12 +202,12 @@
         /* USE : PopupMapper.getSearchStoreList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
         <![CDATA[
-          SELECT  tms.STORE_CD, tms.STORE_NM
+            SELECT  tms.STORE_CD, tms.STORE_NM
           ]]>
         <include refid="CmmSQL.PagingTemplateCount"/>
         <![CDATA[
-          FROM    TB_MS_STORE tms
-          WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
+            FROM    TB_MS_STORE tms
+            WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
           ]]>
         <if test='storeCd != null and storeCd != ""'>
             AND tms.STORE_CD LIKE '%'||#{storeCd}|| '%'
@@ -218,7 +218,17 @@
         <if test='orgnFg != null and orgnFg == "A"'>
             AND tms.AGENCY_CD = #{agencyCd}
         </if>
-        ORDER BY tms.STORE_CD
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+        <![CDATA[
+            AND tms.STORE_CD <> '0000000'
+        ]]>
+        </if>
+        ORDER
+        BY
+        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+            CASE WHEN tms.STORE_CD IN('S613664', 'S613667') THEN 0 ELSE 1 END,
+        </if>
+             tms.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    EmpTalk.xml
+    키오스크 직원대화
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.02.12     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.store.empTalk.service.impl.EmpTalkMapper">
+
+    <!-- 키오스크 직원대화 - 조회 -->
+    <!--
+        TABLE    :  TB_HQ_EMPLOYEE_TEXT, TB_MS_EMPLOYEE_TEXT
+        COMMENTS :
+    -->
+    <select id="getEmpTalkList" parameterType="EmpTalkVO" resultType="DefaultMap">
+        /* EmpTalkMapper.getEmpTalkList */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 	HQ_OFFICE_CD
+                ,		EMP_TEXT_NO
+                ,		EMP_TEXT_INFO
+                ,		USE_YN
+                ,       DISP_SEQ
+                FROM 	TB_HQ_EMPLOYEE_TEXT
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                ORDER
+                BY      DISP_SEQ
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 	STORE_CD
+                ,		EMP_TEXT_NO
+                ,		EMP_TEXT_INFO
+                ,		USE_YN
+                ,       REG_FG
+                ,		DECODE(REG_FG,'H','본사','S','매장')    AS REG_FG_NM
+                ,       DISP_SEQ
+                FROM 	TB_MS_EMPLOYEE_TEXT
+                WHERE   STORE_CD    = #{storeCd}
+                ORDER
+                BY      DISP_SEQ
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크 직원대화 - 대화코드 자동채번 -->
+    <!--
+        TABLE    :  TB_HQ_EMPLOYEE_TEXT, TB_MS_EMPLOYEE_TEXT
+        COMMENTS :
+    -->
+    <select id="getMaxEmpTextNo" parameterType="EmpTalkVO" resultType="String">
+        /* EmpTalkMapper.getMaxEmpTextNo */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  LPAD( NVL(MAX(EMP_TEXT_NO), 0) + 1, 4, '0') AS EMP_TEXT_NO
+                FROM    TB_HQ_EMPLOYEE_TEXT
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  LPAD( NVL(MAX(EMP_TEXT_NO), 8000) + 1, 4, '0') AS EMP_TEXT_NO
+                FROM    TB_MS_EMPLOYEE_TEXT
+                WHERE   STORE_CD  = #{storeCd}
+                AND     EMP_TEXT_NO > 8000
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크 직원대화 - 표시순서 자동채번 -->
+    <!--
+        TABLE    :  TB_HQ_EMPLOYEE_TEXT, TB_MS_EMPLOYEE_TEXT
+        COMMENTS :
+    -->
+    <select id="getMaxDispSeq" parameterType="EmpTalkVO" resultType="String">
+        /* USE : EmpTalkMapper.getMaxDispSeq */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  NVL(MAX(DISP_SEQ), 0) +1 AS DISP_SEQ
+                FROM    TB_HQ_EMPLOYEE_TEXT
+                WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  NVL(MAX(DISP_SEQ), 0) +1 AS DISP_SEQ
+                FROM    TB_MS_EMPLOYEE_TEXT
+                WHERE   STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 키오스크 직원대화 - 추가 -->
+    <!--
+        TABLE    :  TB_HQ_EMPLOYEE_TEXT, TB_MS_EMPLOYEE_TEXT
+        COMMENTS :
+    -->
+    <insert id="mergeEmpTalkList" parameterType="EmpTalkVO">
+        /* USE : SideMenuMapper.mergeEmpTalkList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO	TB_HQ_EMPLOYEE_TEXT
+                USING DUAL
+                ON	(
+                            HQ_OFFICE_CD 	= #{hqOfficeCd}
+                        AND EMP_TEXT_NO 	= #{empTextNo}
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                        EMP_TEXT_INFO	= #{empTextInfo}
+                ,		USE_YN		    = #{useYn}
+                ,		DISP_SEQ		= #{dispSeq}
+                ,		MOD_DT		    = #{modDt}
+                ,		MOD_ID		    = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        HQ_OFFICE_CD
+                ,		EMP_TEXT_NO
+                ,		EMP_TEXT_INFO
+                ,		USE_YN
+                ,		DISP_SEQ
+                ,		REG_DT
+                ,		REG_ID
+                ,		MOD_DT
+                ,		MOD_ID
+                )
+                VALUES
+                (
+                        #{hqOfficeCd}
+                ,		#{empTextNo}
+                ,		#{empTextInfo}
+                ,		#{useYn}
+                ,		#{dispSeq}
+                ,		#{regDt}
+                ,		#{regId}
+                ,		#{modDt}
+                ,		#{modId}
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO	TB_MS_EMPLOYEE_TEXT
+                USING DUAL
+                ON	(
+                            STORE_CD        = #{storeCd}
+                        AND EMP_TEXT_NO 	= #{empTextNo}
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET
+                        EMP_TEXT_INFO	= DECODE(REG_FG, 'H', EMP_TEXT_INFO, #{empTextInfo})
+                ,		USE_YN		    = DECODE(REG_FG, 'H', USE_YN, #{useYn})
+                ,		DISP_SEQ		= #{dispSeq}
+                ,		MOD_DT		    = #{modDt}
+                ,		MOD_ID		    = #{modId}
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        STORE_CD
+                ,		EMP_TEXT_NO
+                ,		EMP_TEXT_INFO
+                ,		USE_YN
+                ,		DISP_SEQ
+                ,		REG_FG
+                ,		REG_DT
+                ,		REG_ID
+                ,		MOD_DT
+                ,		MOD_ID
+                )
+                VALUES
+                (
+                        #{storeCd}
+                ,		#{empTextNo}
+                ,		#{empTextInfo}
+                ,		#{useYn}
+                ,		#{dispSeq}
+                ,       #{regFg}
+                ,		#{regDt}
+                ,		#{regId}
+                ,		#{modDt}
+                ,		#{modId}
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 키오스크 직원대화 - 삭제 -->
+    <!--
+        TABLE    :  TB_HQ_EMPLOYEE_TEXT, TB_MS_EMPLOYEE_TEXT
+        COMMENTS :
+    -->
+    <delete id="deleteEmpTalkList" parameterType="EmpTalkVO">
+        /* USE : SideMenuMapper.deleteEmpTalkList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                DELETE
+                FROM    TB_HQ_EMPLOYEE_TEXT
+                WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     EMP_TEXT_NO     = #{empTextNo}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                DELETE
+                FROM    TB_MS_EMPLOYEE_TEXT
+                WHERE   STORE_CD        = #{storeCd}
+                AND     REG_FG          = 'S'
+                AND     EMP_TEXT_NO     = #{empTextNo}
+            </when>
+        </choose>
+    </delete>
+
+    <!-- 키오스크 직원대화 - 기준매장 상용구 적용 -->
+    <!--
+        TABLE    :  TB_HQ_EMPLOYEE_TEXT, TB_MS_EMPLOYEE_TEXT
+        COMMENTS :
+    -->
+    <insert id="mergeEmpTalkRegStore" parameterType="EmpTalkVO">
+        /* USE : SideMenuMapper.mergeEmpTalkRegStore */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO  TB_HQ_EMPLOYEE_TEXT A
+                USING   (
+                            SELECT  #{hqOfficeCd}   AS HQ_OFFICE_CD
+                            ,       EMP_TEXT_NO
+                            ,       EMP_TEXT_INFO
+                            ,       USE_YN
+                            ,       DISP_SEQ
+                            ,       #{regDt}        AS REG_DT
+                            ,       #{regId}        AS REG_ID
+                            ,       #{modDt}        AS MOD_DT
+                            ,       #{modId}        AS MOD_ID
+                            FROM    TB_HQ_EMPLOYEE_TEXT
+                            WHERE   HQ_OFFICE_CD = 'DS062'
+                        ) B
+                ON  (
+                            B.HQ_OFFICE_CD  = A.HQ_OFFICE_CD
+                        AND B.EMP_TEXT_NO   = A.EMP_TEXT_NO
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.EMP_TEXT_INFO = B.EMP_TEXT_INFO
+                ,       A.USE_YN        = B.USE_YN
+                ,       A.DISP_SEQ      = B.DISP_SEQ
+                ,       A.MOD_DT        = B.MOD_DT
+                ,       A.MOD_ID        = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.HQ_OFFICE_CD
+                ,       A.EMP_TEXT_NO
+                ,       A.EMP_TEXT_INFO
+                ,       A.USE_YN
+                ,       A.DISP_SEQ
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                )
+                VALUES
+                (
+                        B.HQ_OFFICE_CD
+                ,       B.EMP_TEXT_NO
+                ,       B.EMP_TEXT_INFO
+                ,       B.USE_YN
+                ,       B.DISP_SEQ
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO  TB_MS_EMPLOYEE_TEXT A
+                USING   (
+                            SELECT  #{storeCd}      AS STORE_CD
+                            ,       EMP_TEXT_NO
+                            ,       EMP_TEXT_INFO
+                            ,       USE_YN
+                            ,       DISP_SEQ
+                            ,       REG_FG
+                            ,       #{regDt}        AS REG_DT
+                            ,       #{regId}        AS REG_ID
+                            ,       #{modDt}        AS MOD_DT
+                            ,       #{modId}        AS MOD_ID
+                            FROM    TB_MS_EMPLOYEE_TEXT
+                            WHERE   STORE_CD = '0000000'
+                        ) B
+                ON  (
+                            B.STORE_CD      = A.STORE_CD
+                        AND B.EMP_TEXT_NO   = A.EMP_TEXT_NO
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.EMP_TEXT_INFO = B.EMP_TEXT_INFO
+                ,       A.USE_YN        = B.USE_YN
+                ,       A.DISP_SEQ      = B.DISP_SEQ
+                ,       A.REG_FG        = B.REG_FG
+                ,       A.MOD_DT        = B.MOD_DT
+                ,       A.MOD_ID        = B.MOD_ID
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.STORE_CD
+                ,       A.EMP_TEXT_NO
+                ,       A.EMP_TEXT_INFO
+                ,       A.USE_YN
+                ,       A.DISP_SEQ
+                ,       A.REG_FG
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                )
+                VALUES
+                (
+                        B.STORE_CD
+                ,       B.EMP_TEXT_NO
+                ,       B.EMP_TEXT_INFO
+                ,       B.USE_YN
+                ,       B.DISP_SEQ
+                ,       B.REG_FG
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                )
+            </when>
+        </choose>
+    </insert>
+
+</mapper>

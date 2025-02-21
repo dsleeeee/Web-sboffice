@@ -47,6 +47,7 @@ public class VirtualLoginServiceImpl implements VirtualLoginService {
     public List<DefaultMap<String>> getVirtualLoginList(VirtualLoginVO virtualLoginVO, SessionInfoVO sessionInfoVO) {
 
         virtualLoginVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        virtualLoginVO.setSystemId(sessionInfoVO.getUserId());
 
         if("H".equals(virtualLoginVO.getOrgnFg())) { // 본사권한으로 해당 본사코드로만 조회
             virtualLoginVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());

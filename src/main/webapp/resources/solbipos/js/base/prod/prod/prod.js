@@ -41,14 +41,6 @@ var depositCupFgComboData = [
   {"name": "보증컵기타", "value": "4"}
 ];
 
-// KIOSK 엣지
-var momsKioskEdgeComboData = [
-  {"name": "미사용", "value": "0"},
-  {"name": "NEW", "value": "1"},
-  {"name": "BEST", "value": "2"},
-  {"name": "EVENT", "value": "3"}
-];
-
 // 부가세포함여부
 var vatIncldYnComboData = [
   {"name": "포함", "value": "Y"},

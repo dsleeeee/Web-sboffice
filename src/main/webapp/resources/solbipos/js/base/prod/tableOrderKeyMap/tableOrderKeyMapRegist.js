@@ -316,8 +316,8 @@ app.controller('tableOrderKeyMapRegistCtrl', ['$scope', '$http', '$timeout', fun
         var gridLength = $scope.flex.collectionView.items.length;
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/saveKioskCategory.sb', params, function() {
-            if(gridLength > 0) {
+        $scope._save('/base/prod/tableOrderKeyMap/tableOrderKeyMapStoreRegist/saveKioskCategory.sb', params, function() {
+            if(gridLength >= 0) {
                 // 카테고리분류 재조회
                 $scope.btnSearchCls();
             }
@@ -499,7 +499,7 @@ app.controller('tableOrderKeyMapCtrl', ['$scope', '$http', '$timeout', function 
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/base/prod/kioskKeyMap/kioskKeyMap/updateKioskKeyMap.sb', params, function() {
+        $scope._save('/base/prod/tableOrderKeyMap/tableOrderKeyMapStoreRegist/updateKioskKeyMap.sb', params, function() {
 
             // 키맵 재조회
             $scope.searchKeyMap();
@@ -650,7 +650,7 @@ app.controller('tableOrderProdCtrl', ['$scope', '$http', '$timeout', function ($
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMap.sb", params, function(){
+        $scope._save("/base/prod/tableOrderKeyMap/tableOrderKeyMapStoreRegist/saveKioskKeyMap.sb", params, function(){
             // 상품 재조회
             $scope.searchProd();
 

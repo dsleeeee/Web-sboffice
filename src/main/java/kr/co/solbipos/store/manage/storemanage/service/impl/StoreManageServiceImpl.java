@@ -89,6 +89,7 @@ public class StoreManageServiceImpl implements StoreManageService{
         // 소속구분, 총판의 부모총판 코드
         storeManageVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
         storeManageVO.setpAgencyCd(sessionInfoVO.getpAgencyCd());
+        storeManageVO.setUserId(sessionInfoVO.getUserId());
 
         // 총판인 경우, session의 AgencyCode 값 넣기
         if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {

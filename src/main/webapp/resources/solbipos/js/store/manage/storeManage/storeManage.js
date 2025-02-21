@@ -65,7 +65,12 @@ app.controller('storeManageCtrl', ['$scope', '$http', '$timeout', function ($sco
         var col = ht.panel.columns[ht.col];
         var selectedRow = s.rows[ht.row].dataItem;
         if ( col.binding === "storeCd" ||  col.binding === "storeNm") {
-          $scope.setSelectedStore(s.rows[ht.row].dataItem);
+          if(selectedRow.storeModYn === 'N'){
+            $scope._popMsg(messages["storeManage.msg.storeModYn"]); // 변경제한매장 입니다.
+            return false;
+          }else {
+            $scope.setSelectedStore(s.rows[ht.row].dataItem);
+          }
           /*var popup = $scope.storeInfoLayer;
           // 팝업 열린 뒤. 딜레이줘서 열리고 나서 실행되도록 함
           popup.shown.addHandler(function (s) {

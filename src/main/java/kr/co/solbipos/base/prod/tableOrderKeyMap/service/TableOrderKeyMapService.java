@@ -2,6 +2,7 @@ package kr.co.solbipos.base.prod.tableOrderKeyMap.service;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.kioskKeyMap.service.KioskKeyMapVO;
 
 import java.util.List;
 
@@ -24,4 +25,13 @@ public interface TableOrderKeyMapService {
 
     /** 테이블오더키맵 매장적용 팝업 - 조회 */
     List<DefaultMap<Object>> getTableOrderKeyMapStoreRegistList(TableOrderKeyMapVO tableOrderKeyMapVO, SessionInfoVO sessionInfoVO);
+
+    /** 테이블오더 - 키오스크 카테고리(분류) 등록 */
+    int saveKioskCategory(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 테이블오더 - 키오스크 키맵 수정 */
+    int updateKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 테이블오더 - 키오스크 키맵 등록 */
+    int saveKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 }
