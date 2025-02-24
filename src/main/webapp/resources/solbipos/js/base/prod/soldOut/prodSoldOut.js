@@ -382,7 +382,8 @@ app.controller('prodSoldOutCtrl', ['$scope', '$http', '$timeout', function ($sco
       var selectedRow = $scope.flex.selectedRows[0]._data;
       setTimeout(function() {
         var params = {};
-        params.prodCd = selectedRow.prodCd;
+          params.prodCd = selectedRow.prodCd;
+          params.storeCd = selectedRow.storeCd;
         $scope._broadcast('prodDetailCtrl', params);
       }, 50);
     });
