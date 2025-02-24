@@ -400,6 +400,7 @@ app.controller('kioskDisplayCtrl', ['$scope', '$http', '$timeout', function ($sc
       setTimeout(function() {
         var params = {};
         params.prodCd = selectedRow.prodCd;
+        params.storeCd = selectedRow.storeCd;
         $scope._broadcast('prodDetailCtrl', params);
       }, 50);
     });

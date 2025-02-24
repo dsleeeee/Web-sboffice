@@ -35,11 +35,21 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.prodDetail = {};
     // 상품정보관리 그리드 조회
     $scope.$on("prodDetailCtrl", function(event, data) {
+
+        var url = "/base/prod/prod/prod/detail.sb";
+        //var referrer = document.referrer;
+
+        if (orgnFg === "HQ") {
+            if(data.storeCd != null && data.storeCd != "" && data.storeCd != undefined){
+                url = "/base/prod/soldOut/soldOut/detail.sb";
+            }
+        }
+
         // 파라미터
         var params = {};
         params = data;
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/base/prod/prod/prod/detail.sb", params, function(response){
+        $scope._postJSONQuery.withPopUp(url, params, function(response){
                 // 상품정보
                 var prodDetail = response.data.data.list;
                 // 상품상세정보 Set
