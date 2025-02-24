@@ -173,7 +173,7 @@ app.controller('tableOrderKeyMapStoreRegCtrl', ['$scope', '$http', '$timeout', f
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/base/prod/kioskKeyMap/kioskKeyMap/saveKioskKeyMapStore.sb', /* 통신할 URL */
+            url    : '/base/prod/tableOrderKeyMap/tableOrderKeyMapStoreRegist/saveKioskKeyMapStore.sb', /* 통신할 URL */
             data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
             params : sParam,
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
