@@ -348,4 +348,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/tableOrderKeyMap/tableOrderKeyMapStoreRegist.js?ver=20240221.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/tableOrderKeyMap/tableOrderKeyMapStoreRegist.js?ver=20250224.01" charset="utf-8"></script>

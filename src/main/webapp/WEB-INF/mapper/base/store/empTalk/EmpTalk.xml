@@ -42,6 +42,7 @@
                 WHERE   STORE_CD    = #{storeCd}
                 ORDER
                 BY      DISP_SEQ
+                ,       REG_FG
             </when>
         </choose>
     </select>

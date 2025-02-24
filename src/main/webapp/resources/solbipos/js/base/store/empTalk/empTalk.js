@@ -30,10 +30,15 @@ app.controller('empTalkCtrl', ['$scope', '$http', function ($scope, $http) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "empTextNo") {
-                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                var dataItem = s.rows[e.row].dataItem;
+                if(orgnFg === 'STORE') {
+                    if(dataItem.regFg === "H") {
+                        if (col.binding === "empTextInfo" || col.binding === "useYn") {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                        }
+                    }
                 }
-
             }
         });
 

@@ -34,4 +34,7 @@ public interface TableOrderKeyMapService {
 
     /** 테이블오더 - 키오스크 키맵 등록 */
     int saveKioskKeyMap(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
+
+    /** 테이블오더 - 키맵매장적용 */
+    int saveKioskKeyMapStore(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO);
 }

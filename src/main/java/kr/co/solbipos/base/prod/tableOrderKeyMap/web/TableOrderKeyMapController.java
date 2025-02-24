@@ -368,4 +368,26 @@ public class TableOrderKeyMapController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 테이블오더 - 키맵매장적용
+     *
+     * @param   kioskKeyMapVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @author  김유승
+     * @since   2025. 02. 24.
+     */
+    @RequestMapping(value = "/tableOrderKeyMapStoreRegist/saveKioskKeyMapStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskKeyMapStore(@RequestBody KioskKeyMapVO[] kioskKeyMapVOs, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = tableOrderKeyMapService.saveKioskKeyMapStore(kioskKeyMapVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

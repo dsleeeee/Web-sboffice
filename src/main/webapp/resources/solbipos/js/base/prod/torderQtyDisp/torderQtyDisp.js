@@ -419,6 +419,7 @@ app.controller('torderQtyDispCtrl', ['$scope', '$http', '$timeout', function ($s
             setTimeout(function() {
                 var params = {};
                 params.prodCd = selectedRow.prodCd;
+                params.storeCd = selectedRow.storeCd;
                 $scope._broadcast('prodDetailCtrl', params);
             }, 50);
         });
