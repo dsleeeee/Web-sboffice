@@ -201,34 +201,40 @@
     <select id="getSearchStoreList" parameterType="storeManageVO" resultType="DefaultMap">
         /* USE : PopupMapper.getSearchStoreList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        <![CDATA[
-            SELECT  tms.STORE_CD, tms.STORE_NM
-          ]]>
+        SELECT  A.STORE_CD
+        ,       A.STORE_NM
         <include refid="CmmSQL.PagingTemplateCount"/>
-        <![CDATA[
-            FROM    TB_MS_STORE tms
-            WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
-          ]]>
-        <if test='storeCd != null and storeCd != ""'>
-            AND tms.STORE_CD LIKE '%'||#{storeCd}|| '%'
-        </if>
-        <if test='storeNm != null and storeNm != ""'>
-            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
-        </if>
-        <if test='orgnFg != null and orgnFg == "A"'>
-            AND tms.AGENCY_CD = #{agencyCd}
-        </if>
-        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
-        <![CDATA[
-            AND tms.STORE_CD <> '0000000'
-        ]]>
+        FROM    (
+                    SELECT  tms.STORE_CD
+                    ,       tms.STORE_NM
+                    FROM    TB_MS_STORE tms
+                    WHERE   tms.HQ_OFFICE_CD =   #{hqOfficeCd}
+                    <if test='storeCd != null and storeCd != ""'>
+                        AND tms.STORE_CD LIKE '%'||#{storeCd}|| '%'
+                    </if>
+                    <if test='storeNm != null and storeNm != ""'>
+                        AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+                    </if>
+                    <if test='orgnFg != null and orgnFg == "A"'>
+                        AND tms.AGENCY_CD = #{agencyCd}
+                    </if>
+                    <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                    <![CDATA[
+                        AND tms.STORE_CD <> '0000000'
+                    ]]>
+                    UNION
+                    SELECT  A.STORE_CD
+                    ,       A.STORE_NM
+                    FROM    TB_MS_STORE A
+                    WHERE   A.STORE_CD IN ('S613664', 'S613667')
+                ) A
         </if>
         ORDER
         BY
-        <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
-            CASE WHEN tms.STORE_CD IN('S613664', 'S613667') THEN 0 ELSE 1 END,
-        </if>
-             tms.STORE_CD
+            <if test='hqOfficeCd != null and hqOfficeCd == "00000"'>
+                CASE WHEN A.STORE_CD IN('S613664', 'S613667') THEN 0 ELSE 1 END,
+            </if>
+                A.STORE_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
