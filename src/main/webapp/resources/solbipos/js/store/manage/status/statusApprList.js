@@ -3,6 +3,13 @@
  */
 var app = agrid.getApp();
 
+// 업체구분 DropBoxDataMap
+var agencyFgData = [
+    {"name": "전체", "value": "0"},
+    {"name": "자사", "value": "1"},
+    {"name": "대리점", "value": "2"}
+];
+
 /** 관리매장 승인내역 controller */
 app.controller('statusApprListCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
@@ -14,6 +21,7 @@ app.controller('statusApprListCtrl', ['$scope', '$http', function ($scope, $http
 
     // comboBox 초기화
     $scope._setComboData("listScaleBox", gvListScaleBoxData);
+    $scope._setComboData("agencyFg", agencyFgData); //업체구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {

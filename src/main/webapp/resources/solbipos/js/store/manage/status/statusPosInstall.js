@@ -21,6 +21,13 @@ var instFgData = [
     {"name":"재설치","value":"2"}
 ];
 
+// 업체구분 DropBoxDataMap
+var agencyFgData = [
+    {"name": "전체", "value": "0"},
+    {"name": "자사", "value": "1"},
+    {"name": "대리점", "value": "2"}
+];
+
 /**
  *  POS설치현황 그리드 생성
  */
@@ -34,6 +41,7 @@ app.controller('statusPosInstallCtrl', ['$scope', '$http', '$timeout', function 
 
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("instFg", instFgData); //현재상태
+    $scope._setComboData("agencyFg", agencyFgData); //업체구분
 
     // 검색조건에 조회일자
     $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);

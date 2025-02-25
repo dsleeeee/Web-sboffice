@@ -24,7 +24,7 @@ var useYnFgData = [
 var agencyFgData = [
     {"name": "전체", "value": "0"},
     {"name": "자사", "value": "1"},
-    {"name":"대리점","value":"2"}
+    {"name": "대리점", "value": "2"}
 ];
 
 /**
@@ -62,9 +62,10 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
 
                 // 업체명 클릭시 상세정보 조회
                 if ( col.binding === "agencyNm") {
-                    $scope.setSelectedStore(s.rows[ht.row].dataItem);
+                    var selectedRow = s.rows[ht.row].dataItem;
                     var storeScope = agrid.getScope('statusAgencyDetailCtrl');
-                    storeScope._broadcast('statusAgencyDetailCtrl', $scope.getSelectedStore());
+                    storeScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+                    storeScope._broadcast('statusAgencyDetailCtrl', selectedRow);
                     event.preventDefault();
                 }
             }
@@ -87,7 +88,6 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
         params.srchAgencyCd = $("#srchAgencyCd").val();
         params.srchAgencyNm = $("#srchAgencyNm").val();
 
-
         $scope._inquiryMain("/store/manage/status/agency/getStatusAgencyList.sb", params, function() {
             $scope.$apply(function() {
                 var storeScope = agrid.getScope('statusAgencyDetailCtrl');
@@ -101,14 +101,6 @@ app.controller('statusAgencyCtrl', ['$scope', '$http', function ($scope, $http) 
     };
     // <-- //검색 호출 -->
 
-    // 선택 매장
-    $scope.selectedStore;
-    $scope.setSelectedStore = function(store) {
-        $scope.selectedStore = store;
-    };
-    $scope.getSelectedStore = function(){
-        return $scope.selectedStore;
-    };
 }]);
 
 
