@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+// 업체구분 DropBoxDataMap
+var agencyFgData = [
+    {"name": "전체", "value": "0"},
+    {"name": "자사", "value": "1"},
+    {"name": "대리점", "value": "2"}
+];
+
 /**
  *  VAN사 조회 그리드 생성
  */
@@ -24,6 +31,7 @@ app.controller('statusVanCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("clsFg", clsFgData); //용도
     $scope._setComboData("sysStatFg", sysStatFgData); //상태
+    $scope._setComboData("agencyFg", agencyFgData); //업체구분
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -46,9 +54,10 @@ app.controller('statusVanCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 // 업체명 클릭시 상세정보 조회
                 if ( col.binding === "storeCnt") {
-                    $scope.setSelectedStore(s.rows[ht.row].dataItem);
+                    var selectedRow = s.rows[ht.row].dataItem;
                     var storeScope = agrid.getScope('statusVanDetailCtrl');
-                    storeScope._broadcast('statusVanDetailCtrl', $scope.getSelectedStore());
+                    storeScope._setPagingInfo('curr', 1); // 페이지번호 1로 세팅
+                    storeScope._broadcast('statusVanDetailCtrl', selectedRow);
                     event.preventDefault();
                 }
             }
@@ -82,14 +91,6 @@ app.controller('statusVanCtrl', ['$scope', '$http', function ($scope, $http) {
     };
     // <-- //검색 호출 -->
 
-    // 선택 매장
-    $scope.selectedStore;
-    $scope.setSelectedStore = function(store) {
-        $scope.selectedStore = store;
-    };
-    $scope.getSelectedStore = function(){
-        return $scope.selectedStore;
-    };
 }]);
 
 
@@ -111,7 +112,7 @@ app.controller('statusVanDetailCtrl', ['$scope', '$http', function ($scope, $htt
     // <-- 검색 호출 -->
     $scope.$on("statusVanDetailCtrl", function(event, data) {
         if( !isEmptyObject(data) ) {
-            $scope.setSelectedStoreDetail(data);
+            $scope.setSelectedStoreVanDetail(data);
         }
         $scope.searchStatusVanDetail();
         event.preventDefault();
@@ -120,9 +121,9 @@ app.controller('statusVanDetailCtrl', ['$scope', '$http', function ($scope, $htt
     // VAN사 상세 그리드 조회
     $scope.searchStatusVanDetail = function() {
         var params = {};
-        params.vanCd = $scope.selectedStoreDetail.vanCd;
-        params.clsFg = $scope.selectedStoreDetail.clsFg;
-        params.sysStatFg = $scope.selectedStoreDetail.sysStatFg;
+        params.vanCd = $scope.selectedStoreVanDetail.vanCd;
+        params.clsFg = $scope.selectedStoreVanDetail.clsFg;
+        params.sysStatFg = $scope.selectedStoreVanDetail.sysStatFg;
         params.orgnFg = orgnFg;
         params.pAgencyCd = pAgencyCd;
         if(orgnFg != null && orgnFg == 'AGENCY') {
@@ -138,11 +139,11 @@ app.controller('statusVanDetailCtrl', ['$scope', '$http', function ($scope, $htt
     // <-- //검색 호출 -->
 
     // 선택 매장
-    $scope.selectedStoreDetail;
-    $scope.setSelectedStoreDetail = function(store) {
-        $scope.selectedStoreDetail = store;
+    $scope.selectedStoreVanDetail;
+    $scope.setSelectedStoreVanDetail = function(store) {
+        $scope.selectedStoreVanDetail = store;
     };
-    $scope.getSelectedStoreDetail = function(){
-        return $scope.selectedStoreDetail;
+    $scope.getSelectedStoreVanDetail = function(){
+        return $scope.selectedStoreVanDetail;
     };
 }]);
