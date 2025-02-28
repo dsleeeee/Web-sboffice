@@ -100,7 +100,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         return kioskKeyMapMapper.getStoreModGrpList(kioskKeyMapVO);
     }
 
-    /** 키오스크 키맵그룹 저장 */
+    /** 키오스크 매장수정허용카테고리 */
     @Override
     public int saveStoreModGrp(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
 
@@ -119,6 +119,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
             // 매장에 터치키 XML 정보 업데이트
             result += kioskKeyMapMapper.saveStoreModGrp(kioskKeyMapVO);
+            kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
 
         }
 
@@ -210,11 +211,13 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
     public int saveKioskCategory(KioskKeyMapVO[] kioskKeyMapVOs, SessionInfoVO sessionInfoVO) {
         int result = 0;
         String currentDt = currentDateTimeString();
+        String pageFg = "";
 
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
             if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
                 kioskKeyMapVO.setOrgnFg("S");
+                pageFg = kioskKeyMapVO.getPageFg();
             }else{
                 kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             }
@@ -269,7 +272,7 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             }
         }
 
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE || pageFg.equals("1")) {
             // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
             KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
