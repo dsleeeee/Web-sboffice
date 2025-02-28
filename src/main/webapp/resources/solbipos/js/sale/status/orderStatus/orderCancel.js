@@ -13,6 +13,15 @@
  */
 var app = agrid.getApp();
 
+// 배달주문구분
+var cancelFgData = [
+    {"name": "전체", "value": ""},
+    {"name": "주문취소", "value": "1"},
+    {"name": "상세일부취소", "value": "2"}
+];
+
+var cancelFg;
+
 /**
  * 기간내 그리드 생성
  */
@@ -24,6 +33,9 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
     // 조회일자 셋팅
     $scope.ocStartDate = wcombo.genDateVal("#ocStartDate", gvStartDate);
     $scope.ocEndDate   = wcombo.genDateVal("#ocEndDate", gvEndDate);
+
+    // 주문구분 콤보박스 데이터 set
+    $scope._setComboData("cancelFgCombo", cancelFgData);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -46,9 +58,10 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
                 var col = ht.panel.columns[ht.col];
                 if( col.binding === "cancelCnt") {
                     var params = {};
-                    params.startDate  = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
-                    params.endDate    = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
-                    params.storeCds   = $("#orderCancelSelectStoreCd").val();
+                    params.startDate    = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
+                    params.endDate      = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
+                    params.storeCds     = $("#orderCancelSelectStoreCd").val();
+                    params.cancelFg     = cancelFg;
                     $scope._broadcast('orderCancelCtrl', params);
                 }
             }
@@ -71,9 +84,12 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
         }
 
         var params = {};
-        params.startDate  = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
-        params.endDate    = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
-        params.storeCds = $("#orderCancelSelectStoreCd").val();
+        params.startDate    = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
+        params.endDate      = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
+        params.storeCds     = $("#orderCancelSelectStoreCd").val();
+        params.cancelFg     = $scope.cancelFgCombo.selectedValue;
+
+        cancelFg            = params.cancelFg;
 
         // 주문취소 grid 초기화
         var wjGridOrderCancel = wijmo.Control.getControl("#wjGridOrderCancel");
@@ -123,10 +139,11 @@ app.controller('orderCancelSrch2Ctrl', ['$scope', '$http', function ($scope, $ht
                 var col = ht.panel.columns[ht.col];
                 if( col.binding === "cancelCnt") {
                     var params = {};
-                    params.startDate  = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
-                    params.endDate    = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
-                    params.saleDate   = selectedRow.saleDate.replaceAll("-","");
-                    params.storeCds   = $("#orderCancelSelectStoreCd").val();
+                    params.startDate    = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
+                    params.endDate      = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
+                    params.saleDate     = selectedRow.saleDate.replaceAll("-","");
+                    params.storeCds     = $("#orderCancelSelectStoreCd").val();
+                    params.cancelFg     = cancelFg;
                     $scope._broadcast('orderCancelCtrl', params);
                 }
             }
@@ -173,10 +190,11 @@ app.controller('orderCancelSrch3Ctrl', ['$scope', '$http', function ($scope, $ht
                 var col = ht.panel.columns[ht.col];
                 if( col.binding === "cancelCnt") {
                     var params = {};
-                    params.startDate  = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
-                    params.endDate    = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
-                    params.empNo      = selectedRow.empNo;
-                    params.storeCds   = $("#orderCancelSelectStoreCd").val();
+                    params.startDate    = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
+                    params.endDate      = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
+                    params.empNo        = selectedRow.empNo;
+                    params.storeCds     = $("#orderCancelSelectStoreCd").val();
+                    params.cancelFg     = cancelFg;
                     $scope._broadcast('orderCancelCtrl', params);
                 }
             }

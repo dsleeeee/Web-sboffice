@@ -30,6 +30,8 @@ public class OrderStatusVO extends PageVO {
     private String storeCds;
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+    /** 취소구분 */
+    private String cancelFg;
 
     /**
      * @return the hqOfficeCd
@@ -141,5 +143,13 @@ public class OrderStatusVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getCancelFg() {
+        return cancelFg;
+    }
+
+    public void setCancelFg(String cancelFg) {
+        this.cancelFg = cancelFg;
     }
 }

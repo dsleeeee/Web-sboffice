@@ -31,11 +31,24 @@
             <tr>
                 <%-- 조회 일자 --%>
                 <th><s:message code="orderStatus.srchDate" /></th>
-                <td colspan="3">
+                <td>
                     <div class="sb-select">
                         <span class="txtIn"><input id="ocStartDate" ng-model="ocStartDate" class="w110px"></span>
                         <span class="rg">~</span>
                         <span class="txtIn"><input id="ocEndDate" ng-model="ocEndDate" class="w110px"></span>
+                    </div>
+                </td>
+                <th><s:message code="orderStatus.fg" /></th>
+                <td>
+                    <div class="sb-select w50">
+                        <wj-combo-box
+                                id="cancelFg"
+                                items-source="_getComboData('cancelFgCombo')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="cancelFgCombo">
+                        </wj-combo-box>
                     </div>
                 </td>
             </tr>
@@ -163,8 +176,8 @@
                 <wj-flex-grid-column header="<s:message code="orderStatus.dc"/>" binding="dcAmt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderStatus.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderStatus.cashier"/>" binding="empNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderStatus.moveTbl"/>" binding="moveTblNo" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderStatus.moveTbl"/>" binding="moveTblCd" width="70" align="center" is-read-only="true"  visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderStatus.moveTbl"/>" binding="moveTblNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderStatus.moveTbl"/>" binding="moveTblCd" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="saleYn" width="70" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="webReg" width="70" align="center" is-read-only="true"  visible="false"></wj-flex-grid-column>
 
@@ -200,7 +213,7 @@
   var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderCancel.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderCancel.js?ver=20250220.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
