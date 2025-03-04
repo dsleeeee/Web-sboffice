@@ -126,21 +126,21 @@
                         <button type="button" class="btn_skyblue ml5" id="btnCancelVan" style="margin-left: 5px;" ng-click="cancelVanDel()"><s:message code="cmm.selectCancel"/></button>
                     </td>
                 </tr>
-                <c:if test="${orgnFg == 'MASTER'}">
-                    <tr>
-                        <%-- 관리업체 --%>
-                        <th>
-                            <s:message code="statusStore.srchAgencyNm" />
-                        </th>
-                        <td>
-                            <input type="text" id="agencyNm" value="선택" class="sb-input w75" ng-readonly="true" ng-click="searchAgency()">
-                            <input type="hidden" id="agencyCd" ng-hide="true">
+                <tr>
+                    <%-- 관리업체 --%>
+                    <th>
+                        <s:message code="statusStore.srchAgencyNm" />
+                    </th>
+                    <td>
+                        <input type="text" id="agencyNm" value="선택" class="sb-input w75" ng-readonly="true" ng-click="searchAgency()">
+                        <input type="hidden" id="agencyCd" ng-hide="true">
+                        <c:if test="${orgnFg == 'MASTER'}">
                             <button type="button" class="btn_skyblue ml5" id="btnCancelAgency" style="margin-left: 5px;" ng-click="cancelAgencyDel()"><s:message code="cmm.selectCancel"/></button>
-                        </td>
-                        <td></td>
-                        <td></td>
-                     </tr>
-                </c:if>
+                        </c:if>
+                    </td>
+                    <td></td>
+                    <td></td>
+                 </tr>
             </tbody>
         </table>
 
