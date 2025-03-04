@@ -3258,7 +3258,16 @@
                 MOD_ID
                 FROM TB_MS_KIOSK_M_CLS tmkmc
                 WHERE STORE_CD = #{storeCd}
-                AND TMKMC.POS_NO = (SELECT MIN(POS_NO) FROM TB_MS_POS_ENVST tmpe WHERE STORE_CD = #{storeCd} AND ENVST_CD = '4019' AND ENVST_VAL = '6')
+                <choose>
+                    <when test='hqOfficeCd != null and (hqOfficeCd != "A0001" and hqOfficeCd != "DS021" and hqOfficeCd != "DS034" and hqOfficeCd != "DS062")'>
+                        AND POS_NO = #{posNo}
+                    </when>
+                    <otherwise>
+                        <![CDATA[
+                        AND POS_NO = (SELECT MIN(POS_NO) FROM TB_MS_POS_ENVST tmpe WHERE STORE_CD = #{storeCd} AND ENVST_CD = '4019' AND ENVST_VAL = '6' AND POS_NO <> '00')
+                        ]]>
+                    </otherwise>
+                </choose>
                 AND TU_CLS_TYPE = #{tuClsType}
                 AND TU_CLS_CD = #{tuClsCd}
                 ORDER BY INDEX_NO

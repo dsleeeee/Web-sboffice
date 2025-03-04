@@ -34,7 +34,7 @@
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.orderDtlFg"/>"        binding="orderDtlFg" data-map="orderFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.dlvrPackFg"/>"        binding="dlvrPackFg" data-map="dlvrOrderFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.prodCd"/>"            binding="prodCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="orderStatusDtl.prodNm"/>"            binding="prodNm" width="70" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="orderStatusDtl.prodNm"/>"            binding="prodNm" width="70" align="left" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.saleUprc"/>"          binding="saleUprc" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.saleQty"/>"           binding="saleQty" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="orderStatusDtl.saleAmt"/>"           binding="saleAmt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -53,5 +53,5 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatusDtl.js?ver=20230511.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatusDtl.js?ver=20250304.01" charset="utf-8"></script>
 

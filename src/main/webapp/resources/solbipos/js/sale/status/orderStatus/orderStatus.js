@@ -60,7 +60,8 @@ var orderDtlFgData2 = [
 var dlvrOrderFgData = [
     {"name": "일반", "value": "1"},
     {"name": "배달", "value": "2"},
-    {"name": "포장", "value": "3"}
+    {"name": "포장", "value": "3"},
+    {"name": "포장", "value": "4"}
 ];
 var app = agrid.getApp();
 
