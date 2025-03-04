@@ -85,6 +85,11 @@ app.controller('statusPosInstallCtrl', ['$scope', '$http', '$timeout', function 
         if(orgnFg != null && orgnFg == 'AGENCY') {
             params.agencyCd = orgnCd;
         }
+        params.hqOfficeCd = $scope.hqOfficeCd;
+        params.hqOfficeNm = $scope.hqOfficeNm;
+        params.storeCd = $scope.storeCd;
+        params.storeNm = $scope.storeNm;
+        params.instFg = $scope.instFg;
         params.listScale = $scope.listScalePosInstall;
 
         $scope._inquiryMain("/store/manage/status/posInstl/getStatusPosInstallList.sb", params, function() {}, false);
@@ -93,14 +98,24 @@ app.controller('statusPosInstallCtrl', ['$scope', '$http', '$timeout', function 
 
   // 엑셀 다운로드
   $scope.excelDownloadStatusPosinstall = function () {
-      $scope._popConfirm(messages["statusStore.totalExceDownload"], function() {
+      var params = {};
+      // 조회일자 '전체기간' 선택에 따른 params
+      if(!$scope.isChecked){
+          params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+          params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+      }
+      params.orgnFg = orgnFg;
+      params.pAgencyCd = pAgencyCd;
+      if(orgnFg != null && orgnFg == 'AGENCY') {
+          params.agencyCd = orgnCd;
+      }
+      params.hqOfficeCd = $scope.hqOfficeCd;
+      params.hqOfficeNm = $scope.hqOfficeNm;
+      params.storeCd = $scope.storeCd;
+      params.storeNm = $scope.storeNm;
+      params.instFg = $scope.instFg;
 
-          var params = {};
-          // 조회일자 '전체기간' 선택에 따른 params
-          if(!$scope.isChecked){
-              params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-              params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-          }
+      $scope._popConfirm(messages["statusStore.totalExceDownload"], function() {
           $scope._broadcast('posInstallTotalExcelCtrl', params);
       });
   };
@@ -129,10 +144,8 @@ app.controller('posInstallTotalExcelCtrl', ['$scope', '$http', '$timeout', funct
     // 상품매출순위 리스트 조회
     $scope.searchExcelList = function (data) {
         // 파라미터
-        var params       = {};
-        // 조회일자 '전체기간' 선택에 따른 params
-        params.startDate = data.startDate;
-        params.endDate = data.endDate;
+        var params = data;
+
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/store/manage/status/posInstl/getStatusPosInstallExcelList.sb", params, function() {
             if ($scope.excelFlex.rows.length <= 0) {

@@ -92,6 +92,14 @@ app.controller('statusStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
         var params = {};
         params.agencyCd = $("#agencyCd").val();
         params.agencyNm = $("#agencyNm").val();
+        params.hqOfficeCd = $scope.hqOfficeCd;
+        params.hqOfficeNm = $scope.hqOfficeNm;
+        params.storeCd = $scope.storeCd;
+        params.storeNm = $scope.storeNm;
+        params.clsFg = $scope.clsFg;
+        params.sysStatFg = $scope.sysStatFg;
+        params.vanCd = $scope.vanCd;
+        params.storeFg = $scope.storeFg;
         params.listScale = $scope.listScaleStore;
 
         $scope._inquiryMain("/store/manage/status/store/getStatusStoreList.sb", params, function() {}, false);
@@ -175,8 +183,20 @@ app.controller('statusStoreCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 엑셀 다운로드
   $scope.excelDownloadStatusStore = function () {
+      var params = {};
+      params.agencyCd = $("#agencyCd").val();
+      params.agencyNm = $("#agencyNm").val();
+      params.hqOfficeCd = $scope.hqOfficeCd;
+      params.hqOfficeNm = $scope.hqOfficeNm;
+      params.storeCd = $scope.storeCd;
+      params.storeNm = $scope.storeNm;
+      params.clsFg = $scope.clsFg;
+      params.sysStatFg = $scope.sysStatFg;
+      params.vanCd = $scope.vanCd;
+      params.storeFg = $scope.storeFg;
+
       $scope._popConfirm(messages["statusStore.totalExceDownload"], function() {
-          $scope._broadcast('storeTotalExcelCtrl');
+          $scope._broadcast('storeTotalExcelCtrl', params);
       });
   };
 
@@ -201,9 +221,7 @@ app.controller('storeTotalExcelCtrl', ['$scope', '$http', '$timeout', function (
     // 상품매출순위 리스트 조회
     $scope.searchExcelList = function (data) {
         // 파라미터
-        var params       = {};
-        params.agencyCd = $("#agencyCd").val();
-        params.agencyNm = $("#agencyNm").val();
+        var params = data;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/store/manage/status/store/getStatusStoreExcelList.sb", params, function() {

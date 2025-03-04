@@ -291,6 +291,12 @@
         AGENCY_FG,
         COUNT(STORE_CD) AS STORE_CNT,
         SUM(POS_CNT) AS TOT_POS_CNT
+        <if test='clsFg != null and clsFg != ""'>
+            , CLS_FG
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            , SYS_STAT_FG
+        </if>
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM (
                 SELECT
@@ -346,6 +352,12 @@
                 </if>
             )
         GROUP BY AGENCY_CD, AGENCY_NM, AGENCY_FG
+        <if test='clsFg != null and clsFg != ""'>
+            , CLS_FG
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            , SYS_STAT_FG
+        </if>
         ORDER BY AGENCY_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -443,6 +455,12 @@
         VAN_CD,
         VAN_NM,
         COUNT(STORE_CD) AS STORE_CNT
+        <if test='clsFg != null and clsFg != ""'>
+            , CLS_FG
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            , SYS_STAT_FG
+        </if>
         FROM
         (
             SELECT
@@ -486,6 +504,12 @@
             </choose>
         )
         GROUP BY VAN_CD, VAN_NM
+        <if test='clsFg != null and clsFg != ""'>
+            , CLS_FG
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            , SYS_STAT_FG
+        </if>
         ORDER BY VAN_CD
     </select>
 
