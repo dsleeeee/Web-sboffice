@@ -118,7 +118,7 @@
     var multiStoreFg = '${multiStoreFg}';
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderStatus/mobileOrderStatus.js?ver=20230905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/sale/status/orderStatus/mobileOrderStatus.js?ver=20250304.01" charset="utf-8"></script>
 
 <%-- 주문현황 상세 팝업 --%>
 <c:import url="/WEB-INF/view/mobile/sale/status/orderStatus/mobileOrderStatusDtl.jsp">

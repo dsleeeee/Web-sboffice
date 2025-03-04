@@ -49,12 +49,6 @@
         {"name": "취소", "value": "2"},
         {"name": "결제", "value": "3"}
     ];
-    // 배달주문구분
-    var dlvrOrderFgData = [
-        {"name": "일반", "value": "1"},
-        {"name": "배달", "value": "2"},
-        {"name": "포장", "value": "3"}
-    ];
     /**
      * get application
      */

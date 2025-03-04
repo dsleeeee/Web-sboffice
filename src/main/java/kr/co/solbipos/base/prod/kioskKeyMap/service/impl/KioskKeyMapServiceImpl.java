@@ -212,12 +212,14 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         int result = 0;
         String currentDt = currentDateTimeString();
         String pageFg = "";
+        String storeCd = "";
 
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
             if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
                 kioskKeyMapVO.setOrgnFg("S");
                 pageFg = kioskKeyMapVO.getPageFg();
+                storeCd = kioskKeyMapVO.getStoreCd();
             }else{
                 kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             }
@@ -276,7 +278,11 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
             KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            if(storeCd != "" && storeCd != null){
+                kioskKeyMapVO.setStoreCd(storeCd);
+            }else {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
             kioskKeyMapVO.setTuClsType("");
             kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
             kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
@@ -312,12 +318,14 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
         int result = 0;
         String currentDt = currentDateTimeString();
         String pageFg = "";
+        String storeCd = "";
 
         for ( KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
             if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
                 kioskKeyMapVO.setOrgnFg("S");
                 pageFg = kioskKeyMapVO.getPageFg();
+                storeCd = kioskKeyMapVO.getStoreCd();
             }else{
                 kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             }
@@ -346,7 +354,11 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
             KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            if(storeCd != "" && storeCd != null){
+                kioskKeyMapVO.setStoreCd(storeCd);
+            }else {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
             kioskKeyMapVO.setTuClsType("");
             kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
             kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
@@ -397,12 +409,14 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
 
         int procCnt = 0;
         String pageFg = "";
+        String storeCd = "";
 
         for(KioskKeyMapVO kioskKeyMapVO : kioskKeyMapVOs) {
 
             if(kioskKeyMapVO.getPageFg() != null && kioskKeyMapVO.getPageFg().equals("1")) {
                 kioskKeyMapVO.setOrgnFg("S");
                 pageFg = kioskKeyMapVO.getPageFg();
+                storeCd = kioskKeyMapVO.getStoreCd();
             }else{
                 kioskKeyMapVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             }
@@ -435,7 +449,11 @@ public class KioskKeyMapServiceImpl implements KioskKeyMapService {
             // 키오스크 카테고리 TX 데이터 변경처리 PKG 호출(맘스터치)
             KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
             kioskKeyMapVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-            kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            if(storeCd != "" && storeCd != null){
+                kioskKeyMapVO.setStoreCd(storeCd);
+            }else {
+                kioskKeyMapVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
             kioskKeyMapVO.setTuClsType("");
             kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
             kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
