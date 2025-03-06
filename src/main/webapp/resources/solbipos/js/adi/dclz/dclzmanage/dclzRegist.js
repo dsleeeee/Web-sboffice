@@ -127,10 +127,13 @@ app.controller('dclzRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.commuteInDtMmCombo.selectedValue = (result.commuteInDt).substr(10, 2);
             $scope.commuteInDtSsCombo.selectedValue = (result.commuteInDt).substr(12, 2);
 
-            commuteOutDt.value = stringToDate((result.commuteOutDt).substr(0, 8)); // 퇴근일시
-            $scope.commuteOutDtHhCombo.selectedValue = (result.commuteOutDt).substr(8, 2);
-            $scope.commuteOutDtMmCombo.selectedValue = (result.commuteOutDt).substr(10, 2);
-            $scope.commuteOutDtSsCombo.selectedValue = (result.commuteOutDt).substr(12, 2);
+            if(result.commuteOutDt == "" || result.commuteOutDt == null) {
+            } else {
+                commuteOutDt.value = stringToDate((result.commuteOutDt).substr(0, 8)); // 퇴근일시
+                $scope.commuteOutDtHhCombo.selectedValue = (result.commuteOutDt).substr(8, 2);
+                $scope.commuteOutDtMmCombo.selectedValue = (result.commuteOutDt).substr(10, 2);
+                $scope.commuteOutDtSsCombo.selectedValue = (result.commuteOutDt).substr(12, 2);
+            }
 
             $scope.remark = result.remark; // 비고
 

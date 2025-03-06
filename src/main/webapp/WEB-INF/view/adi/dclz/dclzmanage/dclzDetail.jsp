@@ -77,4 +77,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzDetail.js?ver=20210216.05" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzDetail.js?ver=20250306.01" charset="utf-8"></script>

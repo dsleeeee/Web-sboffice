@@ -188,4 +188,4 @@
     var empList = ${empList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzRegist.js?ver=20210210.11" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/dclz/dclzmanage/dclzRegist.js?ver=20250306.01" charset="utf-8"></script>
