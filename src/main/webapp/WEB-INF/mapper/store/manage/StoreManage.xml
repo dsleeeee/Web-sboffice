@@ -5582,6 +5582,652 @@
                 )
     </insert>
 
+    <!-- 테이블그룹 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 테이블그룹을 복사한다
+    -->
+    <insert id="copyTableGroupCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableGroupCopy */
+        MERGE INTO TB_MS_TABLE_GROUP A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       TBL_GRP_CD
+                ,       TBL_GRP_NM
+                ,       TBL_GRP_FG
+                ,       BG_IMG_NM
+                ,       DISP_SEQ
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_TABLE_GROUP
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.TBL_GRP_CD    =  A.TBL_GRP_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.TBL_GRP_CD
+                ,     A.TBL_GRP_NM
+                ,     A.TBL_GRP_FG
+                ,     A.BG_IMG_NM
+                ,     A.DISP_SEQ
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.TBL_GRP_CD
+                ,     B.TBL_GRP_NM
+                ,     B.TBL_GRP_FG
+                ,     B.BG_IMG_NM
+                ,     B.DISP_SEQ
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                )
+    </insert>
+
+    <!-- 테이블 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 테이블을 복사한다
+    -->
+    <insert id="copyTableCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableCopy */
+        MERGE INTO TB_MS_TABLE A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       TBL_CD
+                ,       TBL_NM
+                ,       TBL_GRP_CD
+                ,       TBL_SEAT_CNT
+                ,       X
+                ,       Y
+                ,       WIDTH
+                ,       HEIGHT
+                ,       TBL_TYPE_FG
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       IMG_NM
+                FROM    TB_MS_TABLE
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.TBL_CD        =  A.TBL_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.TBL_CD
+                ,     A.TBL_NM
+                ,     A.TBL_GRP_CD
+                ,     A.TBL_SEAT_CNT
+                ,     A.X
+                ,     A.Y
+                ,     A.WIDTH
+                ,     A.HEIGHT
+                ,     A.TBL_TYPE_FG
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                ,     A.IMG_NM
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.TBL_CD
+                ,     B.TBL_NM
+                ,     B.TBL_GRP_CD
+                ,     B.TBL_SEAT_CNT
+                ,     B.X
+                ,     B.Y
+                ,     B.WIDTH
+                ,     B.HEIGHT
+                ,     B.TBL_TYPE_FG
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                ,     B.IMG_NM
+                )
+    </insert>
+
+    <!-- 테이블속성 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 테이블속성을 복사한다
+    -->
+    <insert id="copyTableAttrCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableAttrCopy */
+        MERGE INTO TB_MS_TABLE_ATTR A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       TBL_TYPE_FG
+                ,       ATTR_CD
+                ,       ATTR_NM
+                ,       X
+                ,       Y
+                ,       WIDTH
+                ,       HEIGHT
+                ,       TEXTALIGN_FG
+                ,       IMG_NM
+                ,       FONT_NM
+                ,       FONT_SIZE
+                ,       FONT_STYLE_FG
+                ,       FONT_COLOR
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       VIEW_YN
+                FROM    TB_MS_TABLE_ATTR
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.TBL_TYPE_FG   =  A.TBL_TYPE_FG
+                AND B.ATTR_CD       =  A.ATTR_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.TBL_TYPE_FG
+                ,     A.ATTR_CD
+                ,     A.ATTR_NM
+                ,     A.X
+                ,     A.Y
+                ,     A.WIDTH
+                ,     A.HEIGHT
+                ,     A.TEXTALIGN_FG
+                ,     A.IMG_NM
+                ,     A.FONT_NM
+                ,     A.FONT_SIZE
+                ,     A.FONT_STYLE_FG
+                ,     A.FONT_COLOR
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                ,     A.VIEW_YN
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.TBL_TYPE_FG
+                ,     B.ATTR_CD
+                ,     B.ATTR_NM
+                ,     B.X
+                ,     B.Y
+                ,     B.WIDTH
+                ,     B.HEIGHT
+                ,     B.TEXTALIGN_FG
+                ,     B.IMG_NM
+                ,     B.FONT_NM
+                ,     B.FONT_SIZE
+                ,     B.FONT_STYLE_FG
+                ,     B.FONT_COLOR
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                ,     B.VIEW_YN
+                )
+    </insert>
+
+    <!-- 테이블속성New 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 테이블속성New을 복사한다
+    -->
+    <insert id="copyTableAttrNewCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableAttrNewCopy */
+        MERGE INTO TB_MS_TABLE_ATTR_NEW A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       TBL_CD
+                ,       ATTR_CD
+                ,       ATTR_NM
+                ,       X
+                ,       Y
+                ,       WIDTH
+                ,       HEIGHT
+                ,       TEXTALIGN_FG
+                ,       IMG_NM
+                ,       FONT_NM
+                ,       FONT_SIZE
+                ,       FONT_STYLE_FG
+                ,       FONT_COLOR
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       VIEW_YN
+                FROM    TB_MS_TABLE_ATTR_NEW
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.TBL_CD   =  A.TBL_CD
+                AND B.ATTR_CD       =  A.ATTR_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.TBL_CD
+                ,     A.ATTR_CD
+                ,     A.ATTR_NM
+                ,     A.X
+                ,     A.Y
+                ,     A.WIDTH
+                ,     A.HEIGHT
+                ,     A.TEXTALIGN_FG
+                ,     A.IMG_NM
+                ,     A.FONT_NM
+                ,     A.FONT_SIZE
+                ,     A.FONT_STYLE_FG
+                ,     A.FONT_COLOR
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                ,     A.VIEW_YN
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.TBL_CD
+                ,     B.ATTR_CD
+                ,     B.ATTR_NM
+                ,     B.X
+                ,     B.Y
+                ,     B.WIDTH
+                ,     B.HEIGHT
+                ,     B.TEXTALIGN_FG
+                ,     B.IMG_NM
+                ,     B.FONT_NM
+                ,     B.FONT_SIZE
+                ,     B.FONT_STYLE_FG
+                ,     B.FONT_COLOR
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                ,     B.VIEW_YN
+                )
+    </insert>
+
+    <!-- 외식용-테이블그룹정보 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 외식용-테이블그룹정보을 복사한다
+    -->
+    <insert id="copyTableTGroupCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableTGroupCopy */
+        MERGE INTO TB_MS_TBGRP_T A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       TG_CD
+                ,       TG_NM
+                ,       TG_FG
+                ,       TG_BGIMAGE
+                ,       TG_SORT
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_TBGRP_T
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.TG_CD         =  A.TG_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.TG_CD
+                ,     A.TG_NM
+                ,     A.TG_FG
+                ,     A.TG_BGIMAGE
+                ,     A.TG_SORT
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.TG_CD
+                ,     B.TG_NM
+                ,     B.TG_FG
+                ,     B.TG_BGIMAGE
+                ,     B.TG_SORT
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                )
+    </insert>
+
+    <!-- 외식용-테이블 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 외식용-테이블을 복사한다
+    -->
+    <insert id="copyTableTCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableTCopy */
+        MERGE INTO TB_MS_TABLE_T A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       TABLE_CD
+                ,       TABLE_NM
+                ,       TG_CD
+                ,       GROUP_CD
+                ,       SEAT_NUM
+                ,       X
+                ,       Y
+                ,       WIDTH
+                ,       HEIGHT
+                ,       SHAPE_FG
+                ,       TABLE_FG
+                ,       STATUS_FG
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_TABLE_T
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.TABLE_CD      =  A.TABLE_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.TABLE_CD
+                ,     A.TABLE_NM
+                ,     A.TG_CD
+                ,     A.GROUP_CD
+                ,     A.SEAT_NUM
+                ,     A.X
+                ,     A.Y
+                ,     A.WIDTH
+                ,     A.HEIGHT
+                ,     A.SHAPE_FG
+                ,     A.TABLE_FG
+                ,     A.STATUS_FG
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.TABLE_CD
+                ,     B.TABLE_NM
+                ,     B.TG_CD
+                ,     B.GROUP_CD
+                ,     B.SEAT_NUM
+                ,     B.X
+                ,     B.Y
+                ,     B.WIDTH
+                ,     B.HEIGHT
+                ,     B.SHAPE_FG
+                ,     B.TABLE_FG
+                ,     B.STATUS_FG
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                )
+    </insert>
+
+    <!-- 외식용-테이블상태코드관리 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 외식용-테이블상태코드관리을 복사한다
+    -->
+    <insert id="copyTableTStatusCodeCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableTStatusCodeCopy */
+        MERGE INTO TB_MS_TBLST_T A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       TABLE_CD
+                ,       COM_CD
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_TBLST_T
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.TABLE_CD      =  A.TABLE_CD
+                AND B.COM_CD        =  A.COM_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.TABLE_CD
+                ,     A.COM_CD
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.TABLE_CD
+                ,     B.COM_CD
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                )
+    </insert>
+
+    <!-- 외식용-테이블정보코드 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 외식용-테이블정보코드을 복사한다
+    -->
+    <insert id="copyTableTNmcodeCodeCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableTNmcodeCodeCopy */
+        MERGE INTO TB_MS_STORE_NMCODE A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       NMCODE_GRP_CD
+                ,       NMCODE_CD
+                ,       PARENT_CD
+                ,       NMCODE_NM
+                ,       NMCODE_ITEM_1
+                ,       NMCODE_ITEM_2
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_MS_STORE_NMCODE
+                WHERE   STORE_CD = #{copyStoreCd}
+                AND     NMCODE_GRP_CD = '210'
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.NMCODE_GRP_CD =  A.NMCODE_GRP_CD
+                AND B.NMCODE_CD     =  A.NMCODE_CD
+                AND B.PARENT_CD     =  A.PARENT_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.NMCODE_GRP_CD
+                ,     A.NMCODE_CD
+                ,     A.PARENT_CD
+                ,     A.NMCODE_NM
+                ,     A.NMCODE_ITEM_1
+                ,     A.NMCODE_ITEM_2
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.NMCODE_GRP_CD
+                ,     B.NMCODE_CD
+                ,     B.PARENT_CD
+                ,     B.NMCODE_NM
+                ,     B.NMCODE_ITEM_1
+                ,     B.NMCODE_ITEM_2
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                )
+    </insert>
+
+    <!-- 외식용-테이블속성관리 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 외식용-테이블속성관리을 복사한다
+    -->
+    <insert id="copyTableTAttrCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableTAttrCopy */
+        MERGE INTO TB_MS_TBLPT_T A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       TABLE_FG
+                ,       PROPERTY_CD
+                ,       PROPERTY_NM
+                ,       X
+                ,       Y
+                ,       WIDTH
+                ,       HEIGHT
+                ,       TEXTALIGN_FG
+                ,       IMAGE_NM
+                ,       FONT
+                ,       FONT_SIZE
+                ,       FONT_STYLE_FG
+                ,       FONT_COLOR
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                ,       FLEX_VIEW_YN
+                FROM    TB_MS_TBLPT_T
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.TABLE_FG      =  A.TABLE_FG
+                AND B.PROPERTY_CD   =  A.PROPERTY_CD
+            )
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.TABLE_FG
+                ,     A.PROPERTY_CD
+                ,     A.PROPERTY_NM
+                ,     A.X
+                ,     A.Y
+                ,     A.WIDTH
+                ,     A.HEIGHT
+                ,     A.TEXTALIGN_FG
+                ,     A.IMAGE_NM
+                ,     A.FONT
+                ,     A.FONT_SIZE
+                ,     A.FONT_STYLE_FG
+                ,     A.FONT_COLOR
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                ,     A.FLEX_VIEW_YN
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.TABLE_FG
+                ,     B.PROPERTY_CD
+                ,     B.PROPERTY_NM
+                ,     B.X
+                ,     B.Y
+                ,     B.WIDTH
+                ,     B.HEIGHT
+                ,     B.TEXTALIGN_FG
+                ,     B.IMAGE_NM
+                ,     B.FONT
+                ,     B.FONT_SIZE
+                ,     B.FONT_STYLE_FG
+                ,     B.FONT_COLOR
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
+                ,     B.FLEX_VIEW_YN
+                )
+    </insert>
+
     <!-- 공통코드 복사   -->
     <!--
         TABLE    : TB_MS_NMCODE

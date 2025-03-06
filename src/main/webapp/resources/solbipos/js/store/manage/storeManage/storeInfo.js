@@ -480,6 +480,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#prtFormChk").prop("checked", false);
       $("#promotionChk").prop("checked", false);
       $("#dlvrProdChk").prop("checked", false);
+      $("#menuAuthChk").prop("checked", false);
+      $("#tableChk").prop("checked", false);
 
       // 아트박스(운영H0345,H0094)(개발DS012)
       if($scope.store.hqOfficeCd === "H0345" || $scope.store.hqOfficeCd === "H0094" || $scope.store.hqOfficeCd === "DS012") {
@@ -1256,6 +1258,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if ($("#dlvrProdChk").is(":checked") === true) {
         $("#dlvrProdChk").prop("checked", false);
       }
+      if ($("#menuAuthChk").is(":checked") === true) {
+        $("#menuAuthChk").prop("checked", false);
+      }
+      if ($("#tableChk").is(":checked") === true) {
+        $("#tableChk").prop("checked", false);
+      }
       $("#productChk").attr("disabled", true);
       $("#salePriceChk").attr("disabled", true);
       $("#supplyPriceChk").attr("disabled", true);
@@ -1273,6 +1281,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#touchKeyChk").attr("disabled", false);
         $("#promotionChk").attr("disabled", false);
         $("#dlvrProdChk").attr("disabled", false);
+        $("#menuAuthChk").attr("disabled", false);
+        $("#tableChk").attr("disabled", false);
 
       // 매장환경복사의 매장을 선택 후 신규등록할 매장을 수정하면
       } else {
@@ -1299,6 +1309,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             if ($("#dlvrProdChk").is(":checked") === true) {
                 $("#dlvrProdChk").prop("checked", false);
             }
+            if ($("#menuAuthChk").is(":checked") === true) {
+              $("#menuAuthChk").prop("checked", false);
+            }
+            if ($("#tableChk").is(":checked") === true) {
+              $("#tableChk").prop("checked", false);
+            }
             $("#productChk").attr("disabled", true);
             $("#salePriceChk").attr("disabled", true);
             $("#supplyPriceChk").attr("disabled", true);
@@ -1315,6 +1331,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#touchKeyChk").attr("disabled", false);
             $("#promotionChk").attr("disabled", false);
             $("#dlvrProdChk").attr("disabled", false);
+            $("#menuAuthChk").attr("disabled", false);
+            $("#tableChk").attr("disabled", false);
 
           // 매장환경복사 본사와 다른 본사면
           } else if($scope.store.hqOfficeCd !== $scope.store.copyHqOfficeCd) {
@@ -1338,6 +1356,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             }
             if ($("#dlvrProdChk").is(":checked") === true) {
               $("#dlvrProdChk").prop("checked", false);
+            }
+            if ($("#menuAuthChk").is(":checked") === true) {
+              $("#menuAuthChk").prop("checked", false);
+            }
+            if ($("#tableChk").is(":checked") === true) {
+              $("#tableChk").prop("checked", false);
             }
             $("#productChk").attr("disabled", true);
             $("#salePriceChk").attr("disabled", true);
@@ -2123,6 +2147,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("input:checkbox[id='touchKeyChk']").prop("checked", false);
         $("input:checkbox[id='promotionChk']").prop("checked", false);
         $("input:checkbox[id='dlvrProdChk']").prop("checked", false);
+        $("input:checkbox[id='menuAuthChk']").prop("checked", false);
+        $("input:checkbox[id='tableChk']").prop("checked", false);
       }
 
     } else {
