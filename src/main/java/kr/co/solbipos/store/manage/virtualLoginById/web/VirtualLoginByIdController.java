@@ -38,7 +38,7 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
  * @ ----------  ---------   -------------------------------
  * @ 2025.02.06  김유승      최초생성
  *
- * @author 솔비포스 WEB개발팀 김유승
+ * @author 링크 WEB개발팀 김유승
  * @since 2025.02.06
  * @version 1.0
  * @see
