@@ -245,6 +245,33 @@ public interface StoreManageMapper {
     /** 배달상품명칭멀티매핑 복사 TODO */
     int copyDlvrProdMultiCopy(StoreManageVO storeManageVO);
 
+    /** 테이블그룹 복사 */
+    int copyTableGroupCopy(StoreManageVO storeManageVO);
+
+    /** 테이블 복사 */
+    int copyTableCopy(StoreManageVO storeManageVO);
+
+    /** 테이블속성 복사 */
+    int copyTableAttrCopy(StoreManageVO storeManageVO);
+
+    /** 테이블속성New 복사 */
+    int copyTableAttrNewCopy(StoreManageVO storeManageVO);
+
+    /** 외식용-테이블그룹정보 복사 */
+    int copyTableTGroupCopy(StoreManageVO storeManageVO);
+
+    /** 외식용-테이블 복사 */
+    int copyTableTCopy(StoreManageVO storeManageVO);
+
+    /** 외식용-테이블상태코드관리 복사 */
+    int copyTableTStatusCodeCopy(StoreManageVO storeManageVO);
+
+    /** 외식용-테이블정보코드 복사 */
+    int copyTableTNmcodeCodeCopy(StoreManageVO storeManageVO);
+
+    /** 외식용-테이블속성관리 복사 */
+    int copyTableTAttrCopy(StoreManageVO storeManageVO);
+
     /** 매장환경 정보 조회 */
     List<DefaultMap<String>> getEnvGroupList(StoreEnvVO storeEnvVO);
 

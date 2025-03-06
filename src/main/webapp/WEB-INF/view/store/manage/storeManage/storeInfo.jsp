@@ -676,6 +676,12 @@
                   <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="dlvrProdChk" value="dlvrProd"/><%-- 배달상품명칭매핑 --%>
                     <label for="dlvrProdChk" ><s:message code="storeManage.dlvrProd" /></label>
                   </span>
+                  <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="menuAuthChk" value="menuAuth"/><%-- 메뉴권한 --%>
+                    <label for="menuAuthChk" ><s:message code="storeManage.menuAuth" /></label>
+                  </span>
+                  <span class="chk mr10 pdb5 txtIn"><input type="checkbox" name="copyChk" id="tableChk" value="table"/><%-- 테이블 --%>
+                    <label for="menuAuthChk" ><s:message code="storeManage.table" /></label>
+                  </span>
                   </div>
                 </td>
               </tr>
@@ -700,7 +706,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20241223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20250306.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

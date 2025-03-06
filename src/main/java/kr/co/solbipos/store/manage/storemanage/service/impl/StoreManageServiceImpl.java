@@ -689,8 +689,44 @@ public class StoreManageServiceImpl implements StoreManageService{
                         // 배달상품명칭멀티매핑
                         procCnt += mapper.copyDlvrProdMultiCopy(storeManageVO);
                     }
+
+                    // 메뉴권한 복사
+                    if( "menuAuth".equals(copyEnv[i]) ) {
+                        StoreMenuVO storeMenuVO = new StoreMenuVO();
+                        storeMenuVO.setCopyStoreCd(storeMenuVO.getCopyStoreCd());
+                        storeMenuVO.setStoreCd(storeMenuVO.getStoreCd());
+
+                        // 1. 메뉴 권한 복사
+                        int authGrpCopy = mapper.copyAuth(storeMenuVO);
+
+                        // 3. 메뉴 권한 예외값이 있는지 확인 후, 복사
+                        int authExpCopy = 0;
+                        List<DefaultMap<String>> excepList = mapper.exceptMenu(storeMenuVO);
+
+                        if (excepList != null && excepList.size() > 0) {
+
+                            for (int j = 0; j < excepList.size(); j++) {
+
+                                storeMenuVO.setResrceCd(excepList.get(j).getStr("resrceCd"));
+
+                                if ("E".equals(excepList.get(j).getStr("incldExcldFg"))) {
+                                    storeMenuVO.setIncldExcldFg(IncldExcldFg.EXCLUDE);
+                                } else {
+                                    storeMenuVO.setIncldExcldFg(IncldExcldFg.INCLUDE);
+                                }
+                                storeMenuVO.setUseYn(excepList.get(j).getStr("useYn"));
+
+                                int result = mapper.copyAuthExcp(storeMenuVO);
+                                if (result <= 0) {
+                                } else {
+                                    authExpCopy++;
+                                }
+                            }
+                        }
+                    }
                 }
             }
+            // 매장환경 복사 끝 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
             //TODO 판매가 테이블 생성시 추가
             if(!EXCLUSIVE_HQ_OFFICE.equals(storeManageVO.getHqOfficeCd())) { // 프랜차이즈
@@ -720,6 +756,44 @@ public class StoreManageServiceImpl implements StoreManageService{
                     }
                 }
             }
+
+            // 매장환경 복사2 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+            if(copyEnv.length > 0) {
+
+                for (int i = 0; i < copyEnv.length; i++) {
+
+                    // 테이블 복사
+                    if( "table".equals(copyEnv[i]) ) {
+                        // 테이블그룹
+                        procCnt += mapper.copyTableGroupCopy(storeManageVO);
+
+                        // 테이블
+                        procCnt += mapper.copyTableCopy(storeManageVO);
+
+                        // 테이블속성
+                        procCnt += mapper.copyTableAttrCopy(storeManageVO);
+
+                        // 테이블속성New
+                        procCnt += mapper.copyTableAttrNewCopy(storeManageVO);
+
+                        // 외식용-테이블그룹정보
+                        procCnt += mapper.copyTableTGroupCopy(storeManageVO);
+
+                        // 외식용-테이블
+                        procCnt += mapper.copyTableTCopy(storeManageVO);
+
+                        // 외식용-테이블상태코드관리
+                        procCnt += mapper.copyTableTStatusCodeCopy(storeManageVO);
+
+                        // 외식용-테이블정보코드
+                        procCnt += mapper.copyTableTNmcodeCodeCopy(storeManageVO);
+
+                        // 외식용-테이블속성관리
+                        procCnt += mapper.copyTableTAttrCopy(storeManageVO);
+                    }
+                }
+            }
+            // 매장환경 복사2 끝 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
             // 특이매장 데이터 처리
             mapper.unusualStoreRegInfo(storeManageVO);
