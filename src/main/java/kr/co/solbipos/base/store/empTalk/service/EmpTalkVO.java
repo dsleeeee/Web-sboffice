@@ -2,6 +2,22 @@ package kr.co.solbipos.base.store.empTalk.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
+/**
+ * @Class Name : EmpTalkVO.java
+ * @Description : 기초관리 > 매장관리 > 키오스크 직원대화
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2025.02.12  김유승      최초생성
+ *
+ * @author 링크 WEB개발팀 김유승
+ * @since 2025.02.12
+ * @version 1.0
+ * @see
+ *
+ * @Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 public class EmpTalkVO extends PageVO {
 
     private static final long serialVersionUID = 3962591897640186247L;
