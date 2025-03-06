@@ -52,11 +52,15 @@ app.controller('dclzDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#lblCommuteInDt").text(vCommuteInDt);
 
             // 퇴근일시
-            var vCommuteOutDt = getFormatDate((result.commuteOutDt).substr(0, 8)) + " " +
-                (result.commuteOutDt).substr(8, 2) + ":" +
-                (result.commuteOutDt).substr(10, 2) + ":" +
-                (result.commuteOutDt).substr(12, 2);
-            $("#lblCommuteOutDt").text(vCommuteOutDt);
+            if(result.commuteOutDt == "" || result.commuteOutDt == null) {
+                $("#lblCommuteOutDt").text("");
+            } else {
+                var vCommuteOutDt = getFormatDate((result.commuteOutDt).substr(0, 8)) + " " +
+                    (result.commuteOutDt).substr(8, 2) + ":" +
+                    (result.commuteOutDt).substr(10, 2) + ":" +
+                    (result.commuteOutDt).substr(12, 2);
+                $("#lblCommuteOutDt").text(vCommuteOutDt);
+            }
 
             $("#lblRemark").text(result.remark); // 비고
 
@@ -78,7 +82,7 @@ app.controller('dclzDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         params.inFg = $("#hdInFg").val();
         $scope.wjDclzRegistLayer.show(true);
         $scope._broadcast('dclzRegistCtrl', params);
-    }
+    };
 
     // 닫기
     $scope.close = function () {

@@ -27,9 +27,9 @@
         <th><s:message code="cmm.search.date"/></th>
         <td>
           <div class="sb-select">
-            <span class="txtIn"><input id="srchStartDate" class="w150px"></span>
+            <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
             <span class="rg">~</span>
-            <span class="txtIn"><input id="srchEndDate" class="w150px"></span>
+            <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
           </div>
         </td>
       </tr>
@@ -98,17 +98,17 @@
                 is-read-only="true">
 
           <!-- define columns -->
-          <wj-flex-grid-column header="<s:message code="dclzManage.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.storeNm"/>" binding="storeNm" width="200" is-read-only="true" align="left"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.sale.date"/>" binding="saleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.sale.date"/>" binding="saleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="dclzManage.empNo"/>" binding="empNo" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.empNm"/>" binding="empNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.empInDt"/>" binding="empInDate" width="150" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.empInDt"/>" binding="commuteInDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.empOutDt"/>" binding="commuteOutDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.workTime"/>" binding="workTime" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.inFg"/>" binding="inFg" data-map="inFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-          <wj-flex-grid-column header="<s:message code="dclzManage.remark"/>" binding="remark" width="300" is-read-only="true" align="left"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.empNm"/>" binding="empNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.empInDt"/>" binding="empInDate" width="125" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.empInDt"/>" binding="commuteInDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.empOutDt"/>" binding="commuteOutDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.workTime"/>" binding="workTime" width="110" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.inFg"/>" binding="inFg" data-map="inFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="dclzManage.remark"/>" binding="remark" width="200" is-read-only="true" align="left"></wj-flex-grid-column>
         </wj-flex-grid>
         <%-- ColumnPicker 사용시 include --%>
         <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">
