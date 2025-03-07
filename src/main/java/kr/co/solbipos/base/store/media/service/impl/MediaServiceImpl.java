@@ -189,6 +189,7 @@ public class MediaServiceImpl implements MediaService {
             System.out.println("파일타입 : " +fileType + " / 동영상출력순서 : " + dispSeq);
 
             mediaVO.setLangFg((String)multi.getParameter("langFg"));
+            mediaVO.setAdverUrl((String)multi.getParameter("adverUrl"));
 
             if(mediaMapper.verRegist(mediaVO) > 0) {
                 isSuccess = "0";
@@ -264,6 +265,7 @@ public class MediaServiceImpl implements MediaService {
 
             mediaVO.setDispTime((String)multi.getParameter("dispTime"));
             mediaVO.setLangFg((String)multi.getParameter("langFg"));
+            mediaVO.setAdverUrl((String)multi.getParameter("adverUrl"));
 
             mediaMapper.verModify(mediaVO);
 
@@ -529,5 +531,25 @@ public class MediaServiceImpl implements MediaService {
             mediaVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
         return mediaMapper.getMediaStoreApplyList(mediaVO);
+    }
+
+    /** 듀얼모니터영상관리 탭 - 파일 중복 가능 갯수 확인 */
+    @Override
+    public String chkDupCnt(SessionInfoVO sessionInfoVO, MediaVO mediaVO) {
+        return mediaMapper.chkDupCnt(mediaVO);
+    }
+
+    /** 듀얼모니터영상관리 탭 - 파일 갯수 확인 */
+    @Override
+    public int chkFileTypeCnt(SessionInfoVO sessionInfoVO, MediaVO mediaVO) {
+
+        if("H".equals(sessionInfoVO.getOrgnFg().getCode())){
+            mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        } else {
+            mediaVO.setHqOfficeCd("");
+            mediaVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        return mediaMapper.chkFileTypeCnt(mediaVO);
     }
 }

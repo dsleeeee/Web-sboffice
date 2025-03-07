@@ -472,4 +472,32 @@ System.out.println("kjs: reFileNM : " + reFileNM);
 
         return returnListJson(Status.OK, list, mediaVO);
     }
+
+    /**
+     * 듀얼모니터영상관리 탭 - 파일등록 중복체크
+     *
+     * @param   mediaVO
+     * @param   request
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 03. 06.
+     */
+    @RequestMapping(value = "/chkDup.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkDup(MediaVO mediaVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        String dupCnt = mediaService.chkDupCnt(sessionInfoVO, mediaVO);
+
+        if(!mediaVO.getUseYn().getCode().equals("N")) {
+            if (dupCnt != null) {
+                int chkFileTypeCnt = mediaService.chkFileTypeCnt(sessionInfoVO, mediaVO);
+                if (chkFileTypeCnt >= Integer.parseInt(dupCnt)) {
+                    return returnJson(Status.FAIL, dupCnt);
+                }
+            }
+        }
+
+        return returnJson(Status.OK, dupCnt);
+    }
 }

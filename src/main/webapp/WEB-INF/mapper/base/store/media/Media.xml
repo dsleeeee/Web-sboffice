@@ -150,7 +150,8 @@
                 DISP_TIME,
                 PROMOTION_CD,
                 NVL2(PROMOTION_CD,(SELECT PROMOTION_NM FROM TB_HQ_PROMO_H thph WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND thph.PROMOTION_CD = thpaf.PROMOTION_CD), '') AS PROMOTION_NM,
-                LANG_FG
+                LANG_FG,
+                ADVER_URL
           FROM TB_HQ_POS_ADVER_FILE thpaf
          WHERE HQ_OFFICE_CD = #{hqOfficeCd}
            AND ADVER_FILE_NO = #{verSerNo}
@@ -175,7 +176,8 @@
                     DISP_TIME,
                     PROMOTION_CD,
                     NVL2(PROMOTION_CD,(SELECT PROMOTION_NM FROM TB_MS_PROMO_H thph WHERE STORE_CD = #{storeCd} AND thph.PROMOTION_CD = tmpaf.PROMOTION_CD), '') AS PROMOTION_NM,
-                    LANG_FG
+                    LANG_FG,
+                    ADVER_URL
               FROM TB_MS_POS_ADVER_FILE tmpaf
              WHERE STORE_CD = #{storeCd}
                AND ADVER_FILE_NO = #{verSerNo}
@@ -237,27 +239,28 @@
             <![CDATA[
             INSERT INTO TB_HQ_POS_ADVER_FILE
             (
-               HQ_OFFICE_CD,
-               ADVER_FILE_NO,
-               FILE_USE_TYPE,
-               ADVER_S_DATE,
-               ADVER_E_DATE,
-               FILE_DIR,
-               FILE_NM,
-               FILE_EXT,
-               FILE_SIZE,
-               FILE_MIME_TYPE,
-               FILE_ORG_NM,
-               FILE_DESC,
-               FILE_CHG_DT,
-               USE_YN,
-               REG_DT,
-               REG_ID,
-               MOD_DT,
-               MOD_ID,
-               DISP_SEQ,
-               DISP_TIME,
-               LANG_FG
+                HQ_OFFICE_CD,
+                ADVER_FILE_NO,
+                FILE_USE_TYPE,
+                ADVER_S_DATE,
+                ADVER_E_DATE,
+                FILE_DIR,
+                FILE_NM,
+                FILE_EXT,
+                FILE_SIZE,
+                FILE_MIME_TYPE,
+                FILE_ORG_NM,
+                FILE_DESC,
+                FILE_CHG_DT,
+                USE_YN,
+                REG_DT,
+                REG_ID,
+                MOD_DT,
+                MOD_ID,
+                DISP_SEQ,
+                DISP_TIME,
+                LANG_FG,
+                ADVER_URL
             )
             VALUES
             (
@@ -281,7 +284,8 @@
                 #{modId},
                 #{dispSeq},
                 #{dispTime},
-                #{langFg}
+                #{langFg},
+                #{adverUrl}
             )
             ]]>
         </if>
@@ -310,7 +314,8 @@
                MOD_ID,
                DISP_SEQ,
                DISP_TIME,
-               LANG_FG
+               LANG_FG,
+                ADVER_URL
             )
             VALUES
             (
@@ -335,7 +340,8 @@
                 #{modId},
                 #{dispSeq},
                 #{dispTime},
-                #{langFg}
+                #{langFg},
+                #{adverUrl}
             )
             ]]>
         </if>
@@ -370,7 +376,8 @@
                MOD_DT           = #{modDt},
                MOD_ID           = #{modId},
                DISP_TIME        = #{dispTime},
-               LANG_FG          = #{langFg}
+               LANG_FG          = #{langFg},
+               ADVER_URL        = #{adverUrl}
          WHERE HQ_OFFICE_CD     = #{hqOfficeCd}
            AND ADVER_FILE_NO    = #{verSerNo}
          ]]>
@@ -397,7 +404,8 @@
                MOD_DT           = #{modDt},
                MOD_ID           = #{modId},
                DISP_TIME        = #{dispTime},
-               LANG_FG          = #{langFg}
+               LANG_FG          = #{langFg},
+               ADVER_URL        = #{adverUrl}
          WHERE STORE_CD         = #{storeCd}
            AND ADVER_FILE_NO    = #{verSerNo}
          ]]>
@@ -826,5 +834,46 @@
         BY      A.STORE_CD
         ,       B.FILE_USE_TYPE
         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 듀얼모니터 영상관리 탭 - 파일중복 가능 갯수 조회 -->
+    <!--
+    TABLE    : TB_CM_POS_ADDR_VERSN
+    COMMENTS : 파일중복 가능 갯수를 조회한다
+    -->
+    <select id="chkDupCnt" parameterType="MediaVO" resultType="String">
+        /* USE : Media.chkDupCnt */
+        SELECT  CASE
+                    WHEN	INSTR(NMCODE_ITEM_1, '⊥') > 0 THEN SUBSTR(NMCODE_ITEM_1 , INSTR(NMCODE_ITEM_1, '⊥') + 1)
+                    ELSE	NULL
+                END	AS DUP_CNT
+        FROM    TB_CM_NMCODE
+        WHERE   NMCODE_GRP_CD = '303'
+        AND     NMCODE_CD = #{fileType}
+    </select>
+
+    <!-- 듀얼모니터 영상관리 탭 - 파일 갯수 확인 -->
+    <!--
+        TABLE    : TB_HQ_POS_ADVER_FILE, TB_MS_POS_ADVER_FILE
+        COMMENTS : 파일 갯수 확인
+    -->
+    <select id="chkFileTypeCnt" parameterType="MediaVO" resultType="Integer">
+        /* USE : Media.chkFileTypeCnt */
+        <if test='hqOfficeCd != null and hqOfficeCd != "" and hqOfficeCd != "00000"'>
+            SELECT  COUNT(*)
+            FROM    TB_HQ_POS_ADVER_FILE
+            WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+            AND     FILE_USE_TYPE   = #{fileType}
+            AND     USE_YN          = 'Y'
+            AND     ADVER_FILE_NO   NOT IN (#{verSerNo})
+        </if>
+        <if test='hqOfficeCd == null or hqOfficeCd == ""'>
+            SELECT  COUNT(*)
+            FROM    TB_MS_POS_ADVER_FILE
+            WHERE   STORE_CD        = #{storeCd}
+            AND     FILE_USE_TYPE   = #{fileType}
+            AND     USE_YN          = 'Y'
+            AND     ADVER_FILE_NO   NOT IN (#{verSerNo})
+        </if>
     </select>
 </mapper>
