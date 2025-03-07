@@ -693,8 +693,12 @@ public class StoreManageServiceImpl implements StoreManageService{
                     // 메뉴권한 복사
                     if( "menuAuth".equals(copyEnv[i]) ) {
                         StoreMenuVO storeMenuVO = new StoreMenuVO();
-                        storeMenuVO.setCopyStoreCd(storeMenuVO.getCopyStoreCd());
-                        storeMenuVO.setStoreCd(storeMenuVO.getStoreCd());
+                        storeMenuVO.setCopyStoreCd(storeManageVO.getCopyStoreCd());
+                        storeMenuVO.setStoreCd(storeManageVO.getStoreCd());
+                        storeMenuVO.setRegDt(dt);
+                        storeMenuVO.setRegId(sessionInfoVO.getUserId());
+                        storeMenuVO.setModDt(dt);
+                        storeMenuVO.setModId(sessionInfoVO.getUserId());
 
                         // 1. 메뉴 권한 복사
                         int authGrpCopy = mapper.copyAuth(storeMenuVO);
