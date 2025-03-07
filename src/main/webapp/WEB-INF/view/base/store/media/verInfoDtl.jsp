@@ -105,8 +105,8 @@
                       </wj-combo-box>
                     {{_langFg}}
                   </td>
-                  <th></th>
-                  <td></td>
+                  <th><s:message code="media.adverUrl" /></th>
+                    <td>{{version.adverUrl}}</td>
               </tr>
               </tbody>
             </table>

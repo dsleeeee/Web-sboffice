@@ -112,6 +112,8 @@ public class MediaVO extends PageVO {
     private String storeCds;
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+    /** URL 주소 */
+    private String adverUrl;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -556,5 +558,13 @@ public class MediaVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getAdverUrl() {
+        return adverUrl;
+    }
+
+    public void setAdverUrl(String adverUrl) {
+        this.adverUrl = adverUrl;
     }
 }

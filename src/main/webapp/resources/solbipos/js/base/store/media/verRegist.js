@@ -193,11 +193,37 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $.postJSON("/base/store/media/chkDate.sb", param, function(result) {
           $scope.$broadcast('loadingPopupActive');
           if(result.status === 'OK') {
-            $scope.regist();
+            $scope.chkDup();
           }
         },
         function(result) {
           $scope._popMsg($scope.versionFileTypeCombo.text + messages["media.chkDate.msg"]);
+        });
+  };
+
+  $scope.chkDup = function (){
+    // 날짜 체크
+    var param = {};
+    param.storeCd = storeCd;
+    param.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+    param.endDate =  wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+    if( isEmptyObject($scope.getSelectVersion()) ) {
+      param.verSerNo = '0';
+    } else {
+      param.verSerNo = $scope.version.verSerNo;
+    }
+    param.fileType = $scope.versionFileTypeCombo.selectedValue;
+    param.useYn = $scope.versionUseYnCombo.selectedValue;
+
+    $.postJSON("/base/store/media/chkDup.sb", param, function(result) {
+          $scope.$broadcast('loadingPopupActive');
+          if(result.status === 'OK') {
+            $scope.regist();
+          }
+        },
+        function(result) {
+          $scope._popMsg($scope.versionFileTypeCombo.text + "광고 이미지 배너는 " + result.data + "개까지 등록 가능합니다.");
+          $scope.$broadcast('loadingPopupInactive');
         });
   };
 
@@ -214,6 +240,8 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#lblFileSizeMax").text(messages["media.fileSize.msg2"]);
     } else if(s.selectedValue === "016") {
       $("#lblFileSizeMax").text(messages["media.fileSize.max4"]);
+    } else if(s.selectedValue === "018") {
+      $("#lblFileSizeMax").text(messages["media.fileSize.max5"]);
     } else {
       $("#lblFileSizeMax").text("");
     }
@@ -270,6 +298,7 @@ app.controller('verRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     formData.append("useYn", $scope.versionUseYnCombo.selectedValue);
     formData.append("dispTime", nvl($scope.version.dispTime, 3));
     formData.append("langFg", $scope.versionLangFgCombo.selectedValue);
+    formData.append("adverUrl", nvl($scope.version.adverUrl, ''));
 
     var url = '';
 

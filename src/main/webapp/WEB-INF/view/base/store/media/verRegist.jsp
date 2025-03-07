@@ -129,6 +129,11 @@
                     </div>
                 </td>
               </tr>
+              <tr>
+                  <%-- URL --%>
+                <th><s:message code="media.adverUrl" /></th>
+                <td colspan="3"><input type="text" class="sb-input w100" id="adverUrl" ng-model="version.adverUrl"></td>
+              </tr>
               </tbody>
             </table>
           </f:form>
@@ -156,4 +161,4 @@
   var userId       = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20241030.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verRegist.js?ver=20250306.01" charset="utf-8"></script>

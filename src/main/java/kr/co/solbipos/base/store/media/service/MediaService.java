@@ -73,4 +73,10 @@ public interface MediaService {
 
     /** 매장별적용파일 탭 - 조회 */
     List<DefaultMap<String>> getMediaStoreApplyList(SessionInfoVO sessionInfoVO, MediaVO mediaVO);
+
+    /** 듀얼모니터영상관리 탭 - 파일 중복 가능 갯수 확인 */
+    String chkDupCnt(SessionInfoVO sessionInfoVO, MediaVO mediaVO);
+
+    /** 듀얼모니터영상관리 탭 - 파일 갯수 확인 */
+    int chkFileTypeCnt(SessionInfoVO sessionInfoVO, MediaVO mediaVO);
 }
