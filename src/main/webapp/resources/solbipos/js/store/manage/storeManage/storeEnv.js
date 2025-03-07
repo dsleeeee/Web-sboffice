@@ -292,6 +292,20 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
         }
       }
 
+      // 다중사업자관리 버튼 show/hide 처리
+      if (list[s].envstCd === "1337") {
+          console.log("1337: " + list[s].selEnvstVal);
+           if (list[s].selEnvstVal === null || list[s].selEnvstVal === undefined || list[s].selEnvstVal === "") {
+              $("#btnMultiBizManage").css("display", "none");
+          } else {
+              if (list[s].selEnvstVal === "1") {
+                  $("#btnMultiBizManage").css("display", "");
+              } else {
+                  $("#btnMultiBizManage").css("display", "none");
+              }
+          }
+      }
+
       // 매장환경 저장전 체크에 필요한 환경설정값 갖고있기
       if(list[s].envstCd  === "1102"){
           console.log("1102: " + list[s].selEnvstVal);
@@ -369,6 +383,15 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.envRemarkPopLayer.show(true);
     $scope._broadcast('envRemarkPopCtrl', params);
     event.preventDefault();
+  }
+  
+  // 다중사업자관리 팝업
+  $scope.multiBizManage = function () {
+
+      var params    = {};
+      $scope.multiBizManageLayer.show(true);
+      $scope._broadcast('multiBizManageCtrl', params);
+      event.preventDefault();
   }
 
 }]);

@@ -700,6 +700,7 @@ public class StoreManageServiceImpl implements StoreManageService{
                         storeMenuVO.setModDt(dt);
                         storeMenuVO.setModId(sessionInfoVO.getUserId());
 
+
                         // 1. 메뉴 권한 복사
                         int authGrpCopy = mapper.copyAuth(storeMenuVO);
 

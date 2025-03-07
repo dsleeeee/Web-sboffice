@@ -30,7 +30,9 @@
           <div class="mt20">
               <input type="text" class="sb-input w200px" id="srchConfig"/>
               <%-- 조회버튼 --%>
-              <button type="button" class="btn_skyblue ml5" ng-click="srchEnvst();"><s:message code="cmm.search"/></button>
+              <button type="button" class="btn_skyblue" ng-click="srchEnvst();"><s:message code="cmm.search"/></button>
+              <%-- 다중사업자관리 --%>
+              <button type="button" class="btn_skyblue" id="btnMultiBizManage" ng-click="multiBizManage();"><s:message code="storeManage.multiBizManage"/></button>
 
               <%-- 환경설정값 조회 시, 조회버튼 클릭으로 조회하는 것인지 또는 탭 클릭으로 조회하는 것인지 확인을 위한 값 --%>
               <%-- [포스환경]탭 에서 [조회] 버튼을 클릭하여 환경설정을 조회할 경우, 포스명칭이 바뀌는것을 방지하기 위해 사용 --%>
@@ -56,6 +58,10 @@
 
       <%-- 주방프린터 상품연결 --%>
       <c:import url="/WEB-INF/view/store/manage/storeManage/kitchenPrintProduct.jsp">
+      </c:import>
+
+      <%-- 다중사업자관리 --%>
+      <c:import url="/WEB-INF/view/store/manage/storeManage/multiBizManage.jsp">
       </c:import>
 
     </div>

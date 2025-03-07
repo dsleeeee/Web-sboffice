@@ -252,12 +252,26 @@
                 tmsi.MOMS_STORE_FG_02,
                 tmsi.MOMS_STORE_FG_03,
                 tmsi.MOMS_STORE_FG_04,
-                tmsi.MOMS_STORE_FG_05
+                tmsi.MOMS_STORE_FG_05,
+                tmpt.VENDOR_CD,
+                tmpt.VENDOR_TERMNL_NO,
+                tmpt.VENDOR_SER_NO
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
                TB_CM_VAN_CMPNY tcvc,
-               TB_MS_STORE_INFO tmsi
+               TB_MS_STORE_INFO tmsi,
+               (
+                    SELECT  A.STORE_CD
+                    ,       A.VENDOR_CD
+                    ,       A.VENDOR_TERMNL_NO
+                    ,       A.VENDOR_SER_NO
+                    FROM    TB_MS_POS_TERMNL A
+                    WHERE   A.STORE_CD = #{storeCd}
+                    AND     A.POS_NO = '01'
+                    AND     A.VENDOR_FG =   '01'
+                    AND 	DECODE(A.BASE_VAN_YN, 'Y', 1, 2) = 1
+               ) tmpt
          WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = #{storeCd}
@@ -265,6 +279,7 @@
            AND tcvc.VAN_CD = tms.VAN_CD
            AND tcvc.VAN_FG = '01' -- VAN만
            AND tmsi.STORE_CD (+)= tms.STORE_CD
+		   AND tmpt.STORE_CD (+)= tms.STORE_CD
         ]]>
     </select>
 
@@ -6109,12 +6124,12 @@
                 AND B.PARENT_CD     =  A.PARENT_CD
             )
             WHEN MATCHED THEN
-                UPDATE SET A.NMCODE_NM     = B.NMCODE_NM,
-                            A.NMCODE_ITEM_1 = B.NMCODE_ITEM_1,
-                            A.NMCODE_ITEM_2 = B.NMCODE_ITEM_2,
-                            A.USE_YN        = B.USE_YN,
-                            A.MOD_DT        = B.MOD_DT,
-                            A.MOD_ID        = B.MOD_ID
+            UPDATE SET A.NMCODE_NM     = B.NMCODE_NM,
+                        A.NMCODE_ITEM_1 = B.NMCODE_ITEM_1,
+                        A.NMCODE_ITEM_2 = B.NMCODE_ITEM_2,
+                        A.USE_YN        = B.USE_YN,
+                        A.MOD_DT        = B.MOD_DT,
+                        A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -9900,4 +9915,111 @@
                                 )
         AND USE_YN = 'Y'
     </select>
+
+    <!-- 포스 터미널 정보 등록 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 포스의 터미널 정보를 등록한다.
+    -->
+    <insert id="insertPosTerminalInfo" parameterType="storeManageVO">
+        /* StoreManageMapper.insertPosTerminalInfo */
+        INSERT INTO TB_MS_POS_TERMNL
+        (   STORE_CD,
+            POS_NO,
+            VENDOR_FG,
+            VENDOR_CD,
+            VENDOR_NM,
+            VENDOR_TERMNL_NO,
+            VENDOR_SER_NO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            BASE_VAN_YN
+        )
+        VALUES
+        (
+            #{storeCd},
+            #{strPosNo},
+            #{vendorFg},
+            #{vendorCd},
+            (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
+            #{vendorTermnlNo},
+            #{vendorSerNo},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{baseVanYn}
+        )
+    </insert>
+
+    <!-- 포스 터미널 정보 수정 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 포스 터미널의 정보를 수정한다.
+    -->
+    <update id="updatePosTerminalInfo" parameterType="storeManageVO">
+        /* StoreManageMapper.updatePosTerminalInfo */
+        UPDATE TB_MS_POS_TERMNL
+           SET VENDOR_CD = #{vendorCd},
+               VENDOR_NM = (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
+               VENDOR_TERMNL_NO = #{vendorTermnlNo},
+               VENDOR_SER_NO = #{vendorSerNo},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+           AND POS_NO = #{posNo}
+           AND VENDOR_FG = #{vendorFg}
+           AND VENDOR_CD = #{bVendorCd}
+           AND BASE_VAN_YN = #{baseVanYn}
+    </update>
+
+    <!-- 코너 터미널 정보 수정 -->
+    <!--
+        TABLE    : TB_MS_CORNER_TERMNL
+        COMMENTS : 코너 터미널의 정보를 수정한다.
+    -->
+    <update id="updateCornerTerminalInfo" parameterType="storeManageVO">
+        /* StoreManageMapper.updateCornerTerminalInfo */
+        UPDATE TB_MS_CORNER_TERMNL
+           SET VENDOR_CD = #{vendorCd},
+               VENDOR_NM = (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
+               VENDOR_TERMNL_NO = #{vendorTermnlNo},
+               VENDOR_SER_NO = #{vendorSerNo},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+           AND CORNR_CD = #{cornrCd}
+           AND VENDOR_FG = #{vendorFg}
+           AND VENDOR_CD = #{bVendorCd}
+           AND BASE_VAN_YN = #{baseVanYn}
+    </update>
+
+    <!-- 터미널관리(밴더코드) 중복 체크 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL, TB_MS_CORNER_TERMNL
+        PARAM    : storeManageVO
+        COMMENTS : 중복되는 터미널관리(밴더코드)가 있는지 확인한다.
+    -->
+    <select id="chkVendorCd" parameterType="storeManageVO" resultType="int">
+        /* USE : StoreManageMapper.chkVendorCd */
+        SELECT SUM(A.VAN_CNT) AS VAN_CNT
+        FROM   (
+                    SELECT COUNT(*) AS VAN_CNT
+                    FROM   TB_MS_POS_TERMNL
+                    WHERE  STORE_CD = #{storeCd}
+                    AND    POS_NO = #{strPosNo}
+                    AND    VENDOR_FG = #{vendorFg}
+                    AND    VENDOR_CD = #{vendorCd}
+                    UNION
+                    SELECT COUNT(*) AS VAN_CNT
+                    FROM   TB_MS_CORNER_TERMNL
+                    WHERE  STORE_CD = #{storeCd}
+                    AND    CORNR_CD = #{cornrCd}
+                    AND    VENDOR_FG = #{vendorFg}
+                    AND    VENDOR_CD = #{vendorCd}
+               ) A
+    </select>
+
 </mapper>

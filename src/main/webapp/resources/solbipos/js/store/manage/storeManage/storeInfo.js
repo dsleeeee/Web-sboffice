@@ -22,6 +22,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("sysStatFg", sysStatFg);
   $scope._setComboData("areaCd", areaCd);
   $scope._setComboData("branchCd", [{"name": messages["cmm.select"], "value": ""}]);
+  $scope._setComboData("vendorCd", vanList);
 
   // [1250 맘스터치]
   // 콤보박스 데이터
@@ -112,6 +113,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     // 매장환경복사 체크 disabled
     $scope.copyStoreSettingChk();
   };
+
+  // 수정시, 밴더코드 변경여부 파악을 위해
+  var b_vendorCd = "";
 
   /*********************************************************
    * [추가설정] 복사할 본사 클릭시, 해당 본사의 매장 목록 조회
@@ -304,6 +308,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.branchCdCombo.selectedIndex = 0;
     $scope.store.branchCd = "";
 
+    $scope.vendorCdCombo.selectedIndex = 0;
+    $scope.store.vendorCd = "";
+    b_vendorCd = "";
+
     // 총판계정으로 접속한 경우, 해당 총판의 데이터만 조회되도록 함.
     // if(orgnFg === "AGENCY" && pAgencyCd !== "00000"){
     if(orgnFg === "AGENCY"){
@@ -317,10 +325,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.store.mapStoreCd = "";
     $scope.store.latitude = "";
     $scope.store.longitude = "";
+    $scope.store.vendorTermnlNo = "";
+    $scope.store.vendorSerNo = "";
     $("#siteCd").val("");
     $("#mapStoreCd").val("");
     $("#latitude").val("");
     $("#longitude").val("");
+    $("#vendorTermnlNo").val("");
+    $("#vendorSerNo").val("");
 
     // 매장코드8이상사용 확인 초기화
     $("#hdDigit8Store").val("");
@@ -490,10 +502,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#addr").attr("readonly", true);
       }
 
+      $scope.vendorCdCombo.selectedValue = storeDetailInfo.vendorCd;
+      b_vendorCd = storeDetailInfo.vendorCd;
+
       $scope.store.siteCd = storeDetailInfo.siteCd;
       $scope.store.mapStoreCd = storeDetailInfo.mapStoreCd;
       $scope.store.latitude = storeDetailInfo.latitude;
       $scope.store.longitude = storeDetailInfo.longitude;
+      $scope.store.vendorTermnlNo = storeDetailInfo.vendorTermnlNo;
+      $scope.store.vendorSerNo = storeDetailInfo.vendorSerNo;
 
       // 본사-그룹 콤보박스 set 후 -> 그룹정보 set
       $scope.setBranchDropdownList();
@@ -902,6 +919,57 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
+    // 터미널번호를 입력하세요.
+    var msg = messages["storeManage.vendorTermnlNo"] + messages["cmm.require.text"];
+    if (isNull($scope.store.vendorTermnlNo)) {
+      $scope._popMsg(msg);
+      return false;
+    } else {
+      if ($scope.store.vendorCd === "001") { // KCP
+          if ($scope.store.vendorTermnlNo.length != 10) {
+              $scope._popMsg(messages["storeManage.vendorTermnlNo"] + "는 10자리로 입력하세요.");
+              return false;
+          }
+      } else {
+          if (nvl($scope.store.vendorTermnlNo.getByteLengthForOracle(), '') > 20) {
+              $scope._popMsg(messages["storeManage.vendorTermnlNo"] + messages["storeManage.require.exact.data"]);
+              return false;
+          }
+      }
+    }
+
+    // 시리얼번호를 입력하세요.
+    var msg = messages["storeManage.vendorSerNo"] + messages["cmm.require.text"];
+    if (isNull($scope.store.vendorSerNo)) {
+      $scope._popMsg(msg);
+      return false;
+    } else {
+      if (nvl($scope.store.vendorSerNo.getByteLengthForOracle(), '') > 20) {
+          $scope._popMsg(messages["storeManage.vendorSerNo"] + messages["storeManage.require.exact.data"]);
+          return false;
+      }
+    }
+
+    // BBQ는 VAN - KCP 만 저장 가능
+    // 개발 DS011
+    // 운영 DS024 H0360
+    if ($scope.store.hqOfficeCd == "DS011" || $scope.store.hqOfficeCd == "DS024" || $scope.store.hqOfficeCd == "H0360") {
+      if ($scope.store.vendorCd == "001") {
+      } else {
+          // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+          $scope._popMsg(messages["storeManage.bbqSave.msg"]);
+          return false;
+      }
+    }
+
+    // KOCES 총판은 벤더코드 KOCES만 저장가능
+    if($("#lblVanFixFg").text() == "Y") {
+      if ($scope.store.vendorCd !== '008') { // KOCES
+          $scope._popMsg(messages["storeManage.terminalManage"] + "는 [008] KOCES" + messages["cmm.require.select"]);
+          return false;
+      }
+    }
+
     // 매장환경복사 체크값이 있을때
     if($("input:checkbox[name='copyChk']:checked").length > 0) {
 
@@ -952,9 +1020,42 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   /*********************************************************
    * 저장
    * *******************************************************/
-  $scope.save = function(){
+  $scope.save = function() {
 
-    if(!$scope.valueCheck()) return false;
+      if (!$scope.valueCheck()) return false;
+      
+      var storeScope = agrid.getScope('storeManageCtrl');
+          
+      // 수정시에만 체크
+      if (!$.isEmptyObject(storeScope.getSelectedStore())) {
+          if (b_vendorCd !== "") {
+              // 터미널관리 선택값이 변경한 경우 기존값과 중복되는지 확인
+              if (b_vendorCd !== $scope.store.vendorCd) {
+                  var params = $scope.store;
+                  $scope._postJSONQuery.withOutPopUp("/store/manage/storeManage/storeManage/chkVendorCd.sb", params, function (response) {
+                      if (response.data.data > 0) {
+                          $scope._popMsg("터미널관리" + getVendorCdNm($scope.store.vendorCd.toString()) + "가 중복됩니다. 확인하여 주십시오(상세정보: [기초관리] - [매장정보관리] - [매장터미널관리])");
+                          return false;
+                      }else{
+                          // 사업자번호 중복체크
+                          $scope.bizNoChk();
+                      }
+                  });
+              } else {
+                  // 사업자번호 중복체크
+                  $scope.bizNoChk();
+              }
+          } else {
+              return false;
+          }
+      }else{
+          // 사업자번호 중복체크
+          $scope.bizNoChk();
+      }
+  };
+
+  // 사업자번호 중복체크
+  $scope.bizNoChk = function () {
 
     var params         = $scope.store;
     params.sysOpenDate = wijmo.Globalize.format(sysOpenDate.value, 'yyyyMMdd');
@@ -969,6 +1070,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.digit8Store = $("#hdDigit8Store").val();
     params.latitude = $("#latitude").val();
     params.longitude = $("#longitude").val();
+    params.vendorTermnlNo = $("#vendorTermnlNo").val();
+    params.vendorSerNo = $("#vendorSerNo").val();
 
      // ERP 연동 매장 등록인 경우, NXPOS_STORE_CD 값을 Update 하기 위함.
     if(orgnFg === "HQ") {
@@ -1046,6 +1149,10 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       }
       // 수정
       else {
+
+        // 터미널관리(밴더코드) 이전 선택값(터미널정보 update 시 필요)
+        params.bVendorCd = b_vendorCd;
+
         $scope._postJSONSave.withPopUp("/store/manage/storeManage/storeManage/updateStoreInfo.sb", params, function () {
           $scope._popMsg(messages["cmm.saveSucc"]);
           $scope.storeInfoLayer.hide();
@@ -1865,10 +1972,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $("#agencyCd").val("");
           $scope._setComboData("branchCd", [{"name": messages["cmm.select"], "value": ""}]);
           $scope.branchCdCombo.selectedIndex = 0;
+          $scope.vendorCdCombo.selectedIndex = 0;
           $("#siteCd").val("");
           $("#mapStoreCd").val("");
           $("#latitude").val("");
           $("#longitude").val("");
+          $("#vendorTermnlNo").val("");
+          $("#vendorSerNo").val("");
 
           $scope.store.storeCd = "";
           $scope.store.storeCdChkFg = "";
@@ -1895,10 +2005,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           $scope.store.agencyNm = "";
           $scope.store.agencyCd = "";
           $scope.store.branchCd = "";
+          $scope.store.vendorCd = "";
           $scope.store.siteCd = "";
           $scope.store.mapStoreCd = "";
           $scope.store.latitude = "";
           $scope.store.longitude = "";
+          $scope.store.vendorTermnlNo = "";
+          $scope.store.vendorSerNo = "";
 
           // ERP 연동 매장 정보 셋팅
           // 매장코드 수동입력 시
@@ -2157,3 +2270,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   };
 
 }]);
+// 터미널관리(밴더코드) 코드값으로 명칭 가져오기
+function getVendorCdNm(cd) {
+    var list = vanList;
+    for (var i = 0; i < list.length; i++) {
+        if (list[i].value === cd) {
+            return list[i].name;
+        }
+    }
+}
+

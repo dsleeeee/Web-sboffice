@@ -235,8 +235,17 @@
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
   // KOCES 총판 및 하위 대리점 코드
   var agencyCol = '${agencyCol}';
-
   var arrAgencyCol = agencyCol.split(',');
+
+  // 밴사정보
+  var vandorList = ${vendorList};
+  // 매장정보 터미널관리 콤보박스용 데이터
+  var vanList = new Array();
+  for (var i in vandorList) {
+      if (vandorList[i].vanFg === '01') {
+          vanList.push(vandorList[i]);
+      }
+  }
 
 </script>
 

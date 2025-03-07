@@ -310,6 +310,38 @@
                   <input type="text" id="siteCd" class="sb-input w100" ng-model="store.siteCd" />
               </td>
             </tr>
+            <tr>
+                <%--터미널관리--%>
+                <th><s:message code="storeManage.terminalManage" /></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="vendorCd"
+                                ng-model="store.vendorCd"
+                                control="vendorCdCombo"
+                                items-source="_getComboData('vendorCd')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                    </div>
+                </td>
+                <%--터미널번호--%>
+                <th><s:message code="storeManage.vendorTermnlNo" /></th>
+                <td>
+                    <input type="text" id="vendorTermnlNo" class="sb-input w100" ng-model="store.vendorTermnlNo" />
+                </td>
+            </tr>
+            <tr>
+                <%--시리얼번호--%>
+                <th><s:message code="storeManage.vendorSerNo" /></th>
+                <td>
+                    <input type="text" id="vendorSerNo" class="sb-input w100" ng-model="store.vendorSerNo" />
+                </td>
+                <th></th>
+                <td></td>
+            </tr>
             </tbody>
           </table>
           <%-- [1250 맘스터치] --%>
@@ -738,4 +770,8 @@
 
 <%-- 매장환경설정코드 설명 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/envRemarkPop.jsp">
+</c:import>
+
+<%-- 다중사업자관리 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/multiBizManage.jsp">
 </c:import>

@@ -238,6 +238,18 @@ public class StoreManageVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 매장정보 관리에서 사용할 VAN 여부 */
+    private String baseVanYn;
+
+    /** 포스번호 */
+    private String strPosNo;
+
+    /** 이전에 선택했던 밴더코드 */
+    private String bVendorCd;
+
+    /** 코너코드*/
+    private String cornrCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -1099,4 +1111,36 @@ public class StoreManageVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getBaseVanYn() {
+        return baseVanYn;
+    }
+
+    public void setBaseVanYn(String baseVanYn) {
+        this.baseVanYn = baseVanYn;
+    }
+
+    public String getStrPosNo() {
+        return strPosNo;
+    }
+
+    public void setStrPosNo(String strPosNo) {
+        this.strPosNo = strPosNo;
+    }
+
+    public String getbVendorCd() {
+        return bVendorCd;
+    }
+
+    public void setbVendorCd(String bVendorCd) {
+        this.bVendorCd = bVendorCd;
+    }
+
+    public String getCornrCd() {
+        return cornrCd;
+    }
+
+    public void setCornrCd(String cornrCd) {
+        this.cornrCd = cornrCd;
+    }
 }

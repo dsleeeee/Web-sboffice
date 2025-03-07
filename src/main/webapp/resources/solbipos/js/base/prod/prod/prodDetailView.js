@@ -37,7 +37,6 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.$on("prodDetailCtrl", function(event, data) {
 
         var url = "/base/prod/prod/prod/detail.sb";
-        //var referrer = document.referrer;
 
         if (orgnFg === "HQ") {
             if(data.storeCd != null && data.storeCd != "" && data.storeCd != undefined){

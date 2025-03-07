@@ -16,6 +16,7 @@ import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
 import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
+import kr.co.solbipos.store.manage.terminalManage.service.TerminalManageService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,15 +68,17 @@ public class StoreManageController {
     private final SessionService sessionService;
     private final CmmEnvUtil cmmEnvUtil;
     private final CmmCodeUtil cmmCodeUtil;
+    private final TerminalManageService terminalManageService;
 
     /** Constructor Injection */
     @Autowired
-    public StoreManageController(StoreManageService service, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil) {
+    public StoreManageController(StoreManageService service, DayProdService dayProdService, SessionService sessionService, CmmEnvUtil cmmEnvUtil, CmmCodeUtil cmmCodeUtil, TerminalManageService terminalManageService) {
         this.service = service;
         this.dayProdService = dayProdService;
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.cmmCodeUtil = cmmCodeUtil;
+        this.terminalManageService = terminalManageService;
     }
 
     /**
@@ -125,6 +128,10 @@ public class StoreManageController {
             System.out.println("momsEnvstVal : " + CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
         }
         /** //맘스터치 */
+
+        // 벤더 목록 조회
+        List<DefaultMap<String>> vendorList = terminalManageService.getVendorList();
+        model.addAttribute("vendorList", convertToJson(vendorList) );
 
         // KOCES VAN 및 하위 대리점 리스트
         List<DefaultMap<String>> agencyCdList = service.agencyCdList();
@@ -1266,6 +1273,26 @@ public class StoreManageController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
         int cnt = service.copyMobileAuth(storeMenuVO, sessionInfoVO);
+
+        return returnJson(Status.OK, cnt);
+    }
+
+    /**
+     *  터미널관리(밴더코드) 중복 체크
+     * @param storeManageVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Result
+     * @author  이다솜
+     * @since   2025. 03. 07.
+     */
+    @RequestMapping(value = "/storeManage/chkVendorCd.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chkVendorCd(StoreManageVO storeManageVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        int cnt = service.chkVendorCd(storeManageVO);
 
         return returnJson(Status.OK, cnt);
     }
