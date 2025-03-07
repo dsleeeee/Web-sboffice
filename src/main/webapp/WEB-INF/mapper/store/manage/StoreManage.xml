@@ -6108,6 +6108,13 @@
                 AND B.NMCODE_CD     =  A.NMCODE_CD
                 AND B.PARENT_CD     =  A.PARENT_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET A.NMCODE_NM     = B.NMCODE_NM,
+                            A.NMCODE_ITEM_1 = B.NMCODE_ITEM_1,
+                            A.NMCODE_ITEM_2 = B.NMCODE_ITEM_2,
+                            A.USE_YN        = B.USE_YN,
+                            A.MOD_DT        = B.MOD_DT,
+                            A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
