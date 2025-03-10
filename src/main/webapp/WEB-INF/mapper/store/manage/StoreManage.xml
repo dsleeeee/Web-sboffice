@@ -5610,6 +5610,14 @@
                     B.STORE_CD      =  A.STORE_CD
                 AND B.TBL_GRP_CD    =  A.TBL_GRP_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.TBL_GRP_NM      = B.TBL_GRP_NM
+                ,             A.TBL_GRP_FG    = B.TBL_GRP_FG
+                ,             A.BG_IMG_NM     = B.BG_IMG_NM
+                ,             A.DISP_SEQ      = B.DISP_SEQ
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5674,6 +5682,19 @@
                     B.STORE_CD      =  A.STORE_CD
                 AND B.TBL_CD        =  A.TBL_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.TBL_NM        = B.TBL_NM
+                ,             A.TBL_GRP_CD    = B.TBL_GRP_CD
+                ,             A.TBL_SEAT_CNT  = B.TBL_SEAT_CNT
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.TBL_TYPE_FG   = B.TBL_TYPE_FG
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
+                ,             A.IMG_NM        = B.IMG_NM
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5753,6 +5774,21 @@
                 AND B.TBL_TYPE_FG   =  A.TBL_TYPE_FG
                 AND B.ATTR_CD       =  A.ATTR_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.ATTR_NM       = B.ATTR_NM
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.TEXTALIGN_FG  = B.TEXTALIGN_FG
+                ,             A.IMG_NM        = B.IMG_NM
+                ,             A.FONT_NM       = B.FONT_NM
+                ,             A.FONT_SIZE     = B.FONT_SIZE
+                ,             A.FONT_STYLE_FG = B.FONT_STYLE_FG
+                ,             A.FONT_COLOR    = B.FONT_COLOR
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5840,6 +5876,22 @@
                 AND B.TBL_CD   =  A.TBL_CD
                 AND B.ATTR_CD       =  A.ATTR_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.ATTR_NM       = B.ATTR_NM
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.TEXTALIGN_FG  = B.TEXTALIGN_FG
+                ,             A.IMG_NM        = B.IMG_NM
+                ,             A.FONT_NM       = B.FONT_NM
+                ,             A.FONT_SIZE     = B.FONT_SIZE
+                ,             A.FONT_STYLE_FG = B.FONT_STYLE_FG
+                ,             A.FONT_COLOR    = B.FONT_COLOR
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
+                ,             A.VIEW_YN       = B.VIEW_YN
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5917,6 +5969,14 @@
                     B.STORE_CD      =  A.STORE_CD
                 AND B.TG_CD         =  A.TG_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.TG_NM         = B.TG_NM
+                ,             A.TG_FG         = B.TG_FG
+                ,             A.TG_BGIMAGE    = B.TG_BGIMAGE
+                ,             A.TG_SORT       = B.TG_SORT
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5983,6 +6043,21 @@
                     B.STORE_CD      =  A.STORE_CD
                 AND B.TABLE_CD      =  A.TABLE_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.TABLE_NM      = B.TABLE_NM
+                ,             A.TG_CD         = B.TG_CD
+                ,             A.GROUP_CD      = B.GROUP_CD
+                ,             A.SEAT_NUM      = B.SEAT_NUM
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.SHAPE_FG      = B.SHAPE_FG
+                ,             A.TABLE_FG      = B.TABLE_FG
+                ,             A.STATUS_FG     = B.STATUS_FG
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -6053,6 +6128,9 @@
                 AND B.TABLE_CD      =  A.TABLE_CD
                 AND B.COM_CD        =  A.COM_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -6109,12 +6187,12 @@
                 AND B.PARENT_CD     =  A.PARENT_CD
             )
             WHEN MATCHED THEN
-                UPDATE SET A.NMCODE_NM     = B.NMCODE_NM,
-                            A.NMCODE_ITEM_1 = B.NMCODE_ITEM_1,
-                            A.NMCODE_ITEM_2 = B.NMCODE_ITEM_2,
-                            A.USE_YN        = B.USE_YN,
-                            A.MOD_DT        = B.MOD_DT,
-                            A.MOD_ID        = B.MOD_ID
+                UPDATE SET  A.NMCODE_NM     = B.NMCODE_NM
+                ,             A.NMCODE_ITEM_1 = B.NMCODE_ITEM_1
+                ,             A.NMCODE_ITEM_2 = B.NMCODE_ITEM_2
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -6186,6 +6264,22 @@
                 AND B.TABLE_FG      =  A.TABLE_FG
                 AND B.PROPERTY_CD   =  A.PROPERTY_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.PROPERTY_NM     = B.PROPERTY_NM
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.TEXTALIGN_FG  = B.TEXTALIGN_FG
+                ,             A.IMAGE_NM      = B.IMAGE_NM
+                ,             A.FONT          = B.FONT
+                ,             A.FONT_SIZE     = B.FONT_SIZE
+                ,             A.FONT_STYLE_FG = B.FONT_STYLE_FG
+                ,             A.FONT_COLOR    = B.FONT_COLOR
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
+                ,             A.FLEX_VIEW_YN  = B.FLEX_VIEW_YN
             WHEN NOT MATCHED THEN
                 INSERT
                 (

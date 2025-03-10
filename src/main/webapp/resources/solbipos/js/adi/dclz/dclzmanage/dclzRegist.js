@@ -14,11 +14,11 @@
 var app = agrid.getApp();
 
 // 입력구분 VALUE
-var inFg = [
-    {"name":"전체","value":""},
-    {"name":"POS","value":"010"},
-    {"name":"WEB","value":"020"}
-];
+// var inFg = [
+//     {"name":"전체","value":""},
+//     {"name":"POS","value":"010"},
+//     {"name":"WEB","value":"020"}
+// ];
 
 // 시 VALUE
 var Hh = [24];
