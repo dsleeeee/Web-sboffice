@@ -9657,80 +9657,84 @@
         /* USE : StoreManageMapper.insertStoreBaseTblBgImg */
         INSERT INTO TB_MS_POS_ADVER_FILE
         (
-               STORE_CD
-        ,      ADVER_FILE_NO
-        ,      FILE_USE_TYPE
-        ,      ADVER_S_DATE
-        ,      ADVER_E_DATE
-        ,      FILE_DIR
-        ,      FILE_NM
-        ,      FILE_EXT
-        ,      FILE_SIZE
-        ,      FILE_MIME_TYPE
-        ,      FILE_ORG_NM
-        ,      FILE_DESC
-        ,      FILE_CHG_DT
-        ,      USE_YN
-        ,      REG_FG
-        ,      REG_DT
-        ,      REG_ID
-        ,      MOD_DT
-        ,      MOD_ID
-        ,      POS_RECV_YN
-        ,      POS_RECV_DT
-        ,      DISP_SEQ
-        ,      DISP_TIME
-        ,      TIME_YN
-        ,      START_TIME
-        ,      END_TIME
-        ,      WEEK_YN
-        ,      MON_YN
-        ,      TUE_YN
-        ,      WED_YN
-        ,      THU_YN
-        ,      FRI_YN
-        ,      SAT_YN
-        ,      SUN_YN
-        ,      PROMOTION_CD
+                STORE_CD
+        ,       ADVER_FILE_NO
+        ,       FILE_USE_TYPE
+        ,       ADVER_S_DATE
+        ,       ADVER_E_DATE
+        ,       FILE_DIR
+        ,       FILE_NM
+        ,       FILE_EXT
+        ,       FILE_SIZE
+        ,       FILE_MIME_TYPE
+        ,       FILE_ORG_NM
+        ,       FILE_DESC
+        ,       FILE_CHG_DT
+        ,       USE_YN
+        ,       REG_FG
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        ,       POS_RECV_YN
+        ,       POS_RECV_DT
+        ,       DISP_SEQ
+        ,       DISP_TIME
+        ,       TIME_YN
+        ,       START_TIME
+        ,       END_TIME
+        ,       WEEK_YN
+        ,       MON_YN
+        ,       TUE_YN
+        ,       WED_YN
+        ,       THU_YN
+        ,       FRI_YN
+        ,       SAT_YN
+        ,       SUN_YN
+        ,       PROMOTION_CD
+        ,       LANG_FG
+        ,       ADVER_URL
         )
-        SELECT #{storeCd} AS STORE_CD
-        ,      (SELECT LPAD(NVL(MAX(ADVER_FILE_NO), 7999) +1, 4, '0') FROM TB_MS_POS_ADVER_FILE WHERE STORE_CD = #{storeCd} AND ADVER_FILE_NO > 7999) AS ADVER_FILE_NO
-        ,      FILE_USE_TYPE
-        ,      ADVER_S_DATE
-        ,      ADVER_E_DATE
-        ,      FILE_DIR
-        ,      FILE_NM
-        ,      FILE_EXT
-        ,      FILE_SIZE
-        ,      FILE_MIME_TYPE
-        ,      FILE_ORG_NM
-        ,      FILE_DESC
-        ,      FILE_CHG_DT
-        ,      USE_YN
-        ,      REG_FG
-        ,      #{regDt} AS REG_DT
-        ,      #{regId} AS REG_ID
-        ,      #{modDt} AS MOD_DT
-        ,      #{modId} AS MOD_ID
-        ,      POS_RECV_YN
-        ,      POS_RECV_DT
-        ,      DISP_SEQ
-        ,      DISP_TIME
-        ,      TIME_YN
-        ,      START_TIME
-        ,      END_TIME
-        ,      WEEK_YN
-        ,      MON_YN
-        ,      TUE_YN
-        ,      WED_YN
-        ,      THU_YN
-        ,      FRI_YN
-        ,      SAT_YN
-        ,      SUN_YN
-        ,      PROMOTION_CD
-        FROM   TB_MS_POS_ADVER_FILE
-        WHERE  STORE_CD      = '0000000'
-        AND    ADVER_FILE_NO = '8000'
+        SELECT  #{storeCd} AS STORE_CD
+        ,       (SELECT LPAD(NVL(MAX(ADVER_FILE_NO), 7999) +1, 4, '0') FROM TB_MS_POS_ADVER_FILE WHERE STORE_CD = #{storeCd} AND ADVER_FILE_NO > 7999) AS ADVER_FILE_NO
+        ,       FILE_USE_TYPE
+        ,       ADVER_S_DATE
+        ,       ADVER_E_DATE
+        ,       FILE_DIR
+        ,       FILE_NM
+        ,       FILE_EXT
+        ,       FILE_SIZE
+        ,       FILE_MIME_TYPE
+        ,       FILE_ORG_NM
+        ,       FILE_DESC
+        ,       FILE_CHG_DT
+        ,       USE_YN
+        ,       REG_FG
+        ,       #{regDt} AS REG_DT
+        ,       #{regId} AS REG_ID
+        ,       #{modDt} AS MOD_DT
+        ,       #{modId} AS MOD_ID
+        ,       POS_RECV_YN
+        ,       POS_RECV_DT
+        ,       DISP_SEQ
+        ,       DISP_TIME
+        ,       TIME_YN
+        ,       START_TIME
+        ,       END_TIME
+        ,       WEEK_YN
+        ,       MON_YN
+        ,       TUE_YN
+        ,       WED_YN
+        ,       THU_YN
+        ,       FRI_YN
+        ,       SAT_YN
+        ,       SUN_YN
+        ,       PROMOTION_CD
+        ,       LANG_FG
+        ,       ADVER_URL
+        FROM    TB_MS_POS_ADVER_FILE
+        WHERE   STORE_CD      = '0000000'
+        AND     ADVER_FILE_NO = '8000'
     </insert>
 
     <!-- 매장포스 환경정값 조회 -->

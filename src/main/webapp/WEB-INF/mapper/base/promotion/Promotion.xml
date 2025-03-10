@@ -2205,73 +2205,77 @@
                 <![CDATA[
                 INSERT INTO TB_HQ_POS_ADVER_FILE
                 (
-                   HQ_OFFICE_CD,
-                   ADVER_FILE_NO,
-                   FILE_USE_TYPE,
-                   ADVER_S_DATE,
-                   ADVER_E_DATE,
-                   FILE_DIR,
-                   FILE_NM,
-                   FILE_EXT,
-                   FILE_SIZE,
-                   FILE_MIME_TYPE,
-                   FILE_ORG_NM,
-                   FILE_DESC,
-                   FILE_CHG_DT,
-                   USE_YN,
-                   REG_DT,
-                   REG_ID,
-                   MOD_DT,
-                   MOD_ID,
-                   DISP_SEQ,
-                   DISP_TIME,
-                   TIME_YN,
-                   START_TIME,
-                   END_TIME,
-                   WEEK_YN,
-                   MON_YN,
-                   TUE_YN,
-                   WED_YN,
-                   THU_YN,
-                   FRI_YN,
-                   SAT_YN,
-                   SUN_YN,
-                   PROMOTION_CD
+                    HQ_OFFICE_CD
+                ,   ADVER_FILE_NO
+                ,   FILE_USE_TYPE
+                ,   ADVER_S_DATE
+                ,   ADVER_E_DATE
+                ,   FILE_DIR
+                ,   FILE_NM
+                ,   FILE_EXT
+                ,   FILE_SIZE
+                ,   FILE_MIME_TYPE
+                ,   FILE_ORG_NM
+                ,   FILE_DESC
+                ,   FILE_CHG_DT
+                ,   USE_YN
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ,   DISP_SEQ
+                ,   DISP_TIME
+                ,   TIME_YN
+                ,   START_TIME
+                ,   END_TIME
+                ,   WEEK_YN
+                ,   MON_YN
+                ,   TUE_YN
+                ,   WED_YN
+                ,   THU_YN
+                ,   FRI_YN
+                ,   SAT_YN
+                ,   SUN_YN
+                ,   PROMOTION_CD
+                ,   LANG_FG
+                ,   ADVER_URL
                 )
                 VALUES
                 (
-                    #{hqOfficeCd},
-                    #{verSerNo},
-                    #{fileType},
-                    #{startDate},
-                    #{endDate},
-                    #{fileDir},
-                    #{fileNm},
-                    #{fileExt},
-                    #{fileSize},
-                    #{fileMimeType},
-                    #{fileOrgNm},
-                    #{verSerNm},
-                    #{regDt},
-                    #{useYn},
-                    #{regDt},
-                    #{regId},
-                    #{modDt},
-                    #{modId},
-                    #{dispSeq},
-                    #{dispTime},
-                    #{timeYn},
-                    #{startTime},
-                    #{endTime},
-                    #{weekYn},
-                    #{monYn},
-                    #{tueYn},
-                    #{wedYn},
-                    #{thuYn},
-                    #{friYn},
-                    #{satYn},
-                    #{sunYn},
-                    #{promotionCd}
+                    #{hqOfficeCd}
+                ,   #{verSerNo}
+                ,   #{fileType}
+                ,   #{startDate}
+                ,   #{endDate}
+                ,   #{fileDir}
+                ,   #{fileNm}
+                ,   #{fileExt}
+                ,   #{fileSize}
+                ,   #{fileMimeType}
+                ,   #{fileOrgNm}
+                ,   #{verSerNm}
+                ,   #{regDt}
+                ,   #{useYn}
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                ,   #{dispSeq}
+                ,   #{dispTime}
+                ,   #{timeYn}
+                ,   #{startTime}
+                ,   #{endTime}
+                ,   #{weekYn}
+                ,   #{monYn}
+                ,   #{tueYn}
+                ,   #{wedYn}
+                ,   #{thuYn}
+                ,   #{friYn}
+                ,   #{satYn}
+                ,   #{sunYn}
+                ,   #{promotionCd}
+                ,   #{langFg}
+                ,   #{adverUrl}
                 )
                 ]]>
             </when>
@@ -2280,75 +2284,79 @@
                 <![CDATA[
                 INSERT INTO TB_MS_POS_ADVER_FILE
                 (
-                   STORE_CD,
-                   ADVER_FILE_NO,
-                   FILE_USE_TYPE,
-                   ADVER_S_DATE,
-                   ADVER_E_DATE,
-                   FILE_DIR,
-                   FILE_NM,
-                   FILE_EXT,
-                   FILE_SIZE,
-                   FILE_MIME_TYPE,
-                   FILE_ORG_NM,
-                   FILE_DESC,
-                   FILE_CHG_DT,
-                   USE_YN,
-                   REG_FG,
-                   REG_DT,
-                   REG_ID,
-                   MOD_DT,
-                   MOD_ID,
-                   DISP_SEQ,
-                   DISP_TIME,
-                   TIME_YN,
-                   START_TIME,
-                   END_TIME,
-                   WEEK_YN,
-                   MON_YN,
-                   TUE_YN,
-                   WED_YN,
-                   THU_YN,
-                   FRI_YN,
-                   SAT_YN,
-                   SUN_YN,
-                   PROMOTION_CD
+                    STORE_CD
+                ,   ADVER_FILE_NO
+                ,   FILE_USE_TYPE
+                ,   ADVER_S_DATE
+                ,   ADVER_E_DATE
+                ,   FILE_DIR
+                ,   FILE_NM
+                ,   FILE_EXT
+                ,   FILE_SIZE
+                ,   FILE_MIME_TYPE
+                ,   FILE_ORG_NM
+                ,   FILE_DESC
+                ,   FILE_CHG_DT
+                ,   USE_YN
+                ,   REG_FG
+                ,   REG_DT
+                ,   REG_ID
+                ,   MOD_DT
+                ,   MOD_ID
+                ,   DISP_SEQ
+                ,   DISP_TIME
+                ,   TIME_YN
+                ,   START_TIME
+                ,   END_TIME
+                ,   WEEK_YN
+                ,   MON_YN
+                ,   TUE_YN
+                ,   WED_YN
+                ,   THU_YN
+                ,   FRI_YN
+                ,   SAT_YN
+                ,   SUN_YN
+                ,   PROMOTION_CD
+                ,   LANG_FG
+                ,   ADVER_URL
                 )
                 VALUES
                 (
-                    #{storeCd},
-                    #{verSerNo},
-                    #{fileType},
-                    #{startDate},
-                    #{endDate},
-                    #{fileDir},
-                    #{fileNm},
-                    #{fileExt},
-                    #{fileSize},
-                    #{fileMimeType},
-                    #{fileOrgNm},
-                    #{verSerNm},
-                    #{regDt},
-                    #{useYn},
-                    'S',
-                    #{regDt},
-                    #{regId},
-                    #{modDt},
-                    #{modId},
-                    #{dispSeq},
-                    #{dispTime},
-                    #{timeYn},
-                    #{startTime},
-                    #{endTime},
-                    #{weekYn},
-                    #{monYn},
-                    #{tueYn},
-                    #{wedYn},
-                    #{thuYn},
-                    #{friYn},
-                    #{satYn},
-                    #{sunYn},
-                    #{promotionCd}
+                    #{storeCd}
+                ,   #{verSerNo}
+                ,   #{fileType}
+                ,   #{startDate}
+                ,   #{endDate}
+                ,   #{fileDir}
+                ,   #{fileNm}
+                ,   #{fileExt}
+                ,   #{fileSize}
+                ,   #{fileMimeType}
+                ,   #{fileOrgNm}
+                ,   #{verSerNm}
+                ,   #{regDt}
+                ,   #{useYn}
+                ,   'S'
+                ,   #{regDt}
+                ,   #{regId}
+                ,   #{modDt}
+                ,   #{modId}
+                ,   #{dispSeq}
+                ,   #{dispTime}
+                ,   #{timeYn}
+                ,   #{startTime}
+                ,   #{endTime}
+                ,   #{weekYn}
+                ,   #{monYn}
+                ,   #{tueYn}
+                ,   #{wedYn}
+                ,   #{thuYn}
+                ,   #{friYn}
+                ,   #{satYn}
+                ,   #{sunYn}
+                ,   #{promotionCd}
+                ,   #{langFg}
+                ,   #{adverUrl}
                 )
                 ]]>
             </when>
@@ -2516,7 +2524,9 @@
                     THU_YN = #{thuYn},
                     FRI_YN = #{friYn},
                     SAT_YN = #{satYn},
-                    SUN_YN = #{sunYn}
+                    SUN_YN = #{sunYn},
+                    LANG_FG = #{langFg},
+                    ADVER_URL = #{adverUrl}
                 WHERE HQ_OFFICE_CD = #{hqOfficeCd}
                 AND FILE_USE_TYPE = #{fileType}
                 AND PROMOTION_CD = #{promotionCd}
@@ -2540,7 +2550,9 @@
                     THU_YN = #{thuYn},
                     FRI_YN = #{friYn},
                     SAT_YN = #{satYn},
-                    SUN_YN = #{sunYn}
+                    SUN_YN = #{sunYn},
+                    LANG_FG = #{langFg},
+                    ADVER_URL = #{adverUrl}
                 WHERE STORE_CD = #{storeCd}
                 AND FILE_USE_TYPE = #{fileType}
                 AND PROMOTION_CD = #{promotionCd}
