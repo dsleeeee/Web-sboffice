@@ -238,6 +238,11 @@ public class StoreManageVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 언어구분 */
+    private String langFg;
+    /** 파일URL */
+    private String adverUrl;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -1099,4 +1104,20 @@ public class StoreManageVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getLangFg() {
+        return langFg;
+    }
+
+    public void setLangFg(String langFg) {
+        this.langFg = langFg;
+    }
+
+    public String getAdverUrl() {
+        return adverUrl;
+    }
+
+    public void setAdverUrl(String adverUrl) {
+        this.adverUrl = adverUrl;
+    }
 }
