@@ -98,6 +98,10 @@ public class HqManageVO extends PageVO {
     private String envst;
     /** 환경설정사용등록 */
     private String envst1266;
+    /** 언어구분 */
+    private String langFg;
+    /** 파일URL */
+    private String adverUrl;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -478,5 +482,21 @@ public class HqManageVO extends PageVO {
 
     public void setEnvst1266(String envst1266) {
         this.envst1266 = envst1266;
+    }
+
+    public String getLangFg() {
+        return langFg;
+    }
+
+    public void setLangFg(String langFg) {
+        this.langFg = langFg;
+    }
+
+    public String getAdverUrl() {
+        return adverUrl;
+    }
+
+    public void setAdverUrl(String adverUrl) {
+        this.adverUrl = adverUrl;
     }
 }
