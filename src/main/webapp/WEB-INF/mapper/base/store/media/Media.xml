@@ -419,11 +419,18 @@
     -->
     <select id="chkFileType" parameterType="MediaVO" resultType="String">
         /* USE : Media.chkFileType */
-        SELECT COUNT(*)
-          FROM TB_CM_NMCODE
-         WHERE NMCODE_GRP_CD = '303'
-           AND NMCODE_ITEM_1 ='날짜중복불가'
-           AND NMCODE_CD = #{fileType}
+        SELECT  COUNT(*)
+        FROM    TB_CM_NMCODE
+        WHERE   NMCODE_GRP_CD = '303'
+        AND     NMCODE_CD = #{fileType}
+        <![CDATA[
+            AND (
+                  CASE
+                      WHEN  INSTR(NMCODE_ITEM_1, '⊥') > 0 THEN SUBSTR(NMCODE_ITEM_1 ,1, INSTR(NMCODE_ITEM_1, '⊥') - 1)
+                      ELSE  NMCODE_ITEM_1
+                  END
+                ) = '날짜중복불가'
+        ]]>
     </select>
 
     <!-- 파일 확장자 조회   -->
