@@ -1365,12 +1365,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if ($("#dlvrProdChk").is(":checked") === true) {
         $("#dlvrProdChk").prop("checked", false);
       }
-      if ($("#menuAuthChk").is(":checked") === true) {
-        $("#menuAuthChk").prop("checked", false);
-      }
-      if ($("#tableChk").is(":checked") === true) {
-        $("#tableChk").prop("checked", false);
-      }
       $("#productChk").attr("disabled", true);
       $("#salePriceChk").attr("disabled", true);
       $("#supplyPriceChk").attr("disabled", true);
@@ -1388,8 +1382,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#touchKeyChk").attr("disabled", false);
         $("#promotionChk").attr("disabled", false);
         $("#dlvrProdChk").attr("disabled", false);
-        $("#menuAuthChk").attr("disabled", false);
-        $("#tableChk").attr("disabled", false);
 
       // 매장환경복사의 매장을 선택 후 신규등록할 매장을 수정하면
       } else {
@@ -1416,12 +1408,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             if ($("#dlvrProdChk").is(":checked") === true) {
                 $("#dlvrProdChk").prop("checked", false);
             }
-            if ($("#menuAuthChk").is(":checked") === true) {
-              $("#menuAuthChk").prop("checked", false);
-            }
-            if ($("#tableChk").is(":checked") === true) {
-              $("#tableChk").prop("checked", false);
-            }
             $("#productChk").attr("disabled", true);
             $("#salePriceChk").attr("disabled", true);
             $("#supplyPriceChk").attr("disabled", true);
@@ -1438,8 +1424,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#touchKeyChk").attr("disabled", false);
             $("#promotionChk").attr("disabled", false);
             $("#dlvrProdChk").attr("disabled", false);
-            $("#menuAuthChk").attr("disabled", false);
-            $("#tableChk").attr("disabled", false);
 
           // 매장환경복사 본사와 다른 본사면
           } else if($scope.store.hqOfficeCd !== $scope.store.copyHqOfficeCd) {
@@ -1463,12 +1447,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             }
             if ($("#dlvrProdChk").is(":checked") === true) {
               $("#dlvrProdChk").prop("checked", false);
-            }
-            if ($("#menuAuthChk").is(":checked") === true) {
-              $("#menuAuthChk").prop("checked", false);
-            }
-            if ($("#tableChk").is(":checked") === true) {
-              $("#tableChk").prop("checked", false);
             }
             $("#productChk").attr("disabled", true);
             $("#salePriceChk").attr("disabled", true);
@@ -2260,8 +2238,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("input:checkbox[id='touchKeyChk']").prop("checked", false);
         $("input:checkbox[id='promotionChk']").prop("checked", false);
         $("input:checkbox[id='dlvrProdChk']").prop("checked", false);
-        $("input:checkbox[id='menuAuthChk']").prop("checked", false);
-        $("input:checkbox[id='tableChk']").prop("checked", false);
       }
 
     } else {

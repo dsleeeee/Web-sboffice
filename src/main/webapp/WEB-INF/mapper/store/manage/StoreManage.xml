@@ -252,26 +252,12 @@
                 tmsi.MOMS_STORE_FG_02,
                 tmsi.MOMS_STORE_FG_03,
                 tmsi.MOMS_STORE_FG_04,
-                tmsi.MOMS_STORE_FG_05,
-                tmpt.VENDOR_CD,
-                tmpt.VENDOR_TERMNL_NO,
-                tmpt.VENDOR_SER_NO
+                tmsi.MOMS_STORE_FG_05
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
                TB_CM_VAN_CMPNY tcvc,
-               TB_MS_STORE_INFO tmsi,
-               (
-                    SELECT  A.STORE_CD
-                    ,       A.VENDOR_CD
-                    ,       A.VENDOR_TERMNL_NO
-                    ,       A.VENDOR_SER_NO
-                    FROM    TB_MS_POS_TERMNL A
-                    WHERE   A.STORE_CD = #{storeCd}
-                    AND     A.POS_NO = '01'
-                    AND     A.VENDOR_FG =   '01'
-                    AND 	DECODE(A.BASE_VAN_YN, 'Y', 1, 2) = 1
-               ) tmpt
+               TB_MS_STORE_INFO tmsi
          WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = #{storeCd}
@@ -279,7 +265,6 @@
            AND tcvc.VAN_CD = tms.VAN_CD
            AND tcvc.VAN_FG = '01' -- VAN만
            AND tmsi.STORE_CD (+)= tms.STORE_CD
-		   AND tmpt.STORE_CD (+)= tms.STORE_CD
         ]]>
     </select>
 
@@ -5625,6 +5610,14 @@
                     B.STORE_CD      =  A.STORE_CD
                 AND B.TBL_GRP_CD    =  A.TBL_GRP_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.TBL_GRP_NM      = B.TBL_GRP_NM
+                ,             A.TBL_GRP_FG    = B.TBL_GRP_FG
+                ,             A.BG_IMG_NM     = B.BG_IMG_NM
+                ,             A.DISP_SEQ      = B.DISP_SEQ
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5689,6 +5682,19 @@
                     B.STORE_CD      =  A.STORE_CD
                 AND B.TBL_CD        =  A.TBL_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.TBL_NM        = B.TBL_NM
+                ,             A.TBL_GRP_CD    = B.TBL_GRP_CD
+                ,             A.TBL_SEAT_CNT  = B.TBL_SEAT_CNT
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.TBL_TYPE_FG   = B.TBL_TYPE_FG
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
+                ,             A.IMG_NM        = B.IMG_NM
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5768,6 +5774,21 @@
                 AND B.TBL_TYPE_FG   =  A.TBL_TYPE_FG
                 AND B.ATTR_CD       =  A.ATTR_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.ATTR_NM       = B.ATTR_NM
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.TEXTALIGN_FG  = B.TEXTALIGN_FG
+                ,             A.IMG_NM        = B.IMG_NM
+                ,             A.FONT_NM       = B.FONT_NM
+                ,             A.FONT_SIZE     = B.FONT_SIZE
+                ,             A.FONT_STYLE_FG = B.FONT_STYLE_FG
+                ,             A.FONT_COLOR    = B.FONT_COLOR
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5855,6 +5876,22 @@
                 AND B.TBL_CD   =  A.TBL_CD
                 AND B.ATTR_CD       =  A.ATTR_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.ATTR_NM       = B.ATTR_NM
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.TEXTALIGN_FG  = B.TEXTALIGN_FG
+                ,             A.IMG_NM        = B.IMG_NM
+                ,             A.FONT_NM       = B.FONT_NM
+                ,             A.FONT_SIZE     = B.FONT_SIZE
+                ,             A.FONT_STYLE_FG = B.FONT_STYLE_FG
+                ,             A.FONT_COLOR    = B.FONT_COLOR
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
+                ,             A.VIEW_YN       = B.VIEW_YN
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5932,6 +5969,14 @@
                     B.STORE_CD      =  A.STORE_CD
                 AND B.TG_CD         =  A.TG_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.TG_NM         = B.TG_NM
+                ,             A.TG_FG         = B.TG_FG
+                ,             A.TG_BGIMAGE    = B.TG_BGIMAGE
+                ,             A.TG_SORT       = B.TG_SORT
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -5998,6 +6043,21 @@
                     B.STORE_CD      =  A.STORE_CD
                 AND B.TABLE_CD      =  A.TABLE_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.TABLE_NM      = B.TABLE_NM
+                ,             A.TG_CD         = B.TG_CD
+                ,             A.GROUP_CD      = B.GROUP_CD
+                ,             A.SEAT_NUM      = B.SEAT_NUM
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.SHAPE_FG      = B.SHAPE_FG
+                ,             A.TABLE_FG      = B.TABLE_FG
+                ,             A.STATUS_FG     = B.STATUS_FG
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -6068,6 +6128,9 @@
                 AND B.TABLE_CD      =  A.TABLE_CD
                 AND B.COM_CD        =  A.COM_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -6124,12 +6187,12 @@
                 AND B.PARENT_CD     =  A.PARENT_CD
             )
             WHEN MATCHED THEN
-            UPDATE SET A.NMCODE_NM     = B.NMCODE_NM,
-                        A.NMCODE_ITEM_1 = B.NMCODE_ITEM_1,
-                        A.NMCODE_ITEM_2 = B.NMCODE_ITEM_2,
-                        A.USE_YN        = B.USE_YN,
-                        A.MOD_DT        = B.MOD_DT,
-                        A.MOD_ID        = B.MOD_ID
+                UPDATE SET  A.NMCODE_NM     = B.NMCODE_NM
+                ,             A.NMCODE_ITEM_1 = B.NMCODE_ITEM_1
+                ,             A.NMCODE_ITEM_2 = B.NMCODE_ITEM_2
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -6201,6 +6264,22 @@
                 AND B.TABLE_FG      =  A.TABLE_FG
                 AND B.PROPERTY_CD   =  A.PROPERTY_CD
             )
+            WHEN MATCHED THEN
+                UPDATE SET  A.PROPERTY_NM     = B.PROPERTY_NM
+                ,             A.X             = B.X
+                ,             A.Y             = B.Y
+                ,             A.WIDTH         = B.WIDTH
+                ,             A.HEIGHT        = B.HEIGHT
+                ,             A.TEXTALIGN_FG  = B.TEXTALIGN_FG
+                ,             A.IMAGE_NM      = B.IMAGE_NM
+                ,             A.FONT          = B.FONT
+                ,             A.FONT_SIZE     = B.FONT_SIZE
+                ,             A.FONT_STYLE_FG = B.FONT_STYLE_FG
+                ,             A.FONT_COLOR    = B.FONT_COLOR
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
+                ,             A.FLEX_VIEW_YN  = B.FLEX_VIEW_YN
             WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -9915,111 +9994,4 @@
                                 )
         AND USE_YN = 'Y'
     </select>
-
-    <!-- 포스 터미널 정보 등록 -->
-    <!--
-        TABLE    : TB_MS_POS_TERMNL
-        COMMENTS : 포스의 터미널 정보를 등록한다.
-    -->
-    <insert id="insertPosTerminalInfo" parameterType="storeManageVO">
-        /* StoreManageMapper.insertPosTerminalInfo */
-        INSERT INTO TB_MS_POS_TERMNL
-        (   STORE_CD,
-            POS_NO,
-            VENDOR_FG,
-            VENDOR_CD,
-            VENDOR_NM,
-            VENDOR_TERMNL_NO,
-            VENDOR_SER_NO,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID,
-            BASE_VAN_YN
-        )
-        VALUES
-        (
-            #{storeCd},
-            #{strPosNo},
-            #{vendorFg},
-            #{vendorCd},
-            (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
-            #{vendorTermnlNo},
-            #{vendorSerNo},
-            #{regDt},
-            #{regId},
-            #{modDt},
-            #{modId},
-            #{baseVanYn}
-        )
-    </insert>
-
-    <!-- 포스 터미널 정보 수정 -->
-    <!--
-        TABLE    : TB_MS_POS_TERMNL
-        COMMENTS : 포스 터미널의 정보를 수정한다.
-    -->
-    <update id="updatePosTerminalInfo" parameterType="storeManageVO">
-        /* StoreManageMapper.updatePosTerminalInfo */
-        UPDATE TB_MS_POS_TERMNL
-           SET VENDOR_CD = #{vendorCd},
-               VENDOR_NM = (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
-               VENDOR_TERMNL_NO = #{vendorTermnlNo},
-               VENDOR_SER_NO = #{vendorSerNo},
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
-         WHERE STORE_CD = #{storeCd}
-           AND POS_NO = #{posNo}
-           AND VENDOR_FG = #{vendorFg}
-           AND VENDOR_CD = #{bVendorCd}
-           AND BASE_VAN_YN = #{baseVanYn}
-    </update>
-
-    <!-- 코너 터미널 정보 수정 -->
-    <!--
-        TABLE    : TB_MS_CORNER_TERMNL
-        COMMENTS : 코너 터미널의 정보를 수정한다.
-    -->
-    <update id="updateCornerTerminalInfo" parameterType="storeManageVO">
-        /* StoreManageMapper.updateCornerTerminalInfo */
-        UPDATE TB_MS_CORNER_TERMNL
-           SET VENDOR_CD = #{vendorCd},
-               VENDOR_NM = (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
-               VENDOR_TERMNL_NO = #{vendorTermnlNo},
-               VENDOR_SER_NO = #{vendorSerNo},
-               MOD_DT = #{modDt},
-               MOD_ID = #{modId}
-         WHERE STORE_CD = #{storeCd}
-           AND CORNR_CD = #{cornrCd}
-           AND VENDOR_FG = #{vendorFg}
-           AND VENDOR_CD = #{bVendorCd}
-           AND BASE_VAN_YN = #{baseVanYn}
-    </update>
-
-    <!-- 터미널관리(밴더코드) 중복 체크 -->
-    <!--
-        TABLE    : TB_MS_POS_TERMNL, TB_MS_CORNER_TERMNL
-        PARAM    : storeManageVO
-        COMMENTS : 중복되는 터미널관리(밴더코드)가 있는지 확인한다.
-    -->
-    <select id="chkVendorCd" parameterType="storeManageVO" resultType="int">
-        /* USE : StoreManageMapper.chkVendorCd */
-        SELECT SUM(A.VAN_CNT) AS VAN_CNT
-        FROM   (
-                    SELECT COUNT(*) AS VAN_CNT
-                    FROM   TB_MS_POS_TERMNL
-                    WHERE  STORE_CD = #{storeCd}
-                    AND    POS_NO = #{strPosNo}
-                    AND    VENDOR_FG = #{vendorFg}
-                    AND    VENDOR_CD = #{vendorCd}
-                    UNION
-                    SELECT COUNT(*) AS VAN_CNT
-                    FROM   TB_MS_CORNER_TERMNL
-                    WHERE  STORE_CD = #{storeCd}
-                    AND    CORNR_CD = #{cornrCd}
-                    AND    VENDOR_FG = #{vendorFg}
-                    AND    VENDOR_CD = #{vendorCd}
-               ) A
-    </select>
-
 </mapper>
