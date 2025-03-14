@@ -58,6 +58,8 @@ public class KitchenPrintVO extends CmmVO {
     private String onlinePrintYn;
     /** 배달포장주문시 주방프린터 출력여부 */
     private String dlvrPrintYn;
+    /** 제우스 매핑코드 */
+    private String zeusPrterNo;
 
     /**
      * @return the storeCd
@@ -255,5 +257,13 @@ public class KitchenPrintVO extends CmmVO {
 
     public void setDlvrPrintYn(String dlvrPrintYn) {
         this.dlvrPrintYn = dlvrPrintYn;
+    }
+
+    public String getZeusPrterNo() {
+        return zeusPrterNo;
+    }
+
+    public void setZeusPrterNo(String zeusPrterNo) {
+        this.zeusPrterNo = zeusPrterNo;
     }
 }

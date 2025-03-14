@@ -248,6 +248,16 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
         $scope._popMsg(msg);
         return false;
       }
+
+      // 제우스매핑코드 최대길이 체크
+      if (nvl($scope.flex.collectionView.itemsEdited[i].zeusPrterNo, '') !== '' &&
+          nvl($scope.flex.collectionView.itemsEdited[i].zeusPrterNo + '', '').getByteLengthForOracle() > 10) {
+        var msg = messages["storeManage.kitchenPrint.zeusPrterNo"] + messages["cmm.overLength"] + " 10 " +
+            ", 현재 : " + $scope.flex.collectionView.itemsEdited[i].zeusPrterNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
+        $scope._popMsg(msg);
+        return false;
+      }
+
       $scope.flex.collectionView.itemsEdited[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsEdited[i].status = "U";
       params.push($scope.flex.collectionView.itemsEdited[i]);
@@ -286,6 +296,15 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
           nvl($scope.flex.collectionView.itemsAdded[i].prterNetPort + '', '').length > 5) {
         var msg = messages["storeManage.prterNetPort"] + messages["cmm.overLength"] + " 5 " +
             ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].prterNetPort.length
+        $scope._popMsg(msg);
+        return false;
+      }
+
+      // 제우스매핑코드 최대길이 체크
+      if (nvl($scope.flex.collectionView.itemsAdded[i].zeusPrterNo, '') !== '' &&
+          nvl($scope.flex.collectionView.itemsAdded[i].zeusPrterNo + '', '').getByteLengthForOracle() > 10) {
+        var msg = messages["storeManage.kitchenPrint.zeusPrterNo"] + messages["cmm.overLength"] + " 10 " +
+            ", 현재 : " + $scope.flex.collectionView.itemsAdded[i].zeusPrterNo.getByteLengthForOracle() + messages["cmm.bateLengthInfo"];
         $scope._popMsg(msg);
         return false;
       }
