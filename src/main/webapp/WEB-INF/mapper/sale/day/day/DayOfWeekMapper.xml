@@ -194,43 +194,41 @@
     -->
     <select id="getDayOfWeekTaxList" parameterType="DayOfWeekVO" resultType="DefaultMap">
         /* DayOfWeekMapper.getDayOfWeekTaxList */
-        SELECT
-        YOIL,
-        COUNT(DISTINCT STORE_CD) AS STORE_CNT,
-        SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
-        SUM(TOT_DC_AMT) AS TOT_DC_AMT,
-        SUM(REAL_SALE_AMT) AS REAL_SALE_AMT,
-        SUM(TAX_SALE_AMT) AS TAX_SALE_AMT,
-        SUM(TAX_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT,
-        SUM(VAT_AMT) AS VAT_AMT,
-        SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT,
-        SUM(NET_SALE_AMT) AS NET_SALE_AMT
+        SELECT  YOIL
+        ,       COUNT(DISTINCT STORE_CD) AS STORE_CNT
+        ,       SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+        ,       SUM(TOT_DC_AMT) AS TOT_DC_AMT
+        ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+        ,       SUM(TAX_SALE_AMT) AS TAX_SALE_AMT
+        ,       SUM(TAX_SALE_AMT) - SUM(VAT_AMT) AS GA_AMT
+        ,       SUM(VAT_AMT) AS VAT_AMT
+        ,       SUM(NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
+        ,       SUM(NET_SALE_AMT) AS NET_SALE_AMT
         FROM
-        (
-            SELECT
-            TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
-            tssh.STORE_CD,
-            tssh.TOT_SALE_AMT,
-            tssh.TOT_DC_AMT,
-            tssh.REAL_SALE_AMT,
-            tssh.TAX_SALE_AMT,
-            tssh.VAT_AMT,
-            tssh.NO_TAX_SALE_AMT,
-            tssh.NET_SALE_AMT
-            FROM TB_SL_SALE_HDR tssh
-            WHERE 1=1
-            AND tssh.HQ_OFFICE_CD = #{membrOrgnCd}
-            AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            <if test='storeCdQuery != null and storeCdQuery != ""'>
-                AND tssh.STORE_CD IN (${storeCdQuery})
-            </if>
-            <if test='orgnFg != null and orgnFg == "H"'>
-                AND (
-                        'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                    OR   tssh.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                    )
-            </if>
-        )
+            (
+                SELECT  TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                ,       tsdt.STORE_CD
+                ,       tsdt.TOT_SALE_AMT
+                ,       tsdt.TOT_DC_AMT
+                ,       tsdt.REAL_SALE_AMT
+                ,       tsdt.TAX_SALE_AMT
+                ,       tsdt.VAT_AMT
+                ,       tsdt.NO_TAX_SALE_AMT
+                ,       tsdt.NET_SALE_AMT
+                FROM    TB_SL_DAILY_TOTAL tsdt
+                WHERE   1=1
+                AND     tsdt.HQ_OFFICE_CD = #{membrOrgnCd}
+                AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND tsdt.STORE_CD IN (${storeCdQuery})
+                </if>
+                <if test='orgnFg != null and orgnFg == "H"'>
+                    AND (
+                            'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                        OR   tsdt.STORE_CD IN (SELECT STORE_CD  FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                        )
+                </if>
+            )
         GROUP BY YOIL
         ORDER BY DECODE(YOIL, '일', 1, '월', 2, '화', 3, '수', 4, '목', 5, '금', 6, '토', 7, 8)
     </select>
