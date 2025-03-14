@@ -403,19 +403,27 @@
         MERGE INTO TB_MS_STORE A
         USING
         (
-            SELECT
-            C.STORE_CD,
-            (SELECT BRANCH_CD FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_NM = C.BRANCH_CD) AS BRANCH_CD
-            FROM TB_TMP_EXCEL_STORE_INFO C
-            WHERE C.SESSION_ID = #{sessionId}
-            AND C.HQ_OFFICE_CD = #{hqOfficeCd}
-            <if test='storeFg != null and storeFg != ""'>
-                AND C.STORE_CD IN
-                <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                    #{item}
-                </foreach>
-            </if>
-            AND C.SEQ BETWEEN #{offset} AND #{limit}
+            SELECT  F.STORE_CD
+            ,       DECODE(F.BRANCH_CD  , 'CHK_NONE', '', F.BRANCH_CD  )    AS BRANCH_CD
+            ,       DECODE(F.B_BRANCH_CD, 'CHK_NONE', '', F.B_BRANCH_CD)    AS B_BRANCH_CD
+            FROM    (
+                        SELECT  D.STORE_CD
+                        ,       D.BRANCH_CD
+                        ,       NVL(E.BRANCH_CD, 'CHK_NONE') B_BRANCH_CD
+                        FROM    (
+                                    SELECT
+                                    C.STORE_CD,
+                                    NVL((SELECT BRANCH_CD FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_NM = C.BRANCH_CD), 'CHK_NONE') AS BRANCH_CD
+                                    FROM TB_TMP_EXCEL_STORE_INFO C
+                                    WHERE C.SESSION_ID = #{sessionId}
+                                    AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND C.SEQ BETWEEN #{offset} AND #{limit}
+                                ) D
+                        ,       TB_MS_STORE E
+                        WHERE   E.STORE_CD  (+) =   D.STORE_CD
+                    ) F
+            WHERE   F.BRANCH_CD     !=  'CHK_NONE'
+            AND     F.B_BRANCH_CD   !=  F.BRANCH_CD
         ) B
         ON (A.STORE_CD = B.STORE_CD)
         WHEN MATCHED THEN
@@ -434,39 +442,99 @@
     <update id="getSimpleStoreInfoSave" parameterType="storeBatchChangeVO">
         /* StoreBatchChangeMapper.getSimpleStoreInfoSave */
         MERGE INTO TB_MS_STORE_INFO A
-        USING (
-                SELECT
-                C.STORE_CD,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_NM = C.MOMS_TEAM) AS MOMS_TEAM,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '152' AND NMCODE_NM = C.MOMS_AC_SHOP) AS MOMS_AC_SHOP,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_NM = C.MOMS_AREA_FG) AS MOMS_AREA_FG,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_NM = C.MOMS_COMMERCIAL) AS MOMS_COMMERCIAL,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_NM = C.MOMS_SHOP_TYPE) AS MOMS_SHOP_TYPE,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_NM = C.MOMS_STORE_MANAGE_TYPE) AS MOMS_STORE_MANAGE_TYPE,
-                #{regDt} AS REG_DT,
-                #{regId} AS REG_ID,
-                #{modDt} AS MOD_DT,
-                #{modId} AS MOD_ID,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_NM = C.MOMS_STORE_FG_01) AS MOMS_STORE_FG_01,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '169' AND NMCODE_NM = C.MOMS_STORE_FG_02) AS MOMS_STORE_FG_02,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '170' AND NMCODE_NM = C.MOMS_STORE_FG_03) AS MOMS_STORE_FG_03,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '171' AND NMCODE_NM = C.MOMS_STORE_FG_04) AS MOMS_STORE_FG_04,
-                (SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '172' AND NMCODE_NM = C.MOMS_STORE_FG_05) AS MOMS_STORE_FG_05
-                FROM TB_TMP_EXCEL_STORE_INFO C
-                WHERE 1=1
-                AND C.SESSION_ID = #{sessionId}
-                AND C.HQ_OFFICE_CD = #{hqOfficeCd}
-                <if test='storeInfoFg != null and storeInfoFg != ""'>
-                    AND C.STORE_CD IN
-                    <foreach collection="storeCdList" item="item" open=" (" separator="," close=")" >
-                        #{item}
-                    </foreach>
-                </if>
-                AND C.SEQ BETWEEN #{offset} AND #{limit}
-            ) B
-        ON (
-                A.STORE_CD = B.STORE_CD
-            )
+        USING
+        (
+            SELECT  F.STORE_CD
+            ,       DECODE(F.MOMS_TEAM               , 'CHK_NONE', '', F.MOMS_TEAM               )    AS MOMS_TEAM
+            ,       DECODE(F.MOMS_AC_SHOP            , 'CHK_NONE', '', F.MOMS_AC_SHOP            )    AS MOMS_AC_SHOP
+            ,       DECODE(F.MOMS_AREA_FG            , 'CHK_NONE', '', F.MOMS_AREA_FG            )    AS MOMS_AREA_FG
+            ,       DECODE(F.MOMS_COMMERCIAL         , 'CHK_NONE', '', F.MOMS_COMMERCIAL         )    AS MOMS_COMMERCIAL
+            ,       DECODE(F.MOMS_SHOP_TYPE          , 'CHK_NONE', '', F.MOMS_SHOP_TYPE          )    AS MOMS_SHOP_TYPE
+            ,       DECODE(F.MOMS_STORE_MANAGE_TYPE  , 'CHK_NONE', '', F.MOMS_STORE_MANAGE_TYPE  )    AS MOMS_STORE_MANAGE_TYPE
+            ,       DECODE(F.MOMS_STORE_FG_01        , 'CHK_NONE', '', F.MOMS_STORE_FG_01        )    AS MOMS_STORE_FG_01
+            ,       DECODE(F.MOMS_STORE_FG_02        , 'CHK_NONE', '', F.MOMS_STORE_FG_02        )    AS MOMS_STORE_FG_02
+            ,       DECODE(F.MOMS_STORE_FG_03        , 'CHK_NONE', '', F.MOMS_STORE_FG_03        )    AS MOMS_STORE_FG_03
+            ,       DECODE(F.MOMS_STORE_FG_04        , 'CHK_NONE', '', F.MOMS_STORE_FG_04        )    AS MOMS_STORE_FG_04
+            ,       DECODE(F.MOMS_STORE_FG_05        , 'CHK_NONE', '', F.MOMS_STORE_FG_05        )    AS MOMS_STORE_FG_05
+            ,       DECODE(F.B_MOMS_TEAM             , 'CHK_NONE', '', F.B_MOMS_TEAM             )    AS B_MOMS_TEAM
+            ,       DECODE(F.B_MOMS_AC_SHOP          , 'CHK_NONE', '', F.B_MOMS_AC_SHOP          )    AS B_MOMS_AC_SHOP
+            ,       DECODE(F.B_MOMS_AREA_FG          , 'CHK_NONE', '', F.B_MOMS_AREA_FG          )    AS B_MOMS_AREA_FG
+            ,       DECODE(F.B_MOMS_COMMERCIAL       , 'CHK_NONE', '', F.B_MOMS_COMMERCIAL       )    AS B_MOMS_COMMERCIAL
+            ,       DECODE(F.B_MOMS_SHOP_TYPE        , 'CHK_NONE', '', F.B_MOMS_SHOP_TYPE        )    AS B_MOMS_SHOP_TYPE
+            ,       DECODE(F.B_MOMS_STORE_MANAGE_TYPE, 'CHK_NONE', '', F.B_MOMS_STORE_MANAGE_TYPE)    AS B_MOMS_STORE_MANAGE_TYPE
+            ,       DECODE(F.B_MOMS_STORE_FG_01      , 'CHK_NONE', '', F.B_MOMS_STORE_FG_01      )    AS B_MOMS_STORE_FG_01
+            ,       DECODE(F.B_MOMS_STORE_FG_02      , 'CHK_NONE', '', F.B_MOMS_STORE_FG_02      )    AS B_MOMS_STORE_FG_02
+            ,       DECODE(F.B_MOMS_STORE_FG_03      , 'CHK_NONE', '', F.B_MOMS_STORE_FG_03      )    AS B_MOMS_STORE_FG_03
+            ,       DECODE(F.B_MOMS_STORE_FG_04      , 'CHK_NONE', '', F.B_MOMS_STORE_FG_04      )    AS B_MOMS_STORE_FG_04
+            ,       DECODE(F.B_MOMS_STORE_FG_05      , 'CHK_NONE', '', F.B_MOMS_STORE_FG_05      )    AS B_MOMS_STORE_FG_05
+            ,       #{regDt} AS REG_DT
+            ,       #{regId} AS REG_ID
+            ,       #{modDt} AS MOD_DT
+            ,       #{modId} AS MOD_ID
+            FROM    (
+                        SELECT  D.STORE_CD
+                        ,       D.MOMS_TEAM
+                        ,       D.MOMS_AC_SHOP
+                        ,       D.MOMS_AREA_FG
+                        ,       D.MOMS_COMMERCIAL
+                        ,       D.MOMS_SHOP_TYPE
+                        ,       D.MOMS_STORE_MANAGE_TYPE
+                        ,       D.MOMS_STORE_FG_01
+                        ,       D.MOMS_STORE_FG_02
+                        ,       D.MOMS_STORE_FG_03
+                        ,       D.MOMS_STORE_FG_04
+                        ,       D.MOMS_STORE_FG_05
+                        ,       NVL(E.MOMS_TEAM             , 'CHK_NONE') B_MOMS_TEAM
+                        ,       NVL(E.MOMS_AC_SHOP          , 'CHK_NONE') B_MOMS_AC_SHOP
+                        ,       NVL(E.MOMS_AREA_FG          , 'CHK_NONE') B_MOMS_AREA_FG
+                        ,       NVL(E.MOMS_COMMERCIAL       , 'CHK_NONE') B_MOMS_COMMERCIAL
+                        ,       NVL(E.MOMS_SHOP_TYPE        , 'CHK_NONE') B_MOMS_SHOP_TYPE
+                        ,       NVL(E.MOMS_STORE_MANAGE_TYPE, 'CHK_NONE') B_MOMS_STORE_MANAGE_TYPE
+                        ,       NVL(E.MOMS_STORE_FG_01      , 'CHK_NONE') B_MOMS_STORE_FG_01
+                        ,       NVL(E.MOMS_STORE_FG_02      , 'CHK_NONE') B_MOMS_STORE_FG_02
+                        ,       NVL(E.MOMS_STORE_FG_03      , 'CHK_NONE') B_MOMS_STORE_FG_03
+                        ,       NVL(E.MOMS_STORE_FG_04      , 'CHK_NONE') B_MOMS_STORE_FG_04
+                        ,       NVL(E.MOMS_STORE_FG_05      , 'CHK_NONE') B_MOMS_STORE_FG_05
+                        FROM    (
+                                    SELECT
+                                    C.STORE_CD,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_NM = C.MOMS_TEAM)               , 'CHK_NONE') AS MOMS_TEAM,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '152' AND NMCODE_NM = C.MOMS_AC_SHOP)            , 'CHK_NONE') AS MOMS_AC_SHOP,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_NM = C.MOMS_AREA_FG)            , 'CHK_NONE') AS MOMS_AREA_FG,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_NM = C.MOMS_COMMERCIAL)         , 'CHK_NONE') AS MOMS_COMMERCIAL,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_NM = C.MOMS_SHOP_TYPE)          , 'CHK_NONE') AS MOMS_SHOP_TYPE,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '156' AND NMCODE_NM = C.MOMS_STORE_MANAGE_TYPE)  , 'CHK_NONE') AS MOMS_STORE_MANAGE_TYPE,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '167' AND NMCODE_NM = C.MOMS_STORE_FG_01)        , 'CHK_NONE') AS MOMS_STORE_FG_01,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '169' AND NMCODE_NM = C.MOMS_STORE_FG_02)        , 'CHK_NONE') AS MOMS_STORE_FG_02,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '170' AND NMCODE_NM = C.MOMS_STORE_FG_03)        , 'CHK_NONE') AS MOMS_STORE_FG_03,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '171' AND NMCODE_NM = C.MOMS_STORE_FG_04)        , 'CHK_NONE') AS MOMS_STORE_FG_04,
+                                    NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '172' AND NMCODE_NM = C.MOMS_STORE_FG_05)        , 'CHK_NONE') AS MOMS_STORE_FG_05
+                                    FROM TB_TMP_EXCEL_STORE_INFO C
+                                    WHERE 1=1
+                                    AND C.SESSION_ID = #{sessionId}
+                                    AND C.HQ_OFFICE_CD = #{hqOfficeCd}
+                                    AND C.SEQ BETWEEN #{offset} AND #{limit}
+                                ) D
+                        ,       TB_MS_STORE_INFO E
+                        WHERE   E.STORE_CD  (+) =   D.STORE_CD
+                    ) F
+            WHERE   (       F.B_MOMS_TEAM                !=  F.MOMS_TEAM
+                    OR      F.B_MOMS_AC_SHOP             !=  F.MOMS_AC_SHOP
+                    OR      F.B_MOMS_AREA_FG             !=  F.MOMS_AREA_FG
+                    OR      F.B_MOMS_COMMERCIAL          !=  F.MOMS_COMMERCIAL
+                    OR      F.B_MOMS_SHOP_TYPE           !=  F.MOMS_SHOP_TYPE
+                    OR      F.B_MOMS_STORE_MANAGE_TYPE   !=  F.MOMS_STORE_MANAGE_TYPE
+                    OR      F.B_MOMS_STORE_FG_01         !=  F.MOMS_STORE_FG_01
+                    OR      F.B_MOMS_STORE_FG_02         !=  F.MOMS_STORE_FG_02
+                    OR      F.B_MOMS_STORE_FG_03         !=  F.MOMS_STORE_FG_03
+                    OR      F.B_MOMS_STORE_FG_04         !=  F.MOMS_STORE_FG_04
+                    OR      F.B_MOMS_STORE_FG_05         !=  F.MOMS_STORE_FG_05
+                    )
+        ) B
+        ON
+        (
+                    A.STORE_CD      =   B.STORE_CD
+        )
         WHEN MATCHED THEN
             UPDATE
             SET
