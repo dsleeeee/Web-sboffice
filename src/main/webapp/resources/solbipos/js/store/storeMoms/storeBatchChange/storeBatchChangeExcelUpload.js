@@ -158,6 +158,9 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
             return false;
         }
 
+        //변경사항이 없는 경우 저장 안함
+        var check_modify_cnt = 0;
+
         // 검증성공 이 아닌 데이터가 1개라도 있으면 저장 안함
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].result !== "검증성공") {
@@ -165,24 +168,10 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                 return false;
             }
 
-            if(nvl($scope.flex.collectionView.items[i].branchCd,'') !== nvl($scope.flex.collectionView.items[i].oldBranchCd,'')){
-                $scope.flex.collectionView.items[i].storeFg = '1';
-            }
-
-            if(nvl($scope.flex.collectionView.items[i].momsTeam,'') !== nvl($scope.flex.collectionView.items[i].oldMomsTeam,'')
-                || nvl($scope.flex.collectionView.items[i].momsAcShop,'') !== nvl($scope.flex.collectionView.items[i].oldMomsAcShop,'')
-                || nvl($scope.flex.collectionView.items[i].momsAreaFg,'') !== nvl($scope.flex.collectionView.items[i].oldMomsAreaFg,'')
-                || nvl($scope.flex.collectionView.items[i].momsCommercial,'') !== nvl($scope.flex.collectionView.items[i].oldMomsCommercial,'')
-                || nvl($scope.flex.collectionView.items[i].momsShopType,'') !== nvl($scope.flex.collectionView.items[i].oldMomsShopType,'')
-                || nvl($scope.flex.collectionView.items[i].momsStoreManageType,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreManageType,'')
-                || nvl($scope.flex.collectionView.items[i].momsStoreFg01,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg01,'')
-                || nvl($scope.flex.collectionView.items[i].momsStoreFg02,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg02,'')
-                || nvl($scope.flex.collectionView.items[i].momsStoreFg03,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg03,'')
-                || nvl($scope.flex.collectionView.items[i].momsStoreFg04,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg04,'')
-                || nvl($scope.flex.collectionView.items[i].momsStoreFg05,'') !== nvl($scope.flex.collectionView.items[i].oldMomsStoreFg05,'')) {
-
-                $scope.flex.collectionView.items[i].storeInfoFg = '1';
-            }
+            // 전체 분할처리
+            $scope.flex.collectionView.items[i].storeFg = '1';
+            $scope.flex.collectionView.items[i].storeInfoFg = '1';
+            params.push($scope.flex.collectionView.items[i]);
 
             if($scope.flex.collectionView.items[i].branchCd !== $scope.flex.collectionView.items[i].oldBranchCd
                 || $scope.flex.collectionView.items[i].momsTeam !== $scope.flex.collectionView.items[i].oldMomsTeam
@@ -197,11 +186,11 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                 || $scope.flex.collectionView.items[i].momsStoreFg04 !== $scope.flex.collectionView.items[i].oldMomsStoreFg04
                 || $scope.flex.collectionView.items[i].momsStoreFg05 !== $scope.flex.collectionView.items[i].oldMomsStoreFg05) {
 
-                params.push($scope.flex.collectionView.items[i]);
+                check_modify_cnt++;
             }
         }
 
-        if (params.length <= 0) {
+        if (check_modify_cnt <= 0) {
             // 변경사항이 없습니다.
             $scope._popMsg(messages['cmm.not.modify']);
             return false;

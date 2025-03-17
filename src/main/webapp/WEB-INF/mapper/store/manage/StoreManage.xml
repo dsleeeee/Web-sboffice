@@ -1801,7 +1801,8 @@
             MOD_DT,
             MOD_ID,
             T_POS_NO,
-            ONLINE_PRINT_YN
+            ONLINE_PRINT_YN,
+            ZEUS_PRTER_NO
         )
         SELECT #{storeCd},
                PRTER_NO,
@@ -1822,7 +1823,8 @@
                #{modDt},
                #{modId},
                T_POS_NO,
-               ONLINE_PRINT_YN
+               ONLINE_PRINT_YN,
+               ZEUS_PRTER_NO
           FROM TB_MS_PRINTER
          WHERE STORE_CD = #{copyStoreCd}
            AND POS_NO IN (SELECT POS_NO FROM TB_MS_POS WHERE STORE_CD = #{storeCd})
@@ -7199,7 +7201,8 @@
                tmp.BELL_USE_YN,
                tmp.T_POS_NO,
                tmp.ONLINE_PRINT_YN,
-               tmp.DLVR_PRINT_YN
+               tmp.DLVR_PRINT_YN,
+               tmp.ZEUS_PRTER_NO
           FROM TB_MS_PRINTER tmp,
                (SELECT STORE_CD, PRTER_NO, COUNT(PROD_CD) AS CNT
                   FROM TB_MS_PRINTER_PROD
@@ -7243,7 +7246,8 @@
             MOD_ID,
             T_POS_NO,
             ONLINE_PRINT_YN,
-            DLVR_PRINT_YN
+            DLVR_PRINT_YN,
+            ZEUS_PRTER_NO
         )
         VALUES
         (
@@ -7268,7 +7272,8 @@
             #{modId},
             #{tPosNo},
             #{onlinePrintYn},
-            #{dlvrPrintYn}
+            #{dlvrPrintYn},
+            #{zeusPrterNo}
         )
     </insert>
 
@@ -7298,7 +7303,8 @@
                MOD_ID = #{modId},
                T_POS_NO = #{tPosNo},
                ONLINE_PRINT_YN = #{onlinePrintYn},
-               DLVR_PRINT_YN = #{dlvrPrintYn}
+               DLVR_PRINT_YN = #{dlvrPrintYn},
+               ZEUS_PRTER_NO = #{zeusPrterNo}
          WHERE STORE_CD = #{storeCd}
            AND PRTER_NO = #{prterNo}
     </update>

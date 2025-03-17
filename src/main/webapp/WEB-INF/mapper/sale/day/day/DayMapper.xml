@@ -755,61 +755,58 @@
     -->
     <select id="getDayTaxList" parameterType="dayVO" resultType="DefaultMap">
         /* USE : DayMapper.getDayTaxList */
-        <![CDATA[
-        SELECT  TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
-        ,       tssh.YOIL
-        ,       tssh.STORE_CNT
-        ,       tssh.TOT_SALE_AMT
-        ,       tssh.TOT_DC_AMT
-        ,       tssh.REAL_SALE_AMT
-        ,       tssh.TAX_SALE_AMT
-        ,       tssh.GA_AMT
-        ,       tssh.VAT_AMT
-        ,       tssh.NO_TAX_SALE_AMT
-        ,       tssh.NET_SALE_AMT
-        FROM    (   SELECT  tssh.SALE_DATE
-                    ,       TO_CHAR(TO_DATE(tssh.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
-                    ,       COUNT(tssh.STORE_CD) AS STORE_CNT
-                    ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
-                    ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
-                    ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
-                    ,       SUM(tssh.TAX_SALE_AMT) AS TAX_SALE_AMT
-                    ,       SUM(tssh.TAX_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
-                    ,       SUM(tssh.VAT_AMT) AS VAT_AMT
-                    ,       SUM(tssh.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
-                    ,       SUM(tssh.NET_SALE_AMT) AS NET_SALE_AMT
-                    FROM    (   SELECT  tssh.SALE_DATE, tssh.STORE_CD
-                                ,       SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
-                                ,       SUM(tssh.TOT_DC_AMT) AS TOT_DC_AMT
-                                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
-                                ,       SUM(tssh.TAX_SALE_AMT) AS TAX_SALE_AMT
-                                ,       SUM(tssh.TAX_SALE_AMT) - SUM(tssh.VAT_AMT) AS GA_AMT
-                                ,       SUM(tssh.VAT_AMT) AS VAT_AMT
-                                ,       SUM(tssh.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
-                                ,       SUM(tssh.NET_SALE_AMT) AS NET_SALE_AMT
-                                FROM    TB_SL_SALE_HDR tssh
-                                WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-        ]]>
-                            <if test='storeCdQuery != null and storeCdQuery != ""'>
-                                AND tssh.STORE_CD IN (${storeCdQuery})
-                            </if>
-                            <if test='orgnFg != null and orgnFg == "H"'>
-                                AND (
+        SELECT  TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       tsdt.YOIL
+        ,       tsdt.STORE_CNT
+        ,       tsdt.TOT_SALE_AMT
+        ,       tsdt.TOT_DC_AMT
+        ,       tsdt.REAL_SALE_AMT
+        ,       tsdt.TAX_SALE_AMT
+        ,       tsdt.GA_AMT
+        ,       tsdt.VAT_AMT
+        ,       tsdt.NO_TAX_SALE_AMT
+        ,       tsdt.NET_SALE_AMT
+        FROM    (   SELECT  tsdt.SALE_DATE
+                    ,       TO_CHAR(TO_DATE(tsdt.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                    ,       COUNT(tsdt.STORE_CD) AS STORE_CNT
+                    ,       SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT
+                    ,       SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT
+                    ,       SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+                    ,       SUM(tsdt.TAX_SALE_AMT) AS TAX_SALE_AMT
+                    ,       SUM(tsdt.TAX_SALE_AMT) - SUM(tsdt.VAT_AMT) AS GA_AMT
+                    ,       SUM(tsdt.VAT_AMT) AS VAT_AMT
+                    ,       SUM(tsdt.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
+                    ,       SUM(tsdt.NET_SALE_AMT) AS NET_SALE_AMT
+                    FROM    (
+                                SELECT  tsdt.SALE_DATE, tsdt.STORE_CD
+                                ,       SUM(tsdt.TOT_SALE_AMT) AS TOT_SALE_AMT
+                                ,       SUM(tsdt.TOT_DC_AMT) AS TOT_DC_AMT
+                                ,       SUM(tsdt.REAL_SALE_AMT) AS REAL_SALE_AMT
+                                ,       SUM(tsdt.TAX_SALE_AMT) AS TAX_SALE_AMT
+                                ,       SUM(tsdt.TAX_SALE_AMT) - SUM(tsdt.VAT_AMT) AS GA_AMT
+                                ,       SUM(tsdt.VAT_AMT) AS VAT_AMT
+                                ,       SUM(tsdt.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT
+                                ,       SUM(tsdt.NET_SALE_AMT) AS NET_SALE_AMT
+                                FROM    TB_SL_DAILY_TOTAL tsdt
+                                WHERE   tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND tsdt.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                <if test='orgnFg != null and orgnFg == "H"'>
+                                    AND (
                                     'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
-                                OR  tssh.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
-                                )
-                            </if>
-        <![CDATA[
-                                AND     tssh.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+                                    OR  tsdt.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                                    )
+                                </if>
+                                AND     tsdt.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
                                 GROUP
-                                BY      tssh.SALE_DATE, tssh.STORE_CD
-                            ) tssh
+                                BY      tsdt.SALE_DATE, tsdt.STORE_CD
+                            ) tsdt
                     GROUP
-                    BY      tssh.SALE_DATE
-                ) tssh
+                    BY      tsdt.SALE_DATE
+                ) tsdt
         ORDER
-        BY      tssh.SALE_DATE DESC
-        ]]>
+        BY      tsdt.SALE_DATE DESC
     </select>
 
 

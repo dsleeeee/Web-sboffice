@@ -50,6 +50,7 @@
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.tPosNo"/>" binding="tPosNo" data-map="posDataMap" width="90" align="center"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.onlinePrintYn"/>" binding="onlinePrintYn" data-map="useYnFgDataMap" width="135" align="center" visible="false"></wj-flex-grid-column>
       <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.dlvrPrintYn"/>" binding="dlvrPrintYn" data-map="useYnFgDataMap" width="150" align="center"></wj-flex-grid-column>
+      <wj-flex-grid-column header="<s:message code="storeManage.kitchenPrint.zeusPrterNo"/>" binding="zeusPrterNo" width="100" align="center"></wj-flex-grid-column>
     </wj-flex-grid>
   </div>
 
@@ -73,4 +74,4 @@
   var useYn       = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20250120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/kitchenPrint.js?ver=20250314.01" charset="utf-8"></script>
