@@ -141,6 +141,15 @@ app.controller('monthTaxCtrl', ['$scope', '$http', '$timeout', function ($scope,
     });
 
     $scope.searchMonthTax = function() {
+
+        var startDt = new Date(wijmo.Globalize.format(startMonth.value, 'yyyy-MM'));
+        var endDt = new Date(wijmo.Globalize.format(endMonth.value, 'yyyy-MM'));
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');

@@ -394,7 +394,10 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                     includeCellStyles	: 	false,
                     includeColumns      :	function (column) {
                         // return column.visible;
-                        return column.binding != 'gChk';
+                        if( column.binding == 'gChk' || column.binding == 'result'){
+                        }else {
+                            return column.visible;
+                        }
                     }
                 },
                 '매장정보일괄변경_엑셀다운로드_'+getCurDateTime()+'.xlsx',

@@ -38,7 +38,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodClassNm"/>" binding="pathNm" width="*" is-read-only="true" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center" format="d"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.saleQty"/>" binding="saleQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodSaleDtl.totSaleAmt"/>" binding="totSaleAmt" width="80" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
