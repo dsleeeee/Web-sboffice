@@ -138,6 +138,16 @@ app.controller('dayTaxCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     // 과면세별 리스트 조회
     $scope.searchDayTaxList = function () {
+
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
         $scope.searchedStoreCd = $("#dayTaxSelectStoreCd").val();
         // 파라미터
         var params       = {};

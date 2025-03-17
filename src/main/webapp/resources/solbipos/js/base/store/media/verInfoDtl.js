@@ -63,8 +63,10 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
       // 적용매장 탭 막기
       if($scope.version.promotionCd !== undefined && $scope.version.promotionCd !== null && $scope.version.promotionCd !== ""){
         $("#storeEnv").hide();
+        $("#promo").show();
       }else{
         $("#storeEnv").show();
+        $("#promo").hide();
       }
 
       // 파일사이즈 변환하여 표기

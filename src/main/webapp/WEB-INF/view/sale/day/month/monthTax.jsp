@@ -105,4 +105,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTax.js?ver=20241219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/day/month/monthTax.js?ver=20250317.01" charset="utf-8"></script>
