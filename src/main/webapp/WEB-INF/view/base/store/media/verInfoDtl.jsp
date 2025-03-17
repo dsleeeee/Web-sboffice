@@ -87,7 +87,7 @@
                 <%-- 이미지출력시간 --%>
                 <th><s:message code="media.dispTime" /></th>
                 <td>{{version.dispTime}}</td>
-                <th id="promo"><s:message code="media.promotionNm" /></th>
+                <th><s:message code="media.promotionNm" /></th>
                 <td>{{version.promotionNm}}</td>
               </tr>
               <tr>
@@ -129,6 +129,6 @@
   var useYn       = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verInfoDtl.js?ver=20250317.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/verInfoDtl.js?ver=20250317.02" charset="utf-8"></script>
 
 

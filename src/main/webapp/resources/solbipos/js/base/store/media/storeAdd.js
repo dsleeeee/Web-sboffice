@@ -140,9 +140,6 @@ app.controller('addStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       // 적용매장 조회 후, 미적용 매장 조회
       var addStoreScope = agrid.getScope("addStoreCtrl");
       addStoreScope._broadcast('addStoreCtrl');
-
-      var mediaScope = agrid.getScope("mediaCtrl");
-      mediaScope.getVersionList();
     });
   };
 
@@ -264,8 +261,6 @@ app.controller('allStoreCtrl', ['$scope', '$http', function ($scope, $http) {
       // 적용매장 조회 후, 미적용 매장 조회
       var addStoreScope = agrid.getScope("addStoreCtrl");
       addStoreScope._broadcast('addStoreCtrl');
-        var mediaScope = agrid.getScope("mediaCtrl");
-        mediaScope.getVersionList();
     });
   };
 }]);
