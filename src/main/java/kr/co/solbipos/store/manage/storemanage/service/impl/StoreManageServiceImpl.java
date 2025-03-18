@@ -780,6 +780,9 @@ public class StoreManageServiceImpl implements StoreManageService{
                         // 테이블속성New
                         procCnt += mapper.copyTableAttrNewCopy(storeManageVO);
 
+                        // 테이블매장설정XML
+                        procCnt += mapper.copyTableConfgXmlCopy(storeManageVO);
+
                         // 외식용-테이블그룹정보
                         procCnt += mapper.copyTableTGroupCopy(storeManageVO);
 

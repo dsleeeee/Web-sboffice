@@ -5875,7 +5875,7 @@
             ) B
             ON  (
                     B.STORE_CD      =  A.STORE_CD
-                AND B.TBL_CD   =  A.TBL_CD
+                AND B.TBL_CD        =  A.TBL_CD
                 AND B.ATTR_CD       =  A.ATTR_CD
             )
             WHEN MATCHED THEN
@@ -5940,6 +5940,65 @@
                 ,     B.MOD_DT
                 ,     B.MOD_ID
                 ,     B.VIEW_YN
+                )
+    </insert>
+
+    <!-- 테이블매장설정XML 복사 -->
+    <!--
+       TABLE    :
+       PARAM    : storeManageVO
+       COMMENTS : 테이블매장설정XML을 복사한다
+    -->
+    <insert id="copyTableConfgXmlCopy" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.copyTableConfgXmlCopy */
+        MERGE INTO TB_WB_STORE_TABLE_CONFG_XML A
+        USING   (
+                SELECT  #{storeCd} AS STORE_CD
+                ,       CONFG_FG
+                ,       CONFG_SUB_FG
+                ,       XML
+                ,       USE_YN
+                ,       #{regDt} AS REG_DT
+                ,       #{regId} AS REG_ID
+                ,       #{modDt} AS MOD_DT
+                ,       #{modId} AS MOD_ID
+                FROM    TB_WB_STORE_TABLE_CONFG_XML
+                WHERE   STORE_CD = #{copyStoreCd}
+            ) B
+            ON  (
+                    B.STORE_CD      =  A.STORE_CD
+                AND B.CONFG_FG      =  A.CONFG_FG
+                AND B.CONFG_SUB_FG  =  A.CONFG_SUB_FG
+            )
+            WHEN MATCHED THEN
+                UPDATE SET  A.XML           = B.XML
+                ,             A.USE_YN        = B.USE_YN
+                ,             A.MOD_DT        = B.MOD_DT
+                ,             A.MOD_ID        = B.MOD_ID
+            WHEN NOT MATCHED THEN
+                INSERT
+                (
+                      A.STORE_CD
+                ,     A.CONFG_FG
+                ,     A.CONFG_SUB_FG
+                ,     A.XML
+                ,     A.USE_YN
+                ,     A.REG_DT
+                ,     A.REG_ID
+                ,     A.MOD_DT
+                ,     A.MOD_ID
+                )
+                VALUES
+                (
+                      B.STORE_CD
+                ,     B.CONFG_FG
+                ,     B.CONFG_SUB_FG
+                ,     B.XML
+                ,     B.USE_YN
+                ,     B.REG_DT
+                ,     B.REG_ID
+                ,     B.MOD_DT
+                ,     B.MOD_ID
                 )
     </insert>
 

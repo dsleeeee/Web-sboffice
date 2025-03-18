@@ -257,6 +257,9 @@ public interface StoreManageMapper {
     /** 테이블속성New 복사 */
     int copyTableAttrNewCopy(StoreManageVO storeManageVO);
 
+    /** 테이블매장설정XML 복사 */
+    int copyTableConfgXmlCopy(StoreManageVO storeManageVO);
+
     /** 외식용-테이블그룹정보 복사 */
     int copyTableTGroupCopy(StoreManageVO storeManageVO);
 
