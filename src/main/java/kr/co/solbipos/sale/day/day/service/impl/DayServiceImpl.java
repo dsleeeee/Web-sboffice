@@ -44,6 +44,7 @@ public class DayServiceImpl implements DayService {
     /** 일자별 - 모바일페이상세 컬럼 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getMpayColList(DayVO dayVO, SessionInfoVO sessionInfoVO) {
+        dayVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return dayMapper.getMpayColList(dayVO);
     }
 
