@@ -1892,4 +1892,10 @@ public class StoreManageServiceImpl implements StoreManageService{
 
         return authExpCopy;
     }
+
+    /** 포스별 테이블 그룹정보 */
+    @Override
+    public List<DefaultMap<String>> posGroupList(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO) {
+        return mapper.getPosGroupList(storePosEnvVO);
+    }
 }

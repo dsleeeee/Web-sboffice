@@ -47,6 +47,7 @@ app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var posList = posEnvScope.getPosList();
         var grpList = response.data.data.groupList;
+        var posGrpList = response.data.data.posGroupList;
 
         var innerHtml = "";
         for(var i=0; i<posList.length; i++) {
@@ -58,7 +59,15 @@ app.controller('tableGroupCtrl', ['$scope', '$http', function ($scope, $http) {
           innerHtml += "<select name='pos'id='pos"+posList[i].posNo+"'>";
 
           for(var j=0; j<grpList.length; j++){
-            innerHtml += "<option value='"+grpList[j].tblGrpCd+"'>"+grpList[j].tblGrpNm+"</option>";
+            if(!isEmptyObject(posGrpList)){
+              if(posGrpList[i].envstVal == grpList[j].tblGrpCd){
+                innerHtml += "<option value='" + grpList[j].tblGrpCd + "' selected >" + grpList[j].tblGrpNm + "</option>";
+              }else {
+                innerHtml += "<option value='" + grpList[j].tblGrpCd + "'>" + grpList[j].tblGrpNm + "</option>";
+              }
+            }else {
+              innerHtml += "<option value='" + grpList[j].tblGrpCd + "'>" + grpList[j].tblGrpNm + "</option>";
+            }
           }
 
           innerHtml += "</select>";

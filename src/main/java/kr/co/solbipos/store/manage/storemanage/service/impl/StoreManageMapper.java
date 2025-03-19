@@ -589,4 +589,7 @@ public interface StoreManageMapper {
 
     /** 모바일 메뉴 예외값 조회 */
     List<DefaultMap<String>> exceptMobileMenu(StoreMenuVO storeMenuVO);
+
+    /** 포스별 테이블 그룹정보 */
+    List<DefaultMap<String>> getPosGroupList(StorePosEnvVO storePosEnvVO);
 }
