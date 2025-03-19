@@ -395,8 +395,12 @@ public class StoreManageController {
        // 테이블 그룹
        List<DefaultMap<String>> groupList = service.getGroupList(storePosEnvVO, sessionInfoVO);
 
+       // 포스별 테이블 그룹정보
+       List<DefaultMap<String>> posGroupList = service.posGroupList(storePosEnvVO, sessionInfoVO);
+
        resultMap.put("list", list);
        resultMap.put("groupList", groupList);
+       resultMap.put("posGroupList", posGroupList);
 
        return returnJson(Status.OK, resultMap);
    }

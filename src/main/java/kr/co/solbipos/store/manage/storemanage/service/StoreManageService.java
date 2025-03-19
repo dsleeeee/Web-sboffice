@@ -199,4 +199,7 @@ public interface StoreManageService {
 
     /** 모바일 메뉴권한복사 */
     int copyMobileAuth(StoreMenuVO storeMenuVO, SessionInfoVO sessionInfoVO);
+
+    /** 포스별 테이블 그룹정보 */
+    List<DefaultMap<String>> posGroupList(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO);
 }

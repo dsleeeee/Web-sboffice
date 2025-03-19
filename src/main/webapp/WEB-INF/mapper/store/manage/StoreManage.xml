@@ -6805,12 +6805,14 @@
     <select id="getPosList" parameterType="storePosEnvVO" resultType="DefaultMap">
         /* USE : StoreManageMapper.getPosList */
         <![CDATA[
-        SELECT ROWNUM,
-               POS_NO,
-               '['||POS_NO||']'||DECODE(POS_NM, NULL, 'POS'||POS_NO, POS_NM) AS POS_CD_NM,
-               POS_NM
-          FROM TB_MS_POS
-         WHERE STORE_CD = #{storeCd}
+        SELECT  ROWNUM
+        ,       POS_NO
+        ,       '['||POS_NO||']'||DECODE(POS_NM, NULL, 'POS'||POS_NO, POS_NM) AS POS_CD_NM
+        ,       POS_NM
+        FROM    TB_MS_POS
+        WHERE   STORE_CD = #{storeCd}
+        ORDER
+        BY      POS_NO
         ]]>
     </select>
 
@@ -10062,5 +10064,22 @@
                                     AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
                                 )
         AND USE_YN = 'Y'
+    </select>
+
+    <!-- 포스별 테이블 그룹정보 -->
+    <!--
+        TABLE    :
+        PARAM    : storePosEnvVO
+        COMMENTS :
+    -->
+    <select id="getPosGroupList" parameterType="storeManageVO" resultType="DefaultMap">
+        /* USE : StoreManageMapper.getPosGroupList */
+        SELECT	POS_NO
+        ,		ENVST_VAL
+        FROM 	TB_MS_POS_ENVST
+        WHERE 	STORE_CD = #{storeCd}
+        AND 	ENVST_CD = '1003'
+        ORDER
+        BY      POS_NO
     </select>
 </mapper>
