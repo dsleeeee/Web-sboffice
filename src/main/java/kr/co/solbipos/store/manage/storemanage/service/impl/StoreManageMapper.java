@@ -257,6 +257,9 @@ public interface StoreManageMapper {
     /** 테이블속성New 복사 */
     int copyTableAttrNewCopy(StoreManageVO storeManageVO);
 
+    /** 테이블매장설정XML 복사 */
+    int copyTableConfgXmlCopy(StoreManageVO storeManageVO);
+
     /** 외식용-테이블그룹정보 복사 */
     int copyTableTGroupCopy(StoreManageVO storeManageVO);
 
@@ -590,15 +593,6 @@ public interface StoreManageMapper {
     /** 모바일 메뉴 예외값 조회 */
     List<DefaultMap<String>> exceptMobileMenu(StoreMenuVO storeMenuVO);
 
-    /** 포스 터미널 정보 등록 */
-    int insertPosTerminalInfo(StoreManageVO storeManageVO);
-
-    /** 포스 터미널 정보 수정 */
-    int updatePosTerminalInfo(StoreManageVO storeManageVO);
-
-    /** 코너 터미널 정보 수정 */
-    int updateCornerTerminalInfo(StoreManageVO storeManageVO);
-
-    /** 터미널관리(밴더코드) 중복 체크 */
-    int chkVendorCd(StoreManageVO storeManageVO);
+    /** 포스별 테이블 그룹정보 */
+    List<DefaultMap<String>> getPosGroupList(StorePosEnvVO storePosEnvVO);
 }
