@@ -18,9 +18,11 @@
                 <a id="nxMigDataMappingTab" href="#" ng-click="nxMigDataMapping()"><s:message code="migDataMapping.nxMigDataMapping"/></a>
             </li>
             <%-- NXPOS1 매출정보 데이터 이관 요청 내역 탭 --%>
-            <li>
-                <a id="zeusDataMappingTab" href="#" ng-click="zeusDataMapping()"><s:message code="migDataMapping.zeusDataMapping"/></a>
-            </li>
+            <c:if test="${sessionInfo.orgnFg == 'MASTER'}">
+                <li>
+                    <a id="zeusDataMappingTab" href="#" ng-click="zeusDataMapping()"><s:message code="migDataMapping.zeusDataMapping"/></a>
+                </li>
+            </c:if>
         </ul>
     </div>
 </div>
