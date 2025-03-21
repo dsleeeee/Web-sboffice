@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ZeusDataConnect.xml
+    제우스데이터연동
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2025.03.19     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sys.admin.zeusDataConnect.service.impl.ZeusDataConnectMapper">
+
+    <!-- 제우스데이터연동 - 제우스 PKG 호출 01 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getZeusPkg01" statementType="CALLABLE" parameterType="ZeusDataConnectVO" resultType="String">
+        /* ZeusDataConnectMapper.getZeusPkg01 */
+        {
+            CALL PKG_SP_ZEUS_TO_LYNK_PROCESS_IUD01.SP_ZEUS_TO_LYNK_PROCESS
+            (
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 제우스데이터연동 - 제우스 PKG 호출 02 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getZeusPkg02" statementType="CALLABLE" parameterType="ZeusDataConnectVO" resultType="String">
+        /* ZeusDataConnectMapper.getZeusPkg02 */
+        {
+            CALL PKG_SP_ZEUS_TO_LYNK_PROCESS_IUD02.SP_ZEUS_TO_LYNK_PROCESS
+            (
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 제우스데이터연동 - 제우스->링크 데이터연동 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getZeusPkg01Call" statementType="CALLABLE" parameterType="ZeusDataConnectVO" resultType="String">
+        /* ZeusDataConnectMapper.getZeusPkg01Call */
+        {
+            CALL PKG_SP_ZEUS_TO_LYNK_P_01_CALL.SP_ZEUS_TO_LYNK_PROCESS
+            (
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 제우스데이터연동 - 연동신청처리 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getZeusPkg02Call" statementType="CALLABLE" parameterType="ZeusDataConnectVO" resultType="String">
+        /* ZeusDataConnectMapper.getZeusPkg02Call */
+        {
+            CALL PKG_SP_ZEUS_TO_LYNK_P_02_CALL.SP_ZEUS_TO_LYNK_PROCESS
+            (
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
+    <!-- 제우스데이터연동 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getZeusDataConnectList" parameterType="ZeusDataConnectVO" resultType="DefaultMap">
+        /* ZeusDataConnectMapper.getZeusDataConnectList */
+        SELECT  A.COCD
+        ,       A.BUUT
+        ,       A.BUNAME1
+        ,       A.HQ_OFFICE_CD
+        ,       A.STORE_CD
+        ,       A.STORE_NM
+        ,       A.MAPPING_FG
+        ,       A.MAPPING_DT
+        ,       A.REG_DT
+        ,       A.DEL_DT
+        ,       A.REMARK
+        FROM    (
+                    SELECT  A.COCD
+                    ,       A.BUUT
+                    ,       (SELECT B.BUNAME1 FROM F1400@ZEUSDB B WHERE B.BUCOCD = A.COCD AND B.BUBUUT = A.BUUT)    AS BUNAME1
+                    ,       A.HQ_OFFICE_CD
+                    ,       A.STORE_CD
+                    ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.STORE_CD)                    AS STORE_NM
+                    ,       (
+                                SELECT  DECODE(MIN(F.CNT), 0, '9', A.MAPPING_FG)        -- 9 해지 체크(제우스/링크 매장이 사용중지가 되면 해지로 표시)
+                                FROM    (
+                                            <![CDATA[
+                                                SELECT COUNT(*) CNT FROM TB_MS_STORE D WHERE D.STORE_CD = A.STORE_CD AND D.SYS_STAT_FG IN ('1', '9')   -- 오픈, 데모
+                                                UNION ALL
+                                                SELECT COUNT(*) CNT FROM F1400@ZEUSDB E WHERE E.BUCOCD = A.COCD AND E.BUBUUT = A.BUUT AND (E.BUUSFL <> 0 AND E.BUGSST <> 'D') -- 사용중지가가 아니거나 삭제되지 않은 경우
+                                            ]]>
+                                        ) F
+                            )   AS MAPPING_FG
+                    ,       TO_CHAR(TO_DATE(A.MAPPING_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')        AS MAPPING_DT
+                    ,       TO_CHAR(TO_DATE(A.REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')            AS REG_DT
+                    ,       '연동삭제'                                                                               AS DEL_DT
+                    ,       A.REMARK                                                                                AS REMARK
+                    FROM    TB_ZEUS_TO_LYNK_STORE_MAPPING A
+                    WHERE   1=1
+                    UNION ALL
+                    SELECT  A.COCD
+                    ,       A.BUUT
+                    ,       (SELECT B.BUNAME1 FROM F1400@ZEUSDB B WHERE B.BUCOCD = A.COCD AND B.BUBUUT = A.BUUT)    AS BUNAME1
+                    ,       A.B_HQ_OFFICE_CD
+                    ,       A.B_STORE_CD
+                    ,       (SELECT C.STORE_NM FROM TB_MS_STORE C WHERE C.STORE_CD = A.B_STORE_CD)                  AS STORE_NM
+                    ,       A.B_MAPPING_FG                                                                          AS MAPPING_FG
+                    ,       TO_CHAR(TO_DATE(A.B_MAPPING_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')      AS MAPPING_DT
+                    ,       TO_CHAR(TO_DATE(A.B_REG_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')          AS REG_DT
+                    ,       TO_CHAR(TO_DATE(A.PROC_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS')           AS DEL_DT
+                    ,       A.B_REMARK                                                                              AS REMARK
+                    FROM    TB_LG_ZEUS_TO_LYNK_STORE_MAPPING_D_LOG A
+                    WHERE   1=1
+                    AND 	A.PROC_FG = 'D'
+                ) A
+        WHERE   1=1
+        ORDER
+        BY 		CASE WHEN A.DEL_DT = '연동삭제' THEN 0 ELSE 1 END
+        ,		A.COCD
+        ,		A.BUUT
+    </select>
+
+</mapper>

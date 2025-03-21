@@ -15,46 +15,41 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('boardMasterCtrl', 1)">
+            <button class="btn_blue fr" ng-click="_broadcast('boardMasterCtrl', 1)">
                 <s:message code="cmm.search" />
             </button>
         </div>
     </div>
 
     <%-- 그리드 --%>
-    <div class="mt10">
-        <div class="wj-TblWrapBr pd10" style="height:440px;">
-            <div class="updownSet oh mb10">
-                <input type="password" class="sb-input w200px" id="srchSystemPw" ng-model="systemPw" />
-                <button class="btn_skyblue" ng-click="zeusPkg01()">제우스 PKG 호출 01</button>
-                <button class="btn_skyblue" ng-click="zeusPkg02()">제우스 PKG 호출 02</button>
-                <button class="btn_skyblue" ng-click="addRow()"><s:message code='cmm.add' /></button>
-                <button class="btn_skyblue" ng-click="del()"><s:message code='cmm.del' /></button>
-                <button class="btn_skyblue" ng-click="save()"><s:message code='cmm.save' /></button>
-            </div>
-            <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
-                    <div class="row">
-                        <wj-flex-grid
-                            autoGenerateColumns.="false"
-                            control="flex"
-                            initialized="initGrid(s,e)"
-                            sticky-headers="true"
-                            selection-mode="Row"
-                            items-source="data"
-                            item-formatter="_itemFormatter"
-                            ime-enabled="true">
+    <div class="w100 mt10 mb20">
+        <div class="updownSet oh mb10">
+            <button class="btn_skyblue" ng-click="addRow()"><s:message code='cmm.add' /></button>
+            <button class="btn_skyblue" ng-click="del()"><s:message code='cmm.del' /></button>
+            <button class="btn_skyblue" ng-click="save()"><s:message code='cmm.save' /></button>
+        </div>
+        <div class="w100 mt10 mb20">
+            <div class="wj-gridWrap" style="height:370px; overflow-y: hidden; overflow-x: hidden;">
+                <div class="row">
+                    <wj-flex-grid
+                        autoGenerateColumns.="false"
+                        control="flex"
+                        initialized="initGrid(s,e)"
+                        sticky-headers="true"
+                        selection-mode="Row"
+                        items-source="data"
+                        item-formatter="_itemFormatter"
+                        ime-enabled="true">
 
-                            <!-- define columns -->
-                            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="boardMaster.boardCd"/>" binding="boardCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="boardMaster.boardNm"/>" binding="boardNm" width="200" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="boardMaster.boardFg"/>" binding="boardFg" data-map="boardFgDataMap" width="100" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="boardMaster.answerFg"/>" binding="answerFg" data-map="answerFgDataMap" width="100" align="center"></wj-flex-grid-column>
-                            <wj-flex-grid-column header="<s:message code="boardMaster.autoApprFg"/>" binding="autoApprFg" data-map="autoApprFgDataMap" width="100" align="center"></wj-flex-grid-column>
+                        <!-- define columns -->
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardMaster.boardCd"/>" binding="boardCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardMaster.boardNm"/>" binding="boardNm" width="200" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardMaster.boardFg"/>" binding="boardFg" data-map="boardFgDataMap" width="100" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardMaster.answerFg"/>" binding="answerFg" data-map="answerFgDataMap" width="100" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="boardMaster.autoApprFg"/>" binding="autoApprFg" data-map="autoApprFgDataMap" width="100" align="center"></wj-flex-grid-column>
 
-                        </wj-flex-grid>
-                    </div>
+                    </wj-flex-grid>
                 </div>
             </div>
         </div>
@@ -72,4 +67,4 @@
     ];
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/board/boardMaster/boardMaster.js?ver=20250214.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/board/boardMaster/boardMaster.js?ver=20250319.01" charset="utf-8"></script>

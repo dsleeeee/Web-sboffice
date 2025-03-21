@@ -22,6 +22,21 @@ import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
+/**
+ * @Class Name : BoardMasterController.java
+ * @Description : 시스템관리 > 게시판관리 > 게시판관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2020.02.10  김설아      최초생성
+ *
+ * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @since 2020.02.10
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Controller
 @RequestMapping("/sys/board/boardMaster")
 public class BoardMasterController {
@@ -92,52 +107,6 @@ public class BoardMasterController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = boardMasterService.getBoardMasterSave(boardMasterVOs, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
-    }
-
-    /**
-     * 제우스 PKG 호출 01
-     *
-     * @param boardMasterVO
-     * @param request
-     * @param response
-     * @param model
-     * @return  Object
-     * @author  김설아
-     * @since   2025. 02. 06.
-     */
-    @RequestMapping(value = "/boardMaster/getZeusPkg01.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getZeusPkg01(@RequestBody BoardMasterVO boardMasterVO, HttpServletRequest request,
-                                     HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        String result = boardMasterService.getZeusPkg01(boardMasterVO, sessionInfoVO);
-
-        return returnJson(Status.OK, result);
-    }
-
-    /**
-     * 제우스 PKG 호출 02
-     *
-     * @param boardMasterVO
-     * @param request
-     * @param response
-     * @param model
-     * @return  Object
-     * @author  김설아
-     * @since   2025. 02. 06.
-     */
-    @RequestMapping(value = "/boardMaster/getZeusPkg02.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getZeusPkg02(@RequestBody BoardMasterVO boardMasterVO, HttpServletRequest request,
-                               HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        String result = boardMasterService.getZeusPkg02(boardMasterVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }
