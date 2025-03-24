@@ -24,6 +24,7 @@
         WHERE   1=1
         AND     NMCODE_GRP_CD = '303'
         AND     NMCODE_CD NOT IN ('008', '009')
+        AND     NMCODE_CD IN ('018')
         ORDER
         BY      NMCODE_CD
     </select>
