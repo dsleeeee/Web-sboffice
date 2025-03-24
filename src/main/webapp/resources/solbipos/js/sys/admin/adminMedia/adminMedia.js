@@ -76,7 +76,7 @@ app.controller('adminMediaCtrl', ['$scope', '$http', function ($scope, $http) {
 
                 // 다운로드
                 if(col.binding === "downLoad"){
-                    e.cell.innerHTML = "<td><a href=\"/sys/admin/adminMedia/adminMedia/download.sb?fileNm=" + item.fileNmExt + "&orginlFileNm=" + item.realFileOrgNm + "&fileExt=" + item.fileExt + "\">다운로드</a></td>";
+                    e.cell.innerHTML = "<td><a href=\"/base/store/media/media/download.sb?fileNm=" + item.fileNmExt + "&orginlFileNm=" + item.realFileOrgNm + "&fileExt=" + item.fileExt + "\">다운로드</a></td>";
                 }
             }
         });

@@ -193,7 +193,7 @@
     var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/adminMedia.js?ver=20250307.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/adminMedia.js?ver=20250324.01" charset="utf-8"></script>
 
 <%-- 버전 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/sys/admin/adminMedia/verInfoDtl.jsp">
