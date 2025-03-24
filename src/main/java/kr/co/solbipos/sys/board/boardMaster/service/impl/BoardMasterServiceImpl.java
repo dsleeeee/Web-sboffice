@@ -83,30 +83,4 @@ public class BoardMasterServiceImpl implements BoardMasterService {
 
         return procCnt;
     }
-
-    /** 제우스 PKG 호출 01 */
-    @Override
-    public String getZeusPkg01(BoardMasterVO boardMasterVO, SessionInfoVO sessionInfoVO) {
-
-        String procResult = "";
-
-        boardMasterMapper.getZeusPkg01(boardMasterVO);
-
-        procResult = boardMasterVO.getResult();
-
-        return procResult;
-    }
-
-    /** 제우스 PKG 호출 02 */
-    @Override
-    public String getZeusPkg02(BoardMasterVO boardMasterVO, SessionInfoVO sessionInfoVO) {
-
-        String procResult = "";
-
-        boardMasterMapper.getZeusPkg02(boardMasterVO);
-
-        procResult = boardMasterVO.getResult();
-
-        return procResult;
-    }
 }

@@ -208,7 +208,7 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20250317.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/media/storeAdd.js?ver=20250318.01" charset="utf-8"></script>
 
 <script>
   $(document).ready(function(){

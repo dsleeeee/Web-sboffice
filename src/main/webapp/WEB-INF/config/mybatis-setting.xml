@@ -243,6 +243,10 @@
     <typeAlias alias="posUtilLogVO" type="kr.co.solbipos.sys.admin.posUtilLog.service.PosUtilLogVO"/>
     <!-- 시스템관리 > 관리자기능 > 기능키적용버전등록 -->
     <typeAlias alias="funcKeyVO" type="kr.co.solbipos.sys.admin.funcKey.service.FuncKeyVO"/>
+    <!-- 시스템관리 > 관리자기능 > 듀얼모니터영상관리 -->
+    <typeAlias alias="adminMediaVO" type="kr.co.solbipos.sys.admin.adminMedia.service.AdminMediaVO"/>
+    <!-- 시스템관리 > 관리자기능 > 제우스데이터연동 -->
+    <typeAlias alias="zeusDataConnectVO" type="kr.co.solbipos.sys.admin.zeusDataConnect.service.ZeusDataConnectVO"/>
     <!-- 시스템관리 > 기타관리 > 샘플용 화면_임시-->
     <!--<typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>-->
 <!--
