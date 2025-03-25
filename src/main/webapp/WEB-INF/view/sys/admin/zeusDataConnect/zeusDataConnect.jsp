@@ -22,7 +22,7 @@
     </div>
 
     <div class="w100 mt10 oh">
-        <div class="w60 fl">
+        <div class="w50 fl">
             <div class="mb10 oh">
                 <p class="tl s14 mt5 lh15 red">※ 제우스에서 데이터 수정시 링크 반영</p>
                 <p class="tl s14 mt5 lh15">1. 데이터 수정시 2시간마다 스케줄로 연동됨</p>
@@ -31,7 +31,7 @@
                 <p class="tl s14 mt5 lh15">&nbsp;&nbsp;- [제우스->링크 데이터연동] : 연동중인 매장의 데이터 처리</p>
             </div>
         </div>
-        <div class="w40 fr">
+        <div class="w50 fr">
             <%-- 사용자용 --%>
             <div class="updownSet oh mb10">
                 <%-- 비밀번호 --%>
