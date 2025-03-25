@@ -74,6 +74,8 @@ public class ZeusDataConnectServiceImpl implements ZeusDataConnectService {
 
         String procResult = "";
 
+        zeusDataConnectVO.setRegId(sessionInfoVO.getUserId());
+
         zeusDataConnectMapper.getZeusPkg01Call(zeusDataConnectVO);
 
         procResult = zeusDataConnectVO.getResult();
@@ -86,6 +88,8 @@ public class ZeusDataConnectServiceImpl implements ZeusDataConnectService {
     public String getZeusPkg02Call(ZeusDataConnectVO zeusDataConnectVO, SessionInfoVO sessionInfoVO) {
 
         String procResult = "";
+
+        zeusDataConnectVO.setRegId(sessionInfoVO.getUserId());
 
         zeusDataConnectMapper.getZeusPkg02Call(zeusDataConnectVO);
 
