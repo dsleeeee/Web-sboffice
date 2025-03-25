@@ -126,6 +126,8 @@ app.controller('zeusDataConnectCtrl', ['$scope', '$http', function ($scope, $htt
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/sys/admin/zeusDataConnect/zeusDataConnect/getZeusPkg01.sb", params, function(response){
             $scope._popMsg(response.data.data);
+            // 조회
+            $scope.searchZeusDataConnect();
         });
     };
 
@@ -147,6 +149,8 @@ app.controller('zeusDataConnectCtrl', ['$scope', '$http', function ($scope, $htt
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/sys/admin/zeusDataConnect/zeusDataConnect/getZeusPkg02.sb", params, function(response){
             $scope._popMsg(response.data.data);
+            // 조회
+            $scope.searchZeusDataConnect();
         });
     };
 
@@ -168,6 +172,8 @@ app.controller('zeusDataConnectCtrl', ['$scope', '$http', function ($scope, $htt
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/sys/admin/zeusDataConnect/zeusDataConnect/getZeusPkg01Call.sb", params, function(response){
             $scope._popMsg(response.data.data);
+            // 조회
+            $scope.searchZeusDataConnect();
         });
     };
 
@@ -189,6 +195,8 @@ app.controller('zeusDataConnectCtrl', ['$scope', '$http', function ($scope, $htt
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._postJSONSave.withPopUp("/sys/admin/zeusDataConnect/zeusDataConnect/getZeusPkg02Call.sb", params, function(response){
             $scope._popMsg(response.data.data);
+            // 조회
+            $scope.searchZeusDataConnect();
         });
     };
 
