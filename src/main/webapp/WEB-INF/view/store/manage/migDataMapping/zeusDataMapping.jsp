@@ -36,9 +36,9 @@
             </th>
             <td colspan="4">
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="zeusStartDate" name="zeusStartDate" ng-model="zeusStartDate" class="w150px" /></span>
+                    <span class="txtIn"> <input id="zeusStartDate" name="zeusStartDate" ng-model="zeusStartDate" class="w110px" /></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="zeusEndDate" name="zeusEndDate" ng-model="zeusEndDate" class="w150px" /></span>
+                    <span class="txtIn"> <input id="zeusEndDate" name="zeusEndDate" ng-model="zeusEndDate" class="w110px" /></span>
                     <%--기간선택--%>
                     <div class="txtIn tabType2">
                         <ul>
@@ -132,17 +132,17 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.hqOfficeCd"/>"         binding="cocd"          width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreCd"/>"       binding="buut"          width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreNm"/>"       binding="buname1"       width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.hqOfficeCd"/>"         binding="hqOfficeCd"    width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreCd"/>"       binding="storeCd"       width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreNm"/>"       binding="storeNm"       width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.mappingFg"/>"          binding="mappingFg"     width="80"  is-read-only="true" align="center" data-map="mapFgDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.mappingTime"/>"        binding="mappingDt"     width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.lastMappingTime"/>"    binding="regDt"         width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.delMapping"/>"         binding="delDt"         width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.remark"/>"             binding="remark"        width="80"  is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.hqOfficeCd"/>"         binding="cocd"          width="70"  is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreCd"/>"       binding="buut"          width="70"  is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreNm"/>"       binding="buname1"       width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.hqOfficeCd"/>"         binding="hqOfficeCd"    width="70"  is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreCd"/>"       binding="storeCd"       width="70"  is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.solbiStoreNm"/>"       binding="storeNm"       width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.mappingFg"/>"          binding="mappingFg"     width="70"  is-read-only="true" align="center" data-map="mapFgDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.mappingTime"/>"        binding="mappingDt"     width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.lastMappingTime"/>"    binding="regDt"         width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.delMapping"/>"         binding="delDt"         width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.remark"/>"             binding="remark"        width="70"  is-read-only="true" align="center"></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>
