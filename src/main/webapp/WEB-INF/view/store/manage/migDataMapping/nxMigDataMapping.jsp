@@ -36,9 +36,9 @@
             </th>
             <td colspan="3">
                 <div class="sb-select">
-                    <span class="txtIn"> <input id="nxStartDate" name="nxStartDate" class="w200px" /></span>
+                    <span class="txtIn"> <input id="nxStartDate" name="nxStartDate" class="w110px" /></span>
                     <span class="rg">~</span>
-                    <span class="txtIn"> <input id="nxEndDate" name="nxEndDate" class="w200px" /></span>
+                    <span class="txtIn"> <input id="nxEndDate" name="nxEndDate" class="w110px" /></span>
                 </div>
             </td>
         </tr>
@@ -112,7 +112,7 @@
                 <wj-flex-grid-column header="<s:message code="migDataMapping.okposStoreNm"/>" binding="storeNm" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.fSaleDate"/>" binding="fSaleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.tSaleDate"/>" binding="tSaleDate" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="migDataMapping.maxSaleDate"/>" binding="maxSaleDate" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="migDataMapping.maxSaleDate"/>" binding="maxSaleDate" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.lastBillNo"/>" binding="lastBillNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.migYn"/>" binding="procYn" data-map="migYnDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="migDataMapping.convMsg"/>" binding="convMsg" width="100" is-read-only="true" align="center"></wj-flex-grid-column>

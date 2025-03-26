@@ -25,7 +25,7 @@
         <div class="w50 fl">
             <div class="mb10 oh">
                 <p class="tl s14 mt5 lh15 red">※ 제우스에서 데이터 수정시 링크 반영</p>
-                <p class="tl s14 mt5 lh15">1. 데이터 수정시 2시간마다 스케줄로 연동됨</p>
+                <p class="tl s14 mt5 lh15">1. 데이터 수정시 1시간마다 스케줄로 연동됨</p>
                 <p class="tl s14 mt5 lh15">2. 즉시 데이터 수정이 필요한 경우</p>
                 <p class="tl s14 mt5 lh15">&nbsp;&nbsp;- [연동신청처리] : 연동신청한 매장 처리</p>
                 <p class="tl s14 mt5 lh15">&nbsp;&nbsp;- [제우스->링크 데이터연동] : 연동중인 매장의 데이터 처리</p>
@@ -67,21 +67,20 @@
                     ime-enabled="true">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.hqOfficeCd"/>" binding="cocd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.storeCd"/>" binding="buut" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.storeNm"/>" binding="buname1" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.hqOfficeCd"/>" binding="hqOfficeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.storeNm"/>" binding="storeNm" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.mappingFg"/>" binding="mappingFg" data-map="mappingFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.mappingTime"/>" binding="mappingDt" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.lastMappingTime"/>" binding="regDt" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="zeusDataConnect.remark"/>" binding="remark" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.hqOfficeCd"/>" binding="cocd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.storeCd"/>" binding="buut" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.storeNm"/>" binding="buname1" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.hqOfficeCd"/>" binding="hqOfficeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.storeCd"/>" binding="storeCd" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.mappingFg"/>" binding="mappingFg" data-map="mappingFgDataMap" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.mappingTime"/>" binding="mappingDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.lastMappingTime"/>" binding="regDt" width="125" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="zeusDataConnect.remark"/>" binding="remark" width="70" is-read-only="true" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/zeusDataConnect/zeusDataConnect.js?ver=20250319.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/zeusDataConnect/zeusDataConnect.js?ver=20250325.01" charset="utf-8"></script>
