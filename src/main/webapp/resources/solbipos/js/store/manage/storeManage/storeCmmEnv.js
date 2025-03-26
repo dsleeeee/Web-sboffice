@@ -272,6 +272,18 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 재조회
         $scope.searchCmmEnv(envScope.getEnvGroupCd());
+
+        // 다중사업자관리 팝업 show 처리
+        if(envScope.getEnvGroupCd() === '00') {
+            if(orgEnv1337 !== $("#env1337").val()) {
+                if($("#env1337").val() === "1"){
+                    $scope.multiBizManageLayer.show(true);
+                    $scope._broadcast('multiBizManageCtrl');
+                    event.preventDefault();
+                }
+            }
+        }
+
       });
     });
     event.preventDefault();

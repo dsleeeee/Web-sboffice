@@ -69,6 +69,23 @@ public class StoreTerminalVO extends CmmVO {
     /** 붙여넣을 포스번호 */
     private String pastePosNo;
 
+    /** 대표 VAN*/
+    private String baseVanYn;
+
+    /** 터미널-코너 별 정렬 순서 */
+    private String cornrRnum;
+
+    /** [코너명] */
+    private String cornrNm;
+    /** [대표자명] */
+    private String ownerNm;
+    /** [사업자버호] */
+    private String bizNo;
+    /** [전화번호] */
+    private String telNo;
+    /** [대표코너구분] 대표:Y 미대표:N */
+    private String baseYn;
+
     /**
      * @return the storeCd
      */
@@ -260,5 +277,61 @@ public class StoreTerminalVO extends CmmVO {
 
     public void setPastePosNo(String pastePosNo) {
         this.pastePosNo = pastePosNo;
+    }
+
+    public String getBaseVanYn() {
+        return baseVanYn;
+    }
+
+    public void setBaseVanYn(String baseVanYn) {
+        this.baseVanYn = baseVanYn;
+    }
+
+    public String getCornrRnum() {
+        return cornrRnum;
+    }
+
+    public void setCornrRnum(String cornrRnum) {
+        this.cornrRnum = cornrRnum;
+    }
+
+    public String getCornrNm() {
+        return cornrNm;
+    }
+
+    public void setCornrNm(String cornrNm) {
+        this.cornrNm = cornrNm;
+    }
+
+    public String getOwnerNm() {
+        return ownerNm;
+    }
+
+    public void setOwnerNm(String ownerNm) {
+        this.ownerNm = ownerNm;
+    }
+
+    public String getBizNo() {
+        return bizNo;
+    }
+
+    public void setBizNo(String bizNo) {
+        this.bizNo = bizNo;
+    }
+
+    public String getTelNo() {
+        return telNo;
+    }
+
+    public void setTelNo(String telNo) {
+        this.telNo = telNo;
+    }
+
+    public String getBaseYn() {
+        return baseYn;
+    }
+
+    public void setBaseYn(String baseYn) {
+        this.baseYn = baseYn;
     }
 }

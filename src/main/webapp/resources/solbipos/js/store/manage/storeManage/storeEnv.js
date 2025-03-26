@@ -323,6 +323,10 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
           console.log("2002: " + list[s].selEnvstVal);
           orgEnv2002 = list[s].selEnvstVal;
       }
+      if(list[s].envstCd  === "1337"){
+          console.log("1337: " + list[s].selEnvstVal);
+          orgEnv1337 = list[s].selEnvstVal;
+      }
 
       // 포스환경 저장전 체크에 필요한 환경설정값 갖고있기
       if(list[s].envstCd  === "1015"){
@@ -387,10 +391,8 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
   
   // 다중사업자관리 팝업
   $scope.multiBizManage = function () {
-
-      var params    = {};
       $scope.multiBizManageLayer.show(true);
-      $scope._broadcast('multiBizManageCtrl', params);
+      $scope._broadcast('multiBizManageCtrl');
       event.preventDefault();
   }
 

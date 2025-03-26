@@ -202,4 +202,7 @@ public interface StoreManageService {
 
     /** 포스별 테이블 그룹정보 */
     List<DefaultMap<String>> posGroupList(StorePosEnvVO storePosEnvVO, SessionInfoVO sessionInfoVO);
+
+    /** 터미널관리(밴더코드) 중복 체크 */
+    int chkVendorCd(StoreManageVO storeManageVO);
 }

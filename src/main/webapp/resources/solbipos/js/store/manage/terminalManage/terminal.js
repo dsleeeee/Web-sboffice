@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+// 대표코너 여부
+var baseYnData = [
+    {"name":"대표","value":"Y"},
+    {"name":"미대표","value":"N"}
+];
+
 // vandorList 에서 name 만을 dataMap으로 사용. (name과 value 동시 사용시 오류) // todo 추후 수정 필요
 var allVanList = new Array();
 var vanList = new Array();
@@ -23,6 +29,7 @@ var paperVoucherList = new Array();
 var taxRefundList = new Array();
 var sktList = new Array();
 var cornerFgList = [];
+var cornerFgListDataMap = [];
 
 for (var i in vandorList) {
     if (vandorList[i].vanFg === '01') {
@@ -210,9 +217,13 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
             var cornerList = result.data.data.cornerList;
 
             cornerFgList = cornerList;
+            cornerFgListDataMap = cornerList;
 
             // 터미널 정보 set(터미널 콤보박스 변경에 따라 값 변함)
             $scope.setTerminalEnvVal(terminalEnvVal);
+            
+            // 구분자 셋팅(매장코드 컬럼 클릭)
+            inPath = "columnClick";
 
             // 터미널 정보 콤보박스에 set
             $scope.terminalFg = terminalEnvVal;
@@ -246,12 +257,18 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView($scope.cornerFgArr);
 
+            // 코너 터미널 리스트 '코너'컬럼 사용
+            var allData = {};
+            allData.name = "[XX] 코너추가";
+            allData.value = "";
+            cornerFgListDataMap.push(allData);
+
             // 코너 보여주기
-            if ($scope.terminalFg === "1" || $scope.terminalFg === "2") {
+            if (terminalEnvVal === "1" || terminalEnvVal === "2") {
                 $scope.showCorner();
             }
             // 포스 보여주기
-            else if ($scope.terminalFg === "0" || $scope.terminalFg === "3") {
+            else if (terminalEnvVal === "0" || terminalEnvVal === "3") {
                 $scope.showPos();
             }
 
@@ -264,6 +281,9 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
             var cornerScope = agrid.getScope('cornerCtrl');
             cornerScope._gridDataInit();
+
+            // 코너 터미널 그리드에서 사용하는 코너콤보 선택값 재셋팅
+            cornerScope.cornerFgDataMap = new wijmo.grid.DataMap(cornerFgListDataMap, 'value', 'name');
 
             $scope.chkVanFix(params);
 
@@ -289,14 +309,14 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     // 코너 보여주기
     $scope.showCorner = function () {
 
-        if ($scope.terminalFg === "1") {
+        if ($scope.getTerminalEnvVal() === "1") {
 
             $scope.cornerFgArr2 = $scope.cornerFgArr;
             if($scope.cornerFgArr2.length > 0 && $scope.cornerFgArr2[0].name === "-전체-"){
                 $scope.cornerFgArr2.splice(0, 1);
                 $scope.comboDt.cornerCombo.itemsSource = new wijmo.collections.CollectionView($scope.cornerFgArr2);
             }
-        }else if($scope.terminalFg === "2") {
+        }else if($scope.getTerminalEnvVal() === "2") {
 
             $scope.cornerFgArr2 = $scope.cornerFgArr;
             if($scope.cornerFgArr2.length > 0 && $scope.cornerFgArr2[0].name !== "-전체-"){
@@ -314,8 +334,8 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         var grid = wijmo.Control.getControl("#wjCornerGrid");
         var columns = grid.columns;
         for(var i=0; i<columns.length-1; i++){
-            if(columns[i].binding === "cornrNm"){
-                if($scope.terminalFg === "2") {
+            if(columns[i].binding === "cornrCd"){
+                if($scope.getTerminalEnvVal() === "2") {
                     columns[i].visible = true;
                 }else{
                     columns[i].visible = false;
@@ -349,36 +369,62 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#posBtnArea").show();
     };
 
-    // 터미널 콤보박스 값 변경 이벤트
+    // 터미널 콤보박스(코너사용설정) 값 변경 이벤트
     $scope.changeTerminalFg = function (s, e) {
 
-        if ($scope.getTerminalEnvVal() === undefined) {
+        if ($scope.getTerminalEnvVal() === undefined || $scope.getTerminalEnvVal() === null) {
             return false;
         }
 
-        $scope.setTerminalEnvVal(s.selectedValue);
-        var selectedTerminalFgVal = $scope.getTerminalEnvVal();
+        // 이벤트 발생 경로가, 콤보박스 selected change로 발생한 경우 실행
+        if(inPath === "comboChange") {
 
-        // 리스트 초기화
-        var posScope = agrid.getScope('posCtrl');
-        posScope._gridDataInit();
+            $scope._popConfirm("사용 터미널이 변경됩니다. 저장 하시겠습니까?", function () {
 
-        var cornerScope = agrid.getScope('cornerCtrl');
-        cornerScope._gridDataInit();
+                // 선택값 셋팅
+                $scope.setTerminalEnvVal(s.selectedValue);
+                var selectedTerminalFgVal = $scope.getTerminalEnvVal();
 
-        // 사용 터미널 콤보박스 변경시, 포스 or 코너 콤보박스 가장 첫번째 값으로 셋팅하고, 리스트 조회
-        $scope.comboDt.cornerCombo.selectedIndex = 0;
-        $scope.comboDt.posCombo.selectedIndex = 0;
-        $scope.setCornerFgVal($scope.comboDt.cornerCombo);
-        $scope.setPosFgVal($scope.comboDt.posCombo);
+                // 파라미터
+                var params = {};
+                params.hqOfficeCd = $("#lblHqOfficeCd").text();
+                params.storeCd = $("#lblStoreCd").text();
+                params.envstCd = "2028";
+                params.envstVal = selectedTerminalFgVal;
 
-        // 코너 보여주기
-        if (selectedTerminalFgVal === "1" || selectedTerminalFgVal === "2") {
-            $scope.showCorner();
-        }
-        // 포스 보여주기
-        else if (selectedTerminalFgVal == "0" || selectedTerminalFgVal == "3") {
-            $scope.showPos();
+                // 터미널 콤보박스(코너사용설정) 선택값에 따른 터미널 환경설정 저장
+                $scope._postJSONSave.withPopUp("/store/manage/terminalManage/terminalManage/chgTerminalEnv.sb", params, function (result) {
+
+                    var msg = selectedTerminalFgVal == "2" ? "다중사업자로 변경되었습니다." : "포스별승인으로 변경되었습니다.";
+                    $scope._popMsg(msg);
+
+                    // 리스트 초기화
+                    var posScope = agrid.getScope('posCtrl');
+                    posScope._gridDataInit();
+
+                    var cornerScope = agrid.getScope('cornerCtrl');
+                    cornerScope._gridDataInit();
+
+                    // 사용 터미널 콤보박스 변경시, 포스 or 코너 콤보박스 가장 첫번째 값으로 셋팅하고, 리스트 조회
+                    $scope.comboDt.cornerCombo.selectedIndex = 0;
+                    $scope.comboDt.posCombo.selectedIndex = 0;
+                    $scope.setCornerFgVal($scope.comboDt.cornerCombo);
+                    $scope.setPosFgVal($scope.comboDt.posCombo);
+
+                    // 코너 리스트 보여주기
+                    if (selectedTerminalFgVal === "2") {
+                        $scope.showCorner();
+                    }
+                    // 포스 리스트 보여주기
+                    else if (selectedTerminalFgVal == "3") {
+                        $scope.showPos();
+                    }
+
+                    // 터미널 정보 재셋팅
+                    $("#orgTerminalEnvVal").val(selectedTerminalFgVal);
+
+                });
+            });
         }
     };
 
@@ -449,7 +495,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     // 코너 추가 등록 팝업
-    $scope.cornerAdd = function () {
+    /*$scope.cornerAdd = function () {
 
         $scope.cornerAddLayer.show(true);
 
@@ -460,10 +506,10 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $scope._broadcast('cornerAddCtrl', params);
 
-    };
+    };*/
 
     // 코너 추가 후 코너 SelectBox 재조회
-    $scope.setCorner = function () {
+    /*$scope.setCorner = function () {
 
         // 코너 SelectBox 데이터 초기화
         $scope.cornerFgArr = [];
@@ -499,7 +545,7 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
             cornerScope._gridDataInit();
 
         });
-    }
+    }*/
 
     // 코너 삭제
     $scope.cornerDel = function () {
@@ -509,6 +555,13 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
             cornerScope.saveCornerDel();
         });
     };
+
+    // 터미널 정보 콤보박스 selected change event 구분하기
+    var inPath = "";
+    $scope.chgFg = function () {
+        // 구분자 셋팅(터미널 정보 콤보박스 변경)
+        inPath = "comboChange";
+    }
 
 }]);
 
@@ -531,16 +584,14 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "vendorNm" ) {
-                    var item = s.rows[e.row].dataItem;
-                    if (col.binding === "vendorFg" || col.binding === "vendorCd") {
-                        if (item.status !== "I") {
-                            wijmo.addClass(e.cell, 'wj-custom-readonly');
-                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                var item = s.rows[e.row].dataItem;
+                if (col.binding === "vendorFg") {
+                    if (item.status !== "I") {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
-                            // Attribute 의 변경사항을 적용.
-                            e.cell.outerHTML = e.cell.outerHTML;
-                        }
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
                     }
                 }
                 if($("#lblVanFixFg").text() == "Y") {
@@ -557,17 +608,18 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         });
 
-        // 벤더구분, 벤더코드 그리드 에디팅 방지
+        // 구분, 상세 그리드 에디팅 방지
         s.beginningEdit.addHandler(function (sender, elements) {
             var col = sender.columns[elements.col];
-            if (col.binding === "vendorFg" || col.binding === "vendorCd") {
+            if (col.binding === "vendorFg") {
                 var dataItem = s.rows[elements.row].dataItem;
-                if(dataItem.status === "U"){
+                if (dataItem.status !== "I") {
                     elements.cancel = true;
-                }else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+                }/*else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
                     elements.cancel = true;
-                }
-            }else if (col.binding === "vendorNm"){
+                }*/
+            }
+            if (col.binding === "vendorNm"){
                 if($("#lblVanFixFg").text() == "Y") {
                     var dataItem = s.rows[elements.row].dataItem;
                     if(dataItem.vendorFg === "01") {
@@ -582,7 +634,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
                 // 변경시 체크박스 체크
-                if (col.binding === "vendorFg" || col.binding === "vendorFgNm" ||
+                if (col.binding === "vendorFg" ||
                     col.binding === "vendorNm" || col.binding === "vendorCd" || col.binding === "vendorTermnlNo" ||
                     col.binding === "vendorSerNo") {
                     $scope.checked(item);
@@ -597,10 +649,9 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
             }
             s.collectionView.commitEdit();
         });
-
     };
 
-    // 벤더구분 변경시 벤더 dataMap 변경
+    // 구분 변경시 상세 dataMap 변경
     $scope.changeVendorFg = function (s, e) {
         if (e.panel === s.cells) {
             var col = s.columns[e.col];
@@ -668,12 +719,19 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
         var params = {};
         params.status = "I";
+        params.gChk = true;
+        params.storeCd = "";
+        params.posNo = "";
         params.vendorFg = "01";
-        params.vendorCd = "001";
         if($("#lblVanFixFg").text() == "Y") {
             params.vendorNm = "KOCES";
+        }else{
+            params.vendorNm = "KCP";
         }
-        params.gChk = true;
+        params.vendorCd = "";
+        params.vendorTermnlNo = "";
+        params.vendorSerNo = "";
+        params.baseVanYn = "";
 
         // 추가기능 수행 : 파라미터
         $scope._addRow(params);
@@ -714,15 +772,10 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
             // 필수값 체크
             for (var i = 0; i < params.length; i++) {
 
-                if (params[i].status !== "D") {
+                if (params[i].status === "I" || params[i].status === "U") {
 
                     if (params[i].vendorFg == "") {
                         $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
-                        return false;
-                    }
-
-                    if (params[i].vendorCd == "") {
-                        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
                         return false;
                     }
 
@@ -761,19 +814,18 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                     // BBQ는 VAN - KCP 만 저장 가능
                     // 개발 DS011
                     // 운영 DS024 H0360
-                    if (params[i].status !== "D") {
-                        if ($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
-                            if (params[i].vendorFg == "01") {
-                                if (params[i].vendorNm == "KCP") {
-                                } else {
-                                    // BBQ 매장은 VAN - KCP 선택하여 주십시오.
-                                    $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
-                                    return false;
-                                }
+                    if ($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
+                        if (params[i].vendorFg == "01") {
+                            if (params[i].vendorNm == "KCP") {
+                            } else {
+                                // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+                                $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+                                return false;
                             }
                         }
                     }
-                    // 벤더구분 [01]VAN인 경우 벤더코드는 [008]KOCES 만 선택가능합니다
+                    
+                    // 구분이 [01]VAN인 경우 상세는 [008]KOCES 만 선택가능합니다
                     if($("#lblVanFixFg").text() == "Y") {
                         if (params[i].vendorFg === '01') {
                             if (params[i].vendorNm !== 'KOCES') {
@@ -785,7 +837,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                 }
             }
 
-            // 벤더구분-벤더코드 중복체크
+            // 구분-상세 중복체크
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 var item = $scope.flex.collectionView.items[i];
                 for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
@@ -794,7 +846,7 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
                         if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
                             && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
                             if (item.vendorFg.toString() + item.vendorNm.toString() === item2.vendorFg.toString() + item2.vendorNm.toString()) {
-                                $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
+                                $scope._popMsg("구분-상세 : " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
                                 return false;
                             }
                         }
@@ -849,6 +901,19 @@ app.controller('posCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 포스 정보 삭제
     $scope.savePosDel = function () {
+
+        // 대표밴 'Y' 인 포스 터미널 체크
+        for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+            var item = $scope.flex.collectionView.items[i];
+
+            if (item.gChk) {
+                if (item.baseVanYn === "Y") {
+                    $scope._popMsg(messages["terminalManage.baseVanYn.delete.chk.msg"]);
+                    return false;
+                }
+            }
+        }
+
         for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
             var item = $scope.flex.collectionView.items[i];
 
@@ -882,14 +947,14 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         // $scope.vanCdDataMap = new wijmo.grid.DataMap(vandorList, 'value', 'name');
         $scope.vanCdDataMap = allVanList;
         $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
-
+        $scope.baseYnDataMap = new wijmo.grid.DataMap(baseYnData, 'value', 'name');
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
-                if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "cornrNm") {
+                if (col.binding === "cornrCd") {
                     if (item.status !== "I") {
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                         wijmo.setAttribute(e.cell, 'aria-readonly', true);
@@ -897,9 +962,28 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                         // Attribute 의 변경사항을 적용.
                         e.cell.outerHTML = e.cell.outerHTML;
                     }
-                }else if(col.binding === "vendorNm") {
-                    if ($("#lblVanFixFg").text() == "Y") {
-                        if (item.vendorFg === "01") {
+                }
+                if (col.binding === "vendorFg") {
+                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                    // Attribute 의 변경사항을 적용.
+                    e.cell.outerHTML = e.cell.outerHTML;
+                }
+                if ($("#lblVanFixFg").text() == "Y") {
+                    if (col.binding === "vendorNm") {
+                        //if (item.vendorFg === "01") {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        //}
+                    }
+                }
+                if (col.binding === "cornrNm" || col.binding === "ownerNm" || col.binding === "bizNo" || col.binding === "baseYn" || col.binding === "telNo") {
+                    if (item.status !== "I") {
+                        if (item.baseVanYn !== "Y" && item.cornrRnum != "1") {
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                             wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
@@ -911,27 +995,44 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         });
 
-        var terminalScope = agrid.getScope('terminalCtrl');
-
-        // 벤더구분, 벤더코드 그리드 에디팅 방지
+        // 구분, 상세 그리드 에디팅 방지
         s.beginningEdit.addHandler(function (sender, elements) {
             var col = sender.columns[elements.col];
-            if (col.binding === "vendorFg" || col.binding === "vendorCd" || col.binding === "cornrNm") {
+            if (col.binding === "cornrCd") {
                 var dataItem = s.rows[elements.row].dataItem;
-                if(dataItem.status === "U"){
+                if (dataItem.status !== "I") {
                     elements.cancel = true;
-                }else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+                }
+                /*if (dataItem.status === "U") {
                     elements.cancel = true;
-                }else if (dataItem.status === "I"){
-                    if(col.binding === "cornrNm" && !isNull(terminalScope.getCornerFgVal())){
+                } else if (nvl(dataItem.status, "") === "" && dataItem.status !== "I") {
+                    elements.cancel = true;
+                } else if (dataItem.status === "I") {
+                    if (col.binding === "cornrCd" && !isNull(terminalScope.getCornerFgVal())) {
                         elements.cancel = true;
                     }
-                }
-            }else if (col.binding === "vendorNm"){
-                if($("#lblVanFixFg").text() == "Y") {
+                }*/
+            }
+            if (col.binding === "vendorFg") {
+                elements.cancel = true;
+            }
+            if ($("#lblVanFixFg").text() == "Y") {
+                if (col.binding === "vendorNm") {
                     var dataItem = s.rows[elements.row].dataItem;
-                    if(dataItem.vendorFg === "01") {
+                    //if(dataItem.vendorFg === "01") {
                         elements.cancel = true;
+                    //}
+                }
+            }
+            if (col.binding === "cornrNm" || col.binding === "ownerNm" || col.binding === "bizNo" || col.binding === "baseYn" || col.binding === "telNo") {
+                var dataItem = s.rows[elements.row].dataItem;
+                if (dataItem.status !== "I") {
+                    if (dataItem.baseVanYn !== "Y" && dataItem.cornrRnum != "1") {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
                     }
                 }
             }
@@ -942,15 +1043,15 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 var col = s.columns[e.col];
                 var item = s.rows[e.row].dataItem;
                 // 변경시 체크박스 체크
-                if (col.binding === "cornrCd" || col.binding === "vendorFg" || col.binding === "vendorFgNm" ||
+                if (col.binding === "cornrCd" || col.binding === "vendorFg" ||
                     col.binding === "vendorNm" || col.binding === "vendorCd" || col.binding === "vendorTermnlNo" ||
-                    col.binding === "vendorSerNo") {
+                    col.binding === "vendorSerNo" || col.binding === "cornrNm" || col.binding === "ownerNm" || col.binding ==="bizNo" || col.binding === "baseYn" || col.binding === "telNo") {
                     $scope.checked(item);
                     if($("#lblVanFixFg").text() == "Y") {
                         if(col.binding === "vendorFg"){
-                            if(item.vendorFg === '01') {
+                            //if(item.vendorFg === "01") {
                                 item.vendorNm = "KOCES";
-                            }
+                            //}
                         }
                     }
                 }
@@ -959,7 +1060,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         });
     };
 
-    // 벤더구분 변경시 벤더 dataMap 변경
+    // 구분 변경시 상세 dataMap 변경
     $scope.changeVendorFg = function (s, e) {
         if (e.panel === s.cells) {
             var col = s.columns[e.col];
@@ -1018,7 +1119,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
         params.cornrCd = terminalScope.getCornerFgVal();
 
         $scope._inquirySub(baseUrl + "corner/getCornerTerminalList.sb", params, function () {
-            $scope.cornerFgDataMap = new wijmo.grid.DataMap(cornerFgList, 'value', 'name');
+            $scope.cornerFgDataMap = new wijmo.grid.DataMap(cornerFgListDataMap, 'value', 'name');
 
         }, false);
     };
@@ -1027,23 +1128,33 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.addRow = function () {
 
         var params = {};
-
         var terminalScope = agrid.getScope('terminalCtrl');
 
         params.status = "I";
+        params.gChk = true;
         if(isNull(terminalScope.getCornerFgVal())) {
             if(cornerFgList !== null && cornerFgList !== '') {
-                params.cornrNm = cornerFgList[0].name;
+                params.cornrCd = cornerFgList[0].value;
             }
         }else{
-            params.cornrNm = terminalScope.getCornerFgVal();
+            params.cornrCd = terminalScope.getCornerFgVal();
         }
         params.vendorFg = "01";
-        params.vendorCd = "001";
         if($("#lblVanFixFg").text() == "Y") {
             params.vendorNm = "KOCES";
+        }else{
+            params.vendorNm = "KCP";
         }
-        params.gChk = true;
+        params.vendorCd = "";
+        params.vendorTermnlNo = "";
+        params.vendorSerNo = "";
+        params.cornrNm = "";
+        params.ownerNm = "";
+        params.bizNo = "";
+        params.baseYn = "N";
+        params.telNo = "";
+        params.cornrRnum = "";
+        params.baseVanYn = "";
 
         // 추가기능 수행 : 파라미터
         $scope._addRow(params);
@@ -1060,9 +1171,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 if($scope.flex.collectionView.itemsEdited[i].gChk) {
                     $scope.flex.collectionView.itemsEdited[i].status = "U";
                     $scope.flex.collectionView.itemsEdited[i].storeCd = $("#lblStoreCd").text();
-                    if(!isNull(terminalScope.getCornerFgVal())){
-                        $scope.flex.collectionView.itemsEdited[i].cornrCd = terminalScope.getCornerFgVal();
-                    }
                     params.push($scope.flex.collectionView.itemsEdited[i]);
                 }
             }
@@ -1070,11 +1178,6 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 if($scope.flex.collectionView.itemsAdded[i].gChk) {
                     $scope.flex.collectionView.itemsAdded[i].status = "I";
                     $scope.flex.collectionView.itemsAdded[i].storeCd = $("#lblStoreCd").text();
-                    if(isNull(terminalScope.getCornerFgVal())){
-                        $scope.flex.collectionView.itemsAdded[i].cornrCd = $scope.flex.collectionView.itemsAdded[i].cornrNm;
-                    }else {
-                        $scope.flex.collectionView.itemsAdded[i].cornrCd = terminalScope.getCornerFgVal();
-                    }
                     params.push($scope.flex.collectionView.itemsAdded[i]);
                 }
             }
@@ -1082,30 +1185,17 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                 if($scope.flex.collectionView.itemsRemoved[i].gChk) {
                     $scope.flex.collectionView.itemsRemoved[i].status = "D";
                     $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
-                    if(!isNull(terminalScope.getCornerFgVal())){
-                        $scope.flex.collectionView.itemsRemoved[i].cornrCd = terminalScope.getCornerFgVal();
-                    }
                     params.push($scope.flex.collectionView.itemsRemoved[i]);
                 }
             }
 
-            //필수값 체크
+            // 필수값 체크
             for (var i = 0; i < params.length; i++) {
 
-                if (params[i].status !== "D") {
-
-                    if (params[i].cornrNm == "") {
-                        $scope._popMsg(messages["terminalManage.corner"] + messages["terminalManage.require.select"]);
-                        return false;
-                    }
+                if (params[i].status === "I" || params[i].status === "U") {
 
                     if (params[i].vendorFg == "") {
                         $scope._popMsg(messages["terminalManage.vendorFg"] + messages["terminalManage.require.select"]);
-                        return false;
-                    }
-
-                    if (params[i].vendorCd == "") {
-                        $scope._popMsg(messages["terminalManage.vendorCd"] + messages["terminalManage.require.select"]);
                         return false;
                     }
 
@@ -1144,18 +1234,17 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                     // BBQ는 VAN - KCP 만 저장 가능
                     // 개발 DS011
                     // 운영 DS024 H0360
-                    if (params[i].status !== "D") {
-                        if ($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
-                            if (params[i].vendorFg == "01") {
-                                if (params[i].vendorNm == "KCP") {
-                                } else {
-                                    // BBQ 매장은 VAN - KCP 선택하여 주십시오.
-                                    $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
-                                    return false;
-                                }
+                    if ($("#lblHqOfficeCd").text() == "DS011" || $("#lblHqOfficeCd").text() == "DS024" || $("#lblHqOfficeCd").text() == "H0360") {
+                        if (params[i].vendorFg == "01") {
+                            if (params[i].vendorNm == "KCP") {
+                            } else {
+                                // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+                                $scope._popMsg(messages["terminalManage.bbqSave.msg"]);
+                                return false;
                             }
                         }
                     }
+
                     // KOCES 총판은 벤더코드 KOCES만 저장가능
                     if($("#lblVanFixFg").text() == "Y") {
                         if (params[i].vendorFg === '01') {
@@ -1165,20 +1254,166 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                             }
                         }
                     }
+
+                }
+
+                // 수정시
+                if(params[i].status === "U"){
+
+                    // 코너을(를) 선택해주세요.
+                    if (params[i].cornrCd === "" || params[i].cornrCd === null || params[i].cornrCd === undefined) {
+                        $scope._popMsg(messages["terminalManage.corner"] + messages["terminalManage.require.select"]);
+                        return false;
+                    }
+
+                    // 코너정보를 변경할 수 있는 경우
+                    if(params[i].cornrRnum === 1){
+
+                        // 코너명을(를) 입력해주세요.
+                        if (params[i].cornrNm == "") {
+                            $scope._popMsg(messages["terminalManage.cornrNm"] + messages["terminalManage.require.input"]);
+                            return false;
+                        }
+
+                        // 사업자번호을(를) 입력해주세요.
+                        if (params[i].bizNo == "") {
+                            $scope._popMsg(messages["terminalManage.bizNo"] + messages["terminalManage.require.input"]);
+                            return false;
+                        }
+
+                        // 숫자만 입력
+                        var numChkexp = /[^-\.0-9]/g;
+                        if (numChkexp.test(nvl(params[i].bizNo, 0)) || String(params[i].bizNo).split('.').length - 1 > 1) {
+                            // 사업자번호는 숫자만 입력해주세요.
+                            $scope._popMsg(messages["terminalManage.bizNo"] + messages["cmm.require.number"]);
+                            return false;
+                        }
+
+                        if (numChkexp.test(nvl(params[i].telNo, 0)) || String(params[i].telNo).split('.').length - 1 > 1) {
+                            // 전화번호는 숫자만 입력해주세요.
+                            $scope._popMsg(messages["terminalManage.telNo"] + messages["cmm.require.number"]);
+                            return false;
+                        }
+
+                        // 대표코너 확인
+                        // 미대표 --> 대표
+                        if(params[i].baseYn === "Y"){
+                            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                                var item = $scope.flex.collectionView.items[j];
+                                if (params[i].cornrCd !== item.cornrCd) {
+                                    if (item.baseYn === 'Y') {
+                                        // 대표코너는 반드시 1개 존재해야 합니다.
+                                        $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
+                        // 대표 --> 미대표
+                        if(params[i].baseYn === "N"){
+                            var chkBaseYnCnt = 0;
+                            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                                var item = $scope.flex.collectionView.items[j];
+                                if (params[i].cornrCd !== item.cornrCd) {
+                                    if (item.baseYn === 'Y') {
+                                        chkBaseYnCnt++;
+                                    }
+                                }
+                            }
+
+                            if (chkBaseYnCnt === 0) {
+                                // 대표코너는 반드시 1개 존재해야 합니다.
+                                $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                // 추가시
+                if(params[i].status === "I"){
+
+                    // 새 코너를 추가하는 경우
+                    if (params[i].cornrCd === "" || params[i].cornrCd === null || params[i].cornrCd === undefined) {
+
+                        // 코너명을(를) 입력해주세요.
+                        if (params[i].cornrNm == "") {
+                            $scope._popMsg(messages["terminalManage.cornrNm"] + messages["terminalManage.require.input"]);
+                            return false;
+                        }
+
+                        // 사업자번호을(를) 입력해주세요.
+                        if (params[i].bizNo == "") {
+                            $scope._popMsg(messages["terminalManage.bizNo"] + messages["terminalManage.require.input"]);
+                            return false;
+                        }
+
+                        // 숫자만 입력
+                        var numChkexp = /[^-\.0-9]/g;
+                        if (numChkexp.test(nvl(params[i].bizNo, 0)) || String(params[i].bizNo).split('.').length - 1 > 1) {
+                            // 사업자번호는 숫자만 입력해주세요.
+                            $scope._popMsg(messages["terminalManage.bizNo"] + messages["cmm.require.number"]);
+                            return false;
+                        }
+
+                        if (numChkexp.test(nvl(params[i].telNo, 0)) || String(params[i].telNo).split('.').length - 1 > 1) {
+                            // 전화번호는 숫자만 입력해주세요.
+                            $scope._popMsg(messages["terminalManage.telNo"] + messages["cmm.require.number"]);
+                            return false;
+                        }
+
+                        // 대표코너 확인
+                        // 미대표 --> 대표
+                        if(params[i].baseYn === "Y"){
+                            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                                var item = $scope.flex.collectionView.items[j];
+                                if (params[i].cornrCd !== item.cornrCd) {
+                                    if (item.baseYn === 'Y') {
+                                        // 대표코너는 반드시 1개 존재해야 합니다.
+                                        $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
+                        // 대표 --> 미대표
+                        if(params[i].baseYn === "N"){
+                            var chkBaseYnCnt = 0;
+                            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
+                                var item = $scope.flex.collectionView.items[j];
+                                if (params[i].cornrCd !== item.cornrCd) {
+                                    if (item.baseYn === 'Y') {
+                                        chkBaseYnCnt++;
+                                    }
+                                }
+                            }
+
+                            if (chkBaseYnCnt === 0) {
+                                // 대표코너는 반드시 1개 존재해야 합니다.
+                                $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
+                                return false;
+                            }
+                        }
+                    }
                 }
             }
 
-            // 벤더구분-벤더코드 중복체크
+            // 코너-구분-상세 중복체크
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 var item = $scope.flex.collectionView.items[i];
                 for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                     var item2 = $scope.flex.collectionView.items[j];
                     if(i !== j){
-                        if(item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
-                           && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
-                            if (item.cornrCd.toString() + item.vendorFg.toString() + item.vendorNm.toString() === item2.cornrCd.toString() + item2.vendorFg.toString() + item2.vendorNm.toString()) {
-                                $scope._popMsg("벤더구분-벤더코드 " + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
-                                return false;
+                        if(item.cornrCd !== "" && item2.cornrCd !== "") {
+                            if (item.vendorNm.toString !== null && item.vendorNm.toString !== '' && item.vendorNm.toString !== undefined
+                                && item2.vendorNm.toString !== null && item2.vendorNm.toString !== '' && item2.vendorNm.toString !== undefined) {
+                                if (item.cornrCd.toString() + item.vendorFg.toString() + item.vendorNm.toString() ===
+                                    item2.cornrCd.toString() + item2.vendorFg.toString() + item2.vendorNm.toString()) {
+                                    $scope._popMsg("코너-구분-상세 : [" + item.cornrCd.toString() + "]-" + getVendorFgNm(item.vendorFg.toString()) + "-" + item.vendorNm.toString() + messages["terminalManage.input.duplicate"]);
+                                    return false;
+                                }
                             }
                         }
                     }
@@ -1232,6 +1467,19 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 코너 정보 삭제
     $scope.saveCornerDel = function () {
+
+        // 대표밴 'Y' 인 코너 터미널 체크
+        for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+            var item = $scope.flex.collectionView.items[i];
+
+            if (item.gChk) {
+                if (item.baseVanYn === "Y") {
+                    $scope._popMsg(messages["terminalManage.baseVanYn.delete.chk.msg"]);
+                    return false;
+                }
+            }
+        }
+
         for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
             var item = $scope.flex.collectionView.items[i];
 
@@ -1251,7 +1499,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
 }]);
 
-// 벤더구분 코드값으로 명칭 가져오기
+// 구분 코드값으로 명칭 가져오기
 function getVendorFgNm (cd){
     var list = vendorFg;
     for (var i = 0; i < list.length; i++) {

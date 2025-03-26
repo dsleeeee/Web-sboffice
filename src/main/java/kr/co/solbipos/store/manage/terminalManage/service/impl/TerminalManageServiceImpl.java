@@ -8,6 +8,7 @@ import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.manage.storemanage.service.StoreEnvVO;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.StorePosVO;
+import kr.co.solbipos.store.manage.storemanage.service.impl.StoreManageMapper;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreTerminalVO;
 import kr.co.solbipos.store.manage.terminalManage.service.TerminalManageService;
@@ -42,13 +43,15 @@ public class TerminalManageServiceImpl implements TerminalManageService{
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private final TerminalManageMapper mapper;
+    private final StoreManageMapper storeManageMapper;
     private final String POS_ENVST_CD = "2028"; // 코너, VAN 설정 환경변수
 
     /** Constructor Injection */
     @Autowired
-    public TerminalManageServiceImpl(TerminalManageMapper mapper) {
+    public TerminalManageServiceImpl(TerminalManageMapper mapper, StoreManageMapper storeManageMapper) {
 
         this.mapper = mapper;
+        this.storeManageMapper = storeManageMapper;
     }
 
     /** 벤더 조회 */
@@ -145,6 +148,15 @@ public class TerminalManageServiceImpl implements TerminalManageService{
 
                 result += mapper.updatePosTerminalInfo(storeTerminalVO);
 
+                // 포스 대표 터미널 정보 수정시 코너 대표 터미널에 정보 merge
+                if("Y".equals(storeTerminalVO.getBaseVanYn())) {
+
+                    storeTerminalVO.setPosNo("01");
+                    storeTerminalVO.setCornrCd("01");
+                    storeTerminalVO.setVendorFg("01");
+                    result += storeManageMapper.insertCornerTerminal(storeTerminalVO);
+                }
+
             } else if(storeTerminalVO.getStatus() == GridDataFg.DELETE) {
 
                 result += mapper.deletePosTerminalInfo(storeTerminalVO);
@@ -168,17 +180,59 @@ public class TerminalManageServiceImpl implements TerminalManageService{
             storeTerminalVO.setModDt(dt);
             storeTerminalVO.setModId(sessionInfoVO.getUserId());
 
+            // 코너 정보 셋팅
+            StoreCornerVO storeCornerVO = new StoreCornerVO();
+            storeCornerVO.setStoreCd(storeTerminalVO.getStoreCd());
+            storeCornerVO.setCornrCd(storeTerminalVO.getCornrCd());
+            storeCornerVO.setCornrNm(storeTerminalVO.getCornrNm());
+            storeCornerVO.setOwnerNm(storeTerminalVO.getOwnerNm());
+            storeCornerVO.setBizNo(storeTerminalVO.getBizNo());
+            storeCornerVO.setTelNo(storeTerminalVO.getTelNo());
+            storeCornerVO.setUseYn(UseYn.Y.getCode());
+            storeCornerVO.setBaseYn(storeTerminalVO.getBaseYn());
+            storeCornerVO.setRegDt(dt);
+            storeCornerVO.setRegId(sessionInfoVO.getUserId());
+            storeCornerVO.setModDt(dt);
+            storeCornerVO.setModId(sessionInfoVO.getUserId());
+
             if(storeTerminalVO.getStatus() == GridDataFg.INSERT) {
+
+                if (storeCornerVO.getCornrCd().isEmpty()) {
+
+                    // 코너 코드 생성
+                    storeCornerVO.setCornrCd(mapper.getCornerCd(storeTerminalVO));
+                    result += mapper.insertCorner(storeCornerVO); // 코너 등록
+
+                    // 터미널 정보에도 코너 코트 셋팅
+                    storeTerminalVO.setCornrCd(storeCornerVO.getCornrCd());
+                }
 
                 result += mapper.insertCornerTerminalInfo(storeTerminalVO);
 
             } else if (storeTerminalVO.getStatus() == GridDataFg.UPDATE) {
 
+                if("1".equals(storeTerminalVO.getCornrRnum())) {
+                    result += mapper.updateCorner(storeCornerVO); // 코너 수정
+                }
+
                 result += mapper.updateCornerTerminalInfo(storeTerminalVO);
+
+                // 코너 대표 터미널 정보 수정시 포스 대표 터미널에 정보 merge
+                if("1".equals(storeTerminalVO.getCornrRnum()) && "Y".equals(storeTerminalVO.getBaseVanYn())) {
+
+                    storeTerminalVO.setPosNo("01");
+                    storeTerminalVO.setCornrCd("01");
+                    storeTerminalVO.setVendorFg("01");
+                    result += mapper.mergePosTerminalInfo(storeTerminalVO);
+                }
 
             } else if(storeTerminalVO.getStatus() == GridDataFg.DELETE) {
 
                 result += mapper.deleteCornerTerminalInfo(storeTerminalVO);
+
+                if("1".equals(storeTerminalVO.getCornrRnum()) && !"Y".equals(storeTerminalVO.getBaseVanYn())) {
+                    result += mapper.deleteCorner(storeCornerVO); // 코너 삭제
+                }
             }
         }
 
@@ -257,4 +311,69 @@ public class TerminalManageServiceImpl implements TerminalManageService{
 
         return result;
     }
+
+    /** 터미널 콤보박스(코너사용설정) 선택값에 따른 터미널 환경설정 저장 */
+    @Override
+    public int chgTerminalEnv(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO){
+
+        int procCnt = 0;
+        String dt = currentDateTimeString();
+
+        storeEnvVO.setRegDt(dt);
+        storeEnvVO.setRegId(sessionInfoVO.getUserId());
+        storeEnvVO.setModDt(dt);
+        storeEnvVO.setModId(sessionInfoVO.getUserId());
+        // [2028] 코너사용설정 저장
+        procCnt += mapper.updateTerminalEnvst(storeEnvVO);
+
+        // [1337] 다중사업자사용여부 저장
+        storeEnvVO.setEnvstCd("1337");
+        if("2".equals(storeEnvVO.getEnvstVal())) {
+            storeEnvVO.setEnvstVal("1"); // 사용
+        }else if("3".equals(storeEnvVO.getEnvstVal())){
+            storeEnvVO.setEnvstVal("0"); // 미사용
+        }
+        procCnt += mapper.updateTerminalEnvst(storeEnvVO);
+
+
+        // [1337] 다중사업자사용여부 '사용' 시
+        if("1".equals(storeEnvVO.getEnvstVal())){
+
+            // 매장 사업자번호 조회
+            StoreManageVO storeManageVO = new StoreManageVO();
+            storeManageVO.setHqOfficeCd(storeEnvVO.getHqOfficeCd());
+            storeManageVO.setStoreCd(storeEnvVO.getStoreCd());
+            DefaultMap<String> storeDtlInfo = storeManageMapper.getStoreDetail(storeManageVO);
+
+            // 01번 대표코너 생성
+            StoreCornerVO storeCornerVO = new StoreCornerVO();
+            storeCornerVO.setStoreCd(storeEnvVO.getStoreCd());
+            storeCornerVO.setCornrCd("01");
+            storeCornerVO.setCornrNm("대표코너");
+            storeCornerVO.setBizNo(storeDtlInfo.getStr("bizNo"));
+            storeCornerVO.setUseYn(UseYn.Y.getCode());
+            storeCornerVO.setBaseYn("Y");
+            storeCornerVO.setRegDt(dt);
+            storeCornerVO.setRegId(sessionInfoVO.getUserId());
+            storeCornerVO.setModDt(dt);
+            storeCornerVO.setModId(sessionInfoVO.getUserId());
+            procCnt += storeManageMapper.insertBaseCorner(storeCornerVO);
+
+            // 01번 코너터미널 생성
+            StoreTerminalVO storeTerminalVO = new StoreTerminalVO();
+            storeTerminalVO.setStoreCd(storeEnvVO.getStoreCd());
+            storeTerminalVO.setPosNo("01");
+            storeTerminalVO.setCornrCd("01");
+            storeTerminalVO.setVendorFg("01");
+            storeTerminalVO.setRegDt(dt);
+            storeTerminalVO.setRegId(sessionInfoVO.getUserId());
+            storeTerminalVO.setModDt(dt);
+            storeTerminalVO.setModId(sessionInfoVO.getUserId());
+            storeTerminalVO.setBaseVanYn("Y");
+            procCnt += storeManageMapper.insertCornerTerminal(storeTerminalVO);
+        }
+
+        return procCnt;
+    }
+
 }

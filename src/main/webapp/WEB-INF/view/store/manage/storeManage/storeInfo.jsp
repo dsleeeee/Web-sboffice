@@ -312,7 +312,7 @@
             </tr>
             <tr>
                 <%--터미널관리--%>
-                <th><s:message code="storeManage.terminalManage" /></th>
+                <th><s:message code="storeManage.terminalManage" /><em class="imp">*</em></th>
                 <td>
                     <div class="sb-select">
                         <wj-combo-box
@@ -328,14 +328,14 @@
                     </div>
                 </td>
                 <%--터미널번호--%>
-                <th><s:message code="storeManage.vendorTermnlNo" /></th>
+                <th><s:message code="storeManage.vendorTermnlNo" /><em class="imp">*</em></th>
                 <td>
                     <input type="text" id="vendorTermnlNo" class="sb-input w100" ng-model="store.vendorTermnlNo" />
                 </td>
             </tr>
             <tr>
                 <%--시리얼번호--%>
-                <th><s:message code="storeManage.vendorSerNo" /></th>
+                <th><s:message code="storeManage.vendorSerNo" /><em class="imp">*</em></th>
                 <td>
                     <input type="text" id="vendorSerNo" class="sb-input w100" ng-model="store.vendorSerNo" />
                 </td>
@@ -738,7 +738,7 @@
   var hqList = ${ccu.getHqOfficeList()};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20250310.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeInfo.js?ver=20250324.01" charset="utf-8"></script>
 
 <%-- 사업자번호 조회 --%>
 <c:import url="/WEB-INF/view/application/layer/checkBizNo.jsp">

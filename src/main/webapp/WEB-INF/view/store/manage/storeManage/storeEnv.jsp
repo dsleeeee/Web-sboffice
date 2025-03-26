@@ -73,6 +73,8 @@
     var orgEnv1221 = "";
     var orgEnv2001 = "";
     var orgEnv2002 = "";
+    var orgEnv1337 = "";
+
 
     // 포스환경 저장전 체크에 필요한 환경설정값 갖고있기
     var orgEnv1015 = "";
@@ -80,5 +82,5 @@
     var orgEnv4021 = "";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20241210.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20250324.01" charset="utf-8"></script>
 

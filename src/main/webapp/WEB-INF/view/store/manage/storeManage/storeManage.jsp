@@ -240,10 +240,10 @@
   // 밴사정보
   var vandorList = ${vendorList};
   // 매장정보 터미널관리 콤보박스용 데이터
-  var vanList = new Array();
+  var vanList01 = new Array();
   for (var i in vandorList) {
       if (vandorList[i].vanFg === '01') {
-          vanList.push(vandorList[i]);
+          vanList01.push(vandorList[i]);
       }
   }
 

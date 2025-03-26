@@ -6,6 +6,7 @@ import kr.co.solbipos.base.prod.touchkey.service.TouchKeyVO;
 import kr.co.solbipos.store.hq.hqmanage.service.HqManageVO;
 import kr.co.solbipos.store.manage.storemanage.service.*;
 import kr.co.solbipos.store.manage.terminalManage.service.StoreCornerVO;
+import kr.co.solbipos.store.manage.terminalManage.service.StoreTerminalVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -595,4 +596,22 @@ public interface StoreManageMapper {
 
     /** 포스별 테이블 그룹정보 */
     List<DefaultMap<String>> getPosGroupList(StorePosEnvVO storePosEnvVO);
+
+    /** 포스 터미널 정보 등록 */
+    int insertPosTerminalInfo(StoreManageVO storeManageVO);
+
+    /** 포스 터미널 정보 수정 */
+    int updatePosTerminalInfo(StoreManageVO storeManageVO);
+
+    /** 코너 터미널 정보 수정 */
+    int updateCornerTerminalInfo(StoreManageVO storeManageVO);
+
+    /** 터미널관리(밴더코드) 중복 체크 */
+    int chkVendorCd(StoreManageVO storeManageVO);
+
+    /** 대표코너 생성 */
+    int insertBaseCorner(StoreCornerVO storeCornerVO);
+
+    /** 코너터미널 생성 */
+    int insertCornerTerminal(StoreTerminalVO storeTerminalVO);
 }

@@ -406,4 +406,27 @@ public class TerminalManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 터미널 콤보박스(코너사용설정) 선택값에 따른 터미널 환경설정 저장
+     * @param storeEnvVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2025. 03. 12.
+     */
+    @RequestMapping(value = "terminalManage/chgTerminalEnv.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result chgTerminalEnv(@RequestBody StoreEnvVO storeEnvVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = service.chgTerminalEnv(storeEnvVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
 }

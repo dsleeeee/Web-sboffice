@@ -92,5 +92,11 @@ public interface TerminalManageMapper {
     
     /** 터미널 정보 복사 */
     int copyTerminalInfo(StoreTerminalVO storeTerminalVO);
+
+    /** 코너 코드 생성 */
+    String getCornerCd(StoreTerminalVO storeTerminalVO);
+
+    /** 코너 대표 터미널 정보 수정시 포스 대표 터미널 정보 merge */
+    int mergePosTerminalInfo(StoreTerminalVO storeTerminalVO);
 }
 

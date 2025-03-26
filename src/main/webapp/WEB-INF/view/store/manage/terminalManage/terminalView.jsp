@@ -146,7 +146,8 @@
                   selected-value-path="value"
                   is-editable="false"
                   initialized="_initComboBox(s)"
-                  selected-index-changed="changeTerminalFg(s,e)">
+                  selected-index-changed="changeTerminalFg(s,e)"
+                  ng-click="chgFg()">
           </wj-combo-box>
           <input type="hidden" id="terminalFgVal" value={{terminalFg}} />
         </div>
@@ -197,7 +198,7 @@
           <%-- 터미널정보복사 --%>
           <%--<button class="btn_skyblue" ng-click="copyTerminalInfo()"><s:message code="terminalManage.copy.terminal"/></button>--%>
           <%-- 코너추가 --%>
-          <button class="btn_skyblue" ng-click="cornerAdd()"><s:message code="terminalManage.cornrAdd"/></button>
+          <%--<button class="btn_skyblue" ng-click="cornerAdd()"><s:message code="terminalManage.cornrAdd"/></button>--%>
           <%-- 추가 --%>
           <button class="btn_skyblue" ng-click="cornerAddRow()"><s:message code="cmm.add"/></button>
           <%-- 저장 --%>
@@ -210,7 +211,7 @@
     </div>
 
     <%-- 포스 설정 --%>
-    <div class="wj-gridWrap" style="height:150px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea" >
+    <div class="wj-gridWrap" style="height:250px; overflow-y: hidden;" ng-controller="posCtrl" id="posArea" >
       <wj-flex-grid
               autoGenerateColumns="false"
               control="flex"
@@ -226,16 +227,16 @@
         <wj-flex-grid-column header="<s:message code="terminalManage.storeCd"/>" binding="storeCd" width="*" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.posNo"/>" binding="posNo" width="*" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="terminalManage.vendorFgNm"/>" binding="vendorFgNm" visible="false" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorNm" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" visible="false" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
+        <wj-flex-grid-column header="" binding="baseVanYn" width="0" visible="false"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
 
     <%-- 코너 설정 --%>
-    <div class="wj-gridWrap" style="height:150px; overflow-y: hidden; display: none;" ng-controller="cornerCtrl" id="cornerArea" >
+    <div class="wj-gridWrap" style="height:250px; overflow-y: hidden; display: none;" ng-controller="cornerCtrl" id="cornerArea" >
       <wj-flex-grid
               id="wjCornerGrid"
               autoGbeginning-editenerateColumns="false"
@@ -249,14 +250,20 @@
               ime-enabled="true">
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="terminalManage.corner"/>" binding="cornrNm" width="*" data-map="cornerFgDataMap"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="terminalManage.cornrCd"/>" binding="cornrCd" width="*" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.corner"/>" binding="cornrCd" width="*" data-map="cornerFgDataMap"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorFg"/>" binding="vendorFg" data-map="vendorFgDataMap" width="*"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="terminalManage.vendorFgNm"/>" binding="vendorFgNm" visible="false" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorNm" data-map="vanCdDataMap" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorCd"/>" binding="vendorCd" visible="false"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorTermnlNo"/>" binding="vendorTermnlNo" width="*"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="terminalManage.vendorSerNo"/>" binding="vendorSerNo" width="*"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.cornrNm"/>" binding="cornrNm" width="100" max-length="15"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.owner"/>" binding="ownerNm" width="100" max-length="15"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.bizNo"/>" binding="bizNo" width="150" max-length="10"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.baseYn"/>" binding="baseYn" width="80" data-map="baseYnDataMap"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="terminalManage.telNo"/>" binding="telNo" width="150" max-length="14"></wj-flex-grid-column>
+        <wj-flex-grid-column header="" binding="cornrRnum" width="0" visible="false"></wj-flex-grid-column>
+        <wj-flex-grid-column header="" binding="baseVanYn" width="0" visible="false"></wj-flex-grid-column>
+
       </wj-flex-grid>
     </div>
   </div>
@@ -278,7 +285,7 @@
   var arrAgencyCol = agencyCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20250210.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20250324.01" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <%--<c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">--%>

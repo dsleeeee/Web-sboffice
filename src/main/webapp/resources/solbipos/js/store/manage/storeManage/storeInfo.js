@@ -22,7 +22,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._setComboData("sysStatFg", sysStatFg);
   $scope._setComboData("areaCd", areaCd);
   $scope._setComboData("branchCd", [{"name": messages["cmm.select"], "value": ""}]);
-  $scope._setComboData("vendorCd", vanList);
+  $scope._setComboData("vendorCd", vanList01);
 
   // [1250 맘스터치]
   // 콤보박스 데이터
@@ -1028,7 +1028,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
           
       // 수정시에만 체크
       if (!$.isEmptyObject(storeScope.getSelectedStore())) {
-          if (b_vendorCd !== "") {
+          if (b_vendorCd !== "" && b_vendorCd !== null) {
               // 터미널관리 선택값이 변경한 경우 기존값과 중복되는지 확인
               if (b_vendorCd !== $scope.store.vendorCd) {
                   var params = $scope.store;
@@ -1046,6 +1046,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                   $scope.bizNoChk();
               }
           } else {
+              $scope._popMsg(messages["cmm.registFail"]);
               return false;
           }
       }else{
@@ -1091,6 +1092,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if($scope.bizNoCheck.bizNo > 0) {
         // 해당 사업자번호[123-32-12312]가 이미 등록되어 있습니다. 계속 진행하시겠습니까?
         $scope._popConfirm(messages["storeManage.chk.bizNo1"] +"["+ $scope.store.bizNo1 +"-"+ $scope.store.bizNo2 +"-"+ $scope.store.bizNo3 +"]"+ messages["storeManage.chk.bizNo2"], function() {
+            // 매장정보 저장
             $scope.storeSave(params);
         });
       } else if($scope.bizNoCheck.bizNo === 0) {
@@ -2248,7 +2250,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 }]);
 // 터미널관리(밴더코드) 코드값으로 명칭 가져오기
 function getVendorCdNm(cd) {
-    var list = vanList;
+    var list = vanList01;
     for (var i = 0; i < list.length; i++) {
         if (list[i].value === cd) {
             return list[i].name;

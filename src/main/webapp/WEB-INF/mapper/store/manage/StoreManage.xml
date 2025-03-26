@@ -252,12 +252,26 @@
                 tmsi.MOMS_STORE_FG_02,
                 tmsi.MOMS_STORE_FG_03,
                 tmsi.MOMS_STORE_FG_04,
-                tmsi.MOMS_STORE_FG_05
+                tmsi.MOMS_STORE_FG_05,
+                tmpt.VENDOR_CD,
+                tmpt.VENDOR_TERMNL_NO,
+                tmpt.VENDOR_SER_NO
           FROM TB_MS_STORE tms,
                TB_HQ_OFFICE tho,
                TB_CM_AGENCY tca,
                TB_CM_VAN_CMPNY tcvc,
-               TB_MS_STORE_INFO tmsi
+               TB_MS_STORE_INFO tmsi,
+               (
+                    SELECT  A.STORE_CD
+                    ,       A.VENDOR_CD
+                    ,       A.VENDOR_TERMNL_NO
+                    ,       A.VENDOR_SER_NO
+                    FROM    TB_MS_POS_TERMNL A
+                    WHERE   A.STORE_CD = #{storeCd}
+                    AND     A.POS_NO = '01'
+                    AND     A.VENDOR_FG =   '01'
+                    AND 	DECODE(A.BASE_VAN_YN, 'Y', 1, 2) = 1
+               ) tmpt
          WHERE tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
            AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = #{storeCd}
@@ -265,6 +279,7 @@
            AND tcvc.VAN_CD = tms.VAN_CD
            AND tcvc.VAN_FG = '01' -- VAN만
            AND tmsi.STORE_CD (+)= tms.STORE_CD
+           AND tmpt.STORE_CD (+)= tms.STORE_CD
         ]]>
     </select>
 
@@ -995,6 +1010,7 @@
         TABLE    : TB_MS_CORNER
         PARAM    : storeManageVO
         COMMENTS : 매장의 기본 코너를 등록한다. (코너 기본 데이터 복사)
+        2025.03.10 확인 0000000 매장에 01 코너 없음 - 실제로는 데이터 생성하지 않고 있음(로직은 2018.11.05 생성됨)
     -->
     <insert id="insertStoreCorner" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreCorner */
@@ -10082,4 +10098,238 @@
         ORDER
         BY      POS_NO
     </select>
+
+    <!-- 포스 터미널 정보 등록 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 포스의 터미널 정보를 등록한다.
+    -->
+    <insert id="insertPosTerminalInfo" parameterType="storeManageVO">
+        /* StoreManageMapper.insertPosTerminalInfo */
+        INSERT INTO TB_MS_POS_TERMNL
+        (   STORE_CD,
+            POS_NO,
+            VENDOR_FG,
+            VENDOR_CD,
+            VENDOR_NM,
+            VENDOR_TERMNL_NO,
+            VENDOR_SER_NO,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            BASE_VAN_YN
+        )
+        VALUES
+        (
+            #{storeCd},
+            #{strPosNo},
+            #{vendorFg},
+            #{vendorCd},
+            (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
+            #{vendorTermnlNo},
+            #{vendorSerNo},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{baseVanYn}
+        )
+    </insert>
+
+    <!-- 포스 터미널 정보 수정 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL
+        COMMENTS : 포스 터미널의 정보를 수정한다.
+    -->
+    <update id="updatePosTerminalInfo" parameterType="storeManageVO">
+        /* StoreManageMapper.updatePosTerminalInfo */
+        UPDATE TB_MS_POS_TERMNL
+           SET VENDOR_CD = #{vendorCd},
+               VENDOR_NM = (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
+               VENDOR_TERMNL_NO = #{vendorTermnlNo},
+               VENDOR_SER_NO = #{vendorSerNo},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+           AND POS_NO = #{strPosNo}
+           AND VENDOR_FG = #{vendorFg}
+           AND VENDOR_CD = #{bVendorCd}
+           AND BASE_VAN_YN = #{baseVanYn}
+    </update>
+
+    <!-- 코너 터미널 정보 수정 -->
+    <!--
+        TABLE    : TB_MS_CORNER_TERMNL
+        COMMENTS : 코너 터미널의 정보를 수정한다.
+    -->
+    <update id="updateCornerTerminalInfo" parameterType="storeManageVO">
+        /* StoreManageMapper.updateCornerTerminalInfo */
+        UPDATE TB_MS_CORNER_TERMNL
+           SET VENDOR_CD = #{vendorCd},
+               VENDOR_NM = (SELECT VAN_NM FROM TB_CM_VAN_CMPNY WHERE VAN_FG = #{vendorFg} AND VAN_CD = #{vendorCd}),
+               VENDOR_TERMNL_NO = #{vendorTermnlNo},
+               VENDOR_SER_NO = #{vendorSerNo},
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
+         WHERE STORE_CD = #{storeCd}
+           AND CORNR_CD = #{cornrCd}
+           AND VENDOR_FG = #{vendorFg}
+           AND BASE_VAN_YN = #{baseVanYn}
+    </update>
+
+    <!-- 터미널관리(밴더코드) 중복 체크 -->
+    <!--
+        TABLE    : TB_MS_POS_TERMNL, TB_MS_CORNER_TERMNL
+        PARAM    : storeManageVO
+        COMMENTS : 중복되는 터미널관리(밴더코드)가 있는지 확인한다.
+    -->
+    <select id="chkVendorCd" parameterType="storeManageVO" resultType="int">
+        /* USE : StoreManageMapper.chkVendorCd */
+        SELECT SUM(A.VAN_CNT) AS VAN_CNT
+        FROM   (
+                    SELECT COUNT(*) AS VAN_CNT
+                    FROM   TB_MS_POS_TERMNL
+                    WHERE  STORE_CD = #{storeCd}
+                    AND    POS_NO = #{strPosNo}
+                    AND    VENDOR_FG = #{vendorFg}
+                    AND    VENDOR_CD = #{vendorCd}
+                    UNION ALL
+                    SELECT COUNT(*) AS VAN_CNT
+                    FROM   TB_MS_CORNER_TERMNL
+                    WHERE  STORE_CD = #{storeCd}
+                    AND    CORNR_CD = #{cornrCd}
+                    AND    VENDOR_FG = #{vendorFg}
+                    AND    VENDOR_CD = #{vendorCd}
+               ) A
+    </select>
+
+    <!-- 대표코너 생성 -->
+    <!--
+        TABLE    : TB_MS_CORNER
+        COMMENTS : 대표코너를 생성한다.
+    -->
+    <update id="insertBaseCorner" parameterType="storeCornerVO">
+        /* StoreManageMapper.insertBaseCorner */
+        MERGE INTO TB_MS_CORNER tmc
+        USING DUAL
+           ON (
+                   tmc.STORE_CD = #{storeCd}
+               AND tmc.CORNR_CD = #{cornrCd}
+          )
+          WHEN MATCHED THEN
+          UPDATE
+          SET     tmc.CORNR_NM        = #{cornrNm}
+          ,       tmc.BIZ_NO          = #{bizNo}
+          ,       tmc.USE_YN          = #{useYn}
+          ,       tmc.MOD_DT          = #{modDt}
+          ,       tmc.MOD_ID          = #{modId}
+          WHEN NOT MATCHED THEN
+          INSERT
+          (
+                  tmc.STORE_CD
+           ,      tmc.CORNR_CD
+           ,      tmc.CORNR_NM
+           ,      tmc.OWNER_NM
+           ,      tmc.BIZ_NO
+           ,      tmc.TEL_NO
+           ,      tmc.VAN_CD
+           ,      tmc.VAN_TERMNL_NO
+           ,      tmc.VAN_SER_NO
+           ,      tmc.USE_YN
+           ,      tmc.BASE_YN
+           ,      tmc.REG_DT
+           ,      tmc.REG_ID
+           ,      tmc.MOD_DT
+           ,      tmc.MOD_ID
+          ) VALUES (
+                  #{storeCd}
+          ,       #{cornrCd}
+          ,       #{cornrNm}
+          ,       #{ownerNm}
+          ,       #{bizNo}
+          ,       #{telNo}
+          ,       #{vanCd}
+          ,       #{vanTermnlNo}
+          ,       #{vanSerNo}
+          ,       #{useYn}
+          ,       #{baseYn}
+          ,       #{regDt}
+          ,       #{regId}
+          ,       #{modDt}
+          ,       #{modId}
+          )
+    </update>
+
+    <!-- 코너터미널 생성 -->
+    <!--
+        TABLE    : TB_MS_CORNER_TERMNL
+        COMMENTS : 코너터미널을 생성한다.
+    -->
+    <update id="insertCornerTerminal" parameterType="storeTerminalVO">
+        /* StoreManageMapper.insertCornerTerminal */
+        MERGE INTO TB_MS_CORNER_TERMNL tmct
+        USING (
+                    SELECT  STORE_CD          AS STORE_CD
+                    ,       POS_NO            AS POS_NO
+                    ,       VENDOR_FG         AS VENDOR_FG
+                    ,       VENDOR_CD         AS VENDOR_CD
+                    ,       VENDOR_NM         AS VENDOR_NM
+                    ,       VENDOR_TERMNL_NO  AS VENDOR_TERMNL_NO
+                    ,       VENDOR_SER_NO     AS VENDOR_SER_NO
+                    ,       #{regDt}          AS REG_DT
+                    ,       #{regId}          AS REG_ID
+                    ,       #{modDt}          AS MOD_DT
+                    ,       #{modId}          AS MOD_ID
+                    ,       BASE_VAN_YN       AS BASE_VAN_YN
+                    FROM    TB_MS_POS_TERMNL
+                    WHERE   STORE_CD = #{storeCd}
+                    AND     POS_NO = #{posNo}
+                    AND     VENDOR_FG = #{vendorFg}
+                    AND     BASE_VAN_YN = #{baseVanYn}
+        ) B
+        ON (
+               tmct.STORE_CD = B.STORE_CD
+           AND tmct.CORNR_CD = #{cornrCd}
+           AND tmct.VENDOR_FG = B.VENDOR_FG
+           AND tmct.BASE_VAN_YN = B.BASE_VAN_YN
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     tmct.VENDOR_CD        = B.VENDOR_CD
+        ,       tmct.VENDOR_NM        = B.VENDOR_NM
+        ,       tmct.VENDOR_TERMNL_NO = B.VENDOR_TERMNL_NO
+        ,       tmct.VENDOR_SER_NO    = B.VENDOR_SER_NO
+        ,       tmct.MOD_DT           = B.MOD_DT
+        ,       tmct.MOD_ID           = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+               tmct.STORE_CD
+        ,      tmct.CORNR_CD
+        ,      tmct.VENDOR_FG
+        ,      tmct.VENDOR_CD
+        ,      tmct.VENDOR_NM
+        ,      tmct.VENDOR_TERMNL_NO
+        ,      tmct.VENDOR_SER_NO
+        ,      tmct.REG_DT
+        ,      tmct.REG_ID
+        ,      tmct.MOD_DT
+        ,      tmct.MOD_ID
+        ,      tmct.BASE_VAN_YN
+        ) VALUES (
+               B.STORE_CD
+        ,      #{cornrCd}
+        ,      B.VENDOR_FG
+        ,      B.VENDOR_CD
+        ,      B.VENDOR_NM
+        ,      B.VENDOR_TERMNL_NO
+        ,      B.VENDOR_SER_NO
+        ,      B.REG_DT
+        ,      B.REG_ID
+        ,      B.MOD_DT
+        ,      B.MOD_ID
+        ,      B.BASE_VAN_YN
+        )
+    </update>
 </mapper>
