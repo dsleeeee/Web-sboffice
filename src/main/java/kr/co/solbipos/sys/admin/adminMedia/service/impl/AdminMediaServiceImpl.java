@@ -398,7 +398,7 @@ public class AdminMediaServiceImpl implements AdminMediaService {
         return procCnt;
     }
 
-    /** 매장등록 - 조회 */
+    /** 매장등록 - 미등록 매장 조회 */
     @Override
     public List<DefaultMap<String>> srchStoreList(AdminMediaVO adminMediaVO, SessionInfoVO sessionInfoVO) {
         System.out.println(adminMediaVO.getHqOfficeCd() + "본사코드 서비스");
@@ -438,5 +438,50 @@ public class AdminMediaServiceImpl implements AdminMediaService {
             if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         return procCnt;
+    }
+
+    /** 적용버전 - 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchRegVersionList(AdminMediaVO adminMediaVO, SessionInfoVO sessionInfoVO) {
+        return adminMediaMapper.getSearchRegVersionList(adminMediaVO);
+    }
+
+    /** 적용 버전 - 버전 삭제 */
+    @Override
+    public int getRemoveVersion(AdminMediaVO[] adminMediaVOS, SessionInfoVO sessionInfo) {
+        int procCnt = 0;
+
+        for(AdminMediaVO adminMediaVO : adminMediaVOS) {
+            procCnt = adminMediaMapper.getRemoveVersion(adminMediaVO);
+            if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }
+        return procCnt;
+    }
+
+    /** 적용 버전 - 버전 등록 */
+    @Override
+    public int getRegistVersion(AdminMediaVO[] adminMediaVOS, SessionInfoVO sessionInfo) {
+        int procCnt = 0;
+
+        String dt = currentDateTimeString();
+
+        for(AdminMediaVO adminMediaVO : adminMediaVOS) {
+
+            adminMediaVO.setRegDt(dt);
+            adminMediaVO.setModDt(dt);
+            adminMediaVO.setRegId(sessionInfo.getUserId());
+            adminMediaVO.setModId(sessionInfo.getUserId());
+
+            int result = adminMediaMapper.getRegistVersion(adminMediaVO);
+            procCnt++;
+        }
+
+        return procCnt;
+    }
+
+    /** 매장등록 - 등록 매장 조회 */
+    @Override
+    public List<DefaultMap<String>> srchRegStoreList(AdminMediaVO adminMediaVO, SessionInfoVO sessionInfoVO) {
+        return adminMediaMapper.srchRegStoreList(adminMediaVO);
     }
 }

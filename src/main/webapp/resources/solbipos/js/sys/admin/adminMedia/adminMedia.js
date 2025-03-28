@@ -205,6 +205,9 @@ app.controller('adminMediaCtrl', ['$scope', '$http', function ($scope, $http) {
         // 매장등록 팝업 핸들러 추가
         $scope.storeAddLayer.shown.addHandler(function (s) {});
 
+        // 버전등록 팝업 핸들러 추가
+        $scope.versionAddLayer.shown.addHandler(function (s) {});
+
         // 버전신규등록 팝업 핸들러 추가
         $scope.versionRegistLayer.shown.addHandler(function (s) {
             setTimeout(function() {

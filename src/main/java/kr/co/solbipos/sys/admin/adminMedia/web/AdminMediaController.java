@@ -332,7 +332,7 @@ public class AdminMediaController {
     }
 
     /**
-     * 매장등록 - 조회
+     * 매장등록 - 미등록 매장 조회
      *
      * @param   adminMediaVO
      * @param   request
@@ -352,6 +352,31 @@ public class AdminMediaController {
         System.out.println(adminMediaVO.getHqOfficeCd() + "본사코드 컨트롤러");
         // 포스가 설치된 매장만 조회
         List<DefaultMap<String>> list = adminMediaService.srchStoreList(adminMediaVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, adminMediaVO);
+    }
+
+    /**
+     * 매장등록 - 등록 매장 조회
+     *
+     * @param   adminMediaVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 03. 20.
+     */
+    @RequestMapping(value = "/adminMedia/srchRegStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result srchRegStoreList(AdminMediaVO adminMediaVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        System.out.println(adminMediaVO.getHqOfficeCd() + "본사코드 컨트롤러");
+        // 포스가 설치된 매장만 조회
+        List<DefaultMap<String>> list = adminMediaService.srchRegStoreList(adminMediaVO, sessionInfoVO);
 
         return returnListJson(Status.OK, list, adminMediaVO);
     }
@@ -398,6 +423,76 @@ public class AdminMediaController {
         SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
 
         int result = adminMediaService.getRemoveStore(applcStores, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 적용버전 - 조회
+     *
+     * @param   adminMediaVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 03. 20.
+     */
+    @RequestMapping(value = "/adminMedia/getSearchRegVersionList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchRegVersionList(AdminMediaVO adminMediaVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 포스가 설치된 매장만 조회
+        List<DefaultMap<String>> list = adminMediaService.getSearchRegVersionList(adminMediaVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, adminMediaVO);
+    }
+
+    /**
+     * 적용 버전 - 버전 삭제
+     *
+     * @param   adminMediaVOS
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 03. 20.
+     */
+    @RequestMapping(value = "/adminMedia/getRemoveVersion.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRemoveVersion(@RequestBody AdminMediaVO[] adminMediaVOS, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = adminMediaService.getRemoveVersion(adminMediaVOS, sessionInfo);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 적용 버전 - 버전 등록
+     *
+     * @param   adminMediaVOS
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 03. 20.
+     */
+    @RequestMapping(value = "/adminMedia/getRegistVersion.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getRegistVersion(@RequestBody AdminMediaVO[] adminMediaVOS, HttpServletRequest request,
+                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfo = sessionService.getSessionInfo(request);
+
+        int result = adminMediaService.getRegistVersion(adminMediaVOS, sessionInfo);
 
         return returnJson(Status.OK, result);
     }

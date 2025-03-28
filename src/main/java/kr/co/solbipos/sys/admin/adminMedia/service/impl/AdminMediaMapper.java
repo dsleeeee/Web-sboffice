@@ -74,4 +74,16 @@ public interface AdminMediaMapper {
 
     /** 매장 적용 - 파일 삭제 */
     int getRemoveStore(MediaApplcStoreVO applcStore);
+
+    /** 적용버전 - 조회 */
+    List<DefaultMap<String>> getSearchRegVersionList(AdminMediaVO adminMediaVO);
+
+    /** 적용버전 - 버전 삭제 */
+    int getRemoveVersion(AdminMediaVO adminMediaVO);
+
+    /** 적용버전 - 버전 등록 */
+    int getRegistVersion(AdminMediaVO adminMediaVO);
+
+    /** 매장등록 - 등록 매장 조회 */
+    List<DefaultMap<String>> srchRegStoreList(AdminMediaVO adminMediaVO);
 }

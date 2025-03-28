@@ -69,7 +69,7 @@
                 <if test='langFg != null and langFg != ""'>
                     AND A.LANG_FG = #{langFg}
                 </if>
-                AND A.FILE_USE_TYPE != '008'
+                AND A.FILE_USE_TYPE NOT IN ('008', '018')
                 AND B.ADVER_FILE_NO (+)= A.ADVER_FILE_NO
                 ORDER BY A.ADVER_FILE_NO DESC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -115,7 +115,7 @@
                 <if test='langFg != null and langFg != ""'>
                     AND A.LANG_FG = #{langFg}
                 </if>
-                AND A.FILE_USE_TYPE != '008'
+                AND A.FILE_USE_TYPE NOT IN ('008', '018')
                 ORDER BY A.ADVER_FILE_NO DESC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -781,7 +781,7 @@
         FROM TB_CM_NMCODE
         WHERE 1=1
         AND NMCODE_GRP_CD = '303'
-        AND NMCODE_CD NOT IN ('008', '009')
+        AND NMCODE_CD NOT IN ('008', '009','018')
         ORDER BY NMCODE_CD
     </select>
 

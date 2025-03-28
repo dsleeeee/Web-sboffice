@@ -92,4 +92,4 @@
     var useYn = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/adminMediaPlaySeq.js?ver=20250307.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/adminMediaPlaySeq.js?ver=20250326.01" charset="utf-8"></script>

@@ -104,6 +104,11 @@ public class AdminMediaVO extends PageVO {
     private String adverUrl;
     /** 적용매장/미적용매장 구분 */
     private String searchSatus;
+    /** 프로그램상세구분 */
+    private String progDetailFg;
+    /** 동영상 파일코드 */
+    private String adverFileNo;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -499,5 +504,21 @@ public class AdminMediaVO extends PageVO {
 
     public void setSearchSatus(String searchSatus) {
         this.searchSatus = searchSatus;
+    }
+
+    public String getProgDetailFg() {
+        return progDetailFg;
+    }
+
+    public void setProgDetailFg(String progDetailFg) {
+        this.progDetailFg = progDetailFg;
+    }
+
+    public String getAdverFileNo() {
+        return adverFileNo;
+    }
+
+    public void setAdverFileNo(String adverFileNo) {
+        this.adverFileNo = adverFileNo;
     }
 }
