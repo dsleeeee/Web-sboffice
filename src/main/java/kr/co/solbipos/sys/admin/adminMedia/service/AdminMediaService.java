@@ -58,4 +58,16 @@ public interface AdminMediaService {
 
     /** 매장 적용 - 파일 삭제 */
     int getRemoveStore(MediaApplcStoreVO[] applcStores, SessionInfoVO sessionInfo);
+
+    /** 적용버전 - 조회 */
+    List<DefaultMap<String>> getSearchRegVersionList(AdminMediaVO adminMediaVO, SessionInfoVO sessionInfoVO);
+
+    /** 적용 버전 - 버전 삭제 */
+    int getRemoveVersion(AdminMediaVO[] adminMediaVOS, SessionInfoVO sessionInfo);
+
+    /** 적용 버전 - 버전 등록 */
+    int getRegistVersion(AdminMediaVO[] adminMediaVOS, SessionInfoVO sessionInfo);
+
+    /** 매장등록 - 등록 매장 조회 */
+    List<DefaultMap<String>> srchRegStoreList(AdminMediaVO adminMediaVO, SessionInfoVO sessionInfoVO);
 }

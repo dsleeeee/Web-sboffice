@@ -15,14 +15,7 @@ var app = agrid.getApp();
 
 // 파일타입
 var fileTypeMediaPlaySeqComboData = [
-    {"name":"POS 듀얼모니터(광고)","value":"001"},
-    {"name":"로고","value":"002"},
-    {"name":"키오스크(인트로)","value":"003"},
-    {"name":"DID","value":"004"},
-    {"name":"POS테이블 바탕화면","value":"005"},
-    {"name":"로그인로고","value":"006"},
-    {"name":"POS (인트로)","value":"007"},
-    {"name":"영양정보(낮은화면)","value":"017"}
+    {"name":"링크POS(인트로)","value":"018"}
 ];
 
 /**

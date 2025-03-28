@@ -186,21 +186,27 @@
     var fileTypeComboListAll = ${fileTypeComboListAll};
 
     <%--var fileType    = ${ccu.getCommCode("303")};--%>
-    var useYn       = ${ccu.getCommCode("067")};
-    var clsFg       = ${ccu.getCommCodeExcpAll("059")};
-    var sysStatFg   = ${ccu.getCommCodeExcpAll("005")};
+    var useYn           = ${ccu.getCommCode("067")};
+    var clsFg           = ${ccu.getCommCodeExcpAll("059")};
+    var sysStatFg       = ${ccu.getCommCodeExcpAll("005")};
+    var progFg          = ${ccu.getCommCodeExcpAll("059")};
+    var progDetailFg    = ${ccu.getCommCodeExcpAll("405")};
+
     <%--var hqList      = ${ccu.getHqOfficeList()};--%>
     var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/adminMedia.js?ver=20250324.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/adminMedia.js?ver=20250326.01" charset="utf-8"></script>
 
-<%-- 버전 상세정보 레이어 --%>
+<%-- 파일 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/sys/admin/adminMedia/verInfoDtl.jsp">
 </c:import>
 <%-- 매장추가 레이어 --%>
 <c:import url="/WEB-INF/view/sys/admin/adminMedia/storeAdd.jsp">
 </c:import>
-<%-- 버전 등록 및 수정 --%>
+<%-- 파일 등록 및 수정 --%>
 <c:import url="/WEB-INF/view/sys/admin/adminMedia/verRegist.jsp">
+</c:import>
+<%-- 적용 버전 등록 --%>
+<c:import url="/WEB-INF/view/sys/admin/adminMedia/versionAdd.jsp">
 </c:import>

@@ -14,7 +14,7 @@
             </li>
             <%-- 재생순서관리 --%>
             <li>
-                <a id="adminMediaPlaySeqTab" href="#" ng-click="adminMediaPlaySeqShow()" style="display: none"><s:message code="mediaTab.mediaPlaySeq"/></a>
+                <a id="adminMediaPlaySeqTab" href="#" ng-click="adminMediaPlaySeqShow()"><s:message code="mediaTab.mediaPlaySeq"/></a>
             </li>
         </ul>
     </div>

@@ -21,9 +21,11 @@
             <%-- 탭 --%>
             <ul class="subTab">
                     <%-- 버전정보 --%>
-                <li><a id="storeInfo" href="#" onclick="changeTab()"><s:message code="media.verInfo" /></a></li>
+                <li><a id="storeInfo" href="#" onclick="changeTab('I')"><s:message code="media.verInfo" /></a></li>
                     <%-- 적용매장 --%>
                 <li><a id="storeEnv" href="#" class="on"><s:message code="media.store.registed" /></a></li>
+                    <%-- 적용버전 --%>
+                <li><a id="versionAdd" href="#" onclick="changeTab('V');"><s:message code="adminMedia.version.registed" /></a></li>
             </ul>
 
             <div  ng-controller="addStoreCtrl">
@@ -64,14 +66,14 @@
                     </table>
                     <div class="mt10 tr">
                         <%-- 조회 --%>
-                        <button id="btnSearchStore" class="btn_skyblue" onclick="search()"><s:message code="cmm.search" /></button>
+                        <button id="btnSearchStore" class="btn_skyblue" onclick="searchStore()"><s:message code="cmm.search" /></button>
                     </div>
                 </div>
 
                 <%-- 등록매장 그리드 --%>
                 <div class="oh mt10 w50 fl">
                     <div class="wj-TblWrap mr10" style="height:405px; overflow-y: hidden;">
-                        <div class="oh mb10">
+                        <div class="oh mb10" style="display:none;">
                             <span class="fl bk lh20 s14"><s:message code="media.store.registed"/></span>
                             <span class="fr"><a href="#" class="btn_grayS2" ng-click="delete()"><s:message code="cmm.del" /></a></span>
                         </div>
@@ -93,6 +95,7 @@
                                 <wj-flex-grid-column header="<s:message code="adminMedia.storeNm"/>" binding="storeNm" align="left" width="70" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="media.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="media.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="adminMedia.verSerNo"/>" binding="verSerNo"  width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
 
                             </wj-flex-grid>
                         </div>
@@ -104,7 +107,7 @@
             <div class="oh mt10 w50 ">
                 <div class=" ">
                     <div class="wj-TblWrap ml10" style="height:405px; overflow-y: hidden;" ng-controller="allStoreCtrl">
-                        <div class="oh mb10">
+                        <div class="oh mb10" style="display:none;">
                             <span class="fl bk lh20 s14"><s:message code="media.store.noRegisted" /></span>
                             <span class="fr"><a href="#" class="btn_grayS2" ng-click="save()" ><s:message code="media.regist.new" /></a></span>
                         </div>

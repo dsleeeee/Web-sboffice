@@ -53,22 +53,6 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             var data = response.data.data;
             $scope.version = data;
 
-            // 수정 버튼 막기
-            if((orgnFg === "STORE" && $scope.version.verSerNo < 8000) || ($scope.version.promotionCd !== undefined && $scope.version.promotionCd !== null && $scope.version.promotionCd !== "")){
-                $("#btnMod").hide();
-            } else {
-                $("#btnMod").show();
-            }
-
-            // 적용매장 탭 막기
-            if($scope.version.promotionCd !== undefined && $scope.version.promotionCd !== null && $scope.version.promotionCd !== ""){
-                $("#storeEnv").hide();
-                $("#promo").show();
-            }else{
-                $("#storeEnv").show();
-                $("#promo").hide();
-            }
-
             // 파일사이즈 변환하여 표기
             $scope.version.fileSize = getfileSize($scope.version.fileSize);
 
@@ -92,20 +76,37 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     };
 
     // 탭변경
-    $scope.changeTab = function(){
+    $scope.changeTab = function(tabFg){
         $scope.versionInfoDetailLayer.hide();
-        $scope.storeAddLayer.show(true, function(){
-            // 탭 닫을때 그리드 초기화
-            var sScope = agrid.getScope("addStoreCtrl");
-            sScope._gridDataInit()
-            var nScope = agrid.getScope("allStoreCtrl");
-            nScope._gridDataInit();
 
-            $("#adminHqOfficeCd").val("");
-            $("#adminHqOfficeNm").val("");
-            $("#adminStoreCd").val("");
-            $("#adminStoreNm").val("");
-        });
+        if(tabFg === 'S') {
+            $scope.storeAddLayer.show(true, function () {
+                // 탭 닫을때 그리드 초기화
+                var sScope = agrid.getScope("addStoreCtrl");
+                sScope._gridDataInit();
+                var nScope = agrid.getScope("allStoreCtrl");
+                nScope._gridDataInit();
+
+                $("#adminHqOfficeCd").val("");
+                $("#adminHqOfficeNm").val("");
+                $("#adminStoreCd").val("");
+                $("#adminStoreNm").val("");
+            });
+        }else{
+            $scope.versionAddLayer.show(true, function () {
+                // 탭 닫을때 그리드 초기화
+                var sScope = agrid.getScope("regVersionCtrl");
+                sScope._gridDataInit();
+                var nScope = agrid.getScope("allVersionCtrl");
+                nScope._gridDataInit();
+
+                $("#adminVerSerNo").val("");
+                $("#adminVerSerNm").val("");
+                sScope.srchProgFgCombo.selectedIndex = 0;
+                sScope.srchProgDetailFgCombo.selectedIndex = 0;
+
+            });
+        }
     };
 
 }]);

@@ -16,15 +16,15 @@
 
         <%-- body --%>
         <div class="wj-dialog-body" ng-controller="verDetailCtrl">
-            <c:if test="${orgnFg == 'HQ' || orgnFg == 'MASTER'}">
                 <%-- 탭 --%>
                 <ul class="subTab">
                         <%-- 버전정보 --%>
                     <li><a id="storeInfo" href="#" class="on"><s:message code="media.verInfo" /></a></li>
                         <%-- 적용매장 --%>
-                    <li><a id="storeEnv" href="#" ng-click="changeTab();"><s:message code="media.store.registed" /></a></li>
+                    <li><a id="storeEnv" href="#" ng-click="changeTab('S');"><s:message code="media.store.registed" /></a></li>
+                        <%-- 적용버전 --%>
+                    <li><a id="versionAdd" href="#" ng-click="changeTab('V');"><s:message code="adminMedia.version.registed" /></a></li>
                 </ul>
-            </c:if>
             <div>
                 <div style="height:170px; overflow-y: auto;">
                     <f:form id="viewForm" name="viewForm" >
@@ -87,8 +87,6 @@
                                     <%-- 이미지출력시간 --%>
                                 <th><s:message code="media.dispTime" /></th>
                                 <td>{{version.dispTime}}</td>
-                                <th id="promo"><s:message code="media.promotionNm" /></th>
-                                <td>{{version.promotionNm}}</td>
                             </tr>
                             <tr>
                                     <%-- 언어구분 --%>
@@ -129,6 +127,6 @@
     var useYn       = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/verInfoDtl.js?ver=20250307.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/verInfoDtl.js?ver=20250326.01" charset="utf-8"></script>
 
 
