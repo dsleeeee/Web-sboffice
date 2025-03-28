@@ -80,26 +80,38 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                     }
                 }
                 if (col.binding === "vendorFg") {
-                    wijmo.addClass(e.cell, 'wj-custom-readonly');
-                    wijmo.setAttribute(e.cell, 'aria-readonly', true);
+                    if (item.cornrCd === "") {
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
-                    // Attribute 의 변경사항을 적용.
-                    e.cell.outerHTML = e.cell.outerHTML;
+                        // Attribute 의 변경사항을 적용.
+                        e.cell.outerHTML = e.cell.outerHTML;
+                    }
                 }
                 if ($("#lblVanFixFg").text() == "Y") {
                     if (col.binding === "vendorNm") {
-                        //if (item.vendorFg === "01") {
+                        if (item.vendorFg === "01") {
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                             wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
                             // Attribute 의 변경사항을 적용.
                             e.cell.outerHTML = e.cell.outerHTML;
-                        //}
+                        }
                     }
                 }
                 if (col.binding === "cornrNm" || col.binding === "ownerNm" || col.binding === "bizNo" || col.binding === "baseYn" || col.binding === "telNo") {
                     if (item.status !== "I") {
                         if (item.baseVanYn !== "Y" && item.cornrRnum != "1") {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
+                    }
+
+                    if(item.status === "I"){
+                        if(item.cornrCd !== ""){
                             wijmo.addClass(e.cell, 'wj-custom-readonly');
                             wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
@@ -130,25 +142,29 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                 }*/
             }
             if (col.binding === "vendorFg") {
-                elements.cancel = true;
+                var dataItem = s.rows[elements.row].dataItem;
+                if(dataItem.cornrCd === "") {
+                    elements.cancel = true;
+                }
             }
             if ($("#lblVanFixFg").text() == "Y") {
                 if (col.binding === "vendorNm") {
                     var dataItem = s.rows[elements.row].dataItem;
-                    //if(dataItem.vendorFg === "01") {
+                    if(dataItem.vendorFg === "01") {
                         elements.cancel = true;
-                    //}
+                    }
                 }
             }
             if (col.binding === "cornrNm" || col.binding === "ownerNm" || col.binding === "bizNo" || col.binding === "baseYn" || col.binding === "telNo") {
                 var dataItem = s.rows[elements.row].dataItem;
                 if (dataItem.status !== "I") {
                     if (dataItem.baseVanYn !== "Y" && dataItem.cornrRnum != "1") {
-                        wijmo.addClass(e.cell, 'wj-custom-readonly');
-                        wijmo.setAttribute(e.cell, 'aria-readonly', true);
-
-                        // Attribute 의 변경사항을 적용.
-                        e.cell.outerHTML = e.cell.outerHTML;
+                        elements.cancel = true;
+                    }
+                }
+                if(dataItem.status === "I"){
+                    if(dataItem.cornrCd !== ""){
+                        elements.cancel = true;
                     }
                 }
             }
@@ -165,10 +181,25 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                     $scope.checked(item);
                     if($("#lblVanFixFg").text() == "Y") {
                         if(col.binding === "vendorFg"){
-                            //if(item.vendorFg === "01") {
+                            if(item.vendorFg === "01") {
                                 item.vendorNm = "KOCES";
-                            //}
+                            }
                         }
+                    }
+
+                    if(col.binding === "cornrCd"){
+                        if(item.cornrCd === "") {
+                            item.vendorFg = "01";
+                            item.vendorNm = "KCP";
+                        }
+                    }
+
+                    if(item.cornrCd !== "") {
+                        item.cornrNm = "";
+                        item.ownerNm = "";
+                        item.bizNo = "";
+                        item.baseYn = "N";
+                        item.telNo = "";
                     }
                 }
             }
@@ -374,9 +405,11 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
             }
             for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
                 if($scope.flex.collectionView.itemsRemoved[i].gChk) {
-                    $scope.flex.collectionView.itemsRemoved[i].status = "D";
-                    $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
-                    params.push($scope.flex.collectionView.itemsRemoved[i]);
+                    if($scope.flex.collectionView.itemsRemoved[i].baseVanYn !== "Y") { // 대표VAN 터미널 삭제 금지
+                        $scope.flex.collectionView.itemsRemoved[i].status = "D";
+                        $scope.flex.collectionView.itemsRemoved[i].storeCd = $("#lblStoreCd").text();
+                        params.push($scope.flex.collectionView.itemsRemoved[i]);
+                    }
                 }
             }
 
@@ -491,11 +524,13 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                         if(params[i].baseYn === "Y"){
                             for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                                 var item = $scope.flex.collectionView.items[j];
-                                if (params[i].cornrCd !== item.cornrCd) {
-                                    if (item.baseYn === 'Y') {
-                                        // 대표코너는 반드시 1개 존재해야 합니다.
-                                        $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
-                                        return false;
+                                if(item.cornrRnum === 1) {
+                                    if (params[i].cornrCd !== item.cornrCd) {
+                                        if (item.baseYn === 'Y') {
+                                            // 대표코너는 반드시 1개 존재해야 합니다.
+                                            $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
+                                            return false;
+                                        }
                                     }
                                 }
                             }
@@ -506,9 +541,11 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                             var chkBaseYnCnt = 0;
                             for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                                 var item = $scope.flex.collectionView.items[j];
-                                if (params[i].cornrCd !== item.cornrCd) {
-                                    if (item.baseYn === 'Y') {
-                                        chkBaseYnCnt++;
+                                if(item.cornrRnum === 1) {
+                                    if (params[i].cornrCd !== item.cornrCd) {
+                                        if (item.baseYn === 'Y') {
+                                            chkBaseYnCnt++;
+                                        }
                                     }
                                 }
                             }
@@ -527,6 +564,12 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
 
                     // 새 코너를 추가하는 경우
                     if (params[i].cornrCd === "" || params[i].cornrCd === null || params[i].cornrCd === undefined) {
+
+                        // 코너추가시, 구분은 'VAN'만 선택할 수 있습니다.
+                        if (params[i].vendorFg !== "01") {
+                            $scope._popMsg(messages["terminalManage.cornerAdd.chk.msg"]);
+                            return false;
+                        }
 
                         // 코너명을(를) 입력해주세요.
                         if (params[i].cornrNm == "") {
@@ -559,11 +602,13 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                         if(params[i].baseYn === "Y"){
                             for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                                 var item = $scope.flex.collectionView.items[j];
-                                if (params[i].cornrCd !== item.cornrCd) {
-                                    if (item.baseYn === 'Y') {
-                                        // 대표코너는 반드시 1개 존재해야 합니다.
-                                        $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
-                                        return false;
+                                if(item.cornrRnum === 1) {
+                                    if (params[i].cornrCd !== item.cornrCd) {
+                                        if (item.baseYn === 'Y') {
+                                            // 대표코너는 반드시 1개 존재해야 합니다.
+                                            $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
+                                            return false;
+                                        }
                                     }
                                 }
                             }
@@ -574,9 +619,11 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                             var chkBaseYnCnt = 0;
                             for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
                                 var item = $scope.flex.collectionView.items[j];
-                                if (params[i].cornrCd !== item.cornrCd) {
-                                    if (item.baseYn === 'Y') {
-                                        chkBaseYnCnt++;
+                                if(item.cornrRnum === 1) {
+                                    if (params[i].cornrCd !== item.cornrCd) {
+                                        if (item.baseYn === 'Y') {
+                                            chkBaseYnCnt++;
+                                        }
                                     }
                                 }
                             }
@@ -629,28 +676,53 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
     // 코너 정보 삭제
     $scope.del = function () {
 
+        var chkCnt = 0;
+
         // 대표밴 'Y' 인 코너 터미널 체크
         for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
             var item = $scope.flex.collectionView.items[i];
 
             if (item.gChk) {
                 if (item.baseVanYn === "Y") {
-                    $scope._popMsg(messages["terminalManage.baseVanYn.delete.chk.msg"]);
-                    return false;
+                    chkCnt++;
                 }
             }
         }
 
-        for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
-            var item = $scope.flex.collectionView.items[i];
+        if(chkCnt > 0){
+            // 대표VAN 터미널 정보는 제외하고 삭제됩니다. 삭제하시겠습니까?
+            $scope._popConfirm(messages["terminalManage.baseVanYn.delete.chk.msg"], function() {
 
-            if (item.gChk) {
-                $scope.flex.collectionView.removeAt(i);
+                // 그리드에서 제거
+                for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                    var item = $scope.flex.collectionView.items[i];
+
+                    if (item.gChk) {
+                        if (item.baseVanYn !== "Y") { // 대표VAN 터미널 삭제 금지
+                            $scope.flex.collectionView.removeAt(i);
+                        }
+                    }
+                }
+
+                // 코너 정보 저장
+                $scope.save();
+            });
+        }else{
+
+            // 그리드에서 제거
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                var item = $scope.flex.collectionView.items[i];
+
+                if (item.gChk) {
+                    if (item.baseVanYn !== "Y") { // 대표VAN 터미널 삭제 금지
+                        $scope.flex.collectionView.removeAt(i);
+                    }
+                }
             }
-        }
 
-        // 코너 정보 저장
-        $scope.save();
+            // 코너 정보 저장
+            $scope.save();
+        }
     };
 
     // 정보 수정시 체크박스 체크

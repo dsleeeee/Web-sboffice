@@ -1045,6 +1045,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                   // 사업자번호 중복체크
                   $scope.bizNoChk();
               }
+          } else if (b_vendorCd == "" || b_vendorCd == null) {
+              // 사업자번호 중복체크
+              $scope.bizNoChk();
           } else {
               $scope._popMsg(messages["cmm.registFail"]);
               return false;

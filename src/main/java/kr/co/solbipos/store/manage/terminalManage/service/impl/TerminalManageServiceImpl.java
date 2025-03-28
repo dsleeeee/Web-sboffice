@@ -231,7 +231,13 @@ public class TerminalManageServiceImpl implements TerminalManageService{
                 result += mapper.deleteCornerTerminalInfo(storeTerminalVO);
 
                 if("1".equals(storeTerminalVO.getCornrRnum()) && !"Y".equals(storeTerminalVO.getBaseVanYn())) {
-                    result += mapper.deleteCorner(storeCornerVO); // 코너 삭제
+
+                    // 코너 터미널 정보가 남아 있는지 확인하고, 없으면 코너 삭제
+                    List<DefaultMap<String>> list = mapper.getCornerTerminalList(storeTerminalVO);
+
+                    if(list.size() == 0) {
+                        result += mapper.deleteCorner(storeCornerVO); // 코너 삭제
+                    }
                 }
             }
         }

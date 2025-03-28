@@ -893,11 +893,18 @@ public class StoreManageServiceImpl implements StoreManageService {
             procCnt += mapper.insertBrandTerminalInfo(storeManageVO);
         }
 
-        // 포스 터미널 정보 수정
+        // 포스 터미널 정보 등록을 위한 셋팅
         storeManageVO.setStrPosNo("01");
         storeManageVO.setVendorFg("01");
         storeManageVO.setBaseVanYn("Y");
-        procCnt += mapper.updatePosTerminalInfo(storeManageVO);
+
+        if (storeManageVO.getbVendorCd() != null && !"".equals(storeManageVO.getbVendorCd()) && !storeManageVO.getbVendorCd().isEmpty()) {
+            // 포스 터미널 정보 수정
+            procCnt += mapper.updatePosTerminalInfo(storeManageVO);
+        } else {
+            // 포스 터미널 정보 등록
+            procCnt += mapper.insertPosTerminalInfo(storeManageVO);
+        }
 
         // 코너 터미널 정보 수정
         storeManageVO.setCornrCd("01");
