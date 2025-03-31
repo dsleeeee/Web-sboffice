@@ -686,7 +686,7 @@
             AND B.HQ_OFFICE_CD LIKE '%'||#{hqOfficeCd}||'%'
         </if>
         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-            AND A.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
+            AND C.HQ_OFFICE_NM LIKE '%'||#{hqOfficeNm}||'%'
         </if>
         <if test='storeCd != null and storeCd != ""'>
             AND B.STORE_CD LIKE '%'||#{storeCd}||'%'
