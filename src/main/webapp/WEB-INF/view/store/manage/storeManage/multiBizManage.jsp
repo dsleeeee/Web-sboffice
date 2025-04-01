@@ -9,7 +9,7 @@
 <c:set var="pAgencyCd" value="${sessionScope.sessionInfo.pAgencyCd}"/>
 <c:set var="baseUrl" value="/store/manage/terminalManage/" />
 
-<wj-popup control="multiBizManageLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+<wj-popup control="multiBizManageLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;">
     <div class="wj-dialog wj-dialog-columns title" ng-controller="multiBizManageCtrl">
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
@@ -99,4 +99,4 @@
     var arrAgencyCol = agencyCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/multiBizManage.js?ver=20250328.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/multiBizManage.js?ver=20250401.01" charset="utf-8"></script>
