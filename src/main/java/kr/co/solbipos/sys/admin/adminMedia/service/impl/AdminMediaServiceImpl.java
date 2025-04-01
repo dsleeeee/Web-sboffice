@@ -54,6 +54,7 @@ public class AdminMediaServiceImpl implements AdminMediaService {
         return adminMediaMapper.getMediaList(adminMediaVO);
     }
 
+    /** 듀얼모니터영상관리 탭 - 삭제 */
     @Override
     public int getMediaDelete(AdminMediaVO[] adminMediaVOS, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;
@@ -452,7 +453,10 @@ public class AdminMediaServiceImpl implements AdminMediaService {
         int procCnt = 0;
 
         for(AdminMediaVO adminMediaVO : adminMediaVOS) {
+            adminMediaVO.setRegId(sessionInfo.getUserId());
+
             procCnt = adminMediaMapper.getRemoveVersion(adminMediaVO);
+            adminMediaMapper.adverStoreRegInfo(adminMediaVO);
             if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
         return procCnt;
@@ -473,6 +477,7 @@ public class AdminMediaServiceImpl implements AdminMediaService {
             adminMediaVO.setModId(sessionInfo.getUserId());
 
             int result = adminMediaMapper.getRegistVersion(adminMediaVO);
+            adminMediaMapper.adverStoreRegInfo(adminMediaVO);
             procCnt++;
         }
 

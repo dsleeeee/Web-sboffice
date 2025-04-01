@@ -324,6 +324,7 @@ public class VerManageServiceImpl implements VerManageService {
             applcStore.setVerRecvDt(dt);;
 
             String result = verManageMapper.registStore(applcStore);
+            verManageMapper.adverStoreRegInfo(applcStore);
             procCnt++;
         }
 
@@ -337,7 +338,10 @@ public class VerManageServiceImpl implements VerManageService {
         int procCnt = 0;
 
         for(ApplcStoreVO applcStore : applcStores) {
+            applcStore.setRegId(sessionInfo.getUserId());
             procCnt = verManageMapper.removeStore(applcStore);
+
+            verManageMapper.adverStoreRegInfo(applcStore);
             if(procCnt <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
         }
 //

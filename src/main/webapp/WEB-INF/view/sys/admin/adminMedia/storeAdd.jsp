@@ -95,7 +95,7 @@
                                 <wj-flex-grid-column header="<s:message code="adminMedia.storeNm"/>" binding="storeNm" align="left" width="70" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="media.store.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="media.store.posCnt"/>" binding="posCnt"  width="50" align="center" is-read-only="true" ></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="adminMedia.verSerNo"/>" binding="verSerNo"  width="100" align="center" is-read-only="true" ></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="adminMedia.verSerNo"/>" binding="verSerNo"  width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
 
                             </wj-flex-grid>
                         </div>
@@ -138,7 +138,7 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/storeAdd.js?ver=20250307.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/admin/adminMedia/storeAdd.js?ver=20250401.01" charset="utf-8"></script>
 
 <script>
     $(document).ready(function(){

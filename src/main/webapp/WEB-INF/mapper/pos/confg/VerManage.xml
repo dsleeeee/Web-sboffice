@@ -568,5 +568,22 @@
          ]]>
     </update>
 
+    <!-- 버전 등록/삭제 후 패키지 호출 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 버전 등록/삭제 후 패키지 호출
+    -->
+    <select id="adverStoreRegInfo" statementType="CALLABLE" parameterType="applcStoreVO" resultType="String">
+        /* VerManageMapper.adverStoreRegInfo */
+        {
+            CALL PKG_MS_TB_CM_POS_ADVER_STORE.SP_TB_CM_POS_ADVER_STORE_0001
+            (
+                #{regId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
+
 </mapper>
 

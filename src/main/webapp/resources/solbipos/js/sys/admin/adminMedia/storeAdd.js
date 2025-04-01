@@ -57,7 +57,7 @@ app.controller('addStoreCtrl', ['$scope', '$http', '$timeout', function ($scope,
         // }
 
 
-        params.verSerNo     = ver;
+        params.adverFileNo  = ver;
         params.searchSatus  = 'Y';
         params.hqOfficeCd   = $("#adminHqOfficeCd").val();
         params.hqOfficeNm   = $("#adminHqOfficeNm").val();
@@ -169,7 +169,7 @@ app.controller('allStoreCtrl', ['$scope', '$http','$timeout', function ($scope, 
 
         var addStoreScope = agrid.getScope('addStoreCtrl');
 
-        params.verSerNo     = ver;
+        params.adverFileNo  = ver;
         params.searchSatus  = 'N';
         params.hqOfficeCd   = $("#adminHqOfficeCd").val();
         params.hqOfficeNm   = $("#adminHqOfficeNm").val();

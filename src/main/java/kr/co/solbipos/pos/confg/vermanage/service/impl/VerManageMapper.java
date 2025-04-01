@@ -65,4 +65,6 @@ public interface VerManageMapper {
     /** 포스버전정보 상세내역 등록 및 수정*/
     int verPatchInfoRegist(VerInfoVO verInfo);
 
+    /** 버전 등록/삭제 후 패키지 호출 */
+    void adverStoreRegInfo(ApplcStoreVO applcStore);
 }

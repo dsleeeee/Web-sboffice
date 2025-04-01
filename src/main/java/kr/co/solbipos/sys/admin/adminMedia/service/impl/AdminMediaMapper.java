@@ -86,4 +86,7 @@ public interface AdminMediaMapper {
 
     /** 매장등록 - 등록 매장 조회 */
     List<DefaultMap<String>> srchRegStoreList(AdminMediaVO adminMediaVO);
+
+    /** 버전 등록/삭제 후 패키지 호출 */
+    String adverStoreRegInfo(AdminMediaVO adminMediaVO);
 }
