@@ -397,7 +397,7 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
 
     // 코너 정보 저장
     $scope.save = function () {
-        $scope._popConfirm(messages["cmm.choo.save"], function() {
+        //$scope._popConfirm(messages["cmm.choo.save"], function() {
 
             // 파라미터 설정
             var params = new Array();
@@ -623,7 +623,7 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                     $scope._broadcast('multiBizManageCtrl');
                 });
             }
-        });
+        //});
     };
 
     // 코너 정보 삭제

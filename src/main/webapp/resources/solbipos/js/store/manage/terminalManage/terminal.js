@@ -551,11 +551,11 @@ app.controller('terminalCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 코너 삭제
     $scope.cornerDel = function () {
-        $scope._popConfirm(messages["cmm.choo.delete"], function () {
+        //$scope._popConfirm(messages["cmm.choo.delete"], function () {
             // 코너 저장
             var cornerScope = agrid.getScope('cornerCtrl');
             cornerScope.saveCornerDel();
-        });
+        //});
     };
 
     // 터미널 정보 콤보박스 selected change event 구분하기
@@ -1235,7 +1235,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 코너 정보 저장
     $scope.save = function () {
-        $scope._popConfirm(messages["cmm.choo.save"], function() {
+        //$scope._popConfirm(messages["cmm.choo.save"], function() {
             var terminalScope = agrid.getScope('terminalCtrl');
 
             // 파라미터 설정
@@ -1492,7 +1492,7 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                     });
                 }
             }
-        });
+       //});
     };
 
     // 코너 정보 삭제
