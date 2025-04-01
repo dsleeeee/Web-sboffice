@@ -190,16 +190,20 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                     if(col.binding === "cornrCd"){
                         if(item.cornrCd === "") {
                             item.vendorFg = "01";
-                            item.vendorNm = "KCP";
+                            if($("#lblVanFixFg").text() == "Y") {
+                                item.vendorNm = "KOCES";
+                            }else{
+                                item.vendorNm = "KCP";
+                            }
                         }
-                    }
 
-                    if(item.cornrCd !== "") {
-                        item.cornrNm = "";
-                        item.ownerNm = "";
-                        item.bizNo = "";
-                        item.baseYn = "N";
-                        item.telNo = "";
+                        if(item.cornrCd !== "") {
+                            item.cornrNm = "";
+                            item.ownerNm = "";
+                            item.bizNo = "";
+                            item.baseYn = "N";
+                            item.telNo = "";
+                        }
                     }
                 }
             }
@@ -214,7 +218,15 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
             var item = s.rows[e.row].dataItem;
             if(col.binding === "vendorFg"){
                 if (item.status === "I") {
-                    item.vendorNm = '';
+                    if ($("#lblVanFixFg").text() == "Y") {
+                        if(item.cornrCd === ""){
+                            item.vendorNm = 'KOCES';
+                        }else{
+                            item.vendorNm = '';
+                        }
+                    }else{
+                        item.vendorNm = '';
+                    }
                 }
             } else if (col.binding === "vendorNm") {
                 var changeVendorFg = s.rows[e.row].dataItem.vendorFg;
@@ -518,44 +530,6 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                             $scope._popMsg(messages["terminalManage.telNo"] + messages["cmm.require.number"]);
                             return false;
                         }
-
-                        // 대표코너 확인
-                        // 미대표 --> 대표
-                        if(params[i].baseYn === "Y"){
-                            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                                var item = $scope.flex.collectionView.items[j];
-                                if(item.cornrRnum === 1) {
-                                    if (params[i].cornrCd !== item.cornrCd) {
-                                        if (item.baseYn === 'Y') {
-                                            // 대표코너는 반드시 1개 존재해야 합니다.
-                                            $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
-                                            return false;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // 대표 --> 미대표
-                        if(params[i].baseYn === "N"){
-                            var chkBaseYnCnt = 0;
-                            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                                var item = $scope.flex.collectionView.items[j];
-                                if(item.cornrRnum === 1) {
-                                    if (params[i].cornrCd !== item.cornrCd) {
-                                        if (item.baseYn === 'Y') {
-                                            chkBaseYnCnt++;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (chkBaseYnCnt === 0) {
-                                // 대표코너는 반드시 1개 존재해야 합니다.
-                                $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
-                                return false;
-                            }
-                        }
                     }
                 }
 
@@ -596,46 +570,25 @@ app.controller('multiBizManageCtrl', ['$scope', '$http', '$timeout', function ($
                             $scope._popMsg(messages["terminalManage.telNo"] + messages["cmm.require.number"]);
                             return false;
                         }
-
-                        // 대표코너 확인
-                        // 미대표 --> 대표
-                        if(params[i].baseYn === "Y"){
-                            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                                var item = $scope.flex.collectionView.items[j];
-                                if(item.cornrRnum === 1) {
-                                    if (params[i].cornrCd !== item.cornrCd) {
-                                        if (item.baseYn === 'Y') {
-                                            // 대표코너는 반드시 1개 존재해야 합니다.
-                                            $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
-                                            return false;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        // 대표 --> 미대표
-                        if(params[i].baseYn === "N"){
-                            var chkBaseYnCnt = 0;
-                            for (var j = 0; j < $scope.flex.collectionView.items.length; j++) {
-                                var item = $scope.flex.collectionView.items[j];
-                                if(item.cornrRnum === 1) {
-                                    if (params[i].cornrCd !== item.cornrCd) {
-                                        if (item.baseYn === 'Y') {
-                                            chkBaseYnCnt++;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (chkBaseYnCnt === 0) {
-                                // 대표코너는 반드시 1개 존재해야 합니다.
-                                $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
-                                return false;
-                            }
-                        }
                     }
                 }
+            }
+
+            // 대표코너 1개인지 체크
+            var chkBaseYnCnt = 0;
+            for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                var item = $scope.flex.collectionView.items[i];
+                if(item.cornrRnum === 1 || item.cornrCd === ""){
+                    if (item.baseYn === 'Y') {
+                        chkBaseYnCnt++;
+                    }
+                }
+            }
+
+            if (chkBaseYnCnt !== 1) {
+                // 대표코너는 반드시 1개 존재해야 합니다.
+               $scope._popMsg(messages["terminalManage.baseYn.chg.msg"]);
+               return false;
             }
 
             // 코너-구분-상세 중복체크

@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
+import kr.co.common.service.code.CmmEnvService;
 import kr.co.common.service.message.MessageService;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
@@ -76,16 +77,18 @@ public class StoreManageServiceImpl implements StoreManageService {
     private final TerminalManageMapper terminalManageMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final CmmEnvService cmmEnvService;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public StoreManageServiceImpl(StoreManageMapper mapper, TerminalManageMapper terminalManageMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public StoreManageServiceImpl(StoreManageMapper mapper, TerminalManageMapper terminalManageMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil, CmmEnvService cmmEnvService) {
         this.mapper = mapper;
         this.terminalManageMapper = terminalManageMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.cmmEnvService = cmmEnvService;
     }
 
     /**
@@ -852,6 +855,42 @@ public class StoreManageServiceImpl implements StoreManageService {
             storeManageVO.setBaseVanYn("Y");
             mapper.insertPosTerminalInfo(storeManageVO);
 
+            // 매장 환경설정 1337(다중사업자사용여부) 조회
+            StoreEnvVO storeEnvVO = new StoreEnvVO();
+            storeEnvVO.setStoreCd(storeCd);
+            storeEnvVO.setEnvstCd("1337");
+            String envst1337 = CmmUtil.nvl(cmmEnvService.getStoreEnvst(storeEnvVO), "0");
+
+            // 1337(다중사업자사용여부) 사용인 경우, 대표코너와 코너터미널 생성
+            if("1".equals(envst1337)){
+
+                // [2028] 코너사용설정 '[2] 다중사업자'로 사용할 것으로 믿는다...
+
+                // 매장 사업자번호 조회
+                DefaultMap<String> storeDtlInfo = mapper.getStoreDetail(storeManageVO);
+
+                // 01번 대표코너 생성
+                storeCornerVO.setStoreCd(storeCd);
+                storeCornerVO.setCornrCd("01");
+                storeCornerVO.setCornrNm("대표코너");
+                storeCornerVO.setBizNo(storeDtlInfo.getStr("bizNo"));
+                storeCornerVO.setUseYn(UseYn.Y.getCode());
+                storeCornerVO.setBaseYn("Y");
+                mapper.insertBaseCorner(storeCornerVO);
+
+                // 01번 코너터미널 생성
+                StoreTerminalVO storeTerminalVO = new StoreTerminalVO();
+                storeTerminalVO.setStoreCd(storeCd);
+                storeTerminalVO.setPosNo("01");
+                storeTerminalVO.setCornrCd("01");
+                storeTerminalVO.setVendorFg("01");
+                storeTerminalVO.setRegDt(dt);
+                storeTerminalVO.setRegId(sessionInfoVO.getUserId());
+                storeTerminalVO.setModDt(dt);
+                storeTerminalVO.setModId(sessionInfoVO.getUserId());
+                storeTerminalVO.setBaseVanYn("Y");
+                mapper.insertCornerTerminal(storeTerminalVO);
+            }
         }
 
         return storeCd;
