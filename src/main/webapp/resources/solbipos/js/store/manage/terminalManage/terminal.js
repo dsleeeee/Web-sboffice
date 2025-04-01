@@ -993,12 +993,20 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
                     }
                 }
                 if (col.binding === "vendorFg") {
-                    if (item.cornrCd === "") {
+                    if (item.status !== "I") {
                         wijmo.addClass(e.cell, 'wj-custom-readonly');
                         wijmo.setAttribute(e.cell, 'aria-readonly', true);
 
                         // Attribute 의 변경사항을 적용.
                         e.cell.outerHTML = e.cell.outerHTML;
+                    }else {
+                        if (item.cornrCd === "") {
+                            wijmo.addClass(e.cell, 'wj-custom-readonly');
+                            wijmo.setAttribute(e.cell, 'aria-readonly', true);
+
+                            // Attribute 의 변경사항을 적용.
+                            e.cell.outerHTML = e.cell.outerHTML;
+                        }
                     }
                 }
                 if ($("#lblVanFixFg").text() == "Y") {
@@ -1056,8 +1064,12 @@ app.controller('cornerCtrl', ['$scope', '$http', function ($scope, $http) {
             }
             if (col.binding === "vendorFg") {
                 var dataItem = s.rows[elements.row].dataItem;
-                if(dataItem.cornrCd === "") {
+                if(dataItem.status !== "I"){
                     elements.cancel = true;
+                }else {
+                    if (dataItem.cornrCd === "") {
+                        elements.cancel = true;
+                    }
                 }
             }
             if ($("#lblVanFixFg").text() == "Y") {
