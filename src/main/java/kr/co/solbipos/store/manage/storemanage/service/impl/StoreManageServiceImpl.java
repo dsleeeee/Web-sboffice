@@ -534,7 +534,7 @@ public class StoreManageServiceImpl implements StoreManageService {
                         // 프랜차이즈매장
                         if (!storeManageVO.getHqOfficeCd().equals("00000")) {
                             // 취급상품
-                            procCnt += mapper.deleteStoreProductStore(storeManageVO);
+//                            procCnt += mapper.deleteStoreProductStore(storeManageVO);
                             procCnt += mapper.insertStoreProductStore(storeManageVO);
                         }
                     }

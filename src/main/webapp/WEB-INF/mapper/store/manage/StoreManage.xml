@@ -1476,7 +1476,7 @@
                #{modId}
           FROM TB_MS_COUPON
          WHERE STORE_CD = #{storeCd}
-  </insert>
+    </insert>
 
     <!-- 테이블 기본 그룹 생성 -->
     <!--
@@ -1513,7 +1513,7 @@
                #{modId}
           FROM TB_MS_TABLE_GROUP
          WHERE STORE_CD = '0000000'
-  </insert>
+    </insert>
 
     <!-- 매장환경 등록 -->
     <!--
@@ -3635,77 +3635,115 @@
     -->
     <insert id="insertStoreHqSdselProd" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreHqSdselProd */
-        MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
-        USING
-        (
-            SELECT
-            #{storeCd} AS STORE_CD,
-            SDSEL_CLASS_CD,
-            PROD_CD,
-            ADD_PROD_UPRC,
-            ADD_PROD_QTY,
-            DISP_SEQ,
-            USE_YN,
-            #{regDt} AS REG_DT,
-            #{regId} AS REG_ID,
-            #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID,
-            RCVKIND,
-            FIX_PROD_FG,
-            PRINT_YN
-            FROM TB_HQ_PRODUCT_SDSEL_PROD
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-        ) B
-        ON  (
-                A.STORE_CD = B.STORE_CD
-                AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
-                AND A.PROD_CD = B.PROD_CD
-            )
-        WHEN MATCHED THEN
-            UPDATE
-            SET
-            ADD_PROD_UPRC = B.ADD_PROD_UPRC,
-            ADD_PROD_QTY = B.ADD_PROD_QTY,
-            DISP_SEQ = B.DISP_SEQ,
-            USE_YN = B.USE_YN,
-            MOD_DT = B.MOD_DT,
-            MOD_ID = B.MOD_ID,
-            RCVKIND = B.RCVKIND,
-            FIX_PROD_FG = B.FIX_PROD_FG,
-            PRINT_YN = B.PRINT_YN
-        WHEN NOT MATCHED THEN
-            INSERT (
-                A.STORE_CD,
-                A.SDSEL_CLASS_CD,
-                A.PROD_CD,
-                A.ADD_PROD_UPRC,
-                A.ADD_PROD_QTY,
-                A.DISP_SEQ,
-                A.USE_YN,
-                A.REG_DT,
-                A.REG_ID,
-                A.MOD_DT,
-                A.MOD_ID,
-                A.RCVKIND,
-                A.FIX_PROD_FG,
-                A.PRINT_YN
-            ) VALUES (
-                B.STORE_CD,
-                B.SDSEL_CLASS_CD,
-                B.PROD_CD,
-                B.ADD_PROD_UPRC,
-                B.ADD_PROD_QTY,
-                B.DISP_SEQ,
-                B.USE_YN,
-                B.REG_DT,
-                B.REG_ID,
-                B.MOD_DT,
-                B.MOD_ID,
-                B.RCVKIND,
-                B.FIX_PROD_FG,
-                B.PRINT_YN
-            )
+        <choose>
+            <when test='hqOfficeCd != "H0514" and hqOfficeCd != "DS021"'>
+                MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
+                USING
+                (
+                        SELECT  #{storeCd} AS STORE_CD
+                        ,       SDSEL_CLASS_CD
+                        ,       PROD_CD
+                        ,       ADD_PROD_UPRC
+                        ,       ADD_PROD_QTY
+                        ,       DISP_SEQ
+                        ,       USE_YN
+                        ,       #{regDt} AS REG_DT
+                        ,       #{regId} AS REG_ID
+                        ,       #{modDt} AS MOD_DT
+                        ,       #{modId} AS MOD_ID
+                        ,       RCVKIND
+                        ,       FIX_PROD_FG
+                        ,       PRINT_YN
+                        FROM    TB_HQ_PRODUCT_SDSEL_PROD
+                        WHERE   1=1
+                        AND     HQ_OFFICE_CD    =   #{hqOfficeCd}
+                ) B
+                ON
+                (
+                        A.STORE_CD          =   B.STORE_CD
+                AND     A.SDSEL_CLASS_CD    =   B.SDSEL_CLASS_CD
+                AND     A.PROD_CD           =   B.PROD_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     ADD_PROD_UPRC   =   B.ADD_PROD_UPRC
+                ,       ADD_PROD_QTY    =   B.ADD_PROD_QTY
+                ,       DISP_SEQ        =   B.DISP_SEQ
+                ,       USE_YN          =   B.USE_YN
+                ,       MOD_DT          =   B.MOD_DT
+                ,       MOD_ID          =   B.MOD_ID
+                ,       RCVKIND         =   B.RCVKIND
+                ,       FIX_PROD_FG     =   B.FIX_PROD_FG
+                ,       PRINT_YN        =   B.PRINT_YN
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.STORE_CD
+                ,       A.SDSEL_CLASS_CD
+                ,       A.PROD_CD
+                ,       A.ADD_PROD_UPRC
+                ,       A.ADD_PROD_QTY
+                ,       A.DISP_SEQ
+                ,       A.USE_YN
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                ,       A.RCVKIND
+                ,       A.FIX_PROD_FG
+                ,       A.PRINT_YN
+                )
+                VALUES
+                (
+                        B.STORE_CD
+                ,       B.SDSEL_CLASS_CD
+                ,       B.PROD_CD
+                ,       B.ADD_PROD_UPRC
+                ,       B.ADD_PROD_QTY
+                ,       B.DISP_SEQ
+                ,       B.USE_YN
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.RCVKIND
+                ,       B.FIX_PROD_FG
+                ,       B.PRINT_YN
+                )
+            </when>
+            <otherwise>
+                INSERT INTO TB_MS_STORE_CREATE_CHK
+                (
+                        STORE_CREATE_CHK_SEQ
+                ,       HQ_OFFICE_CD
+                ,		STORE_CD
+                ,		COPY_STORE_CD
+                ,		PROC_FG
+                ,		PROC_FG_DETAIL
+                ,		PROC_RESULT
+                ,		REMARK
+                ,		REG_DT
+                ,		REG_ID
+                ,		MOD_DT
+                ,		MOD_ID
+                )
+                VALUES
+                (
+                        STORE_CREATE_CHK_SEQ.NEXTVAL
+                ,       #{hqOfficeCd}
+                ,		#{storeCd}
+                ,		''
+                ,		'0'
+                ,		'HQ_SDSEL_PROD'
+                ,		''
+                ,		''
+                ,		#{regDt}
+                ,		#{regId}
+                ,		#{modDt}
+                ,		#{modId}
+                )
+            </otherwise>
+        </choose>
     </insert>
 
     <!-- 사이드(선택메뉴) 복사 -->
@@ -3905,81 +3943,127 @@
     -->
     <insert id="insertStoreSdselProd" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreSdselProd */
-        MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
-        USING
-        (
-            SELECT
-            #{storeCd} AS STORE_CD,
-            SDSEL_CLASS_CD,
-            PROD_CD,
-            ADD_PROD_UPRC,
-            ADD_PROD_QTY,
-            DISP_SEQ,
-            USE_YN,
-            #{regDt} AS REG_DT,
-            #{regId} AS REG_ID,
-            #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID,
-            RCVKIND,
-            FIX_PROD_FG,
-            SOLD_OUT_YN,
-            PRINT_YN
-            FROM TB_MS_PRODUCT_SDSEL_PROD
-            WHERE 1=1
-            AND STORE_CD = #{copyStoreCd}
-        ) B
-        ON  (
-                A.STORE_CD = B.STORE_CD
-                AND A.SDSEL_CLASS_CD = B.SDSEL_CLASS_CD
-                AND A.PROD_CD = B.PROD_CD
-            )
-        WHEN MATCHED THEN
-            UPDATE
-            SET
-            ADD_PROD_UPRC = B.ADD_PROD_UPRC,
-            ADD_PROD_QTY = B.ADD_PROD_QTY,
-            DISP_SEQ = B.DISP_SEQ,
-            USE_YN = B.USE_YN,
-            MOD_DT = B.MOD_DT,
-            MOD_ID = B.MOD_ID,
-            RCVKIND = B.RCVKIND,
-            FIX_PROD_FG = B.FIX_PROD_FG,
-            SOLD_OUT_YN = B.SOLD_OUT_YN,
-            PRINT_YN = B.PRINT_YN
-        WHEN NOT MATCHED THEN
-            INSERT (
-                A.STORE_CD,
-                A.SDSEL_CLASS_CD,
-                A.PROD_CD,
-                A.ADD_PROD_UPRC,
-                A.ADD_PROD_QTY,
-                A.DISP_SEQ,
-                A.USE_YN,
-                A.REG_DT,
-                A.REG_ID,
-                A.MOD_DT,
-                A.MOD_ID,
-                A.RCVKIND,
-                A.FIX_PROD_FG,
-                A.SOLD_OUT_YN,
-                A.PRINT_YN
-            ) VALUES (
-                B.STORE_CD,
-                B.SDSEL_CLASS_CD,
-                B.PROD_CD,
-                B.ADD_PROD_UPRC,
-                B.ADD_PROD_QTY,
-                B.DISP_SEQ,
-                B.USE_YN,
-                B.REG_DT,
-                B.REG_ID,
-                B.MOD_DT,
-                B.MOD_ID,
-                B.RCVKIND,
-                B.FIX_PROD_FG,
-                B.SOLD_OUT_YN,
-                B.PRINT_YN
-            )
+        <choose>
+            <when test='hqOfficeCd != "H0514" and hqOfficeCd != "DS021"'>
+                MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
+                USING
+                (
+                        SELECT  #{storeCd} AS STORE_CD
+                        ,       SDSEL_CLASS_CD
+                        ,       PROD_CD
+                        ,       ADD_PROD_UPRC
+                        ,       ADD_PROD_QTY
+                        ,       DISP_SEQ
+                        ,       USE_YN
+                        ,       #{regDt} AS REG_DT
+                        ,       #{regId} AS REG_ID
+                        ,       #{modDt} AS MOD_DT
+                        ,       #{modId} AS MOD_ID
+                        ,       RCVKIND
+                        ,       FIX_PROD_FG
+                        ,       SOLD_OUT_YN
+                        ,       PRINT_YN
+                        ,       CHANNEL_SOLD_OUT_YN
+                        ,       SELFAPP_YN
+                        FROM    TB_MS_PRODUCT_SDSEL_PROD
+                        WHERE   1=1
+                        AND     STORE_CD    =   #{copyStoreCd}
+                ) B
+                ON
+                (
+                        A.STORE_CD          =   B.STORE_CD
+                AND     A.SDSEL_CLASS_CD    =   B.SDSEL_CLASS_CD
+                AND     A.PROD_CD           =   B.PROD_CD
+                )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     ADD_PROD_UPRC       =   B.ADD_PROD_UPRC
+                ,       ADD_PROD_QTY        =   B.ADD_PROD_QTY
+                ,       DISP_SEQ            =   B.DISP_SEQ
+                ,       USE_YN              =   B.USE_YN
+                ,       MOD_DT              =   B.MOD_DT
+                ,       MOD_ID              =   B.MOD_ID
+                ,       RCVKIND             =   B.RCVKIND
+                ,       FIX_PROD_FG         =   B.FIX_PROD_FG
+                ,       SOLD_OUT_YN         =   B.SOLD_OUT_YN
+                ,       PRINT_YN            =   B.PRINT_YN
+                ,       CHANNEL_SOLD_OUT_YN =   B.CHANNEL_SOLD_OUT_YN
+                ,       SELFAPP_YN          =   B.SELFAPP_YN
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.STORE_CD
+                ,       A.SDSEL_CLASS_CD
+                ,       A.PROD_CD
+                ,       A.ADD_PROD_UPRC
+                ,       A.ADD_PROD_QTY
+                ,       A.DISP_SEQ
+                ,       A.USE_YN
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                ,       A.RCVKIND
+                ,       A.FIX_PROD_FG
+                ,       A.SOLD_OUT_YN
+                ,       A.PRINT_YN
+                ,       A.CHANNEL_SOLD_OUT_YN
+                ,       A.SELFAPP_YN
+                )
+                VALUES
+                (
+                        B.STORE_CD
+                ,       B.SDSEL_CLASS_CD
+                ,       B.PROD_CD
+                ,       B.ADD_PROD_UPRC
+                ,       B.ADD_PROD_QTY
+                ,       B.DISP_SEQ
+                ,       B.USE_YN
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.RCVKIND
+                ,       B.FIX_PROD_FG
+                ,       B.SOLD_OUT_YN
+                ,       B.PRINT_YN
+                ,       B.CHANNEL_SOLD_OUT_YN
+                ,       B.SELFAPP_YN
+                )
+            </when>
+            <otherwise>
+                INSERT INTO TB_MS_STORE_CREATE_CHK
+                (
+                        STORE_CREATE_CHK_SEQ
+                ,       HQ_OFFICE_CD
+                ,		STORE_CD
+                ,		COPY_STORE_CD
+                ,		PROC_FG
+                ,		PROC_FG_DETAIL
+                ,		PROC_RESULT
+                ,		REMARK
+                ,		REG_DT
+                ,		REG_ID
+                ,		MOD_DT
+                ,		MOD_ID
+                )
+                VALUES
+                (
+                        STORE_CREATE_CHK_SEQ.NEXTVAL
+                ,       #{hqOfficeCd}
+                ,		#{storeCd}
+                ,		#{copyStoreCd}
+                ,		'0'
+                ,		'MS_COPY_SDSEL_PROD'
+                ,		''
+                ,		''
+                ,		#{regDt}
+                ,		#{regId}
+                ,		#{modDt}
+                ,		#{modId}
+                )
+            </otherwise>
+        </choose>
     </insert>
 
     <!-- 옵션그룹 복사 -->
@@ -4415,28 +4499,78 @@
     -->
     <insert id="insertStoreProductStore" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreProductStore */
-        INSERT INTO TB_HQ_PRODUCT_STORE
+        MERGE INTO TB_HQ_PRODUCT_STORE A
+        USING
         (
-            HQ_OFFICE_CD,
-            STORE_CD,
-            PROD_CD,
-            REG_DT,
-            REG_ID,
-            MOD_DT,
-            MOD_ID
+                SELECT 	#{hqOfficeCd}	AS HQ_OFFICE_CD
+                ,		#{storeCd}		AS STORE_CD
+                ,		PROD_CD
+                ,		'I'				AS PROC_FG
+                ,		#{regDt} 		AS REG_DT
+                ,	    #{regId} 		AS REG_ID
+                ,	    #{modDt} 		AS MOD_DT
+                ,	    #{modId} 		AS MOD_ID
+                FROM	TB_HQ_PRODUCT_STORE A
+                WHERE 	A.HQ_OFFICE_CD  	= #{copyHqOfficeCd}
+                AND 	A.STORE_CD 			= #{copyStoreCd}
+                AND 	A.PROD_CD NOT IN 	(
+                                                SELECT	B.PROD_CD
+                                                FROM	TB_HQ_PRODUCT_STORE B
+                                                WHERE 	B.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                                                AND 	B.STORE_CD 		= #{storeCd}
+                                            )
+                UNION
+                SELECT 	#{hqOfficeCd}	AS HQ_OFFICE_CD
+                ,		#{storeCd}		AS STORE_CD
+                ,		PROD_CD
+                ,		'D'				AS PROC_FG
+                ,		#{regDt} 		AS REG_DT
+                ,	    #{regId} 		AS REG_ID
+                ,	    #{modDt} 		AS MOD_DT
+                ,	    #{modId} 		AS MOD_ID
+                FROM	TB_HQ_PRODUCT_STORE A
+                WHERE 	A.HQ_OFFICE_CD  	= #{hqOfficeCd}
+                AND 	A.STORE_CD 			= #{storeCd}
+                AND 	A.PROD_CD NOT IN 	(
+                                                SELECT	B.PROD_CD
+                                                FROM	TB_HQ_PRODUCT_STORE B
+                                                WHERE 	B.HQ_OFFICE_CD 	= #{copyHqOfficeCd}
+                                                AND 	B.STORE_CD 		= #{copyStoreCd}
+                                            )
+        ) B
+        ON
+        (
+                B.HQ_OFFICE_CD 	= 	A.HQ_OFFICE_CD
+        AND 	B.STORE_CD 		= 	A.STORE_CD
+        AND 	B.PROD_CD 		= 	A.PROD_CD
         )
-            SELECT
-            #{hqOfficeCd} AS HQ_OFFICE_CD,
-            #{storeCd} AS STORE_CD,
-            PROD_CD,
-            #{regDt} AS REG_DT,
-            #{regId} AS REG_ID,
-            #{modDt} AS MOD_DT,
-            #{modId} AS MOD_ID
-            FROM TB_HQ_PRODUCT_STORE
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{copyHqOfficeCd}
-            AND STORE_CD = #{copyStoreCd}
+        WHEN MATCHED THEN
+        UPDATE
+        SET 	A.MOD_DT 	=	B.MOD_DT
+        ,		A.MOD_ID 	= 	B.MOD_ID
+        DELETE
+        WHERE	B.PROC_FG	= 	'D'
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.HQ_OFFICE_CD
+        ,		A.STORE_CD
+        ,		A.PROD_CD
+        ,		A.REG_DT
+        ,		A.REG_ID
+        ,		A.MOD_DT
+        ,		A.MOD_ID
+        )
+        VALUES
+        (
+                B.HQ_OFFICE_CD
+        ,		B.STORE_CD
+        ,		B.PROD_CD
+        ,		B.REG_DT
+        ,		B.REG_ID
+        ,		B.MOD_DT
+        ,		B.MOD_ID
+        )
     </insert>
 
     <!-- 매장 기능키 복사 -->
@@ -4767,7 +4901,7 @@
                AND tcpfs.FNKEY_FG = tmsf.FNKEY_FG
                AND tcpfs.STORE_CD = tmsf.STORE_CD
           )
-     WHEN NOT MATCHED THEN
+    WHEN NOT MATCHED THEN
           INSERT
           (
             FNKEY_NO,
@@ -4788,7 +4922,7 @@
             #{modDt},
             #{modId}
           )
-  </update>
+    </update>
 
     <!-- 터치키 분류 복사 -->
     <!--
@@ -7968,7 +8102,7 @@
         ,       RESRCE_CD
         ,       INCLD_EXCLD_FG
         ,       USE_YN
-        FROM    TB_WB_AUTHOR_EXCEPT_V01
+        FROM    TB_WB_AUTHOR_EXCEPT_V03
         WHERE   USER_ID = ( SELECT twu.USER_ID
                             FROM    TB_MS_EMPLOYEE tme
                             ,       TB_WB_USER_INFO twu
@@ -9140,7 +9274,7 @@
                            ) tttkc
                 ) tmtkc
           WHERE 6 > tmtkc.PAGE_NO
-  </update>
+    </update>
 
     <!-- 매장 판매터치키 재정렬 (01: 셀 사이즈) -->
     <!--
