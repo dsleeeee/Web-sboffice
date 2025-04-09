@@ -65,7 +65,7 @@
                       selected-value-path="value"
                       is-editable="false"
                       control="srchUseYnCombo"
-                      selected-index="1">
+                      selected-index="2">
               </wj-combo-box>
             </div>
           </td>
