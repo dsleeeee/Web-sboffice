@@ -42,6 +42,24 @@ readonly/>
                         </td>
                     </tr>
                     <tr>
+                        <%-- 매장상태구분 --%>
+                        <th>
+                            <s:message code="selectStore.sysStatFg" />
+                        </th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchPopSysStatFgCombo"
+                                        ng-model="popSysStatFg"
+                                        items-source="_getComboData('popSysStatFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchPopSysStatFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
                         <%-- 구분(판매가변경제한매장) --%>
                         <th><s:message code="selectStore.gubun"/></th>
                         <td>
@@ -58,8 +76,6 @@ readonly/>
                                 </wj-combo-box>
                             </div>
                         </td>
-                        <td></td>
-                        <td></td>
                     </tr>
                     </tbody>
                 </table>
@@ -175,7 +191,7 @@ readonly/>
                             </td>
                         </tr>
                         <tr>
-                                <%-- 점포유형 --%>
+                            <%-- 점포유형 --%>
                             <th><s:message code="cmm.moms.momsShopType"/></th>
                             <td>
                                 <div class="sb-select">
@@ -191,7 +207,7 @@ readonly/>
                                     </wj-combo-box>
                                 </div>
                             </td>
-                                <%-- 매장관리타입 --%>
+                            <%-- 매장관리타입 --%>
                             <th><s:message code="cmm.moms.momsStoreManageType"/></th>
                             <td>
                                 <div class="sb-select">
@@ -389,6 +405,7 @@ readonly/>
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center" is-read-only="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="selectStore.storeCd"/>" binding="storeCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="selectStore.storeNm"/>" binding="storeNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="selectStore.sysStatFg2"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="selectStore.storeChgNot"/>" binding="storeChgNot" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
@@ -404,6 +421,9 @@ readonly/>
      * get application
      */
     var app = agrid.getApp();
+
+    <%-- 매장상태구분 --%>
+    var popSysStatFgComboData = ${ccu.getCommCode("005")};
 
     // 매장브랜드 콤보박스 항목 저장시 쓰려고
     var momsHqBrandCdComboList;
@@ -442,10 +462,14 @@ readonly/>
         var companyFg = "COMMON";
 
         // 조회조건 콤보박스 데이터 Set
+        $scope._setComboData("popSysStatFgCombo", popSysStatFgComboData); // 매장상태구분
         $scope._setComboData("popStoreChgNotCombo", popStoreChgNotComboData); // 구분(판매가변경제한매장)
 
         // grid 초기화 : 생성되기전 초기화되면서 생성된다
         $scope.initGrid = function (s, e) {
+            // 그리드 DataMap 설정
+            $scope.sysStatFgDataMap = new wijmo.grid.DataMap(popSysStatFgComboData, 'value', 'name'); // 매장상태구분
+
             // 선택한 테이블에 따른 리스트 항목 visible
             var grid = wijmo.Control.getControl("#wjGridStore${param.targetId}");
             var columns = grid.columns;
@@ -760,6 +784,8 @@ readonly/>
                         eval('$scope.${param.closeFunc}()');
                     }
                 }
+                $scope.srchPopSysStatFgCombo.selectedIndex = 0;
+                $scope.srchPopStoreChgNotCombo.selectedIndex = 0;
                 $scope.srchPopStoreHqBrandCdCombo.selectedIndex = 0;
                 $scope.srchPopMomsTeamCombo.selectedIndex = 0;
                 $scope.srchPopMomsAcShopCombo.selectedIndex = 0;
@@ -768,7 +794,6 @@ readonly/>
                 $scope.srchPopMomsShopTypeCombo.selectedIndex = 0;
                 $scope.srchPopMomsStoreManageTypeCombo.selectedIndex = 0;
                 $scope.srchPopBranchCdCombo.selectedIndex = 0;
-                $scope.srchPopStoreChgNotCombo.selectedIndex = 0;
                 $scope.srchPopMomsStoreFg01Combo.selectedIndex = 0;
                 // $scope.srchPopMomsStoreFg02Combo.selectedIndex = 0;
                 // $scope.srchPopMomsStoreFg03Combo.selectedIndex = 0;
@@ -810,6 +835,8 @@ readonly/>
             var params = {};
             params.storeCd = $scope.srchStoreCd;
             params.storeNm = $scope.srchStoreNm;
+            params.storeChgNot = $scope.popStoreChgNot;
+            params.sysStatFg = $scope.popSysStatFg;
             params.storeHqBrandCd = $scope.popStoreHqBrandCd;
             params.momsTeam = $scope.popMomsTeam;
             params.momsAcShop = $scope.popMomsAcShop;
@@ -828,7 +855,6 @@ readonly/>
                 }
                 params.userBrands = momsHqBrandCd;
             }
-            params.storeChgNot = $scope.popStoreChgNot;
             params.momsStoreFg01 = $scope.popMomsStoreFg01;
             params.momsStoreFg02 = $scope.popMomsStoreFg02;
             params.momsStoreFg03 = $scope.popMomsStoreFg03;

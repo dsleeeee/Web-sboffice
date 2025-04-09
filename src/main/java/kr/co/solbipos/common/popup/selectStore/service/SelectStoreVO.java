@@ -84,6 +84,9 @@ public class SelectStoreVO extends PageVO {
     /** 판매가변경제한매장 */
     private String storeChgNot;
 
+    /** 매장상태 */
+    private String sysStatFg;
+
     /** 조회매장 팝업 구분 */
     private String selectStoreFg;
 
@@ -243,6 +246,10 @@ public class SelectStoreVO extends PageVO {
     public void setStoreChgNot(String storeChgNot) {
         this.storeChgNot = storeChgNot;
     }
+
+    public String getSysStatFg() { return sysStatFg; }
+
+    public void setSysStatFg(String sysStatFg) { this.sysStatFg = sysStatFg; }
 
     public String getSelectStoreFg() { return selectStoreFg; }
 
