@@ -3636,7 +3636,7 @@
     <insert id="insertStoreHqSdselProd" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreHqSdselProd */
         <choose>
-            <when test='hqOfficeCd != "H0514" and hqOfficeCd != "DS021"'>
+            <when test='hqOfficeCd != "H0514" and hqOfficeCd != "DS021" and hqOfficeCd != "H0393"'>
                 MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
                 USING
                 (
@@ -3944,7 +3944,7 @@
     <insert id="insertStoreSdselProd" parameterType="storeManageVO" >
         /* USE : StoreManageMapper.insertStoreSdselProd */
         <choose>
-            <when test='hqOfficeCd != "H0514" and hqOfficeCd != "DS021"'>
+            <when test='hqOfficeCd != "H0514" and hqOfficeCd != "DS021" and hqOfficeCd != "H0393"'>
                 MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
                 USING
                 (
@@ -10466,4 +10466,123 @@
         ,      B.BASE_VAN_YN
         )
     </update>
+
+    <!-- 회원등급 TX 데이터 추가 -->
+    <!--
+        TABLE    : TB_TX_MEMBER_CLASS
+        PARAM    : memberClassVO
+        COMMENTS : 프랜차이즈 매장 생성 시 본사에 회원등급 적용
+    -->
+    <insert id="mergeMemberClassTx" parameterType="memberClassVO" >
+        /* USE : StoreManageMapper.mergeMemberClassTx */
+        MERGE INTO TB_TX_MEMBER_CLASS A
+        USING
+        (
+                SELECT	#{storeCd}	AS STORE_CD
+                ,		A.*
+                FROM	TB_MB_MEMBER_CLASS A
+                WHERE	A.MEMBR_ORGN_CD = #{hqOfficeCd}
+        ) B
+        ON
+        (
+                A.MEMBR_CLASS_CD 	= 	B.MEMBR_CLASS_CD
+        AND 	A.STORE_CD 			= 	B.STORE_CD
+        )
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.PROC_SEQ
+        ,		A.PROC_FG
+        ,		A.PROC_DT
+        ,		A.STORE_CD
+        ,		A.MEMBR_CLASS_CD
+        ,		A.MEMBR_CLASS_NM
+        ,		A.DC_RATE
+        ,		A.POINT_SAVE_FG
+        ,		A.DEFLT_YN
+        ,		A.NEW_JOIN_SAVE_POINT
+        ,		A.FIRST_SALE_SAVE_POINT
+        ,		A.MIN_USE_POINT
+        ,		A.ANVSR_POINT_SAVE_FG
+        ,		A.ANVSR_SAVE_POINT
+        ,		A.USE_YN
+        ,		A.DC_ACC_POINT_YN
+        ,		A.USE_ACC_POINT_YN
+        ,		A.MAX_USE_POINT
+        ,		A.DC_LIMIT_AMT
+        ,		A.MEMBR_ORGN_CD
+        )
+        VALUES
+        (
+                SQ_TX_MEMBER_CLASS.NEXTVAL
+        ,		'A'
+        ,		TO_CHAR(SYSTIMESTAMP, 'YYYYMMDDHH24MISSFF')
+        ,		B.STORE_CD
+        ,		B.MEMBR_CLASS_CD
+        ,		B.MEMBR_CLASS_NM
+        ,		B.DC_RATE
+        ,		B.POINT_SAVE_FG
+        ,		B.DEFLT_YN
+        ,		B.NEW_JOIN_SAVE_POINT
+        ,		B.FIRST_SALE_SAVE_POINT
+        ,		B.MIN_USE_POINT
+        ,		B.ANVSR_POINT_SAVE_FG
+        ,		B.ANVSR_SAVE_POINT
+        ,		B.USE_YN
+        ,		B.DC_ACC_POINT_YN
+        ,		B.USE_ACC_POINT_YN
+        ,		B.MAX_USE_POINT
+        ,		B.DC_LIMIT_AMT
+        ,		B.MEMBR_ORGN_CD
+        )
+    </insert>
+
+    <!-- 회원적립율 TX 데이터 추가 -->
+    <!--
+        TABLE    : TB_TX_MEMBER_CLASS
+        PARAM    : memberClassVO
+        COMMENTS : 프랜차이즈 매장 생성 시 본사에 회원적립율 적용
+    -->
+    <insert id="mergeMemberClassPayRateTx" parameterType="memberClassVO" >
+        /* USE : StoreManageMapper.mergeMemberClassPayRateTx */
+        MERGE INTO TB_TX_MEMBER_CLASS_PAY_RATE A
+        USING
+        (
+                SELECT 	#{storeCd}  AS STORE_CD
+                ,       A.*
+                FROM 	TB_MB_MEMBER_CLASS_PAY_RATE A
+                WHERE 	A.MEMBR_ORGN_CD = #{hqOfficeCd}
+        ) B
+        ON
+        (
+                A.MEMBR_CLASS_CD	=	B.MEMBR_CLASS_CD
+        AND	    A.PAY_CD			=	B.PAY_CD
+        AND     A.STORE_CD			=	B.STORE_CD
+        )
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.PROC_SEQ
+        , 	    A.PROC_FG
+        , 	    A.PROC_DT
+        , 	    A.STORE_CD
+        , 	    A.MEMBR_CLASS_CD
+        , 	    A.PAY_CD
+        , 	    A.ACC_RATE
+        , 	    A.REMARK
+        , 	    A.MEMBR_ORGN_CD
+        )
+        VALUES
+        (
+                SQ_TX_MEMBER_CLASS_PAY_RATE.NEXTVAL
+        , 	    'A'
+        , 	    TO_CHAR(SYSTIMESTAMP, 'YYYYMMDDHH24MISSFF')
+        , 	    B.STORE_CD
+        , 	    B.MEMBR_CLASS_CD
+        , 	    B.PAY_CD
+        , 	    B.ACC_RATE
+        , 	    B.REMARK
+        , 	    B.MEMBR_ORGN_CD
+        )
+    </insert>
 </mapper>

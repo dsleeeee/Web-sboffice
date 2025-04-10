@@ -387,6 +387,9 @@ public class StoreManageServiceImpl implements StoreManageService {
                 if ("0".equals(envst1237)) {
                     procCnt += mapper.insertStoreMemberClass(memberClassVO);
                 }
+                // 회원등급, 적립율 TX 데이터 추가
+                procCnt += mapper.mergeMemberClassTx(memberClassVO);
+                procCnt += mapper.mergeMemberClassPayRateTx(memberClassVO);
             }
 
             // 프랜차이즈매장: 본사에 등록된 결제수단분류/쿠폰/상품권 생성

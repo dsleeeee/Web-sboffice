@@ -614,4 +614,10 @@ public interface StoreManageMapper {
 
     /** 코너터미널 생성 */
     int insertCornerTerminal(StoreTerminalVO storeTerminalVO);
+
+    /** 회원등급 TX 데이터 추가 */
+    int mergeMemberClassTx(MemberClassVO memberClassVO);
+
+    /** 결제수단별 적립율 TX 데이터 추가 */
+    int mergeMemberClassPayRateTx(MemberClassVO memberClassVO);
 }
