@@ -247,21 +247,18 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
 
     // 판매가 그리드 조회
     $scope.searchHqSalePriceResveList = function(){
-
         var params = {};
-
         // 조회일자 '전체기간' 선택에 따른 params
         if(!$scope.isChecked){
             params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         }
-
         params.prodClassCd = $scope.prodClassCd;
-        params.listScale = $scope.listScaleCombo.text;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
+        params.listScale = $scope.listScaleCombo.text;
 
-        $scope._inquirySub('/base/price/salePriceResve/hqSalePriceResve/getHqSalePriceResveList.sb', params, function() {
+        $scope._inquiryMain('/base/price/salePriceResve/hqSalePriceResve/getHqSalePriceResveList.sb', params, function() {
 
             // 조회한 값으로 마진금액, 마진율 계산
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -638,8 +635,14 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
                 $scope.searchHqSalePriceResveList();
             });
         });
-
     }
+
+    // isValidDate, format: yyyyMMdd
+    $scope.isValidDate = function (str_yyyyMMdd) {
+        var pattern = /[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])/;
+        return pattern.test(str_yyyyMMdd);
+    };
+
     // 수정
     $scope.saveProdPrice = function(){
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
@@ -651,6 +654,14 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
                     }
                 }
 
+                if (!$scope.isValidDate($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
+                    $scope._popMsg(messages["salePriceResve.startDate"] + " " + messages["member.excel.upload.invalid.date"]);
+                    return false;
+                }
+                if (!$scope.isValidDate($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
+                    $scope._popMsg(messages["salePriceResve.endDate"] + " " + messages["member.excel.upload.invalid.date"]);
+                    return false;
+                }
                 if(Number(now) >= Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
                     $scope._popMsg(messages["salePriceResve.startDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
                     return false;
@@ -864,4 +875,157 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
             $("#storeSaveStore").hide();
         }
     };
+
+    // 조회조건 엑셀다운로드
+    $scope.excelDownloadProdPrice = function () {
+        var params = {};
+        // 조회일자 '전체기간' 선택에 따른 params
+        if(!$scope.isChecked){
+            params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+            params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        }
+
+        params.prodClassCd = $scope.prodClassCd;
+        params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
+
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('hqSalePriceResveExcelCtrl', params);
+        });
+    };
+
+}]);
+
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('hqSalePriceResveExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('hqSalePriceResveExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.startDate            = messages["salePriceResve.startDate"];
+        dataItem.endDate              = messages["salePriceResve.endDate"];
+        dataItem.prodCd               = messages["salePriceResve.prodCd"];
+        dataItem.prodNm               = messages["salePriceResve.prodNm"];
+        dataItem.hqSaleUprc           = messages["salePriceResve.salePrice"];
+        dataItem.saleUprc             = messages["salePriceResve.salePrice"];
+        dataItem.hqStinSaleUprc       = messages["salePriceResve.stinSaleUprc"];
+        dataItem.stinSaleUprc         = messages["salePriceResve.stinSaleUprc"];
+        dataItem.hqDlvrSaleUprc       = messages["salePriceResve.dlvrSaleUprc"];
+        dataItem.dlvrSaleUprc         = messages["salePriceResve.dlvrSaleUprc"];
+        dataItem.hqPackSaleUprc       = messages["salePriceResve.packSaleUprc"];
+        dataItem.packSaleUprc         = messages["salePriceResve.packSaleUprc"];
+        dataItem.prcCtrlFg            = messages["salePriceResve.prcCtrlFg"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
+    };
+
+    // <-- 검색 호출 -->
+    $scope.$on("hqSalePriceResveExcelCtrl", function (event, data) {
+        $scope.searchExcelList(data);
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/base/price/salePriceResve/hqSalePriceResve/getHqSalePriceResveExcelList.sb", params, function() {
+            if ($scope.excelFlexHqSalePriceResve.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            // 조회한 값으로 마진금액, 마진율 계산
+            for (var i = 0; i < $scope.excelFlexHqSalePriceResve.collectionView.items.length; i++) {
+                $scope.calcAmt($scope.excelFlexHqSalePriceResve.collectionView.items[i]);
+                $scope.excelFlexHqSalePriceResve.collectionView.commitEdit();
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlexHqSalePriceResve, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, "가격예약(본사판매가)_" + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
+    // <-- //검색 호출 -->
+
+    // 가격 변경
+    $scope.calcAmt = function(item){
+        var hqCostUprc = item.hqCostUprc;
+        var hqSplyUprc = item.hqSplyUprc;
+        //var storeSplyUprc = item.storeSplyUprc;
+        // var hqSaleUprc = item.hqSaleUprc;
+        var saleUprc = item.saleUprc;
+        var poUnitQty =  item.poUnitQty;
+
+        item.hqMarginAmt = (hqSplyUprc - hqCostUprc); // 본사마진금액
+        item.hqMarginRate = (hqSplyUprc - hqCostUprc) / hqCostUprc * 100; // 본사마진율
+        // item.saleUprcAmt = (saleUprc - poUnitQty); // 현재판매금액
+        // item.storeMarginAmt = ((saleUprc - poUnitQty) - storeSplyUprc); // 매장마진금액
+        // item.storeMarginRate = ((saleUprc - poUnitQty) - storeSplyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
+    };
+
 }]);

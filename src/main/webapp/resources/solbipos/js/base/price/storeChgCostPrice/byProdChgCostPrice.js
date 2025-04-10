@@ -65,6 +65,9 @@ app.controller('byProdChgCostPriceCtrl', ['$scope', '$http','$timeout', function
     $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList);             // 매장그룹4
     $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList);             // 매장그룹5
 
+    // 검색조건 일괄변경
+    $("#tblProdChange").show();
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 

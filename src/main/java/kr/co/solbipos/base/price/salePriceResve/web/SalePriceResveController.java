@@ -5,6 +5,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
@@ -134,6 +135,29 @@ public class SalePriceResveController {
         List<DefaultMap<String>> result = salePriceResveService.getHqSalePriceResveList(salePriceResveVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result, salePriceResveVO);
+    }
+
+    /**
+     * 가격예약(본사판매가) - 가격예약(본사판매가) 탭 - 엑셀다운로드 조회
+     *
+     * @param salePriceResveVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 04. 10.
+     */
+    @RequestMapping(value = "/hqSalePriceResve/getHqSalePriceResveExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, HttpServletRequest request,
+                                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = salePriceResveService.getHqSalePriceResveExcelList(salePriceResveVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, salePriceResveVO);
     }
 
     /**
@@ -283,6 +307,29 @@ public class SalePriceResveController {
     }
 
     /**
+     * 가격예약(매장판매가) - 상품별 판매가관리 탭 - 엑셀다운로드 조회
+     *
+     * @param salePriceResveVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 04. 10.
+     */
+    @RequestMapping(value = "/storeSalePriceResve/getStoreProdSalePriceResveExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreProdSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, HttpServletRequest request,
+                                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = salePriceResveService.getStoreProdSalePriceResveExcelList(salePriceResveVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, salePriceResveVO);
+    }
+
+    /**
      * 가격예약(매장판매가) [매장별 판매가관리] 리스트 조회
      * @param salePriceResveVO
      * @param request
@@ -299,6 +346,29 @@ public class SalePriceResveController {
         List<DefaultMap<String>> result = salePriceResveService.getStoreStoreSalePriceResveList(salePriceResveVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result, salePriceResveVO);
+    }
+
+    /**
+     * 가격예약(매장판매가) - 매장별 판매가관리 탭 - 엑셀다운로드 조회
+     *
+     * @param salePriceResveVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 04. 10.
+     */
+    @RequestMapping(value = "/storeSalePriceResve/getStoreStoreSalePriceResveExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreStoreSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, HttpServletRequest request,
+                                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = salePriceResveService.getStoreStoreSalePriceResveExcelList(salePriceResveVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, salePriceResveVO);
     }
 
     /**

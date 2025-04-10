@@ -29,6 +29,9 @@ public interface SalePriceResveMapper {
     /** 가격예약(본사판매가) 리스트 조회 */
     List<DefaultMap<String>> getHqSalePriceResveList(SalePriceResveVO salePriceResveVO);
 
+    /** 가격예약(본사판매가) - 가격예약(본사판매가) 탭 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getHqSalePriceResveExcelList(SalePriceResveVO salePriceResveVO);
+
     /** 가격예약(본사판매가) 기존 예약 판매가 삭제 */
     int deleteHqSalePriceResve(SalePriceResveVO salePriceResveVO);
 
@@ -50,8 +53,14 @@ public interface SalePriceResveMapper {
     /** 가격예약(매장판매가) [상품별 판매가관리] 리스트 조회 */
     List<DefaultMap<String>> getStoreProdSalePriceResveList(SalePriceResveVO salePriceResveVO);
 
+    /** 가격예약(매장판매가) - 상품별 판매가관리 탭 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getStoreProdSalePriceResveExcelList(SalePriceResveVO salePriceResveVO);
+
     /** 가격예약(매장판매가) [매장별 판매가관리] 리스트 조회 */
     List<DefaultMap<String>> getStoreStoreSalePriceResveList(SalePriceResveVO salePriceResveVO);
+
+    /** 가격예약(매장판매가) - 매장별 판매가관리 탭 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getStoreStoreSalePriceResveExcelList(SalePriceResveVO salePriceResveVO);
 
     /** 가격예약(매장판매가) 기존 예약 판매가 삭제 */
     int deleteStoreSalePriceResve(SalePriceResveVO salePriceResveVO);

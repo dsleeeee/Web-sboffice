@@ -19,7 +19,12 @@
     -->
     <select id="getSelectStoreList" parameterType="selectStoreVO" resultType="DefaultMap">
         /* USE : SelectStoreMapper.getSelectStoreList */
-        SELECT tms.HQ_OFFICE_CD, tms.STORE_CD, tms.STORE_NM, thn.STORE_CHG_NOT
+        SELECT
+        tms.HQ_OFFICE_CD,
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tms.SYS_STAT_FG,
+        thn.STORE_CHG_NOT
         FROM TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         (
@@ -45,6 +50,17 @@
         </if>
         <if test='storeNm != null and storeNm != ""'>
             AND tms.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test="sysStatFg != null and sysStatFg != ''">
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        <if test='storeChgNot != null and storeChgNot != ""'>
+            <if test='storeChgNot == "1"'>
+                AND thn.STORE_CHG_NOT IS NOT NULL
+            </if>
+            <if test='storeChgNot == "2"'>
+                AND thn.STORE_CHG_NOT IS NULL
+            </if>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -78,14 +94,6 @@
         </if>
         <if test='branchCd != null and branchCd != ""'>
             AND tms.BRANCH_CD = #{branchCd}
-        </if>
-        <if test='storeChgNot != null and storeChgNot != ""'>
-            <if test='storeChgNot == "1"'>
-                AND thn.STORE_CHG_NOT IS NOT NULL
-            </if>
-            <if test='storeChgNot == "2"'>
-                AND thn.STORE_CHG_NOT IS NULL
-            </if>
         </if>
         <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
             AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
