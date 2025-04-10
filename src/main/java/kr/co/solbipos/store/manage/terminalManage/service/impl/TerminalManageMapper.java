@@ -98,5 +98,8 @@ public interface TerminalManageMapper {
 
     /** 코너 대표 터미널 정보 수정시 포스 대표 터미널 정보 merge */
     int mergePosTerminalInfo(StoreTerminalVO storeTerminalVO);
+
+    /** 대표 POS 등록여부 확인 */
+    int getChkBaseVanYn(StoreTerminalVO storeTerminalVO);
 }
 

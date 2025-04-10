@@ -142,6 +142,18 @@ public class TerminalManageServiceImpl implements TerminalManageService{
 
             if(storeTerminalVO.getStatus() == GridDataFg.INSERT) {
 
+                int cnt = 1;
+
+                if(storeTerminalVO.getPosNo().equals("01") && storeTerminalVO.getVendorFg().equals("01")){
+                    // 대표 POS 등록여부 확인
+                    cnt = mapper.getChkBaseVanYn(storeTerminalVO);
+
+                    // 대표 POS 없을 시 BASE_NAN_YN = 'Y' 처리
+                    if(cnt == 0){
+                        storeTerminalVO.setBaseVanYn("Y");
+                    }
+                }
+
                 result += mapper.insertPosTerminalInfo(storeTerminalVO);
 
             } else if(storeTerminalVO.getStatus() == GridDataFg.UPDATE) {
