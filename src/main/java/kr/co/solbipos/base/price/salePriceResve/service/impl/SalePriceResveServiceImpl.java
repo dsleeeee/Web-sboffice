@@ -70,6 +70,15 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
         return salePriceResveMapper.getHqSalePriceResveList(salePriceResveVO);
     }
 
+    /** 가격예약(본사판매가) - 가격예약(본사판매가) 탭 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getHqSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO) {
+
+        salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return salePriceResveMapper.getHqSalePriceResveExcelList(salePriceResveVO);
+    }
+
     /** 가격예약(본사판매가) 추가 */
     @Override
     public int saveHqSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO) {

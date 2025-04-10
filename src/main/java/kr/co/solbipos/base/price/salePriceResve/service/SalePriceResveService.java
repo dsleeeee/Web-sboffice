@@ -25,6 +25,9 @@ public interface SalePriceResveService {
     /** 가격예약(본사판매가) 리스트 조회 */
     List<DefaultMap<String>> getHqSalePriceResveList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
 
+    /** 가격예약(본사판매가) - 가격예약(본사판매가) 탭 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getHqSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
+
     /** 가격예약(본사판매가) 추가 */
     int saveHqSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);
 

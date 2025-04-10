@@ -20,7 +20,8 @@
     <select id="getHqSalePriceResveList" parameterType="salePriceResveVO" resultType="DefaultMap">
         /* SalePriceResveMapper.getHqSalePriceResveList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT thp.PROD_CD,
+        SELECT
+        thp.PROD_CD,
         thp.PROD_NM,
         thp.PROD_CLASS_CD,                                                              -- 상품분류코드
         thp.PO_UNIT_QTY,                                                                -- 입수
@@ -42,19 +43,19 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM TB_HQ_PRODUCT thp,
         (
-        SELECT HQ_OFFICE_CD,
-        PROD_CD,
-        START_DATE,
-        END_DATE,
-        SALE_UPRC,
-        STIN_SALE_UPRC,
-        DLVR_SALE_UPRC,
-        PACK_SALE_UPRC
-        FROM TB_HQ_PRODUCT_SALE_PRICE
-        WHERE 1=1
-        AND HQ_OFFICE_CD = #{hqOfficeCd}
-        AND SALE_PRC_FG = '1'
-        AND SALE_RESVE_FG = '1'
+            SELECT HQ_OFFICE_CD,
+            PROD_CD,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
+            FROM TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            AND SALE_PRC_FG = '1'
+            AND SALE_RESVE_FG = '1'
         ) thpsp
         WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
@@ -68,14 +69,14 @@
         <!--        </if>-->
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
-            SELECT PROD_CLASS_CD
-            FROM TB_HQ_PRODUCT_CLASS
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-            CONNECT
-            BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
-            )
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE 1=1
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT
+                                        BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        )
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -84,10 +85,10 @@
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
         ORDER
@@ -95,6 +96,86 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 가격예약(본사판매가) - 가격예약(본사판매가) 탭 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getHqSalePriceResveExcelList" parameterType="salePriceResveVO" resultType="DefaultMap">
+        /* SalePriceResveMapper.getHqSalePriceResveExcelList */
+        SELECT
+        thp.PROD_CD,
+        thp.PROD_NM,
+        thp.PROD_CLASS_CD,                                                              -- 상품분류코드
+        thp.PO_UNIT_QTY,                                                                -- 입수
+        thp.COST_UPRC AS HQ_COST_UPRC,                                                  -- 본사원가
+        thp.SPLY_UPRC AS HQ_SPLY_UPRC,                                                  -- 대표공급가
+        TO_CHAR(TO_DATE(thpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+        TO_CHAR(TO_DATE(thpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_END_DATE,     -- 종료시간
+        TO_CHAR(TO_DATE(thpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
+        TO_CHAR(TO_DATE(thpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,         -- 종료시간
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,                                                -- 본사판매가
+        thpsp.SALE_UPRC AS SALE_UPRC,                                                   -- 변경판매가
+        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,                                      -- 본사내점-판매가
+        thpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,                                         -- 변경내점-판매가
+        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,                                      -- 본사배달-판매가
+        thpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,                                         -- 변경배달-판매가
+        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,                                      -- 본사포장-판매가
+        thpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,                                         -- 변경포장-판매가
+        thp.PRC_CTRL_FG
+        FROM TB_HQ_PRODUCT thp,
+        (
+            SELECT HQ_OFFICE_CD,
+            PROD_CD,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
+            FROM TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+            AND SALE_PRC_FG = '1'
+            AND SALE_RESVE_FG = '1'
+        ) thpsp
+        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+            AND thpsp.START_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <!--        <if test='startDate != null and startDate != ""'>-->
+        <!--             AND thpsp.START_DATE <![CDATA[>=]]> #{startDate}-->
+        <!--        </if>-->
+        <!--        <if test='endDate != null and endDate != ""'>-->
+        <!--             AND thpsp.END_DATE <![CDATA[<= ]]> #{endDate}-->
+        <!--        </if>-->
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE 1=1
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT
+                                        BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        ORDER
+        BY thp.PROD_CD ASC, thpsp.START_DATE DESC
+    </select>
     <!-- 가격예약(본사판매가) 기존 예약 판매가 삭제 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SALE_PRICE

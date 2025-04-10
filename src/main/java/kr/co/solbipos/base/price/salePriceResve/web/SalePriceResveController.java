@@ -138,6 +138,29 @@ public class SalePriceResveController {
     }
 
     /**
+     * 가격예약(본사판매가) - 가격예약(본사판매가) 탭 - 엑셀다운로드 조회
+     *
+     * @param salePriceResveVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 04. 10.
+     */
+    @RequestMapping(value = "/hqSalePriceResve/getHqSalePriceResveExcelList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getHqSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, HttpServletRequest request,
+                                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = salePriceResveService.getHqSalePriceResveExcelList(salePriceResveVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, salePriceResveVO);
+    }
+
+    /**
      * 가격예약(본사판매가) 추가
      * @param salePriceResveVOs
      * @param request
