@@ -54,13 +54,11 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
         return $scope.prodInfo;
     };
 
-
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("saleAmtOption", saleAmtOptionFg);
     $scope._setComboData("stinSaleUprcOption", stinSaleAmtOptionFg);
     $scope._setComboData("dlvrSaleUprcOption", dlvrSaleAmtOptionFg);
     $scope._setComboData("packSaleUprcOption", packSaleAmtOptionFg);
-
 
     // 브랜드 콤보박스 셋팅
     $scope._setComboData("srchStoreHqBrandCd", userHqBrandCdComboList); // 매장브랜드
@@ -76,6 +74,9 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
     $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
     $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
     $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
+
+    // 검색조건 일괄변경
+    $("#tblProdChange").show();
 
   $scope.prodSaleUprcApply = true;
 
