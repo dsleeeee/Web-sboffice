@@ -206,6 +206,21 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
         return salePriceResveMapper.getStoreProdSalePriceResveList(salePriceResveVO);
     }
 
+    /** 가격예약(매장판매가) - 상품별 판매가관리 탭 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreProdSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO) {
+
+        salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        if(!StringUtil.getOrBlank(salePriceResveVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(salePriceResveVO.getStoreCd(), 3900));
+            salePriceResveVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return salePriceResveMapper.getStoreProdSalePriceResveExcelList(salePriceResveVO);
+    }
+
     /** 가격예약(매장판매가) [매장별 판매가관리] 리스트 조회 */
     @Override
     public List<DefaultMap<String>> getStoreStoreSalePriceResveList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO) {
@@ -213,6 +228,15 @@ public class SalePriceResveServiceImpl implements SalePriceResveService {
         salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return salePriceResveMapper.getStoreStoreSalePriceResveList(salePriceResveVO);
+    }
+
+    /** 가격예약(매장판매가) - 매장별 판매가관리 탭 - 엑셀다운로드 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreStoreSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO) {
+
+        salePriceResveVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return salePriceResveMapper.getStoreStoreSalePriceResveExcelList(salePriceResveVO);
     }
 
     /** 가격예약(매장판매가) 추가 */

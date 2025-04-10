@@ -40,8 +40,14 @@ public interface SalePriceResveService {
     /** 가격예약(매장판매가) [상품별 판매가관리] 리스트 조회 */
     List<DefaultMap<String>> getStoreProdSalePriceResveList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
 
+    /** 가격예약(매장판매가) - 상품별 판매가관리 탭 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getStoreProdSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
+
     /** 가격예약(매장판매가) [매장별 판매가관리] 리스트 조회 */
     List<DefaultMap<String>> getStoreStoreSalePriceResveList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
+
+    /** 가격예약(매장판매가) - 매장별 판매가관리 탭 - 엑셀다운로드 조회 */
+    List<DefaultMap<Object>> getStoreStoreSalePriceResveExcelList(SalePriceResveVO salePriceResveVO, SessionInfoVO sessionInfoVO);
 
     /** 가격예약(매장판매가) 추가 */
     int saveStoreProdSalePriceResve(SalePriceResveVO[] salePriceResveVOs, SessionInfoVO sessionInfoVO);

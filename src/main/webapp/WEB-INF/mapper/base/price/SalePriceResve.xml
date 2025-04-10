@@ -439,7 +439,8 @@
     <select id="getStoreProdSalePriceResveList" parameterType="salePriceResveVO" resultType="DefaultMap">
         /* SalePriceResveMapper.getStoreProdSalePriceResveList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tms.STORE_CD,
+        SELECT
+        tms.STORE_CD,
         tms.STORE_NM,
         tmp.PROD_CD,
         tmp.PROD_NM,
@@ -464,35 +465,35 @@
         FROM TB_MS_PRODUCT tmp,
         TB_MS_STORE tms,
         (
-        SELECT STORE_CD,
-        PROD_CD,
-        START_DATE,
-        END_DATE,
-        SALE_UPRC,
-        STIN_SALE_UPRC,
-        DLVR_SALE_UPRC,
-        PACK_SALE_UPRC
-        FROM TB_MS_PRODUCT_SALE_PRICE
-        WHERE 1=1
-        AND SALE_PRC_FG = '1'
-        AND SALE_RESVE_FG = '1'
+            SELECT STORE_CD,
+            PROD_CD,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
+            FROM TB_MS_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            AND SALE_PRC_FG = '1'
+            AND SALE_RESVE_FG = '1'
         ) tmpsp,
         TB_HQ_PRODUCT thp,
         (
-        SELECT HQ_OFFICE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_HQ_PRODUCT_SALE_PRICE
-        WHERE 1=1
-        <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP
-        BY HQ_OFFICE_CD, PROD_CD
+            SELECT HQ_OFFICE_CD, PROD_CD,
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+            FROM TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            <![CDATA[
+                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+            AND SALE_PRC_FG = '1'
+            GROUP
+            BY HQ_OFFICE_CD, PROD_CD
         ) thpsp
         WHERE tmp.PROD_CD = #{prodCd}
         AND tmp.SALE_PROD_YN = 'Y'             -- 판매상품 여부
@@ -521,6 +522,94 @@
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
+    <!-- 가격예약(매장판매가) - 상품별 판매가관리 탭 - 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreProdSalePriceResveExcelList" parameterType="salePriceResveVO" resultType="DefaultMap">
+        /* SalePriceResveMapper.getStoreProdSalePriceResveExcelList */
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tmp.PROD_CD,
+        tmp.PROD_NM,
+        TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+        TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_END_DATE,     -- 종료시간
+        TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
+        TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE,         -- 종료시간
+        tmpsp.SALE_UPRC AS SALE_UPRC_P,              -- 변경전 판매금액
+        tmpsp.SALE_UPRC,                             -- 판매금액(변경가능)
+        tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC_P,    -- 변경전 내점판매금액
+        tmpsp.STIN_SALE_UPRC,                        -- 내점판매금액(변경가능)
+        tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC_P,    -- 변경전 배달판매금액
+        tmpsp.DLVR_SALE_UPRC,                        -- 배달판매금액(변경가능)
+        tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC_P,    -- 변경전 포장판매금액
+        tmpsp.PACK_SALE_UPRC,                        -- 포장판매금액(변경가능)
+        tmp.PRC_CTRL_FG,
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,             -- 본사판매가
+        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,   -- 본사내점-판매가
+        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,   -- 본사배달-판매가
+        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC    -- 본사포장-판매가
+        FROM TB_MS_PRODUCT tmp,
+        TB_MS_STORE tms,
+        (
+            SELECT STORE_CD,
+            PROD_CD,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
+            FROM TB_MS_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            AND SALE_PRC_FG = '1'
+            AND SALE_RESVE_FG = '1'
+        ) tmpsp,
+        TB_HQ_PRODUCT thp,
+        (
+            SELECT HQ_OFFICE_CD, PROD_CD,
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+            FROM TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            <![CDATA[
+                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+            AND SALE_PRC_FG = '1'
+            GROUP
+            BY HQ_OFFICE_CD, PROD_CD
+        ) thpsp
+        WHERE tmp.PROD_CD = #{prodCd}
+        AND tmp.SALE_PROD_YN = 'Y'             -- 판매상품 여부
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tms.STORE_CD = tmp.STORE_CD
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thp.PROD_CD = tmp.PROD_CD
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+            AND tmpsp.START_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <!--        <if test='startDate != null and startDate != ""'>-->
+        <!--            AND tmpsp.START_DATE <![CDATA[>=]]> #{startDate}-->
+        <!--        </if>-->
+        <!--        <if test='endDate != null and endDate != ""'>-->
+        <!--            AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}-->
+        <!--        </if>-->
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
+        </if>
+        ORDER
+        BY tms.STORE_CD ASC, tmpsp.START_DATE DESC
+    </select>
+
     <!-- 가격예약(매장판매가) [매장별 판매가관리] 리스트 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_MS_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE, TB_MS_PRODUCT_SALE_PRICE
@@ -530,7 +619,8 @@
     <select id="getStoreStoreSalePriceResveList" parameterType="salePriceResveVO" resultType="DefaultMap">
         /* SalePriceResveMapper.getStoreStoreSalePriceResveList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT tmp.PROD_CD,
+        SELECT
+        tmp.PROD_CD,
         tmp.PROD_NM,
         TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
         TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS ORG_END_DATE,   -- 종료시간
@@ -554,34 +644,34 @@
         FROM TB_MS_PRODUCT tmp,
         TB_HQ_PRODUCT thp,
         (
-        SELECT HQ_OFFICE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_HQ_PRODUCT_SALE_PRICE
-        WHERE 1=1
-        <![CDATA[
-                               AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                               AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP
-        BY HQ_OFFICE_CD, PROD_CD
+            SELECT HQ_OFFICE_CD, PROD_CD,
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+            FROM TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            <![CDATA[
+               AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+               AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+            AND SALE_PRC_FG = '1'
+            GROUP
+            BY HQ_OFFICE_CD, PROD_CD
         ) thpsp,
         (
-        SELECT STORE_CD,
-        PROD_CD,
-        START_DATE,
-        END_DATE,
-        SALE_UPRC,
-        STIN_SALE_UPRC,
-        DLVR_SALE_UPRC,
-        PACK_SALE_UPRC
-        FROM TB_MS_PRODUCT_SALE_PRICE
-        WHERE 1=1
-        AND SALE_PRC_FG = '1'
-        AND SALE_RESVE_FG = '1'
+            SELECT STORE_CD,
+            PROD_CD,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
+            FROM TB_MS_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            AND SALE_PRC_FG = '1'
+            AND SALE_RESVE_FG = '1'
         ) tmpsp
         WHERE tmp.STORE_CD = #{storeCd}
         AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -596,14 +686,14 @@
         <!--        </if>-->
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
-            SELECT PROD_CLASS_CD
-            FROM TB_HQ_PRODUCT_CLASS
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-            CONNECT
-            BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
-            )
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE 1=1
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT
+                                        BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        )
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -612,15 +702,15 @@
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
-        AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+                AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thp.PROD_CD = tmp.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
@@ -629,6 +719,113 @@
         ORDER
         BY tmp.PROD_CD ASC, tmpsp.START_DATE DESC
         <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 가격예약(매장판매가) - 매장별 판매가관리 탭 - 엑셀다운로드 조회 -->
+    <!--
+         TABLE    :
+         COMMENTS :
+     -->
+    <select id="getStoreStoreSalePriceResveExcelList" parameterType="salePriceResveVO" resultType="DefaultMap">
+        /* SalePriceResveMapper.getStoreStoreSalePriceResveExcelList */
+        SELECT
+        tmp.PROD_CD,
+        tmp.PROD_NM,
+        TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS ORG_START_DATE, -- 시작시간
+        TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS ORG_END_DATE,   -- 종료시간
+        TO_CHAR(TO_DATE(tmpsp.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE,     -- 시작시간
+        TO_CHAR(TO_DATE(tmpsp.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')   AS END_DATE,       -- 종료시간
+        thp.PROD_CLASS_CD,                            -- 상품분류코드
+        thpsp.SALE_UPRC AS HQ_SALE_UPRC,              -- 본사판매가
+        tmpsp.SALE_UPRC AS STORE_SALE_UPRC,           -- 매장판매가
+        tmpsp.SALE_UPRC AS SALE_UPRC,                 -- 매장변경판매가
+        thpsp.STIN_SALE_UPRC AS HQ_STIN_SALE_UPRC,    -- 본사내점-판매가
+        tmpsp.STIN_SALE_UPRC AS STORE_STIN_SALE_UPRC, -- 매장내점-판매가
+        tmpsp.STIN_SALE_UPRC AS STIN_SALE_UPRC,       -- 변경내점-판매가
+        thpsp.DLVR_SALE_UPRC AS HQ_DLVR_SALE_UPRC,    -- 본사배달-판매가
+        tmpsp.DLVR_SALE_UPRC AS STORE_DLVR_SALE_UPRC, -- 매장배달-판매가
+        tmpsp.DLVR_SALE_UPRC AS DLVR_SALE_UPRC,       -- 변경배달-판매가
+        thpsp.PACK_SALE_UPRC AS HQ_PACK_SALE_UPRC,    -- 본사포장-판매가
+        tmpsp.PACK_SALE_UPRC AS STORE_PACK_SALE_UPRC, -- 매장포장-판매가
+        tmpsp.PACK_SALE_UPRC AS PACK_SALE_UPRC,       -- 변경포장-판매가
+        tmp.PRC_CTRL_FG
+        FROM TB_MS_PRODUCT tmp,
+        TB_HQ_PRODUCT thp,
+        (
+            SELECT HQ_OFFICE_CD, PROD_CD,
+            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
+            MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
+            MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
+            MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
+            FROM TB_HQ_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            <![CDATA[
+               AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
+               AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
+            ]]>
+            AND SALE_PRC_FG = '1'
+            GROUP
+            BY HQ_OFFICE_CD, PROD_CD
+        ) thpsp,
+        (
+            SELECT STORE_CD,
+            PROD_CD,
+            START_DATE,
+            END_DATE,
+            SALE_UPRC,
+            STIN_SALE_UPRC,
+            DLVR_SALE_UPRC,
+            PACK_SALE_UPRC
+            FROM TB_MS_PRODUCT_SALE_PRICE
+            WHERE 1=1
+            AND SALE_PRC_FG = '1'
+            AND SALE_RESVE_FG = '1'
+        ) tmpsp
+        WHERE tmp.STORE_CD = #{storeCd}
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='startDate != null and startDate != "" and endDate != null and endDate != ""'>
+            AND tmpsp.START_DATE BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <!--        <if test='startDate != null and startDate != ""'>-->
+        <!--            AND tmpsp.START_DATE <![CDATA[>=]]> #{startDate}-->
+        <!--        </if>-->
+        <!--        <if test='endDate != null and endDate != ""'>-->
+        <!--            AND tmpsp.END_DATE <![CDATA[<= ]]> #{endDate}-->
+        <!--        </if>-->
+        <if test='prodClassCd != null and prodClassCd != ""'>
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE 1=1
+                                        AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT
+                                        BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        )
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+                AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND thp.PROD_CD = tmp.PROD_CD
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        ORDER
+        BY tmp.PROD_CD ASC, tmpsp.START_DATE DESC
     </select>
 
     <!-- 가격예약(매장판매가) 기존 예약 판매가 삭제 -->
