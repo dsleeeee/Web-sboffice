@@ -635,8 +635,14 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
                 $scope.searchHqSalePriceResveList();
             });
         });
-
     }
+
+    // isValidDate, format: yyyyMMdd
+    $scope.isValidDate = function (str_yyyyMMdd) {
+        var pattern = /[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])/;
+        return pattern.test(str_yyyyMMdd);
+    };
+
     // 수정
     $scope.saveProdPrice = function(){
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ) {
@@ -648,6 +654,14 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
                     }
                 }
 
+                if (!$scope.isValidDate($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
+                    $scope._popMsg(messages["salePriceResve.startDate"] + " " + messages["member.excel.upload.invalid.date"]);
+                    return false;
+                }
+                if (!$scope.isValidDate($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
+                    $scope._popMsg(messages["salePriceResve.endDate"] + " " + messages["member.excel.upload.invalid.date"]);
+                    return false;
+                }
                 if(Number(now) >= Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
                     $scope._popMsg(messages["salePriceResve.startDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
                     return false;
@@ -903,7 +917,6 @@ app.controller('hqSalePriceResveExcelCtrl', ['$scope', '$http', '$timeout', func
 
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.gChk                 = messages["cmm.chk"];
         dataItem.startDate            = messages["salePriceResve.startDate"];
         dataItem.endDate              = messages["salePriceResve.endDate"];
         dataItem.prodCd               = messages["salePriceResve.prodCd"];
