@@ -775,3 +775,7 @@
 <%-- 다중사업자관리 --%>
 <c:import url="/WEB-INF/view/store/manage/storeManage/multiBizManage.jsp">
 </c:import>
+
+<%-- [매장정보]탭 터미널정보 입력 안내 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storeTerminalExample.jsp">
+</c:import>

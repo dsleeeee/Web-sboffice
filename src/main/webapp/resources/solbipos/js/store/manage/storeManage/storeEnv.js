@@ -32,6 +32,9 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     // [조회] 버튼을 이용한 환경설정 조회 확인 값 초기화
     $("#hdSrchYn").val("");
 
+    // 매장정보 조회
+    $scope.getStoreInfo();
+
     event.preventDefault();
   });
 
@@ -394,7 +397,32 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.multiBizManageLayer.show(true);
       $scope._broadcast('multiBizManageCtrl');
       event.preventDefault();
-  }
+  };
+
+  // 매장정보 조회
+  $scope.getStoreInfo = function () {
+
+      var storeScope = agrid.getScope('storeManageCtrl');
+
+      var params = {};
+      params.hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
+      params.storeCd = storeScope.getSelectedStore().storeCd;
+
+      // todo 데이터 메세지
+      $scope._postJSONQuery.withOutPopUp('/store/manage/storeManage/storeManage/getStoreDetail.sb', params, function (response) {
+          if ($.isEmptyObject(response.data)) {
+              $scope._popMsg(messages["cmm.empty.data"]);
+              return false;
+          }
+
+          var storeDetailInfo = response.data.data.storeDtlInfo;
+
+          // [1337] 다중사업자사용여부 '사용'으로 저장시 터미널정보 기본값 있는지 확인을 위해 사용
+          $("#hdVendorCd").val(storeDetailInfo.vendorCd);             // 터미널관리(터미널상세)
+          $("#hdVendorTermnlNo").val(storeDetailInfo.vendorTermnlNo); // 터미널번호
+          $("#hdvendorSerNo").val(storeDetailInfo.vendorSerNo);       // 시리얼번호
+      });
+  };
 
 }]);
 

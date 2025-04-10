@@ -179,6 +179,26 @@ app.controller('cmmEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       }
     }
 
+    // [1337] 다중사업자사용여부 '사용'으로 저장시 터미널정보 기본값 있는지 확인을 위해 사용
+    // 매장환경 탭이 활성화 되어있을때만 체크
+    if (envScope.getEnvGroupCd() === '00') {
+      var env1337 = $("#env1337").val() === undefined ? orgEnv1337 : $("#env1337").val();
+      if (env1337 === "1") {
+          if ($("#hdVendorCd").val() === "" || $("#hdVendorTermnlNo").val() === "" || $("#hdvendorSerNo").val() === "" ||
+              $("#hdVendorCd").val() === null || $("#hdVendorTermnlNo").val() === null || $("#hdvendorSerNo").val() === null ||
+              $("#hdVendorCd").val() === undefined || $("#hdVendorTermnlNo").val() === undefined || $("#hdvendorSerNo").val() === undefined) {
+
+              // [매장정보]탭 터미널정보 입력 안내 팝업 오픈
+              $scope.storeTerminalExampleLayer.show(true);
+              $scope._broadcast('storeTerminalExampleCtrl');
+
+              // [매장정보] 탭에서 터미널정보를 입력하여 주십시오.
+              $scope._popMsg(messages["storeManage.terminal.chk.msg"]);
+              return false;
+          }
+      }
+    }
+
     var chngCnt  = 0; // 변경된 건수
     var arrChg = []; //  변경된 환경변수 배열 Key 값
     var params = [];

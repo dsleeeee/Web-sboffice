@@ -37,6 +37,11 @@
               <%-- 환경설정값 조회 시, 조회버튼 클릭으로 조회하는 것인지 또는 탭 클릭으로 조회하는 것인지 확인을 위한 값 --%>
               <%-- [포스환경]탭 에서 [조회] 버튼을 클릭하여 환경설정을 조회할 경우, 포스명칭이 바뀌는것을 방지하기 위해 사용 --%>
               <input type="hidden" id="hdSrchYn"/>
+
+              <%-- [1337] 다중사업자사용여부 '사용'으로 저장시 터미널정보 기본값 있는지 확인을 위해 사용 --%>
+              <input type="hidden" id="hdVendorCd"/>
+              <input type="hidden" id="hdVendorTermnlNo"/>
+              <input type="hidden" id="hdvendorSerNo"/>
           </div>
       </div>
 
@@ -82,5 +87,5 @@
     var orgEnv4021 = "";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20250324.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeEnv.js?ver=20250410.01" charset="utf-8"></script>
 
