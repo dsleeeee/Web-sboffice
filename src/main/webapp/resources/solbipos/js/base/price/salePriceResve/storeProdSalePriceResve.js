@@ -924,7 +924,6 @@ app.controller('storeProdSalePriceResveExcelCtrl', ['$scope', '$http', '$timeout
 
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.gChk                 = messages["cmm.chk"];
         dataItem.startDate            = messages["salePriceResve.startDate"];
         dataItem.endDate              = messages["salePriceResve.endDate"];
         dataItem.storeCd              = messages["salePriceResve.storeCd"];

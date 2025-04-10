@@ -321,7 +321,6 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="" binding="gChk" width="35"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgStartDate" width="100" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="" binding="orgEndDate" width="100" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="salePriceResve.startDate"/>" binding="startDate" width="120" align="center">
