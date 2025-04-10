@@ -315,7 +315,7 @@
                     autoGenerateColumns="false"
                     selection-mode="Row"
                     items-source="data"
-                    control="excelFlexProdSalePriceResve"
+                    control="excelFlexStoreProdSalePriceResve"
                     initialized="initGrid(s,e)"
                     is-read-only="true"
                     item-formatter="_itemFormatter">

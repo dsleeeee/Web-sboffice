@@ -995,20 +995,20 @@ app.controller('storeProdSalePriceResveExcelCtrl', ['$scope', '$http', '$timeout
     $scope.searchExcelList = function (params) {
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/base/price/salePriceResve/storeSalePriceResve/getStoreProdSalePriceResveExcelList.sb", params, function() {
-            if ($scope.excelFlexProdSalePriceResve.rows.length <= 0) {
+            if ($scope.excelFlexStoreProdSalePriceResve.rows.length <= 0) {
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 return false;
             }
 
             // 조회한 값으로 마진금액, 마진율 계산
-            for (var i = 0; i < $scope.excelFlexProdSalePriceResve.collectionView.items.length; i++) {
-                $scope.calcAmt($scope.excelFlexProdSalePriceResve.collectionView.items[i]);
-                $scope.excelFlexProdSalePriceResve.collectionView.commitEdit();
+            for (var i = 0; i < $scope.excelFlexStoreProdSalePriceResve.collectionView.items.length; i++) {
+                $scope.calcAmt($scope.excelFlexStoreProdSalePriceResve.collectionView.items[i]);
+                $scope.excelFlexStoreProdSalePriceResve.collectionView.commitEdit();
             }
 
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
             $timeout(function () {
-                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlexProdSalePriceResve, {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlexStoreProdSalePriceResve, {
                     includeColumnHeaders: true,
                     includeCellStyles   : false,
                     includeColumns      : function (column) {
