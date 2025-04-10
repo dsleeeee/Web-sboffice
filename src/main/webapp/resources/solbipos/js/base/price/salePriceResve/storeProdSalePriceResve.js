@@ -77,7 +77,7 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
     };
 
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox1", gvListScaleBoxData);
+    $scope._setComboData("listScaleBox1", gvListScaleBoxData2);
     $scope._setComboData("saleAmtOption", saleAmtOptionFg);
     $scope._setComboData("stinSaleUprcOption", stinSaleAmtOptionFg);
     $scope._setComboData("dlvrSaleUprcOption", dlvrSaleAmtOptionFg);
@@ -85,9 +85,11 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
 
     $scope.prodSaleUprcApply = true;
 
+    // 검색조건 일괄변경
+    $("#tblProdChange").show();
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
 
         // 그리드 링크 효과
@@ -192,6 +194,44 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
                     verticalAlign: 'middle',
                     textAlign    : 'center'
                 });
+
+                if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+                    // 헤더의 전체선택 클릭 로직
+                    var flex   = panel.grid;
+                    var column = flex.columns[c];
+                    // check that this is a boolean column
+                    if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+                        // prevent sorting on click
+                        column.allowSorting = false;
+                        // count true values to initialize checkbox
+                        var cnt             = 0;
+                        for (var i = 0; i < flex.rows.length; i++) {
+                            if (flex.getCellData(i, c) === true) {
+                                cnt++;
+                            }
+                        }
+                        // create and initialize checkbox
+                        if (column.format === 'checkBoxText') {
+                            cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+                        } else {
+                            cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+                        }
+                        var cb           = cell.firstChild;
+                        cb.checked       = cnt > 0;
+                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                        // apply checkbox value to cells
+                        cb.addEventListener('click', function (e) {
+                            flex.beginUpdate();
+                            for (var i = 0; i < flex.rows.length; i++) {
+                                if(!flex.rows[i].isReadOnly) {
+                                    flex.setCellData(i, c, cb.checked);
+                                }
+                            }
+                            flex.endUpdate();
+                        });
+                    }
+                }
             }
             // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
             else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
@@ -223,7 +263,6 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
     };
 
     $scope.$on("storeProdSalePriceResveCtrl", function(event, data) {
-
         // 상품별 예약판매가 조회
         $scope.searchSalePriceInfo();
         event.preventDefault();
@@ -231,7 +270,6 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
 
     // 상품별 예약판매가 조회
     $scope.searchSalePriceInfo = function(){
-
         if( isEmptyObject( $("#prodCd").val()) ) {
             $scope._popMsg("상품을 선택해주세요.");
             return false;
@@ -254,24 +292,19 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
                 $scope.searchSalePriceList();
             }
         );
-
     };
 
     // 상품별 예약판매가 그리드 조회
     $scope.searchSalePriceList = function(){
-
         var params = {};
-
         // 조회일자 '전체기간' 선택에 따른 params
         if(!$scope.isChecked){
             params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         }
-
         params.prodCd = $("#prodCd").val();
         params.storeCd = $("#storeCd").val();
         params.listScale = $scope.listScaleCombo1.text;
-
         // console.log(params);
 
         $scope._inquirySub('/base/price/salePriceResve/storeSalePriceResve/getStoreProdSalePriceResveList.sb', params, function() {
@@ -339,7 +372,6 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
 
     // 가격 변경
     $scope.calcAmt = function(item){
-
         // console.log('calcAmt',item);
         var costUprc = item.costUprc;
         var saleUprc = item.saleUprc;
@@ -624,6 +656,12 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
         });
     }
 
+    // isValidDate, format: yyyyMMdd
+    $scope.isValidDate = function (str_yyyyMMdd) {
+        var pattern = /[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])/;
+        return pattern.test(str_yyyyMMdd);
+    };
+
     // 수정
     $scope.saveProdPrice = function(){
 
@@ -637,6 +675,14 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
                     }
                 }
 
+                if (!$scope.isValidDate($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
+                    $scope._popMsg(messages["salePriceResve.startDate"] + " " + messages["member.excel.upload.invalid.date"]);
+                    return false;
+                }
+                if (!$scope.isValidDate($scope.flex.collectionView.items[i].endDate.replaceAll('-', ''))) {
+                    $scope._popMsg(messages["salePriceResve.endDate"] + " " + messages["member.excel.upload.invalid.date"]);
+                    return false;
+                }
                 if(Number(now) >= Number($scope.flex.collectionView.items[i].startDate.replaceAll('-', ''))) {
                     $scope._popMsg(messages["salePriceResve.startDate"] + "는 " + messages["salePriceResve.resveDate.chk.msg"]);
                     return false;
@@ -832,6 +878,165 @@ app.controller('storeProdSalePriceResveCtrl', ['$scope', '$http', function ($sco
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
     $scope.prodShow = function () {
         $scope._broadcast('prodCtrl');
+    };
+
+    // 조회조건 엑셀다운로드
+    $scope.excelDownloadProdPrice = function () {
+        if( isEmptyObject( $("#prodCd").val()) ) {
+            $scope._popMsg("상품을 선택해주세요.");
+            return false;
+        }
+
+        var params = {};
+        // 조회일자 '전체기간' 선택에 따른 params
+        if(!$scope.isChecked){
+            params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+            params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        }
+        params.prodCd = $("#prodCd").val();
+        params.storeCd = $("#storeCd").val();
+
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('storeProdSalePriceResveExcelCtrl', params);
+        });
+    };
+
+}]);
+
+
+/**
+ *  엑셀다운로드 그리드 생성
+ */
+app.controller('storeProdSalePriceResveExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('storeProdSalePriceResveExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.gChk                 = messages["cmm.chk"];
+        dataItem.startDate            = messages["salePriceResve.startDate"];
+        dataItem.endDate              = messages["salePriceResve.endDate"];
+        dataItem.storeCd              = messages["salePriceResve.storeCd"];
+        dataItem.storeNm              = messages["salePriceResve.storeNm"];
+        dataItem.hqSaleUprc           = messages["salePriceResve.salePrice"];
+        dataItem.saleUprcP            = messages["salePriceResve.salePrice"];
+        dataItem.saleUprc             = messages["salePriceResve.salePrice"];
+        dataItem.hqStinSaleUprc       = messages["salePriceResve.stinSaleUprc"];
+        dataItem.stinSaleUprcP        = messages["salePriceResve.stinSaleUprc"];
+        dataItem.stinSaleUprc         = messages["salePriceResve.stinSaleUprc"];
+        dataItem.hqDlvrSaleUprc       = messages["salePriceResve.dlvrSaleUprc"];
+        dataItem.dlvrSaleUprcP        = messages["salePriceResve.dlvrSaleUprc"];
+        dataItem.dlvrSaleUprc         = messages["salePriceResve.dlvrSaleUprc"];
+        dataItem.hqPackSaleUprc       = messages["salePriceResve.packSaleUprc"];
+        dataItem.packSaleUprcP        = messages["salePriceResve.packSaleUprc"];
+        dataItem.packSaleUprc         = messages["salePriceResve.packSaleUprc"];
+        dataItem.prcCtrlFg            = messages["salePriceResve.prcCtrlFg"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
+    };
+
+    // <-- 검색 호출 -->
+    $scope.$on("storeProdSalePriceResveExcelCtrl", function (event, data) {
+        $scope.searchExcelList(data);
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/base/price/salePriceResve/storeSalePriceResve/getStoreProdSalePriceResveExcelList.sb", params, function() {
+            if ($scope.excelFlexProdSalePriceResve.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            // 조회한 값으로 마진금액, 마진율 계산
+            for (var i = 0; i < $scope.excelFlexProdSalePriceResve.collectionView.items.length; i++) {
+                $scope.calcAmt($scope.excelFlexProdSalePriceResve.collectionView.items[i]);
+                $scope.excelFlexProdSalePriceResve.collectionView.commitEdit();
+            }
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlexProdSalePriceResve, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, "상품별 판매가관리_" + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
+    // <-- //검색 호출 -->
+
+    // 가격 변경
+    $scope.calcAmt = function(item){
+        // console.log('calcAmt',item);
+        var costUprc = item.costUprc;
+        var saleUprc = item.saleUprc;
+        var splyUprc = item.storeSplyUprc;
+        var poUnitQty =  item.poUnitQty;
+
+        item.hqMarginAmt = (splyUprc - costUprc); // 본사마진금액
+        item.hqMarginRate = (splyUprc - costUprc) / costUprc * 100; // 본사마진율
+        item.saleUprcAmt = (saleUprc - poUnitQty); // 현재판매금액
+        item.storeMarginAmt = ((saleUprc - poUnitQty) - splyUprc); // 매장마진금액
+        item.storeMarginRate = ((saleUprc - poUnitQty) - splyUprc) / (saleUprc - poUnitQty) * 100; // 매장마진율
     };
 
 }]);
