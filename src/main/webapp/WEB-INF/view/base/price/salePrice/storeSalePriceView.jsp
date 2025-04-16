@@ -382,10 +382,10 @@
       <%-- 페이지 스케일  --%>
       <wj-combo-box
               class="w100px fl"
-              id="listScaleBox"
+              id="listScaleBox2"
               ng-model="listScale"
-              control="listScaleCombo"
-              items-source="_getComboData('listScaleBox')"
+              control="listScaleCombo2"
+              items-source="_getComboData('listScaleBox2')"
               display-member-path="name"
               selected-value-path="value"
               is-editable="false"
@@ -525,7 +525,7 @@
   var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20240823.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePrice/storeSalePrice.js?ver=20250416.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
