@@ -410,6 +410,28 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
         }
 
+        // 소수점 제거
+        var input_str = params.content.match(/(\d+)(\.\d+)/g); // 소수점있는숫자만
+        if(input_str != null) {
+            if(input_str.length > 0) {
+                for(var i=0; i<input_str.length; i++) {
+                    params.content = params.content.replace(input_str[i], Math.floor(input_str[i]));
+                }
+            }
+        }
+        // 180pt 이상 줄이기
+        var input_str2 = params.content.match(/\d+/g); // 숫자만
+        if(input_str2 != null) {
+            if(input_str2.length > 0) {
+                for(var i=0; i<input_str2.length; i++) {
+                    if(input_str2[i] > 180) {
+                        params.content = params.content.replace(input_str2[i]+"pt", "180pt");
+                    }
+
+                }
+            }
+        }
+
         //보안때문에 게시판에서 스크립트 및 액션이벤트 사용하지 못하도록 막음.
         //내용에 script 또는 on이벤트가 들어있는 경우 저장하지 못함.
         if(params.content.toLowerCase().indexOf('script') >= 0
