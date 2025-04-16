@@ -24,6 +24,11 @@ app.controller('storeStoreSalePriceResveAddCtrl', ['$scope', '$http', function (
 
     $scope._setComboData("useYn", useYnData); // 사용여부
 
+    // 콤보박스 데이터 Set
+    $scope._setComboData("listScaleBox4", gvListScaleBoxData2);
+
+    $scope.popStoreSaleUprcApply = true;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -122,11 +127,6 @@ app.controller('storeStoreSalePriceResveAddCtrl', ['$scope', '$http', function (
             }
         }
     };
-
-    // 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox4", gvListScaleBoxData);
-
-    $scope.popStoreSaleUprcApply = true;
 
     $scope.$on("storeStoreSalePriceResveAddCtrl", function(event, data) {
         // 상품판매가 조회

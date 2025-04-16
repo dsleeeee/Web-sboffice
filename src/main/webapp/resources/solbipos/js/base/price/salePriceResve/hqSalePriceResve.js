@@ -65,6 +65,30 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('hqSalePriceResveCtrl', $scope, $http, false));
 
+    // 콤보박스 데이터 Set
+    $scope._setComboData("listScaleBox", gvListScaleBoxData2);
+
+    // 조회조건 콤보박스 데이터 Set
+    $scope._setComboData("saleAmtOption", saleAmtOptionFg);
+    $scope._setComboData("changeUnit", unitFg);
+    $scope._setComboData("changeMode", modeFg);
+
+    $scope._setComboData("storeStinSaleUprcOption", stinSaleAmtOptionFg);
+    $scope._setComboData("stinSaleUprcChangeUnit", unitFg);
+    $scope._setComboData("stinSaleUprcChangeMode", modeFg);
+
+    $scope._setComboData("storeDlvrSaleUprcOption", dlvrSaleAmtOptionFg);
+    $scope._setComboData("dlvrSaleUprcChangeUnit", unitFg);
+    $scope._setComboData("dlvrSaleUprcChangeMode", modeFg);
+
+    $scope._setComboData("storePackSaleUprcOption", packSaleAmtOptionFg);
+    $scope._setComboData("packSaleUprcChangeUnit", unitFg);
+    $scope._setComboData("packSaleUprcChangeMode", modeFg);
+
+    $scope._setComboData("storeSaveFg", storeSaveFg);
+
+    $scope.saleUprcApply = true;
+
     // 조회일자 셋팅
     $scope.srchStartDate = wcombo.genDateVal("#srchTimeStartDate", gvStartDate);
     $scope.srchEndDate   = wcombo.genDateVal("#srchTimeEndDate", getOneMonthLater());
@@ -210,28 +234,6 @@ app.controller('hqSalePriceResveCtrl', ['$scope', '$http', function ($scope, $ht
             }
         }
     };
-
-    // 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox", gvListScaleBoxData);
-    $scope._setComboData("saleAmtOption", saleAmtOptionFg);
-    $scope._setComboData("changeUnit", unitFg);
-    $scope._setComboData("changeMode", modeFg);
-
-    $scope._setComboData("storeStinSaleUprcOption", stinSaleAmtOptionFg);
-    $scope._setComboData("stinSaleUprcChangeUnit", unitFg);
-    $scope._setComboData("stinSaleUprcChangeMode", modeFg);
-
-    $scope._setComboData("storeDlvrSaleUprcOption", dlvrSaleAmtOptionFg);
-    $scope._setComboData("dlvrSaleUprcChangeUnit", unitFg);
-    $scope._setComboData("dlvrSaleUprcChangeMode", modeFg);
-
-    $scope._setComboData("storePackSaleUprcOption", packSaleAmtOptionFg);
-    $scope._setComboData("packSaleUprcChangeUnit", unitFg);
-    $scope._setComboData("packSaleUprcChangeMode", modeFg);
-
-    $scope._setComboData("storeSaveFg", storeSaveFg);
-
-    $scope.saleUprcApply = true;
 
     // 전체기간 체크박스 클릭이벤트
     $scope.isChkDt = function() {

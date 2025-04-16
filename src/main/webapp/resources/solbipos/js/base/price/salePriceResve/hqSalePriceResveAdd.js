@@ -29,7 +29,9 @@ app.controller('hqSalePriceResveAddCtrl', ['$scope', '$http', function ($scope, 
     angular.extend(this, new RootController('hqSalePriceResveAddCtrl', $scope, $http, true));
 
     // 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox2", gvListScaleBoxData);
+    $scope._setComboData("listScaleBox2", gvListScaleBoxData2);
+
+    // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("srchProdHqBrandCd", userHqBrandCdComboList); // 상품브랜드
     $scope._setComboData("addStoreSaveFg", addStoreSaveFg);
     $scope._setComboData("useYn", useYnData); // 사용여부
