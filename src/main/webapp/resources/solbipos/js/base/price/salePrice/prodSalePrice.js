@@ -54,6 +54,9 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
         return $scope.prodInfo;
     };
 
+    // 콤보박스 데이터 Set
+    $scope._setComboData("listScaleBox", gvListScaleBoxData2);
+
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("saleAmtOption", saleAmtOptionFg);
     $scope._setComboData("stinSaleUprcOption", stinSaleAmtOptionFg);
@@ -318,6 +321,7 @@ app.controller('prodSalePriceCtrl', ['$scope', '$http', function ($scope, $http)
         params.momsStoreFg04 = $scope.momsStoreFg04;
         params.momsStoreFg05 = $scope.momsStoreFg05;
     }
+    params.listScale = $scope.listScaleCombo.text;
     // console.log(params);
 
     $scope._inquirySub('/base/price/salePrice/prodSalePrice/getProdSalePriceList.sb', params, function() {

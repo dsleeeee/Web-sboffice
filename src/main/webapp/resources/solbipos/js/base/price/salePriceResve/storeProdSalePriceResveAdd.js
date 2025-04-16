@@ -22,7 +22,7 @@ app.controller('storeProdSalePriceResveAddCtrl', ['$scope', '$http', function ($
     angular.extend(this, new RootController('storeProdSalePriceResveAddCtrl', $scope, $http, true));
 
     // 콤보박스 데이터 Set
-    $scope._setComboData("listScaleBox2", gvListScaleBoxData);
+    $scope._setComboData("listScaleBox2", gvListScaleBoxData2);
 
     $scope.popProdSaleUprcApply = true;
 
