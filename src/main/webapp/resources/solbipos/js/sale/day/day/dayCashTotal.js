@@ -105,6 +105,23 @@ app.controller('dayTotalCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   // 일별종합 리스트 조회
   $scope.searchDayTotalList = function () {
+
+    var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      s_alert.pop(messages['cmm.dateChk.error']);
+      return false;
+    }
+
+    // 조회일자 최대 1년(365일) 제한
+    if (diffDay > 365) {
+      s_alert.pop(messages['cmm.dateOver.1year.error']);
+      return false;
+    }
+
     $scope.searchedStoreCd = $("#dayTotalSelectStoreCd").val();
     // 파라미터
     var params       = {};

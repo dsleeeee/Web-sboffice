@@ -223,4 +223,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/payMethod/mcoupon/mcoupon.js?ver=20241219.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/appr/payMethod/mcoupon/mcoupon.js?ver=20250416.01" charset="utf-8"></script>

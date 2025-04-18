@@ -205,7 +205,7 @@
 	var arrPayCol   = payCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/payFg/prodPayFg.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/prod/payFg/prodPayFg.js?ver=20250415.01" charset="utf-8"></script>
 
 <%-- 결제내역 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/payFg.jsp">

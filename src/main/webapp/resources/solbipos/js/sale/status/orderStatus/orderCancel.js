@@ -58,8 +58,8 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
                 var col = ht.panel.columns[ht.col];
                 if( col.binding === "cancelCnt") {
                     var params = {};
-                    params.startDate    = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
-                    params.endDate      = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
+                    params.startDate    = $scope.startDate;
+                    params.endDate      = $scope.endDate;
                     params.storeCds     = $("#orderCancelSelectStoreCd").val();
                     params.cancelFg     = cancelFg;
                     $scope._broadcast('orderCancelCtrl', params);
@@ -78,6 +78,22 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
     // 기간내 전체취소건수 조회
     $scope.orderCancelPeriod = function () {
 
+        var startDt = new Date(wijmo.Globalize.format($scope.ocStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.ocEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         if($("#orderCancelSelectStoreCd").val() === ""){
           $scope._popMsg(messages["orderStatus.storeCd"] + messages["cmm.require.select"]); // 매장코드(을)를 선택해주세요.
           return false;
@@ -90,6 +106,8 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
         params.cancelFg     = $scope.cancelFgCombo.selectedValue;
 
         cancelFg            = params.cancelFg;
+        $scope.startDate    = params.startDate;
+        $scope.endDate      = params.endDate;
 
         // 주문취소 grid 초기화
         var wjGridOrderCancel = wijmo.Control.getControl("#wjGridOrderCancel");
@@ -190,8 +208,9 @@ app.controller('orderCancelSrch3Ctrl', ['$scope', '$http', function ($scope, $ht
                 var col = ht.panel.columns[ht.col];
                 if( col.binding === "cancelCnt") {
                     var params = {};
-                    params.startDate    = wijmo.Globalize.format($scope.ocStartDate.value, 'yyyyMMdd');
-                    params.endDate      = wijmo.Globalize.format($scope.ocEndDate.value, 'yyyyMMdd');
+                    var scope = agrid.getScope('orderCancelSrch1Ctrl');
+                    params.startDate    = scope.startDate;
+                    params.endDate      = scope.endDate;
                     params.empNo        = selectedRow.empNo;
                     params.storeCds     = $("#orderCancelSelectStoreCd").val();
                     params.cancelFg     = cancelFg;

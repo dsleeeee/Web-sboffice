@@ -101,5 +101,7 @@ public interface TerminalManageMapper {
 
     /** 대표 POS 등록여부 확인 */
     int getChkBaseVanYn(StoreTerminalVO storeTerminalVO);
+
+    List<DefaultMap<String>> getChkTerminalNull(StoreTerminalVO storeTerminalVO);
 }
 

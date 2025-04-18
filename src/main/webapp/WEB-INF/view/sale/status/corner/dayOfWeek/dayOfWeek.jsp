@@ -136,4 +136,4 @@
 
 <script type="text/javascript">
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayOfWeek/dayOfWeek.js?ver=20240227.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/corner/dayOfWeek/dayOfWeek.js?ver=20250415.01" charset="utf-8"></script>

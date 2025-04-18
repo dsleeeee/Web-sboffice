@@ -213,7 +213,7 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/dc/dcfg.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dc/dcfg.js?ver=20250415.01" charset="utf-8"></script>
 
 <%-- 상품매출내역 팝업 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/prod.jsp">

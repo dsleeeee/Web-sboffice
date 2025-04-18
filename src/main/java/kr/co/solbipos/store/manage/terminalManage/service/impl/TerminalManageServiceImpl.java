@@ -394,4 +394,9 @@ public class TerminalManageServiceImpl implements TerminalManageService{
         return procCnt;
     }
 
+    @Override
+    public List<DefaultMap<String>> getChkTerminalNull(StoreTerminalVO storeTerminalVO) {
+        return mapper.getChkTerminalNull(storeTerminalVO);
+    }
+
 }

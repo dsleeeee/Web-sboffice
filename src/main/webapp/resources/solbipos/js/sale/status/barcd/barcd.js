@@ -114,6 +114,24 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
   // 바코드별매출 리스트 조회
   $scope.searchBarcdList = function (isPageChk) {
 
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchBarcdStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchBarcdEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  $("div.prodRankLayer").hide();
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  $("div.prodRankLayer").hide();
+		  return false;
+	  }
+
     // 파라미터
     var params       = {};
     params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
@@ -186,6 +204,24 @@ app.controller('barcdMainCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   //엑셀 다운로드
   $scope.excelDownloadBarcd = function () {
+
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchBarcdStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchBarcdEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  $("div.prodRankLayer").hide();
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  $("div.prodRankLayer").hide();
+		  return false;
+	  }
 	  // 파라미터
 	  var params     = {};
 	  $scope._broadcast('barcdExcelCtrl',params);

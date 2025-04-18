@@ -148,6 +148,23 @@ app.controller('reportCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     
     $scope.reportCtrlList = function(data){
+
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
     	console.log("scope.orgnFg : " + $scope.orgnFg					);
     	console.log("매장                 : " + $("#reportSelectStoreCd").val()	);
 
@@ -1719,6 +1736,23 @@ app.controller('reportCtrl_excel', ['$scope', '$http', '$timeout', function ($sc
 
 	//excelDownload		START	----------------------------------------------------------------------------------------------------------------------
 	$scope.excelDownload = function(){
+
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
 		var reportCtrl_sl = agrid.getScope("reportCtrl_sl");      //매출종합
 		if (reportCtrl_sl.flex.rows.length <= 0) {
 			  //$scope._popMsg( messages["excelUpload.not.downloadData"] );	//다운로드 할 데이터가 없습니다.

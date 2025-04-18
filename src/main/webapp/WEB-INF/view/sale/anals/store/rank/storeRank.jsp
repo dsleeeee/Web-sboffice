@@ -197,7 +197,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/rank/storeRank.js?ver=20250416.01" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/anals/store/rank/storeIndexNo.jsp">
 	<c:param name="menuCd" value="${menuCd}"/>

@@ -124,11 +124,6 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("dayTimeCtrl", function (event, data) {
-        if($scope.startTime*1 > $scope.endTime*1){ // *1하는이유 : Time들이 String이라 int로 바꿀라고
-            $scope._popMsg(messages["day.time.startEnd"]); // 검색 시작 시간대가 검색 종료 시간대보다 큽니다.
-            return false;
-        }
-
         $scope.searchDayTimeList();
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
@@ -136,6 +131,23 @@ app.controller('dayTimeCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 과면세별 리스트 조회
     $scope.searchDayTimeList = function () {
+
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         $scope.searchedStoreCd = $("#dayTimeSelectStoreCd").val();
         // 파라미터
         var params= {};

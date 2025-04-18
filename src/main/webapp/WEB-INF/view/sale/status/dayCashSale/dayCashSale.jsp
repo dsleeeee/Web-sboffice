@@ -142,54 +142,54 @@
 </c:import>
 
 <%-- 할인구분별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayDc.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--<c:import url="/WEB-INF/view/sale/day/day/dayDc.jsp">--%>
+<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 과면세별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayTax.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 과면세별 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/day/day/dayTax.jsp">--%>
+<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 시간대별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayTime.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 시간대별 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/day/day/dayTime.jsp">--%>
+<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 상품분류별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayProdClass.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 상품분류별 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/day/day/dayProdClass.jsp">--%>
+<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 코너별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayCorner.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 코너별 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/day/day/dayCorner.jsp">--%>
+<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<c:if test="${orgnFg == 'STORE'}">
-    <%-- 외식테이블 레이어 --%>
-    <c:import url="/WEB-INF/view/sale/day/day/dayTable.jsp">
-        <c:param name="menuCd" value="${menuCd}"/>
-        <c:param name="menuNm" value="${menuNm}"/>
-    </c:import>
-</c:if>
+<%--<c:if test="${orgnFg == 'STORE'}">--%>
+<%--    &lt;%&ndash; 외식테이블 레이어 &ndash;%&gt;--%>
+<%--    <c:import url="/WEB-INF/view/sale/day/day/dayTable.jsp">--%>
+<%--        <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--        <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--    </c:import>--%>
+<%--</c:if>--%>
 
-<%-- 포스별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayPos.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 포스별 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/day/day/dayPos.jsp">--%>
+<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 
-<%-- 사원카드별 레이어 --%>
-<c:import url="/WEB-INF/view/sale/day/day/dayEmpCard.jsp">
-    <c:param name="menuCd" value="${menuCd}"/>
-    <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+<%--&lt;%&ndash; 사원카드별 레이어 &ndash;%&gt;--%>
+<%--<c:import url="/WEB-INF/view/sale/day/day/dayEmpCard.jsp">--%>
+<%--    <c:param name="menuCd" value="${menuCd}"/>--%>
+<%--    <c:param name="menuNm" value="${menuNm}"/>--%>
+<%--</c:import>--%>
 <%-- //탭페이지 레이어 --%>
 
 

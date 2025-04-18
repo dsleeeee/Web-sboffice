@@ -124,7 +124,7 @@
 
 	</div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/store/fg/storeFg.js?ver=20250416.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 --%>
 <c:import url="/WEB-INF/view/sale/com/popup/selectProdS.jsp">

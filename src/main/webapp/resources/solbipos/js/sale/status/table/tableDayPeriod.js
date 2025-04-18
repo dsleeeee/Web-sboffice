@@ -82,6 +82,22 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
     // 테이블별 설정기간 리스트 리스트 조회
     $scope.searchTableDayPeriodList = function (s, e, isPageChk) {
 
+        var startDt = new Date(wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         // 파라미터
         var params       = {};
         params.hqOfficeCd = $("#hqOfficeCd").val();
@@ -93,11 +109,6 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
         if(!$scope.isChecked){
             params.startDate = wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyyMMdd');
-        }
-
-        if(params.startDate > params.endDate){
-            $scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-            return false;
         }
 
         $scope.excelStartDate		= params.startDate;
@@ -119,6 +130,22 @@ app.controller('tableDayPeriodCtrl', ['$scope', '$http', '$timeout', function ($
 
     //엑셀 다운로드
     $scope.excelDownload = function () {
+
+        var startDt = new Date(wijmo.Globalize.format($scope.srchTableDayPeriodStartDate, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchTableDayPeriodEndDate, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
         // 파라미터
         var params = {};
 
