@@ -149,8 +149,8 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
 		  params.chkPop   = "tablePop";
 		  params.cornrCd   = selectedRow.cornrCd;
 		  params.storeCd   = selectedRow.storeCd;
-//        params.startDate = $scope.startDateForDt;
-//        params.endDate   = $scope.endDateForDt;
+		  params.startDate = $scope.startDateForExcel;
+		  params.endDate   = $scope.endDateForExcel;
           if (col.binding === "realSaleAmt") { // 실매출
 			  $scope._broadcast('cornerDayPeriodDtlCtrlSrch', params);
           }
@@ -189,6 +189,22 @@ app.controller('cornerDayPeriodMainCtrl', ['$scope', '$http', '$timeout', functi
 
   // 코너별매출 설정기간별 리스트 조회
   $scope.searchCornerDayPeriodList = function (isPageChk) {
+
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchCornerDayPeriodStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchCornerDayPeriodEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  return false;
+	  }
 	  
 	  if( $("#cornerDayPeriodSelectStoreCd").val() === ''){
 	    	 $scope._popMsg(messages["prodsale.day.require.selectStore"]); // 매장을 선택해 주세요.
@@ -320,8 +336,10 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	  // 다른 컨트롤러의 broadcast 받기(페이징 초기화)
 	  $scope.$on("cornerDayPeriodDtlCtrlSrch", function (event, data) {		  
 		  
-		$scope.storeCd   = data.storeCd;
-		$scope.cornrCd   = data.cornrCd;
+		$scope.storeCd   	= data.storeCd;
+		$scope.cornrCd   	= data.cornrCd;
+		$scope.startDateDtl = data.startDate;
+		$scope.endDateDtl	= data.endDate;
 
 	    $scope.searchCornerDayPeriodDtlList(false);
 	    // 기능수행 종료 : 반드시 추가
@@ -343,11 +361,11 @@ app.controller('cornerDayPeriodDtlCtrl', ['$scope', '$http','$timeout', function
 	        }else{
 	            $scope.startDateForDt = "";
 	            $scope.endDateForDt = "";
-	        }		  
+	        }
 	    
 	    // params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-	    params.startDate = $scope.startDateForDt;
-	    params.endDate   = $scope.endDateForDt;
+	    params.startDate = $scope.startDateDtl;
+	    params.endDate   = $scope.endDateDtl;
 	    params.storeCd   = $scope.storeCd;
 	    params.cornrCd   = $scope.cornrCd;
 	    params.isPageChk = isPageChk;

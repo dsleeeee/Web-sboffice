@@ -215,4 +215,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpPeriod.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderEmp/orderEmpPeriod.js?ver=20250416.01" charset="utf-8"></script>

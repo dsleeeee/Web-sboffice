@@ -70,4 +70,5 @@ public interface TerminalManageService {
     /** 터미널 콤보박스(코너사용설정) 선택값에 따른 터미널 환경설정 저장 */
     int chgTerminalEnv(StoreEnvVO storeEnvVO, SessionInfoVO sessionInfoVO);
 
+    List<DefaultMap<String>> getChkTerminalNull(StoreTerminalVO storeTerminalVO);
 }

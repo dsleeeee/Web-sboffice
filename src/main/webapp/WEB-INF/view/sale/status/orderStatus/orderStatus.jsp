@@ -166,7 +166,7 @@
   <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatus.js?ver=20250304.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderStatus.js?ver=20250415.01" charset="utf-8"></script>
 
 <%-- 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/orderStatus/orderStatusDtl.jsp">

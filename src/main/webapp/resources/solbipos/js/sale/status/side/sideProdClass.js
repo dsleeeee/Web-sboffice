@@ -47,6 +47,22 @@ app.controller('sideProdClassCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // 상품매출순위 리스트 조회
     $scope.searchProdClassList = function () {
+
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
         // 파라미터
         var params       = {};
         params.storeCd   = $("#pordClassSelectStoreCd").val();
@@ -57,10 +73,6 @@ app.controller('sideProdClassCtrl', ['$scope', '$http', '$timeout', function ($s
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
             console.log(params);
-        if(params.startDate > params.endDate){
-            $scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-            return false;
-        }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/side/side/sideProdClass.sb", params, function() {});
@@ -95,6 +107,23 @@ app.controller('sideProdClassCtrl', ['$scope', '$http', '$timeout', function ($s
 
     // 엑셀 다운로드
     $scope.excelDownloadClass = function () {
+
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         var params       = {};
         params.storeCd   = $("#pordClassSelectStoreCd").val();
         params.prodCd    = $("#srchProdCd").val();

@@ -285,7 +285,7 @@
   var arrAgencyCol = agencyCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20250401.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/terminalManage/terminal.js?ver=20250410.01" charset="utf-8"></script>
 
 <%-- 매장선택 레이어 팝업 --%>
 <%--<c:import url="/WEB-INF/view/store/manage/terminalManage/store.jsp">--%>
@@ -297,4 +297,8 @@
 
 <%-- 터미널정보복사 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/store/manage/terminalManage/copyTerminalInfo.jsp">
+</c:import>
+
+<%-- [매장정보]탭 터미널정보 입력 안내 팝업 --%>
+<c:import url="/WEB-INF/view/store/manage/storeManage/storeTerminalExample.jsp">
 </c:import>

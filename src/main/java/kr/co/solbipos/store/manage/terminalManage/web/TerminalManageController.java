@@ -429,4 +429,22 @@ public class TerminalManageController {
         return returnJson(Status.OK, result);
     }
 
+    /**
+     * 매장터미널관리 - 코너 터미널 목록 조회
+     * @param storeTerminalVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "terminalManage/getChkTerminalNull.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getChkTerminalNull(StoreTerminalVO storeTerminalVO , HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        List<DefaultMap<String>> cornerList = service.getChkTerminalNull(storeTerminalVO);
+
+        return returnListJson(Status.OK, cornerList, storeTerminalVO);
+    }
+
 }

@@ -178,7 +178,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/posExcclc/posExcclc/posExcclc.js?ver=20240605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/posExcclc/posExcclc/posExcclc.js?ver=20250415.01" charset="utf-8"></script>
 
 <%-- 본사 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/sale/status/posExcclc/posExcclc/posExcclcDetail.jsp">

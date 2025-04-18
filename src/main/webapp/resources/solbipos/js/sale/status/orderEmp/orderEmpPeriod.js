@@ -87,6 +87,22 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
   // 판매자별 설정기간 리스트 조회
   $scope.searchOrderEmpPeriodList = function (isPageChk) {
 
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchOrderEmpPeriodStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchOrderEmpPeriodEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  return false;
+	  }
+
     // 파라미터
     var params       = {};
     params.storeCd   = $("#orderEmpPeriodSelectStoreCd").val();
@@ -156,6 +172,22 @@ app.controller('orderEmpPeriodMainCtrl', ['$scope', '$http', '$timeout', functio
   
   //엑셀 다운로드
   $scope.excelDownloadDayPeriod = function () {
+
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchOrderEmpPeriodStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchOrderEmpPeriodEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  return false;
+	  }
 		// 파라미터
 		var params     = {};
 		$scope._broadcast('orderEmpPeriodExcelCtrl',params);

@@ -131,6 +131,22 @@ app.controller('goalMonthCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   // 월별 목표대비 매출분석 리스트 조회
   $scope.searchGoalMonthList = function (isPageChk) {
+
+      var startDt = new Date(wijmo.Globalize.format($scope.goalMonthStartDateCombo.value, 'yyyy-MM'));
+      var endDt = new Date(wijmo.Globalize.format($scope.goalMonthEndDateCombo.value, 'yyyy-MM'));
+      var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+
+      // 시작일자가 종료일자보다 빠른지 확인
+      if(startDt.getTime() > endDt.getTime()){
+          $scope._popMsg(messages['cmm.dateChk.error']);
+          return false;
+      }
+      // 조회일자 최대 3년(36개월) 제한
+      if (diffMonth > 36) {
+          $scope._popMsg(messages['cmm.dateOver.3year.error']);
+          return false;
+      }
+
     // 파라미터
     var params       = {};
     params.storeCd   = $("#goalMonthSelectStoreCd").val();
@@ -148,10 +164,6 @@ app.controller('goalMonthCtrl', ['$scope', '$http', '$timeout', function ($scope
 //  	  params.endDate 	 = params.endDate[0] + params.endDate[1] + endDay;
 	  $scope.excelStartDate = params.startDate;
 	  $scope.excelEndDate = params.endDate;
-	}
-	if(params.startDate > params.endDate){
-		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-		 	return false;
 	}
 	// 조회 수행 : 조회URL, 파라미터, 콜백함수
 	$scope._inquiryMain("/sale/anals/goal/month/list.sb", params, function() {
@@ -172,7 +184,23 @@ app.controller('goalMonthCtrl', ['$scope', '$http', '$timeout', function ($scope
 
   //엑셀 다운로드
   $scope.excelDownloadGoalMonth = function () {
-    var params = {};
+
+      var startDt = new Date(wijmo.Globalize.format($scope.goalMonthStartDateCombo.value, 'yyyy-MM'));
+      var endDt = new Date(wijmo.Globalize.format($scope.goalMonthEndDateCombo.value, 'yyyy-MM'));
+      var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+
+      // 시작일자가 종료일자보다 빠른지 확인
+      if(startDt.getTime() > endDt.getTime()){
+          $scope._popMsg(messages['cmm.dateChk.error']);
+          return false;
+      }
+      // 조회일자 최대 3년(36개월) 제한
+      if (diffMonth > 36) {
+          $scope._popMsg(messages['cmm.dateOver.3year.error']);
+          return false;
+      }
+
+      var params = {};
     
     $scope._broadcast('goalMonthExcelCtrl', params);
   };

@@ -133,6 +133,21 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 포스별매출월별 리스트 조회
     $scope.searchPosMonthList = function (isPageChk) {
 
+        var startDt = new Date(wijmo.Globalize.format($scope.startDate, 'yyyy-MM'));
+        var endDt = new Date(wijmo.Globalize.format($scope.endDate, 'yyyy-MM'));
+        var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+        // 조회일자 최대 3년(36개월) 제한
+        if (diffMonth > 36) {
+            $scope._popMsg(messages['cmm.dateOver.3year.error']);
+            return false;
+        }
+
         // 파라미터
         var params = {};
         params.storeCd = $("#posMonthSelectStoreCd").val();
@@ -202,6 +217,21 @@ app.controller('posMonthCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     //엑셀 다운로드
     $scope.excelDownloadDay = function () {
+
+        var startDt = new Date(wijmo.Globalize.format($scope.startDate, 'yyyy-MM'));
+        var endDt = new Date(wijmo.Globalize.format($scope.endDate, 'yyyy-MM'));
+        var diffMonth = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000 * 30); // 시 * 분 * 초 * 밀리세컨 * 월
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+        // 조회일자 최대 3년(36개월) 제한
+        if (diffMonth > 36) {
+            $scope._popMsg(messages['cmm.dateOver.3year.error']);
+            return false;
+        }
         // 파라미터
         var params = {};
 

@@ -167,6 +167,22 @@ app.controller('orderEmpDayCtrl', ['$scope', '$http', '$timeout', function ($sco
   // 판매자일자별 리스트 조회
   $scope.searchOrderEmpDayList = function (isPageChk) {
 
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  return false;
+	  }
+
     // 파라미터
     var params       = {};
     params.storeCd   = $("#orderEmpDaySelectStoreCd").val();
@@ -309,6 +325,22 @@ app.controller('orderEmpDayCtrl', ['$scope', '$http', '$timeout', function ($sco
 
   // 엑셀 다운로드
   $scope.excelDownloadOrderEmpDay = function () {
+
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  return false;
+	  }
 	    // 파라미터
 	    var params     = {};
 		$scope._broadcast('orderEmpDayExcelCtrl',params);

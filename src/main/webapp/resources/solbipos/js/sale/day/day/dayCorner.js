@@ -196,6 +196,22 @@ app.controller('dayCornerCtrl', ['$scope', '$http', '$timeout', function ($scope
 
     $scope.searchDayCorner = function() {
 
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         if($("#dayCornerStoreCd").val().split(",").length > 10) {
             $scope._popMsg(messages["day.corner.storeCntAlert"]); // 매장은 최대 10개 선택 가능합니다.
             return false;

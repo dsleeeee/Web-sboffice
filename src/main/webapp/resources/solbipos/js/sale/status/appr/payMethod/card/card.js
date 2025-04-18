@@ -192,6 +192,22 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
   // 신용카드 승인현황 리스트 조회
   $scope.searchApprCardList = function (isPageChk) {
 
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchApprCardStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchApprCardEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  return false;
+	  }
+
     // 파라미터
     var params       = {};
     params.storeCd   = $("#apprCardSelectStoreCd").val();
@@ -211,10 +227,6 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
 	if(!$scope.isChecked){
 	  params.startDate = wijmo.Globalize.format($scope.srchApprCardStartDate.value, 'yyyyMMdd');
 	  params.endDate = wijmo.Globalize.format($scope.srchApprCardEndDate.value, 'yyyyMMdd');
-	}
-	if(params.startDate > params.endDate){
-		 	$scope._popMsg(messages["prodsale.dateChk"]); // 조회종료일자가 조회시작일자보다 빠릅니다.
-		 	return false;
 	}
 
 	$scope.excelStartDate	= params.startDate;
@@ -261,6 +273,22 @@ app.controller('apprCardCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
   //엑셀 다운로드
   $scope.excelDownload = function () {
+
+	  var startDt = new Date(wijmo.Globalize.format($scope.srchApprCardStartDate.value, 'yyyy-MM-dd'));
+	  var endDt = new Date(wijmo.Globalize.format($scope.srchApprCardEndDate.value, 'yyyy-MM-dd'));
+	  var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+	  // 시작일자가 종료일자보다 빠른지 확인
+	  if(startDt.getTime() > endDt.getTime()){
+		  $scope._popMsg(messages['cmm.dateChk.error']);
+		  return false;
+	  }
+
+	  // 조회일자 최대 1년(365일) 제한
+	  if (diffDay > 365) {
+		  $scope._popMsg(messages['cmm.dateOver.1year.error']);
+		  return false;
+	  }
 	// 파라미터
     var params       = {};
 

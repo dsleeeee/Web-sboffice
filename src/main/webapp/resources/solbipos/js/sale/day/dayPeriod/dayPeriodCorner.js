@@ -79,6 +79,22 @@ app.controller('dayPeriodCornerCtrl', ['$scope', '$http', '$timeout', function (
 
     $scope.searchDayPeriodCorner = function() {
 
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1년(365일) 제한
+        if (diffDay > 365) {
+            $scope._popMsg(messages['cmm.dateOver.1year.error']);
+            return false;
+        }
+
         // 본사권한 로그인 시
         if(orgnFg !== null && orgnFg === 'HQ') {
             // 매장코드 값 필수
