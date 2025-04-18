@@ -397,10 +397,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.startDate = dateToDaystring($scope.startDate).replaceAll("-","");
         params.endDate = dateToDaystring($scope.endDate).replaceAll("-","");
         params.remark = $scope.remark;
-        var html = $('#summernote').summernote('code');
-        params.content = html;
         params.storeCds = $("#boardInfoStoreCd").val();
-
         // 신규
         if(params.status === "I") {
             params.boardCd = boardCd;
@@ -410,12 +407,15 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             params.boardSeqNo = $scope.selectedBoardInfo.boardSeqNo;
         }
 
+        var html = $('#summernote').summernote('code');
+        params.content = html;
+        
         // 소수점 제거
         var input_str = params.content.match(/(\d+)(\.\d+)/g); // 소수점있는숫자만
         if(input_str != null) {
             if(input_str.length > 0) {
                 for(var i=0; i<input_str.length; i++) {
-                    params.content = params.content.replace(input_str[i], Math.floor(input_str[i]));
+                    params.content = params.content.replace(input_str[i]+"pt", Math.floor(input_str[i])+"pt");
                 }
             }
         }
