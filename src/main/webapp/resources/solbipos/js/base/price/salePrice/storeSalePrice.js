@@ -731,7 +731,6 @@ app.controller('storeSalePriceCtrl', ['$scope', '$http', function ($scope, $http
         var params = {};
         params.storeCd = $("#searchStoreCd").val();
         params.prodClassCd = $scope.prodClassCd;
-        params.listScale = $scope.listScaleCombo.text;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         if(brandUseFg === "1" && orgnFg === "HQ"){
