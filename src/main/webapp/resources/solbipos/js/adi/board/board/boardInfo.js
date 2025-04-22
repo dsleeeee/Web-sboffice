@@ -361,6 +361,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             $scope.targetFg = "5";
         }
 
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+
         var params = {};
         // 신규, 수정
         params.status = $("#lblStatus").text();
@@ -409,6 +411,93 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
 
         var html = $('#summernote').summernote('code');
         params.content = html;
+
+
+        // 특정 구문 찾기 <v:shape ~ </v:shape>
+        var input_str = "";
+        // 특정 구문 몇번나오는지 체크
+        var str_chk = params.content.match(/(\<v:shape)(\s+)/gi); // <v:shape 전체공백 (대소문자전체)
+        if(str_chk != null) {
+            var startWord = "<v:shape ";
+            var endWord = "</v:shape>";
+            var startCnt = 0;
+            var endCnt = 0;
+            for (var i = 0; i < str_chk.length; i++) {
+                startCnt = params.content.indexOf(startWord, endCnt+(endWord.length));
+                endCnt = params.content.indexOf(endWord, endCnt+(endWord.length));
+
+                input_str = params.content.substring(startCnt, endCnt+(endWord.length));
+
+                // 특정 구문에서 width: ~ pt,px 체크하기
+                var chkTot = "";
+                // 소수점있는숫자만 pt
+                var chk1 = input_str.match(/(\width:)(\d+)(\.\d+)(\pt)/gi); // width: 소수점있는숫자만 pt (대소문자전체)
+                var chk2 = input_str.match(/(\width:)(\s+)(\d+)(\.\d+)(\pt)/gi); // width: 전체공백 소수점있는숫자만 pt (대소문자전체)
+                var chk3 = input_str.match(/(\width:)(\d+)(\.\d+)(\s+)(\pt)/gi); // width: 소수점있는숫자만 전체공백 pt (대소문자전체)
+                var chk4 = input_str.match(/(\width:)(\s+)(\d+)(\.\d+)(\s+)(\pt)/gi); // width: 전체공백 소수점있는숫자만 전체공백 pt (대소문자전체)
+                if(chk1 !== null) { chkTot = chkTot + chk1 + "," }
+                if(chk2 !== null) { chkTot = chkTot + chk2 + "," }
+                if(chk3 !== null) { chkTot = chkTot + chk3 + "," }
+                if(chk4 !== null) { chkTot = chkTot + chk4 + "," }
+                // 소수점있는숫자만 px
+                var chk5 = input_str.match(/(\width:)(\d+)(\.\d+)(\px)/gi); // width: 소수점있는숫자만 px (대소문자전체)
+                var chk6 = input_str.match(/(\width:)(\s+)(\d+)(\.\d+)(\px)/gi); // width: 전체공백 소수점있는숫자만 px (대소문자전체)
+                var chk7 = input_str.match(/(\width:)(\d+)(\.\d+)(\s+)(\px)/gi); // width: 소수점있는숫자만 전체공백 px (대소문자전체)
+                var chk8 = input_str.match(/(\width:)(\s+)(\d+)(\.\d+)(\s+)(\px)/gi); // width: 전체공백 소수점있는숫자만 전체공백 px (대소문자전체)
+                if(chk5 !== null) { chkTot = chkTot + chk5 + "," }
+                if(chk6 !== null) { chkTot = chkTot + chk6 + "," }
+                if(chk7 !== null) { chkTot = chkTot + chk7 + "," }
+                if(chk8 !== null) { chkTot = chkTot + chk8 + "," }
+                // 숫자만 pt
+                var chk9 = input_str.match(/(\width:)(\d+)(\pt)/gi); // width: 숫자만 pt (대소문자전체)
+                var chk10 = input_str.match(/(\width:)(\s+)(\d+)(\pt)/gi); // width: 전체공백 숫자만 pt (대소문자전체)
+                var chk11 = input_str.match(/(\width:)(\d+)(\s+)(\pt)/gi); // width: 숫자만 전체공백 pt (대소문자전체)
+                var chk12 = input_str.match(/(\width:)(\s+)(\d+)(\s+)(\pt)/gi); // width: 전체공백 숫자만 전체공백 pt (대소문자전체)
+                if(chk9 !== null) { chkTot = chkTot + chk9 + "," }
+                if(chk10 !== null) { chkTot = chkTot + chk10 + "," }
+                if(chk11 !== null) { chkTot = chkTot + chk11 + "," }
+                if(chk12 !== null) { chkTot = chkTot + chk12 + "," }
+                // 숫자만 px
+                var chk13 = input_str.match(/(\width:)(\d+)(\px)/gi); // width: 숫자만 px (대소문자전체)
+                var chk14 = input_str.match(/(\width:)(\s+)(\d+)(\px)/gi); // width: 전체공백 숫자만 px (대소문자전체)
+                var chk15 = input_str.match(/(\width:)(\d+)(\s+)(\px)/gi); // width: 숫자만 전체공백 px (대소문자전체)
+                var chk16 = input_str.match(/(\width:)(\s+)(\d+)(\s+)(\px)/gi); // width: 전체공백 숫자만 전체공백 px (대소문자전체)
+                if(chk13 !== null) { chkTot = chkTot + chk13 + "," }
+                if(chk14 !== null) { chkTot = chkTot + chk14 + "," }
+                if(chk15 !== null) { chkTot = chkTot + chk15 + "," }
+                if(chk16 !== null) { chkTot = chkTot + chk16 + "," }
+                chkTot = chkTot.substring(0, chkTot.length-1);
+
+                var input_str2 = "";
+                if(chkTot != null) {
+                    var arr = chkTot.split(",");
+                    if (arr.length > 0) {
+                        for (var i = 0; i < arr.length; i++) {
+                            var data = {};
+                            data.chkTot1 = arr[i]; // width: ~ pt,px
+                            data.chkTot2 = arr[i].match(/(\d+)(\.\d+)/g); // 소수점있는숫자만
+                            if (data.chkTot2 === null) {
+                                data.chkTot2 = arr[i].match(/\d+/g); // 숫자만
+                            }
+                            data.chkTot3 = arr[i].match(/(\pt)/gi); // pt
+                            if (data.chkTot3 === null) {
+                                data.chkTot3 = arr[i].match(/(\px)/gi); // px
+                            }
+                            // arr.push(data);
+
+                            // 소수점제거 (round 반올림, ceil 올림, floor내림)
+                            if (Math.ceil(data.chkTot2) > 100) {
+                                // 100pt, 100px 이상 줄이기
+                                input_str2 = input_str.replace(data.chkTot1, "width: 100" + data.chkTot3);
+
+                                params.content = params.content.replace(input_str, input_str2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         //보안때문에 게시판에서 스크립트 및 액션이벤트 사용하지 못하도록 막음.
         //내용에 script 또는 on이벤트가 들어있는 경우 저장하지 못함.
@@ -561,6 +650,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                         }
                     }
 
+                    $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
                     $scope._popMsg("저장되었습니다.");
                     $scope.close();
                 }
@@ -700,10 +790,12 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
     };
 
     $scope.setTargetFg = function (){
-        console.log(partOrgnCd + " " + partOrgnNm);
-        if($scope.targetFg === "6"){
-            $("#boardInfoStoreCd").val(partOrgnCd);
-            $("#boardInfoStoreNm").val(partOrgnNm);
+        if($scope.targetFg !== undefined) {
+            console.log(partOrgnCd + " " + partOrgnNm);
+            if($scope.targetFg === "6"){
+                $("#boardInfoStoreCd").val(partOrgnCd);
+                $("#boardInfoStoreNm").val(partOrgnNm);
+            }
         }
     };
 
