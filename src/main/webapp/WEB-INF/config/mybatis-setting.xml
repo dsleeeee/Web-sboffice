@@ -372,7 +372,7 @@
     <typeAlias alias="soldOutResveVO" type="kr.co.solbipos.base.prod.soldOutResve.service.SoldOutResveVO"/>
     <!-- 기초관리 > 상품관리 > 옵션관리 -->
     <typeAlias alias="prodOptionVO" type="kr.co.solbipos.base.prod.prodOption.service.ProdOptionVO"/>
-    <!-- 기초관리 > 상품관리 > 상품정보조회 -->
+    <!-- 기초관리 > 상품관리 > 상품구성정보조회 -->
     <typeAlias alias="prodInfoSearchVO" type="kr.co.solbipos.base.prod.prodInfoSearch.service.ProdInfoSearchVO"/>
     <!-- 기초관리 > 상품관리 > 비노출관리 -->
     <typeAlias alias="kioskDisplayVO" type="kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO"/>
