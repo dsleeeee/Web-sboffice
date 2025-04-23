@@ -89,7 +89,7 @@
                 <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE' && touchKeyEnvstVal == '2' && (touchKeyEnvstVal2 == '0' || touchKeyEnvstVal2 == '2')}">style="visibility: hidden"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showGrpNm')">
                     <s:message code="touchKey.grpNm"/>
                 </button>
-                <c:if test="${userId == 'ds021' or userId == 'ds024' or userId == 'h0360'}">
+                <c:if test="${userId == 'ds021' or userId == 'ds024' or userId == 'h0360' or userId == 'ds000153'}">
                     <%-- 본사판매가관리 --%>
                     <button class="btn_skyblue fl ml5" id="btnGrpNm"<c:choose><c:when test="${orgnFg == 'STORE'}">style="display:none"</c:when><c:otherwise>style="margin-left : 4px;"</c:otherwise></c:choose> ng-click="$broadcast('showHqSalePrice')">
                         <s:message code="touchKey.hqSalePrice"/>

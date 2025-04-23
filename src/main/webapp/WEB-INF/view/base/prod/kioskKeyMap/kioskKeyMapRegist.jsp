@@ -149,7 +149,7 @@
                                 <s:message code="kioskKeyMap.kioskKeyMapView" />
                             </button>
                         </c:if>
-                        <c:if test="${userId == 'ds021' or userId == 'ds024' or userId == 'h0360'}">
+                        <c:if test="${userId == 'ds021' or userId == 'ds024' or userId == 'h0360' or userId == 'ds000153'}">
                             <c:if test="${orgnFg == 'HQ'}">
                                 <button class="btn_skyblue" id="btnHqSalePrice" ng-click="hqSalePriceView()">
                                     <s:message code="kioskKeyMap.hqSalePrice" />
