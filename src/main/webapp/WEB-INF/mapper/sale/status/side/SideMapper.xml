@@ -28,6 +28,7 @@
 		SIDE_PROD_NM,
 		SEL_TYPE_FG,
 		BARCD_CD,
+        PROD_CLASS_CD,
 		SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
 		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
 		SUM(TOT_DC_AMT) AS TOT_DC_AMT,
@@ -43,6 +44,7 @@
 					(CASE tsdp.SEL_TYPE_FG WHEN 'S' THEN tsdp.PROD_CD END) AS SIDE_PROD_CD,
 					(CASE tsdp.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS SIDE_PROD_NM,
 					tmpb.BARCD_CD,
+                    tmp.PROD_CLASS_CD,
 					SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
 					SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
 					SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
@@ -78,10 +80,16 @@
 			GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SIDE_PROD_CD, tmps.PROD_NM, tsdp.SEL_TYPE_FG
 		)
 		WHERE 1=1
-		<if test="prodClassCd != null and prodClassCd != ''">
+		<!-- <if test="prodClassCd != null and prodClassCd != ''">
 			AND PATH LIKE '%'|| #{prodClassCd} ||'%'
-		</if>
-		GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH, PATH_NM, SIDE_PROD_CD, SIDE_PROD_NM, SEL_TYPE_FG
+		</if> -->
+        <if test='arrProdClassCd != null'>
+            AND PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+		GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH, PATH_NM, SIDE_PROD_CD, SIDE_PROD_NM, SEL_TYPE_FG, PROD_CLASS_CD
 		ORDER BY PROD_CD, SIDE_PROD_CD DESC
 		<include refid="CmmSQL.PagingTemplateBottom"/>
 	</select>
@@ -104,6 +112,7 @@
 		SIDE_PROD_NM,
 		SEL_TYPE_FG,
 		BARCD_CD,
+        PROD_CLASS_CD,
 		SUM(TOT_SALE_QTY) AS TOT_SALE_QTY,
 		SUM(TOT_SALE_AMT) AS TOT_SALE_AMT,
 		SUM(TOT_DC_AMT) AS TOT_DC_AMT,
@@ -118,6 +127,7 @@
 					(CASE tsdp.SEL_TYPE_FG WHEN 'S' THEN tsdp.PROD_CD END) AS SIDE_PROD_CD,
 					(CASE tsdp.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmp.PROD_NM ELSE tmp.PROD_NM END) AS SIDE_PROD_NM,
 					tmpb.BARCD_CD,
+                    tmp.PROD_CLASS_CD,
 					SUM(tsdp.TOT_SALE_QTY) AS TOT_SALE_QTY,
 					SUM(tsdp.TOT_SALE_AMT) AS TOT_SALE_AMT,
 					SUM(tsdp.TOT_DC_AMT) AS TOT_DC_AMT,
@@ -153,10 +163,16 @@
 			GROUP BY tsdp.PROD_CD, tmp.PROD_NM, tmpb.BARCD_CD, tmp.STORE_CD, tmp.PROD_CLASS_CD, tsdp.SIDE_PROD_CD, tmps.PROD_NM, tsdp.SEL_TYPE_FG
 		)
 		WHERE 1=1
-		<if test="prodClassCd != null and prodClassCd != ''">
+		<!--<if test="prodClassCd != null and prodClassCd != ''">
 			AND PATH LIKE '%'|| #{prodClassCd} ||'%'
-		</if>
-		GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH, PATH_NM, SIDE_PROD_CD, SIDE_PROD_NM, SEL_TYPE_FG
+		</if>-->
+        <if test='arrProdClassCd != null'>
+            AND PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+		GROUP BY PROD_CD, PROD_NM, BARCD_CD, PATH, PATH_NM, SIDE_PROD_CD, SIDE_PROD_NM, SEL_TYPE_FG, PROD_CLASS_CD
 		ORDER BY PROD_CD, SIDE_PROD_CD DESC
 	</select>
 

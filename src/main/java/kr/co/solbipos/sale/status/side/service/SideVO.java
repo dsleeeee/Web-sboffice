@@ -61,6 +61,9 @@ public class SideVO extends PageVO {
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
 
+    /** 상품분류코드(배열형) */
+    private String arrProdClassCd [];
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -168,5 +171,13 @@ public class SideVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
     }
 }

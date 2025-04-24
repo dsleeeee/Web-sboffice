@@ -189,6 +189,28 @@ public class PopupController {
     }
 
     /**
+     * 상품정보 분류 트리 조회3
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author 이다솜
+     * @since 2025.04.21
+     */
+    @RequestMapping(value = "/getProdClassTree3.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdClassTree3(ProdVO prodVO, HttpServletRequest request,
+        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<ProductClassVO> result = popupService.getProdClassTree3(prodVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
      * 상품정보 분류 플랫 조회
      *
      * @param prodVO ProdVO

@@ -57,7 +57,7 @@
 <c:import url="/WEB-INF/view/sale/status/prod/class/prodClass.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
-</c:import> 
+</c:import>
 
 <%-- 상품매출순위 레이어  --%>
 <c:import url="/WEB-INF/view/sale/status/prod/rank/prodRank.jsp">
