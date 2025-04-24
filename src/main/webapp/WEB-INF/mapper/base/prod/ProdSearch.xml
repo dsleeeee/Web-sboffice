@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--
-    Prod.xml
-    상품관리 sql
+    ProdSearch.xml
+    상품정보조회 sql
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
-    1       노현수     2018.10.19     쿼리수정
+    1       권지현     2023.09.12     쿼리수정
 -->
 <mapper namespace="kr.co.solbipos.base.prod.prodSearch.service.impl.ProdSearchMapper">
 
@@ -34,7 +32,7 @@
         COMMENTS : 상품의 목록을 조회한다. ( 본사/매장 )
     -->
     <select id="getProdList" parameterType="prodSearchVO" resultType="DefaultMap">
-        /* USE : ProdMapper.getProdList */
+        /* USE : ProdSearchMapper.getProdList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -400,7 +398,7 @@
         COMMENTS : 상품의 목록을 조회한다. ( 본사/매장 )
     -->
     <select id="getProdExcelList" parameterType="prodSearchVO" resultType="DefaultMap">
-        /* USE : ProdMapper.getProdExcelList */
+        /* USE : ProdSearchMapper.getProdExcelList */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -1762,7 +1760,7 @@
         COMMENTS : 상품의 목록을 조회한다. ( 본사/매장 )
     -->
     <select id="getProdExcelList2" parameterType="prodSearchVO" resultMap="ProdListMap">
-        /* USE : ProdMapper.getProdExcelList2 */
+        /* USE : ProdSearchMapper.getProdExcelList2 */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
