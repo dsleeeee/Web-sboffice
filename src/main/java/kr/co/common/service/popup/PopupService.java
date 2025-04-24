@@ -46,6 +46,9 @@ public interface PopupService {
     /** 상품분류 트리 조회 */
     List<ProductClassVO> getProdClassTree(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 
+    /** 상품분류 트리 조회3 */
+    List<ProductClassVO> getProdClassTree3(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
     /** 상품분류 플랫 조회 */
     String getProdClassCdNm(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 

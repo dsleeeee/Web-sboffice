@@ -141,8 +141,8 @@
 </c:import>
 
 <%-- 상품분류 팝업 --%>
-<%--<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">--%>
-<%--</c:import>--%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd3.jsp">
+</c:import>
 <%-- //팝업 레이어 --%>
 
 

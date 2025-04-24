@@ -12,14 +12,16 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.info.service.ProductClassVO;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
-import kr.co.solbipos.base.prod.prod.service.enums.PriceEnvFg;
 import kr.co.solbipos.store.manage.storemanage.service.StoreManageVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : PopupServiceImpl.java
@@ -135,6 +137,31 @@ public class PopupServiceImpl implements PopupService{
         return popupMapper.getProdClassTree(prodVO);
     }
 
+    /** 상품분류 트리 조회 */
+    @Override
+    public List<ProductClassVO> getProdClassTree3(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+
+        // 소속구분 설정
+        if(prodVO.getPageFg() != null && prodVO.getPageFg().equals("1")) {
+            prodVO.setOrgnFg("S");
+        }else{
+            prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        List<DefaultMap<String>> list = null;
+
+        if (sessionInfoVO.getHqOfficeCd().equals("A0001") || sessionInfoVO.getHqOfficeCd().equals("A0007")) {
+            // (A0001, A0007 본사/하위매장은 기존 상품분류 테이블 사용)
+            list = popupMapper.getProdClassTreeArtisee(prodVO);
+        } else {
+            list = popupMapper.getProdClassTree3(prodVO);
+        }
+
+        return makeTreeData(list);
+    }
+
     /** 상품분류 플랫 조회 */
     @Override
     public String getProdClassCdNm(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
@@ -197,5 +224,49 @@ public class PopupServiceImpl implements PopupService{
         storeManageVO.setStoreCd(sessionInfoVO.getStoreCd());
 
         return popupMapper.getHqStoreList(storeManageVO);
+    }
+
+    /** 트리 데이터 생성 */
+    public List<ProductClassVO> makeTreeData(List<DefaultMap<String>> lists) {
+
+        List<ProductClassVO> prodClsVOs = new ArrayList<ProductClassVO>();
+
+        for(DefaultMap<String> list : lists){
+            ProductClassVO prodClsVO = new ProductClassVO();
+            prodClsVO.setProdClassCd(list.getStr("prodClassCd"));
+            prodClsVO.setpProdClassCd(list.getStr("pProdClassCd"));
+            prodClsVO.setProdClassNm(list.getStr("prodClassNm"));
+            prodClsVO.setItems(new ArrayList<ProductClassVO>());
+            prodClsVOs.add(prodClsVO);
+        }
+
+        Map<String, ProductClassVO> hm = new LinkedHashMap<String, ProductClassVO>();
+
+        ProductClassVO child;
+        ProductClassVO parent;
+
+        for(ProductClassVO prodClsVO : prodClsVOs){
+            if(!hm.containsKey(prodClsVO.getProdClassCd())) {
+                hm.put(prodClsVO.getProdClassCd(), prodClsVO);
+            }
+
+            child = hm.get(prodClsVO.getProdClassCd());
+
+            if (child != null && !"".equals(prodClsVO.getpProdClassCd()) && !prodClsVO.getpProdClassCd().equals("00000")) {
+                if (hm.containsKey(prodClsVO.getpProdClassCd())) {
+                    parent = hm.get(prodClsVO.getpProdClassCd());
+                    parent.getItems().add(child);
+                }
+            }
+        }
+
+        List<ProductClassVO> returnData = new ArrayList<ProductClassVO>();
+        for (ProductClassVO prodClsVO : hm.values()) {
+            if (prodClsVO.getpProdClassCd() == null || "".equals(prodClsVO.getpProdClassCd()) || prodClsVO.getpProdClassCd().equals("00000")) {
+                returnData.add(prodClsVO);
+            }
+        }
+
+        return returnData;
     }
 }
