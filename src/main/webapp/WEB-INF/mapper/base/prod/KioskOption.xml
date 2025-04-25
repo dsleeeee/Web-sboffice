@@ -28,27 +28,16 @@
                 thp.PROD_NM,
                 NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
                 thpb.BARCD_CD
-                FROM TB_HQ_PRODUCT_BARCD thpb, TB_HQ_PRODUCT thp, (
-                                                                    SELECT
-                                                                    HQ_OFFICE_CD,
-                                                                    PROD_CD,
-                                                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                                                    FROM TB_HQ_PRODUCT_SALE_PRICE
-                                                                    WHERE 1=1
-                                                                    AND HQ_OFFICE_CD = #{membrOrgnCd}
-                                                                    <![CDATA[
-                                                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                                                    ]]>
-                                                                    AND SALE_PRC_FG = '1'
-                                                                    GROUP BY HQ_OFFICE_CD, PROD_CD
-                                                                    ) thpsp
+                FROM TB_HQ_PRODUCT_BARCD thpb,
+                TB_HQ_PRODUCT thp,
+                TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{membrOrgnCd}
                 AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
                 AND thpb.PROD_CD (+)= thp.PROD_CD
                 AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
                 AND thpsp.PROD_CD (+)= thp.PROD_CD
+                AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 <if test='chkDt != true'>
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -87,27 +76,16 @@
                 tmp.PROD_NM,
                 NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
                 tmpb.BARCD_CD
-                FROM TB_MS_PRODUCT_BARCD tmpb, TB_MS_PRODUCT tmp, (
-                                                                    SELECT
-                                                                    STORE_CD,
-                                                                    PROD_CD,
-                                                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                                                    FROM TB_MS_PRODUCT_SALE_PRICE
-                                                                    WHERE 1=1
-                                                                    AND STORE_CD = #{storeCd}
-                                                                    <![CDATA[
-                                                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                                                    ]]>
-                                                                    AND SALE_PRC_FG = '1'
-                                                                    GROUP BY STORE_CD, PROD_CD
-                                                                    ) tmpsp
+                FROM TB_MS_PRODUCT_BARCD tmpb,
+                TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 AND tmpb.STORE_CD (+)= tmp.STORE_CD
                 AND tmpb.PROD_CD (+)= tmp.PROD_CD
                 AND tmpsp.STORE_CD (+)= tmp.STORE_CD
                 AND tmpsp.PROD_CD (+)= tmp.PROD_CD
+                AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 <if test='chkDt != true'>
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -161,23 +139,10 @@
                 NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
                 thpo.OPTION_FG
                 FROM TB_HQ_PRODUCT_OPTION thpo
-                LEFT OUTER JOIN (
-                                    SELECT
-                                    HQ_OFFICE_CD,
-                                    PROD_CD,
-                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                    FROM TB_HQ_PRODUCT_SALE_PRICE
-                                    WHERE 1=1
-                                    AND HQ_OFFICE_CD = #{membrOrgnCd}
-                                    <![CDATA[
-                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                    ]]>
-                                    AND SALE_PRC_FG = '1'
-                                    GROUP BY HQ_OFFICE_CD, PROD_CD
-                                    ) thpsp ON
-                                    thpo.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                                    AND thpo.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thpo.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thpo.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 WHERE 1=1
                 AND thpo.HQ_OFFICE_CD = #{membrOrgnCd}
                 AND thpo.PROD_CD = #{prodCd}
@@ -192,23 +157,10 @@
                 NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC,
                 tmpo.OPTION_FG
                 FROM TB_MS_PRODUCT_OPTION tmpo
-                LEFT OUTER JOIN (
-                                    SELECT
-                                    STORE_CD,
-                                    PROD_CD,
-                                    MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                    FROM TB_MS_PRODUCT_SALE_PRICE
-                                    WHERE 1=1
-                                    AND STORE_CD = #{storeCd}
-                                    <![CDATA[
-                                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                    ]]>
-                                    AND SALE_PRC_FG = '1'
-                                    GROUP BY STORE_CD, PROD_CD
-                                    ) tmpsp ON
-                                    tmpo.STORE_CD = tmpsp.STORE_CD
-                                    AND tmpo.PROD_CD = tmpsp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
+                    tmpo.STORE_CD = tmpsp.STORE_CD
+                    AND tmpo.PROD_CD = tmpsp.PROD_CD
+                    AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 WHERE 1=1
                 AND tmpo.STORE_CD = #{storeCd}
                 AND tmpo.PROD_CD = #{prodCd}

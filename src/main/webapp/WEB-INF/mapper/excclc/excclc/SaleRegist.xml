@@ -96,18 +96,15 @@
                 tmp.PROD_TYPE_FG,
                 COST_UPRC,
                 SPLY_UPRC,
-                SALE_UPRC,
+                NVL(tmpsp2.SALE_UPRC, 0) AS SALE_UPRC,
                 tmp.VAT_FG
         FROM 	TB_MS_PRODUCT tmp,
                 TB_MS_PRODUCT_BARCD tmpb,
-                (
-                    SELECT  tmpsp.PROD_CD,
-                            MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM	TB_MS_PRODUCT_SALE_PRICE tmpsp
-                    WHERE 	tmpsp.STORE_CD = #{storeCd}
-                    GROUP BY tmpsp.PROD_CD
-                ) tmpsp2
-        WHERE 	tmp.PROD_CD = tmpsp2.PROD_CD(+)
+                TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp2 --view
+        WHERE 	1=1
+        AND    tmpsp2.STORE_CD = #{storeCd}
+        AND    tmp.PROD_CD = tmpsp2.PROD_CD(+)
+        AND    tmpsp2.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND	    tmp.STORE_CD = tmpb.STORE_CD(+)
         AND 	tmp.PROD_CD = tmpb.PROD_CD(+)
         AND 	tmp.STORE_CD = #{storeCd}

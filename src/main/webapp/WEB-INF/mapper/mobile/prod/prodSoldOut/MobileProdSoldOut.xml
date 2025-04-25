@@ -10,6 +10,7 @@
     1       권지현     2022.03.03     최초작성
 -->
 <mapper namespace="kr.co.solbipos.mobile.prod.prodSoldOut.service.impl.MobileProdSoldOutMapper">
+
     <!-- 브랜드 리스트 조회(선택 콤보박스용) -->
     <!--
         TABLE    : TB_HQ_BRAND, TB_MS_BRAND
@@ -31,7 +32,7 @@
         ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
         NVL(tmp.COST_UPRC, 0) COST_UPRC,
         NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,
-        NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+        NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
         tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
         tmp.SIDE_PROD_YN,
         tmp.SDATTR_CLASS_CD,
@@ -46,31 +47,18 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         TB_MS_PRODUCT tmp
-        LEFT OUTER JOIN (
-        SELECT
-        STORE_CD,
-        PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-        FROM TB_MS_PRODUCT_SALE_PRICE
-        WHERE STORE_CD = #{storeCd}
-        <![CDATA[
-            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-        ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY
-        STORE_CD, PROD_CD
-        ) thpsp ON
-        tmp.STORE_CD = thpsp.STORE_CD
-        AND tmp.PROD_CD = thpsp.PROD_CD
+        LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
+            tmp.STORE_CD = tmpsp.STORE_CD
+            AND tmp.PROD_CD = tmpsp.PROD_CD
+            AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         INNER JOIN TB_MS_STORE tms ON
-        tms.STORE_CD  = tmp.STORE_CD
+            tms.STORE_CD  = tmp.STORE_CD
         LEFT OUTER JOIN TB_MS_BRAND tmb ON
-        tmb.STORE_CD = tmp.STORE_CD
-        AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
+            tmb.STORE_CD = tmp.STORE_CD
+            AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
         LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
-        tmpb.STORE_CD = tmp.STORE_CD
-        AND tmpb.PROD_CD = tmp.PROD_CD
+            tmpb.STORE_CD = tmp.STORE_CD
+            AND tmpb.PROD_CD = tmp.PROD_CD
         WHERE 1=1
         AND tmp.STORE_CD = #{storeCd}
         <if test="chkDt == false">
@@ -91,12 +79,12 @@
         </if>
         <if test="prodClassCd != null and prodClassCd != ''">
             AND tmp.PROD_CLASS_CD IN (
-            SELECT
-            PROD_CLASS_CD
-            FROM TB_MS_PRODUCT_CLASS
-            WHERE STORE_CD = #{storeCd}
-            START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                SELECT
+                PROD_CLASS_CD
+                FROM TB_MS_PRODUCT_CLASS
+                WHERE STORE_CD = #{storeCd}
+                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
             )
         </if>
         <if test="useYn != null and useYn != ''">
@@ -136,4 +124,5 @@
         WHERE   STORE_CD    = #{storeCd}
           AND     PROD_CD   = #{prodCd}
     </update>
+
 </mapper>

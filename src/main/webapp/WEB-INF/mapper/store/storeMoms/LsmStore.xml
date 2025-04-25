@@ -41,21 +41,7 @@
         ,		TB_MS_STORE_ENVST G
         ,		TB_HQ_TOUCH_KEY_CLASS H
         ,		TB_HQ_NMCODE I
-        ,		(
-                SELECT	STORE_CD
-                ,		PROD_CD
-                ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM 	TB_MS_PRODUCT_SALE_PRICE
-                WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND 	SALE_PRC_FG = '1'
-                GROUP
-                BY 		STORE_CD
-                , 		PROD_CD
-                ) J
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 J --view
         ,       (
                     SELECT 	STORE_CD
                     ,       POS_NO
@@ -91,6 +77,7 @@
         AND 	H.TUKEY_CLASS_CD = A.TUKEY_CLASS_CD
         AND 	J.STORE_CD = A.STORE_CD
         AND 	J.PROD_CD = C.PROD_CD
+        AND     J.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND     K.STORE_CD = A.STORE_CD
         AND     K.POS_NO = F.POS_NO
         <if test="tukeyGrpCd != null and tukeyGrpCd !=''">
@@ -144,21 +131,7 @@
         ,		TB_MS_STORE_ENVST G
         ,		TB_HQ_TOUCH_KEY_CLASS H
         ,		TB_HQ_NMCODE I
-        ,		(
-                    SELECT	STORE_CD
-                    ,		PROD_CD
-                    ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM 	TB_MS_PRODUCT_SALE_PRICE
-                    WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND 	SALE_PRC_FG = '1'
-                    GROUP
-                    BY 		STORE_CD
-                    , 		PROD_CD
-                ) J
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 J --view
         ,       (
                     SELECT
                             <if test='downFg != null and downFg =="S"'>
@@ -202,6 +175,7 @@
         AND 	H.TUKEY_CLASS_CD = A.TUKEY_CLASS_CD
         AND 	J.STORE_CD = A.STORE_CD
         AND 	J.PROD_CD = C.PROD_CD
+        AND     J.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND     K.STORE_CD = A.STORE_CD
         <if test='downFg != null and downFg =="A"'>
             AND     K.POS_NO = F.POS_NO
@@ -255,21 +229,7 @@
         ,		TB_MS_STORE_ENVST G
         ,		TB_HQ_KIOSK_CLS H
         ,		TB_HQ_NMCODE I
-        ,		(
-                SELECT	STORE_CD
-                ,		PROD_CD
-                ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM 	TB_MS_PRODUCT_SALE_PRICE
-                WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                <![CDATA[
-                        AND START_DATE  <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE    >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                AND 	SALE_PRC_FG = '1'
-                GROUP
-                BY 		STORE_CD
-                , 		PROD_CD
-                ) J
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 J --view
         ,       (
                     SELECT 	STORE_CD
                     ,		POS_NO
@@ -310,6 +270,7 @@
         AND 	I.NMCODE_ITEM_1	    = A.TU_CLS_CD
         AND 	J.STORE_CD          = A.STORE_CD
         AND 	J.PROD_CD           = C.PROD_CD
+        AND     J.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND     K.STORE_CD          = A.STORE_CD
         AND     K.POS_NO            = A.POS_NO
         <if test="tuClsType != null and tuClsType !=''">
@@ -357,21 +318,7 @@
         ,		TB_MS_STORE_ENVST G
         ,		TB_HQ_KIOSK_CLS H
         ,		TB_HQ_NMCODE I
-        ,		(
-                SELECT	STORE_CD
-                ,		PROD_CD
-                ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM 	TB_MS_PRODUCT_SALE_PRICE
-                WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
-                <![CDATA[
-                        AND START_DATE  <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE    >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                AND 	SALE_PRC_FG = '1'
-                GROUP
-                BY 		STORE_CD
-                , 		PROD_CD
-                ) J
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 J --view
         ,       (
                     SELECT 	STORE_CD
                     ,		POS_NO
@@ -412,6 +359,7 @@
         AND 	I.NMCODE_ITEM_1	    = A.TU_CLS_CD
         AND 	J.STORE_CD          = A.STORE_CD
         AND 	J.PROD_CD           = C.PROD_CD
+        AND     J.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND     K.STORE_CD          = A.STORE_CD
         AND     K.POS_NO            = A.POS_NO
         <if test="tuClsType != null and tuClsType !=''">

@@ -83,48 +83,23 @@
         FROM   TB_MS_PRODUCT tmp
         ,      TB_MS_STORE tms
         ,      TB_MS_STORE_INFO tmsi
-        ,      (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     STORE_CD
-                    ,      PROD_CD
-               ) tmpsp
+        ,      TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         ,      TB_HQ_PRODUCT thp
-        ,      (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     HQ_OFFICE_CD
-                    ,      PROD_CD
-               ) thpsp
-        WHERE  tmp.PROD_CD = #{prodCd}
+        ,      TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE  1=1
+        AND    tmp.PROD_CD = #{prodCd}
         <!-- AND    tmp.SALE_PROD_YN = 'Y' -->             -- 판매상품 여부
         AND    tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND    tms.STORE_CD = tmp.STORE_CD
         AND    tms.STORE_CD = tmsi.STORE_CD(+)
         AND    tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND    tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND    tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND    thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND    thp.PROD_CD = tmp.PROD_CD
         AND    thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND    thpsp.PROD_CD = thp.PROD_CD
+        AND    thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tms.STORE_CD IN (${storeCdQuery})
         </if>
@@ -216,49 +191,24 @@
         ,      TB_MS_PRODUCT tmp
         ,      TB_MS_STORE tms
         ,      TB_MS_STORE_INFO tmsi
-        ,      (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     STORE_CD
-                    ,      PROD_CD
-               ) tmpsp
+        ,      TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         ,      TB_ST_HQ_STOCK_MONTHLY tshsm
         ,      TB_HQ_PRODUCT thp
-        ,      (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     HQ_OFFICE_CD
-                    ,      PROD_CD
-               ) thpsp
-        WHERE  tmp.PROD_CD = #{prodCd}
+        ,      TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE  1=1
+        AND    tmp.PROD_CD = #{prodCd}
         <!-- AND    tmp.SALE_PROD_YN = 'Y' -->             -- 판매상품 여부
         AND    tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND    tms.STORE_CD = tmp.STORE_CD
         AND    tms.STORE_CD = tmsi.STORE_CD(+)
         AND    tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND    tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND    tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND    thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND    thp.PROD_CD = tmp.PROD_CD
         AND    thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND    thpsp.PROD_CD = thp.PROD_CD
+        AND    thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND    tsssm.STORE_CD = tms.STORE_CD
         AND    tsssm.IOSTOCK_YM = #{iostockYm}
         AND    tsssm.STORAGE_CD = #{storageCd}
@@ -355,48 +305,23 @@
         FROM   TB_MS_PRODUCT tmp
         ,      TB_MS_STORE tms
         ,      TB_MS_STORE_INFO tmsi
-        ,      (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     STORE_CD
-                    ,      PROD_CD
-               ) tmpsp
+        ,      TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         ,      TB_HQ_PRODUCT thp
-        ,      (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     HQ_OFFICE_CD
-                    ,      PROD_CD
-               ) thpsp
-        WHERE  tmp.PROD_CD = #{prodCd}
+        ,      TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE  1=1
+        AND    tmp.PROD_CD = #{prodCd}
         <!-- AND    tmp.SALE_PROD_YN = 'Y' -->             -- 판매상품 여부
         AND    tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND    tms.STORE_CD = tmp.STORE_CD
         AND    tms.STORE_CD = tmsi.STORE_CD(+)
         AND    tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND    tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND    tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND    thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND    thp.PROD_CD = tmp.PROD_CD
         AND    thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND    thpsp.PROD_CD = thp.PROD_CD
+        AND    thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tms.STORE_CD IN (${storeCdQuery})
         </if>
@@ -485,49 +410,24 @@
         ,      TB_MS_PRODUCT tmp
         ,      TB_MS_STORE tms
         ,      TB_MS_STORE_INFO tmsi
-        ,      (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     STORE_CD
-                    ,      PROD_CD
-               ) tmpsp
+        ,      TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         ,      TB_ST_HQ_STOCK_MONTHLY tshsm
         ,      TB_HQ_PRODUCT thp
-        ,      (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     HQ_OFFICE_CD
-                    ,      PROD_CD
-               ) thpsp
-        WHERE  tmp.PROD_CD = #{prodCd}
+        ,      TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE  1=1
+        AND    tmp.PROD_CD = #{prodCd}
         <!-- AND    tmp.SALE_PROD_YN = 'Y' -->             -- 판매상품 여부
         AND    tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND    tms.STORE_CD = tmp.STORE_CD
         AND    tms.STORE_CD = tmsi.STORE_CD(+)
         AND    tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND    tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND    tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND    thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND    thp.PROD_CD = tmp.PROD_CD
         AND    thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND    thpsp.PROD_CD = thp.PROD_CD
+        AND    thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND    tsssm.STORE_CD = tms.STORE_CD
         AND    tsssm.IOSTOCK_YM = #{iostockYm}
         AND    tsssm.STORAGE_CD = #{storageCd}
@@ -698,46 +598,21 @@
         FROM TB_MS_PRODUCT tmp
         ,    TB_HQ_PRODUCT thp
         ,    TB_MS_STORE tms
-        ,    (
-                SELECT HQ_OFFICE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_HQ_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  HQ_OFFICE_CD
-                ,      PROD_CD
-            ) thpsp
-        ,   (
-                SELECT STORE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_MS_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  STORE_CD
-                ,      PROD_CD
-            ) tmpsp
-        WHERE tms.STORE_CD = #{storeCd}
+        ,    TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        ,    TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND   tms.STORE_CD = #{storeCd}
         <!-- AND   tmp.SALE_PROD_YN = 'Y' -->            -- 판매상품 여부
         AND   tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tms.STORE_CD = tmp.STORE_CD
         AND   tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND   tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND   tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   thp.PROD_CD = tmp.PROD_CD
         AND   thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND   thpsp.PROD_CD = thp.PROD_CD
+        AND   thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
                                             SELECT PROD_CLASS_CD
@@ -804,46 +679,21 @@
         ,    TB_MS_PRODUCT tmp
         ,    TB_HQ_PRODUCT thp
         ,    TB_MS_STORE tms
-        ,    (
-                SELECT HQ_OFFICE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_HQ_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  HQ_OFFICE_CD
-                ,      PROD_CD
-            ) thpsp
-        ,   (
-                SELECT STORE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_MS_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  STORE_CD
-                ,      PROD_CD
-            ) tmpsp
-        WHERE tms.STORE_CD = #{storeCd}
+        ,    TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        ,    TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND   tms.STORE_CD = #{storeCd}
         <!-- AND   tmp.SALE_PROD_YN = 'Y' -->            -- 판매상품 여부
         AND   tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tms.STORE_CD = tmp.STORE_CD
         AND   tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND   tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND   tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   thp.PROD_CD = tmp.PROD_CD
         AND   thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND   thpsp.PROD_CD = thp.PROD_CD
+        AND   thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   tsssm.STORE_CD = tms.STORE_CD
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
         AND   tsssm.STORAGE_CD = #{storageCd}
@@ -914,46 +764,21 @@
         FROM TB_MS_PRODUCT tmp
         ,    TB_HQ_PRODUCT thp
         ,    TB_MS_STORE tms
-        ,    (
-                SELECT HQ_OFFICE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_HQ_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  HQ_OFFICE_CD
-                ,      PROD_CD
-            ) thpsp
-        ,   (
-                SELECT STORE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_MS_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  STORE_CD
-                ,      PROD_CD
-            ) tmpsp
-        WHERE tms.STORE_CD = #{storeCd}
+        ,    TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        ,    TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND   tms.STORE_CD = #{storeCd}
         <!-- AND   tmp.SALE_PROD_YN = 'Y' -->            -- 판매상품 여부
         AND   tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tms.STORE_CD = tmp.STORE_CD
         AND   tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND   tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND   tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   thp.PROD_CD = tmp.PROD_CD
         AND   thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND   thpsp.PROD_CD = thp.PROD_CD
+        AND   thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
                                             SELECT PROD_CLASS_CD
@@ -1017,46 +842,21 @@
         ,    TB_MS_PRODUCT tmp
         ,    TB_HQ_PRODUCT thp
         ,    TB_MS_STORE tms
-        ,    (
-                SELECT HQ_OFFICE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_HQ_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  HQ_OFFICE_CD
-                ,      PROD_CD
-            ) thpsp
-        ,   (
-                SELECT STORE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_MS_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  STORE_CD
-                ,      PROD_CD
-            ) tmpsp
-        WHERE tms.STORE_CD = #{storeCd}
+        ,    TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        ,    TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND   tms.STORE_CD = #{storeCd}
         <!-- AND   tmp.SALE_PROD_YN = 'Y' -->            -- 판매상품 여부
         AND   tms.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tms.STORE_CD = tmp.STORE_CD
         AND   tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND   tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND   tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   thp.PROD_CD = tmp.PROD_CD
         AND   thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND   thpsp.PROD_CD = thp.PROD_CD
+        AND   thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   tsssm.STORE_CD = tms.STORE_CD
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
         AND   tsssm.STORAGE_CD = #{storageCd}
@@ -1128,36 +928,8 @@
         FROM TB_MS_PRODUCT tmp
         ,    TB_HQ_PRODUCT thp
         ,    TB_MS_STORE tms
-        ,    (
-                SELECT HQ_OFFICE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_HQ_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  HQ_OFFICE_CD
-                ,      PROD_CD
-            ) thpsp
-        ,   (
-                SELECT STORE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_MS_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  STORE_CD
-                ,      PROD_CD
-            ) tmpsp
+        ,     TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        ,    TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         WHERE 1=1
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tms.STORE_CD IN (${storeCdQuery})
@@ -1166,10 +938,12 @@
         AND   tms.STORE_CD = tmp.STORE_CD
         AND   tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND   tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND   tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   thp.PROD_CD = tmp.PROD_CD
         AND   thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND   thpsp.PROD_CD = thp.PROD_CD
+        AND   thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
@@ -1208,36 +982,8 @@
         ,    TB_MS_PRODUCT tmp
         ,    TB_HQ_PRODUCT thp
         ,    TB_MS_STORE tms
-        ,    (
-                SELECT HQ_OFFICE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_HQ_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  HQ_OFFICE_CD
-                ,      PROD_CD
-            ) thpsp
-        ,   (
-                SELECT STORE_CD
-                ,      PROD_CD
-                ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM   TB_MS_PRODUCT_SALE_PRICE
-                WHERE  1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND    SALE_PRC_FG = '1'
-                GROUP
-                   BY  STORE_CD
-                ,      PROD_CD
-            ) tmpsp
+        ,    TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        ,    TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         WHERE 1=1
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tms.STORE_CD IN (${storeCdQuery})
@@ -1247,10 +993,12 @@
         AND   tms.STORE_CD = tmp.STORE_CD
         AND   tmpsp.STORE_CD (+)= tmp.STORE_CD
         AND   tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND   tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   thp.PROD_CD = tmp.PROD_CD
         AND   thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND   thpsp.PROD_CD = thp.PROD_CD
+        AND   thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   tsssm.STORE_CD = tms.STORE_CD
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
         AND   tsssm.STORAGE_CD = #{storageCd}
@@ -1366,36 +1114,8 @@
         ,      TB_MS_PRODUCT tmp
         ,      TB_HQ_PRODUCT thp
         ,      TB_MS_STORE tms
-        ,      (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                       BY  HQ_OFFICE_CD
-                    ,      PROD_CD
-               ) thpsp
-        ,     (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                       BY  STORE_CD
-                    ,      PROD_CD
-              ) tmpsp
+        ,      TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        ,      TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         WHERE 1=1
         AND   A.SESSION_ID = #{sessionId}
         AND   A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1405,10 +1125,12 @@
         AND   tmp.PROD_CD (+)= A.PROD_CD
         AND   tmpsp.STORE_CD = tmp.STORE_CD
         AND   tmpsp.PROD_CD = tmp.PROD_CD
+        AND   tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   thp.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
         AND   thp.PROD_CD (+)= A.PROD_CD
         AND   thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND   thpsp.PROD_CD = thp.PROD_CD
+        AND   thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER
         BY    A.SEQ
     </select>
@@ -1437,38 +1159,10 @@
         ,      TB_ST_STORE_STOCK_MONTHLY tsssm
         ,      TB_MS_PRODUCT tmp
         ,      TB_MS_STORE tms
-        ,      (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     STORE_CD
-                    ,      PROD_CD
-               ) tmpsp
+        ,      TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         ,      TB_ST_HQ_STOCK_MONTHLY tshsm
         ,      TB_HQ_PRODUCT thp
-        ,      (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE  1 = 1
-                    <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                    AND    SALE_PRC_FG = '1'
-                    GROUP
-                    BY     HQ_OFFICE_CD
-                    ,      PROD_CD
-               ) thpsp
+        ,      TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
         WHERE 1=1
         AND   A.SESSION_ID = #{sessionId}
         AND   A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -1478,10 +1172,12 @@
         AND   tmp.PROD_CD (+)= A.PROD_CD
         AND   tmpsp.STORE_CD = tmp.STORE_CD
         AND   tmpsp.PROD_CD = tmp.PROD_CD
+        AND   tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   thp.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
         AND   thp.PROD_CD (+)= A.PROD_CD
         AND   thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND   thpsp.PROD_CD = thp.PROD_CD
+        AND   thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND   tsssm.STORE_CD = tms.STORE_CD
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
         AND   tsssm.STORAGE_CD = #{storageCd}

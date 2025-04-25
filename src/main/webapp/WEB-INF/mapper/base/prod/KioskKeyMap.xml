@@ -1105,32 +1105,25 @@
                 (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_HQ_PRODUCT_SALE_TIME thpst WHERE thpst.HQ_OFFICE_CD = #{hqOfficeCd} AND thpst.PROD_CD = thp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+                INNER JOIN TB_HQ_OFFICE tho ON
+                  tho.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
                 LEFT OUTER JOIN (
-                SELECT HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_HQ_PRODUCT_SALE_PRICE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
-                                           AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                           AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                        ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY HQ_OFFICE_CD, PROD_CD
-                ) thpsp ON thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                AND thp.PROD_CD = thpsp.PROD_CD
-                INNER JOIN TB_HQ_OFFICE tho ON tho.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                LEFT OUTER JOIN (
-                SELECT HQ_OFFICE_CD,
-                PROD_CD
-                FROM TB_HQ_KIOSK_KEY
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND TU_CLS_TYPE = #{tuClsType}
-                AND TU_CLS_CD = #{tuClsCd}
-                GROUP BY HQ_OFFICE_CD, PROD_CD
-                ) thkk ON thp.HQ_OFFICE_CD = thkk.HQ_OFFICE_CD
-                AND thp.PROD_CD = thkk.PROD_CD
-                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        SELECT HQ_OFFICE_CD,
+                        PROD_CD
+                        FROM TB_HQ_KIOSK_KEY
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND TU_CLS_TYPE = #{tuClsType}
+                        AND TU_CLS_CD = #{tuClsCd}
+                        GROUP BY HQ_OFFICE_CD, PROD_CD
+                    ) thkk ON
+                    thp.HQ_OFFICE_CD = thkk.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thkk.PROD_CD
+                WHERE 1=1
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -1208,33 +1201,26 @@
                 (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.STORE_CD = #{storeCd} AND tmpst.PROD_CD = tmp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
+                    tmp.STORE_CD = tmpsp.STORE_CD
+                    AND tmp.PROD_CD = tmpsp.PROD_CD
+                    AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+                INNER JOIN TB_MS_STORE tms ON
+                    tms.STORE_CD  = tmp.STORE_CD
                 LEFT OUTER JOIN (
-                SELECT STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
-                <![CDATA[
-                                             AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                             AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                          ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY STORE_CD, PROD_CD
-                ) tmpsp ON tmp.STORE_CD = tmpsp.STORE_CD
-                AND tmp.PROD_CD = tmpsp.PROD_CD
-                INNER JOIN TB_MS_STORE tms ON tms.STORE_CD  = tmp.STORE_CD
-                LEFT OUTER JOIN (
-                SELECT STORE_CD,
-                PROD_CD
-                FROM TB_MS_KIOSK_KEY
-                WHERE STORE_CD = #{storeCd}
-                AND POS_NO = #{posNo}
-                AND TU_CLS_TYPE = #{tuClsType}
-                AND TU_CLS_CD = #{tuClsCd}
-                GROUP BY STORE_CD, PROD_CD
-                ) tmkk ON tmp.STORE_CD = tmkk.STORE_CD
-                AND tmp.PROD_CD = tmkk.PROD_CD
-                WHERE tmp.STORE_CD = #{storeCd}
+                        SELECT STORE_CD,
+                        PROD_CD
+                        FROM TB_MS_KIOSK_KEY
+                        WHERE STORE_CD = #{storeCd}
+                        AND POS_NO = #{posNo}
+                        AND TU_CLS_TYPE = #{tuClsType}
+                        AND TU_CLS_CD = #{tuClsCd}
+                        GROUP BY STORE_CD, PROD_CD
+                    ) tmkk ON
+                    tmp.STORE_CD = tmkk.STORE_CD
+                    AND tmp.PROD_CD = tmkk.PROD_CD
+                WHERE 1=1
+                AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
                     <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
                         <![CDATA[
@@ -5620,19 +5606,7 @@
                 ,		TB_HQ_PRODUCT_IMAGE thpi
                 ,		TB_HQ_PRODUCT thp2
                 ,		TB_HQ_PRODUCT_INFO thpi2
-                ,		(
-                SELECT	PROD_CD
-                ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM 	TB_HQ_PRODUCT_SALE_PRICE
-                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
-                                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            ]]>
-                AND 	SALE_PRC_FG = '1'
-                GROUP
-                BY 		PROD_CD
-                ) thpsp
+                ,		TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
                 WHERE 	thkk.HQ_OFFICE_CD   = #{hqOfficeCd}
                 AND 	thkk.TU_CLS_TYPE    = #{tuClsType}
                 AND 	thkk.TU_CLS_CD      = #{tuClsCd}
@@ -5645,7 +5619,9 @@
                 AND 	thkk.HQ_OFFICE_CD   = thpi2.HQ_OFFICE_CD(+)
                 AND 	thkk.PROD_CD        = thpi2.PROD_CD(+)
                 AND 	'002'               = thpi.IMG_FG(+)
+                AND 	thkk.HQ_OFFICE_CD   = thpsp.HQ_OFFICE_CD
                 AND 	thkk.PROD_CD        = thpsp.PROD_CD
+                AND     thpsp.SALE_DATE     = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ORDER
                 BY 		thkk.INDEX_NO
             </when>
@@ -5687,19 +5663,7 @@
                 ,		TB_MS_PRODUCT_IMAGE thpi
                 ,		TB_MS_PRODUCT thp2
                 ,		TB_MS_PRODUCT_INFO thpi2
-                ,		(
-                SELECT	PROD_CD
-                ,		MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM 	TB_MS_PRODUCT_SALE_PRICE
-                WHERE 	STORE_CD = #{storeCd}
-                <![CDATA[
-                                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            ]]>
-                AND 	SALE_PRC_FG = '1'
-                GROUP
-                BY 		PROD_CD
-                ) thpsp
+                ,		TB_MS_PRODUCT_SALE_PRICE_V01 thpsp --view
                 WHERE 	thkk.STORE_CD       = #{storeCd}
                 AND 	thkk.POS_NO         = #{posNo}
                 AND 	thkk.TU_CLS_TYPE    = #{tuClsType}
@@ -5713,7 +5677,9 @@
                 AND 	thkk.STORE_CD       = thpi2.STORE_CD(+)
                 AND 	thkk.PROD_CD        = thpi2.PROD_CD(+)
                 AND 	'002'               = thpi.IMG_FG(+)
+                AND 	thkk.STORE_CD       = thpsp.STORE_CD
                 AND 	thkk.PROD_CD        = thpsp.PROD_CD
+                AND     thpsp.SALE_DATE     = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND     (thp.KIOSK_DISPLAY_YN = 'Y' OR thp.KIOSK_DISPLAY_YN IS NULL)
                 ORDER
                 BY 		thkk.INDEX_NO
@@ -5750,54 +5716,41 @@
         thp.PRC_CTRL_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM (
-        SELECT  thkk.HQ_OFFICE_CD
-        ,       thkk.TU_CLS_TYPE
-        ,       thkg.TU_CLS_TYPE_NM
-        ,       thkk.PROD_CD
-        ,       MIN(thkc.INDEX_NO) AS CLASS_INDEX_NO
-        ,       MIN(thkk.INDEX_NO) AS INDEX_NO
-        FROM    TB_HQ_KIOSK_KEY thkk
-        ,		TB_HQ_KIOSK_CLS thkc
-        ,		TB_HQ_KIOSK_GROUP thkg
-        WHERE   thkk.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND 	thkk.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
-        AND 	thkk.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
-        AND 	thkk.HQ_OFFICE_CD = thkc.HQ_OFFICE_CD
-        AND 	thkk.TU_CLS_CD = thkc.TU_CLS_CD
-        <if test='tuClsType != null and tuClsType != ""'>
-            AND thkk.TU_CLS_TYPE = #{tuClsType}
-        </if>
-        GROUP
-        BY      thkk.HQ_OFFICE_CD
-        ,       thkk.TU_CLS_TYPE
-        ,       thkg.TU_CLS_TYPE_NM
-        ,       thkk.PROD_CD
+            SELECT  thkk.HQ_OFFICE_CD
+            ,       thkk.TU_CLS_TYPE
+            ,       thkg.TU_CLS_TYPE_NM
+            ,       thkk.PROD_CD
+            ,       MIN(thkc.INDEX_NO) AS CLASS_INDEX_NO
+            ,       MIN(thkk.INDEX_NO) AS INDEX_NO
+            FROM    TB_HQ_KIOSK_KEY thkk
+            ,		TB_HQ_KIOSK_CLS thkc
+            ,		TB_HQ_KIOSK_GROUP thkg
+            WHERE   thkk.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND 	thkk.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
+            AND 	thkk.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
+            AND 	thkk.HQ_OFFICE_CD = thkc.HQ_OFFICE_CD
+            AND 	thkk.TU_CLS_CD = thkc.TU_CLS_CD
+            <if test='tuClsType != null and tuClsType != ""'>
+                AND thkk.TU_CLS_TYPE = #{tuClsType}
+            </if>
+            GROUP
+            BY      thkk.HQ_OFFICE_CD
+            ,       thkk.TU_CLS_TYPE
+            ,       thkg.TU_CLS_TYPE_NM
+            ,       thkk.PROD_CD
         ) thtk,
         TB_HQ_PRODUCT thp,
-        (
-        SELECT HQ_OFFICE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_HQ_PRODUCT_SALE_PRICE
-        WHERE 1 = 1
-        <![CDATA[
-                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY HQ_OFFICE_CD, PROD_CD
-        ) thpsp
-        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
-            SELECT PROD_CLASS_CD
-            FROM TB_HQ_PRODUCT_CLASS
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                SELECT PROD_CLASS_CD
+                FROM TB_HQ_PRODUCT_CLASS
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
             )
         </if>
         <if test='prodCd != null and prodCd != ""'>
@@ -5807,12 +5760,13 @@
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND thtk.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thtk.PROD_CD = thp.PROD_CD
         ORDER BY thtk.TU_CLS_TYPE, thtk.CLASS_INDEX_NO, thtk.INDEX_NO
@@ -5855,88 +5809,63 @@
         tmp.PRC_CTRL_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM (
-        SELECT  thkk.HQ_OFFICE_CD
-        ,       thkk.TU_CLS_TYPE
-        ,       thkg.TU_CLS_TYPE_NM
-        ,       thkk.PROD_CD
-        ,       MIN(thkc.INDEX_NO) AS CLASS_INDEX_NO
-        ,       MIN(thkk.INDEX_NO) AS INDEX_NO
-        FROM    TB_HQ_KIOSK_KEY thkk
-        ,		TB_HQ_KIOSK_CLS thkc
-        ,		TB_HQ_KIOSK_GROUP thkg
-        WHERE   thkk.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND 	thkk.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
-        AND 	thkk.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
-        AND 	thkk.HQ_OFFICE_CD = thkc.HQ_OFFICE_CD
-        AND 	thkk.TU_CLS_CD = thkc.TU_CLS_CD
-        <if test='tuClsType != null and tuClsType != ""'>
-            AND thkk.TU_CLS_TYPE = #{tuClsType}
-        </if>
-        GROUP
-        BY      thkk.HQ_OFFICE_CD
-        ,       thkk.TU_CLS_TYPE
-        ,       thkg.TU_CLS_TYPE_NM
-        ,       thkk.PROD_CD
+            SELECT  thkk.HQ_OFFICE_CD
+            ,       thkk.TU_CLS_TYPE
+            ,       thkg.TU_CLS_TYPE_NM
+            ,       thkk.PROD_CD
+            ,       MIN(thkc.INDEX_NO) AS CLASS_INDEX_NO
+            ,       MIN(thkk.INDEX_NO) AS INDEX_NO
+            FROM    TB_HQ_KIOSK_KEY thkk
+            ,		TB_HQ_KIOSK_CLS thkc
+            ,		TB_HQ_KIOSK_GROUP thkg
+            WHERE   thkk.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND 	thkk.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
+            AND 	thkk.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
+            AND 	thkk.HQ_OFFICE_CD = thkc.HQ_OFFICE_CD
+            AND 	thkk.TU_CLS_CD = thkc.TU_CLS_CD
+            <if test='tuClsType != null and tuClsType != ""'>
+                AND thkk.TU_CLS_TYPE = #{tuClsType}
+            </if>
+            GROUP
+            BY      thkk.HQ_OFFICE_CD
+            ,       thkk.TU_CLS_TYPE
+            ,       thkg.TU_CLS_TYPE_NM
+            ,       thkk.PROD_CD
         ) thtk,
         TB_MS_PRODUCT tmp,
         TB_HQ_PRODUCT thp,
         TB_MS_STORE tms,
-        (
-        SELECT HQ_OFFICE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_HQ_PRODUCT_SALE_PRICE
-        WHERE 1 = 1
-        <![CDATA[
-                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY HQ_OFFICE_CD, PROD_CD
-        ) thpsp,
-        (
-        SELECT STORE_CD, PROD_CD,
-        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-        FROM TB_MS_PRODUCT_SALE_PRICE
-        WHERE 1 = 1
-        <![CDATA[
-                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-        AND SALE_PRC_FG = '1'
-        GROUP BY STORE_CD, PROD_CD
-        ) tmpsp
-        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp, --view
+        TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
-            SELECT PROD_CLASS_CD
-            FROM TB_HQ_PRODUCT_CLASS
-            WHERE 1=1
-            AND HQ_OFFICE_CD = #{hqOfficeCd}
-            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                SELECT PROD_CLASS_CD
+                FROM TB_HQ_PRODUCT_CLASS
+                WHERE 1=1
+                AND HQ_OFFICE_CD = #{hqOfficeCd}
+                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
             )
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
-        AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+                AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thp.PROD_CD = tmp.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND thtk.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thtk.PROD_CD = thp.PROD_CD
         AND tms.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
@@ -6012,88 +5941,61 @@
                 tmp.PRC_CTRL_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    (
-                SELECT  tmkk.STORE_CD
-                ,       tmkk.TU_CLS_TYPE
-                ,       tmkg.TU_CLS_TYPE_NM
-                ,       tmkk.PROD_CD
-                ,       MIN(tmkc.INDEX_NO) AS CLASS_INDEX_NO
-                ,       MIN(tmkk.INDEX_NO) AS INDEX_NO
-                FROM    TB_MS_KIOSK_KEY tmkk
-                ,		TB_MS_KIOSK_CLS tmkc
-                ,		TB_MS_KIOSK_GROUP tmkg
-                WHERE   tmkk.STORE_CD = #{storeCd}
-                AND 	tmkk.STORE_CD = tmkg.STORE_CD(+)
-                AND 	tmkk.POS_NO = tmkg.POS_NO(+)
-                AND 	tmkk.TU_CLS_TYPE = tmkg.TU_CLS_TYPE(+)
-                AND 	tmkk.STORE_CD = tmkc.STORE_CD
-                AND 	tmkk.POS_NO = tmkc.POS_NO
-                AND 	tmkk.TU_CLS_CD = tmkc.TU_CLS_CD
-                AND     tmkk.POS_NO = #{posNo}
-                <if test='tuClsType != null and tuClsType != ""'>
-                    AND tmkk.TU_CLS_TYPE = #{tuClsType}
-                </if>
-                GROUP
-                BY      tmkk.STORE_CD
-                ,       tmkk.TU_CLS_TYPE
-                ,       tmkg.TU_CLS_TYPE_NM
-                ,       tmkk.PROD_CD
-                ) tmt
-                ,       TB_MS_PRODUCT tmp,
+                    SELECT  tmkk.STORE_CD
+                    ,       tmkk.TU_CLS_TYPE
+                    ,       tmkg.TU_CLS_TYPE_NM
+                    ,       tmkk.PROD_CD
+                    ,       MIN(tmkc.INDEX_NO) AS CLASS_INDEX_NO
+                    ,       MIN(tmkk.INDEX_NO) AS INDEX_NO
+                    FROM    TB_MS_KIOSK_KEY tmkk
+                    ,		TB_MS_KIOSK_CLS tmkc
+                    ,		TB_MS_KIOSK_GROUP tmkg
+                    WHERE   tmkk.STORE_CD = #{storeCd}
+                    AND 	tmkk.STORE_CD = tmkg.STORE_CD(+)
+                    AND 	tmkk.POS_NO = tmkg.POS_NO(+)
+                    AND 	tmkk.TU_CLS_TYPE = tmkg.TU_CLS_TYPE(+)
+                    AND 	tmkk.STORE_CD = tmkc.STORE_CD
+                    AND 	tmkk.POS_NO = tmkc.POS_NO
+                    AND 	tmkk.TU_CLS_CD = tmkc.TU_CLS_CD
+                    AND     tmkk.POS_NO = #{posNo}
+                    <if test='tuClsType != null and tuClsType != ""'>
+                        AND tmkk.TU_CLS_TYPE = #{tuClsType}
+                    </if>
+                    GROUP
+                    BY      tmkk.STORE_CD
+                    ,       tmkk.TU_CLS_TYPE
+                    ,       tmkg.TU_CLS_TYPE_NM
+                    ,       tmkk.PROD_CD
+                ) tmt,
+                TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp, --view
                 (
-                SELECT STORE_CD, PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE 1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY STORE_CD, PROD_CD
-                ) tmpsp,
-                (
-                SELECT
-                thp.PROD_CD,
-                thp.COST_UPRC,
-                thp.SPLY_UPRC,
-                thpsp.SALE_UPRC,
-                thpsp.STIN_SALE_UPRC,
-                thpsp.DLVR_SALE_UPRC,
-                thpsp.PACK_SALE_UPRC
-                FROM TB_HQ_PRODUCT thp,
-                (
-                SELECT HQ_OFFICE_CD, PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                FROM TB_HQ_PRODUCT_SALE_PRICE
-                WHERE 1 = 1
-                <![CDATA[
-                           AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                           AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY HQ_OFFICE_CD, PROD_CD
-                ) thpsp
-                WHERE 1=1
-                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpsp.PROD_CD = thp.PROD_CD
+                    SELECT
+                    thp.PROD_CD,
+                    thp.COST_UPRC,
+                    thp.SPLY_UPRC,
+                    thpsp.SALE_UPRC,
+                    thpsp.STIN_SALE_UPRC,
+                    thpsp.DLVR_SALE_UPRC,
+                    thpsp.PACK_SALE_UPRC
+                    FROM TB_HQ_PRODUCT thp,
+                    TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+                    WHERE 1=1
+                    AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpsp.PROD_CD = thp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 ) thp
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test='prodClassCd != null and prodClassCd != ""'>
                     AND tmp.PROD_CLASS_CD IN (
-                    SELECT PROD_CLASS_CD
-                    FROM TB_MS_PRODUCT_CLASS
-                    WHERE 1=1
-                    AND STORE_CD = #{storeCd}
-                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                        SELECT PROD_CLASS_CD
+                        FROM TB_MS_PRODUCT_CLASS
+                        WHERE 1=1
+                        AND STORE_CD = #{storeCd}
+                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
                     )
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
@@ -6104,6 +6006,7 @@
                 </if>
                 AND tmpsp.STORE_CD = tmp.STORE_CD
                 AND tmpsp.PROD_CD = tmp.PROD_CD
+                AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND thp.PROD_CD (+)= tmp.PROD_CD
                 AND tmt.STORE_CD = tmp.STORE_CD
                 AND tmt.PROD_CD = tmp.PROD_CD
@@ -6132,58 +6035,44 @@
                 tmp.PRC_CTRL_FG
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    (
-                SELECT  tmkk.STORE_CD
-                ,       tmkk.TU_CLS_TYPE
-                ,       tmkg.TU_CLS_TYPE_NM
-                ,       tmkk.PROD_CD
-                ,       MIN(tmkc.INDEX_NO) AS CLASS_INDEX_NO
-                ,       MIN(tmkk.INDEX_NO) AS INDEX_NO
-                FROM    TB_MS_KIOSK_KEY tmkk
-                ,		TB_MS_KIOSK_CLS tmkc
-                ,		TB_MS_KIOSK_GROUP tmkg
-                WHERE   tmkk.STORE_CD = #{storeCd}
-                AND 	tmkk.STORE_CD = tmkg.STORE_CD(+)
-                AND 	tmkk.POS_NO = tmkg.POS_NO(+)
-                AND 	tmkk.TU_CLS_TYPE = tmkg.TU_CLS_TYPE(+)
-                AND 	tmkk.STORE_CD = tmkc.STORE_CD
-                AND 	tmkk.POS_NO = tmkc.POS_NO
-                AND 	tmkk.TU_CLS_CD = tmkc.TU_CLS_CD
-                AND     tmkk.POS_NO = #{posNo}
-                <if test='tuClsType != null and tuClsType != ""'>
-                    AND tmkk.TU_CLS_TYPE = #{tuClsType}
-                </if>
-                GROUP
-                BY      tmkk.STORE_CD
-                ,       tmkk.TU_CLS_TYPE
-                ,       tmkg.TU_CLS_TYPE_NM
-                ,       tmkk.PROD_CD
+                    SELECT  tmkk.STORE_CD
+                    ,       tmkk.TU_CLS_TYPE
+                    ,       tmkg.TU_CLS_TYPE_NM
+                    ,       tmkk.PROD_CD
+                    ,       MIN(tmkc.INDEX_NO) AS CLASS_INDEX_NO
+                    ,       MIN(tmkk.INDEX_NO) AS INDEX_NO
+                    FROM    TB_MS_KIOSK_KEY tmkk
+                    ,		TB_MS_KIOSK_CLS tmkc
+                    ,		TB_MS_KIOSK_GROUP tmkg
+                    WHERE   tmkk.STORE_CD = #{storeCd}
+                    AND 	tmkk.STORE_CD = tmkg.STORE_CD(+)
+                    AND 	tmkk.POS_NO = tmkg.POS_NO(+)
+                    AND 	tmkk.TU_CLS_TYPE = tmkg.TU_CLS_TYPE(+)
+                    AND 	tmkk.STORE_CD = tmkc.STORE_CD
+                    AND 	tmkk.POS_NO = tmkc.POS_NO
+                    AND 	tmkk.TU_CLS_CD = tmkc.TU_CLS_CD
+                    AND     tmkk.POS_NO = #{posNo}
+                    <if test='tuClsType != null and tuClsType != ""'>
+                        AND tmkk.TU_CLS_TYPE = #{tuClsType}
+                    </if>
+                    GROUP
+                    BY      tmkk.STORE_CD
+                    ,       tmkk.TU_CLS_TYPE
+                    ,       tmkg.TU_CLS_TYPE_NM
+                    ,       tmkk.PROD_CD
                 ) tmt
-                ,       TB_MS_PRODUCT tmp,
-                (
-                SELECT STORE_CD, PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE 1 = 1
-                <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY STORE_CD, PROD_CD
-                ) tmpsp
+                TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test='prodClassCd != null and prodClassCd != ""'>
                     AND tmp.PROD_CLASS_CD IN (
-                    SELECT PROD_CLASS_CD
-                    FROM TB_MS_PRODUCT_CLASS
-                    WHERE 1=1
-                    AND STORE_CD = #{storeCd}
-                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                    CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                        SELECT PROD_CLASS_CD
+                        FROM TB_MS_PRODUCT_CLASS
+                        WHERE 1=1
+                        AND STORE_CD = #{storeCd}
+                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                        CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND STORE_CD = #{storeCd}
                     )
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
@@ -6194,6 +6083,7 @@
                 </if>
                 AND tmpsp.STORE_CD = tmp.STORE_CD
                 AND tmpsp.PROD_CD = tmp.PROD_CD
+                AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND tmt.STORE_CD = tmp.STORE_CD
                 AND tmt.PROD_CD = tmp.PROD_CD
                 ORDER BY tmt.TU_CLS_TYPE, tmt.CLASS_INDEX_NO, tmt.INDEX_NO
