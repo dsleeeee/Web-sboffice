@@ -110,44 +110,28 @@
                 ,       thp.VAT_INCLD_YN -- 과세여부
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_HQ_PRODUCT thp
-                        LEFT OUTER JOIN (
-                        SELECT
-                        HQ_OFFICE_CD,
-                        PROD_CD,
-                        MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                        MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                        MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC,
-                        MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
-                        FROM TB_HQ_PRODUCT_SALE_PRICE
-                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                        <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                        ]]>
-                        AND SALE_PRC_FG = '1'
-                        GROUP BY
-                        HQ_OFFICE_CD, PROD_CD
-                        ) thpsp ON
-                        thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                        AND thp.PROD_CD = thpsp.PROD_CD
-                        LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                        thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                        AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
-                        LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
-                        thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                        AND thpb.PROD_CD = thp.PROD_CD
-                        LEFT OUTER JOIN TB_HQ_PRODUCT_INFO thpi ON
-                        thpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                        AND thpi.PROD_CD = thp.PROD_CD
-                        LEFT OUTER JOIN TB_HQ_PRODUCT_SDSEL_GROUP thpsg ON
-                        thpsg.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                        AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
-                        LEFT OUTER JOIN TB_HQ_PRODUCT_OPTION_GROUP thpog ON
-                        thpog.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                        AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
-                        LEFT OUTER JOIN TB_HQ_PRODUCT_SDATTR_CLASS thpsc ON
-                        thpsc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                        AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+                LEFT OUTER JOIN TB_HQ_BRAND thb ON
+                    thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
+                    thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpb.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_INFO thpi ON
+                    thpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpi.PROD_CD = thp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SDSEL_GROUP thpsg ON
+                    thpsg.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_OPTION_GROUP thpog ON
+                    thpog.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SDATTR_CLASS thpsc ON
+                    thpsc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
@@ -289,44 +273,28 @@
                 ,       thp.VAT_INCLD_YN -- 과세여부
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM    TB_MS_PRODUCT thp
-                LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC,
-                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
-                <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                        ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                STORE_CD, PROD_CD
-                ) thpsp ON
-                thp.STORE_CD = thpsp.STORE_CD
-                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thp.STORE_CD = thpsp.STORE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 LEFT OUTER JOIN TB_MS_BRAND thb ON
-                thb.STORE_CD = thp.STORE_CD
-                AND thb.MS_BRAND_CD = thp.HQ_BRAND_CD
+                    thb.STORE_CD = thp.STORE_CD
+                    AND thb.MS_BRAND_CD = thp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_BARCD thpb ON
-                thpb.STORE_CD = thp.STORE_CD
-                AND thpb.PROD_CD = thp.PROD_CD
+                    thpb.STORE_CD = thp.STORE_CD
+                    AND thpb.PROD_CD = thp.PROD_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_INFO thpi ON
-                thpi.STORE_CD = thp.STORE_CD
-                AND thpi.PROD_CD = thp.PROD_CD
+                    thpi.STORE_CD = thp.STORE_CD
+                    AND thpi.PROD_CD = thp.PROD_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_SDSEL_GROUP thpsg ON
-                thpsg.STORE_CD = thp.STORE_CD
-                AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
+                    thpsg.STORE_CD = thp.STORE_CD
+                    AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_OPTION_GROUP thpog ON
-                thpog.STORE_CD = thp.STORE_CD
-                AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
+                    thpog.STORE_CD = thp.STORE_CD
+                    AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_SDATTR_CLASS thpsc ON
-                thpsc.STORE_CD = thp.STORE_CD
-                AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
+                    thpsc.STORE_CD = thp.STORE_CD
+                    AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
                 WHERE 1=1
                 AND thp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
@@ -347,13 +315,13 @@
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM TB_MS_PRODUCT_CLASS
-                    WHERE STORE_CD = #{storeCd}
-                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
-                    )
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
@@ -380,10 +348,10 @@
                     </if>
                 </if>
                 AND (
-                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                OR
-                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-                )
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY thp.PROD_CD ASC
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -474,44 +442,28 @@
                 ,		thpi.PROD_INFO -- 상품상세설명
                 ,       thp.VAT_INCLD_YN -- 과세여부
                 FROM    TB_HQ_PRODUCT thp
-                LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC,
-                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
-                FROM TB_HQ_PRODUCT_SALE_PRICE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                        ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                HQ_OFFICE_CD, PROD_CD
-                ) thpsp ON
-                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
+                    thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
-                thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpb.PROD_CD = thp.PROD_CD
+                    thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpb.PROD_CD = thp.PROD_CD
                 LEFT OUTER JOIN TB_HQ_PRODUCT_INFO thpi ON
-                thpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpi.PROD_CD = thp.PROD_CD
+                    thpi.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpi.PROD_CD = thp.PROD_CD
                 LEFT OUTER JOIN TB_HQ_PRODUCT_SDSEL_GROUP thpsg ON
-                thpsg.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
+                    thpsg.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
                 LEFT OUTER JOIN TB_HQ_PRODUCT_OPTION_GROUP thpog ON
-                thpog.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
+                    thpog.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
                 LEFT OUTER JOIN TB_HQ_PRODUCT_SDATTR_CLASS thpsc ON
-                thpsc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
+                    thpsc.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
@@ -650,44 +602,28 @@
                 ,       DECODE(NVL(thp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상')              AS SELFAPP_YN
                 ,       thp.VAT_INCLD_YN -- 과세여부
                 FROM    TB_MS_PRODUCT thp
-                LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC,
-                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
-                <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                        ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                STORE_CD, PROD_CD
-                ) thpsp ON
-                thp.STORE_CD = thpsp.STORE_CD
-                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thp.STORE_CD = thpsp.STORE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 LEFT OUTER JOIN TB_MS_BRAND thb ON
-                thb.STORE_CD = thp.STORE_CD
-                AND thb.MS_BRAND_CD = thp.HQ_BRAND_CD
+                    thb.STORE_CD = thp.STORE_CD
+                    AND thb.MS_BRAND_CD = thp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_BARCD thpb ON
-                thpb.STORE_CD = thp.STORE_CD
-                AND thpb.PROD_CD = thp.PROD_CD
+                    thpb.STORE_CD = thp.STORE_CD
+                    AND thpb.PROD_CD = thp.PROD_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_INFO thpi ON
-                thpi.STORE_CD = thp.STORE_CD
-                AND thpi.PROD_CD = thp.PROD_CD
+                    thpi.STORE_CD = thp.STORE_CD
+                    AND thpi.PROD_CD = thp.PROD_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_SDSEL_GROUP thpsg ON
-                thpsg.STORE_CD = thp.STORE_CD
-                AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
+                    thpsg.STORE_CD = thp.STORE_CD
+                    AND thpsg.SDSEL_GRP_CD = thp.SDSEL_GRP_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_OPTION_GROUP thpog ON
-                thpog.STORE_CD = thp.STORE_CD
-                AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
+                    thpog.STORE_CD = thp.STORE_CD
+                    AND thpog.OPTION_GRP_CD = thp.OPTION_GRP_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_SDATTR_CLASS thpsc ON
-                thpsc.STORE_CD = thp.STORE_CD
-                AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
+                    thpsc.STORE_CD = thp.STORE_CD
+                    AND thpsc.SDATTR_CLASS_CD = thp.SDATTR_CLASS_CD
                 WHERE 1=1
                 AND thp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
@@ -708,13 +644,13 @@
                 </if>
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM TB_MS_PRODUCT_CLASS
-                    WHERE STORE_CD = #{storeCd}
-                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
-                    )
+                                                SELECT
+                                                PROD_CLASS_CD
+                                                FROM TB_MS_PRODUCT_CLASS
+                                                WHERE STORE_CD = #{storeCd}
+                                                START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                            )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
@@ -741,10 +677,10 @@
                     </if>
                 </if>
                 AND (
-                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-                OR
-                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-                )
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                        OR
+                        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                    )
                 ORDER BY thp.PROD_CD ASC
             </when>
         </choose>
@@ -758,7 +694,7 @@
         COMMENTS : 상품의 정보를 조회한다. ( 본사/매장 )
     -->
     <select id="getProdList2" parameterType="prodSearchVO" resultMap="ProdListMap">
-    /* USE : ProdSearchMapper.getProdList2 */
+        /* USE : ProdSearchMapper.getProdList2 */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -865,24 +801,7 @@
                 ,       TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                 ,       TB_HQ_PRODUCT_BARCD thpb
                 ,       TB_WB_USER_INFO_DTL_V01 twuidv
-                ,       (
-                            SELECT  HQ_OFFICE_CD
-                            ,       PROD_CD
-                            ,       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                            ,       MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC
-                            ,       MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                            ,       MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
-                            FROM    TB_HQ_PRODUCT_SALE_PRICE
-                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                            <![CDATA[
-                                AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                                AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                            ]]>
-                            AND     SALE_PRC_FG = '1'
-                            GROUP
-                            BY      HQ_OFFICE_CD
-                            ,       PROD_CD
-                        ) thpsp
+                ,       TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
                 ,       (
                             SELECT  thtk.PROD_CD
                             ,		SUBSTR(XMLAGG(XMLELEMENT(TUK_NM, ', ', '['|| thtkg.TUKEY_GRP_CD ||'] ' ||thtkg.TUKEY_GRP_NM) ORDER BY thtkg.TUKEY_GRP_CD ).EXTRACT ('//text()').GETCLOBVAL(),2) AS PROD_TUK_NM
@@ -1019,7 +938,8 @@
                             GROUP
                             BY      thpcp.PROD_CD
                         ) prpro
-                WHERE   thp.HQ_OFFICE_CD    =    #{hqOfficeCd}
+                WHERE   1=1
+                AND     thp.HQ_OFFICE_CD    =    #{hqOfficeCd}
                 AND     thp.HQ_OFFICE_CD    =    thpi.HQ_OFFICE_CD(+)
                 AND     thp.PROD_CD         =    thpi.PROD_CD(+)
                 AND     thp.HQ_OFFICE_CD    =    thb.hq_office_cd(+)
@@ -1035,6 +955,7 @@
                 AND     thp.REG_ID          =    twuidv.USER_ID(+)
                 AND     thp.HQ_OFFICE_CD    =    thpsp.HQ_OFFICE_CD(+)
                 AND     thp.PROD_CD         =    thpsp.PROD_CD(+)
+                AND      thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND     thp.PROD_CD         =    prtuk.prod_cd(+)
                 AND     thp.PROD_CD         =    prkio.prod_cd(+)
                 AND     thp.PROD_CD         =    prsdsel.prod_cd(+)
@@ -1362,23 +1283,7 @@
             ,       TB_MS_PRODUCT_SDATTR_CLASS thpsc
             ,       TB_MS_PRODUCT_BARCD thpb
             ,       TB_WB_USER_INFO_DTL_V01 twuidv
-            ,       (
-                        SELECT  STORE_CD
-                        ,       PROD_CD
-                        ,       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                        ,       MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC
-                        ,       MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                        ,       MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
-                        FROM    TB_MS_PRODUCT_SALE_PRICE
-                        WHERE   STORE_CD = #{storeCd}
-                        <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                        ]]>
-                        AND     SALE_PRC_FG = '1'
-                        GROUP
-                        BY      STORE_CD, PROD_CD
-                    ) thpsp
+            ,       TB_MS_PRODUCT_SALE_PRICE_V01 thpsp --view
             ,       (
                         SELECT  tmtk.PROD_CD
                         ,		SUBSTR(XMLAGG(XMLELEMENT(TUK_NM, ', ', '['|| tmtkg.TUKEY_GRP_CD ||'] ' ||tmtkg.TUKEY_GRP_NM) ORDER BY tmtkg.TUKEY_GRP_CD ).EXTRACT ('//text()').GETCLOBVAL(),2) AS PROD_TUK_NM
@@ -1514,7 +1419,8 @@
                         GROUP
                         BY      tmpcp.PROD_CD
                     ) prpro
-            WHERE   thp.STORE_CD        =    #{storeCd}
+            WHERE   1=1
+            AND     thp.STORE_CD        =    #{storeCd}
             AND     thp.STORE_CD        =    thpi.STORE_CD(+)
             AND     thp.PROD_CD         =    thpi.PROD_CD(+)
             AND     thp.STORE_CD        =    thb.STORE_CD(+)
@@ -1530,6 +1436,7 @@
             AND     thp.REG_ID          =    twuidv.USER_ID(+)
             AND     thp.STORE_CD        =    thpsp.STORE_CD(+)
             AND     thp.PROD_CD         =    thpsp.PROD_CD(+)
+            AND     thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
             AND     thp.PROD_CD         =    prtuk.prod_cd(+)
             AND     thp.PROD_CD         =    prkio.prod_cd(+)
             AND     thp.PROD_CD         =    prsdsel.prod_cd(+)
@@ -1865,24 +1772,7 @@
                 ,       TB_HQ_PRODUCT_SDATTR_CLASS thpsc
                 ,       TB_HQ_PRODUCT_BARCD thpb
                 ,       TB_WB_USER_INFO_DTL_V01 twuidv
-                ,       (
-                            SELECT  HQ_OFFICE_CD
-                            ,       PROD_CD
-                            ,       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                            ,       MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC
-                            ,       MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                            ,       MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
-                            FROM    TB_HQ_PRODUCT_SALE_PRICE
-                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
-                            <![CDATA[
-                                AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                                AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                            ]]>
-                            AND     SALE_PRC_FG = '1'
-                            GROUP
-                            BY      HQ_OFFICE_CD
-                            ,       PROD_CD
-                        ) thpsp
+                ,       TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
                 ,       (
                             SELECT  thtk.PROD_CD
                             ,		SUBSTR(XMLAGG(XMLELEMENT(TUK_NM, ', ', '['|| thtkg.TUKEY_GRP_CD ||'] ' ||thtkg.TUKEY_GRP_NM) ORDER BY thtkg.TUKEY_GRP_CD ).EXTRACT ('//text()').GETCLOBVAL(),2) AS PROD_TUK_NM
@@ -2019,7 +1909,8 @@
                             GROUP
                             BY      thpcp.PROD_CD
                         ) prpro
-                WHERE   thp.HQ_OFFICE_CD    =    #{hqOfficeCd}
+                WHERE   1=1
+                AND     thp.HQ_OFFICE_CD    =    #{hqOfficeCd}
                 AND     thp.HQ_OFFICE_CD    =    thpi.HQ_OFFICE_CD(+)
                 AND     thp.PROD_CD         =    thpi.PROD_CD(+)
                 AND     thp.HQ_OFFICE_CD    =    thb.hq_office_cd(+)
@@ -2035,6 +1926,7 @@
                 AND     thp.REG_ID          =    twuidv.USER_ID(+)
                 AND     thp.HQ_OFFICE_CD    =    thpsp.HQ_OFFICE_CD(+)
                 AND     thp.PROD_CD         =    thpsp.PROD_CD(+)
+                AND     thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND     thp.PROD_CD         =    prtuk.prod_cd(+)
                 AND     thp.PROD_CD         =    prkio.prod_cd(+)
                 AND     thp.PROD_CD         =    prsdsel.prod_cd(+)
@@ -2359,23 +2251,7 @@
             ,       TB_MS_PRODUCT_SDATTR_CLASS thpsc
             ,       TB_MS_PRODUCT_BARCD thpb
             ,       TB_WB_USER_INFO_DTL_V01 twuidv
-            ,       (
-                        SELECT  STORE_CD
-                        ,       PROD_CD
-                        ,       MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                        ,       MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC
-                        ,       MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                        ,       MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC
-                        FROM    TB_MS_PRODUCT_SALE_PRICE
-                        WHERE   STORE_CD = #{storeCd}
-                        <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'YYYYMMDD')
-                        ]]>
-                        AND     SALE_PRC_FG = '1'
-                        GROUP
-                        BY      STORE_CD, PROD_CD
-                    ) thpsp
+            ,       TB_MS_PRODUCT_SALE_PRICE_V01 thpsp --view
             ,       (
                         SELECT  tmtk.PROD_CD
                         ,		SUBSTR(XMLAGG(XMLELEMENT(TUK_NM, ', ', '['|| tmtkg.TUKEY_GRP_CD ||'] ' ||tmtkg.TUKEY_GRP_NM) ORDER BY tmtkg.TUKEY_GRP_CD ).EXTRACT ('//text()').GETCLOBVAL(),2) AS PROD_TUK_NM
@@ -2511,7 +2387,8 @@
                         GROUP
                         BY      tmpcp.PROD_CD
                     ) prpro
-            WHERE   thp.STORE_CD        =    #{storeCd}
+            WHERE   1=1
+            AND     thp.STORE_CD        =    #{storeCd}
             AND     thp.STORE_CD        =    thpi.STORE_CD(+)
             AND     thp.PROD_CD         =    thpi.PROD_CD(+)
             AND     thp.STORE_CD        =    thb.STORE_CD(+)
@@ -2527,6 +2404,7 @@
             AND     thp.REG_ID          =    twuidv.USER_ID(+)
             AND     thp.STORE_CD        =    thpsp.STORE_CD(+)
             AND     thp.PROD_CD         =    thpsp.PROD_CD(+)
+            AND     thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
             AND     thp.PROD_CD         =    prtuk.prod_cd(+)
             AND     thp.PROD_CD         =    prkio.prod_cd(+)
             AND     thp.PROD_CD         =    prsdsel.prod_cd(+)
@@ -2747,4 +2625,5 @@
             </when>
         </choose>
     </select>
+
 </mapper>

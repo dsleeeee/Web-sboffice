@@ -30,21 +30,9 @@
         ,      thp.PRC_CTRL_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM  TB_HQ_PRODUCT thp
-        ,     (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    HQ_OFFICE_CD, PROD_CD
-                ) thpsp
-        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,     TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -62,13 +50,14 @@
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
-        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+                (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY thp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -93,21 +82,9 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM  TB_ST_HQ_STOCK_MONTHLY tshsm
         ,     TB_HQ_PRODUCT thp
-        ,     (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    HQ_OFFICE_CD, PROD_CD
-                ) thpsp
-        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,     TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tshsm.IOSTOCK_YM = #{iostockYm}
         AND   tshsm.STORAGE_CD = #{storageCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
@@ -127,13 +104,14 @@
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
-        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+                (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND thp.HQ_OFFICE_CD = tshsm.HQ_OFFICE_CD
         AND thp.PROD_CD = tshsm.PROD_CD
         ORDER BY thp.PROD_CD
@@ -157,21 +135,9 @@
         ,      thp.COST_UPRC AS COST_UPRC      -- 원가
         ,      thp.PRC_CTRL_FG
         FROM  TB_HQ_PRODUCT thp
-        ,     (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    HQ_OFFICE_CD, PROD_CD
-                ) thpsp
-        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,     TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND thp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -189,13 +155,14 @@
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
-        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+                (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY thp.PROD_CD
     </select>
 
@@ -217,21 +184,9 @@
         ,      thp.PRC_CTRL_FG
         FROM  TB_ST_HQ_STOCK_MONTHLY tshsm
         ,     TB_HQ_PRODUCT thp
-        ,     (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    HQ_OFFICE_CD, PROD_CD
-                ) thpsp
-        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,     TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tshsm.IOSTOCK_YM = #{iostockYm}
         AND   tshsm.STORAGE_CD = #{storageCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
@@ -251,13 +206,14 @@
             AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
-        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+                (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND thp.HQ_OFFICE_CD = tshsm.HQ_OFFICE_CD
         AND thp.PROD_CD = tshsm.PROD_CD
         ORDER BY thp.PROD_CD
@@ -357,21 +313,9 @@
         ,      tmp.PRC_CTRL_FG
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM  TB_MS_PRODUCT tmp
-        ,     (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    STORE_CD, PROD_CD
-                ) tmpsp
-        WHERE tmp.STORE_CD = #{storeCd}
+        ,     TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -389,12 +333,13 @@
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY tmp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
@@ -419,22 +364,9 @@
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM  TB_ST_STORE_STOCK_MONTHLY tsssm
         ,     TB_MS_PRODUCT tmp
-        ,     (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    STORE_CD, PROD_CD
-
-                ) tmpsp
-        WHERE tmp.STORE_CD = #{storeCd}
+        ,     TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
         AND   tsssm.STORAGE_CD = #{storageCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
@@ -453,12 +385,13 @@
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND tmp.STORE_CD = tsssm.STORE_CD
         AND tmp.PROD_CD = tsssm.PROD_CD
         ORDER BY tmp.PROD_CD
@@ -482,21 +415,9 @@
         ,      tmp.COST_UPRC AS COST_UPRC      -- 원가
         ,      tmp.PRC_CTRL_FG
         FROM  TB_MS_PRODUCT tmp
-        ,     (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    STORE_CD, PROD_CD
-                ) tmpsp
-        WHERE tmp.STORE_CD = #{storeCd}
+        ,     TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
             AND tmp.PROD_CLASS_CD IN (
                                         SELECT PROD_CLASS_CD
@@ -514,12 +435,13 @@
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY tmp.PROD_CD
     </select>
 
@@ -541,22 +463,9 @@
         ,      tmp.PRC_CTRL_FG
         FROM  TB_ST_STORE_STOCK_MONTHLY tsssm
         ,     TB_MS_PRODUCT tmp
-        ,     (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    STORE_CD, PROD_CD
-
-                ) tmpsp
-        WHERE tmp.STORE_CD = #{storeCd}
+        ,     TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
         AND   tsssm.STORAGE_CD = #{storageCd}
         <if test='prodClassCd != null and prodClassCd != ""'>
@@ -575,12 +484,13 @@
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND tmp.STORE_CD = tsssm.STORE_CD
         AND tmp.PROD_CD = tsssm.PROD_CD
         ORDER BY tmp.PROD_CD
@@ -677,29 +587,18 @@
         ,      thp.COST_UPRC AS B_COST_UPRC    -- 현재원가
         ,      thp.COST_UPRC AS COST_UPRC      -- 변경원가
         FROM  TB_HQ_PRODUCT thp
-        ,     (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    HQ_OFFICE_CD, PROD_CD
-                ) thpsp
-        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,     TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
-        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+                (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY thp.PROD_CD
     </select>
 
@@ -719,32 +618,20 @@
         ,      tshsm.AVG_COST_UPRC AS B_COST_UPRC      	 -- 현재원가
         ,      tshsm.AVG_COST_UPRC AS COST_UPRC          -- 변경원가
         FROM  TB_ST_HQ_STOCK_MONTHLY tshsm
-        ,     TB_HQ_PRODUCT thp
-        ,     (
-                    SELECT HQ_OFFICE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_HQ_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    HQ_OFFICE_CD, PROD_CD
-                ) thpsp
-        WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        ,     TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         AND   tshsm.IOSTOCK_YM = #{iostockYm}
         AND   tshsm.STORAGE_CD = #{storageCd}
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
-        (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN
+                (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND thp.HQ_OFFICE_CD = tshsm.HQ_OFFICE_CD
         AND thp.PROD_CD = tshsm.PROD_CD
         ORDER BY thp.PROD_CD
@@ -766,28 +653,17 @@
         ,      tmp.COST_UPRC AS B_COST_UPRC    -- 현재원가
         ,      tmp.COST_UPRC AS COST_UPRC      -- 변경원가
         FROM  TB_MS_PRODUCT tmp
-        ,     (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    STORE_CD, PROD_CD
-                ) tmpsp
-        WHERE tmp.STORE_CD = #{storeCd}
+        ,     TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY tmp.PROD_CD
     </select>
 
@@ -809,31 +685,19 @@
         ,      tmp.PRC_CTRL_FG
         FROM  TB_ST_STORE_STOCK_MONTHLY tsssm
         ,     TB_MS_PRODUCT tmp
-        ,     (
-                    SELECT STORE_CD
-                    ,      PROD_CD
-                    ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                    FROM   TB_MS_PRODUCT_SALE_PRICE
-                    WHERE 1 = 1
-                    <![CDATA[
-                            AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                            AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                    AND   SALE_PRC_FG = '1'
-                    GROUP
-                    BY    STORE_CD, PROD_CD
-
-                ) tmpsp
-        WHERE tmp.STORE_CD = #{storeCd}
+        ,     TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
         AND   tsssm.IOSTOCK_YM = #{iostockYm}
         AND   tsssm.STORAGE_CD = #{storageCd}
         AND (
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
-        OR
-        ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
-        )
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND tmp.STORE_CD = tsssm.STORE_CD
         AND tmp.PROD_CD = tsssm.PROD_CD
         ORDER BY tmp.PROD_CD
@@ -932,20 +796,7 @@
                A.SEQ
         FROM TB_TMP_EXCEL_COST_PRICE A,
         TB_HQ_PRODUCT thp,
-        (
-            SELECT HQ_OFFICE_CD
-            ,      PROD_CD
-            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-            FROM   TB_HQ_PRODUCT_SALE_PRICE
-            WHERE 1 = 1
-            <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-            AND   SALE_PRC_FG = '1'
-            GROUP
-            BY    HQ_OFFICE_CD, PROD_CD
-        ) thpsp
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
         WHERE 1=1
         AND A.SESSION_ID = #{sessionId}
         AND A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -953,6 +804,7 @@
         AND thp.PROD_CD (+)= A.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY A.SEQ
     </select>
 
@@ -976,20 +828,7 @@
         FROM TB_TMP_EXCEL_COST_PRICE A,
         TB_HQ_PRODUCT thp,
         TB_ST_HQ_STOCK_MONTHLY tshsm,
-        (
-            SELECT HQ_OFFICE_CD
-            ,      PROD_CD
-            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-            FROM   TB_HQ_PRODUCT_SALE_PRICE
-            WHERE 1 = 1
-            <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-            AND   SALE_PRC_FG = '1'
-            GROUP
-            BY    HQ_OFFICE_CD, PROD_CD
-        ) thpsp
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
         WHERE 1=1
         AND A.SESSION_ID = #{sessionId}
         AND A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -999,6 +838,7 @@
         AND thp.PROD_CD (+)= A.PROD_CD
         AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND tshsm.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
         AND tshsm.PROD_CD = thp.PROD_CD
         ORDER BY A.SEQ
@@ -1023,21 +863,7 @@
                A.SEQ
         FROM TB_TMP_EXCEL_COST_PRICE A,
         TB_MS_PRODUCT tmp,
-        (
-            SELECT STORE_CD
-            ,      PROD_CD
-            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-            FROM   TB_MS_PRODUCT_SALE_PRICE
-            WHERE  1 = 1
-            <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-            AND    SALE_PRC_FG = '1'
-            GROUP
-               BY  STORE_CD
-            ,      PROD_CD
-        ) tmpsp
+        TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         WHERE 1=1
         AND A.SESSION_ID = #{sessionId}
         AND A.STORE_CD = #{storeCd}
@@ -1045,6 +871,7 @@
         AND tmp.PROD_CD (+)= A.PROD_CD
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY A.SEQ
     </select>
 
@@ -1068,21 +895,7 @@
         FROM TB_TMP_EXCEL_COST_PRICE A,
         TB_MS_PRODUCT tmp,
         TB_ST_STORE_STOCK_MONTHLY tsssm,
-        (
-            SELECT STORE_CD
-            ,      PROD_CD
-            ,      MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-            FROM   TB_MS_PRODUCT_SALE_PRICE
-            WHERE  1 = 1
-            <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-            ]]>
-            AND    SALE_PRC_FG = '1'
-            GROUP
-               BY  STORE_CD
-            ,      PROD_CD
-        ) tmpsp
+        TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
         WHERE 1=1
         AND A.SESSION_ID = #{sessionId}
         AND A.STORE_CD = #{storeCd}
@@ -1092,6 +905,7 @@
         AND tmp.PROD_CD (+)= A.PROD_CD
         AND tmpsp.STORE_CD = tmp.STORE_CD
         AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
         AND tsssm.STORE_CD = tmp.STORE_CD
         AND tsSsm.PROD_CD = tmp.PROD_CD
         ORDER BY A.SEQ

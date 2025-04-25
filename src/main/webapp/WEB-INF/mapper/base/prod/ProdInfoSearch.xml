@@ -77,20 +77,7 @@
                 FROM 	TB_HQ_PRODUCT thp
                 ,       TB_HQ_PRODUCT_CLASS_V02 thpcv	-- 분류정보
                 -- 가격
-                ,		(
-                        SELECT  HQ_OFFICE_CD,
-                                PROD_CD,
-                                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                        FROM TB_HQ_PRODUCT_SALE_PRICE
-                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                        <![CDATA[
-                        AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                        ]]>
-                        AND SALE_PRC_FG = '1'
-                        GROUP BY
-                        HQ_OFFICE_CD, PROD_CD
-                        ) thpsp2
+                ,		TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp2 --view
                 -- 가격
                 ,		TB_HQ_PRODUCT_INFO thpi				-- 상품정보
                 ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg		-- 선택메뉴
@@ -100,8 +87,10 @@
                 WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thp.HQ_OFFICE_CD = thpcv.HQ_OFFICE_CD
                 AND 	thp.PROD_CD = thpcv.PROD_CD
+                AND     thpsp2.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thp.HQ_OFFICE_CD = thpsp2.HQ_OFFICE_CD
                 AND 	thp.PROD_CD = thpsp2.PROD_CD
+                AND     thpsp2.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND 	thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD (+)
                 AND 	thp.PROD_CD = thpi.PROD_CD (+)
                 -- 선택메뉴
@@ -118,12 +107,12 @@
                 AND 	thp.DEPOSIT_PROD_CD = thp3.PROD_CD (+)
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM TB_HQ_PRODUCT_CLASS
-                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                        SELECT
+                        PROD_CLASS_CD
+                        FROM TB_HQ_PRODUCT_CLASS
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
                     )
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
@@ -214,21 +203,7 @@
                 FROM 	TB_MS_PRODUCT thp
                 ,       TB_MS_PRODUCT_CLASS_V02 thpcv	-- 분류정보
                 -- 가격
-                ,		(
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
-                <![CDATA[
-                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                  ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                STORE_CD, PROD_CD
-                ) thpsp2
+                ,		TB_MS_PRODUCT_SALE_PRICE_V01 thpsp2 --view
                 -- 가격
                 ,		TB_MS_PRODUCT_INFO thpi				-- 상품정보
                 ,		TB_MS_PRODUCT_SDSEL_GROUP thpsg		-- 선택메뉴
@@ -238,8 +213,10 @@
                 WHERE 	thp.STORE_CD = #{storeCd}
                 AND 	thp.STORE_CD = thpcv.STORE_CD
                 AND 	thp.PROD_CD = thpcv.PROD_CD
+                AND     thpsp2.STORE_CD = #{storeCd}
                 AND 	thp.STORE_CD = thpsp2.STORE_CD
                 AND 	thp.PROD_CD = thpsp2.PROD_CD
+                AND     thpsp2.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND 	thp.STORE_CD = thpi.STORE_CD (+)
                 AND 	thp.PROD_CD = thpi.PROD_CD (+)
                 -- 선택메뉴
@@ -256,12 +233,12 @@
                 AND 	thp.DEPOSIT_PROD_CD = thp3.PROD_CD (+)
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM TB_MS_PRODUCT_CLASS
-                    WHERE STORE_CD = #{storeCd}
-                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
-                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                        SELECT
+                        PROD_CLASS_CD
+                        FROM TB_MS_PRODUCT_CLASS
+                        WHERE STORE_CD = #{storeCd}
+                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
                     )
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
@@ -346,21 +323,7 @@
                 FROM 	TB_HQ_PRODUCT thp
                 ,       TB_HQ_PRODUCT_CLASS_V02 thpcv	-- 분류정보
                 -- 가격
-                ,		(
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_HQ_PRODUCT_SALE_PRICE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
-                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                  ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                HQ_OFFICE_CD, PROD_CD
-                ) thpsp2
+                ,		TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp2 --view
                 -- 가격
                 ,		TB_HQ_PRODUCT_INFO thpi				-- 상품정보
                 ,		TB_HQ_PRODUCT_SDSEL_GROUP thpsg		-- 선택메뉴
@@ -370,8 +333,10 @@
                 WHERE 	thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thp.HQ_OFFICE_CD = thpcv.HQ_OFFICE_CD
                 AND 	thp.PROD_CD = thpcv.PROD_CD
+                AND     thpsp2.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND 	thp.HQ_OFFICE_CD = thpsp2.HQ_OFFICE_CD
                 AND 	thp.PROD_CD = thpsp2.PROD_CD
+                AND     thpsp2.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND 	thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD (+)
                 AND 	thp.PROD_CD = thpi.PROD_CD (+)
                 -- 선택메뉴
@@ -388,12 +353,12 @@
                 AND 	thp.DEPOSIT_PROD_CD = thp3.PROD_CD (+)
                 <if test="prodClassCd != null and prodClassCd != ''">
                     AND thp.PROD_CLASS_CD IN (
-                    SELECT
-                    PROD_CLASS_CD
-                    FROM TB_HQ_PRODUCT_CLASS
-                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
-                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                        SELECT
+                        PROD_CLASS_CD
+                        FROM TB_HQ_PRODUCT_CLASS
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
                     )
                 </if>
                 <if test='prodCd != null and prodCd != ""'>
@@ -481,21 +446,7 @@
                 FROM 	TB_MS_PRODUCT thp
                 ,       TB_MS_PRODUCT_CLASS_V02 thpcv	-- 분류정보
                 -- 가격
-                ,		(
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
-                <![CDATA[
-                AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                  ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                STORE_CD, PROD_CD
-                ) thpsp2
+                ,		TB_MS_PRODUCT_SALE_PRICE_V01 thpsp2 --view
                 -- 가격
                 ,		TB_MS_PRODUCT_INFO thpi				-- 상품정보
                 ,		TB_MS_PRODUCT_SDSEL_GROUP thpsg		-- 선택메뉴
@@ -505,8 +456,10 @@
                 WHERE 	thp.STORE_CD = #{storeCd}
                 AND 	thp.STORE_CD = thpcv.STORE_CD
                 AND 	thp.PROD_CD = thpcv.PROD_CD
+                AND     thpsp2.STORE_CD = #{storeCd}
                 AND 	thp.STORE_CD = thpsp2.STORE_CD
                 AND 	thp.PROD_CD = thpsp2.PROD_CD
+                AND     thpsp2.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 AND 	thp.STORE_CD = thpi.STORE_CD (+)
                 AND 	thp.PROD_CD = thpi.PROD_CD (+)
                 -- 선택메뉴

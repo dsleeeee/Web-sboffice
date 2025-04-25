@@ -32,29 +32,16 @@
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                 TB_HQ_PRODUCT thp
-                LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_HQ_PRODUCT_SALE_PRICE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                HQ_OFFICE_CD, PROD_CD
-                ) thpsp ON
-                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
+                    thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
-                thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpb.PROD_CD = thp.PROD_CD
+                    thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpb.PROD_CD = thp.PROD_CD
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
@@ -114,31 +101,18 @@
                 <include refid="CmmSQL.PagingTemplateCount"/>
                 FROM
                 TB_MS_PRODUCT tmp
-                LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
-                <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                STORE_CD, PROD_CD
-                ) thpsp ON
-                tmp.STORE_CD = thpsp.STORE_CD
-                AND tmp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
+                    tmp.STORE_CD = tmpsp.STORE_CD
+                    AND tmp.PROD_CD = tmpsp.PROD_CD
+                    AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 INNER JOIN TB_MS_STORE tms ON
-                tms.STORE_CD  = tmp.STORE_CD
+                    tms.STORE_CD  = tmp.STORE_CD
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-                AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
+                    thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
-                tmpb.STORE_CD = tmp.STORE_CD
-                AND tmpb.PROD_CD = tmp.PROD_CD
+                    tmpb.STORE_CD = tmp.STORE_CD
+                    AND tmpb.PROD_CD = tmp.PROD_CD
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
@@ -205,29 +179,16 @@
                 thpb.BARCD_CD AS BARCD_OLD
                 FROM
                 TB_HQ_PRODUCT thp
-                LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_HQ_PRODUCT_SALE_PRICE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                HQ_OFFICE_CD, PROD_CD
-                ) thpsp ON
-                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                AND thp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
+                    thb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD = thp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_HQ_PRODUCT_BARCD thpb ON
-                thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
-                AND thpb.PROD_CD = thp.PROD_CD
+                    thpb.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+                    AND thpb.PROD_CD = thp.PROD_CD
                 WHERE 1=1
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="chkDt == false">
@@ -283,31 +244,18 @@
                 tmpb.BARCD_CD AS BARCD_OLD
                 FROM
                 TB_MS_PRODUCT tmp
-                LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
-                <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY
-                STORE_CD, PROD_CD
-                ) thpsp ON
-                tmp.STORE_CD = thpsp.STORE_CD
-                AND tmp.PROD_CD = thpsp.PROD_CD
+                LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
+                    tmp.STORE_CD = tmpsp.STORE_CD
+                    AND tmp.PROD_CD = tmpsp.PROD_CD
+                    AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 INNER JOIN TB_MS_STORE tms ON
-                tms.STORE_CD  = tmp.STORE_CD
+                    tms.STORE_CD  = tmp.STORE_CD
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
-                thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-                AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
+                    thb.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                    AND thb.HQ_BRAND_CD = tmp.HQ_BRAND_CD
                 LEFT OUTER JOIN TB_MS_PRODUCT_BARCD tmpb ON
-                tmpb.STORE_CD = tmp.STORE_CD
-                AND tmpb.PROD_CD = tmp.PROD_CD
+                    tmpb.STORE_CD = tmp.STORE_CD
+                    AND tmpb.PROD_CD = tmp.PROD_CD
                 WHERE 1=1
                 AND tmp.STORE_CD = #{storeCd}
                 <if test="chkDt == false">
@@ -418,55 +366,41 @@
                 thp.MAP_PROD_CD
                 FROM
                 TB_HQ_PRODUCT thp
+                LEFT OUTER JOIN TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp ON --view
+                    thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpsp.PROD_CD
+                    AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                FROM TB_HQ_PRODUCT_SALE_PRICE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY HQ_OFFICE_CD, PROD_CD
-                ) thpsp ON
-                thp.HQ_OFFICE_CD = thpsp.HQ_OFFICE_CD
-                AND thp.PROD_CD = thpsp.PROD_CD
+                        SELECT
+                        HQ_OFFICE_CD,
+                        PROD_CD,
+                        IMG_URL || IMG_FILE_NM AS IMG_URL
+                        FROM TB_HQ_PRODUCT_IMAGE
+                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND IMG_FG = '001'
+                    ) thpi ON
+                    thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thpi.PROD_CD
                 LEFT OUTER JOIN (
-                SELECT
-                HQ_OFFICE_CD,
-                PROD_CD,
-                IMG_URL || IMG_FILE_NM AS IMG_URL
-                FROM TB_HQ_PRODUCT_IMAGE
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                AND IMG_FG = '001'
-                ) thpi ON
-                thp.HQ_OFFICE_CD = thpi.HQ_OFFICE_CD
-                AND thp.PROD_CD = thpi.PROD_CD
-                LEFT OUTER JOIN (
-                SELECT
-                thvp.HQ_OFFICE_CD,
-                thvp.PROD_CD,
-                LISTAGG(thvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_CD,
-                LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
-                FROM TB_HQ_VENDOR_PROD thvp,
-                TB_HQ_VENDOR thv
+                        SELECT
+                        thvp.HQ_OFFICE_CD,
+                        thvp.PROD_CD,
+                        LISTAGG(thvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_CD,
+                        LISTAGG(thv.VENDR_NM, ',') WITHIN GROUP (ORDER BY thvp.VENDR_CD) AS VENDR_NM
+                        FROM TB_HQ_VENDOR_PROD thvp,
+                        TB_HQ_VENDOR thv
+                        WHERE 1=1
+                        AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND thvp.PROD_CD = #{prodCd}
+                        AND thvp.USE_YN = 'Y'
+                        AND thv.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
+                        AND thv.VENDR_CD = thvp.VENDR_CD
+                        GROUP BY thvp.HQ_OFFICE_CD, thvp.PROD_CD
+                    ) thvp ON
+                    thp.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
+                    AND thp.PROD_CD = thvp.PROD_CD
                 WHERE 1=1
-                AND thvp.HQ_OFFICE_CD = #{hqOfficeCd}
-                AND thvp.PROD_CD = #{prodCd}
-                AND thvp.USE_YN = 'Y'
-                AND thv.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
-                AND thv.VENDR_CD = thvp.VENDR_CD
-                GROUP BY thvp.HQ_OFFICE_CD, thvp.PROD_CD
-                ) thvp ON
-                thp.HQ_OFFICE_CD = thvp.HQ_OFFICE_CD
-                AND thp.PROD_CD = thvp.PROD_CD
-                WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thp.PROD_CD = #{prodCd}
             </when>
             <!-- 가맹점 -->
@@ -519,55 +453,41 @@
                 tmp.MAP_PROD_CD
                 FROM
                 TB_MS_PRODUCT tmp
+                LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
+                    thp.STORE_CD = tmpsp.STORE_CD
+                    AND thp.PROD_CD = tmpsp.PROD_CD
+                    AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
                 LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC,
-                MIN(STIN_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS STIN_SALE_UPRC,
-                MIN(DLVR_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS DLVR_SALE_UPRC,
-                MIN(PACK_SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS PACK_SALE_UPRC
-                FROM TB_MS_PRODUCT_SALE_PRICE
-                WHERE STORE_CD = #{storeCd}
-                <![CDATA[
-                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                ]]>
-                AND SALE_PRC_FG = '1'
-                GROUP BY STORE_CD, PROD_CD
-                ) tmpsp ON
-                tmp.STORE_CD = tmpsp.STORE_CD
-                AND tmp.PROD_CD = tmpsp.PROD_CD
+                        SELECT
+                        STORE_CD,
+                        PROD_CD,
+                        IMG_URL || IMG_FILE_NM AS IMG_URL
+                        FROM TB_MS_PRODUCT_IMAGE
+                        WHERE STORE_CD = #{storeCd}
+                        AND IMG_FG = '001'
+                    ) tmpi ON
+                    tmp.STORE_CD = tmpi.STORE_CD
+                    AND tmp.PROD_CD = tmpi.PROD_CD
                 LEFT OUTER JOIN (
-                SELECT
-                STORE_CD,
-                PROD_CD,
-                IMG_URL || IMG_FILE_NM AS IMG_URL
-                FROM TB_MS_PRODUCT_IMAGE
-                WHERE STORE_CD = #{storeCd}
-                AND IMG_FG = '001'
-                ) tmpi ON
-                tmp.STORE_CD = tmpi.STORE_CD
-                AND tmp.PROD_CD = tmpi.PROD_CD
-                LEFT OUTER JOIN (
-                SELECT
-                tmvp.STORE_CD,
-                tmvp.PROD_CD,
-                LISTAGG(tmvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_CD,
-                LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
-                FROM TB_MS_VENDOR_PROD tmvp,
-                TB_MS_VENDOR tmv
+                        SELECT
+                        tmvp.STORE_CD,
+                        tmvp.PROD_CD,
+                        LISTAGG(tmvp.VENDR_CD, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_CD,
+                        LISTAGG(tmv.VENDR_NM, ',') WITHIN GROUP (ORDER BY tmvp.VENDR_CD) AS VENDR_NM
+                        FROM TB_MS_VENDOR_PROD tmvp,
+                        TB_MS_VENDOR tmv
+                        WHERE 1=1
+                        AND tmvp.STORE_CD = #{storeCd}
+                        AND tmvp.PROD_CD = #{prodCd}
+                        AND tmvp.USE_YN = 'Y'
+                        AND tmv.STORE_CD = tmvp.STORE_CD
+                        AND tmv.VENDR_CD = tmvp.VENDR_CD
+                        GROUP BY tmvp.STORE_CD, tmvp.PROD_CD
+                    ) tmvp ON
+                    tmp.STORE_CD = tmvp.STORE_CD
+                    AND tmp.PROD_CD = tmvp.PROD_CD
                 WHERE 1=1
-                AND tmvp.STORE_CD = #{storeCd}
-                AND tmvp.PROD_CD = #{prodCd}
-                AND tmvp.USE_YN = 'Y'
-                AND tmv.STORE_CD = tmvp.STORE_CD
-                AND tmv.VENDR_CD = tmvp.VENDR_CD
-                GROUP BY tmvp.STORE_CD, tmvp.PROD_CD
-                ) tmvp ON
-                tmp.STORE_CD = tmvp.STORE_CD
-                AND tmp.PROD_CD = tmvp.PROD_CD
-                WHERE tmp.STORE_CD = #{storeCd}
+                AND tmp.STORE_CD = #{storeCd}
                 AND tmp.PROD_CD = #{prodCd}
             </when>
         </choose>

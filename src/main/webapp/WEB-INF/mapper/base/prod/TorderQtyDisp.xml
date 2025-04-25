@@ -35,7 +35,7 @@
             ( SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM,
             NVL(tmp.COST_UPRC, 0) COST_UPRC,
             NVL(tmp.SPLY_UPRC, 0) SPLY_UPRC,
-            NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
+            NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC, -- 판매단가
             tmp.ORGPLCE_CD, -- TODO 원산지명 조회 필요
             tmp.SIDE_PROD_YN,
             tmp.SDATTR_CLASS_CD,
@@ -73,36 +73,20 @@
                     DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
             FROM
             TB_MS_PRODUCT tmp
-            LEFT OUTER JOIN (
-                                SELECT
-                                STORE_CD,
-                                PROD_CD,
-                                MIN(SALE_UPRC) KEEP( DENSE_RANK FIRST ORDER BY START_DATE DESC ) AS SALE_UPRC
-                                FROM TB_MS_PRODUCT_SALE_PRICE
-                                WHERE 1=1
-                                <if test='storeCdQuery != null and storeCdQuery != ""'>
-                                    AND STORE_CD IN (${storeCdQuery})
-                                </if>
-                                <![CDATA[
-                                    AND START_DATE <= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                    AND END_DATE >= TO_CHAR(SYSDATE, 'yyyyMMdd')
-                                ]]>
-                                AND SALE_PRC_FG = '1'
-                                GROUP BY
-                                STORE_CD, PROD_CD
-                            ) thpsp ON
-                            tmp.STORE_CD = thpsp.STORE_CD
-                            AND tmp.PROD_CD = thpsp.PROD_CD
+            LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
+                tmp.STORE_CD = tmpsp.STORE_CD
+                AND tmp.PROD_CD = tmpsp.PROD_CD
+                AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
             INNER JOIN TB_MS_STORE tms ON
-                        tms.STORE_CD  = tmp.STORE_CD
+                tms.STORE_CD  = tmp.STORE_CD
             LEFT OUTER JOIN TB_MS_BRAND tmb ON
-                        tmb.STORE_CD = tmp.STORE_CD
-                        AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
+                tmb.STORE_CD = tmp.STORE_CD
+                AND tmb.MS_BRAND_CD = tmp.HQ_BRAND_CD
             LEFT OUTER JOIN TB_MS_STORE_INFO tmsi ON
-                        tmsi.STORE_CD = tmp.STORE_CD
+                tmsi.STORE_CD = tmp.STORE_CD
             LEFT OUTER JOIN TB_MS_PRODUCT_INFO tmpi ON
-                        tmpi.STORE_CD = tmp.STORE_CD
-                        AND tmpi.PROD_CD = tmp.PROD_CD
+                tmpi.STORE_CD = tmp.STORE_CD
+                AND tmpi.PROD_CD = tmp.PROD_CD
             WHERE 1=1
             AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
             <if test="chkDt == false">
