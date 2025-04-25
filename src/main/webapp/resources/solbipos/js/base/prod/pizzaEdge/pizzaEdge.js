@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : systemCd.js
- * 설  명 : 시스템명칭관리 JavaScript
+ * 파일명 : pizzaEdge.js
+ * 설  명 : 미스터피자 > 상품관리 > 피자-엣지관리 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2018.08.13     노현수      1.0
+ * 2025.04.24     김유승      1.0
  *
  * **************************************************************/
 /**
@@ -15,7 +15,7 @@ var app = agrid.getApp();
 
 
 /**
- * 대표명칭 그리드 생성
+ * 피자 그리드 생성
  */
 app.controller('pizzaEdgeCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
@@ -24,22 +24,23 @@ app.controller('pizzaEdgeCtrl', ['$scope', '$http', function ($scope, $http) {
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
-        // ReadOnly 효과설정
+        // 그리드 링크효과
         s.formatItem.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
-                if (col.binding === "prodCd") {
+                if (col.binding === "sdselProdCd") {
                     wijmo.addClass(e.cell, 'wijLink');
                 }
             }
         });
-        // 대표명칭 그리드 선택 이벤트
+        
+        // 그리드 선택 이벤트
         s.hostElement.addEventListener('mousedown', function(e) {
             var ht = s.hitTest(e);
             if( ht.cellType === wijmo.grid.CellType.Cell) {
                 var selectedRow = s.rows[ht.row].dataItem;
                 var col = ht.panel.columns[ht.col];
-                if( col.binding === "prodCd") {
+                if( col.binding === "sdselProdCd") {
                     var params = {};
                     params.prodCd       = selectedRow.prodCd;
                     params.sdselProdCd  = selectedRow.sdselProdCd;
@@ -66,6 +67,8 @@ app.controller('pizzaEdgeCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/base/prod/pizzaEdge/pizzaEdge/getSearchPizzaList.sb", params, function() {
+            
+            // 등록, 미등록 상품 그리드 초기화
             $scope.$apply(function() {
                 var scope = agrid.getScope('pizzaEdgeMappCtrl')
                 scope._gridDataInit();
@@ -78,7 +81,7 @@ app.controller('pizzaEdgeCtrl', ['$scope', '$http', function ($scope, $http) {
 }]);
 
 /**
- * 세부명칭 그리드 생성
+ * 등록상품 그리드 생성
  */
 app.controller('pizzaEdgeMappCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
@@ -88,19 +91,20 @@ app.controller('pizzaEdgeMappCtrl', ['$scope', '$http', function ($scope, $http)
 
     };
 
-    // 세부명칭 그리드 조회
+    // 등록상품 그리드 조회
     $scope.$on("pizzaEdgeMappCtrl", function(event, data) {
         $scope.prodCd       = data.prodCd;
         $scope.sdselProdCd  = data.sdselProdCd;
         $scope.sdselClassCd = data.sdselClassCd;
 
+        // 등록상품 그리드 조회
         $scope.getSearchPizzaMappList(data);
 
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
 
-    // 피자 그리드 조회
+    // 등록상품 그리드 조회
     $scope.getSearchPizzaMappList = function (data){
 
         var params = data;
@@ -112,18 +116,20 @@ app.controller('pizzaEdgeMappCtrl', ['$scope', '$http', function ($scope, $http)
         });
     }
 
-    // 대표명칭 그리드 행 삭제
+    // 등록상품 그리드 행 삭제
     $scope.delete = function() {
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-            var item = $scope.flex.collectionView.items[i];
-            if(item.gChk){
-                $scope.flex.collectionView.removeAt(i);
+        $scope._popConfirm( "상품을 삭제하시겠습니까?", function() {
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                var item = $scope.flex.collectionView.items[i];
+                if (item.gChk) {
+                    $scope.flex.collectionView.removeAt(i);
+                }
             }
-        }
-        $scope.save();
+            $scope.save();
+        });
     }
 
-    // 세부명칭 그리드 저장
+    // 등록상품 그리드 저장
     $scope.save = function() {
         // 파라미터 설정
         var params = [];
@@ -147,30 +153,17 @@ app.controller('pizzaEdgeMappCtrl', ['$scope', '$http', function ($scope, $http)
 }]);
 
 /**
- * 세부명칭 그리드 생성
+ * 미등록상품 그리드 생성
  */
 app.controller('pizzaEdgeNoRegCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('pizzaEdgeNoRegCtrl', $scope, $http, false));
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        // ReadOnly 효과설정
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-                if (col.binding === "nmcodeCd") {
-                    var item = s.rows[e.row].dataItem;
-                    if (item.status !== "I") {
-                        wijmo.addClass(e.cell, 'wj-custom-readonly');
-                    } else {
-                        wijmo.removeClass(e.cell, 'wj-custom-readonly');
-                    }
-                }
-            }
-        });
+
     };
 
-    // 세부명칭 그리드 조회
+    // 미등록상품 그리드 조회
     $scope.$on("pizzaEdgeNoRegCtrl", function(event, data) {
         $scope.prodCd       = data.prodCd;
         $scope.sdselProdCd  = data.sdselProdCd;
@@ -182,6 +175,7 @@ app.controller('pizzaEdgeNoRegCtrl', ['$scope', '$http', function ($scope, $http
         event.preventDefault();
     });
 
+    // 미등록상품 그리드 조회
     $scope.getSearchNoRegProdList = function (data){
 
         var params = {};
@@ -195,7 +189,7 @@ app.controller('pizzaEdgeNoRegCtrl', ['$scope', '$http', function ($scope, $http
         });
     }
 
-    // 세부명칭 그리드 저장
+    // 미등록상품 그리드 저장
     $scope.save = function() {
         $scope._popConfirm( "상품을 등록하시겠습니까?", function() {
             // 파라미터 설정

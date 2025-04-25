@@ -26,6 +26,7 @@
         ,		C.SDSEL_CLASS_NM
         ,		D.PROD_CD           AS SDSEL_PROD_CD
         ,		E.PROD_NM           AS SDSEL_PROD_NM
+        ,		B.SDSEL_GRP_NM || ' > ' || C.SDSEL_CLASS_NM  AS SIDE_INFO
         FROM 	TB_HQ_PRODUCT A
         ,		TB_HQ_PRODUCT_SDSEL_GROUP B
         ,		TB_HQ_PRODUCT_SDSEL_CLASS C
@@ -61,6 +62,7 @@
         ,		B.SDSEL_CLASS_NM            AS MAPPING_SDSEL_CLASS_NM
         ,		A.MAPPING_PROD_CD
         ,		C.PROD_NM                   AS MAPPING_PROD_NM
+        ,		D.SDSEL_GRP_NM || ' > ' || B.SDSEL_CLASS_NM  AS SIDE_INFO
         FROM 	TB_HQ_SDSEL_PROD_MAPPING A
         ,		TB_HQ_PRODUCT_SDSEL_CLASS B
         ,		TB_HQ_PRODUCT C
@@ -91,6 +93,7 @@
         ,		C.SDSEL_CLASS_NM
         ,		D.PROD_CD           AS SDSEL_PROD_CD
         ,		E.PROD_NM           AS SDSEL_PROD_NM
+        ,		B.SDSEL_GRP_NM || ' > ' || C.SDSEL_CLASS_NM  AS SIDE_INFO
         FROM 	TB_HQ_PRODUCT A
         ,		TB_HQ_PRODUCT_SDSEL_GROUP B
         ,		TB_HQ_PRODUCT_SDSEL_CLASS C
@@ -122,9 +125,8 @@
 
     <!-- 피자-엣지관리 - 등록 상품 삭제 -->
     <!--
-        TABLE    : TB_MS_PRODUCT_OPTION
-        PARAM    : kioskOptionVO
-        COMMENTS : 매장에서 사용중인 기존 옵션상품을 삭제한다.
+        TABLE    :
+        COMMENTS :
     -->
     <delete id="getDeleteProd" parameterType="PizzaEdgeVO" >
         /* USE : PizzaEdgeMapper.getDeleteProd */

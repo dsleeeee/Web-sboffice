@@ -6,11 +6,8 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.base.prod.kioskOption.service.KioskOptionVO;
 import kr.co.solbipos.base.prod.pizzaEdge.service.PizzaEdgeService;
 import kr.co.solbipos.base.prod.pizzaEdge.service.PizzaEdgeVO;
-import kr.co.solbipos.base.store.storeType.service.StoreTypeVO;
-import kr.co.solbipos.store.manage.storeInfoBatchChange.service.StoreInfoBatchChangeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,8 +22,22 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
-import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
+/**
+ * @Class Name : PizzaEdgeController.java
+ * @Description : 미스터피자 > 상품관리 > 피자-엣지관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2025.04.25  김유승      최초생성
+ *
+ * @author 링크 개발실 개발1팀 김유승
+ * @since 2025.04.18
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Controller
 @RequestMapping(value = "/base/prod/pizzaEdge")
 public class PizzaEdgeController {

@@ -2,6 +2,21 @@ package kr.co.solbipos.base.prod.pizzaEdge.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
+/**
+ * @Class Name : PizzaEdgeVO.java
+ * @Description : 미스터피자 > 상품관리 > 피자-엣지관리
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2025.04.25  김유승      최초생성
+ *
+ * @author 링크 개발실 개발1팀 김유승
+ * @since 2025.04.18
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 public class PizzaEdgeVO extends PageVO {
 
     private static final long serialVersionUID = -8807164610731883029L;

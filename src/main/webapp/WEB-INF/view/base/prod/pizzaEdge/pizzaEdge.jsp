@@ -49,14 +49,16 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="pizzaEdge.prodCd"/>"          binding="prodCd"        width="80"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="pizzaEdge.prodNm"/>"          binding="prodNm"        width="80"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpCd"/>"      binding="sdselGrpCd"    width="100"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpNm"/>"      binding="sdselGrpNm"    width="100"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassCd"/>"    binding="sdselClassCd"  width="100"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassNm"/>"    binding="sdselClassNm"  width="100"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdCd"/>"     binding="sdselProdCd"   width="100"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdNm"/>"     binding="sdselProdNm"   width="100"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.prod"/>"            binding="prodNm"        width="80"  is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sideInfo"/>"        binding="sideInfo"      width="120" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdCd"/>"     binding="sdselProdCd"   width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdNm"/>"     binding="sdselProdNm"   width="120" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.prodCd"/>"          binding="prodCd"        width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.prodNm"/>"          binding="prodNm"        width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpCd"/>"      binding="sdselGrpCd"    width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpNm"/>"      binding="sdselGrpNm"    width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassCd"/>"    binding="sdselClassCd"  width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassNm"/>"    binding="sdselClassNm"  width="100" is-read-only="true"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -72,9 +74,6 @@
                 <span class="fl bk lh30"><s:message code='pizzaEdge.regProd' /></span>
                 <button class="btn_skyblue" id="btnDeleteMapp" style="display: none;" ng-click="delete()">
                     <s:message code="cmm.delete" />
-                </button>
-                <button class="btn_skyblue" id="btnSaveMapp" style="display: none;" ng-click="save()">
-                    <s:message code="cmm.save" />
                 </button>
             </div>
             <%-- 개발시 높이 조절해서 사용--%>
@@ -92,12 +91,13 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>"                   binding="gChk"                  width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpCd"/>"      binding="sdselGrpCd"            width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpNm"/>"      binding="sdselGrpNm"            width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassCd"/>"    binding="mappingSdselClassCd"   width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassNm"/>"    binding="mappingSdselClassNm"   width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdCd"/>"     binding="mappingProdCd"         width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdNm"/>"     binding="mappingProdNm"         width="100"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sideInfo"/>"        binding="sideInfo"              width="120" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdCd"/>"     binding="mappingProdCd"         width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdNm"/>"     binding="mappingProdNm"         width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpCd"/>"      binding="sdselGrpCd"            width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpNm"/>"      binding="sdselGrpNm"            width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassCd"/>"    binding="mappingSdselClassCd"   width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassNm"/>"    binding="mappingSdselClassNm"   width="100" is-read-only="true"></wj-flex-grid-column>
 
                 </wj-flex-grid>
             </div>
@@ -111,7 +111,7 @@
             <div class="updownSet oh mb10">
                 <span class="fl bk lh30"><s:message code='pizzaEdge.noRegProd' /></span>
                 <button class="btn_skyblue" id="btnSaveNoReg" style="display: none;" ng-click="save()">
-                    <s:message code="cmm.save" />
+                    <s:message code="pizzaEdge.reg" />
                 </button>
             </div>
             <%-- 개발시 높이 조절해서 사용--%>
@@ -129,14 +129,15 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.prodCd"/>"          binding="prodCd"        width="100" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.prodNm"/>"          binding="prodNm"        width="100" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpCd"/>"      binding="sdselGrpCd"    width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpNm"/>"      binding="sdselGrpNm"    width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassCd"/>"    binding="sdselClassCd"  width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassNm"/>"    binding="sdselClassNm"  width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdCd"/>"     binding="sdselProdCd"   width="100"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdNm"/>"     binding="sdselProdNm"   width="100"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.prodCd"/>"          binding="sdselProdCd"   width="100" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.prodNm"/>"          binding="sdselProdNm"   width="100" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sideInfo"/>"        binding="sideInfo"      width="120" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdCd"/>"     binding="sdselProdCd"   width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdNm"/>"     binding="sdselProdNm"   width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpCd"/>"      binding="sdselGrpCd"    width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpNm"/>"      binding="sdselGrpNm"    width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassCd"/>"    binding="sdselClassCd"  width="100" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassNm"/>"    binding="sdselClassNm"  width="100" is-read-only="true"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
