@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PizzaEdge.xml
+    피자-엣지관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.04.24     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.pizzaEdge.service.impl.PizzaEdgeMapper">
+
+    <!-- 피자-엣지관리 - 피자 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSearchPizzaList" parameterType="PizzaEdgeVO" resultType="DefaultMap">
+        /* PizzaEdgeMapper.getSearchPizzaList */
+        SELECT 	A.PROD_CD
+        ,		A.PROD_NM
+        ,		B.SDSEL_GRP_CD
+        ,		B.SDSEL_GRP_NM
+        ,		C.SDSEL_CLASS_CD
+        ,		C.SDSEL_CLASS_NM
+        ,		D.PROD_CD           AS SDSEL_PROD_CD
+        ,		E.PROD_NM           AS SDSEL_PROD_NM
+        FROM 	TB_HQ_PRODUCT A
+        ,		TB_HQ_PRODUCT_SDSEL_GROUP B
+        ,		TB_HQ_PRODUCT_SDSEL_CLASS C
+        ,		TB_HQ_PRODUCT_SDSEL_PROD D
+        ,		TB_HQ_PRODUCT E
+        WHERE 	A.HQ_OFFICE_CD 		= #{hqOfficeCd}
+        AND 	B.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	B.SDSEL_GRP_CD 		= A.SDSEL_GRP_CD
+        AND 	C.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	C.SDSEL_GRP_CD 		= B.SDSEL_GRP_CD
+        AND 	D.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	D.SDSEL_CLASS_CD 	= C.SDSEL_CLASS_CD
+        AND 	E.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	E.PROD_CD 			= D.PROD_CD
+        AND 	A.USE_YN 			= 'Y'
+        AND 	B.USE_YN 			= 'Y'
+        AND 	C.USE_YN 			= 'Y'
+        AND 	D.USE_YN 			= 'Y'
+        AND 	E.USE_YN 			= 'Y'
+        AND 	NVL(C.POP_UP_CLASS_YN,'N') 	= 'Y'
+    </select>
+
+    <!-- 피자-엣지관리 - 등록상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSearchPizzaMappList" parameterType="PizzaEdgeVO" resultType="DefaultMap">
+        /* PizzaEdgeMapper.getSearchPizzaMappList */
+        SELECT 	D.SDSEL_GRP_CD
+        ,		D.SDSEL_GRP_NM
+        ,		A.MAPPING_SDSEL_CLASS_CD
+        ,		B.SDSEL_CLASS_NM            AS MAPPING_SDSEL_CLASS_NM
+        ,		A.MAPPING_PROD_CD
+        ,		C.PROD_NM                   AS MAPPING_PROD_NM
+        FROM 	TB_HQ_SDSEL_PROD_MAPPING A
+        ,		TB_HQ_PRODUCT_SDSEL_CLASS B
+        ,		TB_HQ_PRODUCT C
+        ,		TB_HQ_PRODUCT_SDSEL_GROUP D
+        WHERE 	A.HQ_OFFICE_CD 		= #{hqOfficeCd}
+        AND 	B.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	B.SDSEL_CLASS_CD 	= A.MAPPING_SDSEL_CLASS_CD
+        AND 	C.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	D.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	D.SDSEL_GRP_CD 		= B.SDSEL_GRP_CD
+        AND 	C.PROD_CD 			= A.MAPPING_PROD_CD
+        AND     A.SDSEL_CLASS_CD    = #{sdselClassCd}
+        AND     A.PROD_CD           = #{sdselProdCd}
+    </select>
+
+    <!-- 피자-엣지관리 - 미등록 상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSearchNoRegProdList" parameterType="PizzaEdgeVO" resultType="DefaultMap">
+        /* PizzaEdgeMapper.getSearchNoRegProdList */
+        SELECT 	A.PROD_CD
+        ,		A.PROD_NM
+        ,		B.SDSEL_GRP_CD
+        ,		B.SDSEL_GRP_NM
+        ,		C.SDSEL_CLASS_CD
+        ,		C.SDSEL_CLASS_NM
+        ,		D.PROD_CD           AS SDSEL_PROD_CD
+        ,		E.PROD_NM           AS SDSEL_PROD_NM
+        FROM 	TB_HQ_PRODUCT A
+        ,		TB_HQ_PRODUCT_SDSEL_GROUP B
+        ,		TB_HQ_PRODUCT_SDSEL_CLASS C
+        ,		TB_HQ_PRODUCT_SDSEL_PROD D
+        ,		TB_HQ_PRODUCT E
+        WHERE 	A.HQ_OFFICE_CD 		= #{hqOfficeCd}
+        AND 	B.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	B.SDSEL_GRP_CD 		= A.SDSEL_GRP_CD
+        AND 	C.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	C.SDSEL_GRP_CD 		= B.SDSEL_GRP_CD
+        AND 	D.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	D.SDSEL_CLASS_CD 	= C.SDSEL_CLASS_CD
+        AND 	E.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	E.PROD_CD 			= D.PROD_CD
+        AND 	A.USE_YN 			= 'Y'
+        AND 	B.USE_YN 			= 'Y'
+        AND 	C.USE_YN 			= 'Y'
+        AND 	D.USE_YN 			= 'Y'
+        AND 	E.USE_YN 			= 'Y'
+        AND 	A.PROD_CD           = #{prodCd}
+        AND 	NVL(C.POP_UP_CLASS_YN,'N') 	= 'N'
+        AND     D.PROD_CD || C.SDSEL_CLASS_CD NOT IN    (
+                                                            SELECT  MAPPING_PROD_CD || MAPPING_SDSEL_CLASS_CD
+                                                            FROM    TB_HQ_SDSEL_PROD_MAPPING
+                                                            WHERE   SDSEL_CLASS_CD  = #{sdselClassCd}
+                                                            AND     PROD_CD         = #{sdselProdCd}
+                                                        )
+    </select>
+
+    <!-- 피자-엣지관리 - 등록 상품 삭제 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION
+        PARAM    : kioskOptionVO
+        COMMENTS : 매장에서 사용중인 기존 옵션상품을 삭제한다.
+    -->
+    <delete id="getDeleteProd" parameterType="PizzaEdgeVO" >
+        /* USE : PizzaEdgeMapper.getDeleteProd */
+        DELETE
+        FROM    TB_HQ_SDSEL_PROD_MAPPING
+        WHERE   HQ_OFFICE_CD            = #{hqOfficeCd}
+        AND     SDSEL_CLASS_CD          = #{sdselClassCd}
+        AND     PROD_CD                 = #{prodCd}
+        AND     MAPPING_SDSEL_CLASS_CD  = #{mappingSdselClassCd}
+        AND     MAPPING_PROD_CD         = #{mappingProdCd}
+    </delete>
+
+    <!-- 피자-엣지관리 - 상품 등록 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getRegProd" parameterType="PizzaEdgeVO">
+        /* PizzaEdgeMapper.getRegProd */
+        INSERT INTO TB_HQ_SDSEL_PROD_MAPPING
+        (
+                HQ_OFFICE_CD
+        ,       SDSEL_CLASS_CD
+        ,       PROD_CD
+        ,       MAPPING_SDSEL_CLASS_CD
+        ,       MAPPING_PROD_CD
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{sdselClassCd}
+        ,       #{sdselProdCd}
+        ,       #{mappingSdselClassCd}
+        ,       #{mappingProdCd}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
+</mapper>
