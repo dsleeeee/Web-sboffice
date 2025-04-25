@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TimeSaleStoreDtMoms.xml
+    시간대매출(매장) DT포장
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.04.17     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.moms.timeSaleStoreDtMoms.service.impl.TimeSaleStoreDtMomsMapper">
+
+    <!-- 시간대매출(매장) DT포장 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleStoreDtMomsList" parameterType="TimeSaleStoreDtMomsVO" resultType="DefaultMap">
+        /* TimeSaleStoreDtMomsMapper.getTimeSaleStoreDtMomsList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+                tsdto.STORE_CD,
+                tms.STORE_NM,
+        <foreach collection="arrTimeCol" item="item" separator=",">
+            SUM(CASE WHEN tsdto.SALE_HOUR = #{item} THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT${item},
+            SUM(CASE WHEN tsdto.SALE_HOUR = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT${item},
+            SUM(CASE WHEN tsdto.SALE_HOUR = #{item} THEN tsdto.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT${item}
+        </foreach>
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_SL_DAILY_TIME_ORDAPP tsdto
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   1=1
+        AND     tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tsdto.DLVR_ORDER_FG IN  ('3','4')
+        <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+            <if test='dlvrInOut != null and dlvrInOut == "0"'>
+                AND tsdto.DLVR_IN_FG IN
+                <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test='dlvrInOut != null and dlvrInOut == "1"'>
+                AND tsdto.DLVR_IN_FG NOT IN
+                <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdto.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        AND     tms.STORE_CD        = tsdto.STORE_CD
+        AND     tmsi.STORE_CD   (+) = tms.STORE_CD
+        GROUP
+        BY      tsdto.SALE_DATE
+        ,       tsdto.STORE_CD
+        ,       tms.STORE_NM
+        ORDER
+        BY      tsdto.SALE_DATE
+        ,       tsdto.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 시간대매출(매장) DT포장 - 분할 엑셀다운로드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTimeSaleStoreMomsExcelDivisionList" parameterType="TimeSaleStoreDtMomsVO" resultType="DefaultMap">
+        /* TimeSaleStoreDtMomsMapper.getTimeSaleStoreMomsExcelDivisionList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  TO_CHAR(TO_DATE(tsdto.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+        tsdto.STORE_CD,
+        tms.STORE_NM,
+        <foreach collection="arrTimeCol" item="item" separator=",">
+            SUM(CASE WHEN tsdto.SALE_HOUR = #{item} THEN tsdto.TOT_SALE_AMT ELSE 0 END) AS TOT_SALE_AMT${item},
+            SUM(CASE WHEN tsdto.SALE_HOUR = #{item} THEN tsdto.REAL_SALE_AMT ELSE 0 END) AS REAL_SALE_AMT${item},
+            SUM(CASE WHEN tsdto.SALE_HOUR = #{item} THEN tsdto.REAL_SALE_CNT ELSE 0 END) AS BILL_CNT${item}
+        </foreach>
+        FROM    TB_SL_DAILY_TIME_ORDAPP tsdto
+        ,       TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   1=1
+        AND     tsdto.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     tsdto.DLVR_ORDER_FG IN  ('3','4')
+        <if test='dlvrInFgList != null and dlvrInFgList != ""'>
+            <if test='dlvrInOut != null and dlvrInOut == "0"'>
+                AND tsdto.DLVR_IN_FG IN
+                <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test='dlvrInOut != null and dlvrInOut == "1"'>
+                AND tsdto.DLVR_IN_FG NOT IN
+                <foreach collection="dlvrInFgList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdto.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='storeHqBrandCd == null or storeHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 매장브랜드 전체일때
+                AND tms.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND tmsi.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND tmsi.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND tms.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND tmsi.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND tmsi.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND tmsi.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND tmsi.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND tmsi.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        AND     tms.STORE_CD        = tsdto.STORE_CD
+        AND     tmsi.STORE_CD   (+) = tms.STORE_CD
+        GROUP
+        BY      tsdto.SALE_DATE
+        ,       tsdto.STORE_CD
+        ,       tms.STORE_NM
+        ORDER
+        BY      tsdto.SALE_DATE
+        ,       tsdto.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+
+</mapper>
