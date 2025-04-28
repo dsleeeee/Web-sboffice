@@ -101,9 +101,9 @@
                 is-editable="true"
                 text-changed="_checkValidation(s)">
         </wj-combo-box>
-        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+        <%--<c:if test="${sessionInfo.orgnFg == 'HQ'}">
             <input type="text" id="pordClassSelectStoreStoreNum" ng-model="storeNum">
-        </c:if>
+        </c:if>--%>
         <%-- 엑셀 다운로드 //TODO --%>
         <button class="btn_skyblue fr" ng-click="excelDownloadClass()"><s:message code="cmm.excel.down" />
         </button>
@@ -193,7 +193,8 @@
 <script type="text/javascript" src="/resource/solbipos/js/sale/status/side/sideProdClass.js?ver=20250423.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
+<%--
 <c:import url="/WEB-INF/view/base/prod/prod/prodModifyView.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
+</c:import>--%>
