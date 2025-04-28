@@ -406,6 +406,9 @@
     <typeAlias alias="artiseeProdMappingVO" type="kr.co.solbipos.base.prod.artiseeProdMapping.service.ArtiseeProdMappingVO"/>
     <!-- 미스터피자 > 상품관리 > 피자-엣지관리 -->
     <typeAlias alias="PizzaEdgeVO" type="kr.co.solbipos.base.prod.pizzaEdge.service.PizzaEdgeVO"/>
+    <!-- 미스터피자 > 상품관리 > 피자-토핑관리 -->
+    <!--<typeAlias alias="pizzaToppingVO" type="kr.co.solbipos.base.prod.pizzaTopping.service.PizzaToppingVO"/>-->
+
 
     <!--
     <typeAlias alias="prodBarcdVO" type="kr.co.solbipos.base.prod.prodbarcd.service.ProdBarcdVO"/>
