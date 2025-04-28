@@ -288,9 +288,9 @@
                 <div class="classPageNoWrap">
                     <span id="classPageNoText" class="s16"></span>
                 </div>
-                <div class="classNav">
-                    <div class="classNavPrev fl" id="grpNavPrev"></div>
-                    <div class="classNavNext fl" id="grpNavNext"></div>
+                <div style="width: 80%" class="classNav">
+                    <div class="classNavPrev fl" style="width: 49%" id="grpNavPrev"></div>
+                    <div class="classNavNext fl" style="width: 49%" id="grpNavNext"></div>
                 </div>
             </div>
             <%-- 상품페이지 버튼 --%>
@@ -336,9 +336,9 @@
                 <div class="prodPageNoWrap">
                     <span id="prodPageNoText" class="s16"></span>
                 </div>
-                <div class="prodNav">
-                    <div class="prodNavPrev fl" id="prodNavPrev"></div>
-                    <div class="prodNavNext fl" id="prodNavNext"></div>
+                <div style="width: 80%" class="prodNav">
+                    <div class="prodNavPrev fl" style="width: 49%" id="prodNavPrev"></div>
+                    <div class="prodNavNext fl" style="width: 49%" id="prodNavNext"></div>
                 </div>
             </div>
             <%--// 페이지 버튼 영역 끝 --%>

@@ -48,7 +48,7 @@
                             ime-enabled="true">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="pizzaEdge.prod"/>"            binding="prodNm"        width="80"  is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="pizzaEdge.sideInfo"/>"        binding="sideInfo"      width="120" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselProdCd"/>"     binding="sdselProdCd"   width="100" is-read-only="true"></wj-flex-grid-column>
