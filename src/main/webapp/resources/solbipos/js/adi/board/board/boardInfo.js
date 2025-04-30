@@ -422,7 +422,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
             var endWord = "</v:shape>";
             var startCnt = 0;
             var endCnt = 0;
-            for (var i = 0; i < str_chk.length; i++) {
+            for (var j = 0; j < str_chk.length; j++) {
                 startCnt = params.content.indexOf(startWord, endCnt+(endWord.length));
                 endCnt = params.content.indexOf(endWord, endCnt+(endWord.length));
 
@@ -472,16 +472,16 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                 if(chkTot != null) {
                     var arr = chkTot.split(",");
                     if (arr.length > 0) {
-                        for (var i = 0; i < arr.length; i++) {
+                        for (var k = 0; k < arr.length; k++) {
                             var data = {};
-                            data.chkTot1 = arr[i]; // width: ~ pt,px
-                            data.chkTot2 = arr[i].match(/(\d+)(\.\d+)/g); // 소수점있는숫자만
+                            data.chkTot1 = arr[k]; // width: ~ pt,px
+                            data.chkTot2 = arr[k].match(/(\d+)(\.\d+)/g); // 소수점있는숫자만
                             if (data.chkTot2 === null) {
-                                data.chkTot2 = arr[i].match(/\d+/g); // 숫자만
+                                data.chkTot2 = arr[k].match(/\d+/g); // 숫자만
                             }
-                            data.chkTot3 = arr[i].match(/(\pt)/gi); // pt
+                            data.chkTot3 = arr[k].match(/(\pt)/gi); // pt
                             if (data.chkTot3 === null) {
-                                data.chkTot3 = arr[i].match(/(\px)/gi); // px
+                                data.chkTot3 = arr[k].match(/(\px)/gi); // px
                             }
                             // arr.push(data);
 
