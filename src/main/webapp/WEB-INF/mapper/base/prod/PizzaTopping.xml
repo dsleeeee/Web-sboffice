@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    PizzaTopping.xml
+    피자-토핑관리 (미스터피자)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2025.04.28     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.pizzaTopping.service.impl.PizzaToppingMapper">
+
+    <!-- 피자-토핑관리 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPizzaToppingList" parameterType="PizzaToppingVO" resultType="DefaultMap">
+        /* PizzaToppingMapper.getPizzaToppingList */
+        SELECT
+        FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'CD_STR') AS PATH,
+        FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
+        thp.PROD_CD,
+        thp.PROD_NM,
+        thpsp.SALE_UPRC,
+        thp.USE_YN
+        FROM TB_HQ_PRODUCT thp,
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="srchProdCd != null and srchProdCd != ''">
+            AND thp.PROD_CD LIKE '%'|| #{srchProdCd} ||'%'
+        </if>
+        <if test="srchProdNm != null and srchProdNm != ''">
+            AND thp.PROD_NM LIKE '%'|| #{srchProdNm} ||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn}
+        </if>
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY thp.PROD_CD
+    </select>
+
+    <!-- 피자-토핑관리 - 등록 상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPizzaToppingProdList" parameterType="PizzaToppingVO" resultType="DefaultMap">
+        /* PizzaToppingMapper.getPizzaToppingProdList */
+        SELECT
+        thpt.TOPPING_PROD_CD,
+        thp.PROD_NM,
+        thpsp.SALE_UPRC,
+        thp.USE_YN
+        FROM TB_HQ_PRODUCT_TOPPING thpt,
+        TB_HQ_PRODUCT thp,
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thpt.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpt.PROD_CD = #{prodCd}
+        AND thp.HQ_OFFICE_CD (+)= thpt.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= thpt.TOPPING_PROD_CD
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY thpt.TOPPING_PROD_CD
+    </select>
+
+    <!-- 피자-토핑관리 - 미등록 상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPizzaToppingNoProdList" parameterType="PizzaToppingVO" resultType="DefaultMap">
+        /* PizzaToppingMapper.getPizzaToppingNoProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        thp.PROD_CD AS TOPPING_PROD_CD,
+        thp.PROD_NM,
+        thpsp.SALE_UPRC,
+        thp.USE_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_HQ_PRODUCT thp,
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        <![CDATA[
+           AND thp.PROD_CD <> #{prodCd}
+        ]]>
+        AND thp.PROD_CD NOT IN (SELECT TOPPING_PROD_CD FROM TB_HQ_PRODUCT_TOPPING WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd})
+        <if test="srchProdCd != null and srchProdCd != ''">
+            AND thp.PROD_CD LIKE '%'|| #{srchProdCd} ||'%'
+        </if>
+        <if test="srchProdNm != null and srchProdNm != ''">
+            AND thp.PROD_NM LIKE '%'|| #{srchProdNm} ||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_HQ_PRODUCT_CLASS
+                                        WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn}
+        </if>
+        AND thpsp.HQ_OFFICE_CD = thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD = thp.PROD_CD
+        AND thpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY thp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 피자-토핑관리 - 상품 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getPizzaToppingProdSaveInsert" parameterType="PizzaToppingVO">
+        /* PizzaToppingMapper.getPizzaToppingProdSaveInsert */
+        INSERT INTO TB_HQ_PRODUCT_TOPPING
+        (
+            HQ_OFFICE_CD,
+            PROD_CD,
+            TOPPING_PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{hqOfficeCd},
+            #{prodCd},
+            #{toppingProdCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 피자-토핑관리 - 상품 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getPizzaToppingProdSaveDelete" parameterType="PizzaToppingVO">
+        /* PizzaToppingMapper.getPizzaToppingProdSaveDelete */
+        DELETE TB_HQ_PRODUCT_TOPPING
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND PROD_CD = #{prodCd}
+        AND TOPPING_PROD_CD = #{toppingProdCd}
+    </delete>
+
+</mapper>

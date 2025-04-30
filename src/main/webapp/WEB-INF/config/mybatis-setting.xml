@@ -407,7 +407,7 @@
     <!-- 미스터피자 > 상품관리 > 피자-엣지관리 -->
     <typeAlias alias="pizzaEdgeVO" type="kr.co.solbipos.base.prod.pizzaEdge.service.PizzaEdgeVO"/>
     <!-- 미스터피자 > 상품관리 > 피자-토핑관리 -->
-    <!--<typeAlias alias="pizzaToppingVO" type="kr.co.solbipos.base.prod.pizzaTopping.service.PizzaToppingVO"/>-->
+    <typeAlias alias="pizzaToppingVO" type="kr.co.solbipos.base.prod.pizzaTopping.service.PizzaToppingVO"/>
 
 
     <!--
