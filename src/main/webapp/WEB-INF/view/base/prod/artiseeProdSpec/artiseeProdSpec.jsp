@@ -149,7 +149,7 @@
                     <%-- 분류조회 --%>
                     <th><s:message code="cmm.prodClass" /></th>
                     <td>
-                        <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left;"
+                        <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left; width:60%;"
                                placeholder="<s:message code="cmm.prodClass" /> 선택" readonly/>
                         <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
@@ -185,7 +185,7 @@
                 </tbody>
             </table>
             <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:330px; overflow-x: hidden; overflow-y: hidden;">
+                <div class="wj-gridWrap" style="height:360px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns="false"
                             control="flex"
@@ -200,14 +200,14 @@
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodNm"/>" binding="prodNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
+                <%-- 페이지 리스트 --%>
+                <div class="pageNum2 mt10">
+                    <%-- id --%>
+                    <ul id="artiseeProdSpecNoProdCtrlPager" data-size="10">
+                    </ul>
+                </div>
+                <%--//페이지 리스트--%>
             </div>
-            <%-- 페이지 리스트 --%>
-            <div class="pageNum2 mt10">
-                <%-- id --%>
-                <ul id="artiseeProdSpecNoProdCtrlPager" data-size="10">
-                </ul>
-            </div>
-            <%--//페이지 리스트--%>
         </div>
     </div>
     <%--right--%>
@@ -218,7 +218,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdSpec/artiseeProdSpec.js?ver=20241119.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/artiseeProdSpec/artiseeProdSpec.js?ver=20250428.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
