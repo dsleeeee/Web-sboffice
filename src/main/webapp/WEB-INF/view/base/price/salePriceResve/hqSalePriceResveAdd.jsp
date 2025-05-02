@@ -244,4 +244,4 @@
     var useYnData = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveAdd.js?ver=20250416.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/price/salePriceResve/hqSalePriceResveAdd.js?ver=20250430.01" charset="utf-8"></script>

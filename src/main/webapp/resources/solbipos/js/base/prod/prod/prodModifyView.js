@@ -477,6 +477,14 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 보증금상품코드
         params.depositProdCd = $("#_depositProdCd").val();
 
+        // 내점/배달/포장 판매단가
+        if(subPriceFg === "1"){
+        }else{
+            params.stinSaleUprc = ''; // 판매단가-내점
+            params.dlvrSaleUprc = ''; // 판매단가-배달
+            params.packSaleUprc = ''; // 판매단가-포장
+        }
+
         // [1250 맘스터치] 사용시 저장
         if(momsEnvstVal === "1") {
             // KIOSK 판매시간 사용여부에 따라 시간설정
@@ -808,7 +816,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             return false;
         }
         // 판매단가 최대값/특수문자(-) 체크
-        if($("#prodModifySaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#prodModifySaleUprc").val().substring(1))){
+        if($("#prodModifySaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#prodModifySaleUprc").val().substring(1))
+            || $("#prodModifySaleUprc").val() <= -1000000000){
             $scope._popMsg(messages["prod.saleUprcFilter.msg"]);
             $("#prodModifySaleUprc").focus();
             return false;
@@ -818,7 +827,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         if(subPriceFg === "1") {
             // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
             if ($("#stinSaleUprc").val() !== null && $("#stinSaleUprc").val() !== "") {
-                if ($("#stinSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#stinSaleUprc").val().substring(1))) {
+                if ($("#stinSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#stinSaleUprc").val().substring(1))
+                    || $("#stinSaleUprc").val() <= -1000000000) {
                     $scope._popMsg(messages["prod.stinSaleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#stinSaleUprc").focus();
                     return false;
@@ -826,7 +836,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
             // 배달가를 입력한 경우, 최대값/특수문자(-) 체크
             if ($("#dlvrSaleUprc").val() !== null && $("#dlvrSaleUprc").val() !== "") {
-                if ($("#dlvrSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#dlvrSaleUprc").val().substring(1))) {
+                if ($("#dlvrSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#dlvrSaleUprc").val().substring(1))
+                    || $("#dlvrSaleUprc").val() <= -1000000000) {
                     $scope._popMsg(messages["prod.dlvrSaleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#dlvrSaleUprc").focus();
                     return false;
@@ -834,7 +845,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
             // 포장가를 입력한 경우, 최대값/특수문자(-) 체크
             if ($("#packSaleUprc").val() !== null && $("#packSaleUprc").val() !== "") {
-                if ($("#packSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#packSaleUprc").val().substring(1))) {
+                if ($("#packSaleUprc").val() >= 1000000000 || /[^0-9]/.test($("#packSaleUprc").val().substring(1))
+                    || $("#packSaleUprc").val() <= -1000000000) {
                     $scope._popMsg(messages["prod.packSaleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#packSaleUprc").focus();
                     return false;
@@ -1127,7 +1139,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             return false;
         }
         // 판매단가 최대값/특수문자(-) 체크
-        if(vParams.saleUprc >= 1000000000 || /[^0-9]/.test(vParams.saleUprc.toString().substring(1))){
+        if(vParams.saleUprc >= 1000000000 || /[^0-9]/.test(vParams.saleUprc.toString().substring(1))
+            || vParams.saleUprc <= -1000000000){
             $scope._popMsg(messages["prod.saleUprcFilter.msg"]);
             $("#prodModifySaleUprc").focus();
             return false;
@@ -1137,7 +1150,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         if(subPriceFg === "1") {
             // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
             if (vParams.stinSaleUprc !== null && vParams.stinSaleUprc !== "") {
-                if (vParams.stinSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.stinSaleUprc.toString().substring(1))) {
+                if (vParams.stinSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.stinSaleUprc.toString().substring(1))
+                    || vParams.stinSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.stinSaleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#stinSaleUprc").focus();
                     return false;
@@ -1145,7 +1159,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
             // 배달가를 입력한 경우, 최대값/특수문자(-) 체크
             if (vParams.dlvrSaleUprc !== null && vParams.dlvrSaleUprc !== "") {
-                if (vParams.dlvrSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.dlvrSaleUprc.toString().substring(1))) {
+                if (vParams.dlvrSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.dlvrSaleUprc.toString().substring(1))
+                    || vParams.dlvrSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.dlvrSaleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#dlvrSaleUprc").focus();
                     return false;
@@ -1153,7 +1168,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
             // 포장가를 입력한 경우, 최대값/특수문자(-) 체크
             if (vParams.packSaleUprc !== null && vParams.packSaleUprc !== "") {
-                if (vParams.packSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.packSaleUprc.toString().substring(1))) {
+                if (vParams.packSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.packSaleUprc.toString().substring(1))
+                    || vParams.packSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.packSaleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#packSaleUprc").focus();
                     return false;
@@ -1162,7 +1178,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         }else{
             // 내점가를 입력한 경우, 최대값/특수문자(-) 체크
             if (vParams.stinSaleUprc !== null && vParams.stinSaleUprc !== "") {
-                if (vParams.stinSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.stinSaleUprc.toString().substring(1))) {
+                if (vParams.stinSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.stinSaleUprc.toString().substring(1))
+                    || vParams.stinSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#prodModifySaleUprc").focus();
                     return false;
@@ -1170,7 +1187,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
             // 배달가를 입력한 경우, 최대값/특수문자(-) 체크
             if (vParams.dlvrSaleUprc !== null && vParams.dlvrSaleUprc !== "") {
-                if (vParams.dlvrSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.dlvrSaleUprc.toString().substring(1))) {
+                if (vParams.dlvrSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.dlvrSaleUprc.toString().substring(1))
+                    || vParams.dlvrSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#prodModifySaleUprc").focus();
                     return false;
@@ -1178,7 +1196,8 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }
             // 포장가를 입력한 경우, 최대값/특수문자(-) 체크
             if (vParams.packSaleUprc !== null && vParams.packSaleUprc !== "") {
-                if (vParams.packSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.packSaleUprc.toString().substring(1))) {
+                if (vParams.packSaleUprc >= 1000000000 || /[^0-9]/.test(vParams.packSaleUprc.toString().substring(1))
+                    || vParams.packSaleUprc <= -1000000000) {
                     $scope._popMsg(messages["prod.saleUprc"] + messages["prod.uprcFilter.msg"]);
                     $("#prodModifySaleUprc").focus();
                     return false;

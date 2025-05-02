@@ -6,6 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div class="subCon" ng-controller="storeMonthChannelCtrl">
 
@@ -19,7 +20,7 @@
             </button>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <%-- 확장조회 --%>
-                <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                <button class="btn_blue mr5 fl" id="btnSearchAddShow" <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">style="display: none;"</c:if> ng-click="searchAddShowChange()">
                     <s:message code="cmm.search.addShow" />
                 </button>
             </c:if>
@@ -66,8 +67,8 @@
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <tr>
                     <%-- 매장브랜드 --%>
-                    <th><s:message code="cmm.moms.storeHqBrand"/></th>
-                    <td>
+                    <th <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">style="display: none"</c:if>><s:message code="cmm.moms.storeHqBrand"/></th>
+                    <td <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">style="display: none"</c:if>>
                         <div class="sb-select">
                             <wj-combo-box
                                     id="srchStoreHqBrandCdCombo"
@@ -81,7 +82,7 @@
                         </div>
                     </td>
                     <%-- 매장선택 --%>
-                    <th class="monthStore" style="display: none;"><s:message code="cmm.store.select"/></th>
+                    <th class="monthStore" style="display: none; <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">border-left:1px solid #ccc</c:if>"><s:message code="cmm.store.select"/></th>
                     <td class="monthStore" style="display: none;">
                         <%-- 매장선택 모듈 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">

@@ -172,7 +172,7 @@
               <%--판매단가--%>
               <th><s:message code="prod.saleUprc"/></th>
               <td>
-                <input type="text" maxlength="10" numberOnly id="prodModifySaleUprc" name="saleUprc" class="sb-input w100"
+                <input type="text" maxlength="11" numberOnly id="prodModifySaleUprc" name="saleUprc" class="sb-input w100"
                        ng-model="prodModifyInfo.saleUprc"
                        required
                        popover-enable="myForm.saleUprc.$invalid"
@@ -312,19 +312,19 @@
                 <%--내점가--%>
               <th><s:message code="prod.stinSaleUprc"/></th>
               <td>
-                <input type="text" maxlength="10" numberOnly id="stinSaleUprc" name="stinSaleUprc" ng-model="prodModifyInfo.stinSaleUprc" class="sb-input w100">
+                <input type="text" maxlength="11" numberOnly id="stinSaleUprc" name="stinSaleUprc" ng-model="prodModifyInfo.stinSaleUprc" class="sb-input w100">
               </td>
                 <%--포장가--%>
               <th><s:message code="prod.packSaleUprc"/></th>
               <td>
-                <input type="text" maxlength="10" numberOnly id="packSaleUprc" name="packSaleUprc" ng-model="prodModifyInfo.packSaleUprc" class="sb-input w100">
+                <input type="text" maxlength="11" numberOnly id="packSaleUprc" name="packSaleUprc" ng-model="prodModifyInfo.packSaleUprc" class="sb-input w100">
               </td>
             </tr>
             <tr>
                 <%--배달가--%>
               <th><s:message code="prod.dlvrSaleUprc"/></th>
               <td>
-                <input type="text" maxlength="10" numberOnly id="dlvrSaleUprc" name="dlvrSaleUprc" ng-model="prodModifyInfo.dlvrSaleUprc" class="sb-input w100">
+                <input type="text" maxlength="11" numberOnly id="dlvrSaleUprc" name="dlvrSaleUprc" ng-model="prodModifyInfo.dlvrSaleUprc" class="sb-input w100">
               </td>
               <th></th>
               <td></td>
@@ -1219,7 +1219,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20250206.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20250430.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

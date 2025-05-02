@@ -6,6 +6,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div class="subCon">
     <div ng-controller="dayProdStoreCtrl">
@@ -18,7 +19,7 @@
                 </button>
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                     <%-- 확장조회 --%>
-                    <button class="btn_blue mr5 fl" id="btnSearchAddShow" ng-click="searchAddShowChange()">
+                    <button class="btn_blue mr5 fl" id="btnSearchAddShow" <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">style="display: none;"</c:if> ng-click="searchAddShowChange()">
                         <s:message code="cmm.search.addShow" />
                     </button>
                 </c:if>
@@ -99,8 +100,8 @@
                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                     <tr>
                         <%-- 매장브랜드 --%>
-                        <th><s:message code="cmm.moms.storeHqBrand"/></th>
-                        <td>
+                        <th <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">style="display: none"</c:if>><s:message code="cmm.moms.storeHqBrand"/></th>
+                        <td <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">style="display: none"</c:if>>
                             <div class="sb-select">
                                 <wj-combo-box
                                         id="srchStoreHqBrandCdCombo"
@@ -114,7 +115,7 @@
                             </div>
                         </td>
                         <%-- 매장선택 --%>
-                        <th><s:message code="cmm.store.select"/></th>
+                        <th <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">style="border-left:1px solid #ccc"</c:if>><s:message code="cmm.store.select"/></th>
                         <td>
                             <%-- 매장선택 모듈 사용시 include --%>
                             <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
@@ -516,6 +517,7 @@
     var menuNm = "${menuNm}";
     var orgnFg = "${orgnFg}";
     var storeCd = "${storeCd}";
+    var hqOfficeCd = "${hqOfficeCd}"
 
     // List 형식("" 안붙임)
     var momsHqBrandCdComboList = ${momsHqBrandCdComboList};
@@ -533,7 +535,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20250429.01" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
