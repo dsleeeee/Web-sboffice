@@ -64,6 +64,9 @@ public class SideMenuSelGroupVO extends CmmVO {
     /** 사용자 아이디 */
     private String userId;
 
+    /** 하프앤하프 */
+    private String halfAndHalfYn;
+
     /**
      * @return the hqOfficeCd
      */
@@ -223,4 +226,11 @@ public class SideMenuSelGroupVO extends CmmVO {
         this.userId = userId;
     }
 
+    public String getHalfAndHalfYn() {
+        return halfAndHalfYn;
+    }
+
+    public void setHalfAndHalfYn(String halfAndHalfYn) {
+        this.halfAndHalfYn = halfAndHalfYn;
+    }
 }

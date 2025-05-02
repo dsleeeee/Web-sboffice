@@ -98,6 +98,9 @@
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="70" is-read-only="true"></wj-flex-grid-column>
+                        <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.halfAndHalfYn"/>" binding="halfAndHalfYn" data-map="useYnDataMap" width="100"></wj-flex-grid-column>
+                        </c:if>
                     </wj-flex-grid>
                 </div>
             </div>
@@ -167,12 +170,15 @@
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.oldRegStoreFg"/>" binding="oldRegStoreFg" data-map="oldRegStoreFgDataMap" width="85" visible="false"></wj-flex-grid-column>
                         </c:if>
-                        <c:if test="${(orgnFg == 'HQ' and hqOfficeCd == 'A0001') or (orgnFg == 'HQ' and hqOfficeCd == 'DS019') or (orgnFg == 'HQ' and hqOfficeCd == 'DS001') or (orgnFg == 'HQ' and hqOfficeCd == 'H0614')}">
+                        <c:if test="${(orgnFg == 'HQ' and hqOfficeCd == 'A0001') or (orgnFg == 'HQ' and hqOfficeCd == 'DS019') or (orgnFg == 'HQ' and hqOfficeCd == 'DS001')}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.topYn"/>" binding="topYn" data-map="topYnDataMap" width="85"></wj-flex-grid-column>
                         </c:if>
                         <c:if test="${(orgnFg == 'HQ' and hqOfficeCd == 'A0001') or (orgnFg == 'HQ' and hqOfficeCd == 'DS019') or (orgnFg == 'HQ' and hqOfficeCd == 'DS001')}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.expandYn"/>" binding="expandYn" data-map="expandYnDataMap" width="75"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.mappingYn"/>" binding="mappingYn" data-map="mappingYnDataMap" width="110"></wj-flex-grid-column>
+                        </c:if>
+                        <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.popUpClassYn"/>" binding="popUpClassYn" data-map="useYnDataMap" width="120"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -260,9 +266,10 @@
 <script>
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
+    var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20241114.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20250429.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">

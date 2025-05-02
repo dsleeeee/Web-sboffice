@@ -96,6 +96,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $scope.brandDataMap = new wijmo.grid.DataMap(brandList, 'value', 'name'); // 브랜드
     $scope.fixProdFgDataMap = fixProdFgDataMap;
     $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
+    $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name'); //하프앤하프
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -301,6 +302,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
 
     params.fixProdFg = 0;
     params.sdselTypeFg = "C";
+    params.halfAndHalfYn = "N";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);
@@ -514,6 +516,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     $scope.topYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 상단표기여부
     $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
     $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
+    $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name'); // 선택팝업
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -652,6 +655,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     params.topYn = "N";
     params.expandYn = "N";
     params.mappingYn = "N";
+    params.popUpClassYn = "N";
 
     // 추가기능 수행 : 파라미터
     $scope._addRow(params, 2);

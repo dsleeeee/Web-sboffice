@@ -123,6 +123,9 @@ public class SideMenuSelClassVO extends CmmVO {
     /** ERP상품맵핑여부 */
     private String mappingYn;
 
+    /** 선택팝업 */
+    private String popUpClassYn;
+
     /**
      * @return the hqOfficeCd
      */
@@ -392,4 +395,12 @@ public class SideMenuSelClassVO extends CmmVO {
     public String getMappingYn() { return mappingYn; }
 
     public void setMappingYn(String mappingYn) { this.mappingYn = mappingYn; }
+
+    public String getPopUpClassYn() {
+        return popUpClassYn;
+    }
+
+    public void setPopUpClassYn(String popUpClassYn) {
+        this.popUpClassYn = popUpClassYn;
+    }
 }
