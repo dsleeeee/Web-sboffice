@@ -252,19 +252,20 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function(){
-            // 특성
-            var scope = agrid.getScope('artiseeProdSpecCtrl');
-            scope.searchArtiseeProdSpec();
+            $scope.$apply(function() {
+                // 특성
+                var scope = agrid.getScope('artiseeProdSpecCtrl');
+                scope.searchArtiseeProdSpec();
 
-            // 적용 상품
-            $scope.searchArtiseeProdSpecProd();
+                // 적용 상품
+                $scope.searchArtiseeProdSpecProd();
 
-            // 미적용 상품
-            var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
-            storeScope2._gridDataInit();
-            storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+                // 미적용 상품
+                var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+                // storeScope2._gridDataInit();
+                storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+            });
         });
-
     };
     // <-- //저장 -->
 
@@ -282,17 +283,19 @@ app.controller('artiseeProdSpecProdCtrl', ['$scope', '$http', function ($scope, 
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveDelete.sb", params, function(){
-            // 특성
-            var scope = agrid.getScope('artiseeProdSpecCtrl');
-            scope.searchArtiseeProdSpec();
+            $scope.$apply(function() {
+                // 특성
+                var scope = agrid.getScope('artiseeProdSpecCtrl');
+                scope.searchArtiseeProdSpec();
 
-            // 적용 상품
-            $scope.searchArtiseeProdSpecProd();
+                // 적용 상품
+                $scope.searchArtiseeProdSpecProd();
 
-            // 미적용 상품
-            var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
-            storeScope2._gridDataInit();
-            storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+                // 미적용 상품
+                var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+                // storeScope2._gridDataInit();
+                storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedProd());
+            });
         });
     };
     // <-- //삭제 -->
@@ -415,19 +418,21 @@ app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecProdSaveInsert.sb", params, function(){
-            // 특성
-            var scope = agrid.getScope('artiseeProdSpecCtrl');
-            scope.searchArtiseeProdSpec();
+            $scope.$apply(function() {
+                // 특성
+                var scope = agrid.getScope('artiseeProdSpecCtrl');
+                scope.searchArtiseeProdSpec();
 
-            // 적용 상품
-            var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
-            storeScope._gridDataInit();
-            storeScope._broadcast('artiseeProdSpecProdCtrl', $scope.getSelectedNoProd());
+                // 적용 상품
+                var storeScope = agrid.getScope('artiseeProdSpecProdCtrl');
+                // storeScope._gridDataInit();
+                storeScope._broadcast('artiseeProdSpecProdCtrl', $scope.getSelectedNoProd());
 
-            // 미적용 상품
-            var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
-            storeScope2._gridDataInit();
-            storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedNoProd());
+                // 미적용 상품
+                var storeScope2 = agrid.getScope('artiseeProdSpecNoProdCtrl');
+                // storeScope2._gridDataInit();
+                storeScope2._broadcast('artiseeProdSpecNoProdCtrl', $scope.getSelectedNoProd());
+            });
         });
     };
     // <-- //추가 -->

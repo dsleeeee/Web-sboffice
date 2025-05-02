@@ -544,7 +544,8 @@
                     (SELECT LISTAGG(PROD_CD, ',') WITHIN GROUP (ORDER BY PROD_CD) AS PROD_CD FROM TB_HQ_PRODUCT thp WHERE thp.HQ_OFFICE_CD = #{hqOfficeCd} AND thp.SIDE_PROD_YN = 'Y' AND thp.SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD ) AS PROD_CD,
                     (SELECT COUNT(*) FROM TB_HQ_PRODUCT_SDSEL_CLASS WHERE HQ_OFFICE_CD = thpsg.HQ_OFFICE_CD  AND SDSEL_GRP_CD = thpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT,
                     NVL(thpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG,
-                    NVL(thpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG
+                    NVL(thpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG,
+                    NVL(thpsg.HALF_AND_HALF_YN, 'N') AS HALF_AND_HALF_YN
                 FROM
                     TB_HQ_PRODUCT_SDSEL_GROUP thpsg
                 WHERE
@@ -595,7 +596,8 @@
                     tmpsg.SDSEL_GRP_NM,
                     (SELECT COUNT(*) FROM TB_MS_PRODUCT_SDSEL_CLASS WHERE STORE_CD = tmpsg.STORE_CD  AND SDSEL_GRP_CD = tmpsg.SDSEL_GRP_CD AND USE_YN  = 'Y') AS CNT,
                     NVL(tmpsg.FIX_PROD_FG, '0') AS FIX_PROD_FG,
-                    NVL(tmpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG
+                    NVL(tmpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG,
+                    NVL(tmpsg.HALF_AND_HALF_YN, 'N') AS HALF_AND_HALF_YN
                 FROM
                     TB_MS_PRODUCT_SDSEL_GROUP tmpsg
                 WHERE
@@ -683,7 +685,8 @@
                     MOD_DT,
                     MOD_ID,
                     FIX_PROD_FG,
-                    SDSEL_TYPE_FG
+                    SDSEL_TYPE_FG,
+                    HALF_AND_HALF_YN
                 ) VALUES (
                     #{hqOfficeCd},
                     #{hqBrandCd},
@@ -695,7 +698,8 @@
                     #{modDt},
                     #{modId},
                     #{fixProdFg},
-                    #{sdselTypeFg}
+                    #{sdselTypeFg},
+                    #{halfAndHalfYn}
                 )
             </when>
             <!-- 매장 -->
@@ -712,7 +716,8 @@
                     MOD_DT,
                     MOD_ID,
                     FIX_PROD_FG,
-                    SDSEL_TYPE_FG
+                    SDSEL_TYPE_FG,
+                    HALF_AND_HALF_YN
                 ) VALUES (
                     #{storeCd},
                     #{msBrandCd},
@@ -724,7 +729,8 @@
                     #{modDt},
                     #{modId},
                     #{fixProdFg},
-                    #{sdselTypeFg}
+                    #{sdselTypeFg},
+                    #{halfAndHalfYn}
                 )
             </when>
         </choose>
@@ -748,7 +754,8 @@
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
                     FIX_PROD_FG = #{fixProdFg},
-                    SDSEL_TYPE_FG = #{sdselTypeFg}
+                    SDSEL_TYPE_FG = #{sdselTypeFg},
+                    HALF_AND_HALF_YN = #{halfAndHalfYn}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_GRP_CD = #{sdselGrpCd}
@@ -762,7 +769,8 @@
                     MOD_DT = #{modDt},
                     MOD_ID = #{modId},
                     FIX_PROD_FG = #{fixProdFg},
-                    SDSEL_TYPE_FG = #{sdselTypeFg}
+                    SDSEL_TYPE_FG = #{sdselTypeFg},
+                    HALF_AND_HALF_YN = #{halfAndHalfYn}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_GRP_CD = #{sdselGrpCd}
@@ -885,7 +893,8 @@
                     NVL(thpsc.REG_STORE_FG, '0') AS OLD_REG_STORE_FG,
                     NVL(thpsc.TOP_YN, 'N') AS TOP_YN,
                     NVL(thpsc.EXPAND_YN, 'N') AS EXPAND_YN,
-                    NVL(thpsc.MAPPING_YN, 'N') AS MAPPING_YN
+                    NVL(thpsc.MAPPING_YN, 'N') AS MAPPING_YN,
+                    NVL(thpsc.POP_UP_CLASS_YN, 'N') AS POP_UP_CLASS_YN
                 FROM
                     TB_HQ_PRODUCT_SDSEL_CLASS thpsc
                 WHERE
@@ -908,7 +917,8 @@
                     NVL(tmpsc.REQUIRE_YN, 'N') AS REQUIRE_YN,
                     NVL(tmpsc.TOP_YN, 'N') AS TOP_YN,
                     NVL(tmpsc.EXPAND_YN, 'N') AS EXPAND_YN,
-                    NVL(tmpsc.MAPPING_YN, 'N') AS MAPPING_YN
+                    NVL(tmpsc.MAPPING_YN, 'N') AS MAPPING_YN,
+                    NVL(tmpsc.POP_UP_CLASS_YN, 'N') AS POP_UP_CLASS_YN
                 FROM
                     TB_MS_PRODUCT_SDSEL_CLASS tmpsc
                 WHERE
@@ -971,7 +981,8 @@
                     REG_STORE_FG,
                     TOP_YN,
                     EXPAND_YN,
-                    MAPPING_YN
+                    MAPPING_YN,
+                    POP_UP_CLASS_YN
                 ) VALUES (
                     #{hqOfficeCd},
                     #{sdselClassCd},
@@ -988,7 +999,8 @@
                     #{regStoreFg},
                     #{topYn},
                     #{expandYn},
-                    #{mappingYn}
+                    #{mappingYn},
+                    #{popUpClassYn}
                 )
             </when>
             <!-- 매장 -->
@@ -1009,7 +1021,8 @@
                     REQUIRE_YN,
                     TOP_YN,
                     EXPAND_YN,
-                    MAPPING_YN
+                    MAPPING_YN,
+                    POP_UP_CLASS_YN
                 ) VALUES (
                     #{storeCd},
                     #{sdselClassCd},
@@ -1025,7 +1038,8 @@
                     #{requireYn},
                     #{topYn},
                     #{expandYn},
-                    #{mappingYn}
+                    #{mappingYn},
+                    #{popUpClassYn}
                 )
             </when>
         </choose>
@@ -1053,7 +1067,8 @@
                     REG_STORE_FG = #{regStoreFg},
                     TOP_YN = #{topYn},
                     EXPAND_YN = #{expandYn},
-                    MAPPING_YN = #{mappingYn}
+                    MAPPING_YN = #{mappingYn},
+                    POP_UP_CLASS_YN = #{popUpClassYn}
                 WHERE
                     HQ_OFFICE_CD = #{hqOfficeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -1070,7 +1085,8 @@
                     REQUIRE_YN = #{requireYn},
                     TOP_YN = #{topYn},
                     EXPAND_YN = #{expandYn},
-                    MAPPING_YN = #{mappingYn}
+                    MAPPING_YN = #{mappingYn},
+                    POP_UP_CLASS_YN = #{popUpClassYn}
                 WHERE
                     STORE_CD = #{storeCd}
                     AND SDSEL_CLASS_CD = #{sdselClassCd}
@@ -2101,7 +2117,8 @@
                     SDSEL_CLASS_JP_NM,
                     TOP_YN,
                     EXPAND_YN,
-                    MAPPING_YN
+                    MAPPING_YN,
+                    POP_UP_CLASS_YN
                 )
                 SELECT
                 A.HQ_OFFICE_CD,
@@ -2123,7 +2140,8 @@
                 A.SDSEL_CLASS_JP_NM,
                 A.TOP_YN,
                 A.EXPAND_YN,
-                A.MAPPING_YN
+                A.MAPPING_YN,
+                A.POP_UP_CLASS_YN
                 FROM TB_HQ_PRODUCT_SDSEL_CLASS A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -2153,7 +2171,8 @@
                     SDSEL_CLASS_JP_NM,
                     TOP_YN,
                     EXPAND_YN,
-                    MAPPING_YN
+                    MAPPING_YN,
+                    POP_UP_CLASS_YN
                 )
                 SELECT
                 A.STORE_CD,
@@ -2175,7 +2194,8 @@
                 A.SDSEL_CLASS_JP_NM,
                 A.TOP_YN,
                 A.EXPAND_YN,
-                A.MAPPING_YN
+                A.MAPPING_YN,
+                A.POP_UP_CLASS_YN
                 FROM TB_MS_PRODUCT_SDSEL_CLASS A
                 WHERE 1=1
                 AND A.STORE_CD = #{storeCd}

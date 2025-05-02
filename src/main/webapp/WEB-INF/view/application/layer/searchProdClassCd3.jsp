@@ -7,7 +7,7 @@
 <wj-popup control="prodClassPopUpLayer3" show-trigger="Click" hide-trigger="Click" style="display: none;width:400px;" onload="window.self.focus();">
     <div class="wj-dialog wj-dialog-columns" ng-controller="prodClassPopUp3Ctrl">
         <div class="wj-dialog-header wj-dialog-header-font">
-            <s:message code="prod.layer.prodClass"/>333
+            <s:message code="prod.layer.prodClass"/>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 300px;">
