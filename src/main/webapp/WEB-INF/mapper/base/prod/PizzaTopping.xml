@@ -19,7 +19,6 @@
     <select id="getPizzaToppingList" parameterType="PizzaToppingVO" resultType="DefaultMap">
         /* PizzaToppingMapper.getPizzaToppingList */
         SELECT
-        FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'CD_STR') AS PATH,
         FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PATH_NM,
         thp.PROD_CD,
         thp.PROD_NM,
