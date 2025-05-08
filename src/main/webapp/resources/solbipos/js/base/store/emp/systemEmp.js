@@ -32,6 +32,8 @@ app.controller('systemEmpCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('072', 'smsRecvYnComboData', 'A');
   // 관리자여부
   $scope._getComboDataQuery('097', 'adminFgComboData', 'A');
+  // 사용여부
+  $scope._getComboDataQuery('067', 'useYnComboData', 'A');
 
   $scope.selectedSystemEmp;
 

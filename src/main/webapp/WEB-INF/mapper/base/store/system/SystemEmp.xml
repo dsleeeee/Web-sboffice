@@ -79,7 +79,7 @@
           <if test="smsRecvYn != null and smsRecvYn != ''">
             AND tce.SMS_RECV_YN = #{smsRecvYn}
           </if>
-          <if test="useYn != null and useYn != ''">
+          <if test="useYn != null and useYn.toString() != ''">
             AND tce.USE_YN = #{useYn}
           </if>
          ORDER BY tce.EMP_NO DESC, tce.REG_DT DESC

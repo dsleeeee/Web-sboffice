@@ -117,8 +117,23 @@
             </wj-combo-box>
           </div>
         </td>
-        <th></th>
-        <td></td>
+        <%-- 사용여부 --%>
+        <th><s:message code="cmm.useYn"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchUseYn"
+                    ng-model="useYn"
+                    control="useYnCombo"
+                    items-source="_getComboData('useYnComboData')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index="2">
+            </wj-combo-box>
+          </div>
+        </td>
       </tr>
       <tr <c:if test="${orgnFg == 'AGENCY'}">style="display: none;"</c:if>>
         <%-- 관리업체 코드 --%>
@@ -148,7 +163,7 @@
             </wj-combo-box>
           </div>
         </td>
-        <th></th>
+        <td></td>
         <td></td>
       </tr>
     </tbody>
@@ -192,16 +207,16 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.empNo"/>" binding="empNo" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.empNm"/>" binding="empNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.userId"/>" binding="userId" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.useYn"/>" binding="useYn" data-map="webUseYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.mpNo"/>" binding="mpNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.adminFg"/>" binding="adminFg" data-map="adminFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="systemEmp.agencyCd"/>" binding="agencyCd" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.empNo"/>" binding="empNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.empNm"/>" binding="empNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.userId"/>" binding="userId" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.useYn"/>" binding="useYn" data-map="webUseYnDataMap" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.mpNo"/>" binding="mpNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.adminFg"/>" binding="adminFg" data-map="adminFgDataMap" align="center" width="80" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="systemEmp.agencyCd"/>" binding="agencyCd" align="center" width="85" is-read-only="true"></wj-flex-grid-column>
         <wj-flex-grid-column header="<s:message code="systemEmp.agencyNm"/>" binding="agencyNm" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
@@ -227,7 +242,7 @@
   var pAgencyCd = "${pAgencyCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmp.js?ver=20181121.08" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/systemEmp.js?ver=20250508.01" charset="utf-8"></script>
 
 <%-- 사원상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/systemEmpDetail.jsp">
