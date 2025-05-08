@@ -36,6 +36,7 @@
                tme.SERVICE_FG,
                tcn_service_fg.NMCODE_NM AS SERVICE_FG_NM,
                tme.SMS_RECV_YN,
+               tcn_sms_recv_yn.NMCODE_NM AS SMS_RECV_YN_NM,
                tme.USE_YN,
                NVL(tme.MAIN_SALE_FG, 0) AS MAIN_SALE_FG
                <include refid="CmmSQL.PagingTemplateCount"/>
@@ -46,30 +47,36 @@
           LEFT OUTER JOIN TB_CM_NMCODE tcn_web_use_yn ON
             tme.WEB_USE_YN = tcn_web_use_yn.NMCODE_CD
             AND tcn_web_use_yn.NMCODE_GRP_CD = '067'
+        LEFT OUTER JOIN TB_CM_NMCODE tcn_sms_recv_yn ON
+            tme.SMS_RECV_YN = tcn_sms_recv_yn.NMCODE_CD
+            AND tcn_sms_recv_yn.NMCODE_GRP_CD = '072'
         <where>
             <if test="storeCd != null and storeCd != ''">
-            AND tme.STORE_CD = #{storeCd}
+                AND tme.STORE_CD = #{storeCd}
             </if>
             <if test="empNo != null and empNo != ''">
-            AND tme.EMP_NO LIKE '%'||#{empNo}||'%'
+                AND tme.EMP_NO LIKE '%'||#{empNo}||'%'
             </if>
             <if test="empNm != null and empNm != ''">
-            AND tme.EMP_NM LIKE '%'||#{empNm}||'%'
+                AND tme.EMP_NM LIKE '%'||#{empNm}||'%'
             </if>
             <if test="userId != null and userId != ''">
-            AND tme.USER_ID LIKE '%'||#{userId}||'%'
+                AND tme.USER_ID LIKE '%'||#{userId}||'%'
             </if>
             <if test='serviceFg != null and serviceFg.toString() != ""'>
-            AND tme.SERVICE_FG = #{serviceFg}
+                AND tme.SERVICE_FG = #{serviceFg}
             </if>
             <if test="mpNo != null and mpNo != ''">
-            AND tme.MP_NO LIKE '%'||#{mpNo}||'%'
+                AND tme.MP_NO LIKE '%'||#{mpNo}||'%'
             </if>
             <if test='webUseYn != null and webUseYn.toString() != ""'>
-            AND tme.WEB_USE_YN = #{webUseYn}
+                AND tme.WEB_USE_YN = #{webUseYn}
+            </if>
+            <if test="useYn != null and useYn.toString() != ''">
+                AND tme.USE_YN = #{useYn}
             </if>
             <if test='smsRecvYn != null and smsRecvYn != ""'>
-            AND tme.SMS_RECV_YN = #{smsRecvYn}
+                AND tme.SMS_RECV_YN = #{smsRecvYn}
             </if>
             <if test='mainSaleFg != null and mainSaleFg == "0"'>
                 AND (tme.MAIN_SALE_FG = #{mainSaleFg}
@@ -80,7 +87,7 @@
             </if>
             <if test="chkDt == false">
                 <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
-            AND tme.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959' --조회(등록)일자
+                    AND tme.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959' --조회(등록)일자
                 </if>
             </if>
         </where>

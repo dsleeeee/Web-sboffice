@@ -133,7 +133,26 @@
             </wj-combo-box>
           </div>
         </td>
-          <%-- 메인화면매출표시 --%>
+        <%-- 사용여부 --%>
+        <th><s:message code="cmm.useYn"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchUseYn"
+                    ng-model="useYn"
+                    control="useYnCombo"
+                    items-source="_getComboData('useYnComboData')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index="2">
+            </wj-combo-box>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <%-- 메인화면매출표시 --%>
         <th><s:message code="storeEmp.mainSaleFg" /></th>
         <td>
           <div class="sb-select">
@@ -148,6 +167,8 @@
             </wj-combo-box>
           </div>
         </td>
+        <td></td>
+        <td></td>
       </tr>
     </tbody>
   </table>
@@ -188,15 +209,16 @@
 
         <!-- define columns -->
         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.empNo"/>" binding="empNo" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.empNm"/>" binding="empNm" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.userId"/>" binding="userId" align="center" width="*" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" align="center" width="70" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.mpNo"/>" binding="mpNo" width="140" align="center" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.useYn"/>" binding="useYn" data-map="useYnDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
-        <wj-flex-grid-column header="<s:message code="storeEmp.mainSaleFg"/>" binding="mainSaleFg" data-map="mainSaleFgDataMap" align="center" width="100" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.empNo"/>" binding="empNo" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.empNm"/>" binding="empNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.userId"/>" binding="userId" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.webUseYn"/>" binding="webUseYn" data-map="webUseYnDataMap" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.serviceFg"/>" binding="serviceFg" data-map="serviceFgDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.mpNo"/>" binding="mpNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <%--<wj-flex-grid-column header="<s:message code="storeEmp.smsRecvYn"/>" binding="smsRecvYn" data-map="smsRecvYnDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>--%>
+        <wj-flex-grid-column header="<s:message code="storeEmp.smsRecvYn"/>" binding="smsRecvYnNm" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.useYn"/>" binding="useYn" data-map="useYnDataMap" width="65" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="storeEmp.mainSaleFg"/>" binding="mainSaleFg" data-map="mainSaleFgDataMap" width="110" align="center" is-read-only="true"></wj-flex-grid-column>
       </wj-flex-grid>
     </div>
   </div>
@@ -220,7 +242,7 @@
   var smsRecvYn2  = ${ccu.getCommCodeExcpAll("072")}; // SMS수신여부
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=20240322.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/storeEmp.js?ver=20250508.01" charset="utf-8"></script>
 
 <%-- 매장사원 상세정보 레이어 --%>
 <c:import url="/WEB-INF/view/base/store/emp/storeEmpDetail.jsp">

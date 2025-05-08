@@ -42,6 +42,8 @@ app.controller('storeEmpCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('067', 'webUseYnComboData', 'A');
   // SMS 수신여부
   $scope._getComboDataQuery('072', 'smsRecvYnComboData', 'A');
+  // 사용여부
+  $scope._getComboDataQuery('067', 'useYnComboData', 'A');
   // 메인화면매출표시
   $scope._setComboData("srchMainSaleFg", mainSaleFg);
 
@@ -57,12 +59,12 @@ app.controller('storeEmpCtrl', ['$scope', '$http', function ($scope, $http) {
     // 그리드에서 사용하는 dataMap 초기화
     $scope.serviceFgDataMap = new wijmo.grid.DataMap(serviceFg, 'value', 'name');
     $scope.webUseYnDataMap  = new wijmo.grid.DataMap(webUseYn, 'value', 'name');
-    $scope.smsRecvYnDataMap = new wijmo.grid.DataMap(smsRecvYn, 'value', 'name');
+    // $scope.smsRecvYnDataMap = new wijmo.grid.DataMap(smsRecvYn, 'value', 'name');
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
     $scope.mainSaleFgDataMap = new wijmo.grid.DataMap(mainSaleFg, 'value', 'name');
 
-    console.log('smsRecvYn', smsRecvYn);
-    console.log('$scope.smsRecvYnDataMap', $scope.smsRecvYnDataMap);
+    // console.log('smsRecvYn', smsRecvYn);
+    // console.log('$scope.smsRecvYnDataMap', $scope.smsRecvYnDataMap);
 
 
     // 그리드 포맷
