@@ -72,6 +72,9 @@
         <if test="webUseYn != null and webUseYn.toString() != ''">
             AND the.WEB_USE_YN = #{webUseYn}
         </if>
+        <if test="useYn != null and useYn.toString() != ''">
+            AND the.USE_YN = #{useYn}
+        </if>
         <if test="smsRecvYn != null and smsRecvYn != ''">
             AND the.SMS_RECV_YN = #{smsRecvYn}
         </if>

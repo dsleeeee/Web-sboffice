@@ -133,6 +133,25 @@
             </wj-combo-box>
           </div>
         </td>
+        <%-- 사용여부 --%>
+        <th><s:message code="cmm.useYn"/></th>
+        <td>
+          <div class="sb-select">
+            <wj-combo-box
+                    id="srchUseYn"
+                    ng-model="useYn"
+                    control="useYnCombo"
+                    items-source="_getComboData('useYnComboData')"
+                    display-member-path="name"
+                    selected-value-path="value"
+                    is-editable="false"
+                    initialized="_initComboBox(s)"
+                    selected-index="2">
+            </wj-combo-box>
+          </div>
+        </td>
+      </tr>
+      <tr>
           <%-- 메인화면매출표시 --%>
           <th><s:message code="hqEmp.mainSaleFg" /></th>
           <td>
@@ -148,6 +167,8 @@
               </wj-combo-box>
             </div>
           </td>
+          <td></td>
+          <td></td>
       </tr>
     </tbody>
   </table>
@@ -246,7 +267,7 @@
   var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=20230313.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/store/emp/hqEmp.js?ver=20250508.01" charset="utf-8"></script>
 
 <%-- 사원기초정보 상세 Tab 팝업 --%>
 <c:import url="/WEB-INF/view/base/store/emp/hqEmpDetail.jsp">

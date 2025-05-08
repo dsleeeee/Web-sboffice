@@ -41,6 +41,8 @@ app.controller('hqEmpCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope._getComboDataQuery('067', 'webUseYnComboData', 'A');
   // SMS 수신여부
   $scope._getComboDataQuery('072', 'smsRecvYnComboData', 'A');
+  // 사용여부
+  $scope._getComboDataQuery('067', 'useYnComboData', 'A');
   // 메인화면매출표시
   $scope._setComboData("srchMainSaleFg", mainSaleFg);
 
