@@ -75,27 +75,32 @@
         <div class="wj-TblWrap mt10 mb20 w35 fl">
             <div class="wj-TblWrapBr mr10 pd10" style="height:530px;">
                 <div class="w100 mt10 mb20">
-                    <div class="wj-gridWrap" style="height:480px; overflow-x: hidden; overflow-y: hidden;">
-                        <div class="row">
-                            <wj-flex-grid
-                                    autoGenerateColumns.="false"
-                                    control="flex"
-                                    initialized="initGrid(s,e)"
-                                    sticky-headers="true"
-                                    selection-mode="Row"
-                                    items-source="data"
-                                    item-formatter="_itemFormatter"
-                                    ime-enabled="true">
+                    <div class="wj-gridWrap" style="height:460px; overflow-x: hidden; overflow-y: hidden;">
+                        <wj-flex-grid
+                                autoGenerateColumns.="false"
+                                control="flex"
+                                initialized="initGrid(s,e)"
+                                sticky-headers="true"
+                                selection-mode="Row"
+                                items-source="data"
+                                item-formatter="_itemFormatter"
+                                ime-enabled="true">
 
-                                <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="pizzaTopping.pathNm"/>" binding="pathNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="pizzaTopping.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="pizzaTopping.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="pizzaTopping.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="pizzaTopping.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
-                            </wj-flex-grid>
-                        </div>
+                            <!-- define columns -->
+                            <wj-flex-grid-column header="<s:message code="pizzaTopping.pathNm"/>" binding="pathNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="pizzaTopping.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="pizzaTopping.prodNm"/>" binding="prodNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="pizzaTopping.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
+                            <wj-flex-grid-column header="<s:message code="pizzaTopping.useYn"/>" binding="useYn" data-map="useYnFgDataMap" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                        </wj-flex-grid>
                     </div>
+                    <%-- 페이지 리스트 --%>
+                    <div class="pageNum2 mt10">
+                        <%-- id --%>
+                        <ul id="pizzaToppingCtrlPager" data-size="10">
+                        </ul>
+                    </div>
+                    <%--//페이지 리스트--%>
                 </div>
             </div>
         </div>
@@ -236,7 +241,7 @@
     var useYnFgData = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/pizzaTopping/pizzaTopping.js?ver=20250428.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/pizzaTopping/pizzaTopping.js?ver=20250508.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

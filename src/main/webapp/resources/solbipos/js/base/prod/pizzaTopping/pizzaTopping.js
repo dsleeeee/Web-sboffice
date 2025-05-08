@@ -90,6 +90,7 @@ app.controller('pizzaToppingCtrl', ['$scope', '$http', function ($scope, $http) 
         params.srchProdNm = $scope.srchProdNm;
         params.prodClassCd = $scope.prodClassCd;
         params.useYn = $scope.useYn;
+        params.listScale = 100;
 
         $scope._inquiryMain("/base/prod/pizzaTopping/pizzaTopping/getPizzaToppingList.sb", params, function() {
             $scope.$apply(function() {
