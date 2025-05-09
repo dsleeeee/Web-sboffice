@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    ResveCountStatus.xml
+    보나비문자전송현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.05.02     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.resveCountStatus.service.impl.ResveCountStatusMapper">
+
+    <!-- 보나비예약건수현황 - 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getResveCountStatusList" parameterType="resveCountStatusVO" resultType="DefaultMap">
+        /* USE : VirtualLoginMapper.getResveCountStatusList */
+        SELECT	'SMS'				            AS MSG_FG
+        ,		B.SUBJECT			            AS RESVE_FG
+        ,    	C.NOW_DATE			            AS YEAR_MONTH
+        ,		COUNT(A.NOW_DATE)	            AS CNT
+        ,		COUNT(A.NOW_DATE) * TO_NUMBER(#{smsAmt})	AS AMT_TOTAL
+        ,       CASE B.SUBJECT
+                    WHEN '예약안내' THEN 1
+                    WHEN '예약취소' THEN 2
+                    WHEN '픽업안내' THEN 3
+                    ELSE 4
+                END AS RESVE_FG_SORT
+        FROM
+            (
+                SELECT	SUBJECT
+                ,		TO_CHAR(TO_DATE(SUBSTR(NOW_DATE, 1, 6), 'YYYYMM'), 'YYYY-MM') AS NOW_DATE
+                FROM	SDK_SMS_REPORT
+                WHERE 	NOW_DATE BETWEEN #{startMonth} ||'01000000' AND #{endMonth} ||'31235959'
+                AND 	USER_ID IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+            ) A
+        ,   (
+                SELECT 	DISTINCT SUBJECT
+                FROM 	SDK_SMS_REPORT
+                WHERE 	USER_ID IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+            ) B
+        ,	(
+                <![CDATA[
+                SELECT	TO_CHAR(ADD_MONTHS(TO_DATE(#{startMonth}, 'YYYY-MM'), LEVEL - 1), 'YYYY-MM') AS NOW_DATE
+                FROM 	DUAL
+                CONNECT
+                BY 		ADD_MONTHS(TO_DATE(#{startMonth}, 'YYYY-MM'), LEVEL - 1) <= TO_DATE(#{endMonth}, 'YYYY-MM')
+                ]]>
+            ) C
+        WHERE 	A.SUBJECT (+) = B.SUBJECT
+        AND 	A.NOW_DATE (+) = C.NOW_DATE
+        GROUP
+        BY		B.SUBJECT
+        ,		C.NOW_DATE
+        UNION ALL
+        SELECT	'LMS'				AS MSG_FG
+        ,		B.SUBJECT			AS RESVE_FG
+        ,    	C.NOW_DATE			AS YEAR_MONTH
+        ,		COUNT(A.NOW_DATE)	AS CNT
+        ,		COUNT(A.NOW_DATE) * TO_NUMBER(#{lmsAmt})	AS AMT_TOTAL
+        ,       CASE B.SUBJECT
+                    WHEN '예약안내' THEN 1
+                    WHEN '예약취소' THEN 2
+                    WHEN '픽업안내' THEN 3
+                    ELSE 4
+                END AS RESVE_FG_SORT
+        FROM
+            (
+                SELECT	SUBJECT
+                ,		TO_CHAR(TO_DATE(SUBSTR(NOW_DATE, 1, 6), 'YYYYMM'), 'YYYY-MM') AS NOW_DATE
+                FROM	SDK_MMS_REPORT
+                WHERE 	NOW_DATE BETWEEN #{startMonth} ||'01000000' AND #{endMonth} ||'31235959'
+                AND 	USER_ID IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+            ) A
+        ,   (
+                SELECT 	DISTINCT SUBJECT
+                FROM 	SDK_MMS_REPORT
+                WHERE 	USER_ID IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = 'A0001')
+            ) B
+        ,	(
+                <![CDATA[
+                    SELECT	TO_CHAR(ADD_MONTHS(TO_DATE(#{startMonth}, 'YYYY-MM'), LEVEL - 1), 'YYYY-MM') AS NOW_DATE
+                    FROM 	DUAL
+                    CONNECT
+                    BY 		ADD_MONTHS(TO_DATE(#{startMonth}, 'YYYY-MM'), LEVEL - 1) <= TO_DATE(#{endMonth}, 'YYYY-MM')
+                ]]>
+            ) C
+        WHERE 	A.SUBJECT (+) = B.SUBJECT
+        AND 	A.NOW_DATE (+) = C.NOW_DATE
+        GROUP
+        BY		B.SUBJECT
+        ,		C.NOW_DATE
+        ORDER
+        BY		MSG_FG desc
+        ,		YEAR_MONTH
+        ,		RESVE_FG_SORT
+    </select>
+</mapper>
