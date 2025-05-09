@@ -30,6 +30,9 @@ public class ResveCountStatusVO extends PageVO {
     /** lms 금액 */
     private String lmsAmt;
 
+    /** 옵션 */
+    private String option;
+
     public String getStartMonth() {
         return startMonth;
     }
@@ -60,5 +63,13 @@ public class ResveCountStatusVO extends PageVO {
 
     public void setLmsAmt(String lmsAmt) {
         this.lmsAmt = lmsAmt;
+    }
+
+    public String getOption() {
+        return option;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
     }
 }

@@ -38,14 +38,29 @@
                     <span class="txtIn"> <input id="endMonth" name="endMonth" class="w110px" /></span>
                 </div>
             </td>
+                <%-- 옵션 --%>
+                <th><s:message code="resveCountStatus.option"/></th>
+                <td>
+                    <div class="sb-select">
+                        <wj-combo-box
+                                id="srchOption"
+                                ng-model="option"
+                                items-source="_getComboData('srchOption')"
+                                display-member-path="name"
+                                selected-value-path="value"
+                                is-editable="false"
+                                control="srchOptionCombo">
+                        </wj-combo-box>
+                    </div>
+                </td>
         </tr>
         <tr>
-            <%-- 매장코드 --%>
+            <%-- sms금액 --%>
             <th><s:message code="resveCountStatus.smsAmt" /></th>
             <td>
                 <input type="text" class="sb-input w100" id="smsAmt" ng-model="smsAmt" onkeyup="fnNxBtnSearch();" />
             </td>
-            <%-- 매장명 --%>
+            <%-- lms금액 --%>
             <th><s:message code="resveCountStatus.lmsAmt" /></th>
             <td>
                 <input type="text" class="sb-input w100" id="lmsAmt" ng-model="lmsAmt" onkeyup="fnNxBtnSearch();" />
@@ -63,6 +78,7 @@
         <div class="wj-gridWrap mt10" style="height:450px; overflow-y: hidden;">
             <div class="row">
                 <wj-flex-grid
+                        id="resveConutStatusGrid"
                         autoGenerateColumns="false"
                         control="flex"
                         initialized="initGrid(s,e)"
@@ -73,7 +89,8 @@
                         is-read-only="true">
 
                     <!-- define columns -->
-
+                    <wj-flex-grid-column header="<s:message code="resveCountStatus.storeCd"/>" binding="storeCd" width="100" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="resveCountStatus.storeNm"/>" binding="storeNm" width="120" align="center" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="resveCountStatus.msgFg"/>" binding="msgFg" align="center" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="resveCountStatus.resveFg"/>" binding="resveFg" width="100" align="center" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="resveCountStatus.yearMonth"/>" binding="yearMonth" width="100" align="center"></wj-flex-grid-column>
@@ -91,4 +108,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/resveCountStatus/resveCountStatus.js?ver=20250502.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/resveCountStatus/resveCountStatus.js?ver=20250509.01" charset="utf-8"></script>

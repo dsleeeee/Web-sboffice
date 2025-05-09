@@ -26,6 +26,9 @@ import java.util.List;
 @Repository
 public interface ResveCountStatusMapper {
 
-    /** 보나비예약건수현황 - 조회 */
+    /** 보나비예약건수현황 - 전체 조회 */
     List<DefaultMap<String>> getResveCountStatusList(ResveCountStatusVO resveCountStatusVO);
+
+    /** 보나비예약건수현황 - 매장별 조회 */
+    List<DefaultMap<String>> getStoreResveCountStatusList(ResveCountStatusVO resveCountStatusVO);
 }

@@ -50,6 +50,10 @@ public class ResveCountStatusServiceImpl implements ResveCountStatusService {
             resveCountStatusVO.setLmsAmt("1");
         }
 
-        return resveCountStatusMapper.getResveCountStatusList(resveCountStatusVO);
+        if(resveCountStatusVO.getOption().equals("0")) {
+            return resveCountStatusMapper.getResveCountStatusList(resveCountStatusVO);
+        }else{
+            return resveCountStatusMapper.getStoreResveCountStatusList(resveCountStatusVO);
+        }
     }
 }

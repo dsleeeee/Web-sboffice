@@ -13,6 +13,12 @@
  */
 var app = agrid.getApp();
 
+// 생성구분
+var optionData = [
+    {"name":"전체","value":"0"},
+    {"name":"매장별","value":"1"}
+];
+
 /**
  * 가상로그인 그리드 생성
  */
@@ -31,6 +37,9 @@ app.controller('resveCountStatusCtrl',  ['$scope', '$http', '$timeout', function
         selectionMode: "2" // 달력 선택 모드(1:day 2:month)
     });
 
+    // 콤보박스 셋팅
+    $scope._setComboData("srchOption", optionData);    // 옵션
+
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -42,9 +51,9 @@ app.controller('resveCountStatusCtrl',  ['$scope', '$http', '$timeout', function
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
 
-        // 그리드 포맷
-        s.formatItem.addHandler(function (s, e) {
-        });
+        $scope.smsAmt = '9.9';
+        $scope.lmsAmt = '30';
+
     };
     // 가상로그인 그리드 조회
     $scope.$on("resveCountStatusCtrl", function(event, data) {
@@ -77,9 +86,20 @@ app.controller('resveCountStatusCtrl',  ['$scope', '$http', '$timeout', function
 
         params.startMonth   = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth     = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+        params.option       = $scope.srchOptionCombo.selectedValue;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/adi/sms/resveCountStatus/resveCountStatus/getResveCountStatusList.sb", params, function() {
+
+            var grid = wijmo.Control.getControl("#resveConutStatusGrid");
+            var columns = grid.columns;
+            if(params.option === "1"){
+                columns[0].visible = true;
+                columns[1].visible = true;
+            }else{
+                columns[0].visible = false;
+                columns[1].visible = false;
+            }
 
         });
 
