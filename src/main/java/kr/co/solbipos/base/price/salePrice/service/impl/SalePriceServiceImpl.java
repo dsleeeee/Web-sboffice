@@ -384,15 +384,18 @@ public class SalePriceServiceImpl implements SalePriceService {
             // 숫자가 입력되어야 하는 컬럼에 문자가 입력되면 null처리
             // 판매가
             if (salePriceVO.getSaleUprc() != null && !"".equals(salePriceVO.getSaleUprc())) {
-                System.out.println(Integer.parseInt(salePriceVO.getSaleUprc()) + "판매가다");
-                if (Integer.parseInt(salePriceVO.getSaleUprc()) >= 1000000000){
+                if(salePriceVO.getSaleUprc().length() > 10) {
                     salePriceVO.setResult("판매가는 숫자만(정수9자리) 입력해주세요.");
-                } else if (Integer.parseInt(salePriceVO.getSaleUprc()) <= -1000000000) {
-                    salePriceVO.setResult("판매가는 숫자만(정수9자리) 입력해주세요.");
-                } else if (Pattern.matches(pattern, salePriceVO.getSaleUprc())) {
-                    salePriceVO.setSaleUprc(salePriceVO.getSaleUprc());
-                }else {
-                    salePriceVO.setResult("판매가는 숫자만 입력가능합니다.");
+                }else{
+                    if (Integer.parseInt(salePriceVO.getSaleUprc()) >= 1000000000){
+                        salePriceVO.setResult("판매가는 숫자만(정수9자리) 입력해주세요.");
+                    } else if (Integer.parseInt(salePriceVO.getSaleUprc()) <= -1000000000) {
+                        salePriceVO.setResult("판매가는 숫자만(정수9자리) 입력해주세요.");
+                    } else if (Pattern.matches(pattern, salePriceVO.getSaleUprc())) {
+                        salePriceVO.setSaleUprc(salePriceVO.getSaleUprc());
+                    }else {
+                        salePriceVO.setResult("판매가는 숫자만 입력가능합니다.");
+                    }
                 }
             } else {
                 salePriceVO.setResult("판매가를 입력해주세요.");
@@ -400,41 +403,52 @@ public class SalePriceServiceImpl implements SalePriceService {
 
             // 내점판매가
             if (salePriceVO.getStinSaleUprc() != null && !"".equals(salePriceVO.getStinSaleUprc())) {
-                if (Integer.parseInt(salePriceVO.getStinSaleUprc()) >= 1000000000){
+                if(salePriceVO.getStinSaleUprc().length() > 10) {
                     salePriceVO.setResult("내점판매가는 숫자만(정수9자리) 입력해주세요.");
-                } else if (Integer.parseInt(salePriceVO.getStinSaleUprc()) <= -1000000000) {
-                    salePriceVO.setResult("내점판매가는 숫자만(정수9자리) 입력해주세요.");
-                } else if (Pattern.matches(pattern, salePriceVO.getStinSaleUprc())) {
-                    salePriceVO.setStinSaleUprc(salePriceVO.getStinSaleUprc());
-                } else {
-                    salePriceVO.setResult("내점판매가는 숫자만 입력가능합니다.");
+                }else {
+                    if (Integer.parseInt(salePriceVO.getStinSaleUprc()) >= 1000000000) {
+                        salePriceVO.setResult("내점판매가는 숫자만(정수9자리) 입력해주세요.");
+                    } else if (Integer.parseInt(salePriceVO.getStinSaleUprc()) <= -1000000000) {
+                        salePriceVO.setResult("내점판매가는 숫자만(정수9자리) 입력해주세요.");
+                    } else if (Pattern.matches(pattern, salePriceVO.getStinSaleUprc())) {
+                        salePriceVO.setStinSaleUprc(salePriceVO.getStinSaleUprc());
+                    } else {
+                        salePriceVO.setResult("내점판매가는 숫자만 입력가능합니다.");
+                    }
                 }
             }
 
             // 배달판매가
             if (salePriceVO.getDlvrSaleUprc() != null && !"".equals(salePriceVO.getDlvrSaleUprc())) {
-                if (Integer.parseInt(salePriceVO.getDlvrSaleUprc()) >= 1000000000){
+                if(salePriceVO.getDlvrSaleUprc().length() > 10) {
                     salePriceVO.setResult("배달판매가는 숫자만(정수9자리) 입력해주세요.");
-                } else if (Integer.parseInt(salePriceVO.getDlvrSaleUprc()) <= -1000000000) {
-                    salePriceVO.setResult("배달판매가는 숫자만(정수9자리) 입력해주세요.");
-                } else
-                if (Pattern.matches(pattern, salePriceVO.getDlvrSaleUprc())) {
-                    salePriceVO.setDlvrSaleUprc(salePriceVO.getDlvrSaleUprc());
-                } else {
-                    salePriceVO.setResult("배달판매가는 숫자만 입력가능합니다.");
+                }else {
+                    if (Integer.parseInt(salePriceVO.getDlvrSaleUprc()) >= 1000000000) {
+                        salePriceVO.setResult("배달판매가는 숫자만(정수9자리) 입력해주세요.");
+                    } else if (Integer.parseInt(salePriceVO.getDlvrSaleUprc()) <= -1000000000) {
+                        salePriceVO.setResult("배달판매가는 숫자만(정수9자리) 입력해주세요.");
+                    } else if (Pattern.matches(pattern, salePriceVO.getDlvrSaleUprc())) {
+                        salePriceVO.setDlvrSaleUprc(salePriceVO.getDlvrSaleUprc());
+                    } else {
+                        salePriceVO.setResult("배달판매가는 숫자만 입력가능합니다.");
+                    }
                 }
             }
 
             // 포장판매가
             if (salePriceVO.getPackSaleUprc() != null && !"".equals(salePriceVO.getPackSaleUprc())) {
-                if (Integer.parseInt(salePriceVO.getPackSaleUprc()) >= 1000000000){
+                if(salePriceVO.getPackSaleUprc().length() > 10) {
                     salePriceVO.setResult("포장판매가는 숫자만(정수9자리) 입력해주세요.");
-                } else if (Integer.parseInt(salePriceVO.getPackSaleUprc()) <= -1000000000) {
-                    salePriceVO.setResult("포장판매가는 숫자만(정수9자리) 입력해주세요.");
-                } else if (Pattern.matches(pattern, salePriceVO.getPackSaleUprc())) {
-                    salePriceVO.setPackSaleUprc(salePriceVO.getPackSaleUprc());
-                } else {
-                    salePriceVO.setResult("포장판매가는 숫자만 입력가능합니다.");
+                }else {
+                    if (Integer.parseInt(salePriceVO.getPackSaleUprc()) >= 1000000000) {
+                        salePriceVO.setResult("포장판매가는 숫자만(정수9자리) 입력해주세요.");
+                    } else if (Integer.parseInt(salePriceVO.getPackSaleUprc()) <= -1000000000) {
+                        salePriceVO.setResult("포장판매가는 숫자만(정수9자리) 입력해주세요.");
+                    } else if (Pattern.matches(pattern, salePriceVO.getPackSaleUprc())) {
+                        salePriceVO.setPackSaleUprc(salePriceVO.getPackSaleUprc());
+                    } else {
+                        salePriceVO.setResult("포장판매가는 숫자만 입력가능합니다.");
+                    }
                 }
             }
 

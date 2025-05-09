@@ -712,6 +712,9 @@
     <!-- 부가서비스 > SMS관리 > 발신번호관리 -->
     <typeAlias alias="smsTelNoManageVO" type="kr.co.solbipos.adi.sms.smsTelNoManage.service.SmsTelNoManageVO"/>
 
+    <!-- 부가서비스 > SMS분석 > 보나비예약건수현황 -->
+    <typeAlias alias="resveCountStatusVO" type="kr.co.solbipos.adi.sms.resveCountStatus.service.ResveCountStatusVO"/>
+
     <!-- 부가서비스 > 알림톡관리 > 알림톡 전송유형 -->
     <typeAlias alias="alimtalkSendTypeVO" type="kr.co.solbipos.adi.alimtalk.alimtalkSendType.service.AlimtalkSendTypeVO"/>
     <!-- 부가서비스 > 알림톡관리 > 알림톡 전송결과 -->
