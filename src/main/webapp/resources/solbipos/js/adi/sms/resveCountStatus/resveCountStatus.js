@@ -54,6 +54,13 @@ app.controller('resveCountStatusCtrl',  ['$scope', '$http', '$timeout', function
         $scope.smsAmt = '9.9';
         $scope.lmsAmt = '30';
 
+        // 그리드 링크 효과
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel == s.cells) {
+                wijmo.addClass(e.cell, 'wj-custom-readonly');
+            }
+        });
+
     };
     // 가상로그인 그리드 조회
     $scope.$on("resveCountStatusCtrl", function(event, data) {
