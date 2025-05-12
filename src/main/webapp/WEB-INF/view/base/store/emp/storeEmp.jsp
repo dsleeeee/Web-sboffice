@@ -11,7 +11,8 @@
     <a href="#" class="open fl">${menuNm}</a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="getStoreEmpList()">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('storeEmpCtrl', 1)">
+      <%--<button class="btn_blue fr" id="btnSearch" ng-click="getStoreEmpList()">--%>
         <s:message code="cmm.search" />
       </button>
     </div>
