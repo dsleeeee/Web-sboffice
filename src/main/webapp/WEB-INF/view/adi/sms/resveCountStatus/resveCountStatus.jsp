@@ -72,6 +72,9 @@
     <div class="mt10 oh sb-select dkbr">
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
+        <p class="s14 bk fl">
+            * 옵션 - [전체], [매장별]은 소수점 반올림에 따라 합계가 다를 수 있습니다.<br />
+        </p>
     </div>
 
     <div id="grid" class="w100">
@@ -108,4 +111,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/resveCountStatus/resveCountStatus.js?ver=20250509.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/resveCountStatus/resveCountStatus.js?ver=20250509.02" charset="utf-8"></script>
