@@ -16,7 +16,7 @@
             <a href="#" class="open fl">${menuNm}</a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('pizzaToppingCtrl',1)" id="nxBtnSearch">
+                <button class="btn_blue fr" ng-click="_pageView('pizzaToppingCtrl',1)" id="nxBtnSearch">
                     <s:message code="cmm.search" />
                 </button>
             </div>
