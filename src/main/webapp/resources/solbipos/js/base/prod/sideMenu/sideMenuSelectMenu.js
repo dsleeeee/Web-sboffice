@@ -52,6 +52,14 @@ var printYnData = [
   {"name":"미사용","value":"N"}
 ];
 
+// 분류구분
+var popUpClassYnData = [
+    {"name": "미사용", "value": "N"},
+    {"name": "피자", "value": "Y"},
+    {"name": "엣지", "value": "E"},
+    {"name": "토핑", "value": "T"}
+];
+
 /**
  * 사이드메뉴 선택그룹 그리드 생성
  */
@@ -131,6 +139,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
         if ( col.binding === 'sdselGrpCd') {
           if (selectedRow.sdselGrpCd !== '' && selectedRow.sdselGrpCd !== undefined && selectedRow.sdselGrpCd !== '자동채번') {
             $("#sideSelectGroupTitle").html(" [" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm);
+            $("#hdHalfAndfHalfYn").val(selectedRow.halfAndHalfYn);
             $("#sideClassTitle").html("");
 
             // 선택한 선택그룹의 브랜드코드 갖고있기(선택상품 추가 팝업에서 사용)
@@ -205,6 +214,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $("#btnSdselProdRegStore").hide();
 
     $("#sideSelectGroupTitle").html("");
+    $("#hdHalfAndfHalfYn").val("");
     var attrScope = agrid.getScope('sideMenuSelectClassCtrl');
     attrScope._gridDataInit();   // 선택분류 그리드 초기화
 
@@ -341,6 +351,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       // 삭제기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save('/base/prod/sideMenu/menuGrp/save.sb', params, function() {
         $("#sideSelectGroupTitle").html("");
+        $("#hdHalfAndfHalfYn").val("");
         var attrScope = agrid.getScope('sideMenuSelectClassCtrl');
         attrScope._gridDataInit();   // 그리드 초기화
 
@@ -425,6 +436,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
       // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
       $scope._save('/base/prod/sideMenu/menuGrp/save.sb', params, function() {
         $("#sideSelectGroupTitle").html("");
+        $("#hdHalfAndfHalfYn").val("");
         var attrScope = agrid.getScope('sideMenuSelectClassCtrl');
         attrScope._gridDataInit();   // 그리드 초기화
 
@@ -516,7 +528,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
     $scope.topYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 상단표기여부
     $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
     $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
-    $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name'); // 선택팝업
+    $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
 
     // ReadOnly 효과설정
     s.formatItem.addHandler(function (s, e) {
@@ -827,6 +839,53 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
           $scope._popMsg(messages["cmm.max50Chk"]);
           return false;
         }
+      }
+
+      // 미스터피자 본사 및 하위매장만 체크
+      if (hqOfficeCd == "H0614" || hqOfficeCd == 'H0616' || hqOfficeCd == 'DS008') {
+
+          // 선택분류 분류구분 별 갯수
+          var pizzaCnt = 0;
+          var edgeCnt = 0;
+          var toppingCnt = 0;
+
+          // 선택분류 분류구분 [피자]의 row num
+          var pizzaRnum = 0;
+
+          for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+              if ($scope.flex.collectionView.items[i].popUpClassYn == "Y") {
+                  pizzaCnt++;
+                  pizzaRnum = i;
+              }
+              if ($scope.flex.collectionView.items[i].popUpClassYn == "E") { edgeCnt++; }
+              if ($scope.flex.collectionView.items[i].popUpClassYn == "T") { toppingCnt++; }
+          }
+
+          if (pizzaCnt > 1) {
+              $scope._popMsg(messages["sideMenu.selectMenu.popUpClassYnChk.Y.msg"]); // 분류구분 [피자]는 최대 1개만 선택이 가능합니다.
+              return false;
+          }
+
+          if (edgeCnt > 1) {
+              $scope._popMsg(messages["sideMenu.selectMenu.popUpClassYnChk.E.msg"]); // 분류구분 [엣지]는 최대 1개만 선택이 가능합니다.
+              return false;
+          }
+
+          if (toppingCnt > 1) {
+              $scope._popMsg(messages["sideMenu.selectMenu.popUpClassYnChk.T.msg"]); // 분류구분 [토핑]은 최대 1개만 선택이 가능합니다.
+              return false;
+          }
+
+          // 선택그룹 하프앤하프를 사용하는 경우 체크
+          if($("#hdHalfAndfHalfYn").val() == "Y") {
+              // 분류구분 [피자]가 있을때, 수량은 반드시 2로 입력
+              if (pizzaCnt > 0) {
+                  if(parseInt(nvl($scope.flex.collectionView.items[pizzaRnum].sdselQty, 0)) !== 2){
+                      $scope._popMsg(messages["sideMenu.selectMenu.popUpClassYnChk.sdselQty.msg"]); // 선택그룹 하프앤하프 사용시, 분류구분 [피자]의 수량은 2로 입력하여 주십시오.
+                      return false;
+                  }
+              }
+          }
       }
 
       // console.log('2 params',params);

@@ -357,7 +357,7 @@ app.controller('artiseeProdSpecNoProdCtrl', ['$scope', '$http', function ($scope
         params.prodNm = $scope.prodNm;
         params.prodClassCd = $scope.prodClassCd;
         params.useYn = $scope.useYn;
-        params.listScale = 10;
+        params.listScale = 100;
 
         $scope._inquiryMain("/base/prod/artiseeProdSpec/artiseeProdSpec/getArtiseeProdSpecNoProdList.sb", params, function() {}, false);
     };

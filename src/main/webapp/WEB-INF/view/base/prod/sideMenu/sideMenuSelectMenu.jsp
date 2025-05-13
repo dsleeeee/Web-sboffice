@@ -98,7 +98,7 @@
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="70" is-read-only="true"></wj-flex-grid-column>
-                        <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">
+                        <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616' or hqOfficeCd == 'DS008'}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.halfAndHalfYn"/>" binding="halfAndHalfYn" data-map="useYnDataMap" width="100"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
@@ -113,6 +113,7 @@
             <div class="wj-TblWrapBr pd5" style="height: 260px;" ng-controller="sideMenuSelectClassCtrl">
                 <div class="updownSet oh mb10" style="height:60px;">
                     <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupTitle"></span></span>
+                    <input type="hidden" id="hdHalfAndfHalfYn"/>
                     <br>
                     <br>
                     <%-- 선택분류복사 --%>
@@ -177,8 +178,8 @@
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.expandYn"/>" binding="expandYn" data-map="expandYnDataMap" width="75"></wj-flex-grid-column>
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.mappingYn"/>" binding="mappingYn" data-map="mappingYnDataMap" width="110"></wj-flex-grid-column>
                         </c:if>
-                        <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">
-                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.popUpClassYn"/>" binding="popUpClassYn" data-map="useYnDataMap" width="120"></wj-flex-grid-column>
+                        <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616' or hqOfficeCd == 'DS008'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.popUpClassYn"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -269,7 +270,7 @@
     var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20250429.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20250513.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
