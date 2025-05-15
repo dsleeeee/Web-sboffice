@@ -3017,6 +3017,7 @@
         CASE WHEN tmpsp.SALE_UPRC IS NULL THEN thpsp.SALE_UPRC
         ELSE tmpsp.SALE_UPRC END AS SALE_UPRC_B,
         tmp.PRC_CTRL_FG,
+        thp.USE_YN AS HQ_USE_YN,
         -- 내점가
         CASE WHEN tmpsp.STIN_SALE_UPRC IS NULL THEN thpsp.STIN_SALE_UPRC
         ELSE tmpsp.STIN_SALE_UPRC END AS STIN_SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
@@ -3070,7 +3071,8 @@
             AND tmpsp.STORE_CD IN (SELECT store_cd FROM TB_MS_STORE  WHERE HQ_OFFICE_CD = thp.HQ_OFFICE_CD)
             AND tmpsp.PROD_CD = thp.PROD_CD
             AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
-        ) tmpsp
+        ) tmpsp,
+        TB_HQ_PRODUCT thp
         WHERE 1=1
         AND thps.STORE_CD (+)= tmp.STORE_CD
         AND thps.PROD_CD (+)= tmp.PROD_CD
@@ -3086,6 +3088,8 @@
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
         AND thps.PROD_CD IS NOT NULL
+        AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thp.PROD_CD (+)= tmp.PROD_CD
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                 OR
@@ -3127,7 +3131,8 @@
         ELSE tmpsp.PACK_SALE_UPRC END AS PACK_SALE_UPRC, -- 미등록매장은 매장판매가 우선, 없으면 본사판매가
         CASE WHEN tmpsp.PACK_SALE_UPRC IS NULL THEN thpsp.PACK_SALE_UPRC
         ELSE tmpsp.PACK_SALE_UPRC END AS PACK_SALE_UPRC_B,
-        thp.PRC_CTRL_FG
+        thp.PRC_CTRL_FG,
+        thp.USE_YN AS HQ_USE_YN
         FROM TB_HQ_PRODUCT thp,
         (
             SELECT thp.HQ_OFFICE_CD,
@@ -3209,6 +3214,9 @@
                                 WHERE   STORE_CD = #{originalStore}
                                 AND     USE_YN = 'Y'
                                 )
+        </if>
+        <if test='useYn != null and useYn.toString() != ""'>
+             AND thp.USE_YN = #{useYn}
         </if>
         AND (
                 ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )

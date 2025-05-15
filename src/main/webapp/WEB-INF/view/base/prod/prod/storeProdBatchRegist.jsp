@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+
 <wj-popup id="storeProdBatchRegistLayer" control="storeProdBatchRegistLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:1000px;">
     <div class="wj-dialog wj-dialog-columns title">
 
@@ -76,6 +78,29 @@
                         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delStoreProdClass()"><s:message code="cmm.selectCancel"/></button>
                     </td>
                 </tr>
+                <tr>
+                    <%-- 사용여부 --%>
+                    <th><s:message code="prod.useYn" /></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchBatchUseYn"
+                                    ng-model="useYn"
+                                    items-source="_getComboData('useYnAllComboData')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    <c:if test="${hqOfficeCd != 'A0001'}">selected-index="0"</c:if>
+                                    <c:if test="${hqOfficeCd == 'A0001'}">selected-index="1"</c:if>
+                                    selected-index-changed="setBatchUseYn(s)">
+                            </wj-combo-box>
+                            <input type="hidden" id="_srchBatchUseYn" disabled />
+                        </div>
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
                 </tbody>
             </table>
             <%-- 조회 --%>
@@ -120,6 +145,7 @@
                                 <wj-flex-grid-column header="<s:message code="prod.stinSaleUprc"/>" binding="stinSaleUprcB" visible="false" ></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="prod.dlvrSaleUprc"/>" binding="dlvrSaleUprcB" visible="false" ></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="prod.packSaleUprc"/>" binding="packSaleUprcB" visible="false" ></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prod.useYn"/>(<s:message code="prod.hq"/>)" binding="hqUseYn" data-map="useYnFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -153,6 +179,7 @@
                                 </c:if>
                                 <wj-flex-grid-column header="<s:message code="prod.prcCtrlFg"/>" binding="prcCtrlFg" data-map="prcCtrlFgDataMap" is-read-only="true" width="85" align="center"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="prod.saleUprcB"/>" binding="saleUprcB" visible="false" ></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="prod.useYn"/>(<s:message code="prod.hq"/>)" binding="hqUseYn" data-map="useYnFgDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -169,6 +196,8 @@
     var prcCtrlFgData = ${ccu.getCommCodeExcpAll("045")};
     // 내점/배달/포장 가격관리 사용여부 (0: 미사용 1: 사용)
     var subPriceFg = "${subPriceFg}";
+
+    var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20250430.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20250514.01" charset="utf-8"></script>

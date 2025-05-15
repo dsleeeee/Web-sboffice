@@ -18,6 +18,9 @@ app.controller('srchProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('srchProdCtrl', $scope, $http, true));
 
+    // 조회조건 콤보박스 데이터 Set
+    $scope._setComboData('useYnAllComboData', useYnAllComboData);
+
     $scope.storeSaleUprcApply = true;
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -58,6 +61,20 @@ app.controller('srchProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#_srchHqBrand").val($scope.hqBrandCd);
     }
 
+    $scope.setBatchUseYn = function () {
+
+        if ($scope.useYn === undefined) {
+            if (hqOfficeCd != "A0001") {
+                $scope.useYn = "";
+            }
+            if (hqOfficeCd == "A0001") {
+                $scope.useYn = "Y";
+            }
+        }
+
+        $("#_srchBatchUseYn").val($scope.useYn);
+    }
+
     // 매장선택 모듈 팝업 사용시 정의
     // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'Show'
     // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'Ctrl'
@@ -73,7 +90,10 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        // 그리드 DataMap 설정
+        $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnComboData, 'value', 'name'); // 사용여부
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
+
         s.cellEditEnded.addHandler(function (s, e) {
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
@@ -126,6 +146,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.hqBrandCd = '';
         params.prodClassCd = '';
         params.originalStore = '';
+        params.useYn = '';
 
         $scope._inquirySub("/base/prod/prod/prod/getStoreProdBatchList.sb", params, function() {
             // 미등록상품 조회
@@ -332,6 +353,9 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        // 그리드 DataMap 설정
+        $scope.useYnFgDataMap = new wijmo.grid.DataMap(useYnComboData, 'value', 'name'); // 사용여부
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
     };
 
@@ -352,6 +376,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.hqBrandCd = $("#_srchHqBrand").val();
         params.prodClassCd = $("#_storeProdClassCd").val();
         params.originalStore = $("#originalStoreCd").val();
+        params.useYn = $("#_srchBatchUseYn").val();
 
         $scope._inquirySub("/base/prod/prod/prod/getStoreProdBatchList.sb", params);
     };
