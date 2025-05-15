@@ -22,7 +22,12 @@
         SELECT  TO_CHAR(TO_DATE(tsmpsmv.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
         ,       tsmpsmv.STORE_CD
         ,       tms.STORE_NM
-        ,       tmp.PROD_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_NM
+        </if>
         ,       SUM(tsmpsmv.TOT_SALE_QTY)   AS SALE_QTY1
         ,       SUM(tsmpsmv.TOT_SALE_AMT)   AS TOT_SALE_AMT1
         ,       SUM(tsmpsmv.REAL_SALE_AMT)  AS REAL_SALE_AMT1
@@ -31,6 +36,9 @@
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         ,       TB_MS_PRODUCT tmp
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
+        </if>
         WHERE   1=1
         AND     tsmpsmv.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsmpsmv.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -122,16 +130,32 @@
         AND     tmsi.STORE_CD   (+) = tms.STORE_CD
         AND     tmp.STORE_CD        = tsmpsmv.STORE_CD
         AND     tmp.PROD_CD     = tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "true"'>
+            AND 	tmp.STORE_CD = tmpcv.STORE_CD
+            AND 	tmp.PROD_CD = tmpcv.PROD_CD
+            AND 	tmp.PROD_CLASS_CD = tmpcv.PROD_CLASS_CD
+        </if>
         GROUP
         BY      tsmpsmv.SALE_YM
         ,       tsmpsmv.STORE_CD
         ,       tms.STORE_NM
-        ,       tsmpsmv.PROD_CD
-        ,       tmp.PROD_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+            ,       tmpcv.L_CLASS_NM
+        </if>
         ORDER
         BY      tsmpsmv.SALE_YM
         ,       tsmpsmv.STORE_CD
-        ,       tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+        </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
@@ -145,7 +169,12 @@
         SELECT  TO_CHAR(TO_DATE(tsmpsmv.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
         ,       tsmpsmv.STORE_CD
         ,       tms.STORE_NM
-        ,       tmp.PROD_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_NM
+        </if>
         ,       SUM(tsmpsmv.TOT_SALE_QTY) AS SALE_QTY1
         ,       SUM(tsmpsmv.TOT_SALE_AMT) AS TOT_SALE_AMT1
         ,       SUM(tsmpsmv.REAL_SALE_AMT) AS REAL_SALE_AMT1
@@ -153,6 +182,9 @@
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         ,       TB_MS_PRODUCT tmp
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
+        </if>
         WHERE   1=1
         AND     tsmpsmv.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsmpsmv.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -244,16 +276,32 @@
         AND     tmsi.STORE_CD   (+) = tms.STORE_CD
         AND     tmp.STORE_CD        = tsmpsmv.STORE_CD
         AND     tmp.PROD_CD         = tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "true"'>
+            AND 	tmp.STORE_CD = tmpcv.STORE_CD
+            AND 	tmp.PROD_CD = tmpcv.PROD_CD
+            AND 	tmp.PROD_CLASS_CD = tmpcv.PROD_CLASS_CD
+        </if>
         GROUP
         BY      tsmpsmv.SALE_YM
         ,       tsmpsmv.STORE_CD
         ,       tms.STORE_NM
-        ,       tsmpsmv.PROD_CD
-        ,       tmp.PROD_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+            ,       tmpcv.L_CLASS_NM
+        </if>
         ORDER
         BY      tsmpsmv.SALE_YM
         ,       tsmpsmv.STORE_CD
-        ,       tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+        </if>
     </select>
 
     <!-- 상품매출월별(매장) - 분할 엑셀다운로드 조회 -->
@@ -267,7 +315,12 @@
         SELECT  TO_CHAR(TO_DATE(tsmpsmv.SALE_YM, 'yyyymm'), 'yyyy-mm') AS SALE_YM
         ,       tsmpsmv.STORE_CD
         ,       tms.STORE_NM
-        ,       tmp.PROD_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_NM
+        </if>
         ,       SUM(tsmpsmv.TOT_SALE_QTY) AS SALE_QTY1
         ,       SUM(tsmpsmv.TOT_SALE_AMT) AS TOT_SALE_AMT1
         ,       SUM(tsmpsmv.REAL_SALE_AMT) AS REAL_SALE_AMT1
@@ -275,6 +328,9 @@
         ,       TB_MS_STORE tms
         ,       TB_MS_STORE_INFO tmsi
         ,       TB_MS_PRODUCT tmp
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       TB_MS_PRODUCT_CLASS_V02 tmpcv
+        </if>
         WHERE   1=1
         AND     tsmpsmv.HQ_OFFICE_CD = #{hqOfficeCd}
         AND     tsmpsmv.SALE_YM BETWEEN #{startMonth} AND #{endMonth}
@@ -367,16 +423,32 @@
         AND     tmsi.STORE_CD   (+) = tms.STORE_CD
         AND     tmp.STORE_CD        = tsmpsmv.STORE_CD
         AND     tmp.PROD_CD         = tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "true"'>
+            AND 	tmp.STORE_CD = tmpcv.STORE_CD
+            AND 	tmp.PROD_CD = tmpcv.PROD_CD
+            AND 	tmp.PROD_CLASS_CD = tmpcv.PROD_CLASS_CD
+        </if>
         GROUP
         BY      tsmpsmv.SALE_YM
         ,       tsmpsmv.STORE_CD
         ,       tms.STORE_NM
-        ,       tsmpsmv.PROD_CD
-        ,       tmp.PROD_NM
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+            ,       tmp.PROD_NM
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+            ,       tmpcv.L_CLASS_NM
+        </if>
         ORDER
         BY      tsmpsmv.SALE_YM
         ,       tsmpsmv.STORE_CD
-        ,       tsmpsmv.PROD_CD
+        <if test='chkProdClassSumDisplay == "false"'>
+            ,       tsmpsmv.PROD_CD
+        </if>
+        <if test='chkProdClassSumDisplay == "true"'>
+            ,       tmpcv.L_CLASS_CD
+        </if>
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 

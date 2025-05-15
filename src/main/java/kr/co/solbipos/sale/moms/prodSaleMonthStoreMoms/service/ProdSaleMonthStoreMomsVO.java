@@ -145,6 +145,9 @@ public class ProdSaleMonthStoreMomsVO extends PageVO {
     private String startMonth;
     private String endMonth;
 
+    /** 상품분류합산조회 */
+    private String chkProdClassSumDisplay;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -464,4 +467,8 @@ public class ProdSaleMonthStoreMomsVO extends PageVO {
     public void setEndMonth(String endMonth) {
         this.endMonth = endMonth;
     }
+
+    public String getChkProdClassSumDisplay() { return chkProdClassSumDisplay; }
+
+    public void setChkProdClassSumDisplay(String chkProdClassSumDisplay) { this.chkProdClassSumDisplay = chkProdClassSumDisplay; }
 }

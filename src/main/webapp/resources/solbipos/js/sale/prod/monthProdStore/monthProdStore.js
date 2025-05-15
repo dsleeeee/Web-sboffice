@@ -133,6 +133,9 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
         {id: "-1", name: messages["todayBillSaleDtl.saleN"]}
     ], 'id', 'name');
 
+    // 상품분류합산조회
+    $scope.chkProdClassSumDisplay = false;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // add the new GroupRow to the grid's 'columnFooters' panel
@@ -170,6 +173,7 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+        params.chkProdClassSumDisplay = $scope.chkProdClassSumDisplay;
         params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
@@ -247,6 +251,15 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
                         columns[j].visible = false;
                     }
                 }
+
+                // 상품분류합산조회
+                if(params.chkProdClassSumDisplay === true) {
+                    if(columns[j].binding === 'mClassCd' || columns[j].binding === 'mClassNm' || columns[j].binding === 'sClassCd' || columns[j].binding === 'sClassNm'
+                        || columns[j].binding === 'prodCd' || columns[j].binding === 'sideProdCd' || columns[j].binding === 'selTypeFg' || columns[j].binding === 'sideProdNm') {
+                        columns[j].visible = false;
+                    }
+                }
+
             }
             // <-- //그리드 visible -->
         });
@@ -312,6 +325,7 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+        params.chkProdClassSumDisplay = $scope.chkProdClassSumDisplay;
         params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
@@ -413,6 +427,7 @@ app.controller('monthProdStoreCtrl', ['$scope', '$http', '$timeout', function ($
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     };
+
 }]);
 
 
@@ -517,6 +532,14 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
                     }
                 } else if(params.dayOption === "2"){  // 기간합
                     if(columns[j].binding == "saleYm") {
+                        columns[j].visible = false;
+                    }
+                }
+
+                // 상품분류합산조회
+                if(params.chkProdClassSumDisplay === true) {
+                    if(columns[j].binding === 'mClassCd' || columns[j].binding === 'mClassNm' || columns[j].binding === 'sClassCd' || columns[j].binding === 'sClassNm'
+                        || columns[j].binding === 'prodCd' || columns[j].binding === 'sideProdCd' || columns[j].binding === 'selTypeFg' || columns[j].binding === 'sideProdNm') {
                         columns[j].visible = false;
                     }
                 }
@@ -672,6 +695,14 @@ app.controller('monthProdStoreExcelCtrl', ['$scope', '$http', '$timeout', functi
                                                 }
                                             } else if(params.dayOption === "2"){  // 기간합
                                                 if(columns[j].binding == "saleYm") {
+                                                    columns[j].visible = false;
+                                                }
+                                            }
+
+                                            // 상품분류합산조회
+                                            if(params.chkProdClassSumDisplay === true) {
+                                                if(columns[j].binding === 'mClassCd' || columns[j].binding === 'mClassNm' || columns[j].binding === 'sClassCd' || columns[j].binding === 'sClassNm'
+                                                    || columns[j].binding === 'prodCd' || columns[j].binding === 'sideProdCd' || columns[j].binding === 'selTypeFg' || columns[j].binding === 'sideProdNm') {
                                                     columns[j].visible = false;
                                                 }
                                             }
