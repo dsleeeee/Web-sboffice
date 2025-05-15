@@ -517,6 +517,8 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public List<DefaultMap<String>> getFileTypeComboList(MediaVO mediaVO, SessionInfoVO sessionInfoVO) {
 
+        mediaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return mediaMapper.getFileTypeComboList(mediaVO);
     }
 

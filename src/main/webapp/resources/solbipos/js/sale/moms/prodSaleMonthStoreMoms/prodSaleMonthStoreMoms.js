@@ -47,6 +47,9 @@ app.controller('prodSaleMonthStoreMomsCtrl', ['$scope', '$http', '$timeout', fun
     $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
     $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
 
+    // 상품분류합산조회
+    $scope.chkProdClassSumDisplay = false;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // add the new GroupRow to the grid's 'columnFooters' panel
@@ -81,6 +84,7 @@ app.controller('prodSaleMonthStoreMomsCtrl', ['$scope', '$http', '$timeout', fun
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+        params.chkProdClassSumDisplay = $scope.chkProdClassSumDisplay;
         params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
@@ -111,6 +115,9 @@ app.controller('prodSaleMonthStoreMomsCtrl', ['$scope', '$http', '$timeout', fun
         params.momsStoreFg04 = $scope.momsStoreFg04;
         params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
+
+        // 상품분류합산조회
+        $scope.isChkProdClassSumDisplay();
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/moms/prodSaleMonthStoreMoms/prodSaleMonthStoreMoms/getProdSaleMonthStoreMomsList.sb", params, function (){});
@@ -185,6 +192,7 @@ app.controller('prodSaleMonthStoreMomsCtrl', ['$scope', '$http', '$timeout', fun
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
+        params.chkProdClassSumDisplay = $scope.chkProdClassSumDisplay;
         params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
@@ -275,6 +283,19 @@ app.controller('prodSaleMonthStoreMomsCtrl', ['$scope', '$http', '$timeout', fun
         }, 10);
     };
 
+    // 상품분류합산조회
+    $scope.isChkProdClassSumDisplay = function(){
+        var columns = $scope.flex.columns;
+
+        for(var i=0; i<columns.length; i++){
+            if(columns[i].binding === 'lClassNm'){
+                $scope.chkProdClassSumDisplay ? columns[i].visible = true : columns[i].visible = false;
+            } else if(columns[i].binding === 'prodNm'){
+                $scope.chkProdClassSumDisplay ? columns[i].visible = false : columns[i].visible = true;
+            }
+        }
+    };
+
 }]);
 
 
@@ -296,6 +317,9 @@ app.controller('prodSaleMonthStoreMomsExcelCtrl', ['$scope', '$http', '$timeout'
 
     // <-- 검색 호출 -->
     $scope.$on("prodSaleMonthStoreMomsExcelCtrl", function (event, data) {
+        // 상품분류합산조회
+        $scope.isChkProdClassSumDisplay(data);
+
         if(data.excelType === '1') {
             $scope.searchExcelList(data);
         } else {
@@ -505,6 +529,19 @@ app.controller('prodSaleMonthStoreMomsExcelCtrl', ['$scope', '$http', '$timeout'
             $scope._loadingPopup.show(true);
         } else {
             $scope._loadingPopup.hide(true);
+        }
+    };
+
+    // 상품분류합산조회
+    $scope.isChkProdClassSumDisplay = function(data){
+        var columns = $scope.excelFlex.columns;
+
+        for(var i=0; i<columns.length; i++){
+            if(columns[i].binding === 'lClassNm'){
+                data.chkProdClassSumDisplay ? columns[i].visible = true : columns[i].visible = false;
+            } else if(columns[i].binding === 'prodNm'){
+                data.chkProdClassSumDisplay ? columns[i].visible = false : columns[i].visible = true;
+            }
         }
     };
 

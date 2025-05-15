@@ -782,6 +782,9 @@
         WHERE 1=1
         AND NMCODE_GRP_CD = '303'
         AND NMCODE_CD NOT IN ('008', '009','018')
+        <if test='hqOfficeCd == "DS034" or hqOfficeCd == "DS038" or hqOfficeCd == "DS040" or hqOfficeCd == "H0393"'>
+            AND NMCODE_CD NOT IN ('021')
+        </if>
         ORDER BY NMCODE_CD
     </select>
 

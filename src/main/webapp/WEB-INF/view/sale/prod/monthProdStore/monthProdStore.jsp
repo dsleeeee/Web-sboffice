@@ -41,6 +41,11 @@
                         <span class="txtIn"><input id="startMonth" class="w110px"></span>
                         <span class="rg">~</span>
                         <span class="txtIn"><input id="endMonth" class="w110px"></span>
+                        <span class="chk ml10">
+                            <input type="checkbox" ng-model="chkProdClassSumDisplay" />
+                            <%-- 상품분류합산조회 --%>
+                            <label><s:message code="monthProd.chkProdClassSum" /></label>
+                        </span>
                     </div>
                 </td>
                 <%-- 분류조회 --%>
@@ -532,7 +537,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20250429.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/monthProdStore/monthProdStore.js?ver=20250514.01" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark.jsp">
     <c:param name="menuCd" value="${menuCd}"/>

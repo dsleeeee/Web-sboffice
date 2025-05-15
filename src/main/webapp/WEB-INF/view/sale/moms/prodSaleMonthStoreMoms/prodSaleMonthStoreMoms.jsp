@@ -43,6 +43,11 @@
                         <span class="txtIn"> <input id="startMonth" name="startMonth" class="w100px" /></span>
                         <span class="rg">~</span>
                         <span class="txtIn"> <input id="endMonth" name="endMonth" class="w100px" /></span>
+                        <span class="chk ml10">
+                            <input type="checkbox" ng-model="chkProdClassSumDisplay" />
+                            <%-- 상품분류합산조회 --%>
+                            <label><s:message code="prodSaleMonthStoreMoms.chkProdClassSum" /></label>
+                        </span>
                     </div>
                 </td>
                 <%-- 분류조회 --%>
@@ -83,15 +88,15 @@
                             </wj-combo-box>
                         </div>
                     </td>
-                        <%-- 매장선택 --%>
+                    <%-- 매장선택 --%>
                     <th><s:message code="cmm.store.select"/></th>
                     <td>
-                            <%-- 매장선택 모듈 사용시 include --%>
+                        <%-- 매장선택 모듈 사용시 include --%>
                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
                             <jsp:param name="targetTypeFg" value="M"/>
                             <jsp:param name="targetId" value="prodSaleMonthStoreMomsStore"/>
                         </jsp:include>
-                            <%--// 매장선택 모듈 사용시 include --%>
+                        <%--// 매장선택 모듈 사용시 include --%>
                     </td>
                 </tr>
             </c:if>
@@ -379,6 +384,7 @@
                     <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.prodClassNmLv1"/>" binding="lClassNm" width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.saleQty"/>" binding="saleQty1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.totSaleAmt"/>" binding="totSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.realSaleAmt"/>" binding="realSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -412,6 +418,7 @@
                 <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.prodNm"/>" binding="prodNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.prodClassNmLv1"/>" binding="lClassNm" width="120" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.saleQty"/>" binding="saleQty1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.totSaleAmt"/>" binding="totSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodSaleMonthStoreMoms.realSaleAmt"/>" binding="realSaleAmt1" width="90" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -445,4 +452,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleMonthStoreMoms/prodSaleMonthStoreMoms.js?ver=20241220.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleMonthStoreMoms/prodSaleMonthStoreMoms.js?ver=20250514.01" charset="utf-8"></script>
