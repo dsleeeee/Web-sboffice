@@ -52,6 +52,23 @@
         </tbody>
     </table>
 
+    <%-- 선택한 분류 경로 안내 --%>
+    <table class="searchTbl mt10">
+        <colgroup>
+            <col class="w100" />
+        </colgroup>
+        <tbody>
+        <tr class="brt">
+            <th class="oh gr">
+                <p class="s13 bk pdt5 pdb5" style="height: 25px;">
+                    <label id="lblLevel1"></label>
+                </p>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+    <%-- 선택한 분류 경로 안내 --%>
+
     <div id="gridPizzaEdge" class="w50 fl mt10" style="width: 33%" ng-controller="pizzaEdgeCtrl">
         <%--위즈모 테이블--%>
         <div class="wj-TblWrapBr mr10 pd10" style="height: 480px;">
@@ -170,4 +187,4 @@
     </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/pizzaEdge/pizzaEdge.js?ver=20250515.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/pizzaEdge/pizzaEdge.js?ver=20250515.02" charset="utf-8"></script>

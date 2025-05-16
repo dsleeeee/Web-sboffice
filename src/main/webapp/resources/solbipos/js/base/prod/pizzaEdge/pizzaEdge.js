@@ -45,6 +45,9 @@ app.controller('pizzaEdgeCtrl', ['$scope', '$http', function ($scope, $http) {
                     params.prodCd       = selectedRow.prodCd;
                     params.sdselProdCd  = selectedRow.sdselProdCd;
                     params.sdselClassCd = selectedRow.sdselClassCd;
+                    // $("#lblLevel1").text( selectedRow.prodNm + " ▶ " + selectedRow.sideInfo + " ▶ " + selectedRow.sdselProdCd);
+                    $("#lblLevel1").text( "[" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm + " ▶ "
+                    + "[" + selectedRow.sdselClassCd + "]" + selectedRow.sdselClassNm + " ▶ " + "[" + selectedRow.sdselProdCd + "]" + selectedRow.sdselProdNm);
                     $scope._broadcast('pizzaEdgeNoRegCtrl', params);
                     $scope._broadcast('pizzaEdgeMappCtrl', params);
                 }

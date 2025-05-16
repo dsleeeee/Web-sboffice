@@ -132,7 +132,7 @@
         AND 	B.USE_YN 			= 'Y'
         AND 	C.USE_YN 			= 'Y'
         AND 	D.USE_YN 			= 'Y'
-        AND 	A.PROD_CD           = #{prodCd}z
+        AND 	A.PROD_CD           = #{prodCd}
         AND 	NVL(C.POP_UP_CLASS_YN,'N') 	= 'E'
         AND     D.PROD_CD || C.SDSEL_CLASS_CD NOT IN    (
                                                             SELECT  MAPPING_PROD_CD || MAPPING_SDSEL_CLASS_CD
