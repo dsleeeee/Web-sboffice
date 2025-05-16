@@ -128,11 +128,17 @@ app.controller('sideMenuSalePriceCtrl', ['$scope', '$http', function ($scope, $h
                         }
                     }
 
-                    // 변경판매가 - 1000000000 이상 입력 불가
-                    if($scope.flex.collectionView.items[i].saleUprc >= 1000000000){
-                        $scope._popMsg(messages["salePrice.saleUprcInChk"]); // 변경판매가는 숫자만(정수9자리) 입력해주세요.
+                    // 수정상품단가 100000000 이상 입력 불가
+                    if($scope.flex.collectionView.items[i].saleUprc >= 100000000){
+                        $scope._popMsg(messages["sideMenuSalePrice.saleUprcInChk"]); // 수정상품단가는 숫자만(정수8자리) 입력해주세요.
                         return false;
                     }
+                    // 수정상품단가 -100000000 이하 입력 불가
+                    if ($scope.flex.collectionView.items[i].saleUprc <= -100000000) {
+                        $scope._popMsg(messages["sideMenuSalePrice.saleUprcInChk"]); // 수정상품단가는 숫자만(정수8자리) 입력해주세요.
+                        return false;
+                    }
+
                     params.push($scope.flex.collectionView.items[i]);
                 }
             }

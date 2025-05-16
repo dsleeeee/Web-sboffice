@@ -203,7 +203,7 @@
     </div>
     <%-- //페이지 리스트 --%>
 </div>
-<script type="text/javascript" src=/resource/solbipos/js/base/price/sideMenuSalePrice/sideMenuSalePrice.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src=/resource/solbipos/js/base/price/sideMenuSalePrice/sideMenuSalePrice.js?ver=20250516.01" charset="utf-8"></script>
 
 <script>
     // (상품관리)브랜드사용여부
