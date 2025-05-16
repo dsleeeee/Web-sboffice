@@ -25,6 +25,30 @@
             <col class="w35" />
         </colgroup>
         <tbody>
+        <tr>
+            <%-- 상품코드 --%>
+            <th><s:message code="pizzaEdge.prodCd"/></th>
+            <td>
+                <input type="text" id="srchProdCd" name="srchProdCd" ng-model="prodCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+            </td>
+            <%-- 상품명 --%>
+            <th><s:message code="pizzaEdge.prodNm"/></th>
+            <td>
+                <input type="text" id="srchProdNm" name="srchProdNm" ng-model="prodNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+            </td>
+        </tr>
+        <tr>
+            <%-- 사이드상품코드 --%>
+            <th><s:message code="pizzaEdge.sdselProdCd"/></th>
+            <td>
+                <input type="text" id="srchSdselProdCd" name="srchSdselProdCd" ng-model="sdselProdCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+            </td>
+            <%-- 사이드상품명 --%>
+            <th><s:message code="pizzaEdge.sdselProdNm"/></th>
+            <td>
+                <input type="text" id="srchSdselProdNm" name="srchSdselProdNm" ng-model="sdselProdNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -59,6 +83,7 @@
                         <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselGrpNm"/>"      binding="sdselGrpNm"    width="100" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassCd"/>"    binding="sdselClassCd"  width="100" is-read-only="true"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="pizzaEdge.sdselClassNm"/>"    binding="sdselClassNm"  width="100" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="pizzaEdge.regCnt"/>"          binding="regCnt"        width="80"  is-read-only="true"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -145,4 +170,4 @@
     </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/pizzaEdge/pizzaEdge.js?ver=20250424.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/pizzaEdge/pizzaEdge.js?ver=20250515.01" charset="utf-8"></script>

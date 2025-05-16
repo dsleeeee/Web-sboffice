@@ -59,21 +59,20 @@
             <%-- 분류조회 --%>
             <th><s:message code="prod.prodClass" /></th>
             <td>
-                <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
-                       placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCdModel" disabled />
-                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd3.jsp" flush="true">
+                    <jsp:param name="targetId" value="prodClassSelectClass"/>
+                </jsp:include>
             </td>
             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                 <%-- 매장선택 --%>
                 <th><s:message code="cmm.store.select"/></th>
                 <td>
-                    <%-- 매장선택 모듈 사용시 include --%>
+                        <%-- 매장선택 모듈 사용시 include --%>
                     <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
                         <jsp:param name="targetTypeFg" value="M"/>
                         <jsp:param name="targetId" value="pordClassSelectStore"/>
                     </jsp:include>
-                    <%--// 매장선택 모듈 사용시 include --%>
+                        <%--// 매장선택 모듈 사용시 include --%>
                 </td>
             </c:if>
             <c:if test="${sessionInfo.orgnFg != 'HQ'}">
@@ -126,7 +125,7 @@
                 <wj-flex-grid-column header="<s:message code="side.prodCd"/>" 		binding="prodCd" 		width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="side.sideProdCd"/>"   binding="sideProdCd"    width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="side.selTypeFg"/>"    binding="selTypeFg"    width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-<%--                <wj-flex-grid-column header="<s:message code="side.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>--%>
+                <%--                <wj-flex-grid-column header="<s:message code="side.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="side.prodNm"/>"       binding="sideProdNm"    width="200" align="left" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="side.barcdCd"/>" 		binding="barcdCd" 		width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="side.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -170,7 +169,7 @@
                 <wj-flex-grid-column header="<s:message code="side.prodCd"/>" 		binding="prodCd" 		width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="side.sideProdCd"/>"   binding="sideProdCd"    width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="side.selTypeFg"/>"    binding="selTypeFg"    width="100" align="center" is-read-only="true" format="d"></wj-flex-grid-column>
-<%--                <wj-flex-grid-column header="<s:message code="side.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>--%>
+                <%--                <wj-flex-grid-column header="<s:message code="side.prodNm"/>"		binding="prodNm" 		width="200" align="center" is-read-only="true"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="side.prodNm"/>"       binding="sideProdNm"    width="200" align="left" is-read-only="true" format="d"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="side.barcdCd"/>" 		binding="barcdCd" 		width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="side.totSaleQty"/>" 	binding="totSaleQty" 	width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
@@ -190,7 +189,7 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/side/sideProdClass.js?ver=20250423.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/side/sideProdClass.js?ver=20250514.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품정보 입력/수정 --%>
 <%--

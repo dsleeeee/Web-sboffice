@@ -11,7 +11,7 @@
 /**
  * get application
  */
-
+// 미사용 - 로직 jsp로 옮김
 app.controller('prodClassPopUp3Ctrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('prodClassPopUp3Ctrl', $scope, $http, false));

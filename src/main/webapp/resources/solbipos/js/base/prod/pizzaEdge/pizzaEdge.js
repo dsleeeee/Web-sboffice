@@ -54,14 +54,14 @@ app.controller('pizzaEdgeCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 피자 그리드 조회
     $scope.$on('pizzaEdgeCtrl', function(event, data) {
-        $scope.getSearchPizzaList();
+        $scope.getSearchPizzaList(data);
 
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
 
     // 피자 그리드 조회
-    $scope.getSearchPizzaList = function (){
+    $scope.getSearchPizzaList = function (data){
 
         var params = {};
 
@@ -69,12 +69,15 @@ app.controller('pizzaEdgeCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._inquiryMain("/base/prod/pizzaEdge/pizzaEdge/getSearchPizzaList.sb", params, function() {
             
             // 등록, 미등록 상품 그리드 초기화
-            $scope.$apply(function() {
-                var scope = agrid.getScope('pizzaEdgeMappCtrl')
-                scope._gridDataInit();
-                var scope2 =agrid.getScope('pizzaEdgeNoRegCtrl')
-                scope2._gridDataInit();
-            });
+            if(data != undefined){
+            }else {
+                $scope.$apply(function () {
+                    var scope = agrid.getScope('pizzaEdgeMappCtrl')
+                    scope._gridDataInit();
+                    var scope2 = agrid.getScope('pizzaEdgeNoRegCtrl')
+                    scope2._gridDataInit();
+                });
+            }
         });
     }
 
@@ -147,6 +150,7 @@ app.controller('pizzaEdgeMappCtrl', ['$scope', '$http', function ($scope, $http)
             params2.sdselClassCd    = $scope.sdselClassCd;
             $scope._broadcast('pizzaEdgeNoRegCtrl', params2);
             $scope._broadcast('pizzaEdgeMappCtrl', params2);
+            $scope._broadcast('pizzaEdgeCtrl', params2);
         });
     };
 
@@ -213,6 +217,7 @@ app.controller('pizzaEdgeNoRegCtrl', ['$scope', '$http', function ($scope, $http
                 params2.sdselClassCd    = $scope.sdselClassCd;
                 $scope._broadcast('pizzaEdgeNoRegCtrl', params2);
                 $scope._broadcast('pizzaEdgeMappCtrl', params2);
+                $scope._broadcast('pizzaEdgeCtrl', params2);
             });
         });
     };

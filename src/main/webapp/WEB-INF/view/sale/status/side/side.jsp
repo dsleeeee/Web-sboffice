@@ -140,9 +140,6 @@
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>
 
-<%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCd3.jsp">
-</c:import>
 <%-- //팝업 레이어 --%>
 
 
