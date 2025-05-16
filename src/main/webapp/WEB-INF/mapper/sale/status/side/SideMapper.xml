@@ -83,7 +83,7 @@
 		<!-- <if test="prodClassCd != null and prodClassCd != ''">
 			AND PATH LIKE '%'|| #{prodClassCd} ||'%'
 		</if> -->
-        <if test='arrProdClassCd != null'>
+		<if test="arrProdClassCd != null and arrProdClassCd != ''">
             AND PROD_CLASS_CD IN
             <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
                 #{item}
@@ -166,7 +166,7 @@
 		<!--<if test="prodClassCd != null and prodClassCd != ''">
 			AND PATH LIKE '%'|| #{prodClassCd} ||'%'
 		</if>-->
-        <if test='arrProdClassCd != null'>
+        <if test='arrProdClassCd != null and arrProdClassCd != ""'>
             AND PROD_CLASS_CD IN
             <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
                 #{item}

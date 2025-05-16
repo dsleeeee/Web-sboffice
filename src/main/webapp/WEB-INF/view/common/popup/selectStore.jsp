@@ -10,6 +10,7 @@
        value=<c:choose><c:when test="${param.targetTypeFg == 'M'}"><s:message code="cmm.all"/></c:when><c:otherwise><s:message code="cmm.select"/></c:otherwise></c:choose>
                ng-click="_pageView('<c:out value="${param.targetId}"/>Ctrl', 1)"
 readonly/>
+<input type="hidden" id="<c:out value="${param.targetId}Check"/>"/>
 <button type="button" class="btn_skyblue fl" id="<c:out value="${param.targetId}"/>btnCancelStoreCd" style="margin-left: 5px;" onclick="delStore('<c:out value="${param.targetId}"/>', '<c:out value="${param.targetTypeFg}"/>')"><s:message code="cmm.selectCancel"/></button>
 
 <wj-popup id="wj<c:out value="${param.targetId}"/>Layer" control="wj<c:out value="${param.targetId}"/>Layer" show-trigger="Click" hide-trigger="Click" style="display:none;width:630px;">
@@ -76,7 +77,7 @@ readonly/>
                                 </wj-combo-box>
                             </div>
                         </td>
-                    </tr>
+                    </t
                     </tbody>
                 </table>
                 <%-- 조회조건 --%>
@@ -441,6 +442,8 @@ readonly/>
 
         if(targetTypeFg == "M") {
             $("#" + targetId + "Nm").val(messages["cmm.all"]);
+            // 선택취소 클릭 시 값 저장
+            $("#" + targetId + "Check").val('Cancel');
         }else{
             $("#" + targetId + "Nm").val(messages["cmm.select"]);
         }
@@ -769,6 +772,7 @@ readonly/>
 
         // 다른 컨트롤러의 broadcast 받기
         $scope.$on(targetId + 'Ctrl', function (event, paramObj) {
+
             // 매장선택 팝업 오픈
             eval('$scope.wj' + targetId + 'Layer.show(true)');
 
@@ -807,6 +811,21 @@ readonly/>
             if ($scope.searchFg == "N") {
                 $scope.searchStore();
             }
+
+            // 화면에서 선택취소 클릭 후 진입 시
+            if($("#" + targetId + "Check").val() === 'Cancel'){
+                var grid = wijmo.Control.getControl("#wjGridStore" + targetId);
+
+                if(grid.rows.length > 0){
+
+                    for (var i = 0; i < grid.rows.length; i++) {
+                        grid.rows[i].dataItem.gChk = false;
+                    }
+                    grid.refresh();
+                }
+                $("#" + targetId + "Check").val('');
+            }
+
             // 기능수행 종료 : 반드시 추가
             event.preventDefault();
         });

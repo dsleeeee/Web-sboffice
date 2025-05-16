@@ -68,41 +68,13 @@ app.controller('sideProdClassCtrl', ['$scope', '$http', '$timeout', function ($s
         params.storeCd   = $("#pordClassSelectStoreCd").val();
         params.prodCd    = $("#srchProdCd").val();
         params.prodNm    = $("#srchProdNm").val();
-        params.arrProdClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#prodClassSelectClassCd").val();
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
         params.listScale = $scope.listScaleCombo.text; //-페이지 스케일 갯수
-            console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/status/side/side/sideProdClass.sb", params, function() {});
-    };
-
-    // 상품분류정보 팝업
-    $scope.popUpProdClass = function() {
-        var popUp = $scope.prodClassPopUpLayer3;
-        popUp.show(true, function (s) {
-            // 선택 버튼 눌렀을때만
-            if (s.dialogResult === "wj-hide-apply") {
-                var scope = agrid.getScope('prodClassPopUp3Ctrl');
-                var prodClassCd = scope.getSelectedClass();
-                var params = {};
-                params.prodClassCd = prodClassCd[0];
-                // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-                    function(response){
-                        $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassCdNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
-                    }
-                );
-            }
-        });
-    };
-
-    // 상품분류정보 선택취소
-    $scope.delProdClass = function(){
-        $scope.prodClassCd = null;
-        $scope.prodClassCdNm = "";
     };
 
     // 엑셀 다운로드
@@ -128,7 +100,7 @@ app.controller('sideProdClassCtrl', ['$scope', '$http', '$timeout', function ($s
         params.storeCd   = $("#pordClassSelectStoreCd").val();
         params.prodCd    = $("#srchProdCd").val();
         params.prodNm    = $("#srchProdNm").val();
-        params.arrProdClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#prodClassSelectClassCd").val();
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd'); //조회기간
 
@@ -176,7 +148,7 @@ app.controller('prodClassExcelCtrl', ['$scope', '$http', '$timeout', function ($
         params.storeCd = data.storeCd;
         params.prodCd = data.prodCd;
         params.prodNm = data.prodNm;
-        params.arrProdClassCd = data.arrProdClassCd;
+        params.prodClassCd = data.prodClassCd;
         params.startDate = data.startDate;
         params.endDate = data.endDate;
 

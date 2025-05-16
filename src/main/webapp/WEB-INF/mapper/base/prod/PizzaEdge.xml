@@ -27,6 +27,13 @@
         ,		D.PROD_CD           AS SDSEL_PROD_CD
         ,		E.PROD_NM           AS SDSEL_PROD_NM
         ,		B.SDSEL_GRP_NM || ' > ' || C.SDSEL_CLASS_NM  AS SIDE_INFO
+        ,		(
+                    SELECT	COUNT(*)
+                    FROM	TB_HQ_SDSEL_PROD_MAPPING F
+                    WHERE 	F.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+                    AND 	F.SDSEL_CLASS_CD 	= C.SDSEL_CLASS_CD
+                    AND 	F.PROD_CD 			= D.PROD_CD
+                )   AS REG_CNT
         FROM 	TB_HQ_PRODUCT A
         ,		TB_HQ_PRODUCT_SDSEL_GROUP B
         ,		TB_HQ_PRODUCT_SDSEL_CLASS C
@@ -42,11 +49,24 @@
         AND 	E.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
         AND 	E.PROD_CD 			= D.PROD_CD
         AND 	A.USE_YN 			= 'Y'
+        AND     A.SIDE_PROD_YN      = 'Y'
         AND 	B.USE_YN 			= 'Y'
         AND 	C.USE_YN 			= 'Y'
         AND 	D.USE_YN 			= 'Y'
-        AND 	E.USE_YN 			= 'Y'
         AND 	NVL(C.POP_UP_CLASS_YN,'N') 	= 'Y'
+        AND 	NVL(B.HALF_AND_HALF_YN,'N') = 'Y'
+        <if test='prodCd != null and prodCd != ""'>
+            AND A.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND A.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+        </if>
+        <if test='sdselProdCd != null and sdselProdCd != ""'>
+            AND D.PROD_CD LIKE '%'|| #{sdselProdCd} ||'%'
+        </if>
+        <if test='sdselProdNm != null and sdselProdNm != ""'>
+            AND E.PROD_NM LIKE '%'|| #{sdselProdNm} ||'%'
+        </if>
     </select>
 
     <!-- 피자-엣지관리 - 등록상품 조회 -->
@@ -112,9 +132,8 @@
         AND 	B.USE_YN 			= 'Y'
         AND 	C.USE_YN 			= 'Y'
         AND 	D.USE_YN 			= 'Y'
-        AND 	E.USE_YN 			= 'Y'
-        AND 	A.PROD_CD           = #{prodCd}
-        AND 	NVL(C.POP_UP_CLASS_YN,'N') 	= 'N'
+        AND 	A.PROD_CD           = #{prodCd}z
+        AND 	NVL(C.POP_UP_CLASS_YN,'N') 	= 'E'
         AND     D.PROD_CD || C.SDSEL_CLASS_CD NOT IN    (
                                                             SELECT  MAPPING_PROD_CD || MAPPING_SDSEL_CLASS_CD
                                                             FROM    TB_HQ_SDSEL_PROD_MAPPING

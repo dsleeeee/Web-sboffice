@@ -58,6 +58,13 @@ public class SideServiceImpl implements SideService {
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(sideVO.getStoreCd(), 3900));
             sideVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
+        // 분류 array 값 세팅
+        if (sideVO.getProdClassCd() != null && !"".equals(sideVO.getProdClassCd())) {
+            String[] prodCdList = sideVO.getProdClassCd().split(",");
+            sideVO.setArrProdClassCd(prodCdList);
+        }
+
         return sideMapper.sideProdClass(sideVO);
     }
 
@@ -73,6 +80,12 @@ public class SideServiceImpl implements SideService {
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(sideVO.getStoreCd(), 3900));
             sideVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
+
+
+        if(sideVO.getArrProdClassCd().length < 1) {
+            sideVO.setArrProdClassCd(null);
+        }
+
         return sideMapper.sideProdClassExcel(sideVO);
     }
 
