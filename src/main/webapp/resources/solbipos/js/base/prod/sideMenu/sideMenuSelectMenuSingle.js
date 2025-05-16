@@ -1124,6 +1124,30 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
                 return false;
             }
 
+            for (var m = 0; m < params.length; m++) {
+                // 단가 100000000 이상 입력 불가
+                if (params[m].addProdUprc >= 100000000) {
+                    $scope._popMsg(messages["sideMenu.selectMenu.addProdUprcInChk"]); // 단가는 숫자만(정수8자리) 입력해주세요.
+                    return false;
+                }
+                // 단가 -100000000 이하 입력 불가
+                if (params[m].addProdUprc <= -100000000) {
+                    $scope._popMsg(messages["sideMenu.selectMenu.addProdUprcInChk"]); // 단가는 숫자만(정수8자리) 입력해주세요.
+                    return false;
+                }
+
+                // 수량 99 이상 입력 불가
+                if (params[m].addProdQty >= 100) {
+                    $scope._popMsg(messages["sideMenu.selectMenu.addProdQtyInChk"]); // 수량은 숫자만(정수2자리) 입력해주세요.
+                    return false;
+                }
+                // 수량 -99 이하 입력 불가
+                if (params[m].addProdQty <= -100) {
+                    $scope._popMsg(messages["sideMenu.selectMenu.addProdQtyInChk"]); // 수량은 숫자만(정수2자리) 입력해주세요.
+                    return false;
+                }
+            }
+
             // 새로 등록하려는 상품이 선택그룹에 이미 등록되어 있는지 확인 로직 추가(아티제만 적용, 나머지 본사는 그대로)
             if (hqOfficeCd === "A0001") {
 
