@@ -8,7 +8,7 @@
 
 <div class="subCon">
 
-    <div class="searchBar flddUnfld">
+    <div class="searchBar">
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
@@ -187,4 +187,4 @@
     </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/pizzaEdge/pizzaEdge.js?ver=20250515.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/pizzaEdge/pizzaEdge.js?ver=20250515.03" charset="utf-8"></script>
