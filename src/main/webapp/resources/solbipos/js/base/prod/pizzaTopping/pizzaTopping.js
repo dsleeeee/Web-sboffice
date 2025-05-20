@@ -155,8 +155,8 @@ app.controller('pizzaToppingProdCtrl', ['$scope', '$http', function ($scope, $ht
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('pizzaToppingProdCtrl', $scope, $http, false));
 
-    // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData('useYnComboData', useYnFgData);
+
+
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
