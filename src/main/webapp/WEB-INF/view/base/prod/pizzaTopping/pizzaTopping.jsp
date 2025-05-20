@@ -196,7 +196,7 @@
                     <td colspan="4" align="right">
                         <div id="divBtnProd2" style="visibility: hidden;">
                             <%-- 조회 --%>
-                            <button class="btn_skyblue" id="btnArtiseeProdSpecNoProd" ng-click="_pageView('pizzaToppingNoProdCtrl', 1)"><s:message code="cmm.search" /></button>
+                            <button class="btn_skyblue" id="btnPizzaToppingNoProd" ng-click="_pageView('pizzaToppingNoProdCtrl', 1)"><s:message code="cmm.search" /></button>
                             <%-- 저장 --%>
                             <button class="btn_skyblue" id="btnPizzaToppingProdSave" ng-click="save()"><s:message code="cmm.save" /></button>
                         </div>
