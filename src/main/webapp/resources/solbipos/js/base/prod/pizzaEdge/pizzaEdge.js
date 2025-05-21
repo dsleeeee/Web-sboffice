@@ -70,7 +70,8 @@ app.controller('pizzaEdgeCtrl', ['$scope', '$http', function ($scope, $http) {
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/base/prod/pizzaEdge/pizzaEdge/getSearchPizzaList.sb", params, function() {
-            
+
+            $("#lblLevel1").text('');
             // 등록, 미등록 상품 그리드 초기화
             if(data != undefined){
             }else {
