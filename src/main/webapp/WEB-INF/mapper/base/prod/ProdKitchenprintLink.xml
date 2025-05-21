@@ -553,4 +553,197 @@
             )
     </insert>
 
+    <!-- 매장-상품 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreProdKitchenprintLinkList" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
+        /* ProdKitchenprintLinkMapper.getStoreProdKitchenprintLinkList */
+        SELECT
+        tms.STORE_CD,
+        tms.STORE_NM,
+        tmp2.PRTER_NO,
+        tmp2.PRTER_NM,
+        (SELECT COUNT(PROD_CD) FROM TB_MS_PRODUCT WHERE STORE_CD = tms.STORE_CD) AS TOT_PROD_CNT,
+        (SELECT COUNT(PROD_CD) FROM TB_MS_PRINTER_PROD WHERE STORE_CD = tmp2.STORE_CD AND PRTER_NO = tmp2.PRTER_NO) AS PROD_CNT
+        FROM TB_MS_STORE tms,
+        TB_MS_PRINTER tmp2
+        WHERE 1=1
+        AND tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tms.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='sysStatFg != null and sysStatFg.toString() != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
+        </if>
+        AND tmp2.STORE_CD = tms.STORE_CD
+        ORDER BY tms.STORE_CD, tmp2.PRTER_NO
+    </select>
+
+    <!-- 매장-상품 탭 - 등록 상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreProdKitchenprintLinkProdList" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
+        /* ProdKitchenprintLinkMapper.getStoreProdKitchenprintLinkProdList */
+        SELECT
+        tmp.PROD_CD,
+        tmp.PROD_NM,
+        tmpsp.SALE_UPRC,
+        tmp.USE_YN
+        FROM TB_MS_PRINTER_PROD tmpp,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND tmpp.STORE_CD = #{storeCd}
+        AND tmpp.PRTER_NO = #{prterNo}
+        AND tmp.STORE_CD (+)= tmpp.STORE_CD
+        AND tmp.PROD_CD (+)= tmpp.PROD_CD
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY tmp.PROD_CD
+    </select>
+
+    <!-- 매장-상품 탭 - 미등록 상품 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreProdKitchenprintLinkNoProdList" parameterType="prodKitchenprintLinkVO" resultType="DefaultMap">
+        /* ProdKitchenprintLinkMapper.getStoreProdKitchenprintLinkNoProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        tmp.PROD_CD,
+        tmp.PROD_NM,
+        tmpsp.SALE_UPRC,
+        tmp.USE_YN
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp --view
+        WHERE 1=1
+        AND tmp.STORE_CD = #{storeCd}
+        AND tmp.PROD_CD NOT IN (
+                                    SELECT  tmpp.PROD_CD
+                                    FROM    TB_MS_PRINTER_PROD tmpp
+                                    WHERE   tmpp.STORE_CD = #{storeCd}
+                                    AND     tmpp.PRTER_NO = #{prterNo}
+                                )
+        <if test="srchProdCd != null and srchProdCd != ''">
+            AND tmp.PROD_CD LIKE '%'|| #{srchProdCd} ||'%'
+        </if>
+        <if test="srchProdNm != null and srchProdNm != ''">
+            AND tmp.PROD_NM LIKE '%'|| #{srchProdNm} ||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN (
+                                        SELECT PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = #{storeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND tmp.USE_YN = #{useYn}
+        </if>
+        AND tmpsp.STORE_CD = tmp.STORE_CD
+        AND tmpsp.PROD_CD = tmp.PROD_CD
+        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY tmp.PROD_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장-상품 탭 - 상품 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getStoreProdKitchenprintLinkSaveInsert" parameterType="prodKitchenprintLinkVO">
+        /* ProdKitchenprintLinkMapper.getStoreProdKitchenprintLinkSaveInsert */
+        INSERT INTO TB_MS_PRINTER_PROD
+        (
+            STORE_CD,
+            PRTER_NO,
+            PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        ) VALUES (
+            #{storeCd},
+            #{prterNo},
+            #{prodCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+    <!-- 매장-상품 탭 - 상품 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getStoreProdKitchenprintLinkSaveDelete" parameterType="prodKitchenprintLinkVO">
+        /* ProdKitchenprintLinkMapper.getStoreProdKitchenprintLinkSaveDelete */
+        DELETE TB_MS_PRINTER_PROD
+        WHERE 1=1
+        AND STORE_CD = #{storeCd}
+        AND PRTER_NO = #{prterNo}
+        AND PROD_CD = #{prodCd}
+    </delete>
+
+    <!-- 매장-상품 탭 - 전체등록 저장 merge -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getStoreProdKitchenprintLinkAllRegistSaveMerge" parameterType="prodKitchenprintLinkVO">
+        /* ProdKitchenprintLinkMapper.getStoreProdKitchenprintLinkAllRegistSaveMerge */
+        MERGE INTO TB_MS_PRINTER_PROD A
+        USING
+        (
+            SELECT
+            tmp.STORE_CD,
+            tmp2.PRTER_NO,
+            tmp.PROD_CD,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_MS_PRINTER tmp2,
+            TB_MS_PRODUCT tmp
+            WHERE 1=1
+            AND tmp2.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+            AND tmp.STORE_CD = tmp2.STORE_CD
+        ) B
+        ON  (
+                A.STORE_CD = B.STORE_CD
+                AND A.PRTER_NO = B.PRTER_NO
+                AND A.PROD_CD = B.PROD_CD
+            )
+        WHEN NOT MATCHED THEN
+            INSERT (
+                A.STORE_CD,
+                A.PRTER_NO,
+                A.PROD_CD,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            ) VALUES (
+                B.STORE_CD,
+                B.PRTER_NO,
+                B.PROD_CD,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
 </mapper>

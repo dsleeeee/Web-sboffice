@@ -286,4 +286,81 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
         return result;
     }
 
+    /** 매장-상품 탭 - 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreProdKitchenprintLinkList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
+
+        prodKitchenprintLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장검색
+        if(!StringUtil.getOrBlank(prodKitchenprintLinkVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodKitchenprintLinkVO.getStoreCd(), 3900));
+            prodKitchenprintLinkVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return prodKitchenprintLinkMapper.getStoreProdKitchenprintLinkList(prodKitchenprintLinkVO);
+    }
+
+    /** 매장-상품 탭 - 등록 상품 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreProdKitchenprintLinkProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
+
+        prodKitchenprintLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return prodKitchenprintLinkMapper.getStoreProdKitchenprintLinkProdList(prodKitchenprintLinkVO);
+    }
+
+    /** 매장-상품 탭 - 미등록 상품 조회 */
+    @Override
+    public List<DefaultMap<Object>> getStoreProdKitchenprintLinkNoProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
+
+        prodKitchenprintLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        return prodKitchenprintLinkMapper.getStoreProdKitchenprintLinkNoProdList(prodKitchenprintLinkVO);
+    }
+
+    /** 매장-상품 탭 - 상품 저장 */
+    @Override
+    public int getStoreProdKitchenprintLinkSave(ProdKitchenprintLinkVO[] prodKitchenprintLinkVOs, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        for(ProdKitchenprintLinkVO prodKitchenprintLinkVO : prodKitchenprintLinkVOs) {
+            prodKitchenprintLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            prodKitchenprintLinkVO.setModDt(currentDt);
+            prodKitchenprintLinkVO.setModId(sessionInfoVO.getUserId());
+
+            if (prodKitchenprintLinkVO.getStatus() == GridDataFg.INSERT) {
+                prodKitchenprintLinkVO.setRegDt(currentDt);
+                prodKitchenprintLinkVO.setRegId(sessionInfoVO.getUserId());
+
+                procCnt = prodKitchenprintLinkMapper.getStoreProdKitchenprintLinkSaveInsert(prodKitchenprintLinkVO);
+
+            } else if (prodKitchenprintLinkVO.getStatus() == GridDataFg.DELETE) {
+                procCnt = prodKitchenprintLinkMapper.getStoreProdKitchenprintLinkSaveDelete(prodKitchenprintLinkVO);
+            }
+        }
+
+        return procCnt;
+    }
+
+    /** 매장-상품 탭 - 전체등록 저장 merge */
+    @Override
+    public int getStoreProdKitchenprintLinkAllRegistSave(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+        String currentDt = currentDateTimeString();
+
+        prodKitchenprintLinkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodKitchenprintLinkVO.setModDt(currentDt);
+        prodKitchenprintLinkVO.setModId(sessionInfoVO.getUserId());
+        prodKitchenprintLinkVO.setRegDt(currentDt);
+        prodKitchenprintLinkVO.setRegId(sessionInfoVO.getUserId());
+
+        procCnt = prodKitchenprintLinkMapper.getStoreProdKitchenprintLinkAllRegistSaveMerge(prodKitchenprintLinkVO);
+
+        return procCnt;
+    }
 }

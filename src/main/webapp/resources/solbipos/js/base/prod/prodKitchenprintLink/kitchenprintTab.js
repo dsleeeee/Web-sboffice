@@ -14,18 +14,35 @@
 var app = agrid.getApp();
 
 app.controller('kitchenprintCtrl', ['$scope', function ($scope) {
+
     $scope.init = function () {
         $("#prodKitchenprintLinkView").show();
+        $("#storeProdKitchenprintLinkView").hide();
     };
 
     // 상품-매장주방프린터 연결 탭 보이기
     $scope.prodKitchenprintLinkShow = function () {
         $("#prodKitchenprintLinkTab").addClass("on");
+        $("#storeProdKitchenprintLinkTab").removeClass("on");
 
         $("#prodKitchenprintLinkView").show();
+        $("#storeProdKitchenprintLinkView").hide();
 
         // angular 그리드 hide 시 깨지므로 refresh()
         var scope = agrid.getScope("prodKitchenprintLinkCtrl");
+        scope.flex.refresh();
+    };
+
+    // 매장-상품 탭 보이기
+    $scope.storeProdKitchenprintLinkShow = function () {
+        $("#prodKitchenprintLinkTab").removeClass("on");
+        $("#storeProdKitchenprintLinkTab").addClass("on");
+
+        $("#prodKitchenprintLinkView").hide();
+        $("#storeProdKitchenprintLinkView").show();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("storeProdKitchenprintLinkCtrl");
         scope.flex.refresh();
     };
 

@@ -88,4 +88,18 @@ public interface ProdKitchenprintLinkService {
      */
     int savePrinterMapping(ProdKitchenprintLinkVO[] prodKitchenprintLinkVOs, SessionInfoVO sessionInfoVO);
 
+    /** 매장-상품 탭 - 조회 */
+    List<DefaultMap<Object>> getStoreProdKitchenprintLinkList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장-상품 탭 - 등록 상품 조회 */
+    List<DefaultMap<Object>> getStoreProdKitchenprintLinkProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장-상품 탭 - 미등록 상품 조회 */
+    List<DefaultMap<Object>> getStoreProdKitchenprintLinkNoProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장-상품 탭 - 상품 저장 */
+    int getStoreProdKitchenprintLinkSave(ProdKitchenprintLinkVO[] prodKitchenprintLinkVOs, SessionInfoVO sessionInfoVO);
+
+    /** 매장-상품 탭 - 전체등록 저장 */
+    int getStoreProdKitchenprintLinkAllRegistSave(ProdKitchenprintLinkVO prodKitchenprintLinkVO, SessionInfoVO sessionInfoVO);
 }

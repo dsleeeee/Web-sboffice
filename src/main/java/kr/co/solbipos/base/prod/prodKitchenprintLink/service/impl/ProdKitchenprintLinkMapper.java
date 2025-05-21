@@ -69,4 +69,22 @@ public interface ProdKitchenprintLinkMapper {
     int deletePrinterMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
     /* 프린터 매핑 저장 */
     int savePrinterMapping(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /** 매장-상품 탭 - 조회 */
+    List<DefaultMap<Object>> getStoreProdKitchenprintLinkList(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /** 매장-상품 탭 - 등록 상품 조회 */
+    List<DefaultMap<Object>> getStoreProdKitchenprintLinkProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /** 매장-상품 탭 - 미등록 상품 조회 */
+    List<DefaultMap<Object>> getStoreProdKitchenprintLinkNoProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /** 매장-상품 탭 - 상품 저장 insert */
+    int getStoreProdKitchenprintLinkSaveInsert(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /** 매장-상품 탭 - 상품 저장 delete */
+    int getStoreProdKitchenprintLinkSaveDelete(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /** 매장-상품 탭 - 전체등록 저장 merge */
+    int getStoreProdKitchenprintLinkAllRegistSaveMerge(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
 }

@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 
@@ -641,4 +643,118 @@ public class ProdKitchenprintLinkController {
         return returnListJson(Status.OK, result);
     }
 
+    /**
+     * 매장-상품 탭 - 조회
+     *
+     * @param prodKitchenprintLinkVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 05. 20.
+     */
+    @RequestMapping(value = "/storeProdKitchenprintLink/getStoreProdKitchenprintLinkList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreProdKitchenprintLinkList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodKitchenprintLinkService.getStoreProdKitchenprintLinkList(prodKitchenprintLinkVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodKitchenprintLinkVO);
+    }
+
+    /**
+     * 매장-상품 탭 - 등록 상품 조회
+     *
+     * @param prodKitchenprintLinkVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 05. 20.
+     */
+    @RequestMapping(value = "/storeProdKitchenprintLink/getStoreProdKitchenprintLinkProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreProdKitchenprintLinkProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, HttpServletRequest request,
+                                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodKitchenprintLinkService.getStoreProdKitchenprintLinkProdList(prodKitchenprintLinkVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodKitchenprintLinkVO);
+    }
+
+    /**
+     * 매장-상품 탭 - 미등록 상품 조회
+     *
+     * @param prodKitchenprintLinkVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 05. 20.
+     */
+    @RequestMapping(value = "/storeProdKitchenprintLink/getStoreProdKitchenprintLinkNoProdList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreProdKitchenprintLinkNoProdList(ProdKitchenprintLinkVO prodKitchenprintLinkVO, HttpServletRequest request,
+                                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodKitchenprintLinkService.getStoreProdKitchenprintLinkNoProdList(prodKitchenprintLinkVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodKitchenprintLinkVO);
+    }
+
+    /**
+     * 매장-상품 탭 - 상품 저장
+     *
+     * @param prodKitchenprintLinkVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 05. 20.
+     */
+    @RequestMapping(value = "/storeProdKitchenprintLink/getStoreProdKitchenprintLinkSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreProdKitchenprintLinkSave(@RequestBody ProdKitchenprintLinkVO[] prodKitchenprintLinkVOs, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodKitchenprintLinkService.getStoreProdKitchenprintLinkSave(prodKitchenprintLinkVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매장-상품 탭 - 전체등록 저장
+     *
+     * @param prodKitchenprintLinkVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 05. 20.
+     */
+    @RequestMapping(value = "/storeProdKitchenprintLink/getStoreProdKitchenprintLinkAllRegistSave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getStoreProdKitchenprintLinkAllRegistSave(@RequestBody ProdKitchenprintLinkVO prodKitchenprintLinkVO, HttpServletRequest request,
+                                                   HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodKitchenprintLinkService.getStoreProdKitchenprintLinkAllRegistSave(prodKitchenprintLinkVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

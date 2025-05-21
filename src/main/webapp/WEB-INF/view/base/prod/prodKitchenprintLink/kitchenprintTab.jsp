@@ -13,6 +13,10 @@
             <li>
                 <a id="prodKitchenprintLinkTab" href="#" class="on" ng-click="prodKitchenprintLinkShow()"><s:message code="prodKitchenprintLink.prodKitchenprintLink"/></a>
             </li>
+            <%-- 매장-상품 탭 --%>
+            <li>
+                <a id="storeProdKitchenprintLinkTab" href="#" ng-click="storeProdKitchenprintLinkShow()"><s:message code="prodKitchenprintLink.storeProdKitchenprintLink"/></a>
+            </li>
         </ul>
     </div>
 </div>
@@ -37,11 +41,17 @@
     var momsStoreManageTypeComboList = ${momsStoreManageTypeComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/kitchenprintTab.js?ver=20230921.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodKitchenprintLink/kitchenprintTab.js?ver=20250520.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 상품-매장주방프린터 연결 레이어 --%>
 <c:import url="/WEB-INF/view/base/prod/prodKitchenprintLink/prodKitchenprintLink.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 매장-상품 레이어 --%>
+<c:import url="/WEB-INF/view/base/prod/prodKitchenprintLink/storeProdKitchenprintLink.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

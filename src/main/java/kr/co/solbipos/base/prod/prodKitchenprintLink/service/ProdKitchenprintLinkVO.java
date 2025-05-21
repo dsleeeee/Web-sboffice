@@ -139,6 +139,12 @@ public class ProdKitchenprintLinkVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 상품코드 */
+    private String srchProdCd;
+
+    /** 상품명 */
+    private String srchProdNm;
+
     public String getSysClosureDate() {
         return sysClosureDate;
     }
@@ -438,4 +444,12 @@ public class ProdKitchenprintLinkVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getSrchProdCd() { return srchProdCd; }
+
+    public void setSrchProdCd(String srchProdCd) { this.srchProdCd = srchProdCd; }
+
+    public String getSrchProdNm() { return srchProdNm; }
+
+    public void setSrchProdNm(String srchProdNm) { this.srchProdNm = srchProdNm; }
 }
