@@ -7749,4 +7749,73 @@
                                  #{printYn}
                              )
     </insert>
+
+    <!-- 배달앱 상품명-맵핑정보 등록 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_DLVR_PROD_NM, TB_HQ_PRODUCT, TB_CM_NMCODE
+        PARAM    : prodVO
+        COMMENTS : 배달앱 상품명-맵핑정보를 등록한다.
+    -->
+    <insert id="insertHqdlvrProdNm" parameterType="prodVO">
+        /* USE : ProdMapper.insertHqdlvrProdNm */
+        MERGE INTO TB_HQ_PRODUCT_DLVR_PROD_NM A
+        USING
+        (
+            SELECT A.HQ_OFFICE_CD AS HQ_OFFICE_CD
+            ,      A.PROD_CD      AS PROD_CD
+            ,      B.DLVR_CD      AS DLVR_NAME_CD
+            ,      A.PROD_CD      AS DLVR_PROD_NM
+            ,      #{regDt}       AS REG_DT
+            ,      #{regId}       AS REG_ID
+            ,      #{modDt}       AS MOD_DT
+            ,      #{modId}       AS MOD_ID
+            ,      ''             AS DLVR_MAPPING_FG
+            FROM   TB_HQ_PRODUCT A,
+            (
+            	SELECT  tcn.NMCODE_CD AS DLVR_CD
+            	,       tcn.NMCODE_NM AS DLVR_NM
+            	FROM    TB_CM_NMCODE tcn
+            	WHERE   tcn.NMCODE_GRP_CD = '112'
+            	AND     tcn.NMCODE_CD NOT IN ('1') /* 코드 1(포스앱)은 포스에서 사용하는 코드이므로 나오지 않도록 함 */
+            	ORDER
+            	BY      TO_NUMBER(tcn.NMCODE_CD)
+            ) B
+            WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND   A.PROD_CD = #{prodCd}
+        ) B
+        ON
+        (
+                A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+            AND A.PROD_CD      = B.PROD_CD
+            AND A.DLVR_NAME_CD = B.DLVR_NAME_CD
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.DLVR_PROD_NM    = B.DLVR_PROD_NM
+        ,       A.MOD_DT          = B.MOD_DT
+        ,       A.MOD_ID          = B.MOD_ID
+        WHEN NOT MATCHED THEN
+        INSERT
+        (       A.HQ_OFFICE_CD
+        ,       A.PROD_CD
+        ,       A.DLVR_NAME_CD
+        ,       A.DLVR_PROD_NM
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,       A.DLVR_MAPPING_FG
+        )
+        VALUES
+        (       B.HQ_OFFICE_CD
+        ,       B.PROD_CD
+        ,       B.DLVR_NAME_CD
+        ,       B.DLVR_PROD_NM
+        ,       B.REG_DT
+        ,       B.REG_ID
+        ,       B.MOD_DT
+        ,       B.MOD_ID
+        ,       B.DLVR_MAPPING_FG
+        )
+    </insert>
 </mapper>

@@ -499,6 +499,14 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     }
                 }
 
+                // 미스터피자 본사상품 등록인 경우, 배달앱 상품명-맵핑정보 데이터 입력
+                if (prodVO.getHqOfficeCd().equals("H0614") || prodVO.getHqOfficeCd().equals("H0616") || prodVO.getHqOfficeCd().equals("DS008")) {
+                    if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                        // 배달앱 상품명-맵핑정보 등록
+                        prodMapper.insertHqdlvrProdNm(prodVO);
+                    }
+                }
+
                 // 저장완료된 검증결과만 삭제
                 // 간편상품등록
                 if(("simpleProd").equals(simpleProdVO.getGubun())) {

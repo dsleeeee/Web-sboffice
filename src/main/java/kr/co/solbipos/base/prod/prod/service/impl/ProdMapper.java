@@ -550,4 +550,7 @@ public interface ProdMapper {
     List<DefaultMap<String>> getNewSdselProdList(ProdVO prodVO);
 
     int insertSdselProdList(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 배달앱 상품명-맵핑정보 등록 */
+    int insertHqdlvrProdNm(ProdVO prodVO);
 }
