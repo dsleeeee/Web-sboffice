@@ -45,15 +45,20 @@
         ,       thps.OPTION_5
         ,		TO_CHAR(TO_DATE(thps.MOD_DT, 'YYYY-MM-DD HH24:MI:SS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
         ,       twuidv.USER_NM
+        ,       thp.PROD_CLASS_CD
+        ,		thpc.PROD_CLASS_NM
         FROM    TB_HQ_PRODUCT_SPEC thps
         ,       TB_HQ_PRODUCT thp
         ,		TB_WB_USER_INFO_DTL_V01 twuidv
+        ,		TB_HQ_PRODUCT_CLASS thpc
         WHERE   1=1
         AND     thps.HQ_OFFICE_CD       = #{hqOfficeCd}
         AND     thps.SPEC_CD            = #{specCd}
         AND     thp.HQ_OFFICE_CD    (+) = thps.HQ_OFFICE_CD
         AND     thp.PROD_CD         (+) = thps.PROD_CD
         AND     twuidv.USER_ID      (+) = thps.MOD_ID
+        AND     thpc.HQ_OFFICE_CD   (+) = thp.HQ_OFFICE_CD
+        AND     thpc.PROD_CLASS_CD  (+) = thp.PROD_CLASS_CD
         ORDER
         BY      thps.PROD_CD
     </select>
@@ -68,9 +73,12 @@
         <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         thp.PROD_CD,
-        thp.PROD_NM
+        thp.PROD_NM,
+        thp.PROD_CLASS_CD,
+        thpc.PROD_CLASS_NM
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_HQ_PRODUCT thp
+        FROM    TB_HQ_PRODUCT thp,
+        		TB_HQ_PRODUCT_CLASS thpc
         WHERE 1=1
         AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test="chkDt == false">
@@ -99,6 +107,8 @@
             AND thp.USE_YN = #{useYn} --사용여부
         </if>
         AND thp.PROD_CD NOT IN (SELECT thps.PROD_CD FROM TB_HQ_PRODUCT_SPEC thps WHERE thps.HQ_OFFICE_CD = #{hqOfficeCd} AND thps.SPEC_CD = #{specCd})
+        AND thpc.HQ_OFFICE_CD   (+)= thp.HQ_OFFICE_CD
+        AND thpc.PROD_CLASS_CD  (+)= thp.PROD_CLASS_CD
         ORDER BY thp.PROD_CD ASC
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>

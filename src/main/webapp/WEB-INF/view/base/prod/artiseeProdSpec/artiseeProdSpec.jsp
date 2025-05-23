@@ -89,6 +89,7 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodCd"/>"  binding="prodCd"  width="100" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodNm"/>"  binding="prodNm"  width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodClassNm"/>" binding="prodClassNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.specCd"/>"  binding="specCd"  width="100" align="center" visible="false"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option1"/>" binding="option1" width="90"  align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.option2"/>" binding="option2" width="90"  align="center"></wj-flex-grid-column>
@@ -198,6 +199,7 @@
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodNm"/>" binding="prodNm" width="130" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="artiseeProdSpec.prodClassNm"/>" binding="prodClassNm" width="150" is-read-only="true" align="left"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%-- 페이지 리스트 --%>
