@@ -1979,6 +1979,45 @@
                AND PROD_CD = #{prodCd}
     </update>
 
+    <!-- 사이드메뉴-사이드메뉴관리탭 - 상품정보일괄변경 저장 ERP 맵핑상품코드 삭제 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        COMMENTS : [매장]상품
+    -->
+    <delete id="getErpProdMappingDelete" parameterType="sideMenuManageVO">
+        /* SideMenuMapper.getErpProdMappingDelete */
+        MERGE INTO TB_HQ_ERP_PROD_MAPPING A
+        USING
+        (
+            SELECT B.HQ_OFFICE_CD
+            ,       B.MAPPING_CD
+            ,       'D'                                     AS PROC_FG
+            ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')     AS MOD_DT
+            ,       '(D)'||#{userId}                        AS MOD_ID
+            FROM TB_HQ_ERP_PROD_MAPPING B
+            WHERE 1=1
+            AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND B.MAPPING_STRING NOT IN (
+                                            SELECT A.MAPPING_STRING
+                                            FROM LYNK_PROD_MAPPING_C02 A
+                                            WHERE 1=1
+                                            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            AND A.SESSION_ID = #{sessionId}
+                                        )
+        ) S
+        ON
+        (
+                A.HQ_OFFICE_CD  =   S.HQ_OFFICE_CD
+        AND     A.MAPPING_CD    =   S.MAPPING_CD
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET     A.MOD_DT        =   S.MOD_DT
+            ,       A.MOD_ID        =   S.MOD_ID
+            DELETE
+            WHERE   S.PROC_FG       =   'D'
+    </delete>
+
     <!-- 사이드메뉴-사이드메뉴관리탭 속성 콤보박스 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDATTR_CLASS, TB_MS_PRODUCT_SDATTR_CLASS

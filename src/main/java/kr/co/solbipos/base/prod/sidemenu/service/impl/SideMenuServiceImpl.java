@@ -12,6 +12,8 @@ import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.impl.ProdMapper;
+import kr.co.solbipos.base.prod.artiseeProdMapping.service.ArtiseeProdMappingVO;
+import kr.co.solbipos.base.prod.artiseeProdMapping.service.impl.ArtiseeProdMappingMapper;
 import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,14 +45,16 @@ public class SideMenuServiceImpl implements SideMenuService {
     private final ProdMapper prodMapper;
     private final MessageService messageService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final ArtiseeProdMappingMapper artiseeProdMappingMapper; // 아티제상품코드맵핑
 
     /** Constructor Injection */
     @Autowired
-    public SideMenuServiceImpl(SideMenuMapper sideMenuMapper, ProdMapper prodMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil) {
+    public SideMenuServiceImpl(SideMenuMapper sideMenuMapper, ProdMapper prodMapper, MessageService messageService, CmmEnvUtil cmmEnvUtil, ArtiseeProdMappingMapper artiseeProdMappingMapper) {
         this.sideMenuMapper = sideMenuMapper;
         this.prodMapper = prodMapper;
         this.messageService = messageService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.artiseeProdMappingMapper = artiseeProdMappingMapper;
     }
 
     /** 사이드메뉴-속성탭-속성분류 목록 조회 */
@@ -319,6 +323,28 @@ public class SideMenuServiceImpl implements SideMenuService {
                     procResult = sideMenuMapper.deleteHqMenuClassListToStore(sideMenuSelClassVO);
                 }
             }
+
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                // 매핑스트링 TMP 테이블
+                ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
+                artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
+                artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
+
+                // TMP테이블 삭제
+                artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
+                artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
+
+                // 맵핑스트링 저장
+                artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
+
+                // ERP 맵핑상품코드 삭제
+                SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
+                sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                sideMenuManageVO.setSessionId(sessionInfoVO.getSessionId());
+                sideMenuManageVO.setUserId(sessionInfoVO.getUserId());
+                int procCnt = sideMenuMapper.getErpProdMappingDelete(sideMenuManageVO);
+            }
         }
 
         if ( result == sideMenuSelClassVOs.length) {
@@ -446,6 +472,28 @@ public class SideMenuServiceImpl implements SideMenuService {
                     procResult = sideMenuMapper.deleteHqMenuProdListToStore(sideMenuSelProdVO);
                 }
             }
+
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                // 매핑스트링 TMP 테이블
+                ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
+                artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
+                artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
+
+                // TMP테이블 삭제
+                artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
+                artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
+
+                // 맵핑스트링 저장
+                artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
+
+                // ERP 맵핑상품코드 삭제
+                SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
+                sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                sideMenuManageVO.setSessionId(sessionInfoVO.getSessionId());
+                sideMenuManageVO.setUserId(sessionInfoVO.getUserId());
+                int procCnt = sideMenuMapper.getErpProdMappingDelete(sideMenuManageVO);
+            }
         }
 
         if ( result == sideMenuSelProdVOs.length) {
@@ -514,6 +562,30 @@ public class SideMenuServiceImpl implements SideMenuService {
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                     // 상품정보 매장에 UPDATE
                     procCnt = sideMenuMapper.saveSideMenuManageProdBatchStoreUpdate(sideMenuManageVO);
+                }
+
+                if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    // 사이드사용여부 Y 체크
+                    if (sideMenuManageVO.getSideProdYn().equals("Y")) {
+                        // 매핑스트링 TMP 테이블
+                        ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
+                        artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                        artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
+                        artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
+
+                        // TMP테이블 삭제
+                        artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
+                        artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
+
+                        // 맵핑스트링 저장
+                        artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
+
+                        sideMenuManageVO.setSessionId(sessionInfoVO.getSessionId());
+                        sideMenuManageVO.setUserId(sessionInfoVO.getUserId());
+
+                        // ERP 맵핑상품코드 삭제
+                        procCnt = sideMenuMapper.getErpProdMappingDelete(sideMenuManageVO);
+                    }
                 }
             }
         }

@@ -49,6 +49,12 @@ public class SideMenuManageVO extends PageVO {
     /** 사용 여부 */
     private String useYn;
 
+    /** 세션ID */
+    private String sessionId;
+
+    /** 사용자아이디 */
+    private String userId;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -151,5 +157,21 @@ public class SideMenuManageVO extends PageVO {
 
     public void setUseYn(String useYn) {
         this.useYn = useYn;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

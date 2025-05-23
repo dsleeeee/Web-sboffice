@@ -164,6 +164,9 @@ public interface SideMenuMapper {
     /** 사이드메뉴-사이드메뉴관리탭 상품정보일괄변경 저장 매장에 update(사이드메뉴여부, 속성, 선택메뉴) */
     int saveSideMenuManageProdBatchStoreUpdate(SideMenuManageVO sideMenuManageVO);
 
+    /** 사이드메뉴-사이드메뉴관리탭 - 상품정보일괄변경 저장 ERP 맵핑상품코드 삭제 */
+    int getErpProdMappingDelete(SideMenuManageVO sideMenuManageVO);
+
     /** 사이드메뉴-사이드메뉴관리탭 속성 콤보박스 */
     List<DefaultMap<String>> getSideMenuAttrClassCombo(SideMenuManageVO sideMenuManageVO);
 

@@ -19,6 +19,10 @@ import kr.co.solbipos.base.prod.prod.service.enums.WorkModeFg;
 import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelProdVO;
 import kr.co.solbipos.stock.adj.adj.service.AdjVO;
 import kr.co.solbipos.stock.adj.adj.service.impl.AdjMapper;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuManageVO;
+import kr.co.solbipos.base.prod.sidemenu.service.impl.SideMenuMapper;
+import kr.co.solbipos.base.prod.artiseeProdMapping.service.ArtiseeProdMappingVO;
+import kr.co.solbipos.base.prod.artiseeProdMapping.service.impl.ArtiseeProdMappingMapper;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,14 +68,18 @@ public class ProdServiceImpl implements ProdService {
     private final ProdMapper prodMapper;
     private final CmmEnvUtil cmmEnvUtil;
     private final AdjMapper adjMapper; // 조정관리
+    private final SideMenuMapper sideMenuMapper; // 사이드메뉴관리
+    private final ArtiseeProdMappingMapper artiseeProdMappingMapper; // 아티제상품코드맵핑
 
     /** Constructor Injection */
     @Autowired
-    public ProdServiceImpl(ProdMapper prodMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService, AdjMapper adjMapper) {
+    public ProdServiceImpl(ProdMapper prodMapper, CmmEnvUtil cmmEnvUtil, MessageService messageService, AdjMapper adjMapper, SideMenuMapper sideMenuMapper, ArtiseeProdMappingMapper artiseeProdMappingMapper) {
         this.prodMapper = prodMapper;
         this.cmmEnvUtil = cmmEnvUtil;
         this.messageService = messageService;
         this.adjMapper = adjMapper;
+        this.sideMenuMapper = sideMenuMapper;
+        this.artiseeProdMappingMapper = artiseeProdMappingMapper;
     }
 
     /** 상품목록 조회 */
@@ -493,6 +501,26 @@ public class ProdServiceImpl implements ProdService {
                 prodMapper.insertSdselClassToStore(prodVO);
                 //상품(sdselProd)
                 prodMapper.insertSdselProdToStore(prodVO);
+
+                // 매핑스트링 TMP 테이블
+                ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
+                artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
+                artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
+
+                // TMP테이블 삭제
+                artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
+                artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
+
+                // 맵핑스트링 저장
+                artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
+
+                // ERP 맵핑상품코드 삭제
+                SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
+                sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                sideMenuManageVO.setSessionId(sessionInfoVO.getSessionId());
+                sideMenuManageVO.setUserId(sessionInfoVO.getUserId());
+                sideMenuMapper.getErpProdMappingDelete(sideMenuManageVO);
             }
         }
 
