@@ -11,7 +11,7 @@
 <div class="subCon" ng-controller="prodKitchenprintLinkCtrl" style="padding: 10px 20px 40px;">
   <%--searchTbl--%>
   <div class="searchBar flddUnfld">
-    <a href="#" class="open fl">${menuNm}</a>
+    <a href="#" class="open fl"><s:message code="prodKitchenprintLink.prodKitchenprintLink" /></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
       <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodKitchenprintLinkCtrl')">
