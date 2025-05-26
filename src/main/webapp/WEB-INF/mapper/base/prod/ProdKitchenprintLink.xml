@@ -601,9 +601,9 @@
         AND tmpp.PRTER_NO = #{prterNo}
         AND tmp.STORE_CD (+)= tmpp.STORE_CD
         AND tmp.PROD_CD (+)= tmpp.PROD_CD
-        AND tmpsp.STORE_CD = tmp.STORE_CD
-        AND tmpsp.PROD_CD = tmp.PROD_CD
-        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+        AND tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND tmpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY tmp.PROD_CD
     </select>
 
@@ -649,9 +649,9 @@
         <if test="useYn != null and useYn != ''">
             AND tmp.USE_YN = #{useYn}
         </if>
-        AND tmpsp.STORE_CD = tmp.STORE_CD
-        AND tmpsp.PROD_CD = tmp.PROD_CD
-        AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        AND tmpsp.STORE_CD (+)= tmp.STORE_CD
+        AND tmpsp.PROD_CD (+)= tmp.PROD_CD
+        AND tmpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY tmp.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
