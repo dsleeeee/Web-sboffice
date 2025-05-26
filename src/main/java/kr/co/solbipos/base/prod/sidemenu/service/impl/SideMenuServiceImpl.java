@@ -565,27 +565,24 @@ public class SideMenuServiceImpl implements SideMenuService {
                 }
 
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                    // 사이드사용여부 Y 체크
-                    if (sideMenuManageVO.getSideProdYn().equals("Y")) {
-                        // 매핑스트링 TMP 테이블
-                        ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
-                        artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                        artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
-                        artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
+                    // 매핑스트링 TMP 테이블
+                    ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
+                    artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+                    artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
+                    artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
 
-                        // TMP테이블 삭제
-                        artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
-                        artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
+                    // TMP테이블 삭제
+                    artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
+                    artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
 
-                        // 맵핑스트링 저장
-                        artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
+                    // 맵핑스트링 저장
+                    artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
 
-                        sideMenuManageVO.setSessionId(sessionInfoVO.getSessionId());
-                        sideMenuManageVO.setUserId(sessionInfoVO.getUserId());
+                    sideMenuManageVO.setSessionId(sessionInfoVO.getSessionId());
+                    sideMenuManageVO.setUserId(sessionInfoVO.getUserId());
 
-                        // ERP 맵핑상품코드 삭제
-                        procCnt = sideMenuMapper.getErpProdMappingDelete(sideMenuManageVO);
-                    }
+                    // ERP 맵핑상품코드 삭제
+                    procCnt = sideMenuMapper.getErpProdMappingDelete(sideMenuManageVO);
                 }
             }
         }

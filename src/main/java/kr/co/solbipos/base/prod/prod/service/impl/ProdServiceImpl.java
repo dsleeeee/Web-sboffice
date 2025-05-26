@@ -501,27 +501,27 @@ public class ProdServiceImpl implements ProdService {
                 prodMapper.insertSdselClassToStore(prodVO);
                 //상품(sdselProd)
                 prodMapper.insertSdselProdToStore(prodVO);
-
-                // 매핑스트링 TMP 테이블
-                ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
-                artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
-                artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
-
-                // TMP테이블 삭제
-                artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
-                artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
-
-                // 맵핑스트링 저장
-                artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
-
-                // ERP 맵핑상품코드 삭제
-                SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
-                sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-                sideMenuManageVO.setSessionId(sessionInfoVO.getSessionId());
-                sideMenuManageVO.setUserId(sessionInfoVO.getUserId());
-                sideMenuMapper.getErpProdMappingDelete(sideMenuManageVO);
             }
+
+            // 매핑스트링 TMP 테이블
+            ArtiseeProdMappingVO artiseeProdMappingVO = new ArtiseeProdMappingVO();
+            artiseeProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            artiseeProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
+            artiseeProdMappingVO.setUserId(sessionInfoVO.getUserId());
+
+            // TMP테이블 삭제
+            artiseeProdMappingMapper.deleteMappingTmp01(artiseeProdMappingVO);
+            artiseeProdMappingMapper.deleteMappingTmp02(artiseeProdMappingVO);
+
+            // 맵핑스트링 저장
+            artiseeProdMappingMapper.insertMappingString(artiseeProdMappingVO);
+
+            // ERP 맵핑상품코드 삭제
+            SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
+            sideMenuManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            sideMenuManageVO.setSessionId(sessionInfoVO.getSessionId());
+            sideMenuManageVO.setUserId(sessionInfoVO.getUserId());
+            sideMenuMapper.getErpProdMappingDelete(sideMenuManageVO);
         }
 
         // 상품 판매가 저장
