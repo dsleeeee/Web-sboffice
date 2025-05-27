@@ -34,6 +34,25 @@
             <th><s:message code="coupon.storeNm"/></th>
             <td><input type="text" id="srchCoupnStoreNm" ng-model="storeNm" /></td>
           </tr>
+          <tr>
+              <th><s:message code="coupon.sysStatFg"/></th>
+              <td>
+                  <div class="sb-select">
+                      <wj-combo-box
+                              id="srchCoupnSysStatFg"
+                              ng-model="sysStatFg"
+                              control="sysStatFgCombo"
+                              items-source="_getComboData('sysStatFg')"
+                              display-member-path="name"
+                              selected-value-path="value"
+                              is-editable="false"
+                              initialized="_initComboBox(s)">
+                      </wj-combo-box>
+                  </div>
+              </td>
+              <th></th>
+              <td></td>
+          </tr>
           </tbody>
         </table>
         <%-- 조회 --%>
@@ -62,7 +81,8 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="150" is-read-only="true" ></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="coupon.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -89,7 +109,8 @@
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="coupon.storeCd"/>" binding="storeCd" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="coupon.storeNm"/>" binding="storeNm" width="150" is-read-only="true" ></wj-flex-grid-column>
+                  <wj-flex-grid-column header="<s:message code="coupon.sysStatFg"/>" binding="sysStatFg" data-map="sysStatFgDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
           </div>
@@ -98,4 +119,4 @@
     </div>
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20240822.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/couponStore.js?ver=20250523.02" charset="utf-8"></script>

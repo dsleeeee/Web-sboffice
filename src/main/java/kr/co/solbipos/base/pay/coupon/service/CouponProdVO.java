@@ -49,6 +49,19 @@ public class CouponProdVO extends PageVO {
     /** 소분류 코드 */
     private String sClassCd;
 
+    /** 상품분류코드 */
+    private String prodClassCd;
+
+    /** 바코드 */
+    private String barCd;
+
+    /** 사용여부(검색조건용) */
+    private String strUseYn;
+
+    /** 상품유형구분 */
+    private String prodTypeFg;
+
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -222,5 +235,37 @@ public class CouponProdVO extends PageVO {
 
     public void setsClassCd(String sClassCd) {
         this.sClassCd = sClassCd;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
+    }
+
+    public String getBarCd() {
+        return barCd;
+    }
+
+    public void setBarCd(String barCd) {
+        this.barCd = barCd;
+    }
+
+    public String getStrUseYn() {
+        return strUseYn;
+    }
+
+    public void setStrUseYn(String strUseYn) {
+        this.strUseYn = strUseYn;
+    }
+
+    public String getProdTypeFg() {
+        return prodTypeFg;
+    }
+
+    public void setProdTypeFg(String prodTypeFg) {
+        this.prodTypeFg = prodTypeFg;
     }
 }
