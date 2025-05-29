@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreVerPatch.xml
+    패치버전현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.05.27      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.storeMoms.storeVerPatch.service.impl.StoreVerPatchMapper">
+
+    <!-- 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getStoreVerPatchList" parameterType="storeVerPatchVO" resultType="DefaultMap">
+        /* USE : StoreVerPatchMapper.getStoreVerPatchList */
+        SELECT 	#{selectVerCd} AS VERSION
+        ,       A.REG_STORE_CNT
+        ,       A.REG_POS_CNT
+        ,       A.PATCH_STORE_CNT
+        ,       A.PATCH_POS_CNT
+        ,       A.NOT_PATCH_STORE_CNT
+        ,       A.NOT_PATCH_POS_CNT
+        ,		A.MAIN_PATCH_STORE_CNT
+        ,		A.MAIN_NOT_PATCH_STORE_CNT
+        ,       B.REG_STORE_CNT_SALE
+        ,       B.REG_POS_CNT_SALE
+        ,       B.PATCH_STORE_CNT_SALE
+        ,       B.PATCH_POS_CNT_SALE
+        ,       B.NOT_PATCH_STORE_CNT_SALE
+        ,       B.NOT_PATCH_POS_CNT_SALE
+        ,		B.MAIN_PATCH_STORE_CNT_SALE
+        ,		B.MAIN_NOT_PATCH_STORE_CNT_SALE
+        ,       B.MAIN_REG_STORE_CNT_SALE
+        ,		B.MAIN_PATCH_STORE_CNT_SALE         AS MAIN_PATCH_STORE_CNT_SALE2
+        ,       B.MAIN_REG_STORE_CNT_SALE - B.MAIN_PATCH_STORE_CNT_SALE     AS MAIN_REG_NOT_PATCH_STORE_CNT_SALE
+        FROM 	(
+                    SELECT 	COUNT(DISTINCT A.STORE_CD)		AS REG_STORE_CNT
+                    ,		COUNT(A.POS_NO)					AS REG_POS_CNT
+                    ,		COUNT(DISTINCT B.STORE_CD)		AS PATCH_STORE_CNT
+                    ,		COUNT(B.POS_NO)					AS PATCH_POS_CNT
+                    ,		COUNT(DISTINCT A.STORE_CD) - COUNT(DISTINCT B.STORE_CD)		AS NOT_PATCH_STORE_CNT
+                    ,		COUNT(A.POS_NO) - COUNT(B.POS_NO)					        AS NOT_PATCH_POS_CNT
+                    ,		COUNT(C.STORE_CD)               AS MAIN_PATCH_STORE_CNT
+                    ,		COUNT(D.STORE_CD)               AS MAIN_NOT_PATCH_STORE_CNT
+                    FROM 	TB_CM_POS_VERSN_STORE A
+                    ,		(
+                                SELECT  STORE_CD
+                                ,		POS_NO
+                                FROM    TB_MS_POS
+                                WHERE   POS_VER_NO = #{selectVerCd}
+                                AND 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                            ) B
+                    ,		(
+                                SELECT 	A.STORE_CD
+                                ,       A.POS_NO
+                                FROM 	TB_MS_POS A
+                                ,       TB_MS_MAIN_POS_V01 B
+                                WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND 	A.STORE_CD 	    = B.STORE_CD
+                                AND 	A.POS_NO 	    = B.POS_NO
+                                AND 	A.POS_VER_NO    = #{selectVerCd}
+                                AND     B.ENVST_VAL     = '1'
+                            ) C
+                    ,		(
+                                <![CDATA[
+                                    SELECT 	A.STORE_CD
+                                    ,       A.POS_NO
+                                    FROM 	TB_MS_POS A
+                                    ,       TB_MS_MAIN_POS_V01 B
+                                    WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                    AND 	A.STORE_CD 	            = B.STORE_CD
+                                    AND 	A.POS_NO 	            = B.POS_NO
+                                    AND 	NVL(A.POS_VER_NO,'0')   <> #{selectVerCd}
+                                    AND     B.ENVST_VAL             = '1'
+                                ]]>
+                            ) D
+                    ,		TB_MS_STORE_INFO E
+                    ,       TB_MS_STORE F
+                    WHERE 	A.VER_SER_NO 	= #{selectVerCd}
+                    AND 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                    AND 	A.STORE_CD NOT LIKE '000%'
+                    AND 	B.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	B.POS_NO 	(+)	= A.POS_NO
+                    AND 	C.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	C.POS_NO 	(+)	= A.POS_NO
+                    AND 	D.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	D.POS_NO 	(+)	= A.POS_NO
+                    AND 	E.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	F.STORE_CD 		= A.STORE_CD
+                    <if test='patchDate != null and patchDate != ""'>
+                        AND A.DN_START_DT LIKE #{patchDate}||'%'
+                    </if>
+                    <if test='momsTeam != null and momsTeam != ""'>
+                        AND E.MOMS_TEAM = #{momsTeam}
+                    </if>
+                    <if test='momsAcShop != null and momsAcShop != ""'>
+                        AND E.MOMS_AC_SHOP = #{momsAcShop}
+                    </if>
+                    <if test='momsAreaFg != null and momsAreaFg != ""'>
+                        AND E.MOMS_AREA_FG = #{momsAreaFg}
+                    </if>
+                    <if test='momsCommercial != null and momsCommercial != ""'>
+                        AND E.MOMS_COMMERCIAL = #{momsCommercial}
+                    </if>
+                    <if test='momsShopType != null and momsShopType != ""'>
+                        AND E.MOMS_SHOP_TYPE = #{momsShopType}
+                    </if>
+                    <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                        AND E.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                    </if>
+                    <if test='branchCd != null and branchCd != ""'>
+                        AND F.BRANCH_CD = #{branchCd}
+                    </if>
+                    <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                        AND E.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                    </if>
+                    <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                        AND E.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                    </if>
+                    <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                        AND E.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                    </if>
+                    <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                        AND E.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                    </if>
+                    <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                        AND E.MOMS_STORE_FG_05 = #{momsStoreFg05}
+                    </if>
+                ) A
+        ,		(
+                    SELECT 	COUNT(DISTINCT A.STORE_CD)		AS REG_STORE_CNT_SALE
+                    ,		COUNT(A.POS_NO)					AS REG_POS_CNT_SALE
+                    ,		COUNT(DISTINCT B.STORE_CD)		AS PATCH_STORE_CNT_SALE
+                    ,		COUNT(B.POS_NO)					AS PATCH_POS_CNT_SALE
+                    ,		COUNT(DISTINCT A.STORE_CD) - COUNT(DISTINCT B.STORE_CD)		AS NOT_PATCH_STORE_CNT_SALE
+                    ,		COUNT(A.POS_NO) - COUNT(B.POS_NO)					        AS NOT_PATCH_POS_CNT_SALE
+                    ,		COUNT(C.STORE_CD)               AS MAIN_PATCH_STORE_CNT_SALE
+                    ,		COUNT(D.STORE_CD)               AS MAIN_NOT_PATCH_STORE_CNT_SALE
+                    ,       COUNT(E.STORE_CD)               AS MAIN_REG_STORE_CNT_SALE
+                    FROM	TB_CM_POS_VERSN_STORE A
+                    ,		(
+                                SELECT  STORE_CD
+                                ,		POS_NO
+                                FROM    TB_MS_POS
+                                WHERE   POS_VER_NO = #{selectVerCd}
+                                AND 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                            ) B
+                    ,		(
+                                SELECT 	A.STORE_CD
+                                ,       A.POS_NO
+                                FROM 	TB_MS_POS A
+                                ,       TB_MS_MAIN_POS_V01 B
+                                WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND 	A.STORE_CD 	    = B.STORE_CD
+                                AND 	A.POS_NO 	    = B.POS_NO
+                                AND 	A.POS_VER_NO    = #{selectVerCd}
+                                AND     B.ENVST_VAL     = '1'
+                                AND 	A.STORE_CD IN 	(
+                                                            SELECT 	DISTINCT STORE_CD
+                                                            FROM	TB_SL_DAILY_TOTAL
+                                                            WHERE 	SALE_DATE >TO_CHAR(SYSDATE - 14, 'YYYYMMDD')
+                                                            AND 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                        )
+                            ) C
+                    ,		(
+                                <![CDATA[
+                                    SELECT 	A.STORE_CD
+                                    ,       A.POS_NO
+                                    FROM 	TB_MS_POS A
+                                    ,       TB_MS_MAIN_POS_V01 B
+                                    WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                    AND 	A.STORE_CD 	            = B.STORE_CD
+                                    AND 	A.POS_NO 	            = B.POS_NO
+                                    AND     B.ENVST_VAL             = '1'
+                                    AND 	NVL(A.POS_VER_NO,'0')   <> #{selectVerCd}
+                                    AND 	A.STORE_CD IN 	(
+                                                                SELECT 	DISTINCT STORE_CD
+                                                                FROM	TB_SL_DAILY_TOTAL
+                                                                WHERE 	SALE_DATE >TO_CHAR(SYSDATE - 14, 'YYYYMMDD')
+                                                                AND 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                            )
+                                ]]>
+                            ) D
+                    ,		(
+                                SELECT 	A.STORE_CD
+                                ,       A.POS_NO
+                                FROM 	TB_CM_POS_VERSN_STORE A
+                                ,       TB_MS_MAIN_POS_V01 B
+                                WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND 	A.STORE_CD 	            = B.STORE_CD
+                                AND 	A.POS_NO 	            = B.POS_NO
+                                AND     B.ENVST_VAL             = '1'
+                                AND 	A.VER_SER_NO            = #{selectVerCd}
+                                AND 	A.STORE_CD IN 	(
+                                                            SELECT 	DISTINCT STORE_CD
+                                                            FROM	TB_SL_DAILY_TOTAL
+                                                            WHERE 	SALE_DATE >TO_CHAR(SYSDATE - 14, 'YYYYMMDD')
+                                                            AND 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                        )
+                            ) E
+                    ,		TB_MS_STORE_INFO F
+                    ,       TB_MS_STORE G
+                    WHERE 	A.VER_SER_NO 	= #{selectVerCd}
+                    AND 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                    AND 	A.STORE_CD NOT LIKE '000%'
+                    AND 	A.STORE_CD IN 	(
+                                                SELECT 	DISTINCT STORE_CD
+                                                FROM	TB_SL_DAILY_TOTAL
+                                                WHERE 	SALE_DATE >TO_CHAR(SYSDATE - 14, 'YYYYMMDD')
+                                                AND 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                            )
+                    AND 	B.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	B.POS_NO 	(+)	= A.POS_NO
+                    AND 	C.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	C.POS_NO 	(+)	= A.POS_NO
+                    AND 	D.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	D.POS_NO 	(+)	= A.POS_NO
+                    AND 	E.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	E.POS_NO 	(+)	= A.POS_NO
+                    AND 	F.STORE_CD 	(+)	= A.STORE_CD
+                    AND 	G.STORE_CD 		= A.STORE_CD
+                    <if test='patchDate != null and patchDate != ""'>
+                        AND A.DN_START_DT LIKE #{patchDate}||'%'
+                    </if>
+                    <if test='momsTeam != null and momsTeam != ""'>
+                        AND F.MOMS_TEAM = #{momsTeam}
+                    </if>
+                    <if test='momsAcShop != null and momsAcShop != ""'>
+                        AND F.MOMS_AC_SHOP = #{momsAcShop}
+                    </if>
+                    <if test='momsAreaFg != null and momsAreaFg != ""'>
+                        AND F.MOMS_AREA_FG = #{momsAreaFg}
+                    </if>
+                    <if test='momsCommercial != null and momsCommercial != ""'>
+                        AND F.MOMS_COMMERCIAL = #{momsCommercial}
+                    </if>
+                    <if test='momsShopType != null and momsShopType != ""'>
+                        AND F.MOMS_SHOP_TYPE = #{momsShopType}
+                    </if>
+                    <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+                        AND F.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+                    </if>
+                    <if test='branchCd != null and branchCd != ""'>
+                        AND G.BRANCH_CD = #{branchCd}
+                    </if>
+                    <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+                        AND F.MOMS_STORE_FG_01 = #{momsStoreFg01}
+                    </if>
+                    <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+                        AND F.MOMS_STORE_FG_02 = #{momsStoreFg02}
+                    </if>
+                    <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+                        AND F.MOMS_STORE_FG_03 = #{momsStoreFg03}
+                    </if>
+                    <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+                        AND F.MOMS_STORE_FG_04 = #{momsStoreFg04}
+                    </if>
+                    <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+                        AND F.MOMS_STORE_FG_05 = #{momsStoreFg05}
+                    </if>
+                ) B
+    </select>
+
+    <select id="getPatchStoreDtlList" parameterType="storeVerPatchVO" resultType="DefaultMap">
+    /* USE : StoreVerPatchMapper.getPatchStoreDtlList */
+        SELECT 	A.STORE_CD
+        ,       A.POS_NO
+        ,       A.POS_VER_NO
+        ,       TO_CHAR(TO_DATE(A.LAST_LOGIN_DT ,'YYYYMMDDhh24miss'), 'YYYY-MM-DD hh24:mi:ss') AS LAST_LOGIN_DT
+        ,		TO_CHAR(TO_DATE(MAX(C.SALE_DATE) ,'YYYYMMDD'), 'YYYY-MM-DD')    AS LAST_SALE_DATE
+        FROM 	TB_MS_POS A
+        ,		TB_MS_MAIN_POS_V01 B
+        ,		TB_SL_DAILY_TOTAL C
+        ,		TB_MS_STORE D
+        ,		TB_MS_STORE_INFO E
+        WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        AND 	A.STORE_CD NOT LIKE '000%'
+        AND 	B.STORE_CD 		= A.STORE_CD
+        AND 	B.POS_NO		= A.POS_NO
+        AND 	C.STORE_CD 	(+)	= A.STORE_CD
+        AND 	D.STORE_CD 		= A.STORE_CD
+        AND 	E.STORE_CD 	(+)	= A.STORE_CD
+        AND 	B.ENVST_VAL 	= '1'
+        AND 	A.STORE_CD  IN (
+                                    SELECT 	DISTINCT STORE_CD
+                                    FROM 	TB_CM_POS_VERSN_STORE A
+                                    WHERE 	A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                    AND 	A.STORE_CD NOT LIKE '000%'
+                                    AND 	A.STORE_CD IN 	(
+                                                                SELECT 	DISTINCT STORE_CD
+                                                                FROM	TB_SL_DAILY_TOTAL
+                                                                WHERE 	SALE_DATE >TO_CHAR(SYSDATE - 14, 'YYYYMMDD')
+                                                                AND 	HQ_OFFICE_CD = #{hqOfficeCd}
+                                                            )
+                                    AND 	A.VER_SER_NO = #{selectVerCd}
+                                    <if test='patchDate != null and patchDate != ""'>
+                                        AND A.DN_START_DT LIKE #{patchDate}||'%'
+                                    </if>
+                                )
+        <if test='patchFg != null and patchFg == "Y"'>
+            AND	NVL(A.POS_VER_NO,'0') = #{selectVerCd}
+        </if>
+        <if test='patchFg != null and patchFg == "N"'>
+            <![CDATA[
+                AND	NVL(A.POS_VER_NO,'0') <> #{selectVerCd}
+            ]]>
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND E.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAcShop != null and momsAcShop != ""'>
+            AND E.MOMS_AC_SHOP = #{momsAcShop}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND E.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND E.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND E.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        <if test='momsStoreManageType != null and momsStoreManageType != ""'>
+            AND E.MOMS_STORE_MANAGE_TYPE = #{momsStoreManageType}
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            AND D.BRANCH_CD = #{branchCd}
+        </if>
+        <if test='momsStoreFg01 != null and momsStoreFg01 != ""'>
+            AND E.MOMS_STORE_FG_01 = #{momsStoreFg01}
+        </if>
+        <if test='momsStoreFg02 != null and momsStoreFg02 != ""'>
+            AND E.MOMS_STORE_FG_02 = #{momsStoreFg02}
+        </if>
+        <if test='momsStoreFg03 != null and momsStoreFg03 != ""'>
+            AND E.MOMS_STORE_FG_03 = #{momsStoreFg03}
+        </if>
+        <if test='momsStoreFg04 != null and momsStoreFg04 != ""'>
+            AND E.MOMS_STORE_FG_04 = #{momsStoreFg04}
+        </if>
+        <if test='momsStoreFg05 != null and momsStoreFg05 != ""'>
+            AND E.MOMS_STORE_FG_05 = #{momsStoreFg05}
+        </if>
+        GROUP
+        BY 		A.STORE_CD
+        ,       A.POS_NO
+        ,       A.POS_VER_NO
+        ,		A.LAST_LOGIN_DT
+        ORDER
+        BY      A.STORE_CD
+    </select>
+
+</mapper>
