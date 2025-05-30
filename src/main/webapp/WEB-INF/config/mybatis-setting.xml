@@ -1179,6 +1179,10 @@
     <typeAlias alias="timeSaleStoreDtMomsVO" type="kr.co.solbipos.sale.moms.timeSaleStoreDtMoms.service.TimeSaleStoreDtMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 영수건별매출 -->
     <typeAlias alias="billSaleMomsVO" type="kr.co.solbipos.sale.moms.billSaleMoms.service.BillSaleMomsVO"/>
+    <!-- 맘스터치 > 간소화화면 > 시간대별 상품매출(P.MIX) -->
+    <typeAlias alias="timeprodSalePmixMomsVO" type="kr.co.solbipos.sale.moms.timeProdSalePmixMoms.service.TimeProdSalePmixMomsVO"/>
+    <!-- 맘스터치 > 간소화화면 > 시간대별 상품매출(P.MIX 매장) -->
+    <typeAlias alias="timeProdSalePmixStoreMomsVO" type="kr.co.solbipos.sale.moms.timeProdSalePmixStoreMoms.service.TimeProdSalePmixStoreMomsVO"/>
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
