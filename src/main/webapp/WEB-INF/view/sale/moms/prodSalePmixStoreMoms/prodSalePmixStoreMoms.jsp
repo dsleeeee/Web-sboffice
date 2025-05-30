@@ -78,12 +78,12 @@
             </tr>
             <tr>
                 <%-- 상품코드 --%>
-                <th><s:message code="prodSalePmixStoreMoms.prodCd" /></th>
+                <th><s:message code="cmm.prodCd" /></th>
                 <td>
                     <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                 </td>
                 <%-- 상품명 --%>
-                <th><s:message code="prodSalePmixStoreMoms.prodNm" /></th>
+                <th><s:message code="cmm.prodNm" /></th>
                 <td>
                     <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                 </td>
