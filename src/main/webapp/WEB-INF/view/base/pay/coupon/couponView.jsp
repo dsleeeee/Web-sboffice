@@ -215,11 +215,20 @@
   var mappingCd   = ${ccu.getCommCodeExcpAll("805")};
   var hqOfficeCd = "${hqOfficeCd}";
 
+  // 상품유형구분
+  var prodTypeFg = ${ccu.getCommCode("008")};
+
+  // 사용여부
+  var useYnComboData = ${ccu.getCommCode("067")};
+
+  // 매장상태구분
+  var sysStatFg = ${ccu.getCommCode("005")};
+
   // [1299] 프랜매장-쿠폰순서수정허용여부
   var couponSeqChgVal = "${couponSeqChgVal}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20240902.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/coupon/coupon.js?ver=20250523.02" charset="utf-8"></script>
 
 <%-- 쿠폰별 상품 등록 레이어 팝업 --%>
 <c:import url="/WEB-INF/view/base/pay/coupon/couponProdView.jsp">
@@ -246,4 +255,8 @@
 <c:import url="/WEB-INF/view/base/pay/coupon/couponExceptProdView.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
 </c:import>

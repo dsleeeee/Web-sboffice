@@ -14,10 +14,18 @@
  *  쿠폰 등록 상품 그리드 생성
  */
 app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regProdCtrl', $scope, $http, true));
+
+  $scope._setComboData("useYn", useYnComboData);
+  $scope._setComboData('prodTypeFg', prodTypeFg);
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
-  $scope.initGrid = function (s, e) {};
+  $scope.initGrid = function (s, e) {
+      $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');           // 사용여부
+      $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFg, 'value', 'name'); // 상품유형구분
+  };
 
   // 쿠폰등록 상품 그리드 조회
   $scope.$on("regProdCtrl", function(event, data) {
@@ -79,6 +87,33 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
     noRegProdGrid._pageView('noRegProdCtrl', 1);
   };
 
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function () {
+        var popUp = $scope.prodClassPopUpLayer;
+        popUp.show(true, function (s) {
+            // 선택 버튼 눌렀을때만
+            if (s.dialogResult === "wj-hide-apply") {
+                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var prodClassCd = scope.getSelectedClass();
+                var params = {};
+                params.prodClassCd = prodClassCd;
+                // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                    function (response) {
+                        $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassNm = response.data.data;
+                    }
+                );
+            }
+        });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delProdClass = function () {
+        $scope.prodClassCd = "";
+        $scope.prodClassNm = "";
+    };
+
 }]);
 
 /**
@@ -89,6 +124,8 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http ) {
   angular.extend(this, new RootController('noRegProdCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+      $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');           // 사용여부
+      $scope.prodTypeFgDataMap = new wijmo.grid.DataMap(prodTypeFg, 'value', 'name'); // 상품유형구분c
   };
 
   // 미등록 상품 그리드 조회
@@ -108,6 +145,10 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http ) {
       // params.listScale = "10";
       params.prodCd = $("#srchApplyProdCd").val();
       params.prodNm = $("#srchApplyProdNm").val();
+      params.prodClassCd = agrid.getScope('regProdCtrl').prodClassCd;
+      params.barCd = agrid.getScope('regProdCtrl').barcdCd;
+      params.strUseYn = agrid.getScope('regProdCtrl').useYnCombo.selectedValue;
+      params.prodTypeFg = agrid.getScope('regProdCtrl').prodTypeFgCombo.selectedValue;
       params.payClassCd = selectedCouponClass.payClassCd;
       params.coupnCd = selectedCoupon.coupnCd;
       params.coupnEnvstVal = coupnEnvstVal;

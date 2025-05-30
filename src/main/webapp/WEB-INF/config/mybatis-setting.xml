@@ -1001,6 +1001,8 @@
     <typeAlias alias="storePosVersionVO" type="kr.co.solbipos.store.storeMoms.storePosVersion.service.StorePosVersionVO"/>
     <!-- 맘스터치 > 매장관리 > LSM사용매장조회 -->
     <typeAlias alias="lsmStoreVO" type="kr.co.solbipos.store.storeMoms.lsmStore.service.LsmStoreVO"/>
+    <!-- 맘스터치 > 매장관리 > 버전패치현황 -->
+    <typeAlias alias="storeVerPatchVO" type="kr.co.solbipos.store.storeMoms.storeVerPatch.service.StoreVerPatchVO"/>
 
     <!-- 맘스터치 > 승인관리2 > 현금영수증 승인 조회 -->
     <typeAlias alias="cashBillVO" type="kr.co.solbipos.sale.appr.cashBill.service.CashBillVO"/>

@@ -392,6 +392,11 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
               regProdGrid._gridDataInit();
               $("#srchApplyProdCd").val('');
               $("#srchApplyProdNm").val('');
+              regProdGrid.prodClassCd = '';
+              regProdGrid.prodClassNm = '';
+              $("#srchBarcdCd").val('');
+              regProdGrid.useYnCombo.selectedIndex = 0;
+              regProdGrid.prodTypeFgCombo.selectedIndex = 0;
             });
             var noRegProdGrid = agrid.getScope('noRegProdCtrl');
             noRegProdGrid.$apply(function(){
@@ -411,6 +416,7 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
               regStoreGrid._gridDataInit();
               $("#srchCoupnStoreCd").val('');
               $("#srchCoupnStoreNm").val('');
+                regStoreGrid.sysStatFgCombo.selectedIndex = 0;
             });
             var noRegStoreGrid = agrid.getScope('noRegStoreCtrl');
             noRegStoreGrid.$apply(function(){
@@ -453,6 +459,11 @@ app.controller('couponCtrl', ['$scope', '$http', function ($scope, $http) {
               regExceptProdCtrl._gridDataInit();
               $("#srchExceptProdCd").val('');
               $("#srchExceptProdNm").val('');
+                regExceptProdCtrl.prodClassCd = '';
+                regExceptProdCtrl.prodClassNm = '';
+                $("#srchExceptBarcdCd").val('');
+                regExceptProdCtrl.useYnCombo.selectedIndex = 0;
+                regExceptProdCtrl.prodTypeFgCombo.selectedIndex = 0;
             });
             var noRegExceptProdCtrl = agrid.getScope('noRegExceptProdCtrl');
             noRegExceptProdCtrl.$apply(function(){

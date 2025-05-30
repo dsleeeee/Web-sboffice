@@ -44,6 +44,8 @@ public class CouponStoreVO extends PageVO {
     private String srchStoreCd;
     /** 매장명 */
     private String srchStoreNm;
+    /**  상태 */
+    private String sysStatFg;
     /** /////////////////////////////조회조건/////////////////// */
 
     /**
@@ -192,5 +194,13 @@ public class CouponStoreVO extends PageVO {
      */
     public void setResult(String result) {
         this.result = result;
+    }
+
+    public String getSysStatFg() {
+        return sysStatFg;
+    }
+
+    public void setSysStatFg(String sysStatFg) {
+        this.sysStatFg = sysStatFg;
     }
 }

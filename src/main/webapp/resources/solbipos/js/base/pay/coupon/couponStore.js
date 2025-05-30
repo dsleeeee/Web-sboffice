@@ -17,8 +17,12 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('regStoreCtrl', $scope, $http, true));
 
+  // 조회조건 콤보박스 데이터 Set
+  $scope._setComboData("sysStatFg", sysStatFg); // 매장상태구분
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+      $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
   };
   // 쿠폰 등록 매장 그리드 조회
   $scope.$on("regStoreCtrl", function(event, data) {
@@ -74,11 +78,13 @@ app.controller('regStoreCtrl', ['$scope', '$http', function ($scope, $http) {
  *  쿠폰 미등록 매장 그리드 생성
  */
 app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
+
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('noRegStoreCtrl', $scope, $http, true));
+
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
-
+      $scope.sysStatFgDataMap = new wijmo.grid.DataMap(sysStatFg, 'value', 'name');
   };
 
   // 쿠폰 미등록 매장 그리드 조회
@@ -94,7 +100,7 @@ app.controller('noRegStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     var params = {};
     params.srchStoreCd = $("#srchCoupnStoreCd").val();
     params.srchStoreNm = $("#srchCoupnStoreNm").val();
-
+    params.sysStatFg = regStoreScope.sysStatFgCombo.selectedValue;
     params.payClassCd = selectedCouponClass.payClassCd;
     params.coupnCd = selectedCoupon.coupnCd;
     params.storeRegFg = "N";

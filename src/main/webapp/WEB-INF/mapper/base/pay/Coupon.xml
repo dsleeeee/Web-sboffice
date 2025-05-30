@@ -895,16 +895,23 @@
                    thcp.PROD_CD,
                    NVL(p.PROD_NM,'삭제된 메뉴') AS PROD_NM,
                    p.COST_UPRC,
-                   NVL2(thcp.PROD_CD, 'Y', 'N') AS REG_YN
+                   NVL2(thcp.PROD_CD, 'Y', 'N') AS REG_YN,
+                   p.BARCD_CD,
+                   p.USE_YN,
+                   p.PROD_TYPE_FG
               FROM TB_HQ_COUPON_PROD thcp LEFT OUTER JOIN
                    (SELECT thp.HQ_OFFICE_CD,
                            thp.PROD_CLASS_CD,
                            thpc.PROD_CLASS_NM,
                            thp.PROD_CD,
                            thp.PROD_NM,
-                           thp.COST_UPRC
+                           thp.COST_UPRC,
+                           thpb.BARCD_CD,
+                           thp.USE_YN,
+                           thp.PROD_TYPE_FG
                       FROM TB_HQ_PRODUCT thp,
-                           TB_HQ_PRODUCT_CLASS thpc
+                           TB_HQ_PRODUCT_CLASS thpc,
+                           TB_HQ_PRODUCT_BARCD thpb
                      WHERE thp.HQ_OFFICE_CD = THPC.HQ_OFFICE_CD
                        AND thp.PROD_CLASS_CD = THPC.PROD_CLASS_CD
                        AND THP.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -913,6 +920,8 @@
                              OR
                              ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                            )
+                       AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                       AND thpb.PROD_CD      (+)= thp.PROD_CD
                 ) p
                 ON thcp.HQ_OFFICE_CD = p.HQ_OFFICE_CD
                AND thcp.PROD_CD = p.prod_cd
@@ -920,10 +929,28 @@
                AND thcp.PAY_CLASS_CD = #{payClassCd}
                AND thcp.COUPN_CD = #{coupnCd}
             <if test='prodCd != null and prodCd != ""'>
-                AND p.PROD_CD = #{prodCd}
+                AND p.PROD_CD LIKE '%'||#{prodCd}||'%'
             </if>
             <if test='prodNm != null and prodNm != ""'>
                 AND p.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            <if test='prodClassCd != null and prodClassCd != ""'>
+                AND p.PROD_CLASS_CD IN (
+                                                SELECT  PROD_CLASS_CD
+                                                  FROM  TB_HQ_PRODUCT_CLASS
+                                                 WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                )
+            </if>
+            <if test="barCd != null and barCd != ''">
+                AND p.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+            </if>
+            <if test="strUseYn != null and strUseYn != ''">
+                AND p.USE_YN = #{strUseYn}
+            </if>
+            <if test="prodTypeFg != null and prodTypeFg != ''">
+                AND p.PROD_TYPE_FG = #{prodTypeFg} --상품유형
             </if>
         </if>
         <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
@@ -933,10 +960,14 @@
                    thp.PROD_CD,
                    thp.PROD_NM,
                    thp.COST_UPRC,
+                   thpb.BARCD_CD,
+                   thp.USE_YN,
+                   thp.PROD_TYPE_FG,
                    NVL2(thcp.PROD_CD, 'Y', 'N') AS REG_YN
               FROM TB_HQ_PRODUCT thp,
                    TB_HQ_PRODUCT_CLASS thpc,
-                   TB_HQ_COUPON_PROD thcp
+                   TB_HQ_COUPON_PROD thcp,
+                   TB_HQ_PRODUCT_BARCD thpb
              WHERE thp.USE_YN = 'Y'
                AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                AND thp.HQ_OFFICE_CD = thpc.HQ_OFFICE_CD
@@ -946,10 +977,28 @@
                AND thcp.COUPN_CD (+)= #{coupnCd}
                AND thcp.PROD_CD (+)= thp.PROD_CD
             <if test='prodCd != null and prodCd != ""'>
-                AND thp.PROD_CD = #{prodCd}
+                AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
             </if>
             <if test='prodNm != null and prodNm != ""'>
                 AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            <if test='prodClassCd != null and prodClassCd != ""'>
+                AND thp.PROD_CLASS_CD IN (
+                                                SELECT  PROD_CLASS_CD
+                                                  FROM  TB_HQ_PRODUCT_CLASS
+                                                 WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                )
+            </if>
+            <if test="barCd != null and barCd != ''">
+                AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+            </if>
+            <if test="strUseYn != null and strUseYn != ''">
+                AND thp.USE_YN = #{strUseYn}
+            </if>
+            <if test="prodTypeFg != null and prodTypeFg != ''">
+                AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
             </if>
             AND thcp.PROD_CD IS NULL
             AND (
@@ -957,6 +1006,8 @@
                     OR
                     ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                 )
+            AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+            AND thpb.PROD_CD      (+)= thp.PROD_CD
         </if>
     </select>
 
@@ -1185,6 +1236,7 @@
             tho.HQ_OFFICE_NM,
             tms.STORE_CD,
             tms.STORE_NM,
+            tms.SYS_STAT_FG,
             NVL2(thcs.STORE_CD, 'Y', 'N') AS REG_YN
         FROM
             TB_MS_STORE tms,
@@ -1198,10 +1250,13 @@
             AND thcs.PAY_CLASS_CD (+)= #{payClassCd}
             AND thcs.COUPN_CD (+)= #{coupnCd}
         <if test='srchStoreCd != null and srchStoreCd.toString() != ""'>
-            AND tms.STORE_CD = #{srchStoreCd}
+            AND tms.STORE_CD LIKE '%'|| #{srchStoreCd} ||'%'
         </if>
         <if test='srchStoreNm != null and srchStoreNm.toString() != ""'>
             AND tms.STORE_NM LIKE '%'||#{srchStoreNm}||'%'
+        </if>
+        <if test='sysStatFg != null and sysStatFg != ""'>
+            AND tms.SYS_STAT_FG = #{sysStatFg}
         </if>
         <if test='storeRegFg != null and storeRegFg.toString() == "Y"'>
             AND thcs.STORE_CD IS NOT NULL
@@ -1438,6 +1493,9 @@
             ,       NVL(p.PROD_NM,'삭제된 메뉴') AS PROD_NM
             ,       p.COST_UPRC
             ,       NVL2(thcpe.PROD_CD, 'Y', 'N') AS REG_YN
+            ,       p.BARCD_CD
+            ,       p.USE_YN
+            ,       p.PROD_TYPE_FG
             FROM TB_HQ_COUPON_PROD_EXCEPT thcpe 
             ,   (
                     SELECT  thp.HQ_OFFICE_CD
@@ -1446,8 +1504,12 @@
                     ,       thp.PROD_CD
                     ,       thp.PROD_NM
                     ,       thp.COST_UPRC
+                    ,       thpb.BARCD_CD
+                    ,       thp.USE_YN
+                    ,       thp.PROD_TYPE_FG
                     FROM    TB_HQ_PRODUCT thp
                     ,       TB_HQ_PRODUCT_CLASS thpc
+                    ,       TB_HQ_PRODUCT_BARCD thpb
                     WHERE   thp.HQ_OFFICE_CD    = THPC.HQ_OFFICE_CD
                     AND     thp.PROD_CLASS_CD   = THPC.PROD_CLASS_CD
                     AND     THP.HQ_OFFICE_CD    = #{hqOfficeCd}
@@ -1456,6 +1518,8 @@
                     OR
                     ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
                     )
+                    AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                    AND thpb.PROD_CD      (+)= thp.PROD_CD
                 ) p
             WHERE   thcpe.HQ_OFFICE_CD (+) = p.HQ_OFFICE_CD
             AND     thcpe.PROD_CD = p.prod_cd
@@ -1463,10 +1527,28 @@
             AND     thcpe.PAY_CLASS_CD = #{payClassCd}
             AND     thcpe.COUPN_CD = #{coupnCd}
             <if test='prodCd != null and prodCd != ""'>
-                AND p.PROD_CD = #{prodCd}
+                AND p.PROD_CD LIKE '%'||#{prodCd}||'%'
             </if>
             <if test='prodNm != null and prodNm != ""'>
                 AND p.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            <if test='prodClassCd != null and prodClassCd != ""'>
+                AND p.PROD_CLASS_CD IN (
+                                                SELECT  PROD_CLASS_CD
+                                                  FROM  TB_HQ_PRODUCT_CLASS
+                                                 WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                )
+            </if>
+            <if test="barCd != null and barCd != ''">
+                AND p.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+            </if>
+            <if test="strUseYn != null and strUseYn != ''">
+                AND p.USE_YN = #{strUseYn}
+            </if>
+            <if test="prodTypeFg != null and prodTypeFg != ''">
+                AND p.PROD_TYPE_FG = #{prodTypeFg} --상품유형
             </if>
         </if>
         <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
@@ -1476,10 +1558,14 @@
             ,       thp.PROD_CD
             ,       thp.PROD_NM
             ,       thp.COST_UPRC
+            ,       thpb.BARCD_CD
+            ,       thp.USE_YN
+            ,       thp.PROD_TYPE_FG
             ,       NVL2(thcpe.PROD_CD, 'Y', 'N') AS REG_YN
             FROM    TB_HQ_PRODUCT thp
             ,       TB_HQ_PRODUCT_CLASS thpc
             ,       TB_HQ_COUPON_PROD_EXCEPT thcpe
+            ,       TB_HQ_PRODUCT_BARCD thpb
             WHERE   thp.USE_YN = 'Y'
             AND     thp.HQ_OFFICE_CD        = #{hqOfficeCd}
             AND     thp.HQ_OFFICE_CD        = thpc.HQ_OFFICE_CD
@@ -1489,10 +1575,28 @@
             AND     thcpe.COUPN_CD      (+) = #{coupnCd}
             AND     thcpe.PROD_CD       (+) = thp.PROD_CD
             <if test='prodCd != null and prodCd != ""'>
-                AND thp.PROD_CD = #{prodCd}
+                AND thp.PROD_CD LIKE '%'||#{prodCd}||'%'
             </if>
             <if test='prodNm != null and prodNm != ""'>
                 AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            <if test='prodClassCd != null and prodClassCd != ""'>
+                AND thp.PROD_CLASS_CD IN (
+                                                SELECT  PROD_CLASS_CD
+                                                  FROM  TB_HQ_PRODUCT_CLASS
+                                                 WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY P_PROD_CLASS_CD = PRIOR PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                )
+            </if>
+            <if test="barCd != null and barCd != ''">
+                AND thpb.BARCD_CD LIKE '%'|| #{barCd} ||'%'
+            </if>
+            <if test="strUseYn != null and strUseYn != ''">
+                AND thp.USE_YN = #{strUseYn}
+            </if>
+            <if test="prodTypeFg != null and prodTypeFg != ''">
+                AND thp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
             </if>
             AND thcpe.PROD_CD IS NULL
             AND (
@@ -1500,6 +1604,8 @@
             OR
             ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
             )
+            AND thpb.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+            AND thpb.PROD_CD      (+)= thp.PROD_CD
         </if>
     </select>
 
