@@ -856,6 +856,24 @@ public class StoreManageServiceImpl implements StoreManageService {
             storeManageVO.setStrPosNo("01");
             storeManageVO.setVendorFg("01");
             storeManageVO.setBaseVanYn("Y");
+
+            // 데이터이관관리 - [신규이관요청] 팝업 - 링크매장환경복사 시 추가 처리
+            // VENDOR_NM 없는 경우
+            if (storeManageVO.getVendorNm() == null || "".equals(storeManageVO.getVendorNm()))
+            {
+                storeManageVO.setVendorNm("KCP");
+            }
+            // VENDOR_CD 없는 경우
+            if (storeManageVO.getVendorCd() == null || "".equals(storeManageVO.getVendorCd()))
+            {
+                storeManageVO.setVendorCd("001");
+            }
+            // VENDOR_TERMNL_NO 없는 경우 처리
+            if (storeManageVO.getVendorTermnlNo() == null || "".equals(storeManageVO.getVendorTermnlNo()))
+            {
+                storeManageVO.setVendorTermnlNo("0000000000");
+            }
+
             mapper.insertPosTerminalInfo(storeManageVO);
 
             // 매장 환경설정 1337(다중사업자사용여부) 조회
