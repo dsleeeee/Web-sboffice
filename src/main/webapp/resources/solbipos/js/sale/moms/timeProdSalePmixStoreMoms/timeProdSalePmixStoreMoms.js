@@ -946,7 +946,7 @@ app.controller('timeProdSalePmixStoreMomsExcelCtrl', ['$scope', '$http', '$timeo
         $scope._postJSONQuery.withOutPopUp("/sale/moms/timeProdSalePmixStoreMoms/timeProdSalePmixStoreMoms/getTimeProdSalePmixStoreMomsList.sb", params, function(response){
 
             listSize = response.data.data.list[0].totCnt;
-            totFileCnt = Math.ceil(listSize/7500); // 하나의 엑셀파일에 7500개씩 다운로드
+            totFileCnt = Math.ceil(listSize/5000); // 하나의 엑셀파일에 5000개씩 다운로드
 
             if(listSize === 0 || totFileCnt === 0){
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
@@ -970,9 +970,9 @@ app.controller('timeProdSalePmixStoreMomsExcelCtrl', ['$scope', '$http', '$timeo
                         // 다운로드 진행중인 파일 숫자 변경
                         $("#progressCnt").html(x + 1);
 
-                        // 페이징 7500개씩 지정해 분할 다운로드 진행
-                        params.limit = 7500 * (x + 1);
-                        params.offset = (7500 * (x + 1)) - 7499;
+                        // 페이징 5000개씩 지정해 분할 다운로드 진행
+                        params.limit = 5000 * (x + 1);
+                        params.offset = (5000 * (x + 1)) - 4999;
 
                         // 가상로그인 대응한 session id 설정
                         if (document.getElementsByName('sessionId')[0]) {
