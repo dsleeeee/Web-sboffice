@@ -23,7 +23,6 @@ import java.util.List;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
 @Mapper
 @Repository
 public interface BoardMapper {
