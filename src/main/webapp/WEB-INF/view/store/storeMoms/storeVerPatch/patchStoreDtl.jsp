@@ -38,6 +38,7 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="storeVerPatch.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="storeVerPatch.storeNm"/>" binding="storeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeVerPatch.posNo"/>" binding="posNo" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeVerPatch.posVerNo"/>" binding="posVerNo" width="120" is-read-only="true" align="center" ></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="storeVerPatch.lastLoginDt"/>" binding="lastLoginDt" width="150" is-read-only="true" align="center"></wj-flex-grid-column>

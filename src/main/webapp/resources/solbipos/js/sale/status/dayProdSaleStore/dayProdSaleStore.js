@@ -121,10 +121,10 @@ app.controller('dayProdSaleStoreCtrl', ['$scope', '$http', '$timeout', function 
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.storeCds = $("#dayProdSaleStoreStoreCd").val();
-        params.prodClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#dayProdSaleStoreSelectClassCd").val();
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
-        params.sideProdClassCd = $scope.sideProdClassCd;
+        params.sideProdClassCd = $("#dayProdSaleStoreSelectSideClassCd").val();
         params.sideProdCd = $scope.sideProdCd;
         params.sideProdNm = $scope.sideProdNm;
         params.listScale = 500;
@@ -157,10 +157,10 @@ app.controller('dayProdSaleStoreCtrl', ['$scope', '$http', '$timeout', function 
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate   = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
         params.storeCds = $("#dayProdSaleStoreStoreCd").val();
-        params.prodClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#dayProdSaleStoreSelectClassCd").val();
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
-        params.sideProdClassCd = $scope.sideProdClassCd;
+        params.sideProdClassCd = $("#dayProdSaleStoreSelectSideClassCd").val();
         params.sideProdCd = $scope.sideProdCd;
         params.sideProdNm = $scope.sideProdNm;
         params.listScale = 500;
@@ -172,58 +172,58 @@ app.controller('dayProdSaleStoreCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // 상품분류정보 팝업
-    $scope.popUpProdClass = function() {
-        var popUp = $scope.prodClassPopUpLayer;
-        popUp.show(true, function (s) {
-            // 선택 버튼 눌렀을때만
-            if (s.dialogResult === "wj-hide-apply") {
-                var scope = agrid.getScope('prodClassPopUpCtrl');
-                var prodClassCd = scope.getSelectedClass();
-                var params = {};
-                params.prodClassCd = prodClassCd;
-                // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-                    function(response){
-                        $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassCdNm = response.data.data;
-                    }
-                );
-            }
-        });
-    };
-
-    // 상품분류정보 선택취소
-    $scope.delProdClass = function () {
-        $scope.prodClassCd = "";
-        $scope.prodClassCdNm = "";
-    };
-
-    // 사이드상품분류정보 팝업
-    $scope.popUpSideProdClass = function() {
-        var popUp = $scope.prodClassPopUpLayer;
-        popUp.show(true, function (s) {
-            // 선택 버튼 눌렀을때만
-            if (s.dialogResult === "wj-hide-apply") {
-                var scope = agrid.getScope('prodClassPopUpCtrl');
-                var prodClassCd = scope.getSelectedClass();
-                var params = {};
-                params.prodClassCd = prodClassCd;
-                // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
-                    function(response){
-                        $scope.sideProdClassCd = prodClassCd;
-                        $scope.sideProdClassCdNm = response.data.data;
-                    }
-                );
-            }
-        });
-    };
-
-    // 사이드상품분류정보 선택취소
-    $scope.delSideProdClass = function () {
-        $scope.sideProdClassCd = "";
-        $scope.sideProdClassCdNm = "";
-    };
+    // $scope.popUpProdClass = function() {
+    //     var popUp = $scope.prodClassPopUpLayer;
+    //     popUp.show(true, function (s) {
+    //         // 선택 버튼 눌렀을때만
+    //         if (s.dialogResult === "wj-hide-apply") {
+    //             var scope = agrid.getScope('prodClassPopUpCtrl');
+    //             var prodClassCd = scope.getSelectedClass();
+    //             var params = {};
+    //             params.prodClassCd = prodClassCd;
+    //             // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    //             $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+    //                 function(response){
+    //                     $scope.prodClassCd = prodClassCd;
+    //                     $scope.prodClassCdNm = response.data.data;
+    //                 }
+    //             );
+    //         }
+    //     });
+    // };
+    //
+    // // 상품분류정보 선택취소
+    // $scope.delProdClass = function () {
+    //     $scope.prodClassCd = "";
+    //     $scope.prodClassCdNm = "";
+    // };
+    //
+    // // 사이드상품분류정보 팝업
+    // $scope.popUpSideProdClass = function() {
+    //     var popUp = $scope.prodClassPopUpLayer;
+    //     popUp.show(true, function (s) {
+    //         // 선택 버튼 눌렀을때만
+    //         if (s.dialogResult === "wj-hide-apply") {
+    //             var scope = agrid.getScope('prodClassPopUpCtrl');
+    //             var prodClassCd = scope.getSelectedClass();
+    //             var params = {};
+    //             params.prodClassCd = prodClassCd;
+    //             // 조회 수행 : 조회URL, 파라미터, 콜백함수
+    //             $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+    //                 function(response){
+    //                     $scope.sideProdClassCd = prodClassCd;
+    //                     $scope.sideProdClassCdNm = response.data.data;
+    //                 }
+    //             );
+    //         }
+    //     });
+    // };
+    //
+    // // 사이드상품분류정보 선택취소
+    // $scope.delSideProdClass = function () {
+    //     $scope.sideProdClassCd = "";
+    //     $scope.sideProdClassCdNm = "";
+    // };
 
 }]);
 

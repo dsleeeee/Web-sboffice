@@ -44,6 +44,10 @@ public class DayProdSaleStoreVO extends PageVO {
     private String selTypeFg;
     /** 사이드모상품코드 */
     private String sidePProdCd;
+    /** 상품분류코드(배열형) */
+    private String arrProdClassCd [];
+    /** 사이드상품분류코드(배열형) */
+    private String arrSideProdClassCd [];
 
     public String getOrgnFg() {
         return orgnFg;
@@ -175,5 +179,21 @@ public class DayProdSaleStoreVO extends PageVO {
 
     public void setSidePProdCd(String sidePProdCd) {
         this.sidePProdCd = sidePProdCd;
+    }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
+    }
+
+    public String[] getArrSideProdClassCd() {
+        return arrSideProdClassCd;
+    }
+
+    public void setArrSideProdClassCd(String[] arrSideProdClassCd) {
+        this.arrSideProdClassCd = arrSideProdClassCd;
     }
 }

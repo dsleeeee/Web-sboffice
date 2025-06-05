@@ -82,15 +82,11 @@
 
         ) A
         WHERE   1=1
-        <if test="prodClassCd != null and prodClassCd != ''">
-            AND A.PROD_CLASS_CD IN (
-                                        SELECT
-                                        PROD_CLASS_CD
-                                        FROM TB_MS_PRODUCT_CLASS
-                                        WHERE STORE_CD = A.STORE_CD
-                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = A.STORE_CD
-                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = A.STORE_CD
-                                    )
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND A.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND A.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -98,15 +94,11 @@
         <if test='prodNm != null and prodNm != ""'>
             AND A.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
-        <if test="sideProdClassCd != null and sideProdClassCd != ''">
-            AND A.SIDE_PROD_CLASS_CD IN (
-                                            SELECT
-                                            PROD_CLASS_CD
-                                            FROM TB_MS_PRODUCT_CLASS
-                                            WHERE STORE_CD = A.STORE_CD
-                                            START WITH PROD_CLASS_CD = #{sideProdClassCd} AND STORE_CD = A.STORE_CD
-                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = A.STORE_CD
-                                        )
+        <if test="arrSideProdClassCd != null and arrSideProdClassCd != ''">
+            AND A.SIDE_PROD_CLASS_CD IN
+            <foreach collection="arrSideProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         <if test='sideProdCd != null and sideProdCd != ""'>
             AND A.SIDE_PROD_CD LIKE '%'||#{sideProdCd}||'%'
@@ -186,15 +178,11 @@
 
         ) A
         WHERE   1=1
-        <if test="prodClassCd != null and prodClassCd != ''">
-            AND A.PROD_CLASS_CD IN (
-                                        SELECT
-                                        PROD_CLASS_CD
-                                        FROM TB_MS_PRODUCT_CLASS
-                                        WHERE STORE_CD = A.STORE_CD
-                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = A.STORE_CD
-                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = A.STORE_CD
-                                    )
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND A.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         <if test='prodCd != null and prodCd != ""'>
             AND A.PROD_CD LIKE '%'||#{prodCd}||'%'
@@ -202,15 +190,11 @@
         <if test='prodNm != null and prodNm != ""'>
             AND A.PROD_NM LIKE '%'||#{prodNm}||'%'
         </if>
-        <if test="sideProdClassCd != null and sideProdClassCd != ''">
-            AND A.SIDE_PROD_CLASS_CD IN (
-                                            SELECT
-                                            PROD_CLASS_CD
-                                            FROM TB_MS_PRODUCT_CLASS
-                                            WHERE STORE_CD = A.STORE_CD
-                                            START WITH PROD_CLASS_CD = #{sideProdClassCd} AND STORE_CD = A.STORE_CD
-                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = A.STORE_CD
-                                        )
+        <if test="arrSideProdClassCd != null and arrSideProdClassCd != ''">
+            AND A.SIDE_PROD_CLASS_CD IN
+            <foreach collection="arrSideProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
         </if>
         <if test='sideProdCd != null and sideProdCd != ""'>
             AND A.SIDE_PROD_CD LIKE '%'||#{sideProdCd}||'%'

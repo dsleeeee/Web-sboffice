@@ -60,6 +60,18 @@ public class DayProdSaleStoreServiceImpl implements DayProdSaleStoreService {
             dayProdSaleStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
+        // 분류 array 값 세팅
+        if (dayProdSaleStoreVO.getProdClassCd() != null && !"".equals(dayProdSaleStoreVO.getProdClassCd())) {
+            String[] prodCdList = dayProdSaleStoreVO.getProdClassCd().split(",");
+            dayProdSaleStoreVO.setArrProdClassCd(prodCdList);
+        }
+
+        // 사이드분류 array 값 세팅
+        if (dayProdSaleStoreVO.getSideProdClassCd() != null && !"".equals(dayProdSaleStoreVO.getSideProdClassCd())) {
+            String[] sideProdCdList = dayProdSaleStoreVO.getSideProdClassCd().split(",");
+            dayProdSaleStoreVO.setArrSideProdClassCd(sideProdCdList);
+        }
+
         return dayProdSaleStoreMapper.getDayProdSaleStoreList(dayProdSaleStoreVO);
     }
 
@@ -74,6 +86,18 @@ public class DayProdSaleStoreServiceImpl implements DayProdSaleStoreService {
             StoreVO storeVO = new StoreVO();
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayProdSaleStoreVO.getStoreCds(), 3900));
             dayProdSaleStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 분류 array 값 세팅
+        if (dayProdSaleStoreVO.getProdClassCd() != null && !"".equals(dayProdSaleStoreVO.getProdClassCd())) {
+            String[] prodCdList = dayProdSaleStoreVO.getProdClassCd().split(",");
+            dayProdSaleStoreVO.setArrProdClassCd(prodCdList);
+        }
+
+        // 사이드분류 array 값 세팅
+        if (dayProdSaleStoreVO.getSideProdClassCd() != null && !"".equals(dayProdSaleStoreVO.getSideProdClassCd())) {
+            String[] sideProdCdList = dayProdSaleStoreVO.getSideProdClassCd().split(",");
+            dayProdSaleStoreVO.setArrSideProdClassCd(sideProdCdList);
         }
 
         return dayProdSaleStoreMapper.getDayProdSaleStoreExcelList(dayProdSaleStoreVO);
