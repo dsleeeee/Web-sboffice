@@ -28,6 +28,8 @@
 </wj-popup>
 <script>
 
+    <%-- 상품분류v2.1 --%>
+
 
     $(document).ready(function () {
 

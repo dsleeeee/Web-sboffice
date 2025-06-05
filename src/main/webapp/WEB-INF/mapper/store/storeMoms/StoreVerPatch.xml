@@ -270,6 +270,7 @@
     <select id="getPatchStoreDtlList" parameterType="storeVerPatchVO" resultType="DefaultMap">
     /* USE : StoreVerPatchMapper.getPatchStoreDtlList */
         SELECT 	A.STORE_CD
+        ,       D.STORE_NM
         ,       A.POS_NO
         ,       A.POS_VER_NO
         ,       TO_CHAR(TO_DATE(A.LAST_LOGIN_DT ,'YYYYMMDDhh24miss'), 'YYYY-MM-DD hh24:mi:ss') AS LAST_LOGIN_DT
@@ -349,6 +350,7 @@
         </if>
         GROUP
         BY 		A.STORE_CD
+        ,       D.STORE_NM
         ,       A.POS_NO
         ,       A.POS_VER_NO
         ,		A.LAST_LOGIN_DT

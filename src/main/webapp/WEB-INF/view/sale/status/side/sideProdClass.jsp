@@ -59,7 +59,7 @@
             <%-- 분류조회 --%>
             <th><s:message code="prod.prodClass" /></th>
             <td>
-                <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd3.jsp" flush="true">
+                <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd4.jsp" flush="true">
                     <jsp:param name="targetId" value="prodClassSelectClass"/>
                 </jsp:include>
             </td>

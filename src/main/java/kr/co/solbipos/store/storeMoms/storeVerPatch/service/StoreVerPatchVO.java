@@ -2,6 +2,21 @@ package kr.co.solbipos.store.storeMoms.storeVerPatch.service;
 
 import kr.co.solbipos.application.common.service.PageVO;
 
+/**
+ * @Class Name : StoreVerPatchVO.java
+ * @Description : 맘스터치 > 매장관리 > 버전패치현황
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2025.06.04  김유승      최초생성
+ *
+ * @author 링크 개발실 개발1팀 김유승
+ * @since 2025.06.04
+ * @version 1.0
+ *
+ *  Copyright (C) by LYNK CORP. All right reserved.
+ */
 public class StoreVerPatchVO extends PageVO {
 
     private static final long serialVersionUID = 8201266402770138561L;
