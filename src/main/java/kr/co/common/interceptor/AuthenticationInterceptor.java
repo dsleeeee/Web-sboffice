@@ -111,6 +111,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             ROOT_PATH = "/mobile/";
         }
 
+        // 쿼리타임 지연 로그생성 시, 세션정보 확인을 위해(MybatisInterceptor.java 사용)
+        UserContext.setUserId("");
+        UserContext.setVUserId("");
+        UserContext.setIp("");
+
         // 세션 종료 처리
         if (!isSessionValid) {
             // 로그 기록. inValidation 처리시 쉽게 알아보기 위함.
@@ -134,6 +139,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
             //정상 세션값 확인시
             //LOGGER.info("getSessionId : {},getUserId : {},getUserPwd : {},getUserNm : {},getAuthGrpCd : {},getArrStoreCdList : {},getOrgnFg : {},getOrgnGrpCd : {},getOrgnGrpNm : {},getOrgnCd : {},getOrgnNm : {},getStoreCd : {},getStoreNm : {},getHqOfficeCd : {},getHqOfficeNm : {},getEmpNo : {},getLastLoginDt : {},getLastPwdChgDt : {},getLoginFailCnt : {},getUserStatFg : {},getUseYn : {},getLoginIp : {},getBrwsrInfo : {},getLoginResult : {},getStartDate : {},getEndDate : {},getMenuData : {},getMenuTreeData : {},getBkmkMenuData : {},getBkmkMenuTreeData : {},getFixedMenuData : {},getHistoryMenuData : {},getCurrentMenu : {},getvUserId : {},getvLogindIds : {},getHwAuthKey : {},getpAgencyCd : {},getAreaFg : {}", sessionInfoVO.getSessionId(), sessionInfoVO.getUserId(), "NOT CHECK", sessionInfoVO.getUserNm(), sessionInfoVO.getAuthGrpCd(), sessionInfoVO.getArrStoreCdList(), sessionInfoVO.getOrgnFg(), sessionInfoVO.getOrgnGrpCd(), sessionInfoVO.getOrgnGrpNm(), sessionInfoVO.getOrgnCd(), sessionInfoVO.getOrgnNm(), sessionInfoVO.getStoreCd(), sessionInfoVO.getStoreNm(), sessionInfoVO.getHqOfficeCd(), sessionInfoVO.getHqOfficeNm(), sessionInfoVO.getEmpNo(), sessionInfoVO.getLastLoginDt(), sessionInfoVO.getLastPwdChgDt(), sessionInfoVO.getLoginFailCnt(), sessionInfoVO.getUserStatFg(), sessionInfoVO.getUseYn(), sessionInfoVO.getLoginIp(), sessionInfoVO.getBrwsrInfo(), sessionInfoVO.getLoginResult(), sessionInfoVO.getStartDate(), sessionInfoVO.getEndDate(), sessionInfoVO.getMenuData(), sessionInfoVO.getMenuTreeData(), sessionInfoVO.getBkmkMenuData(), sessionInfoVO.getBkmkMenuTreeData(), sessionInfoVO.getFixedMenuData(), sessionInfoVO.getHistoryMenuData(), sessionInfoVO.getCurrentMenu(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds(), sessionInfoVO.getHwAuthKey(), sessionInfoVO.getpAgencyCd(), sessionInfoVO.getAreaFg());
+
+            // (세션이 있는 경우만) 쿼리타임 지연 로그생성 시, 세션정보 확인을 위해(MybatisInterceptor.java 사용)
+            UserContext.setUserId(sessionInfoVO.getUserId());
+            UserContext.setVUserId(sessionInfoVO.getvUserId());
+            UserContext.setIp(sessionInfoVO.getLoginIp());
         }
 
         // 유져 조회 날짜 저장
@@ -306,6 +316,52 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
         }
         return false;
+    }
+
+    /**
+     * ThreadLocal에 현재 사용자 정보를 저장할 클래스
+     * 쿼리타임 지연 로그생성 시, 세션정보 확인을 위해(MybatisInterceptor.java 사용)
+     */
+    public static class UserContext {
+
+        private static final ThreadLocal<String> userId = new ThreadLocal<>();
+        private static final ThreadLocal<String> vUserId = new ThreadLocal<>();
+        private static final ThreadLocal<String> ip = new ThreadLocal<>();
+
+        public static void setUserId(String value) {
+            userId.set(value);
+        }
+
+        public static String getUserId() {
+            return userId.get();
+        }
+
+        public static void setVUserId(String value) {
+            vUserId.set(value);
+        }
+
+        public static String getVUserId() {
+            return vUserId.get();
+        }
+
+        public static void setIp(String value) {
+            ip.set(value);
+        }
+
+        public static String getIp() {
+            return ip.get();
+        }
+
+        public static void clear() {
+            userId.remove();
+            vUserId.remove();
+            ip.remove();
+        }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        UserContext.clear(); // 요청 완료 후 ThreadLocal 정리
     }
 
 }
