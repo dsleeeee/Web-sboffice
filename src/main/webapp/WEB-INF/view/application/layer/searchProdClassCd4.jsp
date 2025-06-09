@@ -14,11 +14,14 @@
     <div class="wj-dialog wj-dialog-columns" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="prod.layer.prodClass"/>
+            <span class="s13">
+                (체크유지)
+            </span>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
         <div class="wj-dialog-body sc2" style="height: 300px;">
             <%-- 상품분류 트리 --%>
-            <div class="theTreeAll_cls" id="treeProdClass${param.targetId}" style="height:auto;overflow: hidden; "></div>
+            <div class="theTreeAll_cls" id="treeProdClass${param.targetId}" style="height:auto;overflow: hidden; width:auto;"></div>
         </div>
         <div class="wj-dialog-footer">
             <button class="btn wj-hide-apply btn_blue" id="btnSelect4"><s:message code="cmm.chk"/></button>
@@ -45,6 +48,7 @@
 
                 manuallyCheckedItems.add(item);
 
+                // 하위분류가 있을 시
                 if(item.items.length !== 0) {
 
                     var containsAll = item.items.every(childItem => manuallyCheckedItems.has(childItem)); // true면 모두 포함, false면 하나라도 미포함
@@ -81,11 +85,14 @@
                     }
                 }
             } else {
+                // 하위분류가 있을 시
                 if(item.items.length !== 0) {
 
                     var containsAll = item.items.every(childItem => manuallyCheckedItems.has(childItem)); // true면 모두 포함, false면 하나라도 미포함
 
+                    // 하위분류가 전체 체크일 시
                     if (containsAll) {
+
                         document.querySelectorAll('.wj-node').forEach(node => {
                             const textSpan = node.querySelector('.wj-node-text');
                             if (textSpan && textSpan.textContent.trim() === item.prodClassNm) {
@@ -134,6 +141,7 @@
                 }
                 <%--console.log(`❌ 체크 해제: ${item.prodClassNm}`);--%>
             }
+            // 체크값 적용
             updateTreeCheckedItems();
         }
 

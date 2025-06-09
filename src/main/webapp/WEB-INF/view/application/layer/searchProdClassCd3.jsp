@@ -18,7 +18,7 @@
         </div>
         <div class="wj-dialog-body sc2" style="height: 300px;">
             <%-- 상품분류 트리 --%>
-            <div class="theTreeAll_cls" id="treeProdClass${param.targetId}" style="height:auto;overflow: hidden; "></div>
+            <div class="theTreeAll_cls" id="treeProdClass${param.targetId}" style="height:auto;overflow: hidden; width:auto;"></div>
         </div>
         <div class="wj-dialog-footer">
             <button class="btn wj-hide-apply btn_blue" id="btnSelect"><s:message code="cmm.chk"/></button>
