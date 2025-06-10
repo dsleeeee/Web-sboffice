@@ -300,9 +300,11 @@ public class PosTemplateController {
     public Result getPrintCodeList(HttpServletRequest request, HttpServletResponse response,
         PosTemplateVO posTemplateVO, Model model) {
 
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
         List<DefaultMap<String>> list = new ArrayList<DefaultMap<String>>();
         // 출력물코드 목록 조회
-        list = posTemplateService.getPrintCodeList(posTemplateVO);
+        list = posTemplateService.getPrintCodeList(posTemplateVO, sessionInfoVO);
         
         return ReturnUtil.returnListJson(Status.OK, list, posTemplateVO);
 
