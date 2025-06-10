@@ -40,7 +40,6 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
  *
  *  Copyright (C) by SOLBIPOS CORP. All right reserved.
  */
-
 @Service("boardService")
 @Transactional
 public class BoardServiceImpl implements BoardService {

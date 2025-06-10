@@ -31,6 +31,21 @@ import org.springframework.util.FileCopyUtils;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
 
+/**
+ * @Class Name : BoardController.java
+ * @Description : 부가서비스 > 게시판 > 일반게시판
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2020.02.11  김설아      최초생성
+ *
+ * @author 솔비포스 개발본부 백엔드PT 김설아
+ * @since 2020.02.11
+ * @version 1.0
+ *
+ *  Copyright (C) by SOLBIPOS CORP. All right reserved.
+ */
 @Controller
 @RequestMapping("/adi/board/board")
 public class BoardController {
