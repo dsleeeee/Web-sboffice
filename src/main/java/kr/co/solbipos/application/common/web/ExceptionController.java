@@ -14,6 +14,7 @@ import kr.co.common.utils.spring.StringUtil;
 import kr.co.common.utils.spring.WebUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.mobile.application.session.auth.enums.LoginFg;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -131,6 +137,47 @@ public class ExceptionController {
         String userId = isEmpty(sessionInfoVO) ? "" : sessionInfoVO.getUserId();
 
         LOGGER.error("Exception : id: {}", userId, e);
+
+        // tomcat root directory
+        String catalinaBase = System.getProperty("catalina.base");
+        String catalinaHome = System.getProperty("catalina.home");
+        LOGGER.debug("catalinaBase : " + catalinaBase);
+        LOGGER.debug("catalinaHome : " + catalinaHome);
+
+        // 오늘 날짜
+        Date date = new Date();
+        String nowDate = new SimpleDateFormat("yyyyMMdd").format(date);
+        String nowDateTime = new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+
+        // 생성 파일 경로
+        //String fileName = "D:\\prod_img\\ERRORLOG_" + nowDate + ".OUT"; // TEST
+        String fileName = catalinaBase + "/logs/ERRORLOG_" + nowDate + ".OUT";
+
+        // 로그 데이터
+        StringBuilder str2 = new StringBuilder(100);
+        str2.append("====================================== START [" + nowDateTime + "] ========================================" + "\n");
+        str2.append("Exception : id: " + userId + "\n");
+        str2.append(ExceptionUtils.getStackTrace(e) + "\n");
+        str2.append("============================================= END ==============================================" + "\n");
+
+        try {
+
+            // 파일 객체 생성
+            File file = new File(fileName);
+
+            // true 지정시 파일의 기존 내용에 이어서 작성
+            FileWriter fw = new FileWriter(file, true);
+
+            // 파일안에 문자열 쓰기
+            fw.write(str2.toString());
+            fw.flush();
+
+            // 객체 닫기
+            fw.close();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
 
         if (WebUtil.isJsonRequest()) {
             String msg = messageService.get("cmm.error");
