@@ -16,7 +16,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_pageView('boardListCtrl',1)" id="nxBtnSearch">
+            <button class="btn_blue fr" ng-click="_pageView('boardListCtrl', 1)" id="nxBtnSearch">
                 <s:message code="cmm.search" />
             </button>
         </div>
@@ -51,7 +51,7 @@
                 <td>
                     <input type="text" class="sb-input w100" id="srchGubunName" ng-model="gubunName" onkeyup="fnNxBtnSearch();"/>
                 </td>
-                <%--열람구분 --%>
+                <%-- 열람구분 --%>
                 <th>
                     <s:message code="board.srchGubunRead" />
                 </th>
@@ -126,7 +126,7 @@
                 <wj-flex-grid-column header="<s:message code="board.boardSeqNo"/>" binding="boardSeqNo" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.userId"/>" binding="userId" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="board.fullSizeYn"/>" binding="fullSizeYn" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-
+                <wj-flex-grid-column header="<s:message code="board.backColorYn"/>" binding="backColorYn" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
@@ -172,7 +172,7 @@
     var rootUrl = "${rootUrl}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20240412.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20250610.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">
