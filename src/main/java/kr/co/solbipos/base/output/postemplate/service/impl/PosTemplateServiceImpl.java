@@ -53,7 +53,10 @@ public class PosTemplateServiceImpl implements PosTemplateService {
     
     /** 출력물코드 목록 조회 */
     @Override
-    public List<DefaultMap<String>> getPrintCodeList(PosTemplateVO posTemplateVO) {
+    public List<DefaultMap<String>> getPrintCodeList(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO) {
+
+        posTemplateVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
         return posTemplateMapper.getPrintCodeList(posTemplateVO);
     }
 

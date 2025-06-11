@@ -49,6 +49,11 @@
             tcpd.PRT_CD = tcpc.PRT_CD
         WHERE
             tcpd.PRT_CLASS_CD = #{prtClassCd}
+        <if test="hqOfficeCd != null and hqOfficeCd != ''">
+            <if test="hqOfficeCd == 'H0393'">
+                AND tcpd.PRT_CD NOT IN ('{-주문차수}')
+            </if>
+        </if>
         ORDER BY
             tcpd.DISP_SEQ
     </select>

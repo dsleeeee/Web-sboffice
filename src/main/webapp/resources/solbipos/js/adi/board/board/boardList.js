@@ -108,7 +108,8 @@ app.controller('boardListCtrl', ['$scope', '$http', function ($scope, $http) {
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
                 var item = $scope.flex.collectionView.items[i];
 
-                if(item.boardSeqNo == "326"){
+                // if(item.boardSeqNo == "326"){
+                if(item.backColorYn == "Y"){
                     rows[i].cssClass = 'wij_gridBackground-yellow-bold';
                 }
             }

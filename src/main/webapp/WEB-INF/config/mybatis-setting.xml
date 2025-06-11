@@ -688,10 +688,14 @@
     <!-- 환율관리 -->
     <typeAlias alias="ehgtVO" type="kr.co.solbipos.adi.etc.ehgt.service.EhgtVO"/>
     <typeAlias alias="crncyCdVO" type="kr.co.solbipos.adi.etc.ehgt.service.CrncyCdVO"/>
-    <!-- 부가서비스 > 게시판 > 게시판 -->
+
+    <!-- 부가서비스 > 게시판 > 일반게시판 -->
     <typeAlias alias="boardVO" type="kr.co.solbipos.adi.board.board.service.BoardVO"/>
+    <!-- 부가서비스 > 게시판 > 일반게시판노출순서 -->
+    <typeAlias alias="boardDisplayVO" type="kr.co.solbipos.adi.board.boardDisplay.service.BoardDisplayVO"/>
     <!-- 부가서비스 > 자료실 > 자료실 -->
     <typeAlias alias="libraryVO" type="kr.co.solbipos.adi.board.library.service.LibraryVO"/>
+
     <!-- 부가서비스 > 예약관리 > 예약현황 -->
     <typeAlias alias="resveInfoVO" type="kr.co.solbipos.adi.resve.resveInfo.service.ResveInfoVO"/>
 

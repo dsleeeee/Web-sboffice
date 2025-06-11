@@ -27,7 +27,7 @@ public interface PosTemplateService {
     List<DefaultMap<String>> getPrintTypeList(PosTemplateVO posTemplateVO);
 
     /** 출력물코드 목록 조회 */
-    List<DefaultMap<String>> getPrintCodeList(PosTemplateVO posTemplateVO);
+    List<DefaultMap<String>> getPrintCodeList(PosTemplateVO posTemplateVO, SessionInfoVO sessionInfoVO);
 
     /** 출력물템플릿 목록 조회 */
     List<DefaultMap<String>> getPosTemplateList(PosTemplateVO posTemplateVO);

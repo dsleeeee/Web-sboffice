@@ -41,6 +41,7 @@
             ,       twbi.REMARK
             ,       DECODE(twbrh.VIEW_YN, null, 'N', 'Y') AS VIEW_YN
             ,       DECODE(twbi.FULL_SiZE_YN, null, 'N', twbi.FULL_SiZE_YN) AS FULL_SiZE_YN
+            ,       NVL(twbi.BACK_COLOR_YN, 'N') AS BACK_COLOR_YN
             <include refid="CmmSQL.PagingTemplateCount"/>
             FROM    TB_WB_BOARD_INFO twbi
             ,       TB_WB_USER_INFO_DTL_V01 twuidv01
@@ -204,7 +205,7 @@
             AND twuidv01.USER_ID (+)= twbi.USER_ID
             AND twbrh.BOARD_CD (+)= twbi.BOARD_CD
             AND twbrh.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
-            ORDER BY 1
+            ORDER BY twbi.TOP_YN DESC, twbi.DISP_SEQ
                     <!-- 시스템 -->
                     <if test='orgnFg == "M"'>
                     ,   twbi.REG_DT DESC
