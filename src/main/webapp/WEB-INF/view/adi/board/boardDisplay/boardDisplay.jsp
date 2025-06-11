@@ -100,9 +100,9 @@
                     item-formatter="_itemFormatter">
 
                 <!-- define columns -->
-                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="boardDisplay.dispSeq"/>" binding="dispSeq" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="boardDisplay.backColorYn"/>" binding="backColorYn" width="60" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
+                <wj-flex-grid-column header="" binding="backColorYn" width="60" align="center" is-read-only="false" format="checkBoxText"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="boardDisplay.title"/>" binding="title" width="300" is-read-only="true" align="left"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="boardDisplay.viewCnt"/>" binding="viewCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="boardDisplay.viewYn"/>" binding="viewYn" data-map="viewYnDataMap" width="65" is-read-only="true" align="center"></wj-flex-grid-column>

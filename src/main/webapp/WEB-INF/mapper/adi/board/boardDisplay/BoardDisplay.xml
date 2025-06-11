@@ -251,6 +251,7 @@
         SET
         TOP_YN = #{topYn},
         DISP_SEQ = (DECODE(#{topYn}, 'Y', (SELECT NVL(MAX(DISP_SEQ), 0)+1 FROM TB_WB_BOARD_INFO WHERE BOARD_CD = #{boardCd}), 0)),
+        BACK_COLOR_YN = 'N',
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
         WHERE 1=1
