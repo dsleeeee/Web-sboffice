@@ -72,10 +72,9 @@
                     <%-- 분류조회 --%>
                     <th><s:message code="prod.prodClass" /></th>
                     <td>
-                        <input type="text" class="sb-input w120px" id="srchStoreProdClassCd" ng-model="prodClassNm" ng-click="popUpStoreProdClass()" style="float: left;"
-                               placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-                        <input type="hidden" id="_storeProdClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
-                        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delStoreProdClass()"><s:message code="cmm.selectCancel"/></button>
+                        <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd3.jsp" flush="true">
+                            <jsp:param name="targetId" value="storeProdBatchRegistSelectClass"/>
+                        </jsp:include>
                     </td>
                 </tr>
                 <tr>

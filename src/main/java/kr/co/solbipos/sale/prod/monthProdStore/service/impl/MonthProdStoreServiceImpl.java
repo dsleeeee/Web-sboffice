@@ -56,6 +56,12 @@ public class MonthProdStoreServiceImpl implements MonthProdStoreService {
             monthProdStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
+        // 분류 array 값 세팅
+        if (monthProdStoreVO.getProdClassCd() != null && !"".equals(monthProdStoreVO.getProdClassCd())) {
+            String[] prodCdList = monthProdStoreVO.getProdClassCd().split(",");
+            monthProdStoreVO.setArrProdClassCd(prodCdList);
+        }
+
         // 상품 array 값 세팅
         if (monthProdStoreVO.getProdCds() != null && !"".equals(monthProdStoreVO.getProdCds())) {
             String[] prodCdList = monthProdStoreVO.getProdCds().split(",");
@@ -88,6 +94,12 @@ public class MonthProdStoreServiceImpl implements MonthProdStoreService {
             StoreVO storeVO = new StoreVO();
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(monthProdStoreVO.getStoreCds(), 3900));
             monthProdStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 분류 array 값 세팅
+        if (monthProdStoreVO.getProdClassCd() != null && !"".equals(monthProdStoreVO.getProdClassCd())) {
+            String[] prodCdList = monthProdStoreVO.getProdClassCd().split(",");
+            monthProdStoreVO.setArrProdClassCd(prodCdList);
         }
 
         // 상품 array 값 세팅

@@ -9,6 +9,8 @@ import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayService;
+import kr.co.solbipos.base.prod.kioskDisplay.service.KioskDisplayVO;
 import kr.co.solbipos.base.prod.prod.service.ProdService;
 import kr.co.solbipos.base.prod.prod.service.ProdVO;
 import kr.co.solbipos.base.prod.prod.service.enums.ProdAuthEnvFg;
@@ -59,15 +61,17 @@ public class StoreSideMenuController {
     private final ProdService prodService;
     private final SideMenuService sideMenuService;
     private final DayProdService dayProdService;
+    private final KioskDisplayService kioskDisplayService;
     private final CmmCodeUtil cmmCodeUtil;
 
-    public StoreSideMenuController(SessionService sessionService, CmmEnvUtil cmmEnvUtil, TouchKeyService touchkeyService, ProdService prodService, SideMenuService sideMenuService, DayProdService dayProdService, CmmCodeUtil cmmCodeUtil) {
+    public StoreSideMenuController(SessionService sessionService, CmmEnvUtil cmmEnvUtil, TouchKeyService touchkeyService, ProdService prodService, SideMenuService sideMenuService, DayProdService dayProdService, KioskDisplayService kioskDisplayService, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.cmmEnvUtil = cmmEnvUtil;
         this.touchkeyService = touchkeyService;
         this.prodService = prodService;
         this.sideMenuService = sideMenuService;
         this.dayProdService = dayProdService;
+        this.kioskDisplayService = kioskDisplayService;
         this.cmmCodeUtil = cmmCodeUtil;
     }
 
@@ -136,10 +140,21 @@ public class StoreSideMenuController {
         ProdVO prodVO = new ProdVO();
         model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
 
+        // 매장별 브랜드 콤보박스 조회(사용자 상관없이 전체 브랜드 표시)
+        KioskDisplayVO kioskDisplayVO = new KioskDisplayVO();
+        model.addAttribute("userHqStoreBrandCdComboList", convertToJson(kioskDisplayService.getUserBrandComboListAll(kioskDisplayVO, sessionInfoVO)));
+
         // 사용자별 브랜드 콤보박스 조회(조회용)
         DayProdVO dayProdVO = new DayProdVO();
         model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
 
+        // 코너 리스트 조회(선택 콤보박스용)
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            List cornerList = prodService.getCornerList(prodVO, sessionInfoVO);
+            model.addAttribute("cornerList", cornerList.isEmpty() ? CmmUtil.comboListAll2("기본코너","00") : cmmCodeUtil.assmblObj(cornerList, "name", "value", UseYn.N));
+        }else {
+            model.addAttribute("cornerList", CmmUtil.comboListAll2("기본코너","00"));
+        }
 
         // 속성, 선택메뉴조회(콤보박스용)
         SideMenuManageVO sideMenuManageVO = new SideMenuManageVO();
@@ -276,6 +291,77 @@ public class StoreSideMenuController {
             branchCdComboListAll = cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N);
         }
         model.addAttribute("branchCdComboList", branchCdComboListAll);
+
+        // 매장그룹
+        List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
+        String momsStoreFg01ComboListAll = "";
+        if (momsStoreFg01ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg01ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg01ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboListAll);
+        // 매장그룹2
+        List momsStoreFg02ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "169");
+        String momsStoreFg02ComboListAll = "";
+        if (momsStoreFg02ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg02ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg02ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg02ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg02ComboList", momsStoreFg02ComboListAll);
+        // 매장그룹3
+        List momsStoreFg03ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "170");
+        String momsStoreFg03ComboListAll = "";
+        if (momsStoreFg03ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg03ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg03ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg03ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg03ComboList", momsStoreFg03ComboListAll);
+        // 매장그룹4
+        List momsStoreFg04ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "171");
+        String momsStoreFg04ComboListAll = "";
+        if (momsStoreFg04ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg04ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg04ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg04ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg04ComboList", momsStoreFg04ComboListAll);
+        // 매장그룹5
+        List momsStoreFg05ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "172");
+        String momsStoreFg05ComboListAll = "";
+        if (momsStoreFg05ComboList.isEmpty()) {
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> m = new HashMap<>();
+            m.put("name", "전체");
+            m.put("value", "");
+            list.add(m);
+            momsStoreFg05ComboListAll = convertToJson(list);
+        } else {
+            momsStoreFg05ComboListAll = cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.N);
+        }
+        model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboListAll);
 
         /** //맘스터치 */
 

@@ -133,6 +133,9 @@ public class MonthProdVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 사이드상품분류코드(배열형) */
+    private String arrProdClassCd [];
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -368,4 +371,12 @@ public class MonthProdVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
+    }
 }

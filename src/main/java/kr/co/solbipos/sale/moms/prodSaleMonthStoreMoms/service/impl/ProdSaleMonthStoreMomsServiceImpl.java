@@ -68,6 +68,12 @@ public class ProdSaleMonthStoreMomsServiceImpl implements ProdSaleMonthStoreMoms
             prodSaleMonthStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
+        // 분류 array 값 세팅
+        if (prodSaleMonthStoreMomsVO.getProdClassCd() != null && !"".equals(prodSaleMonthStoreMomsVO.getProdClassCd())) {
+            String[] prodCdList = prodSaleMonthStoreMomsVO.getProdClassCd().split(",");
+            prodSaleMonthStoreMomsVO.setArrProdClassCd(prodCdList);
+        }
+
         // 상품 array 값 세팅
         if (prodSaleMonthStoreMomsVO.getProdCds() != null && !"".equals(prodSaleMonthStoreMomsVO.getProdCds())) {
             String[] prodCdList = prodSaleMonthStoreMomsVO.getProdCds().split(",");
@@ -102,6 +108,12 @@ public class ProdSaleMonthStoreMomsServiceImpl implements ProdSaleMonthStoreMoms
             prodSaleMonthStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
+        // 분류 array 값 세팅
+        if (prodSaleMonthStoreMomsVO.getProdClassCd() != null && !"".equals(prodSaleMonthStoreMomsVO.getProdClassCd())) {
+            String[] prodCdList = prodSaleMonthStoreMomsVO.getProdClassCd().split(",");
+            prodSaleMonthStoreMomsVO.setArrProdClassCd(prodCdList);
+        }
+
         // 상품 array 값 세팅
         if (prodSaleMonthStoreMomsVO.getProdCds() != null && !"".equals(prodSaleMonthStoreMomsVO.getProdCds())) {
             String[] prodCdList = prodSaleMonthStoreMomsVO.getProdCds().split(",");
@@ -134,6 +146,12 @@ public class ProdSaleMonthStoreMomsServiceImpl implements ProdSaleMonthStoreMoms
             StoreVO storeVO = new StoreVO();
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleMonthStoreMomsVO.getStoreCds(), 3900));
             prodSaleMonthStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 분류 array 값 세팅
+        if (prodSaleMonthStoreMomsVO.getProdClassCd() != null && !"".equals(prodSaleMonthStoreMomsVO.getProdClassCd())) {
+            String[] prodCdList = prodSaleMonthStoreMomsVO.getProdClassCd().split(",");
+            prodSaleMonthStoreMomsVO.setArrProdClassCd(prodCdList);
         }
 
         // 상품 array 값 세팅

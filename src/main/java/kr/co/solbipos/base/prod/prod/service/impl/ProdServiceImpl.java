@@ -108,6 +108,12 @@ public class ProdServiceImpl implements ProdService {
             }
         }
 
+        // 분류 array 값 세팅
+        if (prodVO.getProdClassCd() != null && !"".equals(prodVO.getProdClassCd())) {
+            String[] prodCdList = prodVO.getProdClassCd().split(",");
+            prodVO.setArrProdClassCd(prodCdList);
+        }
+
         /*
           단독매장의 경우 SALE_PRC_FG = '2'
           프랜차이즈의 경우, 상품 판매가 본사통제여부 조회하여
@@ -173,6 +179,12 @@ public class ProdServiceImpl implements ProdService {
                     }
                 }
             }
+        }
+
+        // 분류 array 값 세팅
+        if (prodVO.getProdClassCd() != null && !"".equals(prodVO.getProdClassCd())) {
+            String[] prodCdList = prodVO.getProdClassCd().split(",");
+            prodVO.setArrProdClassCd(prodCdList);
         }
 
         if (prodVO.getExcelGubun().equals("T")) { // 전체 엑셀다운로드시(T) 조회조건 날림
@@ -1111,6 +1123,12 @@ public class ProdServiceImpl implements ProdService {
     public List<DefaultMap<String>> getStoreProdBatchList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
 
         prodVO.setUserId(sessionInfoVO.getUserId());
+
+        // 분류 array 값 세팅
+        if (prodVO.getProdClassCd() != null && !"".equals(prodVO.getProdClassCd())) {
+            String[] prodCdList = prodVO.getProdClassCd().split(",");
+            prodVO.setArrProdClassCd(prodCdList);
+        }
 
         if(prodVO.getProdRegFg() == UseYn.Y){
             return prodMapper.getStoreProdRegList(prodVO);

@@ -148,6 +148,9 @@ public class ProdSaleMonthStoreMomsVO extends PageVO {
     /** 상품분류합산조회 */
     private String chkProdClassSumDisplay;
 
+    /** 사이드상품분류코드(배열형) */
+    private String arrProdClassCd [];
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -471,4 +474,12 @@ public class ProdSaleMonthStoreMomsVO extends PageVO {
     public String getChkProdClassSumDisplay() { return chkProdClassSumDisplay; }
 
     public void setChkProdClassSumDisplay(String chkProdClassSumDisplay) { this.chkProdClassSumDisplay = chkProdClassSumDisplay; }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
+    }
 }

@@ -111,6 +111,9 @@ public class ProdSaleDayMomsVO extends PageVO {
     /** 상품코드 */
     private String prodCds;
 
+    /** 사이드상품분류코드(배열형) */
+    private String arrProdClassCd [];
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -300,4 +303,12 @@ public class ProdSaleDayMomsVO extends PageVO {
     }
 
     public void setProdCds(String prodCds) { this.prodCds = prodCds; }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
+    }
 }

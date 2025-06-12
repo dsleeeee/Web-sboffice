@@ -171,7 +171,7 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
-        params.prodClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#monthProdSelectClassCd").val();
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -313,7 +313,7 @@ app.controller('monthProdCtrl', ['$scope', '$http', '$timeout', function ($scope
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
-        params.prodClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#monthProdSelectClassCd").val();
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;

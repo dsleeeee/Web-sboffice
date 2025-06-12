@@ -259,6 +259,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
   // 상품 목록 조회
   $scope.searchProdList = function(){
+
     // 파라미터
     var params = {};
     // 등록일자 '전체기간' 선택에 따른 params
@@ -266,6 +267,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
+
+    params.prodClassCd = $("#prodSelectClassCd").val();
 
     if(brandUseFg === "1" && orgnFg === "HQ"){
 
@@ -551,7 +554,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     params.excelGubun = 'C';
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
-    params.prodClassCd = $scope.prodClassCd;
+    params.prodClassCd = $("#prodSelectClassCd").val();
     params.barCd = $scope.barCd;
     params.useYn = $scope.useYn;
     //params.hqBrandNm = $scope.hqBrandNm;
