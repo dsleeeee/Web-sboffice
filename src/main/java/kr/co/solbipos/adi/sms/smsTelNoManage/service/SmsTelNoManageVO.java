@@ -87,6 +87,12 @@ public class SmsTelNoManageVO extends PageVO {
     /** 전화번호 */
     private String[] modTelNoList;
 
+    /** 소속코드 */
+    private String srchOrgnCd;
+
+    /** 소속명 */
+    private String srchOrgnNm;
+
     public String getOrgnCd() { return orgnCd; }
 
     public void setOrgnCd(String orgnCd) { this.orgnCd = orgnCd; }
@@ -188,4 +194,12 @@ public class SmsTelNoManageVO extends PageVO {
     public void setModTelNoList(String[] modTelNoList) {
         this.modTelNoList = modTelNoList;
     }
+
+    public String getSrchOrgnCd() { return srchOrgnCd; }
+
+    public void setSrchOrgnCd(String srchOrgnCd) { this.srchOrgnCd = srchOrgnCd; }
+
+    public String getSrchOrgnNm() { return srchOrgnNm; }
+
+    public void setSrchOrgnNm(String srchOrgnNm) { this.srchOrgnNm = srchOrgnNm; }
 }

@@ -16,11 +16,37 @@
             <a href="#" class="open fl"><s:message code="smsTelNoStop.info"/></a>
             <%-- 조회 --%>
             <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-                <button class="btn_blue fr" ng-click="_broadcast('smsTelNoStopCtrl',1)">
+                <button class="btn_blue fr" ng-click="_broadcast('smsTelNoStopCtrl',1)" id="nxBtnSearch3">
                     <s:message code="cmm.search" />
                 </button>
             </div>
         </div>
+        <table class="searchTbl">
+            <colgroup>
+                <col class="w15" />
+                <col class="w35" />
+                <col class="w15" />
+                <col class="w35" />
+            </colgroup>
+            <tbody>
+                <tr>
+                    <%-- 소속코드 --%>
+                    <th>
+                        <s:message code="smsTelNoStop.orgnCd"/>
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchOrgnCd" ng-model="srchOrgnCd" onkeyup="fnNxBtnSearch('3');" />
+                    </td>
+                    <%-- 소속명 --%>
+                    <th>
+                        <s:message code="smsTelNoStop.orgnNm"/>
+                    </th>
+                    <td>
+                        <input type="text" class="sb-input w100" id="srchOrgnNm" ng-model="srchOrgnNm" onkeyup="fnNxBtnSearch('3');" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <%-- 그리드 --%>
         <div class="w100 mt10 mb20">
@@ -65,7 +91,7 @@
     var useYnFgData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20250107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/sms/smsTelNoManage/smsTelNoStop.js?ver=20250612.01" charset="utf-8"></script>
 
 <%-- 일반번호 인증요청 처리 팝업 --%>
 <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsGeneralNoManage.jsp">

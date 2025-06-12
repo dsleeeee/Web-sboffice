@@ -34,6 +34,8 @@ app.controller('smsTelNoStopCtrl', ['$scope', '$http', function ($scope, $http) 
 
     $scope.searchSmsTelNoStop = function() {
         var params = {};
+        params.srchOrgnCd = $scope.srchOrgnCd;
+        params.srchOrgnNm = $scope.srchOrgnNm;
 
         $scope._inquiryMain("/adi/sms/smsTelNoManage/smsTelNoStop/getSmsTelNoStopList.sb", params, function() {}, false);
     };

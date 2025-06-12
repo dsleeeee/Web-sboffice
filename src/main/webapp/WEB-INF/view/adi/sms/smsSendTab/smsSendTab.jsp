@@ -76,6 +76,7 @@
 
 <c:if test="${orgnFg == 'MASTER'}">
     <%-- 발신번호차단 레이어 --%>
+    <%-- 조회버튼 ID 3 : 서비스화면부터 하다보니 그렇게 됨 --%>
     <c:import url="/WEB-INF/view/adi/sms/smsTelNoManage/smsTelNoStop.jsp">
         <c:param name="menuCd" value="${menuCd}"/>
         <c:param name="menuNm" value="${menuNm}"/>
