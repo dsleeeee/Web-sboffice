@@ -61,6 +61,12 @@ public class ProdSaleDayMomsServiceImpl implements ProdSaleDayMomsService {
             prodSaleDayMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
+        // 분류 array 값 세팅
+        if (prodSaleDayMomsVO.getProdClassCd() != null && !"".equals(prodSaleDayMomsVO.getProdClassCd())) {
+            String[] prodCdList = prodSaleDayMomsVO.getProdClassCd().split(",");
+            prodSaleDayMomsVO.setArrProdClassCd(prodCdList);
+        }
+
         // 상품 array 값 세팅
         if (prodSaleDayMomsVO.getProdCds() != null && !"".equals(prodSaleDayMomsVO.getProdCds())) {
             String[] prodCdList = prodSaleDayMomsVO.getProdCds().split(",");
@@ -93,6 +99,12 @@ public class ProdSaleDayMomsServiceImpl implements ProdSaleDayMomsService {
             StoreVO storeVO = new StoreVO();
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleDayMomsVO.getStoreCds(), 3900));
             prodSaleDayMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 분류 array 값 세팅
+        if (prodSaleDayMomsVO.getProdClassCd() != null && !"".equals(prodSaleDayMomsVO.getProdClassCd())) {
+            String[] prodCdList = prodSaleDayMomsVO.getProdClassCd().split(",");
+            prodSaleDayMomsVO.setArrProdClassCd(prodCdList);
         }
 
         // 상품 array 값 세팅

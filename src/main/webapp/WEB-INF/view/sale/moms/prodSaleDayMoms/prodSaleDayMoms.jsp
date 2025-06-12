@@ -46,10 +46,9 @@
                 <%-- 분류조회 --%>
                 <th><s:message code="cmm.prodClass" /></th>
                 <td>
-                    <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left;"
-                           placeholder="<s:message code="cmm.prodClass" /> 선택" readonly/>
-                    <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
-                    <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                    <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd3.jsp" flush="true">
+                        <jsp:param name="targetId" value="prodSaleDayMomsSelectClass"/>
+                    </jsp:include>
                 </td>
             </tr>
             <tr>
@@ -434,4 +433,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayMoms/prodSaleDayMoms.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/prodSaleDayMoms/prodSaleDayMoms.js?ver=20250605.01" charset="utf-8"></script>

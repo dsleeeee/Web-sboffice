@@ -21,7 +21,7 @@
             <div class="theTreeAll_cls" id="treeProdClass${param.targetId}" style="height:auto;overflow: hidden; width:auto;"></div>
         </div>
         <div class="wj-dialog-footer">
-            <button class="btn wj-hide-apply btn_blue" id="btnSelect"><s:message code="cmm.chk"/></button>
+            <button class="btn wj-hide-apply btn_blue" id="${param.targetId}btnSelect"><s:message code="cmm.chk"/></button>
             <button class="btn wj-hide btn_blue"><s:message code="cmm.close"/></button>
         </div>
     </div>
@@ -32,6 +32,12 @@
 
 
     $(document).ready(function () {
+
+        var treeElement = document.getElementById('treeProdClass${param.targetId}');
+        var existingTree = wijmo.Control.getControl(treeElement);
+        if (existingTree) {
+            existingTree.dispose();  // 컨트롤 완전히 제거
+        }
 
         <%-- 메뉴 트리 생성 --%>
         var tree = new wijmo.nav.TreeView('#treeProdClass${param.targetId}', {
@@ -85,7 +91,7 @@
             });
 
         // 선택 버튼 클릭
-        $("#btnSelect").click(function (e) {
+        $("#${param.targetId}btnSelect").click(function (e) {
 
             var arr = new Array();
 

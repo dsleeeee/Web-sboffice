@@ -429,6 +429,9 @@ public class ProdVO extends PageVO {
     /** 페이지 구분 */
     private String pageFg;
 
+    /** 상품분류코드(배열형) */
+    private String arrProdClassCd [];
+
     /**
      * @return the hqOfficeCd
      */
@@ -1818,5 +1821,13 @@ public class ProdVO extends PageVO {
 
     public void setPageFg(String pageFg) {
         this.pageFg = pageFg;
+    }
+
+    public String[] getArrProdClassCd() {
+        return arrProdClassCd;
+    }
+
+    public void setArrProdClassCd(String[] arrProdClassCd) {
+        this.arrProdClassCd = arrProdClassCd;
     }
 }
