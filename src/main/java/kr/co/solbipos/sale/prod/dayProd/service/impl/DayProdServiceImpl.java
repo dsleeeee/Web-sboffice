@@ -109,6 +109,13 @@ public class DayProdServiceImpl implements DayProdService {
             dayProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
+
+        // 분류 array 값 세팅
+        if (dayProdVO.getProdClassCd() != null && !"".equals(dayProdVO.getProdClassCd())) {
+            String[] prodCdList = dayProdVO.getProdClassCd().split(",");
+            dayProdVO.setArrProdClassCd(prodCdList);
+        }
+
         // 상품 array 값 세팅
         if (dayProdVO.getProdCds() != null && !"".equals(dayProdVO.getProdCds())) {
             String[] prodCdList = dayProdVO.getProdCds().split(",");
@@ -141,6 +148,12 @@ public class DayProdServiceImpl implements DayProdService {
             StoreVO storeVO = new StoreVO();
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(dayProdVO.getStoreCds(), 3900));
             dayProdVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 분류 array 값 세팅
+        if (dayProdVO.getProdClassCd() != null && !"".equals(dayProdVO.getProdClassCd())) {
+            String[] prodCdList = dayProdVO.getProdClassCd().split(",");
+            dayProdVO.setArrProdClassCd(prodCdList);
         }
 
         // 상품 array 값 세팅

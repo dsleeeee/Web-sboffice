@@ -46,10 +46,9 @@
                     <%-- 분류조회 --%>
                     <th><s:message code="prod.prodClass" /></th>
                     <td>
-                        <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left;"
-                                placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-                        <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
-                        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                        <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd3.jsp" flush="true">
+                            <jsp:param name="targetId" value="dayProdStoreSelectClass"/>
+                        </jsp:include>
                     </td>
                 </tr>
                 <tr>
@@ -535,7 +534,7 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20250429.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdStore/dayProdStore.js?ver=20250605.01" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/sale/prod/dayProd/saleAmtFgRemark.jsp">
     <c:param name="menuCd" value="${menuCd}"/>

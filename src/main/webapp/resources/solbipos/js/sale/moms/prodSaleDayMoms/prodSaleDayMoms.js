@@ -76,7 +76,7 @@ app.controller('prodSaleDayMomsCtrl', ['$scope', '$http', '$timeout', function (
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#prodSaleDayMomsSelectClassCd").val();
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -181,7 +181,7 @@ app.controller('prodSaleDayMomsCtrl', ['$scope', '$http', '$timeout', function (
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#prodSaleDayMomsSelectClassCd").val();
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;

@@ -67,6 +67,12 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
             prodSaleDayStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
+        // 분류 array 값 세팅
+        if (prodSaleDayStoreMomsVO.getProdClassCd() != null && !"".equals(prodSaleDayStoreMomsVO.getProdClassCd())) {
+            String[] prodCdList = prodSaleDayStoreMomsVO.getProdClassCd().split(",");
+            prodSaleDayStoreMomsVO.setArrProdClassCd(prodCdList);
+        }
+
         // 상품 array 값 세팅
         if (prodSaleDayStoreMomsVO.getProdCds() != null && !"".equals(prodSaleDayStoreMomsVO.getProdCds())) {
             String[] prodCdList = prodSaleDayStoreMomsVO.getProdCds().split(",");
@@ -101,6 +107,12 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
             prodSaleDayStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
+        // 분류 array 값 세팅
+        if (prodSaleDayStoreMomsVO.getProdClassCd() != null && !"".equals(prodSaleDayStoreMomsVO.getProdClassCd())) {
+            String[] prodCdList = prodSaleDayStoreMomsVO.getProdClassCd().split(",");
+            prodSaleDayStoreMomsVO.setArrProdClassCd(prodCdList);
+        }
+
         // 상품 array 값 세팅
         if (prodSaleDayStoreMomsVO.getProdCds() != null && !"".equals(prodSaleDayStoreMomsVO.getProdCds())) {
             String[] prodCdList = prodSaleDayStoreMomsVO.getProdCds().split(",");
@@ -133,6 +145,12 @@ public class ProdSaleDayStoreMomsServiceImpl implements ProdSaleDayStoreMomsServ
             StoreVO storeVO = new StoreVO();
             storeVO.setArrSplitStoreCd(CmmUtil.splitText(prodSaleDayStoreMomsVO.getStoreCds(), 3900));
             prodSaleDayStoreMomsVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        // 분류 array 값 세팅
+        if (prodSaleDayStoreMomsVO.getProdClassCd() != null && !"".equals(prodSaleDayStoreMomsVO.getProdClassCd())) {
+            String[] prodCdList = prodSaleDayStoreMomsVO.getProdClassCd().split(",");
+            prodSaleDayStoreMomsVO.setArrProdClassCd(prodCdList);
         }
 
         // 상품 array 값 세팅

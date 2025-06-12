@@ -121,7 +121,7 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#dayProdStoreSelectClassCd").val();
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -262,7 +262,7 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        params.prodClassCd = $("#dayProdStoreSelectClassCd").val();
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
