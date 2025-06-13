@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayMrpizza.xml
+    (미스터피자) 일별매출현황(채널별)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.06.11     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.day.dayMrpizza.service.impl.DayMrpizzaMapper">
+
+    <!-- 일별매출현황(채널별) 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL_DLVR, TB_SL_DAILY_TOTAL_ORDAPP
+        PARAM    : dayMrpizzaVO
+        COMMENTS : 일별매출현황(채널별) 리스트를 조회한다.
+    -->
+    <select id="getDayMrpizzaList" parameterType="dayMrpizzaVO" resultType="DefaultMap">
+        /* DayMrpizzaMapper.getDayMrpizzaList */
+        SELECT  TO_CHAR(TO_DATE(tsshp.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       tsshp.YOIL
+        ,       tsshp.STORE_CNT
+        ,       tsshp.TOT_SALE_AMT
+        ,       tsshp.TOT_DC_AMT
+        ,       tsshp.REAL_SALE_AMT
+        ,       tsshp.GA_AMT
+        ,       tsshp.VAT_AMT
+        ,       tsshp.TOT_TIP_AMT
+        ,       tsshp.TOT_ETC_AMT
+        ,       tsshp.CUP_AMT
+        ,       tsshp.BILL_CNT
+        ,       tsshp.BILL_UPRC
+        ,       tsshp.GEN_REAL_SALE_AMT
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tsshp.GEN_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS GEN_REAL_SALE_RATE
+        ,       tsshp.DLVR_REAL_SALE_AMT
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tsshp.DLVR_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS DLVR_REAL_SALE_RATE
+        ,       tsshp.PACK_REAL_SALE_AMT
+        ,       DECODE(tsshp.REAL_SALE_AMT, 0, 0, (tsshp.PACK_REAL_SALE_AMT / tsshp.REAL_SALE_AMT)*100) AS PACK_REAL_SALE_RATE
+        ,       <foreach collection="arrPayCol" item="item" separator="+">
+                    NVL(tsshp.PAY${item}, 0)
+                </foreach> +  NVL(tsshp.PAY02, 0) +  NVL(tsshp.PAY021, 0) AS TOT_PAY_AMT
+        ,       <foreach collection="arrPayCol" item="item" separator=",">
+                    tsshp.PAY${item} AS PAY${item}
+                </foreach>
+        ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                    tsshp.MPAY${item} AS MPAY${item}
+                </foreach>
+        ,       tsshp.PAY02 AS PAY02 -- 현금
+        ,       tsshp.PAY021 AS PAY021 -- 현금영수증
+        ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                    tsdto.REAL_SALE_CNT${item} AS REAL_SALE_CNT${item}
+        ,           tsdto.SALE_QTY${item} AS SALE_QTY${item}
+        ,           tsdto.REAL_SALE_AMT${item} AS REAL_SALE_AMT${item}
+                </foreach>
+        FROM    (   SELECT  SALE_DATE
+                    ,       TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
+                    ,       COUNT(DISTINCT tsdt.STORE_CD) AS STORE_CNT
+                    ,       <foreach collection="arrPayCol" item="item" separator=",">
+                                SUM(PAY_AMT_${item}) AS PAY${item}
+                            </foreach>
+                    ,       <foreach collection="arrMpayCol" item="item" separator=",">
+                                SUM(MPAY_AMT_${item}) AS MPAY${item}
+                            </foreach>
+                    ,       SUM(NON_CASH_AMT) AS PAY02
+                    ,       SUM(APPR_CASH_AMT) AS PAY021
+                    ,       SUM(TOT_SALE_AMT) AS TOT_SALE_AMT
+                    ,       SUM(TOT_DC_AMT) AS TOT_DC_AMT
+                    ,       SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
+                    ,       SUM(REAL_SALE_AMT) - SUM( VAT_AMT) AS GA_AMT
+                    ,       SUM(VAT_AMT) AS VAT_AMT
+                    ,       SUM(TOT_TIP_AMT) AS TOT_TIP_AMT
+                    ,       SUM(TOT_ETC_AMT) AS TOT_ETC_AMT
+                    ,       SUM(CUP_AMT) AS CUP_AMT
+                    ,       SUM(REAL_SALE_CNT) AS BILL_CNT
+                    ,       DECODE(SUM(REAL_SALE_CNT), 0, 0, ROUND(SUM(REAL_SALE_AMT) / SUM(REAL_SALE_CNT))) AS BILL_UPRC
+                    ,       SUM(CASE WHEN DLVR_ORDER_FG = '1' THEN REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT
+                    ,       SUM(CASE WHEN DLVR_ORDER_FG = '2' THEN REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT
+                    ,       SUM(CASE WHEN (DLVR_ORDER_FG = '3' OR DLVR_ORDER_FG = '4') THEN REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+                    FROM    TB_SL_DAILY_TOTAL_DLVR tsdt
+                    ,       TB_MS_STORE tms
+                    ,       TB_MS_STORE_INFO tmsi
+                    WHERE   tsdt.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                    AND     tsdt.STORE_CD = tms.STORE_CD
+                    AND     tsdt.STORE_CD = tmsi.STORE_CD (+)
+                    AND     tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdt.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    AND     tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP BY SALE_DATE
+                ) tsshp
+        ,       (   SELECT  SALE_DATE
+                    ,       <foreach collection="arrDlvrInFgCol" item="item" separator=",">
+                                SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_CNT END) AS REAL_SALE_CNT${item}
+                        ,       SUM(CASE WHEN DLVR_IN_FG = ${item} THEN SALE_QTY END) AS SALE_QTY${item}
+                        ,		SUM(CASE WHEN DLVR_IN_FG = ${item} THEN REAL_SALE_AMT END) AS REAL_SALE_AMT${item}
+                            </foreach>
+                    FROM    TB_SL_DAILY_TOTAL_ORDAPP tsdto
+                    ,       TB_MS_STORE tms
+                    ,       TB_MS_STORE_INFO tmsi
+                    WHERE   tsdto.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+                    AND     tsdto.STORE_CD = tms.STORE_CD
+                    AND     tsdto.STORE_CD = tmsi.STORE_CD (+)
+                    AND     tsdto.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND tsdto.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    AND     tsdto.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    GROUP BY SALE_DATE
+                ) tsdto
+        WHERE   tsdto.SALE_DATE  (+) = tsshp.SALE_DATE
+        ORDER
+        BY      tsshp.SALE_DATE DESC
+    </select>
+
+</mapper>

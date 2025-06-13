@@ -1190,6 +1190,15 @@
     <!-- 맘스터치 > 간소화화면 > 시간대별 상품매출(P.MIX 매장) -->
     <typeAlias alias="timeProdSalePmixStoreMomsVO" type="kr.co.solbipos.sale.moms.timeProdSalePmixStoreMoms.service.TimeProdSalePmixStoreMomsVO"/>
 
+    <!-- 미스터피자 > 매출분석 > 일별매출현황(채널별) -->
+    <typeAlias alias="dayMrpizzaVO" type="kr.co.solbipos.sale.day.dayMrpizza.service.DayMrpizzaVO"/>
+    <!-- 미스터피자 > 매출분석 > 월별매출현황(채널별) -->
+    <typeAlias alias="monthMrpizzaVO" type="kr.co.solbipos.sale.month.monthMrpizza.service.MonthMrpizzaVO"/>
+    <!-- 미스터피자 > 매출분석 > 일별시간대 -->
+    <typeAlias alias="dayTimeMrpizzaVO" type="kr.co.solbipos.sale.day.dayTimeMrpizza.service.DayTimeMrpizzaVO"/>
+    <!-- 미스터피자 > 매장분석 > 매장-일별매출현황(채널별) -->
+    <typeAlias alias="storeDayChannelMrpizzaVO" type="kr.co.solbipos.sale.store.storeDayChannelMrpizza.service.StoreDayChannelMrpizzaVO"/>
+
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
     <!-- 매출관리 > 배달현황 > 주문채널별현황 -->
