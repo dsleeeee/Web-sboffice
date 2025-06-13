@@ -1198,6 +1198,8 @@
     <typeAlias alias="dayTimeMrpizzaVO" type="kr.co.solbipos.sale.day.dayTimeMrpizza.service.DayTimeMrpizzaVO"/>
     <!-- 미스터피자 > 매장분석 > 매장-일별매출현황(채널별) -->
     <typeAlias alias="storeDayChannelMrpizzaVO" type="kr.co.solbipos.sale.store.storeDayChannelMrpizza.service.StoreDayChannelMrpizzaVO"/>
+    <!-- 미스터피자 > 매장분석 > 매장-월별매출현황(채널별) -->
+    <typeAlias alias="storeMonthChannelMrpizzaVO" type="kr.co.solbipos.sale.store.storeMonthChannelMrpizza.service.StoreMonthChannelMrpizzaVO"/>
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
