@@ -891,7 +891,8 @@
         <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
             SELECT p.HQ_OFFICE_CD,
                    p.PROD_CLASS_CD,
-                   p.PROD_CLASS_NM,
+                   -- p.PROD_CLASS_NM,
+                   FN_GET_PROD_CLASS_CD_NM_STR(p.HQ_OFFICE_CD, p.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
                    thcp.PROD_CD,
                    NVL(p.PROD_NM,'삭제된 메뉴') AS PROD_NM,
                    p.COST_UPRC,
@@ -956,7 +957,8 @@
         <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
             SELECT thp.HQ_OFFICE_CD,
                    thp.PROD_CLASS_CD,
-                   thpc.PROD_CLASS_NM,
+                   -- thpc.PROD_CLASS_NM,
+                   FN_GET_PROD_CLASS_CD_NM_STR(thp.HQ_OFFICE_CD, thp.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
                    thp.PROD_CD,
                    thp.PROD_NM,
                    thp.COST_UPRC,
@@ -1021,7 +1023,8 @@
         <if test='prodRegFg != null and prodRegFg.toString() == "Y"'>
             SELECT p.STORE_CD,
                    p.PROD_CLASS_CD,
-                   p.PROD_CLASS_NM,
+                   -- p.PROD_CLASS_NM,
+                   FN_GET_PROD_CLASS_CD_NM_STR(p.STORE_CD, p.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
                    tmcp.PROD_CD,
                    NVL(p.PROD_NM,'삭제된 메뉴') AS PROD_NM,
                    p.COST_UPRC,
@@ -1053,7 +1056,8 @@
         <if test='prodRegFg != null and prodRegFg.toString() == "N"'>
             SELECT tmp.STORE_CD,
                    tmp.PROD_CLASS_CD,
-                   tmpc.PROD_CLASS_NM,
+                   -- tmpc.PROD_CLASS_NM,
+                   FN_GET_PROD_CLASS_CD_NM_STR(tmpc.STORE_CD, tmpc.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
                    tmp.PROD_CD,
                    tmp.PROD_NM,
                    tmp.COST_UPRC,
