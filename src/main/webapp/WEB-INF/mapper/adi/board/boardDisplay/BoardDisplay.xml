@@ -205,7 +205,7 @@
             AND twuidv01.USER_ID (+)= twbi.USER_ID
             AND twbrh.BOARD_CD (+)= twbi.BOARD_CD
             AND twbrh.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
-            ORDER BY twbi.TOP_YN DESC, twbi.DISP_SEQ
+            ORDER BY NVL(twbi.TOP_YN, 'N') DESC, twbi.DISP_SEQ
                     <!-- 시스템 -->
                     <if test='orgnFg == "M"'>
                     ,   twbi.REG_DT DESC
@@ -250,7 +250,7 @@
         TB_WB_BOARD_INFO
         SET
         TOP_YN = #{topYn},
-        DISP_SEQ = (DECODE(#{topYn}, 'Y', (SELECT NVL(MAX(DISP_SEQ), 0)+1 FROM TB_WB_BOARD_INFO WHERE BOARD_CD = #{boardCd}), 0)),
+        DISP_SEQ = (DECODE(#{topYn}, 'Y', (SELECT NVL(MAX(DISP_SEQ), 0)+1 FROM TB_WB_BOARD_INFO WHERE BOARD_CD = #{boardCd}), null)),
         BACK_COLOR_YN = 'N',
         MOD_DT = #{modDt},
         MOD_ID = #{modId}
@@ -446,7 +446,7 @@
             AND twuidv01.USER_ID (+)= twbi.USER_ID
             AND twbrh.BOARD_CD (+)= twbi.BOARD_CD
             AND twbrh.BOARD_SEQ_NO (+)= twbi.BOARD_SEQ_NO
-            ORDER BY twbi.TOP_YN DESC, twbi.DISP_SEQ
+            ORDER BY NVL(twbi.TOP_YN, 'N') DESC, twbi.DISP_SEQ
                     <!-- 시스템 -->
                     <if test='orgnFg == "M"'>
                     ,   twbi.REG_DT DESC
