@@ -1993,7 +1993,7 @@
             ,       B.MAPPING_CD
             ,       'D'                                     AS PROC_FG
             ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')     AS MOD_DT
-            ,       '(D)'||#{userId}                        AS MOD_ID
+            ,       'D⊥'||#{userId}                        AS MOD_ID
             FROM TB_HQ_ERP_PROD_MAPPING B
             WHERE 1=1
             AND B.HQ_OFFICE_CD = #{hqOfficeCd}
