@@ -140,16 +140,25 @@
         </div>
         <div class="btnSet2">
           <c:if test="${orgnFg == 'MASTER'}">
+            <%-- 삭제 --%>
+            <span><a href="#" class="btn_red pd20" ng-click="delete()"><s:message code="cmm.delete" /></a></span>
             <%-- 수정 --%>
-            <span><a href="#" class="btn_blue pd20" ng-click="modify()"><s:message code="regist.modify" /></a></span>
+            <span><a href="#" class="btn_blue pd20" ng-click="modify()"><s:message code="cmm.edit" /></a></span>
           </c:if>
           <%-- 닫기 --%>
           <span><a href="#" class="btn_blue pd20" ng-click="close()"><s:message code="cmm.close" /></a></span>
         </div>
       </div>
     </div>
+    <%-- body --%>
+
   </div>
 </wj-popup>
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verInfoDtl.js?ver=20250115.01" charset="utf-8"></script>
 
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/verManage/verInfoDtl.js?ver=20250617.01" charset="utf-8"></script>
 
+<%-- 버전관리 삭제정보 팝업 --%>
+<c:import url="/WEB-INF/view/pos/confg/vermanage/verDelInfo.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

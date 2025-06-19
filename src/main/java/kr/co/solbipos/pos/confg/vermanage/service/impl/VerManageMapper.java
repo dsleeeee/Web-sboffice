@@ -67,4 +67,14 @@ public interface VerManageMapper {
 
     /** 버전 등록/삭제 후 패키지 호출 */
     void adverStoreRegInfo(ApplcStoreVO applcStore);
+
+    /** 버전관리 삭제정보 팝업 - 조회 */
+    DefaultMap<Object> getVerDelInfoList(VerInfoVO verInfoVO);
+
+    /** 버전관리 삭제정보 팝업 - 삭제 (TB_CM_POS_VERSN) */
+    int getVerDelInfoPosVersnDelete(VerInfoVO verInfoVO);
+    /** 버전관리 삭제정보 팝업 - 삭제 (TB_CM_POS_VERSN_INFO) */
+    int getVerDelInfoPosVersnInfoDelete(VerInfoVO verInfoVO);
+    /** 버전관리 삭제정보 팝업 - 삭제 (TB_CM_POS_VERSN_STORE) */
+    int getVerDelInfoPosVersnStoreDelete(VerInfoVO verInfoVO);
 }

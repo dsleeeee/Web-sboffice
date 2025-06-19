@@ -299,4 +299,53 @@ public class VerManageController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 버전관리 삭제정보 팝업 - 조회
+     *
+     * @param verInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 06. 17.
+     */
+    @RequestMapping(value = "/verDelInfo/getVerDelInfoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVerDelInfoList(VerInfoVO verInfoVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        DefaultMap<Object> result = verManageService.getVerDelInfoList(verInfoVO, sessionInfoVO);
+
+        DefaultMap<Object> resultMap = new DefaultMap<Object>();
+        resultMap.put("result", result);
+
+        return returnJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 버전관리 삭제정보 팝업 - 삭제
+     *
+     * @param verInfoVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 06. 17.
+     */
+    @RequestMapping(value = "/verDelInfo/getVerDelInfoDelete.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVerDelInfoDelete(@RequestBody VerInfoVO verInfoVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = verManageService.getVerDelInfoDelete(verInfoVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

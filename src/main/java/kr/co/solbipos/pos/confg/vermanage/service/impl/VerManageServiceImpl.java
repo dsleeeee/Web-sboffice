@@ -358,4 +358,31 @@ public class VerManageServiceImpl implements VerManageService {
     public String getPatchInfo(VerInfoVO verInfo) {
         return  verManageMapper.getPatchInfo(verInfo);
     }
+
+    /** 버전관리 삭제정보 팝업 - 조회 */
+    @Override
+    public DefaultMap<Object> getVerDelInfoList(VerInfoVO verInfoVO, SessionInfoVO sessionInfoVO) {
+
+        return verManageMapper.getVerDelInfoList(verInfoVO);
+    }
+
+    /** 버전관리 삭제정보 팝업 - 삭제 */
+    @Override
+    public int getVerDelInfoDelete(VerInfoVO verInfoVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        verInfoVO.setUserId(sessionInfoVO.getUserId());
+
+        // TB_CM_POS_VERSN
+        procCnt = verManageMapper.getVerDelInfoPosVersnDelete(verInfoVO);
+
+           // TB_CM_POS_VERSN_INFO
+        procCnt = verManageMapper.getVerDelInfoPosVersnInfoDelete(verInfoVO);
+
+        // TB_CM_POS_VERSN_STORE
+        procCnt = verManageMapper.getVerDelInfoPosVersnStoreDelete(verInfoVO);
+
+        return procCnt;
+    }
 }

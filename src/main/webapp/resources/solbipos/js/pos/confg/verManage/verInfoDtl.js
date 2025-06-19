@@ -167,6 +167,22 @@ app.controller('verDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     var scope = agrid.getScope("allStoreCtrl");
     scope.progDetailFg = $scope.version.progDetailFg;
   };
+  
+  // 삭제
+  $scope.delete = function(){
+    $scope.wjVerDelInfoLayer.show(true);
+    event.preventDefault();
+  };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+
+    // 버전관리 삭제정보 팝업 핸들러 추가
+    $scope.wjVerDelInfoLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('verDelInfoCtrl', scope.getSelectVersion());
+      }, 50)
+    });
+  });
 
 }]);
-

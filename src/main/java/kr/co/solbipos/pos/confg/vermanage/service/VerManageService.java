@@ -58,4 +58,10 @@ public interface VerManageService {
 
     /** 포스버전정보 상세내역 조회 */
     String getPatchInfo(VerInfoVO verInfo);
+
+    /** 버전관리 삭제정보 팝업 - 조회 */
+    DefaultMap<Object> getVerDelInfoList(VerInfoVO verInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 버전관리 삭제정보 팝업 - 삭제 */
+    int getVerDelInfoDelete(VerInfoVO verInfoVO, SessionInfoVO sessionInfoVO);
 }

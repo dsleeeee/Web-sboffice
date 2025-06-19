@@ -73,6 +73,9 @@ public class VerInfoVO extends PageVO {
      * S : 매장, 가맹점 */
     private String orgnFg;
 
+    /** 사용자ID */
+    private String userId;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -349,4 +352,8 @@ public class VerInfoVO extends PageVO {
     public void setOrgnFg(String orgnFg) {
         this.orgnFg = orgnFg;
     }
+
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) { this.userId = userId; }
 }

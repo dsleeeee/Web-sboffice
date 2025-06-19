@@ -585,5 +585,125 @@
         }
     </select>
 
-</mapper>
+    <!-- 버전관리 삭제정보 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getVerDelInfoList" parameterType="verInfoVO" resultType="DefaultMap">
+        /* VerManageMapper.getVerDelInfoList */
+        SELECT
+        (
+            SELECT COUNT(DISTINCT STORE_CD)
+            FROM TB_CM_POS_VERSN_STORE
+            WHERE VER_SER_NO = #{verSerNo}
+        ) AS APPLY_STORE_CNT,
+        (
+            SELECT COUNT(DISTINCT STORE_CD)
+            FROM TB_LG_MS_POS_LOG
+            WHERE POS_VER_NO = #{verSerNo}
+            AND PROC_DT BETWEEN TO_CHAR(ADD_MONTHS(SYSDATE, -1),'YYYYMMDD')||'000000' AND TO_CHAR(SYSDATE,'YYYYMMDD')||'235959'
+        ) AS MONTH_STORE_CNT,
+        (
+            SELECT COUNT(DISTINCT STORE_CD)
+            FROM TB_MS_POS
+            WHERE POS_VER_NO = #{verSerNo}
+        ) AS USE_STORE_CNT
+        FROM dual
+    </select>
 
+    <!-- 버전관리 삭제정보 팝업 - 삭제 (TB_CM_POS_VERSN) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getVerDelInfoPosVersnDelete" parameterType="verInfoVO">
+        /* VerManageMapper.getVerDelInfoPosVersnDelete */
+        MERGE INTO TB_CM_POS_VERSN A
+        USING
+        (
+            SELECT B.VER_SER_NO
+            ,       'D'                                     AS PROC_FG
+            ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')     AS MOD_DT
+            ,       'D⊥'||#{userId}                        AS MOD_ID
+            FROM TB_CM_POS_VERSN B
+            WHERE 1=1
+            AND B.VER_SER_NO = #{verSerNo}
+        ) S
+        ON
+        (
+                A.VER_SER_NO  =   S.VER_SER_NO
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET     A.MOD_DT        =   S.MOD_DT
+            ,       A.MOD_ID        =   S.MOD_ID
+            DELETE
+            WHERE   S.PROC_FG       =   'D'
+    </delete>
+
+    <!-- 버전관리 삭제정보 팝업 - 삭제 (TB_CM_POS_VERSN_INFO) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getVerDelInfoPosVersnInfoDelete" parameterType="verInfoVO">
+        /* VerManageMapper.getVerDelInfoPosVersnInfoDelete */
+        MERGE INTO TB_CM_POS_VERSN_INFO A
+        USING
+        (
+            SELECT B.VER_SER_NO
+            ,       'D'                                     AS PROC_FG
+            ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')     AS MOD_DT
+            ,       'D⊥'||#{userId}                        AS MOD_ID
+            FROM TB_CM_POS_VERSN_INFO B
+            WHERE 1=1
+            AND B.VER_SER_NO = #{verSerNo}
+        ) S
+        ON
+        (
+                A.VER_SER_NO  =   S.VER_SER_NO
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET     A.MOD_DT        =   S.MOD_DT
+            ,       A.MOD_ID        =   S.MOD_ID
+            DELETE
+            WHERE   S.PROC_FG       =   'D'
+    </delete>
+
+    <!-- 버전관리 삭제정보 팝업 - 삭제 (TB_CM_POS_VERSN_STORE) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getVerDelInfoPosVersnStoreDelete" parameterType="verInfoVO">
+        /* VerManageMapper.getVerDelInfoPosVersnStoreDelete */
+        MERGE INTO TB_CM_POS_VERSN_STORE A
+        USING
+        (
+            SELECT B.VER_SER_NO
+            ,       B.STORE_CD
+            ,       B.POS_NO
+            ,       'D'                                     AS PROC_FG
+            ,       TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')     AS MOD_DT
+            ,       'D⊥'||#{userId}                        AS MOD_ID
+            FROM TB_CM_POS_VERSN_STORE B
+            WHERE 1=1
+            AND B.VER_SER_NO = #{verSerNo}
+        ) S
+        ON
+        (
+                A.VER_SER_NO  =   S.VER_SER_NO
+        AND     A.STORE_CD    =   S.STORE_CD
+        AND     A.POS_NO      =   S.POS_NO
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET     A.MOD_DT        =   S.MOD_DT
+            ,       A.MOD_ID        =   S.MOD_ID
+            DELETE
+            WHERE   S.PROC_FG       =   'D'
+    </delete>
+
+</mapper>
