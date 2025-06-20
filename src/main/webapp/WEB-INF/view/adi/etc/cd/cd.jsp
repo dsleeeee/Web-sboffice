@@ -104,6 +104,9 @@
         <button class="btn_skyblue" id="btnSaveRepresent" style="display: none;" ng-click="save()">
           <s:message code="cmm.save" />
         </button>
+        <button class="btn_skyblue" id="btnExcelDownload" ng-click="excelDownload()">
+          <s:message code="cmm.excel.down" />
+        </button>
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -190,4 +193,4 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20240116.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/etc/cd/cd.js?ver=20250617.01" charset="utf-8"></script>

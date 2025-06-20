@@ -256,6 +256,7 @@ public class PopupServiceImpl implements PopupService{
                 if (hm.containsKey(prodClsVO.getpProdClassCd())) {
                     parent = hm.get(prodClsVO.getpProdClassCd());
                     parent.getItems().add(child);
+                    child.setParent(parent);
                 }
             }
         }
