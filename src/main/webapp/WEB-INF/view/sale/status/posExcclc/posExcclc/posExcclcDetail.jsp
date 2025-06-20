@@ -3,6 +3,8 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
+
 <!-- layer popup start -->
 	<wj-popup control="posExcclcDetailLayer" show-trigger="Click" hide-trigger="Click" style="display: none; width:900px;">
 
@@ -214,7 +216,24 @@
 							</th>
 							<td id="rPayAmtPrev"></td>
 						</tr>
-
+                        <tr>
+                            <th>
+                                <div class="impWrap"><s:message code="posExcclc.payAmtTrs"/></div>
+                            </th>
+                            <td id="rPayAmtTrs"></td>
+                            <th>
+                                <div class="impWrap"></div>
+                            </th>
+                            <td></td>
+                            <th>
+                                <div class="impWrap"></div>
+                            </th>
+                            <td></td>
+                            <th>
+                                <div class="impWrap"></div>
+                            </th>
+                            <td></td>
+                        </tr>
 
 						</tbody>
 					</table>
@@ -276,18 +295,44 @@
 							</th>
 							<td id="rDcAmtVcoupn"></td>
 							<th>
-								<div class="impWrap"></div>
+								<div class="impWrap"><s:message code="posExcclc.dcAmtVorder"/></div>
 							</th>
-							<td></td>
+                            <td id="rDcAmtVorder"></td>
 							<th>
-								<div class="impWrap"></div>
+								<div class="impWrap"><s:message code="posExcclc.dcAmtTrunc"/></div>
 							</th>
-							<td></td>
+                            <td id="rDcAmtTrunc"></td>
 							<th>
-								<div class="impWrap"></div>
+								<div class="impWrap"><s:message code="posExcclc.dcAmtSkt"/></div>
 							</th>
-							<td></td>
+                            <td id="rDcAmtSkt"></td>
 						</tr>
+                        <tr>
+                            <th>
+                                <div class="impWrap"><s:message code="posExcclc.dcAmtTmbcoupn"/></div>
+                            </th>
+                            <td id="rDcAmtTmbcoupn"></td>
+                            <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'}">
+                                <th>
+                                    <div class="impWrap"><s:message code="posExcclc.dcAmtCarddc"/></div>
+                                </th>
+                                <td id="rDcAmtCarddc"></td>
+                            </c:if>
+                            <c:if test="${hqOfficeCd != 'H0614' and hqOfficeCd != 'H0616'}">
+                                <th>
+                                    <div class="impWrap"></div>
+                                </th>
+                                <td></td>
+                            </c:if>
+                            <th>
+                                <div class="impWrap"></div>
+                            </th>
+                            <td></td>
+                            <th>
+                                <div class="impWrap"></div>
+                            </th>
+                            <td></td>
+                        </tr>
 						</tbody>
 					</table>
 					<!-- //할인내역 end -->
@@ -519,6 +564,7 @@
 
 <script>
 
+    var hqOfficeCd = "${hqOfficeCd}";
 	var app = agrid.getApp();
 
 	/**********************************************************************
@@ -598,6 +644,7 @@
 		    $("#rPayAmtEmpCard").text(numComma(data.payAmtEmpCard));
 		    $("#rPayAmtEmpTemporary").text(numComma(data.payAmtEmpTemporary));
 		    $("#rPayAmtPrev").text(numComma(data.payAmtPrev));
+            $("#rPayAmtTrs").text(numComma(data.payAmtTrs));
 			
 		    $("#rNonsaleCnt1").text(numComma(data.nonsaleCnt1));
 		    $("#rNonsaleAmt1").text(numComma(data.nonsaleAmt1));
@@ -623,6 +670,11 @@
 		    $("#rDcAmtSite").text(numComma(data.dcAmtSite));
 
 		    $("#rDcAmtVcoupn").text(numComma(data.dcAmtVcoupn));
+            $("#rDcAmtVorder").text(numComma(data.dcAmtVorder));
+            $("#rDcAmtTrunc").text(numComma(data.dcAmtTrunc));
+            $("#rDcAmtSkt").text(numComma(data.dcAmtSkt));
+            $("#rDcAmtTmbcoupn").text(numComma(data.dcAmtTmbcoupn));
+            $("#rDcAmtCarddc").text(numComma(data.dcAmtCarddc));
 
 		    $("#rAccntInAmt").text(numComma(data.accntInAmt));
 		    $("#rAccntOutAmt").text(numComma(data.accntOutAmt));

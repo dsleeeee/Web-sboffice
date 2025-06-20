@@ -67,6 +67,9 @@
                     <if test='storeCdQuery != null and storeCdQuery != ""'>
                         AND STORE_CD IN (${storeCdQuery})
                     </if>
+                    <if test="hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616'">
+                        AND PAY_CLASS_CD NOT IN ('001', '002')
+                    </if>
                 ) tmc
         ,       TB_MS_PRODUCT tmp
         WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
@@ -553,6 +556,156 @@
         AND     tcn.NMCODE_CD       = #{dcCd}
         ORDER
         BY      tcn.NMCODE_CD
+    </select>
+
+    <!-- 매출공통팝업 - 미스터피자 제휴할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 미스터피자 제휴할인 상세 리스트를 조회한다.
+    -->
+    <select id="getPartnerMrpizzaDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getPartnerMrpizzaDcList */
+        SELECT  tmc.COUPN_NM
+        ,       tssd.PROD_CD
+        ,       tmp.PROD_NM
+        ,       tssd.SALE_UPRC
+        ,       tssd.SALE_QTY
+        ,       tssdd.DC_AMT
+        FROM    (
+                       SELECT B.PAY_CLASS_CD || B.COUPN_CD AS R_DC_REASON_CD
+                       ,      A.*
+                       FROM TB_SL_SALE_DTL_DC A
+                       , TB_SL_SALE_PAY_COUPN B
+                       WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND A.STORE_CD IN (${storeCdQuery})
+                        </if>
+                       AND B.PAY_CLASS_CD IN ('001')
+                       AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                       AND B.STORE_CD (+)= A.STORE_CD
+                       AND B.SALE_DATE (+)= A.SALE_DATE
+                       AND B.POS_NO (+)= A.POS_NO
+                       AND B.BILL_NO (+)= A.BILL_NO
+                       AND B.DC_AMT > 0
+                ) tssdd
+        ,       TB_SL_SALE_DTL tssd
+        ,       (   SELECT  STORE_CD
+                    ,       PAY_CLASS_CD||COUPN_CD AS COUPN_CD
+                    ,       COUPN_NM
+                    FROM    TB_MS_COUPON
+                    WHERE   STORE_CD  IN  ( SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} )
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND STORE_CD IN (${storeCdQuery})
+                    </if>
+                        AND PAY_CLASS_CD IN ('001')
+                ) tmc
+        ,       TB_MS_PRODUCT tmp
+        WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tssdd.SALE_DATE           =   #{saleDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssdd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR  tssdd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tssdd.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tssdd.BILL_NO = #{billNo}
+        </if>
+        AND     tssdd.DC_CD               =   #{dcCd}
+        AND     tssd.HQ_OFFICE_CD     (+) =   tssdd.HQ_OFFICE_CD
+        AND     tssd.STORE_CD         (+) =   tssdd.STORE_CD
+        AND     tssd.SALE_DATE        (+) =   tssdd.SALE_DATE
+        AND     tssd.POS_NO           (+) =   tssdd.POS_NO
+        AND     tssd.BILL_NO          (+) =   tssdd.BILL_NO
+        AND     tssd.BILL_DTL_NO      (+) =   tssdd.BILL_DTL_NO
+        AND     tmc.STORE_CD              =   tssdd.STORE_CD
+        AND     tmc.COUPN_CD              =   tssdd.R_DC_REASON_CD
+        AND     tmp.STORE_CD              =   tssd.STORE_CD
+        AND     tmp.PROD_CD               =   tssd.PROD_CD
+        ORDER
+        BY      tmc.COUPN_NM, tssd.PROD_CD
+    </select>
+
+    <!-- 매출공통팝업 - 미스터피자 카드사할인 상세 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_DTL_DC, TB_SL_SALE_DTL, TB_MS_COUPON, TB_MS_PRODUCT
+        PARAM    : dcInfoVO
+        COMMENTS : 매출공통팝업 - 미스터피자 카드사할인 상세 리스트를 조회한다.
+    -->
+    <select id="getCarddcDcList" parameterType="dcInfoVO" resultType="DefaultMap">
+        /* USE : DcInfoMapper.getCarddcDcList */
+        SELECT  tmc.COUPN_NM
+        ,       tssd.PROD_CD
+        ,       tmp.PROD_NM
+        ,       tssd.SALE_UPRC
+        ,       tssd.SALE_QTY
+        ,       tssdd.DC_AMT
+        FROM    (
+                       SELECT B.PAY_CLASS_CD || B.COUPN_CD AS R_DC_REASON_CD
+                       ,      A.*
+                       FROM TB_SL_SALE_DTL_DC A
+                       , TB_SL_SALE_PAY_COUPN B
+                       WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                AND A.STORE_CD IN (${storeCdQuery})
+                        </if>
+                       AND B.PAY_CLASS_CD IN ('002')
+                       AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                       AND B.STORE_CD (+)= A.STORE_CD
+                       AND B.SALE_DATE (+)= A.SALE_DATE
+                       AND B.POS_NO (+)= A.POS_NO
+                       AND B.BILL_NO (+)= A.BILL_NO
+                       AND B.DC_AMT > 0
+                ) tssdd
+        ,       TB_SL_SALE_DTL tssd
+        ,       (   SELECT  STORE_CD
+                    ,       PAY_CLASS_CD||COUPN_CD AS COUPN_CD
+                    ,       COUPN_NM
+                    FROM    TB_MS_COUPON
+                    WHERE   STORE_CD  IN  ( SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd} )
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND STORE_CD IN (${storeCdQuery})
+                    </if>
+                        AND PAY_CLASS_CD IN ('002')
+                ) tmc
+        ,       TB_MS_PRODUCT tmp
+        WHERE   tssdd.HQ_OFFICE_CD        =   #{hqOfficeCd}
+        AND     tssdd.SALE_DATE           =   #{saleDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssdd.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='orgnFg != null and orgnFg == "H"'>
+            AND (
+                    'N' = (SELECT NVL(MAX(ENVST_VAL), 'N') FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '0001')
+                    OR  tssdd.STORE_CD IN (SELECT STORE_CD FROM TB_HQ_EMPLOYEE_STORE_V08 WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND EMP_NO = #{empNo})
+                )
+        </if>
+        <if test='posNo != null and posNo != ""'>
+            AND tssdd.POS_NO = #{posNo}
+        </if>
+        <if test='billNo != null and billNo != ""'>
+            AND tssdd.BILL_NO = #{billNo}
+        </if>
+        AND     tssdd.DC_CD               =   #{dcCd}
+        AND     tssd.HQ_OFFICE_CD     (+) =   tssdd.HQ_OFFICE_CD
+        AND     tssd.STORE_CD         (+) =   tssdd.STORE_CD
+        AND     tssd.SALE_DATE        (+) =   tssdd.SALE_DATE
+        AND     tssd.POS_NO           (+) =   tssdd.POS_NO
+        AND     tssd.BILL_NO          (+) =   tssdd.BILL_NO
+        AND     tssd.BILL_DTL_NO      (+) =   tssdd.BILL_DTL_NO
+        AND     tmc.STORE_CD              =   tssdd.STORE_CD
+        AND     tmc.COUPN_CD              =   tssdd.R_DC_REASON_CD
+        AND     tmp.STORE_CD              =   tssd.STORE_CD
+        AND     tmp.PROD_CD               =   tssd.PROD_CD
+        ORDER
+        BY      tmc.COUPN_NM, tssd.PROD_CD
     </select>
 
 </mapper>

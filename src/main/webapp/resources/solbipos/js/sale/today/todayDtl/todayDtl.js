@@ -442,19 +442,51 @@ app.controller('todayDtlDetailCtrl', ['$scope', '$http', '$timeout', function ($
           }
         }
 
-        // 할인
-        for (var i = 0; i < dcColList.length; i++) {
-          if (col.binding === ("dc" + dcColList[i].dcCd)) {
-            // var item = s.rows[e.row].dataItem;
+        // 미스터 피자 할인팝업 분리
+        if (hqOfficeCd === "H0614" || hqOfficeCd === "H0616") {
+          // 할인
+          for (var i = 0; i < dcColList.length; i++) {
+              if (col.binding === ("dc" + dcColList[i].dcCd)) {
+                  // var item = s.rows[e.row].dataItem;
 
-            // 07:포장할인, 08:현장할인이 아닌 경우
-            if (dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08') {
-              // 값이 있으면 링크
-              if (nvl(selectedRow[("dc" + dcColList[i].dcCd)], '') !== '') {
-                params.dcCd = dcColList[i].dcCd;
-                $scope._broadcast(dcColList[i].dcMethod.toLowerCase() + 'DcCtrl', params);
+                  // 07:포장할인, 08:현장할인, 04:제휴할인, 14:카드사할인 이 아닌 경우
+                  if (dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08' && dcColList[i].dcCd !== '04' && dcColList[i].dcCd !== '14') {
+                      // 값이 있으면 링크
+                      if (nvl(selectedRow[("dc" + dcColList[i].dcCd)], '') !== '') {
+                          params.dcCd = dcColList[i].dcCd;
+                          $scope._broadcast(dcColList[i].dcMethod.toLowerCase() + 'DcCtrl', params);
+                      }
+                  }
+
+                  // 04:제휴사할인, 14:카드사할인 미스터피자 전용 팝업 사용
+                  if (dcColList[i].dcCd == '04'){
+                      params.dcCd = dcColList[i].dcCd;
+                      $scope.wjPartnerMrpizzaDcLayer.show(true);
+                      $scope._broadcast('partnerMrpizzaDcCtrl', params);
+                  }
+
+                  if (dcColList[i].dcCd == '14'){
+                      params.dcCd = dcColList[i].dcCd;
+                      $scope.wjCarddcDcLayer.show(true);
+                      $scope._broadcast('carddcDcCtrl', params);
+                  }
               }
-            }
+          }
+        } else {
+          // 할인
+          for (var i = 0; i < dcColList.length; i++) {
+              if (col.binding === ("dc" + dcColList[i].dcCd)) {
+                  // var item = s.rows[e.row].dataItem;
+
+                  // 07:포장할인, 08:현장할인이 아닌 경우
+                  if (dcColList[i].dcCd !== '07' && dcColList[i].dcCd !== '08') {
+                      // 값이 있으면 링크
+                      if (nvl(selectedRow[("dc" + dcColList[i].dcCd)], '') !== '') {
+                          params.dcCd = dcColList[i].dcCd;
+                          $scope._broadcast(dcColList[i].dcMethod.toLowerCase() + 'DcCtrl', params);
+                      }
+                  }
+              }
           }
         }
 

@@ -344,4 +344,50 @@ public class DcInfoController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 매출공통팝업 - 미스터피자 제휴할인 상세 리스트 조회
+     * @param request
+     * @param response
+     * @param model
+     * @param dcInfoVO
+     * @return
+     * @author  이다솜
+     * @since   2025. 06. 20
+     */
+    @RequestMapping(value = "/partnerMrpizzaDc/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getPartnerMrpizzaDcList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DcInfoVO dcInfoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dcInfoService.getPartnerMrpizzaDcList(dcInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
+    }
+
+    /**
+     * 매출공통팝업 - 미스터피자 카드사할인 상세 리스트 조회
+     * @param request
+     * @param response
+     * @param model
+     * @param dcInfoVO
+     * @return
+     * @author  이다솜
+     * @since   2025. 06. 20
+     */
+    @RequestMapping(value = "/carddcDc/list.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCarddcDcList(HttpServletRequest request, HttpServletResponse response,
+        Model model, DcInfoVO dcInfoVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = dcInfoService.getCarddcDcList(dcInfoVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dcInfoVO);
+    }
+
+
 }

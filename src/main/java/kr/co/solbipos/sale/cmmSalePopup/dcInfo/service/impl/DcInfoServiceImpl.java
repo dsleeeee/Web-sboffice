@@ -207,4 +207,39 @@ public class DcInfoServiceImpl implements DcInfoService {
         return dcInfoMapper.getCoupnDcNm(dcInfoVO);
     }
 
+    /** 매출공통팝업 - 미스터피자 제휴할인 상세 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getPartnerMrpizzaDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if (!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcInfoVO.getStoreCd(), 3900));
+            dcInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+        return dcInfoMapper.getPartnerMrpizzaDcList(dcInfoVO);
+    }
+
+    /** 매출공통팝업 - 미스터피자 카드사할인 상세 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getCarddcDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO) {
+        dcInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        dcInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        dcInfoVO.setEmpNo(sessionInfoVO.getEmpNo());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            dcInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        if (!StringUtil.getOrBlank(dcInfoVO.getStoreCd()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcInfoVO.getStoreCd(), 3900));
+            dcInfoVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+        return dcInfoMapper.getCarddcDcList(dcInfoVO);
+    }
 }

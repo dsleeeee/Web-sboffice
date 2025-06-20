@@ -60,7 +60,6 @@ app.controller('storeMonthChannelMrpizzaCtrl', ['$scope', '$http', '$timeout', f
         dataItem.storeCnt     = messages["month.storeCnt"];
         dataItem.storeCd     = messages["month.storeCd"];
         dataItem.storeNm     = messages["month.storeNm"];
-        dataItem.storeCnt    = messages["month.storeCnt"];
         /*dataItem.brand       = messages["dayProd.brand"];
         dataItem.momsTeam    = messages["cmm.moms.momsTeam"];
         dataItem.momsAcShop  = messages["cmm.moms.momsAcShop"];*/
@@ -397,7 +396,6 @@ app.controller('storeMonthChannelMrpizzaExcelCtrl', ['$scope', '$http', '$timeou
         dataItem.storeCnt     = messages["month.storeCnt"];
         dataItem.storeCd     = messages["month.storeCd"];
         dataItem.storeNm     = messages["month.storeNm"];
-        dataItem.storeCnt    = messages["month.storeCnt"];
         /*dataItem.brand       = messages["dayProd.brand"];
         dataItem.momsTeam    = messages["cmm.moms.momsTeam"];
         dataItem.momsAcShop  = messages["cmm.moms.momsAcShop"];*/

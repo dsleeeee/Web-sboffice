@@ -1316,7 +1316,7 @@
                     ,       COUPN_APPLY_FG
                     ,       COUPN_TARGET_FG
                     ,       COUPN_PROD_FG
-                    ,       'N'                 AS USE_YN
+                    ,       USE_YN              AS USE_YN
                     ,       #{regDt}            AS REG_DT
                     ,       #{regId}            AS REG_ID
                     ,       #{modDt}            AS MOD_DT

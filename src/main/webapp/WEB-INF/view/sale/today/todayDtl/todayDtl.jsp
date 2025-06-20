@@ -5,6 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="baseUrl" value="/sale/today/todayDtl/todayDtl/"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
   <div id="todayDtlView" class="subCon" style="display: none;padding: 10px 20px 40px;" ng-controller="todayDtlCtrl">
       <div class="searchBar flddUnfld">
@@ -202,6 +203,9 @@
 
   </div>
 <script type="text/javascript">
+
+  var hqOfficeCd = "${hqOfficeCd}";
+
   var payColList = [];
   var dcColList  = [];
   <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
@@ -228,7 +232,7 @@
   var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/today/todayDtl/todayDtl.js?ver=20250620.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">
@@ -382,6 +386,18 @@
 
 <%-- 스마트 오더 할인 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/vorderDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 미스터피자 제휴할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/partnerMrpizzaDc.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 미스터피자 카드사할인 상세 레이어 --%>
+<c:import url="/WEB-INF/view/sale/cmmSalePopup/dcInfo/carddcDc.jsp">
   <c:param name="menuCd" value="${menuCd}"/>
   <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

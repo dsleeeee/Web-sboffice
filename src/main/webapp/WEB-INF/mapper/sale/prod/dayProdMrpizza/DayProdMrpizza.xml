@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DayProdMrpizza.xml
+    (미스터피자) 일별상품매출현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.06.16     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.prod.dayProdMrpizza.service.impl.DayProdMrpizzaMapper">
+
+    <!-- 일별상품매출현황 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD_SDSEL
+        PARAM    : dayProdMrpizzaVO
+        COMMENTS : 일별상품매출현황 리스트를 조회한다.
+    -->
+    <select id="getDayProdMrpizzaList" parameterType="dayProdMrpizzaVO" resultType="DefaultMap">
+        /* DayProdMrpizzaMapper.getDayProdMrpizzaList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+            TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
+            TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
+        </if>
+        tmpcv.L_CLASS_CD,
+        tmpcv.L_CLASS_NM,
+        tmpcv.M_CLASS_CD,
+        tmpcv.M_CLASS_NM,
+        tmpcv.S_CLASS_CD,
+        tmpcv.S_CLASS_NM,
+        tsdps.SIDE_PROD_CD AS PROD_CD,
+        tmp.PROD_NM,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) AS SIDE_PROD_CD,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY2,
+        SUM(tsdps.TOT_SALE_QTY) AS SALE_QTY3,
+        SUM(tsdps.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tsdps.TOT_DC_AMT) AS DC_AMT,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
+        SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT3
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "0"'>
+            TB_SL_DAILY_PROD_SDSEL tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V01 tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V02 tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "3"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V03 tsdps,
+        </if>
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT tmps2, -- 사이드
+        TB_MS_PRODUCT_CLASS_V03 tmpcv
+        WHERE 1=1
+        AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdps.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND tmps2.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCds != null and prodCds != ""'>
+            AND
+            <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                tmps2.PROD_CD = #{item}
+            </foreach>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmps2.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+            AND tsdps.SEL_TYPE_FG IN ('N', 'P')
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+            AND tsdps.SEL_TYPE_FG IN ('N', 'S')
+        </if>
+        AND tms.STORE_CD = tsdps.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND tmp.STORE_CD = tsdps.STORE_CD
+        AND tmp.PROD_CD = tsdps.PROD_CD
+        AND tmps2.STORE_CD = tsdps.STORE_CD
+        AND tmps2.PROD_CD = tsdps.PROD_CD
+        AND tmpcv.STORE_CD = tmps2.STORE_CD
+        AND tmpcv.PROD_CLASS_CD = tmps2.PROD_CLASS_CD
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            GROUP BY tsdps.SALE_DATE, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.SALE_DATE, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            GROUP BY L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+        </if>
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 일별상품매출현황 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_PROD_SDSEL
+        PARAM    : dayProdMrpizzaVO
+        COMMENTS : 일별상품매출현황 엑셀다운로드를 조회한다.
+    -->
+    <select id="getDayProdMrpizzaExcelList" parameterType="dayProdMrpizzaVO" resultType="DefaultMap">
+        /* DayProdMrpizzaMapper.getDayProdMrpizzaExcelList */
+        SELECT
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE,
+            TO_CHAR(TO_DATE(tsdps.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL,
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            TO_CHAR(TO_DATE(#{startDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_FROM,
+            TO_CHAR(TO_DATE(#{endDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS DAY_TO,
+        </if>
+        tmpcv.L_CLASS_CD,
+        tmpcv.L_CLASS_NM,
+        tmpcv.M_CLASS_CD,
+        tmpcv.M_CLASS_NM,
+        tmpcv.S_CLASS_CD,
+        tmpcv.S_CLASS_NM,
+        tsdps.SIDE_PROD_CD AS PROD_CD,
+        tmp.PROD_NM,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'P' THEN '사이드모상품' WHEN 'S' THEN '사이드상품' WHEN 'N' THEN '일반판매상품' END) AS SEL_TYPE_FG,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) AS SIDE_PROD_CD,
+        (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN 'ㅤ- ▶ ' || tmps2.PROD_NM ELSE tmps2.PROD_NM END) AS SIDE_PROD_NM,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.TOT_SALE_QTY END) AS SALE_QTY2,
+        SUM(tsdps.TOT_SALE_QTY) AS SALE_QTY3,
+        SUM(tsdps.TOT_SALE_AMT) AS TOT_SALE_AMT,
+        SUM(tsdps.TOT_DC_AMT) AS DC_AMT,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'P' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT1,
+        SUM(CASE WHEN tsdps.SEL_TYPE_FG = 'N' OR tsdps.SEL_TYPE_FG = 'S' THEN tsdps.REAL_SALE_AMT END) AS REAL_SALE_AMT2,
+        SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT3
+        FROM
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "0"'>
+            TB_SL_DAILY_PROD_SDSEL tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "1"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V01 tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "2"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V02 tsdps,
+        </if>
+        <if test='saleAmtFg != null and saleAmtFg != "" and saleAmtFg == "3"'>
+            TB_SL_DAILY_PROD_SDSEL_MOMS_V03 tsdps,
+        </if>
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi,
+        TB_MS_PRODUCT tmp,
+        TB_MS_PRODUCT tmps2, -- 사이드
+        TB_MS_PRODUCT_CLASS_V03 tmpcv
+        WHERE 1=1
+        AND tsdps.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsdps.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND tsdps.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND tmps2.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND tmps2.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND tmps2.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='prodCds != null and prodCds != ""'>
+            AND
+            <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
+                tmps2.PROD_CD = #{item}
+            </foreach>
+        </if>
+        <if test='prodHqBrandCd != null and prodHqBrandCd != ""'>
+            AND tmps2.HQ_BRAND_CD = #{prodHqBrandCd} -- 상품브랜드 선택일때
+        </if>
+        <if test='prodHqBrandCd == null or prodHqBrandCd == ""'>
+            <if test='userBrands != null and userBrands != ""'>
+                -- 상품브랜드 전체일때
+                AND tmps2.HQ_BRAND_CD IN
+                <foreach collection="userBrandList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "1"'>
+            AND tsdps.SEL_TYPE_FG IN ('N', 'P')
+        </if>
+        <if test='prodOption != null and prodOption != "" and prodOption == "2"'>
+            AND tsdps.SEL_TYPE_FG IN ('N', 'S')
+        </if>
+        AND tms.STORE_CD = tsdps.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        AND tmp.STORE_CD = tsdps.STORE_CD
+        AND tmp.PROD_CD = tsdps.PROD_CD
+        AND tmps2.STORE_CD = tsdps.STORE_CD
+        AND tmps2.PROD_CD = tsdps.PROD_CD
+        AND tmpcv.STORE_CD = tmps2.STORE_CD
+        AND tmpcv.PROD_CLASS_CD = tmps2.PROD_CLASS_CD
+        <if test='dayOption != null and dayOption != "" and dayOption == "1"'>
+            GROUP BY tsdps.SALE_DATE, L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.SALE_DATE, tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+        </if>
+        <if test='dayOption != null and dayOption != "" and dayOption == "2"'>
+            GROUP BY L_CLASS_CD, L_CLASS_NM, M_CLASS_CD, M_CLASS_NM, S_CLASS_CD, S_CLASS_NM, tsdps.PROD_CD, tmp.PROD_NM, tsdps.SEL_TYPE_FG, tsdps.SIDE_PROD_CD, tmps2.PROD_NM
+            ORDER BY tsdps.SIDE_PROD_CD, (CASE tsdps.SEL_TYPE_FG WHEN 'S' THEN tsdps.PROD_CD END) DESC
+        </if>
+    </select>
+
+</mapper>

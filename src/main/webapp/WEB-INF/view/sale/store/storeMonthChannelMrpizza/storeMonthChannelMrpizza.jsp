@@ -41,8 +41,8 @@
                     </div>
                 </td>
                 <%-- 옵션 --%>
-                <th><s:message code="storeMonthChannel.option"/></th>
-                <td>
+                <th style="display: none;"><s:message code="storeMonthChannel.option"/></th>
+                <td style="display: none;">
                     <div class="sb-select">
                         <wj-combo-box
                                 id="option"
@@ -100,11 +100,11 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="month.yearMonth"/>" binding="yearMonth" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeMonthChannel.branchCd"/>" binding="branchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="storeMonthChannel.branchNm"/>" binding="branchNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="month.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="left" visible="false"></wj-flex-grid-column>
+                    <%--<wj-flex-grid-column header="<s:message code="storeMonthChannel.branchCd"/>" binding="branchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="storeMonthChannel.branchNm"/>" binding="branchNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>--%>
+                    <wj-flex-grid-column header="<s:message code="month.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="month.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                     <%--<wj-flex-grid-column header="<s:message code="dayProd.brand"/>" binding="brand" width="100" align="left" is-read-only="true" visible="false" data-map="brandDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsTeam"/>" binding="momsTeam" width="100" align="left" is-read-only="true" visible="false" data-map="momsTeamDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="cmm.moms.momsAcShop"/>" binding="momsAcShop" width="100" align="left" is-read-only="true" visible="false" data-map="momsAcShopDataMap"></wj-flex-grid-column>--%>
@@ -172,11 +172,11 @@
 
                 <!-- define columns -->
                 <wj-flex-grid-column header="<s:message code="month.yearMonth"/>" binding="yearMonth" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeMonthChannel.branchCd"/>" binding="branchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="storeMonthChannel.branchNm"/>" binding="branchNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="month.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="month.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="month.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="left" visible="false"></wj-flex-grid-column>
+                <%--<wj-flex-grid-column header="<s:message code="storeMonthChannel.branchCd"/>" binding="branchCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="storeMonthChannel.branchNm"/>" binding="branchNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>--%>
+                <wj-flex-grid-column header="<s:message code="month.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="month.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="month.storeNm"/>" binding="storeNm" width="100" is-read-only="true" align="left"></wj-flex-grid-column>
                 <%--<wj-flex-grid-column header="<s:message code="dayProd.brand"/>" binding="brand" width="100" align="left" is-read-only="true" visible="false" data-map="brandDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.moms.momsTeam"/>" binding="momsTeam" width="100" align="left" is-read-only="true" visible="false" data-map="momsTeamDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.moms.momsAcShop"/>" binding="momsAcShop" width="100" align="left" is-read-only="true" visible="false" data-map="momsAcShopDataMap"></wj-flex-grid-column>--%>
@@ -344,7 +344,7 @@
     var arrDlvrInFgCol = dlvrInFgCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeMonthChannelMrpizza/storeMonthChannelMrpizza.js?ver=20250610.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/store/storeMonthChannelMrpizza/storeMonthChannelMrpizza.js?ver=20250620.01" charset="utf-8"></script>
 
 <%-- 팝업 추후 개발 --%>
 <%-- 팝업 레이어 시작 --%>

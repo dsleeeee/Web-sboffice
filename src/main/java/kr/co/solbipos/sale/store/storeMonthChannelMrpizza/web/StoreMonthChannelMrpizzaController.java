@@ -69,7 +69,7 @@ public class StoreMonthChannelMrpizzaController {
         this.cmmCodeUtil = cmmCodeUtil;
     }
 
-    @RequestMapping(value = "/storeMonthChannel/view.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/storeMonthChannelMrpizza/view.sb", method = RequestMethod.GET)
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         DayVO dayVO = new DayVO();

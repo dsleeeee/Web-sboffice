@@ -44,4 +44,10 @@ public interface DcInfoService {
 
     /** 매출공통팝업 - 쿠폰할인 명칭 조회 */
     DefaultMap<String> getCoupnDcNm(DcInfoVO dcInfoVO, SessionInfoVO sessionInfo);
+
+    /** 매출공통팝업 - 미스터피자 제휴할인 상세 리스트 조회 */
+    List<DefaultMap<String>> getPartnerMrpizzaDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 매출공통팝업 - 미스터피자 카드사할인 상세 리스트 조회 */
+    List<DefaultMap<String>> getCarddcDcList(DcInfoVO dcInfoVO, SessionInfoVO sessionInfoVO);
 }
