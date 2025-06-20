@@ -18,9 +18,10 @@ var msgTypeDataMapData = [
     {"name":"SMS","value":"1"},
     {"name":"LMS","value":"2"},
     {"name":"MMS","value":"3"},
-    {"name":"알림톡_SMS","value":"4"},
-    {"name":"알림톡_LMS","value":"5"},
-    {"name":"알림톡_MMS","value":"6"}
+    {"name":"알림톡","value":"4"},
+    {"name":"알림톡_SMS","value":"5"},
+    {"name":"알림톡_LMS","value":"6"},
+    {"name":"알림톡_MMS","value":"7"}
 ];
 // 예약여부
 var reserveYnDataMapData = [

@@ -57,15 +57,27 @@ app.controller('alimtalkDaySendStatusCtrl', ['$scope', '$http', '$timeout', func
 
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.orgnCd = messages["alimtalkDaySendStatus.orgnCd"];
-        dataItem.orgnNm = messages["alimtalkDaySendStatus.orgnNm"];
-        dataItem.smsDate = messages["alimtalkDaySendStatus.smsDate"];
-        dataItem.smsChargeAmt = messages["alimtalkDaySendStatus.smsChargeAmt"];
-        dataItem.smsChargeCnt = messages["alimtalkDaySendStatus.smsChargeCnt"];
-        dataItem.alkSendQty = messages["alimtalkDaySendStatus.alk"];
-        dataItem.alkWaitQty = messages["alimtalkDaySendStatus.alk"];
-        dataItem.alkSuccessQty = messages["alimtalkDaySendStatus.alk"];
-        dataItem.alkFailQty = messages["alimtalkDaySendStatus.alk"];
+        dataItem.orgnCd             = messages["alimtalkDaySendStatus.orgnCd"];
+        dataItem.orgnNm             = messages["alimtalkDaySendStatus.orgnNm"];
+        dataItem.smsDate            = messages["alimtalkDaySendStatus.smsDate"];
+        dataItem.smsChargeAmt       = messages["alimtalkDaySendStatus.smsChargeAmt"];
+        dataItem.smsChargeCnt       = messages["alimtalkDaySendStatus.smsChargeCnt"];
+        dataItem.alkSendQty         = messages["alimtalkDaySendStatus.alk"];
+        dataItem.alkWaitQty         = messages["alimtalkDaySendStatus.alk"];
+        dataItem.alkSuccessQty      = messages["alimtalkDaySendStatus.alk"];
+        dataItem.alkFailQty         = messages["alimtalkDaySendStatus.alk"];
+        dataItem.alkSmsSendQty      = messages["alimtalkDaySendStatus.alkSms"];
+        dataItem.alkSmsWaitQty      = messages["alimtalkDaySendStatus.alkSms"];
+        dataItem.alkSmsSuccessQty   = messages["alimtalkDaySendStatus.alkSms"];
+        dataItem.alkSmsFailQty      = messages["alimtalkDaySendStatus.alkSms"];
+        dataItem.alkLmsSendQty      = messages["alimtalkDaySendStatus.alkLms"];
+        dataItem.alkLmsWaitQty      = messages["alimtalkDaySendStatus.alkLms"];
+        dataItem.alkLmsSuccessQty   = messages["alimtalkDaySendStatus.alkLms"];
+        dataItem.alkLmsFailQty      = messages["alimtalkDaySendStatus.alkLms"];
+        dataItem.alkMmsSendQty      = messages["alimtalkDaySendStatus.alkMms"];
+        dataItem.alkMmsWaitQty      = messages["alimtalkDaySendStatus.alkMms"];
+        dataItem.alkMmsSuccessQty   = messages["alimtalkDaySendStatus.alkMms"];
+        dataItem.alkMmsFailQty      = messages["alimtalkDaySendStatus.alkMms"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 
@@ -199,15 +211,27 @@ app.controller('alimtalkDaySendStatusExcelCtrl', ['$scope', '$http', '$timeout',
 
         // 첫째줄 헤더 생성
         var dataItem = {};
-        dataItem.orgnCd = messages["alimtalkDaySendStatus.orgnCd"];
-        dataItem.orgnNm = messages["alimtalkDaySendStatus.orgnNm"];
-        dataItem.smsDate = messages["alimtalkDaySendStatus.smsDate"];
-        dataItem.smsChargeAmt = messages["alimtalkDaySendStatus.smsChargeAmt"];
-        dataItem.smsChargeCnt = messages["alimtalkDaySendStatus.smsChargeCnt"];
-        dataItem.alkSendQty = messages["alimtalkDaySendStatus.alk"];
-        dataItem.alkWaitQty = messages["alimtalkDaySendStatus.alk"];
-        dataItem.alkSuccessQty = messages["alimtalkDaySendStatus.alk"];
-        dataItem.alkFailQty = messages["alimtalkDaySendStatus.alk"];
+        dataItem.orgnCd             = messages["alimtalkDaySendStatus.orgnCd"];
+        dataItem.orgnNm             = messages["alimtalkDaySendStatus.orgnNm"];
+        dataItem.smsDate            = messages["alimtalkDaySendStatus.smsDate"];
+        dataItem.smsChargeAmt       = messages["alimtalkDaySendStatus.smsChargeAmt"];
+        dataItem.smsChargeCnt       = messages["alimtalkDaySendStatus.smsChargeCnt"];
+        dataItem.alkSendQty         = messages["alimtalkDaySendStatus.alk"];
+        dataItem.alkWaitQty         = messages["alimtalkDaySendStatus.alk"];
+        dataItem.alkSuccessQty      = messages["alimtalkDaySendStatus.alk"];
+        dataItem.alkFailQty         = messages["alimtalkDaySendStatus.alk"];
+        dataItem.alkSmsSendQty      = messages["alimtalkDaySendStatus.alkSms"];
+        dataItem.alkSmsWaitQty      = messages["alimtalkDaySendStatus.alkSms"];
+        dataItem.alkSmsSuccessQty   = messages["alimtalkDaySendStatus.alkSms"];
+        dataItem.alkSmsFailQty      = messages["alimtalkDaySendStatus.alkSms"];
+        dataItem.alkLmsSendQty      = messages["alimtalkDaySendStatus.alkLms"];
+        dataItem.alkLmsWaitQty      = messages["alimtalkDaySendStatus.alkLms"];
+        dataItem.alkLmsSuccessQty   = messages["alimtalkDaySendStatus.alkLms"];
+        dataItem.alkLmsFailQty      = messages["alimtalkDaySendStatus.alkLms"];
+        dataItem.alkMmsSendQty      = messages["alimtalkDaySendStatus.alkMms"];
+        dataItem.alkMmsWaitQty      = messages["alimtalkDaySendStatus.alkMms"];
+        dataItem.alkMmsSuccessQty   = messages["alimtalkDaySendStatus.alkMms"];
+        dataItem.alkMmsFailQty      = messages["alimtalkDaySendStatus.alkMms"];
 
         s.columnHeaders.rows[0].dataItem = dataItem;
 

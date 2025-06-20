@@ -1,5 +1,7 @@
 package kr.co.solbipos.base.prod.info.service;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import kr.co.solbipos.application.common.service.CmmVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.store.hq.brand.service.HqClsVO;
@@ -41,8 +43,13 @@ public class ProductClassVO extends CmmVO {
     private String level1;
     private String level2;
     private String level3;
+
     /** Child Items */
+    @JsonManagedReference
     private List<ProductClassVO> items;
+
+    @JsonBackReference
+    private ProductClassVO parent;
 
     /** 프로시져 결과 */
     private String result;
@@ -183,5 +190,13 @@ public class ProductClassVO extends CmmVO {
 
     public void setArrProdClassCd(String[] arrProdClassCd) {
         this.arrProdClassCd = arrProdClassCd;
+    }
+
+    public ProductClassVO getParent() {
+        return parent;
+    }
+
+    public void setParent(ProductClassVO parent) {
+        this.parent = parent;
     }
 }

@@ -38,7 +38,7 @@
                 FROM    TB_CM_NMCODE
                 WHERE   NMCODE_GRP_CD   =   '999'
                 AND     NMCODE_ITEM_1   IN  ('C', 'H')
-
+                AND     NMCODE_CD NOT IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V02 WHERE HQ_OFFICE_CD = #{hqOfficeCd} ) -- 맘스터치 본사 미사용 공통코드
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>
@@ -69,7 +69,7 @@
                 FROM    TB_CM_NMCODE
                 WHERE   NMCODE_GRP_CD   =   '999'
                 AND     NMCODE_ITEM_1   IN  ('C', 'S')
-
+                AND     NMCODE_CD NOT IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V03 WHERE STORE_CD = #{storeCd} ) -- 맘스터치 매장 미사용 공통코드
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>

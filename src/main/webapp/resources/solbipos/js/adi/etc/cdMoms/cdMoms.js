@@ -29,7 +29,7 @@ var useYnFgDataMap = new wijmo.grid.DataMap([
 /**
  * 대표명칭 그리드 생성
  */
-app.controller('cdMomsCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('cdMomsCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('cdMomsCtrl', $scope, $http, true));
@@ -157,6 +157,31 @@ app.controller('cdMomsCtrl', ['$scope', '$http', function ($scope, $http) {
                 $scope.flex.collectionView.removeAt(i);
             }
         }
+    }
+
+    // 엑셀다운로드
+    $scope.excelDownload = function(){
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);	//다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles   : true,
+                includeColumns      : function (column) {
+                    return column.visible;
+                }
+            }, '대표명칭_' + getCurDateTime() + '.xlsx', function () {
+                $timeout(function () {
+                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                }, 10);
+            });
+        }, 10);
+
     }
 
 }]);

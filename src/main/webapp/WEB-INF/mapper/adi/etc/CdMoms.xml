@@ -38,7 +38,7 @@
                 FROM TB_CM_NMCODE
                 WHERE 1=1
                 AND NMCODE_GRP_CD = '999'
-                AND (NMCODE_ITEM_1 IN ('맘스터치') OR NMCODE_CD IN ('164'))
+                AND NMCODE_CD IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V01)
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>
@@ -68,7 +68,7 @@
                 FROM TB_CM_NMCODE
                 WHERE 1=1
                 AND NMCODE_GRP_CD = '999'
-                AND (NMCODE_ITEM_1 IN ('맘스터치') OR NMCODE_CD IN ('164'))
+                AND NMCODE_CD IN (SELECT NMCODE_CD FROM TB_CM_NMCODE_MOMS_V01)
                 <if test='nmcodeCd != null and nmcodeCd != ""'>
                     AND NMCODE_CD LIKE '%'||#{nmcodeCd}||'%'
                 </if>

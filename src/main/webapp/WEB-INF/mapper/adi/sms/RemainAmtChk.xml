@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    RemainAmtChk2.xml
+    잔여금액확인
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.06.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.adi.sms.remainAmtChk.service.impl.RemainAmtChkMapper">
+
+    <!-- 잔여금액확인 - 조회 -->
+    <!--
+        TABLE    : HCS_DDSMS_T
+        COMMENTS :
+    -->
+    <select id="getRemainAmtChkList" parameterType="RemainAmtChkVO" resultType="DefaultMap">
+        /* RemainAmtChk2.getRemainAmtChkList */
+        SELECT	hdt.OGN_CD                      AS ORGN_CD
+        ,       twuidv01.ORGN_NM
+        ,       SUM(hdt.SMS_CHARGE_AMT)         AS SMS_CHARGE_AMT
+        ,       SUM(hdt.SMS_CHARGE_CNT)         AS SMS_CHARGE_CNT
+        ,       SUM(hdt.TOT_SEND_QTY)           AS TOT_SEND_QTY
+        ,       SUM(hdt.TOT_WAIT_QTY)           AS TOT_WAIT_QTY
+        ,       SUM(hdt.TOT_SUCCESS_QTY)        AS TOT_SUCCESS_QTY
+        ,       SUM(hdt.TOT_FAIL_QTY)           AS TOT_FAIL_QTY
+        ,       SUM((FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * (hdt.SMS_SUCCESS_QTY+hdt.SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * (hdt.LMS_SUCCESS_QTY+hdt.LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * (hdt.MMS_SUCCESS_QTY+hdt.MMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * (hdt.ALK_SUCCESS_QTY+hdt.ALK_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * (hdt.ALK_SMS_SUCCESS_QTY+hdt.ALK_SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * (hdt.ALK_LMS_SUCCESS_QTY+hdt.ALK_LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * (hdt.ALK_MMS_SUCCESS_QTY+hdt.ALK_MMS_WAIT_QTY))) AS TOT_SALE_AMT
+        ,       SUM(hdt.SMS_SEND_QTY)           AS SMS_SEND_QTY
+        ,       SUM(hdt.SMS_WAIT_QTY)           AS SMS_WAIT_QTY
+        ,       SUM(hdt.SMS_SUCCESS_QTY)        AS SMS_SUCCESS_QTY
+        ,       SUM(hdt.SMS_FAIL_QTY)           AS SMS_FAIL_QTY
+        ,       SUM(FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * hdt.SMS_SUCCESS_QTY) AS SMS_SALE_AMT
+        ,       SUM(hdt.LMS_SEND_QTY)           AS LMS_SEND_QTY
+        ,       SUM(hdt.LMS_WAIT_QTY)           AS LMS_WAIT_QTY
+        ,       SUM(hdt.LMS_SUCCESS_QTY)        AS LMS_SUCCESS_QTY
+        ,       SUM(hdt.LMS_FAIL_QTY)           AS LMS_FAIL_QTY
+        ,       SUM(FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * hdt.LMS_SUCCESS_QTY) AS LMS_SALE_AMT
+        ,       SUM(hdt.MMS_SEND_QTY)           AS MMS_SEND_QTY
+        ,       SUM(hdt.MMS_WAIT_QTY)           AS MMS_WAIT_QTY
+        ,       SUM(hdt.MMS_SUCCESS_QTY)        AS MMS_SUCCESS_QTY
+        ,       SUM(hdt.MMS_FAIL_QTY)           AS MMS_FAIL_QTY
+        ,       SUM(FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * hdt.MMS_SUCCESS_QTY) AS MMS_SALE_AMT
+        ,       SUM(hdt.ALK_SEND_QTY)           AS ALK_SEND_QTY
+        ,       SUM(hdt.ALK_WAIT_QTY)           AS ALK_WAIT_QTY
+        ,       SUM(hdt.ALK_SUCCESS_QTY)        AS ALK_SUCCESS_QTY
+        ,       SUM(hdt.ALK_FAIL_QTY)           AS ALK_FAIL_QTY
+        ,       SUM(FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * hdt.ALK_SUCCESS_QTY) AS ALK_SALE_AMT
+        ,       SUM(hdt.ALK_SMS_SEND_QTY)       AS ALK_SMS_SEND_QTY
+        ,       SUM(hdt.ALK_SMS_WAIT_QTY)       AS ALK_SMS_WAIT_QTY
+        ,       SUM(hdt.ALK_SMS_SUCCESS_QTY)    AS ALK_SMS_SUCCESS_QTY
+        ,       SUM(hdt.ALK_SMS_FAIL_QTY)       AS ALK_SMS_FAIL_QTY
+        ,       SUM(FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * hdt.ALK_SMS_SUCCESS_QTY) AS ALK_SMS_SALE_AMT
+        ,       SUM(hdt.ALK_LMS_SEND_QTY)       AS ALK_LMS_SEND_QTY
+        ,       SUM(hdt.ALK_LMS_WAIT_QTY)       AS ALK_LMS_WAIT_QTY
+        ,       SUM(hdt.ALK_LMS_SUCCESS_QTY)    AS ALK_LMS_SUCCESS_QTY
+        ,       SUM(hdt.ALK_LMS_FAIL_QTY)       AS ALK_LMS_FAIL_QTY
+        ,       SUM(FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * hdt.ALK_LMS_SUCCESS_QTY) AS ALK_LMS_SALE_AMT
+        ,       SUM(hdt.ALK_MMS_SEND_QTY)       AS ALK_MMS_SEND_QTY
+        ,       SUM(hdt.ALK_MMS_WAIT_QTY)       AS ALK_MMS_WAIT_QTY
+        ,       SUM(hdt.ALK_MMS_SUCCESS_QTY)    AS ALK_MMS_SUCCESS_QTY
+        ,       SUM(hdt.ALK_MMS_FAIL_QTY)       AS ALK_MMS_FAIL_QTY
+        ,       SUM(FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * hdt.ALK_MMS_SUCCESS_QTY) AS ALK_MMS_SALE_AMT
+        ,		NVL(tlcstl.PRE_REMAIN_AMT,0)    AS PRE_REMAIN_AMT
+        ,		NVL(tlcstl.PRE_REMAIN_AMT,0) + SUM(hdt.SMS_CHARGE_AMT) - SUM((FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * (hdt.SMS_SUCCESS_QTY+hdt.SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * (hdt.LMS_SUCCESS_QTY+hdt.LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * (hdt.MMS_SUCCESS_QTY+hdt.MMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * (hdt.ALK_SUCCESS_QTY+hdt.ALK_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * (hdt.ALK_SMS_SUCCESS_QTY+hdt.ALK_SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * (hdt.ALK_LMS_SUCCESS_QTY+hdt.ALK_LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * (hdt.ALK_MMS_SUCCESS_QTY+hdt.ALK_MMS_WAIT_QTY)))     AS CALC_REMAIN_AMT
+        ,		NVL(tlcstl2.REMAIN_AMT,0)       AS REMAIN_AMT
+        ,		NVL(tlcstl.PRE_REMAIN_AMT,0) + SUM(hdt2.SMS_CHARGE_AMT) - SUM((FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * (hdt2.SMS_SUCCESS_QTY+hdt2.SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * (hdt2.LMS_SUCCESS_QTY+hdt2.LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * (hdt2.MMS_SUCCESS_QTY+hdt2.MMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * (hdt2.ALK_SUCCESS_QTY+hdt2.ALK_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * (hdt2.ALK_SMS_SUCCESS_QTY+hdt2.ALK_SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * (hdt2.ALK_LMS_SUCCESS_QTY+hdt2.ALK_LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * (hdt2.ALK_MMS_SUCCESS_QTY+hdt2.ALK_MMS_WAIT_QTY))) AS CALC_CURR_REMAIN_AMT
+        ,		NVL(cst.SMS_AMT,0)	            AS CURR_REMAIN_AMT
+        ,		DECODE(NVL(tlcstl2.REMAIN_AMT,0), NVL(tlcstl.PRE_REMAIN_AMT,0) + SUM(hdt.SMS_CHARGE_AMT) - SUM((FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * (hdt.SMS_SUCCESS_QTY+hdt.SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * (hdt.LMS_SUCCESS_QTY+hdt.LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * (hdt.MMS_SUCCESS_QTY+hdt.MMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * (hdt.ALK_SUCCESS_QTY+hdt.ALK_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * (hdt.ALK_SMS_SUCCESS_QTY+hdt.ALK_SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * (hdt.ALK_LMS_SUCCESS_QTY+hdt.ALK_LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * (hdt.ALK_MMS_SUCCESS_QTY+hdt.ALK_MMS_WAIT_QTY))), '', '[확인필요]') AS REMAIN_AMT_FG
+        ,		DECODE(NVL(cst.SMS_AMT,0), NVL(tlcstl.PRE_REMAIN_AMT,0) + SUM(hdt2.SMS_CHARGE_AMT) - SUM((FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * (hdt2.SMS_SUCCESS_QTY+hdt2.SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * (hdt2.LMS_SUCCESS_QTY+hdt2.LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * (hdt2.MMS_SUCCESS_QTY+hdt2.MMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * (hdt2.ALK_SUCCESS_QTY+hdt2.ALK_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * (hdt2.ALK_SMS_SUCCESS_QTY+hdt2.ALK_SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * (hdt2.ALK_LMS_SUCCESS_QTY+hdt2.ALK_LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * (hdt2.ALK_MMS_SUCCESS_QTY+hdt2.ALK_MMS_WAIT_QTY))), '', '[확인필요]') AS CURR_REMAIN_AMT_FG
+        FROM    HCS_DDSMS_T hdt
+        ,       (
+                    SELECT  twuidv01.ORGN_FG
+                    ,       twuidv01.ORGN_CD
+                    ,       twuidv01.ORGN_NM
+                    ,       twuidv01.HQ_OFFICE_CD
+                    ,       twuidv01.STORE_CD
+                    ,       (
+                                CASE    WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                                        WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                                        ELSE twuidv01.ORGN_CD END
+                            ) AS AGENCY_CD
+                    FROM    (
+                                SELECT  DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG
+                                ,       twuidv01.ORGN_CD
+                                ,       twuidv01.ORGN_NM
+                                ,       twuidv01.HQ_OFFICE_CD
+                                ,       twuidv01.STORE_CD
+                                FROM    TB_WB_USER_INFO_DTL_V01 twuidv01
+                                GROUP
+                                BY      twuidv01.ORGN_FG
+                                ,       twuidv01.ORGN_CD
+                                ,       twuidv01.ORGN_NM
+                                ,       twuidv01.HQ_OFFICE_CD
+                                ,       twuidv01.STORE_CD
+                            ) twuidv01
+                    WHERE   1=1
+                    GROUP
+                    BY      twuidv01.ORGN_FG
+                    ,       twuidv01.ORGN_CD
+                    ,       twuidv01.ORGN_NM
+                    ,       twuidv01.HQ_OFFICE_CD
+                    ,       twuidv01.STORE_CD
+                ) twuidv01
+        ,		CET_SMSPT_T cst
+        ,		(
+                    SELECT 	OGN_CD
+                    ,		SMS_AMT	AS PRE_REMAIN_AMT
+                    FROM 	TB_LG_CET_SMSPT_T_LOG tlcstl
+                    WHERE 	PROC_SEQ IN	(
+                                            SELECT 	MAX(PROC_SEQ)
+                                            FROM	TB_LG_CET_SMSPT_T_LOG
+                                            WHERE 	PROC_FG = 'U'
+                                            <![CDATA[
+                                                AND     PROC_DT < #{startDate}||'000000'
+                                            ]]>
+                                            GROUP
+                                            BY 		OGN_CD
+                                        )
+                ) tlcstl
+        ,		(
+                    SELECT 	OGN_CD
+                    ,		SMS_AMT	AS REMAIN_AMT
+                    FROM 	TB_LG_CET_SMSPT_T_LOG tlcstl
+                    WHERE 	PROC_SEQ IN	(
+                                            SELECT 	MAX(PROC_SEQ)
+                                            FROM	TB_LG_CET_SMSPT_T_LOG
+                                            WHERE 	PROC_FG = 'U'
+                                            AND 	PROC_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                                            GROUP
+                                            BY 		OGN_CD
+                                        )
+                ) tlcstl2
+        ,		(
+                    SELECT 	OGN_CD
+                    ,		SMS_DATE
+                    ,		COMPANY
+                    ,		SUM(SMS_CHARGE_AMT)		    AS SMS_CHARGE_AMT
+                    ,		SUM(SMS_SUCCESS_QTY)	    AS SMS_SUCCESS_QTY
+                    ,		SUM(LMS_SUCCESS_QTY)	    AS LMS_SUCCESS_QTY
+                    ,		SUM(MMS_SUCCESS_QTY)	    AS MMS_SUCCESS_QTY
+                    ,		SUM(ALK_SUCCESS_QTY)	    AS ALK_SUCCESS_QTY
+                    ,		SUM(ALK_SMS_SUCCESS_QTY)	AS ALK_SMS_SUCCESS_QTY
+                    ,		SUM(ALK_LMS_SUCCESS_QTY)	AS ALK_LMS_SUCCESS_QTY
+                    ,		SUM(ALK_MMS_SUCCESS_QTY)	AS ALK_MMS_SUCCESS_QTY
+                    ,		SUM(SMS_WAIT_QTY)	    	AS SMS_WAIT_QTY
+                    ,		SUM(LMS_WAIT_QTY)	    	AS LMS_WAIT_QTY
+                    ,		SUM(MMS_WAIT_QTY)	    	AS MMS_WAIT_QTY
+                    ,		SUM(ALK_WAIT_QTY)	    	AS ALK_WAIT_QTY
+                    ,		SUM(ALK_SMS_WAIT_QTY)		AS ALK_SMS_WAIT_QTY
+                    ,		SUM(ALK_LMS_WAIT_QTY)		AS ALK_LMS_WAIT_QTY
+                    ,		SUM(ALK_MMS_WAIT_QTY)		AS ALK_MMS_WAIT_QTY
+                    FROM 	HCS_DDSMS_T
+                    WHERE 	SMS_DATE BETWEEN #{startDate} AND #{nowDate}
+                    GROUP
+                    BY 		OGN_CD
+                    ,		SMS_DATE
+                    ,		COMPANY
+                ) hdt2
+        WHERE   1=1
+        AND     hdt.SMS_DATE BETWEEN #{startDate} AND #{endDate}
+        AND     twuidv01.ORGN_CD 	= hdt.OGN_CD
+        AND 	cst.OGN_CD 		(+)	= hdt.OGN_CD
+        AND 	tlcstl.OGN_CD 	(+)	= hdt.OGN_CD
+        AND 	tlcstl2.OGN_CD 	(+)	= hdt.OGN_CD
+        AND 	hdt2.OGN_CD 	(+)	= hdt.OGN_CD
+        AND 	hdt2.SMS_DATE 	(+)	= hdt.SMS_DATE
+        AND 	hdt2.COMPANY 	(+)	= hdt.COMPANY
+        AND     (   hdt.SMS_CHARGE_CNT != 0
+                    OR hdt.SMS_SEND_QTY != 0 OR hdt.SMS_WAIT_QTY != 0 OR hdt.SMS_SUCCESS_QTY != 0 OR hdt.SMS_FAIL_QTY != 0
+                    OR hdt.LMS_SEND_QTY != 0 OR hdt.LMS_WAIT_QTY != 0 OR hdt.LMS_SUCCESS_QTY != 0 OR hdt.LMS_FAIL_QTY != 0
+                    OR hdt.MMS_SEND_QTY != 0 OR hdt.MMS_WAIT_QTY != 0 OR hdt.MMS_SUCCESS_QTY != 0 OR hdt.MMS_FAIL_QTY != 0
+                    OR hdt.ALK_SEND_QTY != 0 OR hdt.ALK_WAIT_QTY != 0 OR hdt.ALK_SUCCESS_QTY != 0 OR hdt.ALK_FAIL_QTY != 0
+                )
+        <if test='srchOrgnCd != null and srchOrgnCd !=""'>
+            AND twuidv01.ORGN_CD LIKE '%' || #{srchOrgnCd} || '%'
+        </if>
+        <if test='srchOrgnNm != null and srchOrgnNm !=""'>
+            AND twuidv01.ORGN_NM LIKE '%' || #{srchOrgnNm} || '%'
+        </if>
+        GROUP
+        BY      hdt.OGN_CD
+        ,       twuidv01.ORGN_NM
+        ,		cst.SMS_AMT
+        ,		tlcstl.PRE_REMAIN_AMT
+        ,		tlcstl2.REMAIN_AMT
+        ORDER
+        BY      hdt.OGN_CD DESC
+    </select>
+
+    <!-- 잔여금액확인 - 팝업 조회 -->
+    <!--
+        TABLE    : HCS_DDSMS_T
+        COMMENTS :
+    -->
+    <select id="getRemainAmtHistList" parameterType="RemainAmtChkVO" resultType="DefaultMap">
+        /* RemainAmtChk2.getRemainAmtHistList */
+        SELECT 	*
+        FROM 	(
+                    SELECT 	'사용'	AS USE_FG
+                    ,		- TO_NUMBER(NVL(DECODE(SEND_STATUS,-1,'0',6,'0',FN_GET_SMS_UPRC(DECODE(hmt.MSG_TYPE,1,'SMS',2,'LMS',3,'MMS',-4,'ALK',-5,'ALK_LMS'), twuidv01.ORGN_CD)),99)) AS USE_AMT
+                    ,		null 	AS ORGN_CD
+                    ,		null	AS ORGN_NM
+                    ,		null	AS ORGN
+                    ,		null 	AS CHARGE_DATE
+                    ,		null 	AS CHARGE_TIME
+                    ,		null 	AS PGRESOURCE
+                    ,		null	AS CONTROLNO
+                    ,		null	AS APPROVALNUM
+                    ,		null 	AS BASE_CHARGE_AMT
+                    ,		null	AS CHARGE_AMT
+                    ,		null 	AS VAT_AMT
+                    ,		null 	AS CHARGE_TOT
+                    ,		null	AS SUCCESS_YN
+                    ,		null	AS CHARGE_ID_NM
+                    ,		null	AS RESULTMESSAGE
+                    ,		hmt.MSG_ID
+                    ,		hmt.REG_DT
+                    ,		hmt.S_OGN_CD
+                    ,		hmt.S_OGN_NM
+                    ,		hmt.S_USER_ID
+                    ,		hmt.S_USER_NM
+                    ,		hmt.CALLBACK
+                    ,		hmt.R_OGN_CD
+                    ,		hmt.R_OGN_NM
+                    ,		hmt.R_OGN_FG
+                    ,		hmt.R_USER_ID
+                    ,		hmt.CST_NO
+                    ,		hmt.PHONE_NUMBER
+                    ,		hmt.MSG_TYPE
+                    ,		hmt.RESERVE_YN
+                    ,		hmt.SEND_DATE
+                    ,		hmt.READ_DATE
+                    ,		hmt.SEND_STATUS
+                    ,		hmt.RESULT_CD
+                    ,		hmt.COMPANY --1:KT, 2:SMTN
+                    ,		hmt.SUBJECT
+                    ,		hmt.MSG_CONTENT
+                    ,		hmt.SMS_SEND_SEQ
+                    ,		hmt.GUBUN
+                    FROM 	(
+                                SELECT 	*
+                                FROM
+                                    (
+                                        (
+                                            --SMS
+                                            SELECT	A.MSG_ID
+                                            ,		A.NOW_DATE AS REG_DT
+                                            ,		A.RESERVED7 AS S_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM
+                                            ,		A.RESERVED8 AS S_USER_ID
+                                            ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM
+                                            ,		SBPENC.D(A.CALLBACK) AS CALLBACK
+                                            ,		A.RESERVED4 AS R_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM
+                                            ,		A.RESERVED5 AS R_OGN_FG
+                                            ,		A.RESERVED6 AS R_USER_ID
+                                            ,		A.RESERVED3 AS CST_NO
+                                            ,		SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER
+                                            ,		1 AS MSG_TYPE
+                                            ,		A.SCHEDULE_TYPE AS RESERVE_YN
+                                            ,		DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE
+                                            ,		A.SEND_PROC_TIME AS READ_DATE
+                                            ,		A.SEND_STATUS
+                                            ,		'' AS RESULT_CD
+                                            ,		'1' AS COMPANY --1:KT, 2:SMTN
+                                            ,		A.SUBJECT
+                                            ,		A.SMS_MSG AS MSG_CONTENT
+                                            ,		A.RESERVED9 AS SMS_SEND_SEQ
+                                            ,		'SDK_SMS_SEND_ENC' AS GUBUN
+                                            FROM 	SDK_SMS_SEND_ENC A
+                                            WHERE 	1=1
+                                            AND 	A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                                            AND 	A.SEND_STATUS NOT IN ('1', '2')
+                                            AND 	A.RESERVED7 = #{srchOrgnCd}
+                                        )
+                                        UNION ALL
+                                        (
+                                            --LMS
+                                            SELECT	A.MSG_ID
+                                            ,		A.NOW_DATE AS REG_DT
+                                            ,		A.RESERVED7 AS S_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM
+                                            ,		A.RESERVED8 AS S_USER_ID
+                                            ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM
+                                            ,		SBPENC.D(A.CALLBACK) AS CALLBACK
+                                            ,		A.RESERVED4 AS R_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM
+                                            ,		A.RESERVED5 AS R_OGN_FG
+                                            ,		A.RESERVED6 AS R_USER_ID
+                                            ,		A.RESERVED3 AS CST_NO
+                                            ,		SUBSTR(SBPENC.D(A.DEST_INFO), INSTR(SBPENC.D(A.DEST_INFO), '^')+1) AS PHONE_NUMBER
+                                            ,		(CASE WHEN A.CONTENT_COUNT = '0' THEN 2 ELSE 3 END) AS MSG_TYPE
+                                            ,		A.SCHEDULE_TYPE AS RESERVE_YN
+                                            ,		DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE
+                                            ,		A.SEND_PROC_TIME AS READ_DATE
+                                            ,		A.SEND_STATUS
+                                            ,		'' AS RESULT_CD
+                                            ,		'1' AS COMPANY --1:KT, 2:SMTN
+                                            ,		A.SUBJECT
+                                            ,		A.MMS_MSG AS MSG_CONTENT
+                                            ,		A.RESERVED9 AS SMS_SEND_SEQ
+                                            ,		(CASE WHEN A.CONTENT_COUNT = '0' THEN 'SDK_LMS_SEND_ENC' ELSE 'SDK_MMS_SEND_ENC' END) AS GUBUN
+                                            FROM 	SDK_MMS_SEND_ENC A
+                                            WHERE 	1=1
+                                            AND 	A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                                            AND 	A.SEND_STATUS NOT IN ('1', '2')
+                                            AND 	A.RESERVED7 = #{srchOrgnCd}
+                                        )
+                                        UNION ALL
+                                        (
+                                            --ALK
+                                            SELECT	A.MSG_ID
+                                            ,		A.NOW_DATE AS REG_DT
+                                            ,		A.S_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.S_OGN_CD GROUP BY ORGN_NM) AS S_OGN_NM
+                                            ,		A.S_USER_ID
+                                            ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.S_USER_ID GROUP BY USER_NM) AS S_USER_NM
+                                            ,		A.CALLBACK
+                                            ,		A.R_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.R_OGN_CD GROUP BY ORGN_NM) AS R_OGN_NM
+                                            ,		A.R_OGN_FG
+                                            ,		A.R_USER_ID
+                                            ,		A.CST_NO
+                                            ,		SBPENC.D(A.TEL_NO) AS PHONE_NUMBER
+                                            ,		(CASE WHEN A.RESULT_CD != '1000' AND A.RESEND_STATUS IN('RSC05','RSC04') THEN -5 ELSE -4 END) AS MSG_TYPE
+                                            ,		A.SCHEDULE_TYPE AS RESERVE_YN
+                                            ,		DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE
+                                            ,		A.RECEIVE_DATE AS READ_DATE
+                                            ,		0 AS SEND_STATUS
+                                            ,		null AS RESULT_CD
+                                            , 		'1' AS COMPANY --1:KT, 2:SMTNT
+                                            ,		A.SUBJECT
+                                            ,		A.ALK_MSG AS MSG_CONTENT
+                                            ,		A.ALK_SEND_SEQ
+                                            ,		'TB_AL_ALIMTALK_SEND_ENC' AS GUBUN
+                                            FROM 	TB_AL_ALIMTALK_SEND_ENC A
+                                            WHERE 	1=1
+                                            AND 	A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                                            AND 	A.S_OGN_CD = #{srchOrgnCd}
+                                        )
+                                        UNION ALL
+                                        (
+                                            --SMS 문자 전송결과
+                                            SELECT	A.MSG_ID
+                                            ,		A.NOW_DATE AS REG_DT
+                                            ,		A.RESERVED7 AS S_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM
+                                            ,		A.RESERVED8 AS S_USER_ID
+                                            ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM
+                                            ,		A.CALLBACK
+                                            ,		A.RESERVED4 AS R_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM
+                                            ,		A.RESERVED5 AS R_OGN_FG
+                                            ,		A.RESERVED6 AS R_USER_ID
+                                            ,		A.RESERVED3 AS CST_NO
+                                            ,		SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER
+                                            ,		1 AS MSG_TYPE
+                                            ,		A.SCHEDULE_TYPE AS RESERVE_YN
+                                            ,		DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE
+                                            ,		B.DELIVER_DATE AS READ_DATE
+                                            ,		(
+                                                        CASE 	WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 0) THEN 4
+                                                                WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 5
+                                                                WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN 6
+                                                                WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 1) THEN 7
+                                                                ELSE null END
+                                                    ) AS SEND_STATUS --현재는 1건씩 전송해서
+                                            ,		('1' || '_' || B.TCS_RESULT) AS RESULT_CD --A.COMPANY || '_' || A.RESULT
+                                            ,		'1' AS COMPANY --1:KT, 2:SMTNT
+                                            ,		A.SUBJECT
+                                            ,		A.SMS_MSG AS MSG_CONTENT
+                                            ,		A.RESERVED9 AS SMS_SEND_SEQ
+                                            ,		'SDK_SMS_REPORT' AS GUBUN
+                                            FROM 	SDK_SMS_REPORT A
+                                            ,		SDK_SMS_REPORT_DETAIL B
+                                            WHERE 	1=1
+                                            AND 	B.MSG_ID = A.MSG_ID
+                                            AND 	A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                                            AND 	A.RESERVED7 = #{srchOrgnCd}
+                                        )
+                                        UNION ALL
+                                        (
+                                            --LMS 문자 전송결과
+                                            SELECT	A.MSG_ID
+                                            ,		A.NOW_DATE AS REG_DT
+                                            ,		A.RESERVED7 AS S_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED7 GROUP BY ORGN_NM) AS S_OGN_NM
+                                            ,		A.RESERVED8 AS S_USER_ID
+                                            ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.RESERVED8 GROUP BY USER_NM) AS S_USER_NM
+                                            ,		A.CALLBACK
+                                            ,		A.RESERVED4 AS R_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.RESERVED4 GROUP BY ORGN_NM) AS R_OGN_NM
+                                            ,		A.RESERVED5 AS R_OGN_FG
+                                            ,		A.RESERVED6 AS R_USER_ID
+                                            ,		A.RESERVED3 AS CST_NO
+                                            ,		SUBSTR(A.DEST_INFO, INSTR(A.DEST_INFO, '^')+1) AS PHONE_NUMBER
+                                            ,		(CASE WHEN A.CONTENT_COUNT = '0' THEN 2 ELSE 3 END) AS MSG_TYPE
+                                            ,		A.SCHEDULE_TYPE AS RESERVE_YN
+                                            ,		DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE
+                                            ,		B.DELIVER_DATE AS READ_DATE
+                                            ,		(
+                                                        CASE 	WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 0) THEN 4
+                                                                WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 5
+                                                                WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN 6
+                                                                WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 1) THEN 7
+                                                                ELSE null END
+                                                    ) AS SEND_STATUS --현재는 1건씩 전송해서
+                                            ,		('1' || '_' || B.TCS_RESULT) AS RESULT_CD --A.COMPANY || '_' || A.RESULT
+                                            ,		'1' AS COMPANY --1:KT, 2:SMTNT
+                                            ,		A.SUBJECT
+                                            ,		A.MMS_MSG AS MSG_CONTENT
+                                            ,		A.RESERVED9 AS SMS_SEND_SEQ
+                                            ,		'SDK_MMS_REPORT' AS GUBUN
+                                            FROM 	SDK_MMS_REPORT A
+                                            ,		SDK_MMS_REPORT_DETAIL B
+                                            WHERE 	1=1
+                                            AND 	B.MSG_ID = A.MSG_ID
+                                            AND 	A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                                            AND 	A.RESERVED7 = #{srchOrgnCd}
+                                        )
+                                        UNION ALL
+                                        (
+                                            --알림톡 전송결과
+                                            SELECT	A.MSG_ID
+                                            ,		A.NOW_DATE AS REG_DT
+                                            ,		A.S_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.S_OGN_CD GROUP BY ORGN_NM) AS S_OGN_NM
+                                            ,		A.S_USER_ID
+                                            ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.S_USER_ID GROUP BY USER_NM) AS S_USER_NM
+                                            ,		A.CALLBACK
+                                            ,		A.R_OGN_CD
+                                            ,		(SELECT ORGN_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE ORGN_CD = A.R_OGN_CD GROUP BY ORGN_NM) AS R_OGN_NM
+                                            ,		A.R_OGN_FG
+                                            ,		A.R_USER_ID
+                                            ,		A.CST_NO
+                                            ,		SBPENC.D(A.TEL_NO) AS PHONE_NUMBER
+                                            ,		(CASE WHEN A.RESULT_CD != '1000' AND A.RESEND_STATUS IN('RSC05','RSC04') THEN -5 ELSE -4 END) AS MSG_TYPE
+                                            ,		A.SCHEDULE_TYPE AS RESERVE_YN
+                                            ,		DECODE(A.SCHEDULE_TYPE, '1', A.SEND_DATE, NULL) AS SEND_DATE
+                                            ,		A.RECEIVE_DATE AS READ_DATE
+                                            ,		(
+                                                        CASE 	WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 0) THEN 4
+                                                                WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 0) THEN 5
+                                                                WHEN (A.SUCC_COUNT = 0 AND A.FAIL_COUNT = 1) THEN 6
+                                                                WHEN (A.SUCC_COUNT = 1 AND A.FAIL_COUNT = 1) THEN 7
+                                                                ELSE null END
+                                                    ) AS SEND_STATUS --현재는 1건씩 전송해서
+                                            ,		A.RESULT_CD
+                                            ,		'1' AS COMPANY --1:KT, 2:SMTNT
+                                            ,		A.SUBJECT
+                                            ,		A.ALK_MSG AS MSG_CONTENT
+                                            ,		A.ALK_SEND_SEQ
+                                            ,		'TB_AL_ALIMTALK_REPORT' AS GUBUN
+                                            FROM 	TB_AL_ALIMTALK_REPORT A
+                                            WHERE 	1=1
+                                            AND 	A.NOW_DATE BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                                            AND 	A.S_OGN_CD = #{srchOrgnCd}
+                                        )
+                                    )
+                                WHERE 1=1
+                            ) hmt
+                    ,		(
+                                SELECT	twuidv01.ORGN_FG
+                                ,		twuidv01.ORGN_CD
+                                ,		twuidv01.ORGN_NM
+                                ,		twuidv01.HQ_OFFICE_CD
+                                ,		twuidv01.STORE_CD
+                                ,		(
+                                            CASE 	WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                                                    WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                                                    ELSE twuidv01.ORGN_CD END
+                                        ) AS AGENCY_CD
+                                FROM
+                                        (
+                                            SELECT	DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG
+                                            ,		twuidv01.ORGN_CD
+                                            ,		twuidv01.ORGN_NM
+                                            ,		twuidv01.HQ_OFFICE_CD
+                                            ,		twuidv01.STORE_CD
+                                            FROM 	TB_WB_USER_INFO_DTL_V01 twuidv01
+                                            GROUP
+                                            BY 		twuidv01.ORGN_FG
+                                            , 		twuidv01.ORGN_CD
+                                            , 		twuidv01.ORGN_NM
+                                            , 		twuidv01.HQ_OFFICE_CD
+                                            , 		twuidv01.STORE_CD
+                                        ) twuidv01
+                                WHERE 1=1
+                                GROUP
+                                BY 		twuidv01.ORGN_FG
+                                , 		twuidv01.ORGN_CD
+                                , 		twuidv01.ORGN_NM
+                                , 		twuidv01.HQ_OFFICE_CD
+                                , 		twuidv01.STORE_CD
+                            ) twuidv01
+                    WHERE 	1=1
+                    AND     twuidv01.ORGN_CD = hmt.S_OGN_CD
+                )
+                UNION ALL
+                (
+                    SELECT	'충전'	AS USE_FG
+                    ,		NVL(cpt.CHARGE_TOT, 0) AS USE_AMT
+                    ,		cpt.OGN_CD AS ORGN_CD
+                    ,		twuidv01.ORGN_NM
+                    ,		('[' || cpt.OGN_CD || '] ' || twuidv01.ORGN_NM || ' (현재잔여금액 : ' || cst.SMS_AMT || ')') AS ORGN
+                    ,		TO_CHAR(TO_DATE(cpt.CHARGE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS CHARGE_DATE
+                    ,		TO_CHAR(TO_DATE(cpt.CHARGE_TIME, 'HH24MISS'), 'HH24:MI:SS') AS CHARGE_TIME
+                    ,		cpt.PGRESOURCE
+                    ,		cpt.CONTROLNO
+                    ,		cpt.APPROVALNUM
+                    ,		NVL(cpt.BASE_CHARGE_AMT, 0) AS BASE_CHARGE_AMT
+                    ,		NVL(cpt.CHARGE_AMT, 0) AS CHARGE_AMT
+                    ,		NVL(cpt.CHARGE_TOT - cpt.CHARGE_AMT, 0) AS VAT_AMT
+                    ,		NVL(cpt.CHARGE_TOT, 0) AS CHARGE_TOT
+                    ,		cpt.SUCCESS_YN
+                    ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = cpt.CHARGE_ID) AS CHARGE_ID_NM
+                    ,		cpt.RESULTMESSAGE
+                    ,		null	AS MSG_ID
+                    ,		null 	AS REG_DT
+                    ,		null 	AS S_OGN_CD
+                    ,		null	AS S_OGN_NM
+                    ,		null	AS S_USER_ID
+                    ,		null	AS S_USER_NM
+                    ,		null	AS CALLBACK
+                    ,		null	AS R_OGN_CD
+                    ,		null	AS R_OGN_NM
+                    ,		null	AS R_OGN_FG
+                    ,		null	AS R_USER_ID
+                    ,		null	AS CST_NO
+                    ,		null	AS PHONE_NUMBER
+                    ,		null 	AS MSG_TYPE
+                    ,		null	AS RESERVE_YN
+                    ,		null	AS SEND_DATE
+                    ,		null	AS READ_DATE
+                    ,		null	AS SEND_STATUS
+                    ,		null 	AS RESULT_CD
+                    ,		null 	AS COMPANY --1:KT, 2:SMTN
+                    ,		null 	AS SUBJECT
+                    ,		null	AS MSG_CONTENT
+                    ,		null	AS SMS_SEND_SEQ
+                    ,		null 	AS GUBUN
+                    FROM 	CET_PGLOG_T cpt
+                    ,		CET_SMSPT_T cst
+                    ,    	(
+                                SELECT	twuidv01.ORGN_FG
+                                ,		twuidv01.ORGN_CD
+                                ,		twuidv01.ORGN_NM
+                                ,		twuidv01.HQ_OFFICE_CD
+                                ,		twuidv01.STORE_CD
+                                ,		(
+                                            CASE 	WHEN twuidv01.ORGN_FG = 'H' THEN (SELECT AGENCY_CD FROM TB_HQ_OFFICE WHERE HQ_OFFICE_CD = twuidv01.HQ_OFFICE_CD)
+                                                    WHEN twuidv01.ORGN_FG = 'S' THEN (SELECT AGENCY_CD FROM TB_MS_STORE WHERE STORE_CD = twuidv01.STORE_CD)
+                                                    ELSE twuidv01.ORGN_CD END
+                                        ) AS AGENCY_CD
+                                FROM
+                                        (
+                                            SELECT	DECODE(twuidv01.ORGN_FG, 'A', 'M', twuidv01.ORGN_FG) AS ORGN_FG
+                                            ,		twuidv01.ORGN_CD
+                                            ,		twuidv01.ORGN_NM
+                                            ,		twuidv01.HQ_OFFICE_CD
+                                            ,		twuidv01.STORE_CD
+                                            FROM 	TB_WB_USER_INFO_DTL_V01 twuidv01
+                                            GROUP
+                                            BY 		twuidv01.ORGN_FG
+                                            ,		twuidv01.ORGN_CD
+                                            , 		twuidv01.ORGN_NM
+                                            , 		twuidv01.HQ_OFFICE_CD
+                                            , 		twuidv01.STORE_CD
+                                        ) twuidv01
+                                WHERE 1=1
+                                GROUP
+                                BY 		twuidv01.ORGN_FG
+                                , 		twuidv01.ORGN_CD
+                                , 		twuidv01.ORGN_NM
+                                , 		twuidv01.HQ_OFFICE_CD
+                                , 		twuidv01.STORE_CD
+                            ) twuidv01
+                    WHERE 	1=1
+                    AND 	cpt.CHARGE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND 	cst.OGN_CD      (+) = cpt.OGN_CD
+                    AND 	twuidv01.ORGN_CD    = cst.OGN_CD
+                    AND 	cst.OGN_CD          = #{srchOrgnCd}
+                )
+        ORDER
+        BY      1 DESC
+    </select>
+
+</mapper>
+
+

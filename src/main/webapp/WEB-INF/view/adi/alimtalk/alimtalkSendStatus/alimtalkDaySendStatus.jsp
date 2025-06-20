@@ -95,6 +95,18 @@
                     <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.waitQty"/>" binding="alkWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.successQty"/>" binding="alkSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.failQty"/>" binding="alkFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.sendQty"/>" binding="alkSmsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.waitQty"/>" binding="alkSmsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.successQty"/>" binding="alkSmsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.failQty"/>" binding="alkSmsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.sendQty"/>" binding="alkLmsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.waitQty"/>" binding="alkLmsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.successQty"/>" binding="alkLmsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.failQty"/>" binding="alkLmsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.sendQty"/>" binding="alkMmsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.waitQty"/>" binding="alkMmsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.successQty"/>" binding="alkMmsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.failQty"/>" binding="alkMmsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -130,10 +142,22 @@
                 <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.waitQty"/>" binding="alkWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.successQty"/>" binding="alkSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.failQty"/>" binding="alkFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.sendQty"/>" binding="alkSmsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.waitQty"/>" binding="alkSmsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.successQty"/>" binding="alkSmsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.failQty"/>" binding="alkSmsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.sendQty"/>" binding="alkLmsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.waitQty"/>" binding="alkLmsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.successQty"/>" binding="alkLmsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.failQty"/>" binding="alkLmsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.sendQty"/>" binding="alkMmsSendQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.waitQty"/>" binding="alkMmsWaitQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.successQty"/>" binding="alkMmsSuccessQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="alimtalkDaySendStatus.failQty"/>" binding="alkMmsFailQty" width="60" is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkDaySendStatus.js?ver=20241119.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/alimtalk/alimtalkSendStatus/alimtalkDaySendStatus.js?ver=20250617.01" charset="utf-8"></script>
