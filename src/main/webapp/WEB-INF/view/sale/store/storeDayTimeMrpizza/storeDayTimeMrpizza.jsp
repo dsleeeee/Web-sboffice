@@ -11,7 +11,7 @@
 
 <div class="subCon" ng-controller="storeDayTimeMrpizzaCtrl">
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="monthMrpizza.monthMrpizza"/></a>
+        <a href="#" class="open fl"><s:message code="storeDayTimeMrpizza.storeDayTimeMrpizza"/></a>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <%-- 조회 --%>
             <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('storeDayTimeMrpizzaCtrl')">
