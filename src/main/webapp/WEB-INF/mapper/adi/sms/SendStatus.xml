@@ -980,10 +980,27 @@
         AND     hdt.SMS_DATE BETWEEN #{startDate} AND #{endDate}
         <choose>
             <when test='orgnFg != null and orgnFg != ""'>
+                <!-- 시스템 -->
+                <if test='orgnFg == "M"'>
+                    <![CDATA[
+                    ]]>
+                </if>
                 <!-- 대리점 -->
                 <if test='orgnFg == "A"'>
                     <![CDATA[
                         AND twuidv01.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{orgnCd} OR P_AGENCY_CD = #{orgnCd})
+                    ]]>
+                </if>
+                <!-- 본사 -->
+                <if test='orgnFg == "H"'>
+                    <![CDATA[
+                        AND twuidv01.HQ_OFFICE_CD = #{orgnCd}
+                    ]]>
+                </if>
+                <!-- 매장 -->
+                <if test='orgnFg == "S"'>
+                    <![CDATA[
+                       AND twuidv01.STORE_CD = #{orgnCd}
                     ]]>
                 </if>
             </when>
