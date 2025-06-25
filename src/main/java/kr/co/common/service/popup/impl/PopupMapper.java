@@ -50,12 +50,6 @@ public interface PopupMapper {
     /** 상품분류 트리 조회 */
     List<ProductClassVO> getProdClassTree(ProdVO prodVO);
 
-    /** 상품분류 트리 조회3 */
-    List<DefaultMap<String>> getProdClassTree3(ProdVO prodVO);
-
-    /** 상품분류 트리 조회3(아티제용) */
-    List<DefaultMap<String>> getProdClassTreeArtisee(ProdVO prodVO);
-
     /** 상품분류 플랫 조회 */
     String getProdClassCdNm(ProdVO prodVO);
 

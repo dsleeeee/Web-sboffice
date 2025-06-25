@@ -45,10 +45,8 @@ public class ProductClassVO extends CmmVO {
     private String level3;
 
     /** Child Items */
-    @JsonManagedReference
     private List<ProductClassVO> items;
 
-    @JsonBackReference
     private ProductClassVO parent;
 
     /** 프로시져 결과 */

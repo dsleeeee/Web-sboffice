@@ -70,7 +70,7 @@ public class PopupController {
     @RequestMapping(value = "/getVanList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getVanList(VanVO vanVO, HttpServletRequest request,
-            HttpServletResponse response, Model model) {
+                             HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> list = popupService.getVanList(vanVO);
 
@@ -90,7 +90,7 @@ public class PopupController {
     @RequestMapping(value = "/getAgencyList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getAgencyList(AgencyVO agencyVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -112,7 +112,7 @@ public class PopupController {
     @RequestMapping(value = "/getHqList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getHqList(HqOfficeVO hqOfficeVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                            HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -134,7 +134,7 @@ public class PopupController {
     @RequestMapping(value = "/getStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                               HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         storeManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -157,7 +157,7 @@ public class PopupController {
     @RequestMapping(value = "/getSearchStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getSearchStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
-                               HttpServletResponse response, Model model) {
+                                     HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -180,34 +180,12 @@ public class PopupController {
     @RequestMapping(value = "/getProdClassTree.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdClassTree(ProdVO prodVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                   HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         List<ProductClassVO> result = popupService.getProdClassTree(prodVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
-    }
-
-    /**
-     * 상품정보 분류 트리 조회3
-     * @param prodVO
-     * @param request
-     * @param response
-     * @param model
-     * @return
-     * @author 이다솜
-     * @since 2025.04.21
-     */
-    @RequestMapping(value = "/getProdClassTree3.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getProdClassTree3(ProdVO prodVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<ProductClassVO> result = popupService.getProdClassTree3(prodVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, result);
     }
 
     /**
@@ -224,7 +202,7 @@ public class PopupController {
     @RequestMapping(value = "/getProdClassCdNm.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProdClassCdNm(ProdVO prodVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                   HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
         String result = popupService.getProdClassCdNm(prodVO, sessionInfoVO);
@@ -247,7 +225,7 @@ public class PopupController {
     @RequestMapping(value = "/getProductList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getProductList(ProdVO prodVO, HttpServletRequest request,
-        HttpServletResponse response, Model model) {
+                                 HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
@@ -270,7 +248,7 @@ public class PopupController {
     @RequestMapping(value = "/getHqStoreList.sb", method = RequestMethod.POST)
     @ResponseBody
     public Result getHqStoreList(StoreManageVO storeManageVO, HttpServletRequest request,
-                               HttpServletResponse response, Model model) {
+                                 HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 

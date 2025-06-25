@@ -189,7 +189,7 @@
 
         // 트리 데이터 불러오기
         var param = {};
-        $.postJSON("/popup/getProdClassTree3.sb", param, function (result) {
+        $.postJSON("/treePopup/getProdClassTree3.sb", param, function (result) {
                 tree.itemsSource = result.data.list;
                 // console.log(result.data.list);
             },
@@ -239,7 +239,7 @@
                     var params = {};
                     params.prodClassCd = prodClassCd[0];
                     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                    $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                    $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNm.sb", params,
                         function(response){
                             $("#${param.targetId}Cd").val(prodClassCd);
                             var srchProdClassCd = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
@@ -264,7 +264,7 @@
 
                     // 데이터를 다시 받아와서 트리 재로드
                     var param = {};
-                    $.postJSON("/popup/getProdClassTree3.sb", param, function (result) {
+                    $.postJSON("/treePopup/getProdClassTree3.sb", param, function (result) {
                             tree.itemsSource =  result.data.list;  // 새 데이터로 트리 갱신
                             tree.refresh();
                         },

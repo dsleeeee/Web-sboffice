@@ -55,6 +55,7 @@
     <typeAlias alias="vanVO" type="kr.co.common.data.domain.VanVO"/>
     <typeAlias alias="agencyVO" type="kr.co.common.data.domain.AgencyVO"/>
     <typeAlias alias="customComboVO" type="kr.co.common.data.domain.CustomComboVO"/>
+    <typeAlias alias="treePopupVO" type="kr.co.common.service.treePopup.TreePopupVO"/>
 
     <typeAlias alias="itemItemVO" type="kr.co.solbipos.sale.status.item.item.service.ItemItemVO"/>
 

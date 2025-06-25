@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TreePupup.xml
+    공통 팝업 관련
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.06.20     최초작성
+-->
+
+<mapper namespace="kr.co.common.service.treePopup.impl.TreePopupMapper">
+    <!-- 상품분류 트리 조회3 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS,
+        PARAM    : prodVO
+        COMMENTS : 상품 분류를 트리뷰 목록으로 조회한다.
+    -->
+    <select id="getProdClassTree3" parameterType="treePopupVO" resultType="DefaultMap">
+        /* USE : TreePopupMapper.getProdClassTree3 */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thpc.P_PROD_CLASS_CD,
+                thpc.PROD_CLASS_CD,
+                '[' || thpc.PROD_CLASS_CD || ']' || thpc.PROD_CLASS_NM AS PROD_CLASS_NM
+                FROM
+                (
+                SELECT L_CLASS_CD AS PROD_CLASS_CD
+                ,      '00000' AS P_PROD_CLASS_CD
+                ,      L_CLASS_NM AS PROD_CLASS_NM
+                FROM TB_HQ_PRODUCT_LCLASS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                UNION
+                SELECT M_CLASS_CD AS PROD_CLASS_CD
+                ,      L_CLASS_CD AS P_PROD_CLASS_CD
+                ,      M_CLASS_NM AS PROD_CLASS_NM
+                FROM TB_HQ_PRODUCT_MCLASS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                UNION
+                SELECT S_CLASS_CD AS PROD_CLASS_CD
+                ,      M_CLASS_CD AS P_PROD_CLASS_CD
+                ,      S_CLASS_NM AS PROD_CLASS_NM
+                FROM TB_HQ_PRODUCT_SCLASS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                ) thpc
+                START WITH
+                thpc.P_PROD_CLASS_CD = '00000'
+                CONNECT BY
+                thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmpc.P_PROD_CLASS_CD,
+                tmpc.PROD_CLASS_CD,
+                '[' || tmpc.PROD_CLASS_CD || ']' || tmpc.PROD_CLASS_NM AS PROD_CLASS_NM
+                FROM
+                (
+                SELECT L_CLASS_CD AS PROD_CLASS_CD
+                ,      '00000' AS P_PROD_CLASS_CD
+                ,      L_CLASS_NM AS PROD_CLASS_NM
+                FROM TB_MS_PRODUCT_LCLASS
+                WHERE STORE_CD = #{storeCd}
+                UNION
+                SELECT M_CLASS_CD AS PROD_CLASS_CD
+                ,      L_CLASS_CD AS P_PROD_CLASS_CD
+                ,      M_CLASS_NM AS PROD_CLASS_NM
+                FROM TB_MS_PRODUCT_MCLASS
+                WHERE STORE_CD = #{storeCd}
+                UNION
+                SELECT S_CLASS_CD AS PROD_CLASS_CD
+                ,      M_CLASS_CD AS P_PROD_CLASS_CD
+                ,      S_CLASS_NM AS PROD_CLASS_NM
+                FROM TB_MS_PRODUCT_SCLASS
+                WHERE STORE_CD = #{storeCd}
+                ) tmpc
+                START WITH
+                tmpc.P_PROD_CLASS_CD = '00000'
+                CONNECT BY
+                tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품분류 트리 조회3(아티제용) -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS,
+        PARAM    : prodVO
+        COMMENTS : 상품 분류를 트리뷰 목록으로 조회한다.
+    -->
+    <select id="getProdClassTreeArtisee" parameterType="treePopupVO" resultType="DefaultMap">
+        /* USE : TreePopupMapper.getProdClassTreeArtisee */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                thpc.P_PROD_CLASS_CD,
+                thpc.PROD_CLASS_CD,
+                '[' || thpc.PROD_CLASS_CD || ']' || thpc.PROD_CLASS_NM AS PROD_CLASS_NM
+                FROM
+                TB_HQ_PRODUCT_CLASS thpc
+                WHERE
+                thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                START WITH
+                thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+                CONNECT BY
+                thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                tmpc.P_PROD_CLASS_CD,
+                tmpc.PROD_CLASS_CD,
+                '[' || tmpc.PROD_CLASS_CD || ']' || tmpc.PROD_CLASS_NM AS PROD_CLASS_NM
+                FROM
+                TB_MS_PRODUCT_CLASS tmpc
+                WHERE
+                tmpc.STORE_CD = #{storeCd}
+                START WITH
+                tmpc.P_PROD_CLASS_CD = '00000' AND tmpc.STORE_CD = #{storeCd}
+                CONNECT BY
+                tmpc.P_PROD_CLASS_CD = PRIOR tmpc.PROD_CLASS_CD AND tmpc.STORE_CD = #{storeCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 상품분류 플랫 조회 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_CLASS, TB_MS_PRODUCT_CLASS,
+        PARAM    : prodVO
+        COMMENTS : 상품 분류명을 플랫 형태로 조회한다.
+    -->
+    <select id="getProdClassCdNm" parameterType="treePopupVO" resultType="java.lang.String">
+        /* USE : TreePopupMapper.getProdClassCdNm */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT
+                SF_GET_PROD_CLASSES('H', #{hqOfficeCd}, #{prodClassCd}) AS PROD_CLASS_CD_NM
+                FROM
+                DUAL
+            </when>
+            <!-- 가맹점 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT
+                SF_GET_PROD_CLASSES('S', #{storeCd}, #{prodClassCd}) AS PROD_CLASS_CD_NM
+                FROM
+                DUAL
+            </when>
+        </choose>
+
+    </select>
+</mapper>
+
