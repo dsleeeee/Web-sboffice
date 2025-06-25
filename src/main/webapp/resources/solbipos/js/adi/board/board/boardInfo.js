@@ -68,7 +68,8 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
         var targetFgData = [
             {"name": "전체", "value": "45"},
             {"name": "매장", "value": "5"},
-            {"name": "특정대상", "value": "6"}
+            {"name": "특정대상", "value": "6"},
+            {"name": "본사", "value": "4"}
         ]
     } else if($scope.orgnFg === 'S') {
         // 매장
