@@ -70,11 +70,9 @@
         allergyScope.prodClassPopUpLayer.show();
         allergyScope.prodClassPopUpLayer.hide();
 
-        if(momsEnvstVal === "1") {
-            var prodInfo2Scope = agrid.getScope("prodInfo2Ctrl");
-            prodInfo2Scope.prodClassPopUpLayer.show();
-            prodInfo2Scope.prodClassPopUpLayer.hide();
-        }
+        var prodInfo2Scope = agrid.getScope("prodInfo2Ctrl");
+        prodInfo2Scope.prodClassPopUpLayer.show();
+        prodInfo2Scope.prodClassPopUpLayer.hide();
     }
 </script>
 <script type="text/javascript">
