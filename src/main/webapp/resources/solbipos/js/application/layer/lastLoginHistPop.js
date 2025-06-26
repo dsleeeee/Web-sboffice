@@ -95,7 +95,7 @@ app.controller('lastLoginHistCtrl', ['$scope', '$http', function ($scope, $http)
     // alert(getCookie("notLastLoginHistPop" + userId));
 
     // 쿠키체크 후 팝업 띄우기
-    if(getCookie("notLastLoginHistPop" + userId)!="Y") {
+    if(getCookie("notLastLoginHistPop" + encodeURI(userId))!="Y") {
         // 메인화면 진입인지 체크
         if(mainYn == "Y") {
             $("#fullDimmedLastLoginHistPop").show();
@@ -105,7 +105,7 @@ app.controller('lastLoginHistCtrl', ['$scope', '$http', function ($scope, $http)
 
     // 7일간 제외
     $scope.dayRemove = function(){
-        setCookie("notLastLoginHistPop" + userId,'Y', 7);
+        setCookie("notLastLoginHistPop" + encodeURI(userId),'Y', 7);
         $("#fullDimmedLastLoginHistPop").hide();
         $("#layerLastLoginHistPop").hide();
     };

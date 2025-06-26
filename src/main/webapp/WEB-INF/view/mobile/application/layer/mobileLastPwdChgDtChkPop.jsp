@@ -31,4 +31,4 @@
     var mainYn = "${mainYn}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/mobile/application/layer/mobileLastPwdChgDtChkPop.js?ver=20240306.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/mobile/application/layer/mobileLastPwdChgDtChkPop.js?ver=20250625.01" charset="utf-8"></script>
