@@ -31,16 +31,9 @@ public class BillInfoServiceImpl implements BillInfoService {
     @Override
     public DefaultMap<String> getBillPayInfo(BillInfoVO billInfoVO, SessionInfoVO sessionInfoVO) {
        // billInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        // 결제수단 array 값 세팅
-        billInfoVO.setArrPayCol(billInfoVO.getPayCol().split(","));
 
-        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
-        String pivotPayCol = "";
-        String arrPayCol[] = billInfoVO.getPayCol().split(",");
-        for(int i=0; i < arrPayCol.length; i++) {
-            pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'"+arrPayCol[i]+"'"+" AS PAY"+arrPayCol[i];
-        }
-        billInfoVO.setPivotPayCol(pivotPayCol);
+        // 결제수단 컬럼 세팅
+        billInfoVO = setPayCol(billInfoVO, sessionInfoVO);
 
         return billInfoMapper.getBillPayInfo(billInfoVO);
     }
@@ -70,5 +63,29 @@ public class BillInfoServiceImpl implements BillInfoService {
         billInfoVO.setPivotDcCol(pivotDcCol);
 
         return billInfoMapper.getBillProdList(billInfoVO);
+    }
+
+    /** 결제수단 컬럼 세팅  */
+    public BillInfoVO setPayCol(BillInfoVO billInfoVO, SessionInfoVO sessionInfoVO) {
+
+        /** PAY_CD = 02 현금,현금영수증 분리 */
+
+        // 결제수단 array 값 세팅
+        String payCol = "";
+
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotPayCol = "";
+        String arrPayCol[] = billInfoVO.getPayCol().split(",");
+        for (int i = 0; i < arrPayCol.length; i++) {
+            // 현금,현금영수증 제외
+            if (!(("02").equals(arrPayCol[i]) || ("021").equals(arrPayCol[i]))) {
+                pivotPayCol += (pivotPayCol.equals("") ? "" : ",") + "'" + arrPayCol[i] + "'" + " AS PAY" + arrPayCol[i];
+                payCol += (payCol.equals("") ? "" : ",") + arrPayCol[i];
+            }
+        }
+        billInfoVO.setPivotPayCol(pivotPayCol);
+        billInfoVO.setArrPayCol(payCol.split(","));
+
+        return billInfoVO;
     }
 }
