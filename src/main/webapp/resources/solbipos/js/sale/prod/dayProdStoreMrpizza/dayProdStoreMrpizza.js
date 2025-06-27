@@ -102,9 +102,9 @@ app.controller('dayProdStoreMrpizzaCtrl', ['$scope', '$http', '$timeout', functi
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 3일 제한
-        if (diffDay > 2) {
-            $scope._popMsg(messages['cmm.dateOver.3day.error']);
+        // 조회일자 최대 7일 제한
+        if (diffDay >= 7) {
+            $scope._popMsg(messages['cmm.dateOver.7day.error']);
             return false;
         }
 
@@ -240,9 +240,9 @@ app.controller('dayProdStoreMrpizzaCtrl', ['$scope', '$http', '$timeout', functi
             $scope._popMsg(messages['cmm.dateChk.error']);
             return false;
         }
-        // 조회일자 최대 1일 제한
-        if (diffDay > 0) {
-            $scope._popMsg(messages['cmm.dateOver.1day.error']);
+        // 조회일자 최대 7일 제한
+        if (diffDay >= 7) {
+            $scope._popMsg(messages['cmm.dateOver.7day.error']);
             return false;
         }
         if ($scope.flex.rows.length <= 0) {
@@ -305,10 +305,10 @@ app.controller('dayProdStoreMrpizzaCtrl', ['$scope', '$http', '$timeout', functi
            $scope._popMsg(messages['cmm.dateChk.error']);
            return false;
         }
-        // 조회일자 최대 1일 제한
-        if (diffDay > 0) {
-           $scope._popMsg(messages['cmm.dateOver.1day.error']);
-           return false;
+        // 조회일자 최대 7일 제한
+        if (diffDay >= 7) {
+            $scope._popMsg(messages['cmm.dateOver.7day.error']);
+            return false;
         }
         if ($scope.flex.rows.length <= 0) {
            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
