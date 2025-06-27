@@ -83,7 +83,7 @@
 
         // 트리 데이터 조회
         var param = {};
-        $.postJSON("/treePopup/getProdClassTree3.sb", param, function (result) {
+        $.postJSON("/treePopupTwo/getProdClassTreeTwo.sb", param, function (result) {
                 tree.itemsSource = result.data.list;
             },
             function (result) {
@@ -140,7 +140,7 @@
                     var params = {};
                     params.prodClassCd = prodClassCd[0];
                     // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                    $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNm.sb", params,
+                    $scope._postJSONQuery.withPopUp("/treePopupTwo/getProdClassCdNm.sb", params,
                         function(response){
                             $("#${param.targetId}Cd").val(prodClassCd);
                             var srchProdClassCd = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
