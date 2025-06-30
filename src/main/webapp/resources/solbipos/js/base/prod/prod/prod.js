@@ -268,8 +268,6 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
     }
 
-    params.prodClassCd = $("#prodSelectClassCd").val();
-
     if(brandUseFg === "1" && orgnFg === "HQ"){
 
       // 선택한 상품브랜드가 있을 때
@@ -554,7 +552,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     params.excelGubun = 'C';
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
-    params.prodClassCd = $("#prodSelectClassCd").val();
+    params.prodClassCd = $scope.prodClassCd;
     params.barCd = $scope.barCd;
     params.useYn = $scope.useYn;
     //params.hqBrandNm = $scope.hqBrandNm;

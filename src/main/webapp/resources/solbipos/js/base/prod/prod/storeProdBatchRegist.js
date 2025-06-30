@@ -28,6 +28,36 @@ app.controller('srchProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
     };
 
+    // 상품분류정보 팝업
+    $scope.popUpStoreProdClass = function() {
+        var popUp = $scope.prodClassPopUpLayer;
+        popUp.show(true, function (s) {
+            // 선택 버튼 눌렀을때만
+            if (s.dialogResult === "wj-hide-apply") {
+                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var prodClassCd = scope.getSelectedClass();
+                var params = {};
+                params.prodClassCd = prodClassCd;
+                // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                    function(response){
+                        $("#_storeProdClassCd").val(prodClassCd);
+                        // $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassNm = response.data.data;
+                    }
+                );
+            }
+        });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delStoreProdClass = function(){
+        $("#_storeProdClassCd").val("");
+        // $scope.prodClassCd = "";
+        $scope.prodClassNm = "";
+    };
+
+
     $scope.setHqBrandCd = function (){
         $("#_srchHqBrand").val($scope.hqBrandCd);
     }
@@ -345,7 +375,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.storeCd     = $("#hdStoreCd").val();
         params.prodRegFg = 'N';
         params.hqBrandCd = $("#_srchHqBrand").val();
-        params.prodClassCd = $("#storeProdBatchRegistSelectClassCd").val();
+        params.prodClassCd = $("#_storeProdClassCd").val();
         params.originalStore = $("#originalStoreCd").val();
         params.useYn = $("#_srchBatchUseYn").val();
 

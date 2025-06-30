@@ -67,9 +67,10 @@
             <%-- 분류조회 --%>
             <th><s:message code="prod.prodClass" /></th>
             <td>
-                <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd3.jsp" flush="true">
-                    <jsp:param name="targetId" value="prodSelectClass"/>
-                </jsp:include>
+                <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
+                       placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
             </td>
             <%-- 바코드 --%>
             <th><s:message code="prod.barCd" /></th>
@@ -336,7 +337,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20250609.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20250630.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

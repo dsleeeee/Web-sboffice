@@ -75,11 +75,15 @@
                 <if test="barCd != null and barCd != ''">
                     AND thpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
-                <if test="arrProdClassCd != null and arrProdClassCd != ''">
-                    AND thp.PROD_CLASS_CD IN
-                    <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
-                        #{item}
-                    </foreach>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                AND thp.PROD_CLASS_CD IN (
+                SELECT
+                PROD_CLASS_CD
+                FROM TB_HQ_PRODUCT_CLASS
+                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
@@ -161,11 +165,15 @@
                 <if test="barCd != null and barCd != ''">
                     AND tmpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
-                <if test="arrProdClassCd != null and arrProdClassCd != ''">
-                    AND tmp.PROD_CLASS_CD IN
-                    <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
-                        #{item}
-                    </foreach>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND tmp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_MS_PRODUCT_CLASS
+                    WHERE STORE_CD = #{storeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = #{storeCd}
+                    )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND tmp.USE_YN = #{useYn} --사용여부
@@ -266,11 +274,15 @@
                 <if test="barCd != null and barCd != ''">
                     AND thpb.BARCD_CD LIKE '%'||#{barCd}||'%' --바코드
                 </if>
-                <if test="arrProdClassCd != null and arrProdClassCd != ''">
-                    AND thp.PROD_CLASS_CD IN
-                    <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
-                        #{item}
-                    </foreach>
+                <if test="prodClassCd != null and prodClassCd != ''">
+                    AND thp.PROD_CLASS_CD IN (
+                    SELECT
+                    PROD_CLASS_CD
+                    FROM TB_HQ_PRODUCT_CLASS
+                    WHERE HQ_OFFICE_CD = #{hqOfficeCd}
+                    START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+                    )
                 </if>
                 <if test="useYn != null and useYn != ''">
                     AND thp.USE_YN = #{useYn} --사용여부
@@ -3180,11 +3192,16 @@
         <if test='hqBrandCd != null and hqBrandCd.toString() != ""'>
             AND thp.HQ_BRAND_CD = #{hqBrandCd}
         </if>
-        <if test="arrProdClassCd != null and arrProdClassCd != ''">
-            AND thp.PROD_CLASS_CD IN
-            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
-                #{item}
-            </foreach>
+        <if test='prodClassCd != null and prodClassCd.toString() != ""'>
+            AND thp.PROD_CLASS_CD IN (
+            SELECT  PROD_CLASS_CD
+            FROM    TB_HQ_PRODUCT_CLASS
+            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+            START WITH
+            PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+            CONNECT BY
+            PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND HQ_OFFICE_CD = #{hqOfficeCd}
+            )
         </if>
         <if test='originalStore != null and originalStore.toString() != ""'>
             AND thp.PROD_CD IN (
