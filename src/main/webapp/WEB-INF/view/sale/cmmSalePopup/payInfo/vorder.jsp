@@ -30,7 +30,6 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="smartorder.pickupFg"/>" binding="pickupFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smartorder.apprTime"/>" binding="apprTime" width="80" align="center" is-read-only="true" format="time"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="smartorder.pickupTelNo"/>" binding="pickupTelNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="smartorder.saleAmt"/>" binding="saleAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>

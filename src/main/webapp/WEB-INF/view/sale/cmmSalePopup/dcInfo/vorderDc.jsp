@@ -30,7 +30,6 @@
             <!-- define columns -->
             <wj-flex-grid-column header="<s:message code="vorderDc.pickupFg"/>" binding="pickupFg" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vorderDc.apprTime"/>" binding="apprTime" width="80" align="center" is-read-only="true" format="time"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="vorderDc.pickupTelNo"/>" binding="pickupTelNo" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="vorderDc.dcAmt"/>" binding="dcAmt" width="80" align="right" is-read-only="true" data-type="Number" format="n0" aggregate="Sum"></wj-flex-grid-column>
 
           </wj-flex-grid>
