@@ -48,23 +48,23 @@ public class TreePopupTwoController {
     }
 
     /**
-     * 상품정보 분류 트리 조회3
+     * 상품정보 분류 트리(체크박스) 조회2
      * @param   treePopupTwoVO
      * @param   request
      * @param   response
      * @param   model
      * @return
      * @author  김유승
-     * @since   2025.06.20
+     * @since   2025.06.25
      */
-    @RequestMapping(value = "/getProdClassTreeTwo.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getProdClassTreeCheck2.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdClassTreeTwo(TreePopupTwoVO treePopupTwoVO, HttpServletRequest request,
+    public Result getProdClassTreeCheck2(TreePopupTwoVO treePopupTwoVO, HttpServletRequest request,
                                       HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<TreePopupTwoVO> result = treePopupTwoService.getProdClassTreeTwo(treePopupTwoVO, sessionInfoVO);
+        List<TreePopupTwoVO> result = treePopupTwoService.getProdClassTreeCheck2(treePopupTwoVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }
@@ -78,15 +78,15 @@ public class TreePopupTwoController {
      * @param   model
      * @return
      * @author  김유승
-     * @since   2025.06.20
+     * @since   2025.06.25
      */
-    @RequestMapping(value = "/getProdClassCdNm.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getProdClassCdNmCheck2.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdClassCdNm(TreePopupTwoVO treePopupTwoVO, HttpServletRequest request,
+    public Result getProdClassCdNmCheck2(TreePopupTwoVO treePopupTwoVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        String result = treePopupTwoService.getProdClassCdNm(treePopupTwoVO, sessionInfoVO);
+        String result = treePopupTwoService.getProdClassCdNmCheck2(treePopupTwoVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

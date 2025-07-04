@@ -47,8 +47,9 @@ public class TreePopupServiceImpl implements TreePopupService {
     }
 
 
+    /** 상품정보 분류 트리(체크박스) 조회 */
     @Override
-    public List<TreePopupVO> getProdClassTree3(TreePopupVO treePopupVO, SessionInfoVO sessionInfoVO) {
+    public List<TreePopupVO> getProdClassTreeCheck(TreePopupVO treePopupVO, SessionInfoVO sessionInfoVO) {
 
         // 소속구분 설정
         if (treePopupVO.getPageFg() != null && treePopupVO.getPageFg().equals("1")) {
@@ -63,17 +64,17 @@ public class TreePopupServiceImpl implements TreePopupService {
 
         if (sessionInfoVO.getHqOfficeCd().equals("A0001") || sessionInfoVO.getHqOfficeCd().equals("A0007")) {
             // (A0001, A0007 본사/하위매장은 기존 상품분류 테이블 사용)
-            list = treePopupMapper.getProdClassTreeArtisee(treePopupVO);
+            list = treePopupMapper.getProdClassTreeCheckArtisee(treePopupVO);
         } else {
-            list = treePopupMapper.getProdClassTree3(treePopupVO);
+            list = treePopupMapper.getProdClassTreeCheck(treePopupVO);
         }
 
         return makeTreeData(list);
     }
 
-
+    /** 상품분류 플랫 조회 */
     @Override
-    public String getProdClassCdNm(TreePopupVO treePopupVO, SessionInfoVO sessionInfoVO) {
+    public String getProdClassCdNmCheck(TreePopupVO treePopupVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정
         if (treePopupVO.getPageFg() != null && treePopupVO.getPageFg().equals("1")) {
             treePopupVO.setOrgnFg("S");
@@ -83,7 +84,7 @@ public class TreePopupServiceImpl implements TreePopupService {
         }
         treePopupVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        return treePopupMapper.getProdClassCdNm(treePopupVO);
+        return treePopupMapper.getProdClassCdNmCheck(treePopupVO);
     }
 
     /**

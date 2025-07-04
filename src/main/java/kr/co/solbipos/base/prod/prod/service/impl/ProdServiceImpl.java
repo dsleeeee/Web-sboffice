@@ -108,6 +108,11 @@ public class ProdServiceImpl implements ProdService {
             }
         }
 
+        // 분류 array 값 세팅
+        if (prodVO.getProdClassCd() != null && !"".equals(prodVO.getProdClassCd())) {
+            String[] prodCdList = prodVO.getProdClassCd().split(",");
+            prodVO.setArrProdClassCd(prodCdList);
+        }
 
         /*
           단독매장의 경우 SALE_PRC_FG = '2'
@@ -174,6 +179,12 @@ public class ProdServiceImpl implements ProdService {
                     }
                 }
             }
+        }
+
+        // 분류 array 값 세팅
+        if (prodVO.getProdClassCd() != null && !"".equals(prodVO.getProdClassCd())) {
+            String[] prodCdList = prodVO.getProdClassCd().split(",");
+            prodVO.setArrProdClassCd(prodCdList);
         }
 
         if (prodVO.getExcelGubun().equals("T")) { // 전체 엑셀다운로드시(T) 조회조건 날림
@@ -553,14 +564,14 @@ public class ProdServiceImpl implements ProdService {
             LOGGER.info("subPriceFg : " + subPriceFg);
 
             // 판매단가가 달라졌는지 확인
-            if(!prodSalePrice.getStr("saleUprc").equals(prodVO.getSaleUprc())){chgYn = true;};
+            if(!prodSalePrice.getStr("saleUprc").equals(prodVO.getSaleUprc())){chgYn = true;}
             LOGGER.info("saleUprc : " + prodSalePrice.getStr("saleUprc") + "/" + prodVO.getSaleUprc());
 
             // 내점/배달/포장 가격관리를 사용하면 내점/배달/포장 가격도 달라졌는지 확인
             if("1".equals(subPriceFg)){
-                if(!prodSalePrice.getStr("stinSaleUprc").equals(prodVO.getStinSaleUprc())){chgYn = true;};
-                if(!prodSalePrice.getStr("dlvrSaleUprc").equals(prodVO.getDlvrSaleUprc())){chgYn = true;};
-                if(!prodSalePrice.getStr("packSaleUprc").equals(prodVO.getPackSaleUprc())){chgYn = true;};
+                if(!prodSalePrice.getStr("stinSaleUprc").equals(prodVO.getStinSaleUprc())){chgYn = true;}
+                if(!prodSalePrice.getStr("dlvrSaleUprc").equals(prodVO.getDlvrSaleUprc())){chgYn = true;}
+                if(!prodSalePrice.getStr("packSaleUprc").equals(prodVO.getPackSaleUprc())){chgYn = true;}
                 LOGGER.info("stinSaleUprc : " + prodSalePrice.getStr("stinSaleUprc") + "/" + prodVO.getStinSaleUprc());
                 LOGGER.info("dlvrSaleUprc : " + prodSalePrice.getStr("dlvrSaleUprc") + "/" + prodVO.getDlvrSaleUprc());
                 LOGGER.info("dlvrSaleUprc : " + prodSalePrice.getStr("packSaleUprc") + "/" + prodVO.getPackSaleUprc());
@@ -685,7 +696,7 @@ public class ProdServiceImpl implements ProdService {
         // 거래처코드
         if (prodVO.getChkVendrCd() != null && !"".equals(prodVO.getChkVendrCd())) {
             // 거래처코드 array 값 세팅
-            String chkVendrCd[] = prodVO.getChkVendrCd().split(",");
+            String[] chkVendrCd = prodVO.getChkVendrCd().split(",");
             for(int i=0; i < chkVendrCd.length; i++) {
                 prodVO.setVendrCd(chkVendrCd[i]);
 
@@ -713,7 +724,7 @@ public class ProdServiceImpl implements ProdService {
 
                     if(sideProd != null && sideProd != "" && sideProd.length() > 0) {
 
-                        String arrProdCol[] = sideProd.split(",");
+                        String[] arrProdCol = sideProd.split(",");
                         for (int i = 0; i < arrProdCol.length; i++) {
 
                             prodVO.setProdCd(arrProdCol[i]);
@@ -903,7 +914,7 @@ public class ProdServiceImpl implements ProdService {
                 if ("Y".equals(sideSelYn) && SideGrpCd != null) {
                     // 상품코드 조회
                     String sideProd = prodMapper.getHqSdselProd(prodVO);
-                    String arrProdCol[] = sideProd.split(",");
+                    String[] arrProdCol = sideProd.split(",");
                     for (int i = 0; i < arrProdCol.length; i++) {
 
                         prodVO.setProdCd(arrProdCol[i]);
@@ -1116,6 +1127,12 @@ public class ProdServiceImpl implements ProdService {
 
         prodVO.setUserId(sessionInfoVO.getUserId());
 
+        // 분류 array 값 세팅
+        if (prodVO.getProdClassCd() != null && !"".equals(prodVO.getProdClassCd())) {
+            String[] prodCdList = prodVO.getProdClassCd().split(",");
+            prodVO.setArrProdClassCd(prodCdList);
+        }
+
         if(prodVO.getProdRegFg() == UseYn.Y){
             return prodMapper.getStoreProdRegList(prodVO);
         }else{
@@ -1228,7 +1245,7 @@ public class ProdServiceImpl implements ProdService {
                     // 상품코드 조회
                     String sideProd = prodMapper.getHqSdselProd(prodVO);
 
-                    String arrProdCol[] = sideProd.split(",");
+                    String[] arrProdCol = sideProd.split(",");
                     for (int i = 0; i < arrProdCol.length; i++) {
 
                         prodVO.setProdCd(arrProdCol[i]);
@@ -1309,21 +1326,21 @@ public class ProdServiceImpl implements ProdService {
             prodInfo.setRegDt(currentDt);
             prodInfo.setRegId(sessionInfo.getUserId());
 
-            prodInfo.setOrgnFg((String)multi.getParameter("orgnFg"));
-            prodInfo.setProdCd((String)multi.getParameter("ImageProdCd"));
-            prodInfo.setProdImageDelFg((String)multi.getParameter("prodImageDelFg"));
+            prodInfo.setOrgnFg(multi.getParameter("orgnFg"));
+            prodInfo.setProdCd(multi.getParameter("ImageProdCd"));
+            prodInfo.setProdImageDelFg(multi.getParameter("prodImageDelFg"));
 
             // 저장경로 폴더
             String path_folder = "";
 
             // 본사
             if(String.valueOf(prodInfo.getOrgnFg()).equals("HQ")) {
-                prodInfo.setHqOfficeCd((String)multi.getParameter("hqOfficeCd"));
+                prodInfo.setHqOfficeCd(multi.getParameter("hqOfficeCd"));
                 path_folder = prodInfo.getHqOfficeCd();
 
                 // 매장
             } else if(String.valueOf(prodInfo.getOrgnFg()).equals("STORE")) {
-                prodInfo.setStoreCd((String)multi.getParameter("storeCd"));
+                prodInfo.setStoreCd(multi.getParameter("storeCd"));
                 path_folder = prodInfo.getStoreCd();
             }
 
@@ -1397,18 +1414,10 @@ public class ProdServiceImpl implements ProdService {
                     String check = prodMapper.getProdImageFileSaveCheck(prodInfo);
                     if(String.valueOf(check).equals("0")) {
                         // 상품 이미지 저장 insert
-                        if(prodMapper.getProdImageFileSaveInsert(prodInfo) > 0) {
-                            isSuccess = true;
-                        } else {
-                            isSuccess = false;
-                        }
+                        isSuccess = prodMapper.getProdImageFileSaveInsert(prodInfo) > 0;
                     } else {
                         // 상품 이미지 저장 update
-                        if(prodMapper.getProdImageFileSaveUpdate(prodInfo) > 0) {
-                            isSuccess = true;
-                        } else {
-                            isSuccess = false;
-                        }
+                        isSuccess = prodMapper.getProdImageFileSaveUpdate(prodInfo) > 0;
                     }
                 }
             }

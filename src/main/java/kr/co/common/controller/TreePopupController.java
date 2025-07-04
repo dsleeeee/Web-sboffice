@@ -52,7 +52,7 @@ public class TreePopupController {
 
 
     /**
-     * 상품정보 분류 트리 조회3
+     * 상품정보 분류 트리(체크박스) 조회
      * @param   treePopupVO
      * @param   request
      * @param   response
@@ -61,14 +61,14 @@ public class TreePopupController {
      * @author  김유승
      * @since   2025.06.20
      */
-    @RequestMapping(value = "/getProdClassTree3.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getProdClassTreeCheck.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdClassTree3(TreePopupVO treePopupVO, HttpServletRequest request,
+    public Result getProdClassTreeCheck(TreePopupVO treePopupVO, HttpServletRequest request,
                                     HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        List<TreePopupVO> result = treePopupService.getProdClassTree3(treePopupVO, sessionInfoVO);
+        List<TreePopupVO> result = treePopupService.getProdClassTreeCheck(treePopupVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }
@@ -84,13 +84,13 @@ public class TreePopupController {
      * @author  김유승
      * @since   2025.06.20
      */
-    @RequestMapping(value = "/getProdClassCdNm.sb", method = RequestMethod.POST)
+    @RequestMapping(value = "/getProdClassCdNmCheck.sb", method = RequestMethod.POST)
     @ResponseBody
-    public Result getProdClassCdNm(TreePopupVO treePopupVO, HttpServletRequest request,
+    public Result getProdClassCdNmCheck(TreePopupVO treePopupVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-        String result = treePopupService.getProdClassCdNm(treePopupVO, sessionInfoVO);
+        String result = treePopupService.getProdClassCdNmCheck(treePopupVO, sessionInfoVO);
 
         return returnJson(Status.OK, result);
     }

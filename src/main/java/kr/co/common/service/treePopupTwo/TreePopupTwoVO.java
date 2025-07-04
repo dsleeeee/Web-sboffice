@@ -1,5 +1,6 @@
 package kr.co.common.service.treePopupTwo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import kr.co.solbipos.application.common.service.PageVO;
 
 import java.util.List;

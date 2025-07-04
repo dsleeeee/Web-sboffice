@@ -30,20 +30,24 @@ app.controller('srchProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상품분류정보 팝업
     $scope.popUpStoreProdClass = function() {
-        var popUp = $scope.prodClassPopUpLayer;
+
+        $scope._broadcast('prodClassCheckPopUpCtrl2', {
+            selectCancelFg2: $("#_selectCancelFg2").val()
+        });
+        var popUp = $scope.prodClassCheckPopUpLayer2;
         popUp.show(true, function (s) {
             // 선택 버튼 눌렀을때만
             if (s.dialogResult === "wj-hide-apply") {
-                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var scope = agrid.getScope('prodClassCheckPopUpCtrl2');
                 var prodClassCd = scope.getSelectedClass();
                 var params = {};
-                params.prodClassCd = prodClassCd;
+                params.prodClassCd = prodClassCd[0];
                 // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                $scope._postJSONQuery.withPopUp("/treePopupTwo/getProdClassCdNmCheck2.sb", params,
                     function(response){
                         $("#_storeProdClassCd").val(prodClassCd);
                         // $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassNm = response.data.data;
+                        $scope.prodClassNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
                     }
                 );
             }
@@ -55,6 +59,7 @@ app.controller('srchProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#_storeProdClassCd").val("");
         // $scope.prodClassCd = "";
         $scope.prodClassNm = "";
+        $("#_selectCancelFg2").val("Y");
     };
 
 
@@ -170,7 +175,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
 
-        var params = new Array();
+        var params = [];
         var numchkexp = /[^0-9]/; // 숫자가 아닌 값 체크
         var numchkexp2 = /^-?[0-9]+$/;
 
@@ -325,7 +330,7 @@ app.controller('regProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상품삭제
     $scope.delete = function(){
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].hqOfficeCd = $("#hdHqOfficeCd").val();
@@ -384,7 +389,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상품등록
     $scope.regist = function(){
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 $scope.flex.collectionView.items[i].hqOfficeCd = $("#hdHqOfficeCd").val();

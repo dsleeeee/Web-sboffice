@@ -104,7 +104,7 @@ app.controller('monthProdMrpizzaCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
-        params.prodClassCd = $("#monthProdMrpizzaSelectClassCd").val();
+        params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         //params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -195,19 +195,24 @@ app.controller('monthProdMrpizzaCtrl', ['$scope', '$http', '$timeout', function 
 
     // 상품분류정보 팝업
     $scope.popUpProdClass = function() {
-        var popUp = $scope.prodClassPopUpLayer;
+
+        // 선택취소 값 전달
+        $scope._broadcast('prodClassCheckPopUpCtrl', {
+            selectCancelFg: $("#_selectCancelFg").val()
+        });
+        var popUp = $scope.prodClassCheckPopUpLayer;
         popUp.show(true, function (s) {
             // 선택 버튼 눌렀을때만
             if (s.dialogResult === "wj-hide-apply") {
-                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var scope = agrid.getScope('prodClassCheckPopUpCtrl');
                 var prodClassCd = scope.getSelectedClass();
                 var params = {};
-                params.prodClassCd = prodClassCd;
+                params.prodClassCd = prodClassCd[0];
                 // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNmCheck.sb", params,
                     function(response){
                         $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassNm = response.data.data;
+                        $scope.prodClassCdNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
                     }
                 );
             }
@@ -217,7 +222,8 @@ app.controller('monthProdMrpizzaCtrl', ['$scope', '$http', '$timeout', function 
     // 상품분류정보 선택취소
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
-        $scope.prodClassNm = "";
+        $scope.prodClassCdNm = "";
+        $("#_selectCancelFg").val("Y");
     };
 
     // 조회조건 엑셀다운로드
@@ -246,7 +252,7 @@ app.controller('monthProdMrpizzaCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
-        params.prodClassCd = $("#monthProdMrpizzaSelectClassCd").val();
+        params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         //params.storeHqBrandCd = $scope.storeHqBrandCd;

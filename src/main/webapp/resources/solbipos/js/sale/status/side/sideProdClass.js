@@ -118,6 +118,38 @@ app.controller('sideProdClassCtrl', ['$scope', '$http', '$timeout', function ($s
         }
     };
 
+    // 상품분류정보 팝업
+    $scope.popUpProdClass = function() {
+
+        $scope._broadcast('prodClassCheckPersistPopUpCtrl', {
+            selectCancelFgCheckPersist: $("#_selectCancelFgCheckPersist").val()
+        });
+        var popUp = $scope.prodClassCheckPersistPopUpLayer;
+        popUp.show(true, function (s) {
+            // 선택 버튼 눌렀을때만
+            if (s.dialogResult === "wj-hide-apply") {
+                var scope = agrid.getScope('prodClassCheckPersistPopUpCtrl');
+                var prodClassCd = scope.getSelectedClass();
+                var params = {};
+                params.prodClassCd = prodClassCd[0];
+                // 조회 수행 : 조회URL, 파라미터, 콜백함수
+                $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNmCheck.sb", params,
+                    function(response){
+                        $scope.prodClassCd = prodClassCd;
+                        $scope.prodClassCdNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
+                    }
+                );
+            }
+        });
+    };
+
+    // 상품분류정보 선택취소
+    $scope.delProdClass = function(){
+        $scope.prodClassCd = "";
+        $scope.prodClassCdNm = "";
+        $("#_selectCancelFgCheckPersist").val("Y");
+    };
+
 }]);
 
 

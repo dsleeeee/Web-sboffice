@@ -17,8 +17,8 @@
         PARAM    : prodVO
         COMMENTS : 상품 분류를 트리뷰 목록으로 조회한다.
     -->
-    <select id="getProdClassTree3" parameterType="treePopupVO" resultType="DefaultMap">
-        /* USE : TreePopupMapper.getProdClassTree3 */
+    <select id="getProdClassTreeCheck" parameterType="treePopupVO" resultType="DefaultMap">
+        /* USE : TreePopupMapper.getProdClassTreeCheck */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -27,29 +27,13 @@
                 thpc.PROD_CLASS_CD,
                 '[' || thpc.PROD_CLASS_CD || ']' || thpc.PROD_CLASS_NM AS PROD_CLASS_NM
                 FROM
-                (
-                SELECT L_CLASS_CD AS PROD_CLASS_CD
-                ,      '00000' AS P_PROD_CLASS_CD
-                ,      L_CLASS_NM AS PROD_CLASS_NM
-                FROM TB_HQ_PRODUCT_LCLASS
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                UNION
-                SELECT M_CLASS_CD AS PROD_CLASS_CD
-                ,      L_CLASS_CD AS P_PROD_CLASS_CD
-                ,      M_CLASS_NM AS PROD_CLASS_NM
-                FROM TB_HQ_PRODUCT_MCLASS
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                UNION
-                SELECT S_CLASS_CD AS PROD_CLASS_CD
-                ,      M_CLASS_CD AS P_PROD_CLASS_CD
-                ,      S_CLASS_NM AS PROD_CLASS_NM
-                FROM TB_HQ_PRODUCT_SCLASS
-                WHERE HQ_OFFICE_CD = #{hqOfficeCd}
-                ) thpc
+                TB_HQ_PRODUCT_CLASS thpc
+                WHERE
+                thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                 START WITH
-                thpc.P_PROD_CLASS_CD = '00000'
+                thpc.P_PROD_CLASS_CD = '00000' AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
                 CONNECT BY
-                thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD
+                thpc.P_PROD_CLASS_CD = PRIOR thpc.PROD_CLASS_CD AND thpc.HQ_OFFICE_CD = #{hqOfficeCd}
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -91,8 +75,8 @@
         PARAM    : prodVO
         COMMENTS : 상품 분류를 트리뷰 목록으로 조회한다.
     -->
-    <select id="getProdClassTreeArtisee" parameterType="treePopupVO" resultType="DefaultMap">
-        /* USE : TreePopupMapper.getProdClassTreeArtisee */
+    <select id="getProdClassTreeCheckArtisee" parameterType="treePopupVO" resultType="DefaultMap">
+        /* USE : TreePopupMapper.getProdClassTreeCheckArtisee */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
@@ -133,8 +117,8 @@
         PARAM    : prodVO
         COMMENTS : 상품 분류명을 플랫 형태로 조회한다.
     -->
-    <select id="getProdClassCdNm" parameterType="treePopupVO" resultType="java.lang.String">
-        /* USE : TreePopupMapper.getProdClassCdNm */
+    <select id="getProdClassCdNmCheck" parameterType="treePopupVO" resultType="java.lang.String">
+        /* USE : TreePopupMapper.getProdClassCdNmCheck */
         <choose>
             <!-- 본사 -->
             <when test='orgnFg != null and orgnFg == "H"'>
