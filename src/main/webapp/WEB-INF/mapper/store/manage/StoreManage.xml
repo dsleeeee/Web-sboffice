@@ -7861,6 +7861,7 @@
         FROM    TB_MS_STORE A
         ,		TB_CM_AGENCY B
         ,       TB_MS_EMPLOYEE C
+        ,       TB_WB_USER_INFO D
         WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     A.STORE_CD     != #{storeCd}
         AND     B.AGENCY_CD     = A.AGENCY_CD
@@ -7870,8 +7871,35 @@
         <if test='orgnFg != null and orgnFg == "A"'>
             AND (A.AGENCY_CD = #{agencyCd} OR B.P_AGENCY_CD = #{agencyCd})
         </if>
+        AND     D.USER_ID       = C.USER_ID
+        <if test='nmcodeAuthHqCnt != null and nmcodeAuthHqCnt == "0"'>
+            AND     D.AUTH_GRP_CD   = (
+                                        SELECT D.AUTH_GRP_CD
+                                        FROM TB_MS_EMPLOYEE C,
+                                        TB_WB_USER_INFO D
+                                        WHERE 1=1
+                                        AND     C.STORE_CD      = #{storeCd}
+                                        AND     C.EMP_NO        = '0000'
+                                        AND     C.USER_ID IS NOT NULL
+                                        AND     D.USER_ID       = C.USER_ID
+                                      )
+        </if>
         ORDER
         BY      A.STORE_CD
+    </select>
+
+    <!-- 시스템명칭관리 [308 권한허용본사] 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getNmcodeAuthHqCnt" parameterType="storeManageVO" resultType="String">
+        /* StoreManageMapper.getNmcodeAuthHqCnt */
+        SELECT COUNT(NMCODE_CD) AS NMCODE_CNT
+        FROM TB_CM_NMCODE
+        WHERE 1=1
+        AND NMCODE_GRP_CD = '308'
+        AND NMCODE_NM = #{hqOfficeCd}
     </select>
 
     <!-- 사용 메뉴 조회 -->

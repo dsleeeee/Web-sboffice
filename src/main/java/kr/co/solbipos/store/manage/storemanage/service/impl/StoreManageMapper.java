@@ -414,6 +414,9 @@ public interface StoreManageMapper {
     /** 권한그룹복사를 위한 매장목록 조회 */
     List<DefaultMap<String>> authStoreList(StoreManageVO storeManageVO);
 
+    /** 시스템명칭관리 [308 권한허용본사] 조회 */
+    String getNmcodeAuthHqCnt(StoreManageVO storeManageVO);
+
     /** 사용메뉴 조회 */
     List<DefaultMap<String>> avlblMenu(StoreManageVO storeManageVO);
 

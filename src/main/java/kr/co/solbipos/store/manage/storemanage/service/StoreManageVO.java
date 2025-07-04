@@ -255,6 +255,9 @@ public class StoreManageVO extends PageVO {
     /** 코너코드*/
     private String cornrCd;
 
+    /** 시스템명칭관리 [308 권한허용본사] */
+    private String nmcodeAuthHqCnt;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -1163,5 +1166,13 @@ public class StoreManageVO extends PageVO {
 
     public void setCornrCd(String cornrCd) {
         this.cornrCd = cornrCd;
+    }
+
+    public String getNmcodeAuthHqCnt() {
+        return nmcodeAuthHqCnt;
+    }
+
+    public void setNmcodeAuthHqCnt(String nmcodeAuthHqCnt) {
+        this.nmcodeAuthHqCnt = nmcodeAuthHqCnt;
     }
 }
