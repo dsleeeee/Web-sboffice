@@ -1636,6 +1636,10 @@ public class StoreManageServiceImpl implements StoreManageService {
             storeManageVO.setAgencyCd(sessionInfoVO.getOrgnCd());
         }
 
+        // 시스템명칭관리 [308 권한허용본사] 조회
+        String nmcodeAuthHqCnt = mapper.getNmcodeAuthHqCnt(storeManageVO);
+        storeManageVO.setNmcodeAuthHqCnt(nmcodeAuthHqCnt);
+
         return mapper.authStoreList(storeManageVO);
     }
 
