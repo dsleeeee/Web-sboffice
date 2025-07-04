@@ -108,7 +108,7 @@ app.controller('monthProdStoreMrpizzaCtrl', ['$scope', '$http', '$timeout', func
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.chkProdClassSumDisplay = $scope.chkProdClassSumDisplay;
-        params.prodClassCd = $("#monthProdStoreMrpizzaSelectClassCd").val();
+        params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         /*params.storeHqBrandCd = $scope.storeHqBrandCd;*/
@@ -208,19 +208,24 @@ app.controller('monthProdStoreMrpizzaCtrl', ['$scope', '$http', '$timeout', func
 
     // 상품분류정보 팝업
     $scope.popUpProdClass = function() {
-        var popUp = $scope.prodClassPopUpLayer;
+
+        // 선택취소 값 전달
+        $scope._broadcast('prodClassCheckPopUpCtrl', {
+            selectCancelFg: $("#_selectCancelFg").val()
+        });
+        var popUp = $scope.prodClassCheckPopUpLayer;
         popUp.show(true, function (s) {
             // 선택 버튼 눌렀을때만
             if (s.dialogResult === "wj-hide-apply") {
-                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var scope = agrid.getScope('prodClassCheckPopUpCtrl');
                 var prodClassCd = scope.getSelectedClass();
                 var params = {};
-                params.prodClassCd = prodClassCd;
+                params.prodClassCd = prodClassCd[0];
                 // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNmCheck.sb", params,
                     function(response){
                         $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassNm = response.data.data;
+                        $scope.prodClassCdNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
                     }
                 );
             }
@@ -230,7 +235,8 @@ app.controller('monthProdStoreMrpizzaCtrl', ['$scope', '$http', '$timeout', func
     // 상품분류정보 선택취소
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
-        $scope.prodClassNm = "";
+        $scope.prodClassCdNm = "";
+        $("#_selectCancelFg").val("Y");
     };
 
     // 조회조건/분할 엑셀다운로드
@@ -260,7 +266,7 @@ app.controller('monthProdStoreMrpizzaCtrl', ['$scope', '$http', '$timeout', func
         params.startMonth = wijmo.Globalize.format(startMonth.value, 'yyyyMM');
         params.endMonth = wijmo.Globalize.format(endMonth.value, 'yyyyMM');
         params.chkProdClassSumDisplay = $scope.chkProdClassSumDisplay;
-        params.prodClassCd = $("#monthProdStoreMrpizzaSelectClassCd").val();
+        params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         /*params.storeHqBrandCd = $scope.storeHqBrandCd;*/
@@ -390,7 +396,7 @@ app.controller('monthProdStoreMrpizzaExcelCtrl', ['$scope', '$http', '$timeout',
                         });
 
                         $scope._popMsg(msgCntChk); // 다운로드 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
-                        return;
+
                     }
                 }
             });
@@ -499,7 +505,7 @@ app.controller('monthProdStoreMrpizzaExcelCtrl', ['$scope', '$http', '$timeout',
                 $scope.excelUploadingPopup(false);
                 return false;
             }
-            ;
+
 
             // 다운로드 될 전체 파일 갯수 셋팅
             $("#totalRows").html(totFileCnt);
@@ -645,7 +651,7 @@ app.controller('monthProdStoreMrpizzaExcelCtrl', ['$scope', '$http', '$timeout',
                         });
                         //}, 3000*x);
                     });
-                };
+                }
 
                 async function getExcelFile(x) {
                     if (totFileCnt > x) {
@@ -653,7 +659,7 @@ app.controller('monthProdStoreMrpizzaExcelCtrl', ['$scope', '$http', '$timeout',
                     } else {
                         $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                     }
-                };
+                }
 
                 // 엑셀 분할 다운로드 시작
                 getExcelFile(0);

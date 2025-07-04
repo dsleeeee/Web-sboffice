@@ -75,6 +75,7 @@
                         <input type="text" class="sb-input w120px" id="srchStoreProdClassCd" ng-model="prodClassNm" ng-click="popUpStoreProdClass()" style="float: left;"
                                placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
                         <input type="hidden" id="_storeProdClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                        <input type="hidden" id="_selectCancelFg2" name="selectCancelFg2" ng-model="selectCancelFg2" disabled />
                         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delStoreProdClass()"><s:message code="cmm.selectCancel"/></button>
                     </td>
                 </tr>
@@ -200,4 +201,4 @@
     var hqOfficeCd  = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20250630.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/storeProdBatchRegist.js?ver=20250703.01" charset="utf-8"></script>

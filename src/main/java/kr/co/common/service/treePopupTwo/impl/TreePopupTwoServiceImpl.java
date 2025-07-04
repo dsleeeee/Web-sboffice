@@ -39,8 +39,9 @@ public class TreePopupTwoServiceImpl implements TreePopupTwoService {
         this.treePopupTwoMapper = treePopupTwoMapper;
     }
 
+    /** 상품정보 분류 트리(체크박스) 조회2 */
     @Override
-    public List<TreePopupTwoVO> getProdClassTreeTwo(TreePopupTwoVO treePopupTwoVO, SessionInfoVO sessionInfoVO) {
+    public List<TreePopupTwoVO> getProdClassTreeCheck2(TreePopupTwoVO treePopupTwoVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정
         if (treePopupTwoVO.getPageFg() != null && treePopupTwoVO.getPageFg().equals("1")) {
             treePopupTwoVO.setOrgnFg("S");
@@ -54,16 +55,17 @@ public class TreePopupTwoServiceImpl implements TreePopupTwoService {
 
         if (sessionInfoVO.getHqOfficeCd().equals("A0001") || sessionInfoVO.getHqOfficeCd().equals("A0007")) {
             // (A0001, A0007 본사/하위매장은 기존 상품분류 테이블 사용)
-            list = treePopupTwoMapper.getProdClassTreeArtisee(treePopupTwoVO);
+            list = treePopupTwoMapper.getProdClassTreeArtiseeCheck2(treePopupTwoVO);
         } else {
-            list = treePopupTwoMapper.getProdClassTreeTwo(treePopupTwoVO);
+            list = treePopupTwoMapper.getProdClassTreeCheck2(treePopupTwoVO);
         }
 
         return makeTreeData(list);
     }
 
+    /** 상품분류 플랫 조회2 */
     @Override
-    public String getProdClassCdNm(TreePopupTwoVO treePopupTwoVO, SessionInfoVO sessionInfoVO) {
+    public String getProdClassCdNmCheck2(TreePopupTwoVO treePopupTwoVO, SessionInfoVO sessionInfoVO) {
         // 소속구분 설정
         if (treePopupTwoVO.getPageFg() != null && treePopupTwoVO.getPageFg().equals("1")) {
             treePopupTwoVO.setOrgnFg("S");
@@ -73,7 +75,7 @@ public class TreePopupTwoServiceImpl implements TreePopupTwoService {
         }
         treePopupTwoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-        return treePopupTwoMapper.getProdClassCdNm(treePopupTwoVO);
+        return treePopupTwoMapper.getProdClassCdNmCheck2(treePopupTwoVO);
     }
 
     /**
@@ -111,6 +113,7 @@ public class TreePopupTwoServiceImpl implements TreePopupTwoService {
                 }
             }
         }
+
 
         List<TreePopupTwoVO> returnData = new ArrayList<TreePopupTwoVO>();
         for (TreePopupTwoVO treePopupTwoVO : hm.values()) {

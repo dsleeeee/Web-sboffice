@@ -25,10 +25,12 @@ import java.util.List;
 @Repository
 public interface TreePopupTwoMapper {
 
+    /** 상품정보 분류 트리(체크박스) 조회2(아티제용) */
+    List<DefaultMap<String>> getProdClassTreeArtiseeCheck2(TreePopupTwoVO treePopupTwoVO);
 
-    List<DefaultMap<String>> getProdClassTreeArtisee(TreePopupTwoVO treePopupTwoVO);
+    /** 상품정보 분류 트리(체크박스) 조회2 */
+    List<DefaultMap<String>> getProdClassTreeCheck2(TreePopupTwoVO treePopupTwoVO);
 
-    List<DefaultMap<String>> getProdClassTreeTwo(TreePopupTwoVO treePopupTwoVO);
-
-    String getProdClassCdNm(TreePopupTwoVO treePopupTwoVO);
+    /** 상품분류 플랫 조회2 */
+    String getProdClassCdNmCheck2(TreePopupTwoVO treePopupTwoVO);
 }

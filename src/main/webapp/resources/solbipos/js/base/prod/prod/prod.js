@@ -389,7 +389,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       return false;
     }
 
-    var params = new Array();
+    var params = [];
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if ($scope.flex.collectionView.items[i].gChk) {
 
@@ -438,19 +438,24 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
   // 상품분류정보 팝업
   $scope.popUpProdClass = function() {
-    var popUp = $scope.prodClassPopUpLayer;
+
+    // 선택취소 값 전달
+    $scope._broadcast('prodClassCheckPopUpCtrl', {
+      selectCancelFg: $("#_selectCancelFg").val()
+    });
+    var popUp = $scope.prodClassCheckPopUpLayer;
     popUp.show(true, function (s) {
       // 선택 버튼 눌렀을때만
       if (s.dialogResult === "wj-hide-apply") {
-        var scope = agrid.getScope('prodClassPopUpCtrl');
+        var scope = agrid.getScope('prodClassCheckPopUpCtrl');
         var prodClassCd = scope.getSelectedClass();
         var params = {};
-        params.prodClassCd = prodClassCd;
+        params.prodClassCd = prodClassCd[0];
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+        $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNmCheck.sb", params,
             function(response){
               $scope.prodClassCd = prodClassCd;
-              $scope.prodClassCdNm = response.data.data;
+              $scope.prodClassCdNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
             }
         );
       }
@@ -461,6 +466,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
   $scope.delProdClass = function(){
     $scope.prodClassCd = "";
     $scope.prodClassCdNm = "";
+    $("#_selectCancelFg").val("Y");
   };
 
   // 화면 ready 된 후 설정

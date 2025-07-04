@@ -41,9 +41,11 @@
                     <%-- 분류조회 --%>
                     <th><s:message code="prod.prodClass" /></th>
                     <td>
-                        <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd3.jsp" flush="true">
-                            <jsp:param name="targetId" value="dayProdMrpizzaSelectClass"/>
-                        </jsp:include>
+                        <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
+                               placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                        <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                        <input type="hidden" id="_selectCancelFg" name="selectCancelFg" ng-model="selectCancelFg" disabled />
+                        <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                     </td>
                 </tr>
                 <tr>
@@ -270,9 +272,13 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdMrpizza/dayProdMrpizza.js?ver=20250626.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/dayProdMrpizza/dayProdMrpizza.js?ver=20250703.02" charset="utf-8"></script>
 
 <%-- 20221117 상품분류 팝업 주석처리함 -> 상품 멀티 팝업에 상품분류가 들어감으로 오류 --%>
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd2.jsp">
+</c:import>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCdCheck.jsp">
 </c:import>

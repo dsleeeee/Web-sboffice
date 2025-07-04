@@ -52,9 +52,11 @@
                 <%-- 상품분류 --%>
                 <th><s:message code="dayProdSaleStore.prodClass" /></th>
                 <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd3.jsp" flush="true">
-                        <jsp:param name="targetId" value="dayProdSaleStoreSelectClass"/>
-                    </jsp:include>
+                    <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
+                           placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                    <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
+                    <input type="hidden" id="_selectCancelFg" name="selectCancelFg" ng-model="selectCancelFg" disabled />
+                    <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                 </td>
                 <td></td>
                 <td></td>
@@ -75,9 +77,11 @@
                 <%-- 사이드상품분류 --%>
                 <th><s:message code="dayProdSaleStore.sideProdClass" /></th>
                 <td>
-                    <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCd4.jsp" flush="true">
-                        <jsp:param name="targetId" value="dayProdSaleStoreSelectSideClass"/>
-                    </jsp:include>
+                    <input type="text" class="sb-input w70" id="srchSideProdClassCd" ng-model="sideProdClassCdNm" ng-click="popUpSideProdClass()" style="float: left;"
+                           placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                    <input type="hidden" id="_sideProdClassCd" name="sideProdClassCd" ng-model="sideProdClassCd" disabled />
+                    <input type="hidden" id="_selectCancelFgCheckPersist" name="selectCancelFgPersist" ng-model="selectCancelFgPersist" disabled />
+                    <button type="button" class="btn_skyblue fl mr5" id="btnCancelSideProdClassCd" style="margin-left: 5px;" ng-click="delSideProdClass()"><s:message code="cmm.selectCancel"/></button>
                 </td>
                 <td></td>
                 <td></td>
@@ -183,8 +187,16 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/dayProdSaleStore/dayProdSaleStore.js?ver=20250605.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/dayProdSaleStore/dayProdSaleStore.js?ver=20250703.01" charset="utf-8"></script>
 
 <%-- 상세 팝업 --%>
 <c:import url="/WEB-INF/view/sale/status/dayProdSaleStore/dayProdSaleStoreDtl.jsp">
+</c:import>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCdCheck.jsp">
+</c:import>
+
+<%-- 상품분류 팝업 --%>
+<c:import url="/WEB-INF/view/application/layer/searchProdClassCdCheckPersist.jsp">
 </c:import>

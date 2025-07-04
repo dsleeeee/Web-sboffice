@@ -26,13 +26,13 @@ import java.util.List;
 @Repository
 public interface TreePopupMapper {
 
-    /** 상품분류 트리 조회3 */
-    List<DefaultMap<String>> getProdClassTree3(TreePopupVO treePopupVO);
+    /** 상품정보 분류 트리(체크박스) 조회 */
+    List<DefaultMap<String>> getProdClassTreeCheck(TreePopupVO treePopupVO);
 
-    /** 상품분류 트리 조회3(아티제용) */
-    List<DefaultMap<String>> getProdClassTreeArtisee(TreePopupVO treePopupVO);
+    /** 상품정보 분류 트리(체크박스) 조회(아티제용) */
+    List<DefaultMap<String>> getProdClassTreeCheckArtisee(TreePopupVO treePopupVO);
 
     /** 상품분류 플랫 조회 */
-    String getProdClassCdNm(TreePopupVO treePopupVO);
+    String getProdClassCdNmCheck(TreePopupVO treePopupVO);
 
 }

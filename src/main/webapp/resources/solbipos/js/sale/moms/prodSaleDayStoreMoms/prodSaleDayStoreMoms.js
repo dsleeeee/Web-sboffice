@@ -82,7 +82,7 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-        params.prodClassCd = $("#prodSaleDayStoreMomsSelectClassCd").val();
+        params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -154,19 +154,24 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
 
     // 상품분류정보 팝업
     $scope.popUpProdClass = function() {
-        var popUp = $scope.prodClassPopUpLayer;
+
+        // 선택취소 값 전달
+        $scope._broadcast('prodClassCheckPopUpCtrl', {
+            selectCancelFg: $("#_selectCancelFg").val()
+        });
+        var popUp = $scope.prodClassCheckPopUpLayer;
         popUp.show(true, function (s) {
             // 선택 버튼 눌렀을때만
             if (s.dialogResult === "wj-hide-apply") {
-                var scope = agrid.getScope('prodClassPopUpCtrl');
+                var scope = agrid.getScope('prodClassCheckPopUpCtrl');
                 var prodClassCd = scope.getSelectedClass();
                 var params = {};
-                params.prodClassCd = prodClassCd;
+                params.prodClassCd = prodClassCd[0];
                 // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                $scope._postJSONQuery.withPopUp("/popup/getProdClassCdNm.sb", params,
+                $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNmCheck.sb", params,
                     function(response){
                         $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassNm = response.data.data;
+                        $scope.prodClassCdNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
                     }
                 );
             }
@@ -176,7 +181,8 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
     // 상품분류정보 선택취소
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
-        $scope.prodClassNm = "";
+        $scope.prodClassCdNm = "";
+        $("#_selectCancelFg").val("Y");
     };
 
     // 확장조회 숨김/보임
@@ -214,7 +220,7 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
-        params.prodClassCd = $("#prodSaleDayStoreMomsSelectClassCd").val();
+        params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -256,7 +262,7 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
             $scope._postJSONQuery.withOutPopUp('/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadUserIdChk.sb', params, function (response) {
                 if (response.data.data.list === 0) {
                     $scope._popMsg(messages["prodSaleDayStoreMoms.userIdChkAlert"]); // 사용권한이 없습니다.
-                    return;
+
                 } else {
                     // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
                     $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
@@ -356,7 +362,7 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
                         $scope._postJSONQuery.withOutPopUp("/sale/moms/prodSaleDayStoreMoms/prodSaleDayStoreMoms/getDivisionExcelDownloadSaveInsert.sb", params2, function(response){});
 
                         $scope._popMsg(msgCntChk); // 다운로드 사용량이 초과되어 대기중입니다. 잠시 후 다시 진행하여 주십시오.
-                        return;
+
                     }
                 }
             });
@@ -441,7 +447,7 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 $scope.excelUploadingPopup(false);
                 return false;
-            };
+            }
 
             // <-- 그리드 visible -->
             // 선택한 테이블에 따른 리스트 항목 visible
@@ -563,7 +569,7 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
 
                         });
                     });
-                };
+                }
 
                 async function getExcelFile(x) {
                     if(totFileCnt > x){
@@ -571,7 +577,7 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
                     }else{
                         $scope.excelUploadingPopup(false); // 작업내역 로딩 팝업 닫기
                     }
-                };
+                }
 
                 // 엑셀 분할 다운로드 시작
                 getExcelFile(0);

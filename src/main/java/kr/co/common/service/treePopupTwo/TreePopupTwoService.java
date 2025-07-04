@@ -21,9 +21,9 @@ import java.util.List;
  */
 public interface TreePopupTwoService {
 
-    /** 상품분류 트리 조회3 */
-    List<TreePopupTwoVO> getProdClassTreeTwo(TreePopupTwoVO treePopupTwoVO, SessionInfoVO sessionInfoVO);
+    /** 상품정보 분류 트리(체크박스) 조회2 */
+    List<TreePopupTwoVO> getProdClassTreeCheck2(TreePopupTwoVO treePopupTwoVO, SessionInfoVO sessionInfoVO);
 
-    /** 상품분류 플랫 조회 */
-    String getProdClassCdNm(TreePopupTwoVO treePopupTwoVO, SessionInfoVO sessionInfoVO);
+    /** 상품분류 플랫 조회2 */
+    String getProdClassCdNmCheck2(TreePopupTwoVO treePopupTwoVO, SessionInfoVO sessionInfoVO);
 }
