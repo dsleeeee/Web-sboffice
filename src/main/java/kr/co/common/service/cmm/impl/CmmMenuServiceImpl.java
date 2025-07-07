@@ -294,6 +294,12 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         return cmmMenuMapper.menuResrceChk(resrceInfoVO);
     }
 
+    /** 사용자 메뉴 제한여부 확인 */
+    @Override
+    public String userMenuChkYn(ResrceInfoVO resrceInfoVO) {
+        return cmmMenuMapper.userMenuChkYn(resrceInfoVO);
+    }
+
     /** [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크 */
     @Override
     public int getWebSessionTimeOutLoginIdChk(SessionInfoVO sessionInfoVO) {

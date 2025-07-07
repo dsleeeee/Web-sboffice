@@ -839,6 +839,19 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
             wijmo.addClass(node.element, "on");
         }
         $scope._setPNode(s.selectedNode);
+
+        // 사용자 메뉴 제한여부 확인
+        if (!isEmpty(s.selectedNode.dataItem.chkYn)) {
+            if (s.selectedNode.dataItem.chkYn === 'N') {
+                // 사용할 수 없는 메뉴입니다.
+                s_alert.pop(messages['cmm.menu.not.use']);
+                return;
+            }
+        } else {
+            // 사용할 수 없는 메뉴입니다.
+            s_alert.pop(messages['cmm.menu.not.use']);
+            return;
+        }
     }
 
     // 아이템 클릭 시 이벤트
@@ -848,6 +861,20 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
 
     // 아이템 클릭 시 이벤트 : private
     function _itemClicked(s, e) {
+
+        // 사용자 메뉴 제한여부 확인
+        if(!isEmpty(s.selectedNode.dataItem.chkYn)){
+            if(s.selectedNode.dataItem.chkYn === 'N'){
+                // 사용할 수 없는 메뉴입니다.
+                s_alert.pop(messages['cmm.menu.not.use']);
+                return;
+            }
+        }else{
+            // 사용할 수 없는 메뉴입니다.
+            s_alert.pop(messages['cmm.menu.not.use']);
+            return;
+        }
+
         // URL 이 있을 경우 페이지 이동
         if (!isEmpty(s.selectedNode.dataItem.url)) {
             // 가상로그인시 파라미터인 SessionID 설정

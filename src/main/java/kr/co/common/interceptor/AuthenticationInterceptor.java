@@ -166,6 +166,32 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
+        // 사용자 메뉴 제한여부 확인
+        if (!userMenuChkYn(request, requestURL, sessionInfoVO)) {
+            LOGGER.info("not user use menu : id : {},  url : {}, accept : {}", sessionInfoVO.getUserId(),
+                requestURL, request.getHeader("accept"));
+            @SuppressWarnings("unused")
+            String exceptionMsg = messageService.get("cmm.menu.not.use");
+
+            // 메뉴 사용 제한 처리
+            String mainUrl = "";
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.MASTER) {
+                mainUrl = "/application/main/content/sys.sb";
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
+                mainUrl = "/application/main/content/agency.sb";
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                mainUrl = "/application/main/content/hq.sb";
+            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                mainUrl = "/application/main/content/store.sb";
+            }
+
+            if(sessionInfoVO.getvUserId() != null) {
+                mainUrl += "?sid=" + sessionInfoVO.getSessionId();
+            }
+
+            throw new AuthenticationException(exceptionMsg, mainUrl);
+        }
+
         // 메뉴 권한 체크
         if (!checkUrl(request, requestURL, sessionInfoVO)) {
             LOGGER.info("not auth : id : {},  url : {}, accept : {}", sessionInfoVO.getUserId(),
@@ -362,6 +388,29 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         UserContext.clear(); // 요청 완료 후 ThreadLocal 정리
+    }
+
+    /**
+     * 사용자 메뉴 제한여부 확인
+     * @param request
+     * @param url
+     * @param sessionInfoVO
+     * @return
+     */
+    private boolean userMenuChkYn(HttpServletRequest request, String url, SessionInfoVO sessionInfoVO) {
+
+        // 사용자 메뉴 제한여부 확인
+        ResrceInfoVO resrceInfoVO = new ResrceInfoVO();
+        resrceInfoVO.setUrl(url);
+        resrceInfoVO.setUserId(sessionInfoVO.getUserId());
+
+        if ("N".equals(cmmMenuService.userMenuChkYn(resrceInfoVO))) {
+            LOGGER.info("userMenuChkYn URL : " + url);
+            LOGGER.info("getUserId : {}, getvUserId : {}, getvLogindIds : {}, ", sessionInfoVO.getUserId(), sessionInfoVO.getvUserId(), sessionInfoVO.getvLogindIds());
+            return false;
+        }
+
+        return true;
     }
 
 }

@@ -32,6 +32,8 @@ public class ResrceInfoBaseVO extends CmmVO {
     private String iconNm;
     /** 활성화 여부 */
     private boolean activation = false;
+    /** 메뉴제한여부 */
+    private String chkYn;
     
     
     /**
@@ -110,5 +112,12 @@ public class ResrceInfoBaseVO extends CmmVO {
     public void setActivation(boolean activation) {
         this.activation = activation;
     }
-    
+
+    public String getChkYn() {
+        return chkYn;
+    }
+
+    public void setChkYn(String chkYn) {
+        this.chkYn = chkYn;
+    }
 }

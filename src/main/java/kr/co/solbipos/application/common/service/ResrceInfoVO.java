@@ -57,6 +57,8 @@ public class ResrceInfoVO extends CmmVO {
     private UseYn useYn;
     /** 사용권한구분 */
     private String authOrgn;
+    /** 사용자 아이디 */
+    private String userId;
     
     /**
      * @return the resrceCd
@@ -209,5 +211,13 @@ public class ResrceInfoVO extends CmmVO {
 
     public void setAuthOrgn(String authOrgn) {
         this.authOrgn = authOrgn;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

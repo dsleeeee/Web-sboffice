@@ -144,7 +144,8 @@
             twri.RESRCE_CD,
             twri.RESRCE_NM,
             twri.URL,
-            tcn.NMCODE_ITEM_2 AS ICON_NM
+            tcn.NMCODE_ITEM_2 AS ICON_NM,
+            FN_GET_MENU_CHK_YN(#{userId}, twri.RESRCE_CD) AS CHK_YN
         FROM
             TB_WB_RESRCE_INFO twri
         INNER JOIN (
@@ -252,7 +253,8 @@
             twri.RESRCE_CD,
             twri.RESRCE_NM,
             twri.URL,
-            tcn.NMCODE_ITEM_2 AS ICON_NM
+            tcn.NMCODE_ITEM_2 AS ICON_NM,
+            FN_GET_MENU_CHK_YN(#{userId}, twri.RESRCE_CD) AS CHK_YN
         FROM
             TB_WB_RESRCE_INFO twri
         INNER JOIN (
@@ -381,6 +383,18 @@
           AND URL IS NOT NULL
           AND USE_YN ='Y'
           AND URL = #{url}
+    </select>
+
+    <!--  사용자 메뉴 제한여부 확인 -->
+    <!--
+        TABLE    : TB_USER_MENU_CHK_YN_V01
+        PARAM    : String
+        COMMENTS : 입력받은 URL이 사용자에게 제한된 메뉴인지 확인한다.
+    -->
+    <select id="userMenuChkYn" parameterType="DefaultMap" resultType="String">
+        /* USE : CmmMenuMapper.userMenuChkYn */
+        SELECT FN_GET_MENU_CHK_YN(#{userId}, #{url}) AS CHK_YN
+        FROM   DUAL
     </select>
 
     <!--  [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크 -->
