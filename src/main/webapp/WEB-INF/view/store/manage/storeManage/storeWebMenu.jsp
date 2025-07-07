@@ -246,4 +246,4 @@
     var orgnFg = "${orgnFg}";
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeWebMenu.js?ver=20241118.29" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeWebMenu.js?ver=20250707.01" charset="utf-8"></script>

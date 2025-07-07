@@ -7899,7 +7899,7 @@
         FROM TB_CM_NMCODE
         WHERE 1=1
         AND NMCODE_GRP_CD = '308'
-        AND NMCODE_NM = #{hqOfficeCd}
+        AND NMCODE_NM = #{selectHqOfficeCd}
     </select>
 
     <!-- 사용 메뉴 조회 -->

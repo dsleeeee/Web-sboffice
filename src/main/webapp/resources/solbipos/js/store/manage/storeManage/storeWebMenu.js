@@ -108,9 +108,12 @@ app.controller('webMenuCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 매장 콤보박스 셋팅
     $scope.setStoreCdCombo = function(valHqCd, valStoreCd){
-    var params = [];
-        params.hqOfficeCd = valHqCd;
-        params.storeCd = valStoreCd;
+        var params = [];
+        params.hqOfficeCd = valHqCd; // 콤보박스
+        params.storeCd = valStoreCd; // 콤보박스
+
+        var storeScope          = agrid.getScope('storeManageCtrl');
+        params.selectHqOfficeCd  = storeScope.getSelectedStore().hqOfficeCd;
 
         $scope._postJSONQuery.withOutPopUp('/store/manage/storeManage/storeManage/getAuthStoreList.sb', params, function (response) {
             if (response.data.data.list.length > 0) {

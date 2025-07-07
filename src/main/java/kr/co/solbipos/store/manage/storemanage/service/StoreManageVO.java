@@ -258,6 +258,9 @@ public class StoreManageVO extends PageVO {
     /** 시스템명칭관리 [308 권한허용본사] */
     private String nmcodeAuthHqCnt;
 
+    /** 본사코드 */
+    private String selectHqOfficeCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -1174,5 +1177,13 @@ public class StoreManageVO extends PageVO {
 
     public void setNmcodeAuthHqCnt(String nmcodeAuthHqCnt) {
         this.nmcodeAuthHqCnt = nmcodeAuthHqCnt;
+    }
+
+    public String getSelectHqOfficeCd() {
+        return selectHqOfficeCd;
+    }
+
+    public void setSelectHqOfficeCd(String selectHqOfficeCd) {
+        this.selectHqOfficeCd = selectHqOfficeCd;
     }
 }
