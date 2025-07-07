@@ -635,13 +635,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         return false;
       }
 
-      // 매장코드 숫자 6자리 입력 금지(20250702)
-      var msg = "등록제한된 매장코드입니다.(관리자에게 문의하여 주십시오.)";
-      if (/^[0-9]+$/.test($scope.store.storeCd) === true && $scope.store.storeCd.length === 6) {
-        $scope._popMsg(msg);
-        return false;
-      }
-
       // 매장코드 수동입력 시
       if ($scope.store.storeCdInputType === "1") {
 
@@ -650,6 +643,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         if (isNull($scope.store.storeCd)) {
           $scope._popMsg(msg);
           return false;
+        }
+
+        // 매장코드 숫자 6자리 입력 제한(맘스터치만 허용)
+        var msg = "매장코드 숫자 6자리는 사용할 수 없습니다.";
+        if($scope.store.hqOfficeCd !== "DS034" && $scope.store.hqOfficeCd !== "DS038" && $scope.store.hqOfficeCd !== "DS040" && $scope.store.hqOfficeCd !== "H0393" && $scope.store.hqOfficeCd !== "DS021") {
+            if (/^[0-9]+$/.test($scope.store.storeCd) === true && $scope.store.storeCd.length === 6) {
+                $scope._popMsg(msg);
+                return false;
+            }
         }
 
         // 매장코드 중복체크를 해주세요.
@@ -670,9 +672,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         // 맘스터치 (운영 DS034,DS038,DS040,H0393) (개발 DS021)
         if($scope.store.hqOfficeCd === "DS034" || $scope.store.hqOfficeCd === "DS038" || $scope.store.hqOfficeCd === "DS040" || $scope.store.hqOfficeCd === "H0393" || $scope.store.hqOfficeCd === "DS021") {
             // 매장코드 시작규칙
-            if($scope.store.storeCd.substring(0, 1) == "C" || $scope.store.storeCd.substring(0, 1) == "D" || $scope.store.storeCd.substring(0, 1) == "E") {
+            if($scope.store.storeCd.substring(0, 1) == "C" || $scope.store.storeCd.substring(0, 1) == "D" || $scope.store.storeCd.substring(0, 1) == "E" || $scope.store.storeCd.substring(0, 1) == "0") {
             } else {
-                $scope._popMsg("맘스터치 매장코드 시작규칙은 C, D, E 입니다."); // 맘스터치 매장코드 시작규칙은 C, D, E 입니다.
+                $scope._popMsg("맘스터치 매장코드 시작규칙은 C, D, E, 0(숫자) 입니다."); // 맘스터치 매장코드 시작규칙은 C, D, E, 0(숫자) 입니다.
                 return false;
             }
             // 매장코드 자리수
