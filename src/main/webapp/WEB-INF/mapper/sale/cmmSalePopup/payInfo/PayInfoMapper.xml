@@ -642,7 +642,7 @@
         <![CDATA[
         SELECT 	PICKUP_FG,
                 SUBSTR(APPR_DT, 9, 14) AS APPR_TIME,
-                PICKUP_TEL_NO,
+                PICKUP_NO,
                 SALE_AMT
         FROM 	TB_SL_SALE_PAY_VORDER
         WHERE   HQ_OFFICE_CD        =   #{hqOfficeCd}
@@ -658,4 +658,5 @@
             AND BILL_NO = #{billNo}
         </if>
     </select>
+
 </mapper>

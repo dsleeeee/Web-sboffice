@@ -389,7 +389,7 @@
         <![CDATA[
         SELECT  tsspv.PICKUP_FG,
                 SUBSTR(tsspv.APPR_DT, 9, 14) AS APPR_TIME,
-                tsspv.PICKUP_TEL_NO,
+                tsspv.PICKUP_NO,
                 tsspv.DC_AMT
         FROM    TB_SL_SALE_HDR_DC tsshd
         ,       TB_SL_SALE_PAY_VORDER tsspv
