@@ -13,7 +13,7 @@
     <a href="#" class="open fl"><s:message code="prodInfoSearch.prodInfo2"/></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodInfo2Ctrl')">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodInfo2Ctrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>

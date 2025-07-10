@@ -95,6 +95,11 @@ public class EnvConfgBatchChangeVO extends PageVO {
 
     /** 부모코드 */
     private String parentCd;
+    
+    /** 포스 - 용도 */
+    private String posUseFg;
+    /** 포스 - 메인여부 */
+    private String posMainFg;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -278,5 +283,21 @@ public class EnvConfgBatchChangeVO extends PageVO {
 
     public void setParentCd(String parentCd) {
         this.parentCd = parentCd;
+    }
+
+    public String getPosUseFg() {
+        return posUseFg;
+    }
+
+    public void setPosUseFg(String posUseFg) {
+        this.posUseFg = posUseFg;
+    }
+
+    public String getPosMainFg() {
+        return posMainFg;
+    }
+
+    public void setPosMainFg(String posMainFg) {
+        this.posMainFg = posMainFg;
     }
 }

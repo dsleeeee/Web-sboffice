@@ -67,6 +67,24 @@ public class ProdInfoSearchVO extends PageVO {
     /** 키오스크 카테고리그룹 */
     private String tuClsType;
 
+    /** 그룹코드 */
+    private String sdselGrpCd;
+
+    /** 그룹명 */
+    private String sdselGrpNm;
+
+    /** 분류코드 */
+    private String sdselClassCd;
+
+    /** 분류명 */
+    private String sdselClassNm;
+    
+    /** 사이드 상품코드 */
+    private String sdselProdCd;
+
+    /** 사이드 상품명 */
+    private String sdselProdNm;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -177,5 +195,53 @@ public class ProdInfoSearchVO extends PageVO {
 
     public void setTuClsType(String tuClsType) {
         this.tuClsType = tuClsType;
+    }
+
+    public String getSdselGrpCd() {
+        return sdselGrpCd;
+    }
+
+    public void setSdselGrpCd(String sdselGrpCd) {
+        this.sdselGrpCd = sdselGrpCd;
+    }
+
+    public String getSdselGrpNm() {
+        return sdselGrpNm;
+    }
+
+    public void setSdselGrpNm(String sdselGrpNm) {
+        this.sdselGrpNm = sdselGrpNm;
+    }
+
+    public String getSdselClassCd() {
+        return sdselClassCd;
+    }
+
+    public void setSdselClassCd(String sdselClassCd) {
+        this.sdselClassCd = sdselClassCd;
+    }
+
+    public String getSdselClassNm() {
+        return sdselClassNm;
+    }
+
+    public void setSdselClassNm(String sdselClassNm) {
+        this.sdselClassNm = sdselClassNm;
+    }
+
+    public String getSdselProdCd() {
+        return sdselProdCd;
+    }
+
+    public void setSdselProdCd(String sdselProdCd) {
+        this.sdselProdCd = sdselProdCd;
+    }
+
+    public String getSdselProdNm() {
+        return sdselProdNm;
+    }
+
+    public void setSdselProdNm(String sdselProdNm) {
+        this.sdselProdNm = sdselProdNm;
     }
 }

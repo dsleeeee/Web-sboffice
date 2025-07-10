@@ -351,57 +351,93 @@
     -->
     <select id="getEnvConfgBatchChangeStorePosList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getEnvConfgBatchChangeStorePosList */
-        SELECT
-        HQ_OFFICE_CD,
-        HQ_OFFICE_NM,
-        STORE_CD,
-        STORE_NM,
-        POS_NO,
-        POS_NM,
-        ENVST_CD,
-        ENVST_VAL,
-        EXIST_FG
+        SELECT  HQ_OFFICE_CD
+        ,       HQ_OFFICE_NM
+        ,       STORE_CD
+        ,       STORE_NM
+        ,       POS_NO
+        ,       POS_NM
+        ,       ENVST_CD
+        ,       ENVST_VAL
+        ,       EXIST_FG
+        ,       POS_USE_FG
+        ,       POS_MAIN_FG
         FROM
-        (
-            SELECT
-            tms.HQ_OFFICE_CD,
-            tho.HQ_OFFICE_NM,
-            tms.STORE_CD,
-            tms.STORE_NM,
-            tmp.POS_NO,
-            tmp.POS_NM,
-            tce.ENVST_CD,
-            tmpe.ENVST_VAL,
-            DECODE(tmpe.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG
-            FROM TB_MS_POS tmp,
-            TB_MS_STORE tms,
-            TB_HQ_OFFICE tho,
-            TB_MS_POS_ENVST tmpe,
-            TB_CM_ENVST tce
-            WHERE 1=1
-            AND tms.STORE_CD != '0000000'
-            <choose>
-                <when test='targtFg != null'>
-                    <!-- H:본사전용, C:공통(매장에서변경가능), N:No, S:매장전용, X:공통(매장에서사용하지만_본사기준), Z:본사+단독매장 -->
-                    <if test='targtFg == "Z"'>
-                        <![CDATA[
-                            AND tms.HQ_OFFICE_CD = '00000'
-                        ]]>
-                    </if>
-                </when>
-            </choose>
-            <if test='orgnFg != null and orgnFg == "A"'>
-                AND tms.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
-            </if>
-            AND tms.STORE_CD (+)= tmp.STORE_CD
-            AND tho.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
-            AND tmpe.STORE_CD (+)= tms.STORE_CD
-            AND tmpe.ENVST_CD (+)= tce.ENVST_CD
-            AND tmpe.POS_NO (+)= tmp.POS_NO
-            AND tce.ENVST_CD = #{envstCd}
-            AND tms.STORE_CD NOT IN (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '178')
-            ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD, tmp.POS_NO
-        )
+            (
+                SELECT  tms.HQ_OFFICE_CD
+                ,       tho.HQ_OFFICE_NM
+                ,       tms.STORE_CD
+                ,       tms.STORE_NM
+                ,       tmp.POS_NO
+                ,       tmp.POS_NM
+                ,       tce.ENVST_CD
+                ,       tmpe.ENVST_VAL
+                ,       DECODE(tmpe.ENVST_CD, NULL, 'N', 'Y') AS EXIST_FG
+                ,       A.POS_USE_FG
+                ,       B.POS_MAIN_FG
+                FROM    TB_MS_POS tmp
+                ,       TB_MS_STORE tms
+                ,       TB_HQ_OFFICE tho
+                ,       TB_MS_POS_ENVST tmpe
+                ,       TB_CM_ENVST tce
+                ,		(
+                            SELECT 	A.STORE_CD
+                            ,		A.POS_NO
+                            ,		A.ENVST_CD
+                            ,		B.ENVST_VAL_CD
+                            ,		B.ENVST_VAL_NM AS POS_USE_FG
+                            FROM 	TB_MS_POS_ENVST A
+                            ,		TB_CM_ENVST_DTL B
+                            WHERE 	A.ENVST_CD 	= B.ENVST_CD
+                            AND 	A.ENVST_VAL = B.ENVST_VAL_CD
+                            AND 	B.ENVST_CD 	= '4019'
+                        ) A
+                ,		(
+                            SELECT 	A.STORE_CD
+                            ,		A.POS_NO
+                            ,		A.ENVST_CD
+                            ,		B.ENVST_VAL_CD
+                            ,		B.ENVST_VAL_NM AS POS_MAIN_FG
+                            FROM 	TB_MS_POS_ENVST A
+                            ,		TB_CM_ENVST_DTL B
+                            WHERE 	A.ENVST_CD 	= B.ENVST_CD
+                            AND 	A.ENVST_VAL = B.ENVST_VAL_CD
+                            AND 	B.ENVST_CD 	= '4021'
+                        ) B
+                WHERE   1=1
+                AND     tms.STORE_CD != '0000000'
+                <choose>
+                    <when test='targtFg != null'>
+                        <!-- H:본사전용, C:공통(매장에서변경가능), N:No, S:매장전용, X:공통(매장에서사용하지만_본사기준), Z:본사+단독매장 -->
+                        <if test='targtFg == "Z"'>
+                            <![CDATA[
+                                AND tms.HQ_OFFICE_CD = '00000'
+                            ]]>
+                        </if>
+                    </when>
+                </choose>
+                <if test='orgnFg != null and orgnFg == "A"'>
+                    AND tms.AGENCY_CD IN (SELECT AGENCY_CD FROM TB_CM_AGENCY WHERE AGENCY_CD = #{agencyCd} OR P_AGENCY_CD = #{agencyCd})
+                </if>
+                AND     tms.STORE_CD        (+) = tmp.STORE_CD
+                AND     tho.HQ_OFFICE_CD        = tms.HQ_OFFICE_CD
+                AND     tmpe.STORE_CD       (+) = tms.STORE_CD
+                AND     tmpe.ENVST_CD       (+) = tce.ENVST_CD
+                AND     tmpe.POS_NO         (+) = tmp.POS_NO
+                AND 	A.STORE_CD			(+) = tmp.STORE_CD
+                AND 	A.POS_NO			(+) = tmp.POS_NO
+                AND 	B.STORE_CD			(+) = tmp.STORE_CD
+                AND 	B.POS_NO			(+) = tmp.POS_NO
+                AND     tce.ENVST_CD            = #{envstCd}
+                AND     tms.STORE_CD NOT IN (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '178')
+                <if test="posUseFg != null and posUseFg != ''">
+                    AND A.ENVST_VAL_CD = #{posUseFg}
+                </if>
+                <if test="posMainFg != null and posMainFg != ''">
+                    AND B.ENVST_VAL_CD = #{posMainFg}
+                </if>
+                ORDER BY tms.HQ_OFFICE_CD, tms.STORE_CD, tmp.POS_NO
+            )
         WHERE 1=1
         <if test="hqOfficeCd != null and hqOfficeCd != ''">
             AND HQ_OFFICE_CD LIKE '%'|| #{hqOfficeCd} ||'%'
@@ -946,5 +982,31 @@
             ,   B.MOD_ID
             )
     </insert>
+    <!-- 포스용도 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST_DTL
+        PARAM    : EnvConfgBatchChangeVO
+        COMMENTS : 포스용도를 조회한다.
+    -->
+    <select id="getPosUseFg" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* USE : EnvConfgBatchChangeMapper.getPosUseFg */
+        SELECT  ENVST_VAL_CD    AS VALUE
+        ,       ENVST_VAL_NM    AS NAME
+        FROM    TB_CM_ENVST_DTL
+        WHERE   ENVST_CD = '4019'
+    </select>
+    <!-- 포스용도 조회 -->
+    <!--
+        TABLE    : TB_CM_ENVST_DTL
+        PARAM    : EnvConfgBatchChangeVO
+        COMMENTS : 포스메인여부를 조회한다.
+    -->
+    <select id="getPosMainFg" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
+        /* USE : EnvConfgBatchChangeMapper.getPosMainFg */
+        SELECT  ENVST_VAL_CD    AS VALUE
+        ,       ENVST_VAL_NM    AS NAME
+        FROM    TB_CM_ENVST_DTL
+        WHERE   ENVST_CD = '4021'
+    </select>
 
 </mapper>

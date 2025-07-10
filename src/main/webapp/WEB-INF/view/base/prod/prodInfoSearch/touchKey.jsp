@@ -13,7 +13,7 @@
     <a href="#" class="open fl"><s:message code="prodInfoSearch.touchKey"/></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('touchKeyCtrl')">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('touchKeyCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -42,6 +42,18 @@
                   initialized="_initComboBox(s)">
           </wj-combo-box>
         </div>
+      </td>
+    </tr>
+    <tr>
+      <%-- 선택상품코드 --%>
+      <th><s:message code="prodInfoSearch.touchKey.prodCd" /></th>
+      <td>
+        <input type="text" id="srchTukeyProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13"/>
+      </td>
+      <%-- 선택상품명 --%>
+      <th><s:message code="prodInfoSearch.touchKey.prodNm" /></th>
+      <td>
+        <input type="text" id="srchTukeyProdNm" ng-model="prodNm" class="sb-input w100" maxlength="100"/>
       </td>
     </tr>
     </tbody>
@@ -112,4 +124,4 @@
     </div>
     <%--//엑셀 리스트--%>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/touchKey.js?ver=20230111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/touchKey.js?ver=20250710.01" charset="utf-8"></script>

@@ -1,10 +1,12 @@
 package kr.co.solbipos.store.manage.envConfgBatchChange.web;
 
 import kr.co.common.data.enums.Status;
+import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
+import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.store.manage.envConfgBatchChange.service.EnvConfgBatchChangeService;
 import kr.co.solbipos.store.manage.envConfgBatchChange.service.EnvConfgBatchChangeVO;
@@ -46,15 +48,17 @@ public class EnvConfgBatchChangeController {
     private final SessionService sessionService;
     private final EnvConfgBatchChangeService envConfgBatchChangeService;
     private final EnvConfgService envConfgService;
+    private final CmmCodeUtil cmmCodeUtil;
 
     /**
      * Constructor Injection
      */
     @Autowired
-    public EnvConfgBatchChangeController(SessionService sessionService, EnvConfgBatchChangeService envConfgBatchChangeService, EnvConfgService envConfgService) {
+    public EnvConfgBatchChangeController(SessionService sessionService, EnvConfgBatchChangeService envConfgBatchChangeService, EnvConfgService envConfgService, CmmCodeUtil cmmCodeUtil) {
         this.sessionService = sessionService;
         this.envConfgBatchChangeService = envConfgBatchChangeService;
         this.envConfgService = envConfgService;
+        this.cmmCodeUtil = cmmCodeUtil;
     }
 
     /**
@@ -68,8 +72,18 @@ public class EnvConfgBatchChangeController {
     public String envConfgBatchChangeView(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         List<DefaultMap<String>> envstGrpList = envConfgService.getEnvstGrpList();
+        List<DefaultMap<Object>> posUseFgComboList = envConfgBatchChangeService.getPosUseFg();
+        List<DefaultMap<Object>> posMainFgComboList = envConfgBatchChangeService.getPosMainFg();
+
+        String posUseFgComboListAll = cmmCodeUtil.assmblObj(posUseFgComboList, "name", "value", UseYn.ALL);
+        String posMainFgComboListAll = cmmCodeUtil.assmblObj(posMainFgComboList, "name", "value", UseYn.ALL);
 
         model.addAttribute("envstGrpList", convertToJson(envstGrpList)  );
+        // 포스-용도 콤보박스 조회
+        model.addAttribute("posUseFg", posUseFgComboListAll);
+        // 포스-메인여부 콤보박스 조회
+        model.addAttribute("posMainFg", posMainFgComboListAll);
+
 
         return "store/manage/envConfgBatchChange/envConfgBatchChange";
     }

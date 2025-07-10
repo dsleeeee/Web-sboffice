@@ -54,6 +54,25 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#hdSrchYn").val("");
   };
 
+    $scope.setDefaultPos = function (){
+
+        // 환경설정 값 가져오기
+        var objEnvstCd      = document.getElementsByName("pos_envstCd");
+        var objDirctInYn    = document.getElementsByName("pos_dirctInYn");
+        var objDefaultCd    = document.getElementsByName("pos_defltYn");
+
+        for(var i=0; i<objEnvstCd.length; i++){
+
+            var defaultVal = $("#env"+objEnvstCd[i].value).attr("defaultVal");
+
+            if(objDirctInYn[i].value == "Y") {
+                $("#env"+objEnvstCd[i].value).val(defaultVal);
+            } else {
+                $("#env"+objEnvstCd[i].value).val(defaultVal).prop("selected", true);
+            }
+        }
+    };
+
   /*********************************************************
    * 매장환경 분류 탭 변경
    * *******************************************************/
@@ -250,7 +269,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
     var chngCnt = 0; // 변경된 건수
     var arrChg = []; //  변경된 환경변수 배열 Key 값
-    var params = new Array();
+    var params = [];
 
     for (var i = 0; i < objEnvstCd.length; i++) {
 
@@ -648,7 +667,7 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     } else {
       $scope._popMsg("올바른 패스워드를 입력해주세요");
       return false;
-    };
+    }
   };
 
 }]);

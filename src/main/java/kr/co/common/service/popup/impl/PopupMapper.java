@@ -61,5 +61,8 @@ public interface PopupMapper {
 
     /** 매장(멀티) 조회조건 사용시, 리스트 검색에 사용할 매장값 리턴 함수 호출 */
     String getSearchMultiStoreRtn(StoreVO storeVO);
+
+    /** 상품(멀티) 조회조건 사용시, 리스트 검색에 사용할 상품값 리턴 함수 호출 */
+    String getSearchMultiProdRtn(ProdVO prodVO);
 }
 

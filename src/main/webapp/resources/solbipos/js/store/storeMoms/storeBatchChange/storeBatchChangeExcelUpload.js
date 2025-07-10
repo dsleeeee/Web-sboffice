@@ -152,7 +152,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
     // 저장
     $scope.save = function() {
 
-        var params = new Array();
+        var params = [];
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.excelUploadData"]);	// 엑셀업로드 된 데이터가 없습니다.
             return false;
@@ -235,7 +235,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
     $scope.storeExcelUploadSave = function(data) {
 
         // 파라미터 설정
-        var params = new Array();
+        var params = [];
 
         // 다운로드 시작이면 작업내역 로딩 팝업 오픈
         $scope.excelUploadingPopup(true);
@@ -256,7 +256,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                 $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
                 $scope.excelUploadingPopup(false);
                 return false;
-            };
+            }
 
             // 다운로드 될 전체 파일 갯수 셋팅
             $("#totalRows").html(listSize);
@@ -284,8 +284,9 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                         params.offset = (10 * (x + 1)) - 9;
                         params.storeFg = "";
                         params.storeInfoFg = "";
+                        var length = (params.limit < data.length)?params.limit:data.length;
 
-                        for (var i = 0; i < data.length; i++) {
+                        for (var i=(x*10); i < length; i++) {
                             if(data[i].storeFg === "1"){
                                 params.storeFg += data[i].storeCd + ",";
                             }
@@ -339,14 +340,14 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
                         });
                         resolve(x);
                     });
-                };
+                }
 
                 async function getExcelFile(x) {
                     if(listSize > (x * 10)){
                         await delay(x);
                     }else{
                     }
-                };
+                }
 
                 // 엑셀 분할 다운로드 시작
                 getExcelFile(0);
@@ -431,7 +432,7 @@ app.controller('storeExcelUploadCtrl', ['$scope', '$http', '$timeout', function 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
 
         // 파라미터 설정
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
             $scope.flex.collectionView.itemsRemoved[i].status = "D";
             params.push($scope.flex.collectionView.itemsRemoved[i]);

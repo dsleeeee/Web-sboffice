@@ -804,6 +804,24 @@
                 AND 	thpsp.HQ_OFFICE_CD      = thp.HQ_OFFICE_CD (+)
                 AND 	thpsp.PROD_CD           = thp.PROD_CD (+)
                 AND 	thpsp.MOD_ID 		    = twuidv.USER_ID (+)
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                    AND thpsg.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND thpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+                <if test='sdselClassCd != null and sdselClassCd != ""'>
+                    AND thpsc.SDSEL_CLASS_CD LIKE '%' || #{sdselClassCd} || '%'
+                </if>
+                <if test='sdselClassNm != null and sdselClassNm != ""'>
+                    AND thpsc.SDSEL_CLASS_NM LIKE '%' || #{sdselClassNm} || '%'
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND thpsp.PROD_CD LIKE '%' || #{prodCd} || '%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%' || #{prodNm} || '%'
+                </if>
                 ORDER
                 BY      thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -849,6 +867,24 @@
                 AND 	tmpsp.STORE_CD          = tmp.STORE_CD (+)
                 AND 	tmpsp.PROD_CD           = tmp.PROD_CD (+)
                 AND 	tmpsp.MOD_ID 		    = twuidv.USER_ID (+)
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                    AND tmpsg.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND tmpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+                <if test='sdselClassCd != null and sdselClassCd != ""'>
+                    AND tmpsc.SDSEL_CLASS_CD LIKE '%' || #{sdselClassCd} || '%'
+                </if>
+                <if test='sdselClassNm != null and sdselClassNm != ""'>
+                    AND tmpsc.SDSEL_CLASS_NM LIKE '%' || #{sdselClassNm} || '%'
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tmpsp.PROD_CD LIKE '%' || #{prodCd} || '%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%' || #{prodNm} || '%'
+                </if>
                 ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -904,6 +940,24 @@
                 AND 	thpsp.HQ_OFFICE_CD (+)  = thp.HQ_OFFICE_CD
                 AND 	thpsp.PROD_CD (+)       = thp.PROD_CD
                 AND 	thpsp.MOD_ID 		    = twuidv.USER_ID (+)
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                    AND thpsg.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND thpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+                <if test='sdselClassCd != null and sdselClassCd != ""'>
+                    AND thpsc.SDSEL_CLASS_CD LIKE '%' || #{sdselClassCd} || '%'
+                </if>
+                <if test='sdselClassNm != null and sdselClassNm != ""'>
+                    AND thpsc.SDSEL_CLASS_NM LIKE '%' || #{sdselClassNm} || '%'
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND thpsp.PROD_CD LIKE '%' || #{prodCd} || '%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND thp.PROD_NM LIKE '%' || #{prodNm} || '%'
+                </if>
                 ORDER BY thpsg.SDSEL_GRP_CD, thpsc.DISP_SEQ, thpsp.DISP_SEQ
             </when>
             <!-- 매장 -->
@@ -945,6 +999,24 @@
                 AND 	tmpsp.STORE_CD          = tmp.STORE_CD (+)
                 AND 	tmpsp.PROD_CD           = tmp.PROD_CD (+)
                 AND 	tmpsp.MOD_ID 		    = twuidv.USER_ID (+)
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                    AND tmpsg.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND tmpsg.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+                <if test='sdselClassCd != null and sdselClassCd != ""'>
+                    AND tmpsc.SDSEL_CLASS_CD LIKE '%' || #{sdselClassCd} || '%'
+                </if>
+                <if test='sdselClassNm != null and sdselClassNm != ""'>
+                    AND tmpsc.SDSEL_CLASS_NM LIKE '%' || #{sdselClassNm} || '%'
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND tmpsp.PROD_CD LIKE '%' || #{prodCd} || '%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND tmp.PROD_NM LIKE '%' || #{prodNm} || '%'
+                </if>
                 ORDER BY tmpsg.SDSEL_GRP_CD, tmpsc.DISP_SEQ, tmpsp.DISP_SEQ
             </when>
         </choose>
@@ -1291,6 +1363,24 @@
                         </foreach>
                     </if>
                 </if>
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                    AND A.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND A.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+                <if test='sdselClassCd != null and sdselClassCd != ""'>
+                    AND A.SDSEL_CLASS_CD LIKE '%' || #{sdselClassCd} || '%'
+                </if>
+                <if test='sdselClassNm != null and sdselClassNm != ""'>
+                    AND A.SDSEL_CLASS_NM LIKE '%' || #{sdselClassNm} || '%'
+                </if>
+                <if test='sdselProdCd != null and sdselProdCd != ""'>
+                    AND A.SDSEL_PROD_CD LIKE '%' || #{sdselProdCd} || '%'
+                </if>
+                <if test='sdselProdNm != null and sdselProdNm != ""'>
+                    AND A.SDSEL_PROD_NM LIKE '%' || #{sdselProdNm} || '%'
+                </if>
                 ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -1504,6 +1594,24 @@
                     <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
                         tmp.PROD_CD = #{item}
                     </foreach>
+                </if>
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                    AND A.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND A.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+                <if test='sdselClassCd != null and sdselClassCd != ""'>
+                    AND A.SDSEL_CLASS_CD LIKE '%' || #{sdselClassCd} || '%'
+                </if>
+                <if test='sdselClassNm != null and sdselClassNm != ""'>
+                    AND A.SDSEL_CLASS_NM LIKE '%' || #{sdselClassNm} || '%'
+                </if>
+                <if test='sdselProdCd != null and sdselProdCd != ""'>
+                    AND A.SDSEL_PROD_CD LIKE '%' || #{sdselProdCd} || '%'
+                </if>
+                <if test='sdselProdNm != null and sdselProdNm != ""'>
+                    AND A.SDSEL_PROD_NM LIKE '%' || #{sdselProdNm} || '%'
                 </if>
                 ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -1744,6 +1852,24 @@
                         </foreach>
                     </if>
                 </if>
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                    AND A.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND A.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+                <if test='sdselClassCd != null and sdselClassCd != ""'>
+                    AND A.SDSEL_CLASS_CD LIKE '%' || #{sdselClassCd} || '%'
+                </if>
+                <if test='sdselClassNm != null and sdselClassNm != ""'>
+                    AND A.SDSEL_CLASS_NM LIKE '%' || #{sdselClassNm} || '%'
+                </if>
+                <if test='sdselProdCd != null and sdselProdCd != ""'>
+                    AND A.SDSEL_PROD_CD LIKE '%' || #{sdselProdCd} || '%'
+                </if>
+                <if test='sdselProdNm != null and sdselProdNm != ""'>
+                    AND A.SDSEL_PROD_NM LIKE '%' || #{sdselProdNm} || '%'
+                </if>
                 ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
             </when>
             <!-- 매장 -->
@@ -1954,6 +2080,24 @@
                     <foreach collection="prodCdList" item="item" open=" (" separator="OR" close=")" >
                         tmp.PROD_CD = #{item}
                     </foreach>
+                </if>
+                <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+                    AND A.SDSEL_GRP_CD LIKE '%' || #{sdselGrpCd} || '%'
+                </if>
+                <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+                    AND A.SDSEL_GRP_NM LIKE '%' || #{sdselGrpNm} || '%'
+                </if>
+                <if test='sdselClassCd != null and sdselClassCd != ""'>
+                    AND A.SDSEL_CLASS_CD LIKE '%' || #{sdselClassCd} || '%'
+                </if>
+                <if test='sdselClassNm != null and sdselClassNm != ""'>
+                    AND A.SDSEL_CLASS_NM LIKE '%' || #{sdselClassNm} || '%'
+                </if>
+                <if test='sdselProdCd != null and sdselProdCd != ""'>
+                    AND A.SDSEL_PROD_CD LIKE '%' || #{sdselProdCd} || '%'
+                </if>
+                <if test='sdselProdNm != null and sdselProdNm != ""'>
+                    AND A.SDSEL_PROD_NM LIKE '%' || #{sdselProdNm} || '%'
                 </if>
                 ORDER BY A.PROD_CD, A.SDATTR_CLASS_CD, A.SDATTR_DISP_SEQ, A.SDSEL_GRP_CD, A.SDSEL_CLASS_DISP_SEQ, A.SDSEL_PROD_DISP_SEQ, A.OPTION_GRP_CD, A.OPTION_VAL_CD
             </when>
@@ -2424,6 +2568,12 @@
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
                     AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND C.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND D.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
                 ORDER BY A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
                 <include refid="CmmSQL.PagingTemplateBottom"/>
             </when>
@@ -2453,6 +2603,12 @@
                 AND 	D.PROD_CD (+) = C.PROD_CD
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
                     AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND C.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND D.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                 </if>
                 ORDER BY A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -2494,6 +2650,12 @@
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
                     AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
                 </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND C.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND D.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
                 ORDER BY A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
             </when>
             <!-- 매장 -->
@@ -2520,6 +2682,12 @@
                 AND 	D.PROD_CD (+) = C.PROD_CD
                 <if test='tukeyGrpCd != null and tukeyGrpCd != ""'>
                     AND A.TUKEY_GRP_CD = #{tukeyGrpCd}
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND C.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND D.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                 </if>
                 ORDER BY A.TUKEY_GRP_CD, A.PAGE_NO, A.Y, A.X, C.PAGE_NO, C.Y, C.X
             </when>
@@ -2572,6 +2740,12 @@
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND D.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND E.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
                 AND     A.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -2616,6 +2790,12 @@
                 AND 	F.USER_ID 		(+) = 	D.MOD_ID
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND D.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND E.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                 </if>
                 AND     A.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
@@ -2668,6 +2848,12 @@
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
                 </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND D.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND E.PROD_NM LIKE '%'|| #{prodNm} ||'%'
+                </if>
                 AND     A.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO
             </when>
@@ -2709,6 +2895,12 @@
                 AND 	F.USER_ID 		(+) = 	D.MOD_ID
                 <if test='tuClsType != null and tuClsType != ""'>
                     AND A.TU_CLS_TYPE = #{tuClsType}
+                </if>
+                <if test='prodCd != null and prodCd != ""'>
+                    AND D.PROD_CD LIKE '%'|| #{prodCd} ||'%'
+                </if>
+                <if test='prodNm != null and prodNm != ""'>
+                    AND E.PROD_NM LIKE '%'|| #{prodNm} ||'%'
                 </if>
                 AND     A.TU_CLS_TYPE NOT IN ('00')
                 ORDER BY A.TU_CLS_TYPE, A.INDEX_NO, C.INDEX_NO, D.INDEX_NO

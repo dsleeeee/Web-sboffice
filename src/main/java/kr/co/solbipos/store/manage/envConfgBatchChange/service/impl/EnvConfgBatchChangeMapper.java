@@ -90,5 +90,9 @@ public interface EnvConfgBatchChangeMapper {
     // 매장 명칭코드에 본사 명칭코드 정보 저장
     int saveHqToStoreNmcode(EnvConfgBatchChangeVO envConfgBatchChangeVO);
 
+    /** 포스-용도 콤보박스 조회 */
+    List<DefaultMap<Object>> getPosUseFg();
 
+    /** 포스-메인여부 콤보박스 조회 */
+    List<DefaultMap<Object>> getPosMainFg();
 }

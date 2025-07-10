@@ -122,7 +122,7 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.setEnvContents = function(envType, list){
 
     // console.log(list)
-    console.log(envstGrp)
+    console.log(envstGrp);
 
 
     var innerHtml = "";
@@ -137,10 +137,10 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
       var storeEnvHtml = "";
       var storeEnvstGrp = envstGrp[i];
 
-      storeEnvHtml += '<h3 class=\"h3_tbl2 lh30\">' + storeEnvstGrp.name + ' <button class=\"open\" id=\"fldGrpBtn'+ i +'\" onclick=\"javascript:fldGrp(\''+ i +'\');\"></button>';
+      storeEnvHtml += '<h3 class=\"h3_tbl2 lh30\">' + storeEnvstGrp.name + ' <button class=\"open\" id=\"fldGrpBtn'+ i +'\" onclick=\"fldGrp(\''+ i +'\');\"></button>';
 
       if (i === 0) { // 기본값으로 설정 버튼
-        storeEnvHtml += '<span class=\"fr\"><a href=\"javascript:;\" class=\"btn_grayS\" id=\"btnDefault\" ng-click=\"setDefault()\">';
+        storeEnvHtml += '<span class=\"fr\"><a href=\"#\" class=\"btn_grayS\" id=\"btnDefault\" onclick=\"setDefault()\">';
         storeEnvHtml += messages["storeManage.setting.default.env"];
         storeEnvHtml += '</a></span>';
       }
@@ -359,21 +359,15 @@ app.controller('storeEnvCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     // 기본값 설정 클릭 이벤트 추가 todo
-    $("#btnDefault").append(function(){
-      return $scope.setDefault();
-    });
+    // $("#btnDefault").append(function(){
+    //   return $scope.setDefault();
+    // });
 
   };
 
   /*********************************************************
    * 기본값으로 설정
    * *******************************************************/
-  $scope.setDefault = function(){
-    //todo
-    // $scope._popMsg("준비중인 메뉴입니다.");
-    // return false;
-  };
-
   // $("#btnDefault").click(function(){
   //   alert("기기기ㅣ")
   //   $scope.setDefault();
@@ -444,3 +438,22 @@ function envRemarkPop(envstCd, envType) {
   var scope = agrid.getScope('storeEnvCtrl');
   scope.envRemarkPop(envstCd, envType);
 }
+// 기본값 설정
+var setDefault = function(){
+
+  // 환경설정 값 가져오기
+  var objEnvstCd      = document.getElementsByName("envstCd");
+  var objDirctInYn    = document.getElementsByName("dirctInYn");
+  var objDefaultCd    = document.getElementsByName("defltYn");
+
+  for(var i=0; i<objEnvstCd.length; i++){
+
+    var defaultVal = $("#env"+objEnvstCd[i].value).attr("defaultVal");
+
+    if(objDirctInYn[i].value == "Y") {
+      $("#env"+objEnvstCd[i].value).val(defaultVal);
+    } else {
+      $("#env"+objEnvstCd[i].value).val(defaultVal).prop("selected", true);
+    }
+  }
+};

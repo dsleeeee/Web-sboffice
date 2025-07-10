@@ -14,7 +14,7 @@
     <a href="#" class="open fl"><s:message code="prodInfoSearch.prodInfo"/></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('prodInfoCtrl')">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('prodInfoCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
@@ -39,12 +39,12 @@
     </tr>
     <tr>
       <%-- 상품코드 --%>
-      <th><s:message code="prodInfoSearch.orgplce.prodCd" /></th>
+      <th><s:message code="prodInfoSearch.prodInfo.prodCd" /></th>
       <td>
         <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('1');"/>
       </td>
       <%-- 상품명 --%>
-      <th><s:message code="prodInfoSearch.orgplce.prodNm" /></th>
+      <th><s:message code="prodInfoSearch.prodInfo.prodNm" /></th>
       <td>
         <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('1');"/>
       </td>
@@ -79,6 +79,42 @@
           <jsp:param name="targetId" value="prodInfoProdSelect"/>
         </jsp:include>
         <%--// 상품선택 모듈 멀티 선택 사용시 include --%>
+      </td>
+    </tr>
+    <tr>
+      <%-- 그룹코드 --%>
+      <th><s:message code="prodInfoSearch.prodInfo.grpCd" /></th>
+      <td>
+        <input type="text" id="srchSdselGrpCdProd" ng-model="sdselGrpCd" class="sb-input w100" maxlength="13"/>
+      </td>
+      <%-- 그룹명 --%>
+      <th><s:message code="prodInfoSearch.prodInfo.grpNm" /></th>
+      <td>
+        <input type="text" id="srchSdselGrpNmProd" ng-model="sdselGrpNm" class="sb-input w100" maxlength="100"/>
+      </td>
+    </tr>
+    <tr>
+      <%-- 분류코드 --%>
+      <th><s:message code="prodInfoSearch.prodInfo.classCd" /></th>
+      <td>
+        <input type="text" id="srchSdselClassCdProd" ng-model="sdselClassCd" class="sb-input w100" maxlength="13" />
+      </td>
+      <%-- 분류명 --%>
+      <th><s:message code="prodInfoSearch.prodInfo.classNm" /></th>
+      <td>
+        <input type="text" id="srchSdselSrchClassNmProd" ng-model="sdselClassNm" class="sb-input w100" maxlength="100"/>
+      </td>
+    </tr>
+    <tr>
+      <%-- 선택상품코드 --%>
+      <th><s:message code="prodInfoSearch.prodInfo.sdselProdCd" /></th>
+      <td>
+        <input type="text" id="srchSdselSelectProdCdProd" ng-model="sdselProdCd" class="sb-input w100" maxlength="13"/>
+      </td>
+      <%-- 선택상품명 --%>
+      <th><s:message code="prodInfoSearch.prodInfo.sdselProdNm" /></th>
+      <td>
+        <input type="text" id="srchSdselSelectProdNmProd" ng-model="sdselProdNm" class="sb-input w100" maxlength="100"/>
       </td>
     </tr>
     </tbody>
@@ -235,4 +271,4 @@
     <%--//엑셀 리스트--%>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/prodInfo.js?ver=20240930.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/prodInfo.js?ver=20250710.01" charset="utf-8"></script>
