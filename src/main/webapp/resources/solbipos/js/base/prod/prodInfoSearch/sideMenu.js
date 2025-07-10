@@ -33,6 +33,12 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   // 사이드-선택메뉴 목록 조회
   $scope.searchSideMenuList = function(){
     var params = {};
+    params.sdselGrpCd   = $scope.sdselGrpCd;
+    params.sdselGrpNm   = $scope.sdselGrpNm;
+    params.classCd      = $scope.sdselClassCd;
+    params.classNm      = $scope.sdselClassNm;
+    params.prodCd       = $scope.sdselProdCd;
+    params.prodNm       = $scope.sdselProdNm;
     params.listScale = 500;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
@@ -42,6 +48,12 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   // 엑셀 다운로드
   $scope.excelDownload = function () {
     var params = {};
+    params.sdselGrpCd   = $scope.sdselGrpCd;
+    params.sdselGrpNm   = $scope.sdselGrpNm;
+    params.sdselClassCd = $scope.sdselClassCd;
+    params.sdselClassNm = $scope.sdselClassNm;
+    params.prodCd       = $scope.sdselProdCd;
+    params.prodNm       = $scope.sdselProdNm;
     $scope._broadcast('sideMenuExcelCtrl', params);
   };
   

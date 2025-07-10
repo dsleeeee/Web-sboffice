@@ -92,6 +92,42 @@
                 <input type="text" class="sb-input w100" id="srchStoreNm" ng-model="storeNm" onkeyup="fnNxBtnSearch('3');"/>
             </td>
         </tr>
+        <tr>
+            <%-- 포스-용도 --%>
+            <th><s:message code="envConfgBatchChange.storePos.posUseFg" /></th>
+            <td>
+                <%--<input type="text" class="sb-input w100" id="srchEnvstGrpCd" ng-model="envstGrpCd" />--%>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchPosUseFg"
+                            ng-model="posUseFg"
+                            items-source="_getComboData('posUseFg')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="posUseFgCombo">
+                    </wj-combo-box>
+                </div>
+            </td>
+            <%-- 포스 - 메인여부 --%>
+            <th><s:message code="envConfgBatchChange.storePos.posMainFg" /></th>
+            <td>
+                <%--<input type="text" class="sb-input w100" id="srchEnvstGrpCd" ng-model="envstGrpCd" />--%>
+                <div class="sb-select">
+                    <wj-combo-box
+                            id="srchPosMainFg"
+                            ng-model="posMainFg"
+                            items-source="_getComboData('posMainFg')"
+                            display-member-path="name"
+                            selected-value-path="value"
+                            is-editable="false"
+                            initialized="_initComboBox(s)"
+                            control="posMainFgCombo">
+                    </wj-combo-box>
+                </div>
+            </td>
+        </tr>
         </tbody>
     </table>
 
@@ -153,6 +189,8 @@
                 <wj-flex-grid-column header="<s:message code="envConfgBatchChange.storePos.storeNm"/>" binding="storeNm" width="200" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="envConfgBatchChange.storePos.posNo"/>" binding="posNo" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="envConfgBatchChange.storePos.posNm"/>" binding="posNm" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="envConfgBatchChange.storePos.posUseFg"/>" binding="posUseFg" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="envConfgBatchChange.storePos.posMainFg"/>" binding="posMainFg" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <%-- 텍스트일때 / DIRCT_IN_YN = Y --%>
                 <wj-flex-grid-column header="<s:message code="envConfgBatchChange.storePos.envstVal"/>" binding="envstVal" width="100" align="center" visible="false"></wj-flex-grid-column>
@@ -167,6 +205,8 @@
 
 <script type="text/javascript">
     var userId = "${userId}";
+    var posUseFgComboList = ${posUseFg};
+    var posMainFgComboList = ${posMainFg};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeStorePos.js?ver=20210617.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeStorePos.js?ver=20250709.01" charset="utf-8"></script>

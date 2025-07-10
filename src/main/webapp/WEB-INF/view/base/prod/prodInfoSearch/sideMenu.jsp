@@ -14,11 +14,58 @@
     <a href="#" class="open fl"><s:message code="prodInfoSearch.sideMenu"/></a>
     <%-- 조회 --%>
     <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-      <button class="btn_blue fr" id="btnSearch" ng-click="_broadcast('sideMenuCtrl')">
+      <button class="btn_blue fr" id="btnSearch" ng-click="_pageView('sideMenuCtrl',1)">
         <s:message code="cmm.search" />
       </button>
     </div>
   </div>
+
+  <table class="searchTbl">
+    <colgroup>
+      <col class="w15"/>
+      <col class="w35"/>
+      <col class="w15"/>
+      <col class="w35"/>
+    </colgroup>
+    <tbody>
+    <tr>
+      <%-- 그룹코드 --%>
+      <th><s:message code="prodInfoSearch.sideMenu.grpCd" /></th>
+      <td>
+        <input type="text" id="srchSdselGrpCd" ng-model="sdselGrpCd" class="sb-input w100" maxlength="13"/>
+      </td>
+      <%-- 그룹명 --%>
+      <th><s:message code="prodInfoSearch.sideMenu.grpNm" /></th>
+      <td>
+        <input type="text" id="srchSdselGrpNm" ng-model="sdselGrpNm" class="sb-input w100" maxlength="100"/>
+      </td>
+    </tr>
+    <tr>
+      <%-- 분류코드 --%>
+      <th><s:message code="prodInfoSearch.sideMenu.classCd" /></th>
+      <td>
+        <input type="text" id="srchSdselClassCd" ng-model="sdselClassCd" class="sb-input w100" maxlength="13" />
+      </td>
+      <%-- 분류명 --%>
+      <th><s:message code="prodInfoSearch.sideMenu.classNm" /></th>
+      <td>
+        <input type="text" id="srchSdselSrchClassNm" ng-model="sdselClassNm" class="sb-input w100" maxlength="100"/>
+      </td>
+    </tr>
+    <tr>
+      <%-- 선택상품코드 --%>
+      <th><s:message code="prodInfoSearch.sideMenu.prodCd" /></th>
+      <td>
+        <input type="text" id="srchSdselSelectProdCd" ng-model="sdselProdCd" class="sb-input w100" maxlength="13"/>
+      </td>
+      <%-- 선택상품명 --%>
+      <th><s:message code="prodInfoSearch.sideMenu.prodNm" /></th>
+      <td>
+        <input type="text" id="srchSdselSelectProdNm" ng-model="sdselProdNm" class="sb-input w100" maxlength="100"/>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 
   <div class="mt10 oh sb-select dkbr">
     <%-- 엑셀다운로드 --%>
@@ -124,4 +171,4 @@
     <%--//엑셀 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/sideMenu.js?ver=20240930.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodInfoSearch/sideMenu.js?ver=20250710.01" charset="utf-8"></script>

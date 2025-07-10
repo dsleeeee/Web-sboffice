@@ -300,4 +300,16 @@ public class EnvConfgBatchChangeServiceImpl implements EnvConfgBatchChangeServic
 
         return procCnt;
     }
+
+    /** 포스-용도 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<Object>> getPosUseFg() {
+        return envConfgBatchChangeMapper.getPosUseFg();
+    }
+
+    /** 포스-메인여부 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<Object>> getPosMainFg() {
+        return envConfgBatchChangeMapper.getPosMainFg();
+    }
 }

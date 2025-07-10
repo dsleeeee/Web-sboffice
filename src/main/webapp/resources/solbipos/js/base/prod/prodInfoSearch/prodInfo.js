@@ -157,6 +157,12 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       }
       params.userBrands = momsHqBrandCd;
     }
+    params.sdselGrpCd   = $scope.sdselGrpCd;
+    params.sdselGrpNm   = $scope.sdselGrpNm;
+    params.sdselClassCd = $scope.sdselClassCd;
+    params.sdselClassNm = $scope.sdselClassNm;
+    params.sdselProdCd  = $scope.sdselProdCd;
+    params.sdselProdNm  = $scope.sdselProdNm;
     params.listScale = 500;
     console.log(params);
 
@@ -216,6 +222,12 @@ app.controller('prodInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       }
       params.userBrands = momsHqBrandCd;
     }
+    params.sdselGrpCd   = $scope.sdselGrpCd;
+    params.sdselGrpNm   = $scope.sdselGrpNm;
+    params.sdselClassCd = $scope.sdselClassCd;
+    params.sdselClassNm = $scope.sdselClassNm;
+    params.selectProdCd = $scope.sdselProdCd;
+    params.selectProdNm = $scope.sdselProdNm;
 
     $scope._broadcast('prodInfoExcelCtrl', params);
   };

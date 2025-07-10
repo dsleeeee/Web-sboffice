@@ -31,7 +31,7 @@
       </wj-combo-box>
     </div>
     <%-- 기본값으로 설정 --%>
-    <a href="#" id="btnDefault" class="btn_grayS mr10"><s:message code="storeManage.setting.default.env" /></a>
+    <a href="#" id="btnDefaultPos" class="btn_grayS mr10" ng-click="setDefaultPos()"><s:message code="storeManage.setting.default.env" /></a>
     <%-- 테이블 그룹설정 --%>
     <button id="btnSetTabGrp" type="button" class="btn_skyblue" ng-click="settingTableGroup()"><s:message code="storeManage.setting.tableGroup" /></button>
     <%-- 포스 명칭설정 --%>
@@ -55,7 +55,7 @@
   </div>
 
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storePosEnv.js?ver=20241210.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storePosEnv.js?ver=20250709.01" charset="utf-8"></script>
 
 <script type="text/javascript">
   var userId = "${userId}";

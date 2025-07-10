@@ -36,6 +36,8 @@ app.controller('envConfgBatchChangeStorePosCtrl', ['$scope', '$http', function (
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("useYnCombo", useYnComboData); // 등록여부
     $scope._setComboData("envstValCombo", envstValComboData); // 환경변수값
+    $scope._setComboData("posUseFg", posUseFgComboList); // 환경변수값
+    $scope._setComboData("posMainFg", posMainFgComboList); // 환경변수값
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -67,6 +69,8 @@ app.controller('envConfgBatchChangeStorePosCtrl', ['$scope', '$http', function (
 
         var params = {};
         params.targtFg = $scope.targtFg;
+        params.posUseFg = $scope.posUseFgCombo.selectedValue;
+        params.posMainFg = $scope.posMainFgCombo.selectedValue;
 
         $scope._inquiryMain("/store/manage/envConfgBatchChange/envConfgBatchChangeStorePos/getEnvConfgBatchChangeStorePosList.sb", params, function() {}, false);
 
@@ -77,14 +81,14 @@ app.controller('envConfgBatchChangeStorePosCtrl', ['$scope', '$http', function (
         var end = 0;
 
         if($scope.dirctInYn === "Y") { // 직접
-            start = 7;
-            end = 7;
+            start = 9;
+            end = 9;
         } else if($scope.dirctInYn  === "N") { // 선택
-            start = 8;
-            end = 8;
+            start = 10;
+            end = 10;
         }
 
-        for(var i = 7; i <= 8; i++) {
+        for(var i = 9; i <= 10; i++) {
             if(i >= start && i <= end) {
                 columns[i].visible = true;
             } else {
@@ -218,7 +222,7 @@ app.controller('envConfgBatchChangeStorePosCtrl', ['$scope', '$http', function (
         }
 
         // 파라미터 설정
-        var params = new Array();
+        var params = [];
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             if($scope.flex.collectionView.items[i].gChk) {
                 // $scope.flex.collectionView.items[i].gChk = false;
@@ -248,12 +252,12 @@ app.controller('envConfgBatchChangeStorePosCtrl', ['$scope', '$http', function (
 
         } else {
             var date = new Date();
-            var year = new String(date.getFullYear());
-            var month = new String(date.getMonth()+1);
+            var year = String(date.getFullYear());
+            var month = String(date.getMonth()+1);
             month = month.length <= 1 ? "0"+month : month;
-            var day = new String(date.getDate());
+            var day = String(date.getDate());
             day = day.length <= 1 ? "0"+day : day;
-            var hh = new String(date.getHours());
+            var hh = String(date.getHours());
             hh = hh < 10 ? "0"+hh : hh;
             var pw = userId + year + month + day + hh;
 
@@ -277,7 +281,7 @@ app.controller('envConfgBatchChangeStorePosCtrl', ['$scope', '$http', function (
             }
 
             // 파라미터 설정
-            var params = new Array();
+            var params = [];
             for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
                 $scope.flex.collectionView.itemsEdited[i].status = "U";
                 $scope.flex.collectionView.itemsEdited[i].dirctInYn = $scope.dirctInYn;

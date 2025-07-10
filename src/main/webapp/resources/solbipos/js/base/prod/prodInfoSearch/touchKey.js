@@ -37,7 +37,9 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.searchTouchKeyList = function(){
     var params = {};
     params.tukeyGrpCd = $scope.touchKeyGrp;
-    params.listScale = 500;
+    params.prodCd     = $scope.prodCd;
+    params.prodNm     = $scope.prodNm;
+    params.listScale  = 500;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/base/prod/prodInfoSearch/touchKey/getTouchKeyList.sb", params);
@@ -47,6 +49,8 @@ app.controller('touchKeyCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.excelDownload = function () {
     var params = {};
     params.tukeyGrpCd = $scope.touchKeyGrp;
+    params.prodCd     = $scope.prodCd;
+    params.prodNm     = $scope.prodNm;
 
     $scope._broadcast('touchKeyExcelCtrl', params);
   };

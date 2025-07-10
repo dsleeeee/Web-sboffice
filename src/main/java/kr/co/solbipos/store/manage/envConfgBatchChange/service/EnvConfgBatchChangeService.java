@@ -67,6 +67,9 @@ public interface EnvConfgBatchChangeService {
     /** 공통코드관리탭 - 저장 */
     int getEnvConfgBatchChangeCommCodeSave(EnvConfgBatchChangeVO[] envConfgBatchChangeVOs, SessionInfoVO sessionInfoVO);
 
-
-
+    /** 포스-용도 콤보박스 조회 */
+    List<DefaultMap<Object>>  getPosUseFg();
+    
+    /** 포스-메인여부 콤보박스 조회 */
+    List<DefaultMap<Object>>  getPosMainFg();
 }

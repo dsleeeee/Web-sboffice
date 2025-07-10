@@ -430,7 +430,10 @@ public class ProdVO extends PageVO {
     private String pageFg;
 
     /** 상품분류코드(배열형) */
-    private String arrProdClassCd [];
+    private String[] arrProdClassCd;
+
+    /** 상품(멀티) 조회조건 사용시, 리스트 검색에 사용할 매장코드 array */
+    private String[] arrSplitProdCd;
 
     /**
      * @return the hqOfficeCd
@@ -1829,5 +1832,13 @@ public class ProdVO extends PageVO {
 
     public void setArrProdClassCd(String[] arrProdClassCd) {
         this.arrProdClassCd = arrProdClassCd;
+    }
+
+    public String[] getArrSplitProdCd() {
+        return arrSplitProdCd;
+    }
+
+    public void setArrSplitProdCd(String[] arrSplitProdCd) {
+        this.arrSplitProdCd = arrSplitProdCd;
     }
 }

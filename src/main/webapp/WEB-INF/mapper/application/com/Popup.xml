@@ -452,4 +452,21 @@
         FROM DUAL
     </select>
 
+    <!-- 상품(멀티) 조회조건 사용시, 리스트 검색에 사용할 상품값 리턴 함수 호출 -->
+    <!--
+        TABLE    : COM_SQLTM_PROD_T
+        PARAM    : storeVO
+        COMMENTS : 상품(멀티) 조회조건 사용시, 리스트 검색에 사용할 상품값을 리턴하는 함수를 호출한다.
+    -->
+    <select id="getSearchMultiProdRtn" parameterType="prodVO" resultType="String">
+        /* USE : PopupMapper.getSearchMultiProdRtn */
+        SELECT FN_GET_REPLACE_PROD_SQL
+        <if test='arrSplitProdCd != null and arrSplitProdCd != ""'>
+            <foreach collection="arrSplitProdCd" item="item" open="(" close=")" separator="||">
+                TO_CLOB (#{item})
+            </foreach>
+        </if>
+        FROM DUAL
+    </select>
+
 </mapper>

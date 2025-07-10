@@ -41,6 +41,8 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', function ($scope, $http) {
     }
     params.tuClsType = $scope.tuClsType;
     params.listScale = 500;
+    params.prodCd     = $scope.prodCd;
+    params.prodNm     = $scope.prodNm;
 
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/base/prod/prodInfoSearch/kioskKeyMap/getKioskKeyMapList.sb", params);
@@ -125,6 +127,8 @@ app.controller('kioskKeyMapCtrl', ['$scope', '$http', function ($scope, $http) {
       params.posNo = $scope.posNo;
     }
     params.tuClsType = $scope.tuClsType;
+    params.prodCd     = $scope.prodCd;
+    params.prodNm     = $scope.prodNm;
 
     $scope._broadcast('kioskKeyMapExcelCtrl', params);
   };
