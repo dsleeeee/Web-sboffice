@@ -638,66 +638,93 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       // 매장코드 수동입력 시
       if ($scope.store.storeCdInputType === "1") {
 
-        // 매장코드를 입력해주세요.
-        var msg = messages["storeManage.storeCd"] + messages["cmm.require.text"];
-        if (isNull($scope.store.storeCd)) {
-          $scope._popMsg(msg);
-          return false;
-        }
+          // 매장코드를 입력해주세요.
+          var msg = messages["storeManage.storeCd"] + messages["cmm.require.text"];
+          if (isNull($scope.store.storeCd)) {
+              $scope._popMsg(msg);
+              return false;
+          }
 
-        // 매장코드 숫자 6자리 입력 제한(맘스터치만 허용)
-        var msg = "매장코드 숫자 6자리는 사용할 수 없습니다.";
-        if($scope.store.hqOfficeCd !== "DS034" && $scope.store.hqOfficeCd !== "DS038" && $scope.store.hqOfficeCd !== "DS040" && $scope.store.hqOfficeCd !== "H0393" && $scope.store.hqOfficeCd !== "DS021") {
-            if (/^[0-9]+$/.test($scope.store.storeCd) === true && $scope.store.storeCd.length === 6) {
-                $scope._popMsg(msg);
-                return false;
-            }
-        }
+          // 본사별 매장코드 생성 규칙 체크
+          // 1. 보나비
+          if ($scope.store.hqOfficeCd === "A0001") {
+              if ($scope.store.storeCd.length !== 7) {
+                  $scope._popMsg(messages["storeManage.bonavie.storeCdLengthChk"]); // 보나비 매장코드는 7자리만 가능합니다.
+                  return false;
+              }
 
-        // 매장코드 중복체크를 해주세요.
-        var msg = messages["storeManage.storeCdDuplicateChk.msg"];
-        if (isNull($scope.store.storeCdChkFg)) {
-          $scope._popMsg(msg);
-          return false;
-        }
+              if ($scope.store.storeCd.substr(0, 1) !== "A") {
+                  $scope._popMsg(messages["storeManage.bonavie.storeCdChk"]); // 보나비 매장코드 시작규칙은 A 입니다.
+                  return false;
+              }
+          }
 
-        // 매장코드 중복체크를 다시 해주세요.
-        var msg = messages["storeManage.storeCdDuplicateChkAgain.msg"];
-        if ($scope.store.storeCd !== $scope.store.storeCdChkFg) {
-          $scope._popMsg(msg);
-          return false;
-        }
+          // 2. 맘스터치
+          else if ($scope.store.hqOfficeCd === "H0393") {
+              if ($scope.store.storeCd.length !== 6) {
+                  $scope._popMsg(messages["storeManage.moms.storeCdLengthChk"]); // 맘스터치 매장코드는 6자리만 가능합니다.
+                  return false;
+              }
+
+              var storePrefix = $scope.store.storeCd.substr(0, 1);
+              if (storePrefix !== "C" && storePrefix !== "D" && storePrefix !== "E" && storePrefix !== "0") {
+                  $scope._popMsg(messages["storeManage.moms.storeCdChk"]); // 맘스터치 매장코드 시작규칙은 C, D, E, 0(숫자) 입니다.
+                  return false;
+              }
+          }
+
+          // 3. 아트박스
+          else if ($scope.store.hqOfficeCd === "H0345") {
+              if ($scope.store.storeCd.length !== 7) {
+                  $scope._popMsg(messages["storeManage.artbox.storeCdLengthChk"]); // 아트박스 매장코드는 7자리만 가능합니다.
+                  return false;
+              }
+
+              if ($scope.store.storeCd.substr(0, 1) !== "P") {
+                  $scope._popMsg(messages["storeManage.artbox.storeCdChk"]); // 아트박스 매장코드 시작규칙은 P 입니다.
+                  return false;
+              }
+          }
+
+          // 4. 미스터피자
+          else if ($scope.store.hqOfficeCd === "H0616") {
+              if ($scope.store.storeCd.length !== 8) {
+                  $scope._popMsg(messages["storeManage.mrpizza.storeCdLengthChk"]); // 미스터피자 매장코드는 8자리만 가능합니다.
+                  return false;
+              }
+
+              if (/^[0-9]+$/.test($scope.store.storeCd.substr(0, 6)) !== true) {
+                  $scope._popMsg(messages["storeManage.mrpizza.storeCdChk"]); // 미스터피자 매장코드 규칙은 숫자 6자리 + MP(영어) 입니다.
+                  return false;
+              }
+
+              if ($scope.store.storeCd.substr(6, 2) !== "MP") {
+                  $scope._popMsg(messages["storeManage.mrpizza.storeCdChk"]); // 미스터피자 매장코드 규칙은 숫자 6자리 + MP(영어) 입니다.
+                  return false;
+              }
+          }
+
+          // 그 외
+          else {
+              $scope._popMsg(messages["storeManage.manual.notUse.msg"]); // 매장코드 확인 - 관리자에게 문의하십시오.
+              return false;
+          }
+
+          // 매장코드 중복체크를 해주세요.
+          var msg = messages["storeManage.storeCdDuplicateChk.msg"];
+          if (isNull($scope.store.storeCdChkFg)) {
+              $scope._popMsg(msg);
+              return false;
+          }
+
+          // 매장코드 중복체크를 다시 해주세요.
+          var msg = messages["storeManage.storeCdDuplicateChkAgain.msg"];
+          if ($scope.store.storeCd !== $scope.store.storeCdChkFg) {
+              $scope._popMsg(msg);
+              return false;
+          }
       }
 
-        // 맘스터치 (운영 DS034,DS038,DS040,H0393) (개발 DS021)
-        if($scope.store.hqOfficeCd === "DS034" || $scope.store.hqOfficeCd === "DS038" || $scope.store.hqOfficeCd === "DS040" || $scope.store.hqOfficeCd === "H0393" || $scope.store.hqOfficeCd === "DS021") {
-            // 매장코드 시작규칙
-            if($scope.store.storeCd.substring(0, 1) == "C" || $scope.store.storeCd.substring(0, 1) == "D" || $scope.store.storeCd.substring(0, 1) == "E" || $scope.store.storeCd.substring(0, 1) == "0") {
-            } else {
-                $scope._popMsg("맘스터치 매장코드 시작규칙은 C, D, E, 0(숫자) 입니다."); // 맘스터치 매장코드 시작규칙은 C, D, E, 0(숫자) 입니다.
-                return false;
-            }
-            // 매장코드 자리수
-            if($scope.store.storeCd.length == 6) {
-            } else {
-                $scope._popMsg(messages["storeManage.moms.storeCdLengthChk"]); // 맘스터치 매장코드는 6자리만 가능합니다.
-                return false;
-            }
-        // BBQ (운영 DS024,H0360) (개발 DS011)
-        } else if($scope.store.hqOfficeCd === "DS024" || $scope.store.hqOfficeCd === "H0360" || $scope.store.hqOfficeCd === "DS011") {
-            // 매장코드 시작규칙
-            if($scope.store.storeCd.substring(0, 1) == "B" || $scope.store.storeCd.substring(0, 1) == "0" || $scope.store.storeCd.substring(0, 1) == "1" || $scope.store.storeCd.substring(0, 1) == "2" || $scope.store.storeCd.substring(0, 1) == "9") {
-            } else {
-                $scope._popMsg(messages["storeManage.bbq.storeCdChk"]); // BBQ 매장코드 시작규칙은 B(영어), 0, 1, 2, 9 입니다.
-                return false;
-            }
-            // 매장코드 자리수
-            if($scope.store.storeCd.length == 9) {
-            } else {
-                $scope._popMsg(messages["storeManage.bbq.storeCdLengthChk"]); // BBQ 매장코드는 9자리만 가능합니다.
-                return false;
-            }
-        }
     }
 
     // 매장명을 입력해주세요.
@@ -1657,8 +1684,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     }
 
+    if ($scope.store.hqOfficeCd !== "A0001" && $scope.store.hqOfficeCd !== "H0393" && $scope.store.hqOfficeCd !== "H0345" && $scope.store.hqOfficeCd !== "H0616") {
+        // 매장코드 확인 - 관리자에게 문의하십시오.
+        $scope._popMsg(messages["storeManage.manual.notUse.msg"]);
+        return false;
+    }
+
     // 매장코드 길이체크
-    if($("#hdDigit8Store").val() === '') {
+    /*if($("#hdDigit8Store").val() === '') {
       if($("#storeCd").val().length !== 7) {
         // 매장코드는 7자리로 입력하세요.
         $scope._popMsg(messages["storeManage.require.storeCdLength7"]);
@@ -1670,7 +1703,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._popMsg(messages["storeManage.require.storeCdLength6Or8To12"]);
         return false;
       }
-    }
+    }*/
 
     var params    = {};
     params.storeCd = $scope.store.storeCd;
