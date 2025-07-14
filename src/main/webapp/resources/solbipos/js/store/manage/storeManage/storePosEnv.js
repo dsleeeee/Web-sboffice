@@ -65,10 +65,14 @@ app.controller('posEnvCtrl', ['$scope', '$http', function ($scope, $http) {
 
             var defaultVal = $("#env"+objEnvstCd[i].value).attr("defaultVal");
 
-            if(objDirctInYn[i].value == "Y") {
-                $("#env"+objEnvstCd[i].value).val(defaultVal);
+            if (objDirctInYn[i].value == "Y") {
+                $("#env" + objEnvstCd[i].value).val(defaultVal);
             } else {
-                $("#env"+objEnvstCd[i].value).val(defaultVal).prop("selected", true);
+                if(defaultVal !== null && defaultVal !== "" && defaultVal !== undefined) {
+                    $("#env" + objEnvstCd[i].value).val(defaultVal).prop("selected", true);
+                }else{
+                    $("#env" + objEnvstCd[i].value).prop("selectedIndex", 0);
+                }
             }
         }
     };
