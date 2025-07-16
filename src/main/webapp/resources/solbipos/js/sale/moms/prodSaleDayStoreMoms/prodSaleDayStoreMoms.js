@@ -53,6 +53,73 @@ app.controller('prodSaleDayStoreMomsCtrl', ['$scope', '$http', '$timeout', funct
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.saleDate = messages["prodSaleDayStoreMoms.saleDate"];
+        dataItem.dayFrom = messages["prodSaleDayStoreMoms.dayFrom"];
+        dataItem.dayTo = messages["prodSaleDayStoreMoms.dayTo"];
+        dataItem.storeCd = messages["prodSaleDayStoreMoms.storeCd"];
+        dataItem.storeNm = messages["prodSaleDayStoreMoms.storeNm"];
+        dataItem.prodNm = messages["prodSaleDayStoreMoms.prodNm"];
+        dataItem.saleQty1 = messages["prodSaleDayStoreMoms.saleQty"];
+        dataItem.totSaleAmt1 = messages["prodSaleDayStoreMoms.totSaleAmt"];
+        dataItem.realSaleAmt1 = messages["prodSaleDayStoreMoms.realSaleAmt"];
+        dataItem.genSaleQty = messages["prodSaleDayStoreMoms.gen"];
+        dataItem.genTotSaleAmt = messages["prodSaleDayStoreMoms.gen"];
+        dataItem.genRealSaleAmt = messages["prodSaleDayStoreMoms.gen"];
+        dataItem.dlvrSaleQty = messages["prodSaleDayStoreMoms.dlvr"];
+        dataItem.dlvrTotSaleAmt = messages["prodSaleDayStoreMoms.dlvr"];
+        dataItem.dlvrRealSaleAmt = messages["prodSaleDayStoreMoms.dlvr"];
+        dataItem.packSaleQty = messages["prodSaleDayStoreMoms.pack"];
+        dataItem.packTotSaleAmt = messages["prodSaleDayStoreMoms.pack"];
+        dataItem.packRealSaleAmt = messages["prodSaleDayStoreMoms.pack"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
     };
 
     // <-- 검색 호출 -->
@@ -330,6 +397,73 @@ app.controller('prodSaleDayStoreMomsExcelCtrl', ['$scope', '$http', '$timeout', 
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
+
+        // <-- 그리드 헤더2줄 -->
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.saleDate = messages["prodSaleDayStoreMoms.saleDate"];
+        dataItem.dayFrom = messages["prodSaleDayStoreMoms.dayFrom"];
+        dataItem.dayTo = messages["prodSaleDayStoreMoms.dayTo"];
+        dataItem.storeCd = messages["prodSaleDayStoreMoms.storeCd"];
+        dataItem.storeNm = messages["prodSaleDayStoreMoms.storeNm"];
+        dataItem.prodNm = messages["prodSaleDayStoreMoms.prodNm"];
+        dataItem.saleQty1 = messages["prodSaleDayStoreMoms.saleQty"];
+        dataItem.totSaleAmt1 = messages["prodSaleDayStoreMoms.totSaleAmt"];
+        dataItem.realSaleAmt1 = messages["prodSaleDayStoreMoms.realSaleAmt"];
+        dataItem.genSaleQty = messages["prodSaleDayStoreMoms.gen"];
+        dataItem.genTotSaleAmt = messages["prodSaleDayStoreMoms.gen"];
+        dataItem.genRealSaleAmt = messages["prodSaleDayStoreMoms.gen"];
+        dataItem.dlvrSaleQty = messages["prodSaleDayStoreMoms.dlvr"];
+        dataItem.dlvrTotSaleAmt = messages["prodSaleDayStoreMoms.dlvr"];
+        dataItem.dlvrRealSaleAmt = messages["prodSaleDayStoreMoms.dlvr"];
+        dataItem.packSaleQty = messages["prodSaleDayStoreMoms.pack"];
+        dataItem.packTotSaleAmt = messages["prodSaleDayStoreMoms.pack"];
+        dataItem.packRealSaleAmt = messages["prodSaleDayStoreMoms.pack"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+        // <-- //그리드 헤더2줄 -->
     };
 
     // <-- 검색 호출 -->
