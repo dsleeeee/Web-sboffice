@@ -122,6 +122,9 @@ public class ProdSaleRateMomsVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 매장합산 */
+    private String chkStoreSumDisplay;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -365,4 +368,8 @@ public class ProdSaleRateMomsVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getChkStoreSumDisplay() { return chkStoreSumDisplay; }
+
+    public void setChkStoreSumDisplay(String chkStoreSumDisplay) { this.chkStoreSumDisplay = chkStoreSumDisplay; }
 }

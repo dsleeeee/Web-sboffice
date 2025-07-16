@@ -39,13 +39,18 @@
                             <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
                             <span class="rg">~</span>
                             <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
+                            <span class="chk ml10">
+                                <input type="checkbox" ng-model="chkStoreSumDisplay" />
+                                <%-- 매장합산 --%>
+                                <label><s:message code="prodSaleRateMoms.chkStoreSum" /></label>
+                            </span>
                         </div>
                     </td>
                     <%-- 분류조회 --%>
-                    <th><s:message code="prodSaleRate.prodClass" /></th>
+                    <th><s:message code="cmm.prodClass" /></th>
                     <td>
                         <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left;"
-                                placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
+                                placeholder="<s:message code="cmm.prodClass" /> 선택" readonly/>
                         <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                         <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                     </td>
@@ -85,12 +90,12 @@
                 </tr>
                 <tr>
                     <%-- 상품코드 --%>
-                    <th><s:message code="prodSaleRate.prodCd" /></th>
+                    <th><s:message code="cmm.prodCd" /></th>
                     <td>
                         <input type="text" id="srchProdCd" ng-model="prodCd" class="sb-input w100" maxlength="13" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
                     <%-- 상품명 --%>
-                    <th><s:message code="prodSaleRate.prodNm" /></th>
+                    <th><s:message code="cmm.prodNm" /></th>
                     <td>
                         <input type="text" id="srchProdNm" ng-model="prodNm" class="sb-input w100" maxlength="100" onkeyup="fnNxBtnSearch('1');"/>
                     </td>
@@ -611,4 +616,4 @@
     var vDlvrOrderFg = ["stin", "dlvr", "pack"];
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRateMoms/prodSaleRateMoms.js?ver=20240813.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/prod/prodSaleRateMoms/prodSaleRateMoms.js?ver=20250715.01" charset="utf-8"></script>

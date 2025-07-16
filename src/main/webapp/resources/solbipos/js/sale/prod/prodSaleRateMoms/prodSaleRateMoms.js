@@ -112,6 +112,9 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
     //     $("#srchBranchCd").attr("disabled", false);
     // }
 
+    // 매장합산
+    $scope.chkStoreSumDisplay = false;
+
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
@@ -359,6 +362,7 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        params.chkStoreSumDisplay = $scope.chkStoreSumDisplay;
         params.prodClassCd = $scope.prodClassCd;
         params.dayOption = $scope.srchDayOptionCombo.selectedValue;
         params.prodOption = $scope.srchProdOptionCombo.selectedValue;
@@ -472,6 +476,9 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
                 }
             }
 
+            // 매장합산
+            $scope.isChkStoreSumDisplay();
+
         });
     };
 
@@ -502,6 +509,7 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        params.chkStoreSumDisplay = $scope.chkStoreSumDisplay;
         params.prodClassCd = $scope.prodClassCd;
         params.dayOption = $scope.srchDayOptionCombo.selectedValue;
         params.prodOption = $scope.srchProdOptionCombo.selectedValue;
@@ -629,6 +637,21 @@ app.controller('prodSaleRateMomsCtrl', ['$scope', '$http', '$timeout', function 
     $scope.delProdClass = function(){
         $scope.prodClassCd = "";
         $scope.prodClassNm = "";
+    };
+
+    // 매장합산
+    $scope.isChkStoreSumDisplay = function(){
+        var columns = $scope.flex.columns;
+
+        for(var i=0; i<columns.length; i++){
+            if(columns[i].binding === 'branchNm'){
+                $scope.chkStoreSumDisplay ? columns[i].visible = false : columns[i].visible = true;
+            } else if(columns[i].binding === 'storeCd'){
+                $scope.chkStoreSumDisplay ? columns[i].visible = false : columns[i].visible = true;
+            } else if(columns[i].binding === 'storeNm'){
+                $scope.chkStoreSumDisplay ? columns[i].visible = false : columns[i].visible = true;
+            }
+        }
     };
 
 }]);
@@ -971,6 +994,9 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                 }
             }
 
+            // 매장합산
+            $scope.isChkStoreSumDisplay(params);
+
             $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
             $timeout(function () {
                 wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
@@ -1158,6 +1184,9 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
                                     }
                                     // <-- //그리드 visible -->
 
+                                    // 매장합산
+                                    $scope.isChkStoreSumDisplay(params);
+
                                     wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
                                         includeColumnHeaders: true,
                                         includeCellStyles: false,
@@ -1211,6 +1240,21 @@ app.controller('prodSaleRateMomsExcelCtrl', ['$scope', '$http', '$timeout', func
             $scope._loadingPopup.show(true);
         } else {
             $scope._loadingPopup.hide(true);
+        }
+    };
+
+    // 매장합산
+    $scope.isChkStoreSumDisplay = function(data){
+        var columns = $scope.excelFlex.columns;
+
+        for(var i=0; i<columns.length; i++){
+            if(columns[i].binding === 'branchNm'){
+                data.chkStoreSumDisplay ? columns[i].visible = false : columns[i].visible = true;
+            } else if(columns[i].binding === 'storeCd'){
+                data.chkStoreSumDisplay ? columns[i].visible = false : columns[i].visible = true;
+            } else if(columns[i].binding === 'storeNm'){
+                data.chkStoreSumDisplay ? columns[i].visible = false : columns[i].visible = true;
+            }
         }
     };
 
