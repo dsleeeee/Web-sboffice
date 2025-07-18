@@ -154,4 +154,4 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/cupReturnStatus/cupReturnStatus.js?ver=20250717.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/cupReturnStatus/cupReturnStatus.js?ver=20250717.02" charset="utf-8"></script>

@@ -17,6 +17,7 @@
     -->
     <select id="getCupReturnStatusList" parameterType="CupReturnStatusVO" resultType="DefaultMap">
         /* CupReturnStatusMapper.getCupReturnStatusList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT 	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,		A.REG_SEQ
         ,		A.POS_NO
@@ -32,6 +33,7 @@
         ,		A.REG_ID
         ,		A.MOD_DT
         ,		A.MOD_ID
+        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM 	TB_PS_EXACTCALC_CUPRETURN A
         ,		TB_CM_NMCODE B
         WHERE 	1=1
@@ -58,5 +60,6 @@
         ORDER
         BY      A.SALE_DATE
         ,       A.REG_SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 </mapper>

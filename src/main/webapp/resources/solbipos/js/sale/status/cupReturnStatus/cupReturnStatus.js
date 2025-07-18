@@ -91,29 +91,6 @@ app.controller('cupReturnStatusCtrl', ['$scope', '$http', '$timeout', function (
         params.barCd = $scope.barCd;
         params.returnType = $scope.returnType;
         params.sendYn = $scope.sendYn;
-        params.momsTeam = $scope.momsTeam;
-        params.momsAcShop = $scope.momsAcShop;
-        params.momsAreaFg = $scope.momsAreaFg;
-        params.momsCommercial = $scope.momsCommercial;
-        params.momsShopType = $scope.momsShopType;
-        params.momsStoreManageType = $scope.momsStoreManageType;
-        params.branchCd = $scope.branchCd;
-        params.storeHqBrandCd = $scope.storeHqBrandCd;
-        // '전체' 일때
-        if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
-            var momsHqBrandCd = "";
-            for(var i=0; i < momsHqBrandCdComboList.length; i++){
-                if(momsHqBrandCdComboList[i].value !== null) {
-                    momsHqBrandCd += momsHqBrandCdComboList[i].value + ","
-                }
-            }
-            params.userBrands = momsHqBrandCd;
-        }
-        params.momsStoreFg01 = $scope.momsStoreFg01;
-        params.momsStoreFg02 = $scope.momsStoreFg02;
-        params.momsStoreFg03 = $scope.momsStoreFg03;
-        params.momsStoreFg04 = $scope.momsStoreFg04;
-        params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
 
         $scope._inquiryMain("/sale/status/cupReturnStatus/cupReturnStatus/getCupReturnStatusList.sb", params, function() {}, false);
