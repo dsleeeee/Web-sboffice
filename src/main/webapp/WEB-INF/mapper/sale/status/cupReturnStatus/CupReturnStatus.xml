@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    cupReturnStatus.xml
+    컴보증금회수현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.07.17     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.cupReturnStatus.service.impl.CupReturnStatusMapper">
+    <!-- 컵보증금회수현황 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCupReturnStatusList" parameterType="CupReturnStatusVO" resultType="DefaultMap">
+        /* CupReturnStatusMapper.getCupReturnStatusList */
+        SELECT 	TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		A.REG_SEQ
+        ,		A.POS_NO
+        ,		A.BARCODE_ID
+        ,		A.RETURN_TYPE
+        ,		TO_CHAR(TO_DATE(A.RETURN_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS RETURN_DT
+        ,		A.RETURN_COST
+        ,		NVL(B.NMCODE_NM,A.CUP_TYPE) AS CUP_TYPE
+        ,		TO_CHAR(TO_DATE(A.SEND_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SEND_DATE
+        ,		TO_CHAR(TO_DATE(A.SEND_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS SEND_DT
+        ,		A.SEND_YN
+        ,		A.REG_DT
+        ,		A.REG_ID
+        ,		A.MOD_DT
+        ,		A.MOD_ID
+        FROM 	TB_PS_EXACTCALC_CUPRETURN A
+        ,		TB_CM_NMCODE B
+        WHERE 	1=1
+        AND 	B.NMCODE_CD     (+) = A.CUP_TYPE
+        AND 	B.NMCODE_GRP_CD (+) = '240'
+        AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCd != null and storeCd != ""'>
+        AND     A.STORE_CD      = #{storeCd}
+        </if>
+        <if test="chkDt == false">
+            <if test='sendStartDate != null and sendStartDate != ""'>
+                AND A.SEND_DATE BETWEEN #{sendStartDate} AND #{sendEndDate}
+            </if>
+        </if>
+        <if test='barCd != null and barCd != ""'>
+          AND A.BARCODE_ID LIKE '%'||#{barCd}||'%'
+        </if>
+        <if test='returnType != null and returnType != ""'>
+          AND A.RETURN_TYPE = #{returnType}
+        </if>
+        <if test='sendYn != null and sendYn != ""'>
+          AND A.SEND_YN = #{sendYn}
+        </if>
+        ORDER
+        BY      A.SALE_DATE
+        ,       A.REG_SEQ
+    </select>
+</mapper>

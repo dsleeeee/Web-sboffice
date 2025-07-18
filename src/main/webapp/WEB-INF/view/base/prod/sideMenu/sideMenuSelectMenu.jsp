@@ -198,6 +198,10 @@
                 <input type="hidden" id="hdSdselGrpBrandCd" />
                 <div class="updownSet oh mb5">
                     <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselProd' /><span id="sideClassTitle"></span> </span>
+                    <%-- 선택상품복사 --%>
+                    <button class="btn_skyblue" id="btnSdselProdCopy" ng-click="sdselProdCopy()" >
+                        <s:message code="sideMenu.selectMenu.sdselProdCopy" />
+                    </button>
                     <button class="btn_up" id="btnUpSelProd" ng-click="rowMoveUp()">
                         <s:message code="cmm.up" />
                     </button>
@@ -270,7 +274,7 @@
     var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20250516.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenu.js?ver=20250715.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품선택 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuProdView.jsp">
@@ -292,6 +296,12 @@
 
 <%-- 선택상품 적용매장등록 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sdselProdRegStore.jsp">
+    <c:param name="menuCd" value="${menuCd}"/>
+    <c:param name="menuNm" value="${menuNm}"/>
+</c:import>
+
+<%-- 선택상품복사 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/sideMenu/sdselProdCopy.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
 </c:import>

@@ -5,17 +5,17 @@
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
-<wj-popup control="wjSdselClassCopyLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:760px;height:660px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSdselProdCopyLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:760px;height:660px;" fade-in="false" fade-out="false">
 
     <%-- header --%>
     <div class="wj-dialog-header wj-dialog-header-font">
-        <s:message code="sideMenu.sdselClassCopy.info"/>
+        <s:message code="sideMenu.sdselProdCopy.info"/>
         <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
     </div>
 
     <%-- body --%>
     <div class="wj-dialog-body">
-        <div ng-controller="sdselClassCopyCtrl">
+        <div ng-controller="sdselProdCopyCtrl">
             <table class="tblType01">
                 <colgroup>
                     <col class="w17"/>
@@ -40,7 +40,7 @@
                         </div>
                     </th>
                     <td>
-                        <input type="text" id="txtCopySelGroup" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(5);"/>
+                        <input type="text" id="txtCopySelGroupProd" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(7);"/>
                     </td>
                     <%-- 상품명,상품코드 --%>
                     <th>
@@ -56,18 +56,18 @@
                         </div>
                     </th>
                     <td>
-                        <input type="text" id="txtCopySelProd" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(5);"/>
+                        <input type="text" id="txtCopySelProdProd" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(7);"/>
                     </td>
                     <td>
                         <%-- 조회 --%>
-                        <button class="btn_blue fr" id="nxBtnSearch5" ng-click="searchSdselClassCopy()"><s:message code="cmm.search" /></button>
+                        <button class="btn_blue fr" id="nxBtnSearch7" ng-click="searchSdselProdCopy()"><s:message code="cmm.search" /></button>
                     </td>
                 </tr>
                 </tbody>
             </table>
             <div class="w100 fl mt10">
                 <div class="mb10 oh sb-select dkbr">
-                    <p class="tl s14 mt5 lh15 red">복사할 선택분류를 체크 하신 후, '선택분류복사' 버튼을 클릭하시면 '적용할 그룹' 에 선택분류가 복사 됩니다.</p>
+                    <p class="tl s14 mt5 lh15 red">복사할 선택상품을 체크 하신 후, '선택상품복사' 버튼을 클릭하시면 '적용할 분류' 에 선택상품이 복사 됩니다.</p>
                 </div>
             </div>
             <table class="tblType01">
@@ -80,16 +80,26 @@
                 <tr>
                     <%-- 적용할 그룹 --%>
                     <th>
-                        <s:message code="sideMenu.sdselClassCopy.copyGroup"/>
+                        <s:message code="sideMenu.sdselProdCopy.copyGroup"/>
                     </th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchApplyGroup" ng-model="applyGroup" readonly />
-                        <input type="text" class="sb-input w100" id="srchApplyGroupCd" ng-model="applyGroupCd" readonly style="display: none" />
+                        <input type="text" class="sb-input w100" id="srchApplyGroupProd" ng-model="applyGroup" readonly />
+                        <input type="text" class="sb-input w100" id="srchApplyGroupProdCd" ng-model="applyGroupCd" readonly style="display: none" />
                     </td>
+                </tr>
+                <tr>
+                    <%-- 적용할 분류 --%>
+                    <th>
+                        <s:message code="sideMenu.sdselProdCopy.copyClass"/>
+                    </th>
                     <td>
-                        <%-- 선택분류복사 --%>
-                        <button class="btn_blue fr" id="btnSave" ng-click="classCopySave()"><s:message code="sideMenu.sdselClassCopy.copy" /></button>
+                        <input type="text" class="sb-input w100" id="srchApplyClassProd" ng-model="applyClass" readonly />
+                        <input type="text" class="sb-input w100" id="srchApplyClassProdCd" ng-model="applyClassCd" readonly style="display: none" />
                     </td>
+                        <td>
+                            <%-- 선택분류복사 --%>
+                            <button class="btn_blue fr" id="btnSave" ng-click="prodCopySave()"><s:message code="sideMenu.sdselProdCopy.copy" /></button>
+                        </td>
                 </tr>
                 </tbody>
             </table>
@@ -100,9 +110,9 @@
                 <%-- 좌측 상단 --%>
                 <div>
                     <%--위즈모 테이블--%>
-                    <div id="gridPrint" class="wj-TblWrapBr pd5" style="height: 220px;" ng-controller="sdselClassCopyGroupCtrl">
+                    <div id="gridPrint" class="wj-TblWrapBr pd5" style="height: 220px;" ng-controller="sdselProdCopyGroupCtrl">
                         <div class="updownSet oh mb10" style="height:30px;">
-                            <span class="fl bk lh30"><s:message code='sideMenu.sdselClassCopy.sdselGrp' /></span>
+                            <span class="fl bk lh30"><s:message code='sideMenu.sdselProdCopy.sdselGrp' /></span>
                         </div>
                         <%-- 개발시 높이 조절해서 사용--%>
                         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -120,14 +130,14 @@
 
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselGrpCd"/>" binding="sdselGrpCd" width="70" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselGrpNm"/>" binding="sdselGrpNm" width="*" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselGrpCd"/>" binding="sdselGrpCd" width="70" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselGrpNm"/>" binding="sdselGrpNm" width="*" is-read-only="true"></wj-flex-grid-column>
                                 <c:if test="${hqOfficeCd == 'A0001' and orgnFg == 'HQ'}">
-                                    <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
                                 </c:if>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselQty"/>" binding="cnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="70" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselQty"/>" binding="cnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="70" is-read-only="true" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -137,9 +147,9 @@
                 <%-- 좌측 하단 --%>
                 <div>
                     <%--위즈모 테이블--%>
-                    <div id="gridMapng" class="wj-TblWrapBr pd5" style="height: 220px;" ng-controller="sdselClassCopyClassCtrl">
+                    <div id="gridMapng" class="wj-TblWrapBr pd5" style="height: 220px;" ng-controller="sdselProdCopyClassCtrl">
                         <div class="updownSet oh mb10" style="height:30px;">
-                            <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.sdselClassCopy.sdselClass' /><span id="sideSelectGroupCopyTitle"></span> </span>
+                            <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.sdselProdCopy.sdselClass' /><span id="sideSelectGroupCopyTitleProd"></span> </span>
                         </div>
                         <%-- 개발시 높이 조절해서 사용--%>
                         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -153,16 +163,16 @@
                                     items-source="data"
                                     item-formatter="_itemFormatter"
                                     ime-enabled="true"
-                                    id="wjGridSelClassCopyList">
+                                    id="wjGridSelClassCopyListProd">
 
                                 <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselClassCd"/>" binding="sdselClassCd" width="70" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselClassNm"/>" binding="sdselClassNm" width="70" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.requireYn"/>" binding="requireYn" data-map="requireYnDataMap" width="85" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselQty"/>" binding="sdselQty" width="50" max-length="3" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselQty"/>" binding="cnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselQty"/>" binding="fixProdCnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselClassCd"/>" binding="sdselClassCd" width="70" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselClassNm"/>" binding="sdselClassNm" width="70" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.requireYn"/>" binding="requireYn" data-map="requireYnDataMap" width="85" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselQty"/>" binding="sdselQty" width="50" max-length="3" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselQty"/>" binding="cnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselQty"/>" binding="fixProdCnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
                                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" is-read-only="true"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.oldRegStoreFg"/>" binding="oldRegStoreFg" data-map="oldRegStoreFgDataMap" width="85" is-read-only="true" visible="false"></wj-flex-grid-column>
@@ -189,9 +199,9 @@
             <div class="w60 fr">
                 <div>
                     <%--위즈모 테이블--%>
-                    <div id="gridMapng" class="wj-TblWrapBr ml10 pd5" style="height: 440px;" ng-controller="sdselClassCopyProdCtrl">
+                    <div id="gridMapng" class="wj-TblWrapBr ml10 pd5" style="height: 440px;" ng-controller="sdselProdCopyProdCtrl">
                         <div class="updownSet oh mb10" style="height:30px;">
-                            <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.sdselClassCopy.sdselProd' /><span id="sideClassCopyTitle"></span> </span>
+                            <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.sdselProdCopy.sdselProd' /><span id="sideClassCopyTitleProd"></span> </span>
                         </div>
                         <%-- 개발시 높이 조절해서 사용--%>
                         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -205,19 +215,20 @@
                                     items-source="data"
                                     item-formatter="_itemFormatter"
                                     ime-enabled="true"
-                                    id="wjGridSelProdCopyList">
+                                    id="wjGridSelProdCopyListProd">
 
                                 <!-- define columns -->
+                                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                                 <c:if test="${brandUseFg == '1'}">
                                     <c:if test="${sessionInfo.orgnFg == 'HQ'}">
                                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.brand"/>" binding="hqBrandCd" data-map="brandDataMap" width="80" is-read-only="true"></wj-flex-grid-column>
                                     </c:if>
                                 </c:if>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.addProdUprc"/>" binding="addProdUprc" width="50" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.addProdQty"/>" binding="addProdQty" width="50" max-length="3" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.fixProdFg"/>" binding="fixProdFg" width="50" data-map="fixProdFgDataMap" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.addProdUprc"/>" binding="addProdUprc" width="50" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.addProdQty"/>" binding="addProdQty" width="50" max-length="3" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.fixProdFg"/>" binding="fixProdFg" width="50" data-map="fixProdFgDataMap" is-read-only="true"></wj-flex-grid-column>
                                 <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
                                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" is-read-only="true"></wj-flex-grid-column>
                                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.oldRegStoreFg"/>" binding="oldRegStoreFg" data-map="oldRegStoreFgDataMap" width="85" visible="false" is-read-only="true"></wj-flex-grid-column>
@@ -238,4 +249,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassCopy.js?ver=20250716.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselProdCopy.js?ver=20250714.01" charset="utf-8"></script>

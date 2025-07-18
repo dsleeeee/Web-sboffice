@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
+import kr.co.common.service.treePopup.TreePopupVO;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -18,6 +19,7 @@ import kr.co.solbipos.base.prod.sidemenu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -631,6 +633,44 @@ public class SideMenuServiceImpl implements SideMenuService {
         int procCnt = 0;
         String procResult;
         String currentDt = currentDateTimeString();
+        String classCds = "";
+        SideMenuSelClassVO countChkVO = new SideMenuSelClassVO();
+
+        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
+            classCds += sideMenuSelClassVO.getCopySdselClassCd() + ",";
+            countChkVO.setApplySdselGrpCd(sideMenuSelClassVO.getApplySdselGrpCd());
+            countChkVO.setCopySdselGrpCd(sideMenuSelClassVO.getCopySdselGrpCd());
+        }
+        countChkVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        countChkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            countChkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 상품 array 값 세팅
+        if (classCds != null && !"".equals(classCds)) {
+            String[] classCdList = classCds.split(",");
+            countChkVO.setClassCdList(classCdList);
+        }
+
+        // 피자,엣지,토핑 갯수 체크
+        List<DefaultMap<String>> classCntList = sideMenuMapper.getCountClassCnt(countChkVO);
+
+        //  분류구분 피자,엣지,토핑은 최대 1개만 선택 가능
+        for (DefaultMap<String> list : classCntList) {
+            if(Integer.parseInt(list.getStr("pizzaCnt")) > 1){
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.Y.msg"));
+            }
+            if(Integer.parseInt(list.getStr("edgeCnt")) > 1){
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.E.msg"));
+            }
+            if(Integer.parseInt(list.getStr("toppingCnt")) > 1){
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.T.msg"));
+            }
+        }
+
+        // 선택그룹 하프앤하프 여부 확인 
+        String halfAndHalf = sideMenuMapper.getChkHalfAndHalfYn(countChkVO);
 
         for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
             sideMenuSelClassVO.setModDt(currentDt);
@@ -642,6 +682,16 @@ public class SideMenuServiceImpl implements SideMenuService {
             sideMenuSelClassVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
             if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
                 sideMenuSelClassVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            System.out.println(sideMenuSelClassVO.getPopUpClassYn() + "분류구분");
+
+            // 선택그룹의 하프앤하프가 '사용'이면서 복사할 분류의 분류구분이 '피자'인 경우
+            if(halfAndHalf.equals("Y") && sideMenuSelClassVO.getPopUpClassYn().equals("Y")){
+                // 수량은 반드시 2로 입력
+                if(sideMenuSelClassVO.getSdselQty() != 2) {
+                    throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.sdselQty.msg"));
+                }
             }
 
             // 분류코드 생성
@@ -862,5 +912,69 @@ public class SideMenuServiceImpl implements SideMenuService {
         }
         sideMenuSelProdVO.setArrProdCd(sideMenuSelProdVO.getProdCd().split(","));
         return sideMenuMapper.chkMenuProdUse(sideMenuSelProdVO);
+    }
+
+    /** 사이드메뉴-선택메뉴 탭-선택상품복사 팝업 - 저장 */
+    @Override
+    public int getSdselProdCopySave(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String procResult;
+        String currentDt = currentDateTimeString();
+        String prodCds = "";
+        SideMenuSelProdVO countChkVO = new SideMenuSelProdVO();
+
+        for(SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs) {
+            prodCds += sideMenuSelProdVO.getProdCd() + ",";
+            countChkVO.setApplySdselClassCd(sideMenuSelProdVO.getApplySdselClassCd());
+            countChkVO.setCopySdselClassCd(sideMenuSelProdVO.getCopySdselClassCd());
+            countChkVO.setSdselQty(sideMenuSelProdVO.getSdselQty());
+        }
+        countChkVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        countChkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            countChkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+        
+        // 상품 array 값 세팅
+        if (prodCds != null && !"".equals(prodCds)) {
+            String[] prodCdList = prodCds.split(",");
+            countChkVO.setProdCdList(prodCdList);
+        }
+        // 선택상품에서 구분이 '고정'인 상품의 수량합
+        int fixProdFgCnt = sideMenuMapper.getCountFixProdFg(countChkVO);
+        // 선택분류의 수량
+        int sdselQty = sideMenuMapper.getCountSdselQty(countChkVO);
+
+        // 선택분류의 수량이랑 선택상품에서 구분이 '고정'인 상품의 수량합 체크(선택분류의 수량보다 크면 안됨)
+        if(fixProdFgCnt > sdselQty){
+            throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.sdselProdCopy.chkAddProdQty"));
+        }
+
+        // 저장
+        for(SideMenuSelProdVO sideMenuSelProdVO : sideMenuSelProdVOs) {
+            sideMenuSelProdVO.setModDt(currentDt);
+            sideMenuSelProdVO.setModId(sessionInfoVO.getUserId());
+            sideMenuSelProdVO.setRegDt(currentDt);
+            sideMenuSelProdVO.setRegId(sessionInfoVO.getUserId());
+
+            sideMenuSelProdVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+            sideMenuSelProdVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+                sideMenuSelProdVO.setStoreCd(sessionInfoVO.getStoreCd());
+            }
+
+            // 선택상품 생성시 표기순번 자동채번
+            sideMenuSelProdVO.setApplyDispSeq(sideMenuMapper.getDispSeqCodeProd(sideMenuSelProdVO));
+
+            // 선택상품 복사
+            procCnt = sideMenuMapper.getSdselProdCopySaveMerge(sideMenuSelProdVO);
+            // 본사에서 접속시
+            if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                procCnt = sideMenuMapper.getSdselProdCopySaveMergeStore(sideMenuSelProdVO);
+            }
+        }
+
+
+        return procCnt;
     }
 }

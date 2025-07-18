@@ -1,11 +1,11 @@
 /****************************************************************
  *
- * 파일명 : sdselClassCopySingle.js
+ * 파일명 : sdselProdCopy.js
  * 설  명 : 선택분류복사 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
  * ------------  ---------   -------------  --------------------
- * 2023.06.19     권지현      1.0
+ * 2025.07.14     김유승      1.0
  *
  * **************************************************************/
 /**
@@ -16,65 +16,70 @@ var app = agrid.getApp();
 /**
  *  선택분류복사 팝업 조회 그리드 생성
  */
-app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('sdselProdCopyCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sdselClassCopySingleCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('sdselProdCopyCtrl', $scope, $http, false));
 
     // 콤보박스 데이터 Set
-    $scope._setComboData("srchCopyTypeSelGroupSingle", vSrchTypeSelGroup);
-    $scope._setComboData("srchCopyTypeSelProdSingle", vSrchTypeSelProd);
+    $scope._setComboData("srchCopyTypeSelGroup", vSrchTypeSelGroup);
+    $scope._setComboData("srchCopyTypeSelProd", vSrchTypeSelProd);
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
     };
 
     // <-- 검색 호출 -->
-    $scope.$on('sdselClassCopySingleCtrl', function(event, data) {
-        console.log(data);
+    $scope.$on('sdselProdCopyCtrl', function(event, data) {
+
         // 적용할 그룹
-        $("#srchApplySingleGroupSingle").val(data.sdselGrpCdNm);
-        $("#srchApplySingleGroupCdSingle").val(data.sdselGrpCd);
+        $("#srchApplyClassProd").val(data.sdselClassCdNm);
+        $("#srchApplyClassProdCd").val(data.sdselClassCd);
+        $("#srchApplyGroupProd").val(data.sdselGrpCdNm);
+        $("#srchApplyGroupProdCd").val(data.sdselGrpCd);
 
         // 검색조건 초기화
-        $scope.srchCopyTypeSelGroupSingleCombo.selectedIndex = 0;
-        $('#txtCopySelGroupSingle').val("");
-        $scope.srchCopyTypeSelProdSingleCombo.selectedIndex = 0;
-        $('#txtCopySelProdSingle').val("");
+        $scope.srchCopyTypeSelGroupCombo.selectedIndex = 0;
+        $('#txtCopySelGroupProd').val("");
+        $scope.srchCopyTypeSelProdCombo.selectedIndex = 0;
+        $('#txtCopySelProdProd').val("");
 
-        $scope.searchSdselClassCopySingle();
+        $scope.searchSdselProdCopy();
 
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
 
-    $scope.searchSdselClassCopySingle = function(){
+    $scope.searchSdselProdCopy = function(){
         // 선택그룹 조회
-        $scope._broadcast('sdselClassCopySingleGroupCtrl');
-        var classdGrid = agrid.getScope('sdselClassCopySingleClassCtrl');
+        $scope._broadcast('sdselProdCopyGroupCtrl');
+        var classdGrid = agrid.getScope('sdselProdCopyClassCtrl');
         classdGrid._gridDataInit();
-        var prodGrid = agrid.getScope('sdselClassCopySingleProdCtrl');
+        var prodGrid = agrid.getScope('sdselProdCopyProdCtrl');
         prodGrid._gridDataInit();
     };
     // <-- //검색 호출 -->
 
     // 선택분류복사
-    $scope.classSingleCopySave = function(){
+    $scope.prodCopySave = function(){
         //  [000012]관리자테스트 에 체크한 선택분류를 복사하시겠습니까?
-        var msg = $("#srchApplySingleGroupSingle").val() + " " + messages["sideMenu.sdselClassCopy.classCopySaveConfirm"];
+        var msg = $("#srchApplyClassProd").val() + " " + messages["sideMenu.sdselProdCopy.prodCopySaveConfirm"];
         $scope._popConfirm(msg, function() {
 
-            var scopeGroup = agrid.getScope("sdselClassCopySingleGroupCtrl");
-            var scopeClass = agrid.getScope("sdselClassCopySingleClassCtrl");
+            var scopeGroup = agrid.getScope("sdselProdCopyGroupCtrl");
+            var scopeClass = agrid.getScope("sdselProdCopyClassCtrl");
+            var scopeProd = agrid.getScope("sdselProdCopyProdCtrl");
 
             // 파라미터 설정
             var params = [];
-            for (var i = 0; i < scopeClass.flex.collectionView.items.length; i++) {
-                if(scopeClass.flex.collectionView.items[i].gChk) {
-                    scopeClass.flex.collectionView.items[i].applySdselGrpCd = $("#srchApplySingleGroupCdSingle").val(); // 적용할 그룹
-                    scopeClass.flex.collectionView.items[i].copySdselGrpCd = scopeGroup.selectedSelGroup.sdselGrpCd; // 복사할 그룹
-                    scopeClass.flex.collectionView.items[i].copySdselClassCd = scopeClass.flex.collectionView.items[i].sdselClassCd; // 복사할 분류
-                    params.push(scopeClass.flex.collectionView.items[i]);
+            for (var i = 0; i < scopeProd.flex.collectionView.items.length; i++) {
+                if(scopeProd.flex.collectionView.items[i].gChk) {
+                    scopeProd.flex.collectionView.items[i].applySdselGrpCd = $("#srchApplyGroupProdCd").val(); // 적용할 그룹
+                    scopeProd.flex.collectionView.items[i].applySdselClassCd = $("#srchApplyClassProdCd").val(); // 적용할 분류
+                    scopeProd.flex.collectionView.items[i].copySdselGrpCd = scopeGroup.selectedSelGroup.sdselGrpCd; // 복사할 그룹
+                    scopeProd.flex.collectionView.items[i].copySdselClassCd = scopeClass.selectedSelClass.sdselClassCd; // 복사할 분류
+                    scopeProd.flex.collectionView.items[i].copySdselProdCd = scopeProd.flex.collectionView.items[i].prodCd; // 복사할 상품
+                    params.push(scopeProd.flex.collectionView.items[i]);
                 }
             }
 
@@ -84,11 +89,16 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', function ($scope,
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp( "/base/prod/sideMenu/menuClass/getSdselClassCopySave.sb", params, function(response){
+            $scope._postJSONSave.withPopUp( "/base/prod/sideMenu/menuClass/getSdselProdCopySave.sb", params, function(response){
+                // 하단 화면에 선택상품 리스트 재조회
+                var prodGrid = agrid.getScope('sideMenuSelectProdCtrl');
+                var selectedSelProd = prodGrid.getSelectedSdselProd();
+                $scope._broadcast('sideMenuSelectProdCtrl', selectedSelProd);
+
                 // 하단 화면에 선택분류 리스트 재조회
-                var grpGrid = agrid.getScope('sideMenuSelectGroupSingleCtrl');
+                var grpGrid = agrid.getScope('sideMenuSelectGroupCtrl');
                 var selectedSelGroup = grpGrid.getSelectedSelGroup();
-                $scope._broadcast('sideMenuSelectClassSingleCtrl', selectedSelGroup);
+                $scope._broadcast('sideMenuSelectClassCtrl', selectedSelGroup);
 
                 // 팝업 닫기
                 $scope.close();
@@ -99,10 +109,12 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', function ($scope,
     // 팝업 닫기
     $scope.close = function(){
         // 적용할 그룹
-        $("#srchApplySingleGroupSingle").val("");
-        $("#srchApplySingleGroupCdSingle").val("");
+        $("#srchApplyGroupProd").val("");
+        $("#srchApplyGroupProdCd").val("");
+        $("#srchApplyClassProd").val("");
+        $("#srchApplyClassProdCd").val("");
 
-        $scope.wjSdselClassCopySingleLayer.hide();
+        $scope.wjSdselProdCopyLayer.hide();
     };
 }]);
 
@@ -110,10 +122,10 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', function ($scope,
 /**
  *  사이드메뉴 선택그룹 조회 그리드 생성
  */
-app.controller('sdselClassCopySingleGroupCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('sdselProdCopyGroupCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sdselClassCopySingleGroupCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('sdselProdCopyGroupCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -153,12 +165,12 @@ app.controller('sdselClassCopySingleGroupCtrl', ['$scope', '$http', function ($s
                 var selectedRow = s.rows[ht.row].dataItem;
                 if ( col.binding === 'sdselGrpCd') {
                     if (selectedRow.sdselGrpCd !== '' && selectedRow.sdselGrpCd !== undefined && selectedRow.sdselGrpCd !== '자동채번') {
-                        $("#sideSelectGroupCopySingleTitle").html(" [" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm);
-                        $("#sideClassCopySingleSingleTitle").html("");
+                        $("#sideSelectGroupCopyTitleProd").html(" [" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm);
+                        $("#sideClassCopyTitleProd").html("");
 
                         $scope.setSelectedSelGroup(selectedRow);
-                        $scope._broadcast('sdselClassCopySingleClassCtrl', selectedRow);
-                        var prodGrid = agrid.getScope('sdselClassCopySingleProdCtrl');
+                        $scope._broadcast('sdselProdCopyClassCtrl', selectedRow);
+                        var prodGrid = agrid.getScope('sdselProdCopyProdCtrl');
                         prodGrid._gridDataInit();
                     }
                 }
@@ -181,7 +193,7 @@ app.controller('sdselClassCopySingleGroupCtrl', ['$scope', '$http', function ($s
     };
 
     // <-- 검색 호출 -->
-    $scope.$on('sdselClassCopySingleGroupCtrl', function(event, data) {
+    $scope.$on('sdselProdCopyGroupCtrl', function(event, data) {
         $scope.srchSelGroup();
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
@@ -191,33 +203,33 @@ app.controller('sdselClassCopySingleGroupCtrl', ['$scope', '$http', function ($s
     $scope.srchSelGroup = function(){
         // 파라미터
         var params = {};
-        params.sdselTypeFg = 'S';
+        params.sdselTypeFg = 'C';
         params.srchType = "";
         params.sdselGrpCd = "";
         params.sdselGrpNm = "";
 
         // 그룹명, 그룹코드 검색조건
-        var vScope = agrid.getScope("sdselClassCopySingleCtrl");
-        var srchTypeGroup = vScope.srchCopyTypeSelGroupSingleCombo.selectedValue;
-        if($("#txtCopySelGroupSingle").val() !== ""){
+        var vScope = agrid.getScope("sdselProdCopyCtrl");
+        var srchTypeGroup = vScope.srchCopyTypeSelGroupCombo.selectedValue;
+        if($("#txtCopySelGroupProd").val() !== ""){
             if(srchTypeGroup === "grpNm"){
                 params.sdselGrpCd = "";
-                params.sdselGrpNm = $("#txtCopySelGroupSingle").val();
+                params.sdselGrpNm = $("#txtCopySelGroupProd").val();
             }
             else if(srchTypeGroup === "grpCd"){
-                params.sdselGrpCd = $("#txtCopySelGroupSingle").val();
+                params.sdselGrpCd = $("#txtCopySelGroupProd").val();
                 params.sdselGrpNm = "";
             }
         }
         // 상품명, 상품코드 검색조건
-        var srchTypeProd = vScope.srchCopyTypeSelProdSingleCombo.selectedValue;
-        if($("#txtCopySelProdSingle").val() !== ""){
+        var srchTypeProd = vScope.srchCopyTypeSelProdCombo.selectedValue;
+        if($("#txtCopySelProdProd").val() !== ""){
             if(srchTypeProd === "prodNm"){
                 params.sdselProdCd = "";
-                params.sdselProdNm = $("#txtCopySelProdSingle").val();
+                params.sdselProdNm = $("#txtCopySelProdProd").val();
             }
             else if(srchTypeProd === "prodCd"){
-                params.sdselProdCd = $("#txtCopySelProdSingle").val();
+                params.sdselProdCd = $("#txtCopySelProdProd").val();
                 params.sdselProdNm = "";
             }
         }
@@ -232,10 +244,10 @@ app.controller('sdselClassCopySingleGroupCtrl', ['$scope', '$http', function ($s
 /**
  *  사이드메뉴 선택분류 조회 그리드 생성
  */
-app.controller('sdselClassCopySingleClassCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('sdselProdCopyClassCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sdselClassCopySingleClassCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('sdselProdCopyClassCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -280,13 +292,14 @@ app.controller('sdselClassCopySingleClassCtrl', ['$scope', '$http', function ($s
                 var selectedRow = s.rows[ht.row].dataItem;
                 if(col.binding === 'sdselClassCd') {
                     if(selectedRow.sdselClassCd !== '' && selectedRow.sdselClassCd !== undefined && selectedRow.sdselClassCd !== '자동채번') {
-                        $("#sideClassCopySingleSingleTitle").html(" [" + selectedRow.sdselClassCd + "]" + selectedRow.sdselClassNm);
+                        $("#sideClassCopyTitleProd").html(" [" + selectedRow.sdselClassCd + "]" + selectedRow.sdselClassNm);
 
                         var params = {};
                         params.sdselClassCd = selectedRow.sdselClassCd;
                         params.sdselQty = selectedRow.sdselQty;
                         params.selGroupFixProdFg = $scope.getSelectedSelClassFixProdFg();
-                        $scope._broadcast('sdselClassCopySingleProdCtrl', params);
+                        $scope.setSelectedSelClass(selectedRow);
+                        $scope._broadcast('sdselProdCopyProdCtrl', params);
                     }
                 }
             }
@@ -299,6 +312,15 @@ app.controller('sdselClassCopySingleClassCtrl', ['$scope', '$http', function ($s
     });
 
     // 선택
+    $scope.selectedSelClass;
+    $scope.setSelectedSelClass = function(data) {
+        $scope.selectedSelClass = data;
+    };
+    $scope.getSelectedSelClass = function(){
+        return $scope.selectedSelClass;
+    };
+
+    // 선택
     $scope.selectedSelClassFixProdFg;
     $scope.setSelectedSelClassFixProdFg = function(fixProdFg) {
         $scope.selectedSelClassFixProdFg = fixProdFg;
@@ -308,7 +330,7 @@ app.controller('sdselClassCopySingleClassCtrl', ['$scope', '$http', function ($s
     };
 
     // <-- 검색 호출 -->
-    $scope.$on('sdselClassCopySingleClassCtrl', function(event, data) {
+    $scope.$on('sdselProdCopyClassCtrl', function(event, data) {
         // 변수 set - 고정여부
         $scope.setSelectedSelClassFixProdFg(data.fixProdFg);
 
@@ -320,7 +342,7 @@ app.controller('sdselClassCopySingleClassCtrl', ['$scope', '$http', function ($s
         $scope._inquiryMain('/base/prod/sideMenu/menuClass/list.sb', params,function() {
             // <-- 그리드 visible -->
             // 선택한 테이블에 따른 리스트 항목 visible
-            var grid = wijmo.Control.getControl("#wjGridSelClassCopySingleList");
+            var grid = wijmo.Control.getControl("#wjGridSelClassCopyListProd");
             var columns = grid.columns;
 
             // 컬럼 총갯수
@@ -365,10 +387,10 @@ app.controller('sdselClassCopySingleClassCtrl', ['$scope', '$http', function ($s
 /**
  *  사이드메뉴 선택상품 조회 그리드 생성
  */
-app.controller('sdselClassCopySingleProdCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('sdselProdCopyProdCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('sdselClassCopySingleProdCtrl', $scope, $http, false));
+    angular.extend(this, new RootController('sdselProdCopyProdCtrl', $scope, $http, false));
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -397,7 +419,7 @@ app.controller('sdselClassCopySingleProdCtrl', ['$scope', '$http', function ($sc
     $scope.sdselQty = 0;
 
     // <-- 검색 호출 -->
-    $scope.$on('sdselClassCopySingleProdCtrl', function(event, data) {
+    $scope.$on('sdselProdCopyProdCtrl', function(event, data) {
         $scope.sdselQty = parseInt(data.sdselQty); // 선택분류의 수량
         var selGroupFixProdFg = data.selGroupFixProdFg; // 선택그룹의 고정여부
 
@@ -409,7 +431,7 @@ app.controller('sdselClassCopySingleProdCtrl', ['$scope', '$http', function ($sc
         $scope._inquiryMain('/base/prod/sideMenu/menuProd/list.sb', params,function() {
             // <-- 그리드 visible -->
             // 선택한 테이블에 따른 리스트 항목 visible
-            var grid = wijmo.Control.getControl("#wjGridSelProdCopyList");
+            var grid = wijmo.Control.getControl("#wjGridSelProdCopyListProd");
             var columns = grid.columns;
 
             // 컬럼 총갯수

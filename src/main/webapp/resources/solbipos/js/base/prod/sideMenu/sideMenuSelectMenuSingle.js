@@ -92,6 +92,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
                   $("#btnSaveSelClassSingle").hide();
                   $("#btnSdselClassRegStoreSingle").hide();
 
+                  $("#btnSdselProdSingleCopy").hide();
                   $("#btnUpSelProdSingle").hide();
                   $("#btnDownSelProdSingle").hide();
                   $("#btnAddSelProdSingle").hide();
@@ -107,6 +108,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
                   $("#btnSaveSelClassSingle").show();
                   $("#btnSdselClassRegStoreSingle").show();
 
+                  $("#btnSdselProdSingleCopy").hide();
                   $("#btnUpSelProdSingle").hide();
                   $("#btnDownSelProdSingle").hide();
                   $("#btnAddSelProdSingle").hide();
@@ -138,6 +140,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
         $("#btnSdselClassRegStoreSingle").hide();
 
         // 선택상품버튼
+        $("#btnSdselProdSingleCopy").hide();
         $("#btnUpSelProdSingle").hide();
         $("#btnDownSelProdSingle").hide();
         $("#btnAddSelProdSingle").hide();
@@ -443,6 +446,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         $scope.topYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 상단표기여부
         $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
         $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
+        $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -477,6 +481,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
                 $("#sideClassSingleTitle").html(" [" + selectedRow.sdselClassCd + "]" + selectedRow.sdselClassNm);
 
                 if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdselClassCd <= 799999) {
+                  $("#btnSdselProdSingleCopy").hide();
                   $("#btnUpSelProdSingle").hide();
                   $("#btnDownSelProdSingle").hide();
                   $("#btnAddSelProdSingle").hide();
@@ -484,6 +489,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
                   $("#btnSaveSelProdSingle").hide();
                   $("#btnSdselProdRegStoreSingle").hide();
                 } else {
+                  $("#btnSdselProdSingleCopy").show();
                   $("#btnUpSelProdSingle").show();
                   $("#btnDownSelProdSingle").show();
                   $("#btnAddSelProdSingle").show();
@@ -496,6 +502,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
                 params.sdselClassCd = selectedRow.sdselClassCd;
                 params.sdselQty = selectedRow.sdselQty;
                 params.selGroupFixProdFg = $scope.getSelectedSelClassFixProdFg();
+                params.sdselGrpCd = $scope.getSdselGrpCd();
                 $scope._broadcast('sideMenuSelectProdSingleCtrl', params);
               }
             }
@@ -877,7 +884,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
     return sdselGrpCd.value;
   };
   return sdselGrpCd;
-});;
+});
 
 
 /**
@@ -912,6 +919,15 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
   // sdselGrpCd Data Getter
   $scope.getSdselClassCd = function () {
     return sdselClassCd.get();
+  };
+
+  // sdselGrpCd Data Setter
+  $scope.setSdselGrpCd = function (value) {
+      $scope.sdselGrpCd = value;
+  };
+  // sdselGrpCd Data Getter
+  $scope.getSdselGrpCd = function () {
+      return $scope.sdselGrpCd;
   };
 
   // 선택분류의 수량 set
@@ -965,7 +981,10 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     // scope 영역에 변수 Set
     $scope.setSdselClassCd(data.sdselClassCd); // 선택분류코드
     $scope.sdselQty = parseInt(data.sdselQty); // 선택분류의 수량
-    var selGroupFixProdFg = data.selGroupFixProdFg; // 선택그룹의 고정여부
+    $scope.selGroupFixProdFg = data.selGroupFixProdFg; // 선택그룹의 고정여부
+    if(data.sdselGrpCd !== null && data.sdselGrpCd !== '' && data.sdselGrpCd !== undefined){
+        $scope.setSdselGrpCd(data.sdselGrpCd);
+    }
 
     // 파라미터
     var params = {};
@@ -983,7 +1002,7 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
       // 합계가 0이면 해당 컬럼 숨기기
       for (var j = 0; j < columnsCnt; j++) {
           // 선택그룹 그리드에 고정여부
-          if(selGroupFixProdFg === "1") {
+          if($scope.selGroupFixProdFg === "1") {
             if(columns[j].binding == "fixProdFg") {
               columns[j].visible = false;
             }
@@ -1111,10 +1130,10 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
 
             // 구분이 '고정'인 상품의 수량합 체크(선택분류의 수량보다 크면 안됨)
             var chkFixProdCnt = 0;
-            for (var m = 0; m < params.length; m++) {
-                if(params[m].status !== 'D') {
-                    if(params[m].fixProdFg === "1") {
-                        chkFixProdCnt += parseInt(params[m].addProdQty);
+            for (var m = 0; m < $scope.flex.collectionView.items.length; m++) {
+                if($scope.flex.collectionView.items[m].status !== 'D') {
+                    if($scope.flex.collectionView.items[m].fixProdFg === "1") {
+                        chkFixProdCnt += parseInt($scope.flex.collectionView.items[m].addProdQty);
                     }
                 }
             }
@@ -1321,19 +1340,53 @@ app.controller('sideMenuSelectProdSingleCtrl', ['$scope', '$http', 'sdselClassCd
     }, 50);
   };
 
-    // 선택상품 적용매장등록
-    $scope.sdselProdRegStore = function() {
-        // 선택메뉴 탭
-        var storeScope = agrid.getScope('sideMenuSelectProdCtrl');
+    // 선택 매장
+  $scope.selectedSdselProd;
+  $scope.setSelectedSdselProd = function(store) {
+      $scope.selectedSdselProd = store;
+  };
+  $scope.getSelectedSdselProd = function(){
+      return $scope.selectedSdselProd;
+  };
 
-        var params = {};
-        params.sdselClassCd = $scope.getSdselClassCd();
-        params.sdselClassCdNm = $("#sideClassSingleTitle").html();
-        storeScope.setSelectedSdselProd(params);
+  // 선택상품복사
+  $scope.sdselProdSingleCopy = function() {
+      var params = {};
+      params.sdselGrpCd = $scope.getSdselGrpCd();
+      params.sdselGrpCdNm = $("#sideSelectGroupSingleTitle").html();
+      params.sdselClassCd = $scope.getSdselClassCd();
+      params.sdselClassCdNm = $("#sideClassSingleTitle").html();
+      params.sdselQty = $scope.sdselQty;
+      params.selGroupFixProdFg = $scope.selGroupFixProdFg;
+      $scope.setSelectedSdselProd(params);
 
-        storeScope.wjSdselProdRegStoreLayer.show(true);
-        event.preventDefault();
-    };
+      $scope.wjSdselProdCopySingleLayer.show(true);
+      event.preventDefault();
+  };
+
+  // 선택상품 적용매장등록
+  $scope.sdselProdRegStore = function() {
+      // 선택메뉴 탭
+      var storeScope = agrid.getScope('sideMenuSelectProdCtrl');
+
+      var params = {};
+      params.sdselClassCd = $scope.getSdselClassCd();
+      params.sdselClassCdNm = $("#sideClassSingleTitle").html();
+      storeScope.setSelectedSdselProd(params);
+
+      storeScope.wjSdselProdRegStoreLayer.show(true);
+      event.preventDefault();
+  };
+
+  // 화면 ready 된 후 설정
+  angular.element(document).ready(function () {
+      // 선택상품복사 팝업 핸들러 추가
+      $scope.wjSdselProdCopySingleLayer.shown.addHandler(function (s) {
+          setTimeout(function() {
+              $scope._broadcast('sdselProdCopySingleCtrl', $scope.getSelectedSdselProd());
+          }, 50)
+      });
+  });
 
 }]).factory('sdselClassCd', function () {
   // 사이드메뉴 선택상품 그리드 의 변수 값 영역

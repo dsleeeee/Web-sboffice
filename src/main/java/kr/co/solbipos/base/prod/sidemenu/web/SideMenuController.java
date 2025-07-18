@@ -943,4 +943,27 @@ public class SideMenuController {
 
         return ReturnUtil.returnListJson(Status.OK, result);
     }
+
+    /**
+     * 사이드메뉴-선택메뉴 탭-선택상품복사 팝업 - 저장
+     *
+     * @param sideMenuSelProdVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 07. 14.
+     */
+    @RequestMapping(value = "/menuClass/getSdselProdCopySave.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSdselProdCopySave(@RequestBody SideMenuSelProdVO[] sideMenuSelProdVOs, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuService.getSdselProdCopySave(sideMenuSelProdVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

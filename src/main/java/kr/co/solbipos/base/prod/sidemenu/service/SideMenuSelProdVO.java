@@ -126,6 +126,24 @@ public class SideMenuSelProdVO extends PageVO {
     /** 다중 상품코드(배열형) */
     private String[] arrProdCd;
 
+    /** 적용할 분류 */
+    private String applySdselClassCd;
+
+    /** 복사할 분류 */
+    private String copySdselClassCd;
+
+    /** 복사할 상품 */
+    private String copySdselProdCd;
+
+    /** 적용할 순번 */
+    private String applyDispSeq;
+
+    /** 상품코드 리스트 */
+    private String[] prodCdList;
+
+    /** 상품분류 수량 */
+    private String sdselQty;
+
     /**
      * @return the hqOfficeCd
      */
@@ -457,5 +475,53 @@ public class SideMenuSelProdVO extends PageVO {
 
     public void setArrProdCd(String[] arrProdCd) {
         this.arrProdCd = arrProdCd;
+    }
+
+    public String getApplySdselClassCd() {
+        return applySdselClassCd;
+    }
+
+    public void setApplySdselClassCd(String applySdselClassCd) {
+        this.applySdselClassCd = applySdselClassCd;
+    }
+
+    public String getCopySdselClassCd() {
+        return copySdselClassCd;
+    }
+
+    public void setCopySdselClassCd(String copySdselClassCd) {
+        this.copySdselClassCd = copySdselClassCd;
+    }
+
+    public String getCopySdselProdCd() {
+        return copySdselProdCd;
+    }
+
+    public void setCopySdselProdCd(String copySdselProdCd) {
+        this.copySdselProdCd = copySdselProdCd;
+    }
+
+    public String getApplyDispSeq() {
+        return applyDispSeq;
+    }
+
+    public void setApplyDispSeq(String applyDispSeq) {
+        this.applyDispSeq = applyDispSeq;
+    }
+
+    public String[] getProdCdList() {
+        return prodCdList;
+    }
+
+    public void setProdCdList(String[] prodCdList) {
+        this.prodCdList = prodCdList;
+    }
+
+    public String getSdselQty() {
+        return sdselQty;
+    }
+
+    public void setSdselQty(String sdselQty) {
+        this.sdselQty = sdselQty;
     }
 }

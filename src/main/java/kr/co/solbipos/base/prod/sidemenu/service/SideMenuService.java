@@ -106,4 +106,7 @@ public interface SideMenuService {
 
     /** 선택상품 저장 전, 선택그룹에 이미 등록된 상품인지 확인 */
     List<DefaultMap<Object>> chkMenuProdUse(SideMenuSelProdVO sideMenuSelProdVO, SessionInfoVO sessionInfoVO);
+
+    /** 사이드메뉴-선택메뉴 탭-선택상품복사 팝업 - 저장 */
+    int getSdselProdCopySave(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
 }

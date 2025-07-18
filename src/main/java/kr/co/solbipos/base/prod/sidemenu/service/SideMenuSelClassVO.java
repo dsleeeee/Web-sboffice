@@ -126,6 +126,9 @@ public class SideMenuSelClassVO extends CmmVO {
     /** 선택팝업 */
     private String popUpClassYn;
 
+    /** 분류코드 리스트 */
+    private String[] classCdList;
+
     /**
      * @return the hqOfficeCd
      */
@@ -402,5 +405,13 @@ public class SideMenuSelClassVO extends CmmVO {
 
     public void setPopUpClassYn(String popUpClassYn) {
         this.popUpClassYn = popUpClassYn;
+    }
+
+    public String[] getClassCdList() {
+        return classCdList;
+    }
+
+    public void setClassCdList(String[] classCdList) {
+        this.classCdList = classCdList;
     }
 }
