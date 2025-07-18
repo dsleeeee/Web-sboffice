@@ -3,6 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="userId" value="${sessionScope.sessionInfo.userId}"/>
+<c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 
 <wj-popup control="wjBoardDetailLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:700px;height:700px;" fade-in="false" fade-out="false">
 
@@ -166,6 +167,7 @@
 
 <script type="text/javascript">
     var userId = "${userId}";
+    var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20210408.15" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardDetail.js?ver=20250718.01" charset="utf-8"></script>
