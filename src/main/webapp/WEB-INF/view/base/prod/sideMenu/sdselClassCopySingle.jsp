@@ -3,6 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <wj-popup control="wjSdselClassCopySingleLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:760px;height:660px;" fade-in="false" fade-out="false">
 
@@ -39,7 +40,7 @@
                         </div>
                     </th>
                     <td>
-                        <input type="text" id="txtCopySelGroupSingle" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(2);"/>
+                        <input type="text" id="txtCopySelGroupSingle" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(6);"/>
                     </td>
                     <%-- 상품명,상품코드 --%>
                     <th>
@@ -55,11 +56,11 @@
                         </div>
                     </th>
                     <td>
-                        <input type="text" id="txtCopySelProdSingle" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(2);"/>
+                        <input type="text" id="txtCopySelProdSingle" class="fl sb-input w25 mr5" style="font-size: 12px;" onkeyup="fnNxBtnSearch(6);"/>
                     </td>
                     <td>
                         <%-- 조회 --%>
-                        <button class="btn_blue fr" id="nxBtnSearch2" ng-click="searchSdselClassCopySingle()"><s:message code="cmm.search" /></button>
+                        <button class="btn_blue fr" id="nxBtnSearch6" ng-click="searchSdselClassCopySingle()"><s:message code="cmm.search" /></button>
                     </td>
                 </tr>
                 </tbody>
@@ -157,11 +158,25 @@
                                 <!-- define columns -->
                                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselClassCd"/>" binding="sdselClassCd" width="70" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselClassNm"/>" binding="sdselClassNm" width="*" is-read-only="true"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.requireYn"/>" binding="requireYn" data-map="requireYnDataMap" width="85" is-read-only="true" visible="false"></wj-flex-grid-column>
-                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselQty"/>" binding="sdselQty" width="50" max-length="3" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselClassNm"/>" binding="sdselClassNm" width="70" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.requireYn"/>" binding="requireYn" data-map="requireYnDataMap" width="85" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselQty"/>" binding="sdselQty" width="50" max-length="3" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselQty"/>" binding="cnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.sdselQty"/>" binding="fixProdCnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.oldRegStoreFg"/>" binding="oldRegStoreFg" data-map="oldRegStoreFgDataMap" width="85" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                </c:if>
+                                <c:if test="${(orgnFg == 'HQ' and hqOfficeCd == 'A0001') or (orgnFg == 'HQ' and hqOfficeCd == 'DS019') or (orgnFg == 'HQ' and hqOfficeCd == 'DS001')}">
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.topYn"/>" binding="topYn" data-map="topYnDataMap" width="85" is-read-only="true"></wj-flex-grid-column>
+                                </c:if>
+                                <c:if test="${(orgnFg == 'HQ' and hqOfficeCd == 'A0001') or (orgnFg == 'HQ' and hqOfficeCd == 'DS019') or (orgnFg == 'HQ' and hqOfficeCd == 'DS001')}">
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.expandYn"/>" binding="expandYn" data-map="expandYnDataMap" width="75" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.mappingYn"/>" binding="mappingYn" data-map="mappingYnDataMap" width="110" is-read-only="true"></wj-flex-grid-column>
+                                </c:if>
+                                <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616' or hqOfficeCd == 'DS008'}">
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.popUpClassYn"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100" is-read-only="true"></wj-flex-grid-column>
+                                </c:if>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -193,12 +208,23 @@
                                     id="wjGridSelProdCopyList">
 
                                 <!-- define columns -->
-                                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="30" visible="false"></wj-flex-grid-column>
+                                <c:if test="${brandUseFg == '1'}">
+                                    <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                                        <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.brand"/>" binding="hqBrandCd" data-map="brandDataMap" width="80" is-read-only="true"></wj-flex-grid-column>
+                                    </c:if>
+                                </c:if>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.prodCd"/>" binding="prodCd" width="100" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.prodNm"/>" binding="prodNm" width="100" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.addProdUprc"/>" binding="addProdUprc" width="50" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.addProdQty"/>" binding="addProdQty" width="50" max-length="3" is-read-only="true"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselClassCopy.fixProdFg"/>" binding="fixProdFg" width="50" data-map="fixProdFgDataMap" is-read-only="true"></wj-flex-grid-column>
+                                <c:if test="${orgnFg == 'HQ' and hqOfficeCd == 'DS021'}">
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.regStoreFg"/>" binding="regStoreFg" data-map="regStoreFgDataMap" width="85" is-read-only="true"></wj-flex-grid-column>
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.oldRegStoreFg"/>" binding="oldRegStoreFg" data-map="oldRegStoreFgDataMap" width="85" visible="false" is-read-only="true"></wj-flex-grid-column>
+                                </c:if>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.printYn"/>" binding="printYn" data-map="printYnDataMap" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.remark"/>" binding="remark" width="100" align="left" is-read-only="true" is-read-only="true"></wj-flex-grid-column>
+                                <wj-flex-grid-column header="" binding="dispSeq" width="*" visible="false"></wj-flex-grid-column>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -212,4 +238,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassCopySingle.js?ver=20230713.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassCopySingle.js?ver=20250716.02" charset="utf-8"></script>

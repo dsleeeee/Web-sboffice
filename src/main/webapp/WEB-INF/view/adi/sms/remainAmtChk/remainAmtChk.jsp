@@ -55,6 +55,8 @@
     </table>
 
     <div class="mt10 oh sb-select dkbr">
+        <p class="tl s14 mt5 lh15 fl">예약 전송 건이 있을 시 금액이 상이할 수 있습니다. 전송일자 범위를 늘려서 조회해주세요.<br/>
+            ex) 예약일자 - 16일 전송일자 - 17일</p>
         <%-- 엑셀다운로드 --%>
         <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
     </div>

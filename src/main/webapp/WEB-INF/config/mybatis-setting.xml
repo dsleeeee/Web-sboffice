@@ -1159,6 +1159,8 @@
     <typeAlias alias="giftCalcVO" type="kr.co.solbipos.sale.status.giftCalc.service.GiftCalcVO"/>
     <!-- 맘스터치 > 매출분석2 > 서비스타임(평균시간) -->
     <typeAlias alias="serviceTimeAvgVO" type="kr.co.solbipos.sale.status.serviceTimeAvg.service.ServiceTimeAvgVO"/>
+    <!-- 맘스터치 > 매출분석2 > 컵보증금회수현황 -->
+    <typeAlias alias="cupReturnStatusVO" type="kr.co.solbipos.sale.status.cupReturnStatus.service.CupReturnStatusVO"/>
 
     <!-- 맘스터치 > 기타관리 > 점포별 파일 버전현황 -->
     <typeAlias alias="fileVersnVO" type="kr.co.solbipos.base.store.fileVersn.service.FileVersnVO"/>

@@ -67,7 +67,7 @@ app.controller('sdselClassCopyCtrl', ['$scope', '$http', function ($scope, $http
             var scopeClass = agrid.getScope("sdselClassCopyClassCtrl");
 
             // 파라미터 설정
-            var params = new Array();
+            var params = [];
             for (var i = 0; i < scopeClass.flex.collectionView.items.length; i++) {
                 if(scopeClass.flex.collectionView.items[i].gChk) {
                     scopeClass.flex.collectionView.items[i].applySdselGrpCd = $("#srchApplyGroupCd").val(); // 적용할 그룹
@@ -240,6 +240,12 @@ app.controller('sdselClassCopyClassCtrl', ['$scope', '$http', function ($scope, 
     $scope.initGrid = function (s, e) {
         // 그리드 내 콤보박스 설정
         $scope.requireYnDataMap = requireYnDataMap;
+        $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+        $scope.oldRegStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+        $scope.topYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 상단표기여부
+        $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
+        $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
+        $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -310,7 +316,43 @@ app.controller('sdselClassCopyClassCtrl', ['$scope', '$http', function ($scope, 
         params.sdselGrpCd = data.sdselGrpCd;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-        $scope._inquiryMain('/base/prod/sideMenu/menuClass/list.sb', params,function() {}, false);
+        $scope._inquiryMain('/base/prod/sideMenu/menuClass/list.sb', params,function() {
+            // <-- 그리드 visible -->
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridSelClassCopyList");
+            var columns = grid.columns;
+
+            // 컬럼 총갯수
+            var columnsCnt = 7;
+
+            // 합계가 0이면 해당 컬럼 숨기기
+            for (var j = 0; j < columnsCnt; j++) {
+                // [1014 포스프로그램구분]
+                if(posVerEnvstVal === "1") {
+                    if(columns[j].binding == "requireYn") {
+                        columns[j].visible = false;
+                    }
+                } else if(posVerEnvstVal === "2") {
+                    // [1261 필수선택사용여부]
+                    if(requireYnEnvstVal === "1") {
+                        // 선택그룹 그리드에 고정여부
+                        if($scope.getSelectedSelClassFixProdFg() === "1") {
+                            if(columns[j].binding == "requireYn" || columns[j].binding == "sdselQty") {
+                                columns[j].visible = false;
+                            }
+                        } else {
+                            if(columns[j].binding == "requireYn" || columns[j].binding == "sdselQty") {
+                                columns[j].visible = true;
+                            }
+                        }
+                    } else if(requireYnEnvstVal === "0") {
+                        if(columns[j].binding == "requireYn") {
+                            columns[j].visible = false;
+                        }
+                    }
+                }
+            }
+        }, false);
 
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
@@ -330,7 +372,11 @@ app.controller('sdselClassCopyProdCtrl', ['$scope', '$http', function ($scope, $
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 그리드 내 콤보박스 설정
+        $scope.brandDataMap = new wijmo.grid.DataMap(brandList, 'value', 'name'); // 브랜드
         $scope.fixProdFgDataMap = fixProdFgDataMap;
+        $scope.regStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+        $scope.oldRegStoreFgDataMap = new wijmo.grid.DataMap(regStoreFgData, 'value', 'name'); // 적용매장구분
+        $scope.printYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 출력여부
 
         // 선택상품 그리드 에디팅 방지
         s.beginningEdit.addHandler(function (s, e) {

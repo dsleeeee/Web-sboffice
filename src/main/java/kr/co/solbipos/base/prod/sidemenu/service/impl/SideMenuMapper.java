@@ -224,4 +224,25 @@ public interface SideMenuMapper {
 
     /** 선택상품 저장 전, 선택그룹에 이미 등록된 상품인지 확인 */
     List<DefaultMap<Object>> chkMenuProdUse(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 선택상품복사 팝업 - 저장 */
+    int getSdselProdCopySaveMerge(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 선택상품복사 팝업 - 매장에 내려줌 */
+    int getSdselProdCopySaveMergeStore(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 선택상품 생성시 표기순번 자동채번 */
+    String getDispSeqCodeProd(SideMenuSelProdVO sideMenuSelProdVO);
+
+    /** 선택상품에서 구분이 '고정'인 상품의 수량합 */
+    int getCountFixProdFg(SideMenuSelProdVO countChkVO);
+
+    /** 선택분류의 수량 */
+    int getCountSdselQty(SideMenuSelProdVO countChkVO);
+
+    /** 선택분류의 피자,엣지,토핑 수량 확인  */
+    List<DefaultMap<String>> getCountClassCnt(SideMenuSelClassVO countChkVO);
+
+    /** 선택그룹 하프앤하프 여부 확인 */
+    String getChkHalfAndHalfYn(SideMenuSelClassVO countChkVO);
 }

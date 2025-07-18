@@ -1466,7 +1466,10 @@
                         thpsp.MOD_DT = #{modDt},
                         thpsp.MOD_ID = #{modId},
                         thpsp.REG_STORE_FG = #{regStoreFg},
-                        thpsp.PRINT_YN = #{printYn}
+                        thpsp.PRINT_YN = #{printYn},
+                        thpsp.FIX_PROD_FG = #{fixProdFg},
+                        thpsp.ADD_PROD_QTY = #{addProdQty},
+                        thpsp.ADD_PROD_UPRC = #{addProdUprc}
                 WHEN NOT MATCHED THEN
                     INSERT
                     (
@@ -1512,11 +1515,14 @@
                         )
                 WHEN MATCHED THEN
                     UPDATE
-                    SET tmpsp.USE_YN = 'Y',
-                        tmpsp.DISP_SEQ = #{dispSeq},
-                        tmpsp.MOD_DT = #{modDt},
-                        tmpsp.MOD_ID = #{modId},
-                        tmpsp.PRINT_YN = #{printYn}
+                    SET thpsp.USE_YN = 'Y',
+                        thpsp.DISP_SEQ = #{dispSeq},
+                        thpsp.MOD_DT = #{modDt},
+                        thpsp.MOD_ID = #{modId},
+                        thpsp.PRINT_YN = #{printYn},
+                        thpsp.FIX_PROD_FG = #{fixProdFg},
+                        thpsp.ADD_PROD_QTY = #{addProdQty},
+                        thpsp.ADD_PROD_UPRC = #{addProdUprc}
                 WHEN NOT MATCHED THEN
                     INSERT
                     (
@@ -2097,7 +2103,6 @@
             </when>
         </choose>
     </select>
-
 
     <!-- 선택분류 생성시 표기순번 자동채번 -->
     <!--
@@ -2920,4 +2925,461 @@
         </choose>
     </select>
 
+    <!-- 선택상품복사 팝업 - 저장 -->
+    <!--
+       TABLE    :
+       COMMENTS :
+    -->
+    <insert id="getSdselProdCopySaveMerge" parameterType="sideMenuSelProdVO">
+        /* SideMenuMapper.getSdselProdCopySaveMerge */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                MERGE INTO TB_HQ_PRODUCT_SDSEL_PROD A
+                USING   (
+                            SELECT  C.HQ_OFFICE_CD
+                            ,       #{applySdselClassCd}    AS SDSEL_CLASS_CD
+                            ,       #{applyDispSeq}         AS DISP_SEQ
+                            ,       C.PROD_CD
+                            ,       C.ADD_PROD_UPRC
+                            ,       C.ADD_PROD_QTY
+                            ,       C.USE_YN
+                            ,       #{regDt} AS REG_DT
+                            ,       #{regId} AS REG_ID
+                            ,       #{modDt} AS MOD_DT
+                            ,       #{modId} AS MOD_ID
+                            ,       C.RCVKIND
+                            ,       C.FIX_PROD_FG
+                            ,       C.PRINT_YN
+                            FROM    TB_HQ_PRODUCT_SDSEL_PROD C
+                            WHERE   1=1
+                            AND     C.HQ_OFFICE_CD      = #{hqOfficeCd}
+                            AND     C.SDSEL_CLASS_CD    = #{copySdselClassCd}
+                            AND     C.PROD_CD           = #{copySdselProdCd}
+                        ) B
+                ON  (
+                            A.HQ_OFFICE_CD      = B.HQ_OFFICE_CD
+                        AND A.SDSEL_CLASS_CD    = B.SDSEL_CLASS_CD
+                        AND A.PROD_CD           = B.PROD_CD
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.ADD_PROD_UPRC = B.ADD_PROD_UPRC
+                ,       A.ADD_PROD_QTY  = B.ADD_PROD_QTY
+                ,       A.USE_YN        = B.USE_YN
+                ,       A.REG_DT        = B.REG_DT
+                ,       A.REG_ID        = B.REG_ID
+                ,       A.MOD_DT        = B.MOD_DT
+                ,       A.MOD_ID        = B.MOD_ID
+                ,       A.RCVKIND       = B.RCVKIND
+                ,       A.FIX_PROD_FG   = B.FIX_PROD_FG
+                ,       A.PRINT_YN      = B.PRINT_YN
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.HQ_OFFICE_CD
+                ,       A.SDSEL_CLASS_CD
+                ,       A.PROD_CD
+                ,       A.ADD_PROD_UPRC
+                ,       A.ADD_PROD_QTY
+                ,       A.DISP_SEQ
+                ,       A.USE_YN
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                ,       A.RCVKIND
+                ,       A.FIX_PROD_FG
+                ,       A.PRINT_YN
+                )
+                VALUES
+                (
+                        B.HQ_OFFICE_CD
+                ,       B.SDSEL_CLASS_CD
+                ,       B.PROD_CD
+                ,       B.ADD_PROD_UPRC
+                ,       B.ADD_PROD_QTY
+                ,       B.DISP_SEQ
+                ,       B.USE_YN
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.RCVKIND
+                ,       B.FIX_PROD_FG
+                ,       B.PRINT_YN
+                )
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
+                USING   (
+                            SELECT  C.STORE_CD
+                            ,       #{applySdselClassCd}    AS SDSEL_CLASS_CD
+                            ,       #{applyDispSeq}         AS DISP_SEQ
+                            ,       C.PROD_CD
+                            ,       C.ADD_PROD_UPRC
+                            ,       C.ADD_PROD_QTY
+                            ,       C.USE_YN
+                            ,       #{regDt} AS REG_DT
+                            ,       #{regId} AS REG_ID
+                            ,       #{modDt} AS MOD_DT
+                            ,       #{modId} AS MOD_ID
+                            ,       C.RCVKIND
+                            ,       C.FIX_PROD_FG
+                            ,       C.SOLD_OUT_YN
+                            ,       C.PRINT_YN
+                            FROM    TB_MS_PRODUCT_SDSEL_PROD C
+                            WHERE   1=1
+                            AND     C.STORE_CD          = #{storeCd}
+                            AND     C.SDSEL_CLASS_CD    = #{copySdselClassCd}
+                            AND     C.PROD_CD           = #{copySdselProdCd}
+                        ) B
+                ON  (
+                            A.STORE_CD          = B.STORE_CD
+                        AND A.SDSEL_CLASS_CD    = B.SDSEL_CLASS_CD
+                        AND A.PROD_CD           = B.PROD_CD
+                    )
+                WHEN MATCHED THEN
+                UPDATE
+                SET     A.ADD_PROD_UPRC         = B.ADD_PROD_UPRC
+                ,       A.ADD_PROD_QTY          = B.ADD_PROD_QTY
+                ,       A.USE_YN                = B.USE_YN
+                ,       A.REG_DT                = B.REG_DT
+                ,       A.REG_ID                = B.REG_ID
+                ,       A.MOD_DT                = B.MOD_DT
+                ,       A.MOD_ID                = B.MOD_ID
+                ,       A.RCVKIND               = B.RCVKIND
+                ,       A.FIX_PROD_FG           = B.FIX_PROD_FG
+                ,       A.SOLD_OUT_YN           = B.SOLD_OUT_YN
+                ,       A.PRINT_YN              = B.PRINT_YN
+                WHEN NOT MATCHED THEN
+                INSERT
+                (
+                        A.STORE_CD
+                ,       A.SDSEL_CLASS_CD
+                ,       A.PROD_CD
+                ,       A.ADD_PROD_UPRC
+                ,       A.ADD_PROD_QTY
+                ,       A.DISP_SEQ
+                ,       A.USE_YN
+                ,       A.REG_DT
+                ,       A.REG_ID
+                ,       A.MOD_DT
+                ,       A.MOD_ID
+                ,       A.RCVKIND
+                ,       A.FIX_PROD_FG
+                ,       A.SOLD_OUT_YN
+                ,       A.PRINT_YN
+                )
+                VALUES
+                (
+                        B.STORE_CD
+                ,       B.SDSEL_CLASS_CD
+                ,       B.PROD_CD
+                ,       B.ADD_PROD_UPRC
+                ,       B.ADD_PROD_QTY
+                ,       B.DISP_SEQ
+                ,       B.USE_YN
+                ,       B.REG_DT
+                ,       B.REG_ID
+                ,       B.MOD_DT
+                ,       B.MOD_ID
+                ,       B.RCVKIND
+                ,       B.FIX_PROD_FG
+                ,       B.SOLD_OUT_YN
+                ,       B.PRINT_YN
+                )
+            </when>
+        </choose>
+    </insert>
+
+    <!-- 선택상품복사 팝업 - 매장에 내려줌 -->
+    <!--
+       TABLE    :
+       COMMENTS :
+    -->
+    <insert id="getSdselProdCopySaveMergeStore" parameterType="sideMenuSelClassVO">
+        /* SideMenuMapper.getSdselProdCopySaveMergeStore */
+        MERGE INTO TB_MS_PRODUCT_SDSEL_PROD A
+        USING   (
+                    SELECT  D.STORE_CD
+                    ,       #{applySdselClassCd}    AS SDSEL_CLASS_CD
+                    ,       #{applyDispSeq}         AS DISP_SEQ
+                    ,       C.PROD_CD
+                    ,       C.ADD_PROD_UPRC
+                    ,       C.ADD_PROD_QTY
+                    ,       C.USE_YN
+                    ,       #{regDt} AS REG_DT
+                    ,       #{regId} AS REG_ID
+                    ,       #{modDt} AS MOD_DT
+                    ,       #{modId} AS MOD_ID
+                    ,       C.RCVKIND
+                    ,       C.FIX_PROD_FG
+                    ,       '' AS SOLD_OUT_YN
+                    ,       C.PRINT_YN
+                    FROM    TB_HQ_PRODUCT_SDSEL_PROD C
+                    ,       TB_MS_STORE D
+                    WHERE   1=1
+                    AND     C.HQ_OFFICE_CD      = #{hqOfficeCd}
+                    AND     C.SDSEL_CLASS_CD    = #{copySdselClassCd}
+                    AND     C.PROD_CD           = #{copySdselProdCd}
+                    AND     D.HQ_OFFICE_CD      = C.HQ_OFFICE_CD
+                ) B
+            ON  (
+                        A.STORE_CD          = B.STORE_CD
+                    AND A.SDSEL_CLASS_CD    = B.SDSEL_CLASS_CD
+                    AND A.PROD_CD           = B.PROD_CD
+                )
+            WHEN MATCHED THEN
+            UPDATE
+            SET     A.ADD_PROD_UPRC         = B.ADD_PROD_UPRC
+            ,       A.ADD_PROD_QTY          = B.ADD_PROD_QTY
+            ,       A.USE_YN                = B.USE_YN
+            ,       A.REG_DT                = B.REG_DT
+            ,       A.REG_ID                = B.REG_ID
+            ,       A.MOD_DT                = B.MOD_DT
+            ,       A.MOD_ID                = B.MOD_ID
+            ,       A.RCVKIND               = B.RCVKIND
+            ,       A.FIX_PROD_FG           = B.FIX_PROD_FG
+            ,       A.SOLD_OUT_YN           = B.SOLD_OUT_YN
+            ,       A.PRINT_YN              = B.PRINT_YN
+            WHEN NOT MATCHED THEN
+            INSERT
+            (
+                    A.STORE_CD
+            ,       A.SDSEL_CLASS_CD
+            ,       A.PROD_CD
+            ,       A.ADD_PROD_UPRC
+            ,       A.ADD_PROD_QTY
+            ,       A.DISP_SEQ
+            ,       A.USE_YN
+            ,       A.REG_DT
+            ,       A.REG_ID
+            ,       A.MOD_DT
+            ,       A.MOD_ID
+            ,       A.RCVKIND
+            ,       A.FIX_PROD_FG
+            ,       A.SOLD_OUT_YN
+            ,       A.PRINT_YN
+            )
+            VALUES
+            (
+                   B.STORE_CD
+            ,      B.SDSEL_CLASS_CD
+            ,      B.PROD_CD
+            ,      B.ADD_PROD_UPRC
+            ,      B.ADD_PROD_QTY
+            ,      B.DISP_SEQ
+            ,      B.USE_YN
+            ,      B.REG_DT
+            ,      B.REG_ID
+            ,      B.MOD_DT
+            ,      B.MOD_ID
+            ,      B.RCVKIND
+            ,      B.FIX_PROD_FG
+            ,      B.SOLD_OUT_YN
+            ,      B.PRINT_YN
+            )
+    </insert>
+
+    <!-- 선택상품 생성시 표기순번 자동채번 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS :
+    -->
+    <select id="getDispSeqCodeProd" parameterType="SideMenuSelProdVO" resultType="String">
+        /* SideMenuMapper.getDispSeqCodeProd */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  NVL(MAX(DISP_SEQ), '0') + 1
+                FROM    TB_HQ_PRODUCT_SDSEL_PROD
+                WHERE   1=1
+                AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND     SDSEL_CLASS_CD  = #{applySdselClassCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  NVL(MAX(DISP_SEQ), '0') + 1
+                FROM    TB_MS_PRODUCT_SDSEL_PROD
+                WHERE   1=1
+                AND     STORE_CD        = #{storeCd}
+                AND     SDSEL_CLASS_CD  = #{applySdselClassCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 선택상품에서 구분이 '고정'인 상품의 수량합 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_PROD, TB_MS_PRODUCT_SDSEL_PROD
+        PARAM    : SideMenuSelProdVO
+        COMMENTS : 선택상품에서 구분이 '고정'인 상품의 수량합을 조회한다.
+    -->
+    <select id="getCountFixProdFg" parameterType="SideMenuSelProdVO" resultType="Integer">
+        /* SideMenuMapper.getCountFixProdFg */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 	SUM(NVL(ADD_PROD_QTY,0))
+                FROM	(
+                            SELECT 	*
+                            FROM 	TB_HQ_PRODUCT_SDSEL_PROD
+                            WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+                            AND 	SDSEL_CLASS_CD  = #{applySdselClassCd}
+                            AND 	FIX_PROD_FG     = '1'
+                            AND     USE_YN          = 'Y'
+                            <if test='prodCdList != null and prodCdList != ""'>
+                                AND PROD_CD NOT IN
+                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            UNION ALL
+                            SELECT 	*
+                            FROM 	TB_HQ_PRODUCT_SDSEL_PROD
+                            WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+                            AND 	SDSEL_CLASS_CD  = #{copySdselClassCd}
+                            AND 	FIX_PROD_FG     = '1'
+                            AND     USE_YN          = 'Y'
+                            <if test='prodCdList != null and prodCdList != ""'>
+                                AND PROD_CD IN
+                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        )
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 	SUM(NVL(ADD_PROD_QTY,0))
+                FROM	(
+                            SELECT 	*
+                            FROM 	TB_MS_PRODUCT_SDSEL_PROD
+                            WHERE 	STORE_CD        = #{storeCd}
+                            AND 	SDSEL_CLASS_CD  = #{applySdselClassCd}
+                            AND 	FIX_PROD_FG     = '1'
+                            <if test='prodCdList != null and prodCdList != ""'>
+                                AND PROD_CD NOT IN
+                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                            UNION ALL
+                            SELECT 	*
+                            FROM 	TB_MS_PRODUCT_SDSEL_PROD thpsp
+                            WHERE 	STORE_CD        = #{storeCd}
+                            AND 	SDSEL_CLASS_CD  = #{copySdselClassCd}
+                            AND 	FIX_PROD_FG     = '1'
+                            <if test='prodCdList != null and prodCdList != ""'>
+                                AND PROD_CD IN
+                                <foreach collection="prodCdList" item="item" open=" (" separator="," close=")" >
+                                    #{item}
+                                </foreach>
+                            </if>
+                        )
+            </when>
+        </choose>
+    </select>
+
+    <!-- 선택분류의 수량 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS, TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : SideMenuSelProdVO
+        COMMENTS : 선택분류의 수량을 조회한다.
+    -->
+    <select id="getCountSdselQty" parameterType="SideMenuSelProdVO" resultType="Integer">
+        /* SideMenuMapper.getCountSdselQty */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT 	NVL(SDSEL_QTY,0)
+                FROM	TB_HQ_PRODUCT_SDSEL_CLASS
+                WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND 	SDSEL_CLASS_CD  = #{applySdselClassCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 	NVL(SDSEL_QTY,0)
+                FROM	TB_MS_PRODUCT_SDSEL_CLASS
+                WHERE 	STORE_CD        = #{storeCd}
+                AND 	SDSEL_CLASS_CD  = #{applySdselClassCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 선택분류복사 팝업 - 피자,엣지,토핑 수량 체크 -->
+    <!--
+        TABLE    : TB_HQ_PRODUCT_SDSEL_CLASS
+        PARAM    : SideMenuSelClassVO
+        COMMENTS :
+    -->
+    <select id="getCountClassCnt" parameterType="SideMenuSelClassVO" resultType="DefaultMap">
+        /* SideMenuMapper.getCountClassCnt */
+        <choose>
+        <when test='orgnFg != null and orgnFg == "H"'>
+        SELECT 	SUM(DECODE(POP_UP_CLASS_YN,'Y',1,0)) AS  PIZZA_CNT
+        ,		SUM(DECODE(POP_UP_CLASS_YN,'E',1,0)) AS  EDGE_CNT
+        ,		SUM(DECODE(POP_UP_CLASS_YN,'T',1,0)) AS  TOPPING_CNT
+        FROM    (
+                    SELECT 	*
+                    FROM 	TB_HQ_PRODUCT_SDSEL_CLASS
+                    WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND 	SDSEL_GRP_CD    = #{applySdselGrpCd}
+                    AND 	USE_YN 		    = 'Y'
+                    UNION ALL
+                    SELECT 	*
+                    FROM 	TB_HQ_PRODUCT_SDSEL_CLASS
+                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='classCdList != null and classCdList != ""'>
+                        AND SDSEL_CLASS_CD IN
+                        <foreach collection="classCdList" item="item" open=" (" separator="," close=")" >
+                            #{item}
+                        </foreach>
+                    </if>
+                )
+        </when>
+        <when test='orgnFg != null and orgnFg == "S"'>
+            SELECT 	SUM(DECODE(POP_UP_CLASS_YN,'Y',1,0)) AS  PIZZA_CNT
+            ,		SUM(DECODE(POP_UP_CLASS_YN,'E',1,0)) AS  EDGE_CNT
+            ,		SUM(DECODE(POP_UP_CLASS_YN,'T',1,0)) AS  TOPPING_CNT
+            FROM    (
+                        SELECT 	*
+                        FROM 	TB_MS_PRODUCT_SDSEL_CLASS
+                        WHERE 	STORE_CD        = #{storeCd}
+                        AND 	SDSEL_GRP_CD    = #{applySdselGrpCd}
+                        AND 	USE_YN 		    = 'Y'
+                        UNION ALL
+                        SELECT 	*
+                        FROM 	TB_MS_PRODUCT_SDSEL_CLASS
+                        WHERE 	STORE_CD        = #{storeCd}
+                        <if test='classCdList != null and classCdList != ""'>
+                            AND SDSEL_CLASS_CD IN
+                            <foreach collection="classCdList" item="item" open=" (" separator="," close=")" >
+                                #{item}
+                            </foreach>
+                        </if>
+                    )
+        </when>
+        </choose>
+    </select>
+
+    <!-- 선택분류복사 팝업 - 하프앤하프 조회 -->
+    <!--
+        TABLE    : TB_ST_HQ_DISUSE
+        PARAM    : disuseVO
+        COMMENTS : 선택그룹의 하프앤하프여부 조회
+    -->
+    <select id="getChkHalfAndHalfYn" parameterType="SideMenuSelClassVO" resultType="String">
+        /* USE : SideMenuMapper.getChkHalfAndHalfYn */
+        <choose>
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  NVL(HALF_AND_HALF_YN, 'N')
+                FROM 	TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                AND     SDSEL_GRP_CD = #{applySdselGrpCd}
+            </when>
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT 	NVL(HALF_AND_HALF_YN, 'N')
+                FROM 	TB_MS_PRODUCT_SDSEL_GROUP thpsg
+                WHERE 	STORE_CD        = #{storeCd}
+                AND     SDSEL_GRP_CD    = #{applySdselGrpCd}
+            </when>
+        </choose>
+    </select>
 </mapper>

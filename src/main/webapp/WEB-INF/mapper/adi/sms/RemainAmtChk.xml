@@ -31,37 +31,37 @@
         ,       SUM(hdt.SMS_WAIT_QTY)           AS SMS_WAIT_QTY
         ,       SUM(hdt.SMS_SUCCESS_QTY)        AS SMS_SUCCESS_QTY
         ,       SUM(hdt.SMS_FAIL_QTY)           AS SMS_FAIL_QTY
-        ,       SUM(FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * hdt.SMS_SUCCESS_QTY) AS SMS_SALE_AMT
+        ,       SUM(FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * (hdt.SMS_SUCCESS_QTY+hdt.SMS_WAIT_QTY)) AS SMS_SALE_AMT
         ,       SUM(hdt.LMS_SEND_QTY)           AS LMS_SEND_QTY
         ,       SUM(hdt.LMS_WAIT_QTY)           AS LMS_WAIT_QTY
         ,       SUM(hdt.LMS_SUCCESS_QTY)        AS LMS_SUCCESS_QTY
         ,       SUM(hdt.LMS_FAIL_QTY)           AS LMS_FAIL_QTY
-        ,       SUM(FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * hdt.LMS_SUCCESS_QTY) AS LMS_SALE_AMT
+        ,       SUM(FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * (hdt.LMS_SUCCESS_QTY+hdt.LMS_WAIT_QTY)) AS LMS_SALE_AMT
         ,       SUM(hdt.MMS_SEND_QTY)           AS MMS_SEND_QTY
         ,       SUM(hdt.MMS_WAIT_QTY)           AS MMS_WAIT_QTY
         ,       SUM(hdt.MMS_SUCCESS_QTY)        AS MMS_SUCCESS_QTY
         ,       SUM(hdt.MMS_FAIL_QTY)           AS MMS_FAIL_QTY
-        ,       SUM(FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * hdt.MMS_SUCCESS_QTY) AS MMS_SALE_AMT
+        ,       SUM(FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * (hdt.MMS_SUCCESS_QTY+hdt.MMS_WAIT_QTY)) AS MMS_SALE_AMT
         ,       SUM(hdt.ALK_SEND_QTY)           AS ALK_SEND_QTY
         ,       SUM(hdt.ALK_WAIT_QTY)           AS ALK_WAIT_QTY
         ,       SUM(hdt.ALK_SUCCESS_QTY)        AS ALK_SUCCESS_QTY
         ,       SUM(hdt.ALK_FAIL_QTY)           AS ALK_FAIL_QTY
-        ,       SUM(FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * hdt.ALK_SUCCESS_QTY) AS ALK_SALE_AMT
+        ,       SUM(FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * (hdt.ALK_SUCCESS_QTY+hdt.ALK_WAIT_QTY)) AS ALK_SALE_AMT
         ,       SUM(hdt.ALK_SMS_SEND_QTY)       AS ALK_SMS_SEND_QTY
         ,       SUM(hdt.ALK_SMS_WAIT_QTY)       AS ALK_SMS_WAIT_QTY
         ,       SUM(hdt.ALK_SMS_SUCCESS_QTY)    AS ALK_SMS_SUCCESS_QTY
         ,       SUM(hdt.ALK_SMS_FAIL_QTY)       AS ALK_SMS_FAIL_QTY
-        ,       SUM(FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * hdt.ALK_SMS_SUCCESS_QTY) AS ALK_SMS_SALE_AMT
+        ,       SUM(FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * (hdt.ALK_SMS_SUCCESS_QTY+hdt.ALK_SMS_WAIT_QTY)) AS ALK_SMS_SALE_AMT
         ,       SUM(hdt.ALK_LMS_SEND_QTY)       AS ALK_LMS_SEND_QTY
         ,       SUM(hdt.ALK_LMS_WAIT_QTY)       AS ALK_LMS_WAIT_QTY
         ,       SUM(hdt.ALK_LMS_SUCCESS_QTY)    AS ALK_LMS_SUCCESS_QTY
         ,       SUM(hdt.ALK_LMS_FAIL_QTY)       AS ALK_LMS_FAIL_QTY
-        ,       SUM(FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * hdt.ALK_LMS_SUCCESS_QTY) AS ALK_LMS_SALE_AMT
+        ,       SUM(FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * (hdt.ALK_LMS_SUCCESS_QTY+hdt.ALK_LMS_WAIT_QTY)) AS ALK_LMS_SALE_AMT
         ,       SUM(hdt.ALK_MMS_SEND_QTY)       AS ALK_MMS_SEND_QTY
         ,       SUM(hdt.ALK_MMS_WAIT_QTY)       AS ALK_MMS_WAIT_QTY
         ,       SUM(hdt.ALK_MMS_SUCCESS_QTY)    AS ALK_MMS_SUCCESS_QTY
         ,       SUM(hdt.ALK_MMS_FAIL_QTY)       AS ALK_MMS_FAIL_QTY
-        ,       SUM(FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * hdt.ALK_MMS_SUCCESS_QTY) AS ALK_MMS_SALE_AMT
+        ,       SUM(FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * (hdt.ALK_MMS_SUCCESS_QTY+hdt.ALK_MMS_WAIT_QTY)) AS ALK_MMS_SALE_AMT
         ,		NVL(tlcstl.PRE_REMAIN_AMT,0)    AS PRE_REMAIN_AMT
         ,		NVL(tlcstl.PRE_REMAIN_AMT,0) + SUM(hdt.SMS_CHARGE_AMT) - SUM((FN_GET_SMS_UPRC('SMS', twuidv01.ORGN_CD) * (hdt.SMS_SUCCESS_QTY+hdt.SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('LMS', twuidv01.ORGN_CD) * (hdt.LMS_SUCCESS_QTY+hdt.LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('MMS', twuidv01.ORGN_CD) * (hdt.MMS_SUCCESS_QTY+hdt.MMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK', twuidv01.ORGN_CD) * (hdt.ALK_SUCCESS_QTY+hdt.ALK_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_SMS', twuidv01.ORGN_CD) * (hdt.ALK_SMS_SUCCESS_QTY+hdt.ALK_SMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_LMS', twuidv01.ORGN_CD) * (hdt.ALK_LMS_SUCCESS_QTY+hdt.ALK_LMS_WAIT_QTY)) + (FN_GET_SMS_UPRC('ALK_MMS', twuidv01.ORGN_CD) * (hdt.ALK_MMS_SUCCESS_QTY+hdt.ALK_MMS_WAIT_QTY)))     AS CALC_REMAIN_AMT
         ,		NVL(tlcstl2.REMAIN_AMT,0)       AS REMAIN_AMT

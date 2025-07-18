@@ -160,6 +160,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnSdselClassCopy").hide();
               $("#btnSdselClassRegStore").hide();
 
+              $("#btnSdselProdCopy").hide();
               $("#btnUpSelProd").hide();
               $("#btnDownSelProd").hide();
               $("#btnAddSelProd").hide();
@@ -175,6 +176,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
               $("#btnSdselClassCopy").show();
               $("#btnSdselClassRegStore").show();
 
+              $("#btnSdselProdCopy").hide();
               $("#btnUpSelProd").hide();
               $("#btnDownSelProd").hide();
               $("#btnAddSelProd").hide();
@@ -206,6 +208,7 @@ app.controller('sideMenuSelectGroupCtrl', ['$scope', '$http', function ($scope, 
     $("#btnSdselClassRegStore").hide();
 
     // 선택상품버튼
+    $("#btnSdselProdCopy").hide();
     $("#btnUpSelProd").hide();
     $("#btnDownSelProd").hide();
     $("#btnAddSelProd").hide();
@@ -563,6 +566,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
             $("#sideClassTitle").html(" [" + selectedRow.sdselClassCd + "]" + selectedRow.sdselClassNm);
 
             if (hqOfficeCd != '00000' && orgnFg == 'STORE' && selectedRow.sdselClassCd <= 799999) {
+              $("#btnSdselProdCopy").hide();
               $("#btnUpSelProd").hide();
               $("#btnDownSelProd").hide();
               $("#btnAddSelProd").hide();
@@ -570,6 +574,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
               $("#btnSaveSelProd").hide();
               $("#btnSdselProdRegStore").hide();
             } else {
+              $("#btnSdselProdCopy").show();
               $("#btnUpSelProd").show();
               $("#btnDownSelProd").show();
               $("#btnAddSelProd").show();
@@ -582,6 +587,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
             params.sdselClassCd = selectedRow.sdselClassCd;
             params.sdselQty = selectedRow.sdselQty;
             params.selGroupFixProdFg = $scope.getSelectedSelClassFixProdFg();
+            params.sdselGrpCd = $scope.getSdselGrpCd();
             $scope._broadcast('sideMenuSelectProdCtrl', params);
           }
         }
@@ -1075,6 +1081,15 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
   });
 
   // sdselGrpCd Data Setter
+  $scope.setSdselGrpCd = function (value) {
+    $scope.sdselGrpCd = value;
+  };
+  // sdselGrpCd Data Getter
+  $scope.getSdselGrpCd = function () {
+    return $scope.sdselGrpCd;
+  };
+
+  // sdselGrpCd Data Setter
   $scope.setSdselClassCd = function (value) {
     sdselClassCd.set(value);
   };
@@ -1133,7 +1148,10 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     // scope 영역에 변수 Set
     $scope.setSdselClassCd(data.sdselClassCd); // 선택분류코드
     $scope.sdselQty = parseInt(data.sdselQty); // 선택분류의 수량
-    var selGroupFixProdFg = data.selGroupFixProdFg; // 선택그룹의 고정여부
+    $scope.selGroupFixProdFg = data.selGroupFixProdFg; // 선택그룹의 고정여부
+    if(data.sdselGrpCd !== null && data.sdselGrpCd !== '' && data.sdselGrpCd !== undefined){
+      $scope.setSdselGrpCd(data.sdselGrpCd);
+    }
 
     // 파라미터
     var params = {};
@@ -1152,7 +1170,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       // 합계가 0이면 해당 컬럼 숨기기
       for (var j = 0; j < columnsCnt; j++) {
           // 선택그룹 그리드에 고정여부
-          if(selGroupFixProdFg === "1") {
+          if($scope.selGroupFixProdFg === "1") {
             if(columns[j].binding == "fixProdFg") {
               columns[j].visible = false;
             }
@@ -1280,10 +1298,10 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
       // 구분이 '고정'인 상품의 수량합 체크(선택분류의 수량보다 크면 안됨)
       var chkFixProdCnt = 0;
-      for (var m = 0; m < params.length; m++) {
-        if(params[m].status !== 'D') {
-          if(params[m].fixProdFg === "1") {
-            chkFixProdCnt += parseInt(params[m].addProdQty);
+      for (var m = 0; m < $scope.flex.collectionView.items.length; m++) {
+        if($scope.flex.collectionView.items[m].status !== 'D') {
+          if($scope.flex.collectionView.items[m].fixProdFg === "1") {
+            chkFixProdCnt += parseInt($scope.flex.collectionView.items[m].addProdQty);
           }
         }
       }
@@ -1498,6 +1516,21 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
     return $scope.selectedSdselProd;
   };
 
+  // 선택상품복사
+  $scope.sdselProdCopy = function() {
+    var params = {};
+    params.sdselGrpCd = $scope.getSdselGrpCd();
+    params.sdselGrpCdNm = $("#sideSelectGroupTitle").html();
+    params.sdselClassCd = $scope.getSdselClassCd();
+    params.sdselClassCdNm = $("#sideClassTitle").html();
+    params.sdselQty = $scope.sdselQty;
+    params.selGroupFixProdFg = $scope.selGroupFixProdFg;
+    $scope.setSelectedSdselProd(params);
+
+    $scope.wjSdselProdCopyLayer.show(true);
+    event.preventDefault();
+  };
+
   // 선택상품 적용매장등록
   $scope.sdselProdRegStore = function() {
     var params = {};
@@ -1511,6 +1544,14 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
+
+    // 선택상품복사 팝업 핸들러 추가
+    $scope.wjSdselProdCopyLayer.shown.addHandler(function (s) {
+      setTimeout(function() {
+        $scope._broadcast('sdselProdCopyCtrl', $scope.getSelectedSdselProd());
+      }, 50)
+    });
+
     // 선택상품 적용매장등록 팝업 핸들러 추가
     $scope.wjSdselProdRegStoreLayer.shown.addHandler(function (s) {
       setTimeout(function() {
