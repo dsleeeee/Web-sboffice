@@ -56,7 +56,44 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#fileContent").html("");
         $("#divComment").html("");
 
-        if(userId !== data.userId) {
+        // 열람자조회/삭제/수정 버튼 기본 hidden
+        $("#readingHistButton").hide();
+        $("#delButton").hide();
+        $("#modifyButton").hide();
+
+        // 1. [182] 게시판수정사용자 인 경우 열람자조회/삭제/수정 가능
+        if (orgnFg === "MASTER") {
+            if (data.targetFg === "123" || data.targetFg === "23" || data.targetFg === "12345" || data.targetFg === "45" || data.targetFg === "6") {
+                for (var i = 0; i < boardModifyUserId.length; i++) {
+                    if (userId === boardModifyUserId[i].name) {
+                        $("#readingHistButton").show();
+                        $("#delButton").show();
+                        $("#modifyButton").show();
+                    }
+                }
+            }
+        }
+
+        if (orgnFg === "HQ") {
+            if (data.targetFg === "45" || data.targetFg === "5" || data.targetFg === "6" || data.targetFg === "4") {
+                for (var i = 0; i < HqBoardModifyUserId.length; i++) {
+                    if (userId === HqBoardModifyUserId[i].name) {
+                        $("#readingHistButton").show();
+                        $("#delButton").show();
+                        $("#modifyButton").show();
+                    }
+                }
+            }
+        }
+
+        // 2. 작성자 본인 열람자조회/삭제/수정 가능
+        if (userId === data.userId) {
+            $("#readingHistButton").show();
+            $("#delButton").show();
+            $("#modifyButton").show();
+        }
+
+        /*if(userId !== data.userId) {
             $("#readingHistButton").hide();
             $("#delButton").hide();
             $("#modifyButton").hide();
@@ -64,7 +101,7 @@ app.controller('boardDetailCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#readingHistButton").show();
             $("#delButton").show();
             $("#modifyButton").show();
-        }
+        }*/
         $scope.setSelectedBoardDetail(data);
         $scope.searchBoardDetail();
         $scope.searchBoardDetailAnswer();

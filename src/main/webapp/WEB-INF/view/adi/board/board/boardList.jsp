@@ -170,9 +170,14 @@
 
     var boardCd = "${boardCd}";
     var rootUrl = "${rootUrl}";
+
+
+    <%-- 게시판수정사용자 --%>
+    var boardModifyUserId = ${ccu.getCommCodeExcpAll("182")};
+    var HqBoardModifyUserId = ${HqBoardModifyUserId};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20250610.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardList.js?ver=20250718.01" charset="utf-8"></script>
 
 <%-- 게시판 상세 팝업 --%>
 <c:import url="/WEB-INF/view/adi/board/board/boardDetail.jsp">
