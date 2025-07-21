@@ -3219,7 +3219,7 @@
         /* SideMenuMapper.getCountFixProdFg */
         <choose>
             <when test='orgnFg != null and orgnFg == "H"'>
-                SELECT 	SUM(NVL(ADD_PROD_QTY,0))
+                SELECT 	NVL(SUM(ADD_PROD_QTY),0)
                 FROM	(
                             SELECT 	*
                             FROM 	TB_HQ_PRODUCT_SDSEL_PROD
@@ -3249,7 +3249,7 @@
                         )
             </when>
             <when test='orgnFg != null and orgnFg == "S"'>
-                SELECT 	SUM(NVL(ADD_PROD_QTY,0))
+                SELECT 	NVL(SUM(ADD_PROD_QTY),0)
                 FROM	(
                             SELECT 	*
                             FROM 	TB_MS_PRODUCT_SDSEL_PROD

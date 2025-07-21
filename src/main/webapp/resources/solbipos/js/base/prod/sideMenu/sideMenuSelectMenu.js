@@ -1300,7 +1300,7 @@ app.controller('sideMenuSelectProdCtrl', ['$scope', '$http', 'sdselClassCd', fun
       var chkFixProdCnt = 0;
       for (var m = 0; m < $scope.flex.collectionView.items.length; m++) {
         if($scope.flex.collectionView.items[m].status !== 'D') {
-          if($scope.flex.collectionView.items[m].fixProdFg === "1") {
+          if(parseInt(nvl($scope.flex.collectionView.items[m].fixProdFg,0)) === 1) {
             chkFixProdCnt += parseInt($scope.flex.collectionView.items[m].addProdQty);
           }
         }
