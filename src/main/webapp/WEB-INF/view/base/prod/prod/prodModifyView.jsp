@@ -1081,7 +1081,7 @@
     </div>
     <div class="wj-dialog-footer">
        <%--<button class="btn btn_blue" ng-click="myForm.$valid && saveProd()"><s:message code="cmm.save"/></button>--%>
-       <button class="btn btn_blue" ng-click="sideCheck()"><s:message code="cmm.save"/></button>
+       <button class="btn btn_blue" ng-click="saveProdSave()"><s:message code="cmm.save"/></button>
       <button class="btn wj-hide btn_blue"><s:message code="cmm.close"/></button>
       <input type="hidden" id="saveMode" name="saveMode"/>
     </div>
@@ -1219,7 +1219,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20250430.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20250725.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

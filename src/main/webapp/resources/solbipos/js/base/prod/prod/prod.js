@@ -215,14 +215,14 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
           // 매장일땐 상품등록구분이 S인 것만 수정가능
           if(orgnFg == "HQ") {
             // 상품정보 수정 팝업
-            $scope.prodModifyLayer.show();
+            $scope.prodModifyLayer.show(true);
           } else if(orgnFg == "STORE") {
             if(selectedRow["regFg"] === 'S') {
               // 상품정보 수정 팝업
-              $scope.prodModifyLayer.show();
+              $scope.prodModifyLayer.show(true);
             } else {
               // 상품정보 상세 팝업
-              $scope.prodDetailLayer.show();
+              $scope.prodDetailLayer.show(true);
             }
           }
           // 등록매장수
@@ -362,7 +362,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       $scope._broadcast('prodAddDelPwCtrl', params);
       $scope.prodAddDelPwLayer.show();
     }else {
-      $scope.prodModifyLayer.show();
+      $scope.prodModifyLayer.show(true);
     }
 
     /*var modifyPopUp = $scope.prodModifyLayer;
