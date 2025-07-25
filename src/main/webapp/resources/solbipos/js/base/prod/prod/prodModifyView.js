@@ -414,306 +414,404 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         });
     };
 
-    // 상품저장
+    // 수정일때 사이드메뉴관리의 선택상품인 상품은 사이드사용여부 Y 안되게 처리
     $scope.saveProd = function() {
 
         // 값 체크
-        if($scope.valueCheck()){
+        if($scope.valueCheck()) {
 
-            // 수정일때 사이드메뉴관리의 선택상품인 상품은 사이드사용여부 Y 안되게
-            if($("#saveMode").val() === "MOD" && $scope.prodModifyInfo.sideProdYn === "Y") {
-                var params    = {};
+            var returnValue = true;
+
+            if ($("#saveMode").val() === "MOD" && $scope.prodModifyInfo.sideProdYn === "Y") {
+
+                var params = {};
                 params.sdselGrpCd = $scope.prodModifyInfo.sdselGrpCd;
                 params.prodCd = $scope.prodModifyInfo.prodCd;
 
-                if(params.sdselGrpCd !== "" && params.prodCd !== ""){
-                    $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getSideMenuChk.sb", params, function(response) {
-                         if(response.data.status === "OK"){
-                            if(response.data.data === 'N'){
-                                $scope._popMsg(messages["prod.sideProdChk.msg"]); // 선택한 선택메뉴의 세트구분이 '세트' 이면서 <br/> 사이드메뉴관리에 선택상품으로 등록된 상품은 <br/> '사이드상품여부'를 '사용'으로 선택할 수 없습니다.
-                                return false;
-                            }else{
-                                // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
-                                $scope.setConfigProdChk();
+                var url = "/base/prod/prod/prod/getSideMenuChk.sb";
+                // 가상로그인시 세션활용
+                if (document.getElementsByName("sessionId")[0]) {
+                    url += '?sid=' + document.getElementsByName("sessionId")[0].value;
+                }
+
+                if (params.sdselGrpCd !== "" && params.prodCd !== "") {
+
+                    $.ajax({
+                        type: "POST",
+                        cache: false,
+                        async: false,
+                        dataType: "json",
+                        url: url,
+                        data: params,
+                        success: function (result) {
+                            if (result.status === "OK") {
+                                if (result.data === 'N') {
+                                    $scope._popMsg(messages["prod.sideProdChk.msg"]); // 선택한 선택메뉴의 세트구분이 '세트' 이면서 <br/> 사이드메뉴관리에 선택상품으로 등록된 상품은 <br/> '사이드상품여부'를 '사용'으로 선택할 수 없습니다.
+                                    returnValue = false;
+                                }
                             }
                         }
                     });
-                } else {
-                    // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
-                    $scope.setConfigProdChk();
                 }
-            } else {
-                // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
-                $scope.setConfigProdChk();
             }
+
+            return returnValue;
         }
     };
 
     // 상품저장
     $scope.saveProdSave = function() {
 
-        // 선택메뉴 값 입력
-        $("#_sdselGrpNm").val($scope.prodModifyInfo.sdselGrpNm);
-        $("#_sdselGrpCd").val($scope.prodModifyInfo.sdselGrpCd);
-        $("#_sdselGrpNmCd").val($scope.prodModifyInfo.sdselGrpNmCd);
+        // 상품정보 [저장] 버튼 클릭 시 로그 남기기
+        var xhr = new XMLHttpRequest(); // 비동기 HTTP 요청을 생성합니다.
+        xhr.open("POST", "/resources/solbipos/jsp/log/sysLogSaveProd.jsp", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        var params = $scope.prodModifyInfo;
-        params.prodNm = params.prodNm.trim().removeEnter();
-        params.prodNoEnv = $("#prodCdInputType").val();
-        params.saveMode = $("#saveMode").val();
-        params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
-        params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
-        params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
-        params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종원가단가
-        params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
-        params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
-        params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
-        params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
-        params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // 서버로부터 응답이 성공적으로 돌아왔을 때
+                console.log("서버 응답: " + xhr.responseText);
+            }
+        };
+        // 서버에 보낼 데이터 (로그 요청임을 알리는 파라미터)
+        xhr.send("action=prodSaveButtonClick");
 
-        // 선택메뉴
-        params.sdselGrpCd = $("#_sdselGrpCd").val();
+        // 저장하시겠습니까?
+        $scope._popConfirm(messages["cmm.choo.save"], function () {
 
-        // 보증금상품코드
-        params.depositProdCd = $("#_depositProdCd").val();
+            // 저장하시겠습니까? [OK] 버튼 클릭 시 로그 남기기
+            xhr = new XMLHttpRequest(); // 비동기 HTTP 요청을 생성합니다.
+            xhr.open("POST", "/resources/solbipos/jsp/log/sysLogSaveProd.jsp", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        // 내점/배달/포장 판매단가
-        if(subPriceFg === "1"){
-        }else{
-            params.stinSaleUprc = ''; // 판매단가-내점
-            params.dlvrSaleUprc = ''; // 판매단가-배달
-            params.packSaleUprc = ''; // 판매단가-포장
-        }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // 서버로부터 응답이 성공적으로 돌아왔을 때
+                    console.log("서버 응답: " + xhr.responseText);
+                }
+            };
+            // 서버에 보낼 데이터 (로그 요청임을 알리는 파라미터)
+            xhr.send("action=prodSaveOkButtonClick");
 
-        // [1250 맘스터치] 사용시 저장
-        if(momsEnvstVal === "1") {
-            // KIOSK 판매시간 사용여부에 따라 시간설정
-            if($scope.prodModifyInfo.saleTimeFg === "Y"){
-                params.saleTime = getKioskTimeValue(); // KIOSK 시간설정
-            }else{
-                params.saleTime = "";
+            // 매장상품제한구분 환경변수 & 사이드상품여부 체크
+            var returnValue = $scope.sideCheck();
+
+            if (returnValue === "saveProd") {
+
+            } else if (returnValue === "chkBarCd") {
+                if ($scope.prodModifyInfo.barCd.replace(/^\s+|\s+$/g, "").length > 0) {
+                    // 바코드 중복 체크
+                    if (!$scope.chkBarCd()) {
+                        return false; // 상품저장 중지
+                    }
+                }
+            } else {
+                return false; // 상품저장 중지
             }
 
-            // KIOSK 뱃지
-            params.momsKioskEdge = $scope.prodModifyInfo.momsKioskEdge;
-
-            // 상품옵션그룹
-            params.optionGrpCd = $("#_optionGrpCd").val();
-
-            // 단품/세트선택설정
-            params.groupProdCd = $("#_groupProdCd").val();
-
-            // 출시일
-            params.releaseDate = wijmo.Globalize.format(releaseDate.value, 'yyyyMMdd');
-
-            // 단종
-            params.disconYn = $("#chkDisconYn").is(":checked") === true ? 'Y' : 'N';
-            params.disconDate = $("#chkDisconYn").is(":checked") === true ? wijmo.Globalize.format(disconDate.value, 'yyyyMMdd') : '';
-
-            if(params.disconYn === 'N'){
-                params.useYn = 'Y' // 단종이 아닌경우, 사용여부 '사용' 처리
+            // 수정일때 사이드메뉴관리의 선택상품인 상품은 사이드사용여부 Y 안되게 처리
+            if (!$scope.saveProd()) {
+                return false; // 상품저장 중지
             }
 
-            // 판매방식
-            params.saleTypeYnSin = $("#chkSaleTypeYnSin").is(":checked") === true ? 'Y' : 'N';  // 판매방식(내점)
-            params.saleTypeYnDlv = $("#chkSaleTypeYnDlv").is(":checked") === true ? 'Y' : 'N'; // 판매방식(배달)
-            params.saleTypeYnPkg = $("#chkSaleTypeYnPkg").is(":checked") === true ? 'Y' : 'N';  // 판매방식(포장)
+            // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
+            if (!$scope.setConfigProdChk()) {
+                return false; // 상품저장 중지
+            }
 
-            // 판매채널
-            params.saleChnYnPos = $("#chkSaleChnYnPos").is(":checked") === true ? 'Y' : 'N';        // 판매채널(포스)
-            params.saleChnYnKsk = $("#chkSaleChnYnKsk").is(":checked") === true ? 'Y' : 'N';      // 판매채널(키오스크)
-            params.saleChnYnCmp = $("#chkSaleChnYnCmp").is(":checked") === true ? 'Y' : 'N';        // 판매채널(자사앱)
-            params.saleChnYnBae = $("#chkSaleChnYnBae").is(":checked") === true ? 'Y' : 'N';     // 판매채널(배민)
-            params.saleChnYnBao = $("#chkSaleChnYnBao").is(":checked") === true ? 'Y' : 'N';    // 판매채널(배민1)
-            params.saleChnYnYgy = $("#chkSaleChnYnYgy").is(":checked") === true ? 'Y' : 'N';     // 판매채널(요기요)
-            params.saleChnYnYge = $("#chkSaleChnYnYge").is(":checked") === true ? 'Y' : 'N';  // 판매채널(요기요익스프레스)
-            params.saleChnYnCpn = $("#chkSaleChnYnCpn").is(":checked") === true ? 'Y' : 'N';    // 판매채널(쿠팡)
-            params.saleChnYnTng = $("#chkSaleChnYnTng").is(":checked") === true ? 'Y' : 'N'; // 판매채널(배달통)
-            params.saleChnYnDdn = $("#chkSaleChnYnDdn").is(":checked") === true ? 'Y' : 'N';    // 판매채널(땡겨요)
+            // 선택메뉴 값 입력
+            $("#_sdselGrpNm").val($scope.prodModifyInfo.sdselGrpNm);
+            $("#_sdselGrpCd").val($scope.prodModifyInfo.sdselGrpCd);
+            $("#_sdselGrpNmCd").val($scope.prodModifyInfo.sdselGrpNmCd);
 
-        } else {
-            // KIOSK 판매시간
-            params.saleTimeFg = "N";
-            params.saleTime = "";
-            // KIOSK 엣지
-            params.momsKioskEdge = $scope.prodModifyInfo.momsKioskEdge;
+            var params = $scope.prodModifyInfo;
+            params.prodNm = params.prodNm.trim().removeEnter();
+            params.prodNoEnv = $("#prodCdInputType").val();
+            params.saveMode = $("#saveMode").val();
+            params.saleUprc = $("#prodModifySaleUprc").val(); // 판매단가
+            params.splyUprc = $("#prodModifySplyUprc").val(); // 공급단가
+            params.costUprc = $("#prodModifyCostUprc").val(); // 원가단가
+            params.lastCostUprc = $("#prodModifyLastCostUprc").val(); // 최종원가단가
+            params.poUnitQty = $("#prodModifyPoUnitQty").val(); // 발주단위수량
+            params.poMinQty = $("#prodModifyPoMinQty").val(); // 최소발주수량
+            params.startStockQty = $("#prodModifyStartStockQty").val(); // 초기재고
+            params.safeStockQty = $("#prodModifySafeStockQty").val(); // 안전재고
+            params.chkVendrCd = $scope.prodModifyInfo.vendrCd;
 
-            // 상품옵션그룹
-            params.optionGrpCd = "";
+            // 선택메뉴
+            params.sdselGrpCd = $("#_sdselGrpCd").val();
 
-            // 단품/세트선택설정
-            params.groupProdCd = "";
+            // 보증금상품코드
+            params.depositProdCd = $("#_depositProdCd").val();
 
-            // 출시일
-            params.releaseDate = "";
+            // 내점/배달/포장 판매단가
+            if (subPriceFg === "1") {
+            } else {
+                params.stinSaleUprc = ''; // 판매단가-내점
+                params.dlvrSaleUprc = ''; // 판매단가-배달
+                params.packSaleUprc = ''; // 판매단가-포장
+            }
 
-            // 단종
-            params.disconYn = "";
-            params.disconDate = "";
-
-            // 판매방식
-            params.saleTypeYnSin = "";
-            params.saleTypeYnDlv = "";
-            params.saleTypeYnPkg = "";
-
-            // 판매채널
-            params.saleChnYnPos = "";
-            params.saleChnYnKsk = "";
-            params.saleChnYnCmp = "";
-            params.saleChnYnBae = "";
-            params.saleChnYnBao = "";
-            params.saleChnYnYgy = "";
-            params.saleChnYnYge = "";
-            params.saleChnYnCpn = "";
-            params.saleChnYnTng = "";
-            params.saleChnYnDdn = "";
-
-            // 영양정보
-            params.nuTotWt = "";
-            params.nuKcal = "";
-            params.nuProtein = "";
-            params.nuSodium = "";
-            params.nuSugars = "";
-            params.nuSatFat = "";
-            params.nuCaffeine = "";
-        }
-
-        // params에 있는 값으로 한번더 value check
-        if($scope.paramsValueCheck(params)) {
-
-            // 저장수행
-            $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function (response) {
-                var result = response.data.data;
-
-                if (result < 1) {
-                    $scope._popMsg(messages["cmm.registFail"]);
-
+            // [1250 맘스터치] 사용시 저장
+            if (momsEnvstVal === "1") {
+                // KIOSK 판매시간 사용여부에 따라 시간설정
+                if ($scope.prodModifyInfo.saleTimeFg === "Y") {
+                    params.saleTime = getKioskTimeValue(); // KIOSK 시간설정
                 } else {
-                    $scope._popMsg(messages["cmm.saveSucc"]);
+                    params.saleTime = "";
+                }
 
-                    // 이미지파일 저장
-                    $scope.prodImageFileSave(result);
+                // KIOSK 뱃지
+                params.momsKioskEdge = $scope.prodModifyInfo.momsKioskEdge;
 
-                    if ($scope.getMode() == "I") {
+                // 상품옵션그룹
+                params.optionGrpCd = $("#_optionGrpCd").val();
 
-                        /* 1. kitchenprintLink 값은 본사/매장 환경코드 [0043 본사신규상품 매장생성기준]이 '0 : 자동생성' 인 경우, 
-                              본사/매장 환경코드 [1110 상품생성시주방프린터연결여부]의 값을 조회함('0 : 자동생성' 또는 '1 : 생성안함' 값이 들어오게 됨)
-                           2. 본사/매장 환경코드 [0043 본사신규상품 매장생성기준]이 '1 : 생성안함' 인 경우 kitchenprintLink에 값이 없으므로,
-                              상품등록팝업 닫힘으로 처리함.
-                        */
-                        if (kitchenprintLink === null || kitchenprintLink === "" || kitchenprintLink === undefined) {
-                            $scope.prodModifyLayer.hide();
+                // 단품/세트선택설정
+                params.groupProdCd = $("#_groupProdCd").val();
 
-                        } else if (kitchenprintLink === "0" && $scope.prodModifyInfo.setProdFg === "1") {
-                            $scope.prodModifyLayer.hide();
+                // 출시일
+                params.releaseDate = wijmo.Globalize.format(releaseDate.value, 'yyyyMMdd');
 
-                        } else {
-                            // 프린터연결팝업창 사용시, 팝업 오픈
-                            if (kitchenprintLink === "1") {
-                                $scope.setKitchenprrint(result);
-                                $scope.kitchenprintLinkLayer.show(true);
-                                var scope = agrid.getScope('kitchenprintLinkCtrl');
-                                scope._broadcast('kitchenprintLinkCtrl');
-                            } else if (orgnFg === "HQ" && kitchenprintLink === "2") {   // 상품그룹프린터연결창 사용(본사만)
-                                $scope.setKitchenprrint(result);
-                                $scope.printerGroupPopupLayer.show(true);
-                                var scope = agrid.getScope('printerGroupPopupCtrl');
-                                scope._broadcast('printerGroupPopupCtrl');
-                            } else if (orgnFg === "STORE" && kitchenprintLink === "2") {   // 상품그룹프린터연결창 사용(매장은 1110값 2면 그냥 닫기)
-                                $scope.prodModifyLayer.hide();
-                            }
+                // 단종
+                params.disconYn = $("#chkDisconYn").is(":checked") === true ? 'Y' : 'N';
+                params.disconDate = $("#chkDisconYn").is(":checked") === true ? wijmo.Globalize.format(disconDate.value, 'yyyyMMdd') : '';
 
-                            // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈
-                            if ($scope.prodModifyInfo.setProdFg !== "1") {
-                                var params = {};
-                                params.prodCd = result;
-                                params.setProdFg = $scope.prodModifyInfo.setProdFg;
-                                params.viewType = "modify";
+                if (params.disconYn === 'N') {
+                    params.useYn = 'Y' // 단종이 아닌경우, 사용여부 '사용' 처리
+                }
 
-                                $scope.setConfigProdLayer.show(true);
-                                $scope._broadcast('setConfigProdCtrl', params);
-                            }
-                        }
+                // 판매방식
+                params.saleTypeYnSin = $("#chkSaleTypeYnSin").is(":checked") === true ? 'Y' : 'N';  // 판매방식(내점)
+                params.saleTypeYnDlv = $("#chkSaleTypeYnDlv").is(":checked") === true ? 'Y' : 'N'; // 판매방식(배달)
+                params.saleTypeYnPkg = $("#chkSaleTypeYnPkg").is(":checked") === true ? 'Y' : 'N';  // 판매방식(포장)
+
+                // 판매채널
+                params.saleChnYnPos = $("#chkSaleChnYnPos").is(":checked") === true ? 'Y' : 'N';        // 판매채널(포스)
+                params.saleChnYnKsk = $("#chkSaleChnYnKsk").is(":checked") === true ? 'Y' : 'N';      // 판매채널(키오스크)
+                params.saleChnYnCmp = $("#chkSaleChnYnCmp").is(":checked") === true ? 'Y' : 'N';        // 판매채널(자사앱)
+                params.saleChnYnBae = $("#chkSaleChnYnBae").is(":checked") === true ? 'Y' : 'N';     // 판매채널(배민)
+                params.saleChnYnBao = $("#chkSaleChnYnBao").is(":checked") === true ? 'Y' : 'N';    // 판매채널(배민1)
+                params.saleChnYnYgy = $("#chkSaleChnYnYgy").is(":checked") === true ? 'Y' : 'N';     // 판매채널(요기요)
+                params.saleChnYnYge = $("#chkSaleChnYnYge").is(":checked") === true ? 'Y' : 'N';  // 판매채널(요기요익스프레스)
+                params.saleChnYnCpn = $("#chkSaleChnYnCpn").is(":checked") === true ? 'Y' : 'N';    // 판매채널(쿠팡)
+                params.saleChnYnTng = $("#chkSaleChnYnTng").is(":checked") === true ? 'Y' : 'N'; // 판매채널(배달통)
+                params.saleChnYnDdn = $("#chkSaleChnYnDdn").is(":checked") === true ? 'Y' : 'N';    // 판매채널(땡겨요)
+
+            } else {
+                // KIOSK 판매시간
+                params.saleTimeFg = "N";
+                params.saleTime = "";
+                // KIOSK 엣지
+                params.momsKioskEdge = $scope.prodModifyInfo.momsKioskEdge;
+
+                // 상품옵션그룹
+                params.optionGrpCd = "";
+
+                // 단품/세트선택설정
+                params.groupProdCd = "";
+
+                // 출시일
+                params.releaseDate = "";
+
+                // 단종
+                params.disconYn = "";
+                params.disconDate = "";
+
+                // 판매방식
+                params.saleTypeYnSin = "";
+                params.saleTypeYnDlv = "";
+                params.saleTypeYnPkg = "";
+
+                // 판매채널
+                params.saleChnYnPos = "";
+                params.saleChnYnKsk = "";
+                params.saleChnYnCmp = "";
+                params.saleChnYnBae = "";
+                params.saleChnYnBao = "";
+                params.saleChnYnYgy = "";
+                params.saleChnYnYge = "";
+                params.saleChnYnCpn = "";
+                params.saleChnYnTng = "";
+                params.saleChnYnDdn = "";
+
+                // 영양정보
+                params.nuTotWt = "";
+                params.nuKcal = "";
+                params.nuProtein = "";
+                params.nuSodium = "";
+                params.nuSugars = "";
+                params.nuSatFat = "";
+                params.nuCaffeine = "";
+            }
+
+            // params에 있는 값으로 한번더 value check
+            if ($scope.paramsValueCheck(params)) {
+
+                // 저장수행
+                $scope._postJSONSave.withPopUp("/base/prod/prod/prod/save.sb", params, function (response) {
+                    var result = response.data.data;
+
+                    if (result < 1) {
+                        $scope._popMsg(messages["cmm.registFail"]);
 
                     } else {
+                        $scope._popMsg(messages["cmm.saveSucc"]);
 
-                        // 기존 세트상품구분값과 변경된 세트상품구분값 비교하여 세트구성상품 팝업 띄우기
-                        if (vSetProdFg === "1") {
+                        // 이미지파일 저장
+                        $scope.prodImageFileSave(result);
 
-                            // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈
-                            if ($scope.prodModifyInfo.setProdFg !== "1") {
-                                var params = {};
-                                params.prodCd = result;
-                                params.setProdFg = $scope.prodModifyInfo.setProdFg;
-                                params.viewType = "modify";
+                        if ($scope.getMode() == "I") {
 
-                                $scope.setConfigProdLayer.show(true);
-                                $scope._broadcast('setConfigProdCtrl', params);
+                            /* 1. kitchenprintLink 값은 본사/매장 환경코드 [0043 본사신규상품 매장생성기준]이 '0 : 자동생성' 인 경우,
+                                  본사/매장 환경코드 [1110 상품생성시주방프린터연결여부]의 값을 조회함('0 : 자동생성' 또는 '1 : 생성안함' 값이 들어오게 됨)
+                               2. 본사/매장 환경코드 [0043 본사신규상품 매장생성기준]이 '1 : 생성안함' 인 경우 kitchenprintLink에 값이 없으므로,
+                                  상품등록팝업 닫힘으로 처리함.
+                            */
+                            if (kitchenprintLink === null || kitchenprintLink === "" || kitchenprintLink === undefined) {
+                                $scope.prodModifyLayer.hide();
+
+                            } else if (kitchenprintLink === "0" && $scope.prodModifyInfo.setProdFg === "1") {
+                                $scope.prodModifyLayer.hide();
+
+                            } else {
+                                // 프린터연결팝업창 사용시, 팝업 오픈
+                                if (kitchenprintLink === "1") {
+                                    $scope.setKitchenprrint(result);
+                                    $scope.kitchenprintLinkLayer.show(true);
+                                    var scope = agrid.getScope('kitchenprintLinkCtrl');
+                                    scope._broadcast('kitchenprintLinkCtrl');
+                                } else if (orgnFg === "HQ" && kitchenprintLink === "2") {   // 상품그룹프린터연결창 사용(본사만)
+                                    $scope.setKitchenprrint(result);
+                                    $scope.printerGroupPopupLayer.show(true);
+                                    var scope = agrid.getScope('printerGroupPopupCtrl');
+                                    scope._broadcast('printerGroupPopupCtrl');
+                                } else if (orgnFg === "STORE" && kitchenprintLink === "2") {   // 상품그룹프린터연결창 사용(매장은 1110값 2면 그냥 닫기)
+                                    $scope.prodModifyLayer.hide();
+                                }
+
+                                // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈
+                                if ($scope.prodModifyInfo.setProdFg !== "1") {
+                                    var params = {};
+                                    params.prodCd = result;
+                                    params.setProdFg = $scope.prodModifyInfo.setProdFg;
+                                    params.viewType = "modify";
+
+                                    $scope.setConfigProdLayer.show(true);
+                                    $scope._broadcast('setConfigProdCtrl', params);
+                                }
+                            }
+
+                        } else {
+
+                            // 기존 세트상품구분값과 변경된 세트상품구분값 비교하여 세트구성상품 팝업 띄우기
+                            if (vSetProdFg === "1") {
+
+                                // 세트상품구분이 일반상품이 아니면, 세트구성상품 팝업오픈
+                                if ($scope.prodModifyInfo.setProdFg !== "1") {
+                                    var params = {};
+                                    params.prodCd = result;
+                                    params.setProdFg = $scope.prodModifyInfo.setProdFg;
+                                    params.viewType = "modify";
+
+                                    $scope.setConfigProdLayer.show(true);
+                                    $scope._broadcast('setConfigProdCtrl', params);
+
+                                } else {
+                                    $scope.prodModifyLayer.hide();
+                                }
 
                             } else {
                                 $scope.prodModifyLayer.hide();
                             }
-
-                        } else {
-                            $scope.prodModifyLayer.hide();
                         }
-                    }
 
-                    // 저장기능 수행후 재조회
-                    $scope._broadcast('prodCtrl');
-                }
-            });
-        }
+                        // 저장기능 수행후 재조회
+                        $scope._broadcast('prodCtrl');
+                    }
+                });
+            }
+        });
     };
 
-    // 사이드 체크
+    // 매장상품제한구분 환경변수 & 사이드상품여부 체크
     $scope.sideCheck = function () {
-        // if(typeof gubun !== "undefined" && gubun == "sideMenu"){
-            var params = $scope.prodModifyInfo;
-            $.postJSON("/base/prod/prod/prod/chkSide.sb", params, function(result) {
-                if(result.status === 'OK') {
-                    if ($scope.prodModifyInfo.barCd == null){
-                        $scope.saveProd();
-                    } else if($scope.prodModifyInfo.barCd.getByteLengthForOracle() > 40){
-                        $scope._popMsg(messages["prod.maxBarCd.msg"]);
-                        return false;
-                    }else {
-                        $scope.chkBarCd();
-                    }
 
+        var params = $scope.prodModifyInfo;
+        var returnValue = "false";
+
+        var url = "/base/prod/prod/prod/chkSide.sb";
+        // 가상로그인시 세션활용
+        if (document.getElementsByName("sessionId")[0]) {
+            url += '?sid=' + document.getElementsByName("sessionId")[0].value;
+        }
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: false,
+            dataType: "json",
+            url: url,
+            data: params,
+            success: function (result) {
+                if (result.status === "OK") {
+                    if ($scope.prodModifyInfo.barCd == null) {
+                        returnValue = "saveProd";
+                    } else if ($scope.prodModifyInfo.barCd.getByteLengthForOracle() > 40) {
+                        $scope._popMsg(messages["prod.maxBarCd.msg"]);
+                        returnValue = "false";
+                    } else {
+                        returnValue = "chkBarCd";
+                    }
+                } else if (result.status === "FAIL") {
+                    if (params.sideProdYn != "Y") {
+                        $scope._popMsg(messages["prod.sideYnChk.msg"]);
+                    } else if (params.sdselGrpCd == "" || params.sdselGrpCd == null) {
+                        $scope._popMsg(messages["prod.sideMenuChk.msg"]);
+                    }
+                    returnValue = "false";
+                } else {
+                    returnValue = "false";
                 }
-            },
-                function (result) {
-                if (params.sideProdYn != "Y") {
-                    $scope._popMsg(messages["prod.sideYnChk.msg"]);
-                } else if (params.sdselGrpCd == "" || params.sdselGrpCd == null) {
-                    $scope._popMsg(messages["prod.sideMenuChk.msg"]);
-                }
-            });
-            return false;
-        // } else {
-        //     $scope.saveProd();
-        // }
-    }
+            }
+        });
+
+        return returnValue;
+    };
 
     // 바코드 중복 체크
     $scope.chkBarCd = function () {
-        if($scope.prodModifyInfo.barCd.replace(/^\s+|\s+$/g, "").length > 0){
-            var params = $scope.prodModifyInfo;
-            $.postJSON("/base/prod/prod/prod/chkBarCd.sb", params, function(result) {
-                    if(result.status === 'OK') {
-                        $scope.saveProd();
-                    }
-                },
-                function (result) {
-                    $scope._popMsg(result.data[0]);
-                    return false;
-                });
 
-        } else {
-            $scope.saveProd();
+        var params = $scope.prodModifyInfo;
+        var returnValue = false;
+
+        var url = "/base/prod/prod/prod/chkBarCd.sb";
+        // 가상로그인시 세션활용
+        if (document.getElementsByName("sessionId")[0]) {
+            url += '?sid=' + document.getElementsByName("sessionId")[0].value;
         }
-    }
+
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: false,
+            dataType: "json",
+            url: url,
+            data: params,
+            success: function (result) {
+                if (result.status === "OK") {
+                    returnValue = true;
+                } else if (result.status === "FAIL") {
+                    $scope._popMsg(result.data[0]);
+                    returnValue = false;
+                } else {
+                    returnValue = false;
+                }
+            }
+        });
+
+        return returnValue;
+    };
 
 
     // 값 체크
@@ -1899,26 +1997,42 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
     $scope.setConfigProdChk = function () {
 
+        var returnValue = true;
+
         if($("#saveMode").val() === "MOD" && $scope.prodModifyInfo.setProdFg === "1") {
+
             var params = {};
             params.prodCd = $scope.prodModifyInfo.prodCd;
 
-            $scope._postJSONQuery.withOutPopUp('/base/prod/prod/prod/getSetConfigProdList.sb', params, function (response) {
-                var list = response.data.data.list;
+            var url = "/base/prod/prod/prod/getSetConfigProdList.sb";
+            // 가상로그인시 세션활용
+            if (document.getElementsByName("sessionId")[0]) {
+                url += '?sid=' + document.getElementsByName("sessionId")[0].value;
+            }
 
-                if(list.length > 0) {
-                    $scope._popMsg(messages["prod.setConfigProdCountChk.msg"]); // 세트 구성 상품이 이미 등록되어 있어<br>일반상품으로 전환 하실 수 없습니다.<br>세트 구성 상품을 먼저 삭제하여 주십시오.
-                    return false;
+            $.ajax({
+                type: "POST",
+                cache: false,
+                async: false,
+                dataType: "json",
+                url: url,
+                data: params,
+                success: function (result) {
+                    if (result.status === "OK") {
 
-                }else{
-                    // 상품저장
-                    $scope.saveProdSave();
+                        var list = result.data.list;
+
+                        if (list.length > 0) {
+                            $scope._popMsg(messages["prod.setConfigProdCountChk.msg"]); // 세트 구성 상품이 이미 등록되어 있어<br>일반상품으로 전환 하실 수 없습니다.<br>세트 구성 상품을 먼저 삭제하여 주십시오.
+                            returnValue = false;
+
+                        }
+                    }
                 }
             });
-        }else{
-            // 상품저장
-            $scope.saveProdSave();
         }
+
+        return returnValue;
     };
     
     // 단종여부 체크박스 클릭시
