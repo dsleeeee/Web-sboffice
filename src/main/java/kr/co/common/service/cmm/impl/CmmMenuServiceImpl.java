@@ -6,6 +6,8 @@ import kr.co.common.system.BaseEnv;
 import kr.co.common.template.RedisCustomTemplate;
 import kr.co.solbipos.application.common.service.*;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -304,6 +306,25 @@ public class CmmMenuServiceImpl implements CmmMenuService {
     @Override
     public int getWebSessionTimeOutLoginIdChk(SessionInfoVO sessionInfoVO) {
         return cmmMenuMapper.getWebSessionTimeOutLoginIdChk(sessionInfoVO);
+    }
+
+    /** 메뉴이동 제한 화면 비밀번호 검증 - 조회 */
+    @Override
+    public int getLoginPwdChk(PwdManageVO pwdManageVO, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+
+        pwdManageVO.setOrgnFg(sessionInfoVO.getOrgnFg());
+        pwdManageVO.setAgencyCd(sessionInfoVO.getOrgnGrpCd());
+        pwdManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        // 소속구분 설정
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
+            pwdManageVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 비밀번호 확인
+        result = cmmMenuMapper.getLoginPwdChk(pwdManageVO);
+
+        return result;
     }
 }
 

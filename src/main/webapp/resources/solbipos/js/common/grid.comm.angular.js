@@ -816,7 +816,7 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
                         }
                     }
                 }
-            };
+            }
         }, 100)
     }
 
@@ -840,18 +840,38 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
         }
         $scope._setPNode(s.selectedNode);
 
+        var pageAccessChkPwdYn = '';
+        if (document.getElementsByName('pageAccessChkPwdYn').length > 0) {
+            pageAccessChkPwdYn = document.getElementsByName('pageAccessChkPwdYn')[0].value;
+        }
+
         // 사용자 메뉴 제한여부 확인
         if (!isEmpty(s.selectedNode.dataItem.chkYn)) {
             if (s.selectedNode.dataItem.chkYn === 'N') {
-                // 사용할 수 없는 메뉴입니다.
-                s_alert.pop(messages['cmm.menu.not.use']);
-                return;
+                if (pageAccessChkPwdYn !== null && pageAccessChkPwdYn !== '') {
+                    // pageAccessChkPwdYn 값 확인
+                    if (pageAccessChkPwdYn !== "Y") {
+                        $scope._broadcast('menuPasswordChkCtrl', s)
+
+                    }
+                }else{
+                    $scope._broadcast('menuPasswordChkCtrl', s)
+
+                }
             }
         } else {
-            // 사용할 수 없는 메뉴입니다.
-            s_alert.pop(messages['cmm.menu.not.use']);
-            return;
+            if (pageAccessChkPwdYn !== null && pageAccessChkPwdYn !== '') {
+                // pageAccessChkPwdYn 값 확인
+                if (pageAccessChkPwdYn !== "Y") {
+                    $scope._broadcast('menuPasswordChkCtrl', s)
+
+                }
+            }else{
+                $scope._broadcast('menuPasswordChkCtrl', s)
+
+            }
         }
+
     }
 
     // 아이템 클릭 시 이벤트
@@ -862,17 +882,36 @@ function MenuController(ctrlName, menuUrl, $scope, $http) {
     // 아이템 클릭 시 이벤트 : private
     function _itemClicked(s, e) {
 
+        var pageAccessChkPwdYn = '';
+        if (document.getElementsByName('pageAccessChkPwdYn').length > 0) {
+            pageAccessChkPwdYn = document.getElementsByName('pageAccessChkPwdYn')[0].value;
+        }
+
         // 사용자 메뉴 제한여부 확인
         if(!isEmpty(s.selectedNode.dataItem.chkYn)){
             if(s.selectedNode.dataItem.chkYn === 'N'){
-                // 사용할 수 없는 메뉴입니다.
-                s_alert.pop(messages['cmm.menu.not.use']);
-                return;
+                if (pageAccessChkPwdYn !== null && pageAccessChkPwdYn !== '') {
+                    // pageAccessChkPwdYn 값 확인
+                    if (pageAccessChkPwdYn !== "Y") {
+                        $scope._broadcast('menuPasswordChkCtrl', s)
+                        return;
+                    }
+                }else{
+                    $scope._broadcast('menuPasswordChkCtrl', s)
+                    return;
+                }
             }
         }else{
-            // 사용할 수 없는 메뉴입니다.
-            s_alert.pop(messages['cmm.menu.not.use']);
-            return;
+            if (pageAccessChkPwdYn !== null && pageAccessChkPwdYn !== '') {
+                // pageAccessChkPwdYn 값 확인
+                if (pageAccessChkPwdYn !== "Y") {
+                    $scope._broadcast('menuPasswordChkCtrl', s)
+                    return;
+                }
+            }else{
+                $scope._broadcast('menuPasswordChkCtrl', s)
+                return;
+            }
         }
 
         // URL 이 있을 경우 페이지 이동

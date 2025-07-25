@@ -107,7 +107,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             if(WebUtils.getCookie(request, BaseEnv.SB_LOGIN_FG).getValue().equals(LoginFg.MOBILE.getCode())){
                 ROOT_PATH = "/mobile/";
             }
-        }else if (request.getRequestURI().substring(0, 8).equals("/mobile/")){
+        }else if (request.getRequestURI().startsWith("/mobile/")){
             ROOT_PATH = "/mobile/";
         }
 
@@ -168,28 +168,32 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         // 사용자 메뉴 제한여부 확인
         if (!userMenuChkYn(request, requestURL, sessionInfoVO)) {
-            LOGGER.info("not user use menu : id : {},  url : {}, accept : {}", sessionInfoVO.getUserId(),
-                requestURL, request.getHeader("accept"));
-            @SuppressWarnings("unused")
-            String exceptionMsg = messageService.get("cmm.menu.not.use");
+            // 비밀번호 확인 여부 체크
+            if(sessionInfoVO.getPageAccessChkPwdYn() != null && sessionInfoVO.getPageAccessChkPwdYn().equals("Y")) {
+            }else{
+                LOGGER.info("not user use menu : id : {},  url : {}, accept : {}", sessionInfoVO.getUserId(),
+                        requestURL, request.getHeader("accept"));
+                @SuppressWarnings("unused")
+                String exceptionMsg = messageService.get("cmm.menu.not.use");
 
-            // 메뉴 사용 제한 처리
-            String mainUrl = "";
-            if (sessionInfoVO.getOrgnFg() == OrgnFg.MASTER) {
-                mainUrl = "/application/main/content/sys.sb";
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
-                mainUrl = "/application/main/content/agency.sb";
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
-                mainUrl = "/application/main/content/hq.sb";
-            } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
-                mainUrl = "/application/main/content/store.sb";
+                // 메뉴 사용 제한 처리
+                String mainUrl = "";
+                if (sessionInfoVO.getOrgnFg() == OrgnFg.MASTER) {
+                    mainUrl = "/application/main/content/sys.sb";
+                } else if (sessionInfoVO.getOrgnFg() == OrgnFg.AGENCY) {
+                    mainUrl = "/application/main/content/agency.sb";
+                } else if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+                    mainUrl = "/application/main/content/hq.sb";
+                } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+                    mainUrl = "/application/main/content/store.sb";
+                }
+
+                if (sessionInfoVO.getvUserId() != null) {
+                    mainUrl += "?sid=" + sessionInfoVO.getSessionId();
+                }
+
+                throw new AuthenticationException(exceptionMsg, mainUrl);
             }
-
-            if(sessionInfoVO.getvUserId() != null) {
-                mainUrl += "?sid=" + sessionInfoVO.getSessionId();
-            }
-
-            throw new AuthenticationException(exceptionMsg, mainUrl);
         }
 
         // 메뉴 권한 체크
@@ -295,7 +299,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
             // 매장
             if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
-                if(!(ROOT_PATH + "application/main/content/store.sb").equals(url)){ return false; }
+                return (ROOT_PATH + "application/main/content/store.sb").equals(url);
             }
 
             return true;

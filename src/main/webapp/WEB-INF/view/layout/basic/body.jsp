@@ -7,6 +7,7 @@
 <body ng-app="rootApp" ng-controller="rootCtrl">
 
   <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
+  <c:set var="pageAccessChkPwdYn" value="${sessionScope.sessionInfo.pageAccessChkPwdYn}" />
 
   <%-- 유져 타입에 따라 css를 변경 메인 화면 색상을 변경해 준다. --%>
   <c:choose>
@@ -46,6 +47,8 @@
       <c:if test="${sessionId ne null}">
         <input type="hidden" name="sessionId" value="${sessionId}"/>
       </c:if>
+      <%-- 화면 이동 제한 아이디 - 비밀번호 확인 여부 --%>
+      <input type="hidden" name="pageAccessChkPwdYn" value="${pageAccessChkPwdYn}"/>
       <tiles:insertAttribute name="content" />
     </div>
     <%-- 오른쪽 부분 --%>
@@ -66,6 +69,10 @@
 
   <%-- 즐겨찾기관리 팝업 추가 --%>
   <c:import url="/WEB-INF/view/application/layer/bkmk.jsp">
+  </c:import>
+
+  <%-- 비밀번호 확인 팝업 추가 --%>
+  <c:import url="/WEB-INF/view/layout/basic/menuPasswordChk.jsp">
   </c:import>
 
   <script type="text/javascript" src="/resource/solbipos/js/layout/basic/body.js?ver=20220302.01" charset="utf-8"></script>

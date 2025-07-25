@@ -3,6 +3,7 @@ package kr.co.common.service.cmm.impl;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.solbipos.application.common.service.*;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -72,4 +73,7 @@ public interface CmmMenuMapper {
 
     /** [231 웹세션 타임아웃 12시간아이디] 특정아이디 체크 */
     int getWebSessionTimeOutLoginIdChk(SessionInfoVO sessionInfoVO);
+
+    /** 메뉴이동 제한 화면 비밀번호 검증 - 조회 */
+    int getLoginPwdChk(PwdManageVO pwdManageVO);
 }

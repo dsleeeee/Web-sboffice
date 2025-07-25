@@ -121,7 +121,14 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        params.prodClassCd = $scope.prodClassCd;
+        // params.prodClassCd = $scope.prodClassCd;
+        var prodClassCd = '';
+        if($scope.prodClassCd !== '' && $scope.prodClassCd !== null && $scope.prodClassCd !== undefined) {
+            for (var i = 0; i < $scope.prodClassCd.length; i++) {
+                prodClassCd += (i == $scope.prodClassCd.length - 1) ? $scope.prodClassCd[i] : $scope.prodClassCd[i] + ',';
+            }
+        }
+        params.prodClassCd = prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
         params.storeHqBrandCd = $scope.storeHqBrandCd;
@@ -155,52 +162,109 @@ app.controller('dayProdStoreCtrl', ['$scope', '$http', '$timeout', function ($sc
         params.momsStoreFg05 = $scope.momsStoreFg05;
         params.listScale = 500;
 
+        // 페이징 처리
+        if ($scope._getPagingInfo('curr') > 0) {
+            params['curr'] = $scope._getPagingInfo('curr');
+        } else {
+            params['curr'] = 1;
+        }
+        // 가상로그인 대응한 session id 설정
+        if (document.getElementsByName('sessionId')[0]) {
+            params['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
         console.log(params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/prod/dayProdStore/dayProdStore/getDayProdStoreList.sb", params, function (){
-            // <-- 그리드 visible -->
-            // 선택한 테이블에 따른 리스트 항목 visible
-            var grid = wijmo.Control.getControl("#wjGridList");
-            var columns = grid.columns;
+        $.postJSON("/sale/prod/dayProdStore/dayProdStore/getDayProdStoreList.sb", params, function(response) {
 
-            // 컬럼 총갯수
-            var columnsCnt = columns.length;
+                // <-- 그리드 visible -->
+                // 선택한 테이블에 따른 리스트 항목 visible
+                var grid = wijmo.Control.getControl("#wjGridList");
+                var columns = grid.columns;
 
-            for (var i = 0; i < columnsCnt; i++) {
-                columns[i].visible = true;
-            }
-
-            // 합계가 0이면 해당 컬럼 숨기기
-            for (var j = 0; j < columnsCnt; j++) {
-                // 상품표시옵션
-                if(params.prodOption === "1"){  // 단품+세트
-                    if(columns[j].binding == "saleQty2" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt2" || columns[j].binding == "realSaleAmt3") {
-                        columns[j].visible = false;
-                    }
-                } else if(params.prodOption === "2"){  // 단품+구성
-                    if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt3") {
-                        columns[j].visible = false;
-                    }
-                } else if(params.prodOption === "3"){  // 단품+세트+구성
-                    if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty2" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt2") {
-                        columns[j].visible = false;
-                    }
+                if(response.status === "FAIL") {
+                    s_alert.pop(response.message);
+                    grid.itemsSource = new wijmo.collections.CollectionView([]);
+                    return;
                 }
 
-                // 일자표시옵션
-                if(params.dayOption === "1"){  // 일자별
-                    if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
-                        columns[j].visible = false;
+                // 컬럼 총갯수
+                var columnsCnt = columns.length;
+
+                for (var i = 0; i < columnsCnt; i++) {
+                    columns[i].visible = true;
+                }
+
+                // 합계가 0이면 해당 컬럼 숨기기
+                for (var j = 0; j < columnsCnt; j++) {
+                    // 상품표시옵션
+                    if(params.prodOption === "1"){  // 단품+세트
+                        if(columns[j].binding == "saleQty2" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt2" || columns[j].binding == "realSaleAmt3") {
+                            columns[j].visible = false;
+                        }
+                    } else if(params.prodOption === "2"){  // 단품+구성
+                        if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty3" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt3") {
+                            columns[j].visible = false;
+                        }
+                    } else if(params.prodOption === "3"){  // 단품+세트+구성
+                        if(columns[j].binding == "saleQty1" || columns[j].binding == "saleQty2" || columns[j].binding == "realSaleAmt1" || columns[j].binding == "realSaleAmt2") {
+                            columns[j].visible = false;
+                        }
                     }
-                } else if(params.dayOption === "2"){  // 기간합
-                    if(columns[j].binding == "saleDate" || columns[j].binding == "yoil") {
-                        columns[j].visible = false;
+
+                    // 일자표시옵션
+                    if(params.dayOption === "1"){  // 일자별
+                        if(columns[j].binding == "dayFrom" || columns[j].binding == "dayTo") {
+                            columns[j].visible = false;
+                        }
+                    } else if(params.dayOption === "2"){  // 기간합
+                        if(columns[j].binding == "saleDate" || columns[j].binding == "yoil") {
+                            columns[j].visible = false;
+                        }
                     }
                 }
+                // <-- //그리드 visible -->
+                grid.itemsSource = response.data.list;
+                grid.itemsSource.trackChanges = true;
+
+                var list = response.data.list;
+                if (list.length === undefined || list.length === 0) {
+                    $scope.data = new wijmo.collections.CollectionView([]);
+                    if (true && response.message) {
+
+                        // 페이징 처리
+                        $scope._setPagingInfo('ctrlName', $scope.name);
+                        $scope._setPagingInfo('pageScale', 10);
+                        $scope._setPagingInfo('curr', 1);
+                        $scope._setPagingInfo('totCnt', 1);
+                        $scope._setPagingInfo('totalPage', 1);
+
+                        $scope._broadcast('drawPager');
+
+                        $scope._popMsg(response.message);
+                    }
+                    return false;
+                }
+                var data = new wijmo.collections.CollectionView(list);
+                data.trackChanges = true;
+                $scope.data = data;
+
+                // 페이징 처리
+                if (response.data.page && response.data.page.curr) {
+                    var pagingInfo = response.data.page;
+                    $scope._setPagingInfo('ctrlName', $scope.name);
+                    $scope._setPagingInfo('pageScale', pagingInfo.pageScale);
+                    $scope._setPagingInfo('curr', pagingInfo.curr);
+                    $scope._setPagingInfo('totCnt', pagingInfo.totCnt);
+                    $scope._setPagingInfo('totalPage', pagingInfo.totalPage);
+                    $scope._broadcast('drawPager');
+                }
+            },
+            function(result){
+                s_alert.pop(result.message);
             }
-            // <-- //그리드 visible -->
-        });
+        );
     };
 
     // 상품선택 모듈 팝업 사용시 정의

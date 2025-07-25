@@ -1515,14 +1515,14 @@
                         )
                 WHEN MATCHED THEN
                     UPDATE
-                    SET thpsp.USE_YN = 'Y',
-                        thpsp.DISP_SEQ = #{dispSeq},
-                        thpsp.MOD_DT = #{modDt},
-                        thpsp.MOD_ID = #{modId},
-                        thpsp.PRINT_YN = #{printYn},
-                        thpsp.FIX_PROD_FG = #{fixProdFg},
-                        thpsp.ADD_PROD_QTY = #{addProdQty},
-                        thpsp.ADD_PROD_UPRC = #{addProdUprc}
+                    SET tmpsp.USE_YN = 'Y',
+                        tmpsp.DISP_SEQ = #{dispSeq},
+                        tmpsp.MOD_DT = #{modDt},
+                        tmpsp.MOD_ID = #{modId},
+                        tmpsp.PRINT_YN = #{printYn},
+                        tmpsp.FIX_PROD_FG = #{fixProdFg},
+                        tmpsp.ADD_PROD_QTY = #{addProdQty},
+                        tmpsp.ADD_PROD_UPRC = #{addProdUprc}
                 WHEN NOT MATCHED THEN
                     INSERT
                     (

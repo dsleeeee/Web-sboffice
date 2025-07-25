@@ -178,6 +178,9 @@ public class SessionInfoVO extends CmmVO {
     /** 소속구분 String형 */
     private String orgnFgCode;
 
+    /** 화면 이동 제한 아이디 - 비밀번호 성공여부*/
+    private String pageAccessChkPwdYn;
+
 	/**
      * @return the sessionId
      */
@@ -708,5 +711,13 @@ public class SessionInfoVO extends CmmVO {
 
     public void setOrgnFgCode(String orgnFgCode) {
         this.orgnFgCode = orgnFgCode;
+    }
+
+    public String getPageAccessChkPwdYn() {
+        return pageAccessChkPwdYn;
+    }
+
+    public void setPageAccessChkPwdYn(String pageAccessChkPwdYn) {
+        this.pageAccessChkPwdYn = pageAccessChkPwdYn;
     }
 }

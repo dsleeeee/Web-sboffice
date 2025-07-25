@@ -2,7 +2,9 @@ package kr.co.solbipos.application.common.web;
 
 import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.Result;
+import kr.co.common.interceptor.AuthenticationInterceptor;
 import kr.co.common.service.cmm.CmmMenuService;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -11,6 +13,7 @@ import kr.co.solbipos.application.common.service.HqVO;
 import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.store.manage.pwdmanage.service.PwdManageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -35,13 +39,15 @@ public class MenuController {
     private final SessionService sessionService;
     private final CmmMenuService cmmMenuService;
     private final CmmEnvUtil cmmEnvUtil;
+    private final MessageService messageService;
 
     /** Constructor Injection */
     @Autowired
-    public MenuController(SessionService sessionService, CmmMenuService cmmMenuService, CmmEnvUtil cmmEnvUtil) {
+    public MenuController(SessionService sessionService, CmmMenuService cmmMenuService, CmmEnvUtil cmmEnvUtil, MessageService messageService) {
         this.sessionService = sessionService;
         this.cmmMenuService = cmmMenuService;
         this.cmmEnvUtil = cmmEnvUtil;
+        this.messageService = messageService;
     }
 
     /**
@@ -174,6 +180,34 @@ public class MenuController {
         List<CmAgencyVO> list = cmmMenuService.getCmAgencyInfo(caVO);
         return returnJson(Status.OK, list);
    }
+
+    /**
+     * 메뉴이동 제한 화면 비밀번호 검증 - 조회
+     *
+     * @param
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 07. 22.
+     */
+    @RequestMapping(value = "/loginPwdChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result loginPwdChk(PwdManageVO pwdManageVO, HttpServletRequest request,
+                              HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+        int result = cmmMenuService.getLoginPwdChk(pwdManageVO, sessionInfoVO);
+        if(result == 1){
+            // 세션에 pageAccessChkPwdYn값(비밀번호 확인) 설정
+            sessionInfoVO.setPageAccessChkPwdYn("Y");
+            sessionService.setSessionInfo(sessionInfoVO);
+        }
+
+        return returnJson(Status.OK, result);
+    }
+
 }
 
 
