@@ -37,6 +37,9 @@ public class DlvrStatusVO extends PageVO {
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
 
+    /** 상품분류코드 */
+    private String prodClassCd;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -67,5 +70,13 @@ public class DlvrStatusVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getProdClassCd() {
+        return prodClassCd;
+    }
+
+    public void setProdClassCd(String prodClassCd) {
+        this.prodClassCd = prodClassCd;
     }
 }
