@@ -36,7 +36,7 @@
         ,    	tmpcv.S_CLASS_NM
         ,		tssd.PROD_CD
         ,		tmp.PROD_NM
-        ,		tssd.REMARK
+        ,	    tmp.REMARK
         ,		NVL(tssd.SALE_QTY, 0) AS SALE_QTY
         ,		NVL(tssd.SALE_AMT, 0) AS SALE_AMT
         ,		NVL(tssd.DC_AMT, 0) AS DC_AMT
