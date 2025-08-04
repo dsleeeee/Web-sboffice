@@ -13,7 +13,7 @@
     <!-- 배달비 - 조회 -->
     <!--
         TABLE    :
-        COMMENTS : todo - 배달비 상품분류 임의로 설정 후 조회중 - 추후 변경예정
+        COMMENTS :
     -->
     <select id="getDlvrStatusList" parameterType="DlvrStatusVO" resultType="DefaultMap">
         /* DlvrStatusMapper.getDlvrStatusList */
@@ -31,7 +31,7 @@
                     AND 	A.HQ_OFFICE_CD = #{hqOfficeCd}
                     AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
                     AND 	A.DLVR_PACK_FG = '2'
-                    AND 	A.PROD_CD IN (SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD= #{hqOfficeCd} AND PROD_CLASS_CD  = '00114')
+                    AND 	A.PROD_CD IN (SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD= #{hqOfficeCd} AND PROD_CLASS_CD  = #{prodClassCd})
                     GROUP
                     BY 		A.STORE_CD
                     ,		A.SALE_DATE
