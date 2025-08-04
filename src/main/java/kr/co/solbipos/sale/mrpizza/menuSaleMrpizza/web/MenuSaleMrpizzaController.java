@@ -85,26 +85,4 @@ public class MenuSaleMrpizzaController {
 
         return ReturnUtil.returnListJson(Status.OK, list, menuSaleMrpizzaVO);
     }
-
-    /**
-     * 메뉴별판매 엑셀다운로드 리스트 조회
-     * @param request
-     * @param response
-     * @param model
-     * @param menuSaleMrpizzaVO
-     * @return
-     * @author  이다솜
-     * @since   2025.07.25
-     */
-    @RequestMapping(value = "/getMenuSaleMrpizzaExcelList.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getMenuSaleMrpizzaExcelList(HttpServletRequest request, HttpServletResponse response, Model model, MenuSaleMrpizzaVO menuSaleMrpizzaVO) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        List<DefaultMap<Object>> list = menuSaleMrpizzaService.getMenuSaleMrpizzaExcelList(menuSaleMrpizzaVO, sessionInfoVO);
-
-        return ReturnUtil.returnListJson(Status.OK, list, menuSaleMrpizzaVO);
-    }
-
 }

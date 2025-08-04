@@ -68,32 +68,4 @@ public class MenuSaleMrpizzaServiceImpl implements MenuSaleMrpizzaService {
 
         return menuSaleMrpizzaMapper.getMenuSaleMrpizzaList(menuSaleMrpizzaVO);
     }
-
-    /** 메뉴별판매 엑셀다운로드 리스트 조회 */
-    @Override
-    public List<DefaultMap<Object>> getMenuSaleMrpizzaExcelList(MenuSaleMrpizzaVO menuSaleMrpizzaVO, SessionInfoVO sessionInfoVO) {
-
-        menuSaleMrpizzaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-
-        // 매장 array 값 세팅
-        if (!StringUtil.getOrBlank(menuSaleMrpizzaVO.getStoreCds()).equals("")) {
-            StoreVO storeVO = new StoreVO();
-            storeVO.setArrSplitStoreCd(CmmUtil.splitText(menuSaleMrpizzaVO.getStoreCds(), 3900));
-            menuSaleMrpizzaVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
-        }
-
-        // 분류 array 값 세팅
-        if (menuSaleMrpizzaVO.getProdClassCd() != null && !"".equals(menuSaleMrpizzaVO.getProdClassCd())) {
-            String[] prodCdList = menuSaleMrpizzaVO.getProdClassCd().split(",");
-            menuSaleMrpizzaVO.setArrProdClassCd(prodCdList);
-        }
-
-        // 상품 array 값 세팅
-        if (menuSaleMrpizzaVO.getProdCds() != null && !"".equals(menuSaleMrpizzaVO.getProdCds())) {
-            String[] prodCdList = menuSaleMrpizzaVO.getProdCds().split(",");
-            menuSaleMrpizzaVO.setProdCdList(prodCdList);
-        }
-
-        return menuSaleMrpizzaMapper.getMenuSaleMrpizzaExcelList(menuSaleMrpizzaVO);
-    }
 }

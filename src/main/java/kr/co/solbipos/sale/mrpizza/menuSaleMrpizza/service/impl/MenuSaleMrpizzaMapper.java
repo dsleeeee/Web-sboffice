@@ -30,6 +30,4 @@ public interface MenuSaleMrpizzaMapper {
     /** 메뉴별판매 엑셀다운로드 리스트 조회 */
     List<DefaultMap<Object>> getMenuSaleMrpizzaList(MenuSaleMrpizzaVO menuSaleMrpizzaVO);
 
-    /** 메뉴별판매 엑셀다운로드 리스트 조회 */
-    List<DefaultMap<Object>> getMenuSaleMrpizzaExcelList(MenuSaleMrpizzaVO menuSaleMrpizzaVO);
 }
