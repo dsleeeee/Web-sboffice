@@ -54,7 +54,7 @@
 
         <div class="mt10 oh sb-select dkbr">
             <%-- 조회조건 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
         </div>
 
         <div class="w100 mt10">
@@ -92,7 +92,7 @@
     <div ng-controller="daySaleMrpizzaDtlCtrl">
         <div class="mt10 oh sb-select dkbr">
             <%-- 조회조건 엑셀다운로드 --%>
-            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
         </div>
 
         <div class="w100 mt10">
@@ -152,6 +152,19 @@
     var payCol = '${payCol}';
     var arrPayCol = payCol.split(',');
 
+    // 할인
+    var dcColList = [];
+    <%--javascript에서 사용할 할인 json 데이터 생성--%>
+    <c:forEach var="dcCol" items="${dcColList}">
+    var dcParam      = {};
+    dcParam.dcCd     = "${dcCol.dcCd}";
+    dcParam.dcMethod = "${dcCol.dcMethod}";
+    dcColList.push(dcParam);
+    </c:forEach>
+
+    var dcCol    = '${dcCol}';
+    var arrDcCol = dcCol.split(',');
+
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/daySaleMrpizza/daySaleMrpizza.js?ver=20250804.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/daySaleMrpizza/daySaleMrpizza.js?ver=20250804.02" charset="utf-8"></script>

@@ -60,6 +60,15 @@ public class DaySaleMrpizzaVO extends PageVO {
     /** 매장코드 */
     private String storeCd;
 
+    /** 할인컬럼 */
+    private String dcCol;
+
+    /** 할인구분 array */
+    private String arrDcCol[];
+
+    /** 쿼리문의 PIVOT IN에 사용할 할인구분 컬럼 문자열 */
+    private String pivotDcCol;
+
 
     public String getOrgnFg() {
         return orgnFg;
@@ -151,5 +160,29 @@ public class DaySaleMrpizzaVO extends PageVO {
 
     public void setStoreCd(String storeCd) {
         this.storeCd = storeCd;
+    }
+
+    public String getDcCol() {
+        return dcCol;
+    }
+
+    public void setDcCol(String dcCol) {
+        this.dcCol = dcCol;
+    }
+
+    public String[] getArrDcCol() {
+        return arrDcCol;
+    }
+
+    public void setArrDcCol(String[] arrDcCol) {
+        this.arrDcCol = arrDcCol;
+    }
+
+    public String getPivotDcCol() {
+        return pivotDcCol;
+    }
+
+    public void setPivotDcCol(String pivotDcCol) {
+        this.pivotDcCol = pivotDcCol;
     }
 }

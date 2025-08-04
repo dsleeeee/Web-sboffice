@@ -125,6 +125,7 @@ app.controller('daySaleMrpizzaCtrl', ['$scope', '$http', '$timeout', function ($
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         params.storeCds = $("#daySaleMrpizzaStoreCd").val();
         params.payCol = payCol;
+        params.dcCol = dcCol;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/mrpizza/daySaleMrpizza/getDaySaleMrpizzaList.sb", params, function (){
