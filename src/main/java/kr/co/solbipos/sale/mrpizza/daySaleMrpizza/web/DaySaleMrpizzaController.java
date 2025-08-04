@@ -78,6 +78,17 @@ public class DaySaleMrpizzaController {
         model.addAttribute("payColList", payColList);
         model.addAttribute("payCol", payCol);
 
+        // 할인구분 조회
+        List<DefaultMap<String>> dcColList = dayService.getDcColList(dayVO, sessionInfoVO);
+
+        // 할인구분 코드를 , 로 연결하는 문자열 생성
+        String dcCol = "";
+        for(int i=0; i < dcColList.size(); i++) {
+            dcCol += (dcCol.equals("") ? "" : ",") + dcColList.get(i).getStr("dcCd");
+        }
+        model.addAttribute("dcColList", dcColList);
+        model.addAttribute("dcCol", dcCol);
+
         return "sale/mrpizza/daySaleMrpizza/daySaleMrpizza";
     }
 

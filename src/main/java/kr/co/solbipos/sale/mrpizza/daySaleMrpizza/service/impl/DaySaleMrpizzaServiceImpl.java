@@ -70,6 +70,16 @@ public class DaySaleMrpizzaServiceImpl implements DaySaleMrpizzaService {
         daySaleMrpizzaVO.setPivotPayCol(pivotPayCol);
         daySaleMrpizzaVO.setArrPayCol(payCol.split(","));
 
+        // 할인구분 array 값 세팅
+        daySaleMrpizzaVO.setArrDcCol(daySaleMrpizzaVO.getDcCol().split(","));
+        // 쿼리문 PIVOT IN 에 들어갈 문자열 생성
+        String pivotDcCol = "";
+        String arrDcCol[] = daySaleMrpizzaVO.getDcCol().split(",");
+        for(int i=0; i < arrDcCol.length; i++) {
+            pivotDcCol += (pivotDcCol.equals("") ? "" : ",") + "'"+arrDcCol[i]+"'"+" AS DC"+arrDcCol[i];
+        }
+        daySaleMrpizzaVO.setPivotDcCol(pivotDcCol);
+
         return daySaleMrpizzaMapper.getDaySaleMrpizzaList(daySaleMrpizzaVO);
     }
 
