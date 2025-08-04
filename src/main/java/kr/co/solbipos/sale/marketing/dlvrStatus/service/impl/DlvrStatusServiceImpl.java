@@ -52,6 +52,8 @@ public class DlvrStatusServiceImpl implements DlvrStatusService {
             dlvrStatusVO.setProdClassCd("00125");
         }else if(dlvrStatusVO.getHqOfficeCd() != null && dlvrStatusVO.getHqOfficeCd().equals("H0616")){
             dlvrStatusVO.setProdClassCd("00055");
+        }else{
+            dlvrStatusVO.setProdClassCd(null);
         }
 
         if(!StringUtil.getOrBlank(dlvrStatusVO.getStoreCd()).equals("")) {
