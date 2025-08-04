@@ -53,7 +53,7 @@
         </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <%-- 조회조건 엑셀다운로드 --%>
+            <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
         </div>
 
@@ -91,7 +91,7 @@
 
     <div ng-controller="daySaleMrpizzaDtlCtrl">
         <div class="mt10 oh sb-select dkbr">
-            <%-- 조회조건 엑셀다운로드 --%>
+            <%-- 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
         </div>
 
