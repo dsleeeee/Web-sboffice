@@ -82,28 +82,28 @@
                     <wj-flex-grid-column header="<s:message code="saleByChannel.storeNm"/>" binding="storeNm" width="120" align="center" is-read-only="true"></wj-flex-grid-column>
                     <%-- 채널 구분 컬럼 생성--%>
                     <c:forEach var="dlvrCol" items="${dlvrColList}">
-                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}" binding="realSaleCnt${dlvrCol.dlvrFg}${dlvrCol.dlvrCd}" width="100" max-length=30 visible="${dlvrCol.visible}" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}" binding="realSaleCnt${dlvrCol.dlvrFg}${dlvrCol.dlvrCd}" width="100" max-length=30 visible="${dlvrCol.visible}" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
-                    <wj-flex-grid-column header="<s:message code="saleByChannel.etc"/>" binding="realSaleCntEtc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleByChannel.total"/>" binding="realSaleCntSum" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleByChannel.etc"/>" binding="realSaleCntEtc" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleByChannel.total"/>" binding="realSaleCntSum" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 채널 구분 컬럼 생성--%>
                     <c:forEach var="dlvrCol" items="${dlvrColList}">
-                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}" binding="totSaleAmt${dlvrCol.dlvrFg}${dlvrCol.dlvrCd}" width="120" max-length=30 visible="${dlvrCol.visible}" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}" binding="totSaleAmt${dlvrCol.dlvrFg}${dlvrCol.dlvrCd}" width="120" max-length=30 visible="${dlvrCol.visible}" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
-                    <wj-flex-grid-column header="<s:message code="saleByChannel.etc"/>" binding="totSaleAmtEtc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleByChannel.total"/>" binding="totSaleAmtSum" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleByChannel.etc"/>" binding="totSaleAmtEtc" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleByChannel.total"/>" binding="totSaleAmtSum" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 채널 구분 컬럼 생성--%>
                     <c:forEach var="dlvrCol" items="${dlvrColList}">
-                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}" binding="totDcAmt${dlvrCol.dlvrFg}${dlvrCol.dlvrCd}" width="120" max-length=30 visible="${dlvrCol.visible}" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}" binding="totDcAmt${dlvrCol.dlvrFg}${dlvrCol.dlvrCd}" width="120" max-length=30 visible="${dlvrCol.visible}" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
-                    <wj-flex-grid-column header="<s:message code="saleByChannel.etc"/>" binding="totDcAmtEtc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleByChannel.total"/>" binding="totDcAmtSum" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleByChannel.etc"/>" binding="totDcAmtEtc" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleByChannel.total"/>" binding="totDcAmtSum" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                     <%-- 채널 구분 컬럼 생성--%>
                     <c:forEach var="dlvrCol" items="${dlvrColList}">
-                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}" binding="realSaleAmt${dlvrCol.dlvrFg}${dlvrCol.dlvrCd}" width="100" max-length=30 visible="${dlvrCol.visible}" is-read-only="true" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="${dlvrCol.dlvrNm}" binding="realSaleAmt${dlvrCol.dlvrFg}${dlvrCol.dlvrCd}" width="100" max-length=30 visible="${dlvrCol.visible}" is-read-only="true" align="right" aggregate="Sum"></wj-flex-grid-column>
                     </c:forEach>
-                    <wj-flex-grid-column header="<s:message code="saleByChannel.etc"/>" binding="realSaleAmtEtc" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="saleByChannel.total"/>" binding="realSaleAmtSum" width="100" align="right" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleByChannel.etc"/>" binding="realSaleAmtEtc" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="saleByChannel.total"/>" binding="realSaleAmtSum" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -122,4 +122,4 @@
     dlvrColList.push(param);
     </c:forEach>
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/saleByChannel/saleByChannel.js?ver=20250725.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/saleByChannel/saleByChannel.js?ver=20250725.02" charset="utf-8"></script>
