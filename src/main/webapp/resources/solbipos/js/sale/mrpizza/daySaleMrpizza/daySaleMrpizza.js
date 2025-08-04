@@ -114,7 +114,7 @@ app.controller('daySaleMrpizzaCtrl', ['$scope', '$http', '$timeout', function ($
         } else {
             // 조회일자 최대 31일 제한
             if (diffDay >= 31) {
-                $scope._popMsg(messages['cmm.dateOver.7day.error']);
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
                 return false;
             }
         }
