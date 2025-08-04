@@ -19,33 +19,38 @@
         /* DlvrStatusMapper.getDlvrStatusList */
         SELECT 	A.STORE_CD
         ,		C.STORE_NM
-        ,		NVL(SUM(A.REAL_SALE_CNT),0) AS DLVR_BILL_CNT
-        ,		NVL(SUM(B.REAL_SALE_AMT),0) AS DLVR_AMT
-        FROM 	TB_SL_DAILY_TOTAL_DLVR A
-        ,		(
-                    SELECT	A.STORE_CD
+        ,		NVL(SUM(B.REAL_SALE_CNT),0) AS DLVR_BILL_CNT
+        ,		NVL(SUM(A.REAL_SALE_AMT),0) AS DLVR_AMT
+        FROM 	(
+                    SELECT	A.HQ_OFFICE_CD
+                    ,		A.STORE_CD
                     ,		A.SALE_DATE
                     ,		SUM(REAL_SALE_AMT) AS REAL_SALE_AMT
                     FROM 	TB_SL_DAILY_PROD A
+                    ,		TB_MS_PRODUCT B
                     WHERE 	1=1
-                    AND 	A.HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND 	B.STORE_CD = A.STORE_CD
+                    AND 	B.PROD_CD  = A.PROD_CD
+                    AND 	A.HQ_OFFICE_CD  = #{hqOfficeCd}
                     AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                    AND 	A.DLVR_PACK_FG = '2'
-                    AND 	A.PROD_CD IN (SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD= #{hqOfficeCd} AND PROD_CLASS_CD  = #{prodClassCd})
+                    AND 	B.PROD_CLASS_CD = #{prodClassCd}
+                    AND 	B.USE_YN = 'Y'
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
                     GROUP
-                    BY 		A.STORE_CD
+                    BY 		A.HQ_OFFICE_CD
+                    ,		A.STORE_CD
                     ,		A.SALE_DATE
-                ) B
+                ) A
+        ,		TB_SL_DAILY_TOTAL_DLVR B
         ,		TB_MS_STORE C
-        WHERE 	B.STORE_CD 	(+)	= A.STORE_CD
-        AND 	B.SALE_DATE (+)	= A.SALE_DATE
-        AND 	C.STORE_CD 		= A.STORE_CD
-        AND 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
-        AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        AND 	A.DLVR_ORDER_FG = '2'
-        <if test='storeCdQuery != null and storeCdQuery != ""'>
-            AND A.STORE_CD IN (${storeCdQuery})
-        </if>
+        WHERE 	1=1
+        AND     B.HQ_OFFICE_CD 	(+)	= A.HQ_OFFICE_CD
+        AND     B.STORE_CD 	    (+)	= A.STORE_CD
+        AND 	B.SALE_DATE     (+)	= A.SALE_DATE
+        AND 	C.STORE_CD 		    = A.STORE_CD
+        AND 	B.DLVR_ORDER_FG     = '2'
         GROUP
         BY 		A.STORE_CD
         ,		C.STORE_NM
