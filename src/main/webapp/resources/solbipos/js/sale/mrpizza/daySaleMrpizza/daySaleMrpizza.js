@@ -146,10 +146,18 @@ app.controller('daySaleMrpizzaCtrl', ['$scope', '$http', '$timeout', function ($
             return false;
         }
 
-        // 조회일자 최대 7일 제한
-        if (diffDay >= 7) {
-            $scope._popMsg(messages['cmm.dateOver.7day.error']);
-            return false;
+        if ($("#daySaleMrpizzaStoreCd").val().length > 0 && $("#daySaleMrpizzaStoreCd").val().split(",").length - 1 === 0) {
+            // 조회일자 최대 6달(186일) 제한
+            if (diffDay > 186) {
+                $scope._popMsg(messages['cmm.dateOver.6month.error']);
+                return false;
+            }
+        } else {
+            // 조회일자 최대 31일 제한
+            if (diffDay >= 31) {
+                $scope._popMsg(messages['cmm.dateOver.1month.error']);
+                return false;
+            }
         }
 
         if ($scope.flex.rows.length <= 0) {
