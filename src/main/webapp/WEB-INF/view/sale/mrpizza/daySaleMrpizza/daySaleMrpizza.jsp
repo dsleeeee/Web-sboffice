@@ -167,4 +167,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/daySaleMrpizza/daySaleMrpizza.js?ver=20250805.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/daySaleMrpizza/daySaleMrpizza.js?ver=20250806.01" charset="utf-8"></script>
