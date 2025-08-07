@@ -19,7 +19,6 @@
     -->
     <select id="getMenuSaleMrpizzaList" parameterType="menuSaleMrpizzaVO" resultType="DefaultMap">
         /* MenuSaleMrpizzaMapper.getMenuSaleMrpizzaList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT  TO_CHAR(TO_DATE(tssd.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
         ,       TO_CHAR(TO_DATE(tssd.SALE_DATE, 'YYYYMMDD'), 'DY') AS YOIL
         ,		tssd.STORE_CD
@@ -41,7 +40,6 @@
         ,		NVL(tssd.SALE_AMT, 0) AS SALE_AMT
         ,		NVL(tssd.DC_AMT, 0) AS DC_AMT
         ,		NVL(tssd.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
-        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    TB_SL_SALE_DTL tssd
         ,		TB_MS_STORE tms
         ,       TB_MS_PRODUCT tmp
@@ -103,7 +101,6 @@
         AND tooh.POS_NO (+)= tssd.POS_NO
         AND tooh.BILL_NO (+)= tssd.BILL_NO
         ORDER BY tssd.SALE_DATE DESC, tssd.STORE_CD, tssd.POS_NO, tssd.BILL_NO, tssd.BILL_DTL_NO ASC
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 </mapper>
