@@ -158,6 +158,8 @@
 
     <!-- 기초관리 > 비밀번호 임의변경 > 비밀번호 임의변경(매장) -->
     <typeAlias alias="pwdManageStoreVO" type="kr.co.solbipos.store.manage.pwdManageStore.service.PwdManageStoreVO"/>
+    <!-- 기초관리 > 매출조회 비밀번호관리 > 매출조회 비밀번호관리 -->
+    <typeAlias alias="pwdManageSaleChkVO" type="kr.co.solbipos.store.manage.pwdManageSaleChk.service.PwdManageSaleChkVO"/>
 
     <typeAlias alias="viewVO" type="kr.co.solbipos.base.store.view.service.ViewVO"/>
     <typeAlias alias="vanConfigVO" type="kr.co.solbipos.base.store.view.service.VanConfigVO"/>
@@ -1226,6 +1228,8 @@
     <typeAlias alias="menuSaleMrpizzaVO" type="kr.co.solbipos.sale.mrpizza.menuSaleMrpizza.service.MenuSaleMrpizzaVO"/>
     <!--미스터피자 > 마케팅조회 > 할인세부내역-->
     <typeAlias alias="dcDetailMrpizzaVO" type="kr.co.solbipos.sale.mrpizza.dcDetailMrpizza.service.DcDetailMrpizzaVO"/>
+    <!--미스터피자 > 마케팅조회 > 취소현황-->
+    <typeAlias alias="saleCancelStatusVO" type="kr.co.solbipos.sale.marketing.saleCancelStatus.service.SaleCancelStatusVO"/>
 
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
