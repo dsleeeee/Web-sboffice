@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleCancelStatusMapper.xml
+    취소현황
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.07.31     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.marketing.saleCancelStatus.service.impl.SaleCancelStatusMapper">
+    <!-- 취소현황 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleCancelStatusList" parameterType="SaleCancelStatusVO" resultType="DefaultMap">
+        /* SaleCancelStatusMapper.getSaleCancelStatusList */
+        SELECT 	A.STORE_CD
+        ,       C.STORE_NM
+        ,		NVL(A.SALE_CNT,0)       AS SALE_CNT
+        ,		NVL(A.REAL_SALE_AMT,0)  AS REAL_SALE_AMT
+        ,		NVL(A.RTN_AMT,0)        AS RTN_AMT
+        ,		NVL(A.RTN_CNT,0)        AS RTN_CNT
+        ,		NVL(B.CANCEL_CNT,0)     AS CANCEL_CNT
+        ,		NVL(B.CANCEL_AMT,0)     AS CANCEL_AMT
+        FROM 	(
+                    SELECT 	STORE_CD
+                    ,		COUNT(*) 			AS SALE_CNT
+                    ,		SUM(REAL_SALE_AMT) 	AS REAL_SALE_AMT
+                    ,		SUM(DECODE(SALE_YN,'Y','0',REAL_SALE_AMT)) 	AS RTN_AMT
+                    ,		SUM(DECODE(SALE_YN,'Y',0,1))				AS RTN_CNT
+                    FROM 	TB_SL_SALE_HDR A
+                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     A.SALE_DATE BETWEEN #{startDate} and #{endDate}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    GROUP
+                    BY		A.STORE_CD
+                ) A
+        FULL OUTER JOIN		(
+                                SELECT 	B.STORE_CD
+                                ,		COUNT(*)			AS CANCEL_CNT
+                                ,		SUM(B.REAL_SALE_AMT) 	AS CANCEL_AMT
+                                FROM 	TB_OD_ORDER_HDR B
+                                WHERE 	B.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                                AND     B.SALE_DATE BETWEEN #{startDate} and #{endDate}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND B.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND 	B.ORDER_FG = '2'
+                                GROUP
+                                BY 		B.STORE_CD
+                            ) B
+        ON  A.STORE_CD = B.STORE_CD
+        JOIN TB_MS_STORE C
+        ON  A.STORE_CD = C.STORE_CD
+        ORDER
+        BY      A.STORE_CD
+    </select>
+
+    <!-- 취소현황 - 상세조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleCancelStatusDtlList" parameterType="SaleCancelStatusVO" resultType="DefaultMap">
+        /* SaleCancelStatusMapper.getSaleCancelStatusDtlList */
+        <choose>
+            <!-- 본사 -->
+            <when test='cancelFg != null and cancelFg == "1"'>
+                SELECT 	A.STORE_CD
+                ,		B.STORE_NM
+                ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                ,		A.POS_NO
+                ,		A.BILL_NO
+                ,		TO_CHAR(TO_DATE(A.BILL_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS CANCEL_DT
+                ,		'결제취소'				        AS CANCEL_FG
+                ,		NVL(SUM(A.TOT_SALE_AMT),0)		AS TOT_SALE_AMT
+                ,		NVL(SUM(A.TOT_DC_AMT),0)		AS TOT_DC_AMT
+                ,		NVL(SUM(A.REAL_SALE_AMT),0) 	AS CANCEL_AMT
+                ,		DECODE(A.DLVR_ORDER_FG,'1','내점','2','배달','3','포장','4','포장','') AS ORDER_FG
+                FROM 	TB_SL_SALE_HDR A
+                ,		TB_MS_STORE B
+                WHERE 	1=1
+                AND 	B.STORE_CD          = A.STORE_CD
+                AND 	A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                AND 	A.STORE_CD          = #{storeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} and #{endDate}
+                AND 	A.SALE_YN           = 'N'
+                GROUP
+                BY		A.STORE_CD
+                ,		B.STORE_NM
+                ,		A.SALE_DATE
+                ,		A.POS_NO
+                ,		A.BILL_NO
+                ,		A.BILL_DT
+                ,		A.DLVR_ORDER_FG
+                ORDER
+                BY      A.SALE_DATE
+                ,		A.POS_NO
+                ,		A.BILL_NO
+            </when>
+            <when test='cancelFg != null and cancelFg == "2"'>
+                SELECT 	A.STORE_CD
+                ,		B.STORE_NM
+                ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+                ,		A.POS_NO
+                ,		A.ORDER_NO
+                ,		TO_CHAR(TO_DATE(A.ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS CANCEL_DT
+                ,		'주문취소'					        AS CANCEL_FG
+                ,		NVL(SUM(A.TOT_SALE_AMT),0)			AS TOT_SALE_AMT
+                ,		NVL(SUM(A.TOT_DC_AMT),0)			AS TOT_DC_AMT
+                ,		NVL(SUM(A.REAL_SALE_AMT),0)         AS CANCEL_AMT
+                ,		DECODE(A.DLVR_ORDER_FG,'1','내점','2','배달','3','포장','4','포장','') AS ORDER_FG
+                FROM 	TB_OD_ORDER_HDR A
+                ,		TB_MS_STORE B
+                WHERE 	1=1
+                AND 	B.STORE_CD = A.STORE_CD
+                AND     A.ORDER_FG = '2'
+                AND 	A.STORE_CD = #{storeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} and #{endDate}
+                GROUP
+                BY 		A.STORE_CD
+                ,		B.STORE_NM
+                ,		A.SALE_DATE
+                ,		A.POS_NO
+                ,		A.ORDER_NO
+                ,		A.ORDER_END_DT
+                ,		A.DLVR_ORDER_FG
+                ORDER
+                BY      A.SALE_DATE
+                ,		A.POS_NO
+                ,		A.ORDER_NO
+            </when>
+        </choose>
+    </select>
+
+    <!-- 취소현황 선택점포 탭 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleCancelStatusStoreList" parameterType="SaleCancelStatusVO" resultType="DefaultMap">
+        /* SaleCancelStatusMapper.getSaleCancelStatusStoreList */
+        SELECT 	A.STORE_CD
+        ,		B.STORE_NM
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		A.POS_NO
+        ,		A.BILL_NO
+        ,		TO_CHAR(TO_DATE(A.BILL_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS CANCEL_DT
+        ,		'결제취소'				        AS CANCEL_FG
+        ,		NVL(SUM(A.TOT_SALE_AMT),0)		AS TOT_SALE_AMT
+        ,		NVL(SUM(A.TOT_DC_AMT),0)		AS TOT_DC_AMT
+        ,		NVL(SUM(A.REAL_SALE_AMT),0) 	AS CANCEL_AMT
+        ,		DECODE(A.DLVR_ORDER_FG,'1','내점','2','배달','3','포장','4','포장','') AS ORDER_FG
+        FROM 	TB_SL_SALE_HDR A
+        ,		TB_MS_STORE B
+        WHERE 	1=1
+        AND 	B.STORE_CD          = A.STORE_CD
+        AND 	A.HQ_OFFICE_CD      = #{hqOfficeCd}
+        AND 	A.STORE_CD          = #{storeCd}
+        AND     A.SALE_DATE BETWEEN #{startDate} and #{endDate}
+        AND 	A.SALE_YN           = 'N'
+        GROUP
+        BY		A.STORE_CD
+        ,		B.STORE_NM
+        ,		A.SALE_DATE
+        ,		A.POS_NO
+        ,		A.BILL_NO
+        ,		A.BILL_DT
+        ,		A.DLVR_ORDER_FG
+        UNION
+        SELECT 	A.STORE_CD
+        ,		B.STORE_NM
+        ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,		A.POS_NO
+        ,		A.ORDER_NO
+        ,		TO_CHAR(TO_DATE(A.ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS CANCEL_DT
+        ,		'주문취소'					        AS CANCEL_FG
+        ,		NVL(SUM(A.TOT_SALE_AMT),0)			AS TOT_SALE_AMT
+        ,		NVL(SUM(A.TOT_DC_AMT),0)			AS TOT_DC_AMT
+        ,		NVL(SUM(A.REAL_SALE_AMT),0)         AS CANCEL_AMT
+        ,		DECODE(A.DLVR_ORDER_FG,'1','내점','2','배달','3','포장','4','포장','') AS ORDER_FG
+        FROM 	TB_OD_ORDER_HDR A
+        ,		TB_MS_STORE B
+        WHERE 	1=1
+        AND 	B.STORE_CD = A.STORE_CD
+        AND     A.ORDER_FG = '2'
+        AND 	A.STORE_CD = #{storeCd}
+        AND     A.SALE_DATE BETWEEN #{startDate} and #{endDate}
+        GROUP
+        BY 		A.STORE_CD
+        ,		B.STORE_NM
+        ,		A.SALE_DATE
+        ,		A.POS_NO
+        ,		A.ORDER_NO
+        ,		A.ORDER_END_DT
+        ,		A.DLVR_ORDER_FG
+        ORDER
+        BY 		SALE_DATE
+        ,		POS_NO
+        ,		CANCEL_FG
+        ,		BILL_NO
+    </select>
+</mapper>

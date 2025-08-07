@@ -443,9 +443,9 @@
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
                 SELECT	COUNT(*)
-                FROM 	TB_MS_STORE
+                FROM 	TB_MS_EMPLOYEE
                 WHERE 	STORE_CD    = #{storeCd}
-                AND 	REMARK      = #{confirmPassword}
+                AND 	SALE_PWD    = #{confirmPassword}
             </when>
         </choose>
     </select>
