@@ -37,75 +37,48 @@
          </table>
 
          <div class="mt10 oh sb-select dkbr">
-             <%-- 조회조건 엑셀다운로드 --%>
-             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCondition"/></button>
+             <%-- 엑셀다운로드 --%>
+             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
          </div>
 
          <div class="w100 mt10">
-             <div class="wj-gridWrap" style="height: 280px; overflow-x: hidden; overflow-y: hidden;">
-                 <wj-flex-grid
-                         id="wjGridList"
-                         autoGenerateColumns="false"
-                         selection-mode="Row"
-                         items-source="data"
-                         control="flex"
-                         initialized="initGrid(s,e)"
-                         is-read-only="true"
-                         item-formatter="_itemFormatter">
+              <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
+                  <wj-flex-grid
+                          id="wjGridList"
+                          autoGenerateColumns="false"
+                          selection-mode="Row"
+                          items-source="data"
+                          control="flex"
+                          initialized="initGrid(s,e)"
+                          is-read-only="true"
+                          item-formatter="_itemFormatter">
 
-                     <!-- define columns -->
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcCode"/>" binding="dcCode" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcType"/>" binding="dcType" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcCnt"/>" binding="dcCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totSaleAmt"/>" binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.payAmt"/>" binding="payAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcAmt"/>" binding="dcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcCnt"/>" binding="dcCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totSaleAmt"/>" binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.payAmt"/>" binding="payAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcAmt"/>" binding="dcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcCnt"/>" binding="dcCnt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totSaleAmt"/>" binding="totSaleAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.payAmt"/>" binding="payAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
-                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcAmt"/>" binding="dcAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <!-- define columns -->
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcCode"/>" binding="coupnCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcType"/>" binding="coupnNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
 
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totDcCnt"/>" binding="totDcCnt1" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totSaleAmt"/>" binding="totSaleAmt1" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcAmt"/>" binding="dcAmt1" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.realSaleAmt"/>" binding="realSaleAmt1" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totDcCnt"/>" binding="totDcCnt2" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totSaleAmt"/>" binding="totSaleAmt2" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcAmt"/>" binding="dcAmt2" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.realSaleAmt"/>" binding="realSaleAmt2" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
-                 </wj-flex-grid>
-             </div>
-         </div>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totDcCnt"/>" binding="totDcCnt3" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totSaleAmt"/>" binding="totSaleAmt3" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcAmt"/>" binding="dcAmt3" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                      <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.realSaleAmt"/>" binding="realSaleAmt3" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
 
-         <%-- 페이지 리스트 --%>
-         <div class="pageNum mt20">
-             <%-- id --%>
-             <ul id="dcDetailMrpizzaAllStoreCtrlPager" data-size="10">
-             </ul>
-         </div>
-         <%-- //페이지 리스트 --%>
-
-     </div>
-
-    <%--엑셀 리스트--%>
-    <div class="w100 mt10" style="display:none;" ng-controller="dcDetailMrpizzaAllStoreExcelCtrl">
-        <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
-            <wj-flex-grid
-                    id="wjGridExcelList"
-                    autoGenerateColumns="false"
-                    selection-mode="Row"
-                    items-source="data"
-                    control="flex"
-                    initialized="initGrid(s,e)"
-                    is-read-only="true"
-                    item-formatter="_itemFormatter">
-
-            </wj-flex-grid>
-        </div>
-    </div>
-    <%--//엑셀 리스트--%>
-
-</div>
+                  </wj-flex-grid>
+              </div>
+          </div>
+      </div>
+ </div>
 
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/dcDetailMrpizza/dcDetailMrpizzaAllStore.js?ver=20250730.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/dcDetailMrpizza/dcDetailMrpizzaAllStore.js?ver=20250806.01" charset="utf-8"></script>

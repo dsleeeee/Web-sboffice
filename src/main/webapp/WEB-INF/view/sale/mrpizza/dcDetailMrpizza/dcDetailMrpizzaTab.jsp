@@ -10,13 +10,13 @@
                 <a id="dcDetailMrpizzaAllStoreTab" href="#" class="on" ng-click="dcDetailMrpizzaAllStoreShow()"><s:message code="dcDetailMrpizza.allStore"/></a>
             </li>
             <%-- 선택점포 탭 --%>
-            <%--<li>
+            <li>
                 <a id="dcDetailMrpizzaSelectStoreTab" href="#" ng-click="dcDetailMrpizzaSelectStoreShow()"><s:message code="dcDetailMrpizza.selectStore"/></a>
-            </li>--%>
+            </li>
             <%-- 할인구분 탭 --%>
-            <%--<li>
+            <li>
                 <a id="dcDetailMrpizzaDcTypeTab" href="#" ng-click="dcDetailMrpizzaDcTypeShow()"><s:message code="dcDetailMrpizza.dcType"/></a>
-            </li>--%>
+            </li>
         </ul>
     </div>
 </div>
@@ -24,7 +24,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/dcDetailMrpizza/dcDetailMrpizzaTab.js?ver=20250730.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/dcDetailMrpizza/dcDetailMrpizzaTab.js?ver=20250806.01" charset="utf-8"></script>
 
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 전체점포 레이어 --%>

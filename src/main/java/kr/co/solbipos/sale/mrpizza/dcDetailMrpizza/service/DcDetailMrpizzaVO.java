@@ -36,6 +36,12 @@ public class DcDetailMrpizzaVO extends PageVO {
     /** 조회매장 */
     private String storeCds;
 
+    /** 매장코드 */
+    private String storeCd;
+
+    /** 매장코드 array */
+    private String arrStoreCd[];
+
     /** 시작일자 */
     private String startDate;
 
@@ -44,6 +50,12 @@ public class DcDetailMrpizzaVO extends PageVO {
 
     /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+
+    /** 검색조건 */
+    private String searchCondition;
+
+    /** 검색어 */
+    private String searchTerm;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -67,6 +79,22 @@ public class DcDetailMrpizzaVO extends PageVO {
 
     public void setStoreCds(String storeCds) {
         this.storeCds = storeCds;
+    }
+
+    public String getStoreCd() {
+        return storeCd;
+    }
+
+    public void setStoreCd(String storeCd) {
+        this.storeCd = storeCd;
+    }
+
+    public String[] getArrStoreCd() {
+        return arrStoreCd;
+    }
+
+    public void setArrStoreCd(String[] arrStoreCd) {
+        this.arrStoreCd = arrStoreCd;
     }
 
     @Override
@@ -95,5 +123,21 @@ public class DcDetailMrpizzaVO extends PageVO {
 
     public void setStoreCdQuery(String storeCdQuery) {
         this.storeCdQuery = storeCdQuery;
+    }
+
+    public String getSearchCondition() {
+        return searchCondition;
+    }
+
+    public void setSearchCondition(String searchCondition) {
+        this.searchCondition = searchCondition;
+    }
+
+    public String getSearchTerm() {
+        return searchTerm;
+    }
+
+    public void setSearchTerm(String searchTerm) {
+        this.searchTerm = searchTerm;
     }
 }

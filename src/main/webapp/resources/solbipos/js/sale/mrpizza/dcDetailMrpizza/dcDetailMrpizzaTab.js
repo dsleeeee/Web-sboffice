@@ -22,7 +22,7 @@ app.controller('dcDetailMrpizzaTabCtrl', ['$scope', '$http', '$timeout', functio
     angular.extend(this, new RootController('dcDetailMrpizzaTabCtrl', $scope, $http, false));
 
     $scope.init = function () {
-        $("#dcDetailMrpizzaAllStoreView").hide();
+        $("#dcDetailMrpizzaAllStoreView").show();
         $("#dcDetailMrpizzaSelectStoreView").hide();
         $("#dcDetailMrpizzaDcTypeView").hide();
     };

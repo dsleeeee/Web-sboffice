@@ -2,6 +2,9 @@ package kr.co.solbipos.sale.mrpizza.dcDetailMrpizza.service.impl;
 
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.service.popup.impl.PopupMapper;
+import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.spring.StringUtil;
+import kr.co.solbipos.application.common.service.StoreVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.sale.mrpizza.dcDetailMrpizza.service.DcDetailMrpizzaService;
 import kr.co.solbipos.sale.mrpizza.dcDetailMrpizza.service.DcDetailMrpizzaVO;
@@ -44,5 +47,37 @@ public class DcDetailMrpizzaServiceImpl implements DcDetailMrpizzaService {
         dcDetailMrpizzaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
         return dcDetailMrpizzaMapper.getDcDetailMrpizzaAllStoreList(dcDetailMrpizzaVO);
+    }
+
+    /** 할인세부내역 - 선택점포 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDcDetailMrpizzaSelectStoreList(DcDetailMrpizzaVO dcDetailMrpizzaVO, SessionInfoVO sessionInfoVO) {
+
+        dcDetailMrpizzaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장 array 값 세팅
+        if (!StringUtil.getOrBlank(dcDetailMrpizzaVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcDetailMrpizzaVO.getStoreCds(), 3900));
+            dcDetailMrpizzaVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return dcDetailMrpizzaMapper.getDcDetailMrpizzaSelectStoreList(dcDetailMrpizzaVO);
+    }
+
+    /** 할인세부내역 - 할인구분 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<Object>> getDcDetailMrpizzaDcTypeList(DcDetailMrpizzaVO dcDetailMrpizzaVO, SessionInfoVO sessionInfoVO) {
+
+        dcDetailMrpizzaVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+        // 매장 array 값 세팅
+        if (!StringUtil.getOrBlank(dcDetailMrpizzaVO.getStoreCds()).equals("")) {
+            StoreVO storeVO = new StoreVO();
+            storeVO.setArrSplitStoreCd(CmmUtil.splitText(dcDetailMrpizzaVO.getStoreCds(), 3900));
+            dcDetailMrpizzaVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
+        }
+
+        return dcDetailMrpizzaMapper.getDcDetailMrpizzaDcTypeList(dcDetailMrpizzaVO);
     }
 }

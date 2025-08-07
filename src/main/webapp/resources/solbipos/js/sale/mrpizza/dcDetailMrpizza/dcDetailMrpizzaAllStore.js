@@ -28,21 +28,8 @@ app.controller('dcDetailMrpizzaAllStoreCtrl', ['$scope', '$http', '$timeout', fu
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
-        //  picker 사용시 호출 : 미사용시 호출안함
-        $scope._makePickColumns("dcDetailMrpizzaAllStoreCtrl");
-
-        // 그리드 링크 효과
-        s.formatItem.addHandler(function (s, e) {
-            if (e.panel === s.cells) {
-                var col = s.columns[e.col];
-
-                if (col.binding === "totBillCnt") { // 수량
-                    var item = s.rows[e.row].dataItem;
-                    wijmo.addClass(e.cell, 'wijLink');
-                    wijmo.addClass(e.cell, 'wj-custom-readonly');
-                }
-            }
-        });
+        // 첫째줄 헤더에서 사용할 날짜
+        //var salePeriod =  wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') + "~" + wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
 
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
@@ -51,9 +38,49 @@ app.controller('dcDetailMrpizzaAllStoreCtrl', ['$scope', '$http', '$timeout', fu
 
         // <-- 그리드 헤더3줄 -->
         // 헤더머지
-        s.allowMerging = 'ColumnHeaders';
+        s.allowMerging = 2;
+
+        // 첫째줄 헤더 생성
         s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        var dataItem = {};
+        dataItem.coupnCd        = "";
+        dataItem.coupnNm        = "";
+        dataItem.totDcCnt1      = "";
+        dataItem.totSaleAmt1    = "";
+        dataItem.dcAmt1         = "";
+        dataItem.realSaleAmt1   = "";
+        dataItem.totDcCnt2      = "";
+        dataItem.totSaleAmt2    = "";
+        dataItem.dcAmt2         = "";
+        dataItem.realSaleAmt2   = "";
+        dataItem.totDcCnt3      = "";
+        dataItem.totSaleAmt3    = "";
+        dataItem.dcAmt3         = "";
+        dataItem.realSaleAmt3   = "";
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        // 둘째줄 헤더 생성
         s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        var dataItem1 = {};
+        dataItem1.coupnCd           = messages["dcDetailMrpizza.fg"];
+        dataItem1.coupnNm           = messages["dcDetailMrpizza.fg"];
+        dataItem1.totDcCnt1         = messages["dcDetailMrpizza.allStoreSum"];
+        dataItem1.totSaleAmt1       = messages["dcDetailMrpizza.allStoreSum"];
+        dataItem1.dcAmt1            = messages["dcDetailMrpizza.allStoreSum"];
+        dataItem1.realSaleAmt1      = messages["dcDetailMrpizza.allStoreSum"];
+        dataItem1.totDcCnt2         = messages["dcDetailMrpizza.franchise"];
+        dataItem1.totSaleAmt2       = messages["dcDetailMrpizza.franchise"];
+        dataItem1.dcAmt2            = messages["dcDetailMrpizza.franchise"];
+        dataItem1.realSaleAmt2      = messages["dcDetailMrpizza.franchise"];
+        dataItem1.totDcCnt3         = messages["dcDetailMrpizza.directManage"];
+        dataItem1.totSaleAmt3       = messages["dcDetailMrpizza.directManage"];
+        dataItem1.dcAmt3            = messages["dcDetailMrpizza.directManage"];
+        dataItem1.realSaleAmt3      = messages["dcDetailMrpizza.directManage"];
+
+        s.columnHeaders.rows[1].dataItem = dataItem1;
 
         s.itemFormatter = function (panel, r, c, cell) {
             if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
@@ -70,6 +97,44 @@ app.controller('dcDetailMrpizzaAllStoreCtrl', ['$scope', '$http', '$timeout', fu
                     verticalAlign: 'middle',
                     textAlign: 'center'
                 });
+
+                if ((panel.grid.columnHeaders.rows.length - 1) === r) {
+                    // 헤더의 전체선택 클릭 로직
+                    var flex = panel.grid;
+                    var column = flex.columns[c];
+                    // check that this is a boolean column
+                    if (column.binding === 'gChk' || column.format === 'checkBox' || column.format === 'checkBoxText') {
+                        // prevent sorting on click
+                        column.allowSorting = false;
+                        // count true values to initialize checkbox
+                        var cnt = 0;
+                        for (var i = 0; i < flex.rows.length; i++) {
+                            if (flex.getCellData(i, c) === true) {
+                                cnt++;
+                            }
+                        }
+                        // create and initialize checkbox
+                        if (column.format === 'checkBoxText') {
+                            cell.innerHTML = '<input id=\"' + column.binding + '\" type=\"checkbox\" class=\"wj-cell-check\" />'
+                                + '<label for=\"' + column.binding + '\" class=\"wj-header-label\">' + cell.innerHTML + '</label>';
+                        } else {
+                            cell.innerHTML = '<input type=\"checkbox\" class=\"wj-cell-check\" />';
+                        }
+                        var cb = cell.firstChild;
+                        cb.checked = cnt > 0;
+                        cb.indeterminate = cnt > 0 && cnt < flex.rows.length;
+                        // apply checkbox value to cells
+                        cb.addEventListener('click', function (e) {
+                            flex.beginUpdate();
+                            for (var i = 0; i < flex.rows.length; i++) {
+                                if (!flex.rows[i].isReadOnly) {
+                                    flex.setCellData(i, c, cb.checked);
+                                }
+                            }
+                            flex.endUpdate();
+                        });
+                    }
+                }
             }
             // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
             else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
@@ -92,7 +157,7 @@ app.controller('dcDetailMrpizzaAllStoreCtrl', ['$scope', '$http', '$timeout', fu
                 }
             }
         }
-        // <-- //그리드 헤더2줄 -->
+        // <-- //그리드 헤더3줄 -->
     };
 
     // 다른 컨트롤러의 broadcast 받기
@@ -128,27 +193,62 @@ app.controller('dcDetailMrpizzaAllStoreCtrl', ['$scope', '$http', '$timeout', fu
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
-        params.listScale = 500;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/mrpizza/dcDetailMrpizza/getDcDetailMrpizzaAllStoreList.sb", params, function () {
 
+            // 그리도 header 조회 날짜 셋팅
+            var grid = wijmo.Control.getControl("#wjGridList");
+
+            // 첫째줄 헤더에서 사용할 날짜
+            var salePeriod =  wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') + "~" + wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+
+            var dataItem = {};
+            dataItem.coupnCd        = salePeriod;
+            dataItem.coupnNm        = salePeriod;
+            dataItem.totDcCnt1      = salePeriod;
+            dataItem.totSaleAmt1    = salePeriod;
+            dataItem.dcAmt1         = salePeriod;
+            dataItem.realSaleAmt1   = salePeriod;
+            dataItem.totDcCnt2      = salePeriod;
+            dataItem.totSaleAmt2    = salePeriod;
+            dataItem.dcAmt2         = salePeriod;
+            dataItem.realSaleAmt2   = salePeriod;
+            dataItem.totDcCnt3      = salePeriod;
+            dataItem.totSaleAmt3    = salePeriod;
+            dataItem.dcAmt3         = salePeriod;
+            dataItem.realSaleAmt3   = salePeriod;
+
+            grid.columnHeaders.rows[0].dataItem = dataItem;
         });
     };
 
     // 엑셀다운로드
     $scope.excelDownload = function () {
 
-    }
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
 
-}]);
+        var startDt = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
+        var endDt = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
 
-/**
- *  전체점포 탭 엑셀 다운로드 그리드 생성
- */
-app.controller('dcDetailMrpizzaAllStoreExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-
-    // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('dcDetailMrpizzaAllStoreExcelCtrl', $scope, $http, true));
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },
+                "할인세부내역_전체점포" + '_' + startDt + '_' + endDt + '_' + getCurDateTime() + '.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
 
 }]);

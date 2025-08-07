@@ -13,12 +13,391 @@
 
     <!--할인세부내역 - 전체점포 탭 리스트 조회 -->
     <!--
-        TABLE    :
+        TABLE    : TB_SL_SALE_PAY_COUPN, TB_SL_SALE_HDR, TB_SL_SALE_HDR_DC
         PARAM    : dcDetailMrpizzaVO
         COMMENTS : 전체점포 탭 리스트를 조회한다.
     -->
     <select id="getDcDetailMrpizzaAllStoreList" parameterType="dcDetailMrpizzaVO" resultType="DefaultMap">
         /* DcDetailMrpizzaMapper.getDcDetailMrpizzaAllStoreList */
-        SELECT * FROM TB_MS_STORE
+        SELECT A.COUPN_CD
+        ,	   A.COUPN_NM
+        ,      NVL(B.TOT_DC_CNT1, 0) AS TOT_DC_CNT1
+        ,      NVL(B.TOT_SALE_AMT1, 0) AS TOT_SALE_AMT1
+        ,      NVL(B.DC_AMT1, 0) AS DC_AMT1
+        ,      NVL(B.REAL_SALE_AMT1, 0) AS REAL_SALE_AMT1
+        ,      NVL(C.TOT_DC_CNT2, 0) AS TOT_DC_CNT2
+        ,      NVL(C.TOT_SALE_AMT2, 0) AS TOT_SALE_AMT2
+        ,      NVL(C.DC_AMT2, 0) AS DC_AMT2
+        ,      NVL(C.REAL_SALE_AMT2, 0) AS REAL_SALE_AMT2
+        ,      NVL(D.TOT_DC_CNT3, 0) AS TOT_DC_CNT3
+        ,      NVL(D.TOT_SALE_AMT3, 0) AS TOT_SALE_AMT3
+        ,      NVL(D.DC_AMT3, 0) AS DC_AMT3
+        ,      NVL(D.REAL_SALE_AMT3, 0) AS REAL_SALE_AMT3
+        FROM (
+                SELECT  A.PAY_CLASS_CD || '-' ||  A.COUPN_CD AS COUPN_CD
+                ,		B.COUPN_NM AS COUPN_NM
+                FROM    TB_SL_SALE_PAY_COUPN A
+                ,       TB_MS_COUPON B
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.PAY_CLASS_CD != '003'  -- 쿠폰 피자할인(003) 제외, 일반할인(DC_CD = 01)임
+                AND     B.STORE_CD     (+)= A.STORE_CD
+                AND     B.PAY_CLASS_CD (+)= A.PAY_CLASS_CD
+                AND     B.COUPN_CD     (+)= A.COUPN_CD
+                GROUP BY A.PAY_CLASS_CD, A.COUPN_CD, B.COUPN_NM
+                UNION
+                SELECT 	A.DC_CD AS COUPN_CD
+                ,       '기타할인-' || B.NMCODE_NM AS COUPN_NM
+                FROM    TB_SL_SALE_HDR_DC A
+                ,	    (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041') B
+                WHERE   A.HQ_OFFICE_CD  =    #{hqOfficeCd}
+                AND     A.SALE_DATE BETWEEN  #{startDate} AND #{endDate}
+                AND     A.DC_CD   !=  '02'
+                AND     A.DC_CD   !=  '04'  -- 제휴할인
+                AND     A.DC_CD   !=  '14'  -- 카드사할인
+                AND     A.DC_CD = B.NMCODE_CD
+                GROUP BY A.DC_CD, B.NMCODE_NM
+        ) A
+        ,
+        (
+                SELECT  A.PAY_CLASS_CD || '-' ||  A.COUPN_CD AS COUPN_CD
+                ,       COUNT(1) AS TOT_DC_CNT1
+                ,	    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT1
+                ,       SUM(DECODE(A.SALE_FG, 1, A.DC_AMT, A.DC_AMT * -1)) AS DC_AMT1
+                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT1
+                FROM    TB_SL_SALE_PAY_COUPN A
+                ,	    TB_SL_SALE_HDR tssh
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.PAY_CLASS_CD != '003'  -- 쿠폰 피자할인(003) 제외, 일반할인(DC_CD = 01)임
+                AND     tssh.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     tssh.HQ_BRAND_CD = A.HQ_BRAND_CD
+                AND     tssh.STORE_CD = A.STORE_CD
+                AND     tssh.SALE_DATE = A.SALE_DATE
+                AND     tssh.POS_NO = A.POS_NO
+                AND     tssh.BILL_NO = A.BILL_NO
+                GROUP BY A.PAY_CLASS_CD, A.COUPN_CD
+                UNION
+                SELECT  A.DC_CD AS COUPN_CD
+                ,       COUNT(1) AS TOT_DC_CNT1
+                ,	    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT1
+                ,       SUM(A.DC_AMT) AS DC_AMT1
+                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT1
+                FROM    TB_SL_SALE_HDR_DC A
+                ,	    TB_SL_SALE_HDR tssh
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.DC_CD   !=  '02'
+                AND     A.DC_CD   !=  '04'  -- 제휴할인
+                AND     A.DC_CD   !=  '14'  -- 카드사할인
+                AND     tssh.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     tssh.HQ_BRAND_CD = A.HQ_BRAND_CD
+                AND     tssh.STORE_CD = A.STORE_CD
+                AND     tssh.SALE_DATE = A.SALE_DATE
+                AND     tssh.POS_NO = A.POS_NO
+                AND     tssh.BILL_NO = A.BILL_NO
+                GROUP BY A.DC_CD
+        ) B
+        ,
+        (
+                SELECT  A.PAY_CLASS_CD || '-' ||  A.COUPN_CD AS COUPN_CD
+                ,       COUNT(1) AS TOT_DC_CNT2
+                ,	    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT2
+                ,       SUM(DECODE(A.SALE_FG, 1, A.DC_AMT, A.DC_AMT * -1)) AS DC_AMT2
+                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT2
+                FROM    TB_SL_SALE_PAY_COUPN A
+                ,	    TB_SL_SALE_HDR tssh
+                ,       TB_MS_STORE tms
+                WHERE   A.HQ_OFFICE_CD  =    #{hqOfficeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.PAY_CLASS_CD != '003'  -- 쿠폰 피자할인(003) 제외, 일반할인(DC_CD = 01)임
+                AND     tssh.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     tssh.HQ_BRAND_CD = A.HQ_BRAND_CD
+                AND     tssh.STORE_CD = A.STORE_CD
+                AND     tssh.SALE_DATE = A.SALE_DATE
+                AND     tssh.POS_NO = A.POS_NO
+                AND     tssh.BILL_NO = A.BILL_NO
+                AND     tms.STORE_CD = A.STORE_CD
+                AND     tms.DIRECT_MANAGE_YN != 'Y'
+                GROUP BY A.PAY_CLASS_CD, A.COUPN_CD
+                UNION
+                SELECT  A.DC_CD AS COUPN_CD
+                ,       COUNT(1) AS TOT_DC_CNT2
+                ,	    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT2
+                ,       SUM(A.DC_AMT) AS DC_AMT2
+                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT2
+                FROM    TB_SL_SALE_HDR_DC A
+                ,	    TB_SL_SALE_HDR tssh
+                ,       TB_MS_STORE tms
+                WHERE   A.HQ_OFFICE_CD  =    #{hqOfficeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.DC_CD   !=  '02'
+                AND     A.DC_CD   !=  '04'  -- 제휴할인
+                AND     A.DC_CD   !=  '14'  -- 카드사할인
+                AND     tssh.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     tssh.HQ_BRAND_CD = A.HQ_BRAND_CD
+                AND     tssh.STORE_CD = A.STORE_CD
+                AND     tssh.SALE_DATE = A.SALE_DATE
+                AND     tssh.POS_NO = A.POS_NO
+                AND     tssh.BILL_NO = A.BILL_NO
+                AND     tms.STORE_CD = A.STORE_CD
+                AND     tms.DIRECT_MANAGE_YN != 'Y'
+                GROUP BY A.DC_CD
+        ) C
+        ,
+        (
+                SELECT  A.PAY_CLASS_CD || '-' ||  A.COUPN_CD AS COUPN_CD
+                ,       COUNT(1) AS TOT_DC_CNT3
+                ,	    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT3
+                ,       SUM(DECODE(A.SALE_FG, 1, A.DC_AMT, A.DC_AMT * -1)) AS DC_AMT3
+                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT3
+                FROM    TB_SL_SALE_PAY_COUPN A
+                ,	    TB_SL_SALE_HDR tssh
+                ,       TB_MS_STORE tms
+                WHERE   A.HQ_OFFICE_CD  =    #{hqOfficeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.PAY_CLASS_CD != '003'  -- 쿠폰 피자할인(003) 제외, 일반할인(DC_CD = 01)임
+                AND     tssh.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     tssh.HQ_BRAND_CD = A.HQ_BRAND_CD
+                AND     tssh.STORE_CD = A.STORE_CD
+                AND     tssh.SALE_DATE = A.SALE_DATE
+                AND     tssh.POS_NO = A.POS_NO
+                AND     tssh.BILL_NO = A.BILL_NO
+                AND     tms.STORE_CD = A.STORE_CD
+                AND     tms.DIRECT_MANAGE_YN = 'Y'
+                GROUP BY A.PAY_CLASS_CD, A.COUPN_CD
+                UNION
+                SELECT  A.DC_CD AS COUPN_CD
+                ,       COUNT(1) AS TOT_DC_CNT3
+                ,	    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT3
+                ,       SUM(A.DC_AMT) AS DC_AMT3
+                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT3
+                FROM    TB_SL_SALE_HDR_DC A
+                ,	    TB_SL_SALE_HDR tssh
+                ,       TB_MS_STORE tms
+                WHERE   A.HQ_OFFICE_CD  =    #{hqOfficeCd}
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.DC_CD   !=  '02'
+                AND     A.DC_CD   !=  '04'  -- 제휴할인
+                AND     A.DC_CD   !=  '14'  -- 카드사할인
+                AND     tssh.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     tssh.HQ_BRAND_CD = A.HQ_BRAND_CD
+                AND     tssh.STORE_CD = A.STORE_CD
+                AND     tssh.SALE_DATE = A.SALE_DATE
+                AND     tssh.POS_NO = A.POS_NO
+                AND     tssh.BILL_NO = A.BILL_NO
+                AND     tms.STORE_CD = A.STORE_CD
+                AND     tms.DIRECT_MANAGE_YN = 'Y'
+                GROUP BY A.DC_CD
+        ) D
+        WHERE B.COUPN_CD (+)= A.COUPN_CD
+        AND C.COUPN_CD   (+)= A.COUPN_CD
+        AND D.COUPN_CD   (+)= A.COUPN_CD
+        ORDER BY A.COUPN_CD
+    </select>
+
+    <!--할인세부내역 - 선택점포 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_COUPN, TB_SL_SALE_HDR, TB_SL_SALE_HDR_DC
+        PARAM    : dcDetailMrpizzaVO
+        COMMENTS : 선택점포 탭 리스트를 조회한다.
+    -->
+    <select id="getDcDetailMrpizzaSelectStoreList" parameterType="dcDetailMrpizzaVO" resultType="DefaultMap">
+        /* DcDetailMrpizzaMapper.getDcDetailMrpizzaSelectStoreList */
+        SELECT A.COUPN_CD
+        ,	   A.COUPN_NM
+        ,      NVL(B.TOT_DC_CNT, 0) AS TOT_DC_CNT
+        ,      NVL(B.TOT_SALE_AMT, 0) AS TOT_SALE_AMT
+        ,      NVL(B.DC_AMT, 0) AS DC_AMT
+        ,      NVL(B.REAL_SALE_AMT, 0) AS REAL_SALE_AMT
+        FROM (
+                SELECT  A.PAY_CLASS_CD || '-' ||  A.COUPN_CD AS COUPN_CD
+                ,		B.COUPN_NM AS COUPN_NM
+                FROM    TB_SL_SALE_PAY_COUPN A
+                ,       TB_MS_COUPON B
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.PAY_CLASS_CD != '003'  -- 쿠폰 피자할인(003) 제외, 일반할인(DC_CD = 01)임
+                AND     B.STORE_CD     (+)= A.STORE_CD
+                AND     B.PAY_CLASS_CD (+)= A.PAY_CLASS_CD
+                AND     B.COUPN_CD     (+)= A.COUPN_CD
+                GROUP BY A.PAY_CLASS_CD, A.COUPN_CD, B.COUPN_NM
+                UNION
+                SELECT 	A.DC_CD AS COUPN_CD
+                ,       '기타할인-' || B.NMCODE_NM AS COUPN_NM
+                FROM    TB_SL_SALE_HDR_DC A
+                ,	    (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041') B
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.DC_CD   !=  '02'
+                AND     A.DC_CD   !=  '04'  -- 제휴할인
+                AND     A.DC_CD   !=  '14'  -- 카드사할인
+                AND     A.DC_CD = B.NMCODE_CD
+                GROUP BY A.DC_CD, B.NMCODE_NM
+        ) A
+        ,
+        (
+                SELECT  A.PAY_CLASS_CD || '-' ||  A.COUPN_CD AS COUPN_CD
+                ,       COUNT(1) AS TOT_DC_CNT
+                ,	    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                ,       SUM(DECODE(A.SALE_FG, 1, A.DC_AMT, A.DC_AMT * -1)) AS DC_AMT
+                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM    TB_SL_SALE_PAY_COUPN A
+                ,	    TB_SL_SALE_HDR tssh
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.PAY_CLASS_CD != '003'  -- 쿠폰 피자할인(003) 제외, 일반할인(DC_CD = 01)임
+                AND     tssh.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     tssh.HQ_BRAND_CD = A.HQ_BRAND_CD
+                AND     tssh.STORE_CD = A.STORE_CD
+                AND     tssh.SALE_DATE = A.SALE_DATE
+                AND     tssh.POS_NO = A.POS_NO
+                AND     tssh.BILL_NO = A.BILL_NO
+                GROUP BY A.PAY_CLASS_CD, A.COUPN_CD
+                UNION
+                SELECT  A.DC_CD AS COUPN_CD
+                ,       COUNT(1) AS TOT_DC_CNT
+                ,	    SUM(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT
+                ,       SUM(A.DC_AMT) AS DC_AMT
+                ,       SUM(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT
+                FROM    TB_SL_SALE_HDR_DC A
+                ,	    TB_SL_SALE_HDR tssh
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.DC_CD   !=  '02'
+                AND     A.DC_CD   !=  '04'  -- 제휴할인
+                AND     A.DC_CD   !=  '14'  -- 카드사할인
+                AND     tssh.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     tssh.HQ_BRAND_CD = A.HQ_BRAND_CD
+                AND     tssh.STORE_CD = A.STORE_CD
+                AND     tssh.SALE_DATE = A.SALE_DATE
+                AND     tssh.POS_NO = A.POS_NO
+                AND     tssh.BILL_NO = A.BILL_NO
+                GROUP BY A.DC_CD
+        ) B
+        WHERE B.COUPN_CD (+)= A.COUPN_CD
+        ORDER BY A.COUPN_CD
+    </select>
+
+    <!--할인세부내역 - 할인구분 탭 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : dcDetailMrpizzaVO
+        COMMENTS : 할인구분 탭 리스트를 조회한다.
+    -->
+    <select id="getDcDetailMrpizzaDcTypeList" parameterType="dcDetailMrpizzaVO" resultType="DefaultMap">
+        /* DcDetailMrpizzaMapper.getDcDetailMrpizzaDcTypeList */
+        SELECT  A.COUPN_CD
+        ,       A.COUPN_NM
+        ,       A.STORE_CD
+        ,       A.STORE_NM
+        ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        ,       TO_CHAR(TO_DATE(A.BILL_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS BILL_DT
+        ,       A.POS_NO
+        ,       A.BILL_NO
+        ,       A.TOT_SALE_AMT
+        ,       A.DC_AMT
+        ,       A.REAL_SALE_AMT
+        ,       A.DLVR_ORDER_FG
+        FROM (
+                SELECT  A.PAY_CLASS_CD || '-' ||  A.COUPN_CD AS COUPN_CD
+                ,		B.COUPN_NM AS COUPN_NM
+                ,       C.STORE_CD
+                ,       D.STORE_NM
+                ,       C.SALE_DATE
+                ,       C.BILL_DT
+                ,       C.POS_NO
+                ,       C.BILL_NO
+                ,       C.TOT_SALE_AMT
+                ,       DECODE(A.SALE_FG, 1, A.DC_AMT, A.DC_AMT * -1) AS DC_AMT
+                ,       C.REAL_SALE_AMT
+                ,       C.DLVR_ORDER_FG
+                FROM    TB_SL_SALE_PAY_COUPN A
+                ,       TB_MS_COUPON B
+                ,       TB_SL_SALE_HDR C
+                ,       TB_MS_STORE D
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.PAY_CLASS_CD != '003'  -- 쿠폰 피자할인(003) 제외, 일반할인(DC_CD = 01)임
+                AND     A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                AND     A.HQ_BRAND_CD  = C.HQ_BRAND_CD
+                AND     A.STORE_CD     = C.STORE_CD
+                AND     A.SALE_DATE    = C.SALE_DATE
+                AND     A.POS_NO       = C.POS_NO
+                AND     A.BILL_NO      = C.BILL_NO
+                AND     B.STORE_CD     (+)= A.STORE_CD
+                AND     B.PAY_CLASS_CD (+)= A.PAY_CLASS_CD
+                AND     B.COUPN_CD     (+)= A.COUPN_CD
+                AND     D.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     D.STORE_CD     = A.STORE_CD
+                UNION
+                SELECT 	A.DC_CD AS COUPN_CD
+                ,       '기타할인-' || B.NMCODE_NM AS COUPN_NM
+                ,       C.STORE_CD
+                ,       D.STORE_NM
+                ,       C.SALE_DATE
+                ,       C.BILL_DT
+                ,       C.POS_NO
+                ,       C.BILL_NO
+                ,       C.TOT_SALE_AMT
+                ,       A.DC_AMT
+                ,       C.REAL_SALE_AMT
+                ,       C.DLVR_ORDER_FG
+                FROM    TB_SL_SALE_HDR_DC A
+                ,	    (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041') B
+                ,       TB_SL_SALE_HDR C
+                ,       TB_MS_STORE D
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                    AND A.STORE_CD IN (${storeCdQuery})
+                </if>
+                AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND     A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                AND     A.HQ_BRAND_CD  = C.HQ_BRAND_CD
+                AND     A.STORE_CD     = C.STORE_CD
+                AND     A.SALE_DATE    = C.SALE_DATE
+                AND     A.POS_NO       = C.POS_NO
+                AND     A.BILL_NO      = C.BILL_NO
+                AND     A.DC_CD   !=  '02'
+                AND     A.DC_CD   !=  '04'  -- 제휴할인
+                AND     A.DC_CD   !=  '14'  -- 카드사할인
+                AND     A.DC_CD = B.NMCODE_CD
+                AND     D.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+                AND     D.STORE_CD     = A.STORE_CD
+        ) A
+        WHERE 1=1
+        <choose>
+            <when test='searchCondition != null and searchCondition != ""'>
+                <if test='searchTerm != null and searchTerm != ""'>
+                    <if test='searchCondition == "dcCode"'>
+                        AND A.COUPN_CD LIKE '%'||#{searchTerm}||'%'
+                    </if>
+                    <if test='searchCondition == "dcType"'>
+                        AND A.COUPN_NM LIKE '%'||#{searchTerm}||'%'
+                    </if>
+                </if>
+            </when>
+            <otherwise>
+                    AND (A.COUPN_CD LIKE '%'||#{searchTerm}||'%' OR A.COUPN_NM LIKE '%'||#{searchTerm}||'%')
+            </otherwise>
+        </choose>
+        <if test='storeCd != null and storeCd != ""'>
+        </if>
+        ORDER BY A.COUPN_CD, A.STORE_CD, A.SALE_DATE, A.POS_NO, A.BILL_NO
     </select>
 </mapper>

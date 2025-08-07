@@ -24,4 +24,10 @@ public interface DcDetailMrpizzaService {
 
     /** 할인세부내역 - 전체점포 탭 리스트 조회 */
     List<DefaultMap<Object>> getDcDetailMrpizzaAllStoreList(DcDetailMrpizzaVO dcDetailMrpizzaVO, SessionInfoVO sessionInfoVO);
+
+    /** 할인세부내역 - 선택점포 탭 리스트 조회 */
+    List<DefaultMap<Object>> getDcDetailMrpizzaSelectStoreList(DcDetailMrpizzaVO dcDetailMrpizzaVO, SessionInfoVO sessionInfoVO);
+
+    /** 할인세부내역 - 할인구분 탭 리스트 조회 */
+    List<DefaultMap<Object>> getDcDetailMrpizzaDcTypeList(DcDetailMrpizzaVO dcDetailMrpizzaVO, SessionInfoVO sessionInfoVO);
 }

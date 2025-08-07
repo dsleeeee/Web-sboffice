@@ -34,30 +34,58 @@
                      </div>
                  </td>
              </tr>
-             <tr>
-                 <c:if test="${sessionInfo.orgnFg == 'HQ'}">
-                     <tr>
-                             <%-- 매장선택 --%>
-                         <th style="border-left:1px solid #ccc"><s:message code="cmm.store.select"/></th>
-                         <td colspan="3">
-                                 <%-- 매장선택 모듈 사용시 include --%>
-                             <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                                 <jsp:param name="targetTypeFg" value="M"/>
-                                 <jsp:param name="targetId" value="dcDetailMrpizzaSelectStore"/>
-                             </jsp:include>
-                                 <%--// 매장선택 모듈 사용시 include --%>
-                         </td>
-                     </tr>
-                 </c:if>
-                 <c:if test="${sessionInfo.orgnFg == 'STORE'}">
-                     <input type="hidden" id="dcDetailMrpizzaSelectStoreCd" value="${sessionInfo.storeCd}"/>
-                 </c:if>
-             </tr>
+             <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                 <tr>
+                         <%-- 매장선택 --%>
+                     <th><s:message code="cmm.store.select"/></th>
+                     <td colspan="3">
+                             <%-- 매장선택 모듈 사용시 include --%>
+                         <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                             <jsp:param name="targetTypeFg" value="S"/>
+                             <jsp:param name="targetId" value="dcDetailMrpizzaSelStore"/>
+                         </jsp:include>
+                             <%--// 매장선택 모듈 사용시 include --%>
+                     </td>
+                 </tr>
+             </c:if>
+             <c:if test="${sessionInfo.orgnFg == 'STORE'}">
+                 <input type="hidden" id="dcDetailMrpizzaSelStoreCd" value="${sessionInfo.storeCd}"/>
+             </c:if>
+             </tbody>
          </table>
+
+         <div class="mt10 oh sb-select dkbr">
+             <%-- 엑셀다운로드 --%>
+             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
+         </div>
+
+         <div class="w100 mt10">
+             <div class="wj-gridWrap" style="height: 380px; overflow-x: hidden; overflow-y: hidden;">
+                 <wj-flex-grid
+                         id="wjGridList2"
+                         autoGenerateColumns="false"
+                         selection-mode="Row"
+                         items-source="data"
+                         control="flex"
+                         initialized="initGrid(s,e)"
+                         is-read-only="true"
+                         item-formatter="_itemFormatter">
+
+                     <!-- define columns -->
+                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcCode"/>" binding="coupnCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcType"/>" binding="coupnNm" width="120" align="left" is-read-only="true"></wj-flex-grid-column>
+                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totDcCnt"/>" binding="totDcCnt" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.totSaleAmt"/>" binding="totSaleAmt" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.dcAmt"/>" binding="dcAmt" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                     <wj-flex-grid-column header="<s:message code="dcDetailMrpizza.realSaleAmt"/>" binding="realSaleAmt" width="85" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+
+                 </wj-flex-grid>
+             </div>
+         </div>
      </div>
 </div>
 
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/dcDetailMrpizza/dcDetailMrpizzaSelectStore.js?ver=20250730.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/dcDetailMrpizza/dcDetailMrpizzaSelectStore.js?ver=20250806.01" charset="utf-8"></script>

@@ -83,4 +83,46 @@ public class DcDetailMrpizzaController {
 
         return ReturnUtil.returnListJson(Status.OK, list, dcDetailMrpizzaVO);
     }
+
+    /**
+     * 할인세부내역 - 선택점포 탭 리스트 조회
+     * @param request
+     * @param response
+     * @param model
+     * @param dcDetailMrpizzaVO
+     * @return
+     * @author  이다솜
+     * @since   2025.07.30
+     */
+    @RequestMapping(value = "/getDcDetailMrpizzaSelectStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDcDetailMrpizzaSelectStoreList(HttpServletRequest request, HttpServletResponse response, Model model, DcDetailMrpizzaVO dcDetailMrpizzaVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = dcDetailMrpizzaService.getDcDetailMrpizzaSelectStoreList(dcDetailMrpizzaVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dcDetailMrpizzaVO);
+    }
+
+    /**
+     * 할인세부내역 - 할인구분 탭 리스트 조회
+     * @param request
+     * @param response
+     * @param model
+     * @param dcDetailMrpizzaVO
+     * @return
+     * @author  이다솜
+     * @since   2025.07.30
+     */
+    @RequestMapping(value = "/getDcDetailMrpizzaDcTypeList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDcDetailMrpizzaDcTypeList(HttpServletRequest request, HttpServletResponse response, Model model, DcDetailMrpizzaVO dcDetailMrpizzaVO) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = dcDetailMrpizzaService.getDcDetailMrpizzaDcTypeList(dcDetailMrpizzaVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, list, dcDetailMrpizzaVO);
+    }
 }
