@@ -13,7 +13,7 @@
     <!-- 채널별매출 - 조회 -->
     <!--
         TABLE    :
-        COMMENTS : 
+        COMMENTS :
     -->
     <select id="getSaleByChannelList" parameterType="SaleByChannelVO" resultType="DefaultMap">
         /* SaleByChannelMapper.getSaleByChannelList */
