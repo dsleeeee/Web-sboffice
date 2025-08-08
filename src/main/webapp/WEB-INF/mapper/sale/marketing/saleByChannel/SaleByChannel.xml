@@ -13,7 +13,7 @@
     <!-- 채널별매출 - 조회 -->
     <!--
         TABLE    :
-        COMMENTS : todo - 테이블 변경해야함
+        COMMENTS : 
     -->
     <select id="getSaleByChannelList" parameterType="SaleByChannelVO" resultType="DefaultMap">
         /* SaleByChannelMapper.getSaleByChannelList */
@@ -113,7 +113,7 @@
         ,		NVL(SUM(CASE WHEN A.DLVR_IN_FG = '9' AND A.DLVR_ORDER_FG IN ('3','4') THEN A.REAL_SALE_AMT END),0) 	    AS REAL_SALE_AMT_PACK9
         ,		NVL(SUM(CASE WHEN A.DLVR_IN_FG NOT IN ('0','1','3','4','13','12','9') THEN A.REAL_SALE_AMT END),0) 	    AS REAL_SALE_AMT_ETC
         ,       NVL(SUM(A.REAL_SALE_AMT),0)    AS REAL_SALE_AMT_SUM
-        FROM 	TB_SL_DAILY_TIME_ORDAPP A
+        FROM 	TB_SL_DAILY_POS_DLVR A
         ,		TB_MS_STORE B
         WHERE 	B.STORE_CD      = A.STORE_CD
         AND 	A.HQ_OFFICE_CD  = #{hqOfficeCd}
