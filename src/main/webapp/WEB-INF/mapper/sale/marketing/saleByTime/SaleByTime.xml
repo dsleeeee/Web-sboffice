@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleByTime.xml
+    시간대별매출
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.08.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.marketing.saleByTime.service.impl.SaleByTimeMapper">
+
+    <!-- 시간대별매출 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getSaleByTimeList" parameterType="saleByTimeVO" resultType="DefaultMap">
+        /* DayTimeMapper.getDayTimeList */
+        <if test="optionFg != null and optionFg.toString() == 'time'">
+            SELECT  A.STORE_CD
+            ,		B.STORE_NM
+            ,		TO_CHAR(TO_DATE(A.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,		TO_CHAR(TO_DATE(A.SALE_DATE , 'yyyymmdd'), 'DY') AS YOIL
+            ,       <foreach collection="arrTimeCol" item="item" separator=",">
+                        NVL(SUM(CASE WHEN A.SALE_HOUR = ${item} THEN A.REAL_SALE_CNT END),0) AS REAL_SALE_CNT${item}
+            ,           NVL(SUM(CASE WHEN A.SALE_HOUR = ${item} THEN A.REAL_SALE_AMT END),0) AS REAL_SALE_AMT${item}
+                    </foreach>
+            FROM    TB_SL_DAILY_TIME A
+            ,       TB_MS_STORE B
+            WHERE   A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+            AND     A.STORE_CD      = B.STORE_CD
+            AND     A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     A.SALE_DATE  BETWEEN #{startDate} AND #{endDate}
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND A.STORE_CD IN (${storeCdQuery})
+            </if>
+            <if test='startTime != "0" or endTime != "23"'>
+                AND A.SALE_HOUR BETWEEN #{startTime} AND #{endTime}
+            </if>
+            GROUP
+            BY 		A.STORE_CD
+            ,		B.STORE_NM
+            ,		A.SALE_DATE
+            ORDER
+            BY      A.SALE_DATE
+            ,       A.STORE_CD
+        </if>
+        <if test="optionFg != null and optionFg.toString() == 'timeSlot'">
+            SELECT  A.STORE_CD
+            ,       C.STORE_NM
+            ,		TO_CHAR(TO_DATE(SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+            ,		TO_CHAR(TO_DATE(SALE_DATE , 'yyyymmdd'), 'DY') AS YOIL
+            ,       <foreach collection="arrTimeCol" item="item" separator=",">
+                    NVL(SUM(CASE WHEN TIME_SLOT = ${item} THEN REAL_SALE_CNT END),0)   AS REAL_SALE_CNT${item}
+            ,       NVL(SUM(CASE WHEN TIME_SLOT = ${item} THEN REAL_SALE_AMT END),0)   AS REAL_SALE_AMT${item}
+                    </foreach>
+            FROM    TB_SL_DAILY_TIME A
+            ,       (
+                        SELECT  MIN( NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) || LPAD(MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) + 1, 2, '0') AS TIME_SLOT
+                        ,       MIN(NMCODE_CD) KEEP(DENSE_RANK FIRST ORDER BY NMCODE_ITEM_1) AS START_TIME
+                        ,       MAX(NMCODE_CD) KEEP(DENSE_RANK LAST ORDER BY NMCODE_ITEM_1) AS END_TIME FROM TB_HQ_NMCODE
+                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND     NMCODE_GRP_CD ='001'
+                        GROUP BY NMCODE_NM
+                    ) B
+            ,       TB_MS_STORE C
+            WHERE   A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+            AND     A.STORE_CD = C.STORE_CD
+            AND     A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            AND     A.SALE_HOUR BETWEEN B.START_TIME AND B.END_TIME
+            <if test='storeCdQuery != null and storeCdQuery != ""'>
+                AND A.STORE_CD IN (${storeCdQuery})
+            </if>
+            <if test='timeSlot != null and timeSlot != ""'>
+                AND B.TIME_SLOT = replace(#{timeSlot},'~','')
+            </if>
+            GROUP
+            BY      A.SALE_DATE
+            ,       A.STORE_CD
+            ,       C.STORE_NM
+            ORDER
+            BY      A.SALE_DATE
+            ,       A.STORE_CD
+        </if>
+    </select>
+
+</mapper>
