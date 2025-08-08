@@ -46,6 +46,9 @@ public class PwdManageSaleChkVO extends PageVO {
     /** 매출화면 접근비밀번호 */
     private String salePwd;
 
+    /** 매출화면 접근비밀번호 사용여부*/
+    private String salePwdYn;
+
     /** 비밀번호 */
     private String password;
 
@@ -110,6 +113,14 @@ public class PwdManageSaleChkVO extends PageVO {
 
     public void setSalePwd(String salePwd) {
         this.salePwd = salePwd;
+    }
+
+    public String getSalePwdYn() {
+        return salePwdYn;
+    }
+
+    public void setSalePwdYn(String salePwdYn) {
+        this.salePwdYn = salePwdYn;
     }
 
     public String getPassword() {
