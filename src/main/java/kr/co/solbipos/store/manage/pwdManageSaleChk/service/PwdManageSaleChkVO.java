@@ -58,6 +58,8 @@ public class PwdManageSaleChkVO extends PageVO {
     /** 매출화면 접근비밀번호 확인 */
     private String confirmPassword;
 
+    /** 사원 소속구분 */
+    private String empOrgnFg;
 
     public String getOrgnFg() {
         return orgnFg;
@@ -145,5 +147,13 @@ public class PwdManageSaleChkVO extends PageVO {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getEmpOrgnFg() {
+        return empOrgnFg;
+    }
+
+    public void setEmpOrgnFg(String empOrgnFg) {
+        this.empOrgnFg = empOrgnFg;
     }
 }

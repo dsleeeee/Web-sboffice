@@ -137,7 +137,7 @@
     var useYn     = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManageSaleChk/pwdManageSaleChk.js?ver=20250805.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/pwdManageSaleChk/pwdManageSaleChk.js?ver=20250805.02" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 비밀번호 변경 --%>
 <c:import url="/WEB-INF/view/store/manage/pwdManageSaleChk/pwdChangeSaleChk.jsp">
