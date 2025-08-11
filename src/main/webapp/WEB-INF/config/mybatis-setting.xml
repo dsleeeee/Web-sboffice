@@ -91,9 +91,17 @@
     <typeAlias alias="addrApplcStoreVO" type="kr.co.solbipos.pos.confg.verAddr.service.AddrApplcStoreVO"/>
     <typeAlias alias="verRecvVO" type="kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO"/>
     <typeAlias alias="storeVerDelVO" type="kr.co.solbipos.pos.confg.storeVerDel.service.StoreVerDelVO"/>
+    <!-- 포스관리 > POS 설정관리 > POS 메인버전관리 -->
+    <!--<typeAlias alias="mainVerManageVO" type="kr.co.solbipos.pos.confg.mainVerManage.service.MainVerManageVO"/>-->
+
     <typeAlias alias="loginStatusVO" type="kr.co.solbipos.pos.loginstatus.service.LoginStatusVO"/>
+
+    <!-- 포스관리 > 설치관리 > 설치관리 -->
     <typeAlias alias="installVO" type="kr.co.solbipos.pos.install.service.InstallVO"/>
+
+    <!-- 포스관리 > 라이선스관리 > 설치관리 -->
     <typeAlias alias="instlManageVO" type="kr.co.solbipos.pos.license.instlManage.service.InstlManageVO"/>
+    <!-- 포스관리 > 라이선스관리 > 운영현황 -->
     <typeAlias alias="operVO" type="kr.co.solbipos.pos.license.oper.service.OperVO"/>
     <typeAlias alias="instlAgencyVO" type="kr.co.solbipos.pos.license.instlAgency.service.InstlAgencyVO"/>
     <typeAlias alias="vanFixExceptStoreVO" type="kr.co.solbipos.pos.license.vanFixExceptStore.service.VanFixExceptStoreVO"/>
