@@ -18,34 +18,50 @@
     <select id="getPwdManageSaleChkList" parameterType="PwdManageSaleChkVO" resultType="DefaultMap">
         /* PwdManageSaleChkMapper.getPwdManageSaleChkList */
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        SELECT 	'매장'            AS EMP_ORGN_FG
-        ,		D.AGENCY_CD
-        ,		D.AGENCY_NM
-        ,		C.HQ_OFFICE_CD
-        ,		C.HQ_OFFICE_NM
+        SELECT  DECODE(A.EMP_ORGN_FG,'H','본사','S','매장','') AS EMP_ORGN_FG
+        ,		A.AGENCY_CD
+        ,		A.AGENCY_NM
+        ,		A.HQ_OFFICE_CD
+        ,		A.HQ_OFFICE_NM
         ,		A.STORE_CD
-        ,		B.STORE_NM
+        ,		A.STORE_NM
         ,		A.USER_ID
         ,		NVL(A.SALE_PWD_YN,'N') AS SALE_PWD_YN
         ,       A.SALE_PWD
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM 	TB_MS_EMPLOYEE A
-        ,		TB_MS_STORE B
-        ,		TB_HQ_OFFICE C
-        ,		TB_CM_AGENCY D
-        WHERE 	B.STORE_CD 		= A.STORE_CD
-        AND 	B.HQ_OFFICE_CD 	= C.HQ_OFFICE_CD
-        AND 	B.AGENCY_CD 	= D.AGENCY_CD
-        AND 	B.HQ_OFFICE_CD  = #{hqOfficeCd}
-        <if test='storeCd != null and storeCd != ""'>
-            AND A.STORE_CD LIKE '%'||#{storeCd}||'%'
+        FROM    (
+                    SELECT 	'S'            AS EMP_ORGN_FG
+                    ,		D.AGENCY_CD
+                    ,		D.AGENCY_NM
+                    ,		C.HQ_OFFICE_CD
+                    ,		C.HQ_OFFICE_NM
+                    ,		A.STORE_CD
+                    ,		B.STORE_NM
+                    ,		A.USER_ID
+                    ,		NVL(A.SALE_PWD_YN,'N') AS SALE_PWD_YN
+                    ,       A.SALE_PWD
+                    <include refid="CmmSQL.PagingTemplateCount"/>
+                    FROM 	TB_MS_EMPLOYEE A
+                    ,		TB_MS_STORE B
+                    ,		TB_HQ_OFFICE C
+                    ,		TB_CM_AGENCY D
+                    WHERE 	B.STORE_CD 		= A.STORE_CD
+                    AND 	B.HQ_OFFICE_CD 	= C.HQ_OFFICE_CD
+                    AND 	B.AGENCY_CD 	= D.AGENCY_CD
+                    AND 	B.HQ_OFFICE_CD  = #{hqOfficeCd}
+                    <if test='storeCd != null and storeCd != ""'>
+                        AND A.STORE_CD LIKE '%'||#{storeCd}||'%'
+                    </if>
+                    <if test='storeNm != null and storeNm != ""'>
+                        AND B.STORE_NM LIKE '%'||#{storeNm}||'%'
+                    </if>
+                    ORDER
+                    BY      A.STORE_CD
+                    ,       A.EMP_NO
+                ) A
+        WHERE   1=1
+        <if test='empOrgnFg != null and empOrgnFg != ""'>
+            AND A.EMP_ORGN_FG = #{empOrgnFg}
         </if>
-        <if test='storeNm != null and storeNm != ""'>
-            AND A.STORE_NM LIKE '%'||#{storeNm}||'%'
-        </if>
-        ORDER
-        BY      A.STORE_CD
-        ,       A.EMP_NO
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
