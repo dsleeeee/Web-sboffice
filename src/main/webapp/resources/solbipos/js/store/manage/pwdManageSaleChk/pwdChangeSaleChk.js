@@ -55,10 +55,12 @@ app.controller('pwdChangeSaleChkCtrl', ['$scope', '$http', function ($scope, $ht
             return;
         }
 
-        var params = $scope.pwdChange;
         if($scope.pwdChange.salePwd === null || $scope.pwdChange.salePwd === undefined){
             $scope.pwdChange.salePwd = '';
         }
+        $scope.pwdChange.salePwdYn = $('input[name="salePwdYn"]:checked').val();
+
+        var params = $scope.pwdChange;
 
         $scope._postJSONSave.withPopUp( "/store/manage/pwdManageSaleChk/pwdManageSaleChk/getModifySalePwd.sb", params, function(response){
             // console.log("response", response);

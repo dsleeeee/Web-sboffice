@@ -74,6 +74,7 @@
         /* USE : PwdManageSaleChkMapper.getModifySalePwd */
         UPDATE  TB_MS_EMPLOYEE
         SET     SALE_PWD    = #{newPassword}
+        ,       SALE_PWD_YN = #{salePwdYn}
         ,       MOD_ID      = #{modId}
         ,       MOD_DT      = #{modDt}
         WHERE   USER_ID     = #{userId}

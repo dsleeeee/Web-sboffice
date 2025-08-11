@@ -1238,6 +1238,8 @@
     <typeAlias alias="dcDetailMrpizzaVO" type="kr.co.solbipos.sale.mrpizza.dcDetailMrpizza.service.DcDetailMrpizzaVO"/>
     <!--미스터피자 > 마케팅조회 > 취소현황-->
     <typeAlias alias="saleCancelStatusVO" type="kr.co.solbipos.sale.marketing.saleCancelStatus.service.SaleCancelStatusVO"/>
+    <!-- 미스터피자 > 마케팅조회 > 시간대별매출 -->
+    <typeAlias alias="saleByTimeVO" type="kr.co.solbipos.sale.marketing.saleByTime.service.SaleByTimeVO"/>
 
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->

@@ -102,7 +102,6 @@ app.controller('menuSaleMrpizzaCtrl', ['$scope', '$http', '$timeout', function (
         params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
-        params.listScale = 500;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/mrpizza/menuSaleMrpizza/getMenuSaleMrpizzaList.sb", params, function () {

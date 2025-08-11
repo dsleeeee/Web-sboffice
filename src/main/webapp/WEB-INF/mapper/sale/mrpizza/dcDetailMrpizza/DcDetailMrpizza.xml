@@ -396,8 +396,6 @@
                     AND (A.COUPN_CD LIKE '%'||#{searchTerm}||'%' OR A.COUPN_NM LIKE '%'||#{searchTerm}||'%')
             </otherwise>
         </choose>
-        <if test='storeCd != null and storeCd != ""'>
-        </if>
         ORDER BY A.COUPN_CD, A.STORE_CD, A.SALE_DATE, A.POS_NO, A.BILL_NO
     </select>
 </mapper>
