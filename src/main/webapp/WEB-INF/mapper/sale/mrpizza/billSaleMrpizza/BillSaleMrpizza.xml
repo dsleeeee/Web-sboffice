@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    billSaleMrpizza.xml
+    [미스터피자] - [마케팅조회] - [영수별매출] 화면
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.08.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.mrpizza.billSaleMrpizza.service.impl.BillSaleMrpizzaMapper">
+
+    <!-- 영수별매출 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : billSaleMrpizzaVO
+        COMMENTS : 영수별매출 리스트를 조회한다.
+    -->
+    <select id="getBillSaleMrpizzaList" parameterType="billSaleMrpizzaVO" resultType="DefaultMap">
+        /* BillSaleMrpizzaMapper.getBillSaleMrpizzaList */
+        SELECT 	TO_CHAR(TO_DATE(tssh.SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS SALE_DATE
+        , 		tssh.STORE_CD
+        ,		tms.STORE_NM
+        ,		tssh.POS_NO
+        ,		tssh.BILL_NO
+        ,		TO_CHAR(TO_DATE(tooh.ORDER_END_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS ORDER_END_DT
+        ,		TO_CHAR(TO_DATE(tooh.BILL_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS BILL_DT
+        ,		tssh.DLVR_ORDER_FG
+        ,		tssh.SALE_FG
+        ,       tsshp.TOT_SALE_AMT
+        ,       tsshp.REAL_SALE_AMT
+        ,       tsshp.DC_AMT
+        ,       C.PAY_NM AS PAY_NM
+        ,       D.DC_TYPE AS DC_TYPE
+        FROM    TB_SL_SALE_HDR tssh
+        ,	    TB_MS_STORE tms
+        , 	    (
+                    SELECT A.HQ_OFFICE_CD
+                    , 	   A.HQ_BRAND_CD
+                    ,      A.STORE_CD
+                    ,      A.SALE_DATE
+                    ,      A.POS_NO
+                    ,      A.BILL_NO
+                    ,      SUM(A.PAY_AMT) AS TOT_SALE_AMT
+                    ,      SUM(CASE WHEN A.PAY_FG = 'PAY' THEN A.PAY_AMT ELSE 0 END) AS REAL_SALE_AMT
+                    ,	   SUM(CASE WHEN A.PAY_FG = 'DC'  THEN A.PAY_AMT ELSE 0 END) AS DC_AMT
+                    FROM   (
+                                SELECT A.HQ_OFFICE_CD
+                                , 	   A.HQ_BRAND_CD
+                                ,      A.STORE_CD
+                                ,      A.SALE_DATE
+                                ,      A.POS_NO
+                                ,      A.BILL_NO
+                                ,      SUM(A.PAY_AMT) AS PAY_AMT
+                                ,      'PAY' AS PAY_FG
+                                FROM   TB_SL_SALE_HDR_PAY A
+                                ,	   (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024') B
+                                WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND A.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND   A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                AND   A.PAY_CD = B.NMCODE_CD
+                                AND   A.PAY_CD != '01'
+                                GROUP
+                                BY     A.HQ_OFFICE_CD
+                                , 	   A.HQ_BRAND_CD
+                                ,      A.STORE_CD
+                                ,      A.SALE_DATE
+                                ,      A.POS_NO
+                                ,      A.BILL_NO
+                                UNION
+                                SELECT A.HQ_OFFICE_CD
+                                , 	   A.HQ_BRAND_CD
+                                ,      A.STORE_CD
+                                ,      A.SALE_DATE
+                                ,      A.POS_NO
+                                ,      A.BILL_NO
+                                ,      SUM(A.SALE_AMT) AS PAY_AMT
+                                ,      'PAY' AS PAY_FG
+                                FROM   TB_SL_SALE_PAY_CARD A
+                                ,	   (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024') B
+                                WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND A.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND    A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                AND   '01' = B.NMCODE_CD
+                                GROUP
+                                BY     A.HQ_OFFICE_CD
+                                , 	   A.HQ_BRAND_CD
+                                ,      A.STORE_CD
+                                ,      A.SALE_DATE
+                                ,      A.POS_NO
+                                ,      A.BILL_NO
+                                UNION
+                                SELECT A.HQ_OFFICE_CD
+                                , 	   A.HQ_BRAND_CD
+                                ,      A.STORE_CD
+                                ,      A.SALE_DATE
+                                ,      A.POS_NO
+                                ,      A.BILL_NO
+                                ,      SUM(A.DC_AMT) AS PAY_AMT
+                                , 	   'DC' AS PAY_FG
+                                FROM  TB_SL_SALE_HDR_DC A
+                                ,	  (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041') B
+                                WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND A.STORE_CD IN (${storeCdQuery})
+                                </if>
+                                AND    A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                AND   A.DC_CD = B.NMCODE_CD
+                                GROUP
+                                BY     A.HQ_OFFICE_CD
+                                , 	   A.HQ_BRAND_CD
+                                ,      A.STORE_CD
+                                ,      A.SALE_DATE
+                                ,      A.POS_NO
+                                ,      A.BILL_NO
+                            ) A
+                            GROUP BY A.HQ_OFFICE_CD
+                            , 	   A.HQ_BRAND_CD
+                            ,      A.STORE_CD
+                            ,      A.SALE_DATE
+                            ,      A.POS_NO
+                            ,      A.BILL_NO
+                ) tsshp
+        ,		(
+                        SELECT  A.HQ_OFFICE_CD
+                        ,		A.HQ_BRAND_CD
+                        ,       A.STORE_CD
+                        ,       A.SALE_DATE
+                        ,       A.POS_NO
+                        ,       A.BILL_NO
+                        ,       A.ORDER_NO
+                        ,       B.ORDER_END_DT              -- 주문일시
+                        ,       A.BILL_DT                   -- 결제시간
+                        FROM    TB_SL_SALE_HDR A
+                        ,       TB_OD_ORDER_HDR B
+                        WHERE   A.HQ_OFFICE_CD      =       #{hqOfficeCd}
+                        AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND A.STORE_CD IN (${storeCdQuery})
+                        </if>
+                        AND     B.STORE_CD      (+) =       A.STORE_CD
+                        AND     B.SALE_DATE     (+) =       A.SALE_DATE
+                        AND     B.ORDER_NO      (+) =       A.ORDER_NO
+                ) tooh
+        , (
+                        SELECT A.HQ_OFFICE_CD
+                        , 	   A.HQ_BRAND_CD
+                        ,      A.STORE_CD
+                        ,      A.SALE_DATE
+                        ,      A.POS_NO
+                        ,      A.BILL_NO
+                        ,      LISTAGG(B.NMCODE_NM, ', ') WITHIN GROUP (ORDER BY A.PAY_CD) AS PAY_NM
+                        FROM   TB_SL_SALE_HDR_PAY A
+                        ,	   (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024') B
+                        WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND A.STORE_CD IN (${storeCdQuery})
+                        </if>
+                        AND   A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND   A.PAY_CD = B.NMCODE_CD
+                        AND   A.PAY_CD != '01'
+                        GROUP
+                        BY     A.HQ_OFFICE_CD
+                        , 	   A.HQ_BRAND_CD
+                        ,      A.STORE_CD
+                        ,      A.SALE_DATE
+                        ,      A.POS_NO
+                        ,      A.BILL_NO
+                        UNION
+                        SELECT A.HQ_OFFICE_CD
+                        , 	   A.HQ_BRAND_CD
+                        ,      A.STORE_CD
+                        ,      A.SALE_DATE
+                        ,      A.POS_NO
+                        ,      A.BILL_NO
+                        ,      LISTAGG(B.NMCODE_NM, ', ') AS PAY_NM
+                        FROM   TB_SL_SALE_PAY_CARD A
+                        ,	   (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024') B
+                        WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                        <if test='storeCdQuery != null and storeCdQuery != ""'>
+                            AND A.STORE_CD IN (${storeCdQuery})
+                        </if>
+                        AND    A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND   '01' = B.NMCODE_CD
+                        GROUP
+                        BY     A.HQ_OFFICE_CD
+                        , 	   A.HQ_BRAND_CD
+                        ,      A.STORE_CD
+                        ,      A.SALE_DATE
+                        ,      A.POS_NO
+                        ,      A.BILL_NO
+                ) 	C
+        , (
+                    SELECT A.HQ_OFFICE_CD
+                    , 	   A.HQ_BRAND_CD
+                    ,      A.STORE_CD
+                    ,      A.SALE_DATE
+                    ,      A.POS_NO
+                    ,      A.BILL_NO
+                    ,      LISTAGG(B.NMCODE_NM, ', ') WITHIN GROUP (ORDER BY A.DC_CD) AS DC_TYPE
+                    FROM  TB_SL_SALE_HDR_DC A
+                    ,	  (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041') B
+                    WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+                    AND    A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                    AND    A.DC_CD = B.NMCODE_CD
+                    GROUP
+                    BY     A.HQ_OFFICE_CD
+                    , 	   A.HQ_BRAND_CD
+                    ,      A.STORE_CD
+                    ,      A.SALE_DATE
+                    ,      A.POS_NO
+                    ,      A.BILL_NO
+
+            ) 	D
+        WHERE tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tssh.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tssh.STORE_CD IN (${storeCdQuery})
+        </if>
+        AND tssh.HQ_OFFICE_CD = tsshp.HQ_OFFICE_CD
+        AND tssh.HQ_BRAND_CD = tsshp.HQ_BRAND_CD
+        AND tssh.STORE_CD = tsshp.STORE_CD
+        AND tssh.SALE_DATE = tsshp.SALE_DATE
+        AND tssh.POS_NO = tsshp.POS_NO
+        AND tssh.BILL_NO = tsshp.BILL_NO
+        AND tssh.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND tssh.STORE_CD = tms.STORE_CD
+        AND tooh.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+        AND tooh.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+        AND tooh.STORE_CD (+)= tssh.STORE_CD
+        AND tooh.SALE_DATE (+)= tssh.SALE_DATE
+        AND tooh.POS_NO (+)= tssh.POS_NO
+        AND tooh.BILL_NO (+)= tssh.BILL_NO
+        AND C.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+        AND C.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+        AND C.STORE_CD (+)= tssh.STORE_CD
+        AND C.SALE_DATE (+)= tssh.SALE_DATE
+        AND C.POS_NO (+)= tssh.POS_NO
+        AND C.BILL_NO (+)= tssh.BILL_NO
+        AND D.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+        AND D.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+        AND D.STORE_CD (+)= tssh.STORE_CD
+        AND D.SALE_DATE (+)= tssh.SALE_DATE
+        AND D.POS_NO (+)= tssh.POS_NO
+        AND D.BILL_NO (+)= tssh.BILL_NO
+        ORDER BY tssh.SALE_DATE DESC, tssh.STORE_CD, tssh.POS_NO, tssh.BILL_NO ASC
+    </select>
+
+</mapper>

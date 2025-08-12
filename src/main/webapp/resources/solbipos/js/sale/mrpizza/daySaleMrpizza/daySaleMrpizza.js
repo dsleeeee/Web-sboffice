@@ -130,40 +130,23 @@ app.controller('daySaleMrpizzaCtrl', ['$scope', '$http', '$timeout', function ($
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/sale/mrpizza/daySaleMrpizza/getDaySaleMrpizzaList.sb", params, function (){
 
+            // 조회날짜 기준 엑셀 다운로드 기간
+            $scope.excelStartDate = params.startDate;
+            $scope.excelEndDate   = params.endDate;
         });
     };
 
     // 조회조건 엑셀다운로드
     $scope.excelDownload = function () {
 
-        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
-        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
-        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
-
-        // 시작일자가 종료일자보다 빠른지 확인
-        if(startDt.getTime() > endDt.getTime()){
-            $scope._popMsg(messages['cmm.dateChk.error']);
-            return false;
-        }
-
-        if ($("#daySaleMrpizzaStoreCd").val().length > 0 && $("#daySaleMrpizzaStoreCd").val().split(",").length - 1 === 0) {
-            // 조회일자 최대 6달(186일) 제한
-            if (diffDay > 186) {
-                $scope._popMsg(messages['cmm.dateOver.6month.error']);
-                return false;
-            }
-        } else {
-            // 조회일자 최대 31일 제한
-            if (diffDay >= 31) {
-                $scope._popMsg(messages['cmm.dateOver.1month.error']);
-                return false;
-            }
-        }
-
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
             return false;
         }
+
+        // 엑셀다운로드 기간
+        var startDt = $scope.excelStartDate;
+        var endDt = $scope.excelEndDate;
 
         // 일자별매출 그리드
         var workBook1 = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
@@ -180,7 +163,7 @@ app.controller('daySaleMrpizzaCtrl', ['$scope', '$http', '$timeout', function ($
 
         // 시트 정보 push
         workBook1.sheets.push(workBook2.sheets[0]);
-        workBook1.saveAsync("일자별매출" + '_' + wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd') + '_' + getCurDateTime() + '.xlsx');
+        workBook1.saveAsync("일자별매출" + '_' + startDt + '_' + endDt + '_' + getCurDateTime() + '.xlsx');
     }
 }]);
 
