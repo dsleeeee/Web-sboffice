@@ -220,6 +220,10 @@ app.controller('dcDetailMrpizzaAllStoreCtrl', ['$scope', '$http', '$timeout', fu
             dataItem.realSaleAmt3   = salePeriod;
 
             grid.columnHeaders.rows[0].dataItem = dataItem;
+
+            // 조회날짜 기준 엑셀 다운로드 기간
+            $scope.excelStartDate = params.startDate;
+            $scope.excelEndDate   = params.endDate;
         });
     };
 
@@ -231,8 +235,9 @@ app.controller('dcDetailMrpizzaAllStoreCtrl', ['$scope', '$http', '$timeout', fu
             return false;
         }
 
-        var startDt = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
-        var endDt = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
+        // 엑셀다운로드 기간
+        var startDt = $scope.excelStartDate;
+        var endDt = $scope.excelEndDate;
 
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         $timeout(function () {

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    cardCoSaleMrpizza.xml
+    [미스터피자] - [마케팅조회] - [카드사별매출] 화면
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.08.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.mrpizza.cardCoSaleMrpizza.service.impl.CardCoSaleMrpizzaMapper">
+
+    <!-- 카드사별매출 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_PAY_CARD, TB_SL_SALE_PAY_TEMPORARY
+        PARAM    : cardCoSaleMrpizzaVO
+        COMMENTS : 카드사별매출 리스트를 조회한다.
+    -->
+    <select id="getCardCoSaleMrpizzaList" parameterType="cardCoSaleMrpizzaVO" resultType="DefaultMap">
+        /* CardCoSaleMrpizzaMapper.getCardCoSaleMrpizzaList */
+        SELECT A.STORE_CD
+        ,	   tms.STORE_NM
+        ,      A.ACQUIRE_CD
+        ,      A.ACQUIRE_NM
+        ,      CASE WHEN A.SALE_YN = 'Y' THEN '승인' ELSE '취소' END AS SALE_YN
+        ,      A.SALE_AMT
+        ,      A.TEMPORARY_AMT
+        ,      A.TOT_SALE_AMT
+        ,      A.PAY_FG
+        FROM (
+        			SELECT A.HQ_OFFICE_CD
+        			,      A.STORE_CD
+        			,      A.ACQUIRE_CD
+        			,      A.ACQUIRE_NM
+        			,      A.SALE_YN
+        			,      SUM(A.SALE_AMT) AS SALE_AMT
+        			,      0 AS TEMPORARY_AMT
+        			,      SUM(A.SALE_AMT) AS TOT_SALE_AMT
+        			,      '카드' AS PAY_FG
+        			FROM   TB_SL_SALE_PAY_CARD A
+        			WHERE  A.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+        			AND    A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        			GROUP
+        			BY A.HQ_OFFICE_CD
+        			,  A.STORE_CD
+        			,  A.ACQUIRE_CD
+        			,  A.ACQUIRE_NM
+        			,  A.SALE_YN
+        		UNION ALL
+        			SELECT A.HQ_OFFICE_CD
+        			,      A.STORE_CD
+        			,      A.TEMPORARY_PAY_CD AS ACQUIRE_CD
+        			,      (SELECT B.NMCODE_NM FROM TB_CM_NMCODE B WHERE B.NMCODE_GRP_CD = '111' AND B.NMCODE_CD = A.TEMPORARY_PAY_CD) AS ACQUIRE_NM
+        			,      A.SALE_YN
+        			,      0 AS SALE_AMT
+        			,      SUM(A.SALE_AMT) AS TEMPORARY_AMT
+        			,      SUM(A.SALE_AMT) AS TOT_SALE_AMT
+        			,      '가승인' AS PAY_FG
+        			FROM TB_SL_SALE_PAY_TEMPORARY A
+        			WHERE  A.HQ_OFFICE_CD = #{hqOfficeCd}
+                    <if test='storeCdQuery != null and storeCdQuery != ""'>
+                        AND A.STORE_CD IN (${storeCdQuery})
+                    </if>
+        			AND    A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        			GROUP
+        			BY A.HQ_OFFICE_CD
+        			,  A.STORE_CD
+        			,  A.TEMPORARY_PAY_CD
+        			,  A.SALE_YN
+        ) A
+        , TB_MS_STORE tms
+        WHERE 1=1
+        AND A.HQ_OFFICE_CD = tms.HQ_OFFICE_CD
+        AND A.STORE_CD = tms.STORE_CD
+        <if test='payFg != null and payFg != ""'>
+            AND A.PAY_FG = #{payFg}
+        </if>
+        ORDER
+        BY A.STORE_CD ASC, A.PAY_FG DESC, A.ACQUIRE_CD ASC
+    </select>
+
+</mapper>

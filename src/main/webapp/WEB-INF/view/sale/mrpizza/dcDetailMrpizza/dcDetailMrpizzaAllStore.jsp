@@ -81,4 +81,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/dcDetailMrpizza/dcDetailMrpizzaAllStore.js?ver=20250806.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/mrpizza/dcDetailMrpizza/dcDetailMrpizzaAllStore.js?ver=20250811.01" charset="utf-8"></script>

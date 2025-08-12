@@ -1240,7 +1240,10 @@
     <typeAlias alias="saleCancelStatusVO" type="kr.co.solbipos.sale.marketing.saleCancelStatus.service.SaleCancelStatusVO"/>
     <!-- 미스터피자 > 마케팅조회 > 시간대별매출 -->
     <typeAlias alias="saleByTimeVO" type="kr.co.solbipos.sale.marketing.saleByTime.service.SaleByTimeVO"/>
-
+    <!--미스터피자 > 마케팅조회 > 카드사별매출-->
+    <typeAlias alias="cardCoSaleMrpizzaVO" type="kr.co.solbipos.sale.mrpizza.cardCoSaleMrpizza.service.CardCoSaleMrpizzaVO"/>
+    <!--미스터피자 > 마케팅조회 > 영수별매출-->
+    <typeAlias alias="billSaleMrpizzaVO" type="kr.co.solbipos.sale.mrpizza.billSaleMrpizza.service.BillSaleMrpizzaVO"/>
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
