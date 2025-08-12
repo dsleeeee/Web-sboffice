@@ -28,6 +28,7 @@
         ,		A.USER_ID
         ,		NVL(A.SALE_PWD_YN,'N') AS SALE_PWD_YN
         ,       A.SALE_PWD
+        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM    (
                     SELECT 	'S'            AS EMP_ORGN_FG
                     ,		D.AGENCY_CD
@@ -39,7 +40,6 @@
                     ,		A.USER_ID
                     ,		NVL(A.SALE_PWD_YN,'N') AS SALE_PWD_YN
                     ,       A.SALE_PWD
-                    <include refid="CmmSQL.PagingTemplateCount"/>
                     FROM 	TB_MS_EMPLOYEE A
                     ,		TB_MS_STORE B
                     ,		TB_HQ_OFFICE C

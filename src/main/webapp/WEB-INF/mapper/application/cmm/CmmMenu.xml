@@ -444,7 +444,7 @@
             <when test='orgnFg != null and orgnFg.toString() == "STORE"'>
                 SELECT	COUNT(*)
                 FROM 	TB_MS_EMPLOYEE
-                WHERE 	STORE_CD    = #{storeCd}
+                WHERE 	USER_ID     = #{userId}
                 AND 	SALE_PWD    = #{confirmPassword}
             </when>
         </choose>

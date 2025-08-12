@@ -316,6 +316,7 @@ public class CmmMenuServiceImpl implements CmmMenuService {
         pwdManageVO.setOrgnFg(sessionInfoVO.getOrgnFg());
         pwdManageVO.setAgencyCd(sessionInfoVO.getOrgnGrpCd());
         pwdManageVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        pwdManageVO.setUserId(sessionInfoVO.getUserId());
         // 소속구분 설정
         if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE){
             pwdManageVO.setStoreCd(sessionInfoVO.getStoreCd());
