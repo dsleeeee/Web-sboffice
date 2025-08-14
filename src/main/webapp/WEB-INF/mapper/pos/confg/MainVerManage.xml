@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MainVerManage.xml
+    POS 메인버전관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2025.08.07     최초작성
+-->
+<mapper namespace="kr.co.solbipos.pos.confg.mainVerManage.service.impl.MainVerManageMapper">
+
+    <!-- POS 메인버전관리 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMainVerManageList" parameterType="MainVerManageVO" resultType="DefaultMap">
+        /* MainVerManageMapper.getMainVerManageList */
+        SELECT
+        tho.HQ_OFFICE_CD,
+        tho.HQ_OFFICE_NM,
+        NVL(tms.STORE_CNT, 0) AS STORE_CNT,
+        (CASE WHEN tcpvm.VER_SER_NO IS NULL THEN '등록' ELSE tcpvm.VER_SER_NO END) AS MAIN_VER_REGIST,
+        (CASE WHEN tcpvm.VER_SER_NO IS NOT NULL THEN '삭제' ELSE '' END) AS MAIN_VER_DEL,
+        tcpv.FILE_DESC,
+        tcpv.PROG_FG
+        FROM TB_HQ_OFFICE tho,
+        TB_CM_POS_VERSN_MAIN tcpvm,
+        (
+            SELECT
+            HQ_OFFICE_CD,
+            COUNT(STORE_CD) AS STORE_CNT
+            FROM TB_MS_STORE
+            WHERE 1=1
+            GROUP BY HQ_OFFICE_CD
+        ) tms,
+        TB_CM_POS_VERSN tcpv
+        WHERE 1=1
+        <if test='srchHqOfficeCd != null and srchHqOfficeCd != ""'>
+            AND tho.HQ_OFFICE_CD LIKE '%'||#{srchHqOfficeCd}||'%'
+        </if>
+        <if test='srchHqOfficeNm != null and srchHqOfficeNm != ""'>
+            AND tho.HQ_OFFICE_NM LIKE '%'||#{srchHqOfficeNm}||'%'
+        </if>
+        <if test='registYn != null and registYn != ""'>
+            <if test='registYn == "Y"'>
+                AND tcpvm.VER_SER_NO IS NOT NULL
+            </if>
+            <if test='registYn == "N"'>
+                AND tcpvm.VER_SER_NO IS NULL
+            </if>
+        </if>
+        AND tcpvm.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+        AND tms.HQ_OFFICE_CD (+)= tho.HQ_OFFICE_CD
+        AND tcpv.VER_SER_NO (+)= tcpvm.VER_SER_NO
+        ORDER BY tho.HQ_OFFICE_CD
+    </select>
+
+    <!-- POS 메인버전관리 - 메인버전 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getMainVerManageDel" parameterType="MainVerManageVO">
+        /* MainVerManageMapper.getMainVerManageDel */
+        DELETE TB_CM_POS_VERSN_MAIN
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+    </delete>
+
+    <!-- 메인버전 등록 팝업 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMainVerRegistList" parameterType="MainVerManageVO" resultType="DefaultMap">
+        /* MainVerManageMapper.getMainVerRegistList */
+        SELECT
+        (CASE WHEN tcpv.PROG_FG = '1' THEN 'NXPOS' WHEN tcpv.PROG_FG = '2' THEN 'LYNKPOS' ELSE '' END) AS VER_GUBUN,
+        tcpv.VER_SER_NO,
+        tcpv.VER_SER_NM,
+        tcpv.FILE_DESC,
+        tcpv.PROG_FG,
+        tcpv.PROG_DETAIL_FG,
+        tcpv.SYSTEM_TYPE_FG,
+        tcpv.PGM_YN,
+        tcpv.DB_YN,
+        tcpv.IMG_YN,
+        tcpv.FILE_SIZE,
+        NVL(tcpv2.REG_CNT, 0) AS REG_CNT,
+        NVL(tcpv2.RECV_CNT, 0) AS RECV_CNT,
+        tcpv.USE_YN,
+        tcpv.ORGN_CDS
+        FROM TB_CM_POS_VERSN tcpv,
+        (
+            SELECT
+            VER_SER_NO,
+            NVL(SUM(DECODE(VER_RECV_FG, '1', 1, '2', 1, 0)), 0) AS REG_CNT,
+            NVL(SUM(DECODE(VER_RECV_FG, '2', 1, 0)), 0) AS RECV_CNT
+            FROM TB_CM_POS_VERSN_STORE
+            GROUP BY VER_SER_NO
+        ) tcpv2
+        WHERE 1=1
+        <if test='verGubun != null and verGubun != ""'>
+            AND tcpv.PROG_FG = #{verGubun}
+        </if>
+        <if test='verSerNo != null and verSerNo != ""'>
+            AND tcpv.VER_SER_NO LIKE '%'||#{verSerNo}||'%'
+        </if>
+        <if test='verSerNm != null and verSerNm != ""'>
+            AND tcpv.VER_SER_NM LIKE '%'||#{verSerNm}||'%'
+        </if>
+        <if test='progDetailFg != null and progDetailFg != ""'>
+            AND tcpv.PROG_DETAIL_FG = #{progDetailFg}
+        </if>
+        <if test='fileDesc != null and fileDesc != ""'>
+            AND tcpv.FILE_DESC LIKE '%'||#{fileDesc}||'%'
+        </if>
+        AND tcpv2.VER_SER_NO (+)= tcpv.VER_SER_NO
+        ORDER BY tcpv.REG_DT DESC
+    </select>
+
+    <!-- 메인버전 등록 팝업 - 등록 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getMainVerRegistSaveInsert" parameterType="MainVerManageVO">
+        /* MainVerManageMapper.getMainVerRegistSaveInsert */
+        INSERT INTO TB_CM_POS_VERSN_MAIN
+        (
+            HQ_OFFICE_CD,
+            VER_SER_NO,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            #{verSerNo},
+            '',
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId}
+        )
+    </insert>
+
+</mapper>

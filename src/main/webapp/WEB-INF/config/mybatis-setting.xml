@@ -92,7 +92,7 @@
     <typeAlias alias="verRecvVO" type="kr.co.solbipos.pos.confg.verrecv.service.VerRecvVO"/>
     <typeAlias alias="storeVerDelVO" type="kr.co.solbipos.pos.confg.storeVerDel.service.StoreVerDelVO"/>
     <!-- 포스관리 > POS 설정관리 > POS 메인버전관리 -->
-    <!--<typeAlias alias="mainVerManageVO" type="kr.co.solbipos.pos.confg.mainVerManage.service.MainVerManageVO"/>-->
+    <typeAlias alias="mainVerManageVO" type="kr.co.solbipos.pos.confg.mainVerManage.service.MainVerManageVO"/>
 
     <typeAlias alias="loginStatusVO" type="kr.co.solbipos.pos.loginstatus.service.LoginStatusVO"/>
 
