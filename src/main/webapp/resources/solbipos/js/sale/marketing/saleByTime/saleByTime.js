@@ -238,11 +238,26 @@ app.controller('saleByTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
     $scope.excelDownloadInfo = function () {
 
         if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            $scope._popMsg(messages["excelUpload.not.downloadData"]);
             return false;
         }
 
-        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        // 합계 행(GroupRow) 가져오기
+        var groupRow = $scope.flex.columnFooters.rows[0];
+
+        // 기존의 합계 행 데이터를 임시 저장
+        var originalDataItem = groupRow.dataItem;
+
+        // 첫 번째 데이터 열의 바인딩명 가져오기
+        var firstColumnBinding = $scope.flex.columns[0].binding;
+
+        // 첫번째 열에 '합계' 텍스트 임의 설정
+        var newDataItem = {};
+        newDataItem[firstColumnBinding] = '합계';
+        groupRow.dataItem = newDataItem;
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
+
         $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
                 includeColumnHeaders: true,
@@ -252,6 +267,9 @@ app.controller('saleByTimeCtrl', ['$scope', '$http', '$timeout', function ($scop
                 }
             },
                 messages["saleByTime.saleByTime"] + '_' + wijmo.Globalize.format(startDate.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format(endDate.value, 'yyyyMMdd') + '_' + getCurDateTime() +'.xlsx', function () {
+                    // 원래의 합계 행 데이터로 복원
+                    groupRow.dataItem = originalDataItem;
+
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

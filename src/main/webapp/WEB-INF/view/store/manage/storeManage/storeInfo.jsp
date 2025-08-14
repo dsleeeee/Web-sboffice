@@ -557,6 +557,89 @@
                   </tbody>
               </table>
           </div>
+            <%-- [1250 미스터피자] --%>
+            <div id="divMrpizzaEnvst" style="display: none;">
+                    <%-- 추가정보 --%>
+                <h3 class="h3_tbl"><s:message code="storeManage.moms.member" /></h3>
+                <table class="searchTbl">
+                    <colgroup>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                        <col class="w15"/>
+                        <col class="w35"/>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                            <%-- 팀별 --%>
+                        <th><s:message code="cmm.moms.momsTeam"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMrpizzaTeamCombo"
+                                        ng-model="store.mrpizzaTeam"
+                                        items-source="_getComboData('mrpizzaTeamCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMrpizzaTeamCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                            <%-- 지역구분 --%>
+                        <th><s:message code="cmm.moms.momsAreaFg"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMrpizzaAreaFgCombo"
+                                        ng-model="store.mrpizzaAreaFg"
+                                        items-source="_getComboData('mrpizzaAreaFgCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMrpizzaAreaFgCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                            <%-- 상권 --%>
+                        <th><s:message code="cmm.moms.momsCommercial"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMrpizzaCommercialCombo"
+                                        ng-model="store.mrpizzaCommercial"
+                                        items-source="_getComboData('mrpizzaCommercialCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMrpizzaCommercialCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                            <%-- 점포유형 --%>
+                        <th><s:message code="cmm.moms.momsShopType"/></th>
+                        <td>
+                            <div class="sb-select">
+                                <wj-combo-box
+                                        id="srchMrpizzaShopTypeCombo"
+                                        ng-model="store.mrpizzaShopType"
+                                        items-source="_getComboData('mrpizzaShopTypeCombo')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false"
+                                        initialized="_initComboBox(s)"
+                                        control="srchMrpizzaShopTypeCombo">
+                                </wj-combo-box>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
           <%-- 비고 --%>
           <h3 class="h3_tbl"><s:message code="storeManage.remark" /></h3>
           <table class="searchTbl">
