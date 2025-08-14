@@ -96,4 +96,4 @@
     <!-- //contents end -->
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/saleCancelStatus/saleCancelStatusStore.js?ver=20250805.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/saleCancelStatus/saleCancelStatusStore.js?ver=20250813.01" charset="utf-8"></script>

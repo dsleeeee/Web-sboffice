@@ -122,4 +122,4 @@
     dlvrColList.push(param);
     </c:forEach>
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/saleByChannel/saleByChannel.js?ver=20250725.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/saleByChannel/saleByChannel.js?ver=20250813.01" charset="utf-8"></script>

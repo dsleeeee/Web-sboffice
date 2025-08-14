@@ -241,6 +241,20 @@ app.controller('dcDetailMrpizzaDcTypeCtrl', ['$scope', '$http', '$timeout', func
         var startDt = $scope.excelStartDate;
         var endDt = $scope.excelEndDate;
 
+        // 합계 행(GroupRow) 가져오기
+        var groupRow = $scope.flex.columnFooters.rows[0];
+
+        // 기존의 합계 행 데이터를 임시 저장
+        var originalDataItem = groupRow.dataItem;
+
+        // 첫 번째 데이터 열의 바인딩명 가져오기
+        var firstColumnBinding = $scope.flex.columns[0].binding;
+
+        // 첫번째 열에 '합계' 텍스트 임의 설정
+        var newDataItem = {};
+        newDataItem[firstColumnBinding] = '합계';
+        groupRow.dataItem = newDataItem;
+
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
@@ -251,6 +265,8 @@ app.controller('dcDetailMrpizzaDcTypeCtrl', ['$scope', '$http', '$timeout', func
                 }
             },
                 "할인세부내역_할인구분" + '_' + startDt + '_' + endDt + '_' + getCurDateTime() + '.xlsx', function () {
+                    // 원래의 합계 행 데이터로 복원
+                    groupRow.dataItem = originalDataItem;
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);

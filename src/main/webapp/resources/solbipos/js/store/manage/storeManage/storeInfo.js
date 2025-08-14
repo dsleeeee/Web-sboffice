@@ -358,6 +358,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#hdMomsEnvstVal").val("");
     $("#trMomsEnvst").css("display", "none");
     $("#divMomsEnvst").css("display", "none");
+    $("#divMrpizzaEnvst").css("display", "none");
     // 콤보박스 데이터
     $scope._setComboData("momsTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
     $scope._setComboData("momsAcShopCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-AC점포별
@@ -561,6 +562,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $("#trMomsEnvst").css("display", "none");
         $("#divMomsEnvst").css("display", "none");
+        $("#divMrpizzaEnvst").css("display", "none");
+      }
+
+      if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616'){
+        $scope.hqNmcodeComboList("151");
+        $scope.hqNmcodeComboList("153");
+        $scope.hqNmcodeComboList("154");
+        $scope.hqNmcodeComboList("155");
+        $("#divMrpizzaEnvst").css("display", "");
       }
 
       // 콤보박스 먼저 set할 시간을 벌기 위해
@@ -584,6 +594,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         } else if($("#envst1114").val() === "1") {
           $scope.srchHqBrandCdCombo.selectedValue = vHqBrandCd;
         }
+        if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616'){
+          $scope.srchMrpizzaTeamCombo.selectedValue = vMomsTeam;
+          $scope.srchMrpizzaAreaFgCombo.selectedValue = vMomsAreaFg;
+          $scope.srchMrpizzaCommercialCombo.selectedValue = vMomsCommercial;
+          $scope.srchMrpizzaShopTypeCombo.selectedValue = vMomsShopType;
+        }
+
       }, 1000);
 
     });
@@ -1367,7 +1384,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $("#trMomsEnvst").css("display", "none");
             $("#divMomsEnvst").css("display", "none");
+            $("#divMrpizzaEnvst").css("display", "none");
           }
+            if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616'){
+              $scope.hqNmcodeComboList("151");
+              $scope.hqNmcodeComboList("153");
+              $scope.hqNmcodeComboList("154");
+              $scope.hqNmcodeComboList("155");
+              $("#divMrpizzaEnvst").css("display", "");
+            }
 
             $("#envst1262").val(hqScope.getHq().envst1262);
 
@@ -1871,6 +1896,14 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
       $("#trMomsEnvst").css("display", "none");
       $("#divMomsEnvst").css("display", "none");
+      $("#divMrpizzaEnvst").css("display", "none");
+    }
+    if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616'){
+      $scope.hqNmcodeComboList("151");
+      $scope.hqNmcodeComboList("153");
+      $scope.hqNmcodeComboList("154");
+      $scope.hqNmcodeComboList("155");
+      $("#divMrpizzaEnvst").css("display", "");
     }
   };
   
@@ -2192,64 +2225,91 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if (response.data.data.list.length > 0) {
         var dataList = response.data.data.list;
 
-        if(nmcodeGrpCd === "151") {
-          $scope._setComboData("momsTeamCombo", dataList); // 추가정보-팀별
-          dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "152") {
-          $scope._setComboData("momsAcShopCombo", dataList); // 추가정보-AC점포별
-          dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "153") {
-          $scope._setComboData("momsAreaFgCombo", dataList); // 추가정보-지역구분
-          dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "154") {
-          $scope._setComboData("momsCommercialCombo", dataList); // 추가정보-상권
-          dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "155") {
-          $scope._setComboData("momsShopTypeCombo", dataList); // 추가정보-점포유형
-          dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "156") {
-          $scope._setComboData("momsStoreManageTypeCombo", dataList); // 추가정보-매장관리타입
-          dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "167") {
-          $scope._setComboData("momsStoreFg01Combo", dataList); // 추가정보-매장그룹
-          dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "169") {
+        if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616') {
+          if(nmcodeGrpCd === "151") {
+            $scope._setComboData("mrpizzaTeamCombo", dataList); // 추가정보-팀별
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "153") {
+            $scope._setComboData("mrpizzaAreaFgCombo", dataList); // 추가정보-지역구분
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "154") {
+            $scope._setComboData("mrpizzaCommercialCombo", dataList); // 추가정보-상권
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "155") {
+            $scope._setComboData("mrpizzaShopTypeCombo", dataList); // 추가정보-점포유형
+            dataList.unshift({name: "선택", value: ""});
+          }
+        }else{
+          if(nmcodeGrpCd === "151") {
+            $scope._setComboData("momsTeamCombo", dataList); // 추가정보-팀별
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "152") {
+            $scope._setComboData("momsAcShopCombo", dataList); // 추가정보-AC점포별
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "153") {
+            $scope._setComboData("momsAreaFgCombo", dataList); // 추가정보-지역구분
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "154") {
+            $scope._setComboData("momsCommercialCombo", dataList); // 추가정보-상권
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "155") {
+            $scope._setComboData("momsShopTypeCombo", dataList); // 추가정보-점포유형
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "156") {
+            $scope._setComboData("momsStoreManageTypeCombo", dataList); // 추가정보-매장관리타입
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "167") {
+            $scope._setComboData("momsStoreFg01Combo", dataList); // 추가정보-매장그룹
+            dataList.unshift({name: "선택", value: ""});
+          } else if(nmcodeGrpCd === "169") {
             $scope._setComboData("momsStoreFg02Combo", dataList); // 추가정보-매장그룹2
             dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "170") {
+          } else if(nmcodeGrpCd === "170") {
             $scope._setComboData("momsStoreFg03Combo", dataList); // 추가정보-매장그룹3
             dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "171") {
+          } else if(nmcodeGrpCd === "171") {
             $scope._setComboData("momsStoreFg04Combo", dataList); // 추가정보-매장그룹4
             dataList.unshift({name: "선택", value: ""});
-        } else if(nmcodeGrpCd === "172") {
+          } else if(nmcodeGrpCd === "172") {
             $scope._setComboData("momsStoreFg05Combo", dataList); // 추가정보-매장그룹5
             dataList.unshift({name: "선택", value: ""});
+          }
         }
-
       } else {
-        if(nmcodeGrpCd === "151") {
-          $scope._setComboData("momsTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
-        } else if(nmcodeGrpCd === "152") {
-          $scope._setComboData("momsAcShopCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-AC점포별
-        } else if(nmcodeGrpCd === "153") {
-          $scope._setComboData("momsAreaFgCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-지역구분
-        } else if(nmcodeGrpCd === "154") {
-          $scope._setComboData("momsCommercialCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-상권
-        } else if(nmcodeGrpCd === "155") {
-          $scope._setComboData("momsShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
-        } else if(nmcodeGrpCd === "156") {
-          $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
-        } else if(nmcodeGrpCd === "167") {
-          $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
-        } else if(nmcodeGrpCd === "169") {
+        if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616') {
+          if (nmcodeGrpCd === "151") {
+            $scope._setComboData("mrpizzaTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
+          } else if (nmcodeGrpCd === "153") {
+            $scope._setComboData("mrpizzaAreaFgCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-지역구분
+          } else if (nmcodeGrpCd === "154") {
+            $scope._setComboData("mrpizzaCommercialCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-상권
+          } else if (nmcodeGrpCd === "155") {
+            $scope._setComboData("mrpizzaShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
+          }
+        }else {
+          if (nmcodeGrpCd === "151") {
+            $scope._setComboData("momsTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
+          } else if (nmcodeGrpCd === "152") {
+            $scope._setComboData("momsAcShopCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-AC점포별
+          } else if (nmcodeGrpCd === "153") {
+            $scope._setComboData("momsAreaFgCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-지역구분
+          } else if (nmcodeGrpCd === "154") {
+            $scope._setComboData("momsCommercialCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-상권
+          } else if (nmcodeGrpCd === "155") {
+            $scope._setComboData("momsShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
+          } else if (nmcodeGrpCd === "156") {
+            $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
+          } else if (nmcodeGrpCd === "167") {
+            $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
+          } else if (nmcodeGrpCd === "169") {
             $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
-        } else if(nmcodeGrpCd === "170") {
+          } else if (nmcodeGrpCd === "170") {
             $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
-        } else if(nmcodeGrpCd === "171") {
+          } else if (nmcodeGrpCd === "171") {
             $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
-        } else if(nmcodeGrpCd === "172") {
+          } else if (nmcodeGrpCd === "172") {
             $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
+          }
         }
       }
     });

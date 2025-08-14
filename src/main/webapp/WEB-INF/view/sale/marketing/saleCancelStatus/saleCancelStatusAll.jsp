@@ -140,4 +140,4 @@
     <!-- //contents end -->
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/saleCancelStatus/saleCancelStatusAll.js?ver=20250731.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/saleCancelStatus/saleCancelStatusAll.js?ver=20250813.01" charset="utf-8"></script>

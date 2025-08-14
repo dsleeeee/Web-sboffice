@@ -105,7 +105,9 @@
         ,       tsshp.PAY_NM
         ,       tsshp.LINE_NO
         ,       tsshp.LINE_SEQ_NO
-        ,		CASE WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '01' THEN tsshp.ACQUIRE_NM ELSE '' END AS ACQUIRE_NM
+        ,		CASE 	WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '01' THEN tsshp.ACQUIRE_NM
+                         WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '18' THEN tcn.NMCODE_NM ELSE ''
+                END AS ACQUIRE_NM
         ,       tssh.ORG_BILL_NO
         ,       tsshp.PAY_AMT AS TOT_SALE_AMT
         ,       CASE WHEN tsshp.PAY_FG = 'PAY' THEN tsshp.PAY_AMT ELSE 0 END AS REAL_SALE_AMT
@@ -194,7 +196,6 @@
                                 AND   A.DC_CD = B.NMCODE_CD
                             ) A
                     ORDER BY A.POS_NO, A.BILL_NO ASC, A.PAY_FG DESC, A.PAY_CD ASC
-
                 ) tsshp
         ,		(
         			 	SELECT  A.HQ_OFFICE_CD
@@ -215,6 +216,8 @@
                         AND     B.SALE_DATE     (+) =       A.SALE_DATE
                         AND     B.ORDER_NO      (+) =       A.ORDER_NO
         		) tooh
+        ,		TB_SL_SALE_PAY_TEMPORARY tsspt
+        ,		TB_CM_NMCODE tcn
         WHERE tssh.HQ_OFFICE_CD = #{hqOfficeCd}
         AND tssh.SALE_DATE = #{saleDate}
         AND tssh.STORE_CD = #{storeCd}
@@ -232,6 +235,14 @@
         AND tooh.SALE_DATE (+)= tssh.SALE_DATE
         AND tooh.POS_NO (+)= tssh.POS_NO
         AND tooh.BILL_NO (+)= tssh.BILL_NO
+        AND tsspt.HQ_OFFICE_CD (+)= tssh.HQ_OFFICE_CD
+        AND tsspt.HQ_BRAND_CD (+)= tssh.HQ_BRAND_CD
+        AND tsspt.STORE_CD (+)= tssh.STORE_CD
+        AND tsspt.SALE_DATE (+)= tssh.SALE_DATE
+        AND tsspt.POS_NO (+)= tssh.POS_NO
+        AND tsspt.BILL_NO (+)= tssh.BILL_NO
+        AND tcn.NMCODE_GRP_CD (+) = '111'
+        AND tcn.NMCODE_CD (+) = tsspt.TEMPORARY_PAY_CD
         ORDER BY tssh.SALE_DATE DESC, tssh.STORE_CD, tssh.POS_NO, tssh.BILL_NO ASC, tsshp.PAY_FG DESC, tsshp.PAY_CD, tsshp.LINE_NO, tsshp.LINE_SEQ_NO ASC
     </select>
 </mapper>

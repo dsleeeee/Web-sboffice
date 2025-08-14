@@ -688,6 +688,8 @@
     <typeAlias alias="cdKwuVO" type="kr.co.solbipos.adi.etc.cdKwu.service.CdKwuVO"/>
     <!-- 맘스터치 > 기타관리 > 명칭관리 -->
     <typeAlias alias="cdMomsVO" type="kr.co.solbipos.adi.etc.cdMoms.service.CdMomsVO"/>
+    <!-- 미스터피자 > 기타관리 > 명칭관리 -->
+    <typeAlias alias="cdMrpizzaVO" type="kr.co.solbipos.adi.etc.cdMrpizza.service.CdMrpizzaVO"/>
     <!-- 맘스터치 > 기타관리 > 매출트레킹수신자목록 -->
     <typeAlias alias="alimtalkVO" type="kr.co.solbipos.adi.etc.alimtalk.service.AlimtalkVO"/>
 
@@ -1244,6 +1246,8 @@
     <typeAlias alias="cardCoSaleMrpizzaVO" type="kr.co.solbipos.sale.mrpizza.cardCoSaleMrpizza.service.CardCoSaleMrpizzaVO"/>
     <!--미스터피자 > 마케팅조회 > 영수별매출-->
     <typeAlias alias="billSaleMrpizzaVO" type="kr.co.solbipos.sale.mrpizza.billSaleMrpizza.service.BillSaleMrpizzaVO"/>
+    <!-- 미스터피자 > 마케팅조회 > 매출실적비교 -->
+    <typeAlias alias="salePerfCompareVO" type="kr.co.solbipos.sale.marketing.salePerfCompare.service.SalePerfCompareVO"/>
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
