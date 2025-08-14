@@ -82,15 +82,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $(".sysClosureDate").css("display", "none");
     }
 
-     // 데모매장이 아닌 매장은 데모매장으로 수정 불가
+    // 데모매장이 아닌 매장은 데모매장으로 수정 불가
     if($("#hdSysStatFg").val() !== null && $("#hdSysStatFg").val() !== "" && $("#hdSysStatFg").val() !== "9"){
-        // 매장상태를 데모매장으로 변경할 수 없습니다.
-        var msg = messages["storeManage.require.notSelectDemo"];
-        if(s.selectedValue === "9"){
-            $scope._popMsg(msg);
-            s.selectedValue = $("#hdSysStatFg").val();
-            return false;
-        }
+      // 매장상태를 데모매장으로 변경할 수 없습니다.
+      var msg = messages["storeManage.require.notSelectDemo"];
+      if(s.selectedValue === "9"){
+        $scope._popMsg(msg);
+        s.selectedValue = $("#hdSysStatFg").val();
+        return false;
+      }
     }
 
     $scope.sysStatFgVal = s.selectedValue;
@@ -137,9 +137,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.hqOfficeCd = s.selectedValue;
 
     $scope._postJSONQuery.withOutPopUp( "/store/manage/storeManage/storeManage/getStoreComboList.sb", params,
-      function(response){
-        $scope._setComboData("envStoreCd", response.data.data.list);
-      }
+        function(response){
+          $scope._setComboData("envStoreCd", response.data.data.list);
+        }
     );
   };
   $scope.getEnvHqOfficeCdVal = function (){
@@ -358,7 +358,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $("#hdMomsEnvstVal").val("");
     $("#trMomsEnvst").css("display", "none");
     $("#divMomsEnvst").css("display", "none");
-    $("#divMrpizzaEnvst").css("display", "none");
     // 콤보박스 데이터
     $scope._setComboData("momsTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
     $scope._setComboData("momsAcShopCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-AC점포별
@@ -467,9 +466,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#hdSysStatFg").val(storeDetailInfo.sysStatFg);
 
       if(storeDetailInfo.sysStatFg === '9'){
-          $scope.sysStatFgCombo.isReadOnly = true;
+        $scope.sysStatFgCombo.isReadOnly = true;
       } else {
-          $scope.sysStatFgCombo.isReadOnly = false;
+        $scope.sysStatFgCombo.isReadOnly = false;
       }
 
       $scope.store.storeCdInputType = "";
@@ -562,15 +561,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
         $("#trMomsEnvst").css("display", "none");
         $("#divMomsEnvst").css("display", "none");
-        $("#divMrpizzaEnvst").css("display", "none");
-      }
-
-      if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616'){
-        $scope.hqNmcodeComboList("151");
-        $scope.hqNmcodeComboList("153");
-        $scope.hqNmcodeComboList("154");
-        $scope.hqNmcodeComboList("155");
-        $("#divMrpizzaEnvst").css("display", "");
       }
 
       // 콤보박스 먼저 set할 시간을 벌기 위해
@@ -594,13 +584,6 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         } else if($("#envst1114").val() === "1") {
           $scope.srchHqBrandCdCombo.selectedValue = vHqBrandCd;
         }
-        if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616'){
-          $scope.srchMrpizzaTeamCombo.selectedValue = vMomsTeam;
-          $scope.srchMrpizzaAreaFgCombo.selectedValue = vMomsAreaFg;
-          $scope.srchMrpizzaCommercialCombo.selectedValue = vMomsCommercial;
-          $scope.srchMrpizzaShopTypeCombo.selectedValue = vMomsShopType;
-        }
-
       }, 1000);
 
     });
@@ -646,7 +629,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       }
 
       // [1262] 매장복사필수여부 사용 시 매장환경을 복사해야지만 저장 가능
-     var msg = messages["storeManage.1262.msg"];
+      var msg = messages["storeManage.1262.msg"];
       if($("#envst1262").val() === "1" && isNull( $scope.envStoreCdVal)){
         $scope._popMsg(msg);
         return false;
@@ -655,91 +638,91 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       // 매장코드 수동입력 시
       if ($scope.store.storeCdInputType === "1") {
 
-          // 매장코드를 입력해주세요.
-          var msg = messages["storeManage.storeCd"] + messages["cmm.require.text"];
-          if (isNull($scope.store.storeCd)) {
-              $scope._popMsg(msg);
-              return false;
+        // 매장코드를 입력해주세요.
+        var msg = messages["storeManage.storeCd"] + messages["cmm.require.text"];
+        if (isNull($scope.store.storeCd)) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 본사별 매장코드 생성 규칙 체크
+        // 1. 보나비
+        if ($scope.store.hqOfficeCd === "A0001") {
+          if ($scope.store.storeCd.length !== 7) {
+            $scope._popMsg(messages["storeManage.bonavie.storeCdLengthChk"]); // 보나비 매장코드는 7자리만 가능합니다.
+            return false;
           }
 
-          // 본사별 매장코드 생성 규칙 체크
-          // 1. 보나비
-          if ($scope.store.hqOfficeCd === "A0001") {
-              if ($scope.store.storeCd.length !== 7) {
-                  $scope._popMsg(messages["storeManage.bonavie.storeCdLengthChk"]); // 보나비 매장코드는 7자리만 가능합니다.
-                  return false;
-              }
+          if ($scope.store.storeCd.substr(0, 1) !== "A") {
+            $scope._popMsg(messages["storeManage.bonavie.storeCdChk"]); // 보나비 매장코드 시작규칙은 A 입니다.
+            return false;
+          }
+        }
 
-              if ($scope.store.storeCd.substr(0, 1) !== "A") {
-                  $scope._popMsg(messages["storeManage.bonavie.storeCdChk"]); // 보나비 매장코드 시작규칙은 A 입니다.
-                  return false;
-              }
+        // 2. 맘스터치
+        else if ($scope.store.hqOfficeCd === "H0393") {
+          if ($scope.store.storeCd.length !== 6) {
+            $scope._popMsg(messages["storeManage.moms.storeCdLengthChk"]); // 맘스터치 매장코드는 6자리만 가능합니다.
+            return false;
           }
 
-          // 2. 맘스터치
-          else if ($scope.store.hqOfficeCd === "H0393") {
-              if ($scope.store.storeCd.length !== 6) {
-                  $scope._popMsg(messages["storeManage.moms.storeCdLengthChk"]); // 맘스터치 매장코드는 6자리만 가능합니다.
-                  return false;
-              }
+          var storePrefix = $scope.store.storeCd.substr(0, 1);
+          if (storePrefix !== "C" && storePrefix !== "D" && storePrefix !== "E" && storePrefix !== "0") {
+            $scope._popMsg(messages["storeManage.moms.storeCdChk"]); // 맘스터치 매장코드 시작규칙은 C, D, E, 0(숫자) 입니다.
+            return false;
+          }
+        }
 
-              var storePrefix = $scope.store.storeCd.substr(0, 1);
-              if (storePrefix !== "C" && storePrefix !== "D" && storePrefix !== "E" && storePrefix !== "0") {
-                  $scope._popMsg(messages["storeManage.moms.storeCdChk"]); // 맘스터치 매장코드 시작규칙은 C, D, E, 0(숫자) 입니다.
-                  return false;
-              }
+        // 3. 아트박스
+        else if ($scope.store.hqOfficeCd === "H0345") {
+          if ($scope.store.storeCd.length !== 7) {
+            $scope._popMsg(messages["storeManage.artbox.storeCdLengthChk"]); // 아트박스 매장코드는 7자리만 가능합니다.
+            return false;
           }
 
-          // 3. 아트박스
-          else if ($scope.store.hqOfficeCd === "H0345") {
-              if ($scope.store.storeCd.length !== 7) {
-                  $scope._popMsg(messages["storeManage.artbox.storeCdLengthChk"]); // 아트박스 매장코드는 7자리만 가능합니다.
-                  return false;
-              }
+          if ($scope.store.storeCd.substr(0, 1) !== "P") {
+            $scope._popMsg(messages["storeManage.artbox.storeCdChk"]); // 아트박스 매장코드 시작규칙은 P 입니다.
+            return false;
+          }
+        }
 
-              if ($scope.store.storeCd.substr(0, 1) !== "P") {
-                  $scope._popMsg(messages["storeManage.artbox.storeCdChk"]); // 아트박스 매장코드 시작규칙은 P 입니다.
-                  return false;
-              }
+        // 4. 미스터피자
+        else if ($scope.store.hqOfficeCd === "H0616") {
+          if ($scope.store.storeCd.length !== 8) {
+            $scope._popMsg(messages["storeManage.mrpizza.storeCdLengthChk"]); // 미스터피자 매장코드는 8자리만 가능합니다.
+            return false;
           }
 
-          // 4. 미스터피자
-          else if ($scope.store.hqOfficeCd === "H0616") {
-              if ($scope.store.storeCd.length !== 8) {
-                  $scope._popMsg(messages["storeManage.mrpizza.storeCdLengthChk"]); // 미스터피자 매장코드는 8자리만 가능합니다.
-                  return false;
-              }
-
-              if (/^[0-9]+$/.test($scope.store.storeCd.substr(0, 6)) !== true) {
-                  $scope._popMsg(messages["storeManage.mrpizza.storeCdChk"]); // 미스터피자 매장코드 규칙은 숫자 6자리 + MP(영어) 입니다.
-                  return false;
-              }
-
-              if ($scope.store.storeCd.substr(6, 2) !== "MP") {
-                  $scope._popMsg(messages["storeManage.mrpizza.storeCdChk"]); // 미스터피자 매장코드 규칙은 숫자 6자리 + MP(영어) 입니다.
-                  return false;
-              }
+          if (/^[0-9]+$/.test($scope.store.storeCd.substr(0, 6)) !== true) {
+            $scope._popMsg(messages["storeManage.mrpizza.storeCdChk"]); // 미스터피자 매장코드 규칙은 숫자 6자리 + MP(영어) 입니다.
+            return false;
           }
 
-          // 그 외
-          else {
-              $scope._popMsg(messages["storeManage.manual.notUse.msg"]); // 매장코드 확인 - 관리자에게 문의하십시오.
-              return false;
+          if ($scope.store.storeCd.substr(6, 2) !== "MP") {
+            $scope._popMsg(messages["storeManage.mrpizza.storeCdChk"]); // 미스터피자 매장코드 규칙은 숫자 6자리 + MP(영어) 입니다.
+            return false;
           }
+        }
 
-          // 매장코드 중복체크를 해주세요.
-          var msg = messages["storeManage.storeCdDuplicateChk.msg"];
-          if (isNull($scope.store.storeCdChkFg)) {
-              $scope._popMsg(msg);
-              return false;
-          }
+        // 그 외
+        else {
+          $scope._popMsg(messages["storeManage.manual.notUse.msg"]); // 매장코드 확인 - 관리자에게 문의하십시오.
+          return false;
+        }
 
-          // 매장코드 중복체크를 다시 해주세요.
-          var msg = messages["storeManage.storeCdDuplicateChkAgain.msg"];
-          if ($scope.store.storeCd !== $scope.store.storeCdChkFg) {
-              $scope._popMsg(msg);
-              return false;
-          }
+        // 매장코드 중복체크를 해주세요.
+        var msg = messages["storeManage.storeCdDuplicateChk.msg"];
+        if (isNull($scope.store.storeCdChkFg)) {
+          $scope._popMsg(msg);
+          return false;
+        }
+
+        // 매장코드 중복체크를 다시 해주세요.
+        var msg = messages["storeManage.storeCdDuplicateChkAgain.msg"];
+        if ($scope.store.storeCd !== $scope.store.storeCdChkFg) {
+          $scope._popMsg(msg);
+          return false;
+        }
       }
 
     }
@@ -830,12 +813,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // 데모매장이 아닌 매장은 데모매장으로 수정 불가
     if($("#hdSysStatFg").val() !== null && $("#hdSysStatFg").val() !== "" && $("#hdSysStatFg").val() !== "9"){
-        // 매장상태를 데모매장으로 변경할 수 없습니다.
-        var msg = messages["storeManage.require.notSelectDemo"];
-        if( $scope.store.sysStatFg === "9") {
-            $scope._popMsg(msg);
-            return false;
-        }
+      // 매장상태를 데모매장으로 변경할 수 없습니다.
+      var msg = messages["storeManage.require.notSelectDemo"];
+      if( $scope.store.sysStatFg === "9") {
+        $scope._popMsg(msg);
+        return false;
+      }
     }
 
     // 용도를 선택해주세요.
@@ -978,15 +961,15 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     } else {
       if ($scope.store.vendorCd === "001") { // KCP
-          if ($scope.store.vendorTermnlNo.length != 10) {
-              $scope._popMsg(messages["storeManage.vendorTermnlNo"] + "는 10자리로 입력하세요.");
-              return false;
-          }
+        if ($scope.store.vendorTermnlNo.length != 10) {
+          $scope._popMsg(messages["storeManage.vendorTermnlNo"] + "는 10자리로 입력하세요.");
+          return false;
+        }
       } else {
-          if (nvl($scope.store.vendorTermnlNo.getByteLengthForOracle(), '') > 20) {
-              $scope._popMsg(messages["storeManage.vendorTermnlNo"] + messages["storeManage.require.exact.data"]);
-              return false;
-          }
+        if (nvl($scope.store.vendorTermnlNo.getByteLengthForOracle(), '') > 20) {
+          $scope._popMsg(messages["storeManage.vendorTermnlNo"] + messages["storeManage.require.exact.data"]);
+          return false;
+        }
       }
     }
 
@@ -997,8 +980,8 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       return false;
     } else {
       if (nvl($scope.store.vendorSerNo.getByteLengthForOracle(), '') > 20) {
-          $scope._popMsg(messages["storeManage.vendorSerNo"] + messages["storeManage.require.exact.data"]);
-          return false;
+        $scope._popMsg(messages["storeManage.vendorSerNo"] + messages["storeManage.require.exact.data"]);
+        return false;
       }
     }
 
@@ -1008,17 +991,17 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     if ($scope.store.hqOfficeCd == "DS011" || $scope.store.hqOfficeCd == "DS024" || $scope.store.hqOfficeCd == "H0360") {
       if ($scope.store.vendorCd == "001") {
       } else {
-          // BBQ 매장은 VAN - KCP 선택하여 주십시오.
-          $scope._popMsg(messages["storeManage.bbqSave.msg"]);
-          return false;
+        // BBQ 매장은 VAN - KCP 선택하여 주십시오.
+        $scope._popMsg(messages["storeManage.bbqSave.msg"]);
+        return false;
       }
     }
 
     // KOCES 총판은 벤더코드 KOCES만 저장가능
     if($("#lblVanFixFg").text() == "Y") {
       if ($scope.store.vendorCd !== '008') { // KOCES
-          $scope._popMsg(messages["storeManage.terminalManage"] + "는 [008] KOCES" + messages["cmm.require.select"]);
-          return false;
+        $scope._popMsg(messages["storeManage.terminalManage"] + "는 [008] KOCES" + messages["cmm.require.select"]);
+        return false;
       }
     }
 
@@ -1074,40 +1057,40 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
    * *******************************************************/
   $scope.save = function() {
 
-      if (!$scope.valueCheck()) return false;
-      
-      var storeScope = agrid.getScope('storeManageCtrl');
-          
-      // 수정시에만 체크
-      if (!$.isEmptyObject(storeScope.getSelectedStore())) {
-          if (b_vendorCd !== "" && b_vendorCd !== null) {
-              // 터미널관리 선택값이 변경한 경우 기존값과 중복되는지 확인
-              if (b_vendorCd !== $scope.store.vendorCd) {
-                  var params = $scope.store;
-                  $scope._postJSONQuery.withOutPopUp("/store/manage/storeManage/storeManage/chkVendorCd.sb", params, function (response) {
-                      if (response.data.data > 0) {
-                          $scope._popMsg("터미널관리" + getVendorCdNm($scope.store.vendorCd.toString()) + "가 중복됩니다. 확인하여 주십시오(상세정보: [기초관리] - [매장정보관리] - [매장터미널관리])");
-                          return false;
-                      }else{
-                          // 사업자번호 중복체크
-                          $scope.bizNoChk();
-                      }
-                  });
-              } else {
-                  // 사업자번호 중복체크
-                  $scope.bizNoChk();
-              }
-          } else if (b_vendorCd == "" || b_vendorCd == null) {
+    if (!$scope.valueCheck()) return false;
+
+    var storeScope = agrid.getScope('storeManageCtrl');
+
+    // 수정시에만 체크
+    if (!$.isEmptyObject(storeScope.getSelectedStore())) {
+      if (b_vendorCd !== "" && b_vendorCd !== null) {
+        // 터미널관리 선택값이 변경한 경우 기존값과 중복되는지 확인
+        if (b_vendorCd !== $scope.store.vendorCd) {
+          var params = $scope.store;
+          $scope._postJSONQuery.withOutPopUp("/store/manage/storeManage/storeManage/chkVendorCd.sb", params, function (response) {
+            if (response.data.data > 0) {
+              $scope._popMsg("터미널관리" + getVendorCdNm($scope.store.vendorCd.toString()) + "가 중복됩니다. 확인하여 주십시오(상세정보: [기초관리] - [매장정보관리] - [매장터미널관리])");
+              return false;
+            }else{
               // 사업자번호 중복체크
               $scope.bizNoChk();
-          } else {
-              $scope._popMsg(messages["cmm.registFail"]);
-              return false;
-          }
-      }else{
+            }
+          });
+        } else {
           // 사업자번호 중복체크
           $scope.bizNoChk();
+        }
+      } else if (b_vendorCd == "" || b_vendorCd == null) {
+        // 사업자번호 중복체크
+        $scope.bizNoChk();
+      } else {
+        $scope._popMsg(messages["cmm.registFail"]);
+        return false;
       }
+    }else{
+      // 사업자번호 중복체크
+      $scope.bizNoChk();
+    }
   };
 
   // 사업자번호 중복체크
@@ -1129,12 +1112,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     params.vendorTermnlNo = $("#vendorTermnlNo").val();
     params.vendorSerNo = $("#vendorSerNo").val();
 
-     // ERP 연동 매장 등록인 경우, NXPOS_STORE_CD 값을 Update 하기 위함.
+    // ERP 연동 매장 등록인 경우, NXPOS_STORE_CD 값을 Update 하기 위함.
     if(orgnFg === "HQ") {
-        if($("#hdBbqStoreCd").val() !== "") {
-            params.bbqStoreCd = $("#hdBbqStoreCd").val();
-        }
-     }
+      if($("#hdBbqStoreCd").val() !== "") {
+        params.bbqStoreCd = $("#hdBbqStoreCd").val();
+      }
+    }
 
     console.log('params',params);
 
@@ -1147,12 +1130,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if($scope.bizNoCheck.bizNo > 0) {
         // 해당 사업자번호[123-32-12312]가 이미 등록되어 있습니다. 계속 진행하시겠습니까?
         $scope._popConfirm(messages["storeManage.chk.bizNo1"] +"["+ $scope.store.bizNo1 +"-"+ $scope.store.bizNo2 +"-"+ $scope.store.bizNo3 +"]"+ messages["storeManage.chk.bizNo2"], function() {
-            // 매장정보 저장
-            $scope.storeSave(params);
-        });
-      } else if($scope.bizNoCheck.bizNo === 0) {
           // 매장정보 저장
           $scope.storeSave(params);
+        });
+      } else if($scope.bizNoCheck.bizNo === 0) {
+        // 매장정보 저장
+        $scope.storeSave(params);
       }
     });
   };
@@ -1263,7 +1246,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         // BBQ 매장코드 초기화(본사 선택시에는 사용안함)
         $("#hdBbqStoreCd").val("");
 
-          if( !$.isEmptyObject(hqScope.getHq())  ) {
+        if( !$.isEmptyObject(hqScope.getHq())  ) {
           // 본사정보 셋팅
           $scope.store.hqOfficeCd = hqScope.getHq().hqOfficeCd;
           $scope.store.hqOfficeNm = hqScope.getHq().hqOfficeNm;
@@ -1384,21 +1367,13 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
             $("#trMomsEnvst").css("display", "none");
             $("#divMomsEnvst").css("display", "none");
-            $("#divMrpizzaEnvst").css("display", "none");
           }
-            if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616'){
-              $scope.hqNmcodeComboList("151");
-              $scope.hqNmcodeComboList("153");
-              $scope.hqNmcodeComboList("154");
-              $scope.hqNmcodeComboList("155");
-              $("#divMrpizzaEnvst").css("display", "");
-            }
 
-            $("#envst1262").val(hqScope.getHq().envst1262);
+          $("#envst1262").val(hqScope.getHq().envst1262);
 
         }
       });
-      
+
       // 본사 정보 초기화(이전데이터 남아있는 현상 발생)
       hqScope.setHq("");
     });
@@ -1437,7 +1412,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#promotionChk").attr("disabled", true);
       $("#dlvrProdChk").attr("disabled", true);
 
-    // 신규등록할 매장이 프랜매장일 경우
+      // 신규등록할 매장이 프랜매장일 경우
     } else if($scope.store.hqOfficeCd !== "00000") {
       // 매장환경복사의 매장을 선택 안한후 신규등록할 매장을 수정하면
       if($scope.store.copyStoreCd == null || $scope.store.copyStoreCd == "") {
@@ -1448,39 +1423,39 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#promotionChk").attr("disabled", false);
         $("#dlvrProdChk").attr("disabled", false);
 
-      // 매장환경복사의 매장을 선택 후 신규등록할 매장을 수정하면
+        // 매장환경복사의 매장을 선택 후 신규등록할 매장을 수정하면
       } else {
         // 매장환경복사 매장이 단독매장일 경우
         if ($scope.store.copyHqOfficeCd === "00000") {
-            if ($("#productChk").is(":checked") === true) {
-                $("#productChk").prop("checked", false);
-            }
-            if ($("#salePriceChk").is(":checked") === true) {
-                $("#salePriceChk").prop("checked", false);
-            }
-            if ($("#supplyPriceChk").is(":checked") === true) {
-                $("#supplyPriceChk").prop("checked", false);
-            }
-            if ($("#touchKeyChk").is(":checked") === true) {
-                $("#touchKeyChk").prop("checked", false);
-            }
-            if ($("#prtFormChk").is(":checked") === true) {
-                $("#prtFormChk").prop("checked", false);
-            }
-            if ($("#promotionChk").is(":checked") === true) {
-                $("#promotionChk").prop("checked", false);
-            }
-            if ($("#dlvrProdChk").is(":checked") === true) {
-                $("#dlvrProdChk").prop("checked", false);
-            }
-            $("#productChk").attr("disabled", true);
-            $("#salePriceChk").attr("disabled", true);
-            $("#supplyPriceChk").attr("disabled", true);
-            $("#touchKeyChk").attr("disabled", true);
-            $("#promotionChk").attr("disabled", true);
-            $("#dlvrProdChk").attr("disabled", true);
+          if ($("#productChk").is(":checked") === true) {
+            $("#productChk").prop("checked", false);
+          }
+          if ($("#salePriceChk").is(":checked") === true) {
+            $("#salePriceChk").prop("checked", false);
+          }
+          if ($("#supplyPriceChk").is(":checked") === true) {
+            $("#supplyPriceChk").prop("checked", false);
+          }
+          if ($("#touchKeyChk").is(":checked") === true) {
+            $("#touchKeyChk").prop("checked", false);
+          }
+          if ($("#prtFormChk").is(":checked") === true) {
+            $("#prtFormChk").prop("checked", false);
+          }
+          if ($("#promotionChk").is(":checked") === true) {
+            $("#promotionChk").prop("checked", false);
+          }
+          if ($("#dlvrProdChk").is(":checked") === true) {
+            $("#dlvrProdChk").prop("checked", false);
+          }
+          $("#productChk").attr("disabled", true);
+          $("#salePriceChk").attr("disabled", true);
+          $("#supplyPriceChk").attr("disabled", true);
+          $("#touchKeyChk").attr("disabled", true);
+          $("#promotionChk").attr("disabled", true);
+          $("#dlvrProdChk").attr("disabled", true);
 
-        // 매장환경복사 매장이 프랜매장일 경우
+          // 매장환경복사 매장이 프랜매장일 경우
         } else if($scope.store.copyHqOfficeCd !== "00000") {
           // 매장환경복사 본사와 같은 본사면
           if($scope.store.hqOfficeCd === $scope.store.copyHqOfficeCd) {
@@ -1490,7 +1465,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#promotionChk").attr("disabled", false);
             $("#dlvrProdChk").attr("disabled", false);
 
-          // 매장환경복사 본사와 다른 본사면
+            // 매장환경복사 본사와 다른 본사면
           } else if($scope.store.hqOfficeCd !== $scope.store.copyHqOfficeCd) {
             if ($("#productChk").is(":checked") === true) {
               $("#productChk").prop("checked", false);
@@ -1710,9 +1685,9 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     }
 
     if ($scope.store.hqOfficeCd !== "A0001" && $scope.store.hqOfficeCd !== "H0393" && $scope.store.hqOfficeCd !== "H0345" && $scope.store.hqOfficeCd !== "H0616") {
-        // 매장코드 확인 - 관리자에게 문의하십시오.
-        $scope._popMsg(messages["storeManage.manual.notUse.msg"]);
-        return false;
+      // 매장코드 확인 - 관리자에게 문의하십시오.
+      $scope._popMsg(messages["storeManage.manual.notUse.msg"]);
+      return false;
     }
 
     // 매장코드 길이체크
@@ -1733,27 +1708,27 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     var params    = {};
     params.storeCd = $scope.store.storeCd;
 
-      $scope._postJSONQuery.withPopUp( "/store/manage/storeManage/storeManage/getStoreCdCnt.sb", params, function(response){
+    $scope._postJSONQuery.withPopUp( "/store/manage/storeManage/storeManage/getStoreCdCnt.sb", params, function(response){
 
-          var result = response.data.data;
+      var result = response.data.data;
 
-          if(result === 0){ // 사용가능
-              $scope._popMsg(messages["storeManage.notStoreCdDuplicate.msg"]);
-              $scope.store.storeCdChkFg = $scope.store.storeCd;
-              
-              // 매장코드 수동채번이면서, 매장코드8자리이상 사용매장인 경우만
-              if ($scope.store.storeCdInputType === "1") {
-                  if($("#hdDigit8Store").val() !== "" && $("#hdDigit8Store").val() !== null && $("#hdDigit8Store").val() !== undefined){
-                      // 웹사용자아이디에 바인딩
-                      $scope.setUserId();
-                  }
-              }
+      if(result === 0){ // 사용가능
+        $scope._popMsg(messages["storeManage.notStoreCdDuplicate.msg"]);
+        $scope.store.storeCdChkFg = $scope.store.storeCd;
 
-          }else{ // 중복
-              $scope._popMsg(messages["storeManage.storeCdDuplicate.msg"]);
-              $scope.store.storeCdChkFg ="";
+        // 매장코드 수동채번이면서, 매장코드8자리이상 사용매장인 경우만
+        if ($scope.store.storeCdInputType === "1") {
+          if($("#hdDigit8Store").val() !== "" && $("#hdDigit8Store").val() !== null && $("#hdDigit8Store").val() !== undefined){
+            // 웹사용자아이디에 바인딩
+            $scope.setUserId();
           }
-      });
+        }
+
+      }else{ // 중복
+        $scope._popMsg(messages["storeManage.storeCdDuplicate.msg"]);
+        $scope.store.storeCdChkFg ="";
+      }
+    });
 
   };
 
@@ -1788,11 +1763,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 매장코드8이상 사용매장인 경우만 웹 사용자 직접등록
       if($("#hdDigit8Store").val() === "" || $("#hdDigit8Store").val() === null || $("#hdDigit8Store").val() === undefined){
-          // 웹 사용자 자동 등록
-          $("#trUser").css("display", "none");
+        // 웹 사용자 자동 등록
+        $("#trUser").css("display", "none");
       }else{
-          // 웹 사용자 직접 등록
-          $("#trUser").css("display", "");
+        // 웹 사용자 직접 등록
+        $("#trUser").css("display", "");
       }
     } else {
       if (hqEnvst0027 === '0') { //자동
@@ -1827,7 +1802,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // ERP 연동 매장 셋팅 팝업 관련 visible 처리
     $("#lblErpStoreSet").text(hqOfficeNm + " 매장");
-    
+
     if(erpLinkHq !== ""){ // ERP 연동 매장등록을 사용하는 본사인 경우
       $("#btnErpStoreSet").css("display", "");
     }else{
@@ -1896,74 +1871,66 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
       $("#trMomsEnvst").css("display", "none");
       $("#divMomsEnvst").css("display", "none");
-      $("#divMrpizzaEnvst").css("display", "none");
-    }
-    if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616'){
-      $scope.hqNmcodeComboList("151");
-      $scope.hqNmcodeComboList("153");
-      $scope.hqNmcodeComboList("154");
-      $scope.hqNmcodeComboList("155");
-      $("#divMrpizzaEnvst").css("display", "");
     }
   };
-  
+
   // 웹 사용자 아이디 중복체크
   $scope.chkUserId = function () {
 
-     // 입력체크
-     if(isNull($("#userId").val())){
-       // 웹사용자아이디(을)를 입력하세요.
-       $scope._popMsg(messages["storeManage.userId"]+messages["cmm.require.text"]);
-       return false;
-     }
+    // 입력체크
+    if(isNull($("#userId").val())){
+      // 웹사용자아이디(을)를 입력하세요.
+      $scope._popMsg(messages["storeManage.userId"]+messages["cmm.require.text"]);
+      return false;
+    }
 
-     // 길이 및 형식 체크
-     if($("#userId").val().length !== 6 && (8 > $("#userId").val().length || $("#userId").val().length > 12)){
-       // 웹사용자아이디는 6자리 또는 8~12자리로 입력하세요.
-       $scope._popMsg(messages["storeManage.userIdLengthRegexp2.msg"]);
-       return false;
-     }
+    // 길이 및 형식 체크
+    if($("#userId").val().length !== 6 && (8 > $("#userId").val().length || $("#userId").val().length > 12)){
+      // 웹사용자아이디는 6자리 또는 8~12자리로 입력하세요.
+      $scope._popMsg(messages["storeManage.userIdLengthRegexp2.msg"]);
+      return false;
+    }
 
-     // 중복체크
-     var params    = {};
-     params.userId = $("#userId").val();
-     params.erpLinkHq = erpLinkHq; // erp 연동 매장 여부 파악
+    // 중복체크
+    var params    = {};
+    params.userId = $("#userId").val();
+    params.erpLinkHq = erpLinkHq; // erp 연동 매장 여부 파악
 
     if(orgnFg === "MASTER" || orgnFg === "AGENCY"){ // 관리자화면에서 매장등록시, erpLinkHq 값이 없어서 중복체크 때 조회해봄.
       params.hqOfficeCd = $scope.store.hqOfficeCd;
     }
 
-     $scope._postJSONQuery.withPopUp( "/store/manage/storeManage/storeManage/chkUserId.sb", params, function(response){
+    $scope._postJSONQuery.withPopUp( "/store/manage/storeManage/storeManage/chkUserId.sb", params, function(response){
 
-       var result = response.data.data;
+      var result = response.data.data;
 
-       console.log('chk duplicate result', result);
+      console.log('chk duplicate result', result);
 
-       if(result == "SUCCESS"){
-         $("#userIdChkFg").val($("#userId").val());
-         $scope.store.userIdChkFg = $scope.store.userId;
-         $scope._popMsg(messages["storeManage.notDuplicate.msg"]);
-       } else if(result === "USER_ID_REGEXP"){
-         $scope._popMsg(messages["storeManage.userIdRegexp.msg"]);
-       } else if(result === "USER_ID_LENGHTH_REGEXP"){
-         $scope._popMsg(messages["storeManage.userIdLengthRegexp.msg"]);
-       } else if(result === "USER_ID_CANNOT_USE_HANGEUL"){
-         $scope._popMsg(messages["storeManage.userIdNotUseHangeul.msg"]);
-       } else if(result === "USER_ID_MUST_CONTAIN_ENG_CAHR"){
-         $scope._popMsg(messages["storeManage.userIdContainEngChar.msg"]);
-       } else if(result === "USER_ID_ONLY_ENG_NUM_CHAR"){
-         $scope._popMsg(messages["storeManage.userIdOnlyEnvNumChar.msg"]);
-       } else if(result === "USER_ID_DUPLICATE"){
-         $("#userIdChkFg").val("");
-         $scope.store.userIdChkFg = "";
-         $scope._popMsg(messages["storeManage.userId.duplicate.msg"]);
-       } else if (result === "USER_ID_LENGHTH_REGEXP_6OR_8TO12"){
-         $scope._popMsg(messages["storeManage.userIdLengthRegexp2.msg"]);
-       } else {
-         $scope._popMsg(messages["storeManage.userId.notDuplicate.msg"]);
-       }
+      if(result == "SUCCESS"){
+        $("#userIdChkFg").val($("#userId").val());
+        $scope.store.userIdChkFg = $scope.store.userId;
+        $scope._popMsg(messages["storeManage.notDuplicate.msg"]);
+      } else if(result === "USER_ID_REGEXP"){
+        $scope._popMsg(messages["storeManage.userIdRegexp.msg"]);
+      } else if(result === "USER_ID_LENGHTH_REGEXP"){
+        $scope._popMsg(messages["storeManage.userIdLengthRegexp.msg"]);
+      } else if(result === "USER_ID_CANNOT_USE_HANGEUL"){
+        $scope._popMsg(messages["storeManage.userIdNotUseHangeul.msg"]);
+      } else if(result === "USER_ID_MUST_CONTAIN_ENG_CAHR"){
+        $scope._popMsg(messages["storeManage.userIdContainEngChar.msg"]);
+      } else if(result === "USER_ID_ONLY_ENG_NUM_CHAR"){
+        $scope._popMsg(messages["storeManage.userIdOnlyEnvNumChar.msg"]);
+      } else if(result === "USER_ID_DUPLICATE"){
+        $("#userIdChkFg").val("");
+        $scope.store.userIdChkFg = "";
+        $scope._popMsg(messages["storeManage.userId.duplicate.msg"]);
+      } else if (result === "USER_ID_LENGHTH_REGEXP_6OR_8TO12"){
+        $scope._popMsg(messages["storeManage.userIdLengthRegexp2.msg"]);
+      } else {
+        $scope._popMsg(messages["storeManage.userId.notDuplicate.msg"]);
+      }
 
-     });
+    });
   };
 
   // 매장코드를 웹 사용자 아이디로 자동 바인딩
@@ -1976,7 +1943,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#userId").val($("#storeCd").val().toString().toLowerCase());
       $scope.store.userId = $("#storeCd").val().toString().toLowerCase();
     }
-    
+
     // 자동바인딩 후에 다시 웹 사용자 아이디 중복체크를 하도록 유도하기 위해 초기화
     $("#userIdChkFg").val("");
     $scope.store.userIdChkFg = "";
@@ -2104,12 +2071,12 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.store.userPwd = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
             $scope.store.userPwdConf = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
           } else {
-              $("#userId").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
-              $("#userPwd").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
-              $("#userPwdConf").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase()  + "1234");
-              $scope.store.userId = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase();
-              $scope.store.userPwd = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
-              $scope.store.userPwdConf = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
+            $("#userId").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase());
+            $("#userPwd").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234");
+            $("#userPwdConf").val(erpStoreScope.getErpStore().bbqStoreCd.toLowerCase()  + "1234");
+            $scope.store.userId = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase();
+            $scope.store.userPwd = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
+            $scope.store.userPwdConf = erpStoreScope.getErpStore().bbqStoreCd.toLowerCase() + "1234";
           }
           $scope.areaCdCombo.selectedValue = erpStoreScope.getErpStore().areaCd;
           if(erpStoreScope.getErpStore().directManageYn === null || erpStoreScope.getErpStore().directManageYn === undefined || erpStoreScope.getErpStore().directManageYn === ""){
@@ -2196,7 +2163,7 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._broadcast('mapPopCtrl', params);
 
   };
-  
+
   // 본사-그룹 콤보박스 set
   $scope.setBranchDropdownList = function(){
 
@@ -2225,91 +2192,64 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
       if (response.data.data.list.length > 0) {
         var dataList = response.data.data.list;
 
-        if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616') {
-          if(nmcodeGrpCd === "151") {
-            $scope._setComboData("mrpizzaTeamCombo", dataList); // 추가정보-팀별
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "153") {
-            $scope._setComboData("mrpizzaAreaFgCombo", dataList); // 추가정보-지역구분
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "154") {
-            $scope._setComboData("mrpizzaCommercialCombo", dataList); // 추가정보-상권
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "155") {
-            $scope._setComboData("mrpizzaShopTypeCombo", dataList); // 추가정보-점포유형
-            dataList.unshift({name: "선택", value: ""});
-          }
-        }else{
-          if(nmcodeGrpCd === "151") {
-            $scope._setComboData("momsTeamCombo", dataList); // 추가정보-팀별
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "152") {
-            $scope._setComboData("momsAcShopCombo", dataList); // 추가정보-AC점포별
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "153") {
-            $scope._setComboData("momsAreaFgCombo", dataList); // 추가정보-지역구분
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "154") {
-            $scope._setComboData("momsCommercialCombo", dataList); // 추가정보-상권
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "155") {
-            $scope._setComboData("momsShopTypeCombo", dataList); // 추가정보-점포유형
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "156") {
-            $scope._setComboData("momsStoreManageTypeCombo", dataList); // 추가정보-매장관리타입
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "167") {
-            $scope._setComboData("momsStoreFg01Combo", dataList); // 추가정보-매장그룹
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "169") {
-            $scope._setComboData("momsStoreFg02Combo", dataList); // 추가정보-매장그룹2
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "170") {
-            $scope._setComboData("momsStoreFg03Combo", dataList); // 추가정보-매장그룹3
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "171") {
-            $scope._setComboData("momsStoreFg04Combo", dataList); // 추가정보-매장그룹4
-            dataList.unshift({name: "선택", value: ""});
-          } else if(nmcodeGrpCd === "172") {
-            $scope._setComboData("momsStoreFg05Combo", dataList); // 추가정보-매장그룹5
-            dataList.unshift({name: "선택", value: ""});
-          }
+        if(nmcodeGrpCd === "151") {
+          $scope._setComboData("momsTeamCombo", dataList); // 추가정보-팀별
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "152") {
+          $scope._setComboData("momsAcShopCombo", dataList); // 추가정보-AC점포별
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "153") {
+          $scope._setComboData("momsAreaFgCombo", dataList); // 추가정보-지역구분
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "154") {
+          $scope._setComboData("momsCommercialCombo", dataList); // 추가정보-상권
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "155") {
+          $scope._setComboData("momsShopTypeCombo", dataList); // 추가정보-점포유형
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "156") {
+          $scope._setComboData("momsStoreManageTypeCombo", dataList); // 추가정보-매장관리타입
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "167") {
+          $scope._setComboData("momsStoreFg01Combo", dataList); // 추가정보-매장그룹
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "169") {
+          $scope._setComboData("momsStoreFg02Combo", dataList); // 추가정보-매장그룹2
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "170") {
+          $scope._setComboData("momsStoreFg03Combo", dataList); // 추가정보-매장그룹3
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "171") {
+          $scope._setComboData("momsStoreFg04Combo", dataList); // 추가정보-매장그룹4
+          dataList.unshift({name: "선택", value: ""});
+        } else if(nmcodeGrpCd === "172") {
+          $scope._setComboData("momsStoreFg05Combo", dataList); // 추가정보-매장그룹5
+          dataList.unshift({name: "선택", value: ""});
         }
+
       } else {
-        if($scope.store.hqOfficeCd === 'H0614' || $scope.store.hqOfficeCd === 'H0616') {
-          if (nmcodeGrpCd === "151") {
-            $scope._setComboData("mrpizzaTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
-          } else if (nmcodeGrpCd === "153") {
-            $scope._setComboData("mrpizzaAreaFgCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-지역구분
-          } else if (nmcodeGrpCd === "154") {
-            $scope._setComboData("mrpizzaCommercialCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-상권
-          } else if (nmcodeGrpCd === "155") {
-            $scope._setComboData("mrpizzaShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
-          }
-        }else {
-          if (nmcodeGrpCd === "151") {
-            $scope._setComboData("momsTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
-          } else if (nmcodeGrpCd === "152") {
-            $scope._setComboData("momsAcShopCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-AC점포별
-          } else if (nmcodeGrpCd === "153") {
-            $scope._setComboData("momsAreaFgCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-지역구분
-          } else if (nmcodeGrpCd === "154") {
-            $scope._setComboData("momsCommercialCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-상권
-          } else if (nmcodeGrpCd === "155") {
-            $scope._setComboData("momsShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
-          } else if (nmcodeGrpCd === "156") {
-            $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
-          } else if (nmcodeGrpCd === "167") {
-            $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
-          } else if (nmcodeGrpCd === "169") {
-            $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
-          } else if (nmcodeGrpCd === "170") {
-            $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
-          } else if (nmcodeGrpCd === "171") {
-            $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
-          } else if (nmcodeGrpCd === "172") {
-            $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
-          }
+        if(nmcodeGrpCd === "151") {
+          $scope._setComboData("momsTeamCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-팀별
+        } else if(nmcodeGrpCd === "152") {
+          $scope._setComboData("momsAcShopCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-AC점포별
+        } else if(nmcodeGrpCd === "153") {
+          $scope._setComboData("momsAreaFgCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-지역구분
+        } else if(nmcodeGrpCd === "154") {
+          $scope._setComboData("momsCommercialCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-상권
+        } else if(nmcodeGrpCd === "155") {
+          $scope._setComboData("momsShopTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-점포유형
+        } else if(nmcodeGrpCd === "156") {
+          $scope._setComboData("momsStoreManageTypeCombo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장관리타입
+        } else if(nmcodeGrpCd === "167") {
+          $scope._setComboData("momsStoreFg01Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹
+        } else if(nmcodeGrpCd === "169") {
+          $scope._setComboData("momsStoreFg02Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹2
+        } else if(nmcodeGrpCd === "170") {
+          $scope._setComboData("momsStoreFg03Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹3
+        } else if(nmcodeGrpCd === "171") {
+          $scope._setComboData("momsStoreFg04Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹4
+        } else if(nmcodeGrpCd === "172") {
+          $scope._setComboData("momsStoreFg05Combo", [{"name": messages["cmm.select"], "value": ""}]); // 추가정보-매장그룹5
         }
       }
     });
@@ -2354,11 +2294,11 @@ app.controller('storeInfoCtrl', ['$scope', '$http', function ($scope, $http) {
 }]);
 // 터미널관리(밴더코드) 코드값으로 명칭 가져오기
 function getVendorCdNm(cd) {
-    var list = vanList01;
-    for (var i = 0; i < list.length; i++) {
-        if (list[i].value === cd) {
-            return list[i].name;
-        }
+  var list = vanList01;
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].value === cd) {
+      return list[i].name;
     }
+  }
 }
 
