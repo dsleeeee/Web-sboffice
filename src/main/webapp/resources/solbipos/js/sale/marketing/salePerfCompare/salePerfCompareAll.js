@@ -491,17 +491,54 @@ app.controller('salePerfCompareAllCtrl', ['$scope', '$http', '$timeout', functio
             return false;
         }
 
+        // 합계 행(GroupRow) 가져오기
+        var groupRow = $scope.flex.columnFooters.rows[0];
+
+        // 기존의 합계 행 데이터를 임시 저장
+        var originalDataItem = groupRow.dataItem;
+
+        // 첫 번째 데이터 열의 바인딩명 가져오기
+        var firstColumnBinding = $scope.flex.columns[0].binding;
+
+        // 첫번째 열에 '합계' 텍스트 임의 설정
+        var newDataItem = {};
+        newDataItem[firstColumnBinding] = '합계';
+        groupRow.dataItem = newDataItem;
+
         // 취소현황 그리드
         var workBook1 = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
             includeColumnHeaders: true,
-            includeCellStyles: false
+            includeCellStyles: false,
+            function() {
+                // 원래의 합계 행 데이터로 복원
+                groupRow.dataItem = originalDataItem;
+            }
         });
 
-        // 취소현황 상세 그리드
         var vScope = agrid.getScope("salePerfCompareAllDtlCtrl");
+
+        // 합계 행(GroupRow) 가져오기
+        var groupRowDtl = vScope.flex.columnFooters.rows[0];
+
+        // 기존의 합계 행 데이터를 임시 저장
+        var originalDataItemDtl = groupRowDtl.dataItem;
+
+        // 첫 번째 데이터 열의 바인딩명 가져오기
+        var firstColumnBindingDtl = vScope.flex.columns[0].binding;
+
+        // 첫번째 열에 '합계' 텍스트 임의 설정
+        var newDataItemDtl = {};
+        newDataItemDtl[firstColumnBindingDtl] = '합계';
+        groupRowDtl.dataItem = newDataItemDtl;
+
+        // 취소현황 상세 그리드
         var workBook2 = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(vScope.flex, {
             includeColumnHeaders: true,
-            includeCellStyles: false
+            includeCellStyles: false,
+            function() {
+                // 원래의 합계 행 데이터로 복원
+                groupRowDtl.dataItem = originalDataItemDtl;
+            }
         });
 
         // 시트 정보 push
@@ -677,6 +714,20 @@ app.controller('salePerfCompareAllDtlCtrl', ['$scope', '$http','$timeout', funct
             return false;
         }
 
+        // 합계 행(GroupRow) 가져오기
+        var groupRow = $scope.flex.columnFooters.rows[0];
+
+        // 기존의 합계 행 데이터를 임시 저장
+        var originalDataItem = groupRow.dataItem;
+
+        // 첫 번째 데이터 열의 바인딩명 가져오기
+        var firstColumnBinding = $scope.flex.columns[0].binding;
+
+        // 첫번째 열에 '합계' 텍스트 임의 설정
+        var newDataItem = {};
+        newDataItem[firstColumnBinding] = '합계';
+        groupRow.dataItem = newDataItem;
+
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
         $timeout(function () {
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
@@ -687,6 +738,9 @@ app.controller('salePerfCompareAllDtlCtrl', ['$scope', '$http','$timeout', funct
                 }
             },
                 "매출실적비교(채널)" + '_' + $scope.startDate + '_' + $scope.endDate + '-' +getCurDateTime() + '.xlsx', function () {
+                    // 원래의 합계 행 데이터로 복원
+                    groupRow.dataItem = originalDataItem;
+
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
                     }, 10);
