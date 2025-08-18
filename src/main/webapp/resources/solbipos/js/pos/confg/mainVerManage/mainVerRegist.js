@@ -52,11 +52,11 @@ app.controller('mainVerRegistCtrl', ['$scope', '$http', function ($scope, $http)
 
     // <-- 검색 호출 -->
     $scope.$on("mainVerRegistCtrl", function(event, data) {
-        $scope.searchMainVerRegist();
         if( !isEmptyObject(data) ) {
             $scope.setSelectedMainVerRegist(data);
             $("#lblHqOfficeCd").text(" [" + data.hqOfficeCd + " " + data.hqOfficeNm + "]");
         }
+        $scope.searchMainVerRegist();
         event.preventDefault();
     });
 

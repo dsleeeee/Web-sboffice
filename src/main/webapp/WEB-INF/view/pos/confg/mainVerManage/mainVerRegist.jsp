@@ -47,12 +47,12 @@
                     <%-- 버전일련번호 --%>
                     <th><s:message code="mainVerRegist.verSerNo" /></th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchVerSerNo" ng-model="srchVerSerNo" onkeyup="fnNxBtnSearch('2');"/>
+                        <input type="text" class="sb-input w100" id="srchVerSerNo" ng-model="verSerNo" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                     <%-- 버전적용명 --%>
                     <th><s:message code="mainVerRegist.verSerNm" /></th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchVerSerNm" ng-model="srchVerSerNm" onkeyup="fnNxBtnSearch('2');"/>
+                        <input type="text" class="sb-input w100" id="srchVerSerNm" ng-model="verSerNm" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                 </tr>
                 <tr>
@@ -75,7 +75,7 @@
                     <%-- 파일설명 --%>
                     <th><s:message code="mainVerRegist.fileDesc" /></th>
                     <td>
-                        <input type="text" class="sb-input w100" id="srchFileDescm" ng-model="srchFileDescm" onkeyup="fnNxBtnSearch('2');"/>
+                        <input type="text" class="sb-input w100" id="srchFileDesc" ng-model="fileDesc" onkeyup="fnNxBtnSearch('2');"/>
                     </td>
                 </tr>
                 </tbody>
@@ -143,4 +143,4 @@
     var useYnData = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/pos/confg/mainVerManage/mainVerRegist.js?ver=20250807.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/pos/confg/mainVerManage/mainVerRegist.js?ver=20250807.02" charset="utf-8"></script>
