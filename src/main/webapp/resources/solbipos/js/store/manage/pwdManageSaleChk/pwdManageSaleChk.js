@@ -90,7 +90,9 @@ app.controller('pwdManageSaleChkCtrl', ['$scope', '$http', function ($scope, $ht
     $scope.getPwdManageSaleChkList = function(){
         var params = {};
         params.listScale = $scope.listScale;
-        params.empOrgnFg = $scope.empOrgnFgCombo.selectedValue;
+        if(orgnFg === "HQ") {
+            params.empOrgnFg = $scope.empOrgnFgCombo.selectedValue;
+        }
 
         $scope._inquiryMain("/store/manage/pwdManageSaleChk/pwdManageSaleChk/getPwdManageSaleChkList.sb", params, function() {
         });
