@@ -154,7 +154,7 @@
                         ,      A.SALE_DATE
                         ,      A.POS_NO
                         ,      A.BILL_NO
-                        ,      LISTAGG(B.NMCODE_NM, ', ') WITHIN GROUP (ORDER BY A.PAY_CD) AS PAY_NM
+                        ,      LISTAGG(DISTINCT B.NMCODE_NM, ', ') WITHIN GROUP (ORDER BY A.PAY_CD) AS PAY_NM
                         FROM   TB_SL_SALE_HDR_PAY A
                         ,	   (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024') B
                         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -178,7 +178,7 @@
                         ,      A.SALE_DATE
                         ,      A.POS_NO
                         ,      A.BILL_NO
-                        ,      LISTAGG(B.NMCODE_NM, ', ') AS PAY_NM
+                        ,      LISTAGG(DISTINCT B.NMCODE_NM, ', ') AS PAY_NM
                         FROM   TB_SL_SALE_PAY_CARD A
                         ,	   (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '024') B
                         WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -202,7 +202,7 @@
                     ,      A.SALE_DATE
                     ,      A.POS_NO
                     ,      A.BILL_NO
-                    ,      LISTAGG(B.NMCODE_NM, ', ') WITHIN GROUP (ORDER BY A.DC_CD) AS DC_TYPE
+                    ,      LISTAGG(DISTINCT B.NMCODE_NM, ', ') WITHIN GROUP (ORDER BY A.DC_CD) AS DC_TYPE
                     FROM  TB_SL_SALE_HDR_DC A
                     ,	  (SELECT NMCODE_CD, NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '041') B
                     WHERE A.HQ_OFFICE_CD = #{hqOfficeCd}
