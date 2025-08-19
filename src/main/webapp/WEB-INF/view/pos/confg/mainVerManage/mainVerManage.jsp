@@ -80,9 +80,9 @@
                 <wj-flex-grid-column header="<s:message code="cmm.hqOfficeCd"/>" binding="hqOfficeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.hqOfficeNm"/>" binding="hqOfficeNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mainVerManage.storeCnt"/>" binding="storeCnt" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mainVerManage.mainVerRegist"/>" binding="mainVerRegist" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mainVerManage.mainVerRegist"/>" binding="mainVerRegist" width="150" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mainVerManage.mainVerDel"/>" binding="mainVerDel" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="mainVerManage.fileDesc"/>" binding="fileDesc" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="mainVerManage.fileDesc"/>" binding="fileDesc" width="250" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="mainVerManage.progFg"/>" binding="progFg" data-map="progFgDataMap" width="90" is-read-only="true" align="center"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
