@@ -843,6 +843,15 @@ public class StoreManageServiceImpl implements StoreManageService {
                 procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
             }
 
+            // 미스터피자 값 추가
+            if(storeManageVO.getHqOfficeCd().equals("H0616") || storeManageVO.getHqOfficeCd().equals("H0614") || storeManageVO.getHqOfficeCd().equals("DS053") ){
+                storeManageVO.setMomsTeam(storeManageVO.getMrpizzaTeam());
+                storeManageVO.setMomsAreaFg(storeManageVO.getMrpizzaAreaFg());
+                storeManageVO.setMomsCommercial(storeManageVO.getMrpizzaCommercial());
+                storeManageVO.setMomsShopType(storeManageVO.getMrpizzaShopType());
+                procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
+            }
+
             // 기준테이블바탕화면 이미지 등록
             if (!storeManageVO.getHqOfficeCd().equals("00000")) {
                 // 기준테이블바탕화면 이미지 등록(프랜차이즈 매장)
@@ -947,6 +956,13 @@ public class StoreManageServiceImpl implements StoreManageService {
             procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
             // [1264] 맘스전용_기프티쇼매장코드 MERGE 처리
             procCnt += mapper.mergeStoreEnv1264(storeManageVO);
+        }
+        if(storeManageVO.getHqOfficeCd().equals("H0616") || storeManageVO.getHqOfficeCd().equals("H0614") || storeManageVO.getHqOfficeCd().equals("DS053") ){
+            storeManageVO.setMomsTeam(storeManageVO.getMrpizzaTeam());
+            storeManageVO.setMomsAreaFg(storeManageVO.getMrpizzaAreaFg());
+            storeManageVO.setMomsCommercial(storeManageVO.getMrpizzaCommercial());
+            storeManageVO.setMomsShopType(storeManageVO.getMrpizzaShopType());
+            procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
         }
         // BBQ매장일때 브랜드 터미널 정보 머지 처리
         if (storeManageVO.getHqOfficeCd().equals("DS011") || storeManageVO.getHqOfficeCd().equals("DS024") || storeManageVO.getHqOfficeCd().equals("H0360")) {

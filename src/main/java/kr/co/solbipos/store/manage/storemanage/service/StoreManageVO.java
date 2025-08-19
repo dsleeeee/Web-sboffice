@@ -261,6 +261,18 @@ public class StoreManageVO extends PageVO {
     /** 본사코드 */
     private String selectHqOfficeCd;
 
+    /** 미스터피자 팀별 */
+    private String mrpizzaTeam;
+
+    /** 미스터피자 지역구분 */
+    private String mrpizzaAreaFg;
+
+    /** 미스터피자 상권 */
+    private String mrpizzaCommercial;
+
+    /** 미스터피자 점포유형 */
+    private String mrpizzaShopType;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -1185,5 +1197,37 @@ public class StoreManageVO extends PageVO {
 
     public void setSelectHqOfficeCd(String selectHqOfficeCd) {
         this.selectHqOfficeCd = selectHqOfficeCd;
+    }
+
+    public String getMrpizzaTeam() {
+        return mrpizzaTeam;
+    }
+
+    public void setMrpizzaTeam(String mrpizzaTeam) {
+        this.mrpizzaTeam = mrpizzaTeam;
+    }
+
+    public String getMrpizzaAreaFg() {
+        return mrpizzaAreaFg;
+    }
+
+    public void setMrpizzaAreaFg(String mrpizzaAreaFg) {
+        this.mrpizzaAreaFg = mrpizzaAreaFg;
+    }
+
+    public String getMrpizzaCommercial() {
+        return mrpizzaCommercial;
+    }
+
+    public void setMrpizzaCommercial(String mrpizzaCommercial) {
+        this.mrpizzaCommercial = mrpizzaCommercial;
+    }
+
+    public String getMrpizzaShopType() {
+        return mrpizzaShopType;
+    }
+
+    public void setMrpizzaShopType(String mrpizzaShopType) {
+        this.mrpizzaShopType = mrpizzaShopType;
     }
 }

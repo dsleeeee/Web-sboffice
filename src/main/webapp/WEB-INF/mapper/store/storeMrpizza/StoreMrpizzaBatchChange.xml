@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreMrpizzaBatchChange.xml
+    매장정보일괄변경
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.08.18      최초작성
+-->
+<mapper namespace="kr.co.solbipos.store.storeMrpizza.storeMrpizzaBatchChange.service.impl.StoreMrpizzaBatchChangeMapper">
+
+    <!-- 매장목록 조회 -->
+    <!--
+        TABLE    : TB_HQ_BRANCH_MOMS, TB_MS_STORE
+        PARAM    : storeMrpizzaBatchChangeVO
+        COMMENTS : 매장목록을 조회한다.
+    -->
+    <select id="getStoreList" parameterType="storeMrpizzaBatchChangeVO" resultType="DefaultMap">
+        /* USE : StoreMrpizzaBatchChangeMapper.getStoreList  */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  tms.STORE_CD
+        ,		tms.STORE_NM
+        ,		tms.OWNER_NM
+        ,		tms.HQ_BRAND_CD
+        ,		tms.BIZ_NO
+        ,		tms.BRANCH_CD
+        ,		tmsi.MOMS_TEAM
+        ,		tmsi.MOMS_AREA_FG
+        ,		tmsi.MOMS_COMMERCIAL
+        ,		tmsi.MOMS_SHOP_TYPE
+        ,		tms.BRANCH_CD                   AS OLD_BRANCH_CD
+        ,		tmsi.MOMS_TEAM                   AS OLD_MOMS_TEAM
+        ,		tmsi.MOMS_AREA_FG                AS OLD_MOMS_AREA_FG
+        ,		tmsi.MOMS_COMMERCIAL             AS OLD_MOMS_COMMERCIAL
+        ,		tmsi.MOMS_SHOP_TYPE              AS OLD_MOMS_SHOP_TYPE
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_MS_STORE tms
+        ,       TB_MS_STORE_INFO tmsi
+        WHERE   tms.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     tms.STORE_CD = tmsi.STORE_CD (+)
+        <if test="storeCd != null and storeCd != ''">
+            AND tms.STORE_CD LIKE '%'||#{storeCd}||'%' --매장코드
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND tms.STORE_NM LIKE '%'||#{storeNm}||'%' --매장명
+        </if>
+        <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
+            AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
+        </if>
+        <if test='momsTeam != null and momsTeam != ""'>
+            AND tmsi.MOMS_TEAM = #{momsTeam}
+        </if>
+        <if test='momsAreaFg != null and momsAreaFg != ""'>
+            AND tmsi.MOMS_AREA_FG = #{momsAreaFg}
+        </if>
+        <if test='momsCommercial != null and momsCommercial != ""'>
+            AND tmsi.MOMS_COMMERCIAL = #{momsCommercial}
+        </if>
+        <if test='momsShopType != null and momsShopType != ""'>
+            AND tmsi.MOMS_SHOP_TYPE = #{momsShopType}
+        </if>
+        ORDER
+        BY tms.STORE_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 매장정보 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS :
+    -->
+    <update id="getStoreBatchChangeSave" parameterType="storeMrpizzaBatchChangeVO">
+        /* StoreMrpizzaBatchChangeMapper.getStoreBatchChangeSave */
+        UPDATE  TB_MS_STORE
+        SET     BRANCH_CD   = #{branchCd}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     STORE_CD        = #{storeCd}
+    </update>
+
+    <!-- 매장정보 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE_INFO
+        COMMENTS :
+    -->
+    <update id="getStoreInfoBatchChangeSave" parameterType="storeMrpizzaBatchChangeVO">
+        /* StoreMrpizzaBatchChangeMapper.getStoreInfoBatchChangeSave */
+        MERGE INTO  TB_MS_STORE_INFO A
+        USING   DUAL
+        ON  (
+                A.STORE_CD = #{storeCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     MOMS_TEAM       = #{momsTeam}
+        ,       MOMS_AREA_FG    = #{momsAreaFg}
+        ,       MOMS_COMMERCIAL = #{momsCommercial}
+        ,       MOMS_SHOP_TYPE  = #{momsShopType}
+        ,       MOD_DT          = #{modDt}
+        ,       MOD_ID          = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                STORE_CD
+        ,       MOMS_TEAM
+        ,       MOMS_AREA_FG
+        ,       MOMS_COMMERCIAL
+        ,       MOMS_SHOP_TYPE
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{storeCd}
+        ,       #{momsTeam}
+        ,       #{momsAreaFg}
+        ,       #{momsCommercial}
+        ,       #{momsShopType}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </update>
+
+    <!-- 검증결과 전체 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_STORE_INFO
+        COMMENTS : [임시]매장엑셀업로드
+    -->
+    <delete id="getStoreExcelUploadCheckDeleteAll" parameterType="storeMrpizzaBatchChangeVO">
+        /* StoreMrpizzaBatchChangeMapper.getStoreExcelUploadCheckDeleteAll */
+        DELETE  TB_TMP_EXCEL_STORE_INFO
+        WHERE   SESSION_ID      = #{sessionId}
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+    </delete>
+
+    <!-- 매장코드 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS : 유요한 매장코드인지 체크
+    -->
+    <select id="getStoreCdChk" parameterType="ProdExcelUploadVO" resultType="Integer">
+        /* StoreMrpizzaBatchChangeMapper.getStoreCdChk */
+        SELECT  COUNT(*)
+        FROM    TB_MS_STORE
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     STORE_CD        = #{storeCd}
+    </select>
+
+    <!-- 본사공통코드 -->
+    <!--
+        TABLE    : TB_HQ_NMCODE
+        COMMENTS : 유효한 본사공통코드인지 체크
+    -->
+    <select id="getHqNmcodeChk" parameterType="ProdExcelUploadVO" resultType="String">
+        /* StoreMrpizzaBatchChangeMapper.getHqNmcodeChk */
+        SELECT  NMCODE_CD
+        FROM    TB_HQ_NMCODE
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     NMCODE_GRP_CD   = #{nmcodeGrpCd}
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "151"'>
+            AND     NMCODE_NM = #{momsTeam}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "153"'>
+            AND     NMCODE_NM = #{momsAreaFg}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "154"'>
+            AND     NMCODE_NM = #{momsCommercial}
+        </if>
+        <if test='nmcodeGrpCd != null and nmcodeGrpCd == "155"'>
+            AND     NMCODE_NM = #{momsShopType}
+        </if>
+    </select>
+
+    <!-- 검증결과 저장 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_STORE_INFO
+        COMMENTS : [임시]매장엑셀업로드
+    -->
+    <insert id="getStoreExcelUploadCheckSave" parameterType="storeMrpizzaBatchChangeVO">
+        /* StoreMrpizzaBatchChangeMapper.getStoreExcelUploadCheckSave */
+        INSERT INTO TB_TMP_EXCEL_STORE_INFO
+        (
+            SESSION_ID
+        ,   SEQ
+        ,   HQ_OFFICE_CD
+        ,   STORE_CD
+        ,   MOMS_TEAM
+        ,   MOMS_AREA_FG
+        ,   MOMS_COMMERCIAL
+        ,   MOMS_SHOP_TYPE
+        ,   RESULT
+        )
+        VALUES
+        (
+            #{sessionId}
+        ,   (SELECT NVL(MAX(SEQ)+1,1) FROM TB_TMP_EXCEL_STORE_INFO WHERE SESSION_ID = #{sessionId} AND HQ_OFFICE_CD = #{hqOfficeCd})
+        ,   #{hqOfficeCd}
+        ,   #{storeCd}
+        ,   #{momsTeam}
+        ,   #{momsAreaFg}
+        ,   #{momsCommercial}
+        ,   #{momsShopType}
+        ,   #{result}
+        )
+    </insert>
+
+    <!-- 검증결과 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_STORE_INFO
+        PARAM    : storeMrpizzaBatchChangeVO
+        COMMENTS : 엑셀업로드 검증결과를 조회한다.
+    -->
+    <select id="getStoreExcelUploadCheckList" parameterType="storeMrpizzaBatchChangeVO" resultType="DefaultMap">
+        /* USE : StoreMrpizzaBatchChangeMapper.getStoreExcelUploadCheckList  */
+        SELECT 	A.SESSION_ID
+        ,		A.SEQ
+        ,		A.HQ_OFFICE_CD
+        ,		A.STORE_CD
+        ,		B.STORE_NM
+        ,		A.MOMS_TEAM
+        ,		A.MOMS_AREA_FG
+        ,		A.MOMS_COMMERCIAL
+        ,		A.MOMS_SHOP_TYPE
+        ,		A.RESULT
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '151' AND thn.NMCODE_CD = B.MOMS_TEAM) 				AS OLD_MOMS_TEAM
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '153' AND thn.NMCODE_CD = B.MOMS_AREA_FG) 			AS OLD_MOMS_AREA_FG
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '154' AND thn.NMCODE_CD = B.MOMS_COMMERCIAL) 		AS OLD_MOMS_COMMERCIAL
+        ,		(SELECT thn.NMCODE_NM FROM TB_HQ_NMCODE thn WHERE thn.HQ_OFFICE_CD = #{hqOfficeCd} AND thn.NMCODE_GRP_CD = '155' AND thn.NMCODE_CD = B.MOMS_SHOP_TYPE) 			AS OLD_MOMS_SHOP_TYPE
+        FROM 	TB_TMP_EXCEL_STORE_INFO A
+        ,		(
+                    SELECT  tms.HQ_OFFICE_CD
+                    ,		tms.STORE_CD
+                    ,		tms.STORE_NM
+                    ,		tmsi.MOMS_TEAM
+                    ,		tmsi.MOMS_AREA_FG
+                    ,		tmsi.MOMS_COMMERCIAL
+                    ,		tmsi.MOMS_SHOP_TYPE
+                    FROM    TB_MS_STORE tms
+                    ,       TB_MS_STORE_INFO tmsi
+                    WHERE   tms.HQ_OFFICE_CD    = #{hqOfficeCd}
+                    AND     tms.STORE_CD        = tmsi.STORE_CD (+)
+                    ORDER
+                    BY      tms.STORE_CD
+                ) B
+        WHERE 	1=1
+        AND 	A.SESSION_ID 		= #{sessionId}
+        AND 	A.HQ_OFFICE_CD 		= #{hqOfficeCd}
+        AND 	B.HQ_OFFICE_CD 	(+)	= A.HQ_OFFICE_CD
+        AND 	B.STORE_CD 		(+)	= A.STORE_CD
+        ORDER
+        BY 		A.SEQ
+    </select>
+
+    <!-- 업로드 매장정보 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        COMMENTS :
+    -->
+    <update id="getStoreBatchChangeUploadSave" parameterType="storeMrpizzaBatchChangeVO">
+        /* StoreMrpizzaBatchChangeMapper.getStoreBatchChangeUploadSave */
+        MERGE INTO TB_MS_STORE A
+        USING
+                (
+                    SELECT  F.STORE_CD
+                    ,       DECODE(F.BRANCH_CD  , 'CHK_NONE', '', F.BRANCH_CD  )    AS BRANCH_CD
+                    ,       DECODE(F.B_BRANCH_CD, 'CHK_NONE', '', F.B_BRANCH_CD)    AS B_BRANCH_CD
+                    FROM    (
+                                SELECT  D.STORE_CD
+                                ,       D.BRANCH_CD
+                                ,       NVL(E.BRANCH_CD, 'CHK_NONE') B_BRANCH_CD
+                                FROM    (
+                                            SELECT  C.STORE_CD
+                                            ,       NVL((SELECT BRANCH_CD FROM TB_HQ_BRANCH_MOMS WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND BRANCH_NM = C.BRANCH_CD), 'CHK_NONE') AS BRANCH_CD
+                                            FROM    TB_TMP_EXCEL_STORE_INFO C
+                                            WHERE   C.SESSION_ID    = #{sessionId}
+                                            AND     C.HQ_OFFICE_CD  = #{hqOfficeCd}
+                                            AND     C.SEQ BETWEEN #{offset} AND #{limit}
+                                        ) D
+                                ,       TB_MS_STORE E
+                                WHERE   E.STORE_CD  (+) =   D.STORE_CD
+                            ) F
+                    WHERE   F.BRANCH_CD     !=  'CHK_NONE'
+                    AND     F.B_BRANCH_CD   !=  F.BRANCH_CD
+                ) B
+            ON  (
+                    A.STORE_CD = B.STORE_CD
+                )
+            WHEN MATCHED THEN
+            UPDATE
+            SET
+                    A.BRANCH_CD = B.BRANCH_CD
+            ,       MOD_DT = #{modDt}
+            ,       MOD_ID = #{modId}
+    </update>
+
+    <!-- 업로드 매장정보 저장 -->
+    <!--
+        TABLE    : TB_MS_STORE_INFO
+        COMMENTS :
+    -->
+    <update id="getSimpleStoreInfoSave" parameterType="storeMrpizzaBatchChangeVO">
+        /* StoreMrpizzaBatchChangeMapper.getSimpleStoreInfoSave */
+        MERGE INTO TB_MS_STORE_INFO A
+        USING
+                (
+                    SELECT  F.STORE_CD
+                    ,       DECODE(F.MOMS_TEAM               , 'CHK_NONE', '', F.MOMS_TEAM               )    AS MOMS_TEAM
+                    ,       DECODE(F.MOMS_AREA_FG            , 'CHK_NONE', '', F.MOMS_AREA_FG            )    AS MOMS_AREA_FG
+                    ,       DECODE(F.MOMS_COMMERCIAL         , 'CHK_NONE', '', F.MOMS_COMMERCIAL         )    AS MOMS_COMMERCIAL
+                    ,       DECODE(F.MOMS_SHOP_TYPE          , 'CHK_NONE', '', F.MOMS_SHOP_TYPE          )    AS MOMS_SHOP_TYPE
+                    ,       DECODE(F.B_MOMS_TEAM             , 'CHK_NONE', '', F.B_MOMS_TEAM             )    AS B_MOMS_TEAM
+                    ,       DECODE(F.B_MOMS_AREA_FG          , 'CHK_NONE', '', F.B_MOMS_AREA_FG          )    AS B_MOMS_AREA_FG
+                    ,       DECODE(F.B_MOMS_COMMERCIAL       , 'CHK_NONE', '', F.B_MOMS_COMMERCIAL       )    AS B_MOMS_COMMERCIAL
+                    ,       DECODE(F.B_MOMS_SHOP_TYPE        , 'CHK_NONE', '', F.B_MOMS_SHOP_TYPE        )    AS B_MOMS_SHOP_TYPE
+                    ,       #{regDt} AS REG_DT
+                    ,       #{regId} AS REG_ID
+                    ,       #{modDt} AS MOD_DT
+                    ,       #{modId} AS MOD_ID
+                    FROM    (
+                                SELECT  D.STORE_CD
+                                ,       D.MOMS_TEAM
+                                ,       D.MOMS_AREA_FG
+                                ,       D.MOMS_COMMERCIAL
+                                ,       D.MOMS_SHOP_TYPE
+                                ,       NVL(E.MOMS_TEAM             , 'CHK_NONE') B_MOMS_TEAM
+                                ,       NVL(E.MOMS_AREA_FG          , 'CHK_NONE') B_MOMS_AREA_FG
+                                ,       NVL(E.MOMS_COMMERCIAL       , 'CHK_NONE') B_MOMS_COMMERCIAL
+                                ,       NVL(E.MOMS_SHOP_TYPE        , 'CHK_NONE') B_MOMS_SHOP_TYPE
+                                FROM    (
+                                            SELECT  C.STORE_CD
+                                            ,       NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '151' AND NMCODE_NM = C.MOMS_TEAM)               , 'CHK_NONE') AS MOMS_TEAM
+                                            ,       NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '153' AND NMCODE_NM = C.MOMS_AREA_FG)            , 'CHK_NONE') AS MOMS_AREA_FG
+                                            ,       NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '154' AND NMCODE_NM = C.MOMS_COMMERCIAL)         , 'CHK_NONE') AS MOMS_COMMERCIAL
+                                            ,       NVL((SELECT NMCODE_CD FROM TB_HQ_NMCODE WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND NMCODE_GRP_CD = '155' AND NMCODE_NM = C.MOMS_SHOP_TYPE)          , 'CHK_NONE') AS MOMS_SHOP_TYPE
+                                            FROM    TB_TMP_EXCEL_STORE_INFO C
+                                            WHERE   1=1
+                                            AND     C.SESSION_ID = #{sessionId}
+                                            AND     C.HQ_OFFICE_CD = #{hqOfficeCd}
+                                            AND     C.SEQ BETWEEN #{offset} AND #{limit}
+                                        ) D
+                                ,       TB_MS_STORE_INFO E
+                                WHERE   E.STORE_CD  (+) =   D.STORE_CD
+                            ) F
+                    WHERE   (           F.B_MOMS_TEAM                !=  F.MOMS_TEAM
+                                OR      F.B_MOMS_AREA_FG             !=  F.MOMS_AREA_FG
+                                OR      F.B_MOMS_COMMERCIAL          !=  F.MOMS_COMMERCIAL
+                                OR      F.B_MOMS_SHOP_TYPE           !=  F.MOMS_SHOP_TYPE
+                            )
+                ) B
+            ON
+                (
+                    A.STORE_CD      =   B.STORE_CD
+                )
+            WHEN MATCHED THEN
+            UPDATE
+            SET
+                    A.MOMS_TEAM = B.MOMS_TEAM
+            ,       A.MOMS_AREA_FG = B.MOMS_AREA_FG
+            ,       A.MOMS_COMMERCIAL = B.MOMS_COMMERCIAL
+            ,       A.MOMS_SHOP_TYPE = B.MOMS_SHOP_TYPE
+            ,       A.MOD_DT = B.MOD_DT
+            ,       A.MOD_ID = B.MOD_ID
+            WHEN NOT MATCHED THEN
+            INSERT
+            (
+                    A.STORE_CD
+            ,       A.MOMS_TEAM
+            ,       A.MOMS_AREA_FG
+            ,       A.MOMS_COMMERCIAL
+            ,       A.MOMS_SHOP_TYPE
+            ,       A.REG_DT
+            ,       A.REG_ID
+            ,       A.MOD_DT
+            ,       A.MOD_ID
+            )
+            VALUES
+            (
+                    B.STORE_CD
+            ,       B.MOMS_TEAM
+            ,       B.MOMS_AREA_FG
+            ,       B.MOMS_COMMERCIAL
+            ,       B.MOMS_SHOP_TYPE
+            ,       B.REG_DT
+            ,       B.REG_ID
+            ,       B.MOD_DT
+            ,       B.MOD_ID
+            )
+    </update>
+
+    <!-- 검증결과 삭제 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_STORE_INFO
+        COMMENTS : [임시]매장엑셀업로드
+    -->
+    <delete id="getStoreExcelUploadCheckDelete" parameterType="storeMrpizzaBatchChangeVO">
+        /* StoreMrpizzaBatchChangeMapper.getStoreExcelUploadCheckDelete */
+        DELETE  TB_TMP_EXCEL_STORE_INFO
+        WHERE   SESSION_ID      = #{sessionId}
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     STORE_CD        = #{storeCd}
+    </delete>
+
+    <!-- 검증결과 조회 -->
+    <!--
+        TABLE    : TB_TMP_EXCEL_STORE_INFO
+        PARAM    : storeMrpizzaBatchChangeVO
+        COMMENTS : 엑셀업로드 검증결과를 조회한다.
+    -->
+    <select id="getTmpStoreList" parameterType="storeMrpizzaBatchChangeVO" resultType="DefaultMap">
+        /* USE : StoreMrpizzaBatchChangeMapper.getTmpStoreList  */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  A.SESSION_ID
+        ,       A.SEQ
+        ,       A.HQ_OFFICE_CD
+        ,       A.STORE_CD
+        ,       B.STORE_NM
+        ,       A.MOMS_TEAM
+        ,       A.MOMS_AREA_FG
+        ,       A.MOMS_COMMERCIAL
+        ,       A.MOMS_SHOP_TYPE
+        ,       A.RESULT
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_TMP_EXCEL_STORE_INFO A
+        ,       TB_MS_STORE B
+        WHERE   1=1
+        AND     A.SESSION_ID        = #{sessionId}
+        AND     A.HQ_OFFICE_CD      = #{hqOfficeCd}
+        AND     B.HQ_OFFICE_CD  (+) = A.HQ_OFFICE_CD
+        AND     B.STORE_CD      (+) = A.STORE_CD
+        ORDER
+        BY      A.SEQ
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+</mapper>

@@ -19,7 +19,7 @@ readonly/>
             <s:message code="cmm.store.select"/>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
-        <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
+        <div class="wj-dialog-body" ng-controller='<out value="${param.targetId}"/>Ctrl'>
             <div class="w100">
                 <%-- 조회조건 --%>
                 <table class="tblType01">
@@ -324,6 +324,87 @@ readonly/>
                     </c:if>
                     </tbody>
                 </table>
+                    <%-- 조회조건 --%>
+                    <table class="tblType01" id="tblSearch2${param.targetId}" style="display: none;">
+                        <colgroup>
+                            <col class="w15" />
+                            <col class="w35" />
+                            <col class="w15" />
+                            <col class="w35" />
+                        </colgroup>
+                        <tbody>
+                        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+                            <tr>
+                                    <%-- 팀별 --%>
+                                <th><s:message code="cmm.moms.momsTeam"/></th>
+                                <td>
+                                    <div class="sb-select">
+                                        <wj-combo-box
+                                                id="srchPopMrpizzaTeamCombo"
+                                                ng-model="popMrpizzaTeam"
+                                                items-source="_getComboData('popMrpizzaTeamCombo')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                initialized="_initComboBox(s)"
+                                                control="srchPopMrpizzaTeamCombo">
+                                        </wj-combo-box>
+                                    </div>
+                                </td>
+                                    <%-- 지역구분 --%>
+                                <th><s:message code="cmm.moms.momsAreaFg"/></th>
+                                <td>
+                                    <div class="sb-select">
+                                        <wj-combo-box
+                                                id="srchPopMrpizzaAreaFgCombo"
+                                                ng-model="popMrpizzaAreaFg"
+                                                items-source="_getComboData('popMrpizzaAreaFgCombo')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                initialized="_initComboBox(s)"
+                                                control="srchPopMrpizzaAreaFgCombo">
+                                        </wj-combo-box>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                    <%-- 상권 --%>
+                                <th><s:message code="cmm.moms.momsCommercial"/></th>
+                                <td>
+                                    <div class="sb-select">
+                                        <wj-combo-box
+                                                id="srchPopMrpizzaCommercialCombo"
+                                                ng-model="popMrpizzaCommercial"
+                                                items-source="_getComboData('popMrpizzaCommercialCombo')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                initialized="_initComboBox(s)"
+                                                control="srchPopMrpizzaCommercialCombo">
+                                        </wj-combo-box>
+                                    </div>
+                                </td>
+                                    <%-- 점포유형 --%>
+                                <th><s:message code="cmm.moms.momsShopType"/></th>
+                                <td>
+                                    <div class="sb-select">
+                                        <wj-combo-box
+                                                id="srchPopMrpizzaShopTypeCombo"
+                                                ng-model="popMrpizzaShopType"
+                                                items-source="_getComboData('popMrpizzaShopTypeCombo')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                initialized="_initComboBox(s)"
+                                                control="srchPopMrpizzaShopTypeCombo">
+                                        </wj-combo-box>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:if>
+                        </tbody>
+                    </table>
                 <%-- 조회조건 --%>
                 <table class="tblType01">
                     <colgroup>
@@ -539,10 +620,14 @@ readonly/>
                 if(companyFg == "MOMS") {
                     // 검색조건
                     $("#tblSearch1${param.targetId}").css("display", "");
-
-                } else if(companyFg == "COMMON") {
+                    $("#tblSearch2${param.targetId}").css("display", "none");
+                } else if(companyFg == "MRPIZZA") {
+                    $("#tblSearch2${param.targetId}").css("display", "");
+                    $("#tblSearch1${param.targetId}").css("display", "none");
+                }else if(companyFg == "COMMON") {
                     // 검색조건
                     $("#tblSearch1${param.targetId}").css("display", "none");
+                    $("#tblSearch2${param.targetId}").css("display", "none");
                 }
             });
 
@@ -564,13 +649,18 @@ readonly/>
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsTeamCombo", list);
+                    $scope._setComboData("popMrpizzaTeamCombo", list);
                     // 팀별
                     if(list.length <= 1) {
                         $("#srchPopMomsTeamCombo").css('background-color', '#F0F0F0');
                         $("#srchPopMomsTeamCombo").attr("disabled", true);
+                        $("#srchPopMrpizzaTeamCombo").css('background-color', '#F0F0F0');
+                        $("#srchPopMrpizzaTeamCombo").attr("disabled", true);
                     } else {
                         $("#srchPopMomsTeamCombo").css('background-color', '#FFFFFF');
                         $("#srchPopMomsTeamCombo").attr("disabled", false);
+                        $("#srchPopMrpizzaTeamCombo").css('background-color', '#FFFFFF');
+                        $("#srchPopMrpizzaTeamCombo").attr("disabled", false);
                     }
                 }
             });
@@ -600,13 +690,18 @@ readonly/>
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsAreaFgCombo", list);
+                    $scope._setComboData("popMrpizzaAreaFgCombo", list);
                     // 지역구분
                     if(list.length <= 1) {
                         $("#srchPopMomsAreaFgCombo").css('background-color', '#F0F0F0');
                         $("#srchPopMomsAreaFgCombo").attr("disabled", true);
+                        $("#srchPopMrpizzaAreaFgCombo").css('background-color', '#F0F0F0');
+                        $("#srchPopMrpizzaAreaFgCombo").attr("disabled", true);
                     } else {
                         $("#srchPopMomsAreaFgCombo").css('background-color', '#FFFFFF');
                         $("#srchPopMomsAreaFgCombo").attr("disabled", false);
+                        $("#srchPopMrpizzaAreaFgCombo").css('background-color', '#FFFFFF');
+                        $("#srchPopMrpizzaAreaFgCombo").attr("disabled", false);
                     }
                 }
             });
@@ -618,13 +713,18 @@ readonly/>
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsCommercialCombo", list);
+                    $scope._setComboData("popMrpizzaCommercialCombo", list);
                     // 상권
                     if(list.length <= 1) {
                         $("#srchPopMomsCommercialCombo").css('background-color', '#F0F0F0');
                         $("#srchPopMomsCommercialCombo").attr("disabled", true);
+                        $("#srchPopMrpizzaCommercialCombo").css('background-color', '#F0F0F0');
+                        $("#srchPopMrpizzaCommercialCombo").attr("disabled", true);
                     } else {
                         $("#srchPopMomsCommercialCombo").css('background-color', '#FFFFFF');
                         $("#srchPopMomsCommercialCombo").attr("disabled", false);
+                        $("#srchPopMrpizzaCommercialCombo").css('background-color', '#FFFFFF');
+                        $("#srchPopMrpizzaCommercialCombo").attr("disabled", false);
                     }
                 }
             });
@@ -636,13 +736,18 @@ readonly/>
                 if (response.data.data.list.length > 0) {
                     var list = response.data.data.list;
                     $scope._setComboData("popMomsShopTypeCombo", list);
+                    $scope._setComboData("popMrpizzaShopTypeCombo", list);
                     // 점포유형
                     if(list.length <= 1) {
                         $("#srchPopMomsShopTypeCombo").css('background-color', '#F0F0F0');
                         $("#srchPopMomsShopTypeCombo").attr("disabled", true);
+                        $("#srchPopMrpizzaShopTypeCombo").css('background-color', '#F0F0F0');
+                        $("#srchPopMrpizzaShopTypeCombo").attr("disabled", true);
                     } else {
                         $("#srchPopMomsShopTypeCombo").css('background-color', '#FFFFFF');
                         $("#srchPopMomsShopTypeCombo").attr("disabled", false);
+                        $("#srchPopMrpizzaShopTypeCombo").css('background-color', '#FFFFFF');
+                        $("#srchPopMrpizzaShopTypeCombo").attr("disabled", false);
                     }
                 }
             });
@@ -803,6 +908,11 @@ readonly/>
                 // $scope.srchPopMomsStoreFg03Combo.selectedIndex = 0;
                 // $scope.srchPopMomsStoreFg04Combo.selectedIndex = 0;
                 // $scope.srchPopMomsStoreFg05Combo.selectedIndex = 0;
+
+                $scope.srchPopMrpizzaTeamCombo.selectedIndex = 0;
+                $scope.srchPopMrpizzaAreaFgCombo.selectedIndex = 0;
+                $scope.srchPopMrpizzaCommercialCombo.selectedIndex = 0;
+                $scope.srchPopMrpizzaShopTypeCombo.selectedIndex = 0;
             });
 
             // 업로드매장 텍스트박스 조회
@@ -864,6 +974,10 @@ readonly/>
             params.momsShopType = $scope.popMomsShopType;
             params.momsStoreManageType = $scope.popMomsStoreManageType;
             params.branchCd = $scope.popBranchCd;
+            params.mrpizzaTeam = $scope.popMrpizzaTeam;
+            params.mrpizzaAreaFg = $scope.popMrpizzaAreaFg;
+            params.mrpizzaCommercial = $scope.popMrpizzaCommercial;
+            params.mrpizzaShopType = $scope.popMrpizzaShopType;
             // '전체' 일때
             if(params.storeHqBrandCd === "" || params.storeHqBrandCd === null) {
                 var momsHqBrandCd = "";

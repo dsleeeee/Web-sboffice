@@ -688,7 +688,9 @@
     <typeAlias alias="cdKwuVO" type="kr.co.solbipos.adi.etc.cdKwu.service.CdKwuVO"/>
     <!-- 맘스터치 > 기타관리 > 명칭관리 -->
     <typeAlias alias="cdMomsVO" type="kr.co.solbipos.adi.etc.cdMoms.service.CdMomsVO"/>
-        <!-- 맘스터치 > 기타관리 > 매출트레킹수신자목록 -->
+    <!-- 미스터피자 > 기타관리 > 명칭관리 -->
+    <typeAlias alias="cdMrpizzaVO" type="kr.co.solbipos.adi.etc.cdMrpizza.service.CdMrpizzaVO"/>
+    <!-- 맘스터치 > 기타관리 > 매출트레킹수신자목록 -->
     <typeAlias alias="alimtalkVO" type="kr.co.solbipos.adi.etc.alimtalk.service.AlimtalkVO"/>
 
 <!--
@@ -1205,6 +1207,9 @@
     <typeAlias alias="timeprodSalePmixMomsVO" type="kr.co.solbipos.sale.moms.timeProdSalePmixMoms.service.TimeProdSalePmixMomsVO"/>
     <!-- 맘스터치 > 간소화화면 > 시간대별 상품매출(P.MIX 매장) -->
     <typeAlias alias="timeProdSalePmixStoreMomsVO" type="kr.co.solbipos.sale.moms.timeProdSalePmixStoreMoms.service.TimeProdSalePmixStoreMomsVO"/>
+
+    <!-- 미스터피자 > 매장관리 > 매장정보일괄변경 -->
+    <typeAlias alias="storeMrpizzaBatchChangeVO" type="kr.co.solbipos.store.storeMrpizza.storeMrpizzaBatchChange.service.StoreMrpizzaBatchChangeVO"/>
 
     <!-- 미스터피자 > 매출분석 > 일별매출현황(채널별) -->
     <typeAlias alias="dayMrpizzaVO" type="kr.co.solbipos.sale.day.dayMrpizza.service.DayMrpizzaVO"/>
