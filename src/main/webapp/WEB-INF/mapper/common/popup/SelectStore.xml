@@ -128,7 +128,8 @@
     <select id="getSelectStoreCompanyFg" parameterType="selectStoreVO" resultType="DefaultMap">
         /* SelectStoreMapper.getSelectStoreCompanyFg */
         SELECT
-        (CASE WHEN (SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1250' AND USE_YN = 'Y') = '1' THEN 'MOMS'
+        (CASE   WHEN (SELECT ENVST_VAL FROM TB_HQ_ENVST WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND ENVST_CD = '1250' AND USE_YN = 'Y') = '1' THEN 'MOMS'
+                WHEN #{hqOfficeCd} IN('H0614', 'H0616', 'DS053') THEN 'MRPIZZA'
                 ELSE 'COMMON' END) AS COMPANY_FG
         FROM dual
     </select>

@@ -105,6 +105,18 @@ public class SelectStoreVO extends PageVO {
     /** 매장그룹5 */
     private String momsStoreFg05;
 
+    /** 팀별 */
+    private String mrpizzaTeam;
+
+    /** 지역구분 */
+    private String mrpizzaAreaFg;
+
+    /** 상권 */
+    private String mrpizzaCommercial;
+
+    /** 점포유형 */
+    private String mrpizzaShopType;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -274,4 +286,36 @@ public class SelectStoreVO extends PageVO {
     public String getMomsStoreFg05() { return momsStoreFg05; }
 
     public void setMomsStoreFg05(String momsStoreFg05) { this.momsStoreFg05 = momsStoreFg05; }
+
+    public String getMrpizzaTeam() {
+        return mrpizzaTeam;
+    }
+
+    public void setMrpizzaTeam(String mrpizzaTeam) {
+        this.mrpizzaTeam = mrpizzaTeam;
+    }
+
+    public String getMrpizzaAreaFg() {
+        return mrpizzaAreaFg;
+    }
+
+    public void setMrpizzaAreaFg(String mrpizzaAreaFg) {
+        this.mrpizzaAreaFg = mrpizzaAreaFg;
+    }
+
+    public String getMrpizzaCommercial() {
+        return mrpizzaCommercial;
+    }
+
+    public void setMrpizzaCommercial(String mrpizzaCommercial) {
+        this.mrpizzaCommercial = mrpizzaCommercial;
+    }
+
+    public String getMrpizzaShopType() {
+        return mrpizzaShopType;
+    }
+
+    public void setMrpizzaShopType(String mrpizzaShopType) {
+        this.mrpizzaShopType = mrpizzaShopType;
+    }
 }

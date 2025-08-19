@@ -312,11 +312,98 @@
                 </table>
             </c:if>
 
+                <c:if test="${sessionInfo.hqOfficeCd == 'H0614' or sessionInfo.hqOfficeCd == 'H0616'}">
+                    <table class="searchTbl" id="tblSearchAddShowEnvMrpizza" style="display: none;">
+                        <colgroup>
+                            <col class="w20"/>
+                            <col class="w30"/>
+                            <col class="w20"/>
+                            <col class="w30"/>
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                                <%-- 팀별 --%>
+                            <th><s:message code="cmm.moms.momsTeam"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMrpizzaTeamCombo"
+                                            ng-model="mrpizzaTeam"
+                                            items-source="_getComboData('mrpizzaTeamCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMrpizzaTeamCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                                <%-- 지역구분 --%>
+                            <th><s:message code="cmm.moms.momsAreaFg"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMrpizzaAreaFgCombo"
+                                            ng-model="mrpizzaAreaFg"
+                                            items-source="_getComboData('mrpizzaAreaFgCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMrpizzaAreaFgCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                                <%-- 상권 --%>
+                            <th><s:message code="cmm.moms.momsCommercial"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMrpizzaCommercialCombo"
+                                            ng-model="mrpizzaCommercial"
+                                            items-source="_getComboData('mrpizzaCommercialCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMrpizzaCommercialCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                                <%-- 점포유형 --%>
+                            <th><s:message code="cmm.moms.momsShopType"/></th>
+                            <td>
+                                <div class="sb-select">
+                                    <wj-combo-box
+                                            id="srchMrpizzaShopTypeCombo"
+                                            ng-model="mrpizzaShopType"
+                                            items-source="_getComboData('mrpizzaShopTypeCombo')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false"
+                                            initialized="_initComboBox(s)"
+                                            control="srchMrpizzaShopTypeCombo">
+                                    </wj-combo-box>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </c:if>
+
             <%-- 버튼영역 --%>
             <div class="mt10 tr">
                 <c:if test="${momsEnvstVal == '1' and sessionInfo.orgnFg == 'HQ'}">
                     <%-- 확장조회 --%>
-                    <button class="btn_blue mr5" id="btnSearchAddShow" ng-click="searchAddShowChangeEnv()">
+                    <button class="btn_blue mr5" id="btnSearchAddShow" ng-click="searchAddShowChangeEnv('moms')">
+                        <s:message code="cmm.search.addShow" />
+                    </button>
+                </c:if>
+                <c:if test="${sessionInfo.hqOfficeCd == 'H0614' or sessionInfo.hqOfficeCd == 'H0616'}">
+                    <%-- 확장조회 --%>
+                    <button class="btn_blue mr5" id="btnSearchAddShowMrpizza" ng-click="searchAddShowChangeEnv('mrpizza')">
                         <s:message code="cmm.search.addShow" />
                     </button>
                 </c:if>
@@ -400,4 +487,4 @@
     var sysStatFg = ${ccu.getCommCode("005")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20241016.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/touchKey/popUpTouchKeyEnv.js?ver=20250819.01" charset="utf-8"></script>

@@ -32,6 +32,10 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
     $scope._setComboData("momsStoreFg03Combo", momsStoreFg03ComboList); // 매장그룹3
     $scope._setComboData("momsStoreFg04Combo", momsStoreFg04ComboList); // 매장그룹4
     $scope._setComboData("momsStoreFg05Combo", momsStoreFg05ComboList); // 매장그룹5
+    $scope._setComboData("mrpizzaTeamCombo", momsTeamComboList); // 팀별
+    $scope._setComboData("mrpizzaAreaFgCombo", momsAreaFgComboList); // 지역구분
+    $scope._setComboData("mrpizzaCommercialCombo", momsCommercialComboList); // 상권
+    $scope._setComboData("mrpizzaShopTypeCombo", momsShopTypeComboList); // 점포유형
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
@@ -92,6 +96,13 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
             }
         } else if(brandUseFg === "1" && orgnFg === "HQ"){
             params.storeHqBrandCd = $scope.storeHqBrandCd;
+        }
+
+        if(hqOfficeCd === 'H0614' || hqOfficeCd === 'H0616'){
+            params.momsTeam          = $scope.mrpizzaTeam;
+            params.momsAreaFg        = $scope.mrpizzaAreaFg;
+            params.momsCommercial    = $scope.mrpizzaCommercial;
+            params.momsShopType      = $scope.mrpizzaShopType;
         }
         console.log(params);
 
@@ -523,11 +534,20 @@ app.controller('popUpTouchKeyEnvCtrl', ['$scope', '$http', '$timeout', function 
     };
 
     // 확장조회 숨김/보임
-    $scope.searchAddShowChangeEnv = function(){
-        if( $("#tblSearchAddShowEnv").css("display") === 'none') {
-            $("#tblSearchAddShowEnv").show();
-        } else {
-            $("#tblSearchAddShowEnv").hide();
+    $scope.searchAddShowChangeEnv = function(comp){
+
+        if(comp === 'moms') {
+            if ($("#tblSearchAddShowEnv").css("display") === 'none') {
+                $("#tblSearchAddShowEnv").show();
+            } else {
+                $("#tblSearchAddShowEnv").hide();
+            }
+        }else if(comp === 'mrpizza'){
+            if ($("#tblSearchAddShowEnvMrpizza").css("display") === 'none') {
+                $("#tblSearchAddShowEnvMrpizza").show();
+            } else {
+                $("#tblSearchAddShowEnvMrpizza").hide();
+            }
         }
     };
 

@@ -56,6 +56,12 @@ public class SelectStoreServiceImpl implements SelectStoreService {
             String[] userBrandList = selectStoreVO.getUserBrands().split(",");
             selectStoreVO.setUserBrandList(userBrandList);
         }
+        if(sessionInfoVO.getHqOfficeCd().equals("H0614") || sessionInfoVO.getHqOfficeCd().equals("H0616")){
+            selectStoreVO.setMomsTeam(selectStoreVO.getMrpizzaTeam());
+            selectStoreVO.setMomsAreaFg(selectStoreVO.getMrpizzaAreaFg());
+            selectStoreVO.setMomsCommercial(selectStoreVO.getMrpizzaCommercial());
+            selectStoreVO.setMomsShopType(selectStoreVO.getMrpizzaShopType());
+        }
 
         List<DefaultMap<String>> resultList = new ArrayList<DefaultMap<String>>();
 
