@@ -28,38 +28,11 @@ app.controller('srchProdCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.prcCtrlFgDataMap = new wijmo.grid.DataMap(prcCtrlFgData, 'value', 'name'); // 가격관리구분
     };
 
-    // 상품분류정보 팝업
-    $scope.popUpStoreProdClass = function() {
-
-        $scope._broadcast('prodClassCheckPopUpCtrl2', {
-            selectCancelFg2: $("#_selectCancelFg2").val()
-        });
-        var popUp = $scope.prodClassCheckPopUpLayer2;
-        popUp.show(true, function (s) {
-            // 선택 버튼 눌렀을때만
-            if (s.dialogResult === "wj-hide-apply") {
-                var scope = agrid.getScope('prodClassCheckPopUpCtrl2');
-                var prodClassCd = scope.getSelectedClass();
-                var params = {};
-                params.prodClassCd = prodClassCd[0];
-                // 조회 수행 : 조회URL, 파라미터, 콜백함수
-                $scope._postJSONQuery.withPopUp("/treePopupTwo/getProdClassCdNmCheck2.sb", params,
-                    function(response){
-                        $("#_storeProdClassCd").val(prodClassCd);
-                        // $scope.prodClassCd = prodClassCd;
-                        $scope.prodClassNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
-                    }
-                );
-            }
-        });
-    };
-
-    // 상품분류정보 선택취소
-    $scope.delStoreProdClass = function(){
-        $("#_storeProdClassCd").val("");
-        // $scope.prodClassCd = "";
-        $scope.prodClassNm = "";
-        $("#_selectCancelFg2").val("Y");
+    // 분류멀티선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'ProdClassMShow'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'ProdClassMCtrl'
+    $scope.srchProdProdClassMShow = function () {
+        $scope._broadcast('srchProdProdClassMCtrl');
     };
 
 
@@ -380,7 +353,7 @@ app.controller('noRegProdCtrl', ['$scope', '$http', function ($scope, $http) {
         params.storeCd     = $("#hdStoreCd").val();
         params.prodRegFg = 'N';
         params.hqBrandCd = $("#_srchHqBrand").val();
-        params.prodClassCd = $("#_storeProdClassCd").val();
+        params.prodClassCd = $("#srchProdProdClassMCd").val();
         params.originalStore = $("#originalStoreCd").val();
         params.useYn = $("#_srchBatchUseYn").val();
 
