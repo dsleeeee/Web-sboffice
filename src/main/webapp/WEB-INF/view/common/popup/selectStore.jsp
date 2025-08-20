@@ -19,7 +19,7 @@ readonly/>
             <s:message code="cmm.store.select"/>
             <a href="#" class="wj-hide btn_close"></a>
         </div>
-        <div class="wj-dialog-body" ng-controller='<out value="${param.targetId}"/>Ctrl'>
+        <div class="wj-dialog-body" ng-controller="<c:out value="${param.targetId}"/>Ctrl">
             <div class="w100">
                 <%-- 조회조건 --%>
                 <table class="tblType01">
