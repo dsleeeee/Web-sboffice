@@ -18,8 +18,8 @@ var dateFgData = [
     {"name":"일기간","value":"dayPeriod"},
     {"name":"월","value":"month"},
     {"name":"월기간","value":"monthPeriod"},
-    {"name":"년","value":"year"},
-    {"name":"년기간","value":"yearPeriod"}
+    {"name":"년","value":"year"}
+    /*{"name":"년기간","value":"yearPeriod"}*/
 ];
 
 var currentYear = new Date().getFullYear();
