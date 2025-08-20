@@ -67,11 +67,11 @@
             <%-- 분류조회 --%>
             <th><s:message code="prod.prodClass" /></th>
             <td>
-                <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassCdNm" ng-click="popUpProdClass()" style="float: left;"
-                       placeholder="<s:message code="prod.prodClass" /> 선택" readonly/>
-                <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
-                <input type="hidden" id="_selectCancelFg" name="selectCancelFg" ng-model="selectCancelFg" disabled />
-                <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
+                <%-- 분류선택 모듈 멀티 선택 사용시 include --%>
+                <jsp:include page="/WEB-INF/view/application/layer/searchProdClassCdM.jsp" flush="true">
+                <jsp:param name="targetId" value="prod"/>
+                </jsp:include>
+                <%--// 분류선택 모듈 멀티 선택 사용시 include --%>
             </td>
             <%-- 바코드 --%>
             <th><s:message code="prod.barCd" /></th>
@@ -338,7 +338,7 @@
     }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20250725.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20250820.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">
@@ -384,12 +384,4 @@
 <c:import url="/WEB-INF/view/base/prod/prod/prodAddDelPw.jsp">
     <c:param name="menuCd" value="${menuCd}"/>
     <c:param name="menuNm" value="${menuNm}"/>
-</c:import>
-
-<%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCdCheck.jsp">
-</c:import>
-
-<%-- 상품분류 팝업 --%>
-<c:import url="/WEB-INF/view/application/layer/searchProdClassCdCheck2.jsp">
 </c:import>

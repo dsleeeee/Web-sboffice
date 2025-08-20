@@ -262,6 +262,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
     // 파라미터
     var params = {};
+    params.prodClassCd =  $("#prodProdClassMCd").val();
     // 등록일자 '전체기간' 선택에 따른 params
     if(!$scope.isChecked){
       params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
@@ -436,38 +437,12 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
 
   };
 
-  // 상품분류정보 팝업
-  $scope.popUpProdClass = function() {
-
-    // 선택취소 값 전달
-    $scope._broadcast('prodClassCheckPopUpCtrl', {
-      selectCancelFg: $("#_selectCancelFg").val()
-    });
-    var popUp = $scope.prodClassCheckPopUpLayer;
-    popUp.show(true, function (s) {
-      // 선택 버튼 눌렀을때만
-      if (s.dialogResult === "wj-hide-apply") {
-        var scope = agrid.getScope('prodClassCheckPopUpCtrl');
-        var prodClassCd = scope.getSelectedClass();
-        var params = {};
-        params.prodClassCd = prodClassCd[0];
-        // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._postJSONQuery.withPopUp("/treePopup/getProdClassCdNmCheck.sb", params,
-            function(response){
-              $scope.prodClassCd = prodClassCd;
-              $scope.prodClassCdNm = (isEmptyObject(response.data.data) ? "" : response.data.data) + (prodClassCd.length - 1 > 0 ? " 외 " + (prodClassCd.length - 1).toString() : "");
-            }
-        );
-      }
-    });
-  };
-
-  // 상품분류정보 선택취소
-  $scope.delProdClass = function(){
-    $scope.prodClassCd = "";
-    $scope.prodClassCdNm = "";
-    $("#_selectCancelFg").val("Y");
-  };
+    // 분류멀티선택 모듈 팝업 사용시 정의
+    // 함수명 : 모듈에 넘기는 파라미터의 targetId + 'ProdClassMShow'
+    // _broadcast : 모듈에 넘기는 파라미터의 targetId + 'ProdClassMCtrl'
+    $scope.prodProdClassMShow = function () {
+        $scope._broadcast('prodProdClassMCtrl');
+    };
 
   // 화면 ready 된 후 설정
   angular.element(document).ready(function () {
@@ -558,7 +533,7 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
     params.excelGubun = 'C';
     params.prodCd = $scope.prodCd;
     params.prodNm = $scope.prodNm;
-    params.prodClassCd = $scope.prodClassCd;
+    params.prodClassCd = $("#prodProdClassMCd").val();
     params.barCd = $scope.barCd;
     params.useYn = $scope.useYn;
     //params.hqBrandNm = $scope.hqBrandNm;
