@@ -90,7 +90,7 @@
                     #{item}
                 </foreach>
               ) B
-        ON (      A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD IN ('DS021', 'DS034', 'H0393')) <!-- 매장적용([H0393] 맘스터치 만 적용 -->
+        ON (      A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD IN ('DS021', 'DS034', 'H0393', 'A0001')) <!-- 매장적용([H0393] 맘스터치 만 적용)([A0001] 다국어추가) -->
                   AND A.FNKEY_NO = B.FNKEY_NO
            )
         WHEN MATCHED THEN
