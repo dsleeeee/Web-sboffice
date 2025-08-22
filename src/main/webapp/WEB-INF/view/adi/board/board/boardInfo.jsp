@@ -263,4 +263,4 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 
-<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20250625.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/adi/board/board/boardInfo.js?ver=20250822.01" charset="utf-8"></script>

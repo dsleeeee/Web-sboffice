@@ -10629,4 +10629,104 @@
         , 	    B.MEMBR_ORGN_CD
         )
     </insert>
+
+    <!-- 주방프린터 상품 추가 -->
+    <!--
+        TABLE    : TB_MS_PRINTER_PROD
+        PARAM    : storeManageVO
+        COMMENTS : 매장 생성 시 주방프린터 상품 추가
+    -->
+    <insert id="insertStorePrintProd" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStorePrintProd */
+        MERGE INTO TB_MS_PRINTER_PROD A
+        USING	(
+                    SELECT 	A.STORE_CD
+                    ,		A.PRTER_NO
+                    ,		B.PROD_CD
+                    FROM 	TB_MS_PRINTER A
+                    ,		TB_MS_PRINTER_PROD B
+                    WHERE 	A.STORE_CD = #{storeCd}
+                    AND 	B.STORE_CD = 'S614607'
+                    AND 	B.PRTER_NO = '01'
+                ) B
+        ON	(
+                    A.STORE_CD 	= B.STORE_CD
+                AND	A.PRTER_NO  = B.PRTER_NO
+                AND	A.PROD_CD	= B.PROD_CD
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.MOD_DT = #{modDt}
+        ,       A.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                STORE_CD
+        ,	    PRTER_NO
+        ,	    PROD_CD
+        ,	    REG_DT
+        ,	    REG_ID
+        ,	    MOD_DT
+        ,	    MOD_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,	    B.PRTER_NO
+        ,	    B.PROD_CD
+        ,	    #{regDt}
+        ,	    #{regId}
+        ,	    #{modDt}
+        ,	    #{modId}
+        )
+    </insert>
+
+    <!-- 주방프린터 상품 추가 -->
+    <!--
+        TABLE    : TB_MS_PRINTER_PROD
+        PARAM    : storeManageVO
+        COMMENTS : 주방프린터 추가 시 주방프린터 상품 추가
+    -->
+    <insert id="insertStoreKitchenPrintProd" parameterType="storeManageVO" >
+        /* USE : StoreManageMapper.insertStoreKitchenPrintProd */
+        MERGE INTO TB_MS_PRINTER_PROD A
+        USING	(
+                    SELECT	#{storeCd}  AS STORE_CD
+                    ,		#{prterNo}  AS PRTER_NO
+                    ,		A.PROD_CD
+                    FROM 	TB_MS_PRINTER_PROD A
+                    WHERE	A.STORE_CD = 'S614607'
+                    AND     A.PRTER_NO = '01'
+                ) B
+        ON	(
+                    A.STORE_CD 	= B.STORE_CD
+                AND	A.PRTER_NO  = B.PRTER_NO
+                AND	A.PROD_CD	= B.PROD_CD
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.MOD_DT = #{modDt}
+        ,       A.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                STORE_CD
+        ,	    PRTER_NO
+        ,	    PROD_CD
+        ,	    REG_DT
+        ,	    REG_ID
+        ,	    MOD_DT
+        ,	    MOD_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,	    B.PRTER_NO
+        ,	    B.PROD_CD
+        ,	    #{regDt}
+        ,	    #{regId}
+        ,	    #{modDt}
+        ,	    #{modId}
+        )
+    </insert>
 </mapper>

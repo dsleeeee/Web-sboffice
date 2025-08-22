@@ -18,6 +18,12 @@ app.controller('kitchenprintCtrl', ['$scope', function ($scope) {
     $scope.init = function () {
         $("#prodKitchenprintLinkView").show();
         $("#storeProdKitchenprintLinkView").hide();
+        if(hqOfficeCd === 'H0614' || hqOfficeCd === 'H0616' || hqOfficeCd === 'DS053'){
+            $("#prodKitchenprintLinkView").hide();
+            $("#storeProdKitchenprintLinkView").show();
+            $("#prodKitchenprintLinkTab").hide();
+            $("#storeProdKitchenprintLinkTab").addClass("on");
+        }
     };
 
     // 상품-매장주방프린터 연결 탭 보이기

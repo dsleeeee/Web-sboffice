@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}" />
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}" />
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 
 <div id="storeProdKitchenprintLinkView" class="subCon" style="display: none;">
 
@@ -21,52 +22,54 @@
                 </button>
             </div>
         </div>
-        <table class="searchTbl">
-            <colgroup>
-                <col class="w10" />
-                <col class="w40" />
-                <col class="w10" />
-                <col class="w40" />
-            </colgroup>
-            <tbody>
-            <tr>
-                <%-- 매장선택 --%>
-                <th><s:message code="cmm.store.select"/></th>
-                <td>
-                    <%-- 매장선택 모듈 사용시 include --%>
-                    <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
-                        <jsp:param name="targetTypeFg" value="M"/>
-                        <jsp:param name="targetId" value="storeProdKitchenprintLinkStore"/>
-                    </jsp:include>
-                    <%--// 매장선택 모듈 사용시 include --%>
-                </td>
-                <input type="hidden" id="storeProdKitchenprintLinkStoreCd" value="${sessionInfo.storeCd}"/>
-                <%-- 매장상태 --%>
-                <th><s:message code="cmm.sysStatFg" /></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="srchSysStatFg"
-                                ng-model="sysStatFg"
-                                items-source="_getComboData('sysStatFgComboData')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)"
-                                selected-index="1">
-                        </wj-combo-box>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <c:if test="${hqOfficeCd != 'H0614' and hqOfficeCd != 'H0616' and hqOfficeCd != 'DS053'}">
+            <table class="searchTbl">
+                <colgroup>
+                    <col class="w10" />
+                    <col class="w40" />
+                    <col class="w10" />
+                    <col class="w40" />
+                </colgroup>
+                <tbody>
+                <tr>
+                    <%-- 매장선택 --%>
+                    <th><s:message code="cmm.store.select"/></th>
+                    <td>
+                        <%-- 매장선택 모듈 사용시 include --%>
+                        <jsp:include page="/WEB-INF/view/common/popup/selectStore.jsp" flush="true">
+                            <jsp:param name="targetTypeFg" value="M"/>
+                            <jsp:param name="targetId" value="storeProdKitchenprintLinkStore"/>
+                        </jsp:include>
+                        <%--// 매장선택 모듈 사용시 include --%>
+                    </td>
+                    <input type="hidden" id="storeProdKitchenprintLinkStoreCd" value="${sessionInfo.storeCd}"/>
+                    <%-- 매장상태 --%>
+                    <th><s:message code="cmm.sysStatFg" /></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="srchSysStatFg"
+                                    ng-model="sysStatFg"
+                                    items-source="_getComboData('sysStatFgComboData')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    selected-index="1">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
-        <div class="mt10 oh sb-select dkbr">
-            <%-- 전체등록 --%>
-            <button class="btn_skyblue ml5 fr" id="btnAllRegist" ng-click="allRegist()">
-                <s:message code="storeProdKitchenprintLink.allRegist" />
-            </button>
-        </div>
+            <div class="mt10 oh sb-select dkbr">
+                <%-- 전체등록 --%>
+                <button class="btn_skyblue ml5 fr" id="btnAllRegist" ng-click="allRegist()">
+                    <s:message code="storeProdKitchenprintLink.allRegist" />
+                </button>
+            </div>
+        </c:if>
 
         <%-- left --%>
         <div class="wj-TblWrap mt10 mb20 w40 fl">

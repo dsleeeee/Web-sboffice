@@ -623,4 +623,10 @@ public interface StoreManageMapper {
 
     /** 결제수단별 적립율 TX 데이터 추가 */
     int mergeMemberClassPayRateTx(MemberClassVO memberClassVO);
+
+    /** 주방프린터 상품 추가 */
+    int insertStorePrintProd(StoreManageVO storeManageVO);
+
+    /** 주방프린터 상품 추가 */
+    int insertStoreKitchenPrintProd(KitchenPrintVO kitchenPrintVO);
 }

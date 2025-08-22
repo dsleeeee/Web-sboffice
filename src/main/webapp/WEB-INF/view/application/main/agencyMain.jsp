@@ -192,10 +192,10 @@
             <div id="divPopup${status.index}" class="layer" style="display: none;">
                 <div class="layer_inner" style="position:absolute; left:50%; top:50%;  transform: translate(-50%, -50%); text-align: center;">
                     <!--layerContent-->
-                    <div class="title" style="max-width:1000px;max-height:700px;">
+                    <div class="title" style="max-width:1000px;max-height:600px;">
                         <p class="tit" id="popTitle${status.index}">
                                 ${board.title}</p>
-                        <div class="con" style="overflow: auto;max-height:550px;">
+                        <div class="con" style="overflow: auto;max-height:450px;">
                             <div id="boardContent${status.index}"></div>
                                 ${board.content}
                         </div>
