@@ -338,7 +338,7 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
 
                 procCnt = prodKitchenprintLinkMapper.getStoreProdKitchenprintLinkSaveInsert(prodKitchenprintLinkVO);
                 // 미스터피자 상품 추가 시 전 매장 적용
-                if(prodKitchenprintLinkVO.getStoreCd().equals("S614607") || prodKitchenprintLinkVO.getStoreCd().equals("DS00501")){
+                if(prodKitchenprintLinkVO.getStoreCd().equals("S614607") || prodKitchenprintLinkVO.getStoreCd().equals("S614653") || prodKitchenprintLinkVO.getStoreCd().equals("DS00501")){
                     if(prodKitchenprintLinkVO.getPrterNo().equals("01")) {
                         procCnt = prodKitchenprintLinkMapper.getMergeProdKitchenPrintLinkMrpizza(prodKitchenprintLinkVO);
                     }
@@ -347,7 +347,7 @@ public class ProdKitchenprintLinkServiceImpl implements ProdKitchenprintLinkServ
             } else if (prodKitchenprintLinkVO.getStatus() == GridDataFg.DELETE) {
                 procCnt = prodKitchenprintLinkMapper.getStoreProdKitchenprintLinkSaveDelete(prodKitchenprintLinkVO);
                 // 미스터피자 상품 삭제 시 전 매장 삭제
-                if(prodKitchenprintLinkVO.getStoreCd().equals("S614607") || prodKitchenprintLinkVO.getStoreCd().equals("DS00501")){
+                if(prodKitchenprintLinkVO.getStoreCd().equals("S614607") || prodKitchenprintLinkVO.getStoreCd().equals("S614653") || prodKitchenprintLinkVO.getStoreCd().equals("DS00501")){
                     if(prodKitchenprintLinkVO.getPrterNo().equals("01")) {
                         procCnt = prodKitchenprintLinkMapper.getDeleteProdKitchenPrintLinkMrpizza(prodKitchenprintLinkVO);
                     }

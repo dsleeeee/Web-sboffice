@@ -22,6 +22,8 @@ import kr.co.solbipos.application.common.service.CmmVO;
 public class KitchenPrintVO extends CmmVO {
 
     private static final long serialVersionUID = -4237428030982506491L;
+    /** 본사코드 */
+    private String hqOfficeCd;
     /** 매장코드 */
     private String storeCd;
     /** 프린터번호 */
@@ -60,6 +62,14 @@ public class KitchenPrintVO extends CmmVO {
     private String dlvrPrintYn;
     /** 제우스 매핑코드 */
     private String zeusPrterNo;
+
+    public String getHqOfficeCd() {
+        return hqOfficeCd;
+    }
+
+    public void setHqOfficeCd(String hqOfficeCd) {
+        this.hqOfficeCd = hqOfficeCd;
+    }
 
     /**
      * @return the storeCd

@@ -310,6 +310,7 @@ app.controller('kitchenPrintCtrl', ['$scope', '$http', function ($scope, $http) 
       }
       $scope.flex.collectionView.itemsAdded[i].storeCd = storeScope.selectedStore.storeCd;
       $scope.flex.collectionView.itemsAdded[i].status = "I";
+      $scope.flex.collectionView.itemsAdded[i].hqOfficeCd = storeScope.getSelectedStore().hqOfficeCd;
       params.push($scope.flex.collectionView.itemsAdded[i]);
     }
 

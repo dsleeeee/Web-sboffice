@@ -107,6 +107,8 @@ app.controller('storeProdKitchenprintLinkCtrl', ['$scope', '$http', function ($s
         params.storeCd = $("#storeProdKitchenprintLinkStoreCd").val();
         if(hqOfficeCd === 'H0616'){
             params.storeCd = 'S614607';
+        }else if(hqOfficeCd === 'H0614'){
+            params.storeCd = 'S614653';
         }else if(hqOfficeCd === 'DS053'){
             params.storeCd = 'DS00501';
         }

@@ -10646,7 +10646,17 @@
                     FROM 	TB_MS_PRINTER A
                     ,		TB_MS_PRINTER_PROD B
                     WHERE 	A.STORE_CD = #{storeCd}
-                    AND 	B.STORE_CD = 'S614607'
+                    <choose>
+                        <when test='hqOfficeCd != null and hqOfficeCd == "H0616"'>
+                            AND 	B.STORE_CD = 'S614607'
+                        </when>
+                        <when test='hqOfficeCd != null and hqOfficeCd == "H0614"'>
+                            AND 	B.STORE_CD = 'S614653'
+                        </when>
+                        <when test='hqOfficeCd != null and hqOfficeCd == "DS053"'>
+                            AND 	B.STORE_CD = 'DS00501'
+                        </when>
+                    </choose>
                     AND 	B.PRTER_NO = '01'
                 ) B
         ON	(
@@ -10695,7 +10705,18 @@
                     ,		#{prterNo}  AS PRTER_NO
                     ,		A.PROD_CD
                     FROM 	TB_MS_PRINTER_PROD A
-                    WHERE	A.STORE_CD = 'S614607'
+                    WHERE	1=1
+                    <choose>
+                        <when test='hqOfficeCd != null and hqOfficeCd == "H0616"'>
+                            AND 	A.STORE_CD = 'S614607'
+                        </when>
+                        <when test='hqOfficeCd != null and hqOfficeCd == "H0614"'>
+                            AND 	A.STORE_CD = 'S614653'
+                        </when>
+                        <when test='hqOfficeCd != null and hqOfficeCd == "DS053"'>
+                            AND 	A.STORE_CD = 'DS00501'
+                        </when>
+                    </choose>
                     AND     A.PRTER_NO = '01'
                 ) B
         ON	(

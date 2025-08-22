@@ -1412,12 +1412,9 @@ public class StoreManageServiceImpl implements StoreManageService {
 
             if (kitchenPrintVO.getStatus() == GridDataFg.INSERT) {
                 result = mapper.insertKitchenPrint(kitchenPrintVO);
-                if (result <= 0) {
-                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
-                } else {
-                    procCnt++;
+                if(kitchenPrintVO.getHqOfficeCd().equals("H0616") || kitchenPrintVO.getHqOfficeCd().equals("H0614") || kitchenPrintVO.getHqOfficeCd().equals("DS053") ) {
+                    result = mapper.insertStoreKitchenPrintProd(kitchenPrintVO);
                 }
-                result = mapper.insertStoreKitchenPrintProd(kitchenPrintVO);
                 if (result <= 0) {
                     throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 } else {
