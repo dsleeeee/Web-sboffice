@@ -87,4 +87,10 @@ public interface ProdKitchenprintLinkMapper {
 
     /** 매장-상품 탭 - 전체등록 저장 merge */
     int getStoreProdKitchenprintLinkAllRegistSaveMerge(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /** 미스터피자 상품 추가 시 전 매장 적용 */
+    int getMergeProdKitchenPrintLinkMrpizza(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
+
+    /** 미스터피자 상품 삭제 시 전 매장 삭제 */
+    int getDeleteProdKitchenPrintLinkMrpizza(ProdKitchenprintLinkVO prodKitchenprintLinkVO);
 }

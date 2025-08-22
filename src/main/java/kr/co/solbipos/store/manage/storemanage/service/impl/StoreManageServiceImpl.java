@@ -827,6 +827,21 @@ public class StoreManageServiceImpl implements StoreManageService {
             }
             // 매장환경 복사2 끝 ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
+
+            // 미스터피자 값 추가
+            if(storeManageVO.getHqOfficeCd().equals("H0616") || storeManageVO.getHqOfficeCd().equals("H0614") || storeManageVO.getHqOfficeCd().equals("DS053") ){
+                storeManageVO.setMomsTeam(storeManageVO.getMrpizzaTeam());
+                storeManageVO.setMomsAreaFg(storeManageVO.getMrpizzaAreaFg());
+                storeManageVO.setMomsCommercial(storeManageVO.getMrpizzaCommercial());
+                storeManageVO.setMomsShopType(storeManageVO.getMrpizzaShopType());
+                procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
+            }
+
+            // 미스터피자 주방프린터 상품 추가
+            if(storeManageVO.getHqOfficeCd().equals("H0616") || storeManageVO.getHqOfficeCd().equals("H0614") || storeManageVO.getHqOfficeCd().equals("DS053") ){
+                procCnt += mapper.insertStorePrintProd(storeManageVO);
+            }
+
             // 특이매장 데이터 처리
             mapper.unusualStoreRegInfo(storeManageVO);
             LOGGER.info("특이매장 데이터 처리_unusualStoreRegInfo");
@@ -840,15 +855,6 @@ public class StoreManageServiceImpl implements StoreManageService {
             // [1250 맘스터치] 환경설정값 조회
             System.out.println("momsEnvstVal : " + storeManageVO.getMomsEnvstVal());
             if (("1").equals(storeManageVO.getMomsEnvstVal())) {
-                procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
-            }
-
-            // 미스터피자 값 추가
-            if(storeManageVO.getHqOfficeCd().equals("H0616") || storeManageVO.getHqOfficeCd().equals("H0614") || storeManageVO.getHqOfficeCd().equals("DS053") ){
-                storeManageVO.setMomsTeam(storeManageVO.getMrpizzaTeam());
-                storeManageVO.setMomsAreaFg(storeManageVO.getMrpizzaAreaFg());
-                storeManageVO.setMomsCommercial(storeManageVO.getMrpizzaCommercial());
-                storeManageVO.setMomsShopType(storeManageVO.getMrpizzaShopType());
                 procCnt += mapper.mergeStoreInfoAddMoms(storeManageVO);
             }
 
@@ -1406,6 +1412,12 @@ public class StoreManageServiceImpl implements StoreManageService {
 
             if (kitchenPrintVO.getStatus() == GridDataFg.INSERT) {
                 result = mapper.insertKitchenPrint(kitchenPrintVO);
+                if (result <= 0) {
+                    throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+                } else {
+                    procCnt++;
+                }
+                result = mapper.insertStoreKitchenPrintProd(kitchenPrintVO);
                 if (result <= 0) {
                     throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
                 } else {

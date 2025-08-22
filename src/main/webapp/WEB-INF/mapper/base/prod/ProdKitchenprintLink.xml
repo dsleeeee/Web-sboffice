@@ -746,4 +746,64 @@
             )
     </insert>
 
+    <!-- 매장-상품 탭 - 미스터피자 상품 추가 시 전 매장 적용 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getMergeProdKitchenPrintLinkMrpizza" parameterType="prodKitchenprintLinkVO">
+        /* ProdKitchenprintLinkMapper.getMergeProdKitchenPrintLinkMrpizza */
+        MERGE INTO TB_MS_PRINTER_PROD A
+        USING	(
+                    SELECT 	STORE_CD
+                    ,		PRTER_NO
+                    ,       #{prodCd}   AS PROD_CD
+                    FROM	TB_MS_PRINTER
+                    WHERE 	STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+                ) B
+        ON	(
+                    A.STORE_CD 	= B.STORE_CD
+                AND	A.PRTER_NO  = B.PRTER_NO
+                AND	A.PROD_CD	= B.PROD_CD
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.MOD_DT = #{modDt}
+        ,       A.MOD_ID = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                STORE_CD
+        ,	    PRTER_NO
+        ,	    PROD_CD
+        ,	    REG_DT
+        ,	    REG_ID
+        ,	    MOD_DT
+        ,	    MOD_ID
+        )
+        VALUES
+        (
+                B.STORE_CD
+        ,	    B.PRTER_NO
+        ,	    B.PROD_CD
+        ,	    #{regDt}
+        ,	    #{regId}
+        ,	    #{modDt}
+        ,	    #{modId}
+        )
+    </insert>
+
+    <!-- 매장-상품 탭 - 미스터피자 상품 삭제 시 전 매장 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getDeleteProdKitchenPrintLinkMrpizza" parameterType="prodKitchenprintLinkVO">
+        /* ProdKitchenprintLinkMapper.getDeleteProdKitchenPrintLinkMrpizza */
+        DELETE
+        FROM    TB_MS_PRINTER_PROD
+        WHERE   STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = #{hqOfficeCd})
+        AND     PROD_CD = #{prodCd}
+    </insert>
+
 </mapper>

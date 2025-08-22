@@ -128,6 +128,7 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                 if(col.binding === "imgApply"){
                     if(selectedRow["fileExt"] === "png" || selectedRow["fileExt"] === "PNG" ||
                         selectedRow["fileExt"] === "jpg" || selectedRow["fileExt"] === "JPG" ||
+                        selectedRow["fileExt"] === "jpeg" || selectedRow["fileExt"] === "JPEG" ||
                         selectedRow["fileExt"] === "gif" || selectedRow["fileExt"] === "GIF") {
                         if (selectedRow["imgApply"] === '본문적용') {
                             var params = {};
@@ -876,9 +877,11 @@ app.controller('boardInfoCtrl', ['$scope', '$http', '$timeout', function ($scope
                 var params = {};
                 params.orginlFileNm = file.name;
                 params.del = "삭제";
-                params.fileExt = file.name.split(".")[1];
+                params.fileExt = file.name.substring(file.name.lastIndexOf('.') + 1);
                 params.tempPath = temp;
                 params.idx = "";
+
+                console.log(params.fileExt);
 
                 if(params.fileExt === "png" || params.fileExt === "PNG" ||
                     params.fileExt === "jpg" || params.fileExt === "JPG" ||

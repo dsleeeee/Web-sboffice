@@ -105,6 +105,11 @@ app.controller('storeProdKitchenprintLinkCtrl', ['$scope', '$http', function ($s
     $scope.searchStoreProdKitchenprintLink = function(){
         var params = {};
         params.storeCd = $("#storeProdKitchenprintLinkStoreCd").val();
+        if(hqOfficeCd === 'H0616'){
+            params.storeCd = 'S614607';
+        }else if(hqOfficeCd === 'DS053'){
+            params.storeCd = 'DS00501';
+        }
         params.sysStatFg = $scope.sysStatFg;
 
         $scope._inquiryMain("/base/prod/prodKitchenprintLink/storeProdKitchenprintLink/getStoreProdKitchenprintLinkList.sb", params, function() {}, false);
