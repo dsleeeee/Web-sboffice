@@ -168,7 +168,7 @@
                 ,       #{nmcodeNm}
                 ,       #{nmcodeItem1,jdbcType=VARCHAR}
                 ,       #{nmcodeItem2,jdbcType=VARCHAR}
-                ,       'Y'
+                ,       #{useYn}
                 ,       #{regDt}
                 ,       #{regId}
                 ,       #{modDt}
@@ -201,7 +201,7 @@
                 ,       #{nmcodeNm}
                 ,       #{nmcodeItem1,jdbcType=VARCHAR}
                 ,       #{nmcodeItem2,jdbcType=VARCHAR}
-                ,       'Y'
+                ,       #{useYn}
                 ,       #{regDt}
                 ,       #{regId}
                 ,       #{modDt}
