@@ -480,6 +480,8 @@
     <typeAlias alias="couponStoreVO" type="kr.co.solbipos.base.pay.coupon.service.CouponStoreVO"/>
     <typeAlias alias="giftVO" type="kr.co.solbipos.base.pay.gift.service.GiftVO"/>
     <typeAlias alias="mobileCouponVO" type="kr.co.solbipos.base.pay.mCoupon.service.MobileCouponVO"/>
+    <!-- 기초관리 > 결제수단 > 모바일쿠폰상품매핑 -->
+    <!--<typeAlias alias="mCoupnProdMappingVO" type="kr.co.solbipos.base.pay.mCoupnProdMapping.service.MCoupnProdMappingVO"/>-->
     <!--
     <typeAlias alias="coprtnCardVO" type="kr.co.solbipos.base.pay.coprtncard.service.CoprtnCardVO"/>
     <typeAlias alias="giftcardLedgrVO" type="kr.co.solbipos.base.pay.giftcardledgr.service.GiftcardLedgrVO"/>
