@@ -66,9 +66,6 @@ app.controller('dlvrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 if(col.binding === "saleDate"){
                     e.cell.innerHTML = getFormatDate(e.cell.innerText.substring(0, 8));
                 }
-                if(col.binding === "billDt"){
-                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
-                }
             }
         });
 
@@ -79,9 +76,13 @@ app.controller('dlvrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "billNo") {
+                    var params      = {};
+                    params.storeCd  = selectedRow.storeCd;
+                    params.saleDate = selectedRow.saleDate;
+                    params.posNo    = selectedRow.posNo;
+                    params.billNo   = selectedRow.billNo;
                     $scope.setSelectedMember(selectedRow);
-                    $scope._broadcast('popBillInfo', selectedRow);
-                    $scope.wjDlvrInfoLayer.show(true);
+                    $scope._broadcast('billPopupCtrl', selectedRow);
                 }
             }
         });
@@ -106,6 +107,22 @@ app.controller('dlvrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
 
     // 일자별회원 구매내역 그리드 조회
     $scope.searchDlvrInfo = function () {
+
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1달(31일) 제한
+        if (diffDay > 31) {
+            $scope._popMsg(messages['cmm.dateOver.1month.error']);
+            return false;
+        }
 
         var params = {};
         // params.membrNm = $scope.membrNm;

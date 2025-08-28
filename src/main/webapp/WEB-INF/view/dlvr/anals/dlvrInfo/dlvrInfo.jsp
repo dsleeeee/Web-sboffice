@@ -7,6 +7,7 @@
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
 <c:set var="orgnCd" value="${sessionScope.sessionInfo.orgnCd}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}"/>
 
 <div class="subCon" ng-controller="dlvrInfoCtrl">
 
@@ -15,7 +16,7 @@
         <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
-            <button class="btn_blue fr" ng-click="_broadcast('dlvrInfoCtrl')" id="nxBtnSearch">
+            <button class="btn_blue fr" ng-click="_pageView('dlvrInfoCtrl', 1)" id="nxBtnSearch">
                 <s:message code="cmm.search"/>
             </button>
         </div>
@@ -100,7 +101,7 @@
                                      align="center"
                                      is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dlvrInfo.billNo"/>" binding="billNo" width="80"
-                                     align="center" is-read-only="false" ></wj-flex-grid-column>
+                                     align="center" is-read-only="true" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dlvrInfo.realSaleAmt"/>" binding="realSaleAmt" width="100"
                                      is-read-only="true" align="center" aggregate="Sum"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="dlvrInfo.dlvrAddr"/>" binding="dlvrAddr" width="300"
@@ -127,7 +128,37 @@
     <%--//페이지 리스트--%>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrInfo/dlvrInfo.js?ver=2019052801.13"
+<script type="text/javascript">
+
+    var hqOfficeCd = "${hqOfficeCd}";
+
+    var payColList = [];
+    var dcColList  = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="payCol" items="${payColList}">
+    var payParam       = {};
+    payParam.payCd     = "${payCol.payCd}";
+    payParam.payMethod = "${payCol.payMethod}";
+    payColList.push(payParam);
+    </c:forEach>
+
+    <%--javascript에서 사용할 할인 json 데이터 생성--%>
+    <c:forEach var="dcCol" items="${dcColList}">
+    var dcParam      = {};
+    dcParam.dcCd     = "${dcCol.dcCd}";
+    dcParam.dcMethod = "${dcCol.dcMethod}";
+    dcColList.push(dcParam);
+    </c:forEach>
+
+    var payCol      = '${payCol}';
+    var dcCol       = '${dcCol}';
+    var guestCol    = '${guestCol}';
+    var arrPayCol   = payCol.split(',');
+    var arrDcCol    = dcCol.split(',');
+    var arrGuestCol = guestCol.split(',');
+</script>
+
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrInfo/dlvrInfo.js?ver=20250822.01"
         charset="utf-8"></script>
 
 <%-- 영수증상세 --%>

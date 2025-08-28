@@ -32,4 +32,10 @@ public interface DlvrInfoMapper {
 
   /** 영수증 상세 조회 */
   List<DefaultMap<Object>> getBillInfoList(DlvrInfoVO dlvrInfoVO);
+
+    DefaultMap<String> getBillPayInfo(DlvrInfoVO dlvrInfoVO);
+
+  DefaultMap<String> getBillGuestInfo(DlvrInfoVO dlvrInfoVO);
+
+  List<DefaultMap<String>> getBillProdList(DlvrInfoVO dlvrInfoVO);
 }

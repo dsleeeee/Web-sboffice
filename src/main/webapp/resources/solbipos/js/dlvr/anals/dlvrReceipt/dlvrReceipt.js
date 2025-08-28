@@ -58,6 +58,22 @@ app.controller('dlvrReceiptCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회
     $scope.dlvrReceiptSearch = function () {
 
+        var startDt = new Date(wijmo.Globalize.format($scope.periodStartDate, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.periodEndDate, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1달(31일) 제한
+        if (diffDay > 31) {
+            $scope._popMsg(messages['cmm.dateOver.1month.error']);
+            return false;
+        }
+
         // 배달지별 내역 조회 후 상세 그리드 초기화
         var dlvrReceiptDetailScope = agrid.getScope('dlvrReceiptDetailCtrl');
         dlvrReceiptDetailScope.dtlGridDefault();
@@ -111,9 +127,13 @@ app.controller('dlvrReceiptDetailCtrl', ['$scope', '$http', function ($scope, $h
                 var col = ht.panel.columns[ht.col];
                 var selectedRow = s.rows[ht.row].dataItem;
                 if (col.binding === "billNo") {
+                    var params      = {};
+                    params.storeCd  = selectedRow.storeCd;
+                    params.saleDate = selectedRow.saleDate;
+                    params.posNo    = selectedRow.posNo;
+                    params.billNo   = selectedRow.billNo;
                     $scope.setSelectedMember(selectedRow);
-                    $scope._broadcast('popBillInfo', selectedRow);
-                    $scope.wjDlvrInfoLayer.show(true);
+                    $scope._broadcast('billPopupCtrl', selectedRow);
                 }
             }
         });

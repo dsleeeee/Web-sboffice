@@ -78,10 +78,10 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
 
     // 첫째줄 헤더 생성
     var dataItem = {};
-    dataItem.saleDate = messages["dayDlvr.saleDate"];
-    dataItem.dlvrBillCnt = messages["dayDlvr.dlvrSale"];
-    dataItem.dlvrAmt = messages["dayDlvr.dlvrSale"];
-    dataItem.nonDlvrBillCnt = messages["dayDlvr.nonDlvrSale"];
+    dataItem.saleDate   = messages["dayDlvr.saleDate"];
+    dataItem.dlvrCnt    = messages["dayDlvr.dlvrSale"];
+    dataItem.dlvrAmt    = messages["dayDlvr.dlvrSale"];
+    dataItem.nonDlvrCnt = messages["dayDlvr.nonDlvrSale"];
     dataItem.nonDlvrAmt = messages["dayDlvr.nonDlvrSale"];
 
     s.columnHeaders.rows[0].dataItem = dataItem;
@@ -137,6 +137,23 @@ app.controller('dayDlvrCtrl', ['$scope', '$http', '$timeout', function ($scope, 
   });
 
   $scope.searchDaySaleList = function () {
+
+    var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+    var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+    var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+    // 시작일자가 종료일자보다 빠른지 확인
+    if(startDt.getTime() > endDt.getTime()){
+      $scope._popMsg(messages['cmm.dateChk.error']);
+      return false;
+    }
+
+    // 조회일자 최대 1년(365일) 제한
+    if (diffDay > 365) {
+      $scope._popMsg(messages['cmm.dateOver.1year.error']);
+      return false;
+    }
+
     var params = {};
     // params.listScale = $scope.listScale;
     params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd'); //조회기간
@@ -216,16 +233,16 @@ app.controller('dayDlvrDtlCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // dataItem.prodClassNm = messages["dayDlvr.prodClassNm"];
     // dataItem.lv1Cd = messages["dayDlvr.prodClassNm"];
-    dataItem.lv1Nm = messages["dayDlvr.prodClassNm"];
+    dataItem.lv1Nm        = messages["dayDlvr.prodClassNm"];
     // dataItem.lv2Cd = messages["dayDlvr.prodLV2"];
-    dataItem.lv2Nm = messages["dayDlvr.prodLV2"];
-    dataItem.prodCd = messages["dayDlvr.prodCd"];
-    dataItem.prodNm = messages["dayDlvr.prodNm"];
-    dataItem.prodClassNm = messages["dayDlvr.prodClassNm"];
-    dataItem.dlvrSaleQty = messages["dayDlvr.dlvrSale"];
-    dataItem.dlvrAmt = messages["dayDlvr.dlvrSale"];
-    dataItem.nonDlvrSaleQty = messages["dayDlvr.nonDlvrSale"];
-    dataItem.nonDlvrAmt = messages["dayDlvr.nonDlvrSale"];
+    dataItem.lv2Nm        = messages["dayDlvr.prodLV2"];
+    dataItem.prodCd       = messages["dayDlvr.prodCd"];
+    dataItem.prodNm       = messages["dayDlvr.prodNm"];
+    dataItem.prodClassNm  = messages["dayDlvr.prodClassNm"];
+    dataItem.dlvrCnt      = messages["dayDlvr.dlvrSale"];
+    dataItem.dlvrAmt      = messages["dayDlvr.dlvrSale"];
+    dataItem.nonDlvrCnt   = messages["dayDlvr.nonDlvrSale"];
+    dataItem.nonDlvrAmt   = messages["dayDlvr.nonDlvrSale"];
 
     s.columnHeaders.rows[0].dataItem = dataItem;
 

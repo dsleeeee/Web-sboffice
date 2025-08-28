@@ -124,17 +124,6 @@
         <%-- 그리드 right --%>
         <div class="w50 mt10 fl mb20" style="width: 60%">
             <div class="mb10 ml10 oh sb-select dkbr ">
-                <%-- 페이지 스케일  --%>
-                <wj-combo-box
-                        class="w100px fl"
-                        id="listScaleBox"
-                        ng-model="listScale"
-                        items-source="_getComboData('listScaleBox')"
-                        display-member-path="name"
-                        selected-value-path="value"
-                        is-editable="false"
-                        initialized="initComboBox(s)">
-                </wj-combo-box>
             </div>
             <div class="wj-gridWrap ml10 pd10" style="height:480px; overflow-y: hidden;">
                 <div class="row">
@@ -180,12 +169,37 @@
         </div>
     </div>
 </div>
-<script>
-    <%--var useYn = ${ccu.getCommCodeExcpAll("067")};--%>
-    <%--var dlvrFirstList = ${dlvrFirstList};--%>
+<script type="text/javascript">
+
+    var hqOfficeCd = "${hqOfficeCd}";
+
+    var payColList = [];
+    var dcColList  = [];
+    <%--javascript에서 사용할 결제수단 json 데이터 생성--%>
+    <c:forEach var="payCol" items="${payColList}">
+    var payParam       = {};
+    payParam.payCd     = "${payCol.payCd}";
+    payParam.payMethod = "${payCol.payMethod}";
+    payColList.push(payParam);
+    </c:forEach>
+
+    <%--javascript에서 사용할 할인 json 데이터 생성--%>
+    <c:forEach var="dcCol" items="${dcColList}">
+    var dcParam      = {};
+    dcParam.dcCd     = "${dcCol.dcCd}";
+    dcParam.dcMethod = "${dcCol.dcMethod}";
+    dcColList.push(dcParam);
+    </c:forEach>
+
+    var payCol      = '${payCol}';
+    var dcCol       = '${dcCol}';
+    var guestCol    = '${guestCol}';
+    var arrPayCol   = payCol.split(',');
+    var arrDcCol    = dcCol.split(',');
+    var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrReceipt/dlvrReceipt.js?ver=2020062901.17"
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/anals/dlvrReceipt/dlvrReceipt.js?ver=20250826.01"
         charset="utf-8"></script>
 
 <%-- 영수증상세 --%>

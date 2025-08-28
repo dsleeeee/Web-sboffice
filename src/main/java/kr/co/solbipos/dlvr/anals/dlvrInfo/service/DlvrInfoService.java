@@ -22,12 +22,21 @@ import java.util.List;
  */
 public interface DlvrInfoService {
 
-  /** 배달내역조회 */
-  public List<DefaultMap<Object>> getDlvrInfoList(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
+    /** 배달내역조회 */
+    public List<DefaultMap<Object>> getDlvrInfoList(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
 
-  /** 영수증 상세 조회 */
-  DefaultMap<String> getBillInfo(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
+    /** 영수증 상세 조회 */
+    DefaultMap<String> getBillInfo(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
 
-  /** 영수증 상세 조회 */
-  List<DefaultMap<Object>> getBillInfoList(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
+    /** 영수증 상세 조회 */
+    List<DefaultMap<Object>> getBillInfoList(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 영수번호 상세팝업 - 영수증상세 결제내역 조회 */
+    DefaultMap<String> getBillPayInfo(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 수번호 상세팝업 - 영수증상세 방문인원 조회 */
+    DefaultMap<String> getBillGuestInfo(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
+
+    /** 영수번호 상세팝업 - 매출종합 리스트 조회 */
+    List<DefaultMap<String>> getBillProdList(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
 }

@@ -121,125 +121,42 @@
     </select>
 
     <select id="getDayDlvrSaleList" parameterType="dayDlvrVO" resultType="DefaultMap">
-        /*배달매출 조회*/
-        /*DlvrMapper.getDlvrList*/
-
-        SELECT NVL(A.DLVR_SALE_DATE, B.NON_DLVR_SALE_DATE) AS SALE_DATE
-        , MAX(A.DLVR_BILL_CNT) AS DLVR_BILL_CNT
-        , SUM(A.DLVR_AMT) AS DLVR_AMT
-        , MAX(B.NON_DLVR_BILL_CNT) AS NON_DLVR_BILL_CNT
-        , SUM(B.NON_DLVR_AMT) AS NON_DLVR_AMT
-        FROM
-        (SELECT tssd.SALE_DATE AS DLVR_SALE_DATE
-        , COUNT(tssd.BILL_NO) AS DLVR_BILL_CNT
-        , SUM(tssd.REAL_SALE_AMT) AS DLVR_AMT
-        FROM TB_SL_SALE_HDR tssh, TB_SL_SALE_DTL tssd
-        WHERE tssh.SALE_DATE = tssd.SALE_DATE
-        AND tssh.POS_NO = tssd.POS_NO
-        AND tssh.BILL_NO = tssd.BILL_NO
-        AND tssh.STORE_CD = tssd.STORE_CD
-        AND tssh.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
-        AND tssh.HQ_BRAND_CD = tssd.HQ_BRAND_CD
-        <if test='storeCd != null and storeCd !=""'>
-            AND tssd.STORE_CD = #{storeCd}
-        </if>
-        <if test='hqOfficeCd != null and hqOfficeCd !=""'>
-            AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
-        </if>
-        AND tssh.DLVR_YN = 'Y'
-        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        GROUP BY tssd.SALE_DATE) A
-        FULL OUTER JOIN
-        (SELECT tssd.SALE_DATE AS NON_DLVR_SALE_DATE
-        , COUNT(tssd.BILL_NO) AS NON_DLVR_BILL_CNT
-        , SUM(tssd.REAL_SALE_AMT) AS NON_DLVR_AMT
-        FROM TB_SL_SALE_HDR tssh, TB_SL_SALE_DTL tssd
-        WHERE tssh.SALE_DATE = tssd.SALE_DATE
-        AND tssh.POS_NO = tssd.POS_NO
-        AND tssh.BILL_NO = tssd.BILL_NO
-        AND tssh.STORE_CD = tssd.STORE_CD
-        AND tssh.HQ_OFFICE_CD = tssd.HQ_OFFICE_CD
-        AND tssh.HQ_BRAND_CD = tssd.HQ_BRAND_CD
-        <if test='hqOfficeCd != null and hqOfficeCd !=""'>
-            AND tssd.HQ_OFFICE_CD = #{hqOfficeCd}
-        </if>
-        <if test='storeCd != null and storeCd !=""'>
-            AND tssd.STORE_CD = #{storeCd}
-        </if>
-        AND tssh.DLVR_YN != 'Y'
-        AND tssd.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-        GROUP BY tssd.SALE_DATE) B ON A.DLVR_SALE_DATE = B.NON_DLVR_SALE_DATE
-        GROUP BY A.DLVR_SALE_DATE, B.NON_DLVR_SALE_DATE
-        ORDER BY NVL(A.DLVR_SALE_DATE, B.NON_DLVR_SALE_DATE)
+        /* USE : DlvrMapper.getDlvrList*/
+        SELECT 	A.SALE_DATE
+        ,		SUM(CASE WHEN A.DLVR_ORDER_FG IN ('2') THEN A.TOT_SALE_QTY ELSE 0 END) 		AS DLVR_CNT
+        ,		SUM(CASE WHEN A.DLVR_ORDER_FG IN ('2') THEN A.REAL_SALE_AMT ELSE 0 END) 	AS DLVR_AMT
+        ,		SUM(CASE WHEN A.DLVR_ORDER_FG NOT IN ('2') THEN A.TOT_SALE_QTY ELSE 0 END) 	AS NON_DLVR_CNT
+        ,		SUM(CASE WHEN A.DLVR_ORDER_FG NOT IN ('2') THEN A.REAL_SALE_AMT ELSE 0 END) AS NON_DLVR_AMT
+        FROM 	TB_SL_DAILY_PROD_DLVR A
+        WHERE 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        AND 	A.STORE_CD = #{storeCd}
+        GROUP
+        BY 		A.SALE_DATE
+        ORDER
+        BY      A.SALE_DATE
     </select>
 
     <select id="getDaySaleDtlList" parameterType="dayDlvrVO" resultType="DefaultMap">
-        SELECT
-        A.PROD_CD,
-        B.PROD_NM,
-        FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, B.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM,
-        NVL(DLVR_SALE_QTY, 0) AS DLVR_SALE_QTY,
-        NVL(DLVR_AMT, 0) AS DLVR_AMT,
-        NVL(NON_DLVR_SALE_QTY, 0) AS NON_DLVR_SALE_QTY,
-        NVL(NON_DLVR_AMT, 0) AS NON_DLVR_AMT
-        FROM
-        (
-        SELECT
-        NVL(A.DLVR_PROD_CD, B.NON_DLVR_PROD_CD) AS PROD_CD , SUM(DLVR_SALE_QTY) AS DLVR_SALE_QTY, SUM(DLVR_AMT) AS DLVR_AMT, SUM(NON_DLVR_SALE_QTY) AS NON_DLVR_SALE_QTY, SUM(NON_DLVR_AMT) AS NON_DLVR_AMT
-        FROM
-        (
-        SELECT
-        tssh.SALE_DATE AS DLVR_SALE_DATE, tssd.PROD_CD AS DLVR_PROD_CD, COUNT(tssd.SALE_QTY) AS DLVR_SALE_QTY, SUM(tssd.REAL_SALE_AMT) AS DLVR_AMT
-        FROM
-        TB_SL_SALE_DTL tssd, TB_SL_SALE_HDR tssh
-        WHERE
-        1 = 1
-        AND tssd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-        AND tssd.STORE_CD = tssh.STORE_CD
-        AND tssd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
-        AND tssd.BILL_NO = tssh.BILL_NO
-        AND tssd.POS_NO = tssh.POS_NO
-        AND tssd.SALE_DATE = tssh.SALE_DATE
-        <if test='storeCd != null and storeCd !=""'>
-            AND tssd.STORE_CD = #{storeCd}
-        </if>
-        AND tssh.DLVR_YN = 'Y'
-        AND tssh.SALE_DATE = #{searchDate}
-        GROUP BY
-        tssh.SALE_DATE, tssd.PROD_CD) A
-        FULL OUTER JOIN (
-        SELECT
-        tssh.SALE_DATE AS NON_DLVR_SALE_DATE, tssd.PROD_CD AS NON_DLVR_PROD_CD, COUNT(tssd.SALE_QTY) AS NON_DLVR_SALE_QTY, SUM(tssd.REAL_SALE_AMT) AS NON_DLVR_AMT
-        FROM
-        TB_SL_SALE_DTL tssd, TB_SL_SALE_HDR tssh
-        WHERE
-        1 = 1
-        AND tssd.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-        AND tssd.STORE_CD = tssh.STORE_CD
-        AND tssd.HQ_BRAND_CD = tssh.HQ_BRAND_CD
-        AND tssd.BILL_NO = tssh.BILL_NO
-        AND tssd.POS_NO = tssh.POS_NO
-        AND tssd.SALE_DATE = tssh.SALE_DATE
-        <if test='storeCd != null and storeCd !=""'>
-            AND tssd.STORE_CD = #{storeCd}
-        </if>
-        AND tssh.DLVR_YN = 'N'
-        AND tssh.SALE_DATE = #{searchDate}
-        GROUP BY
-        tssh.SALE_DATE, tssd.PROD_CD) B ON
-        A.DLVR_SALE_DATE = B.NON_DLVR_SALE_DATE
-        AND A.DLVR_PROD_CD = B.NON_DLVR_PROD_CD
-        GROUP BY
-        A.DLVR_PROD_CD, B.NON_DLVR_PROD_CD) A,
-        TB_MS_PRODUCT B
-        WHERE
-        1 = 1
-        <if test='storeCd != null and storeCd !=""'>
-            AND B.STORE_CD = #{storeCd}
-        </if>
-        AND B.PROD_CD = A.PROD_CD
-        ORDER BY
-        A.PROD_CD
+        /* DayDlvrMapper.getDaySaleDtlList */
+        SELECT 	FN_GET_PROD_CLASS_CD_NM_STR(#{storeCd}, B.PROD_CLASS_CD, 'NM_STR') AS PROD_CLASS_NM
+        ,		A.PROD_CD
+        ,		B.PROD_NM
+        ,		SUM(CASE WHEN A.DLVR_ORDER_FG IN ('2') THEN A.TOT_SALE_QTY ELSE 0 END) 		AS DLVR_CNT
+        ,		SUM(CASE WHEN A.DLVR_ORDER_FG IN ('2') THEN A.REAL_SALE_AMT ELSE 0 END) 	AS DLVR_AMT
+        ,		SUM(CASE WHEN A.DLVR_ORDER_FG NOT IN ('2') THEN A.TOT_SALE_QTY ELSE 0 END) 	AS NON_DLVR_CNT
+        ,		SUM(CASE WHEN A.DLVR_ORDER_FG NOT IN ('2') THEN A.REAL_SALE_AMT ELSE 0 END) AS NON_DLVR_AMT
+        FROM 	TB_SL_DAILY_PROD_DLVR A
+        ,		TB_MS_PRODUCT B
+        WHERE 	A.SALE_DATE = #{searchDate}
+        AND 	A.STORE_CD 	= #{storeCd}
+        AND		A.STORE_CD 	= B.STORE_CD
+        AND		A.PROD_CD 	= B.PROD_CD
+        GROUP
+        BY 		A.PROD_CD
+        ,		B.PROD_NM
+        ,		B.PROD_CLASS_CD
+        ORDER
+        BY      A.PROD_CD
     </select>
 
 </mapper>

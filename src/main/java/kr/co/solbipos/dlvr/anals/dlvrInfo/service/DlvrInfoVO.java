@@ -35,6 +35,19 @@ public class DlvrInfoVO extends PageVO {
   private String storeCd;
   private String dlvrPayEmpNm;
 
+  /** 결제수단컬럼 */
+  private String payCol;
+  /** 결제수단 array */
+  private String arrPayCol[];
+  /** 할인컬럼 */
+  private String dcCol;
+  /** 할인구분 array */
+  private String arrDcCol[];
+  /** 쿼리문의 PIVOT IN에 사용할 할인구분 컬럼 문자열 */
+  private String pivotDcCol;
+  /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
+  private String pivotPayCol;
+
   public String getSaleDate() {
     return saleDate;
   }
@@ -153,5 +166,53 @@ public class DlvrInfoVO extends PageVO {
 
   public void setDlvrPayEmpNm(String dlvrPayEmpNm) {
     this.dlvrPayEmpNm = dlvrPayEmpNm;
+  }
+
+  public String getPayCol() {
+    return payCol;
+  }
+
+  public void setPayCol(String payCol) {
+    this.payCol = payCol;
+  }
+
+  public String[] getArrPayCol() {
+    return arrPayCol;
+  }
+
+  public void setArrPayCol(String[] arrPayCol) {
+    this.arrPayCol = arrPayCol;
+  }
+
+  public String getDcCol() {
+    return dcCol;
+  }
+
+  public void setDcCol(String dcCol) {
+    this.dcCol = dcCol;
+  }
+
+  public String[] getArrDcCol() {
+    return arrDcCol;
+  }
+
+  public void setArrDcCol(String[] arrDcCol) {
+    this.arrDcCol = arrDcCol;
+  }
+
+  public String getPivotDcCol() {
+    return pivotDcCol;
+  }
+
+  public void setPivotDcCol(String pivotDcCol) {
+    this.pivotDcCol = pivotDcCol;
+  }
+
+  public String getPivotPayCol() {
+    return pivotPayCol;
+  }
+
+  public void setPivotPayCol(String pivotPayCol) {
+    this.pivotPayCol = pivotPayCol;
   }
 }

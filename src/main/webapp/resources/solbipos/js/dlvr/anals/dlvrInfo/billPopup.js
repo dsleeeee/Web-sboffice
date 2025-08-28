@@ -1,139 +1,300 @@
+/****************************************************************
+ *
+ * 파일명 : billPopup.js
+ * 설  명 : 매출상세정보 팝업
+ *
+ *    수정일      수정자      Version        Function 명
+ * ------------  ---------   -------------  --------------------
+ * 2025.08.28     김유승      1.0
+ *
+ * **************************************************************/
 /**
  * get application
  */
 var app = agrid.getApp();
-
-app.controller('popDlvrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-
+var orderAddFgData = [
+    {"name":"오프라인","value":"1"},
+    {"name":"온라인","value":"2"}
+]
+/** 영수증 상세 내역 controller */
+app.controller('billPopupCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('popDlvrInfoCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('billPopupCtrl', $scope, $http, true));
 
-    // 선택 회원
-    $scope.selectedMember;
-    $scope.setSelectedMember = function (member) {
-        $scope.selectedMember = member;
-    };
-    $scope.getSelectedMember = function () {
-        return $scope.selectedMember;
-    };
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
-        // 그리드 DataMap 설정
-        // $scope.saleFgDataMap = new wijmo.grid.DataMap(saleFgData, 'value', 'name'); //판매구분
 
-        // 합계
+        $scope.orderAddFgDataMap = new wijmo.grid.DataMap(orderAddFgData, 'value', 'name');
+
         // add the new GroupRow to the grid's 'columnFooters' panel
         s.columnFooters.rows.push(new wijmo.grid.GroupRow());
         // add a sigma to the header to show that this is a summary row
         s.bottomLeftCells.setCellData(0, 0, '합계');
 
-        // //그리드 링크설정
-        // // ReadOnly 효과설정
-        // s.formatItem.addHandler(function (s, e) {
-        //   if (e.panel === s.cells) {
-        //     var col = s.columns[e.col];
-        //     if (col.binding === "totSaleAmt" || col.binding === "membrNm") {
-        //       wijmo.addClass(e.cell, 'wijLink');
-        //     }
-        //   }
-        // });
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem         = {};
+        dataItem.billDtlNo   = messages["billPopup.billDtlNo"];
+        dataItem.prodCd      = messages["billPopup.prodCd"];
+        dataItem.prodNm      = messages["billPopup.prodNm"];
+        dataItem.orderAddFg  = messages["billPopup.orderAddFg"];
+        dataItem.saleQty     = messages["billPopup.saleQty"];
+        dataItem.saleUprc    = messages["billPopup.saleUprc"];
+        dataItem.saleAmt     = messages["billPopup.saleInfo"];
+        dataItem.dcAmt       = messages["billPopup.saleInfo"];
+        dataItem.realSaleAmt = messages["billPopup.saleInfo"];
+        dataItem.gaAmt       = messages["billPopup.saleInfo"];
+        dataItem.vatAmt      = messages["billPopup.saleInfo"];
+        // 할인구분 헤더머지 컬럼 생성
+        for (var i = 0; i < arrDcCol.length; i++) {
+            dataItem['dc' + arrDcCol[i]] = messages["billPopup.dcInfo"];
+        }
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
     };
 
-    // <-- 검색 호출 -->
-    $scope.$on("popBillInfo", function (event, data) {
-        $scope.searchBillInfo(data);
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("billPopupCtrl", function (event, data) {
+        $scope.storeCd  = data.storeCd;
+        $scope.saleDate = data.saleDate;
+        $scope.posNo    = data.posNo;
+        $scope.billNo   = data.billNo;
+
+        $scope.wjBillPopupLayer.show(true);
+
+        $scope.getBillInfo();
+
+        // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
 
-    // 영수증 상세
-    $scope.searchBillInfo = function (data) {
-        console.log("영수증:: ", data);
-        var params = data;
 
-        $scope._postJSONQuery.withOutPopUp("/dlvr/manage/anals/dlvr/getBillInfo.sb", params, function (response) {
-            console.log(response);
-            $scope.searchModel = response.data.data;
-            if ($scope.searchModel.payCd === "01") {
-                $scope.searchModel.card = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "02") {
-                $scope.searchModel.cash = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "03") {
-                $scope.searchModel.payco = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "04") {
-                $scope.searchModel.vpoint = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "05") {
-                $scope.searchModel.vcoupn = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "06") {
-                $scope.searchModel.vcharge = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "07") {
-                $scope.searchModel.mpay = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "08") {
-                $scope.searchModel.mcoupn = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "09") {
-                $scope.searchModel.membr = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "10") {
-                $scope.searchModel.prepaid = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "11") {
-                $scope.searchModel.postpaid = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "12") {
-                $scope.searchModel.coupn = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "13") {
-                $scope.searchModel.gift = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "14") {
-                $scope.searchModel.fstmp = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "15") {
-                $scope.searchModel.partner = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "16") {
-                $scope.searchModel.okcsb = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "17") {
-                $scope.searchModel.empCard = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "18") {
-                $scope.searchModel.temporary = $scope.searchModel.payAmt
-            } else if ($scope.searchModel.payCd === "19") {
-                $scope.searchModel.smartOrder = $scope.searchModel.payAmt
+    // 영수증 종합내역 조회
+    $scope.getBillInfo = function () {
+        // 로딩바 show
+        $scope.$broadcast('loadingPopupActive');
+
+        var params      = {};
+        params.hqOfficeCd = hqOfficeCd;
+        params.storeCd  = $scope.storeCd;
+        params.saleDate = $scope.saleDate;
+        params.posNo    = $scope.posNo;
+        params.billNo   = $scope.billNo;
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : '/dlvr/manage/anals/dlvr/getBillInfo.sb', /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data)) {
+                    var data = response.data.data;
+
+                    $("#billSubTitle").html('매장 : '+'['+data.storeCd+']'+ data.storeNm+'  |  매출일자 : '+getFormatDate($scope.saleDate)+'  |  포스번호 : '+$scope.posNo+'  |  영수번호 : '+$scope.billNo);
+
+                    data.totSaleAmt   = addComma(data.totSaleAmt);
+                    data.totDcAmt     = addComma(data.totDcAmt);
+                    data.realSaleAmt  = addComma(data.realSaleAmt);
+                    data.netSaleAmt   = addComma(data.netSaleAmt);
+                    data.noTaxSaleAmt = addComma(data.noTaxSaleAmt);
+                    data.taxSaleAmt   = addComma(data.taxSaleAmt);
+                    data.vatAmt       = addComma(data.vatAmt);
+                    data.totTipAmt    = addComma(data.totTipAmt);
+
+                    $scope.billInfo = data; // view 종합내역에 조회한 값 세팅
+                    $scope.getBillPayInfo(); // 결제내역 조회
+                }
+                $scope.$broadcast('loadingPopupInactive');
             }
-            $scope._postJSONQuery.withOutPopUp("/dlvr/manage/anals/dlvr/getBillInfoList.sb", params, function (result) {
-                console.log(result);
-                $scope.data = new wijmo.collections.CollectionView(result.data.data.list);
-            });
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            // 로딩바 hide
+            $scope.$broadcast('loadingPopupInactive');
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.error']);
+            }
+            return false;
+        }).then(function () {
+            // "complete" code here
         });
     };
 
-    // 엑셀 다운로드
-    $scope.excelDownload = function () {
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-        var yyyy = today.getFullYear();
 
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
+    // 영수증 결제내역 조회
+    $scope.getBillPayInfo = function () {
 
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
+        var params      = {};
+        params.hqOfficeCd = hqOfficeCd;
+        params.storeCd  = $scope.storeCd;
+        params.saleDate = $scope.saleDate;
+        params.posNo    = $scope.posNo;
+        params.billNo   = $scope.billNo;
+        params.payCol   = payCol;
 
-        today = String(yyyy) + String(mm) + dd;
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : '/dlvr/manage/anals/dlvr/billPayInfo.sb', /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data)) {
+                    var data = response.data.data;
 
-        if ($scope.flex.rows.length <= 0) {
-            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
-            return false;
-        }
+                    // 조회한 결제수단 data에 addComma 추가
+                    for (var i = 0; i < arrPayCol.length; i++) {
+                        data['pay' + arrPayCol[i]] = (nvl(data['pay' + arrPayCol[i]], '') !== '' ? addComma(data['pay' + arrPayCol[i]]) : '');
+                    }
 
-        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
-        $timeout(function () {
-            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
-                includeColumnHeaders: true,
-                includeCellStyles: true,
-                includeColumns: function (column) {
-                    return column.visible;
+                    $scope.billPayInfo = data; // view 결제내역에 조회한 값 세팅
+                    $scope.getBillGuestInfo(); // 방문인원 조회
                 }
-            }, '배달내역_영수증상품내역_' + today + '.xlsx', function () {
-                $timeout(function () {
-                    $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
-                }, 10);
-            });
-        }, 10);
+            }
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            // 로딩바 hide
+            $scope.$broadcast('loadingPopupInactive');
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.error']);
+            }
+            return false;
+        }).then(function () {
+            // "complete" code here
+        });
     };
+
+
+    // 영수증 방문인원 조회
+    $scope.getBillGuestInfo = function () {
+
+        var params      = {};
+        params.hqOfficeCd = hqOfficeCd;
+        params.storeCd  = $scope.storeCd;
+        params.saleDate = $scope.saleDate;
+        params.posNo    = $scope.posNo;
+        params.billNo   = $scope.billNo;
+
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : '/dlvr/manage/anals/dlvr/billGuestInfo.sb', /* 통신할 URL */
+            params : params, /* 파라메터로 보낼 데이터 */
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if ($scope._httpStatusCheck(response, true)) {
+                if (!$.isEmptyObject(response.data.data)) {
+                    var data = response.data.data;
+
+                    data.guest01 = (nvl(data.guest01, '') !== '' ? addComma(data.guest01) : '');
+                    data.guest02 = (nvl(data.guest02, '') !== '' ? addComma(data.guest02) : '');
+                    data.guest03 = (nvl(data.guest03, '') !== '' ? addComma(data.guest03) : '');
+                    data.guest04 = (nvl(data.guest04, '') !== '' ? addComma(data.guest04) : '');
+
+                    $scope.billGuestInfo = data;
+                    $scope.$broadcast('loadingPopupInactive');
+                }
+
+                // 영수증 상품내역 리스트 조회
+                $scope.searchBillInfoProdList();
+
+            }
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            // 로딩바 hide
+            $scope.$broadcast('loadingPopupInactive');
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.error']);
+            }
+            return false;
+        }).then(function () {
+            // "complete" code here
+        });
+    };
+
+
+    // 영수증 상품내역 리스트 조회
+    $scope.searchBillInfoProdList = function () {
+        // 파라미터
+        var params       = {};
+        params.hqOfficeCd = hqOfficeCd;
+        params.storeCd   = $scope.storeCd;
+        params.saleDate  = $scope.saleDate;
+        params.posNo     = $scope.posNo;
+        params.billNo    = $scope.billNo;
+        params.dcCol     = dcCol;
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/dlvr/manage/anals/dlvr/billProdList.sb", params, function () {
+        });
+    };
+
+
+    // 팝업 닫기
+    $scope.close = function(){
+
+        // 초기화
+        var oScope = agrid.getScope("billPopupCtrl");
+        $("#billSubTitle").val("");
+        $scope.billPopup = "";
+        $scope.billPayInfo = "";
+        $scope.billGuestInfo = "";
+        oScope._gridDataInit();
+        $scope.wjBillPopupLayer.hide();
+    };
+
 }]);
+

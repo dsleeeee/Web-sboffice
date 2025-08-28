@@ -8,6 +8,9 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.dlvr.anals.dlvrInfo.service.DlvrInfoService;
 import kr.co.solbipos.dlvr.anals.dlvrInfo.service.DlvrInfoVO;
+import kr.co.solbipos.sale.cmmSalePopup.billInfo.service.BillInfoVO;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlService;
+import kr.co.solbipos.sale.today.todayDtl.service.TodayDtlVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +48,13 @@ public class DlvrInfoController {
 
   private final SessionService sessionService;
   private final DlvrInfoService dlvrInfoService;
+  private final TodayDtlService todayDtlService;
 
   @Autowired
-  public DlvrInfoController(SessionService sessionService, DlvrInfoService dlvrInfoService) {
+  public DlvrInfoController(SessionService sessionService, DlvrInfoService dlvrInfoService, TodayDtlService todayDtlService) {
     this.sessionService = sessionService;
     this.dlvrInfoService = dlvrInfoService;
+    this.todayDtlService = todayDtlService;
   }
 
 
@@ -62,7 +67,50 @@ public class DlvrInfoController {
    */
   @RequestMapping(value = "/dlvrInfo/list.sb", method = RequestMethod.GET)
   public String registList(HttpServletRequest request, HttpServletResponse response, Model model) {
+
+    TodayDtlVO todayDtlVO = new TodayDtlVO();
+
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+    // 결제수단 조회
+    List<DefaultMap<String>> payColList = todayDtlService.getPayColList(todayDtlVO, sessionInfoVO);
+
+    // 결제수단 코드를 , 로 연결하는 문자열 생성
+    String payCol = "";
+    for(int i=0; i < payColList.size(); i++) {
+      payCol += (payCol.equals("") ? "" : ",") + payColList.get(i).getStr("payCd");
+
+      // 맘스터치 결제수단 '식권' -> '식권대장' 으로 변경표기 (20240909)
+      if(sessionInfoVO.getHqOfficeCd().equals("DS021") || sessionInfoVO.getHqOfficeCd().equals("DS034") || sessionInfoVO.getHqOfficeCd().equals("H0393")){
+        if(payColList.get(i).getStr("payCd").equals("14")){
+          payColList.get(i).put("payNm", "식권대장");
+        }
+      }
+    }
+    model.addAttribute("payColList", payColList);
+    model.addAttribute("payCol", payCol);
+
+    // 할인구분 조회
+    List<DefaultMap<String>> dcColList = todayDtlService.getDcColList(todayDtlVO, sessionInfoVO);
+
+    // 할인구분 코드를 , 로 연결하는 문자열 생성
+    String dcCol = "";
+    for(int i=0; i < dcColList.size(); i++) {
+      dcCol += (dcCol.equals("") ? "" : ",") + dcColList.get(i).getStr("dcCd");
+    }
+    model.addAttribute("dcColList", dcColList);
+    model.addAttribute("dcCol", dcCol);
+
+    // 객수 조회
+    List<DefaultMap<String>> guestColList = todayDtlService.getGuestColList(todayDtlVO, sessionInfoVO);
+
+    // 할인구분 코드를 , 로 연결하는 문자열 생성
+    String guestCol = "";
+    for(int i=0; i < guestColList.size(); i++) {
+      guestCol += (guestCol.equals("") ? "" : ",") + guestColList.get(i).getStr("guestCd");
+    }
+    model.addAttribute("guestColList", guestColList);
+    model.addAttribute("guestCol", guestCol);
     return "dlvr/anals/dlvrInfo/dlvrInfo";
   }
 
@@ -81,15 +129,24 @@ public class DlvrInfoController {
   }
 
   /**
-   * 영수증 상세조회
-   *
-   * @return
+   * 영수번호 상세팝업 - 영수증상세조회
+   * @param   request
+   * @param   response
+   * @param   model
+   * @param   dlvrInfoVO
+   * @return  String
+   * @author  김유승
+   * @since   2025. 08. 26.
    */
   @RequestMapping(value = "/dlvr/getBillInfo.sb", method = RequestMethod.POST)
   @ResponseBody
-  public Result getBillInfo(DlvrInfoVO dlvrInfoVO, HttpServletRequest request) {
+  public Result getBillInfo(HttpServletRequest request, HttpServletResponse response,
+                            Model model, DlvrInfoVO dlvrInfoVO) {
+
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
     DefaultMap<String> result = dlvrInfoService.getBillInfo(dlvrInfoVO, sessionInfoVO);
+
     return ReturnUtil.returnJson(Status.OK, result);
   }
 
@@ -104,6 +161,74 @@ public class DlvrInfoController {
     SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
     List<DefaultMap<Object>> result = dlvrInfoService.getBillInfoList(dlvrInfoVO, sessionInfoVO);
     return ReturnUtil.returnListJson(Status.OK, result);
+  }
+
+  /**
+   * 영수번호 상세팝업 - 영수증상세 결제내역 조회
+   * @param   request
+   * @param   response
+   * @param   model
+   * @param   dlvrInfoVO
+   * @return  String
+   * @author  김유승
+   * @since   2025. 08. 26.
+   */
+  @RequestMapping(value = "/dlvr/billPayInfo.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getBillPayInfo(HttpServletRequest request, HttpServletResponse response,
+                               Model model, DlvrInfoVO dlvrInfoVO) {
+
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+    DefaultMap<String> result = dlvrInfoService.getBillPayInfo(dlvrInfoVO, sessionInfoVO);
+
+    return ReturnUtil.returnJson(Status.OK, result);
+  }
+
+
+  /**
+   * 영수번호 상세팝업 - 영수증상세 방문인원 조회
+   * @param   request
+   * @param   response
+   * @param   model
+   * @param   dlvrInfoVO
+   * @return  String
+   * @author  김유승
+   * @since   2025. 08. 26.
+   */
+  @RequestMapping(value = "/dlvr/billGuestInfo.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getBillGuestInfo(HttpServletRequest request, HttpServletResponse response,
+                                 Model model, DlvrInfoVO dlvrInfoVO) {
+
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+    DefaultMap<String> result = dlvrInfoService.getBillGuestInfo(dlvrInfoVO, sessionInfoVO);
+
+    return ReturnUtil.returnJson(Status.OK, result);
+  }
+
+
+  /**
+   * 영수번호 상세팝업 - 매출종합 리스트 조회
+   * @param   request
+   * @param   response
+   * @param   model
+   * @param   dlvrInfoVO
+   * @return  String
+   * @author  김유승
+   * @since   2025. 08. 26.
+   */
+  @RequestMapping(value = "/dlvr/billProdList.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getBillProdList(HttpServletRequest request, HttpServletResponse response,
+                                Model model, DlvrInfoVO dlvrInfoVO) {
+
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+    List<DefaultMap<String>> list = dlvrInfoService.getBillProdList(dlvrInfoVO, sessionInfoVO);
+
+    return ReturnUtil.returnListJson(Status.OK, list, dlvrInfoVO);
   }
 
 }

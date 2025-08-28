@@ -12,122 +12,72 @@
 <mapper namespace="kr.co.solbipos.dlvr.anals.dlvrInfo.service.impl.DlvrInfoMapper">
 
     <select id="getDlvrInfoList" parameterType="dlvrInfoVO" resultType="DefaultMap">
-        /*DlvrMapper.getDlvrInfoList*/
+        /* USE : DlvrMapper.getDlvrInfoList*/
         <include refid="CmmSQL.PagingTemplateHeader"/>
-        /*배달내역 조회*/
-        SELECT
-        tssh.SALE_DATE,
-        tssh.POS_NO,
-        tssh.BILL_NO,
-        tssh.REAL_SALE_AMT,
-        tssh.HQ_OFFICE_CD,
-        tssh.HQ_BRAND_CD,
-        tssh.STORE_CD,
-		SBPENC.D(tsshd.DLVR_ADDR) AS DLVR_ADDR,
-        SBPENC.D(tsshd.DLVR_TEL_NO) AS DLVR_TEL_NO,
-        SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM,
-        tsshm.MEMBR_NO,
-        tsshm.MEMBR_CARD_NO,
-        tssh.BILL_DT,
-		tme.EMP_NM,
-		tme2.EMP_NM AS DLVR_PAY_EMP_NM
-        <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM
-        TB_SL_SALE_HDR_DLVR tsshd
-        LEFT JOIN TB_SL_SALE_HDR tssh ON tssh.BILL_NO = tsshd.BILL_NO
-        AND tssh.POS_NO = tsshd.POS_NO
-        AND tssh.STORE_CD = tsshd.STORE_CD
-        AND tssh.SALE_DATE = tsshd.SALE_DATE
-        AND tssh.HQ_OFFICE_CD = tsshd.HQ_OFFICE_CD
-        LEFT JOIN TB_SL_SALE_HDR_MEMBR tsshm ON tsshm.BILL_NO = tssh.BILL_NO
-        AND tsshm.POS_NO = tsshd.POS_NO
-        AND tsshm.STORE_CD = tssh.STORE_CD
-        AND tsshm.SALE_DATE = tssh.SALE_DATE
-        AND tsshm.HQ_OFFICE_CD = tssh.HQ_OFFICE_CD
-        LEFT JOIN TB_MS_EMPLOYEE tme ON tme.EMP_NO = tsshd.DLVR_EMP_NO
-        AND tme.STORE_CD = tsshd.STORE_CD
-		LEFT JOIN TB_MS_EMPLOYEE tme2 ON tme2.EMP_NO = tsshd.DLVR_PAY_EMP_NO
-		AND tme2.STORE_CD = tsshd.STORE_CD
-        WHERE
-        tssh.SALE_DATE BETWEEN #{ startDate } AND #{ endDate }
-        <if test='membrNm != null and membrNm !=""'>
-            AND SBPENC.D(tsshm.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
-        </if>
+		SELECT 	A.SALE_DATE
+		,		A.POS_NO
+		,		A.BILL_NO
+		,		A.REAL_SALE_AMT
+		,		SBPENC.D(B.DLVR_ADDR)	AS DLVR_ADDR
+		,		SBPENC.D(B.DLVR_TEL_NO)	AS DLVR_TEL_NO
+		,		SBPENC.D(C.MEMBR_NM) 	AS MEMBR_NM
+		,		TO_CHAR(TO_DATE(A.BILL_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')	AS BILL_DT
+		,		D.EMP_NM
+		,		E.EMP_NM 	AS DLVR_PAY_EMP_NM
+		,		A.STORE_CD
+		<include refid="CmmSQL.PagingTemplateCount"/>
+		FROM 	TB_SL_SALE_HDR A
+		,		TB_SL_SALE_HDR_DLVR B
+		,		TB_SL_SALE_HDR_MEMBR C
+		,		TB_MS_EMPLOYEE D
+		,		TB_MS_EMPLOYEE E
+		WHERE 	A.HQ_OFFICE_CD 	= B.HQ_OFFICE_CD
+		AND 	A.HQ_BRAND_CD 	= B.HQ_BRAND_CD
+		AND 	A.STORE_CD 		= B.STORE_CD
+		AND 	A.SALE_DATE 	= B.SALE_DATE
+		AND		A.POS_NO 		= B.POS_NO
+		AND 	A.BILL_NO 		= B.BILL_NO
+		AND	 	A.HQ_OFFICE_CD 	= C.HQ_OFFICE_CD
+		AND 	A.HQ_BRAND_CD 	= C.HQ_BRAND_CD
+		AND 	A.STORE_CD 		= C.STORE_CD
+		AND 	A.SALE_DATE 	= C.SALE_DATE
+		AND		A.POS_NO 		= C.POS_NO
+		AND 	A.BILL_NO 		= C.BILL_NO
+		AND		D.EMP_NO 	(+)	= B.DLVR_EMP_NO
+		AND		D.STORE_CD 	(+)	= B.STORE_CD
+		AND		E.EMP_NO 	(+)	= B.DLVR_PAY_EMP_NO
+		AND		E.STORE_CD 	(+)	= B.STORE_CD
+		AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+		AND		A.DLVR_ORDER_FG = '2'
+		AND 	A.STORE_CD = #{storeCd}
+		<if test='membrNm != null and membrNm !=""'>
+			AND SBPENC.D(C.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
+		</if>
 		<if test='empNm != null and empNm !=""'>
-			AND tme.EMP_NM LIKE '%'||#{empNm}||'%'
+			AND D.EMP_NM LIKE '%'||#{empNm}||'%'
 		</if>
 		<if test='dlvrPayEmpNm != null and dlvrPayEmpNm !=""'>
-			AND tme2.EMP_NM LIKE '%'||#{dlvrPayEmpNm}||'%'
+			AND E.EMP_NM LIKE '%'||#{dlvrPayEmpNm}||'%'
 		</if>
-        AND tsshd.STORE_CD = #{storeCd}
-		AND tssh.DLVR_YN = 'Y'
         <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
 
     <select id="getBillInfo" parameterType="dlvrInfoVO" resultType="DefaultMap">
-    /*DlvrMapper.getBillInfo*/
-    /*영수증 상세*/
-    SELECT
-    	tssh.HQ_OFFICE_CD,
-    	tssh.HQ_BRAND_CD,
-    	tssh.STORE_CD,
-    	tssh.SALE_DATE,
-    	tssh.POS_NO,
-    	tssh.BILL_NO,
-    	tsshm.MEMBR_CARD_NO ,
-    	tsshm.MEMBR_NO ,
-    	SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM ,
-    	tsshm.SALE_SAVE_POINT,
-    	tsshp.PAY_CD ,
-    	MAX(tsshp.PAY_AMT) AS PAY_AMT ,
-    	(
-    	SELECT
-    		tcn.NMCODE_NM
-    	FROM
-    		TB_CM_NMCODE tcn
-    	WHERE
-    		tcn.NMCODE_GRP_CD = '024'
-    		AND tcn.NMCODE_CD = tsshp.PAY_CD) AS PAY_NM,
-    	MAX(tssh.TOT_SALE_AMT) AS TOT_SALE_AMT ,
-    	MAX(tssh.TOT_DC_AMT) AS TOT_DC_AMT ,
-    	MAX(tssh.REAL_SALE_AMT) AS REAL_SALE_AMT ,
-    	MAX(tssh.NET_SALE_AMT) AS NET_SALE_AMT ,
-    	MAX(tssh.NO_TAX_SALE_AMT) AS NO_TAX_SALE_AMT ,
-    	MAX(tssh.TAX_SALE_AMT) AS TAX_SALE_AMT ,
-    	MAX(tssh.VAT_AMT) AS VAT_AMT ,
-    	MAX(tssh.TOT_TIP_AMT) AS TOT_TIP_AMT
-    FROM
-    	TB_SL_SALE_HDR tssh,
-    	TB_SL_SALE_HDR_PAY tsshp,
-    	TB_SL_SALE_HDR_MEMBR tsshm
-    WHERE
-    	1 = 1
-    	AND tsshm.STORE_CD (+)= tssh.STORE_CD
-    	AND tsshm.SALE_DATE (+)= tssh.SALE_DATE
-    	AND tsshm.POS_NO (+)= tssh.POS_NO
-    	AND tsshm.BILL_NO (+)= tssh.BILL_NO
-    	AND tssh.STORE_CD = tsshp.STORE_CD
-    	AND tssh.SALE_DATE = tsshp.SALE_DATE
-    	AND tssh.POS_NO = tsshp.POS_NO
-    	AND tssh.BILL_NO = tsshp.BILL_NO
-    	AND tssh.STORE_CD = #{storeCd}
-    	AND tssh.SALE_DATE = #{saleDate}
-    	AND tssh.POS_NO = #{posNo}
-    	AND tssh.BILL_NO = #{billNo}
-    	AND tssh.DLVR_YN = 'Y'
-    GROUP BY
-    	tssh.HQ_OFFICE_CD,
-    	tssh.HQ_BRAND_CD,
-    	tssh.STORE_CD,
-    	tssh.SALE_DATE,
-    	tssh.POS_NO,
-    	tssh.BILL_NO,
-    	tsshp.PAY_CD,
-    	tsshm.SALE_SAVE_POINT,
-    	tsshm.MEMBR_CARD_NO ,
-    	tsshm.MEMBR_NO ,
-    	tsshm.MEMBR_NM
+    /* USE : DlvrMapper.getBillInfo*/
+	SELECT  tssh.STORE_CD, tms.STORE_NM
+	,       tssh.TOT_SALE_AMT, tssh.TOT_DC_AMT, tssh.REAL_SALE_AMT
+	,       tssh.NET_SALE_AMT, tssh.NO_TAX_SALE_AMT, tssh.TAX_SALE_AMT
+	,       tssh.VAT_AMT, tssh.TOT_TIP_AMT
+	,       tssh.ORG_BILL_NO
+	FROM    TB_SL_SALE_HDR tssh
+	,       TB_MS_STORE tms
+	WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
+	AND     tssh.STORE_CD     = #{storeCd}
+	AND     tssh.SALE_DATE    = #{saleDate}
+	AND     tssh.POS_NO       = #{posNo}
+	AND     tssh.BILL_NO      = #{billNo}
+	AND     tms.STORE_CD  (+) = tssh.STORE_CD
     </select>
 
 	<select id="getBillInfoList" parameterType="dlvrInfoVO" resultType="DefaultMap">
@@ -154,6 +104,181 @@
     		AND tssd.SALE_DATE = #{saleDate}
     		AND tssd.POS_NO = #{posNo}
     		AND tssd.BILL_NO = #{billNo}
+	</select>
+
+	<!-- 매출공통팝업 - 영수증상세 결제내역 조회 -->
+	<!--
+        TABLE    : TB_SL_SALE_HDR_PAY
+        PARAM    : dlvrInfoVO
+        COMMENTS : 매출공통팝업 - 영수증상세 결제내역을 조회한다.
+    -->
+	<select id="getBillPayInfo" parameterType="dlvrInfoVO" resultType="DefaultMap">
+		/* USE : DlvrMapper.getBillPayInfo */
+		SELECT  <foreach collection="arrPayCol" item="item" separator=",">
+					NVL(tsshp.PAY${item}, 0) AS PAY${item}
+				</foreach>
+		,		NVL(tsspc.PAY02, 0) AS PAY02
+		,		NVL(tsspc.PAY021, 0) AS PAY021
+		FROM 	TB_SL_SALE_HDR tssh
+		,    (
+				SELECT  HQ_OFFICE_CD
+				,		STORE_CD
+				,		SALE_DATE
+				,		POS_NO
+				,		BILL_NO
+				,		<foreach collection="arrPayCol" item="item" separator=",">
+							NVL(PAY${item}, 0) AS PAY${item}
+						</foreach>
+				FROM (
+						SELECT  tsshp.HQ_OFFICE_CD
+						,		tsshp.STORE_CD
+						,		tsshp.SALE_DATE
+						,		tsshp.POS_NO
+						,		tsshp.BILL_NO
+						,		tsshp.PAY_CD
+						,		SUM(tsshp.PAY_AMT) AS PAY_AMT
+						FROM    TB_SL_SALE_HDR_PAY tsshp
+						WHERE   tsshp.HQ_OFFICE_CD 	= #{hqOfficeCd}
+						AND     tsshp.STORE_CD 		= #{storeCd}
+						AND     tsshp.SALE_DATE 	= #{saleDate}
+						AND     tsshp.POS_NO 		= #{posNo}
+						AND     tsshp.BILL_NO 		= #{billNo}
+						AND     tsshp.PAY_CD 		!= '02' -- 현금,현금영수증 분리
+						GROUP
+						BY      tsshp.HQ_OFFICE_CD
+						,		tsshp.STORE_CD
+						,		tsshp.SALE_DATE
+						,		tsshp.POS_NO
+						,		tsshp.BILL_NO
+						,		tsshp.PAY_CD
+					)
+				PIVOT 	(
+							SUM(PAY_AMT)
+							FOR PAY_CD
+							IN (${pivotPayCol})
+						)
+			) tsshp
+		, 	(
+				-- 현금,현금영수증 분리
+				SELECT  tsspc.HQ_OFFICE_CD
+				,		tsspc.STORE_CD
+				, 	 	tsspc.SALE_DATE
+				,       tsspc.POS_NO
+				, 		tsspc.BILL_NO
+				,		SUM(tsspc.SALE_AMT) - SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY02 -- 현금
+				,		SUM(CASE WHEN tsspc.APPR_PROC_FG IN ('1','2','4') THEN tsspc.SALE_AMT ELSE 0 END) AS PAY021 -- 현금영수증
+				FROM    TB_SL_SALE_PAY_CASH tsspc
+				WHERE   tsspc.HQ_OFFICE_CD = #{hqOfficeCd}
+				AND     tsspc.STORE_CD     = #{storeCd}
+				AND     tsspc.SALE_DATE    = #{saleDate}
+				AND     tsspc.POS_NO       = #{posNo}
+				AND     tsspc.BILL_NO      = #{billNo}
+				GROUP
+				BY      tsspc.HQ_OFFICE_CD
+				,		tsspc.STORE_CD
+				,		tsspc.SALE_DATE
+				,		tsspc.POS_NO
+				,		tsspc.BILL_NO
+			) tsspc
+		WHERE   tssh.HQ_OFFICE_CD  		= #{hqOfficeCd}
+		AND     tssh.STORE_CD      		= #{storeCd}
+		AND     tssh.SALE_DATE     		= #{saleDate}
+		AND     tssh.POS_NO        		= #{posNo}
+		AND     tssh.BILL_NO       		= #{billNo}
+		AND     tsshp.HQ_OFFICE_CD 	(+) = tssh.HQ_OFFICE_CD
+		AND     tsshp.STORE_CD     	(+) = tssh.STORE_CD
+		AND     tsshp.SALE_DATE    	(+) = tssh.SALE_DATE
+		AND     tsshp.POS_NO       	(+) = tssh.POS_NO
+		AND     tsshp.BILL_NO      	(+) = tssh.BILL_NO
+		AND     tsspc.HQ_OFFICE_CD 	(+) = tssh.HQ_OFFICE_CD
+		AND     tsspc.STORE_CD     	(+) = tssh.STORE_CD
+		AND     tsspc.SALE_DATE    	(+) = tssh.SALE_DATE
+		AND     tsspc.POS_NO       	(+) = tssh.POS_NO
+		AND     tsspc.BILL_NO      	(+) = tssh.BILL_NO
+	</select>
+
+
+	<!-- 매출공통팝업 - 영수증상세 방문인원 조회 -->
+	<!--
+        TABLE    : TB_SL_SALE_HDR_GUEST
+        PARAM    : dlvrInfoVO
+        COMMENTS : 매출공통팝업 - 영수증상세 방문인원을 조회한다.
+    -->
+	<select id="getBillGuestInfo" parameterType="dlvrInfoVO" resultType="DefaultMap">
+		/* USE : DlvrMapper.getBillGuestInfo */
+		SELECT  NVL(tsshg.GUEST_CNT_1, 0) AS GUEST01
+	 	,       NVL(tsshg.GUEST_CNT_2, 0) AS GUEST02
+	 	,       NVL(tsshg.GUEST_CNT_3, 0) AS GUEST03
+	 	,       NVL(tsshg.GUEST_CNT_4, 0) AS GUEST04
+	 	,       NVL(tsshg.GUEST_CNT_5, 0) AS GUEST05
+	 	,       NVL(tsshg.GUEST_CNT_6, 0) AS GUEST06
+		FROM    TB_SL_SALE_HDR_GUEST tsshg
+		WHERE   tsshg.HQ_OFFICE_CD = #{hqOfficeCd}
+	  	AND     tsshg.STORE_CD     = #{storeCd}
+	  	AND     tsshg.SALE_DATE    = #{saleDate}
+	  	AND     tsshg.POS_NO       = #{posNo}
+	  	AND     tsshg.BILL_NO      = #{billNo}
+	</select>
+
+
+	<!-- 매출공통팝업 - 영수증상세 상품 리스트 조회 -->
+	<!--
+        TABLE    : TB_SL_SALE_HDR_DTL
+        PARAM    : dlvrInfoVO
+        COMMENTS : 매출공통팝업 - 영수증상세 상품 리스트를 조회한다.
+    -->
+	<select id="getBillProdList" parameterType="dlvrInfoVO" resultType="DefaultMap">
+		/* USE : DlvrMapper.getBillProdList */
+		SELECT  tssd.BILL_DTL_NO
+		,       tssd.PROD_CD
+	 	, 		tmp.PROD_NM
+		,       tssd.SALE_QTY
+	 	, 		tssd.SALE_UPRC
+		,       tssd.SALE_AMT
+		, 		tssd.DC_AMT
+		, 		tssd.REAL_SALE_AMT
+		,       (tssd.REAL_SALE_AMT - tssd.VAT_AMT) AS GA_AMT
+		,       tssd.VAT_AMT
+		,       NVL(tssd.ORDER_ADD_FG, '1') AS ORDER_ADD_FG
+		,       <foreach collection="arrDcCol" item="item" separator=",">
+					tssdd.DC${item} AS DC${item}
+				</foreach>
+		FROM    TB_SL_SALE_DTL tssd
+		,       (   SELECT  PROD_CD
+				 	, 		BILL_DTL_NO
+					,       <foreach collection="arrDcCol" item="item" separator=",">
+								DC${item} AS DC${item}
+							</foreach>
+					FROM    (
+					    		SELECT  tssdd.PROD_CD
+							 	, 		tssdd.DC_CD
+							 	, 		tssdd.DC_AMT
+							 	, 		tssdd.BILL_DTL_NO
+								FROM    TB_SL_SALE_DTL_DC tssdd
+								WHERE   tssdd.HQ_OFFICE_CD  = #{hqOfficeCd}
+								AND     tssdd.STORE_CD      = #{storeCd}
+								AND     tssdd.SALE_DATE     = #{saleDate}
+								AND     tssdd.POS_NO        = #{posNo}
+								AND     tssdd.BILL_NO       = #{billNo}
+							)
+					PIVOT   (
+								SUM(DC_AMT)
+								FOR DC_CD
+								IN (${pivotDcCol})
+							)
+				) tssdd
+		,       TB_MS_PRODUCT tmp
+		WHERE   tssd.HQ_OFFICE_CD 		= #{hqOfficeCd}
+		AND     tssd.STORE_CD     		= #{storeCd}
+		AND     tssd.SALE_DATE    		= #{saleDate}
+		AND     tssd.POS_NO       		= #{posNo}
+		AND     tssd.BILL_NO      		= #{billNo}
+		AND     tssdd.PROD_CD 		(+) = tssd.PROD_CD
+		AND 	tssdd.BILL_DTL_NO  	(+) = tssd.BILL_DTL_NO
+		AND     tmp.STORE_CD  		(+) = tssd.STORE_CD
+		AND     tmp.PROD_CD   		(+) = tssd.PROD_CD
+		ORDER
+		BY 		tssd.BILL_DTL_NO
 	</select>
 
 </mapper>
