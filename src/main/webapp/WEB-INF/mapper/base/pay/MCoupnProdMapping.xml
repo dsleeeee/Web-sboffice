@@ -1,0 +1,817 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    MCoupnProdMapping.xml
+    모바일쿠폰상품매핑
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2025.08.19     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.pay.mCoupnProdMapping.service.impl.MCoupnProdMappingMapper">
+
+    <!-- 모바일쿠폰상품매핑 - 조회 (가로용) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingList" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        thpmpc.PROD_CD,
+        thp.PROD_NM,
+        thpmpc.MCOUPN_CD,
+        tcn.NMCODE_NM AS MCOUPN_NM
+        ${sQuery2}
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+            SELECT
+            AA.HQ_OFFICE_CD,
+            AA.PROD_CD,
+            AA.MCOUPN_CD
+            ${sQuery1}
+            FROM
+            (
+                SELECT
+                A.HQ_OFFICE_CD,
+                A.PROD_CD,
+                A.MCOUPN_CD,
+                LISTAGG(A.MCOUPN_PROD_CD, ',') WITHIN GROUP (ORDER BY A.MCOUPN_PROD_CD ASC) AS MCOUPN_PROD_CD_LIST,
+                LISTAGG(B.PROD_NM, ',') WITHIN GROUP (ORDER BY A.MCOUPN_PROD_CD ASC) AS MCOUPN_PROD_NM_LIST
+                FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD A,
+                TB_HQ_PRODUCT B
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="chkDt == false">
+                    <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                        <if test="regDtType != null and regDtType == 'dlvrProdNm'">
+                            <![CDATA[
+                               AND A.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                           ]]>
+                        </if>
+                    </if>
+                </if>
+                AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                AND B.PROD_CD (+)= A.PROD_CD
+                GROUP BY A.HQ_OFFICE_CD, A.PROD_CD, A.MCOUPN_CD
+            ) AA
+        ) thpmpc,
+        TB_HQ_PRODUCT thp,
+        TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND thpmpc.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <if test="regDtType != null and regDtType == 'prod'">
+                    <![CDATA[
+                       AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                   ]]>
+                </if>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND thpmpc.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY
+                                        PRIOR   PROD_CLASS_CD    = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS  (
+                            SELECT  1
+                            FROM    TB_HQ_PRODUCT_BARCD
+                            WHERE   HQ_OFFICE_CD    = thp.HQ_OFFICE_CD
+                            AND     PROD_CD         = thp.PROD_CD
+                            AND     BARCD_CD        = #{barCd}
+                        )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn}
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND thp.HQ_OFFICE_CD (+)= thpmpc.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= thpmpc.PROD_CD
+        AND tcn.NMCODE_GRP_CD (+)= '183'
+        AND tcn.NMCODE_CD (+)= thpmpc.MCOUPN_CD
+        ORDER BY thpmpc.PROD_CD, thpmpc.MCOUPN_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 모바일쿠폰상품매핑 - 조회 (세로용) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingList2" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingList2 */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT
+        thpmpc.PROD_CD,
+        thp.PROD_NM,
+        NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
+        thpmpc.MCOUPN_CD,
+        tcn.NMCODE_NM AS MCOUPN_NM,
+        thpmpc.MCOUPN_PROD_CD,
+        thpmpc.MCOUPN_PROD_MM,
+        thpmpc.REMARK
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM
+        (
+            SELECT
+            A.HQ_OFFICE_CD,
+            A.PROD_CD,
+            A.MCOUPN_CD,
+            A.MCOUPN_PROD_CD,
+            B.PROD_NM AS MCOUPN_PROD_MM,
+            A.REMARK,
+            A.REG_DT
+            FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD A,
+            TB_HQ_PRODUCT B
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+            AND B.PROD_CD (+)= A.PROD_CD
+        ) thpmpc,
+        TB_HQ_PRODUCT thp,
+        TB_CM_NMCODE tcn,
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thpmpc.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <if test="regDtType != null and regDtType == 'prod'">
+                    <![CDATA[
+                        AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    ]]>
+                </if>
+                <if test="regDtType != null and regDtType == 'dlvrProdNm'">
+                    <![CDATA[
+                        AND thpmpc.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                    ]]>
+                </if>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND thpmpc.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND thp.PROD_CLASS_CD IN (
+                                        SELECT  PROD_CLASS_CD
+                                        FROM    TB_HQ_PRODUCT_CLASS
+                                        WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        CONNECT BY
+                                        PRIOR   PROD_CLASS_CD    = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                    )
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS  (
+                            SELECT  1
+                            FROM    TB_HQ_PRODUCT_BARCD
+                            WHERE   HQ_OFFICE_CD    = thp.HQ_OFFICE_CD
+                            AND     PROD_CD         = thp.PROD_CD
+                            AND     BARCD_CD        = #{barCd}
+                        )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND thp.USE_YN = #{useYn}
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND thp.HQ_OFFICE_CD (+)= thpmpc.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= thpmpc.PROD_CD
+        AND tcn.NMCODE_GRP_CD (+)= '183'
+        AND tcn.NMCODE_CD (+)= thpmpc.MCOUPN_CD
+        AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD (+)= thp.PROD_CD
+        AND thpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY thpmpc.PROD_CD, thpmpc.MCOUPN_CD
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- 모바일쿠폰상품매핑 - 모바일쿠폰사-상품코드 최대수 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingCnt" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingCnt */
+        SELECT
+        NVL(MAX(A.MCOUPN_PROD_CNT), 0) AS MCOUPN_PROD_CNT
+        FROM
+        (
+            SELECT
+            thpmpc.MCOUPN_CD,
+            COUNT(thpmpc.MCOUPN_PROD_CD) AS MCOUPN_PROD_CNT
+            FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD thpmpc,
+            TB_HQ_PRODUCT thp
+            WHERE 1=1
+            AND thpmpc.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test="chkDt == false">
+                <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                    <if test="regDtType != null and regDtType == 'prod'">
+                        <![CDATA[
+                            AND thp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                    <if test="regDtType != null and regDtType == 'dlvrProdNm'">
+                        <![CDATA[
+                            AND thpmpc.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                        ]]>
+                    </if>
+                </if>
+            </if>
+            <if test="prodCd != null and prodCd != ''">
+                AND thpmpc.PROD_CD LIKE '%'||#{prodCd}||'%'
+            </if>
+            <if test="prodNm != null and prodNm != ''">
+                AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            <if test="prodClassCd != null and prodClassCd != ''">
+                AND thp.PROD_CLASS_CD IN (
+                                            SELECT  PROD_CLASS_CD
+                                            FROM    TB_HQ_PRODUCT_CLASS
+                                            WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                            CONNECT BY
+                                            PRIOR   PROD_CLASS_CD    = P_PROD_CLASS_CD  AND HQ_OFFICE_CD = #{hqOfficeCd}
+                                        )
+            </if>
+            <if test="barCd != null and barCd != ''">
+                AND EXISTS  (
+                                SELECT  1
+                                FROM    TB_HQ_PRODUCT_BARCD
+                                WHERE   HQ_OFFICE_CD    = thp.HQ_OFFICE_CD
+                                AND     PROD_CD         = thp.PROD_CD
+                                AND     BARCD_CD        = #{barCd}
+                            )
+            </if>
+            <if test="useYn != null and useYn != ''">
+                AND thp.USE_YN = #{useYn}
+            </if>
+            AND (
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+            AND thp.HQ_OFFICE_CD (+)= thpmpc.HQ_OFFICE_CD
+            AND thp.PROD_CD (+)= thpmpc.PROD_CD
+            GROUP BY thpmpc.MCOUPN_CD
+        ) A
+    </select>
+
+    <!-- 모바일쿠폰상품매핑 - 엑셀업로드 양식 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingExcelUploadSampleList" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadSampleList */
+        SELECT
+        '0000000000001' AS PROD_CD,
+        '아메리카노' AS PROD_NM,
+        '1000' AS SALE_UPRC,
+        '즐거운' AS MCOUPN_NM,
+        '0000000000009' AS MCOUPN_PROD_CD,
+        '테스트' AS REMARK
+        FROM dual
+    </select>
+
+    <!-- 모바일쿠폰상품매핑 엑셀업로드 팝업 - 검증결과 전체 삭제 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getMCoupnProdMappingExcelUploadCheckDeleteAll" parameterType="MCoupnProdMappingVO">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadCheckDeleteAll */
+        DELETE
+        TB_TMP_PRODUCT_MCOUPN_PROD_CD
+        WHERE 1=1
+        AND SESSION_ID = #{sessionId}
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+    </delete>
+
+    <!-- 모바일쿠폰상품매핑 엑셀업로드 팝업 - 업로드시 임시테이블 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getMCoupnProdMappingExcelUploadCheckSave" parameterType="MCoupnProdMappingVO">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadCheckSave */
+        INSERT INTO TB_TMP_PRODUCT_MCOUPN_PROD_CD
+        (
+            SESSION_ID,
+            HQ_OFFICE_CD,
+            SEQ,
+            PROD_CD,
+            MCOUPN_CD,
+            MCOUPN_NM,
+            MCOUPN_PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            REMARK
+        )
+        VALUES
+        (
+            #{sessionId},
+            #{hqOfficeCd},
+            '1',
+            #{prodCd},
+            (SELECT NMCODE_CD FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '183' AND NMCODE_NM = #{mcoupnNm}),
+            #{mcoupnNm},
+            #{mcoupnProdCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{remark}
+         )
+    </insert>
+
+    <!-- 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 조회 (중복) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingExcelUploadResultList" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultList */
+        SELECT
+        'X' AS RESULT_GUBUN,
+        tmpmp.PROD_CD,
+        thp.PROD_NM,
+        NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
+        tmpmp.MCOUPN_CD,
+        tmpmp.MCOUPN_NM,
+        tmpmp.MCOUPN_PROD_CD,
+        tmpmp.REMARK
+        FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD tmpmp,
+        TB_HQ_PRODUCT thp,
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND tmpmp.SESSION_ID = #{sessionId}
+        AND tmpmp.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND (tmpmp.HQ_OFFICE_CD, tmpmp.MCOUPN_CD, tmpmp.MCOUPN_PROD_CD) IN (
+                                                                                SELECT
+                                                                                BB.HQ_OFFICE_CD,
+                                                                                BB.MCOUPN_CD,
+                                                                                BB.MCOUPN_PROD_CD
+                                                                                FROM
+                                                                                (
+                                                                                    SELECT
+                                                                                    B.HQ_OFFICE_CD,
+                                                                                    B.MCOUPN_CD,
+                                                                                    B.MCOUPN_PROD_CD,
+                                                                                    COUNT(B.PROD_CD) AS OVERLAP_CNT
+                                                                                    FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD B
+                                                                                    WHERE 1=1
+                                                                                    AND B.SESSION_ID = #{sessionId}
+                                                                                    AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                                    AND B.MCOUPN_CD IS NOT NULL
+                                                                                    GROUP BY B.HQ_OFFICE_CD, B.MCOUPN_CD, B.MCOUPN_PROD_CD
+                                                                                ) BB
+                                                                                WHERE 1=1
+                                                                                <![CDATA[
+                                                                                    AND BB.OVERLAP_CNT > 1
+                                                                                ]]>
+                                                                            )
+        AND thp.HQ_OFFICE_CD (+)= tmpmp.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= tmpmp.PROD_CD
+        AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD (+)= thp.PROD_CD
+        AND thpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY tmpmp.PROD_CD
+    </select>
+
+    <!-- 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 조회 (삭제,추가,유지) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingExcelUploadResultList2" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultList2 */
+        SELECT
+        tmpmp.RESULT_NUM,
+        tmpmp.RESULT_GUBUN,
+        tmpmp.SEQ,
+        tmpmp.PROD_CD,
+        thp.PROD_NM,
+        NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
+        tmpmp.MCOUPN_CD,
+        tmpmp.MCOUPN_NM,
+        tmpmp.MCOUPN_PROD_CD,
+        tmpmp.REMARK
+        FROM
+        (
+            SELECT
+            '1' AS RESULT_NUM,
+            'D' AS RESULT_GUBUN,
+            HQ_OFFICE_CD,
+            SEQ,
+            PROD_CD,
+            MCOUPN_CD,
+            MCOUPN_NM,
+            MCOUPN_PROD_CD,
+            REMARK
+            FROM
+            (
+                SELECT
+                A.HQ_OFFICE_CD,
+                A.SEQ,
+                A.PROD_CD,
+                A.MCOUPN_CD,
+                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '183' AND NMCODE_CD = A.MCOUPN_CD) AS MCOUPN_NM,
+                A.MCOUPN_PROD_CD,
+                A.REMARK
+                FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD A
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                MINUS
+                SELECT
+                B.HQ_OFFICE_CD,
+                B.SEQ,
+                B.PROD_CD,
+                B.MCOUPN_CD,
+                B.MCOUPN_NM,
+                B.MCOUPN_PROD_CD,
+                B.REMARK
+                FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD B
+                WHERE 1=1
+                AND B.SESSION_ID = #{sessionId}
+                AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+            UNION ALL
+            SELECT
+            '2' AS RESULT_NUM,
+            'I' AS RESULT_GUBUN,
+            HQ_OFFICE_CD,
+            SEQ,
+            PROD_CD,
+            MCOUPN_CD,
+            MCOUPN_NM,
+            MCOUPN_PROD_CD,
+            REMARK
+            FROM
+            (
+                SELECT
+                B.HQ_OFFICE_CD,
+                B.SEQ,
+                B.PROD_CD,
+                B.MCOUPN_CD,
+                B.MCOUPN_NM,
+                B.MCOUPN_PROD_CD,
+                B.REMARK
+                FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD B
+                WHERE 1=1
+                AND B.SESSION_ID = #{sessionId}
+                AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+                MINUS
+                SELECT
+                A.HQ_OFFICE_CD,
+                A.SEQ,
+                A.PROD_CD,
+                A.MCOUPN_CD,
+                (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '183' AND NMCODE_CD = A.MCOUPN_CD) AS MCOUPN_NM,
+                A.MCOUPN_PROD_CD,
+                A.REMARK
+                FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD A
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            )
+            UNION ALL
+            SELECT
+            '3' AS RESULT_NUM,
+            'U' AS RESULT_GUBUN,
+            B.HQ_OFFICE_CD,
+            B.SEQ,
+            B.PROD_CD,
+            B.MCOUPN_CD,
+            B.MCOUPN_NM,
+            B.MCOUPN_PROD_CD,
+            B.REMARK
+            FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD A,
+            TB_TMP_PRODUCT_MCOUPN_PROD_CD B
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND B.SESSION_ID = #{sessionId}
+            AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND B.HQ_OFFICE_CD = A.HQ_OFFICE_CD
+            AND B.PROD_CD = A.PROD_CD
+            AND B.MCOUPN_CD = A.MCOUPN_CD
+            AND B.MCOUPN_PROD_CD = A.MCOUPN_PROD_CD
+        ) tmpmp,
+        TB_HQ_PRODUCT thp,
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thp.HQ_OFFICE_CD (+)= tmpmp.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= tmpmp.PROD_CD
+        AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD (+)= thp.PROD_CD
+        AND thpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY tmpmp.RESULT_NUM, tmpmp.PROD_CD
+    </select>
+
+    <!-- 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 저장 (백업) insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getMCoupnProdMappingExcelUploadBackUpSaveInsert" parameterType="MCoupnProdMappingVO">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadBackUpSaveInsert */
+        INSERT INTO TB_HQ_PRODUCT_MCOUPN_PROD_CD_UPLOAD_LOG
+        (
+            PROC_DT,
+            USER_ID,
+            HQ_OFFICE_CD,
+            SEQ,
+            PROD_CD,
+            MCOUPN_CD,
+            MCOUPN_PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            REMARK
+        )
+        SELECT
+        #{regDt} AS PROC_DT,
+        #{userId} AS USER_ID,
+        HQ_OFFICE_CD,
+        SEQ,
+        PROD_CD,
+        MCOUPN_CD,
+        MCOUPN_PROD_CD,
+        REG_DT,
+        REG_ID,
+        MOD_DT,
+        MOD_ID,
+        REMARK
+        FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+    </insert>
+
+    <!-- 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 저장 delete -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <delete id="getMCoupnProdMappingExcelUploadResultSaveDelete" parameterType="MCoupnProdMappingVO">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveDelete */
+        DELETE
+        TB_HQ_PRODUCT_MCOUPN_PROD_CD
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SEQ = #{seq}
+        AND PROD_CD = #{prodCd}
+        AND MCOUPN_CD = #{mcoupnCd}
+        AND MCOUPN_PROD_CD = #{mcoupnProdCd}
+    </delete>
+
+    <!-- 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 저장 insert -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <insert id="getMCoupnProdMappingExcelUploadResultSaveInsert" parameterType="MCoupnProdMappingVO">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveInsert */
+        INSERT INTO TB_HQ_PRODUCT_MCOUPN_PROD_CD
+        (
+            HQ_OFFICE_CD,
+            SEQ,
+            PROD_CD,
+            MCOUPN_CD,
+            MCOUPN_PROD_CD,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            REMARK
+        )
+        VALUES
+        (
+            #{hqOfficeCd},
+            '1',
+            #{prodCd},
+            #{mcoupnCd},
+            #{mcoupnProdCd},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{remark}
+        )
+    </insert>
+
+    <!-- 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 저장 update -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <update id="getMCoupnProdMappingExcelUploadResultSaveUpdate" parameterType="MCoupnProdMappingVO">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveUpdate */
+        UPDATE
+        TB_HQ_PRODUCT_MCOUPN_PROD_CD
+        SET
+        REMARK = #{remark},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SEQ = #{seq}
+        AND PROD_CD = #{prodCd}
+        AND MCOUPN_CD = #{mcoupnCd}
+        AND MCOUPN_PROD_CD = #{mcoupnProdCd}
+    </update>
+
+    <!-- 모바일쿠폰상품매핑 이력조회 팝업 - 조회 (가로용) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingHistList" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingHistList */
+        SELECT
+        TO_CHAR(TO_DATE(thpmpcul.PROC_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS PROC_DT,
+        thpmpcul.USER_ID,
+        thpmpcul.PROD_CD,
+        thp.PROD_NM,
+        thpmpcul.MCOUPN_CD,
+        tcn.NMCODE_NM AS MCOUPN_NM
+        ${sQuery2}
+        FROM
+        (
+            SELECT
+            AA.PROC_DT,
+            AA.USER_ID,
+            AA.HQ_OFFICE_CD,
+            AA.PROD_CD,
+            AA.MCOUPN_CD
+            ${sQuery1}
+            FROM
+            (
+                SELECT
+                A.PROC_DT,
+                A.USER_ID,
+                A.HQ_OFFICE_CD,
+                A.PROD_CD,
+                A.MCOUPN_CD,
+                LISTAGG(A.MCOUPN_PROD_CD, ',') WITHIN GROUP (ORDER BY A.MCOUPN_PROD_CD ASC) AS MCOUPN_PROD_CD_LIST,
+                LISTAGG(B.PROD_NM, ',') WITHIN GROUP (ORDER BY A.MCOUPN_PROD_CD ASC) AS MCOUPN_PROD_NM_LIST
+                FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD_UPLOAD_LOG A,
+                TB_HQ_PRODUCT B
+                WHERE 1=1
+                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                AND B.PROD_CD (+)= A.PROD_CD
+                GROUP BY A.PROC_DT, A.USER_ID, A.HQ_OFFICE_CD, A.PROD_CD, A.MCOUPN_CD
+            ) AA
+        ) thpmpcul,
+        TB_HQ_PRODUCT thp,
+        TB_CM_NMCODE tcn
+        WHERE 1=1
+        AND thpmpcul.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpmpcul.PROC_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        <if test="prodCd != null and prodCd != ''">
+            AND thpmpcul.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND thp.HQ_OFFICE_CD (+)= thpmpcul.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= thpmpcul.PROD_CD
+        AND tcn.NMCODE_GRP_CD (+)= '183'
+        AND tcn.NMCODE_CD (+)= thpmpcul.MCOUPN_CD
+        ORDER BY thpmpcul.PROC_DT DESC, thpmpcul.USER_ID, thpmpcul.PROD_CD, thpmpcul.MCOUPN_CD
+    </select>
+
+    <!-- 모바일쿠폰상품매핑 이력조회 팝업 - 조회 (세로용) -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingHistList2" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingHistList2 */
+        SELECT
+        TO_CHAR(TO_DATE(thpmpcul.PROC_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS PROC_DT,
+        thpmpcul.USER_ID,
+        thpmpcul.PROD_CD,
+        thp.PROD_NM,
+        NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
+        thpmpcul.MCOUPN_CD,
+        tcn.NMCODE_NM AS MCOUPN_NM,
+        thpmpcul.MCOUPN_PROD_CD,
+        thpmpcul.MCOUPN_PROD_MM,
+        thpmpcul.REMARK
+        FROM
+        (
+            SELECT
+            A.PROC_DT,
+            A.USER_ID,
+            A.HQ_OFFICE_CD,
+            A.PROD_CD,
+            A.MCOUPN_CD,
+            A.MCOUPN_PROD_CD,
+            B.PROD_NM AS MCOUPN_PROD_MM,
+            A.REMARK
+            FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD_UPLOAD_LOG A,
+            TB_HQ_PRODUCT B
+            WHERE 1=1
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+            AND B.PROD_CD (+)= A.PROD_CD
+        ) thpmpcul,
+        TB_HQ_PRODUCT thp,
+        TB_CM_NMCODE tcn,
+        TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
+        WHERE 1=1
+        AND thpmpcul.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thpmpcul.PROC_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+        <if test="prodCd != null and prodCd != ''">
+            AND thpmpcul.PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+            )
+        AND thp.HQ_OFFICE_CD (+)= thpmpcul.HQ_OFFICE_CD
+        AND thp.PROD_CD (+)= thpmpcul.PROD_CD
+        AND tcn.NMCODE_GRP_CD (+)= '183'
+        AND tcn.NMCODE_CD (+)= thpmpcul.MCOUPN_CD
+        AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+        AND thpsp.PROD_CD (+)= thp.PROD_CD
+        AND thpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
+        ORDER BY thpmpcul.PROC_DT DESC, thpmpcul.USER_ID, thpmpcul.PROD_CD, thpmpcul.MCOUPN_CD
+    </select>
+
+    <!-- 모바일쿠폰상품매핑 이력조회 팝업 - 모바일쿠폰사-상품코드 최대수 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMCoupnProdMappingHistCnt" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingHistCnt */
+        SELECT
+        NVL(MAX(A.MCOUPN_PROD_CNT), 0) AS MCOUPN_PROD_CNT
+        FROM
+        (
+            SELECT
+            thpmpcul.PROC_DT,
+            thpmpcul.USER_ID,
+            thpmpcul.MCOUPN_CD,
+            COUNT(thpmpcul.MCOUPN_PROD_CD) AS MCOUPN_PROD_CNT
+            FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD_UPLOAD_LOG thpmpcul,
+            TB_HQ_PRODUCT thp
+            WHERE 1=1
+            AND thpmpcul.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND thpmpcul.PROC_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+            <if test="prodCd != null and prodCd != ''">
+                AND thpmpcul.PROD_CD LIKE '%'||#{prodCd}||'%'
+            </if>
+            <if test="prodNm != null and prodNm != ''">
+                AND thp.PROD_NM LIKE '%'||#{prodNm}||'%'
+            </if>
+            AND (
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                    OR
+                    ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+                )
+            AND thp.HQ_OFFICE_CD (+)= thpmpcul.HQ_OFFICE_CD
+            AND thp.PROD_CD (+)= thpmpcul.PROD_CD
+            GROUP BY thpmpcul.PROC_DT, thpmpcul.USER_ID, thpmpcul.MCOUPN_CD
+        ) A
+    </select>
+
+</mapper>
