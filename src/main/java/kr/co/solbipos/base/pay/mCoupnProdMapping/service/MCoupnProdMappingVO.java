@@ -46,7 +46,7 @@ public class MCoupnProdMappingVO extends PageVO {
     private String userId;
 
     /** 모바일쿠폰사-상품코드 최대수 */
-    private int mCoupnProdCnt;
+    private int mcoupnProdCnt;
 
     /** 동적 컬럼 생성을 위한 쿼리 문자열*/
     private String sQuery1;
@@ -69,6 +69,9 @@ public class MCoupnProdMappingVO extends PageVO {
 
     /** 모바일쿠폰사-상품코드 */
     private String mcoupnProdCd;
+
+    /** 모바일쿠폰사-상품명 */
+    private String mcoupnProdNm;
 
     /** 비고 */
     private String remark;
@@ -128,10 +131,10 @@ public class MCoupnProdMappingVO extends PageVO {
         this.userId = userId;
     }
 
-    public int getMCoupnProdCnt() { return mCoupnProdCnt; }
+    public int getMcoupnProdCnt() { return mcoupnProdCnt; }
 
-    public void setMCoupnProdCnt(int mCoupnProdCnt) {
-        this.mCoupnProdCnt = mCoupnProdCnt;
+    public void setMcoupnProdCnt(int mcoupnProdCnt) {
+        this.mcoupnProdCnt = mcoupnProdCnt;
     }
 
     public String getsQuery1() { return sQuery1; }
@@ -170,6 +173,12 @@ public class MCoupnProdMappingVO extends PageVO {
 
     public void setMcoupnProdCd(String mcoupnProdCd) {
         this.mcoupnProdCd = mcoupnProdCd;
+    }
+
+    public String getMcoupnProdNm() { return mcoupnProdNm; }
+
+    public void setMcoupnProdNm(String mcoupnProdNm) {
+        this.mcoupnProdNm = mcoupnProdNm;
     }
 
     public String getRemark() { return remark; }

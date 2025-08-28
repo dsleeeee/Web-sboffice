@@ -101,30 +101,30 @@
             </tbody>
         </table>
 
-            <table class="searchTbl mt10">
-                <colgroup>
-                    <col class="w100" />
-                </colgroup>
-                <tbody>
-                <tr class="brt">
-                    <th class="oh gr fl w70" style="height: 40px; padding-left: 10px">
-                        <p class="s12 bk lh20">
-                            * 상품코드, 쿠폰사, 매핑코드, 비고만 저장됩니다.<br />
-                        </p>
-                    </th>
-                    <th class="oh gr fr w30" style="height: 40px; font-size:15px">
-                        <%-- 엑셀업로드 --%>
-                        <button class="btn_skyblue ml5 fr" ng-click="excelUpload()">
-                            <s:message code="cmm.excel.excelUpload" />
-                        </button>
-                        <%-- 양식다운로드 --%>
-                        <button class="btn_skyblue ml5 fr" ng-click="sampleDownload()">
-                            <s:message code="cmm.excel.sampleDown" />
-                        </button>
-                    </th>
-                </tr>
-                </tbody>
-            </table>
+        <table class="searchTbl mt10">
+            <colgroup>
+                <col class="w100" />
+            </colgroup>
+            <tbody>
+            <tr class="brt">
+                <th class="oh gr fl w70" style="height: 40px; padding-left: 10px">
+                    <p class="s12 bk lh20">
+                        * 상품코드, 쿠폰사, 매핑코드, 비고만 저장됩니다.<br />
+                    </p>
+                </th>
+                <th class="oh gr fr w30" style="height: 40px; font-size:15px">
+                    <%-- 엑셀업로드 --%>
+                    <button class="btn_skyblue ml5 fr" ng-click="excelUpload()">
+                        <s:message code="cmm.excel.excelUpload" />
+                    </button>
+                    <%-- 양식다운로드 --%>
+                    <button class="btn_skyblue ml5 fr" ng-click="sampleDownload()">
+                        <s:message code="cmm.excel.sampleDown" />
+                    </button>
+                </th>
+            </tr>
+            </tbody>
+        </table>
 
         <div class="mt10 oh sb-select dkbr">
             <%-- 현재화면 엑셀다운로드 --%>
@@ -188,7 +188,7 @@
     var useYnData = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMapping.js?ver=20250828.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMapping.js?ver=20250828.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

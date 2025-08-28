@@ -86,6 +86,30 @@ app.controller('mCoupnProdMappingExcelUploadResultCtrl', ['$scope', '$http', '$t
     };
     // <-- //검색 호출 -->
 
+    // 현재화면 엑셀다운로드
+    $scope.excelDownload = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },
+                "모바일쿠폰상품매핑 엑셀업로드 결과_" + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
+
     // 저장
     $("#funcSave").click(function(e){
         if($scope.flex.rows.length <= 0) {
@@ -96,15 +120,11 @@ app.controller('mCoupnProdMappingExcelUploadResultCtrl', ['$scope', '$http', '$t
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            if ( $scope.flex.collectionView.items[i].prodNm !== null && $scope.flex.collectionView.items[i].prodNm !== ''
-                && $scope.flex.collectionView.items[i].mcoupnCd !== null && $scope.flex.collectionView.items[i].mcoupnCd !== '' ) {
-                params.push($scope.flex.collectionView.items[i]);
-            }
+            params.push($scope.flex.collectionView.items[i]);
         }
 
         if(params.length <= 0) {
-            // 저장할 데이터가 없습니다.
-            s_alert.pop(messages["mCoupnProdMappingExcelUploadResult.saveAlert"]);
+            s_alert.pop(messages["cmm.not.select"]);
             return;
         }
 

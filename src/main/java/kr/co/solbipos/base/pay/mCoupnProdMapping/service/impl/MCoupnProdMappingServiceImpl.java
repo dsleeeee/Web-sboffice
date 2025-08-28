@@ -56,7 +56,7 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
         // 조회구분 (A:가로, B:세로)
         if( "A".equals(mCoupnProdMappingVO.getSearchGubun()) ) {
             // 모바일쿠폰사-상품코드 최대수
-            int mcoupnProdCnt = mCoupnProdMappingVO.getMCoupnProdCnt();
+            int mcoupnProdCnt = mCoupnProdMappingVO.getMcoupnProdCnt();
 
             // 동적 컬럼 생성을 위한 쿼리 변수;
             String sQuery1 = "";
@@ -71,7 +71,8 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
             mCoupnProdMappingVO.setsQuery2(sQuery2);
 
             result = mCoupnProdMappingMapper.getMCoupnProdMappingList(mCoupnProdMappingVO);
-        } else {
+        }
+        else {
             result = mCoupnProdMappingMapper.getMCoupnProdMappingList2(mCoupnProdMappingVO);
         }
 
@@ -124,7 +125,16 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
             mCoupnProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
             mCoupnProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
-            mCoupnProdMappingVO.setProdCd(mCoupnProdMappingVO.getProdCd().replaceAll("'",""));
+            if (mCoupnProdMappingVO.getProdCd() != null && !"".equals(mCoupnProdMappingVO.getProdCd())) {
+                if(mCoupnProdMappingVO.getProdCd().contains("'")) {
+                    mCoupnProdMappingVO.setProdCd(mCoupnProdMappingVO.getProdCd().replaceAll("'",""));
+                }
+            }
+            if (mCoupnProdMappingVO.getMcoupnProdCd() != null && !"".equals(mCoupnProdMappingVO.getMcoupnProdCd())) {
+                if(mCoupnProdMappingVO.getMcoupnProdCd().contains("'")) {
+                    mCoupnProdMappingVO.setMcoupnProdCd(mCoupnProdMappingVO.getMcoupnProdCd().replaceAll("'",""));
+                }
+            }
 
             procCnt += mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadCheckSave(mCoupnProdMappingVO);
         }
@@ -144,7 +154,8 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
         // 조회구분 (1:중복, 2:삭제,추가,유지)
         if( "1".equals(mCoupnProdMappingVO.getSearchGubun()) ) {
             result = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultList(mCoupnProdMappingVO);
-        } else {
+        }
+        else {
             result = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultList2(mCoupnProdMappingVO);
         }
 
@@ -174,18 +185,26 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
                 procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadBackUpSaveInsert(mCoupnProdMappingVO);
             }
 
-            // 삭제
-            if("D".equals(mCoupnProdMappingVO.getResultGubun())) {
-                procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveDelete(mCoupnProdMappingVO);
-            }
-            // 추가
-            else if("I".equals(mCoupnProdMappingVO.getResultGubun())) {
-                procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveInsert(mCoupnProdMappingVO);
-            }
-//            // 유지
-//            else if("U".equals(mCoupnProdMappingVO.getResultGubun())) {
+            if(mCoupnProdMappingVO.getProdCd() != null && mCoupnProdMappingVO.getProdCd() != ""
+                    && mCoupnProdMappingVO.getProdNm() != null && mCoupnProdMappingVO.getProdNm() != ""
+                    && mCoupnProdMappingVO.getMcoupnCd() != null && mCoupnProdMappingVO.getMcoupnCd() != ""
+                    && mCoupnProdMappingVO.getMcoupnNm() != null && mCoupnProdMappingVO.getMcoupnNm() != ""
+                    && mCoupnProdMappingVO.getMcoupnProdCd() != null && mCoupnProdMappingVO.getMcoupnProdCd() != ""
+                    && mCoupnProdMappingVO.getMcoupnProdNm() != null && mCoupnProdMappingVO.getMcoupnProdNm() != "") {
+
+                // 삭제
+                if("D".equals(mCoupnProdMappingVO.getResultGubun())) {
+                    procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveDelete(mCoupnProdMappingVO);
+                }
+                // 추가
+                else if("I".equals(mCoupnProdMappingVO.getResultGubun())) {
+                    procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveInsert(mCoupnProdMappingVO);
+                }
+//                // 유지
+//                else if("U".equals(mCoupnProdMappingVO.getResultGubun())) {
 //                procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveUpdate(mCoupnProdMappingVO);
-//            }
+//                }
+            }
 
             i++;
         }
@@ -205,7 +224,7 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
         // 조회구분 (A:가로, B:세로)
         if( "A".equals(mCoupnProdMappingVO.getSearchGubun()) ) {
             // 모바일쿠폰사-상품코드 최대수
-            int mcoupnProdCnt = mCoupnProdMappingVO.getMCoupnProdCnt();
+            int mcoupnProdCnt = mCoupnProdMappingVO.getMcoupnProdCnt();
 
             // 동적 컬럼 생성을 위한 쿼리 변수;
             String sQuery1 = "";
@@ -220,7 +239,8 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
             mCoupnProdMappingVO.setsQuery2(sQuery2);
 
             result = mCoupnProdMappingMapper.getMCoupnProdMappingHistList(mCoupnProdMappingVO);
-        } else {
+        }
+        else {
             result = mCoupnProdMappingMapper.getMCoupnProdMappingHistList2(mCoupnProdMappingVO);
         }
 

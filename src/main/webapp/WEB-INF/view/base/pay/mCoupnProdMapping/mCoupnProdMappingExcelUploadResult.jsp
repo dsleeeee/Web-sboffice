@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjMCoupnProdMappingExcelUploadResultLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:850px;height:520px;" fade-in="false" fade-out="false">
+<wj-popup control="wjMCoupnProdMappingExcelUploadResultLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:850px;height:550px;" fade-in="false" fade-out="false">
     <div ng-controller="mCoupnProdMappingExcelUploadResultCtrl">
 
         <%-- header --%>
@@ -18,6 +18,13 @@
                 <div class="oh sb-select dkbr">
                     <%-- 조회 --%>
                     <button class="btn_skyblue ml5 fr" id="nxBtnSearch2" ng-click="_broadcast('mCoupnProdMappingExcelUploadResultCtrl', 1)"><s:message code="cmm.search" /></button>
+                </div>
+            </div>
+
+            <div class="mt10 tr">
+                <div class="oh sb-select dkbr">
+                    <%-- 현재화면 엑셀다운로드 --%>
+                    <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
                 </div>
             </div>
 
@@ -66,4 +73,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMappingExcelUploadResult.js?ver=20250828.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMappingExcelUploadResult.js?ver=20250828.02" charset="utf-8"></script>

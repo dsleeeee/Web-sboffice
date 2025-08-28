@@ -488,6 +488,7 @@
             AND B.PROD_CD = A.PROD_CD
             AND B.MCOUPN_CD = A.MCOUPN_CD
             AND B.MCOUPN_PROD_CD = A.MCOUPN_PROD_CD
+            AND B.REMARK = A.REMARK
         ) tmpmp,
         TB_HQ_PRODUCT thp,
         TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view

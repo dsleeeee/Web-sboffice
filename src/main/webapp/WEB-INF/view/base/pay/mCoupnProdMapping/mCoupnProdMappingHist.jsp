@@ -47,6 +47,7 @@
                 </tr>
                 </tbody>
             </table>
+
             <div class="mt10 tr">
                 <div class="oh sb-select dkbr">
                     <%-- 조회(가로) --%>
@@ -86,4 +87,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMappingHist.js?ver=20250828.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMappingHist.js?ver=20250828.02" charset="utf-8"></script>

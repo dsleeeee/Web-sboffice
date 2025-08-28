@@ -67,7 +67,7 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
             $scope.mCoupnProdMappingCnt = mCoupnProdMappingCnt;
 
             // 모바일쿠폰사-상품코드 최대수
-            params.mCoupnProdCnt = $scope.mCoupnProdMappingCnt.mcoupnProdCnt;
+            params.mcoupnProdCnt = $scope.mCoupnProdMappingCnt.mcoupnProdCnt;
 
             // 조회
             $scope.searchMCoupnProdMapping(params);
@@ -85,7 +85,7 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
 
             if(params.searchGubun == "A") {
                 grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMapping.mcoupnNm"], binding: 'mcoupnNm', width: 110, align: "center" , isReadOnly: "true"}));
-                for(var j=1; j<params.mCoupnProdCnt+1; j++){
+                for(var j=1; j<params.mcoupnProdCnt+1; j++){
                     grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMapping.mappingCd"]+j, binding: 'mcoupnProdCd'+j, width: 100, align: "center" , isReadOnly: "true"}));
                 }
             } else {
