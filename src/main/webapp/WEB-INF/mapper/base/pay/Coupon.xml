@@ -1500,7 +1500,7 @@
             ,       p.BARCD_CD
             ,       p.USE_YN
             ,       p.PROD_TYPE_FG
-            FROM TB_HQ_COUPON_PROD_EXCEPT thcpe 
+            FROM TB_HQ_COUPON_PROD_EXCEPT thcpe
             ,   (
                     SELECT  thp.HQ_OFFICE_CD
                     ,       thp.PROD_CLASS_CD
@@ -1813,7 +1813,7 @@
         ,   MOD_DT
         ,   MOD_ID
         )
-        VALUES 
+        VALUES
         (
             #{hqOfficeCd}
         ,   #{payClassCd}
@@ -1846,7 +1846,6 @@
                     FROM    TB_HQ_PRODUCT
                     WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
                     AND     PROD_CLASS_CD   = #{sClassCd}
-                    AND 	USE_YN			= 'Y'
                     AND 	PROD_CD NOT IN 	(
                                                 SELECT 	PROD_CD
                                                 FROM 	TB_HQ_COUPON_PROD_EXCEPT
@@ -1955,7 +1954,6 @@
                     ,		TB_HQ_PRODUCT B
                     WHERE 	B.HQ_OFFICE_CD  = #{hqOfficeCd}
                     AND 	B.PROD_CLASS_CD = #{sClassCd}
-                    AND 	B.USE_YN		= 'Y'
                     AND 	B.PROD_CD NOT IN 	(
                                                     SELECT 	PROD_CD
                                                     FROM 	TB_HQ_COUPON_PROD_EXCEPT
