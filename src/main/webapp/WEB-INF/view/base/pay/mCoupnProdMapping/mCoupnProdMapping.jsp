@@ -139,18 +139,6 @@
             </table>
 
         <div class="mt10 oh sb-select dkbr">
-            <%-- 페이지 스케일 --%>
-            <wj-combo-box
-                    class="w100px fl"
-                    id="listScaleBox"
-                    ng-model="listScale"
-                    items-source="_getComboData('listScaleBox')"
-                    display-member-path="name"
-                    selected-value-path="value"
-                    is-editable="false"
-                    initialized="initComboBox(s)">
-            </wj-combo-box>
-            <%--// 페이지 스케일 --%>
             <%-- 이력조회 --%>
             <button class="btn_skyblue ml5 fr" ng-click="mCoupnProdMappingHist()">
                 <s:message code="mCoupnProdMapping.mCoupnProdMappingHist" />
@@ -175,13 +163,6 @@
                     <wj-flex-grid-column header="<s:message code="cmm.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
-            <%-- 페이지 리스트 --%>
-            <div class="pageNum mt20">
-                <%-- id --%>
-                <ul id="mCoupnProdMappingCtrlPager" data-size="10">
-                </ul>
-            </div>
-            <%-- //페이지 리스트 --%>
         </div>
     </div>
 
@@ -217,7 +198,7 @@
     var useYnData = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMapping.js?ver=20250819.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMapping.js?ver=20250828.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

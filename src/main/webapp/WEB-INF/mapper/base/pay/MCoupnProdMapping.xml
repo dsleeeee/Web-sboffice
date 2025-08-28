@@ -18,14 +18,12 @@
     -->
     <select id="getMCoupnProdMappingList" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
         /* MCoupnProdMappingMapper.getMCoupnProdMappingList */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         thpmpc.PROD_CD,
         thp.PROD_NM,
         thpmpc.MCOUPN_CD,
         tcn.NMCODE_NM AS MCOUPN_NM
         ${sQuery2}
-        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
             SELECT
@@ -110,7 +108,6 @@
         AND tcn.NMCODE_GRP_CD (+)= '183'
         AND tcn.NMCODE_CD (+)= thpmpc.MCOUPN_CD
         ORDER BY thpmpc.PROD_CD, thpmpc.MCOUPN_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 모바일쿠폰상품매핑 - 조회 (세로용) -->
@@ -120,7 +117,6 @@
     -->
     <select id="getMCoupnProdMappingList2" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
         /* MCoupnProdMappingMapper.getMCoupnProdMappingList2 */
-        <include refid="CmmSQL.PagingTemplateHeader"/>
         SELECT
         thpmpc.PROD_CD,
         thp.PROD_NM,
@@ -130,7 +126,6 @@
         thpmpc.MCOUPN_PROD_CD,
         thpmpc.MCOUPN_PROD_MM,
         thpmpc.REMARK
-        <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
             SELECT
@@ -208,7 +203,6 @@
         AND thpsp.PROD_CD (+)= thp.PROD_CD
         AND thpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
         ORDER BY thpmpc.PROD_CD, thpmpc.MCOUPN_CD
-        <include refid="CmmSQL.PagingTemplateBottom"/>
     </select>
 
     <!-- 모바일쿠폰상품매핑 - 모바일쿠폰사-상품코드 최대수 -->

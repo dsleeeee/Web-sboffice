@@ -31,9 +31,6 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
     $scope.srchStartDate = wcombo.genDateVal("#srchStartDate", gvStartDate);
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
-    // 콤보박스 데이터 Set
-    $scope._setComboData('listScaleBox', gvListScaleBoxData);
-
     // 조회조건 콤보박스 데이터 Set
     $scope._setComboData("regDtTypeCombo", regDtTypeComboData); // 등록일자
     $scope._setComboData("useYnCombo", useYnData); // 사용여부
@@ -69,7 +66,6 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
         params.prodClassCd = $scope.prodClassCd;
         params.barCd = $scope.barCd;
         params.useYn = $scope.useYn;
-        params.listScale = $scope.listScale;
 
         // 조회구분 (A:가로, B:세로)
         params.searchGubun = searchGubun;
