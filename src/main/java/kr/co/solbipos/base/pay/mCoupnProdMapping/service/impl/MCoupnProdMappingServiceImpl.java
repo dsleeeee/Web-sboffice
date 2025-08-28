@@ -185,12 +185,9 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
                 procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadBackUpSaveInsert(mCoupnProdMappingVO);
             }
 
-            if(mCoupnProdMappingVO.getProdCd() != null && mCoupnProdMappingVO.getProdCd() != ""
-                    && mCoupnProdMappingVO.getProdNm() != null && mCoupnProdMappingVO.getProdNm() != ""
+            if(mCoupnProdMappingVO.getProdNm() != null && mCoupnProdMappingVO.getProdNm() != ""
                     && mCoupnProdMappingVO.getMcoupnCd() != null && mCoupnProdMappingVO.getMcoupnCd() != ""
-                    && mCoupnProdMappingVO.getMcoupnNm() != null && mCoupnProdMappingVO.getMcoupnNm() != ""
-                    && mCoupnProdMappingVO.getMcoupnProdCd() != null && mCoupnProdMappingVO.getMcoupnProdCd() != ""
-                    && mCoupnProdMappingVO.getMcoupnProdNm() != null && mCoupnProdMappingVO.getMcoupnProdNm() != "") {
+                    && mCoupnProdMappingVO.getMcoupnProdCd() != null && mCoupnProdMappingVO.getMcoupnProdCd() != "") {
 
                 // 삭제
                 if("D".equals(mCoupnProdMappingVO.getResultGubun())) {
