@@ -64,10 +64,8 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
 
             for(int i=1; i < mcoupnProdCnt+1; i++) {
                 sQuery1 +=", REGEXP_SUBSTR(AA.MCOUPN_PROD_CD_LIST, '[^,]+', 1, "+ i + ") AS MCOUPN_PROD_CD_" + i + "\n";
-                sQuery1 +=", REGEXP_SUBSTR(AA.MCOUPN_PROD_NM_LIST, '[^,]+', 1, "+ i + ") AS MCOUPN_PROD_NM_" + i + "\n";
 
                 sQuery2 +=", thpmpc.MCOUPN_PROD_CD_"+ i + "\n";
-                sQuery2 +=", thpmpc.MCOUPN_PROD_NM_"+ i + "\n";
             }
             mCoupnProdMappingVO.setsQuery1(sQuery1);
             mCoupnProdMappingVO.setsQuery2(sQuery2);
@@ -182,10 +180,10 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
             else if("I".equals(mCoupnProdMappingVO.getResultGubun())) {
                 procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveInsert(mCoupnProdMappingVO);
             }
-            // 유지
-            else if("U".equals(mCoupnProdMappingVO.getResultGubun())) {
-                procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveUpdate(mCoupnProdMappingVO);
-            }
+//            // 유지
+//            else if("U".equals(mCoupnProdMappingVO.getResultGubun())) {
+//                procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveUpdate(mCoupnProdMappingVO);
+//            }
 
             i++;
         }
@@ -213,10 +211,8 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
 
             for(int i=1; i < mcoupnProdCnt+1; i++) {
                 sQuery1 +=", REGEXP_SUBSTR(AA.MCOUPN_PROD_CD_LIST, '[^,]+', 1, "+ i + ") AS MCOUPN_PROD_CD_" + i + "\n";
-                sQuery1 +=", REGEXP_SUBSTR(AA.MCOUPN_PROD_NM_LIST, '[^,]+', 1, "+ i + ") AS MCOUPN_PROD_NM_" + i + "\n";
 
                 sQuery2 +=", thpmpcul.MCOUPN_PROD_CD_"+ i + "\n";
-                sQuery2 +=", thpmpcul.MCOUPN_PROD_NM_"+ i + "\n";
             }
             mCoupnProdMappingVO.setsQuery1(sQuery1);
             mCoupnProdMappingVO.setsQuery2(sQuery2);

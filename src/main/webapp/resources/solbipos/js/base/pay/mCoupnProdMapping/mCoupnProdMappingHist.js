@@ -78,10 +78,20 @@ app.controller('mCoupnProdMappingHistCtrl', ['$scope', '$http', '$timeout', func
     });
 
     $scope.searchMCoupnProdMappingHistCnt = function(searchGubun){
+        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
         var params = {};
         params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         params.prodCd = $scope.prodCd;
+        params.prodNm = $scope.prodNm;
         params.prodNm = $scope.prodNm;
 
         // 조회구분 (A:가로, B:세로)
@@ -112,7 +122,7 @@ app.controller('mCoupnProdMappingHistCtrl', ['$scope', '$http', '$timeout', func
             if(params.searchGubun == "A") {
                 grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMappingHist.mcoupnNm"], binding: 'mcoupnNm', width: 110, align: "center" , isReadOnly: "true"}));
                 for(var j=1; j<params.mCoupnProdCnt+1; j++){
-                    grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMappingHist.mappingCd"]+j, binding: 'mcoupnProdNm'+j, width: 100, align: "center" , isReadOnly: "true"}));
+                    grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMappingHist.mappingCd"]+j, binding: 'mcoupnProdCd'+j, width: 100, align: "center" , isReadOnly: "true"}));
                 }
             } else {
                 grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMappingHist.saleUprc"], binding: 'saleUprc', width: 80, align: "right" , isReadOnly: "true"}));
@@ -151,6 +161,9 @@ app.controller('mCoupnProdMappingHistCtrl', ['$scope', '$http', '$timeout', func
 
     // 팝업 닫기
     $scope.close = function() {
+        $scope.prodCd = "";
+        $scope.prodNm = "";
+
         $scope.wjMCoupnProdMappingHistLayer.hide();
         event.preventDefault();
     };

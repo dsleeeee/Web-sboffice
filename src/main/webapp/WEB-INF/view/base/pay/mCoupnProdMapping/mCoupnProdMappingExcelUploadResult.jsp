@@ -66,4 +66,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMappingExcelUploadResult.js?ver=20250819.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMappingExcelUploadResult.js?ver=20250828.01" charset="utf-8"></script>

@@ -96,11 +96,15 @@ app.controller('mCoupnProdMappingExcelUploadResultCtrl', ['$scope', '$http', '$t
         // 파라미터 설정
         var params = new Array();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            params.push($scope.flex.collectionView.items[i]);
+            if ( $scope.flex.collectionView.items[i].prodNm !== null && $scope.flex.collectionView.items[i].prodNm !== ''
+                && $scope.flex.collectionView.items[i].mcoupnCd !== null && $scope.flex.collectionView.items[i].mcoupnCd !== '' ) {
+                params.push($scope.flex.collectionView.items[i]);
+            }
         }
 
         if(params.length <= 0) {
-            s_alert.pop(messages["cmm.not.select"]);
+            // 저장할 데이터가 없습니다.
+            s_alert.pop(messages["mCoupnProdMappingExcelUploadResult.saveAlert"]);
             return;
         }
 

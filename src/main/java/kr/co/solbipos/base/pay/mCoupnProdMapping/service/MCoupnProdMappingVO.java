@@ -27,9 +27,6 @@ public class MCoupnProdMappingVO extends PageVO {
     /** 전체기간 여부 */
     private boolean chkDt;
 
-    /** 등록일자 검색기준 */
-    private String regDtType;
-
     /** 상품코드 */
     private String prodCd;
 
@@ -87,14 +84,6 @@ public class MCoupnProdMappingVO extends PageVO {
 
     public void setChkDt(boolean chkDt) {
         this.chkDt = chkDt;
-    }
-
-    public String getRegDtType() {
-        return regDtType;
-    }
-
-    public void setRegDtType(String regDtType) {
-        this.regDtType = regDtType;
     }
 
     public String getProdCd() {

@@ -39,18 +39,6 @@
                 <th><s:message code="mCoupnProdMapping.regDt" /></th>
                 <td colspan="3">
                     <div class="sb-select">
-                        <span class="txtIn w100px">
-                            <wj-combo-box
-                                    id="srchRegDtTypeCombo"
-                                    ng-model="regDtType"
-                                    items-source="_getComboData('regDtTypeCombo')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    initialized="_initComboBox(s)"
-                                    control="srchRegDtTypeCombo">
-                            </wj-combo-box>
-                        </span>
                         <span class="txtIn"><input id="srchStartDate" class="w110px"></span>
                         <span class="rg">~</span>
                         <span class="txtIn"><input id="srchEndDate" class="w110px"></span>
@@ -139,6 +127,8 @@
             </table>
 
         <div class="mt10 oh sb-select dkbr">
+            <%-- 현재화면 엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.downCurrent"/></button>
             <%-- 이력조회 --%>
             <button class="btn_skyblue ml5 fr" ng-click="mCoupnProdMappingHist()">
                 <s:message code="mCoupnProdMapping.mCoupnProdMappingHist" />
