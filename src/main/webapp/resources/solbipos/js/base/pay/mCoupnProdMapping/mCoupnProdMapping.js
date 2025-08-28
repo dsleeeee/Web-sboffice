@@ -13,12 +13,6 @@
  */
 var app = agrid.getApp();
 
-// 등록일자
-var regDtTypeComboData = [
-    {"name":"상품","value":"prod"},
-    {"name":"상품명칭","value":"dlvrProdNm"}
-];
-
 /**
  *  모바일쿠폰상품매핑 그리드 생성
  */
@@ -32,14 +26,12 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
     $scope.srchEndDate   = wcombo.genDateVal("#srchEndDate", gvEndDate);
 
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("regDtTypeCombo", regDtTypeComboData); // 등록일자
     $scope._setComboData("useYnCombo", useYnData); // 사용여부
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         // 전체기간 체크박스
         $scope.isChecked = true;
-        $scope.srchRegDtTypeCombo.isReadOnly = $scope.isChecked;
         $scope.srchStartDate.isReadOnly = $scope.isChecked;
         $scope.srchEndDate.isReadOnly = $scope.isChecked;
     };
@@ -57,7 +49,6 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
         var params = {};
         // 등록일자 '전체기간' 선택에 따른 params
         if(!$scope.isChecked){
-            params.regDtType = $scope.srchRegDtTypeCombo.selectedValue;
             params.startDate = wijmo.Globalize.format($scope.srchStartDate.value, 'yyyyMMdd');
             params.endDate = wijmo.Globalize.format($scope.srchEndDate.value, 'yyyyMMdd');
         }
@@ -95,7 +86,7 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
             if(params.searchGubun == "A") {
                 grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMapping.mcoupnNm"], binding: 'mcoupnNm', width: 110, align: "center" , isReadOnly: "true"}));
                 for(var j=1; j<params.mCoupnProdCnt+1; j++){
-                    grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMapping.mappingCd"]+j, binding: 'mcoupnProdNm'+j, width: 100, align: "center" , isReadOnly: "true"}));
+                    grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMapping.mappingCd"]+j, binding: 'mcoupnProdCd'+j, width: 100, align: "center" , isReadOnly: "true"}));
                 }
             } else {
                 grid.columns.push(new wijmo.grid.Column({header: messages["mCoupnProdMapping.saleUprc"], binding: 'saleUprc', width: 80, align: "right" , isReadOnly: "true"}));
@@ -110,7 +101,6 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
 
     // 전체기간 체크박스 클릭이벤트
     $scope.isChkDt = function() {
-        $scope.srchRegDtTypeCombo.isReadOnly = $scope.isChecked;
         $scope.srchStartDate.isReadOnly = $scope.isChecked;
         $scope.srchEndDate.isReadOnly = $scope.isChecked;
     };
@@ -142,14 +132,34 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
         $scope.prodClassCdNm = "";
     };
 
+    // 현재화면 엑셀다운로드
+    $scope.excelDownload = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    return column.visible;
+                }
+            },
+                "모바일쿠폰상품매핑_" + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
+
     // <-- 양식다운로드 -->
     $scope.sampleDownload = function(){
         var params = {};
-
-        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
-        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
-            $scope._broadcast('mCoupnProdMappingExcelUploadSampleCtrl', params);
-        });
+        $scope._broadcast('mCoupnProdMappingExcelUploadSampleCtrl', params);
     };
     // <-- //양식다운로드 -->
 
@@ -161,6 +171,7 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
     };
     // <-- //엑셀업로드 -->
 
+    // 이력조회
     $scope.mCoupnProdMappingHist = function(){
         // 팝업 호출
         $scope.wjMCoupnProdMappingHistLayer.show(true);
