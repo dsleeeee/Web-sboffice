@@ -124,6 +124,8 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
             mCoupnProdMappingVO.setSessionId(sessionInfoVO.getSessionId());
             mCoupnProdMappingVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
+            mCoupnProdMappingVO.setProdCd(mCoupnProdMappingVO.getProdCd().replaceAll("'",""));
+
             procCnt += mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadCheckSave(mCoupnProdMappingVO);
         }
 
