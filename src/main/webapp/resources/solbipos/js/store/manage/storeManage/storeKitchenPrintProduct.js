@@ -126,6 +126,11 @@ app.controller('storeKitchenPrintProductCtrl', ['$scope', '$http', function ($sc
    * *******************************************************/
   $scope.delete = function(){
 
+    if(gvHqOfficeCd !== null && gvHqOfficeCd === 'H0616'){
+      $scope._popMsg(messages["storeManage.print.pop.msg"]);
+      return false;
+    }
+
     var params = $scope.regProductTreeCtrl.checkedItems;
 
     if(params.length <= 0) {
@@ -153,6 +158,11 @@ app.controller('storeKitchenPrintProductCtrl', ['$scope', '$http', function ($sc
    * 주방프린터 연결상품 추가
    * *******************************************************/
   $scope.add = function(){
+
+    if(gvHqOfficeCd !== null && gvHqOfficeCd === 'H0616'){
+      $scope._popMsg(messages["storeManage.print.pop.msg"]);
+      return false;
+    }
 
     var params = $scope.noRegProductTreeCtrl.checkedItems;
 

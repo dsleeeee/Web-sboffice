@@ -110,4 +110,4 @@
 <script>
 
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeKitchenPrintProduct.js?ver=20181115.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/storeManage/storeKitchenPrintProduct.js?ver=20250826.01" charset="utf-8"></script>
