@@ -228,7 +228,7 @@
   }
 </style>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20240223.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/output/posTemplate/posTemplate.js?ver=20250828.01" charset="utf-8"></script>
 <%-- 레이어 팝업 : 적용매장 선택 팝업 --%>
 <c:import url="/WEB-INF/view/base/output/posTemplate/storePosTemplate.jsp">
   <c:param name="menuCd" value="${menuCd}"/>

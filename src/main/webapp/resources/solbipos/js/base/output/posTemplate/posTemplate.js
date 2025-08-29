@@ -298,6 +298,21 @@ app.controller('templateCtrl', ['$scope', '$http', function ($scope, $http) {
       $scope.flex.collectionView.itemsRemoved[d].status = "D";
       params.push($scope.flex.collectionView.itemsRemoved[d]);
     }
+
+    for (var i = 0; i < params.length; i++) {
+        var item = params[i];
+
+        if (item.templtNm === "") {
+            $scope._popMsg(messages["posTemplate.templtNm"] + messages["cmm.require.text"]);  // 템플릿명(을)를 입력하세요.
+            return false;
+        }
+
+        if (nvl(item.templtNm + '', '').getByteLengthForOracle() > 50) {
+            $scope._popMsg(messages["posTemplate.templtNm"] +  messages["cmm.overLength"] + " 50 ");  // 템플릿명의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 50
+            return false;
+        }
+    }
+
     // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
     $scope._save("/base/output/posTemplate/template/saveList.sb", params, function(){
       // 저장 후 재조회
