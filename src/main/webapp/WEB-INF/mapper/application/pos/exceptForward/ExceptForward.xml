@@ -77,8 +77,10 @@
                tnsp.CD_ITEM,        -- ERP 품목코드
                NVL(tnse.QT_IO, 0) AS QT_IO,         -- 예외출고 수량
                tnse.NO_EGR,          -- 기타출고 고유번호
+            <if test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
                tnsg.NO_IO,           -- 입고번호
                tnsg.NO_IOLINE,        -- 입고항번
+            </if>
                '예외출고'AS REGIST
       <include refid="CmmSQL.PagingTemplateCount"/>
             <choose>
@@ -143,10 +145,19 @@
            AND tnse.DT_IO (+)= tnsp.SALE_DATE
            AND tnse.CD_PJT (+)= tnsp.CD_PARTNER
            AND tnse.CD_ITEM (+)= tnsp.CD_ITEM
-           AND tnsg.CD_COMPANY = tnsp.CD_COMPANY
-           AND tnsg.CD_PJT = tnsp.CD_PARTNER      -- 점포코드
-           AND tnsg.CD_ITEM = tnsp.CD_ITEM
-           AND tnsg.DT_IO = tnsp.SALE_DATE
+            <choose>
+                <when test='hqOfficeCd != null and hqOfficeCd == "A0007"'>
+                    AND tnsg.CD_COMPANY = tnsp.CD_COMPANY
+                    AND tnsg.CD_PJT = tnsp.CD_PARTNER      -- 점포코드
+                    AND tnsg.CD_ITEM = tnsp.CD_ITEM
+                    AND tnsg.DT_IO = tnsp.SALE_DATE
+                </when>
+                <otherwise>
+                    AND tnsg.CD_COMPANY = tnsp.CD_COMPANY
+                    AND tnsg.CD_PARTNER = tnsp.CD_PARTNER      -- 점포코드
+                    AND tnsg.CD_ITEM = tnsp.CD_ITEM
+                </otherwise>
+            </choose>
            AND tmp.STORE_CD  (+)= tnsp.STORE_CD
            AND tmp.PROD_CD (+)= tnsp.PROD_CD
       <include refid="CmmSQL.PagingTemplateBottom"/>
