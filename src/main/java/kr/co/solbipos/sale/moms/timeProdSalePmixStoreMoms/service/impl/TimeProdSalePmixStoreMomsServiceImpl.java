@@ -99,7 +99,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
 
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.SALE_QTY1, 0)) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", NVL(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )), 0) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
 
             sQuery2 += ", T1.SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery2 += ", T1.REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
@@ -108,7 +108,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
 
         sQuery1 += ", SUM(B.SALE_QTY1) AS TOT_SALE_QTY1" + "\n";
         sQuery1 += ", SUM(B.REAL_SALE_AMT1) AS TOT_REAL_SALE_AMT1" + "\n";
-        sQuery1 += ", SUM(B.REAL_SALE_AMT1) / SUM(B.P_REAL_SALE_AMT1) AS TOT_P_MIX_SALE1" + "\n";
+        sQuery1 += ", NVL(SUM(B.REAL_SALE_AMT1) / DECODE(SUM(B.P_REAL_SALE_AMT1), 0, NULL, SUM(B.P_REAL_SALE_AMT1)), 0) AS TOT_P_MIX_SALE1" + "\n";
 
         sQuery2 += ", T1.TOT_SALE_QTY1" + "\n";
         sQuery2 += ", T1.TOT_REAL_SALE_AMT1" + "\n";
@@ -127,7 +127,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
         for (int i = 0; i < arrTimeCol.length; i++) {
             sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_SALE_QTY1, 0)) AS TIME_SALE_QTY1_" + arrTimeCol[i] + "\n";
             sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) AS TIME_REAL_SALE_AMT1_" + arrTimeCol[i] + "\n";
-            sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "', B.TIME_P_REAL_SALE_AMT1, 0) )) AS TIME_P_MIX_SALE1_" + arrTimeCol[i] + "\n";
+            sQuery3 += ", NVL(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "', B.TIME_P_REAL_SALE_AMT1, 0) )), 0) AS TIME_P_MIX_SALE1_" + arrTimeCol[i] + "\n";
 
             sQuery2 += ", T2.TIME_SALE_QTY1_" + arrTimeCol[i] + "\n";
             sQuery2 += ", T2.TIME_REAL_SALE_AMT1_" + arrTimeCol[i] + "\n";
@@ -193,7 +193,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
 
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.SALE_QTY1, 0)) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", NVL(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )), 0) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
 
             sQuery2 += ", T1.SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery2 += ", T1.REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
@@ -202,7 +202,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
 
         sQuery1 += ", SUM(B.SALE_QTY1) AS TOT_SALE_QTY1" + "\n";
         sQuery1 += ", SUM(B.REAL_SALE_AMT1) AS TOT_REAL_SALE_AMT1" + "\n";
-        sQuery1 += ", SUM(B.REAL_SALE_AMT1) / SUM(B.P_REAL_SALE_AMT1) AS TOT_P_MIX_SALE1" + "\n";
+        sQuery1 += ", NVL(SUM(B.REAL_SALE_AMT1) / DECODE(SUM(B.P_REAL_SALE_AMT1), 0, NULL, SUM(B.P_REAL_SALE_AMT1)), 0) AS TOT_P_MIX_SALE1" + "\n";
 
         sQuery2 += ", T1.TOT_SALE_QTY1" + "\n";
         sQuery2 += ", T1.TOT_REAL_SALE_AMT1" + "\n";
@@ -221,7 +221,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
         for (int i = 0; i < arrTimeCol.length; i++) {
             sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_SALE_QTY1, 0)) AS TIME_SALE_QTY1_" + arrTimeCol[i] + "\n";
             sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) AS TIME_REAL_SALE_AMT1_" + arrTimeCol[i] + "\n";
-            sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "', B.TIME_P_REAL_SALE_AMT1, 0) )) AS TIME_P_MIX_SALE1_" + arrTimeCol[i] + "\n";
+            sQuery3 += ", NVL(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "', B.TIME_P_REAL_SALE_AMT1, 0) )), 0) AS TIME_P_MIX_SALE1_" + arrTimeCol[i] + "\n";
 
             sQuery2 += ", T2.TIME_SALE_QTY1_" + arrTimeCol[i] + "\n";
             sQuery2 += ", T2.TIME_REAL_SALE_AMT1_" + arrTimeCol[i] + "\n";
@@ -287,7 +287,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
 
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.SALE_QTY1, 0)) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", NVL(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )), 0) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
 
             sQuery2 += ", T1.SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery2 += ", T1.REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
@@ -296,7 +296,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
 
         sQuery1 += ", SUM(B.SALE_QTY1) AS TOT_SALE_QTY1" + "\n";
         sQuery1 += ", SUM(B.REAL_SALE_AMT1) AS TOT_REAL_SALE_AMT1" + "\n";
-        sQuery1 += ", SUM(B.REAL_SALE_AMT1) / SUM(B.P_REAL_SALE_AMT1) AS TOT_P_MIX_SALE1" + "\n";
+        sQuery1 += ", NVL(SUM(B.REAL_SALE_AMT1) / DECODE(SUM(B.P_REAL_SALE_AMT1), 0, NULL, SUM(B.P_REAL_SALE_AMT1)), 0) AS TOT_P_MIX_SALE1" + "\n";
 
         sQuery2 += ", T1.TOT_SALE_QTY1" + "\n";
         sQuery2 += ", T1.TOT_REAL_SALE_AMT1" + "\n";
@@ -315,7 +315,7 @@ public class TimeProdSalePmixStoreMomsServiceImpl implements TimeProdSalePmixSto
         for (int i = 0; i < arrTimeCol.length; i++) {
             sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_SALE_QTY1, 0)) AS TIME_SALE_QTY1_" + arrTimeCol[i] + "\n";
             sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) AS TIME_REAL_SALE_AMT1_" + arrTimeCol[i] + "\n";
-            sQuery3 += ", SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "', B.TIME_P_REAL_SALE_AMT1, 0) )) AS TIME_P_MIX_SALE1_" + arrTimeCol[i] + "\n";
+            sQuery3 += ", NVL(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "' , B.TIME_P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_HOUR, '" + arrTimeCol[i] + "', B.TIME_P_REAL_SALE_AMT1, 0) )), 0) AS TIME_P_MIX_SALE1_" + arrTimeCol[i] + "\n";
 
             sQuery2 += ", T2.TIME_SALE_QTY1_" + arrTimeCol[i] + "\n";
             sQuery2 += ", T2.TIME_REAL_SALE_AMT1_" + arrTimeCol[i] + "\n";
