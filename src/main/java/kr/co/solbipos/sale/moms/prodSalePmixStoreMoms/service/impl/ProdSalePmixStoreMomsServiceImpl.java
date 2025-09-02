@@ -97,12 +97,12 @@ public class ProdSalePmixStoreMomsServiceImpl implements ProdSalePmixStoreMomsSe
 
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.SALE_QTY1, 0)) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", NVL(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )), 0) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
         sQuery1 += ", SUM(B.SALE_QTY1) AS TOT_SALE_QTY1" + "\n";
         sQuery1 += ", SUM(B.REAL_SALE_AMT1) AS TOT_REAL_SALE_AMT1" + "\n";
-        sQuery1 += ", SUM(B.REAL_SALE_AMT1) / SUM(B.P_REAL_SALE_AMT1) AS TOT_P_MIX_SALE1" + "\n";
+        sQuery1 += ", NVL(SUM(B.REAL_SALE_AMT1) / DECODE(SUM(B.P_REAL_SALE_AMT1), 0, NULL, SUM(B.P_REAL_SALE_AMT1)), 0) AS TOT_P_MIX_SALE1" + "\n";
 
         prodSalePmixStoreMomsVO.setsQuery1(sQuery1);
 
@@ -159,12 +159,12 @@ public class ProdSalePmixStoreMomsServiceImpl implements ProdSalePmixStoreMomsSe
 
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.SALE_QTY1, 0)) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", NVL(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )), 0) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
         sQuery1 += ", SUM(B.SALE_QTY1) AS TOT_SALE_QTY1" + "\n";
         sQuery1 += ", SUM(B.REAL_SALE_AMT1) AS TOT_REAL_SALE_AMT1" + "\n";
-        sQuery1 += ", SUM(B.REAL_SALE_AMT1) / SUM(B.P_REAL_SALE_AMT1) AS TOT_P_MIX_SALE1" + "\n";
+        sQuery1 += ", NVL(SUM(B.REAL_SALE_AMT1) / DECODE(SUM(B.P_REAL_SALE_AMT1), 0, NULL, SUM(B.P_REAL_SALE_AMT1)), 0) AS TOT_P_MIX_SALE1" + "\n";
 
         prodSalePmixStoreMomsVO.setsQuery1(sQuery1);
 
@@ -221,12 +221,12 @@ public class ProdSalePmixStoreMomsServiceImpl implements ProdSalePmixStoreMomsSe
 
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.SALE_QTY1, 0)) AS SALE_QTY1_" + dateArr.get(i).get("sOrgDate") + "\n";
             sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) AS REAL_SALE_AMT1_" + dateArr.get(i).get("sOrgDate") + "\n";
-            sQuery1 += ", SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
+            sQuery1 += ", NVL(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.REAL_SALE_AMT1, 0)) / DECODE(SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "' , B.P_REAL_SALE_AMT1, 0)), 0, NULL, SUM(DECODE(B.SALE_DATE, '" + dateArr.get(i).get("sOrgDate") + "', B.P_REAL_SALE_AMT1, 0) )), 0) AS P_MIX_SALE1_" + dateArr.get(i).get("sOrgDate") + "\n";
         }
 
         sQuery1 += ", SUM(B.SALE_QTY1) AS TOT_SALE_QTY1" + "\n";
         sQuery1 += ", SUM(B.REAL_SALE_AMT1) AS TOT_REAL_SALE_AMT1" + "\n";
-        sQuery1 += ", SUM(B.REAL_SALE_AMT1) / SUM(B.P_REAL_SALE_AMT1) AS TOT_P_MIX_SALE1" + "\n";
+        sQuery1 += ", NVL(SUM(B.REAL_SALE_AMT1) / DECODE(SUM(B.P_REAL_SALE_AMT1), 0, NULL, SUM(B.P_REAL_SALE_AMT1)), 0) AS TOT_P_MIX_SALE1" + "\n";
 
         prodSalePmixStoreMomsVO.setsQuery1(sQuery1);
 
