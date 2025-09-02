@@ -57,6 +57,7 @@ app.controller('mCoupnProdMappingCtrl', ['$scope', '$http', '$timeout', function
         params.prodClassCd = $scope.prodClassCd;
         params.barCd = $scope.barCd;
         params.useYn = $scope.useYn;
+        params.mcoupnProdCd = $scope.mcoupnProdCd;
 
         // 조회구분 (A:가로, B:세로)
         params.searchGubun = searchGubun;

@@ -56,7 +56,7 @@ public interface MCoupnProdMappingMapper {
     int getMCoupnProdMappingExcelUploadResultSaveInsert(MCoupnProdMappingVO mCoupnProdMappingVO);
 
     /** 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 저장 update */
-//    int getMCoupnProdMappingExcelUploadResultSaveUpdate(MCoupnProdMappingVO mCoupnProdMappingVO);
+    int getMCoupnProdMappingExcelUploadResultSaveUpdate(MCoupnProdMappingVO mCoupnProdMappingVO);
 
     /** 모바일쿠폰상품매핑 이력조회 팝업 - 조회 */
     List<DefaultMap<Object>> getMCoupnProdMappingHistList(MCoupnProdMappingVO mCoupnProdMappingVO);

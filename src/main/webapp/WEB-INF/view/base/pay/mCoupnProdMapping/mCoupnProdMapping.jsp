@@ -95,8 +95,11 @@
                         </wj-combo-box>
                     </div>
                 </td>
-                <td></td>
-                <td></td>
+                <%-- 매핑코드 --%>
+                <th><s:message code="mCoupnProdMapping.mappingCd" /></th>
+                <td>
+                    <input type="text" class="sb-input w100" id="srchMcoupnProdCd" ng-model="mcoupnProdCd" onkeyup="fnNxBtnSearch();"/>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -188,7 +191,7 @@
     var useYnData = ${ccu.getCommCode("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMapping.js?ver=20250828.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMapping.js?ver=20250901.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

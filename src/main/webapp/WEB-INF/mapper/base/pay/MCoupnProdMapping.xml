@@ -41,6 +41,9 @@
                 FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                <if test="mcoupnProdCd != null and mcoupnProdCd != ''">
+                    AND A.MCOUPN_PROD_CD LIKE '%'||#{mcoupnProdCd}||'%'
+                </if>
                 GROUP BY A.HQ_OFFICE_CD, A.PROD_CD, A.MCOUPN_CD
             ) AA
         ) thpmpc,
@@ -125,6 +128,9 @@
             TB_HQ_PRODUCT B
             WHERE 1=1
             AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            <if test="mcoupnProdCd != null and mcoupnProdCd != ''">
+                AND A.MCOUPN_PROD_CD LIKE '%'||#{mcoupnProdCd}||'%'
+            </if>
             AND B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
             AND B.PROD_CD (+)= A.PROD_CD
         ) thpmpc,
@@ -237,6 +243,9 @@
             <if test="useYn != null and useYn != ''">
                 AND thp.USE_YN = #{useYn}
             </if>
+            <if test="mcoupnProdCd != null and mcoupnProdCd != ''">
+                AND thpmpc.MCOUPN_PROD_CD LIKE '%'||#{mcoupnProdCd}||'%'
+            </if>
             AND (
                     ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (thp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
                     OR
@@ -326,7 +335,7 @@
     <select id="getMCoupnProdMappingExcelUploadResultList" parameterType="MCoupnProdMappingVO" resultType="DefaultMap">
         /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultList */
         SELECT
-        'X' AS RESULT_GUBUN,
+        tmpmp.RESULT_GUBUN,
         tmpmp.PROD_CD,
         thp.PROD_NM,
         NVL(thpsp.SALE_UPRC, 0) AS SALE_UPRC,
@@ -334,42 +343,93 @@
         tmpmp.MCOUPN_NM,
         tmpmp.MCOUPN_PROD_CD,
         tmpmp.REMARK
-        FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD tmpmp,
+        FROM
+        (
+            SELECT
+            '1' AS RESULT_NUM,
+            '중복' AS RESULT_GUBUN,
+            A.HQ_OFFICE_CD,
+            A.PROD_CD,
+            A.MCOUPN_CD,
+            A.MCOUPN_NM,
+            A.MCOUPN_PROD_CD,
+            A.REMARK
+            FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD A
+            WHERE 1=1
+            AND A.SESSION_ID = #{sessionId}
+            AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND A.PROD_CD IN (SELECT PROD_CD FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = A.HQ_OFFICE_CD AND PROD_CD = A.PROD_CD)
+            AND A.MCOUPN_CD IS NOT NULL
+            AND A.MCOUPN_PROD_CD IS NOT NULL
+            AND (A.HQ_OFFICE_CD, A.MCOUPN_CD, A.MCOUPN_PROD_CD) IN (
+                                                                        SELECT
+                                                                        BB.HQ_OFFICE_CD,
+                                                                        BB.MCOUPN_CD,
+                                                                        BB.MCOUPN_PROD_CD
+                                                                        FROM
+                                                                        (
+                                                                            SELECT
+                                                                            B.HQ_OFFICE_CD,
+                                                                            B.MCOUPN_CD,
+                                                                            B.MCOUPN_PROD_CD,
+                                                                            COUNT(DISTINCT B.PROD_CD) AS OVERLAP_CNT
+                                                                            FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD B
+                                                                            WHERE 1=1
+                                                                            AND B.SESSION_ID = #{sessionId}
+                                                                            AND B.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                            AND B.MCOUPN_CD IS NOT NULL
+                                                                            AND B.MCOUPN_PROD_CD IS NOT NULL
+                                                                            GROUP BY B.HQ_OFFICE_CD, B.MCOUPN_CD, B.MCOUPN_PROD_CD
+                                                                        ) BB
+                                                                        WHERE 1=1
+                                                                        <![CDATA[
+                                                                            AND BB.OVERLAP_CNT > 1
+                                                                        ]]>
+                                                                    )
+            UNION ALL
+            SELECT
+            A.RESULT_NUM,
+            A.RESULT_GUBUN,
+            A.HQ_OFFICE_CD,
+            A.PROD_CD,
+            A.MCOUPN_CD,
+            A.MCOUPN_NM,
+            A.MCOUPN_PROD_CD,
+            A.REMARK
+            FROM
+            (
+                SELECT
+                '2' AS RESULT_NUM,
+                <![CDATA[
+                    (CASE WHEN (SELECT COUNT(PROD_CD) FROM TB_HQ_PRODUCT WHERE HQ_OFFICE_CD = tmpmp.HQ_OFFICE_CD AND PROD_CD = tmpmp.PROD_CD) < 1 THEN '상품코드없음'
+                            WHEN (SELECT COUNT(NMCODE_CD) FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '183' AND NMCODE_CD = tmpmp.MCOUPN_CD) < 1 THEN '쿠폰사없음'
+                            WHEN (tmpmp.MCOUPN_PROD_CD = '' OR tmpmp.MCOUPN_PROD_CD IS NULL) THEN '매핑코드없음'
+                            ELSE '' END
+                    ) AS RESULT_GUBUN,
+                ]]>
+                tmpmp.HQ_OFFICE_CD,
+                tmpmp.PROD_CD,
+                tmpmp.MCOUPN_CD,
+                tmpmp.MCOUPN_NM,
+                tmpmp.MCOUPN_PROD_CD,
+                tmpmp.REMARK
+                FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD tmpmp
+                WHERE 1=1
+                AND tmpmp.SESSION_ID = #{sessionId}
+                AND tmpmp.HQ_OFFICE_CD = #{hqOfficeCd}
+            ) A
+            WHERE 1=1
+            AND A.RESULT_GUBUN IS NOT NULL
+        ) tmpmp,
         TB_HQ_PRODUCT thp,
         TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
         WHERE 1=1
-        AND tmpmp.SESSION_ID = #{sessionId}
-        AND tmpmp.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND (tmpmp.HQ_OFFICE_CD, tmpmp.MCOUPN_CD, tmpmp.MCOUPN_PROD_CD) IN (
-                                                                                SELECT
-                                                                                BB.HQ_OFFICE_CD,
-                                                                                BB.MCOUPN_CD,
-                                                                                BB.MCOUPN_PROD_CD
-                                                                                FROM
-                                                                                (
-                                                                                    SELECT
-                                                                                    B.HQ_OFFICE_CD,
-                                                                                    B.MCOUPN_CD,
-                                                                                    B.MCOUPN_PROD_CD,
-                                                                                    COUNT(B.PROD_CD) AS OVERLAP_CNT
-                                                                                    FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD B
-                                                                                    WHERE 1=1
-                                                                                    AND B.SESSION_ID = #{sessionId}
-                                                                                    AND B.HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                                    AND B.MCOUPN_CD IS NOT NULL
-                                                                                    GROUP BY B.HQ_OFFICE_CD, B.MCOUPN_CD, B.MCOUPN_PROD_CD
-                                                                                ) BB
-                                                                                WHERE 1=1
-                                                                                <![CDATA[
-                                                                                    AND BB.OVERLAP_CNT > 1
-                                                                                ]]>
-                                                                            )
         AND thp.HQ_OFFICE_CD (+)= tmpmp.HQ_OFFICE_CD
         AND thp.PROD_CD (+)= tmpmp.PROD_CD
         AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD (+)= thp.PROD_CD
         AND thpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
-        ORDER BY tmpmp.PROD_CD
+        ORDER BY tmpmp.RESULT_NUM, tmpmp.RESULT_GUBUN
     </select>
 
     <!-- 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 조회 (삭제,추가,유지) -->
@@ -395,13 +455,13 @@
             SELECT
             '1' AS RESULT_NUM,
             'D' AS RESULT_GUBUN,
-            HQ_OFFICE_CD,
-            SEQ,
-            PROD_CD,
-            MCOUPN_CD,
-            MCOUPN_NM,
-            MCOUPN_PROD_CD,
-            REMARK
+            C.HQ_OFFICE_CD,
+            C.SEQ,
+            C.PROD_CD,
+            C.MCOUPN_CD,
+            C.MCOUPN_NM,
+            C.MCOUPN_PROD_CD,
+            D.REMARK
             FROM
             (
                 SELECT
@@ -410,8 +470,7 @@
                 A.PROD_CD,
                 A.MCOUPN_CD,
                 (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '183' AND NMCODE_CD = A.MCOUPN_CD) AS MCOUPN_NM,
-                A.MCOUPN_PROD_CD,
-                A.REMARK
+                A.MCOUPN_PROD_CD
                 FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
@@ -422,24 +481,30 @@
                 B.PROD_CD,
                 B.MCOUPN_CD,
                 B.MCOUPN_NM,
-                B.MCOUPN_PROD_CD,
-                B.REMARK
+                B.MCOUPN_PROD_CD
                 FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD B
                 WHERE 1=1
                 AND B.SESSION_ID = #{sessionId}
                 AND B.HQ_OFFICE_CD = #{hqOfficeCd}
-            )
+            ) C,
+            TB_HQ_PRODUCT_MCOUPN_PROD_CD D
+            WHERE 1=1
+            AND D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+            AND D.SEQ = C.SEQ
+            AND D.PROD_CD = C.PROD_CD
+            AND D.MCOUPN_CD = C.MCOUPN_CD
+            AND D.MCOUPN_PROD_CD = C.MCOUPN_PROD_CD
             UNION ALL
             SELECT
             '2' AS RESULT_NUM,
             'I' AS RESULT_GUBUN,
-            HQ_OFFICE_CD,
-            SEQ,
-            PROD_CD,
-            MCOUPN_CD,
-            MCOUPN_NM,
-            MCOUPN_PROD_CD,
-            REMARK
+            C.HQ_OFFICE_CD,
+            C.SEQ,
+            C.PROD_CD,
+            C.MCOUPN_CD,
+            C.MCOUPN_NM,
+            C.MCOUPN_PROD_CD,
+            D.REMARK
             FROM
             (
                 SELECT
@@ -448,8 +513,7 @@
                 B.PROD_CD,
                 B.MCOUPN_CD,
                 B.MCOUPN_NM,
-                B.MCOUPN_PROD_CD,
-                B.REMARK
+                B.MCOUPN_PROD_CD
                 FROM TB_TMP_PRODUCT_MCOUPN_PROD_CD B
                 WHERE 1=1
                 AND B.SESSION_ID = #{sessionId}
@@ -461,16 +525,23 @@
                 A.PROD_CD,
                 A.MCOUPN_CD,
                 (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '183' AND NMCODE_CD = A.MCOUPN_CD) AS MCOUPN_NM,
-                A.MCOUPN_PROD_CD,
-                A.REMARK
+                A.MCOUPN_PROD_CD
                 FROM TB_HQ_PRODUCT_MCOUPN_PROD_CD A
                 WHERE 1=1
                 AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-            )
+            ) C,
+            TB_TMP_PRODUCT_MCOUPN_PROD_CD D
+            WHERE 1=1
+            AND D.SESSION_ID = #{sessionId}
+            AND D.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+            AND D.SEQ = C.SEQ
+            AND D.PROD_CD = C.PROD_CD
+            AND D.MCOUPN_CD = C.MCOUPN_CD
+            AND D.MCOUPN_PROD_CD = C.MCOUPN_PROD_CD
             UNION ALL
             SELECT
             '3' AS RESULT_NUM,
-            'U' AS RESULT_GUBUN,
+            (CASE WHEN A.REMARK = B.REMARK THEN 'X' ELSE 'U' END) AS RESULT_GUBUN,
             B.HQ_OFFICE_CD,
             B.SEQ,
             B.PROD_CD,
@@ -488,7 +559,6 @@
             AND B.PROD_CD = A.PROD_CD
             AND B.MCOUPN_CD = A.MCOUPN_CD
             AND B.MCOUPN_PROD_CD = A.MCOUPN_PROD_CD
-            AND B.REMARK = A.REMARK
         ) tmpmp,
         TB_HQ_PRODUCT thp,
         TB_HQ_PRODUCT_SALE_PRICE_V01 thpsp --view
@@ -498,7 +568,7 @@
         AND thpsp.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
         AND thpsp.PROD_CD (+)= thp.PROD_CD
         AND thpsp.SALE_DATE (+)= TO_CHAR(SYSDATE, 'yyyyMMdd')
-        ORDER BY tmpmp.RESULT_NUM, tmpmp.PROD_CD
+        ORDER BY tmpmp.RESULT_NUM, tmpmp.RESULT_GUBUN,  tmpmp.PROD_CD
     </select>
 
     <!-- 모바일쿠폰상품매핑 엑셀업로드 결과 팝업 - 저장 (백업) insert -->
@@ -598,21 +668,21 @@
         TABLE    :
         COMMENTS :
     -->
-    <!--<update id="getMCoupnProdMappingExcelUploadResultSaveUpdate" parameterType="MCoupnProdMappingVO">-->
-        <!--/* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveUpdate */-->
-        <!--UPDATE-->
-        <!--TB_HQ_PRODUCT_MCOUPN_PROD_CD-->
-        <!--SET-->
-        <!--REMARK = #{remark},-->
-        <!--MOD_DT = #{modDt},-->
-        <!--MOD_ID = #{modId}-->
-        <!--WHERE 1=1-->
-        <!--AND HQ_OFFICE_CD = #{hqOfficeCd}-->
-        <!--AND SEQ = #{seq}-->
-        <!--AND PROD_CD = #{prodCd}-->
-        <!--AND MCOUPN_CD = #{mcoupnCd}-->
-        <!--AND MCOUPN_PROD_CD = #{mcoupnProdCd}-->
-    <!--</update>-->
+    <update id="getMCoupnProdMappingExcelUploadResultSaveUpdate" parameterType="MCoupnProdMappingVO">
+        /* MCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveUpdate */
+        UPDATE
+        TB_HQ_PRODUCT_MCOUPN_PROD_CD
+        SET
+        REMARK = #{remark},
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+        AND SEQ = #{seq}
+        AND PROD_CD = #{prodCd}
+        AND MCOUPN_CD = #{mcoupnCd}
+        AND MCOUPN_PROD_CD = #{mcoupnProdCd}
+    </update>
 
     <!-- 모바일쿠폰상품매핑 이력조회 팝업 - 조회 (가로용) -->
     <!--

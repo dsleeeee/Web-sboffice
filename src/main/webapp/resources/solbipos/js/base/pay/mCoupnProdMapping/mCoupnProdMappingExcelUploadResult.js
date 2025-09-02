@@ -17,8 +17,8 @@ var app = agrid.getApp();
 var resultGubunData = [
     {"name": "삭제", "value": "D"},
     {"name": "추가", "value": "I"},
-    {"name": "유지", "value": "U"},
-    {"name": "중복", "value": "X"}
+    {"name": "유지(비고변경)", "value": "U"},
+    {"name": "유지", "value": "X"}
 ];
 
 /**

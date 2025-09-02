@@ -41,7 +41,7 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="mCoupnProdMappingExcelUploadResult.resultGubun"/>" binding="resultGubun" data-map="resultGubunDataMap" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="mCoupnProdMappingExcelUploadResult.resultGubun"/>" binding="resultGubun" data-map="resultGubunDataMap" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="cmm.prodCd"/>" binding="prodCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="cmm.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="mCoupnProdMappingExcelUploadResult.saleUprc"/>" binding="saleUprc" width="80" is-read-only="true" align="right"></wj-flex-grid-column>
@@ -73,4 +73,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMappingExcelUploadResult.js?ver=20250828.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/pay/mCoupnProdMapping/mCoupnProdMappingExcelUploadResult.js?ver=20250901.01" charset="utf-8"></script>

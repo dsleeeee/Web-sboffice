@@ -197,10 +197,10 @@ public class MCoupnProdMappingServiceImpl implements MCoupnProdMappingService {
                 else if("I".equals(mCoupnProdMappingVO.getResultGubun())) {
                     procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveInsert(mCoupnProdMappingVO);
                 }
-//                // 유지
-//                else if("U".equals(mCoupnProdMappingVO.getResultGubun())) {
-//                procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveUpdate(mCoupnProdMappingVO);
-//                }
+                // 유지
+                else if("U".equals(mCoupnProdMappingVO.getResultGubun())) {
+                procCnt = mCoupnProdMappingMapper.getMCoupnProdMappingExcelUploadResultSaveUpdate(mCoupnProdMappingVO);
+                }
             }
 
             i++;
