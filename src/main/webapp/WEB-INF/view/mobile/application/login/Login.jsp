@@ -14,7 +14,7 @@ mobile_url = request.getRequestURL().toString().replace(request.getRequestURI(),
 <div class="loginArea">
   <h2>Welcome Login</h2>
 
-  <f:form class="loginF" modelAttribute="sessionInfo" method="post" action="/mobile/auth/login.sb">
+  <f:form class="loginF" modelAttribute="sessionInfo" method="post" action="/mobile/auth/login.sb" onsubmit="return inputChk();">
 
     <%--     <s:eval expression="@env['login.check.id.save']" var="idField"/> --%>
 
@@ -115,7 +115,20 @@ mobile_url = request.getRequestURL().toString().replace(request.getRequestURI(),
     $("input:checkbox[id='chk']").prop("checked", true);
   }
 
+  // input 값 체크
+  function inputChk() {
+    if(isEmptyObject($("#userId").val())){
+      alert(messages["login.id.empty"]);
+      return false;
+    }
 
+    if(isEmptyObject($("#userPwd").val())){
+      alert(messages["login.pwd.empty"]);
+      return false;
+    }
+
+    return true;
+  }
 
   // 이용약관
   $("#termsOfUse").bind("click", function () {
