@@ -132,6 +132,7 @@ app.controller('sdselProdCopySingleGroupCtrl', ['$scope', '$http', function ($sc
         // 그리드 내 콤보박스 설정
         $scope.fixProdFgDataMap = fixProdFgDataMap;
         $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name'); //하프앤하프(진행구분)
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -258,7 +259,12 @@ app.controller('sdselProdCopySingleClassCtrl', ['$scope', '$http', function ($sc
         $scope.topYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 상단표기여부
         $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
         $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
-        $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
+
+        if(hqOfficeCd == 'A0001') { // 보나비(A0001) 분류구분 별도 셋팅
+            $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(bonaviePopUpClassYnData, 'value', 'name'); // 분류구분
+        } else {
+            $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
+        }
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {

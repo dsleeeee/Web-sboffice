@@ -69,9 +69,20 @@
   var momsStoreFg03ComboList = ${momsStoreFg03ComboList};
   var momsStoreFg04ComboList = ${momsStoreFg04ComboList};
   var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
+
+  // 보나비(A0001) 전용 선택분류 '진행단계' 콤보박스 셋팅 데이터
+  var progressStageData = ${ccu.getCommCodeExcpAll("241")};
+  var bonaviePopUpClassYnData = [{name:"미사용", value:"N"}];
+
+  for(var i = 0; i < progressStageData.length; i++){
+      var comboData   = {};
+      comboData.name = progressStageData[i].name;
+      comboData.value = progressStageData[i].value;
+      bonaviePopUpClassYnData.push(comboData);
+  }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20230217.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20250905.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:if test="${param.gubun ne 'sideMenu'}">

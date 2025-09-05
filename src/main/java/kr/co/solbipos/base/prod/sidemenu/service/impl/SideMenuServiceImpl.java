@@ -653,7 +653,7 @@ public class SideMenuServiceImpl implements SideMenuService {
             countChkVO.setClassCdList(classCdList);
         }
 
-        // 피자,엣지,토핑 갯수 체크
+        // 피자,엣지,토핑 갯수 체크(분기처리 안되어 있지만 결국 미스터 피자만 사용)
         List<DefaultMap<String>> classCntList = sideMenuMapper.getCountClassCnt(countChkVO);
 
         //  분류구분 피자,엣지,토핑은 최대 1개만 선택 가능
@@ -669,7 +669,7 @@ public class SideMenuServiceImpl implements SideMenuService {
             }
         }
 
-        // 선택그룹 하프앤하프 여부 확인 
+        // 선택그룹 하프앤하프 여부 확인
         String halfAndHalf = sideMenuMapper.getChkHalfAndHalfYn(countChkVO);
 
         for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
@@ -686,7 +686,7 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             System.out.println(sideMenuSelClassVO.getPopUpClassYn() + "분류구분");
 
-            // 선택그룹의 하프앤하프가 '사용'이면서 복사할 분류의 분류구분이 '피자'인 경우
+            // 선택그룹의 하프앤하프가 '사용'이면서 복사할 분류의 분류구분이 '피자'인 경우(분기처리 안되어 있지만 결국 미스터 피자만 사용)
             if(halfAndHalf.equals("Y") && sideMenuSelClassVO.getPopUpClassYn().equals("Y")){
                 // 수량은 반드시 2로 입력
                 if(sideMenuSelClassVO.getSdselQty() != 2) {

@@ -96,6 +96,9 @@
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="70" is-read-only="true"></wj-flex-grid-column>
+                   <c:if test="${hqOfficeCd == 'A0001'}">
+                        <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.progressStage"/>" binding="halfAndHalfYn" data-map="useYnDataMap" width="100"></wj-flex-grid-column>
+                   </c:if>
                  </wj-flex-grid>
                </div>
              </div>
@@ -107,6 +110,7 @@
             <div class="wj-TblWrapBr pd5" style="height: 260px;" ng-controller="sideMenuSelectClassSingleCtrl">
                 <div class="updownSet oh mb10" style="height:60px;">
                   <span class="fl bk lh30" style="white-space: nowrap;"><s:message code='sideMenu.selectMenu.sdselClass' /><span id="sideSelectGroupSingleTitle"></span> </span>
+                  <input type="hidden" id="hdHalfAndHalfYnSingle"/>
                   <br>
                   <br>
                     <%-- 선택분류복사 --%>
@@ -174,6 +178,9 @@
                         </c:if>
                         <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616' or hqOfficeCd == 'DS008'}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.popUpClassYn"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100"></wj-flex-grid-column>
+                        </c:if>
+                        <c:if test="${hqOfficeCd == 'A0001'}">
+                            <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.progressStage"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>
                 </div>
@@ -267,7 +274,7 @@
     var hqOfficeCd = "${hqOfficeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20250715.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenuSelectMenuSingle.js?ver=20250905.01" charset="utf-8"></script>
 
 <%-- 선택분류복사 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/sideMenu/sdselClassCopySingle.jsp">

@@ -35,6 +35,7 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', function ($scope,
         // 적용할 그룹
         $("#srchApplySingleGroupSingle").val(data.sdselGrpCdNm);
         $("#srchApplySingleGroupCdSingle").val(data.sdselGrpCd);
+        $("#srchHalfAndHalfYnSingle").val(data.halfAndHalfYn);
 
         // 검색조건 초기화
         $scope.srchCopyTypeSelGroupSingleCombo.selectedIndex = 0;
@@ -83,6 +84,17 @@ app.controller('sdselClassCopySingleCtrl', ['$scope', '$http', function ($scope,
                 return;
             }
 
+            // 보나비(A0001) & 선택그룹 진행단계 '사용'시, 선택분류 진행단계 체크
+            if (hqOfficeCd == "A0001" && $("#srchHalfAndHalfYnSingle").val() === "Y") {
+                for (var i = 0; i < params.length; i++) {
+                    var item = params[i];
+                    if(item.popUpClassYn === "N"){
+                        s_alert.pop(messages["sideMenu.sdselClassCopy.classCopySaveConfirm2"]);
+                        return;
+                    }
+                }
+            }
+
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
             $scope._postJSONSave.withPopUp( "/base/prod/sideMenu/menuClass/getSdselClassCopySave.sb", params, function(response){
                 // 하단 화면에 선택분류 리스트 재조회
@@ -120,6 +132,7 @@ app.controller('sdselClassCopySingleGroupCtrl', ['$scope', '$http', function ($s
         // 그리드 내 콤보박스 설정
         $scope.fixProdFgDataMap = fixProdFgDataMap;
         $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name'); //하프앤하프(진행구분)
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -246,7 +259,12 @@ app.controller('sdselClassCopySingleClassCtrl', ['$scope', '$http', function ($s
         $scope.topYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 상단표기여부
         $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
         $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
-        $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
+
+        if(hqOfficeCd == 'A0001') { // 보나비(A0001) 분류구분 별도 셋팅
+            $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(bonaviePopUpClassYnData, 'value', 'name'); // 분류구분
+        } else {
+            $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
+        }
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {

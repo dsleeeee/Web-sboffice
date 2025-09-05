@@ -40,6 +40,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
         $scope.brandDataMap = new wijmo.grid.DataMap(brandList, 'value', 'name'); // 브랜드
         $scope.fixProdFgDataMap = fixProdFgDataMap;
         $scope.sdselTypeFgDataMap = sdselTypeFgDataMap;
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useYnData, 'value', 'name'); //하프앤하프
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -72,6 +73,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
             if ( col.binding === 'sdselGrpCd') {
               if (selectedRow.sdselGrpCd !== '' && selectedRow.sdselGrpCd !== undefined && selectedRow.sdselGrpCd !== '자동채번') {
                 $("#sideSelectGroupSingleTitle").html(" [" + selectedRow.sdselGrpCd + "]" + selectedRow.sdselGrpNm);
+                $("#hdHalfAndHalfYnSingle").val(selectedRow.halfAndHalfYn);
                 $("#sideClassSingleTitle").html("");
 
                 // 선택한 선택그룹의 브랜드코드 갖고있기(선택상품 추가 팝업에서 사용)
@@ -149,6 +151,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
         $("#btnSdselProdRegStoreSingle").hide();
 
         $("#sideSelectGroupSingleTitle").html("");
+        $("#hdHalfAndHalfYnSingle").val("");
         var attrScope = agrid.getScope('sideMenuSelectClassSingleCtrl');
         attrScope._gridDataInit();   // 선택분류(싱글) 그리드 초기화
 
@@ -245,6 +248,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
 
         params.fixProdFg = 0;
         params.sdselTypeFg = "S";
+        params.halfAndHalfYn = "N";
 
         // 추가기능 수행 : 파라미터
         $scope._addRow(params, 2);
@@ -283,6 +287,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
           // 삭제기능 수행 : 저장URL, 파라미터, 콜백함수
           $scope._save('/base/prod/sideMenu/menuGrp/save.sb', params, function() {
             $("#sideSelectGroupSingleTitle").html("");
+            $("#hdHalfAndHalfYnSingle").val("");
             var attrScope = agrid.getScope('sideMenuSelectClassSingleCtrl');
             attrScope._gridDataInit();   // 그리드 초기화
 
@@ -367,6 +372,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
           // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
           $scope._save('/base/prod/sideMenu/menuGrp/save.sb', params, function() {
             $("#sideSelectGroupSingleTitle").html("");
+            $("#hdHalfAndHalfYnSingle").val("");
             var attrScope = agrid.getScope('sideMenuSelectClassSingleCtrl');
             attrScope._gridDataInit();   // 그리드 초기화
 
@@ -446,7 +452,12 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         $scope.topYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 상단표기여부
         $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
         $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
-        $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
+
+        if(hqOfficeCd == 'A0001') { // 보나비(A0001) 분류구분 별도 셋팅
+            $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(bonaviePopUpClassYnData, 'value', 'name'); // 분류구분
+        } else {
+            $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
+        }
 
         // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
@@ -587,6 +598,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         params.topYn = "N";
         params.expandYn = "N";
         params.mappingYn = "N";
+        params.popUpClassYn = "N";
 
         // 추가기능 수행 : 파라미터
         $scope._addRow(params, 2);
@@ -731,6 +743,19 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
                 }
             }
 
+            // 보나비(A0001) 본사 및 하위매장만 체크
+            if (hqOfficeCd == "A0001") {
+                // 선택그룹 진행단계를 사용하는 경우 체크
+                if ($("#hdHalfAndHalfYnSingle").val() == "Y") {
+                    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+                        if ($scope.flex.collectionView.items[i].popUpClassYn == "N") {
+                            $scope._popMsg(messages["sideMenu.selectMenu.popUpClassYnChk.use.msg"]); // 선택그룹의 진행단계가 '사용'이면, 선택분류의 진행단계 '미사용'은 선택할 수 없습니다.
+                            return false;
+                        }
+                    }
+                }
+            }
+
             // console.log('2 params',params);
 
             if(orgnFg == 'HQ') {
@@ -844,6 +869,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         var params = {};
         params.sdselGrpCd = $scope.getSdselGrpCd();
         params.sdselGrpCdNm = $("#sideSelectGroupSingleTitle").html();
+        params.halfAndHalfYn = $("#hdHalfAndHalfYnSingle").val();
         $scope.setSelectedSdselClassSingle(params);
 
         $scope.wjSdselClassCopySingleLayer.show(true);

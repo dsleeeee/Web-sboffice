@@ -138,6 +138,9 @@
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselQty"/>" binding="cnt" width="*" is-read-only="true" visible="false"></wj-flex-grid-column>
                                 <wj-flex-grid-column header="<s:message code="sideMenu.sdselProdCopy.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="70" is-read-only="true" visible="false"></wj-flex-grid-column>
+                                <c:if test="${hqOfficeCd == 'A0001'}">
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.progressStage"/>" binding="halfAndHalfYn" data-map="useYnDataMap" width="70" is-read-only="true"></wj-flex-grid-column>
+                                </c:if>
                             </wj-flex-grid>
                         </div>
                     </div>
@@ -186,6 +189,9 @@
                                 </c:if>
                                 <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616' or hqOfficeCd == 'DS008'}">
                                     <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.popUpClassYn"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100" is-read-only="true"></wj-flex-grid-column>
+                                </c:if>
+                                <c:if test="${hqOfficeCd == 'A0001'}">
+                                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.progressStage"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100" is-read-only="true"></wj-flex-grid-column>
                                 </c:if>
                             </wj-flex-grid>
                         </div>
@@ -249,4 +255,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselProdCopy.js?ver=20250714.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselProdCopy.js?ver=20250905.01" charset="utf-8"></script>
