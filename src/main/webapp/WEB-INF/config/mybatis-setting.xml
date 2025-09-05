@@ -1254,6 +1254,9 @@
     <!-- 미스터피자 > 마케팅조회 > 매출실적비교 -->
     <typeAlias alias="salePerfCompareVO" type="kr.co.solbipos.sale.marketing.salePerfCompare.service.SalePerfCompareVO"/>
 
+    <!-- 국민대 > 근로학생관리 > 근로학생관리 -->
+    <typeAlias alias="workStudentKookminVO" type="kr.co.solbipos.kookmin.workStudent.workStudent.service.WorkStudentKookminVO"/>
+
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
     <!-- 매출관리 > 배달현황 > 주문채널별현황 -->

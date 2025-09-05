@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    WorkStudentKookmin.xml
+    근로학생관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.09.04
+-->
+<mapper namespace="kr.co.solbipos.kookmin.workStudent.workStudent.service.impl.WorkStudentKookminMapper">
+    <!-- 근로학생관리 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getWorkStudentKookminList" parameterType="WorkStudentKookminVO" resultType="DefaultMap">
+        /* WorkStudentKookminMapper.getWorkStudentKookminList */
+        SELECT 	A.STUDENT_NO
+        ,		A.STUDENT_NM
+        ,		A.DEPARTMENT
+        ,		A.MP_NO
+        ,		A.BANK_NM
+        ,		A.ACCOUNT_NO
+        ,		A.COOP_YN
+        ,		TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
+        ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.REG_ID) 	AS REG_NM
+        ,		TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.MOD_ID) 	AS MOD_NM
+        FROM 	TB_HQ_WORK_STUDENTS A
+        WHERE   A.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='srchCondition != null and srchCondition != ""'>
+            AND (   A.STUDENT_NO LIKE '%' || #{srchCondition} || '%'
+                or  A.STUDENT_NM LIKE '%' || #{srchCondition} || '%'
+                or  A.MP_NO LIKE '%' || #{srchCondition} || '%'
+                )
+        </if>
+    </select>
+
+    <!-- 근로학생 등록 -->
+    <!--
+        TABLE    : TB_HQ_WORK_STUDENTS
+        COMMENTS : 근로학생을 등록한다.
+    -->
+    <insert id="insertWorkStudent" parameterType="WorkStudentKookminVO">
+        /* WorkStudentKookminMapper.insertWorkStudent */
+        INSERT INTO TB_HQ_WORK_STUDENTS
+        (
+            HQ_OFFICE_CD
+        ,   STUDENT_NO
+        ,   STUDENT_NM
+        ,   DEPARTMENT
+        ,   MP_NO
+        ,   BANK_NM
+        ,   ACCOUNT_NO
+        ,   COOP_YN
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{studentNo}
+        ,   #{studentNm}
+        ,   #{department}
+        ,   #{mpNo}
+        ,   #{bankNm}
+        ,   #{accountNo}
+        ,   #{coopYn}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 근로학생 등록 -->
+    <!--
+        TABLE    : TB_HQ_WORK_STUDENTS
+        COMMENTS : 근로학생을 등록한다.
+    -->
+    <update id="updateWorkStudent" parameterType="WorkStudentKookminVO">
+        /* WorkStudentKookminMapper.updateWorkStudent */
+        UPDATE  TB_HQ_WORK_STUDENTS
+        SET     STUDENT_NM  = #{studentNm}
+        ,       DEPARTMENT  = #{department}
+        ,       MP_NO       = #{mpNo}
+        ,       BANK_NM     = #{bankNm}
+        ,       ACCOUNT_NO  = #{accountNo}
+        ,       COOP_YN     = #{coopYn}
+        ,       MOD_DT      = #{regDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     STUDENT_NO      = #{studentNo}
+    </update>
+
+    <!-- 근로학생 등록 -->
+    <!--
+        TABLE    : TB_HQ_WORK_STUDENTS
+        COMMENTS : 근로학생을 등록한다.
+    -->
+    <delete id="deleteWorkStudent" parameterType="WorkStudentKookminVO">
+        /* WorkStudentKookminMapper.deleteWorkStudent */
+        DELETE  TB_HQ_WORK_STUDENTS
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     STUDENT_NO      = #{studentNo}
+    </delete>
+
+    <!-- 근로학생관리 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getChkStudentNo" parameterType="WorkStudentKookminVO" resultType="Integer">
+        /* WorkStudentKookminMapper.getChkStudentNo */
+        SELECT 	COUNT(*)
+        FROM 	TB_HQ_WORK_STUDENTS A
+        WHERE   A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     A.STUDENT_NO    = #{studentNo}
+    </select>
+</mapper>

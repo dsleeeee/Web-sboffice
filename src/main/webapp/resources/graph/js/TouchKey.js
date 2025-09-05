@@ -2721,6 +2721,24 @@ Graph.prototype.initClassArea = function (prodArea) {
   //멀티선택방지
   graph.getSelectionModel().setSingleSelection(true);
 
+
+  // 스타일 문자열을 객체로 파싱(터치키분류 classCd값 조회)
+  function parseStyle(styleString) {
+    var styleObj = {};
+    if (!styleString) return styleObj;
+
+    var entries = styleString.split(';');
+    entries.forEach(function(entry) {
+      var parts = entry.split('=');
+      // 유효한 key=value 형식만 처리
+      if (parts.length === 2) {
+        styleObj[parts[0].trim()] = parts[1].trim();
+      }
+    });
+
+    return styleObj;
+  }
+
   //터치키분류 영역에 새로운 분류 생성
   var createClassArea = function (x, y) {
     var parent = graph.getDefaultParent();
@@ -2738,9 +2756,32 @@ Graph.prototype.initClassArea = function (prodArea) {
       }
     }
 
+    var classCd;
+
+    for (var i = 0; i < 9999; i++) {
+      // classCd 생성
+      classCd = "000" + graph.nextGrpId;
+      classCd = graph.classPrefix + classCd.slice(-4);
+
+      var allCells = graph.getChildVertices(parent);
+
+      // classCd가 포함된 셀이 있는지 검사
+      var isDuplicated = allCells.some(function(cell) {
+        var styleMap = parseStyle(cell.getStyle());
+        var existingCd = styleMap["classCd"];
+        return existingCd && existingCd.includes(classCd); // 포함 여부 검사
+      });
+
+      // 중복여부 확인
+      if (!isDuplicated) {
+        break;
+      }
+
+      graph.nextGrpId++; // 중복이면 값 추가 후 재시도
+    }
     // 상품영역과 id 공유를 위해 classCd 커스텀태그로 별도 관리 : 20180920 노현수
-    var classCd = "000" + graph.nextGrpId;
-    classCd = graph.classPrefix + classCd.slice(-4);
+    // var classCd = "000" + graph.nextGrpId;
+    // classCd = graph.classPrefix + classCd.slice(-4);
     //스타일코드
     var styleCd = styleCombo.selectedValue;
 

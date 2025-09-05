@@ -11,7 +11,7 @@ import kr.co.solbipos.application.common.service.PageVO;
  * @ ----------  ---------   -------------------------------
  * @ 2025.08.18  김유승      최초생성
  *
- * @author LYNK 개발실 개발1팀 김유승
+ * @author 링크 개발실 개발1팀 김유승
  * @since 2025.08.08
  * @version 1.0
  *

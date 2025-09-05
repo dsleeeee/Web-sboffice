@@ -159,7 +159,7 @@ app.controller('salePerfCompareAllCtrl', ['$scope', '$http', '$timeout', functio
                     return false;
                 }
 
-                if (diffDay > 31) {
+                if (diffDay > 186) {
                     $scope._popMsg(messages['cmm.dateOver.1month.error']);
                     return false;
                 }
@@ -172,7 +172,7 @@ app.controller('salePerfCompareAllCtrl', ['$scope', '$http', '$timeout', functio
                     return false;
                 }
 
-                if (compDiffDay > 31) {
+                if (compDiffDay > 186) {
                     $scope._popMsg(messages['cmm.dateOver.1month.error']);
                     return false;
                 }
@@ -270,44 +270,45 @@ app.controller('salePerfCompareAllCtrl', ['$scope', '$http', '$timeout', functio
         params.endDate          = endDate;
         params.compStartDate    = compStartDate;
         params.compEndDate      = compEndDate;
+        $scope._broadcast('salePerfCompareAllDtlCtrl',params);
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/sale/marketing/salePerfCompare/salePerfCompare/getSalePerfCompareList.sb", params, function (){
-            var grid = wijmo.Control.getControl("#salePerfCompareAllMainGrid");
-            var dataItem         = {};
-            var srchDate = '';
-            var compDate = '';
-            if(dateFg === 'day' || dateFg  === 'month' || dateFg === 'year'){
-                srchDate = '(' + params.startDate + ')';
-                compDate = '(' + params.compStartDate + ')';
-            }else{
-                srchDate = '(' + params.startDate + '~' + params.endDate + ')';
-                compDate = '(' + params.compStartDate + '~' + params.compEndDate + ')';
-            }
-            dataItem.dlvrOrderFg        = messages["salePerfCompare.dlvrOrderFg"];
-            dataItem.compSaleCntFran    = messages["salePerfCompare.compDate"] + compDate;
-            dataItem.compSaleAmtFran    = messages["salePerfCompare.compDate"] + compDate;
-            dataItem.compSaleCntDm      = messages["salePerfCompare.compDate"] + compDate;
-            dataItem.compSaleAmtDm      = messages["salePerfCompare.compDate"] + compDate;
-            dataItem.compTotSaleCnt     = messages["salePerfCompare.compDate"] + compDate;
-            dataItem.compTotSaleAmt     = messages["salePerfCompare.compDate"] + compDate;
-            dataItem.srchSaleCntFran    = messages["salePerfCompare.srchDate"] + srchDate;
-            dataItem.srchSaleAmtFran    = messages["salePerfCompare.srchDate"] + srchDate;
-            dataItem.srchSaleCntDm      = messages["salePerfCompare.srchDate"] + srchDate;
-            dataItem.srchSaleAmtDm      = messages["salePerfCompare.srchDate"] + srchDate;
-            dataItem.srchTotSaleCnt     = messages["salePerfCompare.srchDate"] + srchDate;
-            dataItem.srchTotSaleAmt     = messages["salePerfCompare.srchDate"] + srchDate;
-            dataItem.grSaleCntFran      = messages["salePerfCompare.growthRate"];
-            dataItem.grSaleAmtFran      = messages["salePerfCompare.growthRate"];
-            dataItem.grSaleCntDm        = messages["salePerfCompare.growthRate"];
-            dataItem.grSaleAmtDm        = messages["salePerfCompare.growthRate"];
-            dataItem.grTotSaleCnt       = messages["salePerfCompare.growthRate"];
-            dataItem.grTotSaleAmt       = messages["salePerfCompare.growthRate"];
-            grid.columnHeaders.rows[0].dataItem = dataItem;
-
-            $scope._broadcast('salePerfCompareAllDtlCtrl',params);
-
-        });
+        // $scope._inquiryMain("/sale/marketing/salePerfCompare/salePerfCompare/getSalePerfCompareList.sb", params, function (){
+        //     var grid = wijmo.Control.getControl("#salePerfCompareAllMainGrid");
+        //     var dataItem         = {};
+        //     var srchDate = '';
+        //     var compDate = '';
+        //     if(dateFg === 'day' || dateFg  === 'month' || dateFg === 'year'){
+        //         srchDate = '(' + params.startDate + ')';
+        //         compDate = '(' + params.compStartDate + ')';
+        //     }else{
+        //         srchDate = '(' + params.startDate + '~' + params.endDate + ')';
+        //         compDate = '(' + params.compStartDate + '~' + params.compEndDate + ')';
+        //     }
+        //     dataItem.dlvrOrderFg        = messages["salePerfCompare.dlvrOrderFg"];
+        //     dataItem.compSaleCntFran    = messages["salePerfCompare.compDate"] + compDate;
+        //     dataItem.compSaleAmtFran    = messages["salePerfCompare.compDate"] + compDate;
+        //     dataItem.compSaleCntDm      = messages["salePerfCompare.compDate"] + compDate;
+        //     dataItem.compSaleAmtDm      = messages["salePerfCompare.compDate"] + compDate;
+        //     dataItem.compTotSaleCnt     = messages["salePerfCompare.compDate"] + compDate;
+        //     dataItem.compTotSaleAmt     = messages["salePerfCompare.compDate"] + compDate;
+        //     dataItem.srchSaleCntFran    = messages["salePerfCompare.srchDate"] + srchDate;
+        //     dataItem.srchSaleAmtFran    = messages["salePerfCompare.srchDate"] + srchDate;
+        //     dataItem.srchSaleCntDm      = messages["salePerfCompare.srchDate"] + srchDate;
+        //     dataItem.srchSaleAmtDm      = messages["salePerfCompare.srchDate"] + srchDate;
+        //     dataItem.srchTotSaleCnt     = messages["salePerfCompare.srchDate"] + srchDate;
+        //     dataItem.srchTotSaleAmt     = messages["salePerfCompare.srchDate"] + srchDate;
+        //     dataItem.grSaleCntFran      = messages["salePerfCompare.growthRate"];
+        //     dataItem.grSaleAmtFran      = messages["salePerfCompare.growthRate"];
+        //     dataItem.grSaleCntDm        = messages["salePerfCompare.growthRate"];
+        //     dataItem.grSaleAmtDm        = messages["salePerfCompare.growthRate"];
+        //     dataItem.grTotSaleCnt       = messages["salePerfCompare.growthRate"];
+        //     dataItem.grTotSaleAmt       = messages["salePerfCompare.growthRate"];
+        //     grid.columnHeaders.rows[0].dataItem = dataItem;
+        //
+        //     $scope._broadcast('salePerfCompareAllDtlCtrl',params);
+        //
+        // });
     };
 
     // 구분 값 변경 시
@@ -318,7 +319,7 @@ app.controller('salePerfCompareAllCtrl', ['$scope', '$http', '$timeout', functio
         $scope.compStartDateAll.dispose();
         $scope.compEndDateAll.dispose();
 
-        
+
         if(s.selectedValue === 'day' || s.selectedValue === 'month' || s.selectedValue === 'year'){
             // 일/월/연
             $("#srchRg").css('display', 'none');
