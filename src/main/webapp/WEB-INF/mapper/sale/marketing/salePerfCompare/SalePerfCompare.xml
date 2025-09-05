@@ -160,64 +160,46 @@
         <choose>
             <when test='dateFg != null and (dateFg == "day" or dateFg == "dayPeriod")'>
                 SELECT 	A.DLVR_IN_FG
-                ,		DECODE(A.NMCODE_CD,'5',A.COMP_SALE_CNT_FRAN_CE,A.COMP_SALE_CNT_FRAN) 	AS COMP_SALE_CNT_FRAN
-                ,		DECODE(A.NMCODE_CD,'5',A.COMP_SALE_AMT_FRAN_CE,A.COMP_SALE_AMT_FRAN) 	AS COMP_SALE_AMT_FRAN
-                ,		DECODE(A.NMCODE_CD,'5',A.COMP_SALE_CNT_DM_CE,A.COMP_SALE_CNT_DM) 		AS COMP_SALE_CNT_DM
-                ,		DECODE(A.NMCODE_CD,'5',A.COMP_SALE_AMT_DM_CE,A.COMP_SALE_AMT_DM)		AS COMP_SALE_AMT_DM
-                ,		DECODE(A.NMCODE_CD,'5',A.COMP_SALE_CNT_DM_CE,A.COMP_SALE_CNT_DM) + DECODE(A.NMCODE_CD,'5',A.COMP_SALE_CNT_FRAN_CE,A.COMP_SALE_CNT_FRAN)     AS COMP_TOT_SALE_CNT
-                ,		DECODE(A.NMCODE_CD,'5',A.COMP_SALE_AMT_DM_CE,A.COMP_SALE_AMT_DM) + DECODE(A.NMCODE_CD,'5',A.COMP_SALE_AMT_FRAN_CE,A.COMP_SALE_AMT_FRAN)     AS COMP_TOT_SALE_AMT
-                ,		DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_CNT_FRAN_CE,A.SRCH_SALE_CNT_FRAN)   	AS SRCH_SALE_CNT_FRAN
-                ,		DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_AMT_FRAN_CE,A.SRCH_SALE_AMT_FRAN)   	AS SRCH_SALE_AMT_FRAN
-                ,		DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_CNT_DM_CE,A.SRCH_SALE_CNT_DM)     	AS SRCH_SALE_CNT_DM
-                ,		DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_AMT_DM_CE,A.SRCH_SALE_AMT_DM)     	AS SRCH_SALE_AMT_DM
-                ,		DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_CNT_DM_CE,A.SRCH_SALE_CNT_DM) + DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_CNT_FRAN_CE,A.SRCH_SALE_CNT_FRAN)     AS SRCH_TOT_SALE_CNT
-                ,		DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_AMT_DM_CE,A.SRCH_SALE_AMT_DM) + DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_AMT_FRAN_CE,A.SRCH_SALE_AMT_FRAN)     AS SRCH_TOT_SALE_AMT
-                ,		(NULLIF(DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_CNT_FRAN_CE,A.SRCH_SALE_CNT_FRAN),0) / NULLIF(DECODE(A.NMCODE_CD,'5',A.COMP_SALE_CNT_FRAN_CE,A.COMP_SALE_CNT_FRAN),0))     AS GR_SALE_CNT_FRAN
-                ,		(NULLIF(DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_AMT_FRAN_CE,A.SRCH_SALE_AMT_FRAN),0) / NULLIF(DECODE(A.NMCODE_CD,'5',A.COMP_SALE_AMT_FRAN_CE,A.COMP_SALE_AMT_FRAN),0))     AS GR_SALE_AMT_FRAN
-                ,		(NULLIF(DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_CNT_DM_CE,A.SRCH_SALE_CNT_DM),0) / NULLIF(DECODE(A.NMCODE_CD,'5',A.COMP_SALE_CNT_DM_CE,A.COMP_SALE_CNT_DM),0))         AS GR_SALE_CNT_DM
-                ,		(NULLIF(DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_AMT_DM_CE,A.SRCH_SALE_AMT_DM),0) / NULLIF(DECODE(A.NMCODE_CD,'5',A.COMP_SALE_AMT_DM_CE,A.COMP_SALE_AMT_DM),0))         AS GR_SALE_AMT_DM
-                ,       (NULLIF(DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_AMT_DM_CE,A.SRCH_SALE_AMT_DM) + DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_AMT_FRAN_CE,A.SRCH_SALE_AMT_FRAN),0) / NULLIF(DECODE(A.NMCODE_CD,'5',A.COMP_SALE_AMT_DM_CE,A.COMP_SALE_AMT_DM) + DECODE(A.NMCODE_CD,'5',A.COMP_SALE_AMT_FRAN_CE,A.COMP_SALE_AMT_FRAN),0)) AS GR_TOT_SALE_AMT
-                ,       (NULLIF(DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_CNT_DM_CE,A.SRCH_SALE_CNT_DM) + DECODE(A.NMCODE_CD,'5',A.SRCH_SALE_CNT_FRAN_CE,A.SRCH_SALE_CNT_FRAN),0) / NULLIF(DECODE(A.NMCODE_CD,'5',A.COMP_SALE_CNT_DM_CE,A.COMP_SALE_CNT_DM) + DECODE(A.NMCODE_CD,'5',A.COMP_SALE_CNT_FRAN_CE,A.COMP_SALE_CNT_FRAN),0)) AS GR_TOT_SALE_CNT
+                ,		A.COMP_SALE_CNT_FRAN
+                ,		A.COMP_SALE_AMT_FRAN
+                ,		A.COMP_SALE_CNT_DM
+                ,		A.COMP_SALE_AMT_DM
+                ,		A.COMP_SALE_CNT_DM + A.COMP_SALE_CNT_FRAN     AS COMP_TOT_SALE_CNT
+                ,		A.COMP_SALE_AMT_DM + A.COMP_SALE_AMT_FRAN     AS COMP_TOT_SALE_AMT
+                ,		A.SRCH_SALE_CNT_FRAN   AS SRCH_SALE_CNT_FRAN
+                ,		A.SRCH_SALE_AMT_FRAN   AS SRCH_SALE_AMT_FRAN
+                ,		A.SRCH_SALE_CNT_DM     AS SRCH_SALE_CNT_DM
+                ,		A.SRCH_SALE_AMT_DM     AS SRCH_SALE_AMT_DM
+                ,		A.SRCH_SALE_CNT_DM + A.SRCH_SALE_CNT_FRAN     AS SRCH_TOT_SALE_CNT
+                ,		A.SRCH_SALE_AMT_DM + A.SRCH_SALE_AMT_FRAN     AS SRCH_TOT_SALE_AMT
+                ,		(NULLIF(A.SRCH_SALE_CNT_FRAN,0) / NULLIF(A.COMP_SALE_CNT_FRAN,0))     AS GR_SALE_CNT_FRAN
+                ,		(NULLIF(A.SRCH_SALE_AMT_FRAN,0) / NULLIF(A.COMP_SALE_AMT_FRAN,0))     AS GR_SALE_AMT_FRAN
+                ,		(NULLIF(A.SRCH_SALE_CNT_DM,0) / NULLIF(A.COMP_SALE_CNT_DM,0))         AS GR_SALE_CNT_DM
+                ,		(NULLIF(A.SRCH_SALE_AMT_DM,0) / NULLIF(A.COMP_SALE_AMT_DM,0))         AS GR_SALE_AMT_DM
+                ,       (NULLIF(A.SRCH_SALE_AMT_DM + A.SRCH_SALE_AMT_FRAN,0) / NULLIF(A.COMP_SALE_AMT_DM + A.COMP_SALE_AMT_FRAN,0)) AS GR_TOT_SALE_AMT
+                ,       (NULLIF(A.SRCH_SALE_CNT_DM + A.SRCH_SALE_CNT_FRAN,0) / NULLIF(A.COMP_SALE_CNT_DM + A.COMP_SALE_CNT_FRAN,0)) AS GR_TOT_SALE_CNT
                 FROM 	(
-                            SELECT 	NVL(C.NMCODE_NM,'일반') 	AS DLVR_IN_FG
+                            SELECT 	SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_CNT  ELSE 0 END) AS SRCH_SALE_CNT_DM
+                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_AMT  ELSE 0 END) AS SRCH_SALE_AMT_DM
+                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_CNT  ELSE 0 END) AS SRCH_SALE_CNT_FRAN
+                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_AMT  ELSE 0 END) AS SRCH_SALE_AMT_FRAN
+                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_CNT  ELSE 0 END) AS COMP_SALE_CNT_DM
+                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_AMT  ELSE 0 END) AS COMP_SALE_AMT_DM
+                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_CNT  ELSE 0 END) AS COMP_SALE_CNT_FRAN
+                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_AMT  ELSE 0 END) AS COMP_SALE_AMT_FRAN
+                            ,		NVL(C.NMCODE_NM,'일반') AS DLVR_IN_FG
                             ,		NVL(C.NMCODE_CD,'0')	AS NMCODE_CD
-                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND NVL(A.DLVR_IN_FG,'0') NOT IN ('5') AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN SALE_FG  ELSE 0 END)                  AS SRCH_SALE_CNT_DM
-                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND NVL(A.DLVR_IN_FG,'0') NOT IN ('5') AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_AMT  ELSE 0 END)            AS SRCH_SALE_AMT_DM
-                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND NVL(A.DLVR_IN_FG,'0') NOT IN ('5') AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN SALE_FG  ELSE 0 END)                  AS SRCH_SALE_CNT_FRAN
-                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND NVL(A.DLVR_IN_FG,'0') NOT IN ('5') AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_AMT  ELSE 0 END)            AS SRCH_SALE_AMT_FRAN
-                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND NVL(A.DLVR_IN_FG,'0') NOT IN ('5') AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN SALE_FG  ELSE 0 END)          AS COMP_SALE_CNT_DM
-                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND NVL(A.DLVR_IN_FG,'0') NOT IN ('5') AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_AMT  ELSE 0 END)    AS COMP_SALE_AMT_DM
-                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND NVL(A.DLVR_IN_FG,'0') NOT IN ('5') AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN SALE_FG  ELSE 0 END)          AS COMP_SALE_CNT_FRAN
-                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND NVL(A.DLVR_IN_FG,'0') NOT IN ('5') AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_AMT  ELSE 0 END)    AS COMP_SALE_AMT_FRAN
-                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND D.TEMPORARY_PAY_CD = '08' AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN SALE_FG  ELSE 0 END)                           AS SRCH_SALE_CNT_DM_CE
-                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND D.TEMPORARY_PAY_CD = '08' AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_AMT  ELSE 0 END)                     AS SRCH_SALE_AMT_DM_CE
-                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND D.TEMPORARY_PAY_CD = '08' AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN SALE_FG  ELSE 0 END)                           AS SRCH_SALE_CNT_FRAN_CE
-                            ,		SUM(CASE WHEN A.SALE_DATE BETWEEN #{startDate} AND #{endDate} AND D.TEMPORARY_PAY_CD = '08' AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_AMT  ELSE 0 END)                     AS SRCH_SALE_AMT_FRAN_CE
-                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND D.TEMPORARY_PAY_CD = '08' AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN SALE_FG  ELSE 0 END)                   AS COMP_SALE_CNT_DM_CE
-                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND D.TEMPORARY_PAY_CD = '08' AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_AMT  ELSE 0 END)             AS COMP_SALE_AMT_DM_CE
-                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND D.TEMPORARY_PAY_CD = '08' AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN SALE_FG  ELSE 0 END)                   AS COMP_SALE_CNT_FRAN_CE
-                            ,	  	SUM(CASE WHEN A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate} AND D.TEMPORARY_PAY_CD = '08' AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_AMT  ELSE 0 END)             AS COMP_SALE_AMT_FRAN_CE
-                            FROM 	TB_SL_SALE_HDR A
+                            FROM 	TB_SL_DAILY_TOTAL_ORDAPP A
                             ,		TB_MS_STORE B
                             ,		TB_CM_NMCODE C
-                            ,		TB_SL_SALE_PAY_TEMPORARY D
                             WHERE 	A.HQ_OFFICE_CD = #{hqOfficeCd}
                             AND 	(A.SALE_DATE BETWEEN #{startDate} AND #{endDate} OR A.SALE_DATE BETWEEN #{compStartDate} AND #{compEndDate})
-                            AND 	B.STORE_CD 				= A.STORE_CD
-                            AND 	C.NMCODE_CD 		(+) = A.DLVR_IN_FG
-                            AND 	C.NMCODE_GRP_CD 	(+) = '112'
-                            AND		D.HQ_OFFICE_CD      (+) = A.HQ_OFFICE_CD
-                            AND		D.HQ_BRAND_CD       (+) = A.HQ_BRAND_CD
-                            AND		D.STORE_CD 		    (+) = A.STORE_CD
-                            AND		D.SALE_DATE 	    (+) = A.SALE_DATE
-                            AND		D.POS_NO 		    (+) = A.POS_NO
-                            AND		D.BILL_NO 		    (+) = A.BILL_NO
-                            AND		D.TEMPORARY_PAY_CD  (+) = '08'
+                            AND 	B.STORE_CD = A.STORE_CD
+                            AND 	C.NMCODE_CD (+) = A.DLVR_IN_FG
+                            AND 	C.NMCODE_GRP_CD (+) = '112'
                             GROUP
                             BY 		C.NMCODE_NM
                             ,       C.NMCODE_CD
-                            ORDER
-                            BY		C.NMCODE_CD
                         ) A
                 ORDER
                 BY      TO_NUMBER(A.NMCODE_CD)
@@ -243,7 +225,7 @@
                 ,       (NULLIF(A.SRCH_SALE_AMT_DM + A.SRCH_SALE_AMT_FRAN,0) / NULLIF(A.COMP_SALE_AMT_DM + A.COMP_SALE_AMT_FRAN,0)) AS GR_TOT_SALE_AMT
                 ,       (NULLIF(A.SRCH_SALE_CNT_DM + A.SRCH_SALE_CNT_FRAN,0) / NULLIF(A.COMP_SALE_CNT_DM + A.COMP_SALE_CNT_FRAN,0)) AS GR_TOT_SALE_CNT
                 FROM 	(
-                            SELECT 	SUM(CASE WHEN A.SALE_YM BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_CNT  ELSE 0 END) AS SRCH_SALE_CNT_DM
+                            SELECT 	SUM(CAS E WHEN A.SALE_YM BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_CNT  ELSE 0 END) AS SRCH_SALE_CNT_DM
                             ,		SUM(CASE WHEN A.SALE_YM BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'Y' THEN REAL_SALE_AMT  ELSE 0 END) AS SRCH_SALE_AMT_DM
                             ,		SUM(CASE WHEN A.SALE_YM BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_CNT  ELSE 0 END) AS SRCH_SALE_CNT_FRAN
                             ,		SUM(CASE WHEN A.SALE_YM BETWEEN #{startDate} AND #{endDate} AND NVL(B.DIRECT_MANAGE_YN,'N') = 'N' THEN REAL_SALE_AMT  ELSE 0 END) AS SRCH_SALE_AMT_FRAN
