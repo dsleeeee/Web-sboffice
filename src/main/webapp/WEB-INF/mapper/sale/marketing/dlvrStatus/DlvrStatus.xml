@@ -10,6 +10,7 @@
     1       김유승     2025.07.25     최초작성
 -->
 <mapper namespace="kr.co.solbipos.sale.marketing.dlvrStatus.service.impl.DlvrStatusMapper">
+
     <!-- 배달비 - 조회 -->
     <!--
         TABLE    :
@@ -17,7 +18,8 @@
     -->
     <select id="getDlvrStatusList" parameterType="DlvrStatusVO" resultType="DefaultMap">
         /* DlvrStatusMapper.getDlvrStatusList */
-        SELECT 	A.STORE_CD
+        SELECT TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE
+        ,       A.STORE_CD
         ,		C.STORE_NM
         ,		NVL(SUM(B.REAL_SALE_CNT),0) AS DLVR_BILL_CNT
         ,		NVL(SUM(A.REAL_SALE_AMT),0) AS DLVR_AMT
@@ -52,9 +54,11 @@
         AND 	C.STORE_CD 		    = A.STORE_CD
         AND 	B.DLVR_ORDER_FG     = '2'
         GROUP
-        BY 		A.STORE_CD
+        BY 		A.SALE_DATE
+        ,       A.STORE_CD
         ,		C.STORE_NM
         ORDER
         BY 		A.STORE_CD
     </select>
+
 </mapper>
