@@ -56,21 +56,31 @@ app.controller('periodSaleCtrl', ['$scope', '$http', '$timeout', function ($scop
 
   // 영수증별매출상세현황 리스트 조회
   $scope.searchTodayBillSaleList = function () {
-    if ($("#periodSaleSelectStoreCd").val() === '') {
-      $scope._popMsg(messages["todayBillSaleDtl.require.selectStore"]); // 매장을 선택해주세요.
-      return false;
+    if(hqOfficeCd == "H0614" || hqOfficeCd == "H0616") {
+    } else {
+      if ($("#periodSaleSelectStoreCd").val() === '') {
+          $scope._popMsg(messages["todayBillSaleDtl.require.selectStore"]); // 매장을 선택해주세요.
+          return false;
+      }
     }
 
     var startDt = new Date(wijmo.Globalize.format($scope.srchPeriodSaleStartDate.value, 'yyyy-MM-dd'));
     var endDt = new Date(wijmo.Globalize.format($scope.srchPeriodSaleEndDate.value, 'yyyy-MM-dd'));
     var diffDay = (endDt.getTime() - startDt.getTime()) / (1000 * 60 * 60 * 24); // 시 * 분 * 초 * 밀리세컨
 
-    // 조회일자 최대 한달(31일) 제한
-    if (diffDay >= 31) {
-      $scope._popMsg(messages['weight.date.error']);
-      return false;
+    if ($("#periodSaleSelectStoreCd").val() == "" || $("#periodSaleSelectStoreCd").val() == null) {
+      // 조회일자 최대 10일 제한
+      if (diffDay >= 10) {
+        $scope._popMsg(messages['cmm.dateOver.10day.error']);
+        return false;
+      }
+    } else {
+      // 조회일자 최대 한달(31일) 제한
+      if (diffDay >= 31) {
+        $scope._popMsg(messages['weight.date.error']);
+        return false;
+      }
     }
-
 
     // 파라미터
     var params       = {};

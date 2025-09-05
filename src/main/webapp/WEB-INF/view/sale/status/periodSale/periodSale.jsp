@@ -5,6 +5,7 @@
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
 <c:set var="orgnFg" value="${sessionScope.sessionInfo.orgnFg}"/>
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
 <c:set var="storeCd" value="${sessionScope.sessionInfo.storeCd}" />
 
 <div class="subCon">
@@ -150,7 +151,8 @@
 
 <script type="text/javascript">
   var orgnFg = "${orgnFg}";
+  var hqOfficeCd = "${hqOfficeCd}";
   var storeCd = "${storeCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/periodSale/periodSale.js?ver=20220701.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/periodSale/periodSale.js?ver=20250905.01" charset="utf-8"></script>
