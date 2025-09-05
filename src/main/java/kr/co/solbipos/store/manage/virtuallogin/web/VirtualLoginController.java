@@ -4,6 +4,7 @@ import kr.co.common.data.enums.Status;
 import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
+import kr.co.common.exception.AuthenticationException;
 import kr.co.common.service.cmm.CmmMenuService;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.system.BaseEnv;
@@ -41,6 +42,7 @@ import java.util.List;
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static kr.co.common.utils.spring.StringUtil.generateUUID;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @Class Name : VirtualLoginController.java
@@ -229,12 +231,14 @@ public class VirtualLoginController {
 
         // 기존 세션 조회
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
         // 기존세션 이용하여 권한조회
         int authResult = virtualLoginService.checkVirtualLoginAuth(sessionInfoVO.getUserId());
 
         virtualLoginVO.setUserIdCkeck(virtualLoginVO.getvUserId());
         virtualLoginVO.setvUserIdCkeck(sessionInfoVO.getUserId());
         int authResultCheck = virtualLoginService.checkVirtualLoginAuthCheck(virtualLoginVO, sessionInfoVO);
+        System.out.println("authResultCheck : " + authResultCheck);
 
         if(authResultCheck <= 0)
         {
@@ -256,14 +260,27 @@ public class VirtualLoginController {
             StopWatch sw = new StopWatch();
             sw.start();
             LOGGER.info("가상로그인 시작 : {} sessionInfoVO.getUserId(): ", sessionInfoVO.getUserId()+", BaseEnv.VIRTUAL_LOGIN_ID:"+BaseEnv.VIRTUAL_LOGIN_ID);
+
             // 신규 세션 생성을 위해 VO 재사용
             sessionInfoVO = new SessionInfoVO();
             // 사용자ID를 가상로그인ID로 설정
             sessionInfoVO.setUserId(BaseEnv.VIRTUAL_LOGIN_ID);
             // 가상로그인 아이디는 현재 아이디가 되어야함
             sessionInfoVO.setvUserId(vGetUserId);
+
             // userId 로 사용자 조회 ( sessionInfoVO 값 Override 주의 )
             sessionInfoVO = authService.selectWebUser(sessionInfoVO);
+            // 디비에 아이디가 존재하지 않을때
+            if (isEmpty(sessionInfoVO.getUserId())) {
+                try {
+                    response.setContentType("text/html; charset=UTF-8");
+                    PrintWriter out = response.getWriter();
+                    out.println("<script>alert('아이디가 없습니다.'); window.close();</script>");
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             sessionInfoVO.setLoginIp(getClientIp(request));
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));
             // 가상로그인은 로그인 상태 정상으로 판단

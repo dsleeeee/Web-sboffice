@@ -41,6 +41,7 @@ import java.util.List;
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static kr.co.common.utils.spring.StringUtil.convertToJson;
 import static kr.co.common.utils.spring.StringUtil.generateUUID;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 /**
  * @Class Name : MobileVirtualLoginController.java
@@ -253,14 +254,27 @@ public class MobileVirtualLoginController {
             StopWatch sw = new StopWatch();
             sw.start();
             LOGGER.info("가상로그인 시작 : {} sessionInfoVO.getUserId(): ", sessionInfoVO.getUserId()+", BaseEnv.VIRTUAL_LOGIN_ID:"+BaseEnv.VIRTUAL_LOGIN_ID);
+
             // 신규 세션 생성을 위해 VO 재사용
             sessionInfoVO = new SessionInfoVO();
             // 사용자ID를 가상로그인ID로 설정
             sessionInfoVO.setUserId(BaseEnv.VIRTUAL_LOGIN_ID);
             // 가상로그인 아이디는 현재 아이디가 되어야함
             sessionInfoVO.setvUserId(vGetUserId);
+
             // userId 로 사용자 조회 ( sessionInfoVO 값 Override 주의 )
             sessionInfoVO = mobileAuthService.selectWebUser(sessionInfoVO);
+            // 디비에 아이디가 존재하지 않을때
+            if (isEmpty(sessionInfoVO.getUserId())) {
+                try {
+                    response.setContentType("text/html; charset=UTF-8");
+                    PrintWriter out = response.getWriter();
+                    out.println("<script>alert('아이디가 없습니다.'); window.close();</script>");
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
             sessionInfoVO.setLoginIp(getClientIp(request));
             sessionInfoVO.setLoginFg(LoginFg.MOBILE.getCode());
             sessionInfoVO.setBrwsrInfo(request.getHeader("User-Agent"));

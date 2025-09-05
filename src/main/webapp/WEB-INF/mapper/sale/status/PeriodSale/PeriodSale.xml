@@ -46,9 +46,11 @@
         ,       TB_MS_PRODUCT_BARCD tmpb
         ,       TB_MS_STORE tms
         WHERE   tssh.HQ_OFFICE_CD = #{hqOfficeCd}
-        AND     tssh.STORE_CD     = #{storeCd}
-        AND     tssh.SALE_DATE between #{startDate} and #{endDate}
         ]]>
+        <if test='storeCd != null and storeCd != ""'>
+            AND     tssh.STORE_CD     = #{storeCd}
+        </if>
+        AND     tssh.SALE_DATE between #{startDate} and #{endDate}
         <if test='posNo != null and posNo != ""'>
             AND   tssh.POS_NO       = #{posNo}
         </if>
@@ -76,6 +78,7 @@
         AND     tmp.PROD_CD       (+) = tssd.PROD_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmpb.STORE_CD     (+) = tmp.STORE_CD
         AND     tmpb.PROD_CD      (+) = tmp.PROD_CD
+        AND     tms.HQ_OFFICE_CD     = #{hqOfficeCd}
         AND     tms.HQ_OFFICE_CD     = tssh.HQ_OFFICE_CD
         AND     tms.STORE_CD         = tssh.STORE_CD
         ORDER

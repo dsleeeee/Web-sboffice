@@ -14,7 +14,7 @@
 <div class="loginArea">
   <h2>Welcome Login</h2>
 
-  <f:form class="loginF" modelAttribute="sessionInfo" method="post" action="/auth/login.sb">
+  <f:form class="loginF" modelAttribute="sessionInfo" method="post" action="/auth/login.sb" onsubmit="return inputChk();">
     <input type='hidden' id='s_userId'  name='s_userId'  value='<%=request.getParameter("userId")%>'>
     <input type='hidden' id='s_userPwd' name='s_userPwd' value='nxposweb'>
     <input type='hidden' id='accessCd'  name='accessCd'  value='<%=request.getParameter("accessCd")%>'>
@@ -134,6 +134,20 @@
     }, 3000);
   }
 
+  // input 값 체크
+  function inputChk() {
+    if(isEmptyObject($("#userId").val())){
+      alert(messages["login.id.empty"]);
+      return false;
+    }
+
+    if(isEmptyObject($("#userPwd").val())){
+      alert(messages["login.pwd.empty"]);
+      return false;
+    }
+
+    return true;
+  }
 
   // 이용약관
   $("#termsOfUse").bind("click", function () {

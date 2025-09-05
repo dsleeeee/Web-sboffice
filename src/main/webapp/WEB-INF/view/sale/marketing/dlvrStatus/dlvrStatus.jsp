@@ -76,15 +76,16 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
+                    <wj-flex-grid-column header="<s:message code="dlvrStatus.saleDate"/>" binding="saleDate" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrStatus.storeCd"/>" binding="storeCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrStatus.storeNm"/>" binding="storeNm" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrStatus.dlvrBillCnt"/>" binding="dlvrBillCnt" width="100" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrStatus.dlvrIncBillCnt"/>" binding="dlvrIncBillCnt" width="130" align="center" is-read-only="true" aggregate="Sum" visible="false"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dlvrStatus.dlvrAmt"/>" binding="dlvrAmt" width="100" align="center" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrStatus.dlvrAmt"/>" binding="dlvrAmt" width="100" align="right" is-read-only="true" aggregate="Sum"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/dlvrStatus/dlvrStatus.js?ver=20250813.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/dlvrStatus/dlvrStatus.js?ver=20250905.01" charset="utf-8"></script>

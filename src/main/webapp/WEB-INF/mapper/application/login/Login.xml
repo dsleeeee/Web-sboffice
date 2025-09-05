@@ -179,7 +179,7 @@
         VALUES
         (
           SQ_WB_LOGIN_HIST.NEXTVAL,
-          #{userId},
+          NVL(#{userId}, 'NULL'),
           #{statCd},
           #{loginOrgn},
           #{loginIp},
