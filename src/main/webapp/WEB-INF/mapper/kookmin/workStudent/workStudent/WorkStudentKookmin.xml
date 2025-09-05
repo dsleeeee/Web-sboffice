@@ -77,10 +77,10 @@
         )
     </insert>
 
-    <!-- 근로학생 등록 -->
+    <!-- 근로학생 수정 -->
     <!--
         TABLE    : TB_HQ_WORK_STUDENTS
-        COMMENTS : 근로학생을 등록한다.
+        COMMENTS : 근로학생 수정
     -->
     <update id="updateWorkStudent" parameterType="WorkStudentKookminVO">
         /* WorkStudentKookminMapper.updateWorkStudent */
@@ -97,10 +97,10 @@
         AND     STUDENT_NO      = #{studentNo}
     </update>
 
-    <!-- 근로학생 등록 -->
+    <!-- 근로학생 삭제 -->
     <!--
         TABLE    : TB_HQ_WORK_STUDENTS
-        COMMENTS : 근로학생을 등록한다.
+        COMMENTS : 근로학생을 삭제한다.
     -->
     <delete id="deleteWorkStudent" parameterType="WorkStudentKookminVO">
         /* WorkStudentKookminMapper.deleteWorkStudent */
@@ -109,7 +109,7 @@
         AND     STUDENT_NO      = #{studentNo}
     </delete>
 
-    <!-- 근로학생관리 조회 -->
+    <!-- 학번중복체크 -->
     <!--
         TABLE    :
         COMMENTS :

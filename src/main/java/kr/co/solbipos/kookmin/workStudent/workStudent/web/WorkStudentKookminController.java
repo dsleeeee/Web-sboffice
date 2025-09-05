@@ -69,7 +69,7 @@ public class WorkStudentKookminController {
     }
 
     /**
-     * 일반게시판 조회
+     * 근로학생관리 조회
      *
      * @param   workStudentKookminVO
      * @param   request

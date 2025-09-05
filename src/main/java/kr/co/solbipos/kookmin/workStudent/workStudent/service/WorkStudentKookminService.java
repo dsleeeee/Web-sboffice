@@ -21,9 +21,12 @@ import java.util.List;
  */
 public interface WorkStudentKookminService {
 
+    /** 근로학생관리 조회 */
     List<DefaultMap<Object>> getWorkStudentKookminList(WorkStudentKookminVO workStudentKookminVO, SessionInfoVO sessionInfoVO);
 
+    /** 근로학생관리 저장 */
     int saveWorkStudent(WorkStudentKookminVO[] workStudentKookminVOs, SessionInfoVO sessionInfoVO);
 
+    /** 근로학생관리 엑셀업로드 */
     int saveWorkStudentExcelUpload(WorkStudentKookminVO[] workStudentKookminVOs, SessionInfoVO sessionInfoVO);
 }

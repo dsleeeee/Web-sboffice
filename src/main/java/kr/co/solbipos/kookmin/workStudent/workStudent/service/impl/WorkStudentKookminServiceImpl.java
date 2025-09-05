@@ -43,12 +43,14 @@ public class WorkStudentKookminServiceImpl implements WorkStudentKookminService 
         this.messageService = messageService;
     }
 
+    /** 근로학생관리 조회 */
     @Override
     public List<DefaultMap<Object>> getWorkStudentKookminList(WorkStudentKookminVO workStudentKookminVO, SessionInfoVO sessionInfoVO) {
         workStudentKookminVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         return workStudentKookminMapper.getWorkStudentKookminList(workStudentKookminVO);
     }
 
+    /** 근로학생관리 저장 */
     @Override
     public int saveWorkStudent(WorkStudentKookminVO[] workStudentKookminVOs, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;
@@ -62,20 +64,23 @@ public class WorkStudentKookminServiceImpl implements WorkStudentKookminService 
             workStudentKookminVO.setModId(sessionInfoVO.getUserId());
             workStudentKookminVO.setModDt(currentDt);
 
-            int result = 0;
             if(workStudentKookminVO.getStatus() == GridDataFg.INSERT) {
+                //추가
                 procCnt += workStudentKookminMapper.insertWorkStudent(workStudentKookminVO);
             }
             else if(workStudentKookminVO.getStatus() == GridDataFg.UPDATE) {
+                //수정
                 procCnt += workStudentKookminMapper.updateWorkStudent(workStudentKookminVO);
             }
             else if(workStudentKookminVO.getStatus() == GridDataFg.DELETE) {
+                //삭제
                 procCnt += workStudentKookminMapper.deleteWorkStudent(workStudentKookminVO);
             }
         }
         return procCnt;
     }
 
+    /** 근로학생관리 엑셀업로드 */
     @Override
     public int saveWorkStudentExcelUpload(WorkStudentKookminVO[] workStudentKookminVOs, SessionInfoVO sessionInfoVO) {
         int procCnt = 0;

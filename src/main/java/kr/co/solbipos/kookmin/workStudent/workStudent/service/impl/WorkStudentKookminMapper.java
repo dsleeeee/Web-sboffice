@@ -24,13 +24,19 @@ import java.util.List;
 @Mapper
 @Repository
 public interface WorkStudentKookminMapper {
+
+    /** 근로학생관리 조회 */
     List<DefaultMap<Object>> getWorkStudentKookminList(WorkStudentKookminVO workStudentKookminVO);
 
+    /** 근로학생관리 저장 - 추가 */
     int insertWorkStudent(WorkStudentKookminVO workStudentKookminVO);
 
+    /** 근로학생관리 저장 - 수정 */
     int updateWorkStudent(WorkStudentKookminVO workStudentKookminVO);
 
+    /** 근로학생관리 저장 - 삭제 */
     int deleteWorkStudent(WorkStudentKookminVO workStudentKookminVO);
 
+    /** 학번 중복체크 */
     int getChkStudentNo(WorkStudentKookminVO workStudentKookminVO);
 }
