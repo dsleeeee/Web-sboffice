@@ -698,7 +698,7 @@ app.controller('sideMenuSelectClassCtrl', ['$scope', '$http', 'sdselGrpCd', func
             if (item.cnt === 0 || item.cnt === null || item.cnt === undefined || item.cnt === "") {
               $scope.flex.collectionView.removeAt(i);
             } else {
-              $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.notNull"]);
+              $scope._popMsg(messages["sideMenu.selectMenu.sdselProd.notNull"]);
               return false;
             }
           }
