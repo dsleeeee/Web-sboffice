@@ -125,6 +125,12 @@ mobile_url = request.getRequestURL().toString().replace(request.getRequestURI(),
     if(isEmptyObject($("#userPwd").val())){
       alert(messages["login.pwd.empty"]);
       return false;
+    } else {
+      // SessionInfoVO / userPwd / min = 4, max = 100 정보 확인
+      if($("#userPwd").val().length <= 3) {
+        alert(messages["login.idpw.fail"]);
+        return false;
+      }
     }
 
     return true;
