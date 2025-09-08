@@ -58,7 +58,7 @@
             AND   tssh.BILL_NO    = #{billNo}
         </if>
         <if test='prodCd != null and prodCd != ""'>
-            AND   tssd.PROD_CD    = #{prodCd}
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%'
         </if>
         <if test='prodNm != null and prodNm != ""'>
             AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%'
@@ -74,8 +74,8 @@
         AND     tssd.BILL_NO          = tssh.BILL_NO
         AND     tmt.STORE_CD      (+) = tssh.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmt.TBL_CD        (+) = tssh.TBL_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        AND     tmp.STORE_CD      (+) = tssd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
-        AND     tmp.PROD_CD       (+) = tssd.PROD_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmp.STORE_CD       = tssd.STORE_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
+        AND     tmp.PROD_CD        = tssd.PROD_CD /* 개발엔 자료가 없어서 (+) 검. 나중엔 (+) 빼야함. */
         AND     tmpb.STORE_CD     (+) = tmp.STORE_CD
         AND     tmpb.PROD_CD      (+) = tmp.PROD_CD
         AND     tms.HQ_OFFICE_CD     = #{hqOfficeCd}
