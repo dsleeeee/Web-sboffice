@@ -24,6 +24,7 @@
         ,		A.BANK_NM
         ,		A.ACCOUNT_NO
         ,		A.COOP_YN
+        ,       A.REMARK
         ,		TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
         ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = A.REG_ID) 	AS REG_NM
         ,		TO_CHAR(TO_DATE(A.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
@@ -36,6 +37,8 @@
                 or  A.MP_NO LIKE '%' || #{srchCondition} || '%'
                 )
         </if>
+        ORDER
+        BY      A.STUDENT_NO
     </select>
 
     <!-- 근로학생 등록 -->
@@ -55,6 +58,7 @@
         ,   BANK_NM
         ,   ACCOUNT_NO
         ,   COOP_YN
+        ,   REMARK
         ,   REG_DT
         ,   REG_ID
         ,   MOD_DT
@@ -70,6 +74,7 @@
         ,   #{bankNm}
         ,   #{accountNo}
         ,   #{coopYn}
+        ,   #{remark}
         ,   #{regDt}
         ,   #{regId}
         ,   #{modDt}
@@ -91,6 +96,7 @@
         ,       BANK_NM     = #{bankNm}
         ,       ACCOUNT_NO  = #{accountNo}
         ,       COOP_YN     = #{coopYn}
+        ,       REMARK      = #{remark}
         ,       MOD_DT      = #{regDt}
         ,       MOD_ID      = #{modId}
         WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}

@@ -143,6 +143,46 @@ app.controller('workStudentKookminCtrl', ['$scope', '$http', '$timeout', functio
                     return false;
                 }
             }
+            if(nvl($scope.flex.collectionView.itemsEdited[i].studentNo, '').getByteLengthForOracle() > 30){
+                // 학번은 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.studentNo'] + "은 " + messages["cmm.max30Chk"] + "<br>(학번 : " + $scope.flex.collectionView.itemsEdited[i].studentNo + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsEdited[i].studentNm, '').getByteLengthForOracle() > 50){
+                // 이름은 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.studentNm'] + "은 " + messages["cmm.max50Chk"] + "<br>(이름 : " + $scope.flex.collectionView.itemsEdited[i].studentNm + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsEdited[i].department, '').getByteLengthForOracle() > 100){
+                // 학과는 최대 100byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.department'] + "는 " + messages["cmm.max100Chk"] + "<br>(학과 : " + $scope.flex.collectionView.itemsEdited[i].department + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsEdited[i].mpNo, '').getByteLengthForOracle() > 15){
+                // 연락처는 최대 15byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.mpNo'] + "는 " + messages["cmm.max15Chk"] + "<br>(연락처 : " + $scope.flex.collectionView.itemsEdited[i].mpNo + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsEdited[i].bankNm, '').getByteLengthForOracle() > 50){
+                // 은행은 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.bankNm'] + "은 " + messages["cmm.max50Chk"] + "<br>(은행 : " + $scope.flex.collectionView.itemsEdited[i].bankNm + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsEdited[i].accountNo, '').getByteLengthForOracle() > 50){
+                // 계좌번호는 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.accountNo'] + "는 " + messages["cmm.max50Chk"] + "<br>(계좌번호 : " + $scope.flex.collectionView.itemsEdited[i].accountNo + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsEdited[i].coopYn, '').getByteLengthForOracle() > 1){
+                // 조합원여부 최대 1byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.coopYn'] + "는 " + messages["cmm.max1Chk"] + "<br>(조합원여부 : " + $scope.flex.collectionView.itemsEdited[i].coopYn + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsEdited[i].remark, '').getByteLengthForOracle() > 2000){
+                // 비고는 최대 2000byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.remark'] + "는 " + messages["cmm.max2000Chk"] + "<br>(비고 : " + $scope.flex.collectionView.itemsEdited[i].remark + ")");
+                return;
+            }
             $scope.flex.collectionView.itemsEdited[i].status = "U";
             params.push($scope.flex.collectionView.itemsEdited[i]);
         }
@@ -180,6 +220,47 @@ app.controller('workStudentKookminCtrl', ['$scope', '$http', '$timeout', functio
                     $scope._popMsg(messages["workStudentKookmin.coopYn"] + '은 Y 또는 N만 입력 가능합니다');
                     return false;
                 }
+            }
+
+            if(nvl($scope.flex.collectionView.itemsAdded[i].studentNo, '').getByteLengthForOracle() > 30){
+                // 학번은 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.studentNo'] + "은 " + messages["cmm.max30Chk"] + "<br>(학번 : " + $scope.flex.collectionView.itemsAdded[i].studentNo + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsAdded[i].studentNm, '').getByteLengthForOracle() > 50){
+                // 이름은 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.studentNm'] + "은 " + messages["cmm.max50Chk"] + "<br>(이름 : " + $scope.flex.collectionView.itemsAdded[i].studentNm + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsAdded[i].department, '').getByteLengthForOracle() > 100){
+                // 학과는 최대 100byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.department'] + "는 " + messages["cmm.max100Chk"] + "<br>(학과 : " + $scope.flex.collectionView.itemsAdded[i].department + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsAdded[i].mpNo, '').getByteLengthForOracle() > 15){
+                // 연락처는 최대 15byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.mpNo'] + "는 " + messages["cmm.max15Chk"] + "<br>(연락처 : " + $scope.flex.collectionView.itemsAdded[i].mpNo + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsAdded[i].bankNm, '').getByteLengthForOracle() > 50){
+                // 은행은 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.bankNm'] + "은 " + messages["cmm.max50Chk"] + "<br>(은행 : " + $scope.flex.collectionView.itemsAdded[i].bankNm + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsAdded[i].accountNo, '').getByteLengthForOracle() > 50){
+                // 계좌번호는 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.accountNo'] + "는 " + messages["cmm.max50Chk"] + "<br>(계좌번호 : " + $scope.flex.collectionView.itemsAdded[i].accountNo + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsAdded[i].coopYn, '').getByteLengthForOracle() > 1){
+                // 조합원여부 최대 1byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.coopYn'] + "는 " + messages["cmm.max1Chk"] + "<br>(조합원여부 : " + $scope.flex.collectionView.itemsAdded[i].coopYn + ")");
+                return;
+            }
+            if(nvl($scope.flex.collectionView.itemsAdded[i].remark, '').getByteLengthForOracle() > 2000){
+                // 비고는 최대 2000byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.remark'] + "는 " + messages["cmm.max2000Chk"] + "<br>(비고 : " + $scope.flex.collectionView.itemsAdded[i].remark + ")");
+                return;
             }
 
             // 학번 중복 체크
@@ -452,6 +533,55 @@ app.controller('workStudentKookminExcelCtrl', ['$scope', '$http', '$timeout', fu
                     return false;
                 }
             }
+
+            if(nvl(item.studentNo, '').getByteLengthForOracle() > 30){
+                // 학번은 최대 30byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.studentNo'] + "은 " + messages["cmm.max30Chk"] + "<br>(학번 : " + item.studentNo + ")");
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                return;
+            }
+            if(nvl(item.studentNm, '').getByteLengthForOracle() > 50){
+                // 이름은 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.studentNm'] + "은 " + messages["cmm.max50Chk"] + "<br>(이름 : " + item.studentNm + ")");
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                return;
+            }
+            if(nvl(item.department, '').getByteLengthForOracle() > 100){
+                // 학과는 최대 100byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.department'] + "는 " + messages["cmm.max100Chk"] + "<br>(학과 : " + item.department + ")");
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                return;
+            }
+            if(nvl(item.mpNo, '').getByteLengthForOracle() > 15){
+                // 연락처는 최대 15byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.mpNo'] + "는 " + messages["cmm.max15Chk"] + "<br>(연락처 : " + item.mpNo + ")");
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                return;
+            }
+            if(nvl(item.bankNm, '').getByteLengthForOracle() > 50){
+                // 은행은 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.bankNm'] + "은 " + messages["cmm.max50Chk"] + "<br>(은행 : " + item.bankNm + ")");
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                return;
+            }
+            if(nvl(item.accountNo, '').getByteLengthForOracle() > 50){
+                // 계좌번호는 최대 50byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.accountNo'] + "는 " + messages["cmm.max50Chk"] + "<br>(계좌번호 : " + item.accountNo + ")");
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                return;
+            }
+            if(nvl(item.coopYn, '').getByteLengthForOracle() > 1){
+                // 조합원여부 최대 1byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.coopYn'] + "는 " + messages["cmm.max1Chk"] + "<br>(조합원여부 : " + item.coopYn + ")");
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                return;
+            }
+            if(nvl(item.remark, '').getByteLengthForOracle() > 2000){
+                // 비고는 최대 2000byte까지 입력 가능합니다. (한글 3byte 그외 1byte)
+                $scope._popMsg(messages['workStudentKookmin.remark'] + "는 " + messages["cmm.max2000Chk"] + "<br>(비고 : " + item.remark + ")");
+                $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
+                return;
+            }
         }
 
         // 데이터 저장
@@ -535,7 +665,7 @@ app.controller('workStudentKookminExcelCtrl', ['$scope', '$http', '$timeout', fu
     $scope.excelUploadingPopup = function (showFg) {
         if (showFg) {
             // 팝업내용 동적 생성
-            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['empCardInfo.excelUploading'] + '</p>';
+            var innerHtml = '<div class=\"wj-popup-loading\"><p class=\"bk\">' + messages['excelUpload.excelUploading'] + '</p>';
             innerHtml += '<div class="mt5 txtIn"><span class="bk" id="progressCnt">0</span>/<span class="bk" id="totalRows">0</span> 개 적용 중...</div>';
             innerHtml += '<p><img src=\"/resource/solbipos/css/img/loading.gif\" alt=\"\" /></p></div>';
             // html 적용

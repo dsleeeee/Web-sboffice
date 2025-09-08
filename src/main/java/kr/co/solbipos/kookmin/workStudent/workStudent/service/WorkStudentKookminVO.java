@@ -39,6 +39,8 @@ public class WorkStudentKookminVO extends PageVO {
     private String accountNo;
     /** 조합원 */
     private String coopYn;
+    /** 비고 */
+    private String remark;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -110,5 +112,13 @@ public class WorkStudentKookminVO extends PageVO {
 
     public void setCoopYn(String coopYn) {
         this.coopYn = coopYn;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }
