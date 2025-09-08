@@ -429,6 +429,9 @@ app.controller('workStudentKookminExcelCtrl', ['$scope', '$http', '$timeout', fu
                             if (item.coopYn !== null && item.coopYn !== undefined && item.coopYn !== "") {
                                 item.coopYn = item.coopYn.toString().replace(/\r\n|\r|\n/g, ' ');
                             }
+                            if (item.remark !== null && item.remark !== undefined && item.remark !== "") {
+                                item.remark = item.remark.toString().replace(/\r\n|\r|\n/g, ' ');
+                            }
                         });
                         console.log(arr);
                         //console.log(JSON.stringify(arr, null, 2));
@@ -492,6 +495,7 @@ app.controller('workStudentKookminExcelCtrl', ['$scope', '$http', '$timeout', fu
 
         for (var i = 0; i < $scope.totalRows; i++) {
             var item = jsonData[i];
+            console.log(Object.keys(item));
             if(item.studentNo == "" || item.studentNo == null){
                 $scope._popMsg(messages["workStudentKookmin.studentNo"] + messages["workStudentKookmin.inputEnv"]);
                 $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
