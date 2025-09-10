@@ -58,7 +58,9 @@
             </tbody>
         </table>
 
-        <div class="mt10 oh sb-select dkbr">
+        <div class="mt10 oh">
+            <p class="tl s14 mt5 lh15">복합결제로 가승인-채널 중복 시 금액 오차가 있을 수 있습니다.</p>
+            <p class="tl s14 mt5 lh15">(예> 하나의 영수에 가승인 결제 배민, 요기요 두개 선택한 경우)</p>
             <%-- 현재화면 엑셀다운로드 --%>
             <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down"/></button>
         </div>
