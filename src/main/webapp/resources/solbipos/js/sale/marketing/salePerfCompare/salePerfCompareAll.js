@@ -305,7 +305,7 @@ app.controller('salePerfCompareAllCtrl', ['$scope', '$http', '$timeout', functio
             dataItem.grTotSaleAmt       = messages["salePerfCompare.growthRate"];
             grid.columnHeaders.rows[0].dataItem = dataItem;
 
-            $scope._broadcast('salePerfCompareAllDtlCtrl',params);
+            // $scope._broadcast('salePerfCompareAllDtlCtrl',params);
 
         });
     };
@@ -515,34 +515,34 @@ app.controller('salePerfCompareAllCtrl', ['$scope', '$http', '$timeout', functio
             }
         });
 
-        var vScope = agrid.getScope("salePerfCompareAllDtlCtrl");
-
-        // 합계 행(GroupRow) 가져오기
-        var groupRowDtl = vScope.flex.columnFooters.rows[0];
-
-        // 기존의 합계 행 데이터를 임시 저장
-        var originalDataItemDtl = groupRowDtl.dataItem;
-
-        // 첫 번째 데이터 열의 바인딩명 가져오기
-        var firstColumnBindingDtl = vScope.flex.columns[0].binding;
-
-        // 첫번째 열에 '합계' 텍스트 임의 설정
-        var newDataItemDtl = {};
-        newDataItemDtl[firstColumnBindingDtl] = '합계';
-        groupRowDtl.dataItem = newDataItemDtl;
-
-        // 취소현황 상세 그리드
-        var workBook2 = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(vScope.flex, {
-            includeColumnHeaders: true,
-            includeCellStyles: false,
-            function() {
-                // 원래의 합계 행 데이터로 복원
-                groupRowDtl.dataItem = originalDataItemDtl;
-            }
-        });
+        // var vScope = agrid.getScope("salePerfCompareAllDtlCtrl");
+        //
+        // // 합계 행(GroupRow) 가져오기
+        // var groupRowDtl = vScope.flex.columnFooters.rows[0];
+        //
+        // // 기존의 합계 행 데이터를 임시 저장
+        // var originalDataItemDtl = groupRowDtl.dataItem;
+        //
+        // // 첫 번째 데이터 열의 바인딩명 가져오기
+        // var firstColumnBindingDtl = vScope.flex.columns[0].binding;
+        //
+        // // 첫번째 열에 '합계' 텍스트 임의 설정
+        // var newDataItemDtl = {};
+        // newDataItemDtl[firstColumnBindingDtl] = '합계';
+        // groupRowDtl.dataItem = newDataItemDtl;
+        //
+        // // 취소현황 상세 그리드
+        // var workBook2 = wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(vScope.flex, {
+        //     includeColumnHeaders: true,
+        //     includeCellStyles: false,
+        //     function() {
+        //         // 원래의 합계 행 데이터로 복원
+        //         groupRowDtl.dataItem = originalDataItemDtl;
+        //     }
+        // });
 
         // 시트 정보 push
-        workBook1.sheets.push(workBook2.sheets[0]);
+        // workBook1.sheets.push(workBook2.sheets[0]);
         workBook1.saveAsync("매출실적비교" + '_' + wijmo.Globalize.format($scope.srchStartDateAll.value, 'yyyyMMdd') + '_' + wijmo.Globalize.format($scope.srchEndDateAll.value, 'yyyyMMdd') + '_' + getCurDateTime() + '.xlsx');
     }
 

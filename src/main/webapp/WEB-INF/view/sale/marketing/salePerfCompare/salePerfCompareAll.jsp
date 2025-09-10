@@ -120,12 +120,12 @@
     <%-- wj grid start --%>
     <div class="wj-gridWrap2 mt10" ng-controller="salePerfCompareAllDtlCtrl">
         <%-- left --%>
-        <div class="oh sb-select dkbr mb10 mr10" >
+        <div class="oh sb-select dkbr mb10 mr10" style="display: none;">
             <%-- 엑셀 다운로드 --%>
             <button class="btn_skyblue fr" ng-click="excelDownloadDtl()"><s:message code="cmm.excel.down" />
             </button>
         </div>
-        <div class="w100 mt10">
+        <div class="w100 mt10" style="display: none;">
             <div class="wj-gridWrap" style="overflow-y: hidden; overflow-x: hidden;">
                 <wj-flex-grid
                         id="salePerfCompareAllDtlGrid"
@@ -170,4 +170,4 @@
     <!-- //contents end -->
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/salePerfCompare/salePerfCompareAll.js?ver=20250820.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/marketing/salePerfCompare/salePerfCompareAll.js?ver=20250910.01" charset="utf-8"></script>
