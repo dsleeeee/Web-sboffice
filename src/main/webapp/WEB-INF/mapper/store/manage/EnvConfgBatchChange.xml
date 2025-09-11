@@ -699,18 +699,23 @@
     -->
     <select id="getHqList" parameterType="EnvConfgBatchChangeVO" resultType="DefaultMap">
         /* EnvConfgBatchChangeMapper.getHqList */
-        SELECT HQ_OFFICE_CD
-        ,      HQ_OFFICE_NM
-        FROM   TB_HQ_OFFICE
-        WHERE  HQ_OFFICE_CD != '00000'
+        SELECT A.HQ_OFFICE_CD
+        ,      A.HQ_OFFICE_NM
+        ,      B.USE_YN
+        FROM   TB_HQ_OFFICE A
+        ,      TB_HQ_NMCODE B
+        WHERE  A.HQ_OFFICE_CD != '00000'
+        AND    B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+        AND    B.NMCODE_GRP_CD (+)= #{nmcodeGrpCd}
+        AND    B.NMCODE_CD (+)= #{nmcodeCd}
         <if test='hqOfficeCd != null and hqOfficeCd != ""'>
-            AND HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
+            AND A.HQ_OFFICE_CD LIKE '%' || #{hqOfficeCd} || '%'
         </if>
         <if test='hqOfficeNm != null and hqOfficeNm != ""'>
-            AND HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
+            AND A.HQ_OFFICE_NM LIKE '%' || #{hqOfficeNm} || '%'
         </if>
         ORDER
-        BY      HQ_OFFICE_CD
+        BY      A.HQ_OFFICE_CD
     </select>
 
     <!-- 공통코드관리탭 - 매장리스트 조회 -->
@@ -724,9 +729,14 @@
         ,      A.STORE_NM
         ,      B.HQ_OFFICE_CD
         ,      B.HQ_OFFICE_NM
+        ,      C.USE_YN
         FROM   TB_MS_STORE A
         ,      TB_HQ_OFFICE B
+        ,      TB_MS_STORE_NMCODE C
         WHERE  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+        AND    C.STORE_CD (+)= A.STORE_CD
+        AND    C.NMCODE_GRP_CD (+)= #{nmcodeGrpCd}
+        AND    C.NMCODE_CD (+)= #{nmcodeCd}
         <if test='selHqOfficeCd != null and selHqOfficeCd != ""'>
             AND A.HQ_OFFICE_CD = #{selHqOfficeCd}
         </if>

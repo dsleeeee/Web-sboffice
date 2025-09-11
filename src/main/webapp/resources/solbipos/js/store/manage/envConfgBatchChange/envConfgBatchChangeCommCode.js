@@ -13,6 +13,13 @@
  */
 var app = agrid.getApp();
 
+// 사용여부 DataMap
+var useYnFg = [
+    {"name":"","value":""},
+    {"name":"사용","value":"Y"},
+    {"name":"미사용","value":"N"}
+];
+
 /**
  * 공통코드관리 탭 그리드 생성
  */
@@ -23,6 +30,8 @@ app.controller('envConfgBatchChangeCommCodeCtrl', ['$scope', '$http', function (
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+        // 그리드 DataMap 설정
+        $scope.useYnDataMap = new wijmo.grid.DataMap(useYnFg, 'value', 'name');
     };
 
     $scope.$on("envConfgBatchChangeCommCodeCtrl", function(event, data) {
@@ -52,6 +61,8 @@ app.controller('envConfgBatchChangeCommCodeCtrl', ['$scope', '$http', function (
         params.hqOfficeNm = $("#srchHqOfficeNm").val();
         params.storeCd = $("#srchStoreCd").val();
         params.storeNm = $("#srchStoreNm").val();
+        params.nmcodeGrpCd = $scope.nmcodeGrpCd;
+        params.nmcodeCd = $scope.nmcodeCd;
 
         $scope._inquiryMain("/store/manage/envConfgBatchChange/envConfgBatchChangeCommCode/getEnvConfgBatchChangeCommCodeList.sb", params, function() {
 

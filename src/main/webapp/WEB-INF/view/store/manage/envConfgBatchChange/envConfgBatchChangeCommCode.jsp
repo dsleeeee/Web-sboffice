@@ -98,6 +98,7 @@
                     <wj-flex-grid-column header="<s:message code="envConfgBatchChange.commCode.hqOfficeNm"/>" binding="hqOfficeNm" width="250" is-read-only="true" align="left"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="envConfgBatchChange.commCode.storeCd"/>" binding="storeCd" width="100" is-read-only="true" align="center"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="envConfgBatchChange.commCode.storeNm"/>" binding="storeNm" width="250" is-read-only="true" align="left"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="envConfgBatchChange.commCode.useYn"/>" binding="useYn" width="100" data-map="useYnDataMap" is-read-only="true" align="center"></wj-flex-grid-column>
                 </wj-flex-grid>
             </div>
         </div>
@@ -107,4 +108,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeCommCode.js?ver=20241120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeCommCode.js?ver=20250911.01" charset="utf-8"></script>
