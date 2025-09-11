@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    WorkScheduleStore.xml
+    매장별 근무테이블 등록 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.09.09
+-->
+<mapper namespace="kr.co.solbipos.kookmin.workStudent.workScheduleStore.service.impl.WorkScheduleStoreMapper">
+
+    <!-- 요일 ListMap -->
+    <resultMap id="WorkScheduleStoreListMap" type="DefaultMap">
+        <result column="SUN" property="sun" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="MON" property="mon" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="TUE" property="tue" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="WED" property="wed" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="THU" property="thu" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="FRI" property="fri" typeHandler="CustomBooleanTypeHandler"/>
+        <result column="SAT" property="sat" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
+    <!-- 매장별 근무테이블 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getWorkScheduleStoreList" parameterType="WorkScheduleStoreVO" resultMap="WorkScheduleStoreListMap">
+        /* WorkScheduleStoreMapper.getWorkScheduleStoreList */
+        SELECT 	A.TERM_YEAR
+        ,		A.TERM_FG
+        ,		A.STORE_CD
+        ,       B.STORE_NM
+        ,		A.WORK_SCH_CODE
+        ,       DECODE(INSTR(A.WORK_DAY, '1'), 0, 'N', NULL, 'N', 'Y')      AS SUN
+        ,       DECODE(INSTR(A.WORK_DAY, '2'), 0, 'N', NULL, 'N', 'Y')      AS MON
+        ,       DECODE(INSTR(A.WORK_DAY, '3'), 0, 'N', NULL, 'N', 'Y')      AS TUE
+        ,       DECODE(INSTR(A.WORK_DAY, '4'), 0, 'N', NULL, 'N', 'Y')      AS WED
+        ,       DECODE(INSTR(A.WORK_DAY, '5'), 0, 'N', NULL, 'N', 'Y')      AS THU
+        ,       DECODE(INSTR(A.WORK_DAY, '6'), 0, 'N', NULL, 'N', 'Y')      AS FRI
+        ,       DECODE(INSTR(A.WORK_DAY, '7'), 0, 'N', NULL, 'N', 'Y')      AS SAT
+        ,		SUBSTR(A.START_TIME,0,2) || ':' || SUBSTR(A.START_TIME,3,4) AS START_TIME
+        ,		SUBSTR(A.END_TIME,0,2) || ':' || SUBSTR(A.END_TIME,3,4)     AS END_TIME
+        ,		TO_NUMBER(A.HOUR_PAY) AS HOUR_PAY
+        ,		A.WORK_FG
+        ,		A.REMARK
+        , 		ROUND((TO_DATE(END_TIME, 'HH24MI') - TO_DATE(START_TIME, 'HH24MI')) * 24, 2)                            AS WORK_TIME
+        ,		FLOOR(ROUND((TO_DATE(END_TIME, 'HH24MI') - TO_DATE(START_TIME, 'HH24MI')) * 24, 2)  / 4) * 0.5          AS BREAK_TIME   -- 휴게시간 사용여부, 계산식 확인
+        ,		NVL(ROUND((TO_DATE(END_TIME, 'HH24MI') - TO_DATE(START_TIME, 'HH24MI')) * 24, 2) * LENGTH(WORK_DAY),0)  AS TOT_WORK_TIME
+        FROM 	TB_HQ_WORK_SCHEDULE A
+        ,       TB_MS_STORE B
+        WHERE 	A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND     A.TERM_FG       = #{termFg}
+        AND     A.TERM_YEAR     = #{srchDate}
+        AND     B.STORE_CD      = A.STORE_CD
+        ORDER
+        BY		A.STORE_CD
+        ,		TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))
+    </select>
+
+    <!-- 매장별 근무코드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getWorkSchCodeList" parameterType="WorkScheduleStoreVO" resultType="DefaultMap">
+        /* WorkScheduleStoreMapper.getWorkSchCodeList */
+        SELECT 	A.STORE_CD
+        ,		A.STORE_NM
+        ,		MAX(TO_NUMBER(SUBSTR(B.WORK_SCH_CODE, 2, INSTR(B.WORK_SCH_CODE, '-') - 2))) AS MAX_FIRST
+        ,		C.MAX_LAST
+        FROM 	TB_MS_STORE A
+        ,		TB_HQ_WORK_SCHEDULE B
+        ,		(
+                    SELECT 	STORE_CD
+                    ,		MAX(TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))) +1 	AS MAX_LAST
+                    FROM 	TB_HQ_WORK_SCHEDULE
+                    WHERE 	HQ_OFFICE_CD = #{hqOfficeCd}
+                    AND     STORE_CD IN (${storeCdQuery})
+                    AND     TERM_YEAR    = #{termYear}
+                    AND     TERM_FG      = #{termFg}
+                    GROUP
+                    BY		STORE_CD
+                ) C
+        WHERE 	A.HQ_OFFICE_CD      = #{hqOfficeCd}
+        AND     A.STORE_CD IN (${storeCdQuery})
+        AND     B.TERM_YEAR     (+) = #{termYear}
+        AND     B.TERM_FG       (+) = #{termFg}
+        AND 	B.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+        AND 	B.STORE_CD 		(+) = A.STORE_CD
+        AND		C.STORE_CD 		(+) = A.STORE_CD
+        GROUP
+        BY		A.STORE_CD
+        ,		A.STORE_NM
+        ,		C.MAX_LAST
+        ORDER
+        BY		A.STORE_CD
+    </select>
+
+    <!-- 근무코드 MAX값 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMaxWowkSchCode" parameterType="WorkScheduleStoreVO" resultType="Integer">
+        /* WorkScheduleStoreMapper.getMaxWowkSchCode */
+        SELECT 	NVL(MAX(TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))),0) AS MAX_CODE
+        FROM 	TB_HQ_WORK_SCHEDULE
+        WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     TERM_YEAR       = #{termYear}
+        AND     TERM_FG         = #{termFg}
+    </select>
+
+    <!-- 근무테이블 등록 -->
+    <!--
+        TABLE    : TB_HQ_WORK_SCHEDULE
+        COMMENTS : 근무테이블 등록한다.
+    -->
+    <insert id="insertWorkScheduleStore" parameterType="WorkScheduleStoreVO">
+        /* WorkScheduleStoreMapper.insertWorkScheduleStore */
+        INSERT INTO TB_HQ_WORK_SCHEDULE
+        (
+            HQ_OFFICE_CD
+        ,   TERM_YEAR
+        ,   TERM_FG
+        ,   STORE_CD
+        ,   WORK_SCH_CODE
+        ,   WORK_DAY
+        ,   START_TIME
+        ,   END_TIME
+        ,   HOUR_PAY
+        ,   WORK_FG
+        ,   REMARK
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{hqOfficeCd}
+        ,   #{termYear}
+        ,   #{termFg}
+        ,   #{storeCd}
+        ,   #{workSchCode}
+        ,   #{workDay}
+        ,   #{startTime}
+        ,   #{endTime}
+        ,   #{hourPay}
+        ,   #{workFg}
+        ,   #{remark}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 근무테이블 수정 -->
+    <!--
+        TABLE    : TB_HQ_WORK_SCHEDULE
+        COMMENTS : 근무테이블 수정
+    -->
+    <update id="updateWorkScheduleStore" parameterType="WorkScheduleStoreVO">
+        /* WorkScheduleStoreMapper.updateWorkScheduleStore */
+        UPDATE  TB_HQ_WORK_SCHEDULE
+        SET     WORK_DAY    = #{workDay}
+        ,       START_TIME  = #{startTime}
+        ,       END_TIME    = #{endTime}
+        ,       HOUR_PAY    = #{hourPay}
+        ,       WORK_FG     = #{workFg}
+        ,       REMARK      = #{remark}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     TERM_YEAR       = #{termYear}
+        AND     TERM_FG         = #{termFg}
+        AND     STORE_CD        = #{storeCd}
+        AND     WORK_SCH_CODE   = #{workSchCode}
+    </update>
+
+    <!-- 근무테이블 삭제 -->
+    <!--
+        TABLE    : TB_HQ_WORK_SCHEDULE
+        COMMENTS : 근무테이블 삭제한다.
+    -->
+    <delete id="deleteWorkScheduleStore" parameterType="WorkScheduleStoreVO">
+        /* WorkScheduleStoreMapper.deleteWorkScheduleStore */
+        DELETE  TB_HQ_WORK_SCHEDULE
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     TERM_YEAR       = #{termYear}
+        AND     TERM_FG         = #{termFg}
+        AND     STORE_CD        = #{storeCd}
+        AND     WORK_SCH_CODE   = #{workSchCode}
+    </delete>
+
+    <!-- 매장별 근무코드 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getWorkSchCodeStore" parameterType="WorkScheduleStoreVO" resultType="String">
+        /* WorkScheduleStoreMapper.getWorkSchCodeStore */
+        SELECT 	'A' || MAX(MAX_FIRST) || '-' || MAX(MAX_LAST) AS WORK_SCH_CODE
+        FROM	(
+                    SELECT 	B.STORE_CD
+                    ,		NVL(TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))
+                            ,		NVL((	SELECT 	MAX(TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))) + 1
+                                        FROM 	TB_HQ_WORK_SCHEDULE
+                                        WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+                                        AND		TERM_YEAR       = #{termYear}
+                                        AND		TERM_FG	        = #{termFg}
+                                        ),1)) AS MAX_FIRST
+                    ,		NVL(C.MAX_LAST,1) AS MAX_LAST
+                    FROM 	TB_HQ_WORK_SCHEDULE A
+                    ,		TB_MS_STORE B
+                    ,		(
+                                SELECT 	STORE_CD
+                                ,		MAX(TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))) +1 	AS MAX_LAST
+                                FROM 	TB_HQ_WORK_SCHEDULE
+                                WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+                                AND		STORE_CD        = #{storeCd}
+                                AND		TERM_YEAR       = #{termYear}
+                                AND		TERM_FG	        = #{termFg}
+                                GROUP
+                                BY		STORE_CD
+                            ) C
+                    WHERE 	A.STORE_CD 	(+) = B.STORE_CD
+                    AND		C.STORE_CD 	(+) = B.STORE_CD
+                    AND		B.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                    AND		B.STORE_CD 		= #{storeCd}
+                    AND		A.TERM_YEAR (+) = #{termYear}
+                    AND		A.TERM_FG	(+) = #{termFg}
+                )
+    </select>
+
+</mapper>

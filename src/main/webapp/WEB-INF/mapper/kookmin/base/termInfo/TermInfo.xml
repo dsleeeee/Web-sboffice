@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    TermInfo.xml
+    학기정보관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.09.05
+-->
+<mapper namespace="kr.co.solbipos.kookmin.base.termInfo.service.impl.TermInfoMapper">
+    <!-- 학기정보 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTermInfoList" parameterType="TermInfoVO" resultType="DefaultMap">
+        /* TermInfoMapper.getTermInfoList */
+        SELECT 	B.TERM_YEAR
+        ,		B.TERM_FG
+        ,		TO_CHAR(TO_DATE(A.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd')    AS START_DATE
+        ,		TO_CHAR(TO_DATE(A.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')      AS END_DATE
+        FROM 	TB_HQ_TERM_INFO A
+        ,		(
+                    SELECT 	#{srchDate}	AS TERM_YEAR
+                    ,		'1' 	AS TERM_FG
+                    FROM 	DUAL
+                    UNION
+                    SELECT 	#{srchDate}	AS TERM_YEAR
+                    ,		'2' 	AS TERM_FG
+                    FROM 	DUAL
+                    UNION
+                    SELECT 	#{srchDate}	AS TERM_YEAR
+                    ,		'3' 	AS TERM_FG
+                    FROM 	DUAL
+                    UNION
+                    SELECT 	#{srchDate}	AS TERM_YEAR
+                    ,		'4' 	AS TERM_FG
+                    FROM 	DUAL
+                ) B
+        WHERE	A.TERM_YEAR	(+) = B.TERM_YEAR
+        AND		A.TERM_FG 	(+) = B.TERM_FG
+        AND     A.TERM_YEAR (+) = #{srchDate}
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        ORDER
+        BY 		B.TERM_FG
+    </select>
+
+    <!-- 학기정보 저장 -->
+    <!--
+        TABLE    : TB_HQ_TERM_INFO
+        PARAM    :
+        COMMENTS : 학기정보를 저장한다
+    -->
+    <insert id="saveTermInfo" parameterType="TermInfoVO" >
+        /* USE : TermInfoMapper.saveTermInfo */
+        MERGE INTO TB_HQ_TERM_INFO A
+        USING DUAL
+        ON  (
+                    A.HQ_OFFICE_CD  = #{hqOfficeCd}
+                AND A.TERM_YEAR     = #{termYear}
+                AND A.TERM_FG       = #{termFg}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+                A.START_DATE    = #{startDate}
+        ,       A.END_DATE      = #{endDate}
+        ,       A.MOD_DT        = #{modDt}
+        ,       A.MOD_ID        = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            HQ_OFFICE_CD
+        ,   TERM_YEAR
+        ,   TERM_FG
+        ,   START_DATE
+        ,   END_DATE
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        ) VALUES (
+            #{hqOfficeCd}
+        ,   #{termYear}
+        ,   #{termFg}
+        ,   #{startDate}
+        ,   #{endDate}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+</mapper>
