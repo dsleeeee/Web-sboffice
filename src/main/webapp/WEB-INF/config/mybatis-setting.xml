@@ -1256,6 +1256,12 @@
 
     <!-- 국민대 > 근로학생관리 > 근로학생관리 -->
     <typeAlias alias="workStudentKookminVO" type="kr.co.solbipos.kookmin.workStudent.workStudent.service.WorkStudentKookminVO"/>
+    <!-- 국민대 > 근로학생관리 > 매장별근무테이블등록 -->
+    <typeAlias alias="workScheduleStoreVO" type="kr.co.solbipos.kookmin.workStudent.workScheduleStore.service.WorkScheduleStoreVO"/>
+
+
+    <!-- 국민대 > 기초관리 > 학기정보관리 -->
+    <typeAlias alias="termInfoVO" type="kr.co.solbipos.kookmin.base.termInfo.service.TermInfoVO"/>
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
