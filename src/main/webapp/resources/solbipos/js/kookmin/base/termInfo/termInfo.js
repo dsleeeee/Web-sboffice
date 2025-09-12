@@ -50,18 +50,8 @@ app.controller('termInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
             if (e.panel === s.cells) {
                 var col = s.columns[e.col];
                 if (col.binding === "termYear" || col.binding === "termFg") {
-                    var item = s.rows[e.row].dataItem;
                     wijmo.addClass(e.cell, 'wj-custom-readonly');
                 }
-            }
-        });
-
-        // 그리드 에디팅 방지
-        s.beginningEdit.addHandler(function (sender, elements) {
-            var col = sender.columns[elements.col];
-            if (col.binding === "termYear" || col.binding === "termFg") {
-                var dataItem = s.rows[elements.row].dataItem;
-                elements.cancel = true;
             }
         });
 
@@ -95,7 +85,6 @@ app.controller('termInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
             var row = ht.row;
             var col = ht.col;
 
-
             if (row != null && col != null) {
                 // 셀 데이터 가져오기
                 var item = grid.rows[row].dataItem;
@@ -128,8 +117,6 @@ app.controller('termInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
             var rows = grid.rows;
 
             for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-                var item = $scope.flex.collectionView.items[i];
-
                 // 행간격 고정
                 rows[i].height = 25;
             }

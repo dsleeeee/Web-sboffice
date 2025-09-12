@@ -93,11 +93,11 @@
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.sat"/>"         binding="sat"           width="50"     align="center" is-read-only="false"  ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.startTime"/>"   binding="startTime"     width="80"     align="center" is-read-only="false"  data-map="timeDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.endTime"/>"     binding="endTime"       width="80"     align="center" is-read-only="false"  data-map="timeDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workScheduleStore.hourPay"/>"     binding="hourPay"       width="80"     align="center" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workScheduleStore.hourPay"/>"     binding="hourPay"       width="80"     align="center" data-type="String"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.workFg"/>"      binding="workFg"        width="80"     align="center" data-map="workFgComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workScheduleStore.workTime"/>"    binding="workTime"      width="80"     align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workScheduleStore.workTime"/>"    binding="workTime"      width="80"     align="center" is-read-only="true"   format="n1"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.breakTime"/>"   binding="breakTime"     width="80"     align="center" is-read-only="true"   format="n1"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workScheduleStore.totWorkTime"/>" binding="totWorkTime"   width="80"     align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workScheduleStore.totWorkTime"/>" binding="totWorkTime"   width="80"     align="center" is-read-only="true"   format="n1"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.remark"/>"      binding="remark"        width="150"    align="center" ></wj-flex-grid-column>
 
             </wj-flex-grid>
@@ -105,6 +105,6 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workScheduleStore/workScheduleStore.js?ver=20250909.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workScheduleStore/workScheduleStore.js?ver=20250909.02" charset="utf-8"></script>
 
 

@@ -56,7 +56,7 @@
         AND     A.TERM_YEAR     = #{srchDate}
         AND     B.STORE_CD      = A.STORE_CD
         ORDER
-        BY		A.STORE_CD
+        BY		TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))
         ,		TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))
     </select>
 
@@ -208,10 +208,10 @@
                     SELECT 	B.STORE_CD
                     ,		NVL(TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))
                             ,		NVL((	SELECT 	MAX(TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))) + 1
-                                        FROM 	TB_HQ_WORK_SCHEDULE
-                                        WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
-                                        AND		TERM_YEAR       = #{termYear}
-                                        AND		TERM_FG	        = #{termFg}
+                                            FROM 	TB_HQ_WORK_SCHEDULE
+                                            WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+                                            AND		TERM_YEAR       = #{termYear}
+                                            AND		TERM_FG	        = #{termFg}
                                         ),1)) AS MAX_FIRST
                     ,		NVL(C.MAX_LAST,1) AS MAX_LAST
                     FROM 	TB_HQ_WORK_SCHEDULE A

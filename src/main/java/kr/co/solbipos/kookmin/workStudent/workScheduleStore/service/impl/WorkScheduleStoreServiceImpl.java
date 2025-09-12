@@ -116,6 +116,7 @@ public class WorkScheduleStoreServiceImpl implements WorkScheduleStoreService {
             workScheduleStoreVO.setModId(sessionInfoVO.getUserId());
             workScheduleStoreVO.setModDt(currentDt);
 
+            // 근무요일 셋팅
             String workDay = "";
             if(workScheduleStoreVO.getSun()) workDay += "1"; //일
             if(workScheduleStoreVO.getMon()) workDay += "2"; //월
@@ -127,6 +128,7 @@ public class WorkScheduleStoreServiceImpl implements WorkScheduleStoreService {
             workScheduleStoreVO.setWorkDay(workDay);
 
             if(workScheduleStoreVO.getStatus() == GridDataFg.INSERT) {
+                // 근무코드 값 조회
                 String workSchCode = workScheduleStoreMapper.getWorkSchCodeStore(workScheduleStoreVO);
                 workScheduleStoreVO.setWorkSchCode(workSchCode);
                 //추가

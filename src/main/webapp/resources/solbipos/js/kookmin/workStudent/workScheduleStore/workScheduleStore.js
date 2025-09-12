@@ -24,7 +24,7 @@ var workFgComboData = [
     {"name": "진열", "value": '2'},
     {"name": "제조", "value": '3'}
 ];
-/** 요일별 그리드 controller */
+/** 근무테이블 그리드 controller */
 app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('workScheduleStoreCtrl', $scope, $http, true));
@@ -114,6 +114,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
         $scope._inquiryMain("/kookmin/workStudent/workScheduleStore/workScheduleStore/getWorkScheduleStoreList.sb", params);
     };
 
+    // 추가 클릭 시 근무코드 조회
     // $scope.add = function () {
     //     if($("#workScheduleStoreStoreCd").val() === ""){
     //         $scope._popMsg("매장을 선택해주세요");
@@ -153,6 +154,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
     //     });
     // }
 
+    // 추가
     $scope.add = function () {
         if($("#workScheduleStoreStoreCd").val() === ""){
             $scope._popMsg("매장을 선택해주세요");
@@ -163,6 +165,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
 
         var arr = $("#workScheduleStoreStoreCd").val().split(",");
 
+        // 선택한 매장 추가
         for (var i = 0; i < arr.length; i++) {
             params.gChk = true;
             params.termYear = $scope.termYear;
@@ -176,15 +179,12 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
             params.fri = false;
             params.sat = false;
             params.status = "I";
-            params.startTime = '0000';
-            params.endTime = '0000';
-            params.hourPay = '1000'
             params.workFg = '1';
             $scope._addRow(params);
         }
     }
 
-    // 요청일 저장
+    // 근무테이블 저장
     $scope.save = function () {
         var params = [];
 
@@ -247,7 +247,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
         });
     };
 
-    // 근로학생관리 그리드 행 삭제
+    // 근무테이블 그리드 행 삭제
     $scope.delete = function(){
         for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
             var item = $scope.flex.collectionView.items[i];

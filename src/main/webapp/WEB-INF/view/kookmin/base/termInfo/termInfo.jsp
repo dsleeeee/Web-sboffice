@@ -29,7 +29,7 @@
             <tr>
                 <%-- 년도 --%>
                 <th>
-                    <s:message code="termInfo.srchYear"/>
+                    <s:message code="termInfo.termYear"/>
                 </th>
                 <td>
                     <div class="sb-select">
@@ -59,8 +59,8 @@
 
                     <!-- define columns -->
                     <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="termInfo.termYear"/>"     binding="termYear"  width="60" align="center"  ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="termInfo.termFg"/>"       binding="termFg"    width="80"  align="center"  data-map="termFgComboDataMap" is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="termInfo.termYear"/>"     binding="termYear"  width="60"  align="center"  is-read-only="true"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="termInfo.termFg"/>"       binding="termFg"    width="80"  align="center"  is-read-only="true" data-map="termFgComboDataMap"></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="termInfo.startDate"/>"    binding="startDate" width="150" align="center"  >
                         <wj-flex-grid-cell-template cell-type="CellEdit">
                             <div class="sb-select">
@@ -100,6 +100,6 @@
 
 </div>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/base/termInfo/termInfo.js?ver=20250905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/base/termInfo/termInfo.js?ver=20250905.02" charset="utf-8"></script>
 
 

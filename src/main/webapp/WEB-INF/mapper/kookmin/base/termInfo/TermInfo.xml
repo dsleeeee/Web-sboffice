@@ -39,10 +39,10 @@
                     ,		'4' 	AS TERM_FG
                     FROM 	DUAL
                 ) B
-        WHERE	A.TERM_YEAR	(+) = B.TERM_YEAR
-        AND		A.TERM_FG 	(+) = B.TERM_FG
-        AND     A.TERM_YEAR (+) = #{srchDate}
-        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
+        WHERE	A.TERM_YEAR	    (+) = B.TERM_YEAR
+        AND		A.TERM_FG 	    (+) = B.TERM_FG
+        AND     A.HQ_OFFICE_CD  (+) = #{hqOfficeCd}
+        AND     A.TERM_YEAR     (+) = #{srchDate}
         ORDER
         BY 		B.TERM_FG
     </select>
