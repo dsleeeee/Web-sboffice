@@ -87,6 +87,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
             s.collectionView.commitEdit();
         });
 
+        $scope.getWorkScheduleStoreList();
     };
 
     // 수정시 체크박스 체크
@@ -255,19 +256,20 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             if($scope.flex.collectionView.itemsEdited[i].gChk) {
                 // 입력값 체크
-                if ($scope.flex.collectionView.itemsEdited[i].startTime == "" || $scope.flex.collectionView.itemsEdited[i].startTime == null) {
+                if ($scope.flex.collectionView.itemsEdited[i].startTime === "" || $scope.flex.collectionView.itemsEdited[i].startTime === null) {
                     $scope._popMsg(messages["workScheduleStore.startTime"] + messages["workScheduleStore.inputEnv"]);
                     return false;
                 }
-                if ($scope.flex.collectionView.itemsEdited[i].endTime == "" || $scope.flex.collectionView.itemsEdited[i].endTime == null) {
+                if ($scope.flex.collectionView.itemsEdited[i].endTime == "" || $scope.flex.collectionView.itemsEdited[i].endTime === null) {
                     $scope._popMsg(messages["workScheduleStore.endTime"] + messages["workScheduleStore.inputEnv"]);
                     return false;
                 }
-                if ($scope.flex.collectionView.itemsEdited[i].hourPay == "" || $scope.flex.collectionView.itemsEdited[i].hourPay == null) {
+                if ($scope.flex.collectionView.itemsEdited[i].hourPay === "" || $scope.flex.collectionView.itemsEdited[i].hourPay === null) {
+                    console.log(0);
                     $scope._popMsg(messages["workScheduleStore.hourPay"] + messages["workScheduleStore.inputEnv"]);
                     return false;
                 }
-                if ($scope.flex.collectionView.itemsEdited[i].workFg == "" || $scope.flex.collectionView.itemsEdited[i].workFg == null) {
+                if ($scope.flex.collectionView.itemsEdited[i].workFg === "" || $scope.flex.collectionView.itemsEdited[i].workFg === null) {
                     $scope._popMsg(messages["workScheduleStore.workFg"] + messages["workScheduleStore.inputEnv"]);
                     return false;
                 }
