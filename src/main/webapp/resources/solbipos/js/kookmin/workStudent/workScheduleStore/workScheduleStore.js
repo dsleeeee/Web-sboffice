@@ -162,26 +162,34 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
         }
 
         var params = {};
+        params.storeCd  = $("#workScheduleStoreStoreCd").val();
 
-        var arr = $("#workScheduleStoreStoreCd").val().split(",");
+        $scope._postJSONQuery.withPopUp("/kookmin/workStudent/workScheduleStore/workScheduleStore/addRowWorkScheduleStore.sb", params, function(response) {
+            var list = response.data.data.list;
 
-        // 선택한 매장 추가
-        for (var i = 0; i < arr.length; i++) {
-            params.gChk = true;
-            params.termYear = $scope.termYear;
-            params.termFg = $scope.termFg;
-            params.storeCd = arr[i];
-            params.sun = false;
-            params.mon = false;
-            params.tue = false;
-            params.wed = false;
-            params.thu = false;
-            params.fri = false;
-            params.sat = false;
-            params.status = "I";
-            params.workFg = '1';
-            $scope._addRow(params);
-        }
+            // 파라미터 설정
+            var params2 = {};
+
+            if(list.length > 0) {
+                for (var i = 0; i < list.length; i++) {
+                    params2.gChk = true;
+                    params2.termYear = $scope.termYear;
+                    params2.termFg = $scope.termFg;
+                    params2.storeCd = list[i].storeCd;
+                    params2.storeNm = list[i].storeNm;
+                    params2.sun = false;
+                    params2.mon = false;
+                    params2.tue = false;
+                    params2.wed = false;
+                    params2.thu = false;
+                    params2.fri = false;
+                    params2.sat = false;
+                    params2.status = "I";
+                    params.workFg = '1';
+                    $scope._addRow(params2);
+                }
+            }
+        });
     }
 
     // 근무테이블 저장
@@ -206,6 +214,39 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
                 $scope._popMsg(messages["workScheduleStore.workFg"] + messages["workScheduleStore.inputEnv"]);
                 return false;
             }
+
+            var numchkexp = /[^0-9]/g; // 숫자가 아닌 값 체크
+            var numchkexp2 = /^-[0-9]/g;
+
+            if (numchkexp.test($scope.flex.collectionView.itemsAdded[i].hourPay)) {
+                if((numchkexp2.test($scope.flex.collectionView.itemsAdded[i].hourPay) == false)){
+                    $scope._popMsg(messages["workScheduleStore.hourPayChk"]); // 시급은 숫자만(정수7자리) 입력해주세요.
+                    return false;
+                }
+            }
+
+            if($scope.flex.collectionView.itemsAdded[i].hourPay >= 10000000){
+                $scope._popMsg(messages["workScheduleStore.hourPayChk"]); // 시급은 숫자만(정수7자리) 입력해주세요.
+                return false;
+            }
+
+            // 근무 시작시간이 종료시간보다 빠른지 확인
+            var [startHours, startMin] = $scope.flex.collectionView.itemsAdded[i].startTime.split(":").map(Number);
+            var startTime = new Date();
+            startTime.setHours(startHours, startMin, 0, 0); // 시, 분, 초, 밀리초 설정
+
+            var [endHours, endMin] = $scope.flex.collectionView.itemsAdded[i].endTime.split(":").map(Number);
+            var endTime = new Date();
+            endTime.setHours(endHours, endMin, 0, 0); // 시, 분, 초, 밀리초 설정
+
+            if(startTime > endTime){
+                // 근무시작시간과 근무종료시간을 확인하세요.
+                $scope._popMsg(messages['workScheduleStore.timeChk.error']);
+                return false;
+            }
+        }
+
+        for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             $scope.flex.collectionView.itemsAdded[i].startTime = $scope.flex.collectionView.itemsAdded[i].startTime.replaceAll(":","");
             $scope.flex.collectionView.itemsAdded[i].endTime = $scope.flex.collectionView.itemsAdded[i].endTime.replaceAll(":","");
             params.push($scope.flex.collectionView.itemsAdded[i]);
@@ -213,7 +254,6 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
 
         for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
             if($scope.flex.collectionView.itemsEdited[i].gChk) {
-                $scope.flex.collectionView.itemsEdited[i].status = "U";
                 // 입력값 체크
                 if ($scope.flex.collectionView.itemsEdited[i].startTime == "" || $scope.flex.collectionView.itemsEdited[i].startTime == null) {
                     $scope._popMsg(messages["workScheduleStore.startTime"] + messages["workScheduleStore.inputEnv"]);
@@ -231,8 +271,43 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
                     $scope._popMsg(messages["workScheduleStore.workFg"] + messages["workScheduleStore.inputEnv"]);
                     return false;
                 }
-                $scope.flex.collectionView.itemsEdited[i].startTime = $scope.flex.collectionView.itemsEdited[i].startTime.replaceAll(":","");
-                $scope.flex.collectionView.itemsEdited[i].endTime = $scope.flex.collectionView.itemsEdited[i].endTime.replaceAll(":","");
+
+                var numchkexp = /[^0-9]/g; // 숫자가 아닌 값 체크
+                var numchkexp2 = /^-[0-9]/g;
+
+                if (numchkexp.test($scope.flex.collectionView.itemsEdited[i].hourPay)) {
+                    if((numchkexp2.test($scope.flex.collectionView.itemsEdited[i].hourPay) == false)){
+                        $scope._popMsg(messages["workScheduleStore.hourPayChk"]); // 시급은 숫자만(정수7자리) 입력해주세요.
+                        return false;
+                    }
+                }
+
+                if($scope.flex.collectionView.itemsEdited[i].hourPay >= 10000000){
+                    $scope._popMsg(messages["workScheduleStore.hourPayChk"]); // 시급은 숫자만(정수7자리) 입력해주세요.
+                    return false;
+                }
+
+                // 근무 시작시간이 종료시간보다 빠른지 확인
+                var [startHours, startMin] = $scope.flex.collectionView.itemsEdited[i].startTime.split(":").map(Number);
+                var startTime = new Date();
+                startTime.setHours(startHours, startMin, 0, 0); // 시, 분, 초, 밀리초 설정
+
+                var [endHours, endMin] = $scope.flex.collectionView.itemsEdited[i].endTime.split(":").map(Number);
+                var endTime = new Date();
+                endTime.setHours(endHours, endMin, 0, 0); // 시, 분, 초, 밀리초 설정
+
+                if(startTime > endTime){
+                    // 근무시작시간과 근무종료시간을 확인하세요.
+                    $scope._popMsg(messages['workScheduleStore.timeChk.error'] + " (" + $scope.flex.collectionView.itemsEdited[i].workSchCode + ")");
+                    return false;
+                }
+            }
+        }
+        for (var i = 0; i < $scope.flex.collectionView.itemsEdited.length; i++) {
+            if($scope.flex.collectionView.itemsEdited[i].gChk) {
+                $scope.flex.collectionView.itemsEdited[i].status = "U";
+                $scope.flex.collectionView.itemsEdited[i].startTime = $scope.flex.collectionView.itemsEdited[i].startTime.replaceAll(":", "");
+                $scope.flex.collectionView.itemsEdited[i].endTime = $scope.flex.collectionView.itemsEdited[i].endTime.replaceAll(":", "");
                 params.push($scope.flex.collectionView.itemsEdited[i]);
             }
         }

@@ -236,4 +236,17 @@
                 )
     </select>
 
+    <!-- 로우추가 매장코드, 매장명 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getWorkScheduleStoreCdNmList" parameterType="WorkScheduleStoreVO" resultType="DefaultMap">
+        /* WorkScheduleStoreMapper.getWorkScheduleStoreCdNmList */
+        SELECT 	STORE_CD
+        ,       STORE_NM
+        FROM    TB_MS_STORE
+        WHERE   STORE_CD IN (${storeCdQuery})
+    </select>
+
 </mapper>
