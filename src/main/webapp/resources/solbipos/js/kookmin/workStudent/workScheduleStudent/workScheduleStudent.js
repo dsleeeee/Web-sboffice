@@ -221,7 +221,7 @@ app.controller('workScheduleStudentCtrl', ['$scope', '$http', function ($scope, 
                 var endDt = new Date(endDay);
                 // 시작일자가 종료일자보다 빠른지 확인
                 if(startDt.getTime() > endDt.getTime()){
-                    $scope._popMsg(messages['cmm.dateChk.error'] + " (" + $scope.flex.collectionView.itemsEdited[i].workSchCode + ")");
+                    $scope._popMsg(messages['workScheduleStudent.dateChk.error'] + " (" + $scope.flex.collectionView.itemsEdited[i].workSchCode + ")");
                     return false;
                 }
 
