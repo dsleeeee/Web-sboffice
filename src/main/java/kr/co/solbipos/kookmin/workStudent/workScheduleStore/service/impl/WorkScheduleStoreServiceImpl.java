@@ -52,7 +52,7 @@ public class WorkScheduleStoreServiceImpl implements WorkScheduleStoreService {
         return workScheduleStoreMapper.getWorkScheduleStoreList(workScheduleStoreVO);
     }
 
-    /** 로우 추가 매장별 근무코드 조회 */
+    /** 로우 추가 매장코드 조회 */
     @Override
     public List<DefaultMap<Object>> addRowWorkScheduleStore(WorkScheduleStoreVO workScheduleStoreVO, SessionInfoVO sessionInfoVO) {
 
@@ -64,42 +64,43 @@ public class WorkScheduleStoreServiceImpl implements WorkScheduleStoreService {
             workScheduleStoreVO.setStoreCdQuery(popupMapper.getSearchMultiStoreRtn(storeVO));
         }
 
-        // 근무코드 조회
-        List<DefaultMap<Object>> list = workScheduleStoreMapper.getWorkSchCodeList(workScheduleStoreVO);
-
-        // 근무코드 최댓값 조회(A뒤 값 중 최대값)
-        int maxCode = workScheduleStoreMapper.getMaxWowkSchCode(workScheduleStoreVO);
-
-        List<DefaultMap<Object>> addRowList = new ArrayList<>();
-
-        if (list != null && list.size() > 0) {
-            for (int i = 0; i < list.size(); i++) {
-                DefaultMap<Object> row = new DefaultMap<>();
-
-                // 값 추출
-                String storeCd = list.get(i).getStr("storeCd");
-                String storeNm = list.get(i).getStr("storeNm");
-                String maxFirst = list.get(i).getStr("maxFirst");
-                if(maxFirst == null || maxFirst.equals("")){
-                    maxFirst = ++maxCode + "";
-                }
-                String maxLast = list.get(i).getStr("maxLast");
-                if(maxLast == null || maxLast.equals("")){
-                    maxLast = "1";
-                }
-
-                String workSchCode = "A" + maxFirst + "-" + maxLast;
-
-                // row에 값 세팅
-                row.put("storeCd", storeCd);
-                row.put("storeNm", storeNm);
-                row.put("workSchCode", workSchCode);
-
-                // 리스트에 추가
-                addRowList.add(row);
-            }
-        }
-        return addRowList;
+//        // 근무코드 조회
+//        List<DefaultMap<Object>> list = workScheduleStoreMapper.getWorkSchCodeList(workScheduleStoreVO);
+//
+//        // 근무코드 최댓값 조회(A뒤 값 중 최대값)
+//        int maxCode = workScheduleStoreMapper.getMaxWowkSchCode(workScheduleStoreVO);
+//
+//        List<DefaultMap<Object>> addRowList = new ArrayList<>();
+//
+//        if (list != null && list.size() > 0) {
+//            for (int i = 0; i < list.size(); i++) {
+//                DefaultMap<Object> row = new DefaultMap<>();
+//
+//                // 값 추출
+//                String storeCd = list.get(i).getStr("storeCd");
+//                String storeNm = list.get(i).getStr("storeNm");
+//                String maxFirst = list.get(i).getStr("maxFirst");
+//                if(maxFirst == null || maxFirst.equals("")){
+//                    maxFirst = ++maxCode + "";
+//                }
+//                String maxLast = list.get(i).getStr("maxLast");
+//                if(maxLast == null || maxLast.equals("")){
+//                    maxLast = "1";
+//                }
+//
+//                String workSchCode = "A" + maxFirst + "-" + maxLast;
+//
+//                // row에 값 세팅
+//                row.put("storeCd", storeCd);
+//                row.put("storeNm", storeNm);
+//                row.put("workSchCode", workSchCode);
+//
+//                // 리스트에 추가
+//                addRowList.add(row);
+//            }
+//        }
+//        return addRowList;
+        return workScheduleStoreMapper.getWorkScheduleStoreCdNmList(workScheduleStoreVO);
     }
 
     /** 근무테이블 저장 */

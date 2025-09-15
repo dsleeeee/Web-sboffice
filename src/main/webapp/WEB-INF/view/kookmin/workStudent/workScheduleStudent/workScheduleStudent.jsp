@@ -141,7 +141,7 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workScheduleStudent/workScheduleStudent.js?ver=20250911.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workScheduleStudent/workScheduleStudent.js?ver=20250915.01" charset="utf-8"></script>
 
 <%-- 프린터연결 팝업 --%>
 <c:import url="/WEB-INF/view/kookmin/workStudent/workScheduleStudent/workScheduleStudentReg.jsp">
