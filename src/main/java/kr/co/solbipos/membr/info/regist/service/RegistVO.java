@@ -328,6 +328,12 @@ public class RegistVO extends PageVO {
     /** 가상로그인ID */
     private String vUserId;
 
+    /** 매출처구분 */
+    private String customerFg;
+
+    /** 매출처코드 */
+    private String customerCd;
+
     /**
      * @return the orgnFg
      */
@@ -1579,6 +1585,22 @@ public class RegistVO extends PageVO {
 
     public void setvUserId(String vUserId) {
         this.vUserId = vUserId;
+    }
+
+    public String getCustomerFg() {
+        return customerFg;
+    }
+
+    public void setCustomerFg(String customerFg) {
+        this.customerFg = customerFg;
+    }
+
+    public String getCustomerCd() {
+        return customerCd;
+    }
+
+    public void setCustomerCd(String customerCd) {
+        this.customerCd = customerCd;
     }
 
     @Override

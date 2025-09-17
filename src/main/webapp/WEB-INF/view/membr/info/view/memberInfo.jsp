@@ -550,7 +550,7 @@
                 <wj-flex-grid-column header="<s:message code="regist.membr.pointSaveFg"/>" binding="pointSaveFg" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.memberCard"/>" binding="memberCard" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.memberCash"/>" binding="memberCash" width="100" is-read-only="true" align="center" visible="false"></wj-flex-grid-column>
-
+                <wj-flex-grid-column header="<s:message code="regist.membr.customerFg"/>" binding="customerFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
         </div>
     </div>

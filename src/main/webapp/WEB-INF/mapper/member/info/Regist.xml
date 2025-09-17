@@ -144,7 +144,8 @@
                     '후불적용매장등록' AS POSTPAID_STORE,
                     tmmcpr.POINT_SAVE_FG,
                     tmmcpr.PAY01 AS MEMBER_CARD,
-                    tmmcpr.PAY02 AS MEMBER_CASH
+                    tmmcpr.PAY02 AS MEMBER_CASH,
+                    tmm.CUSTOMER_FG
                     <include refid="CmmSQL.PagingTemplateCount"/>
                     FROM TB_MB_MEMBER tmm,
                     TB_MB_MEMBER_CLASS tmmc,
@@ -651,7 +652,8 @@
         tnsp.NO_COMPANY,
         tnsp.NM_CEO,
         tmm.LATITUDE,
-        tmm.LONGITUDE
+        tmm.LONGITUDE,
+        tmm.CUSTOMER_FG
         FROM TB_MB_MEMBER tmm,
               TB_MB_MEMBER_PTN tmmp,
                 <choose>
@@ -772,7 +774,9 @@
             tmm.MOD_ID,
             tmm.CST_CARD_USE_FG,
             tmm.LATITUDE,
-            tmm.LONGITUDE
+            tmm.LONGITUDE,
+            tmm.CUSTOMER_FG,
+            tmm.CUSTOMER_CD
         ) VALUES (
             #{membrOrgnCd},
             #{membrNo},
@@ -803,7 +807,9 @@
             #{modId},
             #{cstCardUseFg},
             #{latitude},
-            #{longitude}
+            #{longitude},
+            #{customerFg},
+            #{customerCd}
         )
         ]]>
     </insert>

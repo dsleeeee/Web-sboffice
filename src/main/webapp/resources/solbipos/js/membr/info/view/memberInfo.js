@@ -516,10 +516,20 @@ app.controller('memberCtrl', ['$scope', '$http', '$timeout', function ($scope, $
 
     // 회원 삭제
     $scope.deleteMember = function () {
-
         if($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["regist.membr.none.msg"]); // 삭제할 회원이 없습니다.
             return false;
+        }
+
+        // 체크
+        for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+            if ($scope.flex.collectionView.items[i].gChk) {
+                // 매출처구분 (1: 매출처)
+                if ($scope.flex.collectionView.items[i].customerFg == 1) {
+                    $scope._popMsg(messages["regist.membr.customerFgDelAlert"]); // 매출처회원은 삭제할 수 없습니다.
+                    return;
+                }
+            }
         }
 
         var params = new Array();

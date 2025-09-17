@@ -685,6 +685,15 @@
                         <th></th>
                         <td></td>
                     </tr>
+                    <tr>
+                        <%-- 매출처구분 --%>
+                        <th style="display:block;"><s:message code="regist.membr.customerFg"/></th>
+                        <td style="display:block;">
+                            <input type="hidden" id="customerFg" class="sb-input w100" ng-model="member.customerFg" maxlength="15"/>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     </tbody>
                 </table>
             </c:if>
@@ -716,4 +725,4 @@
     var skateFgComboList = ${skateFgComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20240620.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberBasic.js?ver=20250916.01" charset="utf-8"></script>

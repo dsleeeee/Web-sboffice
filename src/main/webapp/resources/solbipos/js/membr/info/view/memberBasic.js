@@ -198,6 +198,7 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope.member.phoneNo = '01000000000';
             // 이전포인트 초기값 세팅
             $scope.member.movePoint = 0;
+            $scope.member.customerFg = '';
 
             // [1246 광운대아이스링크]
             if(kwuEnvstVal === "1") {
@@ -706,6 +707,13 @@ app.controller('memberBasicCtrl', ['$scope', '$http', function ($scope, $http) {
         } else {
             // 수정
             if ($scope.saveMode === "MOD") {
+
+                // 매출처구분 (1: 매출처)
+                if ($scope.member.customerFg == 1) {
+                    $scope._popMsg(messages["regist.membr.customerFgSaveAlert"]); // 매출처회원은 수정할 수 없습니다.
+                    return;
+                }
+
                 $scope._postJSONSave.withPopUp("/membr/info/view/base/updateMemberInfo.sb", params, function (result) {
                     var scope = agrid.getScope('memberCtrl');
                     $scope._popMsg(messages["cmm.saveSucc"]);
