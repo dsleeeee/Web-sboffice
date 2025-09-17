@@ -333,7 +333,7 @@
                         </div>
                     </div>
                     <div id="touchKeyStyleCopy2ndWrap">
-                        <span class="s12 fl lh15 bk">상품터치키 스타일 적용</span>
+                        <span class="s12 fl lh15 bk"><s:message code="touchKey.touchKeyStyleCopySnd"/></span>
                         <button class="btn_skyblue fl mr2" id="btnTouchKeyStyleApply2ndA">A</button>
                         <button class="btn_skyblue fl mr2" id="btnTouchKeyStyleApply2ndB">B</button>
                         <button class="btn_skyblue fl mr2" id="btnTouchKeyStyleApply2ndC">C</button>
