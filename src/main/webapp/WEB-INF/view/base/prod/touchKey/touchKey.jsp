@@ -319,17 +319,44 @@
                         </div>
                     </div>
                     <div id="touchKeyStyleCopyWrap">
-                        <span class="s12 fl lh20 bk"><s:message code="touchKey.touchKeyStyleCopy"/></span>
+                        <span class="s12 fl lh15 bk"><s:message code="touchKey.touchKeyStyleCopy"/></span>
                         <button class="btn_skyblue fl mr5" id="btnTouchKeyStyleCopy"><s:message code="cmm.copy" /></button>
                         <button class="btn_skyblue" id="btnTouchKeyStyleApply"><s:message code="cmm.apply" /></button>
                         <div class="mt5" id="divTouchKeyStyleCopy" style="display: none;">
-                            <span class="s12 fl lh15 bk">채우기 <input type="color" style="width:18px; height:18px;" id="pickCopyFillColor"></span></br>
-                            <span class="s12 fl lh15 bk">상품명 <input type="color" style="width:18px; height:18px;" id="pickCopyFont02"><label id="lblCopyFont02"></label></span></br>
-                            <span class="s12 fl lh15 bk">금&nbsp;&nbsp; 액 <input type="color" style="width:18px; height:18px;" id="pickCopyFont03"><label id="lblCopyFont03"></label></span>
+                            <span class="s12 fl lh15 bk">채우기 <input type="color" style="width:15px; height:15px;" id="pickCopyFillColor"></span></br>
+                            <span class="s12 fl lh15 bk">상품명 <input type="color" style="width:15px; height:15px;" id="pickCopyFont02"><label id="lblCopyFont02"></label></span></br>
+                            <span class="s12 fl lh15 bk">금&nbsp;&nbsp; 액 <input type="color" style="width:15px; height:15px;" id="pickCopyFont03"><label id="lblCopyFont03"></label></span>
                             <input type="hidden" id="hdCopyFillColor" />
                             <input type="hidden" id="hdCopyFont02" />
                             <input type="hidden" id="hdCopyFont03" />
                             <input type="hidden" id="hdTouchKeyStyleApply" value="N"/>
+                        </div>
+                    </div>
+                    <div id="touchKeyStyleCopy2ndWrap">
+                        <span class="s12 fl lh15 bk">상품터치키 스타일 적용</span>
+                        <button class="btn_skyblue fl mr2" id="btnTouchKeyStyleApply2ndA">A</button>
+                        <button class="btn_skyblue fl mr2" id="btnTouchKeyStyleApply2ndB">B</button>
+                        <button class="btn_skyblue fl mr2" id="btnTouchKeyStyleApply2ndC">C</button>
+                        <button class="btn_skyblue fl mr2" id="btnTouchKeyStyleApply2ndD">D</button>
+                        <div class="mt5" id="divTouchKeyStyleCopy2nd" style="display: none;">
+                            <span class="s12 fl lh15 bk">채우기 <input type="color" style="width:15px; height:15px;" id="pickCopyFillColor2nd"></span></br>
+                            <span class="s12 fl lh15 bk">상품명 <input type="color" style="width:15px; height:15px;" id="pickCopyFont2nd02"><label id="lblCopyFont2nd02"></label></span></br>
+                            <span class="s12 fl lh15 bk">금&nbsp;&nbsp; 액 <input type="color" style="width:15px; height:15px;" id="pickCopyFont2nd03"><label id="lblCopyFont2nd03"></label></span>
+                            <input type="hidden" id="hdCopyFillColor2nd" />
+                            <input type="hidden" id="hdCopyFont2nd02" />
+                            <input type="hidden" id="hdCopyFont2nd03" />
+                            <input type="hidden" id="hdTouchKeyStyleApply2ndA" value="N"/>
+                            <input type="hidden" id="hdTouchKeyStyleApply2ndB" value="N"/>
+                            <input type="hidden" id="hdTouchKeyStyleApply2ndC" value="N"/>
+                            <input type="hidden" id="hdTouchKeyStyleApply2ndD" value="N"/>
+                        </div>
+                    </div>
+                    <div id="touchKeyStyleCopyChkWrap">
+                        <div class="mt5" id="divTouchKeyStyleCopyChk" style="display: none;">
+                            <input type="hidden" id="hdCopyFillColorChk" />
+                            <input type="hidden" id="hdCopyFontChk02" />
+                            <input type="hidden" id="hdCopyFontChk03" />
+                            <input type="hidden" id="hdTouchKeyStyleApplyChk" value="N"/>
                         </div>
                     </div>
                 </div>
@@ -567,7 +594,7 @@
 <script type="text/javascript"
         src="/resource/vendor/wijmo/js/grid/wijmo.grid.filter.min.js?ver=520182500"
         charset="utf-8"></script>
-<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20250903.01"
+<script type="text/javascript" src="/resource/graph/js/TouchKey.js?ver=20250916.01"
         charset="utf-8"></script>
 
 <%-- 스타일미리보기 팝업 --%>
