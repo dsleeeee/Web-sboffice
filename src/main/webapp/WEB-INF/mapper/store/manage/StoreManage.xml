@@ -10750,4 +10750,73 @@
         ,	    #{modId}
         )
     </insert>
+
+    <!-- 매출처 회원 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCustomerCntChk" parameterType="storeManageVO" resultType="Integer">
+        /* StoreManageMapper.getCustomerCntChk */
+        SELECT COUNT(*) AS CUSTOMER_CNT
+        FROM TB_MB_MEMBER
+        WHERE 1=1
+        AND MEMBR_ORGN_CD = 'DS002'
+        AND CUSTOMER_FG = '1' -- 매출처
+    </select>
+
+    <!-- 매출처 회원 후불회원 등록 (전매장) -->
+    <!--
+      TABLE    :
+      PARAM    :
+      COMMENTS :
+    -->
+    <insert id="getStorePostpaidSaveMerge" parameterType="storeManageVO">
+        /* USE : StoreManageMapper.getStorePostpaidSaveMerge */
+        MERGE INTO TB_MB_MEMBER_POSTPAID_STORE A
+        USING
+        (
+            SELECT
+            #{hqOfficeCd} AS MEMBR_ORGN_CD,
+            MEMBR_NO,
+            #{storeCd} AS STORE_CD,
+            'Y' AS USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_MB_MEMBER
+            WHERE 1=1
+            AND MEMBR_ORGN_CD = #{hqOfficeCd}
+        ) B
+        ON (
+            A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+            AND A.STORE_CD = B.STORE_CD
+            AND A.MEMBR_NO = B.MEMBR_NO
+        )
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+            A.MEMBR_ORGN_CD,
+            A.MEMBR_NO,
+            A.STORE_CD,
+            A.USE_YN,
+            A.REG_DT,
+            A.REG_ID,
+            A.MOD_DT,
+            A.MOD_ID
+        )
+        VALUES
+        (
+            B.MEMBR_ORGN_CD,
+            B.MEMBR_NO,
+            B.STORE_CD,
+            B.USE_YN,
+            B.REG_DT,
+            B.REG_ID,
+            B.MOD_DT,
+            B.MOD_ID
+        )
+    </insert>
+
 </mapper>

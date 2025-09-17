@@ -629,4 +629,10 @@ public interface StoreManageMapper {
 
     /** 주방프린터 상품 추가 */
     int insertStoreKitchenPrintProd(KitchenPrintVO kitchenPrintVO);
+
+    /** 매출처 회원 체크 */
+    int getCustomerCntChk(StoreManageVO storeManageVO);
+
+    /** 매출처 회원 후불회원 등록 (전매장) */
+    int getStorePostpaidSaveMerge(StoreManageVO storeManageVO);
 }

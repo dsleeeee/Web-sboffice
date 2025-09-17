@@ -927,6 +927,14 @@ public class StoreManageServiceImpl implements StoreManageService {
                 storeTerminalVO.setBaseVanYn("Y");
                 mapper.insertCornerTerminal(storeTerminalVO);
             }
+
+            // 매출처가 연결된 회원이 있는 경우 후불회원으로 등록
+            // 매출처 회원 체크
+            int customerCnt = mapper.getCustomerCntChk(storeManageVO);
+            if(customerCnt >= 1) {
+                // 매출처 회원 후불회원 등록 (전매장)
+                mapper.getStorePostpaidSaveMerge(storeManageVO);
+            }
         }
 
         return storeCd;
