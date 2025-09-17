@@ -120,6 +120,9 @@
               <wj-flex-grid-column header="<s:message code="memberFg.storeNm"/>" binding="storeNm" width="80" is-read-only="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="memberFg.memberClassCd"/>" binding="membrClassNm" width="80" is-read-only="true" ></wj-flex-grid-column>
               <wj-flex-grid-column header="<s:message code="memberFg.telNo"/>" binding="telNo" width="80" is-read-only="true" ></wj-flex-grid-column>
+
+              <%--저장시 필요--%>
+              <wj-flex-grid-column header="<s:message code="memberFg.customerFg"/>" binding="customerFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
           </div>
           <div class="pageNum3 mt20">
@@ -176,4 +179,4 @@
   var orgnCd = "${orgnCd}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/memberFg/memberPostpaid.js?ver=20240826.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/memberFg/memberPostpaid.js?ver=20250916.01" charset="utf-8"></script>

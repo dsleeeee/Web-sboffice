@@ -76,6 +76,17 @@ app.controller('memberPostpaidRegistCtrl', ['$scope', '$http', function ($scope,
 
   // 후불회원 등록 해제
   $scope.regPrepaid = function() {
+    // 체크
+    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+      if ($scope.flex.collectionView.items[i].gChk) {
+        // 매출처구분 (1: 매출처)
+        if ($scope.flex.collectionView.items[i].customerFg == 1) {
+          $scope._popMsg(messages["memberFg.customerFgDelAlert"]); // 매출처회원은 삭제할 수 없습니다.
+          return;
+        }
+      }
+    }
+
     // 파라미터 설정
     var params = new Array();
     for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
