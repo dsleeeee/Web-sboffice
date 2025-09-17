@@ -34,25 +34,27 @@
                 <th><s:message code="vendr.vendrNm" /></th>
                 <td><input type="text"  class="sb-input w100" id="vendrNm" ng-model="vendrNm" onkeyup="fnNxBtnSearch();"/></td>
             </tr>
-            <tr>
-                <%-- 거래처구분 --%>
-                <th><s:message code="vendr.vendorFg" /></th>
-                <td>
-                    <div class="sb-select">
-                        <wj-combo-box
-                                id="vendorFg"
-                                ng-model="vendorFg"
-                                items-source="_getComboData('vendorFg')"
-                                display-member-path="name"
-                                selected-value-path="value"
-                                is-editable="false"
-                                initialized="_initComboBox(s)">
-                        </wj-combo-box>
-                    </div>
-                </td>
-                <th></th>
-                <td></td>
-            </tr>
+            <c:if test="${urlVendorFg != '2'}">
+                <tr>
+                    <%-- 거래처구분 --%>
+                    <th><s:message code="vendr.vendorFg" /></th>
+                    <td>
+                        <div class="sb-select">
+                            <wj-combo-box
+                                    id="vendorFg"
+                                    ng-model="vendorFg"
+                                    items-source="_getComboData('vendorFg')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                            </wj-combo-box>
+                        </div>
+                    </td>
+                    <th></th>
+                    <td></td>
+                </tr>
+            </c:if>
         </tbody>
     </table>
 
@@ -131,9 +133,13 @@
   // [1242 거래처출고구분] 환경설정값
   var gEnvst1242  = '${envst1242}';
 
+  // 거래처구분
+  // 0: [기초관리] - [상품관리] - [거래처관리]
+  // 2: [국민대] - [매출처관리] - [매출처등록]
+  var urlVendorFg = "${urlVendorFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/vendr.js?ver=20220726.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/vendr.js?ver=20250916.01" charset="utf-8"></script>
 
 <%-- 거래처관리 상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/vendr/info.jsp">

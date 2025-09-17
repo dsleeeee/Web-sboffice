@@ -13,10 +13,7 @@ import kr.co.solbipos.store.hq.brand.service.HqEnvstVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,7 +57,6 @@ public class VendrController {
         this.cmmEnvService = cmmEnvService;
     }
 
-
     /**
      * 거래처 조회 페이지 이동
      *
@@ -69,7 +65,7 @@ public class VendrController {
      * @param model Model
      * @return
      */
-    @RequestMapping(value = "/vendr/list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/vendr//list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, Model model)
     {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
@@ -79,6 +75,37 @@ public class VendrController {
         hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
         hqEnvstVO.setEnvstCd("1242");
         model.addAttribute("envst1242", CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0"));
+
+        // 거래처구분
+        model.addAttribute("urlVendorFg", "0");
+
+        return RESULT_URI + "/vendr";
+    }
+
+    /**
+     * 거래처 조회 페이지 이동
+     *
+     * @param request HttpServletRequest
+     * @param response HttpSession
+     * @param model Model
+     * @return
+     */
+    @RequestMapping(value = "/vendr/{urlVendorFg}/list.sb", method = RequestMethod.GET)
+    public String list(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable String urlVendorFg)
+    {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        // 본사 환경설정 1242(거래처출고구분) 조회
+        HqEnvstVO hqEnvstVO = new HqEnvstVO();
+        hqEnvstVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        hqEnvstVO.setEnvstCd("1242");
+        model.addAttribute("envst1242", CmmUtil.nvl(cmmEnvService.getHqEnvst(hqEnvstVO), "0"));
+
+        // 메뉴 분리해서 사용하려고 추가
+        // 거래처구분
+        // 0: [기초관리] - [상품관리] - [거래처관리]
+        // 2: [국민대] - [매출처관리] - [매출처등록]
+        model.addAttribute("urlVendorFg", urlVendorFg);
 
         return RESULT_URI + "/vendr";
     }

@@ -7,8 +7,14 @@ import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.application.session.user.enums.OrgnFg;
+import kr.co.solbipos.base.prod.vendr.enums.VendorFg;
 import kr.co.solbipos.base.prod.vendr.service.VendrService;
 import kr.co.solbipos.base.prod.vendr.service.VendrVO;
+import kr.co.solbipos.membr.info.regist.enums.WeddingYn;
+import kr.co.solbipos.membr.info.regist.service.RegistVO;
+import kr.co.solbipos.membr.info.regist.service.impl.RegistMapper;
+import kr.co.solbipos.membr.info.memberFg.service.MemberFgVO;
+import kr.co.solbipos.membr.info.memberFg.service.impl.MemberFgMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +42,16 @@ public class VendrServiceImpl implements VendrService {
 
     private final MessageService messageService;
     private final VendrMapper vendrMapper;
+    private final RegistMapper registMapper; // 회원정보관리
+    private final MemberFgMapper memberFgMapper; // 선불/후불회원관리
 
     /** Constructor Injection */
     @Autowired
-    public VendrServiceImpl(MessageService messageService, VendrMapper vendrMapper) {
+    public VendrServiceImpl(MessageService messageService, VendrMapper vendrMapper, RegistMapper registMapper, MemberFgMapper memberFgMapper) {
         this.messageService = messageService;
         this.vendrMapper = vendrMapper;
+        this.registMapper = registMapper; // 회원정보관리
+        this.memberFgMapper = memberFgMapper; // 선불/후불회원관리
     }
 
 
@@ -126,6 +136,41 @@ public class VendrServiceImpl implements VendrService {
 
             result = vendrMapper.insertHqVendr(vendrVO);
 
+            // 2: 매출처
+            if(VendorFg.B.equals(vendrVO.getVendorFg())) {
+                // 회원정보관리
+                RegistVO registVO = new RegistVO();
+                registVO.setRegDt(vendrVO.getRegDt());
+                registVO.setRegId(vendrVO.getRegId());
+                registVO.setModDt(vendrVO.getModDt());
+                registVO.setModId(vendrVO.getModId());
+                registVO.setMembrOrgnCd(vendrVO.getHqOfficeCd());
+                registVO.setMembrNo(registMapper.getNewMemberNo(registVO));
+                if(registVO.getMembrNm() == null || registVO.getMembrNm() == ""){
+                    registVO.setMembrNm(registVO.getMembrNo());
+                }
+                registVO.setMembrClassCd("000");
+                registVO.setRegStoreCd(vendrMapper.getMinRegStoreCd(vendrVO));
+                registVO.setGendrFg("F");
+                registVO.setShortNo("0000");
+                registVO.setTelNo("01000000000");
+                registVO.setWeddingYn(WeddingYn.N);
+                registVO.setEmailRecvYn(UseYn.Y);
+                registVO.setSmsRecvYn(UseYn.Y);
+                registVO.setUseYn("Y");
+                registVO.setCstCardUseFg("1");
+
+                registVO.setCustomerFg("1"); // 1: 매출처
+                registVO.setCustomerCd(vendrCd);
+
+                // 회원등록
+                result = registMapper.registMemberInfo(registVO);
+
+                // 매출처 회원 후불회원 등록 (전매장)
+                vendrVO.setMembrNo(registVO.getMembrNo());
+                result = vendrMapper.getMembrPostpaidSaveMerge(vendrVO);
+            }
+
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {
             //매장코드
@@ -167,6 +212,9 @@ public class VendrServiceImpl implements VendrService {
             vendrVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
 
             result = vendrMapper.modifyHqVendr(vendrVO);
+
+            // 회원명 수정
+            result = vendrMapper.getMembrNmSaveUpdate(vendrVO);
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {

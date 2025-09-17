@@ -18,6 +18,23 @@ var vatIncldYnData = [
     {"name":"별도","value":"N"},
     {"name":"포함","value":"Y"}
 ];
+
+// 부가세포함여부
+var vendorFgData2 = [
+    {"name":"매출거래처","value":"2"}
+];
+
+// 업체구분
+var companyFgData = [
+    {"name":"미정","value":"0000"}
+];
+
+// 사업자구분
+var businessFgData = [
+    {"name":"국민대학교","value":"0000"}
+];
+
+
 /**
  *  거래처 등록
  */
@@ -27,10 +44,16 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     angular.extend(this, new RootController('vendrRegistCtrl', $scope, $http, false));
 
     // 조회조건 콤보박스 데이터 Set
-    $scope._setComboData("rVendorFg", vendorFgData);      // 거래처구분
+    if(urlVendorFg == "2") {
+        $scope._setComboData("rVendorFg", vendorFgData2);      // 거래처구분
+    } else {
+        $scope._setComboData("rVendorFg", vendorFgData);      // 거래처구분
+    }
     $scope._setComboData("rVatIncldYn", vatIncldYnData);  // 부가세포함여부
     $scope._setComboData("rUseYn", useYnData);            // 사용여부
     $scope._setComboData("rShipFg", useYnData);           // 직배송
+    $scope._setComboData("rCompanyFg", companyFgData); // 업체구분
+    $scope._setComboData("rBusinessFg", businessFgData); // 사업자구분
 
     // 등록인지 수정인지 파악하기 위해
     var valType;
@@ -55,6 +78,8 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#popTitleMod").hide();
             $("#btnReg").show();
             $("#btnMod").hide();
+
+            $("#trMembr").hide();
 
         }else{
 
@@ -83,6 +108,38 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.shipFgCombo.selectedValue = data.shipFg;
                     $("#rRemark").val(data.remark);
 
+                    $scope.companyFgCombo.selectedValue = data.companyFg;
+                    $scope.businessFgCombo.selectedValue = data.businessFg;
+                    $("#rPurchaseId").val(data.purchaseId);
+                    $("#rCorporationNumber").val(data.corporationNumber);
+                    $("#rBusinessStatus").val(data.businessStatus);
+                    $("#rIndustry").val(data.industry);
+                    $("#rHomepage").val(data.homepage);
+                    $("#rOwnerTelNo").val(data.ownerTelNo);
+                    $("#rOwnerEmail").val(data.ownerEmail);
+                    $("#rManagerNm").val(data.managerNm);
+                    $("#rManagerTelNo").val(data.managerTelNo);
+                    $("#rManagerEmail").val(data.managerEmail);
+                    $("#rManagerSpot").val(data.managerSpot);
+                    $("#rManagerPhoneNo").val(data.managerPhoneNo);
+                    $("#rBankCd").val(data.bankCd);
+                    $("#rAccountNo").val(data.accountNo);
+                    $("#rDepositor").val(data.depositor);
+                    $("#rCollectFg").val(data.collectFg);
+                    $("#rDouzoneErp").val(data.douzoneErp);
+                    $("#rCreditLimit").val(data.creditLimit);
+                    $("#rCollateralType").val(data.collateralType);
+                    $("#rCollateralAmt").val(data.collateralAmt);
+                    $("#rContrastDate").val(data.contrastDate);
+                    $("#rCollatorStore").val(data.collatorStore);
+                    $("#rCollatorCompany").val(data.collatorCompany);
+                    $("#rDealStartDate").val(data.dealStartDate);
+                    $("#rDealEndDate").val(data.dealEndDate);
+                    $("#rLastSaleDate").val(data.lastSaleDate);
+                    $("#rLastDepositDate").val(data.lastDepositDate);
+                    $("#rMembrNo").val(data.membrNo);
+                    $("#rMembrNm").val(data.membrNm);
+
                 },
                 function (result) {
                     s_alert.pop(result.message);
@@ -95,6 +152,8 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#popTitleMod").show();
             $("#btnReg").hide();
             $("#btnMod").show();
+
+            $("#trMembr").show();
         }
 
         event.preventDefault();
@@ -197,6 +256,38 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             param.addrDtl = $("#rAddrDtl").val();
             param.remark = $("#rRemark").val();
 
+            param.companyFg = $scope.companyFgCombo.selectedValue;
+            param.businessFg = $scope.businessFgCombo.selectedValue;
+            param.purchaseId = $("#rPurchaseId").val();
+            param.corporationNumber = $("#rCorporationNumber").val();
+            param.businessStatus = $("#rBusinessStatus").val();
+            param.industry = $("#rIndustry").val();
+            param.homepage = $("#rHomepage").val();
+            param.ownerTelNo = $("#rOwnerTelNo").val();
+            param.ownerEmail = $("#rOwnerEmail").val();
+            param.managerNm = $("#rManagerNm").val();
+            param.managerTelNo = $("#rManagerTelNo").val();
+            param.managerEmail = $("#rManagerEmail").val();
+            param.managerSpot = $("#rManagerSpot").val();
+            param.managerPhoneNo = $("#rManagerPhoneNo").val();
+            param.bankCd = $("#rBankCd").val();
+            param.accountNo = $("#rAccountNo").val();
+            param.depositor = $("#rDepositor").val();
+            param.collectFg = $("#rCollectFg").val();
+            param.douzoneErp = $("#rDouzoneErp").val();
+            param.creditLimit = $("#rCreditLimit").val();
+            param.collateralType = $("#rCollateralType").val();
+            param.collateralAmt = $("#rCollateralAmt").val();
+            param.contrastDate = $("#rContrastDate").val();
+            param.collatorStore = $("#rCollatorStore").val();
+            param.collatorCompany = $("#rCollatorCompany").val();
+            param.dealStartDate = $("#rDealStartDate").val();
+            param.dealEndDate = $("#rDealEndDate").val();
+            param.lastSaleDate = $("#rLastSaleDate").val();
+            param.lastDepositDate = $("#rLastDepositDate").val();
+            param.membrNo = $("#rMembrNo").val();
+            param.membrNm = $("#rMembrNm").val();
+
             if(orgnFg == "HQ" && gEnvst1242 == "2"){ // 본사권한 이면서, [1242] 거래처출고구분 값이 [2] 거래처별출고전표자동생성 인 경우만, 입력 가능
                 param.shipFg = $scope.shipFgCombo.selectedValue;
             }else{
@@ -204,7 +295,9 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             }
 
             // 저장
-            $scope._postJSONSave.withPopUp(url, param, function () { $scope.close(); });
+            $scope._postJSONSave.withPopUp(url, param, function () {
+                $scope.close();
+            });
         }
     };
 
@@ -221,7 +314,11 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.infoInit = function(){
 
         var inputArr = [
-            rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
+            rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark,
+            rCompanyFg, rPurchaseId, rCorporationNumber, rBusinessStatus, rIndustry, rHomepage, rOwnerTelNo,
+            rOwnerEmail, rManagerNm, rManagerTelNo, rManagerEmail, rManagerSpot, rManagerPhoneNo, rBankCd, rAccountNo,
+            rDepositor, rCollectFg, rDouzoneErp, rCreditLimit, rCollateralType, rCollateralAmt, rContrastDate, rCollatorStore,
+            rCollatorCompany, rDealStartDate, rDealEndDate, rLastSaleDate, rLastDepositDate, rMembrNo, rMembrNm
         ].forEach(function(element){element.value="";});
 
         /*var selectArr = [
@@ -234,6 +331,8 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.useYnCombo.selectedValue = 'Y';
         $scope.shipFgCombo.selectedValue = 'N';
 
+        $scope.companyFgCombo.selectedValue = "0000";
+        $scope.businessFgCombo.selectedValue = "0000";
     };
 
     // 탭변경

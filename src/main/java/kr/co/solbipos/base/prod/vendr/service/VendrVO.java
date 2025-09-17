@@ -84,6 +84,71 @@ public class VendrVO extends PageVO {
     /** 상품분류코드 */
     private String prodClassCd;
 
+    /** 업체구분 */
+    private String companyFg;
+    /** 사업자구분 */
+    private String businessFg;
+    /** 구매ID */
+    private String purchaseId;
+    /** 법인번호 */
+    private String corporationNumber;
+    /** 업태 */
+    private String businessStatus;
+    /** 업종 */
+    private String industry;
+    /** 홈페이지 */
+    private String homepage;
+    /** 대표자전화 */
+    private String ownerTelNo;
+    /** 대표자Email */
+    private String ownerEmail;
+    /** 담당자명 */
+    private String managerNm;
+    /** 담당자전화번호 */
+    private String managerTelNo;
+    /** 담당자Email */
+    private String managerEmail;
+    /** 담당자직위 */
+    private String managerSpot;
+    /** 담당자휴대전화 */
+    private String managerPhoneNo;
+    /** 은행코드 */
+    private String bankCd;
+    /** 계좌번호 */
+    private String accountNo;
+    /** 예금주 */
+    private String depositor;
+    /** 수금 일자/주기 */
+    private String collectFg;
+    /** 더존ERP */
+    private String douzoneErp;
+    /** 외상한도액 */
+    private String creditLimit;
+    /** 담보종류 */
+    private String collateralType;
+    /** 담보금액 */
+    private String collateralAmt;
+    /** 외상한대조일도액 */
+    private String contrastDate;
+    /** 대조자(점포) */
+    private String collatorStore;
+    /** 대조자(업체) */
+    private String collatorCompany;
+    /** 거래시작일 */
+    private String dealStartDate;
+    /** 거래종료일 */
+    private String dealEndDate;
+    /** 최종매출일 */
+    private String lastSaleDate;
+    /** 최종입금일 */
+    private String lastDepositDate;
+
+    /** 회원코드 */
+    private String membrNo;
+
+    /** 회원명 */
+    private String membrNm;
+
     /**
      * @return the hqBrandCd
      */
@@ -438,4 +503,148 @@ public class VendrVO extends PageVO {
     public void setProdClassCd(String prodClassCd) {
         this.prodClassCd = prodClassCd;
     }
+
+    public String getCompanyFg() {
+        return companyFg;
+    }
+
+    public void setCompanyFg(String companyFg) {
+        this.companyFg = companyFg;
+    }
+
+    public String getBusinessFg() {
+        return businessFg;
+    }
+
+    public void setBusinessFg(String businessFg) {
+        this.businessFg = businessFg;
+    }
+
+    public String getPurchaseId() {
+        return purchaseId;
+    }
+
+    public void setPurchaseId(String purchaseId) {
+        this.purchaseId = purchaseId;
+    }
+
+    public String getCorporationNumber() { return corporationNumber; }
+
+    public void setCorporationNumber(String corporationNumber) {
+        this.corporationNumber = corporationNumber;
+    }
+
+    public String getBusinessStatus() { return businessStatus; }
+
+    public void setBusinessStatus(String businessStatus) {
+        this.businessStatus = businessStatus;
+    }
+
+    public String getIndustry() { return industry; }
+
+    public void setIndustry(String industry) {
+        this.industry = industry;
+    }
+
+    public String getHomepage() { return homepage; }
+
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
+
+    public String getOwnerTelNo() { return ownerTelNo; }
+
+    public void setOwnerTelNo(String ownerTelNo) { this.ownerTelNo = ownerTelNo; }
+
+    public String getOwnerEmail() { return ownerEmail; }
+
+    public void setOwnerEmail(String ownerEmail) { this.ownerEmail = ownerEmail; }
+
+    public String getManagerNm() { return managerNm; }
+
+    public void setManagerNm(String managerNm) { this.managerNm = managerNm; }
+
+    public String getManagerTelNo() { return managerTelNo; }
+
+    public void setManagerTelNo(String managerTelNo) { this.managerTelNo = managerTelNo; }
+
+    public String getManagerEmail() { return managerEmail; }
+
+    public void setManagerEmail(String managerEmail) { this.managerEmail = managerEmail; }
+
+    public String getManagerSpot() { return managerSpot; }
+
+    public void setManagerSpot(String managerSpot) { this.managerSpot = managerSpot; }
+
+    public String getManagerPhoneNo() { return managerPhoneNo; }
+
+    public void setManagerPhoneNo(String managerPhoneNo) { this.managerPhoneNo = managerPhoneNo; }
+
+    public String getBankCd() { return bankCd; }
+
+    public void setBankCd(String bankCd) { this.bankCd = bankCd; }
+
+    public String getAccountNo() { return accountNo; }
+
+    public void setAccountNo(String accountNo) { this.accountNo = accountNo; }
+
+    public String getDepositor() { return depositor; }
+
+    public void setDepositor(String depositor) { this.depositor = depositor; }
+
+    public String getCollectFg() { return collectFg; }
+
+    public void setCollectFg(String collectFg) { this.collectFg = collectFg; }
+
+    public String getDouzoneErp() { return douzoneErp; }
+
+    public void setDouzoneErp(String douzoneErp) { this.douzoneErp = douzoneErp; }
+
+    public String getCreditLimit() { return creditLimit; }
+
+    public void setCreditLimit(String creditLimit) { this.creditLimit = creditLimit; }
+
+    public String getCollateralType() { return collateralType; }
+
+    public void setCollateralType(String collateralType) { this.collateralType = collateralType; }
+
+    public String getCollateralAmt() { return collateralAmt; }
+
+    public void setCollateralAmt(String collateralAmt) { this.collateralAmt = collateralAmt; }
+
+    public String getContrastDate() { return contrastDate; }
+
+    public void setContrastDate(String contrastDate) { this.contrastDate = contrastDate; }
+
+    public String getCollatorStore() { return collatorStore; }
+
+    public void setCollatorStore(String collatorStore) { this.collatorStore = collatorStore; }
+
+    public String getCollatorCompany() { return collatorCompany; }
+
+    public void setCollatorCompany(String collatorCompany) { this.collatorCompany = collatorCompany; }
+
+    public String getDealStartDate() { return dealStartDate; }
+
+    public void setDealStartDate(String dealStartDate) { this.dealStartDate = dealStartDate; }
+
+    public String getDealEndDate() { return dealEndDate; }
+
+    public void setDealEndDate(String dealEndDate) { this.dealEndDate = dealEndDate; }
+
+    public String getLastSaleDate() { return lastSaleDate; }
+
+    public void setLastSaleDate(String lastSaleDate) { this.lastSaleDate = lastSaleDate; }
+
+    public String getLastDepositDate() { return lastDepositDate; }
+
+    public void setLastDepositDate(String lastDepositDate) { this.lastDepositDate = lastDepositDate; }
+
+    public String getMembrNo() { return membrNo; }
+
+    public void setMembrNo(String membrNo) { this.membrNo = membrNo; }
+
+    public String getMembrNm() { return membrNm; }
+
+    public void setMembrNm(String membrNm) { this.membrNm = membrNm; }
 }

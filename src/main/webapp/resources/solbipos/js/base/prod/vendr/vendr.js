@@ -82,7 +82,11 @@ app.controller('vendrCtrl', ['$scope', '$http', function ($scope, $http) {
         var param = {};
         param.vendrCd = $scope.vendrCd;
         param.vendrNm = $scope.vendrNm;
-        param.vendorFg = $scope.vendorFg;
+        if(urlVendorFg == "2") {
+            param.vendorFg = urlVendorFg;
+        } else {
+            param.vendorFg = $scope.vendorFg;
+        }
         param.listScale = listScaleBox.selectedValue;
 
         $scope._inquiryMain("/base/prod/vendr/vendr/list.sb", param, function() {}, false);

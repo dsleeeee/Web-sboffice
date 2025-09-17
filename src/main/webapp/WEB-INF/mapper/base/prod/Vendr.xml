@@ -136,164 +136,270 @@
         AND tmv.STORE_CD = #{storeCd}
     </select>
 
-  <!-- 거래처 등록 -->
-  <!--
+    <!-- 거래처 등록 -->
+    <!--
     TABLE    : TB_HQ_VENDOR
     COMMENTS : 거래처(본사) 등록
-  -->
-  <insert id="insertHqVendr" parameterType="vendrVO">
-    /* USE : VendrMapper.insertHqVendr */
-    INSERT INTO TB_HQ_VENDOR
-    (
-       HQ_OFFICE_CD,
-       HQ_BRAND_CD,
-       VENDR_CD,
-       VENDR_NM,
-       OWNER_NM,
-       BIZ_NO,
-       BIZ_TYPE_CD,
-       BIZ_ITEM_CD,
-       TEL_NO,
-       FAX_NO,
-       EMAIL_ADDR,
-       POST_NO,
-       ADDR,
-       ADDR_DTL,
-       SHIP_FG,
-       VAT_INCLD_YN,
-       USE_YN,
-       REMARK,
-       REG_DT,
-       REG_ID,
-       MOD_DT,
-       MOD_ID,
-       VENDOR_FG
-      ) VALUES (
-         #{hqOfficeCd},
-         '0000000',
-         #{vendrCd},
-         #{vendrNm},
-         #{ownerNm},
-         #{bizNo},
-         #{bizTypeCd},
-         #{bizItemCd},
-         #{telNo},
-         #{faxNo},
-         #{emailAddr},
-         #{postNo},
-         #{addr},
-         #{addrDtl},
-         #{shipFg},
-         #{vatIncldYn},
-         #{useYn},
-         #{remark},
-         #{regDt},
-         #{regId},
-         #{modDt},
-         #{modId},
-         #{vendorFg}
-      )
-  </insert>
+    -->
+    <insert id="insertHqVendr" parameterType="vendrVO">
+        /* USE : VendrMapper.insertHqVendr */
+        INSERT INTO TB_HQ_VENDOR
+        (
+            HQ_OFFICE_CD,
+            HQ_BRAND_CD,
+            VENDR_CD,
+            VENDR_NM,
+            OWNER_NM,
+            BIZ_NO,
+            BIZ_TYPE_CD,
+            BIZ_ITEM_CD,
+            TEL_NO,
+            FAX_NO,
+            EMAIL_ADDR,
+            POST_NO,
+            ADDR,
+            ADDR_DTL,
+            SHIP_FG,
+            VAT_INCLD_YN,
+            USE_YN,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            VENDOR_FG,
+            COMPANY_FG,
+            BUSINESS_FG,
+            PURCHASE_ID,
+            CORPORATION_NUMBER,
+            BUSINESS_STATUS,
+            INDUSTRY,
+            HOMEPAGE,
+            OWNER_TEL_NO,
+            OWNER_EMAIL,
+            MANAGER_NM,
+            MANAGER_TEL_NO,
+            MANAGER_EMAIL,
+            MANAGER_SPOT,
+            MANAGER_PHONE_NO,
+            BANK_CD,
+            ACCOUNT_NO,
+            DEPOSITOR,
+            COLLECT_FG,
+            DOUZONE_ERP,
+            CREDIT_LIMIT,
+            COLLATERAL_TYPE,
+            COLLATERAL_AMT,
+            CONTRAST_DATE,
+            COLLATOR_STORE,
+            COLLATOR_COMPANY,
+            DEAL_START_DATE,
+            DEAL_END_DATE,
+            LAST_SALE_DATE,
+            LAST_DEPOSIT_DATE
+        ) VALUES (
+            #{hqOfficeCd},
+            '0000000',
+            #{vendrCd},
+            #{vendrNm},
+            #{ownerNm},
+            #{bizNo},
+            #{bizTypeCd},
+            #{bizItemCd},
+            #{telNo},
+            #{faxNo},
+            #{emailAddr},
+            #{postNo},
+            #{addr},
+            #{addrDtl},
+            #{shipFg},
+            #{vatIncldYn},
+            #{useYn},
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{vendorFg},
+            #{companyFg},
+            #{businessFg},
+            #{purchaseId},
+            #{corporationNumber},
+            #{businessStatus},
+            #{industry},
+            #{homepage},
+            #{ownerTelNo},
+            #{ownerEmail},
+            #{managerNm},
+            #{managerTelNo},
+            #{managerEmail},
+            #{managerSpot},
+            #{managerPhoneNo},
+            #{bankCd},
+            #{accountNo},
+            #{depositor},
+            #{collectFg},
+            #{douzoneErp},
+            #{creditLimit},
+            #{collateralType},
+            #{collateralAmt},
+            #{contrastDate},
+            #{collatorStore},
+            #{collatorCompany},
+            #{dealStartDate},
+            #{dealEndDate},
+            #{lastSaleDate},
+            #{lastDepositDate}
+        )
+    </insert>
 
-  <!-- 거래처 등록 -->
-  <!--
+    <!-- 거래처 등록 -->
+    <!--
     TABLE    : TB_MS_VENDOR
     COMMENTS : 거래처(매장) 등록
-  -->
-  <insert id="insertMsVendr" parameterType="vendrVO">
-    /* USE : VendrMapper.insertMsVendr */
-    INSERT INTO TB_MS_VENDOR
-    (
-      STORE_CD,
-      VENDR_CD,
-      VENDR_NM,
-      OWNER_NM,
-      BIZ_NO,
-      BIZ_TYPE_CD,
-      BIZ_ITEM_CD,
-      TEL_NO,
-      FAX_NO,
-      EMAIL_ADDR,
-      POST_NO,
-      ADDR,
-      ADDR_DTL,
-      SHIP_FG,
-      VAT_INCLD_YN,
-      USE_YN,
-      REMARK,
-      REG_DT,
-      REG_ID,
-      MOD_DT,
-      MOD_ID,
-      VENDOR_FG
-    ) VALUES (
-        #{storeCd},
-        #{vendrCd},
-        #{vendrNm},
-        #{ownerNm},
-        #{bizNo},
-        #{bizTypeCd},
-        #{bizItemCd},
-        #{telNo},
-        #{faxNo},
-        #{emailAddr},
-        #{postNo},
-        #{addr},
-        #{addrDtl},
-        #{shipFg},
-        #{vatIncldYn},
-        #{useYn},
-        #{remark},
-        #{regDt},
-        #{regId},
-        #{modDt},
-        #{modId},
-        #{vendorFg}
-    )
-  </insert>
+    -->
+    <insert id="insertMsVendr" parameterType="vendrVO">
+        /* USE : VendrMapper.insertMsVendr */
+        INSERT INTO TB_MS_VENDOR
+        (
+            STORE_CD,
+            VENDR_CD,
+            VENDR_NM,
+            OWNER_NM,
+            BIZ_NO,
+            BIZ_TYPE_CD,
+            BIZ_ITEM_CD,
+            TEL_NO,
+            FAX_NO,
+            EMAIL_ADDR,
+            POST_NO,
+            ADDR,
+            ADDR_DTL,
+            SHIP_FG,
+            VAT_INCLD_YN,
+            USE_YN,
+            REMARK,
+            REG_DT,
+            REG_ID,
+            MOD_DT,
+            MOD_ID,
+            VENDOR_FG
+        ) VALUES (
+            #{storeCd},
+            #{vendrCd},
+            #{vendrNm},
+            #{ownerNm},
+            #{bizNo},
+            #{bizTypeCd},
+            #{bizItemCd},
+            #{telNo},
+            #{faxNo},
+            #{emailAddr},
+            #{postNo},
+            #{addr},
+            #{addrDtl},
+            #{shipFg},
+            #{vatIncldYn},
+            #{useYn},
+            #{remark},
+            #{regDt},
+            #{regId},
+            #{modDt},
+            #{modId},
+            #{vendorFg}
+        )
+    </insert>
 
-  <!-- 거래처(본사) 상세정보 조회  -->
-  <!--
+    <!-- 거래처(본사) 상세정보 조회  -->
+    <!--
       TABLE    : TB_HQ_VENDOR
       PARAM    : vendrVO
       COMMENTS :  거래처(본사) 상세정보 조회
-  -->
-  <select id="getHqDtlInfo" parameterType="vendrVO" resultType="DefaultMap">
-    /* USE : VendrMapper.getHqDtlInfo */
-    SELECT
-      HQ_OFFICE_CD,
-      VENDR_CD,
-      VENDR_NM,
-      OWNER_NM,
-      BIZ_NO,
-      SUBSTR(thv.BIZ_NO,0,3) AS BIZ_NO1,
-      SUBSTR(thv.BIZ_NO,4,2) AS BIZ_NO2,
-      SUBSTR(thv.BIZ_NO,6,5) AS BIZ_NO3,
-      BIZ_TYPE_CD,
-      BIZ_ITEM_CD,
-      TEL_NO,
-      FAX_NO,
-      EMAIL_ADDR,
-      POST_NO,
-      ADDR,
-      ADDR_DTL,
-      SHIP_FG,
-      VAT_INCLD_YN,
-      USE_YN,
-      REMARK,
-      REG_DT,
-      REG_ID,
-      MOD_DT,
-      MOD_ID,
-      VENDOR_FG,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thv.SHIP_FG) AS SHIP_FG_NM, --TODO 코드 변경 필요
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '011' AND NMCODE_CD = thv.VENDOR_FG) AS VENDOR_FG_NM,
-      (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thv.USE_YN) AS USE_YN_NM,
-      CASE thv.VAT_INCLD_YN WHEN 'N' THEN '별도' WHEN 'Y' THEN '포함' END AS VAT_INCLD_YN_NM
-    FROM TB_HQ_VENDOR thv
-    WHERE VENDR_CD = #{vendrCd}
-      AND HQ_OFFICE_CD = #{hqOfficeCd}
-  </select>
+    -->
+    <select id="getHqDtlInfo" parameterType="vendrVO" resultType="DefaultMap">
+        /* USE : VendrMapper.getHqDtlInfo */
+        SELECT
+        thv.HQ_OFFICE_CD,
+        thv.VENDR_CD,
+        thv.VENDR_NM,
+        thv.OWNER_NM,
+        thv.BIZ_NO,
+        SUBSTR(thv.BIZ_NO,0,3) AS BIZ_NO1,
+        SUBSTR(thv.BIZ_NO,4,2) AS BIZ_NO2,
+        SUBSTR(thv.BIZ_NO,6,5) AS BIZ_NO3,
+        thv.BIZ_TYPE_CD,
+        thv.BIZ_ITEM_CD,
+        thv.TEL_NO,
+        thv.FAX_NO,
+        thv.EMAIL_ADDR,
+        thv.POST_NO,
+        thv.ADDR,
+        thv.ADDR_DTL,
+        thv.SHIP_FG,
+        thv.VAT_INCLD_YN,
+        thv.USE_YN,
+        thv.REMARK,
+        thv.REG_DT,
+        thv.REG_ID,
+        thv.MOD_DT,
+        thv.MOD_ID,
+        thv.VENDOR_FG,
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thv.SHIP_FG) AS SHIP_FG_NM, --TODO 코드 변경 필요
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '011' AND NMCODE_CD = thv.VENDOR_FG) AS VENDOR_FG_NM,
+        (SELECT NMCODE_NM FROM TB_CM_NMCODE WHERE NMCODE_GRP_CD = '067' AND NMCODE_CD = thv.USE_YN) AS USE_YN_NM,
+        (CASE thv.VAT_INCLD_YN WHEN 'N' THEN '별도' WHEN 'Y' THEN '포함' END) AS VAT_INCLD_YN_NM,
+        thv.COMPANY_FG,
+        (CASE thv.COMPANY_FG WHEN '0000' THEN '미정' ELSE '' END) AS COMPANY_FG_NM,
+        thv.BUSINESS_FG,
+        (CASE thv.BUSINESS_FG WHEN '0000' THEN '국민대학교' ELSE '' END) AS BUSINESS_FG_NM,
+        thv.PURCHASE_ID,
+        thv.CORPORATION_NUMBER,
+        thv.BUSINESS_STATUS,
+        thv.INDUSTRY,
+        thv.HOMEPAGE,
+        thv.OWNER_TEL_NO,
+        thv.OWNER_EMAIL,
+        thv.MANAGER_NM,
+        thv.MANAGER_TEL_NO,
+        thv.MANAGER_EMAIL,
+        thv.MANAGER_SPOT,
+        thv.MANAGER_PHONE_NO,
+        thv.BANK_CD,
+        thv.ACCOUNT_NO,
+        thv.DEPOSITOR,
+        thv.COLLECT_FG,
+        thv.DOUZONE_ERP,
+        thv.CREDIT_LIMIT,
+        thv.COLLATERAL_TYPE,
+        thv.COLLATERAL_AMT,
+        thv.CONTRAST_DATE,
+        thv.COLLATOR_STORE,
+        thv.COLLATOR_COMPANY,
+        thv.DEAL_START_DATE,
+        thv.DEAL_END_DATE,
+        thv.LAST_SALE_DATE,
+        thv.LAST_DEPOSIT_DATE,
+        tmm.MEMBR_NO,
+        tmm.MEMBR_NM
+        FROM TB_HQ_VENDOR thv,
+        (
+            SELECT
+            MEMBR_ORGN_CD,
+            MEMBR_NO,
+            SBPENC.D(MEMBR_NM) AS MEMBR_NM,
+            CUSTOMER_FG,
+            CUSTOMER_CD AS VENDR_CD
+            FROM TB_MB_MEMBER
+            WHERE 1=1
+            AND MEMBR_ORGN_CD = #{hqOfficeCd}
+            AND CUSTOMER_FG = '1'
+        ) tmm
+        WHERE 1=1
+        AND thv.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND thv.VENDR_CD = #{vendrCd}
+        AND tmm.MEMBR_ORGN_CD (+)= thv.HQ_OFFICE_CD
+        AND tmm.VENDR_CD (+)= thv.VENDR_CD
+    </select>
 
   <!-- 거래처(매장) 상세정보 조회  -->
   <!--
@@ -338,36 +444,65 @@
       AND STORE_CD = #{storeCd}
     </select>
 
-  <!-- 거래처(본사) 수정 -->
-  <!--
+    <!-- 거래처(본사) 수정 -->
+    <!--
       TABLE    : TB_HQ_VENDOR
       PARAM    : vendrVO
       COMMENTS : 거래처(본사) 정보 수정
-  -->
-  <update id="modifyHqVendr" parameterType="vendrVO">
+    -->
+    <update id="modifyHqVendr" parameterType="vendrVO">
     /* USE : VendrMapper.modifyHqVendr */
-    UPDATE TB_HQ_VENDOR
-       SET VENDR_NM      = #{vendrNm},
-           OWNER_NM      = #{ownerNm},
-           BIZ_NO        = #{bizNo},
-           BIZ_TYPE_CD   = #{bizTypeCd},
-           BIZ_ITEM_CD   = #{bizItemCd},
-           TEL_NO        = #{telNo},
-           FAX_NO        = #{faxNo},
-           EMAIL_ADDR    = #{emailAddr},
-           POST_NO       = #{postNo},
-           ADDR          = #{addr},
-           ADDR_DTL      = #{addrDtl},
-           SHIP_FG       = #{shipFg},
-           VAT_INCLD_YN  = #{vatIncldYn},
-           USE_YN        = #{useYn},
-           REMARK        = #{remark},
-           MOD_DT        = #{modDt},
-           MOD_ID        = #{modId},
-           VENDOR_FG     = #{vendorFg}
-     WHERE HQ_OFFICE_CD  = #{hqOfficeCd}
-       AND VENDR_CD      = #{vendrCd}
-  </update>
+        UPDATE TB_HQ_VENDOR
+        SET VENDR_NM      = #{vendrNm},
+            OWNER_NM      = #{ownerNm},
+            BIZ_NO        = #{bizNo},
+            BIZ_TYPE_CD   = #{bizTypeCd},
+            BIZ_ITEM_CD   = #{bizItemCd},
+            TEL_NO        = #{telNo},
+            FAX_NO        = #{faxNo},
+            EMAIL_ADDR    = #{emailAddr},
+            POST_NO       = #{postNo},
+            ADDR          = #{addr},
+            ADDR_DTL      = #{addrDtl},
+            SHIP_FG       = #{shipFg},
+            VAT_INCLD_YN  = #{vatIncldYn},
+            USE_YN        = #{useYn},
+            REMARK        = #{remark},
+            MOD_DT        = #{modDt},
+            MOD_ID        = #{modId},
+            VENDOR_FG     = #{vendorFg},
+            COMPANY_FG			=	#{companyFg},
+            BUSINESS_FG         =   #{businessFg},
+            PURCHASE_ID         =   #{purchaseId},
+            CORPORATION_NUMBER  =   #{corporationNumber},
+            BUSINESS_STATUS     =   #{businessStatus},
+            INDUSTRY            =   #{industry},
+            HOMEPAGE            =   #{homepage},
+            OWNER_TEL_NO        =   #{ownerTelNo},
+            OWNER_EMAIL         =   #{ownerEmail},
+            MANAGER_NM          =   #{managerNm},
+            MANAGER_TEL_NO      =   #{managerTelNo},
+            MANAGER_EMAIL       =   #{managerEmail},
+            MANAGER_SPOT        =   #{managerSpot},
+            MANAGER_PHONE_NO    =   #{managerPhoneNo},
+            BANK_CD             =   #{bankCd},
+            ACCOUNT_NO          =   #{accountNo},
+            DEPOSITOR           =   #{depositor},
+            COLLECT_FG          =   #{collectFg},
+            DOUZONE_ERP         =   #{douzoneErp},
+            CREDIT_LIMIT        =   #{creditLimit},
+            COLLATERAL_TYPE     =   #{collateralType},
+            COLLATERAL_AMT      =   #{collateralAmt},
+            CONTRAST_DATE       =   #{contrastDate},
+            COLLATOR_STORE      =   #{collatorStore},
+            COLLATOR_COMPANY    =   #{collatorCompany},
+            DEAL_START_DATE    =   #{dealStartDate},
+            DEAL_END_DATE       =   #{dealEndDate},
+            LAST_SALE_DATE      =   #{lastSaleDate},
+            LAST_DEPOSIT_DATE   =   #{lastDepositDate}
+        WHERE HQ_OFFICE_CD  = #{hqOfficeCd}
+        AND VENDR_CD      = #{vendrCd}
+    </update>
 
   <!-- 거래처(매장) 수정 -->
   <!--
@@ -688,4 +823,90 @@
             tmvpc.MOD_ID
           )
   </update>
+
+    <!-- 회원명 수정 -->
+    <!--
+      TABLE    :
+      PARAM    :
+      COMMENTS :
+    -->
+    <update id="getMembrNmSaveUpdate" parameterType="vendrVO">
+        /* USE : VendrMapper.getMembrNmSaveUpdate */
+        UPDATE TB_MB_MEMBER
+        SET
+        MEMBR_NM = SBPENC.E(#{membrNm}),
+        MOD_DT = #{modDt},
+        MOD_ID = #{modId}
+        WHERE 1=1
+        AND MEMBR_ORGN_CD = #{hqOfficeCd}
+        AND MEMBR_NO = #{membrNo}
+    </update>
+
+    <!-- 등록매장코드 채번 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getMinRegStoreCd" parameterType="vendrVO" resultType="String">
+        /* VendrMapper.getMinRegStoreCd */
+        SELECT MIN(STORE_CD) AS REG_STORE_CD
+        FROM TB_MS_STORE
+        WHERE 1=1
+        AND HQ_OFFICE_CD = #{hqOfficeCd}
+    </select>
+
+    <!-- 매출처 회원 후불회원 등록 (전매장) -->
+    <!--
+      TABLE    :
+      PARAM    :
+      COMMENTS :
+    -->
+    <insert id="getMembrPostpaidSaveMerge" parameterType="vendrVO">
+        /* USE : VendrMapper.getMembrPostpaidSaveMerge */
+        MERGE INTO TB_MB_MEMBER_POSTPAID_STORE A
+        USING
+        (
+            SELECT
+            #{hqOfficeCd} AS MEMBR_ORGN_CD,
+            #{membrNo} AS MEMBR_NO,
+            STORE_CD,
+            'Y' AS USE_YN,
+            #{regDt} AS REG_DT,
+            #{regId} AS REG_ID,
+            #{modDt} AS MOD_DT,
+            #{modId} AS MOD_ID
+            FROM TB_MS_STORE
+            WHERE 1=1
+            AND HQ_OFFICE_CD = #{hqOfficeCd}
+        ) B
+        ON (
+            A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
+            AND A.STORE_CD = B.STORE_CD
+            AND A.MEMBR_NO = B.MEMBR_NO
+        )
+        WHEN NOT MATCHED THEN
+            INSERT
+            (
+                A.MEMBR_ORGN_CD,
+                A.MEMBR_NO,
+                A.STORE_CD,
+                A.USE_YN,
+                A.REG_DT,
+                A.REG_ID,
+                A.MOD_DT,
+                A.MOD_ID
+            )
+            VALUES
+            (
+                B.MEMBR_ORGN_CD,
+                B.MEMBR_NO,
+                B.STORE_CD,
+                B.USE_YN,
+                B.REG_DT,
+                B.REG_ID,
+                B.MOD_DT,
+                B.MOD_ID
+            )
+    </insert>
+
 </mapper>

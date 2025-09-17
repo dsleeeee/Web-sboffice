@@ -71,6 +71,38 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                 if(data.remark != null)
                     $("#vRemark").text(data.remark);
 
+                $("#vCompanyFg").text(data.companyFgNm);
+                $("#vBusinessFg").text(data.businessFgNm);
+                $("#vPurchaseId").text(data.purchaseId);
+                $("#vCorporationNumber").text(data.corporationNumber);
+                $("#vBusinessStatus").text(data.businessStatus);
+                $("#vIndustry").text(data.industry);
+                $("#vHomepage").text(data.homepage);
+                $("#vOwnerTelNo").text(data.ownerTelNo);
+                $("#vOwnerEmail").text(data.ownerEmail);
+                $("#vManagerNm").text(data.managerNm);
+                $("#vManagerTelNo").text(data.managerTelNo);
+                $("#vManagerEmail").text(data.managerEmail);
+                $("#vManagerSpot").text(data.managerSpot);
+                $("#vManagerPhoneNo").text(data.managerPhoneNo);
+                $("#vBankCd").text(data.bankCd);
+                $("#vAccountNo").text(data.accountNo);
+                $("#vDepositor").text(data.depositor);
+                $("#vCollectFg").text(data.collectFg);
+                $("#vDouzoneErp").text(data.douzoneErp);
+                $("#vCreditLimit").text(data.creditLimit);
+                $("#vCollateralType").text(data.collateralType);
+                $("#vCollateralAmt").text(data.collateralAmt);
+                $("#vContrastDate").text(data.contrastDate);
+                $("#vCollatorStore").text(data.collatorStore);
+                $("#vCollatorCompany").text(data.collatorCompany);
+                $("#vDealStartDate").text(data.dealStartDate);
+                $("#vDealEndDate").text(data.dealEndDate);
+                $("#vLastSaleDate").text(data.lastSaleDate);
+                $("#vLastDepositDate").text(data.lastDepositDate);
+                $("#vMembrNo").text(data.membrNo);
+                $("#vMembrNm").text(data.membrNm);
+
             },
             function (result) {
                 s_alert.pop(result.message);
@@ -129,6 +161,37 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#vShipFg").text("");
         $("#vRemark").text("");
 
+        $("#vCompanyFg").text("");
+        $("#vBusinessFg").text("");
+        $("#vPurchaseId").text("");
+        $("#vCorporationNumber").text("");
+        $("#vBusinessStatus").text("");
+        $("#vIndustry").text("");
+        $("#vHomepage").text("");
+        $("#vOwnerTelNo").text("");
+        $("#vOwnerEmail").text("");
+        $("#vManagerNm").text("");
+        $("#vManagerTelNo").text("");
+        $("#vManagerEmail").text("");
+        $("#vManagerSpot").text("");
+        $("#vManagerPhoneNo").text("");
+        $("#vBankCd").text("");
+        $("#vAccountNo").text("");
+        $("#vDepositor").text("");
+        $("#vCollectFg").text("");
+        $("#vDouzoneErp").text("");
+        $("#vCreditLimit").text("");
+        $("#vCollateralType").text("");
+        $("#vCollateralAmt").text("");
+        $("#vContrastDate").text("");
+        $("#vCollatorStore").text("");
+        $("#vCollatorCompany").text("");
+        $("#vDealStartDate").text("");
+        $("#vDealEndDate").text("");
+        $("#vLastSaleDate").text("");
+        $("#vLastDepositDate").text("");
+        $("#vMembrNo").text("");
+        $("#vMembrNm").text("");
     };
 
     // 탭변경

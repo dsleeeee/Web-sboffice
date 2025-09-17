@@ -83,4 +83,12 @@ public interface VendrMapper {
     /** 취급/미취급상품 상태변경(매장) */
     int updateMsVendrProdStatus(VendrVO vendrVO);
 
+    /** 회원명 수정 */
+    int getMembrNmSaveUpdate(VendrVO vendrVO);
+
+    /** 등록매장코드 채번 */
+    String getMinRegStoreCd(VendrVO vendrVO);
+
+    /** 매출처 회원 후불회원 등록 (전매장) */
+    int getMembrPostpaidSaveMerge(VendrVO vendrVO);
 }
