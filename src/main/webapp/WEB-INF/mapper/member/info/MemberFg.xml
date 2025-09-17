@@ -256,7 +256,8 @@
                    tmmps.STORE_CD,
                    tms.STORE_NM,
                    tmmc.MEMBR_CLASS_NM,
-                   SBPENC.D(tmm.TEL_NO) AS TEL_NO
+                   SBPENC.D(tmm.TEL_NO) AS TEL_NO,
+                   tmm.CUSTOMER_FG
             <include refid="CmmSQL.PagingTemplateCount"/>
               FROM TB_MB_MEMBER_POSTPAID_STORE tmmps,
                    TB_MB_MEMBER tmm,
