@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    외상매출조회.xml
+    POS 메인버전관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2025.09.17     최초작성
+-->
+<mapper namespace="kr.co.solbipos.membr.anals.postpaidSale.service.impl.PostpaidSaleMapper">
+
+    <!-- 외상매출조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPostpaidSaleList" parameterType="PostpaidSaleVO" resultType="DefaultMap">
+        /* PostpaidSaleMapper.getPostpaidSaleList */
+        SELECT
+        tsshm.STORE_CD,
+        tms.STORE_NM,
+        tsshm.MEMBR_NO,
+        SBPENC.D(tmm.MEMBR_NM) AS MEMBR_NM,
+        TO_CHAR(TO_DATE(tsshm.SALE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE,
+        tsshm.POS_NO,
+        tsshm.BILL_NO,
+        tsdmp.PROD_CD,
+        tmp.PROD_NM,
+        tsdmp.TOT_SALE_QTY,
+        tsdmp.REAL_SALE_AMT
+        FROM TB_SL_SALE_HDR_MEMBR tsshm,
+        TB_SL_DAILY_MEMBR_PROD tsdmp,
+        TB_MS_STORE tms,
+        TB_MB_MEMBER tmm,
+        TB_MS_PRODUCT tmp
+        WHERE 1=1
+        AND tsshm.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND tsshm.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='membrNo != null and membrNo != ""'>
+            AND tsshm.MEMBR_NO LIKE '%'||#{membrNo}||'%'
+        </if>
+        <if test='membrNm != null and membrNm != ""'>
+            AND tmm.MEMBR_NM LIKE '%'||#{membrNm}||'%'
+        </if>
+        <if test='saleFg != null and saleFg != ""'>
+            <if test='saleFg == "WEB"'>
+                AND tsshm.POS_NO = '99'
+            </if>
+            <if test='saleFg == "POS"'>
+                <![CDATA[
+                    AND tsshm.POS_NO <> '99'
+                ]]>
+            </if>
+            <if test='saleFg == "ERP"'> -- 미진행
+            </if>
+        </if>
+        AND tsdmp.HQ_OFFICE_CD = tsshm.HQ_OFFICE_CD
+        AND tsdmp.HQ_BRAND_CD = tsshm.HQ_BRAND_CD
+        AND tsdmp.STORE_CD = tsshm.STORE_CD
+        AND tsdmp.SALE_DATE = tsshm.SALE_DATE
+        AND tsdmp.MEMBR_NO = tsshm.MEMBR_NO
+        AND tms.STORE_CD = tsshm.STORE_CD
+        AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND tmm.MEMBR_NO = tsshm.MEMBR_NO
+        AND tmp.HQ_BRAND_CD = tsdmp.HQ_BRAND_CD
+        AND tmp.STORE_CD = tsdmp.STORE_CD
+        AND tmp.PROD_CD = tsdmp.PROD_CD
+        ORDER BY tsshm.STORE_CD, tsshm.MEMBR_NO
+    </select>
+
+</mapper>

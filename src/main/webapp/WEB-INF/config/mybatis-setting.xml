@@ -552,6 +552,8 @@
     <typeAlias alias="MembrNonBilClctVO" type="kr.co.solbipos.membr.anals.membrNonBilClct.service.MembrNonBilClctVO"/>
     <typeAlias alias="inclnVO" type="kr.co.solbipos.membr.anals.incln.service.InclnVO"/>
     <typeAlias alias="bbqMemberExcelUploadVO" type="kr.co.solbipos.membr.info.bbqMemberExcelUpload.service.BbqMemberExcelUploadVO"/>
+    <!-- 국민대 > 매출처관리 > 외상매출조회 -->
+    <typeAlias alias="postpaidSaleVO" type="kr.co.solbipos.membr.anals.postpaidSale.service.PostpaidSaleVO"/>
 
 
     <!-- (공통) 선택그룹 팝업 -->
