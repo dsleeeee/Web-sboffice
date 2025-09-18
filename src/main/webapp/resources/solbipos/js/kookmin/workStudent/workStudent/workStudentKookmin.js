@@ -96,13 +96,22 @@ app.controller('workStudentKookminCtrl', ['$scope', '$http', '$timeout', functio
 
     // 근로학생관리 그리드 행 삭제
     $scope.delete = function(){
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-            var item = $scope.flex.collectionView.items[i];
-            if(item.gChk){
-                $scope.flex.collectionView.removeAt(i);
+        $scope._popConfirm(messages['workStudentKookmin.msg.delConfirm'], function () {
+            var params = [];
+
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                var item = $scope.flex.collectionView.items[i];
+                item.status = "D";
+                if (item.gChk) {
+                    params.push(item);
+                }
             }
-        }
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save('/kookmin/workStudent/workStudent/workStudent/saveWorkStudent.sb', params, function(){ $scope.getWorkStudentKookminList() });
+        });
     };
+
 
     // 근로학생관리 저장
     $scope.save = function() {
@@ -276,11 +285,6 @@ app.controller('workStudentKookminCtrl', ['$scope', '$http', '$timeout', functio
             }
 
             params.push($scope.flex.collectionView.itemsAdded[i]);
-        }
-
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
         }
 
         // console.log(params);

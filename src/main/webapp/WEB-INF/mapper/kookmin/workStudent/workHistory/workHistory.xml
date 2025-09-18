@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    WorkHistory.xml
+    근무내역 조회/수정 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.09.12
+-->
+<mapper namespace="kr.co.solbipos.kookmin.workStudent.workHistory.service.impl.WorkHistoryMapper">
+
+    <!-- 근무내역 조회 -->
+    <!--
+        TABLE    : TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE
+        COMMENTS : 근무내역을 조회한다.
+    -->
+    <select id="getWorkHistoryList" parameterType="WorkHistoryVO" resultType="DefaultMap">
+        /* WorkHistoryMapper.getWorkHistoryList */
+        SELECT 	A.TERM_YEAR
+        ,		A.TERM_FG
+        ,		TO_CHAR(TO_DATE(#{workDate}, 'yyyymmdd'), 'yyyy-mm-dd') AS WORK_DATE
+        ,		A.WORK_SCH_CODE
+        ,		A.STORE_CD
+        ,		C.STORE_NM
+        ,		B.STUDENT_NO
+        ,		B.STUDENT_NM
+        ,		TO_CHAR(TO_DATE(A.START_TIME ,'hh24mi'), 'hh24:mi')        AS BASE_START_TIME
+        ,		TO_CHAR(TO_DATE(A.END_TIME ,'hh24mi'), 'hh24:mi')          AS BASE_END_TIME
+        ,		ROUND((TO_DATE(A.END_TIME, 'HH24MI') - TO_DATE(A.START_TIME, 'HH24MI')) * 24, 1)  AS BASE_WORK_TIME
+        ,		CASE
+                        WHEN D.REAL_START_TIME IS NULL THEN ''
+                        WHEN SUBSTR(D.REAL_START_TIME,9,4) > A.START_TIME THEN TO_CHAR(TO_DATE(SUBSTR(D.REAL_START_TIME, 9, 4), 'HH24MI'), 'HH24:MI')
+                        ELSE TO_CHAR(TO_DATE(A.START_TIME ,'hh24mi'), 'hh24:mi')
+                END AS REAL_START_TIME
+        ,		CASE
+                        WHEN D.REAL_END_TIME IS NULL THEN ''
+                        WHEN A.END_TIME > SUBSTR(D.REAL_END_TIME,9,4) THEN TO_CHAR(TO_DATE(SUBSTR(D.REAL_END_TIME, 9, 4), 'HH24MI'), 'HH24:MI')
+                        ELSE TO_CHAR(TO_DATE(A.END_TIME ,'hh24mi'), 'hh24:mi')
+                END AS REAL_END_TIME
+        ,		D.WORK_TIME
+        ,		CASE
+                        WHEN D.REAL_START_TIME IS NOT NULL OR D.REAL_END_TIME IS NOT NULL THEN '근무'
+                        ELSE '결근'
+                END AS WORK_STATUS
+        ,       D.MOD_REASON
+        ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = D.MOD_ID) 	AS MOD_NM
+        FROM 	TB_HQ_WORK_SCHEDULE A
+        ,		TB_HQ_WORK_STUDENTS B
+        ,		TB_MS_STORE C
+        ,		TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE D
+        WHERE 	B.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+        AND 	B.STUDENT_NO 	(+) = A.STUDENT_NO
+        AND 	C.STORE_CD 			= A.STORE_CD
+        AND 	C.HQ_OFFICE_CD 		= A.HQ_OFFICE_CD
+        AND 	D.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+        AND 	D.TERM_YEAR 	(+) = A.TERM_YEAR
+        AND 	D.TERM_FG 		(+) = A.TERM_FG
+        AND 	D.STORE_CD 		(+) = A.STORE_CD
+        AND 	D.WORK_SCH_CODE (+) = A.WORK_SCH_CODE
+        AND		D.WORK_DATE		(+) = #{workDate}
+        AND		#{workDate} BETWEEN A.START_DAY AND A.END_DAY
+        <if test="storeCd != null and storeCd != ''">
+            AND C.STORE_CD LIKE '%'|| #{storeCd} || '%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND C.STORE_NM LIKE '%'|| #{storeNm} || '%'
+        </if>
+        <if test="studentNo != null and studentNo != ''">
+            AND B.STUDENT_NO LIKE '%'|| #{studentNo} || '%'
+        </if>
+        <if test="studentNm != null and studentNm != ''">
+            AND B.STUDENT_NM LIKE '%'|| #{studentNm} || '%'
+        </if>
+        ORDER
+        BY		TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))
+        ,		TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))
+    </select>
+
+    <!-- 근무내역 저장 -->
+    <!--
+        TABLE    : TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE
+        COMMENTS : 근무내역을 저장한다.
+    -->
+    <insert id="mergeWorkHistory" parameterType="WorkHistoryVO">
+        /* WorkHistoryMapper.mergeWorkHistory */
+        MERGE INTO TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE
+        USING DUAL
+        ON 	(
+                    HQ_OFFICE_CD	= #{hqOfficeCd}
+                AND TERM_YEAR		= #{termYear}
+                AND TERM_FG			= #{termFg}
+                AND STORE_CD		= #{storeCd}
+                AND WORK_SCH_CODE	= #{workSchCode}
+                AND WORK_DATE		= #{workDate}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET		REAL_START_TIME	= #{realStartTime}
+        ,		REAL_END_TIME	= #{realEndTime}
+        ,		MOD_REASON		= #{modReason}
+        ,       REG_IN_FG       = #{regInFg}
+        ,		MOD_DT			= #{modDt}
+        ,		MOD_ID			= #{modId}
+        ,       WORK_TIME       = ROUND(
+                                            (
+                                                LEAST(TO_DATE(#{realEndTime}, 'YYYYMMDDHH24MISS'), TO_DATE(#{baseEndTime}, 'YYYYMMDDHH24MISS'))
+                                                -
+                                                GREATEST(TO_DATE(#{realStartTime}, 'YYYYMMDDHH24MISS'), TO_DATE(#{baseStartTime}, 'YYYYMMDDHH24MISS'))
+                                            )* 24,1)
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                HQ_OFFICE_CD
+        ,       TERM_YEAR
+        ,       TERM_FG
+        ,       STORE_CD
+        ,       WORK_SCH_CODE
+        ,       WORK_DATE
+        ,       REAL_START_TIME
+        ,       REAL_END_TIME
+        ,       REG_IN_FG
+        ,       MOD_REASON
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        ,       WORK_TIME
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{termYear}
+        ,       #{termFg}
+        ,       #{storeCd}
+        ,       #{workSchCode}
+        ,       #{workDate}
+        ,       #{realStartTime}
+        ,       #{realEndTime}
+        ,       #{regInFg}
+        ,       #{modReason}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        ,       ROUND(
+                        (
+                            LEAST(TO_DATE(#{realEndTime}, 'YYYYMMDDHH24MISS'), TO_DATE(#{baseEndTime}, 'YYYYMMDDHH24MISS'))
+                            -
+                            GREATEST(TO_DATE(#{realStartTime}, 'YYYYMMDDHH24MISS'), TO_DATE(#{baseStartTime}, 'YYYYMMDDHH24MISS'))
+                        )* 24,1)
+        )
+    </insert>
+</mapper>

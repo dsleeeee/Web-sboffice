@@ -507,29 +507,56 @@ app.controller('verAddStoreExcelFileUploadCtrl', ['$scope', '$http', '$timeout',
   $scope.excelUpload = function () {
     $scope.progressCnt = 0; // 처리된 숫자(초기화)
 
-    // 선택한 파일이 있으면
     if ($('#excelUpFile')[0].files[0]) {
       var file = $('#excelUpFile')[0].files[0];
       var fileName = file.name;
       var fileExtension = fileName.substring(fileName.lastIndexOf('.'));
 
-      // 확장자가 xlsx, xlsm 인 경우에만 업로드 실행
       if (fileExtension.toLowerCase() === '.xlsx' || fileExtension.toLowerCase() === '.xlsm') {
-        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]);
 
         $timeout(function () {
-          var flex = $scope.flex;
-          wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(flex, $('#excelUpFile')[0].files[0], {includeColumnHeaders: true}
-              , function (workbook) {
-                $timeout(function () {
-                  $scope.excelUploadToJsonConvert();
-                }, 10);
-              }
-          );
+          try {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.loadAsync(
+                $scope.flex,
+                file,
+                { includeColumnHeaders: true },
+                function (workbook) {
+                  try {
+                    // ✅ workbook 유효성 체크
+                    if (!workbook || !workbook.sheets || workbook.sheets.length === 0) {
+                      throw new Error("시트 없음");
+                    }
+                    $timeout(function () {
+                      $scope.excelUploadToJsonConvert();
+                    }, 10);
+                  } catch (err) {
+                    console.error("⚠️ 엑셀 구조 오류:", err);
+                    $scope._popMsg("업로드한 엑셀 파일의 시트 구조가 올바르지 않습니다.\n" +
+                        "파일을 다시 저장하거나 양식을 확인해주세요.");
+                    $scope.$broadcast('loadingPopupInactive');
+                    $("#excelUpFile").val(''); // 파일 선택 초기화
+                  }
+                },
+                function (error) {
+                  console.error("❌ loadAsync 실패:", error);
+                  $scope._popMsg("엑셀 파일을 불러오는 중 오류가 발생했습니다.\n" +
+                      "엑셀파일을 열어 내용 확인 및 다른 이름으로 저장 후 다시 시도해주세요.");
+                  $scope.$broadcast('loadingPopupInactive');
+                  $("#excelUpFile").val('');
+                }
+            );
+          } catch (e) {
+            console.error("❌ 예외 발생:", e);
+            $scope._popMsg("엑셀 업로드 중 알 수 없는 오류가 발생했습니다.");
+            $scope.$broadcast('loadingPopupInactive');
+            $("#excelUpFile").val('');
+          }
         }, 10);
+
       } else {
         $("#excelUpFile").val('');
-        $scope._popMsg(messages['empCardInfo.not.excelFile']); // 엑셀 파일만 업로드 됩니다.(*.xlsx, *.xlsm)
+        $scope._popMsg(messages['empCardInfo.not.excelFile']); // 엑셀 파일만 업로드 됩니다.
         return false;
       }
     }
