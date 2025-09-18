@@ -764,8 +764,8 @@ Sidebar.prototype.makeDragSource = function () {
             "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=01;rounded=0;"
         );
 
-        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
-          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), new Array(btn));
+        if($("#hdTouchKeyStyleApplyChk").val() === "Y" && $("#hdCopyFillColorChk").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColorChk").val(), new Array(btn));
           graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["01"].off, new Array(btn));
           graph.setCellStyles(mxConstants.STYLE_FONTSIZE, graph.fontStyles["01"].size, new Array(btn));
         }else{
@@ -782,10 +782,10 @@ Sidebar.prototype.makeDragSource = function () {
             "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=02;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align=left;verticalAlign=top;whiteSpace=wrap;overflow=hidden;"
         );
 
-        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
-          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), new Array(prodTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFont02").val().split("/")[0], new Array(prodTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFont02").val().split("/")[1], new Array(prodTag));
+        if($("#hdTouchKeyStyleApplyChk").val() === "Y" && $("#hdCopyFillColorChk").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColorChk").val(), new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFontChk02").val().split("/")[0], new Array(prodTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFontChk02").val().split("/")[1], new Array(prodTag));
         }else{
           graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["02"].off, new Array(prodTag));
           graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["02"].off, new Array(prodTag));
@@ -800,10 +800,10 @@ Sidebar.prototype.makeDragSource = function () {
             "prodCd=" + item.prodCd + ";styleCd=" + styleCd + ";tukeyFg=03;rounded=0;strokeColor=none;resizable=0;selectable=1;movable=0;align:right;"
         );
 
-        if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
-          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), new Array(priceTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFont03").val().split("/")[0], new Array(priceTag));
-          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFont03").val().split("/")[1], new Array(priceTag));
+        if($("#hdTouchKeyStyleApplyChk").val() === "Y" && $("#hdCopyFillColorChk").val() !== "") {
+          graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColorChk").val(), new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFontChk03").val().split("/")[0], new Array(priceTag));
+          graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFontChk03").val().split("/")[1], new Array(priceTag));
         }else{
           graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, graph.buttonStyles["03"].off, new Array(priceTag));
           graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, graph.fontStyles["03"].off, new Array(priceTag));
@@ -1730,7 +1730,7 @@ Format.prototype.initElements = function () {
       scope._popConfirm("터치키를 초기화 하시겠습니까?", function() {
 
         scope._popConfirm("초기화시 터치키정보 전체가 삭제되며 복구할 수 없습니다. 진행하시겠습니까?", function() {
-          
+
           // 터치키 저장 시 새 그룹으로 생성해 저장하겠다는 Flag
           $("#hdNewGrp").val("N");
 
@@ -2005,7 +2005,12 @@ Format.prototype.initElements = function () {
       $("#hdCopyFont02").val(initFontColor02 + "/" + initFontSize02);
       $("#hdCopyFont03").val(initFontColor03 + "/" + initFontSize03);
 
+      Set_StyleApply('NONE');
       $("#divTouchKeyStyleCopy").css("display", "");
+    }
+    else
+    {
+      Set_StyleApply('NONE');
     }
   });
 
@@ -2013,14 +2018,186 @@ Format.prototype.initElements = function () {
   addClickHandler(document.getElementById('btnTouchKeyStyleApply'), function () {
 
     // 적용 버튼 toggle
-    if($("#hdTouchKeyStyleApply").val() === "N"){
-      $("#hdTouchKeyStyleApply").val("Y"); // 적용 버튼 활성화
-      $("#btnTouchKeyStyleApply").css('background-color', '#1e88e5');
-      $("#btnTouchKeyStyleApply").css('color', '#ffffff');
+    if($("#hdTouchKeyStyleApply").val() === "N" && $("#hdCopyFillColor").val() !== ""){
+        Set_StyleApply('1st');
     }else{
-      $("#hdTouchKeyStyleApply").val("N"); // 적용 버튼 비활성화
-      $("#btnTouchKeyStyleApply").css('background-color', '#ebf5ff');
-      $("#btnTouchKeyStyleApply").css('color', '#337dde');
+        Set_StyleApply('NONE');
+    }
+  });
+
+/**
+ * 적용버튼 처리
+ */
+function Set_StyleApply(s_Button) {
+
+    //적용버튼
+    $("#hdTouchKeyStyleApply").val("N"); // 적용 버튼 비활성화
+    $("#btnTouchKeyStyleApply").css('background-color', '#ebf5ff');
+    $("#btnTouchKeyStyleApply").css('color', '#337dde');
+    //적용버튼2ndA
+    $("#hdTouchKeyStyleApply2ndA").val("N"); // 적용 버튼 비활성화
+    $("#btnTouchKeyStyleApply2ndA").css('background-color', '#ebf5ff');
+    $("#btnTouchKeyStyleApply2ndA").css('color', '#337dde');
+    //적용버튼2ndB
+    $("#hdTouchKeyStyleApply2ndB").val("N"); // 적용 버튼 비활성화
+    $("#btnTouchKeyStyleApply2ndB").css('background-color', '#ebf5ff');
+    $("#btnTouchKeyStyleApply2ndB").css('color', '#337dde');
+    //적용버튼2ndC
+    $("#hdTouchKeyStyleApply2ndC").val("N"); // 적용 버튼 비활성화
+    $("#btnTouchKeyStyleApply2ndC").css('background-color', '#ebf5ff');
+    $("#btnTouchKeyStyleApply2ndC").css('color', '#337dde');
+    //적용버튼2ndD
+    $("#hdTouchKeyStyleApply2ndD").val("N"); // 적용 버튼 비활성화
+    $("#btnTouchKeyStyleApply2ndD").css('background-color', '#ebf5ff');
+    $("#btnTouchKeyStyleApply2ndD").css('color', '#337dde');
+
+    $("#divTouchKeyStyleCopy").css("display", "none");
+    $("#divTouchKeyStyleCopy2nd").css("display", "none");
+
+    /*
+    A : 채우기(#ffffff) 상품명(#212121, 15pt) 금액(#ff5414, 13pt)
+    B : 채우기(#ffbe3d) 상품명(#ffffff, 15pt) 금액(#ff5414, 13pt)
+    C : 채우기(#2ad59c) 상품명(#ffffff, 15pt) 금액(#fae128, 13pt)
+    D : 채우기(#d983e9) 상품명(#ffffff, 15pt) 금액(#fae128, 13pt)
+    */
+    if(s_Button == '1st')
+    {
+        $("#divTouchKeyStyleCopy").css("display", "");
+        $("#hdTouchKeyStyleApply").val("Y");
+        $("#btnTouchKeyStyleApply").css('background-color', '#1e88e5');
+        $("#btnTouchKeyStyleApply").css('color', '#ffffff');
+    }
+    else if(s_Button == '2ndA')
+    {
+        // 복사한 터치키스타일 보여주고 hidden에 Setting
+        document.getElementById("pickCopyFillColor2nd").value = "#ffffff";
+        document.getElementById("pickCopyFont2nd02").value = "#212121";
+        document.getElementById("pickCopyFont2nd03").value = "#ff5414";
+        $("#lblCopyFont2nd02").text("15pt");
+        $("#lblCopyFont2nd03").text("13pt");
+        $("#hdCopyFillColor2nd").val("#ffffff");
+        $("#hdCopyFont2nd02").val("#212121" + "/" + "15");
+        $("#hdCopyFont2nd03").val("#ff5414" + "/" + "13");
+
+        $("#divTouchKeyStyleCopy2nd").css("display", "");
+        $("#hdTouchKeyStyleApply2ndA").val("Y");
+        $("#btnTouchKeyStyleApply2ndA").css('background-color', '#1e88e5');
+        $("#btnTouchKeyStyleApply2ndA").css('color', '#ffffff');
+    }
+    else if(s_Button == '2ndB')
+    {
+        // 복사한 터치키스타일 보여주고 hidden에 Setting
+        document.getElementById("pickCopyFillColor2nd").value = "#ffbe3d";
+        document.getElementById("pickCopyFont2nd02").value = "#ffffff";
+        document.getElementById("pickCopyFont2nd03").value = "#ff5414";
+        $("#lblCopyFont2nd02").text("15pt");
+        $("#lblCopyFont2nd03").text("13pt");
+        $("#hdCopyFillColor2nd").val("#ffbe3d");
+        $("#hdCopyFont2nd02").val("#ffffff" + "/" + "15");
+        $("#hdCopyFont2nd03").val("#ff5414" + "/" + "13");
+
+        $("#divTouchKeyStyleCopy2nd").css("display", "");
+        $("#hdTouchKeyStyleApply2ndB").val("Y");
+        $("#btnTouchKeyStyleApply2ndB").css('background-color', '#1e88e5');
+        $("#btnTouchKeyStyleApply2ndB").css('color', '#ffffff');
+    }
+    else if(s_Button == '2ndC')
+    {
+        // 복사한 터치키스타일 보여주고 hidden에 Setting
+        document.getElementById("pickCopyFillColor2nd").value = "#2ad59c";
+        document.getElementById("pickCopyFont2nd02").value = "#ffffff";
+        document.getElementById("pickCopyFont2nd03").value = "#fae128";
+        $("#lblCopyFont2nd02").text("15pt");
+        $("#lblCopyFont2nd03").text("13pt");
+        $("#hdCopyFillColor2nd").val("#2ad59c");
+        $("#hdCopyFont2nd02").val("#ffffff" + "/" + "15");
+        $("#hdCopyFont2nd03").val("#fae128" + "/" + "13");
+
+        $("#divTouchKeyStyleCopy2nd").css("display", "");
+        $("#hdTouchKeyStyleApply2ndC").val("Y");
+        $("#btnTouchKeyStyleApply2ndC").css('background-color', '#1e88e5');
+        $("#btnTouchKeyStyleApply2ndC").css('color', '#ffffff');
+    }
+    else if(s_Button == '2ndD')
+    {
+        // 복사한 터치키스타일 보여주고 hidden에 Setting
+        document.getElementById("pickCopyFillColor2nd").value = "#d983e9";
+        document.getElementById("pickCopyFont2nd02").value = "#ffffff";
+        document.getElementById("pickCopyFont2nd03").value = "#fae128";
+        $("#lblCopyFont2nd02").text("15pt");
+        $("#lblCopyFont2nd03").text("13pt");
+        $("#hdCopyFillColor2nd").val("#d983e9");
+        $("#hdCopyFont2nd02").val("#ffffff" + "/" + "15");
+        $("#hdCopyFont2nd03").val("#fae128" + "/" + "13");
+
+        $("#divTouchKeyStyleCopy2nd").css("display", "");
+        $("#hdTouchKeyStyleApply2ndD").val("Y");
+        $("#btnTouchKeyStyleApply2ndD").css('background-color', '#1e88e5');
+        $("#btnTouchKeyStyleApply2ndD").css('color', '#ffffff');
+    }
+
+    if( $("#hdTouchKeyStyleApply").val() === "Y" )
+    {
+        $("#hdTouchKeyStyleApplyChk").val("Y");
+        $("#hdCopyFillColorChk").val($("#hdCopyFillColor").val());
+        $("#hdCopyFontChk02").val($("#hdCopyFont02").val());
+        $("#hdCopyFontChk03").val($("#hdCopyFont03").val());
+    }
+    else if( $("#hdTouchKeyStyleApply2ndA").val() === "Y"
+    ||  $("#hdTouchKeyStyleApply2ndB").val() === "Y"
+    ||  $("#hdTouchKeyStyleApply2ndC").val() === "Y"
+    ||  $("#hdTouchKeyStyleApply2ndD").val() === "Y"
+    )
+    {
+        $("#hdTouchKeyStyleApplyChk").val("Y");
+        $("#hdCopyFillColorChk").val($("#hdCopyFillColor2nd").val());
+        $("#hdCopyFontChk02").val($("#hdCopyFont2nd02").val());
+        $("#hdCopyFontChk03").val($("#hdCopyFont2nd03").val());
+    }
+    else
+    {
+        $("#hdTouchKeyStyleApplyChk").val("N");
+    }
+}
+
+  // 터치키스타일 적용버튼2ndA
+  addClickHandler(document.getElementById('btnTouchKeyStyleApply2ndA'), function () {
+
+    // 적용 버튼 toggle
+    if($("#hdTouchKeyStyleApply2ndA").val() === "N"){
+        Set_StyleApply('2ndA');
+    }else{
+        Set_StyleApply('NONE');
+    }
+  });
+  // 터치키스타일 적용버튼2ndB
+  addClickHandler(document.getElementById('btnTouchKeyStyleApply2ndB'), function () {
+
+    // 적용 버튼 toggle
+    if($("#hdTouchKeyStyleApply2ndB").val() === "N"){
+        Set_StyleApply('2ndB');
+    }else{
+        Set_StyleApply('NONE');
+    }
+  });
+  // 터치키스타일 적용버튼2ndC
+  addClickHandler(document.getElementById('btnTouchKeyStyleApply2ndC'), function () {
+
+    // 적용 버튼 toggle
+    if($("#hdTouchKeyStyleApply2ndC").val() === "N"){
+        Set_StyleApply('2ndC');
+    }else{
+        Set_StyleApply('NONE');
+    }
+  });
+  // 터치키스타일 적용버튼2ndD
+  addClickHandler(document.getElementById('btnTouchKeyStyleApply2ndD'), function () {
+
+    // 적용 버튼 toggle
+    if($("#hdTouchKeyStyleApply2ndD").val() === "N"){
+        Set_StyleApply('2ndD');
+    }else{
+        Set_StyleApply('NONE');
     }
   });
 
@@ -3062,15 +3239,15 @@ Graph.prototype.initProdArea = function (classArea, sidebar) {
         // 선택한 셀이 있으면 스타일 적용
         if (cell.children) {
           // '적용'버튼 활성화시 복사한 스타일로 적용
-          if($("#hdTouchKeyStyleApply").val() === "Y" && $("#hdCopyFillColor").val() !== "") {
+          if($("#hdTouchKeyStyleApplyChk").val() === "Y" && $("#hdCopyFillColorChk").val() !== "") {
             // 배경
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), cells);
-            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColor").val(), cell.children);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColorChk").val(), cells);
+            graph.setCellStyles(mxConstants.STYLE_FILLCOLOR, $("#hdCopyFillColorChk").val(), cell.children);
             // 상품명, 금액
-            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFont02").val().split("/")[0], new Array(cell.children[0]));
-            graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFont02").val().split("/")[1], new Array(cell.children[0]));
-            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFont03").val().split("/")[0], new Array(cell.children[1]));
-            graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFont03").val().split("/")[1], new Array(cell.children[1]));
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFontChk02").val().split("/")[0], new Array(cell.children[0]));
+            graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFontChk02").val().split("/")[1], new Array(cell.children[0]));
+            graph.setCellStyles(mxConstants.STYLE_FONTCOLOR, $("#hdCopyFontChk03").val().split("/")[0], new Array(cell.children[1]));
+            graph.setCellStyles(mxConstants.STYLE_FONTSIZE, $("#hdCopyFontChk03").val().split("/")[1], new Array(cell.children[1]));
           }
         }
       } else {

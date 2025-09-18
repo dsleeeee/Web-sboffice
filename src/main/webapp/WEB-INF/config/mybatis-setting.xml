@@ -259,6 +259,9 @@
     <typeAlias alias="adminMediaVO" type="kr.co.solbipos.sys.admin.adminMedia.service.AdminMediaVO"/>
     <!-- 시스템관리 > 관리자기능 > 제우스데이터연동 -->
     <typeAlias alias="zeusDataConnectVO" type="kr.co.solbipos.sys.admin.zeusDataConnect.service.ZeusDataConnectVO"/>
+    <!-- 시스템관리 > 연동 > OMS연동샘플 -->
+    <typeAlias alias="omsLinkSampleVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.OmsLinkSampleVO"/>
+    <typeAlias alias="apiLinkVO" type="kr.co.solbipos.sys.link.omsLinkSample.service.ApiLinkVO"/>
     <!-- 시스템관리 > 기타관리 > 샘플용 화면_임시-->
     <!--<typeAlias alias="sampleViewVO" type="kr.co.solbipos.sys.admin.sampleView.service.SampleViewVO"/>-->
 <!--
