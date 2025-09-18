@@ -199,19 +199,19 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
 
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
             // 입력값 체크
-            if($scope.flex.collectionView.itemsAdded[i].startTime == "" || $scope.flex.collectionView.itemsAdded[i].startTime == null){
+            if($scope.flex.collectionView.itemsAdded[i].startTime === "" || $scope.flex.collectionView.itemsAdded[i].startTime === null){
                 $scope._popMsg(messages["workScheduleStore.startTime"] + messages["workScheduleStore.inputEnv"]);
                 return false;
             }
-            if($scope.flex.collectionView.itemsAdded[i].endTime == "" || $scope.flex.collectionView.itemsAdded[i].endTime == null){
+            if($scope.flex.collectionView.itemsAdded[i].endTime === "" || $scope.flex.collectionView.itemsAdded[i].endTime === null){
                 $scope._popMsg(messages["workScheduleStore.endTime"] + messages["workScheduleStore.inputEnv"]);
                 return false;
             }
-            if($scope.flex.collectionView.itemsAdded[i].hourPay == "" || $scope.flex.collectionView.itemsAdded[i].hourPay == null){
+            if($scope.flex.collectionView.itemsAdded[i].hourPay === "" || $scope.flex.collectionView.itemsAdded[i].hourPay === null){
                 $scope._popMsg(messages["workScheduleStore.hourPay"] + messages["workScheduleStore.inputEnv"]);
                 return false;
             }
-            if($scope.flex.collectionView.itemsAdded[i].workFg == "" || $scope.flex.collectionView.itemsAdded[i].workFg == null){
+            if($scope.flex.collectionView.itemsAdded[i].workFg === "" || $scope.flex.collectionView.itemsAdded[i].workFg === null){
                 $scope._popMsg(messages["workScheduleStore.workFg"] + messages["workScheduleStore.inputEnv"]);
                 return false;
             }
@@ -314,11 +314,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
             }
         }
 
-        for (var i = 0; i < $scope.flex.collectionView.itemsRemoved.length; i++) {
-            $scope.flex.collectionView.itemsRemoved[i].status = "D";
-            params.push($scope.flex.collectionView.itemsRemoved[i]);
-        }
-
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
         $scope._save("/kookmin/workStudent/workScheduleStore/workScheduleStore/saveWorkScheduleStore.sb", params, function () {
             $scope.getWorkScheduleStoreList()
         });
@@ -326,12 +322,22 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
 
     // 근무테이블 그리드 행 삭제
     $scope.delete = function(){
-        for(var i = $scope.flex.collectionView.items.length-1; i >= 0; i-- ){
-            var item = $scope.flex.collectionView.items[i];
-            if(item.gChk){
-                $scope.flex.collectionView.removeAt(i);
+        $scope._popConfirm(messages['workScheduleStore.msg.delConfirm'], function () {
+            var params = [];
+
+            for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+                var item = $scope.flex.collectionView.items[i];
+                item.status = "D";
+                if (item.gChk) {
+                    params.push(item);
+                }
             }
-        }
+
+            // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+            $scope._save("/kookmin/workStudent/workScheduleStore/workScheduleStore/saveWorkScheduleStore.sb", params, function () {
+                $scope.getWorkScheduleStoreList()
+            });
+        });
     };
 
 }]);

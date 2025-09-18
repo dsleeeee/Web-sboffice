@@ -1260,6 +1260,8 @@
     <typeAlias alias="workScheduleStoreVO" type="kr.co.solbipos.kookmin.workStudent.workScheduleStore.service.WorkScheduleStoreVO"/>
     <!-- 국민대 > 근로학생관리 > 근로학생 배치 -->
     <typeAlias alias="workScheduleStudentVO" type="kr.co.solbipos.kookmin.workStudent.workScheduleStudent.service.WorkScheduleStudentVO"/>
+    <!-- 국민대 > 근로학생관리 > 근무내역 조회/수정 -->
+    <typeAlias alias="workHistoryVO" type="kr.co.solbipos.kookmin.workStudent.workHistory.service.WorkHistoryVO"/>
 
 
     <!-- 국민대 > 기초관리 > 학기정보관리 -->
