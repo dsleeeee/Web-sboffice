@@ -4,11 +4,11 @@
 
 <c:set var="menuCd" value="${sessionScope.sessionInfo.currentMenu.resrceCd}"/>
 <c:set var="menuNm" value="${sessionScope.sessionInfo.currentMenu.resrceNm}"/>
-<c:set var="baseUrl" value="/kookmin/workStudent/workStudentPayHistory/workStudentPayHistoryReport/"/>
+<c:set var="baseUrl" value="/kookmin/workStudent/workStudentScheduleStatus/workStudentScheduleStatusReport.jsp/"/>
 
 
-<wj-popup id="wjWorkStudentPayHistoryReportLayer" control="wjWorkStudentPayHistoryReportLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
-    <div id="dstbProdReportLayer" class="wj-dialog wj-dialog-columns" ng-controller="workStudentPayHistoryReportCtrl">
+<wj-popup id="wjWorkStudentScheduleStatusReportLayer" control="wjWorkStudentScheduleStatusReportLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:900px;">
+    <div id="workStudentScheduleStatusReportLayer" class="wj-dialog wj-dialog-columns" ng-controller="workStudentScheduleStatusReportCtrl">
         <div class="wj-dialog-header wj-dialog-header-font">
             <a href="#" class="wj-hide btn_close"></a>
         </div>
@@ -19,11 +19,11 @@
                     <s:message code="cmm.print"/></button>
             </div>
 
-            <div class="workStudentPayHistoryReport reportPrint w100" id="workStudentPayHistoryReport">
+            <div class="workStudentScheduleStatusReport reportPrint w100" id="workStudentScheduleStatusReport">
             </div>
 
         </div>
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudentPayHistory/workStudentPayHistoryReport.js?ver=20250918.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudentScheduleStatus/workStudentScheduleStatusReport.js?ver=20250919.01" charset="utf-8"></script>

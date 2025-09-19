@@ -1270,7 +1270,9 @@
     <!-- 국민대 > 근로학생관리 > 근무내역 조회/수정 -->
     <typeAlias alias="workStudentPayHistoryVO" type="kr.co.solbipos.kookmin.workStudent.workStudentPayHistory.service.WorkStudentPayHistoryVO"/>
     <!-- 국민대 > 근로학생관리 > 근무내역 조회/수정 -->
-    <typeAlias alias="WorkHistoryByWorkStudentVO" type="kr.co.solbipos.kookmin.workStudent.workHistoryByWorkStudent.service.WorkHistoryByWorkStudentVO"/>
+    <typeAlias alias="workHistoryByWorkStudentVO" type="kr.co.solbipos.kookmin.workStudent.workHistoryByWorkStudent.service.WorkHistoryByWorkStudentVO"/>
+    <!-- 국민대 > 근로학생관리 > 근로학생 근무배치 현황 -->
+    <typeAlias alias="workStudentScheduleStatusVO" type="kr.co.solbipos.kookmin.workStudent.workStudentScheduleStatus.service.WorkStudentScheduleStatusVO"/>
 
 
     <!-- 국민대 > 기초관리 > 학기정보관리 -->

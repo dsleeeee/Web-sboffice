@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    WorkStudentScheduleStatus.xml
+    근로학생 근무배치 현황 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.09.19
+-->
+<mapper namespace="kr.co.solbipos.kookmin.workStudent.workStudentScheduleStatus.service.impl.WorkStudentScheduleStatusMapper">
+
+    <!-- 근로학생 근무배치 현황 조회 -->
+    <!--
+        TABLE    : TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE
+        COMMENTS : 근로학생 근무배치 현황을 조회한다.
+    -->
+    <select id="getWorkStudentScheduleStatusList" parameterType="WorkStudentScheduleStatusVO" resultType="DefaultMap">
+        /* WorkStudentScheduleStatusMapper.getWorkStudentScheduleStatusList */
+        SELECT 	A.TERM_YEAR
+        ,		A.TERM_FG
+        ,		A.WORK_SCH_CODE
+        ,		A.STORE_CD
+        ,		B.STORE_NM
+        ,		RTRIM	(
+                            CASE WHEN INSTR(A.WORK_DAY, '1') > 0 THEN '일, ' ELSE '' END ||
+                            CASE WHEN INSTR(A.WORK_DAY, '2') > 0 THEN '월, ' ELSE '' END ||
+                            CASE WHEN INSTR(A.WORK_DAY, '3') > 0 THEN '화, ' ELSE '' END ||
+                            CASE WHEN INSTR(A.WORK_DAY, '4') > 0 THEN '수, ' ELSE '' END ||
+                            CASE WHEN INSTR(A.WORK_DAY, '5') > 0 THEN '목, ' ELSE '' END ||
+                            CASE WHEN INSTR(A.WORK_DAY, '6') > 0 THEN '금, ' ELSE '' END ||
+                            CASE WHEN INSTR(A.WORK_DAY, '7') > 0 THEN '토, ' ELSE '' END,
+                            ', '
+                        ) AS WORK_DAY
+        ,		SUBSTR(A.START_TIME, 1, 2) || ':' || SUBSTR(A.START_TIME, 3, 2) || ' ~ ' || SUBSTR(A.END_TIME, 1, 2) || ':' || SUBSTR(A.END_TIME, 3, 2) AS WORK_TIME
+        ,		TO_NUMBER(A.HOUR_PAY) AS HOUR_PAY
+        ,		DECODE(A.WORK_FG,'1','판매','2','진열','3','제조','')         AS WORK_FG
+        ,		A.STUDENT_NO
+        ,       C.STUDENT_NM
+        ,		TO_CHAR(TO_DATE(A.START_DAY, 'yyyymmdd'), 'yyyy-mm-dd')     AS START_DAY
+        ,		TO_CHAR(TO_DATE(A.END_DAY, 'yyyymmdd'), 'yyyy-mm-dd')       AS END_DAY
+        ,       A.REMARK
+        FROM 	TB_HQ_WORK_SCHEDULE A
+        ,		TB_MS_STORE B
+        ,		TB_HQ_WORK_STUDENTS C
+        WHERE 	B.STORE_CD 			= A.STORE_CD
+        AND 	C.HQ_OFFICE_CD		= A.HQ_OFFICE_CD
+        AND 	C.STUDENT_NO 		= A.STUDENT_NO
+        AND 	A.HQ_OFFICE_CD 		= #{hqOfficeCd}
+        AND 	A.TERM_YEAR 		= #{srchYear}
+        AND 	A.TERM_FG 			= #{termFg}
+        <if test="storeCd != null and storeCd != ''">
+            AND A.STORE_CD LIKE '%'|| #{storeCd} || '%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND B.STORE_NM LIKE '%'|| #{storeNm} || '%'
+        </if>
+        ORDER
+        BY		TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))
+        ,		TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))
+    </select>
+</mapper>
