@@ -32,6 +32,18 @@ public interface KioskSideOptionMapper {
     /** 키오스크(카테고리명) 영문, 중문, 일문 저장 */
     int saveKioskCategory(KioskSideOptionVO kioskSideOptionVO);
 
+    /** 키오스크중분류(카테고리명) 키맵그룹 콤보박스 조회(중분류 사용 키맵그룹만 조회) */
+    List<DefaultMap<String>> getKioskTuClsTypeComboList(KioskSideOptionVO kioskSideOptionVO);
+
+    /** 키오스크중분류(카테고리명) 카테고리(대분류) 콤보박스 조회 */
+    List<DefaultMap<String>> getKioskCategoryComboList(KioskSideOptionVO kioskSideOptionVO);
+
+    /** 키오스크중분류(카테고리명) 탭 리스트 조회 */
+    List<DefaultMap<String>> getKioskMClsList(KioskSideOptionVO kioskSideOptionVO);
+
+    /** 키오스크중분류(카테고리명) 영문, 중문, 일문 저장 */
+    int saveKioskMCls(KioskSideOptionVO kioskSideOptionVO);
+
     /** 사이드(선택그룹명) 탭 리스트 조회 */
     List<DefaultMap<String>> getSideSdselGrpList(KioskSideOptionVO kioskSideOptionVO);
 

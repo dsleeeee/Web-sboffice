@@ -1,8 +1,6 @@
 package kr.co.solbipos.base.multilingual.kioskSideOption.service.impl;
 
-import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
-import kr.co.common.exception.JsonException;
 import kr.co.common.service.message.MessageService;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.multilingual.kioskSideOption.service.KioskSideOptionService;
@@ -78,6 +76,56 @@ public class KioskSideOptionServiceImpl  implements KioskSideOptionService {
         kioskKeyMapVO.setTuClsType("");
         kioskKeyMapVO.setRegId(sessionInfoVO.getUserId());
         kioskKeyMapMapper.updateKioskClsMomsLsm(kioskKeyMapVO);
+
+        /*if (result == kioskSideOptionVOs.length) {
+            return result;
+        } else {
+            throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
+        }*/
+
+        return result;
+    }
+
+    /** 키오스크중분류(카테고리명) 키맵그룹 콤보박스 조회(중분류 사용 키맵그룹만 조회) */
+    @Override
+    public List<DefaultMap<String>> getKioskTuClsTypeComboList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO){
+
+        kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return kioskSideOptionMapper.getKioskTuClsTypeComboList(kioskSideOptionVO);
+    }
+
+    /** 키오스크중분류(카테고리명) 카테고리(대분류) 콤보박스 조회 */
+    @Override
+    public List<DefaultMap<String>> getKioskCategoryComboList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO){
+
+        kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return kioskSideOptionMapper.getKioskCategoryComboList(kioskSideOptionVO);
+    }
+
+    /** 키오스크중분류(카테고리명) 탭 리스트 조회 */
+    @Override
+    public List<DefaultMap<String>> getKioskMClsList(KioskSideOptionVO kioskSideOptionVO, SessionInfoVO sessionInfoVO){
+
+        kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return kioskSideOptionMapper.getKioskMClsList(kioskSideOptionVO);
+    }
+
+    /** 키오스크중분류(카테고리명) 영문, 중문, 일문 저장 */
+    @Override
+    public int saveKioskMCls(KioskSideOptionVO[] kioskSideOptionVOs, SessionInfoVO sessionInfoVO){
+        int result = 0;
+        String dt = currentDateTimeString();
+
+        for (KioskSideOptionVO kioskSideOptionVO : kioskSideOptionVOs) {
+
+            kioskSideOptionVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+            kioskSideOptionVO.setRegDt(dt);
+            kioskSideOptionVO.setRegId(sessionInfoVO.getUserId());
+            kioskSideOptionVO.setModDt(dt);
+            kioskSideOptionVO.setModId(sessionInfoVO.getUserId());
+
+            result += kioskSideOptionMapper.saveKioskMCls(kioskSideOptionVO);
+        }
 
         /*if (result == kioskSideOptionVOs.length) {
             return result;

@@ -2,12 +2,18 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<c:set var="hqOfficeCd" value="${sessionScope.sessionInfo.hqOfficeCd}" />
+
 <div class="con">
     <div class="tabType1" ng-controller="kioskSideOptionTabCtrl" ng-init="init()">
         <ul>
             <%-- 키오스크(카테고리명) 탭 --%>
             <li>
                 <a id="kioskCategoryTab" href="#" class="on" ng-click="kioskCategoryShow()"><s:message code="kioskSideOption.kioskCategory"/></a>
+            </li>
+            <%-- 키오스크중분류(카테고리명) 탭 --%>
+            <li <c:if test="${hqOfficeCd == 'DS021' or hqOfficeCd == 'DS034' or hqOfficeCd == 'H0393'}">style="display: none;"</c:if> >
+                <a id="kioskMClsTab" href="#" ng-click="kioskMClsShow()"><s:message code="kioskSideOption.kioskMCls"/></a>
             </li>
             <%-- 사이드(선택그룹명) 탭 --%>
             <li>
@@ -32,7 +38,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskSideOptionTab.js?ver=20240111.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/kioskSideOption/kioskSideOptionTab.js?ver=20250919.01" charset="utf-8"></script>
 
 <%-- excelfile read js --%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
@@ -40,6 +46,10 @@
 <%-- 탭페이지 레이어 시작 --%>
 <%-- 키오스크(카테고리명) 탭 --%>
 <c:import url="/WEB-INF/view/base/multilingual/kioskSideOption/kioskCategory.jsp">
+</c:import>
+
+<%-- 키오스크중분류(카테고리명) 탭 --%>
+<c:import url="/WEB-INF/view/base/multilingual/kioskSideOption/kioskMCls.jsp">
 </c:import>
 
 <%-- 사이드(선택그룹명) 탭 --%>

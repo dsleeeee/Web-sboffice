@@ -60,6 +60,14 @@ public class KioskSideOptionVO extends PageVO {
     private String optionValCnNm;
     /** 옵션명[일문] */
     private String optionValJpNm;
+    /** 중분류코드 */
+    private String tuMClsCd;
+    /** 중분류명(영문)*/
+    private String tuMClsEnNm;
+    /** 중분류명(중문)*/
+    private String tuMClsCnNm;
+    /** 중분류명(일문) */
+    private String tuMClsJpNm;
 
     public String getHqOfficeCd() {
         return hqOfficeCd;
@@ -275,5 +283,37 @@ public class KioskSideOptionVO extends PageVO {
 
     public void setOptionValJpNm(String optionValJpNm) {
         this.optionValJpNm = optionValJpNm;
+    }
+
+    public String getTuMClsCd() {
+        return tuMClsCd;
+    }
+
+    public void setTuMClsCd(String tuMClsCd) {
+        this.tuMClsCd = tuMClsCd;
+    }
+
+    public String getTuMClsEnNm() {
+        return tuMClsEnNm;
+    }
+
+    public void setTuMClsEnNm(String tuMClsEnNm) {
+        this.tuMClsEnNm = tuMClsEnNm;
+    }
+
+    public String getTuMClsCnNm() {
+        return tuMClsCnNm;
+    }
+
+    public void setTuMClsCnNm(String tuMClsCnNm) {
+        this.tuMClsCnNm = tuMClsCnNm;
+    }
+
+    public String getTuMClsJpNm() {
+        return tuMClsJpNm;
+    }
+
+    public void setTuMClsJpNm(String tuMClsJpNm) {
+        this.tuMClsJpNm = tuMClsJpNm;
     }
 }

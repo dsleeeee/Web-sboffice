@@ -6,6 +6,7 @@ import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.CmmUtil;
+import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
 import kr.co.solbipos.base.multilingual.kioskSideOption.service.KioskSideOptionService;
@@ -74,11 +75,16 @@ public class KioskSideOptionController {
     public String view(HttpServletRequest request, HttpServletResponse response, Model model) {
 
         KioskKeyMapVO kioskKeyMapVO = new KioskKeyMapVO();
+        KioskSideOptionVO kioskSideOptionVO = new KioskSideOptionVO();
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         // 키오스크 키맵그룹 조회
         List<DefaultMap<String>> kioskTuClsTypeList = kioskKeyMapService.getKioskTuClsTypeList(kioskKeyMapVO, sessionInfoVO);
         model.addAttribute("kioskTuClsTypeList", kioskTuClsTypeList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(kioskTuClsTypeList, "name", "value", UseYn.ALL));
+
+        // 키오스크 키맵그룹 조회(중분류 사용 키맵그룹만 조회)
+        List<DefaultMap<String>> kioskTuClsType2List = kioskSideOptionService.getKioskTuClsTypeComboList(kioskSideOptionVO, sessionInfoVO);
+        model.addAttribute("kioskTuClsType2List", kioskTuClsType2List.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(kioskTuClsType2List, "name", "value", UseYn.ALL));
 
         return "base/multilingual/kioskSideOption/kioskSideOptionTab";
     }
@@ -119,6 +125,68 @@ public class KioskSideOptionController {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
         int result = kioskSideOptionService.saveKioskCategory(kioskSideOptionVOs, sessionInfoVO);
+
+        return returnListJson(Status.OK, result);
+    }
+
+    /**
+     * 키오스크중분류(카테고리명) 카테고리(대분류) 콤보박스 조회
+     * @param kioskSideOptionVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2025. 09. 18.
+     */
+    @RequestMapping(value = "/getKioskCategoryComboList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskCategoryComboList(KioskSideOptionVO kioskSideOptionVO, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = kioskSideOptionService.getKioskCategoryComboList(kioskSideOptionVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, kioskSideOptionVO);
+    }
+
+    /**
+     * 키오스크중분류(카테고리명) 탭 리스트 조회
+     * @param kioskSideOptionVO
+     * @param request
+     * @return
+     * @author  이다솜
+     * @since   2025. 09. 18.
+     */
+    @RequestMapping(value = "/getKioskMClsList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getKioskMClsList(KioskSideOptionVO kioskSideOptionVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> list = kioskSideOptionService.getKioskMClsList(kioskSideOptionVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, list, kioskSideOptionVO);
+    }
+
+    /**
+     * 키오스크중분류(카테고리명) 영문, 중문, 일문 저장
+     * @param kioskSideOptionVOs
+     * @param request
+     * @param response
+     * @param model
+     * @author  이다솜
+     * @since   2025. 09. 18.
+     */
+    @RequestMapping(value = "/saveKioskMCls.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveKioskMCls(@RequestBody KioskSideOptionVO[] kioskSideOptionVOs, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = kioskSideOptionService.saveKioskMCls(kioskSideOptionVOs, sessionInfoVO);
 
         return returnListJson(Status.OK, result);
     }

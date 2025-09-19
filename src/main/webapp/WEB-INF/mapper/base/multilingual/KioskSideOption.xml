@@ -83,6 +83,132 @@
         ,   MOD_ID        = #{modId}
     </update>
 
+    <!-- 키오스크중분류(카테고리명) 키맵그룹 콤보박스 조회(중분류 사용 키맵그룹만 조회) -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS, TB_HQ_KIOSK_GROUP
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 키오스크중분류(카테고리명) 키맵그룹 콤보박스를 조회한다.(중분류 사용 키맵그룹만 조회)
+    -->
+    <select id="getKioskTuClsTypeComboList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
+        /* USE : KioskSideOptionMapper.getKioskTuClsTypeComboList */
+        SELECT  DISTINCT thkc.TU_CLS_TYPE AS VALUE
+        ,       NVL2(thkg.TU_CLS_TYPE_NM, '[' || thkc.TU_CLS_TYPE || ']' || thkg.TU_CLS_TYPE_NM, '[' || thkc.TU_CLS_TYPE || ']')AS NAME
+        FROM    TB_HQ_KIOSK_CLS thkc
+        ,       TB_HQ_KIOSK_GROUP thkg
+        WHERE   thkc.HQ_OFFICE_CD = #{hqOfficeCd}
+        AND     thkc.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
+        AND     thkc.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
+        AND     thkc.TU_CLS_TYPE NOT IN ('00')
+        AND     thkc.TU_M_CLS_FG = '2'
+        ORDER
+        BY      thkc.TU_CLS_TYPE
+    </select>
+
+    <!-- 키오스크중분류(카테고리명) 카테고리(대분류) 콤보박스 조회 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_CLS
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 키오스크중분류(카테고리명) 카테고리(대분류) 콤보박스를 조회한다.
+    -->
+    <select id="getKioskCategoryComboList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
+        /* KioskSideOptionMapper.getKioskCategoryComboList */
+        SELECT '' AS VALUE
+        ,      '전체' AS NAME
+        ,      '' AS TU_CLS_TYPE
+        FROM   DUAL
+        UNION
+        SELECT TU_CLS_CD AS VALUE
+        ,      '[' || TU_CLS_CD || ']' || TU_CLS_NM AS NAME
+        ,      TU_CLS_TYPE
+        FROM   TB_HQ_KIOSK_CLS
+        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="tuClsType != null and tuClsType != ''">
+            AND TU_CLS_TYPE = #{tuClsType}
+        </if>
+        ORDER
+        BY     VALUE NULLS FIRST, TU_CLS_TYPE, VALUE ASC
+    </select>
+
+    <!-- 키오스크중분류(카테고리명) 탭 리스트 조회 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_M_CLS, TB_HQ_KIOSK_GROUP, TB_HQ_KIOSK_CLS
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 키오스크중분류(카테고리명) 탭 리스트를 조회한다.
+    -->
+    <select id="getKioskMClsList" parameterType="kioskSideOptionVO" resultType="DefaultMap">
+         /* USE : KioskSideOptionMapper.getKioskMClsList */
+         SELECT thkmc.HQ_OFFICE_CD
+         ,      thkmc.TU_CLS_TYPE
+         ,      thkg.TU_CLS_TYPE_NM
+         ,      thkmc.TU_CLS_CD
+         ,      thkc.TU_CLS_NM
+         ,      thkmc.TU_M_CLS_CD
+         ,      thkmc.TU_M_CLS_NM
+         ,      thkmc.TU_PAGE
+         ,      thkmc.X
+         ,      thkmc.Y
+         ,      thkmc.WIDTH
+         ,      thkmc.HEIGHT
+         ,      thkmc.INDEX_NO
+         ,      thkmc.CLS_FG
+         ,      thkmc.M_CLS_MEMO
+         ,      thkmc.TU_M_CLS_EN_NM
+         ,      thkmc.TU_M_CLS_CN_NM
+         ,      thkmc.TU_M_CLS_JP_NM
+         ,      NVL((
+                SELECT  NMCODE_ITEM_2
+                FROM    TB_HQ_NMCODE thn
+                WHERE   thn.HQ_OFFICE_CD = thkmc.HQ_OFFICE_CD
+                AND     thn.NMCODE_GRP_CD = '229'
+                AND     thn.NMCODE_NM = thkmc.TU_CLS_TYPE
+                AND     thn.NMCODE_ITEM_1 = thkmc.TU_CLS_CD
+                ), 'N') AS STORE_MOD_YN
+         FROM   TB_HQ_KIOSK_M_CLS thkmc
+         ,      TB_HQ_KIOSK_GROUP thkg
+         ,      TB_HQ_KIOSK_CLS thkc
+         WHERE  thkmc.HQ_OFFICE_CD = #{hqOfficeCd}
+         AND    thkmc.HQ_OFFICE_CD = thkg.HQ_OFFICE_CD(+)
+         AND    thkmc.TU_CLS_TYPE = thkg.TU_CLS_TYPE(+)
+         AND    thkmc.HQ_OFFICE_CD = thkc.HQ_OFFICE_CD(+)
+         AND    thkmc.TU_CLS_TYPE = thkc.TU_CLS_TYPE(+)
+         AND    thkmc.TU_CLS_CD = thkc.TU_CLS_CD(+)
+        <if test="tuClsType != null and tuClsType != ''">
+         AND    thkmc.TU_CLS_TYPE = #{tuClsType}
+        </if>
+        <if test="tuClsCd != null and tuClsCd != ''">
+         AND    thkmc.TU_CLS_CD = #{tuClsCd}
+        </if>
+         AND    thkmc.TU_CLS_TYPE NOT IN ('00')
+         ORDER
+         BY     thkmc.TU_CLS_TYPE, thkmc.TU_CLS_CD, thkmc.TU_M_CLS_CD
+    </select>
+
+    <!-- 키오스크중분류(카테고리명) 영문, 중문, 일문 저장 -->
+    <!--
+        TABLE    : TB_HQ_KIOSK_M_CLS
+        PARAM    : kioskSideOptionVO
+        COMMENTS : 키오스크중분류(카테고리명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveKioskMCls" parameterType="kioskSideOptionVO">
+        /* USE : KioskSideOptionMapper.saveKioskMCls */
+        MERGE INTO TB_HQ_KIOSK_M_CLS thkmc
+        USING DUAL
+        ON (
+            HQ_OFFICE_CD = #{hqOfficeCd}
+        AND TU_CLS_TYPE  = #{tuClsType}
+        AND TU_CLS_CD    = #{tuClsCd}
+        AND TU_M_CLS_CD  = #{tuMClsCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            TU_M_CLS_EN_NM  = #{tuMClsEnNm}
+        ,   TU_M_CLS_CN_NM  = #{tuMClsCnNm}
+        ,   TU_M_CLS_JP_NM  = #{tuMClsJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
     <!-- 사이드(선택그룹명) 탭 리스트 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT_SDSEL_GROUP

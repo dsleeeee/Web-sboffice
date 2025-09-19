@@ -17,6 +17,7 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
 
     $scope.init = function () {
         $("#kioskCategoryView").show();
+        $("#kioskMClsView").hide();
         $("#sideSdselGrpView").hide();
         $("#sideSdselClassView").hide();
         $("#optionGrpView").hide();
@@ -26,12 +27,14 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
     // 키오스크(카테고리) 탭 보이기
     $scope.kioskCategoryShow = function () {
         $("#kioskCategoryTab").addClass("on");
+        $("#kioskMClsTab").removeClass("on");
         $("#sideSdselGrpTab").removeClass("on");
         $("#sideSdselClassTab").removeClass("on");
         $("#optionGrpTab").removeClass("on");
         $("#optionValTab").removeClass("on");
 
         $("#kioskCategoryView").show();
+        $("#kioskMClsView").hide();
         $("#sideSdselGrpView").hide();
         $("#sideSdselClassView").hide();
         $("#optionGrpView").hide();
@@ -42,15 +45,38 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
         scope.flex.refresh();
     };
 
+    // 키오스크중분류(카테고리명) 탭 보이기
+    $scope.kioskMClsShow = function () {
+        $("#kioskCategoryTab").removeClass("on");
+        $("#kioskMClsTab").addClass("on");
+        $("#sideSdselGrpTab").removeClass("on");
+        $("#sideSdselClassTab").removeClass("on");
+        $("#optionGrpTab").removeClass("on");
+        $("#optionValTab").removeClass("on");
+
+        $("#kioskCategoryView").hide();
+        $("#kioskMClsView").show();
+        $("#sideSdselGrpView").hide();
+        $("#sideSdselClassView").hide();
+        $("#optionGrpView").hide();
+        $("#optionValView").hide();
+
+        // angular 그리드 hide 시 깨지므로 refresh()
+        var scope = agrid.getScope("kioskMClsCtrl");
+        scope.flex.refresh();
+    };
+
     // 사이드(선택그룹명) 탭 보이기
     $scope.sideSdselGrpShow = function () {
         $("#kioskCategoryTab").removeClass("on");
+        $("#kioskMClsTab").removeClass("on");
         $("#sideSdselGrpTab").addClass("on");
         $("#sideSdselClassTab").removeClass("on");
         $("#optionGrpTab").removeClass("on");
         $("#optionValTab").removeClass("on");
 
         $("#kioskCategoryView").hide();
+        $("#kioskMClsView").hide();
         $("#sideSdselGrpView").show();
         $("#sideSdselClassView").hide();
         $("#optionGrpView").hide();
@@ -64,12 +90,14 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
     // 사이드(선택분류) 탭 보이기
     $scope.sideSdselClassShow = function () {
         $("#kioskCategoryTab").removeClass("on");
+        $("#kioskMClsTab").removeClass("on");
         $("#sideSdselGrpTab").removeClass("on");
         $("#sideSdselClassTab").addClass("on");
         $("#optionGrpTab").removeClass("on");
         $("#optionValTab").removeClass("on");
 
         $("#kioskCategoryView").hide();
+        $("#kioskMClsView").hide();
         $("#sideSdselGrpView").hide();
         $("#sideSdselClassView").show();
         $("#optionGrpView").hide();
@@ -83,12 +111,14 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
     // 옵션(그룹명) 탭 보이기
     $scope.optionGrpShow = function () {
         $("#kioskCategoryTab").removeClass("on");
+        $("#kioskMClsTab").removeClass("on");
         $("#sideSdselGrpTab").removeClass("on");
         $("#sideSdselClassTab").removeClass("on");
         $("#optionGrpTab").addClass("on");
         $("#optionValTab").removeClass("on");
 
         $("#kioskCategoryView").hide();
+        $("#kioskMClsView").hide();
         $("#sideSdselGrpView").hide();
         $("#sideSdselClassView").hide();
         $("#optionGrpView").show();
@@ -102,12 +132,14 @@ app.controller('kioskSideOptionTabCtrl', ['$scope', function ($scope) {
     // 옵션(옵션명) 탭 보이기
     $scope.optionValShow = function () {
         $("#kioskCategoryTab").removeClass("on");
+        $("#kioskMClsTab").removeClass("on");
         $("#sideSdselGrpTab").removeClass("on");
         $("#sideSdselClassTab").removeClass("on");
         $("#optionGrpTab").removeClass("on");
         $("#optionValTab").addClass("on");
 
         $("#kioskCategoryView").hide();
+        $("#kioskMClsView").hide();
         $("#sideSdselGrpView").hide();
         $("#sideSdselClassView").hide();
         $("#optionGrpView").hide();
