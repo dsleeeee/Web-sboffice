@@ -13,20 +13,21 @@
  */
 
 /** 근로학생별 근무내역 출력 팝업 controller */
-app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+app.controller('workStudentScheduleStatusReportCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
-    angular.extend(this, new RootController('workHistoryByWorkStudentReportCtrl', $scope, $http, true));
+    angular.extend(this, new RootController('workStudentScheduleStatusReportCtrl', $scope, $http, true));
 
     // 다른 컨트롤러의 broadcast 받기
-    $scope.$on("workHistoryByWorkStudentReportCtrl", function (event, data) {
+    $scope.$on("workStudentScheduleStatusReportCtrl", function (event, data) {
         $scope.data = data;
 
-        $scope.wjWorkHistoryByWorkStudentReportLayer.show(true);
+        $scope.wjWorkStudentScheduleStatusReportLayer.show(true);
 
-        // workHistoryByWorkStudentReport html 내용 초기화
-        $("#workHistoryByWorkStudentReport").html('');
 
-        $scope.getWorkHistoryByWorkStudentReportList();
+        // workStudentScheduleStatusReport html 내용 초기화
+        $("#workStudentScheduleStatusReport").html('');
+
+        $scope.getWorkStudentScheduleStatusList();
 
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
@@ -34,17 +35,15 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
 
 
     // 근로학생별 근무내역 리스트 조회
-    $scope.getWorkHistoryByWorkStudentReportList = function () {
+    $scope.getWorkStudentScheduleStatusList = function () {
         // 로딩바 show
         $scope.$broadcast('loadingPopupActive');
 
         var params    = {};
-        params.startDate    = $scope.data.startDate;
-        params.endDate      = $scope.data.endDate;
+        params.srchYear    = $scope.data.srchYear;
+        params.termFg      = $scope.data.termFg;
         params.storeCd      = $scope.data.storeCd;
         params.storeNm      = $scope.data.storeNm;
-        params.studentNo    = $scope.data.studentNo;
-        params.studentNm    = $scope.data.studentNm;
 
         //가상로그인 session 설정
         if(document.getElementsByName('sessionId')[0]){
@@ -54,7 +53,7 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
         // ajax 통신 설정
         $http({
             method : 'POST', //방식
-            url    : '/kookmin/workStudent/workHistoryByWorkStudent/workHistoryByWorkStudent/getWorkHistoryByWorkStudentList.sb', /* 통신할 URL */
+            url    : '/kookmin/workStudent/workStudentScheduleStatus/workStudentScheduleStatus/getWorkStudentScheduleStatusList.sb', /* 통신할 URL */
             params : params, /* 파라메터로 보낼 데이터 */
             headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
         }).then(function successCallback(response) {
@@ -66,7 +65,7 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
 
                     var arrWorkStudentList = [];
                     var arrList     = [];
-                    var pageRowCnt  = 35; // 한 페이지에 표시할 row 수 변수
+                    var pageRowCnt  = 30; // 한 페이지에 표시할 row 수 변수
                     var rowCnt      = 0;
                     var totPageCnt  = Math.ceil(parseInt(loopCnt) / parseInt(pageRowCnt));
                     // 한 페이지에 표시할 row 수에 따라 배열에 담기 위해 for 문 돔. 해당 배열만큼 페이지수 생성
@@ -88,8 +87,6 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
                     var month              = getCurDate('-').split('-')[1];
                     var day                = getCurDate('-').split('-')[2];
                     var time               = getCurTime(':');
-                    var srchStartDate      = $scope.data.startDate.substring(0,4) + '-' + $scope.data.startDate.substring(4,6) + '-' + $scope.data.startDate.substring(6,8);
-                    var srchEndDate        = $scope.data.endDate.substring(0,4) + '-' + $scope.data.endDate.substring(4,6) + '-' + $scope.data.endDate.substring(6,8);
                     var rowNo              = 0;  // row 의 No. 를 위한 변수
                     var workStudentReportHtml = ''; // 화면에 뿌려질 최종 html 을 담기위한 변수
                     var titleHtml          = ''; // 근로학생별 근무내역 최상단 html
@@ -97,23 +94,31 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
                     var nextPageHtml       = '<p class="nextPage"></p>'; // 프린트 출력시 다음 페이지로 넘기기 위한 html
                     var workStudentListHeaderHtml = '<table class="w100 mt5">' // 근로학생별 근무내역리스트 header html
                         + '<colgroup>'
-                        + '<col style="width:5%;">'
-                        + '<col style="width:8%;">'
-                        + '<col style="width:8%;">'
+                        + '<col style="width:4%;">'
+                        + '<col style="width:6%;">'
                         + '<col style="width:12%;">'
+                        + '<col style="width:11%;">'
+                        + '<col style="width:10%;">'
+                        + '<col style="width:6%;">'
+                        + '<col style="width:6%;">'
+                        + '<col style="width:10%;">'
                         + '<col style="width:8%;">'
-                        + '<col style="width:8%;">'
-                        + '<col style="width:8%;">'
-                        + '<col style="width:20%;">'
+                        + '<col style="width:10%;">'
+                        + '<col style="width:10%;">'
+                        + '<col style="width:15%;">'
                         + '</colgroup>'
                         + '<tr class="tc">'
                         + '<th>No.</th>'
-                        + '<th>근로학생</th>'
-                        + '<th>근무일자</th>'
-                        + '<th>근무장소</th>'
-                        + '<th>출근시간</th>'
-                        + '<th>퇴근시간</th>'
+                        + '<th>근무코드</th>'
+                        + '<th>매장명</th>'
+                        + '<th>근무요일</th>'
                         + '<th>근무시간</th>'
+                        + '<th>시급</th>'
+                        + '<th>업무</th>'
+                        + '<th>학번</th>'
+                        + '<th>근로학생</th>'
+                        + '<th>근무시작일</th>'
+                        + '<th>근무종료일</th>'
                         + '<th>비고</th>'
                         + '</tr>';
 
@@ -125,12 +130,16 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
                             var item = payHistList[j];
                             workStudentListHtml += '<tr class="h25">'
                                 + '<td class="tc">' + (++rowNo) + '</td>'
-                                + '<td class="tc">' + item.studentNm + '</td>'
-                                + '<td class="tc">' + item.workDate + '</td>'
+                                + '<td class="tc">' + item.workSchCode + '</td>'
                                 + '<td class="tc">' + item.storeNm + '</td>'
-                                + '<td class="tc">' + item.realStartTime + '</td>'
-                                + '<td class="tc">' + item.realEndTime + '</td>'
-                                + '<td class="tc">' + item.baseWorkTime + '</td>'
+                                + '<td class="tc">' + item.workDay + '</td>'
+                                + '<td class="tc">' + item.workTime + '</td>'
+                                + '<td class="tc">' + addComma(item.hourPay) + '</td>'
+                                + '<td class="tc">' + item.workFg + '</td>'
+                                + '<td class="tc">' + item.studentNo + '</td>'
+                                + '<td class="tc">' + item.studentNm + '</td>'
+                                + '<td class="tc">' + item.startDay + '</td>'
+                                + '<td class="tc">' + item.endDay + '</td>'
                                 + '<td class="tc">' + nvl(item.remark,'') + '</td>'
                                 + '</tr>';
                         }
@@ -143,10 +152,10 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
                             + '<col style="width: 20%">'
                             + '</colgroup>'
                             + '<tr>'
-                            + '<td class="tl br0"><p class="bk s20">근로학생별 근로내역 현황 </p></td>'
+                            + '<td class="tl br0"><p class="bk s20">근로학생 근무배치 현황 </p></td>'
                             + '</tr>'
                             + '<tr>'
-                            + '<td class="tl br0" valign="bottom">(기간 : ' + srchStartDate + ' ~ ' + srchEndDate + ')</td>'
+                            + '<td class="tl br0" valign="bottom">' + $scope.data.srchYear + '년도 '  + $scope.data.termFgTxt + ' 점소 : ' + nvl($scope.data.storeNm,'전체') + '</td>'
                             + '<td class="tr br0" valign="bottom">출력일자 : ' + month + '-' + day + ' ' + time + '</td>'
                             + '<td class="tr br0" valign="bottom">페이지 : ' + (i + 1) + ' / ' + totPageCnt + '</td>'
                             + '</tr>'
@@ -156,7 +165,7 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
                     }
 
                     // console.log(workStudentReportHtml);
-                    $('#workHistoryByWorkStudentReport').append(workStudentReportHtml);
+                    $('#workStudentScheduleStatusReport').append(workStudentReportHtml);
 
                     // 로딩바 hide
                     $scope.$broadcast('loadingPopupInactive');
@@ -193,7 +202,7 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
         }
 
         // add content to it
-        var view = document.querySelector('#workHistoryByWorkStudentReport');
+        var view = document.querySelector('#workStudentScheduleStatusReport');
         doc.append(view);
 
         // and print it
