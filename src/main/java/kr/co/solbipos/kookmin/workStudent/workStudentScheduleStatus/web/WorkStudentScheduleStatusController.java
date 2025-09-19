@@ -6,7 +6,6 @@ import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.kookmin.workStudent.workHistoryByWorkStudent.service.WorkHistoryByWorkStudentVO;
 import kr.co.solbipos.kookmin.workStudent.workStudentScheduleStatus.service.WorkStudentScheduleStatusService;
 import kr.co.solbipos.kookmin.workStudent.workStudentScheduleStatus.service.WorkStudentScheduleStatusVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-
+/**
+ * @Class Name  : WorkStudentScheduleStatusController.java
+ * @Description : 국민대 > 근로학생관리 > 근로학생 근무배치 현황
+ * @Modification Information
+ * @
+ * @  수정일      수정자              수정내용
+ * @ ----------  ---------   -------------------------------
+ * @ 2025.09.19  김유승      최초생성
+ *
+ * @author 링크 개발실 개발1팀 김유승
+ * @since 2025.09.19
+ * @version 1.0
+ *
+ *  Copyright (C) by LYNK CORP. All right reserved.
+ */
 @Controller
 @RequestMapping(value = "/kookmin/workStudent/workStudentScheduleStatus")
 public class WorkStudentScheduleStatusController {
