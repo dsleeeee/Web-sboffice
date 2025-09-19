@@ -120,7 +120,6 @@
                 is-read-only="true">
 
             <!-- define columns -->
-            <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrpCd"/>" binding="tuClsType" align="center" width="85" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kioskSideOption.keyMapGrpNm"/>" binding="tuClsTypeNm" align="left" width="150" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="kioskSideOption.categoryCd"/>" binding="tuClsCd" align="center" width="85" is-read-only="true"></wj-flex-grid-column>
