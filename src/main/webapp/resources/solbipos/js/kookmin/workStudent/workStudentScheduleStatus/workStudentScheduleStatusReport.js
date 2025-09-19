@@ -61,7 +61,26 @@ app.controller('workStudentScheduleStatusReportCtrl', ['$scope', '$http', '$time
                 if (!$.isEmptyObject(response.data.data)) {
                     var dataList = response.data.data.list;
                     var loopCnt  = dataList.length;
-                    console.log(dataList);
+
+                    var storeCnt = '';
+                    if(dataList.length > 0) {
+                        var storeSet = new Set();
+
+                        for (var i = 0; i < dataList.length; i++) {
+                            storeSet.add(dataList[i].storeNm);
+                        }
+                        var storeArr = Array.from(storeSet);
+                        if($scope.data.storeNm !== null && $scope.data.storeNm !== '' && $scope.data.storeNm !== undefined){
+                            console.log(0);
+                            if(storeArr.length > 1) {
+                                storeCnt = storeArr[0] + "외 " + (storeArr.length - 1) + "개";
+                            }else{
+                                storeCnt = storeArr[0];
+                            }
+                        }else{
+                            storeCnt = '전체';
+                        }
+                    }
 
                     var arrWorkStudentList = [];
                     var arrList     = [];
@@ -155,7 +174,7 @@ app.controller('workStudentScheduleStatusReportCtrl', ['$scope', '$http', '$time
                             + '<td class="tl br0"><p class="bk s20">근로학생 근무배치 현황 </p></td>'
                             + '</tr>'
                             + '<tr>'
-                            + '<td class="tl br0" valign="bottom">' + $scope.data.srchYear + '년도 '  + $scope.data.termFgTxt + ' 점소 : ' + nvl($scope.data.storeNm,'전체') + '</td>'
+                            + '<td class="tl br0" valign="bottom">' + $scope.data.srchYear + '년도 '  + $scope.data.termFgTxt + ' 점소 : ' + storeCnt + '</td>'
                             + '<td class="tr br0" valign="bottom">출력일자 : ' + month + '-' + day + ' ' + time + '</td>'
                             + '<td class="tr br0" valign="bottom">페이지 : ' + (i + 1) + ' / ' + totPageCnt + '</td>'
                             + '</tr>'
