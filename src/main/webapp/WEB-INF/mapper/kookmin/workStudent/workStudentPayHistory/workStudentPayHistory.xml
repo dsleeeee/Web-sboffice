@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    WorkStudentPayHistory.xml
+    근로장학금 지급 내역 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.09.18
+-->
+<mapper namespace="kr.co.solbipos.kookmin.workStudent.workStudentPayHistory.service.impl.WorkStudentPayHistoryMapper">
+
+    <!-- 근무내역 조회 -->
+    <!--
+        TABLE    : TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE
+        COMMENTS : 근무내역을 조회한다.
+    -->
+    <select id="getWorkStudentPayHistoryList" parameterType="WorkStudentPayHistoryVO" resultType="DefaultMap">
+        /* WorkStudentPayHistoryMapper.getWorkStudentPayHistoryList */
+        SELECT 	A.WORK_SCH_CODE
+        ,		B.STUDENT_NM
+        ,       A.STORE_CD
+        ,		C.STORE_NM
+        ,		B.DEPARTMENT
+        ,		B.STUDENT_NO
+        ,		TO_CHAR(TO_DATE(#{srchYm}||'01','YYYYMMDD'), 'YYYY-MM-DD') || ' ~ ' ||TO_CHAR(LAST_DAY(TO_DATE(#{srchYm}, 'YYYYMM')), 'YYYY-MM-DD') AS WORK_PERIOD
+        ,		B.BANK_NM || ' ' || B.ACCOUNT_NO    AS BANK_ACCOUNT
+        ,		SUM(D.WORK_TIME)                    AS WORK_TIME
+        ,		SUM(D.WORK_TIME) * A.HOUR_PAY       AS PAY_AMT
+        FROM 	TB_HQ_WORK_SCHEDULE A
+        ,		TB_HQ_WORK_STUDENTS B
+        ,		TB_MS_STORE C
+        ,		TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE D
+        WHERE 	A.HQ_OFFICE_CD 	= B.HQ_OFFICE_CD
+        AND 	A.STUDENT_NO 	= B.STUDENT_NO
+        AND 	A.HQ_OFFICE_CD	= C.HQ_OFFICE_CD
+        AND 	A.STORE_CD		= C.STORE_CD
+        AND		D.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND		D.TERM_YEAR 	= A.TERM_YEAR
+        AND		D.TERM_FG 		= A.TERM_FG
+        AND		D.STORE_CD 		= A.STORE_CD
+        AND		D.WORK_SCH_CODE = A.WORK_SCH_CODE
+        AND		A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND		D.WORK_DATE BETWEEN #{srchYm} || '01' AND #{srchYm} || '31'
+        GROUP
+        BY		A.WORK_SCH_CODE
+        ,		B.STUDENT_NM
+        ,       A.STORE_CD
+        ,		C.STORE_NM
+        ,		B.DEPARTMENT
+        ,		B.STUDENT_NO
+        ,		B.BANK_NM || ' ' || B.ACCOUNT_NO
+        ,		A.HOUR_PAY
+        ORDER
+        BY		TO_NUMBER(SUBSTR(A.WORK_SCH_CODE, 2, INSTR(A.WORK_SCH_CODE, '-') - 2))
+        ,		TO_NUMBER(SUBSTR(A.WORK_SCH_CODE, INSTR(A.WORK_SCH_CODE, '-') + 1 ))
+    </select>
+</mapper>

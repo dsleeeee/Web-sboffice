@@ -83,7 +83,7 @@
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.termYear"/>"    binding="termFg"        width=""       align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.workSchCode"/>" binding="workSchCode"   width="80"     align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.storeCd"/>"     binding="storeCd"       width="80"     align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workScheduleStore.storeNm"/>"     binding="storeNm"       width="120"    align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workScheduleStore.storeNm"/>"     binding="storeNm"       width="120"    align="left"   is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.sun"/>"         binding="sun"           width="50"     align="center" is-read-only="false"  ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.mon"/>"         binding="mon"           width="50"     align="center" is-read-only="false"  ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.tue"/>"         binding="tue"           width="50"     align="center" is-read-only="false"  ></wj-flex-grid-column>
@@ -98,7 +98,7 @@
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.workTime"/>"    binding="workTime"      width="80"     align="center" is-read-only="true"   format="n1"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.breakTime"/>"   binding="breakTime"     width="80"     align="center" is-read-only="true"   format="n1"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.totWorkTime"/>" binding="totWorkTime"   width="80"     align="center" is-read-only="true"   format="n1"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workScheduleStore.remark"/>"      binding="remark"        width="150"    align="center" ></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workScheduleStore.remark"/>"      binding="remark"        width="150"    align="left" ></wj-flex-grid-column>
 
             </wj-flex-grid>
         </div>

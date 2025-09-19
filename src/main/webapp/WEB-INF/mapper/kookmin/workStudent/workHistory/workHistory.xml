@@ -61,6 +61,7 @@
         AND 	D.WORK_SCH_CODE (+) = A.WORK_SCH_CODE
         AND		D.WORK_DATE		(+) = #{workDate}
         AND		#{workDate} BETWEEN A.START_DAY AND A.END_DAY
+        AND     A.HQ_OFFICE_CD      = #{hqOfficeCd}
         <if test="storeCd != null and storeCd != ''">
             AND C.STORE_CD LIKE '%'|| #{storeCd} || '%'
         </if>

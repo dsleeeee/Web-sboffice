@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    workHistoryByWorkStudent.xml
+    근로학생별 근로내역 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.09.19
+-->
+<mapper namespace="kr.co.solbipos.kookmin.workStudent.workHistoryByWorkStudent.service.impl.WorkHistoryByWorkStudentMapper">
+
+    <!-- 근로학생별 근로내역 조회 -->
+    <!--
+        TABLE    : TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE
+        COMMENTS : 근로학생별 근로내역을 조회한다.
+    -->
+    <select id="getWorkHistoryByWorkStudentList" parameterType="WorkHistoryByWorkStudentVO" resultType="DefaultMap">
+        /* WorkHistoryByWorkStudentMapper.getWorkHistoryByWorkStudentList */
+        SELECT 	A.STUDENT_NO
+        ,		C.STUDENT_NM
+        ,		TO_CHAR(TO_DATE(B.WORK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS WORK_DATE
+        ,		A.STORE_CD
+        ,		D.STORE_NM
+        ,		TO_CHAR(TO_DATE(SUBSTR(B.REAL_START_TIME,9,4) ,'hh24mi'), 'hh24:mi')  	AS REAL_START_TIME
+        ,		TO_CHAR(TO_DATE(SUBSTR(B.REAL_END_TIME,9,4) ,'hh24mi'), 'hh24:mi')      AS REAL_END_TIME
+        ,		ROUND((TO_DATE(A.END_TIME, 'HH24MI') - TO_DATE(A.START_TIME, 'HH24MI')) * 24, 2)	AS BASE_WORK_TIME
+        ,		B.REMARK
+        FROM 	TB_HQ_WORK_SCHEDULE  A
+        ,		TB_HQ_WORK_SCHEDULE_STUDENTS_REG_DATE B
+        ,		TB_HQ_WORK_STUDENTS C
+        ,		TB_MS_STORE D
+        WHERE 	B.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND 	B.TERM_YEAR 	= A.TERM_YEAR
+        AND 	B.TERM_FG 		= A.TERM_FG
+        AND 	B.STORE_CD 		= A.STORE_CD
+        AND 	B.WORK_SCH_CODE = A.WORK_SCH_CODE
+        AND		C.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND		C.STUDENT_NO 	= A.STUDENT_NO
+        AND		D.STORE_CD		= A.STORE_CD
+        AND     B.WORK_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test="storeCd != null and storeCd != ''">
+            AND A.STORE_CD LIKE '%'|| #{storeCd} || '%'
+        </if>
+        <if test="storeNm != null and storeNm != ''">
+            AND D.STORE_NM LIKE '%'|| #{storeNm} || '%'
+        </if>
+        <if test="studentNo != null and studentNo != ''">
+            AND A.STUDENT_NO LIKE '%'|| #{studentNo} || '%'
+        </if>
+        <if test="studentNm != null and studentNm != ''">
+            AND C.STUDENT_NM LIKE '%'|| #{studentNm} || '%'
+        </if>
+        ORDER
+        BY		B.WORK_DATE
+        ,		A.STORE_CD
+        ,		A.STUDENT_NO
+    </select>
+</mapper>
