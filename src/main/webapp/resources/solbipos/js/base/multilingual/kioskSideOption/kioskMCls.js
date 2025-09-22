@@ -67,7 +67,7 @@ app.controller('kioskMClsCtrl', ['$scope', '$http', '$timeout', function ($scope
         params.tuClsCd = $scope.srchTuClsCd2Combo.selectedValue;
 
         // 키오스크중분류(카테고리) 탭 리스트 조회
-        $scope._inquiryMain("/base/multilingual/kioskSideOption/getKioskMClsList.sb", params);
+        $scope._inquirySub("/base/multilingual/kioskSideOption/getKioskMClsList.sb", params);
     };
 
     // 저장

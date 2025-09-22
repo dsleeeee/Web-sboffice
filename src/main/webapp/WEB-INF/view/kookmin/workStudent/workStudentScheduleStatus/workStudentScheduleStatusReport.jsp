@@ -26,4 +26,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudentScheduleStatus/workStudentScheduleStatusReport.js?ver=20250919.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudentScheduleStatus/workStudentScheduleStatusReport.js?ver=20250922.02" charset="utf-8"></script>
