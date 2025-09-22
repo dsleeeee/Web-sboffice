@@ -108,18 +108,18 @@
                             <%-- 사업자번호 --%>
                             <th><s:message code="vendr.bizNo" /></th>
                             <td>
-                                <input type="text" id="rBizNo1" maxlength="3" style="width:50px;" maxlength="3"/>
-                                <input type="text" id="rBizNo2" maxlength="2" style="width:40px;" maxlength="2"/>
-                                <input type="text" id="rBizNo3" maxlength="5" style="width:110px;" maxlength="5"/>
+                                <input type="text" id="rBizNo1" maxlength="3" style="width:50px;" maxlength="3" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                <input type="text" id="rBizNo2" maxlength="2" style="width:40px;" maxlength="2" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                <input type="text" id="rBizNo3" maxlength="5" style="width:110px;" maxlength="5" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" />
                             </td>
                             <th><s:message code="vendr.telNo" /></th>
-                            <td><input type="text" class="sb-input w100" id="rTelNo" ng-model="rTelNo" maxlength="15"/></td>
+                            <td><input type="text" class="sb-input w100" id="rTelNo" ng-model="rTelNo" maxlength="15" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" /></td>
                         </tr>
                         <tr>
                             <th><s:message code="vendr.emailAddr" /></th>
                             <td><input type="text" class="sb-input w100" id="rEmailAddr" ng-model="rEmailAddr" maxlength="200"/></td>
                             <th><s:message code="vendr.faxNo" /></th>
-                            <td><input type="text" class="sb-input w100" id="rFaxNo" ng-model="rFaxNo" maxlength="15"/></td>
+                            <td><input type="text" class="sb-input w100" id="rFaxNo" ng-model="rFaxNo" maxlength="15" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" /></td>
                         </tr>
                         <tr>
                             <th><s:message code="vendr.addr" /></th>

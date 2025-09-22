@@ -146,9 +146,7 @@ public class VendrServiceImpl implements VendrService {
                 registVO.setModId(vendrVO.getModId());
                 registVO.setMembrOrgnCd(vendrVO.getHqOfficeCd());
                 registVO.setMembrNo(registMapper.getNewMemberNo(registVO));
-                if(registVO.getMembrNm() == null || registVO.getMembrNm() == ""){
-                    registVO.setMembrNm(registVO.getMembrNo());
-                }
+                registVO.setMembrNm(vendrVO.getVendrNm());
                 registVO.setMembrClassCd("000");
                 registVO.setRegStoreCd(vendrMapper.getMinRegStoreCd(vendrVO));
                 registVO.setGendrFg("F");

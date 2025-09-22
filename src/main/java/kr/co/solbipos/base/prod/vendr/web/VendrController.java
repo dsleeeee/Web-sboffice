@@ -65,7 +65,7 @@ public class VendrController {
      * @param model Model
      * @return
      */
-    @RequestMapping(value = "/vendr//list.sb", method = RequestMethod.GET)
+    @RequestMapping(value = "/vendr/list.sb", method = RequestMethod.GET)
     public String list(HttpServletRequest request, HttpServletResponse response, Model model)
     {
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
