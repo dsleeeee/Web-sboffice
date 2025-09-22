@@ -7,6 +7,8 @@ import kr.co.common.service.session.SessionService;
 import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.solbipos.adi.board.board.service.BoardVO;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
+import kr.co.solbipos.base.prod.sidemenu.service.SideMenuSelClassVO;
+import kr.co.solbipos.base.store.emp.cardInfo.service.EmpCardInfoVO;
 import kr.co.solbipos.iostock.order.outstockReqDate.service.OutstockReqDateVO;
 import kr.co.solbipos.kookmin.base.termInfo.service.TermInfoVO;
 import kr.co.solbipos.kookmin.workStudent.workScheduleStore.service.WorkScheduleStoreService;
@@ -24,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
+import static kr.co.common.utils.grid.ReturnUtil.returnListJson;
+
 /**
  * @Class Name  : WorkScheduleStoreController.java
  * @Description : 국민대 > 근로학생관리 > 매장별 근무테이블 등록
@@ -134,5 +138,25 @@ public class WorkScheduleStoreController {
         int result = workScheduleStoreService.saveWorkScheduleStore(workScheduleStoreVOs, sessionInfoVO);
 
         return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 학기정보 조회
+     *
+     * @param   workScheduleStoreVO
+     * @param   request
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 09. 22.
+     */
+    @RequestMapping(value = "/workScheduleStore/getTermInfoChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getTermInfoChk(WorkScheduleStoreVO workScheduleStoreVO, HttpServletRequest request) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> list = workScheduleStoreService.getTermInfoChk(workScheduleStoreVO, sessionInfoVO);
+
+        return returnJson(Status.OK, list);
     }
 }

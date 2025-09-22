@@ -29,4 +29,7 @@ public interface WorkScheduleStoreService {
 
     /** 근무테이블 저장 */
     int saveWorkScheduleStore(WorkScheduleStoreVO[] workScheduleStoreVOs, SessionInfoVO sessionInfoVO);
+
+    /** 학기정보 조회 */
+    List<DefaultMap<Object>> getTermInfoChk(WorkScheduleStoreVO workScheduleStoreVO, SessionInfoVO sessionInfoVO);
 }

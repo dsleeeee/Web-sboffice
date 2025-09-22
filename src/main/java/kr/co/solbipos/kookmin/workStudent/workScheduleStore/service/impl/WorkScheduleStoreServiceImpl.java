@@ -148,4 +148,11 @@ public class WorkScheduleStoreServiceImpl implements WorkScheduleStoreService {
 
         return procCnt;
     }
+
+    /** 학기정보 조회 */
+    @Override
+    public List<DefaultMap<Object>> getTermInfoChk(WorkScheduleStoreVO workScheduleStoreVO, SessionInfoVO sessionInfoVO) {
+        workScheduleStoreVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return workScheduleStoreMapper.getTermInfoChk(workScheduleStoreVO);
+    }
 }

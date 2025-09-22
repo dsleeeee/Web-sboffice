@@ -39,6 +39,7 @@
         AND		C.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
         AND		C.STUDENT_NO 	= A.STUDENT_NO
         AND		D.STORE_CD		= A.STORE_CD
+        AND     A.HQ_OFFICE_CD  = #{hqOfficeCd}
         AND     B.WORK_DATE BETWEEN #{startDate} AND #{endDate}
         <if test="storeCd != null and storeCd != ''">
             AND A.STORE_CD LIKE '%'|| #{storeCd} || '%'

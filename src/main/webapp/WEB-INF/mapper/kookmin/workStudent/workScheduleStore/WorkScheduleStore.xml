@@ -249,4 +249,20 @@
         WHERE   STORE_CD IN (${storeCdQuery})
     </select>
 
+    <!-- 로우추가 매장코드, 매장명 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getTermInfoChk" parameterType="WorkScheduleStoreVO" resultType="DefaultMap">
+        /* WorkScheduleStoreMapper.getTermInfoChk */
+        SELECT 	*
+        FROM 	TB_HQ_TERM_INFO thti
+        WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND 	TERM_YEAR       = #{srchDate}
+        AND     TERM_FG         = #{termFg}
+        AND 	START_DATE 	IS NOT NULL
+        AND 	END_DATE IS NOT NULL
+    </select>
+
 </mapper>

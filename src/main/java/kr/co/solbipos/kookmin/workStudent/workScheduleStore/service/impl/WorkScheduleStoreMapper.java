@@ -47,4 +47,6 @@ public interface WorkScheduleStoreMapper {
 
     /** 로우 추가 매장코드, 매장명 조회 */
     List<DefaultMap<Object>> getWorkScheduleStoreCdNmList(WorkScheduleStoreVO workScheduleStoreVO);
+
+    List<DefaultMap<Object>> getTermInfoChk(WorkScheduleStoreVO workScheduleStoreVO);
 }

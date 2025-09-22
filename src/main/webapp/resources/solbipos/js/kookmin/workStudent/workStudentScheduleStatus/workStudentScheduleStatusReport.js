@@ -70,8 +70,8 @@ app.controller('workStudentScheduleStatusReportCtrl', ['$scope', '$http', '$time
                             storeSet.add(dataList[i].storeNm);
                         }
                         var storeArr = Array.from(storeSet);
-                        if($scope.data.storeNm !== null && $scope.data.storeNm !== '' && $scope.data.storeNm !== undefined){
-                            console.log(0);
+                        if(($scope.data.storeNm !== null && $scope.data.storeNm !== '' && $scope.data.storeNm !== undefined)
+                        || ($scope.data.storeCd !== null && $scope.data.storeCd !== '' && $scope.data.storeCd !== undefined)){
                             if(storeArr.length > 1) {
                                 storeCnt = storeArr[0] + "외 " + (storeArr.length - 1) + "개";
                             }else{
@@ -151,7 +151,7 @@ app.controller('workStudentScheduleStatusReportCtrl', ['$scope', '$http', '$time
                                 + '<td class="tc">' + (++rowNo) + '</td>'
                                 + '<td class="tc">' + item.workSchCode + '</td>'
                                 + '<td class="tc">' + item.storeNm + '</td>'
-                                + '<td class="tc">' + item.workDay + '</td>'
+                                + '<td class="tc">' + nvl(item.workDay,'') + '</td>'
                                 + '<td class="tc">' + item.workTime + '</td>'
                                 + '<td class="tc">' + addComma(item.hourPay) + '</td>'
                                 + '<td class="tc">' + item.workFg + '</td>'
