@@ -117,7 +117,6 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
 
             if(response.data.data.length <= 0) {
                 $scope._popMsg($scope.termYear + '년 ' + $scope.termFgTxt + ' ' + messages["workScheduleStore.msg.regTermInfo"]); // 계정이 등록되어 있습니다.
-                return false;
                 $scope.getWorkScheduleStoreList(params);
             }else{
                 $scope.getWorkScheduleStoreList(params);
