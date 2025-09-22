@@ -10761,7 +10761,7 @@
         SELECT COUNT(*) AS CUSTOMER_CNT
         FROM TB_MB_MEMBER
         WHERE 1=1
-        AND MEMBR_ORGN_CD = 'DS002'
+        AND MEMBR_ORGN_CD = #{hqOfficeCd}
         AND CUSTOMER_FG = '1' -- 매출처
     </select>
 
