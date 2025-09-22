@@ -87,7 +87,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
             s.collectionView.commitEdit();
         });
 
-        $scope.getWorkScheduleStoreList();
+        $scope.getTermInfoChk();
     };
 
     // 수정시 체크박스 체크
@@ -97,19 +97,40 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
 
     // 다른 컨트롤러의 broadcast 받기
     $scope.$on("workScheduleStoreCtrl", function (event, data) {
-        $scope.getWorkScheduleStoreList();
+        $scope.getTermInfoChk();
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
     });
 
-    $scope.getWorkScheduleStoreList = function () {
+    $scope.getTermInfoChk = function (){
         // 파라미터
         var params  = {};
         params.srchDate = $scope.srchDate.selectedValue;
         params.termFg   = $("input[name=termFg]:checked").val();
 
         $scope.termYear = params.srchDate;
-        $scope.termFg = params.termFg;
+        $scope.termFg   = params.termFg;
+        $scope.termFgTxt = $("label[for='" + $("input[name=termFg]:checked").attr("id") + "']").text();
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._postJSONQuery.withPopUp("/kookmin/workStudent/workScheduleStore/workScheduleStore/getTermInfoChk.sb", params, function(response){
+
+            if(response.data.data.length <= 0) {
+                $scope._popMsg($scope.termYear + '년 ' + $scope.termFgTxt + ' ' + messages["workScheduleStore.msg.regTermInfo"]); // 계정이 등록되어 있습니다.
+                return false;
+                $scope.getWorkScheduleStoreList(params);
+            }else{
+                $scope.getWorkScheduleStoreList(params);
+            }
+
+        });
+    }
+
+    $scope.getWorkScheduleStoreList = function (data) {
+        // 파라미터
+        var params  = {};
+        params.srchDate =  $scope.termYear;
+        params.termFg   =  $scope.termFg;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
         $scope._inquiryMain("/kookmin/workStudent/workScheduleStore/workScheduleStore/getWorkScheduleStoreList.sb", params);

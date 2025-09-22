@@ -110,10 +110,10 @@
                 <wj-flex-grid-column header="<s:message code="workHistory.workStudent"/>"   binding="studentNm"     width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.baseStartTime"/>" binding="baseStartTime" width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.baseEndTime"/>"   binding="baseEndTime"   width="70"  align="center" is-read-only="true"  data-map="workFgComboDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workHistory.baseWorkTime"/>"  binding="baseWorkTime"  width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workHistory.baseWorkTime"/>"  binding="baseWorkTime"  width="70"  align="center" is-read-only="true" format="n1"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.realStartTime"/>" binding="realStartTime" width="70"  align="center" data-map="timeDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.realEndTime"/>"   binding="realEndTime"   width="70"  align="center" data-map="timeDataMap"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workHistory.realWorkTime"/>"  binding="workTime"      width="70"  align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workHistory.realWorkTime"/>"  binding="workTime"      width="70"  align="center" is-read-only="true" format="n1"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.workStatus"/>"    binding="workStatus"    width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.overTime"/>"      binding="overTime"      width="80"  align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.totWorkTime"/>"   binding="totWorkTime"   width="150" align="center" visible="false"></wj-flex-grid-column>

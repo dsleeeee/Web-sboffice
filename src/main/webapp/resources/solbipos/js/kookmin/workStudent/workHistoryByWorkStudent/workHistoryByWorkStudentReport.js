@@ -62,7 +62,6 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
                 if (!$.isEmptyObject(response.data.data)) {
                     var dataList = response.data.data.list;
                     var loopCnt  = dataList.length;
-                    console.log(dataList);
 
                     var arrWorkStudentList = [];
                     var arrList     = [];
@@ -128,8 +127,8 @@ app.controller('workHistoryByWorkStudentReportCtrl', ['$scope', '$http', '$timeo
                                 + '<td class="tc">' + item.studentNm + '</td>'
                                 + '<td class="tc">' + item.workDate + '</td>'
                                 + '<td class="tc">' + item.storeNm + '</td>'
-                                + '<td class="tc">' + item.realStartTime + '</td>'
-                                + '<td class="tc">' + item.realEndTime + '</td>'
+                                + '<td class="tc">' + nvl(item.realStartTime,'') + '</td>'
+                                + '<td class="tc">' + nvl(item.realEndTime,'') + '</td>'
                                 + '<td class="tc">' + item.baseWorkTime + '</td>'
                                 + '<td class="tc">' + nvl(item.remark,'') + '</td>'
                                 + '</tr>';
