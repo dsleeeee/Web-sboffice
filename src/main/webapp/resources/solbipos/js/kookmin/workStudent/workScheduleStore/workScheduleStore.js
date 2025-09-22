@@ -132,7 +132,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
         params.termFg   =  $scope.termFg;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
-        $scope._inquiryMain("/kookmin/workStudent/workScheduleStore/workScheduleStore/getWorkScheduleStoreList.sb", params);
+        $scope._inquirySub("/kookmin/workStudent/workScheduleStore/workScheduleStore/getWorkScheduleStoreList.sb", params);
     };
 
     // 추가 클릭 시 근무코드 조회
