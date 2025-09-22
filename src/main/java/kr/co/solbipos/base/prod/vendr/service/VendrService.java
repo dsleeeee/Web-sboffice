@@ -26,7 +26,7 @@ public interface VendrService {
      * @param vendrVO
      * @return List
      */
-    List<DefaultMap<String>> list(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
+    List<DefaultMap<String>> getVendrList(VendrVO vendrVO, SessionInfoVO sessionInfoVO);
 
     /** 거래처 상세정보 조회
      * @param vendrVO

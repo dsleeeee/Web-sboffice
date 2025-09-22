@@ -89,7 +89,7 @@ app.controller('vendrCtrl', ['$scope', '$http', function ($scope, $http) {
         }
         param.listScale = listScaleBox.selectedValue;
 
-        $scope._inquiryMain("/base/prod/vendr/vendr/list.sb", param, function() {}, false);
+        $scope._inquiryMain("/base/prod/vendr/vendr/getVendrList.sb", param, function() {}, false);
     };
 
     // 거래처등록 팝업 오픈

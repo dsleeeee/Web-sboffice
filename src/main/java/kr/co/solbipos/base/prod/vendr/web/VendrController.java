@@ -124,7 +124,26 @@ public class VendrController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
 
-        List<DefaultMap<String>> result =  vendrService.list(vendrVO, sessionInfoVO);
+        List<DefaultMap<String>> result =  vendrService.getVendrList(vendrVO, sessionInfoVO);
+
+        return returnListJson(Status.OK, result, vendrVO);
+    }
+
+    /**
+     * 거래처 조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/vendr/getVendrList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getVendrList(VendrVO vendrVO, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+
+        List<DefaultMap<String>> result =  vendrService.getVendrList(vendrVO, sessionInfoVO);
 
         return returnListJson(Status.OK, result, vendrVO);
     }

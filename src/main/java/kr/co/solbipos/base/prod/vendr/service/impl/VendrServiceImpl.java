@@ -57,7 +57,7 @@ public class VendrServiceImpl implements VendrService {
 
     /** 거래처 목록 조회 */
     @Override
-    public List<DefaultMap<String>> list(VendrVO vendrVO, SessionInfoVO sessionInfoVO)
+    public List<DefaultMap<String>> getVendrList(VendrVO vendrVO, SessionInfoVO sessionInfoVO)
     {
         List<DefaultMap<String>> list = null;
 

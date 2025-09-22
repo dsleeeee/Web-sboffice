@@ -139,7 +139,7 @@
   var urlVendorFg = "${urlVendorFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/vendr.js?ver=20250916.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/vendr.js?ver=20250922.01" charset="utf-8"></script>
 
 <%-- 거래처관리 상세 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/vendr/info.jsp">

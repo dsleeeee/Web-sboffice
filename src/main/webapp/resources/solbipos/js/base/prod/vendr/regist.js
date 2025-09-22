@@ -108,37 +108,39 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.shipFgCombo.selectedValue = data.shipFg;
                     $("#rRemark").val(data.remark);
 
-                    $scope.companyFgCombo.selectedValue = data.companyFg;
-                    $scope.businessFgCombo.selectedValue = data.businessFg;
-                    $("#rPurchaseId").val(data.purchaseId);
-                    $("#rCorporationNumber").val(data.corporationNumber);
-                    $("#rBusinessStatus").val(data.businessStatus);
-                    $("#rIndustry").val(data.industry);
-                    $("#rHomepage").val(data.homepage);
-                    $("#rOwnerTelNo").val(data.ownerTelNo);
-                    $("#rOwnerEmail").val(data.ownerEmail);
-                    $("#rManagerNm").val(data.managerNm);
-                    $("#rManagerTelNo").val(data.managerTelNo);
-                    $("#rManagerEmail").val(data.managerEmail);
-                    $("#rManagerSpot").val(data.managerSpot);
-                    $("#rManagerPhoneNo").val(data.managerPhoneNo);
-                    $("#rBankCd").val(data.bankCd);
-                    $("#rAccountNo").val(data.accountNo);
-                    $("#rDepositor").val(data.depositor);
-                    $("#rCollectFg").val(data.collectFg);
-                    $("#rDouzoneErp").val(data.douzoneErp);
-                    $("#rCreditLimit").val(data.creditLimit);
-                    $("#rCollateralType").val(data.collateralType);
-                    $("#rCollateralAmt").val(data.collateralAmt);
-                    $("#rContrastDate").val(data.contrastDate);
-                    $("#rCollatorStore").val(data.collatorStore);
-                    $("#rCollatorCompany").val(data.collatorCompany);
-                    $("#rDealStartDate").val(data.dealStartDate);
-                    $("#rDealEndDate").val(data.dealEndDate);
-                    $("#rLastSaleDate").val(data.lastSaleDate);
-                    $("#rLastDepositDate").val(data.lastDepositDate);
-                    $("#rMembrNo").val(data.membrNo);
-                    $("#rMembrNm").val(data.membrNm);
+                    if(urlVendorFg == "2") {
+                        $scope.companyFgCombo.selectedValue = data.companyFg;
+                        $scope.businessFgCombo.selectedValue = data.businessFg;
+                        $("#rPurchaseId").val(data.purchaseId);
+                        $("#rCorporationNumber").val(data.corporationNumber);
+                        $("#rBusinessStatus").val(data.businessStatus);
+                        $("#rIndustry").val(data.industry);
+                        $("#rHomepage").val(data.homepage);
+                        $("#rOwnerTelNo").val(data.ownerTelNo);
+                        $("#rOwnerEmail").val(data.ownerEmail);
+                        $("#rManagerNm").val(data.managerNm);
+                        $("#rManagerTelNo").val(data.managerTelNo);
+                        $("#rManagerEmail").val(data.managerEmail);
+                        $("#rManagerSpot").val(data.managerSpot);
+                        $("#rManagerPhoneNo").val(data.managerPhoneNo);
+                        $("#rBankCd").val(data.bankCd);
+                        $("#rAccountNo").val(data.accountNo);
+                        $("#rDepositor").val(data.depositor);
+                        $("#rCollectFg").val(data.collectFg);
+                        $("#rDouzoneErp").val(data.douzoneErp);
+                        $("#rCreditLimit").val(data.creditLimit);
+                        $("#rCollateralType").val(data.collateralType);
+                        $("#rCollateralAmt").val(data.collateralAmt);
+                        $("#rContrastDate").val(data.contrastDate);
+                        $("#rCollatorStore").val(data.collatorStore);
+                        $("#rCollatorCompany").val(data.collatorCompany);
+                        $("#rDealStartDate").val(data.dealStartDate);
+                        $("#rDealEndDate").val(data.dealEndDate);
+                        $("#rLastSaleDate").val(data.lastSaleDate);
+                        $("#rLastDepositDate").val(data.lastDepositDate);
+                        $("#rMembrNo").val(data.membrNo);
+                        $("#rMembrNm").val(data.membrNm);
+                    }
 
                 },
                 function (result) {
@@ -256,37 +258,39 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             param.addrDtl = $("#rAddrDtl").val();
             param.remark = $("#rRemark").val();
 
-            param.companyFg = $scope.companyFgCombo.selectedValue;
-            param.businessFg = $scope.businessFgCombo.selectedValue;
-            param.purchaseId = $("#rPurchaseId").val();
-            param.corporationNumber = $("#rCorporationNumber").val();
-            param.businessStatus = $("#rBusinessStatus").val();
-            param.industry = $("#rIndustry").val();
-            param.homepage = $("#rHomepage").val();
-            param.ownerTelNo = $("#rOwnerTelNo").val();
-            param.ownerEmail = $("#rOwnerEmail").val();
-            param.managerNm = $("#rManagerNm").val();
-            param.managerTelNo = $("#rManagerTelNo").val();
-            param.managerEmail = $("#rManagerEmail").val();
-            param.managerSpot = $("#rManagerSpot").val();
-            param.managerPhoneNo = $("#rManagerPhoneNo").val();
-            param.bankCd = $("#rBankCd").val();
-            param.accountNo = $("#rAccountNo").val();
-            param.depositor = $("#rDepositor").val();
-            param.collectFg = $("#rCollectFg").val();
-            param.douzoneErp = $("#rDouzoneErp").val();
-            param.creditLimit = $("#rCreditLimit").val();
-            param.collateralType = $("#rCollateralType").val();
-            param.collateralAmt = $("#rCollateralAmt").val();
-            param.contrastDate = $("#rContrastDate").val();
-            param.collatorStore = $("#rCollatorStore").val();
-            param.collatorCompany = $("#rCollatorCompany").val();
-            param.dealStartDate = $("#rDealStartDate").val();
-            param.dealEndDate = $("#rDealEndDate").val();
-            param.lastSaleDate = $("#rLastSaleDate").val();
-            param.lastDepositDate = $("#rLastDepositDate").val();
-            param.membrNo = $("#rMembrNo").val();
-            param.membrNm = $("#rMembrNm").val();
+            if(urlVendorFg == "2") {
+                param.companyFg = $scope.companyFgCombo.selectedValue;
+                param.businessFg = $scope.businessFgCombo.selectedValue;
+                param.purchaseId = $("#rPurchaseId").val();
+                param.corporationNumber = $("#rCorporationNumber").val();
+                param.businessStatus = $("#rBusinessStatus").val();
+                param.industry = $("#rIndustry").val();
+                param.homepage = $("#rHomepage").val();
+                param.ownerTelNo = $("#rOwnerTelNo").val();
+                param.ownerEmail = $("#rOwnerEmail").val();
+                param.managerNm = $("#rManagerNm").val();
+                param.managerTelNo = $("#rManagerTelNo").val();
+                param.managerEmail = $("#rManagerEmail").val();
+                param.managerSpot = $("#rManagerSpot").val();
+                param.managerPhoneNo = $("#rManagerPhoneNo").val();
+                param.bankCd = $("#rBankCd").val();
+                param.accountNo = $("#rAccountNo").val();
+                param.depositor = $("#rDepositor").val();
+                param.collectFg = $("#rCollectFg").val();
+                param.douzoneErp = $("#rDouzoneErp").val();
+                param.creditLimit = $("#rCreditLimit").val();
+                param.collateralType = $("#rCollateralType").val();
+                param.collateralAmt = $("#rCollateralAmt").val();
+                param.contrastDate = $("#rContrastDate").val();
+                param.collatorStore = $("#rCollatorStore").val();
+                param.collatorCompany = $("#rCollatorCompany").val();
+                param.dealStartDate = $("#rDealStartDate").val();
+                param.dealEndDate = $("#rDealEndDate").val();
+                param.lastSaleDate = $("#rLastSaleDate").val();
+                param.lastDepositDate = $("#rLastDepositDate").val();
+                param.membrNo = $("#rMembrNo").val();
+                param.membrNm = $("#rMembrNm").val();
+            }
 
             if(orgnFg == "HQ" && gEnvst1242 == "2"){ // 본사권한 이면서, [1242] 거래처출고구분 값이 [2] 거래처별출고전표자동생성 인 경우만, 입력 가능
                 param.shipFg = $scope.shipFgCombo.selectedValue;
@@ -313,13 +317,19 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 입력값 초기화
     $scope.infoInit = function(){
 
-        var inputArr = [
-            rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark,
-            rCompanyFg, rPurchaseId, rCorporationNumber, rBusinessStatus, rIndustry, rHomepage, rOwnerTelNo,
-            rOwnerEmail, rManagerNm, rManagerTelNo, rManagerEmail, rManagerSpot, rManagerPhoneNo, rBankCd, rAccountNo,
-            rDepositor, rCollectFg, rDouzoneErp, rCreditLimit, rCollateralType, rCollateralAmt, rContrastDate, rCollatorStore,
-            rCollatorCompany, rDealStartDate, rDealEndDate, rLastSaleDate, rLastDepositDate, rMembrNo, rMembrNm
-        ].forEach(function(element){element.value="";});
+        if(urlVendorFg == "2") {
+            var inputArr = [
+                rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark,
+                rPurchaseId, rCorporationNumber, rBusinessStatus, rIndustry, rHomepage, rOwnerTelNo,
+                rOwnerEmail, rManagerNm, rManagerTelNo, rManagerEmail, rManagerSpot, rManagerPhoneNo, rBankCd, rAccountNo,
+                rDepositor, rCollectFg, rDouzoneErp, rCreditLimit, rCollateralType, rCollateralAmt, rContrastDate, rCollatorStore,
+                rCollatorCompany, rDealStartDate, rDealEndDate, rLastSaleDate, rLastDepositDate, rMembrNo, rMembrNm
+            ].forEach(function(element){element.value="";});
+        } else {
+            var inputArr = [
+                rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
+            ].forEach(function(element){element.value="";});
+        }
 
         /*var selectArr = [
             rVendorFg, rVatIncldYn, rUseYn
@@ -331,8 +341,10 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.useYnCombo.selectedValue = 'Y';
         $scope.shipFgCombo.selectedValue = 'N';
 
-        $scope.companyFgCombo.selectedValue = "0000";
-        $scope.businessFgCombo.selectedValue = "0000";
+        if(urlVendorFg == "2") {
+            $scope.companyFgCombo.selectedValue = "0000";
+            $scope.businessFgCombo.selectedValue = "0000";
+        }
     };
 
     // 탭변경
