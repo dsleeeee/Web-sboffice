@@ -381,7 +381,6 @@
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.hqBrandCd"/>" binding="hqBrandCd" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.storeCd"/>" binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="orderTimeTracking.storeNm"/>" binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg01"/>" binding="momsStoreFg01" data-map="momsStoreFg01DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
             <c:if test="${sessionScope.sessionInfo.userId == 'ds021' or sessionScope.sessionInfo.userId == 'ds034' or sessionScope.sessionInfo.userId == 'h0393'}">
                 <wj-flex-grid-column header="<s:message code="cmm.moms.momsStoreFg02"/>" binding="momsStoreFg02" data-map="momsStoreFg02DataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -396,8 +395,8 @@
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.dtOrder"/>" binding="dtOrder" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.channelService"/>" binding="channelService" width="150" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.channelRegDt"/>" binding="channelRegDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="orderTimeTracking.vOrderNo"/>" binding="vOrderNo" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
-            <wj-flex-grid-column header="<s:message code="orderTimeTracking.vOrderRegDt"/>" binding="vOrderRegDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderTimeTracking.vOrderNo"/>" binding="vorderNo" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
+            <wj-flex-grid-column header="<s:message code="orderTimeTracking.vOrderRegDt"/>" binding="vorderRegDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.orderNo"/>" binding="orderNo" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.posRegDt"/>" binding="posRegDt" width="130" align="center" is-read-only="true"></wj-flex-grid-column>
             <wj-flex-grid-column header="<s:message code="orderTimeTracking.acceptedFg"/>" binding="acceptedFg" data-map="acceptedFgDataMap" width="90" align="center" is-read-only="true"></wj-flex-grid-column>
@@ -436,4 +435,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/anals/orderTimeTracking/orderTimeTracking.js?ver=20240530.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/anals/orderTimeTracking/orderTimeTracking.js?ver=20250922.01" charset="utf-8"></script>
