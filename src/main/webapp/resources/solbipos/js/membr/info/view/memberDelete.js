@@ -102,6 +102,26 @@ app.controller('memberDeleteCtrl', ['$scope', '$http', function ($scope, $http) 
         });
     };
 
+    // 선택회원삭제
+    $scope.allMembrDeleteChk = function () {
+        // 매출처회원 체크
+        var params = {};
+        // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
+        $scope._postJSONSave.withOutPopUp("/membr/info/view/base/getCustomerFgChk.sb", params, function (response) {
+            var result = response.data.data;
+
+            if(result > 0) {
+                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                $scope._popMsg(messages["regist.membr.customerFgDelAlert"]); // 매출처회원은 삭제할 수 없습니다.
+                return false;
+            } else {
+                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                // 전체회원삭제
+                $scope.allMembrDelete();
+            }
+        });
+    };
+
     // 전체회원삭제
     $scope.allMembrDelete = function () {
 

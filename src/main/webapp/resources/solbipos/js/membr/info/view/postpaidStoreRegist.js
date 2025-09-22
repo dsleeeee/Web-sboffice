@@ -59,6 +59,17 @@ app.controller('postpaidStoreRegistCtrl', ['$scope', '$http', function ($scope, 
 
   // 등록 매장 삭제
   $scope.delete = function(){
+    // 체크
+    for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+      if($scope.flex.collectionView.items[i].gChk) {
+        // 매출처구분 (1: 매출처)
+        if ($scope.flex.collectionView.items[i].customerFg == 1) {
+          $scope._popMsg(messages["regist.membr.customerFgDelAlert"]); // 매출처회원은 삭제할 수 없습니다.
+          return;
+        }
+      }
+    }
+
     var params = [];
     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
       if($scope.flex.collectionView.items[i].gChk) {

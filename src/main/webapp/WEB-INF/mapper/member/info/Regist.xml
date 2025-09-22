@@ -1004,14 +1004,19 @@
         SELECT
         tmbcs.MEMBR_NO,
         tmbcs.STORE_CD,
-        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmbcs.STORE_CD) AS STORE_NM
-        FROM TB_MB_MEMBER_POSTPAID_STORE tmbcs
+        (SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = tmbcs.STORE_CD) AS STORE_NM,
+        tmm.CUSTOMER_FG
+        FROM TB_MB_MEMBER_POSTPAID_STORE tmbcs,
+        TB_MB_MEMBER tmm
         WHERE tmbcs.MEMBR_ORGN_CD = #{membrOrgnCd}
         AND tmbcs.MEMBR_NO = #{membrNo}
         AND tmbcs.USE_YN = 'Y'
         <if test='defaultStoreCd != null and defaultStoreCd.toString() != ""'>
             AND tmbcs.STORE_CD != #{defaultStoreCd}
         </if>
+        AND tmm.MEMBR_ORGN_CD = tmbcs.MEMBR_ORGN_CD
+        AND tmm.MEMBR_NO = tmbcs.MEMBR_NO
+        AND tmm.CUSTOMER_FG = '1'
         ORDER BY tmbcs.STORE_CD
     </select>
 
@@ -2987,6 +2992,20 @@
         WHERE 1=1
         AND tmmak.MEMBR_ORGN_CD = #{membrOrgnCd}
         AND tmmak.MEMBR_NO = #{membrNo}
+    </select>
+
+    <!-- 전체회원삭제 매출처회원 체크  -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getCustomerFgChk" parameterType="registVO" resultType="Integer">
+        /* RegistMapper.getCustomerFgChk */
+        SELECT COUNT(*) AS CUSTOMER_CNT
+        FROM TB_MB_MEMBER
+        WHERE 1=1
+        AND MEMBR_ORGN_CD = #{membrOrgnCd}
+        AND CUSTOMER_FG = '1' -- 매출처
     </select>
 
 </mapper>

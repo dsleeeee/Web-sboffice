@@ -1214,4 +1214,17 @@ public class RegistServiceImpl implements RegistService {
         return mapper.getMemberInfoAddKwu(registVO);
     }
 
+    /** 전체회원삭제 매출처회원 체크  */
+    @Override
+    public int getCustomerFgChk(RegistVO registVO, SessionInfoVO sessionInfoVO) {
+
+        int procCnt = 0;
+
+        registVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
+        procCnt = mapper.getCustomerFgChk(registVO);
+
+        return procCnt;
+    }
+
 }

@@ -48,11 +48,10 @@
             </c:if>
             <div class="btnSet tc mt20">
                 <button class="btn_blue" id="btnSelectMembrDelete" ng-click="selectMembrDelete()"><s:message code="regist.membr.selectDelete"/></button>
-                <button class="btn_blue" id="btnAllMembrDelete" ng-click="allMembrDelete()"><s:message code="regist.membr.allDelete"/></button>
+                <button class="btn_blue" id="btnAllMembrDelete" ng-click="allMembrDeleteChk()"><s:message code="regist.membr.allDelete"/></button>
             </div>
         </div>
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberDelete.js?ver=20240910.01"
-        charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/memberDelete.js?ver=20250922.01" charset="utf-8"></script>

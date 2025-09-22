@@ -53,6 +53,9 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.storeCd"/>" binding="storeCd" width="80" is-read-only="true" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="regist.membr.storeNm"/>" binding="storeNm" width="*" is-read-only="true" ></wj-flex-grid-column>
+
+                <%-- 팝업 조회시 필요 --%>
+                <wj-flex-grid-column header="<s:message code="regist.membr.customerFg"/>" binding="customerFg" width="100" align="center" is-read-only="true" visible="false"></wj-flex-grid-column>
               </wj-flex-grid>
             </div>
             <%-- 페이지 리스트 --%>
@@ -120,4 +123,4 @@
   </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/postpaidStoreRegist.js?ver=20201228.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/membr/info/view/postpaidStoreRegist.js?ver=20250922.01" charset="utf-8"></script>

@@ -1080,4 +1080,27 @@ public class RegistController {
 
         return ReturnUtil.returnJson(Status.OK, result);
     }
+
+    /**
+     * 전체회원삭제 매출처회원 체크
+     *
+     * @param registVO
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김설아
+     * @since   2025. 09. 22.
+     */
+    @RequestMapping(value = "/base/getCustomerFgChk.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getCustomerFgChk(@RequestBody RegistVO registVO, HttpServletRequest request,
+                                          HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = registService.getCustomerFgChk(registVO, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
 }

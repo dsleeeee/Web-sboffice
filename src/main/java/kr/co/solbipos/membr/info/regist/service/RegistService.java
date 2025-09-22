@@ -213,4 +213,7 @@ public interface RegistService {
 
     /** 회원정보 조회 (광운대아이스링크 추가정보) */
     DefaultMap<String> getMemberInfoAddKwu(RegistVO registVO, SessionInfoVO sessionInfoVO);
+
+    /** 전체회원삭제 매출처회원 체크 */
+    int getCustomerFgChk(RegistVO registVO, SessionInfoVO sessionInfoVO);
 }

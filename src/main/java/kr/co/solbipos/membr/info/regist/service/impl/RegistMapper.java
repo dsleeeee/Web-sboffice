@@ -331,4 +331,7 @@ public interface RegistMapper {
 
     /** 마스킹 없는 엑셀다운로드 로그 저장 */
     int saveMemberExcelLog(RegistVO registVO);
+
+    /** 전체회원삭제 매출처회원 체크  */
+    int getCustomerFgChk(RegistVO registVO);
 }
