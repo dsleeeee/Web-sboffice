@@ -10788,6 +10788,7 @@
             FROM TB_MB_MEMBER
             WHERE 1=1
             AND MEMBR_ORGN_CD = #{hqOfficeCd}
+            AND CUSTOMER_FG = '1' -- 매출처
         ) B
         ON (
             A.MEMBR_ORGN_CD = B.MEMBR_ORGN_CD
