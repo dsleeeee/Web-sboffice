@@ -241,8 +241,10 @@
                                 <th><s:message code="vendr.membrNo" /></th>
                                 <td id="vMembrNo"></td>
                                 <%-- 회원명 --%>
-                                <th><s:message code="vendr.membrNm" /></th>
-                                <td id="vMembrNm"></td>
+                                <th style="display: none;"><s:message code="vendr.membrNm" /></th>
+                                <td style="display: none;" id="vMembrNm"></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </c:if>
                         </tbody>

@@ -136,37 +136,39 @@ public class VendrServiceImpl implements VendrService {
 
             result = vendrMapper.insertHqVendr(vendrVO);
 
-            // 2: 매출처
-            if(VendorFg.B.equals(vendrVO.getVendorFg())) {
-                // 회원정보관리
-                RegistVO registVO = new RegistVO();
-                registVO.setRegDt(vendrVO.getRegDt());
-                registVO.setRegId(vendrVO.getRegId());
-                registVO.setModDt(vendrVO.getModDt());
-                registVO.setModId(vendrVO.getModId());
-                registVO.setMembrOrgnCd(vendrVO.getHqOfficeCd());
-                registVO.setMembrNo(registMapper.getNewMemberNo(registVO));
-                registVO.setMembrNm(vendrVO.getVendrNm());
-                registVO.setMembrClassCd("000");
-                registVO.setRegStoreCd(vendrMapper.getMinRegStoreCd(vendrVO));
-                registVO.setGendrFg("F");
-                registVO.setShortNo("0000");
-                registVO.setTelNo("01000000000");
-                registVO.setWeddingYn(WeddingYn.N);
-                registVO.setEmailRecvYn(UseYn.Y);
-                registVO.setSmsRecvYn(UseYn.Y);
-                registVO.setUseYn("Y");
-                registVO.setCstCardUseFg("1");
+            if( "H0632".equals(vendrVO.getHqOfficeCd()) || "DS062".equals(vendrVO.getHqOfficeCd()) || "DS019".equals(vendrVO.getHqOfficeCd()) ) {
+                // 2: 매출처
+                if(VendorFg.B.equals(vendrVO.getVendorFg())) {
+                    // 회원정보관리
+                    RegistVO registVO = new RegistVO();
+                    registVO.setRegDt(vendrVO.getRegDt());
+                    registVO.setRegId(vendrVO.getRegId());
+                    registVO.setModDt(vendrVO.getModDt());
+                    registVO.setModId(vendrVO.getModId());
+                    registVO.setMembrOrgnCd(vendrVO.getHqOfficeCd());
+                    registVO.setMembrNo(registMapper.getNewMemberNo(registVO));
+                    registVO.setMembrNm(vendrVO.getVendrNm());
+                    registVO.setMembrClassCd("000");
+                    registVO.setRegStoreCd(vendrMapper.getMinRegStoreCd(vendrVO));
+                    registVO.setGendrFg("F");
+                    registVO.setShortNo("0000");
+                    registVO.setTelNo("01000000000");
+                    registVO.setWeddingYn(WeddingYn.N);
+                    registVO.setEmailRecvYn(UseYn.Y);
+                    registVO.setSmsRecvYn(UseYn.Y);
+                    registVO.setUseYn("Y");
+                    registVO.setCstCardUseFg("1");
 
-                registVO.setCustomerFg("1"); // 1: 매출처
-                registVO.setCustomerCd(vendrCd);
+                    registVO.setCustomerFg("1"); // 1: 매출처
+                    registVO.setCustomerCd(vendrCd);
 
-                // 회원등록
-                result = registMapper.registMemberInfo(registVO);
+                    // 회원등록
+                    result = registMapper.registMemberInfo(registVO);
 
-                // 매출처 회원 후불회원 등록 (전매장)
-                vendrVO.setMembrNo(registVO.getMembrNo());
-                result = vendrMapper.getMembrPostpaidSaveMerge(vendrVO);
+                    // 매출처 회원 후불회원 등록 (전매장)
+                    vendrVO.setMembrNo(registVO.getMembrNo());
+                    result = vendrMapper.getMembrPostpaidSaveMerge(vendrVO);
+                }
             }
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
@@ -211,8 +213,11 @@ public class VendrServiceImpl implements VendrService {
 
             result = vendrMapper.modifyHqVendr(vendrVO);
 
-            // 회원명 수정
-            result = vendrMapper.getMembrNmSaveUpdate(vendrVO);
+            if( "H0632".equals(vendrVO.getHqOfficeCd()) || "DS062".equals(vendrVO.getHqOfficeCd()) || "DS019".equals(vendrVO.getHqOfficeCd()) ) {
+                // 회원명 수정
+                vendrVO.setMembrNm(vendrVO.getVendrNm());
+                result = vendrMapper.getMembrNmSaveUpdate(vendrVO);
+            }
 
         }else if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE)
         {

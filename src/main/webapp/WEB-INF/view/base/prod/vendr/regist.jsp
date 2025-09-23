@@ -310,8 +310,10 @@
                                 <th><s:message code="vendr.membrNo" /></th>
                                 <td><input type="text" class="sb-input w100" id="rMembrNo" ng-model="rMembrNo" readonly/></td>
                                 <%-- 회원명 --%>
-                                <th><s:message code="vendr.membrNm" /></th>
-                                <td><input type="text" class="sb-input w100" id="rMembrNm" ng-model="rMembrNM"/></td>
+                                <th style="display: none;"><s:message code="vendr.membrNm" /></th>
+                                <td style="display: none;"><input type="text" class="sb-input w100" id="rMembrNm" ng-model="rMembrNm" readonly/></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </c:if>
                         </tbody>
