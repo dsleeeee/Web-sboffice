@@ -1,6 +1,6 @@
 /****************************************************************
  *
- * 파일명 : dailyTableKwu.js
+ * 파일명 : saleRegistKwu.js
  * 설  명 : 후방매출등록 (광운대 아이스링크) JavaScript
  *
  *    수정일      수정자      Version        Function 명
