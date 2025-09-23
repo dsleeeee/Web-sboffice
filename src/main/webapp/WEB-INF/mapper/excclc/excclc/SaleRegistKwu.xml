@@ -3,11 +3,11 @@
 
 <!--
     SaleRegistKwu.xml
-    매출수기등록
+    광운대 > 후방매출등록 > 후방매출등록
     ======================================================
     No  ||  수정자 ||  수정일자    ||  수정내역
     ======================================================
-    1       권지현     2022.06.24     최초작성
+    1       권지현     2022.08.31     최초작성
 -->
 <mapper namespace="kr.co.solbipos.excclc.excclc.saleRegistKwu.service.impl.SaleRegistKwuMapper">
 
