@@ -82,7 +82,16 @@ app.controller('workStudentKookminCtrl', ['$scope', '$http', '$timeout', functio
         var params = {};
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-        $scope._inquiryMain('/kookmin/workStudent/workStudent/workStudent/getWorkStudentKookminList.sb', params, function(){}, false);
+        $scope._inquiryMain('/kookmin/workStudent/workStudent/workStudent/getWorkStudentKookminList.sb', params, function(){
+
+            // 사용자 행위 기록
+            var actParams = {};
+            actParams.resrceCd = menuCd;
+            actParams.pathNm = "국민대-근로학생관리-근로학생관리";
+            actParams.contents = "[조회] 버튼 클릭 시";
+
+            $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+        }, false);
 
     };
 
@@ -108,7 +117,17 @@ app.controller('workStudentKookminCtrl', ['$scope', '$http', '$timeout', functio
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._save('/kookmin/workStudent/workStudent/workStudent/saveWorkStudent.sb', params, function(){ $scope.getWorkStudentKookminList() });
+            $scope._save('/kookmin/workStudent/workStudent/workStudent/saveWorkStudent.sb', params, function(){
+                $scope.getWorkStudentKookminList();
+
+                // 사용자 행위 기록
+                var actParams = {};
+                actParams.resrceCd = menuCd;
+                actParams.pathNm = "국민대-근로학생관리-근로학생관리";
+                actParams.contents = "[삭제] 버튼 클릭 시";
+
+                $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+            });
         });
     };
 
@@ -290,7 +309,18 @@ app.controller('workStudentKookminCtrl', ['$scope', '$http', '$timeout', functio
         // console.log(params);
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save('/kookmin/workStudent/workStudent/workStudent/saveWorkStudent.sb', params, function(){ $scope.getWorkStudentKookminList() });
+        $scope._save('/kookmin/workStudent/workStudent/workStudent/saveWorkStudent.sb', params, function(){
+            $scope.getWorkStudentKookminList();
+
+            // 사용자 행위 기록
+            var actParams = {};
+            actParams.resrceCd = menuCd;
+            actParams.pathNm = "국민대-근로학생관리-근로학생관리";
+            actParams.contents = "[저장] 버튼 클릭 시";
+
+            $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+
+        });
     }
 
     // 양식 다운로드
@@ -645,6 +675,13 @@ app.controller('workStudentKookminExcelCtrl', ['$scope', '$http', '$timeout', fu
                 if (parseInt($scope.progressCnt) >= parseInt($scope.totalRows)) {
                     // 재조회
                     agrid.getScope('workStudentKookminCtrl').getWorkStudentKookminList();
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "국민대-근로학생관리-근로학생관리";
+                    actParams.contents = "[엑셀업로드] 버튼 클릭 시";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
                 }
             }
         }, function errorCallback(response) {

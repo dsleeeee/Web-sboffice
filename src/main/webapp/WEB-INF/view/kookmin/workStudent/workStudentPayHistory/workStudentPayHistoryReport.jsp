@@ -26,4 +26,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudentPayHistory/workStudentPayHistoryReport.js?ver=20250918.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudentPayHistory/workStudentPayHistoryReport.js?ver=20250924.01" charset="utf-8"></script>

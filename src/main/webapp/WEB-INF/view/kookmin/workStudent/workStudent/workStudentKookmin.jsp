@@ -123,7 +123,7 @@
            onchange="angular.element(this).scope().excelFileChanged()"
            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel.sheet.macroEnabled.12"/>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudent/workStudentKookmin.js?ver=20250917.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudent/workStudentKookmin.js?ver=20250924.01" charset="utf-8"></script>
 
 <%-- excelfile read js --%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>

@@ -129,6 +129,16 @@ app.controller('workStudentPayHistoryReportCtrl', ['$scope', '$http', '$timeout'
                                 + '<td class="tc">' + item.bankAccount + '</td>'
                                 + '</tr>';
                         }
+
+                        if(i === arrPayHistList.length - 1){
+                            payHistListHtml += '<tr class="h25">'
+                                + '<td class="tc" colspan="6">' + $scope.srchYm.substring(0, 4) + '년 ' + $scope.srchYm.substring(4, 6) +'월 분 지급 총액</td>'
+                                + '<td class="tc">' + item.totalWorkTime + '</td>'
+                                + '<td class="tc">' + addComma(item.totalPayAmt) + '</td>'
+                                + '<td class="tc"></td>'
+                                + '</tr>';
+                        }
+
                         payHistListHtml += '</table>';
 
                         titleHtml    = '<table class="w100">'
@@ -154,6 +164,14 @@ app.controller('workStudentPayHistoryReportCtrl', ['$scope', '$http', '$timeout'
 
                     // console.log(payHistoryReportHtml);
                     $('#workStudentPayHistoryReport').append(payHistoryReportHtml);
+
+                    // 사용자 행위 기록
+                    var actParams = {};
+                    actParams.resrceCd = menuCd;
+                    actParams.pathNm = "국민대-근로학생관리-근로장학금 지급내역-출력 팝업";
+                    actParams.contents = "화면 진입 시 근로장학금 지급내역 리스트 조회";
+
+                    $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
 
                     // 로딩바 hide
                     $scope.$broadcast('loadingPopupInactive');
@@ -195,6 +213,14 @@ app.controller('workStudentPayHistoryReportCtrl', ['$scope', '$http', '$timeout'
 
         // and print it
         doc.print();
+
+        // 사용자 행위 기록
+        var actParams = {};
+        actParams.resrceCd = menuCd;
+        actParams.pathNm = "국민대-근로학생관리-근로장학금 지급내역-출력 팝업";
+        actParams.contents = "[인쇄] 버튼 클릭 시";
+
+        $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
     };
 
 }]);
