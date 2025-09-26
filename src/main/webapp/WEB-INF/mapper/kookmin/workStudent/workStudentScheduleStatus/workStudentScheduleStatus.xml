@@ -37,7 +37,7 @@
         ,		TO_NUMBER(A.HOUR_PAY) AS HOUR_PAY
         ,		DECODE(A.WORK_FG,'1','판매','2','진열','3','제조','')         AS WORK_FG
         ,		A.STUDENT_NO
-        ,       C.STUDENT_NM
+        ,       SBPENC.D(C.STUDENT_NM)  AS STUDENT_NM
         ,		TO_CHAR(TO_DATE(A.START_DAY, 'yyyymmdd'), 'yyyy-mm-dd')     AS START_DAY
         ,		TO_CHAR(TO_DATE(A.END_DAY, 'yyyymmdd'), 'yyyy-mm-dd')       AS END_DAY
         ,       A.REMARK

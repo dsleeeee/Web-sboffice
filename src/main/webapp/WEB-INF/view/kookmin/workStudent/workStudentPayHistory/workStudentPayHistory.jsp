@@ -76,7 +76,7 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudentPayHistory/workStudentPayHistory.js?ver=20250918.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workStudentPayHistory/workStudentPayHistory.js?ver=20250924.01" charset="utf-8"></script>
 
 <%-- 근로장학금 지급내역 출력 레이어 --%>
 <c:import url="/WEB-INF/view/kookmin/workStudent/workStudentPayHistory/workStudentPayHistoryReport.jsp">

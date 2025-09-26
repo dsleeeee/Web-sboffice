@@ -636,41 +636,41 @@ public class SideMenuServiceImpl implements SideMenuService {
         String classCds = "";
         SideMenuSelClassVO countChkVO = new SideMenuSelClassVO();
 
-        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
-            classCds += sideMenuSelClassVO.getCopySdselClassCd() + ",";
-            countChkVO.setApplySdselGrpCd(sideMenuSelClassVO.getApplySdselGrpCd());
-            countChkVO.setCopySdselGrpCd(sideMenuSelClassVO.getCopySdselGrpCd());
-        }
-        countChkVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
-        countChkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
-            countChkVO.setStoreCd(sessionInfoVO.getStoreCd());
-        }
-
-        // 상품 array 값 세팅
-        if (classCds != null && !"".equals(classCds)) {
-            String[] classCdList = classCds.split(",");
-            countChkVO.setClassCdList(classCdList);
-        }
-
-        // 피자,엣지,토핑 갯수 체크(분기처리 안되어 있지만 결국 미스터 피자만 사용)
-        List<DefaultMap<String>> classCntList = sideMenuMapper.getCountClassCnt(countChkVO);
-
-        //  분류구분 피자,엣지,토핑은 최대 1개만 선택 가능
-        for (DefaultMap<String> list : classCntList) {
-            if(Integer.parseInt(list.getStr("pizzaCnt")) > 1){
-                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.Y.msg"));
-            }
-            if(Integer.parseInt(list.getStr("edgeCnt")) > 1){
-                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.E.msg"));
-            }
-            if(Integer.parseInt(list.getStr("toppingCnt")) > 1){
-                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.T.msg"));
-            }
-        }
-
-        // 선택그룹 하프앤하프 여부 확인
-        String halfAndHalf = sideMenuMapper.getChkHalfAndHalfYn(countChkVO);
+//        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
+//            classCds += sideMenuSelClassVO.getCopySdselClassCd() + ",";
+//            countChkVO.setApplySdselGrpCd(sideMenuSelClassVO.getApplySdselGrpCd());
+//            countChkVO.setCopySdselGrpCd(sideMenuSelClassVO.getCopySdselGrpCd());
+//        }
+//        countChkVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+//        countChkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+//        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+//            countChkVO.setStoreCd(sessionInfoVO.getStoreCd());
+//        }
+//
+//        // 상품 array 값 세팅
+//        if (classCds != null && !"".equals(classCds)) {
+//            String[] classCdList = classCds.split(",");
+//            countChkVO.setClassCdList(classCdList);
+//        }
+//
+//        // 피자,엣지,토핑 갯수 체크(분기처리 안되어 있지만 결국 미스터 피자만 사용)
+//        List<DefaultMap<String>> classCntList = sideMenuMapper.getCountClassCnt(countChkVO);
+//
+//        //  분류구분 피자,엣지,토핑은 최대 1개만 선택 가능
+//        for (DefaultMap<String> list : classCntList) {
+//            if(Integer.parseInt(list.getStr("pizzaCnt")) > 1){
+//                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.Y.msg"));
+//            }
+//            if(Integer.parseInt(list.getStr("edgeCnt")) > 1){
+//                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.E.msg"));
+//            }
+//            if(Integer.parseInt(list.getStr("toppingCnt")) > 1){
+//                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.T.msg"));
+//            }
+//        }
+//
+//        // 선택그룹 하프앤하프 여부 확인
+//        String halfAndHalf = sideMenuMapper.getChkHalfAndHalfYn(countChkVO);
 
         for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
             sideMenuSelClassVO.setModDt(currentDt);
@@ -686,13 +686,13 @@ public class SideMenuServiceImpl implements SideMenuService {
 
             System.out.println(sideMenuSelClassVO.getPopUpClassYn() + "분류구분");
 
-            // 선택그룹의 하프앤하프가 '사용'이면서 복사할 분류의 분류구분이 '피자'인 경우(분기처리 안되어 있지만 결국 미스터 피자만 사용)
-            if(halfAndHalf.equals("Y") && sideMenuSelClassVO.getPopUpClassYn().equals("Y")){
-                // 수량은 반드시 2로 입력
-                if(sideMenuSelClassVO.getSdselQty() != 2) {
-                    throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.sdselQty.msg"));
-                }
-            }
+//            // 선택그룹의 하프앤하프가 '사용'이면서 복사할 분류의 분류구분이 '피자'인 경우(분기처리 안되어 있지만 결국 미스터 피자만 사용)
+//            if(halfAndHalf.equals("Y") && sideMenuSelClassVO.getPopUpClassYn().equals("Y")){
+//                // 수량은 반드시 2로 입력
+//                if(sideMenuSelClassVO.getSdselQty() != 2) {
+//                    throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.sdselQty.msg"));
+//                }
+//            }
 
             // 분류코드 생성
             sideMenuSelClassVO.setApplySdselClassCd(sideMenuMapper.getMenuClassCode(sideMenuSelClassVO));
@@ -974,6 +974,64 @@ public class SideMenuServiceImpl implements SideMenuService {
             }
         }
 
+
+        return procCnt;
+    }
+
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 저장 전 검증 */
+    @Override
+    public int getChkClassCondition(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO) {
+        int procCnt = 0;
+        String procResult;
+        String currentDt = currentDateTimeString();
+        String classCds = "";
+        SideMenuSelClassVO countChkVO = new SideMenuSelClassVO();
+
+        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
+            classCds += sideMenuSelClassVO.getCopySdselClassCd() + ",";
+            countChkVO.setApplySdselGrpCd(sideMenuSelClassVO.getApplySdselGrpCd());
+            countChkVO.setCopySdselGrpCd(sideMenuSelClassVO.getCopySdselGrpCd());
+        }
+        countChkVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        countChkVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE ){
+            countChkVO.setStoreCd(sessionInfoVO.getStoreCd());
+        }
+
+        // 상품 array 값 세팅
+        if (classCds != null && !"".equals(classCds)) {
+            String[] classCdList = classCds.split(",");
+            countChkVO.setClassCdList(classCdList);
+        }
+
+        // 피자,엣지,토핑 갯수 체크(분기처리 안되어 있지만 결국 미스터 피자만 사용)
+        List<DefaultMap<String>> classCntList = sideMenuMapper.getCountClassCnt(countChkVO);
+
+        //  분류구분 피자,엣지,토핑은 최대 1개만 선택 가능
+        for (DefaultMap<String> list : classCntList) {
+            if(Integer.parseInt(list.getStr("pizzaCnt")) > 1){
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.Y.msg"));
+            }
+            if(Integer.parseInt(list.getStr("edgeCnt")) > 1){
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.E.msg"));
+            }
+            if(Integer.parseInt(list.getStr("toppingCnt")) > 1){
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.T.msg"));
+            }
+        }
+
+        // 선택그룹 하프앤하프 여부 확인
+        String halfAndHalf = sideMenuMapper.getChkHalfAndHalfYn(countChkVO);
+
+        for(SideMenuSelClassVO sideMenuSelClassVO : sideMenuSelClassVOs) {
+            // 선택그룹의 하프앤하프가 '사용'이면서 복사할 분류의 분류구분이 '피자'인 경우(분기처리 안되어 있지만 결국 미스터 피자만 사용)
+            if(halfAndHalf.equals("Y") && sideMenuSelClassVO.getPopUpClassYn().equals("Y")){
+                // 수량은 반드시 2로 입력
+                if(sideMenuSelClassVO.getSdselQty() != 2) {
+                    throw new JsonException(Status.SERVER_ERROR, messageService.get("sideMenu.selectMenu.popUpClassYnChk.sdselQty.msg"));
+                }
+            }
+        }
 
         return procCnt;
     }

@@ -19,15 +19,17 @@
     <select id="getWorkStudentPayHistoryList" parameterType="WorkStudentPayHistoryVO" resultType="DefaultMap">
         /* WorkStudentPayHistoryMapper.getWorkStudentPayHistoryList */
         SELECT 	A.WORK_SCH_CODE
-        ,		B.STUDENT_NM
+        ,		SBPENC.D(B.STUDENT_NM)  AS STUDENT_NM
         ,       A.STORE_CD
         ,		C.STORE_NM
         ,		B.DEPARTMENT
         ,		B.STUDENT_NO
         ,		TO_CHAR(TO_DATE(#{srchYm}||'01','YYYYMMDD'), 'YYYY-MM-DD') || ' ~ ' ||TO_CHAR(LAST_DAY(TO_DATE(#{srchYm}, 'YYYYMM')), 'YYYY-MM-DD') AS WORK_PERIOD
-        ,		B.BANK_NM || ' ' || B.ACCOUNT_NO    AS BANK_ACCOUNT
+        ,		SBPENC.D(B.BANK_NM) || ' ' || SBPENC.D(B.ACCOUNT_NO)    AS BANK_ACCOUNT
         ,		SUM(D.WORK_TIME)                    AS WORK_TIME
         ,		SUM(D.WORK_TIME) * A.HOUR_PAY       AS PAY_AMT
+        ,   	SUM(SUM(D.WORK_TIME)) OVER ()       AS TOTAL_WORK_TIME
+        ,   	SUM(SUM(D.WORK_TIME) * A.HOUR_PAY) OVER () AS TOTAL_PAY_AMT
         FROM 	TB_HQ_WORK_SCHEDULE A
         ,		TB_HQ_WORK_STUDENTS B
         ,		TB_MS_STORE C
@@ -45,12 +47,12 @@
         AND		D.WORK_DATE BETWEEN #{srchYm} || '01' AND #{srchYm} || '31'
         GROUP
         BY		A.WORK_SCH_CODE
-        ,		B.STUDENT_NM
+        ,		SBPENC.D(B.STUDENT_NM)
         ,       A.STORE_CD
         ,		C.STORE_NM
         ,		B.DEPARTMENT
         ,		B.STUDENT_NO
-        ,		B.BANK_NM || ' ' || B.ACCOUNT_NO
+        ,		SBPENC.D(B.BANK_NM) || ' ' || SBPENC.D(B.ACCOUNT_NO)
         ,		A.HOUR_PAY
         ORDER
         BY		TO_NUMBER(SUBSTR(A.WORK_SCH_CODE, 2, INSTR(A.WORK_SCH_CODE, '-') - 2))

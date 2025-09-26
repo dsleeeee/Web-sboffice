@@ -966,4 +966,28 @@ public class SideMenuController {
 
         return returnJson(Status.OK, result);
     }
+
+    /**
+     * 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 저장 저장 전 검증
+     *
+     * @param sideMenuSelClassVOs
+     * @param request
+     * @param response
+     * @param model
+     * @return  Object
+     * @author  김유승
+     * @since   2025. 09. 25.
+     */
+    @RequestMapping(value = "/menuClass/getChkClassCondition.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getChkClassCondition(@RequestBody SideMenuSelClassVO[] sideMenuSelClassVOs, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = sideMenuService.getChkClassCondition(sideMenuSelClassVOs, sessionInfoVO);
+
+
+        return returnJson(Status.OK, result);
+    }
 }

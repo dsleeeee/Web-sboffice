@@ -18,11 +18,11 @@
     <select id="getWorkStudentKookminList" parameterType="WorkStudentKookminVO" resultType="DefaultMap">
         /* WorkStudentKookminMapper.getWorkStudentKookminList */
         SELECT 	A.STUDENT_NO
-        ,		A.STUDENT_NM
+        ,		SBPENC.D(A.STUDENT_NM)  AS STUDENT_NM
         ,		A.DEPARTMENT
-        ,		A.MP_NO
-        ,		A.BANK_NM
-        ,		A.ACCOUNT_NO
+        ,		SBPENC.D(A.MP_NO)       AS MP_NO
+        ,		SBPENC.D(A.BANK_NM)     AS BANK_NM
+        ,		SBPENC.D(A.ACCOUNT_NO)  AS ACCOUNT_NO
         ,		A.COOP_YN
         ,       A.REMARK
         ,		TO_CHAR(TO_DATE(A.REG_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS REG_DT
@@ -33,8 +33,8 @@
         WHERE   A.HQ_OFFICE_CD = #{hqOfficeCd}
         <if test='srchCondition != null and srchCondition != ""'>
             AND (   A.STUDENT_NO LIKE '%' || #{srchCondition} || '%'
-                or  A.STUDENT_NM LIKE '%' || #{srchCondition} || '%'
-                or  A.MP_NO LIKE '%' || #{srchCondition} || '%'
+                or  SBPENC.D(A.STUDENT_NM) LIKE '%' || #{srchCondition} || '%'
+                or  A.MP_NO LIKE '%' || SBPENC.D(#{srchCondition}) || '%'
                 )
         </if>
         ORDER
@@ -68,11 +68,11 @@
         (
             #{hqOfficeCd}
         ,   #{studentNo}
-        ,   #{studentNm}
+        ,   SBPENC.E(#{studentNm})
         ,   #{department}
-        ,   #{mpNo}
-        ,   #{bankNm}
-        ,   #{accountNo}
+        ,   SBPENC.E(#{mpNo})
+        ,   SBPENC.E(#{bankNm})
+        ,   SBPENC.E(#{accountNo})
         ,   #{coopYn}
         ,   #{remark}
         ,   #{regDt}
@@ -90,11 +90,11 @@
     <update id="updateWorkStudent" parameterType="WorkStudentKookminVO">
         /* WorkStudentKookminMapper.updateWorkStudent */
         UPDATE  TB_HQ_WORK_STUDENTS
-        SET     STUDENT_NM  = #{studentNm}
+        SET     STUDENT_NM  = SBPENC.E(#{studentNm})
         ,       DEPARTMENT  = #{department}
-        ,       MP_NO       = #{mpNo}
-        ,       BANK_NM     = #{bankNm}
-        ,       ACCOUNT_NO  = #{accountNo}
+        ,       MP_NO       = SBPENC.E(#{mpNo})
+        ,       BANK_NM     = SBPENC.E(#{bankNm})
+        ,       ACCOUNT_NO  = SBPENC.E(#{accountNo})
         ,       COOP_YN     = #{coopYn}
         ,       REMARK      = #{remark}
         ,       MOD_DT      = #{regDt}

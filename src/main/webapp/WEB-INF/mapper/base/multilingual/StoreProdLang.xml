@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreProdLang.xml
+    다국어관리(상품)(매장)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.09.25     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.multilingual.storeProdLang.service.impl.StoreProdLangMapper">
+
+    <!-- 상품명 탭 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : storeProdLangVO
+        COMMENTS : 상품명 탭 리스트를 조회한다.
+    -->
+    <select id="getStoreProdNmList" parameterType="storeProdLangVO" resultType="DefaultMap">
+        /* StoreProdLangMapper.getStoreProdNmList */
+        SELECT tmp.STORE_CD
+        ,      tmp.PROD_CD
+        ,      tmp.PROD_NM
+        ,      tmp.PROD_CLASS_CD
+        ,      (SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM -- 상품분류명
+        ,      tmp.PROD_EN_NM
+        ,      tmp.PROD_CN_NM
+        ,      tmp.PROD_JP_NM
+        FROM   TB_MS_PRODUCT tmp
+        WHERE  1=1
+        AND    tmp.STORE_CD = #{storeCd}
+        <if test="prodCd != null and prodCd != ''">
+        AND    tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+        AND    tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+        AND    tmp.PROD_CLASS_CD IN (
+                                        SELECT
+                                        PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = tmp.STORE_CD
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND tmp.USE_YN = #{useYn} --사용여부
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+             )
+        ORDER
+        BY      tmp.PROD_CD ASC
+    </select>
+
+    <!-- 상품명 영문, 중문, 일문 저장(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT
+        PARAM    : storeProdLangVO
+        COMMENTS : 상품명 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveStoreProdNm" parameterType="storeProdLangVO">
+        /* USE : StoreProdLangMapper.saveStoreProdNm */
+        MERGE INTO TB_MS_PRODUCT
+        USING DUAL
+        ON (
+            STORE_CD = #{storeCd}
+        AND PROD_CD  = #{prodCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            PROD_EN_NM = #{prodEnNm}
+        ,   PROD_CN_NM = #{prodCnNm}
+        ,   PROD_JP_NM = #{prodJpNm}
+        ,   MOD_DT     = #{modDt}
+        ,   MOD_ID     = #{modId}
+    </update>
+
+    <!-- 상품설명 탭 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_INFO
+        PARAM    : storeProdLangVO
+        COMMENTS : 상품설명 탭 리스트를 조회한다.
+    -->
+    <select id="getStoreProdInfoList" parameterType="storeProdLangVO" resultType="DefaultMap">
+        /* StoreProdLangMapper.getStoreProdInfoList */
+        SELECT tmp.STORE_CD
+        ,      tmp.PROD_CD
+        ,      tmp.PROD_NM
+        ,      tmp.PROD_CLASS_CD
+        ,      (SELECT SF_GET_PROD_CLASSES('S', tmp.STORE_CD, tmp.PROD_CLASS_CD) FROM DUAL ) AS PROD_CLASS_NM -- 상품분류명
+        ,      tmpi.PROD_INFO
+        ,      tmpi.PROD_EN_INFO
+        ,      tmpi.PROD_CN_INFO
+        ,      tmpi.PROD_JP_INFO
+        FROM   TB_MS_PRODUCT tmp
+        ,      TB_MS_PRODUCT_INFO tmpi
+        WHERE  1=1
+        AND    tmp.STORE_CD = #{storeCd}
+        AND    tmp.STORE_CD = tmpi.STORE_CD
+        AND    tmp.PROD_CD  = tmpi.PROD_CD
+        <if test="prodCd != null and prodCd != ''">
+        AND    tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+        AND    tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+        AND    tmp.PROD_CLASS_CD IN (
+                                        SELECT
+                                        PROD_CLASS_CD
+                                        FROM TB_MS_PRODUCT_CLASS
+                                        WHERE STORE_CD = tmp.STORE_CD
+                                        START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = tmp.STORE_CD
+                                        CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD AND STORE_CD = tmp.STORE_CD
+                                    )
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND tmp.USE_YN = #{useYn} --사용여부
+        </if>
+        AND (
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) != 0) AND (tmp.HQ_BRAND_CD IN (SELECT HQ_BRAND_CD FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId})) )
+                OR
+                ( ((SELECT COUNT(HQ_BRAND_CD) FROM TB_WB_USER_BRAND WHERE USER_ID = #{userId}) = 0) AND 1=1 )
+             )
+        ORDER
+        BY      tmp.PROD_CD ASC
+    </select>
+
+    <!-- 상품설명 영문, 중문, 일문 저장(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_PRODUCT_INFO
+        PARAM    : storeProdLangVO
+        COMMENTS : 상품설명 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveStoreProdInfo" parameterType="storeProdLangVO">
+        /* USE : StoreProdLangMapper.saveStoreProdInfo */
+        MERGE INTO TB_MS_PRODUCT_INFO
+        USING DUAL
+        ON (
+            STORE_CD = #{storeCd}
+        AND PROD_CD  = #{prodCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            PROD_EN_INFO = #{prodEnInfo}
+        ,   PROD_CN_INFO = #{prodCnInfo}
+        ,   PROD_JP_INFO = #{prodJpInfo}
+        ,   MOD_DT       = #{modDt}
+        ,   MOD_ID       = #{modId}
+    </update>
+
+</mapper>

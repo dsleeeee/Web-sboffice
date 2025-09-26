@@ -36,7 +36,7 @@
         ,		TO_NUMBER(A.HOUR_PAY) AS HOUR_PAY
         ,		A.WORK_FG
         ,		A.STUDENT_NO
-        ,       NVL(C.STUDENT_NM, '[등록]')   AS STUDENT_NM
+        ,       NVL(SBPENC.D(C.STUDENT_NM), '[등록]')   AS STUDENT_NM
         ,		TO_CHAR(TO_DATE(A.START_DAY, 'yyyymmdd'), 'yyyy-mm-dd')    AS START_DAY
         ,		TO_CHAR(TO_DATE(A.END_DAY, 'yyyymmdd'), 'yyyy-mm-dd')      AS END_DAY
         ,       A.REMARK
@@ -72,7 +72,7 @@
     <select id="getWorkStudentList" parameterType="WorkScheduleStudentVO" resultType="DefaultMap">
         /* WorkScheduleStudentMapper.getWorkStudentList */
         SELECT 	STUDENT_NO
-        ,		STUDENT_NM
+        ,		SBPENC.D(STUDENT_NM)    AS STUDENT_NM
         ,		DEPARTMENT
         FROM 	TB_HQ_WORK_STUDENTS
         WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
@@ -80,7 +80,7 @@
             AND STUDENT_NO LIKE '%' || #{studentNo} || '%'
         </if>
         <if test='studentNm != null and studentNm != ""'>
-            AND STUDENT_NM LIKE '%' || #{studentNm} || '%'
+            AND SBPENC.D(STUDENT_NM) LIKE '%' || #{studentNm} || '%'
         </if>
         <if test='department != null and department != ""'>
             AND DEPARTMENT LIKE '%' || #{department} || '%'

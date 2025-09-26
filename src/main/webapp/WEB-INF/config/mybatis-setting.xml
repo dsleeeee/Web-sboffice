@@ -325,6 +325,10 @@
     <typeAlias alias="fnkeyCmNmcdVO" type="kr.co.solbipos.base.multilingual.fnkeyCmNmcd.service.FnkeyCmNmcdVO" />
     <!-- 기초관리 다국어관리 다국어관리(상품) -->
     <typeAlias alias="prodLangVO" type="kr.co.solbipos.base.multilingual.prodLang.service.ProdLangVO" />
+    <!-- 기초관리 다국어관리 다국어관리(키오스크/사이드/옵션)(매장)-->
+    <typeAlias alias="storeKioskSideOptionVO" type="kr.co.solbipos.base.multilingual.storeKioskSideOption.service.StoreKioskSideOptionVO" />
+    <!-- 기초관리 다국어관리 다국어관리(상품)(매장) -->
+    <typeAlias alias="storeProdLangVO" type="kr.co.solbipos.base.multilingual.storeProdLang.service.StoreProdLangVO" />
 <!--
     <typeAlias alias="posFuncVO" type="kr.co.solbipos.base.store.posfunc.service.PosFuncVO"/>
     <typeAlias alias="empBrandVO" type="kr.co.solbipos.base.store.empbrand.service.EmpBrandVO"/>

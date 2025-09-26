@@ -109,4 +109,7 @@ public interface SideMenuService {
 
     /** 사이드메뉴-선택메뉴 탭-선택상품복사 팝업 - 저장 */
     int getSdselProdCopySave(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 사이드메뉴-선택메뉴 탭-선택분류복사 팝업 - 저장 저장 전 검증 */
+    int getChkClassCondition(SideMenuSelClassVO[] sideMenuSelClassVOs, SessionInfoVO sessionInfoVO);
 }

@@ -19,7 +19,7 @@
     <select id="getWorkHistoryByWorkStudentList" parameterType="WorkHistoryByWorkStudentVO" resultType="DefaultMap">
         /* WorkHistoryByWorkStudentMapper.getWorkHistoryByWorkStudentList */
         SELECT 	A.STUDENT_NO
-        ,		C.STUDENT_NM
+        ,		SBPENC.D(C.STUDENT_NM)  AS STUDENT_NM
         ,		TO_CHAR(TO_DATE(B.WORK_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS WORK_DATE
         ,		A.STORE_CD
         ,		D.STORE_NM
@@ -51,7 +51,7 @@
             AND A.STUDENT_NO LIKE '%'|| #{studentNo} || '%'
         </if>
         <if test="studentNm != null and studentNm != ''">
-            AND C.STUDENT_NM LIKE '%'|| #{studentNm} || '%'
+            AND SBPENC.D(C.STUDENT_NM) LIKE '%'|| #{studentNm} || '%'
         </if>
         ORDER
         BY		B.WORK_DATE
