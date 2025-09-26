@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreKioskSideOption.xml
+    다국어관리(키오스크/사이드/옵션)(매장)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.09.19     최초작성
+-->
+
+<mapper namespace="kr.co.solbipos.base.multilingual.storeKioskSideOption.service.impl.StoreKioskSideOptionMapper">
+
+    <!-- 키오스크(카테고리명) 탭 리스트 조회(매장) -->
+        <!--
+            TABLE    : TB_MS_KIOSK_CLS
+            PARAM    : storeKioskSideOptionVO
+            COMMENTS : 키오스크(카테고리명) 탭 리스트(매장)를 조회한다.
+        -->
+        <select id="getStoreKioskCategoryList" parameterType="storeKioskSideOptionVO" resultType="DefaultMap">
+         /* USE : StoreKioskSideOptionMapper.getStoreKioskCategoryList */
+         SELECT tmkc.STORE_CD
+         , 	   tmkc.POS_NO
+         ,      tmkc.TU_CLS_TYPE
+         ,      tmkg.TU_CLS_TYPE_NM
+         ,      tmkc.TU_CLS_CD
+         ,      tmkc.TU_CLS_NM
+         ,      tmkc.TU_PAGE
+         ,      tmkc.X
+         ,      tmkc.Y
+         ,      tmkc.WIDTH
+         ,      tmkc.HEIGHT
+         ,      tmkc.INDEX_NO
+         ,      tmkc.CLS_FG
+         ,      tmkc.CLS_MEMO
+         ,      tmkc.TU_M_CLS_FG
+         ,      tmkc.TU_CLS_EN_NM
+         ,      tmkc.TU_CLS_CN_NM
+         ,      tmkc.TU_CLS_JP_NM
+         FROM   TB_MS_KIOSK_CLS tmkc
+         ,      TB_MS_KIOSK_GROUP tmkg
+         WHERE  tmkc.STORE_CD = #{storeCd}
+         AND    tmkc.STORE_CD = tmkg.STORE_CD(+)
+         AND    tmkc.TU_CLS_TYPE = tmkg.TU_CLS_TYPE(+)
+        <if test="posNo != null and posNo != ''">
+            AND tmkc.POS_NO = #{posNo}
+        </if>
+        <if test="tuClsType != null and tuClsType != ''">
+         AND    tmkc.TU_CLS_TYPE = #{tuClsType}
+        </if>
+         AND    tmkc.TU_CLS_TYPE NOT IN ('00')
+         ORDER
+         BY     tmkc.TU_CLS_TYPE, tmkc.TU_CLS_CD
+    </select>
+
+    <!-- 키오스크(카테고리명) 영문, 중문, 일문 저장(매장) -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 키오스크(카테고리명) 영문, 중문, 일문(매장)을 저장한다.
+    -->
+    <update id="saveStoreKioskCategory" parameterType="storeKioskSideOptionVO">
+        /* USE : StoreKioskSideOptionMapper.saveStoreKioskCategory */
+        MERGE INTO TB_MS_KIOSK_CLS tmkc
+        USING DUAL
+        ON (
+            STORE_CD     = #{storeCd}
+        AND POS_NO       = #{posNo}
+        AND TU_CLS_TYPE  = #{tuClsType}
+        AND TU_CLS_CD    = #{tuClsCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            TU_CLS_EN_NM  = #{tuClsEnNm}
+        ,   TU_CLS_CN_NM  = #{tuClsCnNm}
+        ,   TU_CLS_JP_NM  = #{tuClsJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+    <!-- 키오스크 포스 조회(중분류 사용 포스만 조회) -->
+    <!--
+        TABLE    :
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 키오스크 포스를 조회한다.(중분류 사용 포스만 조회)
+    -->
+    <select id="getKioskPosComboList" parameterType="storeKioskSideOptionVO" resultType="DefaultMap">
+        /* USE : StoreKioskSideOptionMapper.getKioskPosComboList */
+        SELECT tmp.POS_NO AS NAME,
+        tmp.POS_NO AS VALUE
+        FROM TB_MS_POS_ENVST tmpe,
+        TB_MS_POS tmp
+        WHERE tmpe.STORE_CD = #{storeCd}
+        AND tmp.STORE_CD = tmpe.STORE_CD
+        AND tmp.POS_NO = tmpe.POS_NO
+        AND tmpe.ENVST_CD = '4019'  <!-- 포스용도 -->
+        AND tmpe.ENVST_VAL = '6'
+        AND NVL((SELECT ENVST_VAL FROM TB_MS_POS_ENVST WHERE STORE_CD = #{storeCd} AND POS_NO = tmp.POS_NO AND ENVST_CD = '4101'), 0) = 2
+    </select>
+
+    <!-- 키오스크중분류(카테고리명) 카테고리(대분류) 콤보박스 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_KIOSK_CLS
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 키오스크중분류(카테고리명) 카테고리(대분류) 콤보박스를 조회한다.
+    -->
+    <select id="getStoreKioskCategoryComboList" parameterType="storeKioskSideOptionVO" resultType="DefaultMap">
+        /* StoreKioskSideOptionMapper.getStoreKioskCategoryComboList */
+        SELECT '' AS VALUE
+        ,      '전체' AS NAME
+        ,      '' AS TU_CLS_TYPE
+        FROM   DUAL
+        UNION
+        SELECT TU_CLS_CD AS VALUE
+        ,      '[' || TU_CLS_CD || ']' || TU_CLS_NM AS NAME
+        ,      TU_CLS_TYPE
+        FROM   TB_MS_KIOSK_CLS
+        WHERE  STORE_CD = #{storeCd}
+        <if test="posNo != null and posNo != ''">
+            AND POS_NO = #{posNo}
+        </if>
+        <if test="tuClsType != null and tuClsType != ''">
+            AND TU_CLS_TYPE = #{tuClsType}
+        </if>
+        ORDER
+        BY     VALUE NULLS FIRST, TU_CLS_TYPE, VALUE ASC
+    </select>
+
+    <!-- 키오스크중분류(카테고리명) 탭 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS, TB_MS_KIOSK_GROUP, TB_MS_KIOSK_CLS
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 키오스크중분류(카테고리명) 탭 리스트를 조회한다.
+    -->
+    <select id="getStoreKioskMClsList" parameterType="storeKioskSideOptionVO" resultType="DefaultMap">
+         /* USE : StoreKioskSideOptionMapper.getStoreKioskMClsList */
+         SELECT tmkmc.STORE_CD
+         ,      tmkmc.POS_NO
+         ,      tmkmc.TU_CLS_TYPE
+         ,      tmkg.TU_CLS_TYPE_NM
+         ,      tmkmc.TU_CLS_CD
+         ,      thkc.TU_CLS_NM
+         ,      tmkmc.TU_M_CLS_CD
+         ,      tmkmc.TU_M_CLS_NM
+         ,      tmkmc.TU_PAGE
+         ,      tmkmc.X
+         ,      tmkmc.Y
+         ,      tmkmc.WIDTH
+         ,      tmkmc.HEIGHT
+         ,      tmkmc.INDEX_NO
+         ,      tmkmc.CLS_FG
+         ,      tmkmc.M_CLS_MEMO
+         ,      tmkmc.TU_M_CLS_EN_NM
+         ,      tmkmc.TU_M_CLS_CN_NM
+         ,      tmkmc.TU_M_CLS_JP_NM
+         FROM   TB_MS_KIOSK_M_CLS tmkmc
+         ,      TB_MS_KIOSK_GROUP tmkg
+         ,      TB_MS_KIOSK_CLS thkc
+         WHERE  tmkmc.POS_NO = #{posNo}
+         AND    tmkmc.STORE_CD = #{storeCd}
+         AND    tmkmc.POS_NO = tmkg.POS_NO(+)
+         AND    tmkmc.STORE_CD = tmkg.STORE_CD(+)
+         AND    tmkmc.TU_CLS_TYPE = tmkg.TU_CLS_TYPE(+)
+         AND    tmkmc.POS_NO = thkc.POS_NO(+)
+         AND    tmkmc.STORE_CD = thkc.STORE_CD(+)
+         AND    tmkmc.TU_CLS_TYPE = thkc.TU_CLS_TYPE(+)
+         AND    tmkmc.TU_CLS_CD = thkc.TU_CLS_CD(+)
+        <if test="posNo != null and posNo != ''">
+            AND tmkmc.POS_NO = #{posNo}
+        </if>
+        <if test="tuClsType != null and tuClsType != ''">
+         AND    tmkmc.TU_CLS_TYPE = #{tuClsType}
+        </if>
+        <if test="tuClsCd != null and tuClsCd != ''">
+         AND    tmkmc.TU_CLS_CD = #{tuClsCd}
+        </if>
+         AND    tmkmc.TU_CLS_TYPE NOT IN ('00')
+         ORDER
+         BY     tmkmc.TU_CLS_TYPE, tmkmc.TU_CLS_CD, tmkmc.TU_M_CLS_CD
+    </select>
+
+    <!-- 키오스크중분류(카테고리명) 영문, 중문, 일문 저장(매장) -->
+    <!--
+        TABLE    : TB_MS_KIOSK_M_CLS
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 키오스크중분류(카테고리명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveStoreKioskMCls" parameterType="storeKioskSideOptionVO">
+        /* USE : StoreKioskSideOptionMapper.saveStoreKioskMCls */
+        MERGE INTO TB_MS_KIOSK_M_CLS
+        USING DUAL
+        ON (
+            STORE_CD     = #{storeCd}
+        AND POS_NO       = #{posNo}
+        AND TU_CLS_TYPE  = #{tuClsType}
+        AND TU_CLS_CD    = #{tuClsCd}
+        AND TU_M_CLS_CD  = #{tuMClsCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            TU_M_CLS_EN_NM  = #{tuMClsEnNm}
+        ,   TU_M_CLS_CN_NM  = #{tuMClsCnNm}
+        ,   TU_M_CLS_JP_NM  = #{tuMClsJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+    <!-- 사이드(선택그룹명) 탭 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 사이드(선택그룹명) 탭 리스트를 조회한다.
+    -->
+    <select id="getStoreSideSdselGrpList" parameterType="storeKioskSideOptionVO" resultType="DefaultMap">
+        /* USE : StoreKioskSideOptionMapper.getStoreSideSdselGrpList */
+        SELECT
+            tmpsg.SDSEL_GRP_CD,
+            tmpsg.SDSEL_GRP_NM,
+            NVL(tmpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG,
+            tmpsg.SDSEL_GRP_EN_NM,
+            tmpsg.SDSEL_GRP_CN_NM,
+            tmpsg.SDSEL_GRP_JP_NM
+        FROM
+            TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+        WHERE
+            tmpsg.STORE_CD = #{storeCd}
+            AND tmpsg.USE_YN = 'Y'
+        <if test='sdselTypeFg != null and sdselTypeFg != ""'>
+            AND tmpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
+        </if>
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND tmpsg.SDSEL_GRP_CD LIKE '%'|| #{sdselGrpCd} ||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND tmpsg.SDSEL_GRP_NM LIKE '%'|| #{sdselGrpNm} ||'%'
+        </if>
+        ORDER BY
+            tmpsg.SDSEL_GRP_CD
+    </select>
+
+    <!-- 사이드(선택그룹명) 영문, 중문, 일문 저장(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_GROUP
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 사이드(선택그룹명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveStoreSideSdselGrp" parameterType="storeKioskSideOptionVO">
+        /* USE : StoreKioskSideOptionMapper.saveStoreSideSdselGrp */
+        MERGE INTO TB_MS_PRODUCT_SDSEL_GROUP
+        USING DUAL
+        ON (
+            STORE_CD = #{storeCd}
+        AND SDSEL_GRP_CD  = #{sdselGrpCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            SDSEL_GRP_EN_NM  = #{sdselGrpEnNm}
+        ,   SDSEL_GRP_CN_NM  = #{sdselGrpCnNm}
+        ,   SDSEL_GRP_JP_NM  = #{sdselGrpJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+    <!-- 사이드(선택분류명) 탭 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 사이드(선택분류명) 탭 리스트를 조회한다.
+    -->
+    <select id="getStoreSideSdselClassList" parameterType="storeKioskSideOptionVO" resultType="DefaultMap">
+        /* USE : StoreKioskSideOptionMapper.getStoreSideSdselClassList */
+        SELECT
+            tmpsc.SDSEL_GRP_CD,
+            tmpsg.SDSEL_GRP_NM,
+            tmpsc.SDSEL_CLASS_CD,
+            tmpsc.SDSEL_CLASS_NM,
+            NVL(tmpsg.SDSEL_TYPE_FG, 'C') AS SDSEL_TYPE_FG,
+            tmpsc.SDSEL_CLASS_EN_NM,
+            tmpsc.SDSEL_CLASS_CN_NM,
+            tmpsc.SDSEL_CLASS_JP_NM
+        FROM
+            TB_MS_PRODUCT_SDSEL_CLASS tmpsc,
+            TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+        WHERE
+            tmpsc.STORE_CD = #{storeCd}
+            AND tmpsc.USE_YN = 'Y'
+            AND tmpsg.STORE_CD (+)= tmpsc.STORE_CD
+            AND tmpsg.SDSEL_GRP_CD (+)= tmpsc.SDSEL_GRP_CD
+        <if test='sdselTypeFg != null and sdselTypeFg != ""'>
+            AND tmpsg.SDSEL_TYPE_FG = #{sdselTypeFg}
+        </if>
+        <if test='sdselGrpCd != null and sdselGrpCd != ""'>
+            AND tmpsc.SDSEL_GRP_CD LIKE '%'|| #{sdselGrpCd} ||'%'
+        </if>
+        <if test='sdselGrpNm != null and sdselGrpNm != ""'>
+            AND tmpsg.SDSEL_GRP_NM LIKE '%'|| #{sdselGrpNm} ||'%'
+        </if>
+        <if test='sdselClassCd != null and sdselClassCd != ""'>
+            AND tmpsc.SDSEL_CLASS_CD LIKE '%'|| #{sdselClassCd} ||'%'
+        </if>
+        <if test='sdselClassNm != null and sdselClassNm != ""'>
+            AND tmpsc.SDSEL_CLASS_NM LIKE '%'|| #{sdselClassNm} ||'%'
+        </if>
+        ORDER BY
+            tmpsc.SDSEL_GRP_CD, SDSEL_CLASS_CD
+    </select>
+
+    <!-- 사이드(선택분류명) 영문, 중문, 일문 저장(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_SDSEL_CLASS
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 사이드(선택분류명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveStoreSideSdselClass" parameterType="storeKioskSideOptionVO">
+        /* USE : StoreKioskSideOptionMapper.saveStoreSideSdselClass */
+        MERGE INTO TB_MS_PRODUCT_SDSEL_CLASS
+        USING DUAL
+        ON (
+            STORE_CD = #{storeCd}
+        AND SDSEL_CLASS_CD  = #{sdselClassCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            SDSEL_CLASS_EN_NM  = #{sdselClassEnNm}
+        ,   SDSEL_CLASS_CN_NM  = #{sdselClassCnNm}
+        ,   SDSEL_CLASS_JP_NM  = #{sdselClassJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+    <!-- 옵션(그룹명) 탭 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 옵션(그룹명) 탭 리스트를 조회한다.
+    -->
+    <select id="getStoreOptionGrpList" parameterType="storeKioskSideOptionVO" resultType="DefaultMap">
+        /* USE : StoreKioskSideOptionMapper.getStoreOptionGrpList */
+        SELECT
+            tmpog.OPTION_GRP_CD,
+            tmpog.OPTION_GRP_NM,
+            tmpog.OPTION_GRP_EN_NM,
+            tmpog.OPTION_GRP_CN_NM,
+            tmpog.OPTION_GRP_JP_NM
+        FROM
+            TB_MS_PRODUCT_OPTION_GROUP tmpog
+        WHERE
+            tmpog.STORE_CD = #{storeCd}
+            AND tmpog.USE_YN = 'Y'
+        <if test='optionGrpCd != null and optionGrpCd != ""'>
+            AND tmpog.OPTION_GRP_CD LIKE '%'|| #{optionGrpCd} ||'%'
+        </if>
+        <if test='optionGrpNm != null and optionGrpNm != ""'>
+            AND tmpog.OPTION_GRP_NM LIKE '%'|| #{optionGrpNm} ||'%'
+       </if>
+        ORDER BY
+            tmpog.OPTION_GRP_CD
+    </select>
+
+    <!-- 옵션(그룹명) 영문, 중문, 일문 저장(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION_GROUP
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 옵션(그룹명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveStoreOptionGrp" parameterType="storeKioskSideOptionVO">
+        /* USE : StoreKioskSideOptionMapper.saveStoreOptionGrp */
+        MERGE INTO TB_MS_PRODUCT_OPTION_GROUP
+        USING DUAL
+        ON (
+            STORE_CD = #{storeCd}
+        AND OPTION_GRP_CD = #{optionGrpCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            OPTION_GRP_EN_NM  = #{optionGrpEnNm}
+        ,   OPTION_GRP_CN_NM  = #{optionGrpCnNm}
+        ,   OPTION_GRP_JP_NM  = #{optionGrpJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+    <!-- 옵션(옵션명) 탭 리스트 조회(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION_VAL
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 옵션(옵션명) 탭 리스트를 조회한다.
+    -->
+    <select id="getStoreOptionValList" parameterType="storeKioskSideOptionVO" resultType="DefaultMap">
+        /* USE : StoreKioskSideOptionMapper.storeKioskSideOptionVO */
+        SELECT
+            tmpov.OPTION_GRP_CD,
+            tmpog.OPTION_GRP_NM,
+            tmpov.OPTION_VAL_CD,
+            tmpov.OPTION_VAL_NM,
+            tmpov.OPTION_VAL_EN_NM,
+            tmpov.OPTION_VAL_CN_NM,
+            tmpov.OPTION_VAL_JP_NM
+        FROM
+            TB_MS_PRODUCT_OPTION_VAL tmpov,
+            TB_MS_PRODUCT_OPTION_GROUP tmpog
+        WHERE
+            tmpov.STORE_CD = #{storeCd}
+        AND tmpog.STORE_CD (+)= tmpov.STORE_CD
+        AND tmpog.OPTION_GRP_CD (+)= tmpov.OPTION_GRP_CD
+        <if test='optionGrpCd != null and optionGrpCd != ""'>
+            AND tmpov.OPTION_GRP_CD LIKE '%'|| #{optionGrpCd} ||'%'
+        </if>
+        <if test='optionGrpNm != null and optionGrpNm != ""'>
+            AND tmpog.OPTION_GRP_NM LIKE '%'|| #{optionGrpNm} ||'%'
+        </if>
+        <if test='optionValCd != null and optionValCd != ""'>
+            AND tmpov.OPTION_VAL_CD LIKE '%'|| #{optionValCd} ||'%'
+        </if>
+        <if test='optionValNm != null and optionValNm != ""'>
+            AND tmpov.OPTION_VAL_NM LIKE '%'|| #{optionValNm} ||'%'
+        </if>
+        ORDER BY
+            tmpov.OPTION_GRP_CD, tmpov.OPTION_VAL_CD
+    </select>
+
+    <!-- 옵션(옵션명) 영문, 중문, 일문 저장(매장) -->
+    <!--
+        TABLE    : TB_MS_PRODUCT_OPTION_VAL
+        PARAM    : storeKioskSideOptionVO
+        COMMENTS : 옵션(옵션명) 영문, 중문, 일문을 저장한다.
+    -->
+    <update id="saveStoreOptionVal" parameterType="storeKioskSideOptionVO">
+        /* USE : StoreKioskSideOptionMapper.saveStoreOptionVal */
+        MERGE INTO TB_MS_PRODUCT_OPTION_VAL
+        USING DUAL
+        ON (
+            STORE_CD = #{storeCd}
+        AND OPTION_GRP_CD = #{optionGrpCd}
+        AND OPTION_VAL_CD = #{optionValCd}
+        )
+        WHEN MATCHED THEN
+        UPDATE
+        SET
+            OPTION_VAL_EN_NM  = #{optionValEnNm}
+        ,   OPTION_VAL_CN_NM  = #{optionValCnNm}
+        ,   OPTION_VAL_JP_NM  = #{optionValJpNm}
+        ,   MOD_DT        = #{modDt}
+        ,   MOD_ID        = #{modId}
+    </update>
+
+</mapper>
