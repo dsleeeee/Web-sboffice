@@ -245,4 +245,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassCopySingle.js?ver=20250905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sdselClassCopySingle.js?ver=20250925.01" charset="utf-8"></script>
