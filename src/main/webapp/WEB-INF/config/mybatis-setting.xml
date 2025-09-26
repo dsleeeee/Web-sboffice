@@ -555,8 +555,6 @@
     <typeAlias alias="MembrNonBilClctVO" type="kr.co.solbipos.membr.anals.membrNonBilClct.service.MembrNonBilClctVO"/>
     <typeAlias alias="inclnVO" type="kr.co.solbipos.membr.anals.incln.service.InclnVO"/>
     <typeAlias alias="bbqMemberExcelUploadVO" type="kr.co.solbipos.membr.info.bbqMemberExcelUpload.service.BbqMemberExcelUploadVO"/>
-    <!-- 국민대 > 매출처관리 > 외상매출조회 -->
-    <typeAlias alias="postpaidSaleVO" type="kr.co.solbipos.membr.anals.postpaidSale.service.PostpaidSaleVO"/>
 
 
     <!-- (공통) 선택그룹 팝업 -->
@@ -1329,7 +1327,6 @@
     <!-- 광운대 > 광운대일마감 > 일일일계표3 -->
     <typeAlias alias="dailyTableKwu2VO" type="kr.co.solbipos.excclc.excclc.dailyTableKwu2.service.DailyTableKwu2VO"/>
 
-
     <!-- 광운대 > 후방매출등록 > 후방매출등록 -->
     <typeAlias alias="saleRegistKwuVO" type="kr.co.solbipos.excclc.excclc.saleRegistKwu.service.SaleRegistKwuVO"/>
 
@@ -1346,7 +1343,10 @@
     <typeAlias alias="saleStatusKwuVO" type="kr.co.solbipos.sale.status.saleStatusKwu.service.SaleStatusKwuVO"/>
 
 
-
+    <!-- 국민대 > 매출처관리 > 외상매출조회 -->
+    <typeAlias alias="postpaidSaleVO" type="kr.co.solbipos.membr.anals.postpaidSale.service.PostpaidSaleVO"/>
+    <!-- 국민대 > 매출관리 > 매출전표등록(일반) -->
+    <typeAlias alias="saleRegistKmuVO" type="kr.co.solbipos.excclc.excclc.saleRegistKmu.service.SaleRegistKmuVO"/>
 
 
     <!-- ====================================== 모바일 시작 ====================================== -->
