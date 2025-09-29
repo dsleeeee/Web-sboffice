@@ -102,16 +102,29 @@ app.controller('storeKioskMClsCtrl', ['$scope', '$http', '$timeout', function ($
     // 카테고리(대분류) 콤보박스 조회
     $scope.getKioskCategory = function () {
 
-        var params = {};
-        params.posNo = $scope.srchPosNo2Combo.selectedValue;
-        params.tuClsType = $scope.srchTuClsType2Combo.selectedValue;
+        if ($scope.srchTuClsType2Combo.selectedValue === "") {
 
-        $scope._postJSONQuery.withOutPopUp('/base/multilingual/storeKioskSideOption/getStoreKioskCategoryComboList.sb', params, function (response) {
-            if (response.data.data.list.length > 0) {
-                var comboList = response.data.data.list;
-                $scope._setComboData("tuClsCd2", comboList);
-            }
-        });
+            var comboArray = [];
+            var comboData  = {};
+
+            comboData.name  = "전체";
+            comboData.value = "";
+            comboArray.push(comboData);
+
+            $scope._setComboData("tuClsCd2", comboArray);
+
+        } else {
+            var params = {};
+            params.posNo = $scope.srchPosNo2Combo.selectedValue;
+            params.tuClsType = $scope.srchTuClsType2Combo.selectedValue;
+
+            $scope._postJSONQuery.withOutPopUp('/base/multilingual/storeKioskSideOption/getStoreKioskCategoryComboList.sb', params, function (response) {
+                if (response.data.data.list.length > 0) {
+                    var comboList = response.data.data.list;
+                    $scope._setComboData("tuClsCd2", comboList);
+                }
+            });
+        }
     };
 
     // 조회
