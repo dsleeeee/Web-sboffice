@@ -169,7 +169,8 @@ app.controller('storeKioskCategoryCtrl', ['$scope', '$http', '$timeout', functio
                     includeColumnHeaders: true,
                     includeCellStyles   : true,
                     includeColumns      : function (column) {
-                        return column.visible;
+                        //return column.visible;
+                        return column.binding != 'gChk'; //선택
                     }
                 }, messages["storeKioskSideOption.kioskCategory"]  + '_' +  getCurDateTime() + '.xlsx', function () {
                     $timeout(function () {

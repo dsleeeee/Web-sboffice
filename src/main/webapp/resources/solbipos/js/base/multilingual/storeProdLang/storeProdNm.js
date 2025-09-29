@@ -118,7 +118,8 @@ app.controller('storeProdNmCtrl', ['$scope', '$http', '$timeout', function ($sco
                     includeColumnHeaders: true,
                     includeCellStyles   : true,
                     includeColumns      : function (column) {
-                        return column.visible;
+                        //return column.visible;
+                        return column.binding != 'gChk'; //선택
                     }
                 }, messages["storeProdLang.prodNm"]  + '_' +  getCurDateTime() + '.xlsx', function () {
                     $timeout(function () {

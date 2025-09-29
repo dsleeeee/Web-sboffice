@@ -121,7 +121,8 @@ app.controller('storeSideSdselClassCtrl', ['$scope', '$http', '$timeout', functi
                     includeColumnHeaders: true,
                     includeCellStyles   : true,
                     includeColumns      : function (column) {
-                        return column.visible;
+                        //return column.visible;
+                        return column.binding != 'gChk'; //선택
                     }
                 }, messages["storeKioskSideOption.sideSdselClass"]  + '_' +  getCurDateTime() + '.xlsx', function () {
                     $timeout(function () {
