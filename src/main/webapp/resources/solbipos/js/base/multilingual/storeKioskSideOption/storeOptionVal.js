@@ -113,7 +113,8 @@ app.controller('storeOptionValCtrl', ['$scope', '$http', '$timeout', function ($
                     includeColumnHeaders: true,
                     includeCellStyles   : true,
                     includeColumns      : function (column) {
-                        return column.visible;
+                        //return column.visible;
+                        return column.binding != 'gChk'; //선택
                     }
                 }, messages["storeKioskSideOption.optionVal"]  + '_' +  getCurDateTime() + '.xlsx', function () {
                     $timeout(function () {
