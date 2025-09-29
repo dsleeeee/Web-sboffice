@@ -83,6 +83,7 @@
                 <wj-flex-grid-column header="<s:message code="cmm.membrNo"/>"                   binding="membrNo" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="cmm.membrNm"/>"                   binding="membrNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleRegistKmu.modFg"/>"        binding="modFg" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleRegistKmu.postpaidNo"/>"        binding="postpaidNo" width="80" align="right" is-read-only="true" visible="false"></wj-flex-grid-column>
             </wj-flex-grid>
             <%-- ColumnPicker 사용시 include --%>
             <jsp:include page="/WEB-INF/view/layout/columnPicker.jsp" flush="true">

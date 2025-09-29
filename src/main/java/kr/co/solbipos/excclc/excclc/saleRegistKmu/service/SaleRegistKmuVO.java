@@ -114,6 +114,9 @@ public class SaleRegistKmuVO extends PageVO {
 
     private float postPaidPer;
 
+    /** 후불번호 */
+    private String postpaidNo;
+
     public String getHqOfficeCd() {
         return hqOfficeCd;
     }
@@ -457,4 +460,13 @@ public class SaleRegistKmuVO extends PageVO {
     public void setPostPaidPer(float postPaidPer) {
         this.postPaidPer = postPaidPer;
     }
+
+    public String getPostpaidNo() {
+        return postpaidNo;
+    }
+
+    public void setPostpaidNo(String postpaidNo) {
+        this.postpaidNo = postpaidNo;
+    }
+
 }

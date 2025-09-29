@@ -57,6 +57,9 @@ public interface SaleRegistKmuMapper {
     /** MEMBER_POSTPAID 저장 */
     int getMemberPostpaid(SaleRegistKmuVO saleRegistKmuVO);
 
+    /** MEMBER_PAID_BALANCE 저장 */
+    int getMemberPaidBalance(SaleRegistKmuVO saleRegistKmuVO);
+
     /** 매출수기등록 특정 전표 조회 */
     List<DefaultMap<String>> getBillDtlList(SaleRegistKmuVO saleRegistKmuVO);
     List<DefaultMap<String>> getCashAmt(SaleRegistKmuVO saleRegistKmuVO);
@@ -65,6 +68,8 @@ public interface SaleRegistKmuMapper {
     /** HDR 삭제 */
     int delSaleHdr(SaleRegistKmuVO saleRegistKmuVO);
     int delSaleHdrMembr(SaleRegistKmuVO saleRegistKmuVO);
+    int delMemberPostpaid(SaleRegistKmuVO saleRegistKmuVO);
+    int delMemberPaidBalance(SaleRegistKmuVO saleRegistKmuVO);
 
     /** 회원정보 조회 */
     List<DefaultMap<Object>> getMemberList(SaleRegistKmuVO saleRegistKmuVO);
