@@ -104,7 +104,7 @@
     var prodTypeFgData = ${ccu.getCommCodeExcpAll("008")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKmu/saleRegist.js?ver=20240611.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKmu/saleRegist.js?ver=20250929.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 신규등록 --%>
 <c:import url="/WEB-INF/view/excclc/excclc/saleRegistKmu/newRegist.jsp">

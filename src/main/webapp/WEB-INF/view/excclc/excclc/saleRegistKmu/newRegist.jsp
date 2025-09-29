@@ -92,6 +92,7 @@
                         <span class="mr10">매장 : <span id="storeNm"></span><span id="storeCd" style="display: none"></span></span>
                         <span class="mr10">포스번호 : <span id="posNo"></span></span>
                         <span class="mr10">영수증번호 : <span id="billNo"></span></span>
+                        <span class="mr10" style="display: none;">후불번호 : <span id="postpaidNo"></span></span>
                     </a>
                 </div>
 

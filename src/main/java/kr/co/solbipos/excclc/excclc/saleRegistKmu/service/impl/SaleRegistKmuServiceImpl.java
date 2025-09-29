@@ -375,7 +375,14 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
     @Override
     public int getBillDel(SaleRegistKmuVO saleRegistKmuVO, SessionInfoVO sessionInfoVO) {
 
+        String currentDt = currentDateTimeString();
+
         saleRegistKmuVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        saleRegistKmuVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        saleRegistKmuVO.setRegDt(currentDt);
+        saleRegistKmuVO.setRegId("WEB_REG_" + sessionInfoVO.getUserId());
+        saleRegistKmuVO.setModDt(currentDt);
+        saleRegistKmuVO.setModId("WEB_REG_" + sessionInfoVO.getUserId());
 
         // TB_SL_SALE_HDR_MEMBR
         saleRegistKmuMapper.delSaleHdrMembr(saleRegistKmuVO);

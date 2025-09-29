@@ -86,6 +86,7 @@ app.controller('saleRegistCtrl', ['$scope', '$http', '$timeout', function ($scop
                     newRegistScope.saleGubunCombo = selectedRow.saleGubun;
                     $("#membrNo").val(selectedRow.membrNo);
                     $("#membrNm").val(selectedRow.membrNm);
+                    $("#postpaidNo").text(selectedRow.postpaidNo);
 
                     event.preventDefault();
                 }

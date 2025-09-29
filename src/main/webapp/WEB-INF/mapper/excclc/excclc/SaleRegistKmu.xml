@@ -53,7 +53,8 @@
                     AND 	tssp.POS_NO		= tssh.POS_NO
                 ) AS SALE_GUBUN,
                 tsshm.MEMBR_NO,
-                SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM
+                SBPENC.D(tsshm.MEMBR_NM) AS MEMBR_NM,
+                tmmp.POSTPAID_NO
         FROM 	TB_SL_SALE_HDR tssh,
                 TB_SL_SALE_HDR_MEMBR tsshm,
                 TB_MB_MEMBER_POSTPAID tmmp
