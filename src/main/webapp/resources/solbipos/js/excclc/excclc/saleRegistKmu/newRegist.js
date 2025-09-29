@@ -269,6 +269,14 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
 
     $scope.billChk = function (){
 
+        // 결제구분 외상거래
+        if($scope.saleGubunCombo == "11") {
+            if($("#membrNo").val() == "" || $("#membrNo").val()  == null) {
+                $scope._popMsg(messages['saleRegistKmu.membrNoAlert']); // 결제구분이 외상거래 입니다. 회원을 선택해주세요.
+                return false;
+            }
+        }
+
         if ($scope.flex.rows.length <= 0) {
             $scope._popMsg(messages["saleRegist.not.data"]);
             return false;
@@ -303,14 +311,6 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         //     $scope._popMsg(messages['saleRegistKmu.saleAmt.chk']);
         //     return false;
         // }
-
-        // 결제구분 외상거래
-        if($scope.saleGubunCombo == "11") {
-            if($("#membrNo").val() == "" || $("#membrNo").val()  == null) {
-                $scope._popMsg(messages['saleRegistKmu.membrNoAlert']); // 결제구분이 외상거래 입니다. 회원을 선택해주세요.
-                return false;
-            }
-        }
 
         var params = [];
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
@@ -352,7 +352,20 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._inquirySub("/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDtlList.sb", params, function() {
             $.postJSON("/excclc/excclc/saleRegistKmu/saleRegistKmu/getCashAmt.sb", params, function(result) {
                 // $("#card").val(result.data.list[0]);
-                $("#cash").val(result.data.list[1]);
+
+                // 결제구분 카드
+                if($scope.saleGubunCombo == "01") {
+                    $("#cash").val(result.data.list[0]);
+                }
+                // 결제구분 현금
+                else if($scope.saleGubunCombo == "02") {
+                    $("#cash").val(result.data.list[1]);
+                }
+                // 결제구분 외상거래
+                else if($scope.saleGubunCombo == "11") {
+                    $("#cash").val(result.data.list[2]);
+                }
+
             });
             $.postJSON("/excclc/excclc/saleRegistKmu/saleRegistKmu/getSaleFg.sb", params, function(result) {
                 if(result.data.list === "1"){

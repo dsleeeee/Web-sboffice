@@ -263,10 +263,14 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
                     saleRegistKmuVO.setPostpaidPayFg("0"); // 후불입금수단구분
                     saleRegistKmuVO.setNonsaleTypeApprNo(saleRegistKmuVO.getMembrNo()); // 비매출승인번호
                     saleRegistKmuVO.setOrgNonsaleTypeApprNo(""); // 원거래비매출승인번호
-                    saleRegistKmuVO.setNonsaleBillNo(saleRegistKmuVO.getStoreCd() + saleRegistKmuVO.getSaleDate() + saleRegistKmuVO.getPosNo() + saleRegistKmuVO.getBillNo()); // 비매출영수증번호
+                    saleRegistKmuVO.setNonsaleBillNo(saleRegistKmuVO.getStoreCd() + saleRegistKmuVO.getSaleDate() + "99" + saleRegistKmuVO.getBillNo()); // 비매출영수증번호
+                    saleRegistKmuVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
                     // TB_MB_MEMBER_POSTPAID
                     saleRegistKmuMapper.getMemberPostpaid(saleRegistKmuVO);
+
+                    // TB_MB_MEMBER_PAID_BALANCE
+                    saleRegistKmuMapper.getMemberPaidBalance(saleRegistKmuVO);
                 }
             }
 
@@ -371,11 +375,19 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
     @Override
     public int getBillDel(SaleRegistKmuVO saleRegistKmuVO, SessionInfoVO sessionInfoVO) {
 
+        saleRegistKmuVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+
         // TB_SL_SALE_HDR_MEMBR
         saleRegistKmuMapper.delSaleHdrMembr(saleRegistKmuVO);
 
         // TB_SL_SALE_HDR
         saleRegistKmuMapper.delSaleHdr(saleRegistKmuVO);
+
+        // TB_MB_MEMBER_POSTPAID
+        saleRegistKmuMapper.delMemberPostpaid(saleRegistKmuVO);
+
+        // TB_MB_MEMBER_PAID_BALANCE
+        saleRegistKmuMapper.delMemberPaidBalance(saleRegistKmuVO);
 
         return 0;
     }
