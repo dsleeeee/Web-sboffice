@@ -250,27 +250,4 @@ public class SaleRegistKmuController {
         return ReturnUtil.returnListJson(Status.OK, result, saleRegistKmuVO);
     }
 
-    /**
-     * 매출전표등록(일반) - 삭제
-     *
-     * @param saleRegistKmuVO
-     * @param request
-     * @param response
-     * @param model
-     * @return  Object
-     * @author  김설아
-     * @since   2025. 10. 01.
-     */
-    @RequestMapping(value = "saleRegistKmu/getNewRegistDel.sb", method = RequestMethod.POST)
-    @ResponseBody
-    public Result getNewRegistDel(SaleRegistKmuVO saleRegistKmuVO, HttpServletRequest request,
-                             HttpServletResponse response, Model model) {
-
-        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
-
-        int result = saleRegistKmuService.getNewRegistDel(saleRegistKmuVO, sessionInfoVO);
-
-        return returnListJson(Status.OK, result);
-    }
-
 }

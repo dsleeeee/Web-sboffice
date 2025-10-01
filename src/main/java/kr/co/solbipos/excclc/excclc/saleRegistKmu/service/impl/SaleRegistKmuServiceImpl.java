@@ -384,6 +384,10 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
         saleRegistKmuVO.setModDt(currentDt);
         saleRegistKmuVO.setModId("WEB_REG_" + sessionInfoVO.getUserId());
 
+        // 금액 결제구분에 따라 처리
+        Long amt =  saleRegistKmuVO.getCashAmt();
+        saleRegistKmuVO.setTotSaleAmt(amt);
+
         // TB_SL_SALE_HDR_MEMBR
         saleRegistKmuMapper.delSaleHdrMembr(saleRegistKmuVO);
 
@@ -393,8 +397,10 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
         // TB_MB_MEMBER_POSTPAID
         saleRegistKmuMapper.delMemberPostpaid(saleRegistKmuVO);
 
-        // TB_MB_MEMBER_PAID_BALANCE
-        saleRegistKmuMapper.delMemberPaidBalance(saleRegistKmuVO);
+        if(saleRegistKmuVO.getMembrNo() == "" || saleRegistKmuVO.getMembrNo() == null) {
+            // TB_MB_MEMBER_PAID_BALANCE
+            saleRegistKmuMapper.delMemberPaidBalance(saleRegistKmuVO);
+        }
 
         return 0;
     }
@@ -406,34 +412,6 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
         saleRegistKmuVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
 
         return saleRegistKmuMapper.getSaleRegistKmuMemberList(saleRegistKmuVO);
-    }
-
-    /** 매출전표등록(일반) - 삭제 */
-    @Override
-    public int getNewRegistDel(SaleRegistKmuVO saleRegistKmuVO, SessionInfoVO sessionInfoVO) {
-
-        String currentDt = currentDateTimeString();
-
-        saleRegistKmuVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
-        saleRegistKmuVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
-        saleRegistKmuVO.setRegDt(currentDt);
-        saleRegistKmuVO.setRegId("WEB_REG_" + sessionInfoVO.getUserId());
-        saleRegistKmuVO.setModDt(currentDt);
-        saleRegistKmuVO.setModId("WEB_REG_" + sessionInfoVO.getUserId());
-
-        // TB_SL_SALE_HDR_MEMBR
-        saleRegistKmuMapper.delSaleHdrMembr(saleRegistKmuVO);
-
-        // TB_SL_SALE_HDR
-        saleRegistKmuMapper.delSaleHdr(saleRegistKmuVO);
-
-        // TB_MB_MEMBER_POSTPAID
-        saleRegistKmuMapper.delMemberPostpaid(saleRegistKmuVO);
-
-        // TB_MB_MEMBER_PAID_BALANCE
-        saleRegistKmuMapper.delMemberPaidBalance(saleRegistKmuVO);
-
-        return 0;
     }
 
 }

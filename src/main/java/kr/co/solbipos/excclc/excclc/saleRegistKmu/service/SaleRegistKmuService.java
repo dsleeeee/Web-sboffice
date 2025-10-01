@@ -46,6 +46,4 @@ public interface SaleRegistKmuService {
     /** 회원선택 팝업 - 조회 */
     List<DefaultMap<Object>> getSaleRegistKmuMemberList(SaleRegistKmuVO saleRegistKmuVO, SessionInfoVO sessionInfoVO);
 
-    /** 매출전표등록(일반) - 삭제 */
-    int getNewRegistDel(SaleRegistKmuVO saleRegistKmuVO, SessionInfoVO sessionInfoVO);
 }

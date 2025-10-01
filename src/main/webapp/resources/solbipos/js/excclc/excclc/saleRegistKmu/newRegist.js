@@ -250,7 +250,7 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 현금 금액변경
     $scope.changeCashAmt = function (){
         var totalAmt = 0;
-        var cashAmt = $("#cash").val();
+        // var cashAmt = $("#cash").val();
         for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
             totalAmt += Number($scope.flex.collectionView.items[i].realSaleAmt);
         }
@@ -286,8 +286,12 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.storeCd = $("#storeCd").text();
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
+
+                params.saleFg = $scope.saleFg;
+                params.cashAmt = $("#cash").val(); // 결제구분에 따라 금액처리
                 params.membrNo = $("#membrNo").val();
                 params.postpaidNo = $("#postpaidNo").text();
+
                 $scope._postJSONQuery.withOutPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDel.sb', params, function (result) {
                     $scope.save();
                 });
@@ -430,9 +434,13 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.storeCd = $("#storeCd").text();
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
+
+                params.saleFg = $scope.saleFg;
+                params.cashAmt = $("#cash").val(); // 결제구분에 따라 금액처리
                 params.membrNo = $("#membrNo").val();
                 params.postpaidNo = $("#postpaidNo").text();
-                $scope._postJSONQuery.withPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getNewRegistDel.sb', params, function (result) {
+
+                $scope._postJSONQuery.withPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDel.sb', params, function (result) {
                     // 팝업 닫기
                     $scope.close();
                 });
