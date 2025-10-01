@@ -408,4 +408,32 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
         return saleRegistKmuMapper.getSaleRegistKmuMemberList(saleRegistKmuVO);
     }
 
+    /** 매출전표등록(일반) - 삭제 */
+    @Override
+    public int getNewRegistDel(SaleRegistKmuVO saleRegistKmuVO, SessionInfoVO sessionInfoVO) {
+
+        String currentDt = currentDateTimeString();
+
+        saleRegistKmuVO.setMembrOrgnCd(sessionInfoVO.getOrgnGrpCd());
+        saleRegistKmuVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        saleRegistKmuVO.setRegDt(currentDt);
+        saleRegistKmuVO.setRegId("WEB_REG_" + sessionInfoVO.getUserId());
+        saleRegistKmuVO.setModDt(currentDt);
+        saleRegistKmuVO.setModId("WEB_REG_" + sessionInfoVO.getUserId());
+
+        // TB_SL_SALE_HDR_MEMBR
+        saleRegistKmuMapper.delSaleHdrMembr(saleRegistKmuVO);
+
+        // TB_SL_SALE_HDR
+        saleRegistKmuMapper.delSaleHdr(saleRegistKmuVO);
+
+        // TB_MB_MEMBER_POSTPAID
+        saleRegistKmuMapper.delMemberPostpaid(saleRegistKmuVO);
+
+        // TB_MB_MEMBER_PAID_BALANCE
+        saleRegistKmuMapper.delMemberPaidBalance(saleRegistKmuVO);
+
+        return 0;
+    }
+
 }

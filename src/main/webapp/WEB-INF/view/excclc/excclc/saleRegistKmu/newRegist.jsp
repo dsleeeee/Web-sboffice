@@ -9,10 +9,11 @@
         <%-- header --%>
         <div class="wj-dialog-header wj-dialog-header-font">
             <s:message code="saleRegistKmu.newRegist"/>
-            <a href="#" class="wj-hide btn_close"></a>
+            <a href="#" class="wj-hide btn_close" ng-click="close()"></a>
         </div>
 
-        <div class="wj-dialog-body" >
+        <%-- body --%>
+        <div class="wj-dialog-body">
             <%-- body_위 --%>
             <div ng-controller="selectProdCtrl">
                 <%-- 조회조건 --%>
@@ -82,6 +83,7 @@
                     </div>
                 </div>
             </div>
+            <%-- //body_위 --%>
 
             <%-- body_아래 --%>
             <div ng-controller="newRegistCtrl" class="oh mt5">
@@ -193,9 +195,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="btnSet2">
+                    <%-- 삭제 --%>
+                    <span style="display: none;" id="btnDel">
+                        <a href="#" class="btn_blue pd20" ng-click="delete()"><s:message code="cmm.del" /></a>
+                    </span>
+                </div>
             </div>
-
+            <%-- //body_아래 --%>
         </div>
+        <%-- //body --%>
+
     </div>
 </wj-popup>
 
@@ -207,7 +217,7 @@
     });
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKmu/newRegist.js?ver=20250929.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistKmu/newRegist.js?ver=20251001.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

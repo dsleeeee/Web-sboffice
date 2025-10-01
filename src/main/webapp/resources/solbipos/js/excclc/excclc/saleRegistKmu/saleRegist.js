@@ -125,6 +125,7 @@ app.controller('saleRegistCtrl', ['$scope', '$http', '$timeout', function ($scop
         event.preventDefault();
     });
 
+    // 신규등록
     $scope.newRegist = function (){
         if(srchGubun){
             if(orgnFg == "HQ") {
@@ -151,6 +152,9 @@ app.controller('saleRegistCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             $("#membrNo").val("");
             $("#membrNm").val("");
+
+            // 삭제 버튼
+            $("#btnDel").css("display", "none");
 
         } else {
             $scope._popMsg(messages["saleRegistKmu.srchGubun.chk"]);

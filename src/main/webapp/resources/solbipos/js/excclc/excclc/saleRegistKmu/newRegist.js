@@ -296,18 +296,18 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             }
         }
 
-    }
+    };
 
     // 등록
     $scope.save = function(){
 
-        var totalAmt = 0;
-        var cashAmt = $("#cash").val();
+        // var totalAmt = 0;
+        // var cashAmt = $("#cash").val();
         // var cardAmt = $("#card").val();
 
-        for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
-            totalAmt += Number($scope.flex.collectionView.items[i].realSaleAmt);
-        }
+        // for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {
+        //     totalAmt += Number($scope.flex.collectionView.items[i].realSaleAmt);
+        // }
 
         // if(Number(cashAmt) + Number(cardAmt) !== totalAmt){
         //     $scope._popMsg(messages['saleRegistKmu.saleAmt.chk']);
@@ -329,23 +329,30 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.push($scope.flex.collectionView.items[i]);
             }
         }
+
         if(params.length == 0){
-            $scope._popMsg(messages["saleRegist.not.data"]);
-            return false;
+            if ($("#billNo").text().length === 4) {
+                // 팝업 닫기
+                $scope.close();
+                return false;
+            } else {
+                $scope._popMsg(messages["saleRegist.not.data"]);
+                return false;
+            }
         }
+
         console.log(params);
         $scope._save("/excclc/excclc/saleRegistKmu/saleRegistKmu/getNewRegistList.sb", params, function (){
-            $scope.newRegistLayer.hide();
-            $("#membrNo").val("");
-            $("#membrNm").val("");
-
-            var scope = agrid.getScope('saleRegistCtrl');
-            scope.searchSaleRegistList();
+            // 팝업 닫기
+            $scope.close();
         });
     };
 
     // 조회
     $scope.searchBillDtl = function (){
+        // 삭제 버튼
+        $("#btnDel").css("display", "");
+
         var params        = {};
         params.storeCd = $("#storeCd").text();
         params.saleDate = $("#saleDate").text().replaceAll("-","");
@@ -401,5 +408,36 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             }, 50)
         });
     });
+
+    // 팝업 닫기
+    $scope.close = function() {
+        $scope.newRegistLayer.hide();
+        $("#membrNo").val("");
+        $("#membrNm").val("");
+
+        var scope = agrid.getScope('saleRegistCtrl');
+        scope.searchSaleRegistList();
+    };
+
+    // 삭제
+    $scope.delete = function(){
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["cmm.empty.data"]);
+            return false;
+        } else {
+            if ($("#billNo").text().length === 4) {
+                var params = {};
+                params.storeCd = $("#storeCd").text();
+                params.saleDate = $("#saleDate").text().replaceAll("-","");
+                params.billNo = $("#billNo").text();
+                params.membrNo = $("#membrNo").val();
+                params.postpaidNo = $("#postpaidNo").text();
+                $scope._postJSONQuery.withPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getNewRegistDel.sb', params, function (result) {
+                    // 팝업 닫기
+                    $scope.close();
+                });
+            }
+        }
+    };
 
 }]);
