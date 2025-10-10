@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    StoreSaleKmu.xml
+    점소별매출일보 (국민대)
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2025.10.01     최초작성
+-->
+<mapper namespace="kr.co.solbipos.sale.status.storeSaleKmu.service.impl.StoreSaleKmuMapper">
+
+    <!-- 점소별매출일보 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getStoreSaleKmuList" parameterType="StoreSaleKmuVO" resultType="DefaultMap">
+        /* StoreSaleKmuMapper.getStoreSaleKmuList */
+        SELECT
+        '' AS TEAM_CD,
+        '' AS TEAM_NM,
+        '' AS BRANCD_CD,
+        '' AS BRANCD_NM,
+        tsdt.STORE_CD,
+        tms.STORE_NM,
+        NVL(SUM(tsdt.TOT_SALE_AMT), 0) AS TOT_SALE_AMT,
+        NVL(SUM(tsdt.TOT_DC_AMT), 0) AS TOT_DC_AMT,
+        NVL(SUM(tsdt.REAL_SALE_AMT), 0) AS REAL_SALE_AMT,
+        NVL(SUM(tsdt.TOT_ETC_AMT), 0) AS TOT_ETC_AMT,
+        NVL(SUM(tsdt.PAY_AMT_11), 0) AS POSTPAID_AMT,
+        0 AS GIFT_AMT,
+        NVL(SUM(tsdt.PAY_AMT_01), 0) AS CARD_AMT,
+        NVL(SUM(tsdt.PAY_AMT_02), 0) AS CASH_AMT
+        FROM TB_SL_DAILY_TOTAL tsdt,
+        TB_MS_STORE tms,
+        TB_MS_STORE_INFO tmsi
+        WHERE 1=1
+        AND tsdt.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test='storeCdQuery != null and storeCdQuery != ""'>
+            AND tsdt.STORE_CD IN (${storeCdQuery})
+        </if>
+        AND tsdt.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+        <if test='teamCd != null and teamCd != ""'>
+            -- 팀코드
+        </if>
+        <if test='teamNm != null and teamNm != ""'>
+            -- 팀명
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            -- 지점코드
+        </if>
+        <if test='branchNm != null and branchNm != ""'>
+            -- 지점명
+        </if>
+        AND tms.HQ_OFFICE_CD = tsdt.HQ_OFFICE_CD
+        AND tms.STORE_CD = tsdt.STORE_CD
+        AND tmsi.STORE_CD (+)= tms.STORE_CD
+        GROUP BY tsdt.STORE_CD, tms.STORE_NM
+        ORDER BY tsdt.STORE_CD
+    </select>
+
+</mapper>

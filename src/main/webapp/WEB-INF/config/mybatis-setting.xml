@@ -1351,7 +1351,8 @@
     <typeAlias alias="postpaidSaleVO" type="kr.co.solbipos.membr.anals.postpaidSale.service.PostpaidSaleVO"/>
     <!-- 국민대 > 매출관리 > 매출전표등록(일반) -->
     <typeAlias alias="saleRegistKmuVO" type="kr.co.solbipos.excclc.excclc.saleRegistKmu.service.SaleRegistKmuVO"/>
-
+    <!-- 국민대 > 매출관리 > 점소별매출일보 -->
+    <typeAlias alias="storeSaleKmuVO" type="kr.co.solbipos.sale.status.storeSaleKmu.service.StoreSaleKmuVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->
