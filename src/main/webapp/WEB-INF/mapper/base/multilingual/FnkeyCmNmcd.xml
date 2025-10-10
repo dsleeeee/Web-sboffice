@@ -78,10 +78,10 @@
         /* USE : FnkeyCmNmcdMapper.applyToStoreFnkey */
         MERGE INTO TB_MS_STORE_FNKEY A
         USING (
-                  SELECT FNKEY_NO
-                  ,      FNKEY_EN_NM
-                  ,      FNKEY_CN_NM
-                  ,      FNKEY_JP_NM
+                  SELECT FNKEY_NO AS FNKEY_NO
+                  ,      FNKEY_EN_NM AS FNKEY_EN_NM
+                  ,      FNKEY_CN_NM AS FNKEY_CN_NM
+                  ,      FNKEY_JP_NM AS FNKEY_JP_NM
                   ,      #{modDt} AS MOD_DT
                   ,      #{modId} AS MOD_ID
                   FROM TB_CM_POS_FNKEY
@@ -89,8 +89,16 @@
                 <foreach collection="arrFnkeyNo" item="item" open="(" close=")" separator=",">
                     #{item}
                 </foreach>
+                  AND     (       FNKEY_EN_NM IS NOT NULL
+                              OR  FNKEY_CN_NM IS NOT NULL
+                              OR  FNKEY_JP_NM IS NOT NULL
+                          )
               ) B
-        ON (      A.STORE_CD IN (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD IN ('DS021', 'DS034', 'H0393', 'A0001')) <!-- 매장적용([H0393] 맘스터치 만 적용)([A0001] 다국어추가) -->
+        ON (      A.STORE_CD IN (
+                                    SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD IN ('DS021', 'DS034', 'H0393', 'A0001', 'H0514') <!-- 매장적용(맘스, 아티제, [1347] 사용매장) -->
+                                    UNION ALL
+                                    SELECT STORE_CD FROM TB_MS_STORE_ENVST WHERE ENVST_CD  = '1347' AND ENVST_VAL = 'Y'
+                                )
                   AND A.FNKEY_NO = B.FNKEY_NO
            )
         WHEN MATCHED THEN
