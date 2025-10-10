@@ -553,4 +553,13 @@ public interface ProdMapper {
 
     /** 배달앱 상품명-맵핑정보 등록 */
     int insertHqdlvrProdNm(ProdVO prodVO);
+
+    /** 상품 재고, 거래처 정보 조회 */
+    List<DefaultMap<Object>> getProdVendrStockInfoList(ProdVO prodVO);
+
+    /** 매장별 재고 조회 */
+    List<DefaultMap<Object>> getProdStockByStoreList(ProdVO prodVO);
+
+    /** 도서 재고 정보 조회 */
+    List<DefaultMap<Object>> getProdBookVendrStockInfoList(ProdVO prodVO);
 }

@@ -17,7 +17,7 @@
 <div class="subCon" ng-controller="prodCtrl" id="prodView">
     <%--searchTbl--%>
     <div class="searchBar">
-        <a href="#" class="open fl"><s:message code="storeSideMenu.prod" /></a>
+        <a href="#" class="open fl">${menuNm}</a>
         <%-- 조회 --%>
         <div class="mr15 fr" style="display:block;position: relative;margin-top: 6px;">
             <button class="btn_blue fr" id="nxBtnSearch2" ng-click="_pageView('prodCtrl',1)">
@@ -336,6 +336,12 @@
     if("${posLoginReconnect}" === "Y"){ // 직접입력한경우
         $(".menuControl").trigger("click");
     }
+
+    // 상품정보관리
+    // 0: [기초관리] - [상품관리] - [상품정보관리]
+    // 1: [국민대] - [상품정보관리] - [일반상품관리]
+    // 2: [국민대] - [상품정보관리] - [도서관리]
+    var urlProdFg = "${urlProdFg}";
 </script>
 
 <script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20250820.01" charset="utf-8"></script>

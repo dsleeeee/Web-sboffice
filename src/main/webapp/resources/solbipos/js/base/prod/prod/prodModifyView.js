@@ -12,12 +12,63 @@
  * 팝업 그리드 생성
  */
 
+
+// 식권구분
+var ticketFgComboData = [
+    {"name": "NO", "value": "N"},
+    {"name": "YES", "value": "Y"}
+];
+
+// 매입VAT 포함여부
+var acquireVatComboData = [
+    {"name": "포함", "value": "Y"},
+    {"name": "별도", "value": "N"}
+];
+
+// ISBN 구분 데이터
+var shBisbnComboData = [
+    {"name": "ISBN", "value": "ISBN"},
+    {"name": "ISSN", "value": "ISSN"}
+];
+
+// 특정관리 선택
+var spcManageComboData = [
+    {"name": "안함", "value": "N"},
+    {"name": "미정", "value": ""},
+    {"name": "미정", "value": ""}
+];
+
+// 도서구분 데이터
+var bookProdFgComboData = [
+    {"name": "일반상품관리", "value": "1"},
+    {"name": "도서관리", "value": "2"}
+];
+
 // 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
 var vSetProdFg = "";
 
 app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, $timeout, true));
+
+    // 도서구분 콤보박스의 데이터
+    $scope._setComboData('bookProdFgComboData', bookProdFgComboData);
+
+    // 일반상품관리 콤보박스
+    // 식권구분 쓰는 콤보박스의 데이터
+    $scope._setComboData('shPTicketFgComboData', ticketFgComboData);
+    // 매입VAT 쓰는 콤보박스의 데이터
+    $scope._setComboData('shPAcquireVatComboData', acquireVatComboData);
+    // 특정관리 콤보박스의 데이터
+    $scope._setComboData('shPSpcManageComboData', spcManageComboData);
+
+    // 도서관리 콤보박스
+    // 매입VAT 쓰는 콤보박스의 데이터
+    $scope._setComboData('shBAcquireVatComboData', acquireVatComboData);
+    // 특정관리 콤보박스의 데이터
+    $scope._setComboData('shBSpcManageComboData', spcManageComboData);
+    // ISBN 콤보박스의 데이터
+    $scope._setComboData('shBIsbnFgComboData', shBisbnComboData);
 
     // var vProdNoEnvFg = prodNoEnvFg;
 
@@ -173,6 +224,17 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.vatIncldYn = "Y"; // 부가세포함여부
             params.useYn = "Y"; // 사용여부
             params.barCd = ""; // 바코드
+            params.shPTicketFg = "N"; // 식권구분
+            params.shPAcquireVat = "Y"; // 매입가
+            params.shBAcquireVat = "Y"; // 매입가
+            params.shBIsbnFg = "ISBN"; //ISBN
+            if(urlProdFg === "1"){ // 상품구분
+                params.bookProdFg = "1";
+            }else if(urlProdFg === "2"){
+                params.bookProdFg = "2";
+            }else if(urlProdFg === "0"){
+                params.bookProdFg = "0";
+            }
             // 가격관리구분
             if(orgnFg == "HQ") {
                 params.prcCtrlFg = "H";
@@ -1625,6 +1687,32 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $scope.prodModifyInfo.vatIncldYn = "Y";
                 }
 
+                // 식권구분 값 없으면 'NO'으로 셋팅
+                if ($scope.prodModifyInfo.shPTicketFg === null || $scope.prodModifyInfo.shPTicketFg === "") {
+                    $scope.prodModifyInfo.shPTicketFg = "N";
+                }
+                // 매입VAT 값 없으면 '포함으로 셋팅
+                if ($scope.prodModifyInfo.shPAcquireVat === null || $scope.prodModifyInfo.shPAcquireVat === "") {
+                    $scope.prodModifyInfo.shPAcquireVat = "Y";
+                }
+                // 매입VAT 값 없으면 '포함으로 셋팅
+                if ($scope.prodModifyInfo.shBAcquireVat === null || $scope.prodModifyInfo.shBAcquireVat === "") {
+                    $scope.prodModifyInfo.shBAcquireVat = "Y";
+                }
+                // ISBN 값 없으면 'ISBN'으로 셋팅
+                if ($scope.prodModifyInfo.shBIsbnFg === null || $scope.prodModifyInfo.shBIsbnFg === "") {
+                    $scope.prodModifyInfo.shBIsbnFg = "ISBN";
+                }
+                // 도서구분 값 없으면 [일반상품관리] 화면은 일반상품관리, [도서관리] 화면은 도서관리
+                if ($scope.prodModifyInfo.bookProdFg === null || $scope.prodModifyInfo.bookProdFg === "") {
+                    if(urlProdFg === "1"){
+                        $scope.prodModifyInfo.bookProdFg = "1";
+                    }else if(urlProdFg === "2"){
+                        $scope.prodModifyInfo.bookProdFg = "2";
+                    }
+                }
+
+
                 // 세트구성상품 등록버튼 visible 처리
                 if($scope.prodModifyInfo.setProdFg === "1"){
                     $("#btnSetConfigProd").css("display", "none");
@@ -1750,6 +1838,40 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $("input:checkbox[id='chkSaleChnYnCpn']").prop("checked", $scope.prodModifyInfo.saleChnYnCpn === 'Y' ? true : false);
                     $("input:checkbox[id='chkSaleChnYnTng']").prop("checked", $scope.prodModifyInfo.saleChnYnTng === 'Y' ? true : false);
                     $("input:checkbox[id='chkSaleChnYnDdn']").prop("checked", $scope.prodModifyInfo.saleChnYnDdn === 'Y' ? true : false);
+                }
+
+                var vParams = {};
+                vParams.prodCd = $scope.prodModifyInfo.prodCd;
+                if(urlProdFg === '1'){
+
+                    if(orgnFg === "HQ") {
+                        // 상품재고정보 조회
+                        $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getProdVendrStockInfoList.sb", vParams, function (response) {
+                            var list = response.data.data.list;
+
+                            var prodVendrStockInfoGrid = wijmo.Control.getControl("#wjGridProdVendrStockInfo");
+                            prodVendrStockInfoGrid.itemsSource = new wijmo.collections.CollectionView(list);
+                            prodVendrStockInfoGrid.collectionView.trackChanges = true;
+                        });
+                    }
+
+                    // 점소별 재고정보 조회
+                    $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getProdStockByStoreList.sb", vParams, function (response) {
+                        var list = response.data.data.list;
+
+                        var prodStockByStore = wijmo.Control.getControl("#wjGridProdStockByStore");
+                        prodStockByStore.itemsSource = new wijmo.collections.CollectionView(list);
+                        prodStockByStore.collectionView.trackChanges = true;
+                    });
+                }else if(urlProdFg === '2'){
+                    // 도서 재고정보 조회
+                    $scope._postJSONQuery.withOutPopUp("/base/prod/prod/prod/getProdBookVendrStockInfoList.sb", vParams, function (response) {
+                        var list = response.data.data.list;
+
+                        var bookVendrStockInfoGrid = wijmo.Control.getControl("#wjGridBookVendrStockInfo");
+                        bookVendrStockInfoGrid.itemsSource = new wijmo.collections.CollectionView(list);
+                        bookVendrStockInfoGrid.collectionView.trackChanges = true;
+                    });
                 }
             });
 
