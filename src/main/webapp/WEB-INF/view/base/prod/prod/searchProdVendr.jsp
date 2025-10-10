@@ -103,4 +103,4 @@
 
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchProdVendr.js?ver=20201224.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/searchProdVendr.js?ver=20250926.01" charset="utf-8"></script>

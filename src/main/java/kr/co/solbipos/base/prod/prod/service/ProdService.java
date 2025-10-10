@@ -150,4 +150,13 @@ public interface ProdService {
     /** 선택메뉴 조회 팝업 - 신규선택메뉴생성 팝업 오른쪽 상품리스트 그리드 조회 */
     List<DefaultMap<String>> getNewSdselProdList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
     int insertSdselProdList(SideMenuSelProdVO[] sideMenuSelProdVOs, SessionInfoVO sessionInfoVO);
+
+    /** 상품 재고, 거래처 정보 조회 */
+    List<DefaultMap<Object>> getProdVendrStockInfoList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 매장별 재고 조회 */
+    List<DefaultMap<Object>> getProdStockByStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 도서 재고 정보 조회 */
+    List<DefaultMap<Object>> getProdBookVendrStockInfoList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
 }

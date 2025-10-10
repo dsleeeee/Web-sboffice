@@ -463,6 +463,31 @@
                 thpi.PROD_EN_INFO,
                 thpi.PROD_CN_INFO,
                 thpi.PROD_JP_INFO,
+                thpi.SH_P_ALIAS,
+                thpi.SH_P_TICKET_FG,
+                thpi.SH_P_MAKER_NM,
+                thpi.SH_P_ACQUIRE_VAT,
+                thpi.SH_P_POINT_SAVE_RATE,
+                NVL(thpsp.SALE_UPRC, 0) * NVL(thpi.SH_P_POINT_SAVE_RATE,0) / 100  AS SH_P_POINT_SAVE_PRICE,
+                thpi.SH_P_SPEC,
+                thpi.SH_P_SPC_MANAGE,
+                thpi.SH_P_SINGLE_PROD_CD,
+                thpi.SH_B_ALIAS,
+                thpi.SH_B_PUBLISH_NM,
+                thpi.SH_B_AUTHOR1,
+                thpi.SH_B_AUTHOR2,
+                thpi.SH_B_TRANSLATOR1,
+                thpi.SH_B_TRANSLATOR2,
+                thpi.SH_B_PUB_DATE,
+                thpi.SH_B_DISC_RATE,
+                NVL(thpsp.SALE_UPRC, 0) * NVL(thpi.SH_B_DISC_RATE,0) / 100  AS SH_B_DISC_PRICE,
+                thpi.SH_B_ACQUIRE_VAT,
+                thpi.SH_B_POINT_SAVE_RATE,
+                NVL(thpsp.SALE_UPRC, 0) * NVL(thpi.SH_B_POINT_SAVE_RATE,0) / 100 AS SH_B_POINT_SAVE_PRICE,
+                thpi.SH_B_SPEC,
+                thpi.SH_B_SPC_MANAGE,
+                thpi.SH_B_ISBN_FG,
+                thpi.SH_B_ISBN_CODE,
                 NVL(thp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN
                 FROM
                 TB_HQ_PRODUCT thp
@@ -602,6 +627,31 @@
                 tmpi.PROD_EN_INFO,
                 tmpi.PROD_CN_INFO,
                 tmpi.PROD_JP_INFO,
+                tmpi.SH_P_ALIAS,
+                tmpi.SH_P_TICKET_FG,
+                tmpi.SH_P_MAKER_NM,
+                tmpi.SH_P_ACQUIRE_VAT,
+                tmpi.SH_P_POINT_SAVE_RATE,
+                NVL(tmpsp.SALE_UPRC, 0) * NVL(tmpi.SH_P_POINT_SAVE_RATE,0) / 100  AS SH_P_POINT_SAVE_PRICE,
+                tmpi.SH_P_SPEC,
+                tmpi.SH_P_SPC_MANAGE,
+                tmpi.SH_P_SINGLE_PROD_CD,
+                tmpi.SH_B_ALIAS,
+                tmpi.SH_B_PUBLISH_NM,
+                tmpi.SH_B_AUTHOR1,
+                tmpi.SH_B_AUTHOR2,
+                tmpi.SH_B_TRANSLATOR1,
+                tmpi.SH_B_TRANSLATOR2,
+                tmpi.SH_B_PUB_DATE,
+                tmpi.SH_B_DISC_RATE,
+                NVL(tmpsp.SALE_UPRC, 0) * NVL(tmpi.SH_B_DISC_RATE,0) / 100  AS SH_B_DISC_PRICE,
+                tmpi.SH_B_ACQUIRE_VAT,
+                tmpi.SH_B_POINT_SAVE_RATE,
+                NVL(tmpsp.SALE_UPRC, 0) * NVL(tmpi.SH_B_POINT_SAVE_RATE,0) / 100 AS SH_B_POINT_SAVE_PRICE,
+                tmpi.SH_B_SPEC,
+                tmpi.SH_B_SPC_MANAGE,
+                tmpi.SH_B_ISBN_FG,
+                tmpi.SH_B_ISBN_CODE,
                 NVL(tmp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN
                 FROM
                 TB_MS_PRODUCT tmp
@@ -1131,7 +1181,29 @@
                     thpi.SALE_CHN_YN_YGE = #{saleChnYnYge},
                     thpi.SALE_CHN_YN_CPN = #{saleChnYnCpn},
                     thpi.SALE_CHN_YN_TNG = #{saleChnYnTng},
-                    thpi.SALE_CHN_YN_DDN = #{saleChnYnDdn}
+                    thpi.SALE_CHN_YN_DDN = #{saleChnYnDdn},
+                    thpi.SH_P_ALIAS				= #{shPAlias},
+                    thpi.SH_P_TICKET_FG		= #{shPTicketFg},
+                    thpi.SH_P_MAKER_NM			= #{shPMakerNm},
+                    thpi.SH_P_ACQUIRE_VAT		= #{shPAcquireVat},
+                    thpi.SH_P_POINT_SAVE_RATE	= #{shPPointSaveRate},
+                    thpi.SH_P_SPEC				= #{shPSpec},
+                    thpi.SH_P_SPC_MANAGE		= #{shPSpcManage},
+                    thpi.SH_P_SINGLE_PROD_CD	= #{shPSingleProdCd},
+                    thpi.SH_B_ALIAS				= #{shBAlias},
+                    thpi.SH_B_PUBLISH_NM		= #{shBPublishNm},
+                    thpi.SH_B_AUTHOR1			= #{shBAuthor1},
+                    thpi.SH_B_AUTHOR2 			= #{shBAuthor2},
+                    thpi.SH_B_TRANSLATOR1		= #{shBTranslator1},
+                    thpi.SH_B_TRANSLATOR2		= #{shBTranslator1},
+                    thpi.SH_B_PUB_DATE			= #{shBPubDate},
+                    thpi.SH_B_DISC_RATE			= #{shBDiscRate},
+                    thpi.SH_B_ACQUIRE_VAT		= #{shBAcquireVat},
+                    thpi.SH_B_POINT_SAVE_RATE	= #{shBPointSaveRate},
+                    thpi.SH_B_SPEC				= #{shBSpec},
+                    thpi.SH_B_SPC_MANAGE		= #{shBSpcManage},
+                    thpi.SH_B_ISBN_FG			= #{shBIsbnFg},
+                    thpi.SH_B_ISBN_CODE			= #{shBIsbnCode}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -1162,7 +1234,29 @@
                     SALE_CHN_YN_YGE,
                     SALE_CHN_YN_CPN,
                     SALE_CHN_YN_TNG,
-                    SALE_CHN_YN_DDN
+                    SALE_CHN_YN_DDN,
+                    SH_P_ALIAS,
+                    SH_P_TICKET_FG,
+                    SH_P_MAKER_NM,
+                    SH_P_ACQUIRE_VAT,
+                    SH_P_POINT_SAVE_RATE,
+                    SH_P_SPEC,
+                    SH_P_SPC_MANAGE,
+                    SH_P_SINGLE_PROD_CD,
+                    SH_B_ALIAS,
+                    SH_B_PUBLISH_NM,
+                    SH_B_AUTHOR1,
+                    SH_B_AUTHOR2,
+                    SH_B_TRANSLATOR1,
+                    SH_B_TRANSLATOR2,
+                    SH_B_PUB_DATE,
+                    SH_B_DISC_RATE,
+                    SH_B_ACQUIRE_VAT,
+                    SH_B_POINT_SAVE_RATE,
+                    SH_B_SPEC,
+                    SH_B_SPC_MANAGE,
+                    SH_B_ISBN_FG,
+                    SH_B_ISBN_CODE
                 ) VALUES (
                     #{hqOfficeCd},
                     #{prodCd},
@@ -1191,7 +1285,29 @@
                     #{saleChnYnYge},
                     #{saleChnYnCpn},
                     #{saleChnYnTng},
-                    #{saleChnYnDdn}
+                    #{saleChnYnDdn},
+                    #{shPAlias},
+                    #{shPTicketFg},
+                    #{shPMakerNm},
+                    #{shPAcquireVat},
+                    #{shPPointSaveRate},
+                    #{shPSpec},
+                    #{shPSpcManage},
+                    #{shPSingleProdCd},
+                    #{shBAlias},
+                    #{shBPublishNm},
+                    #{shBAuthor1},
+                    #{shBAuthor2},
+                    #{shBTranslator1},
+                    #{shBTranslator1},
+                    #{shBPubDate},
+                    #{shBDiscRate},
+                    #{shBAcquireVat},
+                    #{shBPointSaveRate},
+                    #{shBSpec},
+                    #{shBSpcManage},
+                    #{shBIsbnFg},
+                    #{shBIsbnCode}
                 )
             </when>
             <!-- 매장 -->
@@ -1228,7 +1344,29 @@
                     tmpi.SALE_CHN_YN_YGE = #{saleChnYnYge},
                     tmpi.SALE_CHN_YN_CPN = #{saleChnYnCpn},
                     tmpi.SALE_CHN_YN_TNG = #{saleChnYnTng},
-                    tmpi.SALE_CHN_YN_DDN = #{saleChnYnDdn}
+                    tmpi.SALE_CHN_YN_DDN = #{saleChnYnDdn},
+                    tmpi.SH_P_ALIAS				= #{shPAlias},
+                    tmpi.SH_P_TICKET_FG		= #{shPTicketFg},
+                    tmpi.SH_P_MAKER_NM			= #{shPMakerNm},
+                    tmpi.SH_P_ACQUIRE_VAT		= #{shPAcquireVat},
+                    tmpi.SH_P_POINT_SAVE_RATE	= #{shPPointSaveRate},
+                    tmpi.SH_P_SPEC				= #{shPSpec},
+                    tmpi.SH_P_SPC_MANAGE		= #{shPSpcManage},
+                    tmpi.SH_P_SINGLE_PROD_CD	= #{shPSingleProdCd},
+                    tmpi.SH_B_ALIAS				= #{shBAlias},
+                    tmpi.SH_B_PUBLISH_NM		= #{shBPublishNm},
+                    tmpi.SH_B_AUTHOR1			= #{shBAuthor1},
+                    tmpi.SH_B_AUTHOR2 			= #{shBAuthor2},
+                    tmpi.SH_B_TRANSLATOR1		= #{shBTranslator1},
+                    tmpi.SH_B_TRANSLATOR2		= #{shBTranslator1},
+                    tmpi.SH_B_PUB_DATE			= #{shBPubDate},
+                    tmpi.SH_B_DISC_RATE			= #{shBDiscRate},
+                    tmpi.SH_B_ACQUIRE_VAT		= #{shBAcquireVat},
+                    tmpi.SH_B_POINT_SAVE_RATE	= #{shBPointSaveRate},
+                    tmpi.SH_B_SPEC				= #{shBSpec},
+                    tmpi.SH_B_SPC_MANAGE		= #{shBSpcManage},
+                    tmpi.SH_B_ISBN_FG			= #{shBIsbnFg},
+                    tmpi.SH_B_ISBN_CODE			= #{shBIsbnCode}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -1259,7 +1397,29 @@
                     SALE_CHN_YN_YGE,
                     SALE_CHN_YN_CPN,
                     SALE_CHN_YN_TNG,
-                    SALE_CHN_YN_DDN
+                    SALE_CHN_YN_DDN,
+                    SH_P_ALIAS,
+                    SH_P_TICKET_FG,
+                    SH_P_MAKER_NM,
+                    SH_P_ACQUIRE_VAT,
+                    SH_P_POINT_SAVE_RATE,
+                    SH_P_SPEC,
+                    SH_P_SPC_MANAGE,
+                    SH_P_SINGLE_PROD_CD,
+                    SH_B_ALIAS,
+                    SH_B_PUBLISH_NM,
+                    SH_B_AUTHOR1,
+                    SH_B_AUTHOR2,
+                    SH_B_TRANSLATOR1,
+                    SH_B_TRANSLATOR2,
+                    SH_B_PUB_DATE,
+                    SH_B_DISC_RATE,
+                    SH_B_ACQUIRE_VAT,
+                    SH_B_POINT_SAVE_RATE,
+                    SH_B_SPEC,
+                    SH_B_SPC_MANAGE,
+                    SH_B_ISBN_FG,
+                    SH_B_ISBN_CODE
                 ) VALUES (
                     #{storeCd},
                     #{prodCd},
@@ -1288,7 +1448,29 @@
                     #{saleChnYnYge},
                     #{saleChnYnCpn},
                     #{saleChnYnTng},
-                    #{saleChnYnDdn}
+                    #{saleChnYnDdn},
+                    #{shPAlias},
+                    #{shPTicketFg},
+                    #{shPMakerNm},
+                    #{shPAcquireVat},
+                    #{shPPointSaveRate},
+                    #{shPSpec},
+                    #{shPSpcManage},
+                    #{shPSingleProdCd},
+                    #{shBAlias},
+                    #{shBPublishNm},
+                    #{shBAuthor1},
+                    #{shBAuthor2},
+                    #{shBTranslator1},
+                    #{shBTranslator1},
+                    #{shBPubDate},
+                    #{shBDiscRate},
+                    #{shBAcquireVat},
+                    #{shBPointSaveRate},
+                    #{shBSpec},
+                    #{shBSpcManage},
+                    #{shBIsbnFg},
+                    #{shBIsbnCode}
                 )
             </when>
         </choose>
@@ -3479,6 +3661,9 @@
                         #{item}
                     </foreach>
                 </if>
+                <if test='vendorFg != null and vendorFg != ""'>
+                    AND thv.VENDOR_FG = #{vendorFg}
+                </if>
                 ORDER BY thv.VENDR_CD
             </when>
             <!-- 매장 -->
@@ -3494,6 +3679,9 @@
                     <foreach collection="vendrCdList" item="item" open="(" separator="," close=")" >
                         #{item}
                     </foreach>
+                </if>
+                <if test='vendorFg != null and vendorFg != ""'>
+                    AND tmv.VENDOR_FG = #{vendorFg}
                 </if>
                 ORDER BY tmv.VENDR_CD
             </when>
@@ -7797,4 +7985,128 @@
         ,       B.DLVR_MAPPING_FG
         )
     </insert>
+
+    <!-- 상품 재고, 거래처 정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR, TB_HQ_VENDOR_PROD
+        PARAM    : prodVO
+        COMMENTS : 상품별 거래처 및 재고를 조회한다
+    -->
+    <select id="getProdVendrStockInfoList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getProdVendrStockInfoList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'CD') AS VENDR_CD
+                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'NM') AS VENDR_NM
+                ,       SF_ZERO_TO_NULL((A.CURR_QTY))   AS CURR_QTY
+                FROM    TB_ST_HQ_STOCK_CUR A
+                ,       TB_HQ_PRODUCT B
+                WHERE   A.HQ_OFFICE_CD    	=   #{hqOfficeCd}
+                AND     A.STORAGE_CD      	=   '999'
+                AND     B.HQ_OFFICE_CD      =   A.HQ_OFFICE_CD
+                AND     B.PROD_CD           =   A.PROD_CD
+                AND     B.STOCK_PROD_YN     =   'Y'
+                AND     B.USE_YN            =   'Y'
+                AND     B.PROD_CD           =   #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+            </when>
+        </choose>
+    </select>
+
+    <!-- 매장별 재고 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR, TB_HQ_VENDOR_PROD
+        PARAM    : prodVO
+        COMMENTS : 매장별 재고를 조회한다.
+    -->
+    <select id="getProdStockByStoreList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getProdStockByStoreList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  C.STORE_NM
+                ,       SF_ZERO_TO_NULL((A.CURR_QTY)) AS CURR_QTY
+                FROM    TB_ST_STORE_STOCK_CUR A
+                ,       TB_MS_PRODUCT B
+                ,		TB_MS_STORE C
+                WHERE   B.STORE_CD          =   A.STORE_CD
+                AND     A.STORAGE_CD        =   '999'
+                AND     B.PROD_CD           =   A.PROD_CD
+                AND     B.STOCK_PROD_YN     =   'Y'
+                AND     B.USE_YN            =   'Y'
+                AND		C.STORE_CD          =   A.STORE_CD
+                AND		C.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.PROD_CD           =   #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  C.STORE_NM
+                ,       SF_ZERO_TO_NULL((A.CURR_QTY)) AS CURR_QTY
+                FROM    TB_ST_STORE_STOCK_CUR A
+                ,       TB_MS_PRODUCT B
+                ,		TB_MS_STORE C
+                WHERE   B.STORE_CD          =   A.STORE_CD
+                AND     A.STORAGE_CD        =   '999'
+                AND     B.PROD_CD           =   A.PROD_CD
+                AND     B.STOCK_PROD_YN     =   'Y'
+                AND     B.USE_YN            =   'Y'
+                AND		C.STORE_CD          =   A.STORE_CD
+                AND		C.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.PROD_CD           =   #{prodCd}
+            </when>
+        </choose>
+    </select>
+
+    <!-- 도서 재고 정보 조회 -->
+    <!--
+        TABLE    : TB_HQ_VENDOR, TB_HQ_VENDOR_PROD
+        PARAM    : prodVO
+        COMMENTS : 도서 재고를 조회한다.
+    -->
+    <select id="getProdBookVendrStockInfoList" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getProdBookVendrStockInfoList */
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                SELECT  A.STORE_CD
+                ,       C.STORE_NM
+                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'CD') AS VENDR_CD
+                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'NM') AS VENDR_NM
+                ,       SF_ZERO_TO_NULL((A.CURR_QTY)) AS CURR_QTY
+                FROM    TB_ST_STORE_STOCK_CUR A
+                ,       TB_MS_PRODUCT B
+                ,		TB_MS_STORE C
+                WHERE   B.STORE_CD          =   A.STORE_CD
+                AND     A.STORAGE_CD        =   '999'
+                AND     B.PROD_CD           =   A.PROD_CD
+                AND     B.STOCK_PROD_YN     =   'Y'
+                AND     B.USE_YN            =   'Y'
+                AND		C.STORE_CD          =   A.STORE_CD
+                AND		C.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.PROD_CD           =   #{prodCd}
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                SELECT  A.STORE_CD
+                ,       C.STORE_NM
+                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'CD') AS VENDR_CD
+                ,       FN_GET_VENDOR_STR(#{hqOfficeCd}, A.PROD_CD,'NM') AS VENDR_NM
+                ,       SF_ZERO_TO_NULL((A.CURR_QTY)) AS CURR_QTY
+                FROM    TB_ST_STORE_STOCK_CUR A
+                ,       TB_MS_PRODUCT B
+                ,		TB_MS_STORE C
+                WHERE   B.STORE_CD          =   A.STORE_CD
+                AND     A.STORAGE_CD        =   '999'
+                AND     B.PROD_CD           =   A.PROD_CD
+                AND     B.STOCK_PROD_YN     =   'Y'
+                AND     B.USE_YN            =   'Y'
+                AND		C.STORE_CD          =   A.STORE_CD
+                AND		C.HQ_OFFICE_CD      =   #{hqOfficeCd}
+                AND     B.PROD_CD           =   #{prodCd}
+            </when>
+        </choose>
+    </select>
 </mapper>

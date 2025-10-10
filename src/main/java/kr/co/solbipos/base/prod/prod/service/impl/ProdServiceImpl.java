@@ -416,7 +416,29 @@ public class ProdServiceImpl implements ProdService {
                     || (prodVO.getSaleChnYnYge() != null && prodVO.getSaleChnYnYge().length() > 0)
                     || (prodVO.getSaleChnYnCpn() != null && prodVO.getSaleChnYnCpn().length() > 0)
                     || (prodVO.getSaleChnYnTng() != null && prodVO.getSaleChnYnTng().length() > 0)
-                    || (prodVO.getSaleChnYnDdn() != null && prodVO.getSaleChnYnDdn().length() > 0))
+                    || (prodVO.getShPAlias()            != null && prodVO.getShPAlias().length() > 0)
+                    || (prodVO.getShPTicketFg()         != null && prodVO.getShPTicketFg().length() > 0)
+                    || (prodVO.getShPMakerNm()          != null && prodVO.getShPMakerNm().length() > 0)
+                    || (prodVO.getShPAcquireVat()       != null && prodVO.getShPAcquireVat().length() > 0)
+                    || (prodVO.getShPPointSaveRate()    != null && prodVO.getShPPointSaveRate().length() > 0)
+                    || (prodVO.getShPSpec()             != null && prodVO.getShPSpec().length() > 0)
+                    || (prodVO.getShPSpcManage()        != null && prodVO.getShPSpcManage().length() > 0)
+                    || (prodVO.getShPSingleProdCd()     != null && prodVO.getShPSingleProdCd().length() > 0)
+                    || (prodVO.getShBAlias()            != null && prodVO.getShBAlias().length() > 0)
+                    || (prodVO.getShBPublishNm()        != null && prodVO.getShBPublishNm().length() > 0)
+                    || (prodVO.getShBAuthor1()          != null && prodVO.getShBAuthor1().length() > 0)
+                    || (prodVO.getShBAuthor2()          != null && prodVO.getShBAuthor2().length() > 0)
+                    || (prodVO.getShBTranslator1()      != null && prodVO.getShBTranslator1().length() > 0)
+                    || (prodVO.getShBTranslator2()      != null && prodVO.getShBTranslator2().length() > 0)
+                    || (prodVO.getShBPubDate()          != null && prodVO.getShBPubDate().length() > 0)
+                    || (prodVO.getShBDiscRate()         != null && prodVO.getShBDiscRate().length() > 0)
+                    || (prodVO.getShBAcquireVat()       != null && prodVO.getShBAcquireVat().length() > 0)
+                    || (prodVO.getShBPointSaveRate()    != null && prodVO.getShBPointSaveRate().length() > 0)
+                    || (prodVO.getShBSpec()             != null && prodVO.getShBSpec().length() > 0)
+                    || (prodVO.getShBSpcManage()        != null && prodVO.getShBSpcManage().length() > 0)
+                    || (prodVO.getShBIsbnFg()           != null && prodVO.getShBIsbnFg().length() > 0)
+                    || (prodVO.getShBIsbnCode()         != null && prodVO.getShBIsbnCode().length() > 0)
+            )
             {
                 // 상품 설명 상세 + 영양정보
                 prodMapper.saveProdInfo(prodVO);
@@ -2390,5 +2412,35 @@ public class ProdServiceImpl implements ProdService {
             result = prodMapper.insertSdselProdList(sideMenuSelProdVO);
         }
         return result;
+    }
+
+    /** 상품 재고, 거래처 정보 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdVendrStockInfoList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodMapper.getProdVendrStockInfoList(prodVO);
+    }
+
+    /** 매장별 재고 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdStockByStoreList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodMapper.getProdStockByStoreList(prodVO);
+    }
+
+    /** 도서 재고 정보 조회 */
+    @Override
+    public List<DefaultMap<Object>> getProdBookVendrStockInfoList(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        prodVO.setStoreCd(sessionInfoVO.getStoreCd());
+
+        return prodMapper.getProdBookVendrStockInfoList(prodVO);
     }
 }

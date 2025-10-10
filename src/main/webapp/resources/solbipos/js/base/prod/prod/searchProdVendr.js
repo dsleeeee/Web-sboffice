@@ -167,6 +167,10 @@ app.controller('searchNoProdVendrCtrl', ['$scope', '$http', function ($scope, $h
         params.prodCd = $("#lblProdCd").text();
         params.chkVendrCd = $("#lblChkVendrCd").text();
 
+        if(urlProdFg !== "0") {
+            params.vendorFg = '1';
+        }
+
         $scope._inquirySub("/base/prod/prod/prod/getSearchNoProdVendrList.sb", params, function() {}, false);
     };
     // <-- //검색 호출 -->

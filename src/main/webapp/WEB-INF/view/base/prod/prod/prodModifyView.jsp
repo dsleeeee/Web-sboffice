@@ -294,6 +294,353 @@
                     </div>
                 </td>
             </tr>
+            <%-- [국민대] - [상품정보관리] - [일반상품관리] 진입 시 --%>
+            <c:if test="${urlProdFg == '1'}">
+              <tr>
+                <%-- 상품약칭 --%>
+                <th>
+                  <s:message code="prod.sh.prodAlias"/>
+                </th>
+                <td>
+                  <input type="text" id="shPAlias" name="shPAlias" ng-model="prodModifyInfo.shPAlias" class="sb-input w100" />
+                </td>
+                <%-- 식권구분 --%>
+                <th>
+                  <s:message code="prod.sh.ticketFg"/>
+                </th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box id="shPTicketFg" name="shPTicketFg"
+                                  ng-model="prodModifyInfo.shPTicketFg"
+                                  items-source="_getComboData('shPTicketFgComboData')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  required
+                                  popover-enable="myForm.shPTicketFg.$invalid"
+                                  popover-placement="bottom-left"
+                                  popover-trigger="'mouseenter'"
+                                  uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <%-- 제조사 --%>
+                <th>
+                  <s:message code="prod.sh.makerNm"/>
+                </th>
+                <td>
+                  <input type="text" id="shPMakerNm" name="shPMakerNm" ng-model="prodModifyInfo.shPMakerNm" class="sb-input w100" />
+                </td>
+                <%-- 매입VAT --%>
+                <th>
+                  <s:message code="prod.sh.acquireVat"/>
+                </th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box id="shPAcquireVat" name="shPAcquireVat"
+                                  ng-model="prodModifyInfo.shPAcquireVat"
+                                  items-source="_getComboData('shPAcquireVatComboData')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  required
+                                  popover-enable="myForm.shPAcquireVat.$invalid"
+                                  popover-placement="bottom-left"
+                                  popover-trigger="'mouseenter'"
+                                  uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <%-- 포인트적립율 --%>
+                <th>
+                  <s:message code="prod.sh.pointSaveRate"/>
+                </th>
+                <td>
+                  <input type="text" id="shPPointSaveRate" name="shPPointSaveRate" ng-model="prodModifyInfo.shPPointSaveRate" class="sb-input" style="width:49%"/>
+                  <input type="text" id="shPPointSavePrice" name="shPPointSavePrice" ng-model="prodModifyInfo.shPPointSavePrice" class="sb-input" style="width:49%" readonly/>
+                </td>
+                <%-- 규격 --%>
+                <th>
+                  <s:message code="prod.sh.spec"/>
+                </th>
+                <td>
+                  <input type="text" id="shPSpec" name="shPSpec" ng-model="prodModifyInfo.shPSpec" class="sb-input w100" />
+                </td>
+              </tr>
+              <tr>
+                <%-- 매입가 --%>
+                <th>
+                  <s:message code="prod.sh.acquirePrice"/>
+                </th>
+                <td>
+                  <input type="text" id="shPAcquirePrice" name="shPAcquirePrice" ng-model="prodModifyInfo.shPAcquirePrice" class="sb-input w100" readonly/>
+                </td>
+                <%-- 입고/반품대기 --%>
+                <th>
+                  <s:message code="prod.sh.inOutWait"/>
+                </th>
+                <td>
+                  <input type="text" id="shPInWait" name="shPInWait" ng-model="prodModifyInfo.shPInWait" class="sb-input" style="width:49%" readonly/>
+                  <input type="text" id="shPOutWait" name="shPOutWait" ng-model="prodModifyInfo.shPOutWait" class="sb-input" style="width:49%" readonly/>
+                </td>
+              </tr>
+              <tr>
+                <%-- 재고단위 --%>
+                <th>
+                  <s:message code="prod.sh.currStk"/>
+                </th>
+                <td>
+                  <input type="text" id="shPCurrStk" name="shPCurrStk" ng-model="prodModifyInfo.shPCurrStk" class="sb-input w100" readonly/>
+                </td>
+                <%-- 현재고 --%>
+                <th>
+                  <s:message code="prod.sh.stockUnit"/>
+                </th>
+                <td>
+                  <input type="text" id="shPStockUnit" name="shPStockUnit" ng-model="prodModifyInfo.shPStockUnit" class="sb-input w100" readonly/>
+                </td>
+              </tr>
+              <tr>
+                <%-- 특정관리 --%>
+                <th>
+                  <s:message code="prod.sh.specialManage"/>
+                </th>
+                <td colspan="3">
+                  <div class="sb-select fl mr5" style="width:24%">
+                    <wj-combo-box id="shPSpcManage" name="shPSpcManage"
+                                  ng-model="prodModifyInfo.shPSpcManage"
+                                  items-source="_getComboData('shPSpcManageComboData')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  required
+                                  popover-enable="myForm.shPSpcManage.$invalid"
+                                  popover-placement="bottom-left"
+                                  popover-trigger="'mouseenter'"
+                                  uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
+                    </wj-combo-box>
+                  </div>
+                  <input type="text" id="shPSpcManage2" name="shPSpcManage2" ng-model="prodModifyInfo.shPSpcManage2" class="sb-input" style="width:14%" readonly/>
+                  <input type="text" id="shPSpcManage3" name="shPSpcManage3" ng-model="prodModifyInfo.shPSpcManage3" class="sb-input" style="width:50%" readonly/>
+                </td>
+              </tr>
+              <tr>
+                  <%-- 단품코드 --%>
+                <th>
+                  <s:message code="prod.sh.singleProdCd"/>
+                </th>
+                <td>
+                  <input type="text" id="shPSingleProdCd1" name="shPSingleProdCd1" ng-model="prodModifyInfo.shPSingleProdCd1" class="sb-input" style="width:39%" />
+                  <input type="text" id="shPSingleProdCd2" name="shPSingleProdCd2" ng-model="prodModifyInfo.shPSingleProdCd2" class="sb-input" style="width:59%" />
+                </td>
+              </tr>
+            </c:if>
+
+            <%-- [국민대] - [상품정보관리] - [도서관리] 진입 시 --%>
+            <c:if test="${urlProdFg == '2'}">
+              <tr>
+                <%-- 도서약칭 --%>
+                <th>
+                  <s:message code="prod.sh.bookAlias"/>
+                </th>
+                <td>
+                  <input type="text" id="shBAlias" name="shBAlias" ng-model="prodModifyInfo.shBAlias" class="sb-input w100" />
+                </td>
+                <%-- 출판사 --%>
+                <th>
+                  <s:message code="prod.sh.publishNm"/>
+                </th>
+                <td>
+                  <input type="text" id="shBPublishNm" name="shBPublishNm" ng-model="prodModifyInfo.shBPublishNm" class="sb-input w100" />
+                </td>
+              </tr>
+              <tr>
+                <%-- 저자1 --%>
+                <th>
+                  <s:message code="prod.sh.author1"/>
+                </th>
+                <td>
+                  <input type="text" id="shBAuthor1" name="shBAuthor1" ng-model="prodModifyInfo.shBAuthor1" class="sb-input w100" />
+                </td>
+                <%-- 저자2 --%>
+                <th>
+                  <s:message code="prod.sh.author2"/>
+                </th>
+                <td>
+                  <input type="text" id="shBAuthor2" name="shBAuthor2" ng-model="prodModifyInfo.shBAuthor2" class="sb-input w100" />
+                </td>
+              </tr>
+              <tr>
+                <%-- 역자1 --%>
+                <th>
+                  <s:message code="prod.sh.translator1"/>
+                </th>
+                <td>
+                  <input type="text" id="shBTranslator1" name="shBTranslator1" ng-model="prodModifyInfo.shBTranslator1" class="sb-input w100" />
+                </td>
+                <%-- 역자2 --%>
+                <th>
+                  <s:message code="prod.sh.translator2"/>
+                </th>
+                <td>
+                  <input type="text" id="shBTranslator2" name="shBTranslator2" ng-model="prodModifyInfo.shBTranslator2" class="sb-input w100" />
+                </td>
+              </tr>
+              <tr>
+                <%-- 발행일 --%>
+                <th>
+                  <s:message code="prod.sh.pubDate"/>
+                </th>
+                <td>
+                  <input type="text" id="shBPubDate" maxlength="8" numberOnly name="shBPubDate" ng-model="prodModifyInfo.shBPubDate" class="sb-input w100" />
+                </td>
+                <%-- 할인율 --%>
+                <th>
+                  <s:message code="prod.sh.discRate"/>
+                </th>
+                <td>
+                  <input type="text" id="shBDiscRate" name="shBDiscRate" ng-model="prodModifyInfo.shBDiscRate" class="sb-input" style="width:49%" />
+                  <input type="text" id="shBDiscPrice" name="shBDiscPrice" ng-model="prodModifyInfo.shBDiscPrice" class="sb-input" style="width:49%" readonly />
+                </td>
+              </tr>
+              <tr>
+                <%-- 매입VAT --%>
+                <th>
+                  <s:message code="prod.sh.acquireVat"/>
+                </th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box id="shBAcquireVat" name="shBAcquireVat"
+                                  ng-model="prodModifyInfo.shBAcquireVat"
+                                  items-source="_getComboData('shBAcquireVatComboData')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  required
+                                  popover-enable="myForm.shBAcquireVat.$invalid"
+                                  popover-placement="bottom-left"
+                                  popover-trigger="'mouseenter'"
+                                  uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
+                    </wj-combo-box>
+                  </div>
+                </td>
+                <%-- 포인트적립율 --%>
+                <th>
+                  <s:message code="prod.sh.pointSaveRate"/>
+                </th>
+                <td>
+                  <input type="text" id="shBPointSaveRate" name="shBPointSaveRate" ng-model="prodModifyInfo.shBPointSaveRate" class="sb-input" style="width:49%;" />
+                  <input type="text" id="shBPointSavePrice" name="shBPointSavePrice" ng-model="prodModifyInfo.shBPointSavePrice" class="sb-input" style="width:49%;" readonly/>
+                </td>
+              </tr>
+              <tr>
+                <%-- 규격/단위 --%>
+                <th>
+                  <s:message code="prod.sh.specUnit"/>
+                </th>
+                <td>
+                  <input type="text" id="shBSpec" name="shBSpec" ng-model="prodModifyInfo.shBSpec" class="sb-input" style="width:49%;" />
+                  <input type="text" id="shBUnit" name="shBUnit" ng-model="prodModifyInfo.shBUnit" class="sb-input" style="width:49%;" />
+                </td>
+                <%-- 현재고 --%>
+                <th>
+                  <s:message code="prod.sh.currStk"/>
+                </th>
+                <td>
+                  <input type="text" id="shBCurrStk" name="shBCurrStk" ng-model="prodModifyInfo.shBCurrStk" class="sb-input w100" readonly />
+                </td>
+              </tr>
+              <tr>
+                <%-- 특정관리 --%>
+                <th>
+                  <s:message code="prod.sh.specialManage"/>
+                </th>
+                <td colspan="3">
+                  <div class="sb-select fl mr5" style="width:24%">
+                    <wj-combo-box id="shBSpcManage" name="shBSpcManage"
+                                  ng-model="prodModifyInfo.shBSpcManage"
+                                  items-source="_getComboData('shBSpcManageComboData')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  required
+                                  popover-enable="myForm.shBSpcManage.$invalid"
+                                  popover-placement="bottom-left"
+                                  popover-trigger="'mouseenter'"
+                                  uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
+                    </wj-combo-box>
+                  </div>
+                  <input type="text" id="shBSpcManage2" name="shBSpcManage2" ng-model="prodModifyInfo.shBSpcManage2" class="sb-input" style="width:14%" readonly/>
+                  <input type="text" id="shBSpcManage3" name="shBSpcManage3" ng-model="prodModifyInfo.shBSpcManage3" class="sb-input" style="width:50%" readonly/>
+                </td>
+              </tr>
+              <tr>
+                <%-- 입고/반품대기 --%>
+                <th>
+                  <s:message code="prod.sh.inOutWait"/>
+                </th>
+                <td>
+                  <input type="text" id="shBInWait" name="shBInWait" ng-model="prodModifyInfo.shBInWait" class="sb-input" style="width:49%" readonly/>
+                  <input type="text" id="shBOutWait" name="shBOutWait" ng-model="prodModifyInfo.shBOutWait" class="sb-input" style="width:49%" readonly/>
+                </td>
+                    <%-- ISBN --%>
+                  <th>
+                    <s:message code="prod.sh.isbn"/>
+                  </th>
+                  <td>
+                    <div class="sb-select fl mr5" style="width:49%">
+                      <wj-combo-box id="shBIsbnFg" name="shBIsbnFg"
+                                    ng-model="prodModifyInfo.shBIsbnFg"
+                                    items-source="_getComboData('shBIsbnFgComboData')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)"
+                                    required
+                                    popover-enable="myForm.shBIsbnFg.$invalid"
+                                    popover-placement="bottom-left"
+                                    popover-trigger="'mouseenter'"
+                                    uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
+                      </wj-combo-box>
+                    </div>
+                    <input type="text" id="shBIsbnCode" name="shBIsbnCode" ng-model="prodModifyInfo.shBIsbnCode" class="sb-input" style="width:40%"/>
+                  </td>
+              </tr>
+            </c:if>
+            <c:if test="${urlProdFg != '0'}">
+              <tr>
+                <%-- 도서구분 --%>
+                <th>
+                  <s:message code="prod.sh.bookProdFg"/>
+                </th>
+                <td>
+                  <div class="sb-select">
+                    <wj-combo-box id="bookProdFg" name="bookProdFg"
+                                  ng-model="prodModifyInfo.bookProdFg"
+                                  items-source="_getComboData('bookProdFgComboData')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  required
+                                  popover-enable="myForm.bookProdFg.$invalid"
+                                  popover-placement="bottom-left"
+                                  popover-trigger="'mouseenter'"
+                                  uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
+                    </wj-combo-box>
+                  </div>
+                </td>
+              </tr>
+            </c:if>
           </table>
         </div>
       <%-- 내점/배달/포장 가격 --%>
@@ -1078,6 +1425,98 @@
           </tbody>
         </table>
       </div>
+      <%-- [국민대] - [상품정보관리] - [일반상품관리] 진입 시 --%>
+      <c:if test="${urlProdFg == '1'}">
+        <c:if test="${sessionInfo.orgnFg == 'HQ'}">
+          <%-- 상품재고정보 --%>
+          <h3 class="h3_tbl"><s:message code="prod.sh.title.prodVendrStockInfo"/></h3>
+          <%--위즈모 테이블--%>
+          <div class="wj-TblWrapBr">
+            <%-- 개발시 높이 조절해서 사용--%>
+            <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+            <div id="theProdStockInfoGrid" style="height: 200px;">
+              <wj-flex-grid
+                      autoGenerateColumns="false"
+                      control="flex"
+                      initialized="initGrid(s,e)"
+                      sticky-headers="true"
+                      selection-mode="Row"
+                      items-source="data"
+                      item-formatter="_itemFormatter"
+                      id="wjGridProdVendrStockInfo">
+
+                <!-- define columns -->
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireCd"/>"     binding="vendrCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireNm"/>"     binding="vendrNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireRank"/>"   binding="" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireFg"/>"     binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireForm"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquirePrice"/>"  binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.acquireRate"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"       binding="currQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+              </wj-flex-grid>
+            </div>
+          </div>
+        </c:if>
+        <%-- 매장별 재고 --%>
+        <h3 class="h3_tbl"><s:message code="prod.sh.title.prodStockByStore"/></h3>
+        <%--위즈모 테이블--%>
+        <div class="wj-TblWrapBr">
+          <%-- 개발시 높이 조절해서 사용--%>
+          <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+          <div id="theProdStockByStore" style="height: 200px;">
+            <wj-flex-grid
+                    autoGenerateColumns="false"
+                    control="flex"
+                    initialized="initGrid(s,e)"
+                    sticky-headers="true"
+                    selection-mode="Row"
+                    items-source="data"
+                    item-formatter="_itemFormatter"
+                    id="wjGridProdStockByStore">
+
+              <!-- define columns -->
+              <wj-flex-grid-column header="<s:message code="prod.storeNm"/>"     binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"  binding="currQty" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+              <wj-flex-grid-column header="<s:message code="prod.sh.prodFg"/>"   binding="" width="60" align="center" is-read-only="true"></wj-flex-grid-column>
+            </wj-flex-grid>
+          </div>
+        </div>
+      </c:if>
+      <%-- [국민대] - [상품정보관리] - [도서관리] 진입 시 --%>
+      <c:if test="${urlProdFg == '2'}">
+        <%-- 상품재고정보 --%>
+        <h3 class="h3_tbl"><s:message code="prod.sh.title.bookVendrStockInfo"/></h3>
+        <%--위즈모 테이블--%>
+        <div class="wj-TblWrapBr">
+        <%-- 개발시 높이 조절해서 사용--%>
+        <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
+        <div id="theBookVendrStockInfoGrid" style="height: 200px;">
+        <wj-flex-grid
+        autoGenerateColumns="false"
+        control="flex"
+        initialized="initGrid(s,e)"
+        sticky-headers="true"
+        selection-mode="Row"
+        items-source="data"
+        item-formatter="_itemFormatter"
+        id="wjGridBookVendrStockInfo">
+
+        <!-- define columns -->
+        <wj-flex-grid-column header="<s:message code="prod.storeCd"/>"          binding="storeCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.storeNm"/>"          binding="storeNm" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireCd"/>"     binding="vendrCd" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireNm"/>"     binding="vendrNm" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireRank"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireFg"/>"     binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireForm"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquirePrice"/>"  binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.acquireRate"/>"   binding="" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        <wj-flex-grid-column header="<s:message code="prod.sh.currStk"/>"       binding="currQty" width="80" align="center" is-read-only="true"></wj-flex-grid-column>
+        </wj-flex-grid>
+        </div>
+        </div>
+      </c:if>
     </div>
     <div class="wj-dialog-footer">
        <%--<button class="btn btn_blue" ng-click="myForm.$valid && saveProd()"><s:message code="cmm.save"/></button>--%>
@@ -1260,3 +1699,5 @@
 <%-- 보증금상품코드 팝업--%>
 <c:import url="/WEB-INF/view/base/prod/prod/searchDepositProd.jsp">
 </c:import>
+
+

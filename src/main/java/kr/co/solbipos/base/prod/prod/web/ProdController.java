@@ -24,10 +24,7 @@ import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +56,8 @@ import static kr.co.common.utils.spring.StringUtil.convertToJson;
 @Controller
 @RequestMapping(value = "/base/prod/prod/prod")
 public class ProdController {
+
+    private final String RESULT_URI = "/base/prod/prod/prod";
 
     private final SessionService sessionService;
     private final ProdService prodService;
@@ -233,6 +232,180 @@ public class ProdController {
         if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){
             model.addAttribute("posLoginReconnect", request.getParameter("posLoginReconnect"));
         }
+
+        // 메뉴 분리해서 사용하려고 추가
+        // 상품정보관리
+        // 0: [기초관리] - [상품관리] - [상품정보관리]
+        // 1: [국민대] - [상품정보관리] - [일반상품관리]
+        // 2: [국민대] - [상품정보관리] - [도서관리]
+        model.addAttribute("urlProdFg", "0");
+
+        return "base/prod/prod/prod";
+    }
+
+
+    /**
+     * 상품조회
+     *
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+
+    @RequestMapping(value = "/{urlProdFg}/view.sb", method = RequestMethod.GET)
+    public String view(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable String urlProdFg) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        // 상품등록 본사 통제여부
+//        ProdEnvFg prodEnvstVal = ProdEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0020"));
+        // 판매가 본사 통제여부
+//        PriceEnvFg priceEnvstVal = PriceEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0022"));
+
+        // 상품생성설정
+        ProdAuthEnvFg prodAuthEnvstVal = ProdAuthEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0042"));
+        model.addAttribute("prodAuthEnvstVal", prodAuthEnvstVal);
+
+        // 상품코드 채번방식
+        ProdNoEnvFg prodNoEnvFg;
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0028"));
+        }else{
+            prodNoEnvFg = ProdNoEnvFg.getEnum(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0028"));
+        }
+        model.addAttribute("prodNoEnvFg", prodNoEnvFg);
+
+        // 본사
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            if(CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0043"),"0").equals("0")){ // 0043 본사신규상품 매장생성기준
+                model.addAttribute("kitchenprintLink", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1110") , "0")); // 1110상품생성시주방프린터연결여부
+            }
+        } else {
+            model.addAttribute("kitchenprintLink", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1110") , "0")); // 1110상품생성시주방프린터연결여부
+        }
+
+        // 상품코드 PREFIX 값 사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("prodCdPreFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "0"));
+        }else{
+            if(sessionInfoVO.getHqOfficeCd().equals("00000")) {
+                model.addAttribute("prodCdPreFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0047"), "0"));
+            }else{
+                model.addAttribute("prodCdPreFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0047"), "0"));
+            }
+        }
+
+        // 상품상세 필수 START
+        // 내점/배달/포장 가격관리 사용여부
+        if(sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "0044"), "0"));
+        }else{
+            model.addAttribute("subPriceFg", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "0044") , "0"));
+        }
+
+        // (상품관리)브랜드사용여부
+        model.addAttribute("brandUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1114"), "0"));
+
+        // 매장상품제한구분 사용여부(매장 세트구성상품 등록시 사용, 매장에서 사용하지만 본사환경설정값으로 여부파악)
+        if ( sessionInfoVO.getOrgnFg() == OrgnFg.HQ ) {
+            model.addAttribute("storeProdUseFg", "0");
+        } else {
+            model.addAttribute("storeProdUseFg", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1100"), "0"));
+        }
+
+        // 브랜드 리스트 조회(선택 콤보박스용)
+        ProdVO prodVO = new ProdVO();
+        model.addAttribute("brandList", convertToJson(prodService.getBrandList(prodVO, sessionInfoVO)));
+
+        // 매장별 브랜드 콤보박스 조회(사용자 상관없이 전체 브랜드 표시)
+        KioskDisplayVO kioskDisplayVO = new KioskDisplayVO();
+        model.addAttribute("userHqStoreBrandCdComboList", convertToJson(kioskDisplayService.getUserBrandComboListAll(kioskDisplayVO, sessionInfoVO)));
+
+        // 사용자별 브랜드 콤보박스 조회
+        DayProdVO dayProdVO = new DayProdVO();
+        model.addAttribute("userHqBrandCdComboList", convertToJson(dayProdService.getUserBrandComboList(dayProdVO, sessionInfoVO)));
+
+        // 코너 리스트 조회(선택 콤보박스용)
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            List cornerList = prodService.getCornerList(prodVO, sessionInfoVO);
+            model.addAttribute("cornerList", cornerList.isEmpty() ? CmmUtil.comboListAll2("기본코너","00") : cmmCodeUtil.assmblObj(cornerList, "name", "value", UseYn.N));
+        }else {
+            model.addAttribute("cornerList", CmmUtil.comboListAll2("기본코너","00"));
+        }
+
+        /** 맘스터치 */
+        // [1250 맘스터치] 환경설정값 조회
+        if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getHqEnvst(sessionInfoVO, "1250"), "0"));
+        } else if (sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
+            model.addAttribute("momsEnvstVal", CmmUtil.nvl(cmmEnvUtil.getStoreEnvst(sessionInfoVO, "1250"), "0"));
+        }
+
+        // 사용자별 코드별 공통코드 콤보박스 조회
+        // - 팀별
+        List momsTeamComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "151");
+        model.addAttribute("momsTeamComboList", momsTeamComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsTeamComboList, "name", "value", UseYn.N));
+
+        // - AC점포별
+        List momsAcShopComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "152");
+        model.addAttribute("momsAcShopComboList", momsAcShopComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsAcShopComboList, "name", "value", UseYn.N));
+
+        // - 지역구분
+        List momsAreaFgComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "153");
+        model.addAttribute("momsAreaFgComboList", momsAreaFgComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsAreaFgComboList, "name", "value", UseYn.N));
+
+        // - 상권
+        List momsCommercialComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "154");
+        model.addAttribute("momsCommercialComboList", momsCommercialComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsCommercialComboList, "name", "value", UseYn.N));
+
+        // - 점포유형
+        List momsShopTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "155");
+        model.addAttribute("momsShopTypeComboList", momsShopTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsShopTypeComboList, "name", "value", UseYn.N));
+
+        // - 매장관리타입
+        List momsStoreManageTypeComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "156");
+        model.addAttribute("momsStoreManageTypeComboList", momsStoreManageTypeComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreManageTypeComboList, "name", "value", UseYn.N));
+
+        // - 사용자별 그룹 콤보박스 조회
+        List branchCdComboList = dayProdService.getUserBranchComboList(sessionInfoVO);
+        model.addAttribute("branchCdComboList", branchCdComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(branchCdComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹
+        List momsStoreFg01ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "167");
+        model.addAttribute("momsStoreFg01ComboList", momsStoreFg01ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg01ComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹2
+        List momsStoreFg02ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "169");
+        model.addAttribute("momsStoreFg02ComboList", momsStoreFg02ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg02ComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹3
+        List momsStoreFg03ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "170");
+        model.addAttribute("momsStoreFg03ComboList", momsStoreFg03ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg03ComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹4
+        List momsStoreFg04ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "171");
+        model.addAttribute("momsStoreFg04ComboList", momsStoreFg04ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg04ComboList, "name", "value", UseYn.N));
+
+        // - 매장그룹5
+        List momsStoreFg05ComboList = dayProdService.getUserHqNmcodeComboList(sessionInfoVO, "172");
+        model.addAttribute("momsStoreFg05ComboList", momsStoreFg05ComboList.isEmpty() ? CmmUtil.comboListAll() : cmmCodeUtil.assmblObj(momsStoreFg05ComboList, "name", "value", UseYn.N));
+
+        /** //맘스터치 */
+        // 상품상세 필수 END
+
+
+        // POS에서 해당 WEB 화면 재접속한 경우(이전 접속 session 그대로 존재), 'posLoginReconnect'값울 판단하여 view화면 처리
+        if(request.getParameter("posLoginReconnect") != null && request.getParameter("posLoginReconnect").length() > 0){
+            model.addAttribute("posLoginReconnect", request.getParameter("posLoginReconnect"));
+        }
+
+        // 메뉴 분리해서 사용하려고 추가
+        // 상품정보관리
+        // 0: [기초관리] - [상품관리] - [상품정보관리]
+        // 1: [국민대] - [상품정보관리] - [일반상품관리]
+        // 2: [국민대] - [상품정보관리] - [도서관리]
+        model.addAttribute("urlProdFg", urlProdFg);
 
         return "base/prod/prod/prod";
     }
@@ -1004,5 +1177,59 @@ public class ProdController {
         }
 
         return ReturnUtil.returnJson(Status.OK, result);
+    }
+
+    /**
+     * 상품 재고, 거래처 정보 조회
+     * @param prodVO
+     * @param request
+     * @return
+     * @author  김유승
+     * @since   2025. 09. 26.
+     */
+    @RequestMapping(value = "/getProdVendrStockInfoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdVendrStockInfoList(ProdVO prodVO, HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodService.getProdVendrStockInfoList(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, "list", result);
+    }
+
+    /**
+     * 매장별 재고 조회
+     * @param prodVO
+     * @param request
+     * @return
+     * @author  김유승
+     * @since   2025. 09. 26.
+     */
+    @RequestMapping(value = "/getProdStockByStoreList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdStockByStoreList(ProdVO prodVO, HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodService.getProdStockByStoreList(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, "list", result);
+    }
+
+    /**
+     * 도서 재고 정보 조회
+     * @param prodVO
+     * @param request
+     * @return
+     * @author  김유승
+     * @since   2025. 09. 26.
+     */
+    @RequestMapping(value = "/getProdBookVendrStockInfoList.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getProdBookVendrStockInfoList(ProdVO prodVO, HttpServletRequest request) {
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<Object>> result = prodService.getProdBookVendrStockInfoList(prodVO, sessionInfoVO);
+
+        return returnJson(Status.OK, "list", result);
     }
 }
