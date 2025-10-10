@@ -84,7 +84,7 @@ public class FnkeyCmNmcdServiceImpl implements FnkeyCmNmcdService {
                 fnkeyCmNmcdVO.setModDt(dt);
                 fnkeyCmNmcdVO.setModId(sessionInfoVO.getUserId());
 
-                // 매장적용([H0393] 맘스터치 만 적용
+                // 매장적용(맘스, 아티제, [1347] 사용매장)
                 fnkeyCmNmcdMapper.applyToStoreFnkey(fnkeyCmNmcdVO);
             }
 
