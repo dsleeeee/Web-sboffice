@@ -32,7 +32,7 @@
         ,		H.VENDR_NM          AS ACQUIRE_NM
         ,		CASE
                         WHEN A.TOT_SALE_QTY IS NULL OR A.TOT_SALE_QTY = 0 THEN 0
-                        ELSE ROUNT(NVL(A.TOT_SALE_AMT, 0) / A.TOT_SALE_QTY,0)
+                        ELSE ROUND(NVL(A.TOT_SALE_AMT, 0) / A.TOT_SALE_QTY,0)
                 END AS SALE_AMT
         ,		A.TOT_SALE_QTY
         ,		A.TOT_SALE_AMT
