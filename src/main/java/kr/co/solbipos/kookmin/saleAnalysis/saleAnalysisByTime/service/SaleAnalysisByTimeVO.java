@@ -19,18 +19,41 @@ import kr.co.solbipos.application.common.service.PageVO;
 public class SaleAnalysisByTimeVO extends PageVO {
     private static final long serialVersionUID = -8346496803389509753L;
 
+    /** 본사코드 */
     private String hqOfficeCd;
+
+    /** 매장코드 */
     private String storeCd;
+
+    /** 지점코드 */
     private String branchCd;
+
+    /** 지점명 */
     private String branchNm;
+
+    /** 매장코드 */
     private String storeCds;
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
+
+    /** 요일구분 */
     private String yoil;
+
+    /** 요일 리스트 */
     private String yoilList[];
 
+
+    /** 객수 */
     private String guestCnt;
+
+    /** 객단가 */
     private String guestAmt;
+
+    /** 수량 */
     private String saleQty;
+
+    /** 총매출 */
     private String totSaleAmt;
 
     public String getHqOfficeCd() {

@@ -19,15 +19,34 @@ import kr.co.solbipos.application.common.service.PageVO;
 public class SaleAnalysisByProductVO extends PageVO {
     private static final long serialVersionUID = 2991969061187665767L;
 
+    /** 본사코드 */
     private String hqOfficeCd;
+
+    /** 매장코드 */
     private String storeCd;
+    
+    /** 매입처코드 */
     private String acquireCd;
+
+    /** 매입처명 */
     private String acquireNm;
+    
+    /** 지점코드 */
     private String branchCd;
+
+    /** 지점명 */
     private String branchNm;
+    
+    /** 상품코드 */
     private String prodCd;
+    
+    /** 상품명 */
     private String prodNm;
+    
+    /** 매장코드 */
     private String storeCds;
+
+    /** 매장(멀티) 조회를 위한 쿼리 문자열*/
     private String storeCdQuery;
 
 
