@@ -125,7 +125,7 @@
                             </div>
                             <div class="fr">
                                 <%--현금 --%>
-                                <input type="text" class="sb-input w100px" id="cash" ng-model="cash" ng-change="changeCashAmt()" numberOnly/>
+                                <input type="text" class="sb-input w100px" id="cash" ng-model="cash" ng-change="changeCashAmt()" numberOnly readonly/>
                                 <%--신용카드 <input type="text" class="sb-input w100px" id="card" ng-model="card" ng-change="changeCardAmt()" numberOnly/>--%>
                             </div>
                             <div class="sb-select w110px fr">
