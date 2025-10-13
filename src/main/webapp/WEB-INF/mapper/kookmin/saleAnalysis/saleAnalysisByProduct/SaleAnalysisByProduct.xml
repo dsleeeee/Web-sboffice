@@ -62,7 +62,7 @@
         AND		H.HQ_OFFICE_CD 	(+)	= A.HQ_OFFICE_CD
         AND 	H.HQ_BRAND_CD 	(+)	= A.HQ_BRAND_CD
         AND		H.VENDR_CD 		(+)	= G.VENDR_CD
-        AND		H.VENDOR_FG 	(+) = '1'       -- 매입거래처
+--         AND		H.VENDOR_FG 	(+) = '1'       -- 매입거래처(매입처 처리 방법 확인 후 수정)
         AND     A.SALE_DATE     BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND A.STORE_CD IN (${storeCdQuery})
@@ -80,8 +80,8 @@
             AND C.PROD_NM LIKE '%' || #{prodNm} || '%'
         </if>
         ORDER
-        BY      A.SALE_DATE
-        ,       A.STORE_CD
+        BY     	A.STORE_CD
         ,       A.PROD_CD
+        ,		G.VENDR_CD
     </select>
 </mapper>
