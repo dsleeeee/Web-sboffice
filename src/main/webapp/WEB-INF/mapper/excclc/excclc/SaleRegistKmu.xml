@@ -1263,18 +1263,22 @@
             #{hqOfficeCd} AS HQ_OFFICE_CD,
             #{storeCd} AS STORE_CD,
             tmm.MEMBR_NO,
-            NVL(tmmpb.POSTPAID_AMT, 0) - (#{totSaleAmt} * #{saleFg}) AS POSTPAID_AMT,
-            NVL(tmmpb.POSTPAID_BAL_AMT, 0) - (#{totSaleAmt} * #{saleFg}) AS POSTPAID_BAL_AMT,
+            NVL(tmmpb.POSTPAID_AMT, 0) - NVL(tmmp.POSTPAID_AMT, 0) AS POSTPAID_AMT,
+            NVL(tmmpb.POSTPAID_BAL_AMT, 0) - NVL(tmmp.POSTPAID_AMT, 0) AS POSTPAID_BAL_AMT,
             #{modDt} AS MOD_DT,
             #{modId} AS MOD_ID
             FROM TB_MB_MEMBER tmm,
-            TB_MB_MEMBER_PAID_BALANCE tmmpb
+            TB_MB_MEMBER_PAID_BALANCE tmmpb,
+            TB_MB_MEMBER_POSTPAID tmmp
             WHERE 1=1
             AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-            AND tmm.MEMBR_NO = #{membrNo}
             AND tmmpb.HQ_OFFICE_CD (+)= #{hqOfficeCd}
             AND tmmpb.STORE_CD (+)= #{storeCd}
             AND tmmpb.MEMBR_NO (+)= tmm.MEMBR_NO
+            AND tmmp.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
+            AND tmmp.STORE_CD = tmmpb.STORE_CD
+            AND tmmp.MEMBR_NO = tmmpb.MEMBR_NO
+            AND tmmp.POSTPAID_NO = #{postpaidNo}
         ) B
         ON  (
                 A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
@@ -1289,22 +1293,5 @@
                 A.MOD_DT = B.MOD_DT,
                 A.MOD_ID = B.MOD_ID
     </update>
-
-    <!-- 총매출액 조회 -->
-    <!--
-        TABLE    : TB_SL_SALE_HDR
-        PARAM    : saleRegistKmuVO
-        COMMENTS :
-    -->
-    <select id="getSaleHdrTotSaleAmt" parameterType="saleRegistKmuVO" resultType="String">
-        /* SaleRegistKmuMapper.getSaleHdrTotSaleAmt */
-        SELECT NVL(tssh.TOT_SALE_AMT, '0') AS TOT_SALE_AMT
-        FROM TB_SL_SALE_HDR tssh
-        WHERE 1=1
-        AND tssh.STORE_CD = #{storeCd}
-        AND tssh.SALE_DATE = #{saleDate}
-        AND tssh.POS_NO = '99'
-        AND tssh.BILL_NO = #{billNo}
-    </select>
 
 </mapper>

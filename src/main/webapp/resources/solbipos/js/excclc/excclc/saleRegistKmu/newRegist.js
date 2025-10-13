@@ -287,9 +287,9 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
 
-                params.saleFg = $scope.saleFg;
-                params.cashAmt = $("#cash").val(); // 결제구분에 따라 금액처리
-                params.membrNo = $("#membrNo").val();
+                // params.saleFg = $scope.saleFg;
+                // params.cashAmt = $("#cash").val(); // 결제구분에 따라 금액처리
+                // params.membrNo = $("#membrNo").val();
                 params.postpaidNo = $("#postpaidNo").text();
 
                 $scope._postJSONQuery.withOutPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDel.sb', params, function (result) {
@@ -435,9 +435,9 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
 
-                params.saleFg = $scope.saleFg;
-                params.cashAmt = $("#cash").val(); // 결제구분에 따라 금액처리
-                params.membrNo = $("#membrNo").val();
+                // params.saleFg = $scope.saleFg;
+                // params.cashAmt = $("#cash").val(); // 결제구분에 따라 금액처리
+                // params.membrNo = $("#membrNo").val();
                 params.postpaidNo = $("#postpaidNo").text();
 
                 $scope._postJSONQuery.withPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDel.sb', params, function (result) {

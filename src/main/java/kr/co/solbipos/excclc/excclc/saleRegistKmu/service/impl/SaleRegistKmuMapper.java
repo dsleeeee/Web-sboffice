@@ -76,7 +76,4 @@ public interface SaleRegistKmuMapper {
 
     /** 회원선택 팝업 - 조회 */
     List<DefaultMap<Object>> getSaleRegistKmuMemberList(SaleRegistKmuVO saleRegistKmuVO);
-
-    /** 총매출액 조회 */
-    String getSaleHdrTotSaleAmt(SaleRegistKmuVO saleRegistKmuVO);
 }

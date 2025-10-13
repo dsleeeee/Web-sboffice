@@ -384,28 +384,17 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
         saleRegistKmuVO.setModDt(currentDt);
         saleRegistKmuVO.setModId("WEB_REG_" + sessionInfoVO.getUserId());
 
-        // 금액 결제구분에 따라 처리
-        Long amt =  saleRegistKmuVO.getCashAmt();
-        // 수량 0 입력으로 인한 삭제시
-        if (amt == 0) {
-            String totSaleAmt = saleRegistKmuMapper.getSaleHdrTotSaleAmt(saleRegistKmuVO);
-            amt =  Long.parseLong(totSaleAmt);
-        }
-        saleRegistKmuVO.setTotSaleAmt(amt);
-
         // TB_SL_SALE_HDR_MEMBR
         saleRegistKmuMapper.delSaleHdrMembr(saleRegistKmuVO);
 
         // TB_SL_SALE_HDR
         saleRegistKmuMapper.delSaleHdr(saleRegistKmuVO);
 
+        // TB_MB_MEMBER_PAID_BALANCE
+        saleRegistKmuMapper.delMemberPaidBalance(saleRegistKmuVO);
+
         // TB_MB_MEMBER_POSTPAID
         saleRegistKmuMapper.delMemberPostpaid(saleRegistKmuVO);
-
-        if(saleRegistKmuVO.getMembrNo() != "" || saleRegistKmuVO.getMembrNo() != null) {
-            // TB_MB_MEMBER_PAID_BALANCE
-            saleRegistKmuMapper.delMemberPaidBalance(saleRegistKmuVO);
-        }
 
         return 0;
     }
