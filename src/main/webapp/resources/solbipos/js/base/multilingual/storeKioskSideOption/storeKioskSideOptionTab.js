@@ -73,7 +73,7 @@ app.controller('storeKioskSideOptionTabCtrl', ['$scope', function ($scope) {
         $("#storeSideSdselGrpTab").addClass("on");
         $("#storeSideSdselClassTab").removeClass("on");
         $("#storeOptionGrpTab").removeClass("on");
-        $("#storeOoptionValTab").removeClass("on");
+        $("#storeOptionValTab").removeClass("on");
 
         $("#storeKioskCategoryView").hide();
         $("#storeKioskMClsView").hide();
@@ -94,7 +94,7 @@ app.controller('storeKioskSideOptionTabCtrl', ['$scope', function ($scope) {
         $("#storeSideSdselGrpTab").removeClass("on");
         $("#storeSideSdselClassTab").addClass("on");
         $("#storeOptionGrpTab").removeClass("on");
-        $("#storeOoptionValTab").removeClass("on");
+        $("#storeOptionValTab").removeClass("on");
 
         $("#storeKioskCategoryView").hide();
         $("#storeKioskMClsView").hide();
@@ -115,7 +115,7 @@ app.controller('storeKioskSideOptionTabCtrl', ['$scope', function ($scope) {
         $("#storeSideSdselGrpTab").removeClass("on");
         $("#storeSideSdselClassTab").removeClass("on");
         $("#storeOptionGrpTab").addClass("on");
-        $("#storeOoptionValTab").removeClass("on");
+        $("#storeOptionValTab").removeClass("on");
 
         $("#storeKioskCategoryView").hide();
         $("#storeKioskMClsView").hide();
@@ -136,7 +136,7 @@ app.controller('storeKioskSideOptionTabCtrl', ['$scope', function ($scope) {
         $("#storeSideSdselGrpTab").removeClass("on");
         $("#storeSideSdselClassTab").removeClass("on");
         $("#storeOptionGrpTab").removeClass("on");
-        $("#storeOoptionValTab").addClass("on");
+        $("#storeOptionValTab").addClass("on");
 
         $("#storeKioskCategoryView").hide();
         $("#storeKioskMClsView").hide();

@@ -43,7 +43,7 @@
     var kioskPos2List = ${kioskPos2List};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/storeKioskSideOption/storeKioskSideOptionTab.js?ver=20250925.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/multilingual/storeKioskSideOption/storeKioskSideOptionTab.js?ver=20251013.01" charset="utf-8"></script>
 
 <%-- excelfile read js --%>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
