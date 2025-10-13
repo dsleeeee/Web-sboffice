@@ -386,6 +386,11 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
 
         // 금액 결제구분에 따라 처리
         Long amt =  saleRegistKmuVO.getCashAmt();
+        // 수량 0 입력으로 인한 삭제시
+        if (amt == 0) {
+            String totSaleAmt = saleRegistKmuMapper.getSaleHdrTotSaleAmt(saleRegistKmuVO);
+            amt =  Long.parseLong(totSaleAmt);
+        }
         saleRegistKmuVO.setTotSaleAmt(amt);
 
         // TB_SL_SALE_HDR_MEMBR
