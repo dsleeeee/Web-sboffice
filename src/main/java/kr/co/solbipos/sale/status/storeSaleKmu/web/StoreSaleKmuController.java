@@ -1,7 +1,6 @@
 package kr.co.solbipos.sale.status.storeSaleKmu.web;
 
 import kr.co.common.data.enums.Status;
-import kr.co.common.data.enums.UseYn;
 import kr.co.common.data.structure.DefaultMap;
 import kr.co.common.data.structure.Result;
 import kr.co.common.service.session.SessionService;
@@ -10,11 +9,8 @@ import kr.co.common.utils.grid.ReturnUtil;
 import kr.co.common.utils.jsp.CmmCodeUtil;
 import kr.co.common.utils.jsp.CmmEnvUtil;
 import kr.co.solbipos.application.session.auth.service.SessionInfoVO;
-import kr.co.solbipos.application.session.user.enums.OrgnFg;
 import kr.co.solbipos.sale.status.storeSaleKmu.service.StoreSaleKmuService;
 import kr.co.solbipos.sale.status.storeSaleKmu.service.StoreSaleKmuVO;
-import kr.co.solbipos.sale.prod.dayProd.service.DayProdService;
-import kr.co.solbipos.sale.prod.dayProd.service.DayProdVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
