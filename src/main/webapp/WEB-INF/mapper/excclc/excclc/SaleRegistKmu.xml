@@ -1290,4 +1290,21 @@
                 A.MOD_ID = B.MOD_ID
     </update>
 
+    <!-- 총매출액 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR
+        PARAM    : saleRegistKmuVO
+        COMMENTS :
+    -->
+    <select id="getSaleHdrTotSaleAmt" parameterType="saleRegistKmuVO" resultType="String">
+        /* SaleRegistKmuMapper.getSaleHdrTotSaleAmt */
+        SELECT NVL(tssh.TOT_SALE_AMT, '0') AS TOT_SALE_AMT
+        FROM TB_SL_SALE_HDR tssh
+        WHERE 1=1
+        AND tssh.STORE_CD = #{storeCd}
+        AND tssh.SALE_DATE = #{saleDate}
+        AND tssh.POS_NO = '99'
+        AND tssh.BILL_NO = #{billNo}
+    </select>
+
 </mapper>
