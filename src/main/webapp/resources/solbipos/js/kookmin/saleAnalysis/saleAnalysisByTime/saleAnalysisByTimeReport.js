@@ -218,7 +218,7 @@ app.controller('saleAnalysisByTimeReportCtrl', ['$scope', '$http', '$timeout', f
                             + '<col style="width: 15%">'
                             + '</colgroup>'
                             + '<tr>'
-                            + '<td class="tl br0"><p class="bk s20">상품별 매출분석 </p></td>'
+                            + '<td class="tl br0"><p class="bk s20">시간대별 매출분석(요일별) </p></td>'
                             + '</tr>'
                             + '<tr>'
                             + '<td class="tl br0" valign="bottom">기간 : ' + srchStartDate + ' ~ ' + srchEndDate + ' 지점 : 전체' + ' 점소 : ' + srchStoreNm
@@ -259,7 +259,7 @@ app.controller('saleAnalysisByTimeReportCtrl', ['$scope', '$http', '$timeout', f
     $scope.print = function () {
         // create document
         var doc = new wijmo.PrintDocument({
-            title: '근로학생별 근로내역 현황'
+            title: '시간대별 매출분석(요일별)'
         });
 
         // 브라우저 체크하여 크롬인 경우 위에 빈칸 9mm 를 둔다. ie와 비슷하게 맞추기 위함...

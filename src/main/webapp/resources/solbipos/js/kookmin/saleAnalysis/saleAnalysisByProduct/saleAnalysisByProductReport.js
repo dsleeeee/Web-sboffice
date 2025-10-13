@@ -225,7 +225,7 @@ app.controller('saleAnalysisByProductReportCtrl', ['$scope', '$http', '$timeout'
     $scope.print = function () {
         // create document
         var doc = new wijmo.PrintDocument({
-            title: '근로학생별 근로내역 현황'
+            title: '상품별 매출분석'
         });
 
         // 브라우저 체크하여 크롬인 경우 위에 빈칸 9mm 를 둔다. ie와 비슷하게 맞추기 위함...
