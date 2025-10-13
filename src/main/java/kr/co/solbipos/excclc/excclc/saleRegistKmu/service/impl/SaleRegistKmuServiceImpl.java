@@ -397,7 +397,7 @@ public class SaleRegistKmuServiceImpl implements SaleRegistKmuService {
         // TB_MB_MEMBER_POSTPAID
         saleRegistKmuMapper.delMemberPostpaid(saleRegistKmuVO);
 
-        if(saleRegistKmuVO.getMembrNo() == "" || saleRegistKmuVO.getMembrNo() == null) {
+        if(saleRegistKmuVO.getMembrNo() != "" || saleRegistKmuVO.getMembrNo() != null) {
             // TB_MB_MEMBER_PAID_BALANCE
             saleRegistKmuMapper.delMemberPaidBalance(saleRegistKmuVO);
         }
