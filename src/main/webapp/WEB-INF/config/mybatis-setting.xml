@@ -1359,7 +1359,7 @@
     <!-- 국민대 > 매출관리 > 점소별매출일보 -->
     <typeAlias alias="storeSaleKmuVO" type="kr.co.solbipos.sale.status.storeSaleKmu.service.StoreSaleKmuVO"/>
     <!-- 국민대 > 매입처관리 > 매입처조회 -->
-    <!--<typeAlias alias="purchaserVO" type="kr.co.solbipos.base.prod.purchaser.service.PurchaserVO"/>-->
+    <typeAlias alias="purchaserVO" type="kr.co.solbipos.base.prod.purchaser.service.PurchaserVO"/>
 
 
     <!-- ====================================== 모바일 시작 ====================================== -->

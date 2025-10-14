@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Purchaser.xml
+    매입처조회
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김설아     2025.10.10     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.purchaser.service.impl.PurchaserMapper">
+
+    <!-- 매입처조회 - 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getPurchaserList" parameterType="PurchaserVO" resultType="DefaultMap">
+        /* PurchaserMapper.getPurchaserList */
+        SELECT
+        thv.VENDR_CD,
+        thv.VENDR_NM,
+        thv.TEL_NO,
+        thv.OWNER_NM,
+        thv.OWNER_TEL_NO,
+        thv.MANAGER_NM,
+        thv.MANAGER_TEL_NO,
+        thv.FAX_NO,
+        <![CDATA[
+            (CASE WHEN LENGTH(thv.BIZ_NO) >= 6 THEN (SUBSTR(thv.BIZ_NO, 1,3) || '-' || SUBSTR(thv.BIZ_NO, 4,2) || '-' || SUBSTR(thv.BIZ_NO, 6)) ELSE thv.BIZ_NO END) AS BIZ_NO
+        ]]>
+        FROM TB_HQ_VENDOR thv
+        WHERE 1=1
+        AND thv.HQ_OFFICE_CD = #{hqOfficeCd}
+        <if test="vendrCd != null and vendrCd != ''">
+            AND thv.VENDR_CD LIKE '%'||#{vendrCd}||'%'
+        </if>
+        <if test="vendrNm != null and vendrNm != ''">
+            AND thv.VENDR_NM LIKE '%'||#{vendrNm}||'%'
+        </if>
+        <if test='teamCd != null and teamCd != ""'>
+            -- 팀코드
+        </if>
+        <if test='teamNm != null and teamNm != ""'>
+            -- 팀명
+        </if>
+        <if test='branchCd != null and branchCd != ""'>
+            -- 지점코드
+        </if>
+        <if test='branchNm != null and branchNm != ""'>
+            -- 지점명
+        </if>
+        AND thv.VENDOR_FG = '1' --거래처구분
+        ORDER BY thv.VENDR_CD
+    </select>
+
+</mapper>
