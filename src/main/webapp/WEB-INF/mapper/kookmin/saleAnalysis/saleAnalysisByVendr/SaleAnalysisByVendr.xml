@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleAnalysisByVendr.xml
+    매입처별 매출분석 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.10.10
+-->
+<mapper namespace="kr.co.solbipos.kookmin.saleAnalysis.saleAnalysisByVendr.service.impl.SaleAnalysisByVendrMapper">
+
+    <!-- 매입처별 매출분석 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS : 매입처별 매출분석을 조회한다.
+    -->
+    <select id="getSaleAnalysisByVendrList" parameterType="SaleAnalysisByVendrVO" resultType="DefaultMap">
+        /* SaleAnalysisByVendrMapper.getSaleAnalysisByVendrList */
+        SELECT 	A.VENDR_CD
+        ,		A.VENDR_NM
+        ,		C.STORE_CD
+        ,		C.PROD_CD
+        ,		D.PROD_NM
+        ,		E.PROD_CLASS_NM
+        ,		CASE
+                  WHEN C.TOT_SALE_QTY IS NULL OR C.TOT_SALE_QTY = 0 THEN 0
+                  ELSE NVL(C.TOT_SALE_AMT, 0) / C.TOT_SALE_QTY
+                END AS SALE_UPRC
+        ,		B.SPLY_UPRC
+        ,		C.TOT_SALE_QTY
+        ,		C.TOT_SALE_AMT
+        ,		C.TOT_DC_AMT
+        ,		C.REAL_SALE_AMT
+        ,		ROUND(C.TOT_SALE_QTY * B.SPLY_UPRC, 0)  AS COGS
+        ,		ROUND(C.REAL_SALE_AMT - (C.TOT_SALE_QTY * B.SPLY_UPRC), 0) AS SALES_PROFIT
+        FROM 	TB_HQ_VENDOR A
+        ,		TB_HQ_VENDOR_PROD B
+        ,		TB_SL_DAILY_PROD C
+        ,		TB_MS_PRODUCT D
+        ,		TB_MS_PRODUCT_CLASS E
+        WHERE 	B.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND		B.HQ_BRAND_CD 	= A.HQ_BRAND_CD
+        AND 	B.VENDR_CD 		= A.VENDR_CD
+        AND		C.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND 	C.HQ_BRAND_CD 	= A.HQ_BRAND_CD
+        AND 	C.PROD_CD 		= B.PROD_CD
+        AND		D.STORE_CD 		= C.STORE_CD
+        AND 	D.PROD_CD 		= C.PROD_CD
+        AND		E.STORE_CD 		= D.STORE_CD
+        AND		E.PROD_CLASS_CD = D.PROD_CLASS_CD
+        AND		A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND		A.VENDOR_FG 	= '1'       -- 매입거래처
+        <if test='storeCd != null and storeCd != ""'>
+            AND     C.STORE_CD      = #{storeCd}
+        </if>
+        <if test="acquireCd != null and acquireCd != ''">
+            AND A.VENDR_CD LIKE '%' || #{acquireCd} || '%'
+        </if>
+        <if test="acquireNm != null and acquireNm != ''">
+            AND A.VENDR_NM LIKE '%' || #{acquireNm} || '%'
+        </if>
+        <if test="arrProdClassCd != null and arrProdClassCd != ''">
+            AND D.PROD_CLASS_CD IN
+            <foreach collection="arrProdClassCd" item="item" open=" (" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ORDER
+        BY      A.VENDR_CD
+        ,       C.PROD_CD
+    </select>
+</mapper>

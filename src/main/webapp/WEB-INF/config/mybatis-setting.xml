@@ -1283,7 +1283,10 @@
     <typeAlias alias="saleAnalysisByProductVO" type="kr.co.solbipos.kookmin.saleAnalysis.saleAnalysisByProduct.service.SaleAnalysisByProductVO"/>
     <!-- 국민대 > 매출분석 > 시간대별 매출분석 -->
     <typeAlias alias="saleAnalysisByTimeVO" type="kr.co.solbipos.kookmin.saleAnalysis.saleAnalysisByTime.service.SaleAnalysisByTimeVO"/>
-
+    <!-- 국민대 > 매출분석 > 매입처별 매출분석 -->
+    <typeAlias alias="saleAnalysisByVendrVO" type="kr.co.solbipos.kookmin.saleAnalysis.saleAnalysisByVendr.service.SaleAnalysisByVendrVO"/>
+    <!-- 국민대 > 매출분석 > 매입처별 매출분석 -->
+    <typeAlias alias="saleTotalAnalysisByTimeVO" type="kr.co.solbipos.kookmin.saleAnalysis.saleTotalAnalysisByTime.service.SaleTotalAnalysisByTimeVO"/>
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
