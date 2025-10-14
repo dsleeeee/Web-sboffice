@@ -111,6 +111,12 @@ public class TimeSaleMomsVO extends PageVO {
     /** 상품코드 */
     private String prodCds;
 
+    /** 배달포장구분 구분 코드*/
+    private String dlvrOrderFg;
+
+    /** 배달포장구분 구분 코드 리스트*/
+    private String [] dlvrOrderFgList;
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -300,4 +306,20 @@ public class TimeSaleMomsVO extends PageVO {
     }
 
     public void setProdCds(String prodCds) { this.prodCds = prodCds; }
+
+    public String getDlvrOrderFg() {
+        return dlvrOrderFg;
+    }
+
+    public void setDlvrOrderFg(String dlvrOrderFg) {
+        this.dlvrOrderFg = dlvrOrderFg;
+    }
+
+    public String[] getDlvrOrderFgList() {
+        return dlvrOrderFgList;
+    }
+
+    public void setDlvrOrderFgList(String[] dlvrOrderFgList) {
+        this.dlvrOrderFgList = dlvrOrderFgList;
+    }
 }

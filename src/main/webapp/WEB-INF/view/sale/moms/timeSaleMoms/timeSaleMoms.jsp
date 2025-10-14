@@ -132,6 +132,23 @@
                     <td></td>
                 </c:if>
             </tr>
+            <tr>
+                <%-- 조회옵션 --%>
+                <th><s:message code="timeSaleMoms.srchOption"/></th>
+                <td>
+                    <%-- 내점 --%>
+                    <div style="float: left;"><input type="checkbox" id="chkOptStin" ng-model="optStin"/></div>
+                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="timeSaleMoms.stin" /></label></div>
+                    <%-- 포장 --%>
+                    <div style="float: left;"><input type="checkbox" id="chkOptPack" ng-model="optPack"/></div>
+                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="timeSaleMoms.pack" /></label></div>
+                    <%-- 배달 --%>
+                    <div style="float: left;"><input type="checkbox" id="chkOptDlvr" ng-model="optDlvr"/></div>
+                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="timeSaleMoms.dlvr" /></label></div>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
             </tbody>
         </table>
         <table class="searchTbl" id="tblSearchAddShow" style="display: none;">
@@ -445,4 +462,4 @@
     var momsStoreFg05ComboList = ${momsStoreFg05ComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/moms/timeSaleMoms/timeSaleMoms.js?ver=20250312.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/moms/timeSaleMoms/timeSaleMoms.js?ver=20251014.01" charset="utf-8"></script>

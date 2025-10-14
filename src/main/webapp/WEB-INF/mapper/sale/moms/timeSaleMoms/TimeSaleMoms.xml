@@ -29,7 +29,7 @@
         SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
         SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_DAILY_PROD_SDSEL_TIME_MOMS_V04 tsdpst,
+        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
@@ -38,6 +38,12 @@
         AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tsdpst.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+            AND tsdpst.DLVR_ORDER_FG IN
+            <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -146,7 +152,7 @@
         SUM(tsdpst.TOT_SALE_QTY) AS SALE_QTY1,
         SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
         SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
-        FROM TB_SL_DAILY_PROD_SDSEL_TIME_MOMS_V04 tsdpst,
+        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
@@ -155,6 +161,12 @@
         AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tsdpst.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+            AND tsdpst.DLVR_ORDER_FG IN
+            <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -263,7 +275,7 @@
         SUM(tsdpst.TOT_SALE_QTY) AS SALE_QTY1,
         SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
         SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
-        FROM TB_SL_DAILY_PROD_SDSEL_TIME_MOMS_V04 tsdpst,
+        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
@@ -272,6 +284,12 @@
         AND tsdpst.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCdQuery != null and storeCdQuery != ""'>
             AND tsdpst.STORE_CD IN (${storeCdQuery})
+        </if>
+        <if test='dlvrOrderFgList != null and dlvrOrderFgList != ""'>
+            AND tsdpst.DLVR_ORDER_FG IN
+            <foreach collection="dlvrOrderFgList" item="item" open=" (" separator="," close=")" >
+                #{item}
+            </foreach>
         </if>
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
