@@ -76,6 +76,11 @@ app.controller('timeSaleMomsCtrl', ['$scope', '$http', '$timeout', function ($sc
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        var srchOption = "";
+        if($("#chkOptStin").is(":checked")) {srchOption += "1,"}
+        if($("#chkOptPack").is(":checked")) {srchOption += "3,4,"}
+        if($("#chkOptDlvr").is(":checked")) {srchOption += "2,"}
+        params.dlvrOrderFg = srchOption;
         params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
@@ -180,6 +185,11 @@ app.controller('timeSaleMomsCtrl', ['$scope', '$http', '$timeout', function ($sc
         var params = {};
         params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
         params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+        var srchOption = "";
+        if($("#chkOptStin").is(":checked")) {srchOption += "1,"}
+        if($("#chkOptPack").is(":checked")) {srchOption += "3,4,"}
+        if($("#chkOptDlvr").is(":checked")) {srchOption += "2,"}
+        params.dlvrOrderFg = srchOption;
         params.prodClassCd = $scope.prodClassCd;
         params.prodCd = $scope.prodCd;
         params.prodNm = $scope.prodNm;
@@ -294,7 +304,6 @@ app.controller('timeSaleMomsExcelCtrl', ['$scope', '$http', '$timeout', function
     // <-- 검색 호출 -->
     $scope.$on("timeSaleMomsExcelCtrl", function (event, data) {
         if(data.excelType === '1') {
-            $scope.searchExcelList(data);
             $scope.searchExcelList(data);
         } else {
             // 엑셀다운로드 진행 사용자 현재 인원수 체크

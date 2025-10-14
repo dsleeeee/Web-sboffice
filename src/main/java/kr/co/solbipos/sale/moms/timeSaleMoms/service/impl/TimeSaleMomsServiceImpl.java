@@ -76,6 +76,11 @@ public class TimeSaleMomsServiceImpl implements TimeSaleMomsService {
             }
         }
 
+        // 조회옵션 array 값 세팅
+        if (timeSaleMomsVO.getDlvrOrderFg() != null && !"".equals(timeSaleMomsVO.getDlvrOrderFg())) {
+            timeSaleMomsVO.setDlvrOrderFgList(timeSaleMomsVO.getDlvrOrderFg().split(","));
+        }
+
         return timeSaleMomsMapper.getTimeSaleMomsList(timeSaleMomsVO);
     }
 
@@ -110,6 +115,11 @@ public class TimeSaleMomsServiceImpl implements TimeSaleMomsService {
             }
         }
 
+        // 조회옵션 array 값 세팅
+        if (timeSaleMomsVO.getDlvrOrderFg() != null && !"".equals(timeSaleMomsVO.getDlvrOrderFg())) {
+            timeSaleMomsVO.setDlvrOrderFgList(timeSaleMomsVO.getDlvrOrderFg().split(","));
+        }
+
         return timeSaleMomsMapper.getTimeSaleMomsExcelList(timeSaleMomsVO);
     }
 
@@ -142,6 +152,11 @@ public class TimeSaleMomsServiceImpl implements TimeSaleMomsService {
                 String[] userBrandList = timeSaleMomsVO.getUserBrands().split(",");
                 timeSaleMomsVO.setUserBrandList(userBrandList);
             }
+        }
+
+        // 조회옵션 array 값 세팅
+        if (timeSaleMomsVO.getDlvrOrderFg() != null && !"".equals(timeSaleMomsVO.getDlvrOrderFg())) {
+            timeSaleMomsVO.setDlvrOrderFgList(timeSaleMomsVO.getDlvrOrderFg().split(","));
         }
 
         return timeSaleMomsMapper.getTimeSaleMomsExcelDivisionList(timeSaleMomsVO);
