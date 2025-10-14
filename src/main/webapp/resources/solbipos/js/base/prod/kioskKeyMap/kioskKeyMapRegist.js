@@ -420,6 +420,11 @@ app.controller('kioskKeyMapRegistCtrl', ['$scope', '$http', '$timeout', function
                     return;
                 }
                 //}
+
+                if (nvl($scope.flex.collectionView.items[m].tuClsNm + '', '').getByteLengthForOracle() > 50) {
+                    $scope._popMsg(messages["kioskKeyMap.tuClsNm"] +  messages["cmm.overLength"] + " 50 ");  // 카테고리명의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 50
+                    return;
+                }
             }
 
             // 파라미터 설정
@@ -1107,6 +1112,11 @@ app.controller('categoryClsMCtrl', ['$scope', '$http', '$timeout', function ($sc
                     return;
                 }
                 //}
+
+                if (nvl($scope.flexM.collectionView.items[m].tuMClsNm  + '', '').getByteLengthForOracle() > 50) {
+                    $scope._popMsg(messages["kioskKeyMap.tuMClsNm"] +  messages["cmm.overLength"] + " 50 ");  // 카테고리명의 데이터 중 문자열의 길이가 너무 긴 데이터가 있습니다. 최대 : 50
+                    return;
+                }
             }
 
             // 파라미터 설정
