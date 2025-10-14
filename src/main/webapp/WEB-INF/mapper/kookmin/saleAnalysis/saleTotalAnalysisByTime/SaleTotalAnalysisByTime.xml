@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleTotalAnalysisByTime.xml
+    시간대 매출합계분석 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.10.13
+-->
+<mapper namespace="kr.co.solbipos.kookmin.saleAnalysis.saleTotalAnalysisByTime.service.impl.SaleTotalAnalysisByTimeMapper">
+
+    <!-- 시간대 매출합계분석 조회 -->
+    <!--
+        TABLE    :
+        COMMENTS : 시간대 매출합계분석을 조회한다.
+    -->
+    <select id="getSaleTotalAnalysisByTimeList" parameterType="SaleTotalAnalysisByTimeVO" resultType="DefaultMap">
+        /* SaleTotalAnalysisByTimeMapper.getSaleTotalAnalysisByTimeList */
+        WITH HOURS AS
+        (
+            SELECT '00' AS SALE_HOUR_L, '12' AS SALE_HOUR_R FROM DUAL UNION ALL
+            SELECT '01', '13' FROM DUAL UNION ALL
+            SELECT '02', '14' FROM DUAL UNION ALL
+            SELECT '03', '15' FROM DUAL UNION ALL
+            SELECT '04', '16' FROM DUAL UNION ALL
+            SELECT '05', '17' FROM DUAL UNION ALL
+            SELECT '06', '18' FROM DUAL UNION ALL
+            SELECT '07', '19' FROM DUAL UNION ALL
+            SELECT '08', '20' FROM DUAL UNION ALL
+            SELECT '09', '21' FROM DUAL UNION ALL
+            SELECT '10', '22' FROM DUAL UNION ALL
+            SELECT '11', '23' FROM DUAL
+        )
+        ,   BASE AS
+        (
+            SELECT	SALE_HOUR
+            ,		SUM(TOT_SALE_AMT) 	AS TOT_SALE_AMT
+            ,		SUM(NVL(GUEST_CNT_1, 0) + NVL(GUEST_CNT_2, 0) + NVL(GUEST_CNT_3, 0) + NVL(GUEST_CNT_4, 0) + NVL(GUEST_CNT_5, 0) + NVL(GUEST_CNT_6, 0))	AS GUEST_CNT
+            ,		SUM(SALE_QTY)		AS SALE_QTY
+            FROM	TB_SL_DAILY_TIME
+            WHERE	1=1
+            AND     HQ_OFFICE_CD = #{hqOfficeCd}
+            AND		SALE_DATE BETWEEN #{startDate} AND #{endDate}
+            <if test='storeCd != null and storeCd != ""'>
+                AND     STORE_CD = #{storeCd}
+            </if>
+            <if test="yoil != null">
+                AND     TO_CHAR(TO_DATE(SALE_DATE, 'YYYYMMDD'), 'DY') IN
+                <foreach collection="yoilList" item="item" open=" (" separator="," close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            GROUP
+            BY		SALE_HOUR
+        )
+        SELECT	A.SALE_HOUR_L
+        ,		B.TOT_SALE_AMT  AS TOT_SALE_AMT_L
+        ,		B.GUEST_CNT     AS GUEST_CNT_L
+        ,		B.SALE_QTY      AS SALE_QTY_L
+        ,		A.SALE_HOUR_R
+        ,		C.TOT_SALE_AMT  AS TOT_SALE_AMT_R
+        ,		C.GUEST_CNT     AS GUEST_CNT_R
+        ,		C.SALE_QTY      AS SALE_QTY_R
+        <if test='storeCd != null and storeCd != ""'>
+        ,		(SELECT STORE_NM FROM TB_MS_STORE WHERE STORE_CD = #{storeCd}) AS STORE_NM
+        </if>
+        FROM	HOURS A
+        ,		BASE B
+        ,		BASE C
+        WHERE	A.SALE_HOUR_L = B.SALE_HOUR (+)
+        AND		A.SALE_HOUR_R = C.SALE_HOUR (+)
+        UNION ALL
+        SELECT	''
+        ,		NULL
+        ,		NULL
+        ,		NULL
+        ,		'매출전표'
+        ,		SUM(TOT_SALE_AMT)
+        ,		SUM(GUEST_CNT)
+        ,		SUM(SALE_QTY)
+        <if test='storeCd != null and storeCd != ""'>
+        ,       ''
+        </if>
+        FROM	BASE
+        ORDER
+        BY		SALE_HOUR_L
+    </select>
+</mapper>
