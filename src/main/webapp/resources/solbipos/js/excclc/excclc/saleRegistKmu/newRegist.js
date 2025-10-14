@@ -287,9 +287,6 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
 
-                // params.saleFg = $scope.saleFg;
-                // params.cashAmt = $("#cash").val(); // 결제구분에 따라 금액처리
-                // params.membrNo = $("#membrNo").val();
                 params.postpaidNo = $("#postpaidNo").text();
 
                 $scope._postJSONQuery.withOutPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDel.sb', params, function (result) {
@@ -365,20 +362,7 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope._inquirySub("/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDtlList.sb", params, function() {
             $.postJSON("/excclc/excclc/saleRegistKmu/saleRegistKmu/getCashAmt.sb", params, function(result) {
                 // $("#card").val(result.data.list[0]);
-
-                // 결제구분 카드
-                if($scope.saleGubunCombo == "01") {
-                    $("#cash").val(result.data.list[0]);
-                }
-                // 결제구분 현금
-                else if($scope.saleGubunCombo == "02") {
-                    $("#cash").val(result.data.list[1]);
-                }
-                // 결제구분 외상거래
-                else if($scope.saleGubunCombo == "11") {
-                    $("#cash").val(result.data.list[2]);
-                }
-
+                $("#cash").val(result.data.list[0]);
             });
             $.postJSON("/excclc/excclc/saleRegistKmu/saleRegistKmu/getSaleFg.sb", params, function(result) {
                 if(result.data.list === "1"){
@@ -435,9 +419,6 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
 
-                // params.saleFg = $scope.saleFg;
-                // params.cashAmt = $("#cash").val(); // 결제구분에 따라 금액처리
-                // params.membrNo = $("#membrNo").val();
                 params.postpaidNo = $("#postpaidNo").text();
 
                 $scope._postJSONQuery.withPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDel.sb', params, function (result) {

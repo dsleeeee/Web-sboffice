@@ -698,12 +698,12 @@
         /* SaleRegistKmuMapper.getBillDtlList */
         SELECT 	tssd.PROD_CD,
                 tmp.PROD_NM,
-                tssd.SALE_UPRC,
-                tssd.SALE_QTY,
-                tssd.SALE_AMT,
-                tssd.DC_AMT,
-                tssd.REAL_SALE_AMT,
-                tssd.VAT_AMT,
+                DECODE(tssd.SALE_FG, -1, (tssd.SALE_UPRC * -1), tssd.SALE_UPRC) AS SALE_UPRC,
+                DECODE(tssd.SALE_FG, -1, (tssd.SALE_QTY * -1), tssd.SALE_QTY) AS SALE_QTY,
+                DECODE(tssd.SALE_FG, -1, (tssd.SALE_AMT * -1), tssd.SALE_AMT) AS SALE_AMT,
+                DECODE(tssd.SALE_FG, -1, (tssd.DC_AMT * -1), tssd.DC_AMT) AS DC_AMT,
+                DECODE(tssd.SALE_FG, -1, (tssd.REAL_SALE_AMT * -1), tssd.REAL_SALE_AMT) AS REAL_SALE_AMT,
+                DECODE(tssd.SALE_FG, -1, (tssd.VAT_AMT * -1), tssd.VAT_AMT) AS VAT_AMT,
                 tmp.VAT_FG,
                 tmp.PROD_TYPE_FG
         FROM 	TB_SL_SALE_DTL tssd,
@@ -718,29 +718,36 @@
 
     <select id="getCashAmt" parameterType="saleRegistKmuVO" resultType="Integer">
         /* SaleRegistKmuMapper.getCashAmt */
-        SELECT 	NVL(MAX(PAY_AMT), 0)
-        FROM 	TB_SL_SALE_HDR_PAY
-        WHERE   STORE_CD = #{storeCd}
-        AND     SALE_DATE = #{saleDate}
-        AND     POS_NO = #{posNo}
-        AND     BILL_NO = #{billNo}
-        AND     PAY_CD = '01'
-        UNION  ALL
-        SELECT 	NVL(MAX(PAY_AMT), 0)
-        FROM 	TB_SL_SALE_HDR_PAY
-        WHERE   STORE_CD = #{storeCd}
-        AND     SALE_DATE = #{saleDate}
-        AND     POS_NO = #{posNo}
-        AND     BILL_NO = #{billNo}
-        AND     PAY_CD = '02'
-        UNION  ALL
-        SELECT 	NVL(MAX(PAY_AMT), 0)
-        FROM 	TB_SL_SALE_HDR_PAY
-        WHERE   STORE_CD = #{storeCd}
-        AND     SALE_DATE = #{saleDate}
-        AND     POS_NO = #{posNo}
-        AND     BILL_NO = #{billNo}
-        AND     PAY_CD = '11'
+        SELECT DECODE(SALE_FG, -1, (PAY_AMT * -1), PAY_AMT) AS PAY_AMT
+        FROM
+        (
+            SELECT 	NVL(MAX(PAY_AMT), 0) AS PAY_AMT, SALE_FG
+            FROM 	TB_SL_SALE_HDR_PAY
+            WHERE   STORE_CD = #{storeCd}
+            AND     SALE_DATE = #{saleDate}
+            AND     POS_NO = #{posNo}
+            AND     BILL_NO = #{billNo}
+            AND     PAY_CD = '01'
+            GROUP BY SALE_FG
+            UNION  ALL
+            SELECT 	NVL(MAX(PAY_AMT), 0) AS PAY_AMT, SALE_FG
+            FROM 	TB_SL_SALE_HDR_PAY
+            WHERE   STORE_CD = #{storeCd}
+            AND     SALE_DATE = #{saleDate}
+            AND     POS_NO = #{posNo}
+            AND     BILL_NO = #{billNo}
+            AND     PAY_CD = '02'
+            GROUP BY SALE_FG
+            UNION  ALL
+            SELECT 	NVL(MAX(PAY_AMT), 0) AS PAY_AMT, SALE_FG
+            FROM 	TB_SL_SALE_HDR_PAY
+            WHERE   STORE_CD = #{storeCd}
+            AND     SALE_DATE = #{saleDate}
+            AND     POS_NO = #{posNo}
+            AND     BILL_NO = #{billNo}
+            AND     PAY_CD = '11'
+            GROUP BY SALE_FG
+        )
     </select>
 
     <select id="getSaleFg" parameterType="saleRegistKmuVO" resultType="String">
@@ -1277,7 +1284,7 @@
             AND tmmpb.MEMBR_NO (+)= tmm.MEMBR_NO
             AND tmmp.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
             AND tmmp.STORE_CD = tmmpb.STORE_CD
-            AND tmmp.MEMBR_NO = tmmpb.MEMBR_NO
+            AND tmmp.SALE_DATE = #{saleDate}
             AND tmmp.POSTPAID_NO = #{postpaidNo}
         ) B
         ON  (
