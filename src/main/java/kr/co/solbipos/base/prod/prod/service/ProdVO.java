@@ -483,6 +483,9 @@ public class ProdVO extends PageVO {
     /** 거래처 구분 */
     private String vendorFg;
 
+    /** 상품등록주체 구분 */
+    private String orgProdFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -2072,5 +2075,13 @@ public class ProdVO extends PageVO {
 
     public void setVendorFg(String vendorFg) {
         this.vendorFg = vendorFg;
+    }
+
+    public String getOrgProdFg() {
+        return orgProdFg;
+    }
+
+    public void setOrgProdFg(String orgProdFg) {
+        this.orgProdFg = orgProdFg;
     }
 }

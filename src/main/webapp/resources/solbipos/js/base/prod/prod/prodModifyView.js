@@ -38,10 +38,12 @@ var spcManageComboData = [
     {"name": "미정", "value": ""}
 ];
 
-// 도서구분 데이터
-var bookProdFgComboData = [
-    {"name": "일반상품관리", "value": "1"},
-    {"name": "도서관리", "value": "2"}
+// 상품등록구분 데이터
+var orgProdFgComboData = [
+    {"name": "", "value": "00"},
+    {"name": "일반상품", "value": "10"},
+    {"name": "도서상품", "value": "20"},
+    {"name": "OMS", "value": "30"}
 ];
 
 // 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
@@ -52,7 +54,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, $timeout, true));
 
     // 도서구분 콤보박스의 데이터
-    $scope._setComboData('bookProdFgComboData', bookProdFgComboData);
+    $scope._setComboData('orgProdFgComboData', orgProdFgComboData);
 
     // 일반상품관리 콤보박스
     // 식권구분 쓰는 콤보박스의 데이터
@@ -229,11 +231,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.shBAcquireVat = "Y"; // 매입가
             params.shBIsbnFg = "ISBN"; //ISBN
             if(urlProdFg === "1"){ // 상품구분
-                params.bookProdFg = "1";
+                params.orgProdFg = "10";
             }else if(urlProdFg === "2"){
-                params.bookProdFg = "2";
-            }else if(urlProdFg === "0"){
-                params.bookProdFg = "0";
+                params.orgProdFg = "20";
+            }else{
+                params.orgProdFg = "00";
             }
             // 가격관리구분
             if(orgnFg == "HQ") {
@@ -1704,11 +1706,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $scope.prodModifyInfo.shBIsbnFg = "ISBN";
                 }
                 // 도서구분 값 없으면 [일반상품관리] 화면은 일반상품관리, [도서관리] 화면은 도서관리
-                if ($scope.prodModifyInfo.bookProdFg === null || $scope.prodModifyInfo.bookProdFg === "") {
+                if ($scope.prodModifyInfo.orgProdFg === null || $scope.prodModifyInfo.orgProdFg === "") {
                     if(urlProdFg === "1"){
-                        $scope.prodModifyInfo.bookProdFg = "1";
+                        $scope.prodModifyInfo.orgProdFg = "10";
                     }else if(urlProdFg === "2"){
-                        $scope.prodModifyInfo.bookProdFg = "2";
+                        $scope.prodModifyInfo.orgProdFg = "20";
+                    }else{
+                        $scope.prodModifyInfo.orgProdFg = "00";
                     }
                 }
 

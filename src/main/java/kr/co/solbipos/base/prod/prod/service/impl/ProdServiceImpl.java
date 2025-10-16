@@ -393,60 +393,63 @@ public class ProdServiceImpl implements ProdService {
         }
 
         // 상품정보 추가 테이블 조회
-        String prodInfoRowCount = prodMapper.getProdInfoRowCount(prodVO);
-        if(prodInfoRowCount.equals("0")) {
-            if( (prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0)
-                    || (prodVO.getNuTotWt() != null && prodVO.getNuTotWt().length() > 0)
-                    || (prodVO.getNuKcal() != null && prodVO.getNuKcal().length() > 0)
-                    || (prodVO.getNuProtein() != null && prodVO.getNuProtein().length() > 0)
-                    || (prodVO.getNuSodium() != null && prodVO.getNuSodium().length() > 0)
-                    || (prodVO.getNuSugars() != null && prodVO.getNuSugars().length() > 0)
-                    || (prodVO.getNuSatFat() != null && prodVO.getNuSatFat().length() > 0)
-                    || (prodVO.getNuCaffeine() != null && prodVO.getNuCaffeine().length() > 0)
-                    || (prodVO.getMomsKioskEdge() != null && prodVO.getMomsKioskEdge().length() > 0 && Integer.parseInt(prodVO.getMomsKioskEdge()) > 0)
-                    || (prodVO.getSaleTypeYnSin() != null && prodVO.getSaleTypeYnSin().length() > 0)
-                    || (prodVO.getSaleTypeYnDlv() != null && prodVO.getSaleTypeYnDlv().length() > 0)
-                    || (prodVO.getSaleTypeYnPkg() != null && prodVO.getSaleTypeYnPkg().length() > 0)
-                    || (prodVO.getSaleChnYnPos() != null && prodVO.getSaleChnYnPos().length() > 0)
-                    || (prodVO.getSaleChnYnKsk() != null && prodVO.getSaleChnYnKsk().length() > 0)
-                    || (prodVO.getSaleChnYnCmp() != null && prodVO.getSaleChnYnCmp().length() > 0)
-                    || (prodVO.getSaleChnYnBae() != null && prodVO.getSaleChnYnBae().length() > 0)
-                    || (prodVO.getSaleChnYnBao() != null && prodVO.getSaleChnYnBao().length() > 0)
-                    || (prodVO.getSaleChnYnYgy() != null && prodVO.getSaleChnYnYgy().length() > 0)
-                    || (prodVO.getSaleChnYnYge() != null && prodVO.getSaleChnYnYge().length() > 0)
-                    || (prodVO.getSaleChnYnCpn() != null && prodVO.getSaleChnYnCpn().length() > 0)
-                    || (prodVO.getSaleChnYnTng() != null && prodVO.getSaleChnYnTng().length() > 0)
-                    || (prodVO.getShPAlias()            != null && prodVO.getShPAlias().length() > 0)
-                    || (prodVO.getShPTicketFg()         != null && prodVO.getShPTicketFg().length() > 0)
-                    || (prodVO.getShPMakerNm()          != null && prodVO.getShPMakerNm().length() > 0)
-                    || (prodVO.getShPAcquireVat()       != null && prodVO.getShPAcquireVat().length() > 0)
-                    || (prodVO.getShPPointSaveRate()    != null && prodVO.getShPPointSaveRate().length() > 0)
-                    || (prodVO.getShPSpec()             != null && prodVO.getShPSpec().length() > 0)
-                    || (prodVO.getShPSpcManage()        != null && prodVO.getShPSpcManage().length() > 0)
-                    || (prodVO.getShPSingleProdCd()     != null && prodVO.getShPSingleProdCd().length() > 0)
-                    || (prodVO.getShBAlias()            != null && prodVO.getShBAlias().length() > 0)
-                    || (prodVO.getShBPublishNm()        != null && prodVO.getShBPublishNm().length() > 0)
-                    || (prodVO.getShBAuthor1()          != null && prodVO.getShBAuthor1().length() > 0)
-                    || (prodVO.getShBAuthor2()          != null && prodVO.getShBAuthor2().length() > 0)
-                    || (prodVO.getShBTranslator1()      != null && prodVO.getShBTranslator1().length() > 0)
-                    || (prodVO.getShBTranslator2()      != null && prodVO.getShBTranslator2().length() > 0)
-                    || (prodVO.getShBPubDate()          != null && prodVO.getShBPubDate().length() > 0)
-                    || (prodVO.getShBDiscRate()         != null && prodVO.getShBDiscRate().length() > 0)
-                    || (prodVO.getShBAcquireVat()       != null && prodVO.getShBAcquireVat().length() > 0)
-                    || (prodVO.getShBPointSaveRate()    != null && prodVO.getShBPointSaveRate().length() > 0)
-                    || (prodVO.getShBSpec()             != null && prodVO.getShBSpec().length() > 0)
-                    || (prodVO.getShBSpcManage()        != null && prodVO.getShBSpcManage().length() > 0)
-                    || (prodVO.getShBIsbnFg()           != null && prodVO.getShBIsbnFg().length() > 0)
-                    || (prodVO.getShBIsbnCode()         != null && prodVO.getShBIsbnCode().length() > 0)
-            )
-            {
-                // 상품 설명 상세 + 영양정보
-                prodMapper.saveProdInfo(prodVO);
-            }
-        } else {
-            // 상품 설명 상세 + 영양정보
-            prodMapper.saveProdInfo(prodVO);
-        }
+//        String prodInfoRowCount = prodMapper.getProdInfoRowCount(prodVO);
+//        if(prodInfoRowCount.equals("0")) {
+//            if( (prodVO.getProdInfo() != null && prodVO.getProdInfo().length() > 0)
+//                    || (prodVO.getNuTotWt() != null && prodVO.getNuTotWt().length() > 0)
+//                    || (prodVO.getNuKcal() != null && prodVO.getNuKcal().length() > 0)
+//                    || (prodVO.getNuProtein() != null && prodVO.getNuProtein().length() > 0)
+//                    || (prodVO.getNuSodium() != null && prodVO.getNuSodium().length() > 0)
+//                    || (prodVO.getNuSugars() != null && prodVO.getNuSugars().length() > 0)
+//                    || (prodVO.getNuSatFat() != null && prodVO.getNuSatFat().length() > 0)
+//                    || (prodVO.getNuCaffeine() != null && prodVO.getNuCaffeine().length() > 0)
+//                    || (prodVO.getMomsKioskEdge() != null && prodVO.getMomsKioskEdge().length() > 0 && Integer.parseInt(prodVO.getMomsKioskEdge()) > 0)
+//                    || (prodVO.getSaleTypeYnSin() != null && prodVO.getSaleTypeYnSin().length() > 0)
+//                    || (prodVO.getSaleTypeYnDlv() != null && prodVO.getSaleTypeYnDlv().length() > 0)
+//                    || (prodVO.getSaleTypeYnPkg() != null && prodVO.getSaleTypeYnPkg().length() > 0)
+//                    || (prodVO.getSaleChnYnPos() != null && prodVO.getSaleChnYnPos().length() > 0)
+//                    || (prodVO.getSaleChnYnKsk() != null && prodVO.getSaleChnYnKsk().length() > 0)
+//                    || (prodVO.getSaleChnYnCmp() != null && prodVO.getSaleChnYnCmp().length() > 0)
+//                    || (prodVO.getSaleChnYnBae() != null && prodVO.getSaleChnYnBae().length() > 0)
+//                    || (prodVO.getSaleChnYnBao() != null && prodVO.getSaleChnYnBao().length() > 0)
+//                    || (prodVO.getSaleChnYnYgy() != null && prodVO.getSaleChnYnYgy().length() > 0)
+//                    || (prodVO.getSaleChnYnYge() != null && prodVO.getSaleChnYnYge().length() > 0)
+//                    || (prodVO.getSaleChnYnCpn() != null && prodVO.getSaleChnYnCpn().length() > 0)
+//                    || (prodVO.getSaleChnYnTng() != null && prodVO.getSaleChnYnTng().length() > 0)
+//                    || (prodVO.getShPAlias()            != null && prodVO.getShPAlias().length() > 0)
+//                    || (prodVO.getShPTicketFg()         != null && prodVO.getShPTicketFg().length() > 0)
+//                    || (prodVO.getShPMakerNm()          != null && prodVO.getShPMakerNm().length() > 0)
+//                    || (prodVO.getShPAcquireVat()       != null && prodVO.getShPAcquireVat().length() > 0)
+//                    || (prodVO.getShPPointSaveRate()    != null && prodVO.getShPPointSaveRate().length() > 0)
+//                    || (prodVO.getShPSpec()             != null && prodVO.getShPSpec().length() > 0)
+//                    || (prodVO.getShPSpcManage()        != null && prodVO.getShPSpcManage().length() > 0)
+//                    || (prodVO.getShPSingleProdCd()     != null && prodVO.getShPSingleProdCd().length() > 0)
+//                    || (prodVO.getShBAlias()            != null && prodVO.getShBAlias().length() > 0)
+//                    || (prodVO.getShBPublishNm()        != null && prodVO.getShBPublishNm().length() > 0)
+//                    || (prodVO.getShBAuthor1()          != null && prodVO.getShBAuthor1().length() > 0)
+//                    || (prodVO.getShBAuthor2()          != null && prodVO.getShBAuthor2().length() > 0)
+//                    || (prodVO.getShBTranslator1()      != null && prodVO.getShBTranslator1().length() > 0)
+//                    || (prodVO.getShBTranslator2()      != null && prodVO.getShBTranslator2().length() > 0)
+//                    || (prodVO.getShBPubDate()          != null && prodVO.getShBPubDate().length() > 0)
+//                    || (prodVO.getShBDiscRate()         != null && prodVO.getShBDiscRate().length() > 0)
+//                    || (prodVO.getShBAcquireVat()       != null && prodVO.getShBAcquireVat().length() > 0)
+//                    || (prodVO.getShBPointSaveRate()    != null && prodVO.getShBPointSaveRate().length() > 0)
+//                    || (prodVO.getShBSpec()             != null && prodVO.getShBSpec().length() > 0)
+//                    || (prodVO.getShBSpcManage()        != null && prodVO.getShBSpcManage().length() > 0)
+//                    || (prodVO.getShBIsbnFg()           != null && prodVO.getShBIsbnFg().length() > 0)
+//                    || (prodVO.getShBIsbnCode()         != null && prodVO.getShBIsbnCode().length() > 0)
+//            )
+//            {
+//                // 상품 설명 상세 + 영양정보
+//                prodMapper.saveProdInfo(prodVO);
+//            }
+//        } else {
+//            // 상품 설명 상세 + 영양정보
+//            prodMapper.saveProdInfo(prodVO);
+//        }
+
+        // 상품 설명 상세 + 영양정보 // 콤보박스 때문에 값 들어가서 NULL 로직 제거
+        prodMapper.saveProdInfo(prodVO);
 
         // KIOSK 판매여부
         if(prodVO.getSaleTimeFg() != null && "Y".equals(prodVO.getSaleTimeFg())){

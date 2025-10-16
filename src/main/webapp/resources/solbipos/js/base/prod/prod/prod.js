@@ -286,6 +286,12 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       }
     }
 
+    if(urlProdFg === "1"){
+      params.orgProdFg = "10";
+    }else if(urlProdFg === "2"){
+      params.orgProdFg = "20";
+    }
+
     // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
     $scope._inquiryMain("/base/prod/prod/prod/list.sb", params, function(){
 
