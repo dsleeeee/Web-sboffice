@@ -22,497 +22,525 @@
                         <col class="w35"/>
                     </colgroup>
                     <tbody>
-                    <tr>
-                        <%-- 상품이미지 //TODO --%>
-                        <th rowspan="4"><s:message code="prod"/><br/><s:message code="image"/>
-                        </th>
-                        <td rowspan="4">
-                            <%--등록한 상품이 없는 경우--%>
-                            <span class="goodsNo" id="goodsNoProdDetail"><s:message code="image"/> 등록 준비중 입니다</span>
-                            <%--등록한 상품이 있는 경우--%>
-                            <%--<span class="goodsYes"><img src="img/sample.jpg" alt="" /></span>--%>
-                            <span class="goodsYes" id="goodsYesProdDetail"><img id="imgProdImageProdDetail" /></span>
-                        </td>
-                        <%-- 브랜드명 --%>
-                        <th <c:if test="${brandUseFg == '0'}"> style="display: none;" </c:if> ><s:message code="prod.brandNm"/></th>
-                        <td id="_hqBrandNm" <c:if test="${brandUseFg == '0'}"> style="display: none;" </c:if> >
-                            {{prodDetail.hqBrandNm}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%--상품유형 //TODO --%>
-                        <th>
-                            <s:message code="prod.prodTypeFg"/>
-                        </th>
-                        <td>
-                            <wj-combo-box
-                                    ng-model="prodDetail.prodTypeFg"
-                                    ng-hide="true"
-                                    text="_prodTypeFg"
-                                    items-source="_getComboData('prodTypeFgComboData')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false">
-                            </wj-combo-box>
-                            {{_prodTypeFg}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%--상품코드--%>
-                        <th>
-                            <s:message code="prod.prodCd"/>
-                        </th>
-                        <td id="_prodCd">
-                            {{prodDetail.prodCd}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%--상품명--%>
-                        <th>
-                            <s:message code="prod.prodNm"/>
-                        </th>
-                        <td id="_prodNm">
-                            {{prodDetail.prodNm}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%--상품분류--%>
-                        <th><s:message code="prod.prodClass"/></th>
-                        <td id="_prodClassCdNm">
-                            {{prodDetail.prodClassCdNm}}
-                        </td>
-                        <%--거래처 --%>
-                        <th>
-                            <s:message code="prod.vendr"/>
-                        </th>
-                        <td id="_vendr">
-                            {{prodDetail.vendrNm}}
-                            <div style="display: none;">
-                                {{prodDetail.vendrCd}}
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <%--판매상품여부--%>
-                        <th><s:message code="prod.saleProdYn"/></th>
-                        <td>
-                            <wj-combo-box
-                                    ng-model="prodDetail.saleProdYn"
-                                    ng-hide="true"
-                                    text="_saleProdYn"
-                                    items-source="_getComboData('saleProdYnComboData')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false">
-                            </wj-combo-box>
-                            {{_saleProdYn}}
-                        </td>
-                        <%--원산지--%>
-                        <th>
-                            <s:message code="prod.orgplceCd"/>
-                        </th>
-                        <td id="_orgplceCd">
-                            <s:message code="prod.orgplceCd"/> 등록은 준비중 입니다.
-                        </td>
-                    </tr>
-                    <tr>
-                        <%--판매단가--%>
-                        <th>
-                            <s:message code="prod.saleUprc"/>
-                        </th>
-                        <td id="_saleUprc">
-                            {{prodDetail.saleUprc}}
-                        </td>
-                        <%-- 봉사료 포함 여부 --%>
-                        <th><s:message code="prod.prodTipYn"/></th>
-                        <td>
-                            <wj-combo-box
-                                    ng-model="prodDetail.prodTipYn"
-                                    ng-hide="true"
-                                    text="_prodTipYn"
-                                    items-source="_getComboData('prodTipYnComboData')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false">
-                            </wj-combo-box>
-                            {{_prodTipYn}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%--과세여부--%>
-                        <th>
-                            <s:message code="prod.vatFg"/>
-                        </th>
-                        <td>
-                            <wj-combo-box
-                                    ng-model="prodDetail.vatFg"
-                                    ng-hide="true"
-                                    text="_vatFg"
-                                    items-source="_getComboData('vatFgComboData')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false">
-                            </wj-combo-box>
-                            {{_vatFg}}
-                        </td>
-                        <%--부가세포함여부--%>
-                        <th>
-                            <s:message code="prod.vatIncldYn"/>
-                        </th>
-                        <td>
-                            <wj-combo-box
-                                    ng-model="prodDetail.vatIncldYn"
-                                    ng-hide="true"
-                                    text="_vatIncldYn"
-                                    items-source="_getComboData('vatIncldYnComboData')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false">
-                            </wj-combo-box>
-                            {{_vatIncldYn}}
-                        </td>
-                    </tr>
-                    <tr <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
-                        <%--사용여부--%>
-                        <th <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
-                            <s:message code="useYn"/>
-                        </th>
-                        <td <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
-                            <wj-combo-box
-                                    ng-model="prodDetail.useYn"
-                                    ng-hide="true"
-                                    text="_useYn"
-                                    items-source="_getComboData('useYnComboData')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false">
-                            </wj-combo-box>
-                            {{_useYn}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <%--바코드--%>
-                        <th>
-                            <s:message code="prod.barCd"/>
-                        </th>
-                        <td>
-                            {{prodDetail.barCd}}
-                        </td>
-                        <%-- 가격관리구분 --%>
-                        <th>
-                            <s:message code="prod.prcCtrlFg"/>
-                        </th>
-                        <td>
-                            <wj-combo-box
-                                    ng-model="prodDetail.prcCtrlFg"
-                                    ng-hide="true"
-                                    text="_prcCtrlFg"
-                                    items-source="_getComboData('prcCtrlFgComboData')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false">
-                            </wj-combo-box>
-                            {{_prcCtrlFg}}
-                        </td>
-                    </tr>
-                    <%-- [국민대] - [상품정보관리] - [일반상품관리] 진입 시 --%>
-                    <c:if test="${urlProdFg == '1'}">
                         <tr>
-                                <%-- 상품약칭 --%>
-                            <th>
-                                <s:message code="prod.sh.prodAlias"/>
+                            <%-- 상품이미지 //TODO --%>
+                            <th rowspan="4"><s:message code="prod"/><br/><s:message code="image"/>
                             </th>
-                            <td>
-                                {{prodDetail.shPAlias}}
+                            <td rowspan="4">
+                                <%--등록한 상품이 없는 경우--%>
+                                <span class="goodsNo" id="goodsNoProdDetail"><s:message code="image"/> 등록 준비중 입니다</span>
+                                <%--등록한 상품이 있는 경우--%>
+                                <%--<span class="goodsYes"><img src="img/sample.jpg" alt="" /></span>--%>
+                                <span class="goodsYes" id="goodsYesProdDetail"><img id="imgProdImageProdDetail" /></span>
                             </td>
-                                <%-- 식권구분 --%>
+                            <%-- 브랜드명 --%>
+                            <th <c:if test="${brandUseFg == '0'}"> style="display: none;" </c:if> ><s:message code="prod.brandNm"/></th>
+                            <td id="_hqBrandNm" <c:if test="${brandUseFg == '0'}"> style="display: none;" </c:if> >
+                                {{prodDetail.hqBrandNm}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <%--상품유형 //TODO --%>
                             <th>
-                                <s:message code="prod.sh.ticketFg"/>
+                                <s:message code="prod.prodTypeFg"/>
                             </th>
                             <td>
                                 <wj-combo-box
-                                        ng-model="prodDetail.shPTicketFg"
+                                        ng-model="prodDetail.prodTypeFg"
                                         ng-hide="true"
-                                        text="_shPTicketFg"
-                                        items-source="_getComboData('shPTicketFgComboData')"
+                                        text="_prodTypeFg"
+                                        items-source="_getComboData('prodTypeFgComboData')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false">
                                 </wj-combo-box>
-                                {{_shPTicketFg}}
+                                {{_prodTypeFg}}
                             </td>
                         </tr>
                         <tr>
-                                <%-- 제조사 --%>
+                            <%--상품코드--%>
                             <th>
-                                <s:message code="prod.sh.makerNm"/>
+                                <s:message code="prod.prodCd"/>
                             </th>
-                            <td>
-                                {{prodDetail.shPMakerNm}}
+                            <td id="_prodCd">
+                                {{prodDetail.prodCd}}
                             </td>
-                                <%-- 매입VAT --%>
+                        </tr>
+                        <tr>
+                            <%--상품명--%>
                             <th>
-                                <s:message code="prod.sh.acquireVat"/>
+                                <s:message code="prod.prodNm"/>
                             </th>
+                            <td id="_prodNm">
+                                {{prodDetail.prodNm}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <%--상품분류--%>
+                            <th><s:message code="prod.prodClass"/></th>
+                            <td id="_prodClassCdNm">
+                                {{prodDetail.prodClassCdNm}}
+                            </td>
+                            <%--거래처 --%>
+                            <th>
+                                <s:message code="prod.vendr"/>
+                            </th>
+                            <td id="_vendr">
+                                {{prodDetail.vendrNm}}
+                                <div style="display: none;">
+                                    {{prodDetail.vendrCd}}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <%--판매상품여부--%>
+                            <th><s:message code="prod.saleProdYn"/></th>
                             <td>
                                 <wj-combo-box
-                                        ng-model="prodDetail.shPAcquireVat"
+                                        ng-model="prodDetail.saleProdYn"
                                         ng-hide="true"
-                                        text="_shPAcquireVat"
-                                        items-source="_getComboData('shPAcquireVatComboData')"
+                                        text="_saleProdYn"
+                                        items-source="_getComboData('saleProdYnComboData')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false">
                                 </wj-combo-box>
-                                {{_shPAcquireVat}}
+                                {{_saleProdYn}}
+                            </td>
+                            <%--원산지--%>
+                            <th>
+                                <s:message code="prod.orgplceCd"/>
+                            </th>
+                            <td id="_orgplceCd">
+                                <s:message code="prod.orgplceCd"/> 등록은 준비중 입니다.
                             </td>
                         </tr>
                         <tr>
-                                <%-- 포인트적립율 --%>
+                            <%--판매단가--%>
                             <th>
-                                <s:message code="prod.sh.pointSaveRate"/>
+                                <s:message code="prod.saleUprc"/>
                             </th>
-                            <td>
-                                {{prodDetail.shPPointSaveRate}}
-                                {{prodDetail.shPPointSavePrice}}
+                            <td id="_saleUprc">
+                                {{prodDetail.saleUprc}}
                             </td>
-                                <%-- 규격 --%>
-                            <th>
-                                <s:message code="prod.sh.spec"/>
-                            </th>
+                            <%-- 봉사료 포함 여부 --%>
+                            <th><s:message code="prod.prodTipYn"/></th>
                             <td>
-                                {{prodDetail.shPSpec}}
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 매입가 --%>
-                            <th>
-                                <s:message code="prod.sh.acquirePrice"/>
-                            </th>
-                            <td>
-                                {{prodDetail.acquireVat}}
-                            </td>
-                                <%-- 입고/반품대기 --%>
-                            <th>
-                                <s:message code="prod.sh.inOutWait"/>
-                            </th>
-                            <td>
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 재고단위 --%>
-                            <th>
-                                <s:message code="prod.sh.currStk"/>
-                            </th>
-                            <td>
-                            </td>
-                                <%-- 현재고 --%>
-                            <th>
-                                <s:message code="prod.sh.stockUnit"/>
-                            </th>
-                            <td>
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 특정관리 --%>
-                            <th>
-                                <s:message code="prod.sh.specialManage"/>
-                            </th>
-                            <td colspan="3">
                                 <wj-combo-box
-                                        ng-model="prodDetail.shPSpcManage"
+                                        ng-model="prodDetail.prodTipYn"
                                         ng-hide="true"
-                                        text="_shPSpcManage"
-                                        items-source="_getComboData('shPSpcManageComboData')"
+                                        text="_prodTipYn"
+                                        items-source="_getComboData('prodTipYnComboData')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false">
                                 </wj-combo-box>
-                                {{_shPSpcManage}}
+                                {{_prodTipYn}}
                             </td>
                         </tr>
                         <tr>
-                                <%-- 단품코드 --%>
+                            <%--과세여부--%>
                             <th>
-                                <s:message code="prod.sh.singleProdCd"/>
-                            </th>
-                            <td>
-                            </td>
-                        </tr>
-                    </c:if>
-                    <%-- [국민대] - [상품정보관리] - [도서관리] 진입 시 --%>
-                    <c:if test="${urlProdFg == '2'}">
-                        <tr>
-                                <%-- 도서약칭 --%>
-                            <th>
-                                <s:message code="prod.sh.bookAlias"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBAlias}}
-                            </td>
-                                <%-- 출판사 --%>
-                            <th>
-                                <s:message code="prod.sh.publishNm"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBPublishNm}}
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 저자1 --%>
-                            <th>
-                                <s:message code="prod.sh.author1"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBAuthor1}}
-                            </td>
-                                <%-- 저자2 --%>
-                            <th>
-                                <s:message code="prod.sh.author2"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBAuthor2}}
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 역자1 --%>
-                            <th>
-                                <s:message code="prod.sh.translator1"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBTranslator1}}
-                            </td>
-                                <%-- 역자2 --%>
-                            <th>
-                                <s:message code="prod.sh.translator2"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBTranslator2}}
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 발행일 --%>
-                            <th>
-                                <s:message code="prod.sh.pubDate"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBPubDate}}
-                            </td>
-                                <%-- 할인율 --%>
-                            <th>
-                                <s:message code="prod.sh.discRate"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBDiscRate}}
-                                {{prodDetail.shBDiscPrice}}
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 매입VAT --%>
-                            <th>
-                                <s:message code="prod.sh.acquireVat"/>
+                                <s:message code="prod.vatFg"/>
                             </th>
                             <td>
                                 <wj-combo-box
-                                        ng-model="prodDetail.shBAcquireVat"
+                                        ng-model="prodDetail.vatFg"
                                         ng-hide="true"
-                                        text="_shBAcquireVat"
-                                        items-source="_getComboData('shBAcquireVatComboData')"
+                                        text="_vatFg"
+                                        items-source="_getComboData('vatFgComboData')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false">
                                 </wj-combo-box>
-                                {{_shBAcquireVat}}
+                                {{_vatFg}}
                             </td>
-                                <%-- 포인트적립율 --%>
+                            <%--부가세포함여부--%>
                             <th>
-                                <s:message code="prod.sh.pointSaveRate"/>
+                                <s:message code="prod.vatIncldYn"/>
                             </th>
                             <td>
-                                {{prodDetail.shBPointSaveRate}}
-                                {{prodDetail.shBPointSavePrice}}
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 규격/단위 --%>
-                            <th>
-                                <s:message code="prod.sh.specUnit"/>
-                            </th>
-                            <td>
-                                {{prodDetail.shBSpec}}
-                            </td>
-                                <%-- 현재고 --%>
-                            <th>
-                                <s:message code="prod.sh.currStk"/>
-                            </th>
-                            <td>
-                            </td>
-                        </tr>
-                        <tr>
-                                <%-- 특정관리 --%>
-                            <th>
-                                <s:message code="prod.sh.specialManage"/>
-                            </th>
-                            <td colspan="3">
                                 <wj-combo-box
-                                        ng-model="prodDetail.shBSpcManage"
+                                        ng-model="prodDetail.vatIncldYn"
                                         ng-hide="true"
-                                        text="_shBSpcManage"
-                                        items-source="_getComboData('shBSpcManageComboData')"
+                                        text="_vatIncldYn"
+                                        items-source="_getComboData('vatIncldYnComboData')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false">
                                 </wj-combo-box>
-                                {{_shBSpcManage}}
+                                {{_vatIncldYn}}
                             </td>
                         </tr>
-                        <tr>
-                                <%-- 입고/반품대기 --%>
-                            <th>
-                                <s:message code="prod.sh.inOutWait"/>
+                        <tr <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
+                            <%--사용여부--%>
+                            <th <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
+                                <s:message code="useYn"/>
                             </th>
-                            <td>
-                            </td>
-                                <%-- ISBN --%>
-                            <th>
-                                <s:message code="prod.sh.isbn"/>
-                            </th>
-                            <td>
+                            <td <c:if test="${momsEnvstVal == '1'}">style="display: none"</c:if>>
                                 <wj-combo-box
-                                        ng-model="prodDetail.shBIsbnFg"
+                                        ng-model="prodDetail.useYn"
                                         ng-hide="true"
-                                        text="_shBIsbnFg"
-                                        items-source="_getComboData('shBIsbnFgComboData')"
+                                        text="_useYn"
+                                        items-source="_getComboData('useYnComboData')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false">
                                 </wj-combo-box>
-                                {{_shBIsbnFg}}
+                                {{_useYn}}
                             </td>
                         </tr>
-                    </c:if>
-                    <c:if test="${urlProdFg != '0'}">
                         <tr>
-                                <%-- 상품등록구분 --%>
+                            <%--바코드--%>
                             <th>
-                                <s:message code="prod.sh.orgProdFg"/>
+                                <s:message code="prod.barCd"/>
+                            </th>
+                            <td>
+                                {{prodDetail.barCd}}
+                            </td>
+                            <%-- 가격관리구분 --%>
+                            <th>
+                                <s:message code="prod.prcCtrlFg"/>
                             </th>
                             <td>
                                 <wj-combo-box
-                                        ng-model="prodDetail.orgProdFg"
+                                        ng-model="prodDetail.prcCtrlFg"
                                         ng-hide="true"
-                                        text="_orgProdFg"
-                                        items-source="_getComboData('orgProdFgComboData')"
+                                        text="_prcCtrlFg"
+                                        items-source="_getComboData('prcCtrlFgComboData')"
                                         display-member-path="name"
                                         selected-value-path="value"
                                         is-editable="false">
                                 </wj-combo-box>
-                                {{_orgProdFg}}
+                                {{_prcCtrlFg}}
                             </td>
                         </tr>
-                    </c:if>
+                        <c:if test="${urlProdFg != '0'}">
+                            <tr>
+                                    <%-- 상품등록구분 --%>
+                                <th>
+                                    <s:message code="prod.sh.orgProdFg"/>
+                                </th>
+                                <td>
+                                    <wj-combo-box
+                                            ng-model="prodDetail.orgProdFg"
+                                            ng-hide="true"
+                                            text="_orgProdFg"
+                                            items-source="_getComboData('orgProdFgComboData')"
+                                            display-member-path="name"
+                                            selected-value-path="value"
+                                            is-editable="false">
+                                    </wj-combo-box>
+                                    {{_orgProdFg}}
+                                </td>
+                            </tr>
+                        </c:if>
                     </tbody>
                 </table>
+                <%-- [국민대] - [상품정보관리] - [일반상품관리] 진입 시 --%>
+                <c:if test="${urlProdFg == '1'}">
+                    <%-- 일반상품정보 --%>
+                    <h3 class="h3_tbl"><s:message code="prod.sh.title.prod"/></h3>
+                    <div class="tblBr">
+                        <table class="tblType01">
+                            <colgroup>
+                                <col class="w15"/>
+                                <col class="w35"/>
+                                <col class="w15"/>
+                                <col class="w35"/>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                        <%-- 상품약칭 --%>
+                                    <th>
+                                        <s:message code="prod.sh.prodAlias"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shPAlias}}
+                                    </td>
+                                        <%-- 식권구분 --%>
+                                    <th>
+                                        <s:message code="prod.sh.ticketFg"/>
+                                    </th>
+                                    <td>
+                                        <wj-combo-box
+                                                ng-model="prodDetail.shPTicketFg"
+                                                ng-hide="true"
+                                                text="_shPTicketFg"
+                                                items-source="_getComboData('shPTicketFgComboData')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false">
+                                        </wj-combo-box>
+                                        {{_shPTicketFg}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 제조사 --%>
+                                    <th>
+                                        <s:message code="prod.sh.makerNm"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shPMakerNm}}
+                                    </td>
+                                        <%-- 매입VAT --%>
+                                    <th>
+                                        <s:message code="prod.sh.acquireVat"/>
+                                    </th>
+                                    <td>
+                                        <wj-combo-box
+                                                ng-model="prodDetail.shPAcquireVat"
+                                                ng-hide="true"
+                                                text="_shPAcquireVat"
+                                                items-source="_getComboData('shPAcquireVatComboData')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false">
+                                        </wj-combo-box>
+                                        {{_shPAcquireVat}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 포인트적립율 --%>
+                                    <th>
+                                        <s:message code="prod.sh.pointSaveRate"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shPPointSaveRate}}
+                                        {{prodDetail.shPPointSavePrice}}
+                                    </td>
+                                        <%-- 규격 --%>
+                                    <th>
+                                        <s:message code="prod.sh.spec"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shPSpec}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 매입가 --%>
+                                    <th>
+                                        <s:message code="prod.sh.acquirePrice"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.acquireVat}}
+                                    </td>
+                                        <%-- 입고/반품대기 --%>
+                                    <th>
+                                        <s:message code="prod.sh.inOutWait"/>
+                                    </th>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 재고단위 --%>
+                                    <th>
+                                        <s:message code="prod.sh.currStk"/>
+                                    </th>
+                                    <td>
+                                    </td>
+                                        <%-- 현재고 --%>
+                                    <th>
+                                        <s:message code="prod.sh.stockUnit"/>
+                                    </th>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 특정관리 --%>
+                                    <th>
+                                        <s:message code="prod.sh.specialManage"/>
+                                    </th>
+                                    <td colspan="3">
+                                        <wj-combo-box
+                                                ng-model="prodDetail.shPSpcManage"
+                                                ng-hide="true"
+                                                text="_shPSpcManage"
+                                                items-source="_getComboData('shPSpcManageComboData')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false">
+                                        </wj-combo-box>
+                                        {{_shPSpcManage}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 단품코드 --%>
+                                    <th>
+                                        <s:message code="prod.sh.singleProdCd"/>
+                                    </th>
+                                    <td>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:if>
+                <%-- [국민대] - [상품정보관리] - [도서관리] 진입 시 --%>
+                <c:if test="${urlProdFg == '2'}">
+                    <%-- 도서상품정보 --%>
+                    <h3 class="h3_tbl"><s:message code="prod.sh.title.book"/></h3>
+                    <div class="tblBr">
+                        <table class="tblType01">
+                            <colgroup>
+                                <col class="w15"/>
+                                <col class="w35"/>
+                                <col class="w15"/>
+                                <col class="w35"/>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                        <%-- 도서약칭 --%>
+                                    <th>
+                                        <s:message code="prod.sh.bookAlias"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBAlias}}
+                                    </td>
+                                        <%-- 출판사 --%>
+                                    <th>
+                                        <s:message code="prod.sh.publishNm"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBPublishNm}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 저자1 --%>
+                                    <th>
+                                        <s:message code="prod.sh.author1"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBAuthor1}}
+                                    </td>
+                                        <%-- 저자2 --%>
+                                    <th>
+                                        <s:message code="prod.sh.author2"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBAuthor2}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 역자1 --%>
+                                    <th>
+                                        <s:message code="prod.sh.translator1"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBTranslator1}}
+                                    </td>
+                                        <%-- 역자2 --%>
+                                    <th>
+                                        <s:message code="prod.sh.translator2"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBTranslator2}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 발행일 --%>
+                                    <th>
+                                        <s:message code="prod.sh.pubDate"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBPubDate}}
+                                    </td>
+                                        <%-- 할인율 --%>
+                                    <th>
+                                        <s:message code="prod.sh.discRate"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBDiscRate}}
+                                        {{prodDetail.shBDiscPrice}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 매입VAT --%>
+                                    <th>
+                                        <s:message code="prod.sh.acquireVat"/>
+                                    </th>
+                                    <td>
+                                        <wj-combo-box
+                                                ng-model="prodDetail.shBAcquireVat"
+                                                ng-hide="true"
+                                                text="_shBAcquireVat"
+                                                items-source="_getComboData('shBAcquireVatComboData')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false">
+                                        </wj-combo-box>
+                                        {{_shBAcquireVat}}
+                                    </td>
+                                        <%-- 포인트적립율 --%>
+                                    <th>
+                                        <s:message code="prod.sh.pointSaveRate"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBPointSaveRate}}
+                                        {{prodDetail.shBPointSavePrice}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 규격/단위 --%>
+                                    <th>
+                                        <s:message code="prod.sh.specUnit"/>
+                                    </th>
+                                    <td>
+                                        {{prodDetail.shBSpec}}
+                                    </td>
+                                        <%-- 현재고 --%>
+                                    <th>
+                                        <s:message code="prod.sh.currStk"/>
+                                    </th>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 특정관리 --%>
+                                    <th>
+                                        <s:message code="prod.sh.specialManage"/>
+                                    </th>
+                                    <td colspan="3">
+                                        <wj-combo-box
+                                                ng-model="prodDetail.shBSpcManage"
+                                                ng-hide="true"
+                                                text="_shBSpcManage"
+                                                items-source="_getComboData('shBSpcManageComboData')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false">
+                                        </wj-combo-box>
+                                        {{_shBSpcManage}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                        <%-- 입고/반품대기 --%>
+                                    <th>
+                                        <s:message code="prod.sh.inOutWait"/>
+                                    </th>
+                                    <td>
+                                    </td>
+                                        <%-- ISBN --%>
+                                    <th>
+                                        <s:message code="prod.sh.isbn"/>
+                                    </th>
+                                    <td>
+                                        <wj-combo-box
+                                                ng-model="prodDetail.shBIsbnFg"
+                                                ng-hide="true"
+                                                text="_shBIsbnFg"
+                                                items-source="_getComboData('shBIsbnFgComboData')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false">
+                                        </wj-combo-box>
+                                        {{_shBIsbnFg}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </c:if>
             </div>
             <%-- 내점/배달/포장 가격 --%>
             <c:if test="${subPriceFg == '1'}">
