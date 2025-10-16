@@ -618,24 +618,24 @@
             </c:if>
             <c:if test="${urlProdFg != '0'}">
               <tr>
-                <%-- 도서구분 --%>
+                <%-- 상품등록구분 --%>
                 <th>
-                  <s:message code="prod.sh.bookProdFg"/>
+                  <s:message code="prod.sh.orgProdFg"/>
                 </th>
                 <td>
                   <div class="sb-select">
-                    <wj-combo-box id="bookProdFg" name="bookProdFg"
-                                  ng-model="prodModifyInfo.bookProdFg"
-                                  items-source="_getComboData('bookProdFgComboData')"
+                    <wj-combo-box id="orgProdFg" name="orgProdFg"
+                                  ng-model="prodModifyInfo.orgProdFg"
+                                  items-source="_getComboData('orgProdFgComboData')"
                                   display-member-path="name"
                                   selected-value-path="value"
                                   is-editable="false"
+                                  disabled
                                   initialized="_initComboBox(s)"
                                   required
-                                  popover-enable="myForm.bookProdFg.$invalid"
+                                  popover-enable="myForm.orgProdFg.$invalid"
                                   popover-placement="bottom-left"
-                                  popover-trigger="'mouseenter'"
-                                  uib-popover="<s:message code="cmm.useYn" />은(는) 필수 입력항목 입니다.">
+                                  popover-trigger="'mouseenter'">
                     </wj-combo-box>
                   </div>
                 </td>
@@ -1658,7 +1658,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20250725.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251015.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
