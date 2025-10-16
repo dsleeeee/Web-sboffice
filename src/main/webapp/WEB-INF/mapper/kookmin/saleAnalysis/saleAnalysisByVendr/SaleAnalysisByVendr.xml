@@ -52,6 +52,7 @@
         AND		E.PROD_CLASS_CD = D.PROD_CLASS_CD
         AND		A.HQ_OFFICE_CD 	= #{hqOfficeCd}
         AND		A.VENDOR_FG 	= '1'       -- 매입거래처
+        AND     C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCd != null and storeCd != ""'>
             AND     C.STORE_CD      = #{storeCd}
         </if>
