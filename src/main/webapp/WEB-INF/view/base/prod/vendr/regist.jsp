@@ -26,7 +26,7 @@
                         <ul>
                             <%-- 거래처등록 탭 --%>
                             <li><a href="#" id="vendrTab" class="on" ng-click="changeTab('1')"><s:message code="vendr.regst" /></a></li>
-                            <c:if test="${urlVendorFg != '2'}">
+                            <c:if test="${urlVendorFg != '2' and urlVendorFg != '1'}">
                                 <%-- 취급상품 탭 --%>
                                 <li><a href="#" id="trtMntTab" ng-click="changeTab('2')"><s:message code="vendr.trtMnt" /></a></li>
                             </c:if>
@@ -159,8 +159,8 @@
                                 <input type="text" class="sb-input w100" id="rRemark" ng-model="rRemark" maxlength="500"/>
                             </td>
                         </tr>
-                        <c:if test="${urlVendorFg == '2'}">
-                            <tr>
+                        <tr>
+                            <c:if test="${urlVendorFg == '2'}">
                                 <%-- 업체구분 --%>
                                 <th><s:message code="vendr.companyFg" /></th>
                                 <td>
@@ -177,6 +177,26 @@
                                         </wj-combo-box>
                                     </div>
                                 </td>
+                            </c:if>
+                            <c:if test="${urlVendorFg == '1'}">
+                                <%-- 매입처구분 --%>
+                                <th><s:message code="vendr.acquireCd" /></th>
+                                <td>
+                                    <div class="sb-select">
+                                        <wj-combo-box
+                                                id="rAcquireCd"
+                                                ng-model="acquireCd"
+                                                items-source="_getComboData('rAcquireCd')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                initialized="_initComboBox(s)"
+                                                control="acquireCdCombo">
+                                        </wj-combo-box>
+                                    </div>
+                                </td>
+                            </c:if>
+                            <c:if test="${urlVendorFg == '2' or urlVendorFg == '1'}">
                                 <%-- 사업자구분 --%>
                                 <th><s:message code="vendr.businessFg" /></th>
                                 <td>
@@ -193,14 +213,52 @@
                                         </wj-combo-box>
                                     </div>
                                 </td>
-                            </tr>
+                            </c:if>
+                        </tr>
+                        <c:if test="${urlVendorFg == '1'}">
                             <tr>
-                                <%-- 구매ID --%>
-                                <th><s:message code="vendr.purchaseId" /></th>
-                                <td><input type="text" class="sb-input w100" id="rPurchaseId" ng-model="rPurchaseId"/></td>
+                                <%-- 매입구분 --%>
+                                <th><s:message code="vendr.acquireFg" /></th>
+                                <td>
+                                    <div class="sb-select">
+                                        <wj-combo-box
+                                                id="rAcquireFg"
+                                                ng-model="acquireFg"
+                                                items-source="_getComboData('rAcquireFg')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                initialized="_initComboBox(s)"
+                                                control="acquireFgCombo">
+                                        </wj-combo-box>
+                                    </div>
+                                </td>
+                                <%-- 관리지점 --%>
+                                <th><s:message code="vendr.manageSpotCd" /></th>
+                                <td>
+                                    <div class="sb-select">
+                                        <wj-combo-box
+                                                id="rManageSpotCd"
+                                                ng-model="manageSpotCd"
+                                                items-source="_getComboData('rManageSpotCd')"
+                                                display-member-path="name"
+                                                selected-value-path="value"
+                                                is-editable="false"
+                                                initialized="_initComboBox(s)"
+                                                control="manageSpotCdCombo">
+                                        </wj-combo-box>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${urlVendorFg == '2' or urlVendorFg == '1'}">
+                            <tr>
                                 <%-- 법인번호 --%>
                                 <th><s:message code="vendr.corporationNumber" /></th>
                                 <td><input type="text" class="sb-input w100" id="rCorporationNumber" ng-model="rCorporationNumber"/></td>
+                                <%-- 홈페이지 --%>
+                                <th><s:message code="vendr.homepage" /></th>
+                                <td><input type="text" class="sb-input w100" id="rHomepage" ng-model="rHomepage"/></td>
                             </tr>
                             <tr>
                                 <%-- 업태 --%>
@@ -211,97 +269,99 @@
                                 <td><input type="text" class="sb-input w100" id="rIndustry" ng-model="rIndustry"/></td>
                             </tr>
                             <tr>
-                                <%-- 홈페이지 --%>
-                                <th><s:message code="vendr.homepage" /></th>
-                                <td><input type="text" class="sb-input w100" id="rHomepage" ng-model="rHomepage"/></td>
                                 <%-- 대표자전화 --%>
                                 <th><s:message code="vendr.ownerTelNo" /></th>
                                 <td><input type="text" class="sb-input w100" id="rOwnerTelNo" ng-model="rOwnerTelNo"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 대표자Email --%>
                                 <th><s:message code="vendr.ownerEmail" /></th>
                                 <td><input type="text" class="sb-input w100" id="rOwnerEmail" ng-model="rOwnerEmail"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 담당자명 --%>
                                 <th><s:message code="vendr.managerNm" /></th>
                                 <td><input type="text" class="sb-input w100" id="rManagerNm" ng-model="rManagerNm"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 담당자전화번호 --%>
                                 <th><s:message code="vendr.managerTelNo" /></th>
                                 <td><input type="text" class="sb-input w100" id="rManagerTelNo" ng-model="rManagerTelNo"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 담당자Email --%>
                                 <th><s:message code="vendr.managerEmail" /></th>
                                 <td><input type="text" class="sb-input w100" id="rManagerEmail" ng-model="rManagerEmail"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 담당자직위 --%>
                                 <th><s:message code="vendr.managerSpot" /></th>
                                 <td><input type="text" class="sb-input w100" id="rManagerSpot" ng-model="rManagerSpot"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 담당자휴대전화 --%>
                                 <th><s:message code="vendr.managerPhoneNo" /></th>
                                 <td><input type="text" class="sb-input w100" id="rManagerPhoneNo" ng-model="rManagerPhoneNo"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 은행코드 --%>
                                 <th><s:message code="vendr.bankCd" /></th>
                                 <td><input type="text" class="sb-input w100" id="rBankCd" ng-model="rBankCd"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 계좌번호 --%>
                                 <th><s:message code="vendr.accountNo" /></th>
                                 <td><input type="text" class="sb-input w100" id="rAccountNo" ng-model="rAccountNo"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 예금주 --%>
                                 <th><s:message code="vendr.depositor" /></th>
                                 <td><input type="text" class="sb-input w100" id="rDepositor" ng-model="rDepositor"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 수금 일자/주기 --%>
                                 <th><s:message code="vendr.collectFg" /></th>
                                 <td><input type="text" class="sb-input w100" id="rCollectFg" ng-model="rCollectFg"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 더존ERP --%>
                                 <th><s:message code="vendr.douzoneErp" /></th>
                                 <td><input type="text" class="sb-input w100" id="rDouzoneErp" ng-model="rDouzoneErp"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 외상한도액 --%>
                                 <th><s:message code="vendr.creditLimit" /></th>
                                 <td><input type="text" class="sb-input w100" id="rCreditLimit" ng-model="rCreditLimit"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 담보종류 --%>
                                 <th><s:message code="vendr.collateralType" /></th>
                                 <td><input type="text" class="sb-input w100" id="rCollateralType" ng-model="rCollateralType"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 담보금액 --%>
                                 <th><s:message code="vendr.collateralAmt" /></th>
                                 <td><input type="text" class="sb-input w100" id="rCollateralAmt" ng-model="rCollateralAmt"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 대조일 --%>
                                 <th><s:message code="vendr.contrastDate" /></th>
                                 <td><input type="text" class="sb-input w100" id="rContrastDate" ng-model="rContrastDate"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 대조자(점포) --%>
                                 <th><s:message code="vendr.collatorStore" /></th>
                                 <td><input type="text" class="sb-input w100" id="rCollatorStore" ng-model="rCollatorStore"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 대조자(업체) --%>
                                 <th><s:message code="vendr.collatorCompany" /></th>
                                 <td><input type="text" class="sb-input w100" id="rCollatorCompany" ng-model="rCollatorCompany"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 거래시작일 --%>
                                 <th><s:message code="vendr.dealStartDate" /></th>
                                 <td><input type="text" class="sb-input w100" id="rDealStartDate" ng-model="rDealStartDate"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 거래종료일 --%>
                                 <th><s:message code="vendr.dealEndDate" /></th>
                                 <td><input type="text" class="sb-input w100" id="rDealEndDate" ng-model="rDealEndDate"/></td>
+                            </tr>
+                            <tr>
                                 <%-- 최종매출일 --%>
                                 <th><s:message code="vendr.lastSaleDate" /></th>
                                 <td><input type="text" class="sb-input w100" id="rLastSaleDate" ng-model="rLastSaleDate"/></td>
-                            </tr>
-                            <tr>
                                 <%-- 최종입금일 --%>
                                 <th><s:message code="vendr.lastDepositDate" /></th>
                                 <td><input type="text" class="sb-input w100" id="rLastDepositDate" ng-model="rLastDepositDate"/></td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${urlVendorFg == '2'}">
+                            <tr>
+                                <%-- 구매ID --%>
+                                <th><s:message code="vendr.purchaseId" /></th>
+                                <td><input type="text" class="sb-input w100" id="rPurchaseId" ng-model="rPurchaseId"/></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -312,8 +372,16 @@
                                 <%-- 회원명 --%>
                                 <th style="display: none;"><s:message code="vendr.membrNm" /></th>
                                 <td style="display: none;"><input type="text" class="sb-input w100" id="rMembrNm" ng-model="rMembrNm" readonly/></td>
-                                <td></td>
-                                <td></td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${urlVendorFg == '1'}">
+                            <tr>
+                                <%-- 전자계산서 --%>
+                                <th><s:message code="vendr.electronicBill" /></th>
+                                <td><input type="text" class="sb-input w100" id="rElectronicBill" ng-model="rElectronicBill"/></td>
+                                <%-- 매입상품 --%>
+                                <th><s:message code="vendr.acquireProd" /></th>
+                                <td><input type="text" class="sb-input w100" id="rAcquireProd" ng-model="rAcquireProd"/></td>
                             </tr>
                         </c:if>
                         </tbody>
@@ -342,4 +410,4 @@
     var useYnData        = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20250922.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/regist.js?ver=20251015.01" charset="utf-8"></script>

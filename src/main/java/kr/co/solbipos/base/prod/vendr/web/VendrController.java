@@ -105,6 +105,7 @@ public class VendrController {
         // 거래처구분
         // 0: [기초관리] - [상품관리] - [거래처관리]
         // 2: [국민대] - [매출처관리] - [매출처등록]
+        // 1: [국민대] - [매입처관리] - [매입처등록]
         model.addAttribute("urlVendorFg", urlVendorFg);
 
         return RESULT_URI + "/vendr";
