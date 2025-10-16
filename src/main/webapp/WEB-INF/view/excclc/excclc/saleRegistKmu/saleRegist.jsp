@@ -50,7 +50,7 @@
 
     <div class="mt10 oh sb-select dkbr">
         <%-- 신규등록 --%>
-        <button class="btn_skyblue ml5 fr" ng-click="newRegist()"><s:message code="saleRegist.newRegist"/></button>
+        <button class="btn_skyblue ml5 fr" ng-click="newRegist()"><s:message code="saleRegistKmu.newRegist"/></button>
     </div>
 
     <div class="w100 mt10">
