@@ -19,9 +19,14 @@ var vatIncldYnData = [
     {"name":"포함","value":"Y"}
 ];
 
-// 부가세포함여부
+// 거래처구분
 var vendorFgData2 = [
     {"name":"매출거래처","value":"2"}
+];
+
+// 거래처구분
+var vendorFgData1 = [
+    {"name":"매입거래처","value":"1"}
 ];
 
 // 업체구분
@@ -34,6 +39,26 @@ var businessFgData = [
     {"name":"국민대학교","value":"0000"}
 ];
 
+// 매입처구분
+var acquireCdData = [
+    {"name":"수정예정","value":"000"},
+    {"name":"국내개인","value":"003"}
+];
+
+// 매입구분
+var acquireFgData = [
+    {"name":"현매","value":"1"},
+    {"name":"현매(월)","value":"2"},
+    {"name":"위탁","value":"3"},
+    {"name":"외상","value":"4"},
+    {"name":"현매(거)","value":"5"}
+];
+
+// 관리지점
+var manageSpotCdData = [
+    {"name":"수정예정","value":"000"},
+    {"name":"문구점","value":"002"}
+];
 
 /**
  *  거래처 등록
@@ -46,7 +71,11 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     // 조회조건 콤보박스 데이터 Set
     if(urlVendorFg == "2") {
         $scope._setComboData("rVendorFg", vendorFgData2);      // 거래처구분
-    } else {
+    }
+    else if(urlVendorFg == "1") {
+        $scope._setComboData("rVendorFg", vendorFgData1);      // 거래처구분
+    }
+    else {
         $scope._setComboData("rVendorFg", vendorFgData);      // 거래처구분
     }
     $scope._setComboData("rVatIncldYn", vatIncldYnData);  // 부가세포함여부
@@ -54,6 +83,9 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope._setComboData("rShipFg", useYnData);           // 직배송
     $scope._setComboData("rCompanyFg", companyFgData); // 업체구분
     $scope._setComboData("rBusinessFg", businessFgData); // 사업자구분
+    $scope._setComboData("rAcquireCd", acquireCdData); // 매입처구분
+    $scope._setComboData("rAcquireFg", acquireFgData); // 매입구분
+    $scope._setComboData("rManageSpotCd", manageSpotCdData); // 관리지점
 
     // 등록인지 수정인지 파악하기 위해
     var valType;
@@ -108,10 +140,8 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                     $scope.shipFgCombo.selectedValue = data.shipFg;
                     $("#rRemark").val(data.remark);
 
-                    if(urlVendorFg == "2") {
-                        $scope.companyFgCombo.selectedValue = data.companyFg;
+                    if(urlVendorFg == "2" || urlVendorFg == "1") {
                         $scope.businessFgCombo.selectedValue = data.businessFg;
-                        $("#rPurchaseId").val(data.purchaseId);
                         $("#rCorporationNumber").val(data.corporationNumber);
                         $("#rBusinessStatus").val(data.businessStatus);
                         $("#rIndustry").val(data.industry);
@@ -138,8 +168,19 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                         $("#rDealEndDate").val(data.dealEndDate);
                         $("#rLastSaleDate").val(data.lastSaleDate);
                         $("#rLastDepositDate").val(data.lastDepositDate);
+                    }
+                    if(urlVendorFg == "2") {
+                        $scope.companyFgCombo.selectedValue = data.companyFg;
+                        $("#rPurchaseId").val(data.purchaseId);
                         $("#rMembrNo").val(data.membrNo);
                         $("#rMembrNm").val(data.membrNm);
+                    }
+                    if(urlVendorFg == "1") {
+                        $("#rElectronicBill").val(data.electronicBill);
+                        $("#rAcquireProd").val(data.acquireProd);
+                        $scope.acquireCdCombo.selectedValue = data.acquireCd;
+                        $scope.acquireFgCombo.selectedValue = data.acquireFg;
+                        $scope.manageSpotCdCombo.selectedValue = data.manageSpotCd;
                     }
 
                 },
@@ -258,10 +299,8 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
             param.addrDtl = $("#rAddrDtl").val();
             param.remark = $("#rRemark").val();
 
-            if(urlVendorFg == "2") {
-                param.companyFg = $scope.companyFgCombo.selectedValue;
+            if(urlVendorFg == "2" || urlVendorFg == "1") {
                 param.businessFg = $scope.businessFgCombo.selectedValue;
-                param.purchaseId = $("#rPurchaseId").val();
                 param.corporationNumber = $("#rCorporationNumber").val();
                 param.businessStatus = $("#rBusinessStatus").val();
                 param.industry = $("#rIndustry").val();
@@ -288,8 +327,19 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 param.dealEndDate = $("#rDealEndDate").val();
                 param.lastSaleDate = $("#rLastSaleDate").val();
                 param.lastDepositDate = $("#rLastDepositDate").val();
+            }
+            if(urlVendorFg == "2") {
+                param.companyFg = $scope.companyFgCombo.selectedValue;
+                param.purchaseId = $("#rPurchaseId").val();
                 param.membrNo = $("#rMembrNo").val();
                 param.membrNm = $("#rMembrNm").val();
+            }
+            if(urlVendorFg == "1") {
+                param.electronicBill = $("#rElectronicBill").val();
+                param.acquireProd = $("#rAcquireProd").val();
+                param.acquireCd = $scope.acquireCdCombo.selectedValue;
+                param.acquireFg = $scope.acquireFgCombo.selectedValue;
+                param.manageSpotCd = $scope.manageSpotCdCombo.selectedValue;
             }
 
             if(orgnFg == "HQ" && gEnvst1242 == "2"){ // 본사권한 이면서, [1242] 거래처출고구분 값이 [2] 거래처별출고전표자동생성 인 경우만, 입력 가능
@@ -320,12 +370,24 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         if(urlVendorFg == "2") {
             var inputArr = [
                 rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark,
-                rPurchaseId, rCorporationNumber, rBusinessStatus, rIndustry, rHomepage, rOwnerTelNo,
+                rCorporationNumber, rBusinessStatus, rIndustry, rHomepage, rOwnerTelNo,
                 rOwnerEmail, rManagerNm, rManagerTelNo, rManagerEmail, rManagerSpot, rManagerPhoneNo, rBankCd, rAccountNo,
                 rDepositor, rCollectFg, rDouzoneErp, rCreditLimit, rCollateralType, rCollateralAmt, rContrastDate, rCollatorStore,
-                rCollatorCompany, rDealStartDate, rDealEndDate, rLastSaleDate, rLastDepositDate, rMembrNo, rMembrNm
+                rCollatorCompany, rDealStartDate, rDealEndDate, rLastSaleDate, rLastDepositDate,
+                rPurchaseId, rMembrNo, rMembrNm
             ].forEach(function(element){element.value="";});
-        } else {
+        }
+        else if(urlVendorFg == "1") {
+            var inputArr = [
+                rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark,
+                rCorporationNumber, rBusinessStatus, rIndustry, rHomepage, rOwnerTelNo,
+                rOwnerEmail, rManagerNm, rManagerTelNo, rManagerEmail, rManagerSpot, rManagerPhoneNo, rBankCd, rAccountNo,
+                rDepositor, rCollectFg, rDouzoneErp, rCreditLimit, rCollateralType, rCollateralAmt, rContrastDate, rCollatorStore,
+                rCollatorCompany, rDealStartDate, rDealEndDate, rLastSaleDate, rLastDepositDate,
+                rElectronicBill, rAcquireProd
+            ].forEach(function(element){element.value="";});
+        }
+        else {
             var inputArr = [
                 rVendrCd, rVendrNm, rOwnerNm, rBizNo1, rBizNo2, rBizNo3, rTelNo, rEmailAddr, rFaxNo, rPostNo, rAddr, rAddrDtl, rRemark
             ].forEach(function(element){element.value="";});
@@ -341,9 +403,16 @@ app.controller('vendrRegistCtrl', ['$scope', '$http', function ($scope, $http) {
         $scope.useYnCombo.selectedValue = 'Y';
         $scope.shipFgCombo.selectedValue = 'N';
 
+        if(urlVendorFg == "2" || urlVendorFg == "1") {
+            $scope.businessFgCombo.selectedValue = "0000";
+        }
         if(urlVendorFg == "2") {
             $scope.companyFgCombo.selectedValue = "0000";
-            $scope.businessFgCombo.selectedValue = "0000";
+        }
+        if(urlVendorFg == "1") {
+            $scope.acquireCdCombo.selectedValue = "000";
+            $scope.acquireFgCombo.selectedValue = "1";
+            $scope.manageSpotCdCombo.selectedValue = "000";
         }
     };
 

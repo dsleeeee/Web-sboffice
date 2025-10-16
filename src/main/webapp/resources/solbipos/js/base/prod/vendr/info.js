@@ -71,10 +71,8 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                 if(data.remark != null)
                     $("#vRemark").text(data.remark);
 
-                if(urlVendorFg == "2") {
-                    $("#vCompanyFg").text(data.companyFgNm);
+                if(urlVendorFg == "2" || urlVendorFg == "1") {
                     $("#vBusinessFg").text(data.businessFgNm);
-                    $("#vPurchaseId").text(data.purchaseId);
                     $("#vCorporationNumber").text(data.corporationNumber);
                     $("#vBusinessStatus").text(data.businessStatus);
                     $("#vIndustry").text(data.industry);
@@ -101,8 +99,19 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
                     $("#vDealEndDate").text(data.dealEndDate);
                     $("#vLastSaleDate").text(data.lastSaleDate);
                     $("#vLastDepositDate").text(data.lastDepositDate);
+                }
+                if(urlVendorFg == "2") {
+                    $("#vCompanyFg").text(data.companyFgNm);
+                    $("#vPurchaseId").text(data.purchaseId);
                     $("#vMembrNo").text(data.membrNo);
                     $("#vMembrNm").text(data.membrNm);
+                }
+                if(urlVendorFg == "1") {
+                    $("#vElectronicBill").text(data.electronicBill);
+                    $("#vAcquireProd").text(data.acquireProd);
+                    $("#vAcquireCd").text(data.acquireCdNm);
+                    $("#vAcquireFg").text(data.acquireFgNm);
+                    $("#vManageSpotCd").text(data.manageSpotCdNm);
                 }
 
             },
@@ -163,10 +172,8 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
         $("#vShipFg").text("");
         $("#vRemark").text("");
 
-        if(urlVendorFg == "2") {
-            $("#vCompanyFg").text("");
+        if(urlVendorFg == "2" || urlVendorFg == "1") {
             $("#vBusinessFg").text("");
-            $("#vPurchaseId").text("");
             $("#vCorporationNumber").text("");
             $("#vBusinessStatus").text("");
             $("#vIndustry").text("");
@@ -193,8 +200,19 @@ app.controller('vendrInfoCtrl', ['$scope', '$http', function ($scope, $http) {
             $("#vDealEndDate").text("");
             $("#vLastSaleDate").text("");
             $("#vLastDepositDate").text("");
+        }
+        if(urlVendorFg == "2") {
+            $("#vCompanyFg").text("");
+            $("#vPurchaseId").text("");
             $("#vMembrNo").text("");
             $("#vMembrNm").text("");
+        }
+        if(urlVendorFg == "1") {
+            $("#vElectronicBill").text("");
+            $("#vAcquireProd").text("");
+            $("#vAcquireCd").text("");
+            $("#vAcquireFg").text("");
+            $("#vManageSpotCd").text("");
         }
     };
 

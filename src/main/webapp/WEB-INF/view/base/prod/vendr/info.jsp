@@ -20,7 +20,7 @@
                         <ul>
                             <%-- 거래처등록 탭 --%>
                             <li><a href="#" id="vendrTab" class="on" ng-click="changeTab('1')"><s:message code="vendr.regst" /></a></li>
-                            <c:if test="${urlVendorFg != '2'}">
+                            <c:if test="${urlVendorFg != '2' and urlVendorFg != '1'}">
                                 <%-- 취급상품 탭 --%>
                                 <li><a href="#" id="trtMntTab" ng-click="changeTab('2')"><s:message code="vendr.trtMnt" /></a></li>
                             </c:if>
@@ -116,22 +116,41 @@
                             </th>
                             <td colspan="3" id="vRemark"></td>
                         </tr>
-                        <c:if test="${urlVendorFg == '2'}">
-                            <tr>
+                        <tr>
+                            <c:if test="${urlVendorFg == '2'}">
                                 <%-- 업체구분 --%>
                                 <th><s:message code="vendr.companyFg" /></th>
                                 <td id="vCompanyFg"></td>
+                            </c:if>
+                            <c:if test="${urlVendorFg == '1'}">
+                                <%-- 매입처구분 --%>
+                                <th><s:message code="vendr.acquireCd" /></th>
+                                <td id="vAcquireCd"></td>
+                            </c:if>
+                            <c:if test="${urlVendorFg == '2' or urlVendorFg == '1'}">
                                 <%-- 사업자구분 --%>
                                 <th><s:message code="vendr.businessFg" /></th>
                                 <td id="vBusinessFg"></td>
-                            </tr>
+                            </c:if>
+                        </tr>
+                        <c:if test="${urlVendorFg == '1'}">
                             <tr>
-                                <%-- 구매ID --%>
-                                <th><s:message code="vendr.purchaseId" /></th>
-                                <td id="vPurchaseId"></td>
+                                <%-- 매입구분 --%>
+                                <th><s:message code="vendr.acquireFg" /></th>
+                                <td id="vAcquireFg"></td>
+                                <%-- 관리지점 --%>
+                                <th><s:message code="vendr.manageSpotCd" /></th>
+                                <td id="vManageSpotCd"></td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${urlVendorFg == '2' or urlVendorFg == '1'}">
+                            <tr>
                                 <%-- 법인번호 --%>
                                 <th><s:message code="vendr.corporationNumber" /></th>
                                 <td id="vCorporationNumber"></td>
+                                <%-- 홈페이지 --%>
+                                <th><s:message code="vendr.homepage" /></th>
+                                <td id="vHomepage"></td>
                             </tr>
                             <tr>
                                 <%-- 업태 --%>
@@ -142,97 +161,99 @@
                                 <td id="vIndustry"></td>
                             </tr>
                             <tr>
-                                <%-- 홈페이지 --%>
-                                <th><s:message code="vendr.homepage" /></th>
-                                <td id="vHomepage"></td>
                                 <%-- 대표자전화 --%>
                                 <th><s:message code="vendr.ownerTelNo" /></th>
                                 <td id="vOwnerTelNo"></td>
-                            </tr>
-                            <tr>
                                 <%-- 대표자Email --%>
                                 <th><s:message code="vendr.ownerEmail" /></th>
                                 <td id="vOwnerEmail"></td>
+                            </tr>
+                            <tr>
                                 <%-- 담당자명 --%>
                                 <th><s:message code="vendr.managerNm" /></th>
                                 <td id="vManagerNm"></td>
-                            </tr>
-                            <tr>
                                 <%-- 담당자전화번호 --%>
                                 <th><s:message code="vendr.managerTelNo" /></th>
                                 <td id="vManagerTelNo"></td>
+                            </tr>
+                            <tr>
                                 <%-- 담당자Email --%>
                                 <th><s:message code="vendr.managerEmail" /></th>
                                 <td id="vManagerEmail"></td>
-                            </tr>
-                            <tr>
                                 <%-- 담당자직위 --%>
                                 <th><s:message code="vendr.managerSpot" /></th>
                                 <td id="vManagerSpot"></td>
+                            </tr>
+                            <tr>
                                 <%-- 담당자휴대전화 --%>
                                 <th><s:message code="vendr.managerPhoneNo" /></th>
                                 <td id="vManagerPhoneNo"></td>
-                            </tr>
-                            <tr>
                                 <%-- 은행코드 --%>
                                 <th><s:message code="vendr.bankCd" /></th>
                                 <td id="vBankCd"></td>
+                            </tr>
+                            <tr>
                                 <%-- 계좌번호 --%>
                                 <th><s:message code="vendr.accountNo" /></th>
                                 <td id="vAccountNo"></td>
-                            </tr>
-                            <tr>
                                 <%-- 예금주 --%>
                                 <th><s:message code="vendr.depositor" /></th>
                                 <td id="vDepositor"></td>
+                            </tr>
+                            <tr>
                                 <%-- 수금 일자/주기 --%>
                                 <th><s:message code="vendr.collectFg" /></th>
                                 <td id="vCollectFg"></td>
-                            </tr>
-                            <tr>
                                 <%-- 더존ERP --%>
                                 <th><s:message code="vendr.douzoneErp" /></th>
                                 <td id="vDouzoneErp"></td>
+                            </tr>
+                            <tr>
                                 <%-- 외상한도액 --%>
                                 <th><s:message code="vendr.creditLimit" /></th>
                                 <td id="vCreditLimit"></td>
-                            </tr>
-                            <tr>
                                 <%-- 담보종류 --%>
                                 <th><s:message code="vendr.collateralType" /></th>
                                 <td id="vCollateralType"></td>
+                            </tr>
+                            <tr>
                                 <%-- 담보금액 --%>
                                 <th><s:message code="vendr.collateralAmt" /></th>
                                 <td id="vCollateralAmt"></td>
-                            </tr>
-                            <tr>
                                 <%-- 대조일 --%>
                                 <th><s:message code="vendr.contrastDate" /></th>
                                 <td id="vContrastDate"></td>
+                            </tr>
+                            <tr>
                                 <%-- 대조자(점포) --%>
                                 <th><s:message code="vendr.collatorStore" /></th>
                                 <td id="vCollatorStore"></td>
-                            </tr>
-                            <tr>
                                 <%-- 대조자(업체) --%>
                                 <th><s:message code="vendr.collatorCompany" /></th>
                                 <td id="vCollatorCompany"></td>
+                            </tr>
+                            <tr>
                                 <%-- 거래시작일 --%>
                                 <th><s:message code="vendr.dealStartDate" /></th>
                                 <td id="vDealStartDate"></td>
-                            </tr>
-                            <tr>
                                 <%-- 거래종료일 --%>
                                 <th><s:message code="vendr.dealEndDate" /></th>
                                 <td id="vDealEndDate"></td>
+                            </tr>
+                            <tr>
                                 <%-- 최종매출일 --%>
                                 <th><s:message code="vendr.lastSaleDate" /></th>
                                 <td id="vLastSaleDate"></td>
-                            </tr>
-                            <tr>
                                 <%-- 최종입금일 --%>
                                 <th><s:message code="vendr.lastDepositDate" /></th>
                                 <td id="vLastDepositDate"></td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${urlVendorFg == '2'}">
+                            <tr>
+                                <%-- 구매ID --%>
+                                <th><s:message code="vendr.purchaseId" /></th>
+                                <td id="vPurchaseId"></td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -243,8 +264,16 @@
                                 <%-- 회원명 --%>
                                 <th style="display: none;"><s:message code="vendr.membrNm" /></th>
                                 <td style="display: none;" id="vMembrNm"></td>
-                                <td></td>
-                                <td></td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${urlVendorFg == '1'}">
+                            <tr>
+                                <%-- 전자계산서 --%>
+                                <th><s:message code="vendr.electronicBill" /></th>
+                                <td id="vElectronicBill"></td>
+                                <%-- 매입상품 --%>
+                                <th><s:message code="vendr.acquireProd" /></th>
+                                <td id="vAcquireProd"></td>
                             </tr>
                         </c:if>
                         </tbody>
@@ -268,4 +297,4 @@
     var orgnFg = "${orgnFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/info.js?ver=20250922.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/vendr/info.js?ver=20251015.01" charset="utf-8"></script>

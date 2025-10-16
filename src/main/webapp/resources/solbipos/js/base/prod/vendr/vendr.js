@@ -82,7 +82,7 @@ app.controller('vendrCtrl', ['$scope', '$http', function ($scope, $http) {
         var param = {};
         param.vendrCd = $scope.vendrCd;
         param.vendrNm = $scope.vendrNm;
-        if(urlVendorFg == "2") {
+        if(urlVendorFg == "2" || urlVendorFg == "1") {
             param.vendorFg = urlVendorFg;
         } else {
             param.vendorFg = $scope.vendorFg;

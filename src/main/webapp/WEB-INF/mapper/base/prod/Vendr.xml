@@ -196,7 +196,12 @@
             DEAL_START_DATE,
             DEAL_END_DATE,
             LAST_SALE_DATE,
-            LAST_DEPOSIT_DATE
+            LAST_DEPOSIT_DATE,
+            ElECTRONIC_BILL,
+            ACQUIRE_PROD,
+            ACQUIRE_CD,
+            ACQUIRE_FG,
+            MANAGE_SPOT_CD
         ) VALUES (
             #{hqOfficeCd},
             '0000000',
@@ -249,7 +254,12 @@
             #{dealStartDate},
             #{dealEndDate},
             #{lastSaleDate},
-            #{lastDepositDate}
+            #{lastDepositDate},
+            #{electronicBill},
+            #{acquireProd},
+            #{acquireCd},
+            #{acquireFg},
+            #{manageSpotCd}
         )
     </insert>
 
@@ -380,7 +390,15 @@
         thv.LAST_SALE_DATE,
         thv.LAST_DEPOSIT_DATE,
         tmm.MEMBR_NO,
-        tmm.MEMBR_NM
+        tmm.MEMBR_NM,
+        thv.ElECTRONIC_BILL,
+        thv.ACQUIRE_PROD,
+        thv.ACQUIRE_CD,
+        (CASE thv.ACQUIRE_CD WHEN '000' THEN '수정예정' WHEN '003' THEN '국내개인' ELSE '' END) AS ACQUIRE_CD_NM,
+        thv.ACQUIRE_FG,
+        (CASE thv.ACQUIRE_FG WHEN '1' THEN '현매' WHEN '2' THEN '현매(월)' WHEN '3' THEN '위탁' WHEN '4' THEN '외상' WHEN '5' THEN '현매(거)' ELSE '' END) AS ACQUIRE_FG_NM,
+        thv.MANAGE_SPOT_CD,
+        (CASE thv.MANAGE_SPOT_CD WHEN '000' THEN '수정예정' WHEN '002' THEN '문구점' ELSE '' END) AS MANAGE_SPOT_CD_NM
         FROM TB_HQ_VENDOR thv,
         (
             SELECT
@@ -499,7 +517,12 @@
             DEAL_START_DATE    =   #{dealStartDate},
             DEAL_END_DATE       =   #{dealEndDate},
             LAST_SALE_DATE      =   #{lastSaleDate},
-            LAST_DEPOSIT_DATE   =   #{lastDepositDate}
+            LAST_DEPOSIT_DATE   =   #{lastDepositDate},
+            ElECTRONIC_BILL     =   #{electronicBill},
+            ACQUIRE_PROD        =   #{acquireProd},
+            ACQUIRE_CD          =   #{acquireCd},
+            ACQUIRE_FG          =   #{acquireFg},
+            MANAGE_SPOT_CD      =   #{manageSpotCd}
         WHERE HQ_OFFICE_CD  = #{hqOfficeCd}
         AND VENDR_CD      = #{vendrCd}
     </update>

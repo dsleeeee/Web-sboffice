@@ -149,6 +149,21 @@ public class VendrVO extends PageVO {
     /** 회원명 */
     private String membrNm;
 
+    /** 전자계산서 */
+    private String electronicBill;
+
+    /** 매입상품 */
+    private String acquireProd;
+
+    /** 매입처구분 */
+    private String acquireCd;
+
+    /** 매입구분 */
+    private String acquireFg;
+
+    /** 관리지점 */
+    private String manageSpotCd;
+
     /**
      * @return the hqBrandCd
      */
@@ -647,4 +662,24 @@ public class VendrVO extends PageVO {
     public String getMembrNm() { return membrNm; }
 
     public void setMembrNm(String membrNm) { this.membrNm = membrNm; }
+
+    public String getElectronicBill() { return electronicBill; }
+
+    public void setElectronicBill(String electronicBill) { this.electronicBill = electronicBill; }
+
+    public String getAcquireProd() { return acquireProd; }
+
+    public void setAcquireProd(String acquireProd) { this.acquireProd = acquireProd; }
+
+    public String getAcquireCd() { return acquireCd; }
+
+    public void setAcquireCd(String acquireCd) { this.acquireCd = acquireCd; }
+
+    public String getAcquireFg() { return acquireFg; }
+
+    public void setAcquireFg(String acquireFg) { this.acquireFg = acquireFg; }
+
+    public String getManageSpotCd() { return manageSpotCd; }
+
+    public void setManageSpotCd(String manageSpotCd) { this.manageSpotCd = manageSpotCd; }
 }
