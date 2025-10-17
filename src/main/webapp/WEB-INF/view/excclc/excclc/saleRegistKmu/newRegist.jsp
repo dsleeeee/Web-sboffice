@@ -35,16 +35,16 @@
                     </colgroup>
                     <tbody>
                     <tr>
-                        <th><s:message code="saleRegistKmu.prodCd"/></th>
+                        <th><s:message code="cmm.prodCd"/></th>
                         <td><input type="text" id="srchProdCd" ng-model="prodCd" /></td>
-                        <th><s:message code="saleRegistKmu.prodNm"/></th>
+                        <th><s:message code="cmm.prodNm"/></th>
                         <td><input type="text" id="srchProdNm" ng-model="prodNm" /></td>
                     </tr>
                     <tr>
-                        <th><s:message code="saleRegistKmu.prodClass"/></th>
+                        <th><s:message code="cmm.prodClass"/></th>
                         <td>
                             <input type="text" class="sb-input w70" id="srchProdClassCd" ng-model="prodClassNm" ng-click="popUpProdClass()" style="float: left;"
-                                   placeholder="<s:message code="prodBatchChange.srchClass" /> 선택" readonly/>
+                                   placeholder="<s:message code="cmm.prodClass" /> 선택" readonly/>
                             <input type="hidden" id="_prodClassCd" name="prodClassCd" ng-model="prodClassCd" disabled />
                             <button type="button" class="btn_skyblue fl mr5" id="btnCancelProdClassCd" style="margin-left: 5px;" ng-click="delProdClass()"><s:message code="cmm.selectCancel"/></button>
                         </td>

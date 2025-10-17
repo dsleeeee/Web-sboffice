@@ -45,5 +45,4 @@ public interface SaleRegistKmuService {
 
     /** 회원선택 팝업 - 조회 */
     List<DefaultMap<Object>> getSaleRegistKmuMemberList(SaleRegistKmuVO saleRegistKmuVO, SessionInfoVO sessionInfoVO);
-
 }

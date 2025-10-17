@@ -1,6 +1,6 @@
 /****************************************************************
  *
- * 파일명 : storeProdBatchRegist.js
+ * 파일명 : newRegist.js
  * 설  명 : 매출전표등록(일반) 팝업 JavaScript
  *
  *    수정일      수정자      Version        Function 명
