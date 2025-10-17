@@ -96,7 +96,7 @@
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.fixProdFg"/>" binding="fixProdFg" data-map="fixProdFgDataMap" width="50" is-read-only="true"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselQty"/>" binding="cnt" width="*" visible="false"></wj-flex-grid-column>
                    <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.sdselTypeFg"/>" binding="sdselTypeFg" data-map="sdselTypeFgDataMap" width="70" is-read-only="true"></wj-flex-grid-column>
-                   <c:if test="${hqOfficeCd == 'A0001'}">
+                   <c:if test="${hqOfficeCd == 'A0001' or hqOfficeCd == 'DS001'}">
                         <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.progressStage"/>" binding="halfAndHalfYn" data-map="useYnDataMap" width="100"></wj-flex-grid-column>
                    </c:if>
                  </wj-flex-grid>
@@ -179,7 +179,7 @@
                         <c:if test="${hqOfficeCd == 'H0614' or hqOfficeCd == 'H0616' or hqOfficeCd == 'DS008'}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.popUpClassYn"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100"></wj-flex-grid-column>
                         </c:if>
-                        <c:if test="${hqOfficeCd == 'A0001'}">
+                        <c:if test="${hqOfficeCd == 'A0001' or hqOfficeCd == 'DS001'}">
                             <wj-flex-grid-column header="<s:message code="sideMenu.selectMenu.progressStage"/>" binding="popUpClassYn" data-map="popUpClassYnDataMap" width="100"></wj-flex-grid-column>
                         </c:if>
                     </wj-flex-grid>

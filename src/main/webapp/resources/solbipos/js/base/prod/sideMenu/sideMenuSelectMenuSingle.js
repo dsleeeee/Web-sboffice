@@ -188,7 +188,7 @@ app.controller('sideMenuSelectGroupSingleCtrl', ['$scope', '$http', function ($s
                 params.sdselGrpNm = "";
             }
         }
-        
+
         // 상품명, 상품코드 검색조건
         if($("#txtSelProdSingle").val() !== ""){
             if($scope.srchTypeSelProdSingleCombo.selectedValue === "prodNm"){
@@ -453,7 +453,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
         $scope.expandYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 펼치기여부
         $scope.mappingYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // ERP상품맵핑여부
 
-        if(hqOfficeCd == 'A0001') { // 보나비(A0001) 분류구분 별도 셋팅
+        if(hqOfficeCd == 'A0001' || hqOfficeCd == 'DS001') { // 보나비(A0001) 분류구분 별도 셋팅
             $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(bonaviePopUpClassYnData, 'value', 'name'); // 분류구분
         } else {
             $scope.popUpClassYnDataMap = new wijmo.grid.DataMap(popUpClassYnData, 'value', 'name'); // 분류구분
@@ -618,7 +618,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
                     if (item.cnt === 0 || item.cnt === null || item.cnt === undefined || item.cnt === "") {
                       $scope.flex.collectionView.removeAt(i);
                     } else {
-                      $scope._popMsg(messages["sideMenu.selectMenu.sdselClass.notNull"]);
+                      $scope._popMsg(messages["sideMenu.selectMenu.sdselProd.notNull"]);
                       return false;
                     }
                   }
@@ -744,7 +744,7 @@ app.controller('sideMenuSelectClassSingleCtrl', ['$scope', '$http', 'sdselGrpCd'
             }
 
             // 보나비(A0001) 본사 및 하위매장만 체크
-            if (hqOfficeCd == "A0001") {
+            if (hqOfficeCd == "A0001" || hqOfficeCd == "DS001") {
                 // 선택그룹 진행단계를 사용하는 경우 체크
                 if ($("#hdHalfAndHalfYnSingle").val() == "Y") {
                     for (var i = 0; i < $scope.flex.collectionView.items.length; i++) {

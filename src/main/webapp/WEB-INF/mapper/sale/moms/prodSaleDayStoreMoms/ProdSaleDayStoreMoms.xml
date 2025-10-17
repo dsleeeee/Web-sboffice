@@ -78,14 +78,31 @@
             SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.TOT_SALE_QTY ELSE 0 END) AS PACK_TOT_SALE_QTY,
             SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
             SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-            FROM TB_SL_DAILY_PROD tsdp
-            WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            <if test='storeCdQuery != null and storeCdQuery != ""'>
-                AND tsdp.STORE_CD IN (${storeCdQuery})
-            </if>
-            GROUP BY tsdp.SALE_DATE, tsdp.STORE_CD, tsdp.PROD_CD
+            FROM (SELECT  A.HQ_OFFICE_CD
+                    ,       A.HQ_BRAND_CD
+                    ,       A.STORE_CD
+                    ,       A.SALE_DATE
+                    ,       A.DLVR_PACK_FG
+                    ,       DECODE(A.SEL_TYPE_FG, 'S', A.SIDE_PROD_CD, A.PROD_CD)     AS PROD_CD
+                    ,       DECODE(A.SEL_TYPE_FG, 'S', 'P'           , A.SEL_TYPE_FG) AS SEL_TYPE_FG
+                    ,       A.SIDE_PROD_CD
+                    ,       A.SDSEL_CLASS_CD
+                    ,       DECODE(A.SEL_TYPE_FG, 'S', 0, A.TOT_SALE_QTY)             AS TOT_SALE_QTY
+                    ,       A.TOT_SALE_AMT
+                    ,       A.TOT_DC_AMT
+                    ,       A.TOT_TIP_AMT
+                    ,       A.TOT_ETC_AMT
+                    ,       A.REAL_SALE_AMT
+                    ,       A.TOT_VAT_AMT
+                    FROM    TB_SL_DAILY_PROD_SDSEL_DLVR A
+                                WHERE 1=1
+                                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                                <if test='storeCdQuery != null and storeCdQuery != ""'>
+                                    AND A.STORE_CD IN (${storeCdQuery})
+                                </if>
+                ) tsdp
+                GROUP BY tsdp.SALE_DATE, tsdp.STORE_CD, tsdp.PROD_CD
         ) tsdp
         WHERE 1=1
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
