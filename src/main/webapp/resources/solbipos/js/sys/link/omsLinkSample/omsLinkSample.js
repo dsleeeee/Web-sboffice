@@ -192,7 +192,13 @@ app.controller('omsLinkSampleCtrl', ['$scope', '$http', function ($scope, $http)
         params.storeCode = $("#regAgencyMapping_storeCode").val();
         params.isB2BContract = $("#regAgencyMapping_isB2BContract").val();
 
-        $scope._postJSONSave.withOutPopUp("/sys/link/omsLinkSample/getOmsLinkSampleReqApi.sb", params, function (result) {
+        $scope._postJSONSave.withOutPopUp("/sys/link/omsLinkSample/getOmsLinkSampleReqApi.sb", params, function (response) {
+
+            // api 로그 seq값
+            var seq = response.data.data;
+
+            // OMS연동샘플 API 호출 목록 조회(방금 호출한 건 즉시조회)
+            $scope.searchOmsLinkSampleReqList(seq);
 
         });
     };
@@ -216,7 +222,13 @@ app.controller('omsLinkSampleCtrl', ['$scope', '$http', function ($scope, $http)
         params.posShopId = $("#delAgencyMapping_posShopId").val();
         params.mappingSequence = $("#delAgencyMapping_mappingSequence").val();
 
-        $scope._postJSONSave.withOutPopUp("/sys/link/omsLinkSample/getOmsLinkSampleReqApi.sb", params, function (result) {
+        $scope._postJSONSave.withOutPopUp("/sys/link/omsLinkSample/getOmsLinkSampleReqApi.sb", params, function (response) {
+
+            // api 로그 seq값
+            var seq = response.data.data;
+
+            // OMS연동샘플 API 호출 목록 조회(방금 호출한 건 즉시조회)
+            $scope.searchOmsLinkSampleReqList(seq);
 
         });
     };
