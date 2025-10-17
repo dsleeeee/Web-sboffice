@@ -1355,14 +1355,20 @@
     <typeAlias alias="saleStatusKwuVO" type="kr.co.solbipos.sale.status.saleStatusKwu.service.SaleStatusKwuVO"/>
 
 
+
     <!-- 국민대 > 매출처관리 > 외상매출조회 -->
     <typeAlias alias="postpaidSaleVO" type="kr.co.solbipos.membr.anals.postpaidSale.service.PostpaidSaleVO"/>
+
     <!-- 국민대 > 매출관리 > 매출전표등록(일반) -->
     <typeAlias alias="saleRegistKmuVO" type="kr.co.solbipos.excclc.excclc.saleRegistKmu.service.SaleRegistKmuVO"/>
+    <!-- 국민대 > 매출관리 > 매출전표등록(수수료) -->
+    <!--<typeAlias alias="saleRegistChargeKmuVO" type="kr.co.solbipos.excclc.excclc.saleRegistChargeKmu.service.SaleRegistChargeKmuVO"/>-->
     <!-- 국민대 > 매출관리 > 점소별매출일보 -->
     <typeAlias alias="storeSaleKmuVO" type="kr.co.solbipos.sale.status.storeSaleKmu.service.StoreSaleKmuVO"/>
+
     <!-- 국민대 > 매입처관리 > 매입처조회 -->
     <typeAlias alias="purchaserVO" type="kr.co.solbipos.base.prod.purchaser.service.PurchaserVO"/>
+
 
 
     <!-- ====================================== 모바일 시작 ====================================== -->
