@@ -123,4 +123,4 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sys/link/omsLinkSample/omsLinkSample.js?ver=20250917.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sys/link/omsLinkSample/omsLinkSample.js?ver=20251016.01" charset="utf-8"></script>

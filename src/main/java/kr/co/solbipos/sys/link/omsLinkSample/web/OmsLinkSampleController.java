@@ -183,8 +183,7 @@ public class OmsLinkSampleController {
 
             // 1. URL과 쿼리 파라미터 조합
             String fullUrl = buildUrlWithQueryParams(apiUrl, queryParams);
-            //URL url = new URL(fullUrl);
-            URL url = new URL("https://test.bowlingpick.com/pick/api/E007_getAssignNo?store_cd=A0002");
+            URL url = new URL(fullUrl);
             apiLinkVO.setUrl(fullUrl);
             System.out.println("API 호출 URL: " + url);
 
@@ -194,8 +193,7 @@ public class OmsLinkSampleController {
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
             connection.setRequestProperty("Accept", "application/json");
-            //connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            connection.setRequestProperty("Authorization", "Bearer " + "b34afd51-530e-45a2-affa-ad64cf7fe8c1");
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
             apiLinkVO.setRequestMethod(connection.getRequestMethod());
 
             // 3. 응답 코드 확인
@@ -237,7 +235,6 @@ public class OmsLinkSampleController {
 
         // API 호출 로그 저장
         return omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
-        //return 2;
     }
 
     /**
@@ -259,8 +256,7 @@ public class OmsLinkSampleController {
 
         try {
             // 1. URL 객체 생성
-            //URL url = new URL(apiUrl);
-            URL url = new URL("https://test.bowlingpick.com/pick/api/H002_sendAdvertiseView");
+            URL url = new URL(apiUrl);
             apiLinkVO.setUrl(apiUrl);
 
             // 2. HttpURLConnection 객체 생성 및 설정
@@ -269,8 +265,7 @@ public class OmsLinkSampleController {
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
             connection.setRequestProperty("Accept", "application/json");
-            //connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            connection.setRequestProperty("Authorization", "Bearer " + "b34afd51-530e-45a2-affa-ad64cf7fe8c1");
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
             connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
             apiLinkVO.setRequestMethod(connection.getRequestMethod());
 
@@ -329,7 +324,6 @@ public class OmsLinkSampleController {
 
         // API 호출 로그 저장
         return omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
-        //return 2;
     }
 
     /**
@@ -426,8 +420,7 @@ public class OmsLinkSampleController {
         }
 
         // API 호출 로그 저장
-        //return omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
-        return 2;
+        return omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
     }
 
     /**
