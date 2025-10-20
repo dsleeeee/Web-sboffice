@@ -18,49 +18,48 @@
     -->
     <select id="getSaleAnalysisByVendrList" parameterType="SaleAnalysisByVendrVO" resultType="DefaultMap">
         /* SaleAnalysisByVendrMapper.getSaleAnalysisByVendrList */
-        SELECT 	A.VENDR_CD
-        ,		A.VENDR_NM
-        ,		C.STORE_CD
-        ,		C.PROD_CD
+        SELECT 	C.VENDR_CD
+        ,		C.VENDR_NM
+        ,		A.PROD_CD
         ,		D.PROD_NM
         ,		E.PROD_CLASS_NM
         ,		CASE
-                  WHEN C.TOT_SALE_QTY IS NULL OR C.TOT_SALE_QTY = 0 THEN 0
-                  ELSE NVL(C.TOT_SALE_AMT, 0) / C.TOT_SALE_QTY
+                    WHEN SUM(A.TOT_SALE_QTY) IS NULL OR SUM(A.TOT_SALE_QTY) = 0 THEN 0
+                    ELSE NVL(SUM(A.TOT_SALE_AMT), 0) / SUM(A.TOT_SALE_QTY)
                 END AS SALE_UPRC
-        ,		B.SPLY_UPRC
-        ,		C.TOT_SALE_QTY
-        ,		C.TOT_SALE_AMT
-        ,		C.TOT_DC_AMT
-        ,		C.REAL_SALE_AMT
-        ,		ROUND(C.TOT_SALE_QTY * B.SPLY_UPRC, 0)  AS COGS
-        ,		ROUND(C.REAL_SALE_AMT - (C.TOT_SALE_QTY * B.SPLY_UPRC), 0) AS SALES_PROFIT
-        FROM 	TB_HQ_VENDOR A
+        ,		SUM(B.SPLY_UPRC)        AS SPLY_UPRC
+        ,		SUM(A.TOT_SALE_QTY)     AS TOT_SALE_QTY
+        ,		SUM(A.TOT_SALE_AMT)     AS TOT_SALE_AMT
+        ,		SUM(A.TOT_DC_AMT)       AS TOT_DC_AMT
+        ,		SUM(A.REAL_SALE_AMT)    AS REAL_SALE_AMT
+        ,		SUM(ROUND(A.TOT_SALE_QTY * B.SPLY_UPRC, 0))  AS COGS
+        ,		SUM(ROUND(A.REAL_SALE_AMT - (A.TOT_SALE_QTY * B.SPLY_UPRC), 0)) AS SALES_PROFIT
+        FROM 	TB_SL_DAILY_PROD A
         ,		TB_HQ_VENDOR_PROD B
-        ,		TB_SL_DAILY_PROD C
+        ,		TB_HQ_VENDOR C
         ,		TB_MS_PRODUCT D
         ,		TB_MS_PRODUCT_CLASS E
-        WHERE 	B.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
-        AND		B.HQ_BRAND_CD 	= A.HQ_BRAND_CD
-        AND 	B.VENDR_CD 		= A.VENDR_CD
-        AND		C.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
-        AND 	C.HQ_BRAND_CD 	= A.HQ_BRAND_CD
-        AND 	C.PROD_CD 		= B.PROD_CD
-        AND		D.STORE_CD 		= C.STORE_CD
-        AND 	D.PROD_CD 		= C.PROD_CD
-        AND		E.STORE_CD 		= D.STORE_CD
-        AND		E.PROD_CLASS_CD = D.PROD_CLASS_CD
+        WHERE 	B.HQ_OFFICE_CD  (+) = A.HQ_OFFICE_CD
+        AND		B.HQ_BRAND_CD   (+) = A.HQ_BRAND_CD
+        AND 	B.PROD_CD 		(+)	= A.PROD_CD
+        AND 	C.HQ_OFFICE_CD 	(+)	= B.HQ_OFFICE_CD
+        AND		C.HQ_BRAND_CD   (+) = B.HQ_BRAND_CD
+        AND 	C.VENDR_CD 		(+)	= B.VENDR_CD
+        AND 	D.STORE_CD 		= A.STORE_CD
+        AND 	D.PROD_CD 		= A.PROD_CD
+        AND 	E.STORE_CD 		= D.STORE_CD
+        AND 	E.PROD_CLASS_CD = D.PROD_CLASS_CD
         AND		A.HQ_OFFICE_CD 	= #{hqOfficeCd}
-        AND		A.VENDOR_FG 	= '1'       -- 매입거래처
-        AND     C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+--         AND		C.VENDOR_FG 	= '1'       -- (매입처 처리 방법 확인 후 수정)
+        AND     A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
         <if test='storeCd != null and storeCd != ""'>
-            AND     C.STORE_CD      = #{storeCd}
+            AND     A.STORE_CD      = #{storeCd}
         </if>
         <if test="acquireCd != null and acquireCd != ''">
-            AND A.VENDR_CD LIKE '%' || #{acquireCd} || '%'
+            AND C.VENDR_CD LIKE '%' || #{acquireCd} || '%'
         </if>
         <if test="acquireNm != null and acquireNm != ''">
-            AND A.VENDR_NM LIKE '%' || #{acquireNm} || '%'
+            AND C.VENDR_NM LIKE '%' || #{acquireNm} || '%'
         </if>
         <if test="arrProdClassCd != null and arrProdClassCd != ''">
             AND D.PROD_CLASS_CD IN
@@ -68,8 +67,14 @@
                 #{item}
             </foreach>
         </if>
+        GROUP
+        BY		C.VENDR_CD
+        ,		C.VENDR_NM
+        ,		A.PROD_CD
+        ,		D.PROD_NM
+        ,		E.PROD_CLASS_NM
         ORDER
-        BY      A.VENDR_CD
-        ,       C.PROD_CD
+        BY      C.VENDR_CD
+        ,       A.PROD_CD
     </select>
 </mapper>

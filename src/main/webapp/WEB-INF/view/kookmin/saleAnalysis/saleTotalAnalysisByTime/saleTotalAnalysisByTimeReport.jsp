@@ -26,4 +26,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/saleAnalysis/saleTotalAnalysisByTime/saleTotalAnalysisByTimeReport.js?ver=20250930.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/saleAnalysis/saleTotalAnalysisByTime/saleTotalAnalysisByTimeReport.js?ver=20251020.01" charset="utf-8"></script>
