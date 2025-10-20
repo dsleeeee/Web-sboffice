@@ -82,6 +82,13 @@ app.controller('prodDeleteCtrl', ['$scope', '$http', function ($scope, $http) {
             $scope._popConfirm(messages["cmm.choo.delete"], function() {
 
                 var params = {};
+                if(urlProdFg === "1"){
+                    params.orgProdFg = "10";
+                }else if(urlProdFg === "2") {
+                    params.orgProdFg = "20";
+                }else if(urlProdFg === "0"){
+                    params.orgProdFg = "00";
+                }
 
                 // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
                 $scope._postJSONSave.withPopUp("/base/prod/prod/prod/allProdDelete.sb", params, function () {

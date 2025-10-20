@@ -7128,8 +7128,25 @@
                 thp.PROD_CLASS_CD,
                 thp.PROD_CD,
                 thp.PROD_NM
-                FROM TB_HQ_PRODUCT thp
+                FROM TB_HQ_PRODUCT thp,
+                     TB_HQ_PRODUCT_INFO thpi
                 WHERE 1=1
+                AND thpi.HQ_OFFICE_CD (+) = thp.HQ_OFFICE_CD
+                AND thpi.PROD_CD 	  (+) = thp.PROD_CD
+                <choose>
+                    <!-- 상품정보관리 -->
+                    <when test='orgProdFg != null and orgProdFg == "00"'>
+                        AND	NVL(thpi.ORG_PROD_FG, '00') = #{orgProdFg}
+                    </when>
+                    <!-- 일반상품관리 -->
+                    <when test='orgProdFg != null and orgProdFg == "10"'>
+                        AND	thpi.ORG_PROD_FG = #{orgProdFg}
+                    </when>
+                    <!-- 도서상품관리 -->
+                    <when test='orgProdFg != null and orgProdFg == "20"'>
+                        AND	thpi.ORG_PROD_FG = #{orgProdFg}
+                    </when>
+                </choose>
                 AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND thp.PROD_CD NOT IN ('0000000000000', '0A0000DLVFEE', '0ADLVFEE0000')
                 AND (
@@ -7147,8 +7164,25 @@
                 tmp.PROD_CD,
                 tmp.PROD_NM,
                 tmp.REG_FG
-                FROM TB_MS_PRODUCT tmp
+                FROM TB_MS_PRODUCT tmp,
+                TB_MS_PRODUCT_INFO tmpi
                 WHERE 1=1
+                AND tmpi.STORE_CD (+) = tmp.STORE_CD
+                AND tmpi.PROD_CD  (+) = tmp.PROD_CD
+                <choose>
+                    <!-- 상품정보관리 -->
+                    <when test='orgProdFg != null and orgProdFg == "00"'>
+                        AND	NVL(tmpi.ORG_PROD_FG, '00') = #{orgProdFg}
+                    </when>
+                    <!-- 일반상품관리 -->
+                    <when test='orgProdFg != null and orgProdFg == "10"'>
+                        AND	tmpi.ORG_PROD_FG = #{orgProdFg}
+                    </when>
+                    <!-- 도서상품관리 -->
+                    <when test='orgProdFg != null and orgProdFg == "20"'>
+                        AND	tmpi.ORG_PROD_FG = #{orgProdFg}
+                    </when>
+                </choose>
                 AND tmp.STORE_CD = #{storeCd}
                 AND tmp.PROD_CD NOT IN ('0000000000000', '0A0000DLVFEE', '0ADLVFEE0000')
                 AND tmp.REG_FG ='S'
