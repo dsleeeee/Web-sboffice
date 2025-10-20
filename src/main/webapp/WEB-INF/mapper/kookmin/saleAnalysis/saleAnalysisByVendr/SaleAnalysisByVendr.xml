@@ -58,7 +58,7 @@
         <if test="acquireCd != null and acquireCd != ''">
             AND C.VENDR_CD LIKE '%' || #{acquireCd} || '%'
         </if>
-        <if test="acquireNm != null and acquirseNm != ''">
+        <if test="acquireNm != null and acquireNm != ''">
             AND C.VENDR_NM LIKE '%' || #{acquireNm} || '%'
         </if>
         <if test="arrProdClassCd != null and arrProdClassCd != ''">
