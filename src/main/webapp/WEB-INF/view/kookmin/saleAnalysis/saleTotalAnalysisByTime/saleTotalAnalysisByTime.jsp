@@ -114,11 +114,13 @@
                 <!-- define columns -->
                 <%--                <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>--%>
                 <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.saleHour"/>"      binding="saleHourL"     width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.totSaleAmt"/>"    binding="totSaleAmtL"   width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.totSaleAmt"/>"    binding="totSaleAmtL"   width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.realSaleAmt"/>"   binding="realSaleAmtL"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.guestCnt"/>"      binding="guestCntL"     width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.saleQty"/>"       binding="saleQtyL"      width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.saleHour"/>"      binding="saleHourR"     width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.totSaleAmt"/>"    binding="totSaleAmtR"   width="120" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.totSaleAmt"/>"    binding="totSaleAmtR"   width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.realSaleAmt"/>"   binding="realSaleAmtR"  width="100" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.guestCnt"/>"      binding="guestCntR"     width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="saleTotalAnalysisByTime.saleQty"/>"       binding="saleQtyR"      width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
 

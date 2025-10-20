@@ -31,13 +31,13 @@
         ,		G.VENDR_CD          AS ACQUIRE_CD
         ,		H.VENDR_NM          AS ACQUIRE_NM
         ,		CASE
-                        WHEN A.TOT_SALE_QTY IS NULL OR A.TOT_SALE_QTY = 0 THEN 0
-                        ELSE ROUND(NVL(A.TOT_SALE_AMT, 0) / A.TOT_SALE_QTY,0)
+                    WHEN SUM(A.TOT_SALE_QTY) IS NULL OR SUM(A.TOT_SALE_QTY) = 0 THEN 0
+                    ELSE ROUND(NVL(SUM(A.TOT_SALE_AMT), 0) / SUM(A.TOT_SALE_QTY),0)
                 END AS SALE_AMT
-        ,		A.TOT_SALE_QTY
-        ,		A.TOT_SALE_AMT
-        ,		A.TOT_DC_AMT
-        ,		A.REAL_SALE_AMT
+        ,		SUM(A.TOT_SALE_QTY)     AS TOT_SALE_QTY
+        ,		SUM(A.TOT_SALE_AMT)     AS TOT_SALE_AMT
+        ,		SUM(A.TOT_DC_AMT)       AS TOT_DC_AMT
+        ,		SUM(A.REAL_SALE_AMT)    AS REAL_SALE_AMT
         FROM 	TB_SL_DAILY_PROD A
         ,		TB_MS_STORE B
         ,		TB_MS_PRODUCT C
@@ -79,6 +79,19 @@
         <if test="prodNm != null and prodNm != ''">
             AND C.PROD_NM LIKE '%' || #{prodNm} || '%'
         </if>
+        GROUP
+        BY		A.STORE_CD
+        ,		B.STORE_NM
+        ,		A.PROD_CD
+        ,		C.PROD_NM
+        ,		D.SH_B_PUBLISH_NM
+        ,		D.SH_B_AUTHOR1
+        ,		E.PROD_CLASS_CD
+        ,		E.PROD_CLASS_NM
+        ,		F.PROD_CLASS_CD
+        ,		F.PROD_CLASS_NM
+        ,		G.VENDR_CD
+        ,		H.VENDR_NM
         ORDER
         BY     	A.STORE_CD
         ,       A.PROD_CD
