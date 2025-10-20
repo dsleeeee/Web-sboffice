@@ -287,6 +287,7 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
 
+                params.membrNo = $("#membrNo").val();
                 params.postpaidNo = $("#postpaidNo").text();
 
                 $scope._postJSONQuery.withOutPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDel.sb', params, function (result) {
@@ -419,6 +420,7 @@ app.controller('newRegistCtrl', ['$scope', '$http', function ($scope, $http) {
                 params.saleDate = $("#saleDate").text().replaceAll("-","");
                 params.billNo = $("#billNo").text();
 
+                params.membrNo = $("#membrNo").val();
                 params.postpaidNo = $("#postpaidNo").text();
 
                 $scope._postJSONQuery.withPopUp('/excclc/excclc/saleRegistKmu/saleRegistKmu/getBillDel.sb', params, function (result) {
