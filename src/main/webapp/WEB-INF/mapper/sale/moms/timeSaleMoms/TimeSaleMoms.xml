@@ -29,7 +29,7 @@
         SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
         SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
         <include refid="CmmSQL.PagingTemplateCount"/>
-        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME tsdpst,
+        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME_MOMS_V04 tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
@@ -152,7 +152,7 @@
         SUM(tsdpst.TOT_SALE_QTY) AS SALE_QTY1,
         SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
         SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
-        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME tsdpst,
+        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME_MOMS_V04 tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
@@ -275,7 +275,7 @@
         SUM(tsdpst.TOT_SALE_QTY) AS SALE_QTY1,
         SUM(tsdpst.TOT_SALE_AMT) AS TOT_SALE_AMT1,
         SUM(tsdpst.REAL_SALE_AMT) AS REAL_SALE_AMT1
-        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME tsdpst,
+        FROM TB_SL_DAILY_PROD_SDSEL_DLVR_TIME_MOMS_V04 tsdpst,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
         TB_MS_PRODUCT tmp
