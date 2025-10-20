@@ -25,15 +25,15 @@
         SUM(tsdps.TOT_SALE_QTY) AS SALE_QTY1,
         SUM(tsdps.TOT_SALE_AMT) AS TOT_SALE_AMT1,
         SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT1,
-        SUM(tsdp.GEN_TOT_SALE_QTY) AS GEN_SALE_QTY,
-        SUM(tsdp.GEN_TOT_SALE_AMT) AS GEN_TOT_SALE_AMT,
-        SUM(tsdp.GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
-        SUM(tsdp.DLVR_TOT_SALE_QTY) AS DLVR_SALE_QTY,
-        SUM(tsdp.DLVR_TOT_SALE_AMT) AS DLVR_TOT_SALE_AMT,
-        SUM(tsdp.DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
-        SUM(tsdp.PACK_TOT_SALE_QTY) AS PACK_SALE_QTY,
-        SUM(tsdp.PACK_TOT_SALE_AMT) AS PACK_TOT_SALE_AMT,
-        SUM(tsdp.PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
+        SUM(tsdps.GEN_TOT_SALE_QTY) AS GEN_SALE_QTY,
+        SUM(tsdps.GEN_TOT_SALE_AMT) AS GEN_TOT_SALE_AMT,
+        SUM(tsdps.GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
+        SUM(tsdps.DLVR_TOT_SALE_QTY) AS DLVR_SALE_QTY,
+        SUM(tsdps.DLVR_TOT_SALE_AMT) AS DLVR_TOT_SALE_AMT,
+        SUM(tsdps.DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
+        SUM(tsdps.PACK_TOT_SALE_QTY) AS PACK_SALE_QTY,
+        SUM(tsdps.PACK_TOT_SALE_AMT) AS PACK_TOT_SALE_AMT,
+        SUM(tsdps.PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
         <include refid="CmmSQL.PagingTemplateCount"/>
         FROM
         (
@@ -43,8 +43,17 @@
             v4.PROD_CD,
             SUM(v4.TOT_SALE_QTY) AS TOT_SALE_QTY,
             SUM(v4.TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(v4.REAL_SALE_AMT) AS REAL_SALE_AMT
-            FROM TB_SL_DAILY_PROD_SDSEL_MOMS_V04 v4
+            SUM(v4.REAL_SALE_AMT) AS REAL_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '1' THEN v4.TOT_SALE_QTY ELSE 0 END) AS GEN_TOT_SALE_QTY,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '1' THEN v4.TOT_SALE_AMT ELSE 0 END) AS GEN_TOT_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '1' THEN v4.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '2' THEN v4.TOT_SALE_QTY ELSE 0 END) AS DLVR_TOT_SALE_QTY,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '2' THEN v4.TOT_SALE_AMT ELSE 0 END) AS DLVR_TOT_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '2' THEN v4.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '3' THEN v4.TOT_SALE_QTY ELSE 0 END) AS PACK_TOT_SALE_QTY,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '3' THEN v4.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '3' THEN v4.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+            FROM TB_SL_DAILY_PROD_SDSEL_DLVR_MOMS_V04 v4
             WHERE 1=1
             AND v4.HQ_OFFICE_CD = #{hqOfficeCd}
             AND v4.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -55,47 +64,7 @@
         ) tsdps,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
-        TB_MS_PRODUCT tmp,
-        (
-            SELECT
-            tsdp.SALE_DATE,
-            tsdp.STORE_CD,
-            tsdp.PROD_CD,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.TOT_SALE_QTY ELSE 0 END) AS GEN_TOT_SALE_QTY,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.TOT_SALE_AMT ELSE 0 END) AS GEN_TOT_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.TOT_SALE_QTY ELSE 0 END) AS DLVR_TOT_SALE_QTY,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.TOT_SALE_AMT ELSE 0 END) AS DLVR_TOT_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.TOT_SALE_QTY ELSE 0 END) AS PACK_TOT_SALE_QTY,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-            FROM (SELECT  A.HQ_OFFICE_CD
-                    ,       A.HQ_BRAND_CD
-                    ,       A.STORE_CD
-                    ,       A.SALE_DATE
-                    ,       A.DLVR_PACK_FG
-                    ,       DECODE(A.SEL_TYPE_FG, 'S', A.SIDE_PROD_CD, A.PROD_CD)     AS PROD_CD
-                    ,       DECODE(A.SEL_TYPE_FG, 'S', 'P'           , A.SEL_TYPE_FG) AS SEL_TYPE_FG
-                    ,       A.SIDE_PROD_CD
-                    ,       A.SDSEL_CLASS_CD
-                    ,       DECODE(A.SEL_TYPE_FG, 'S', 0, A.TOT_SALE_QTY)             AS TOT_SALE_QTY
-                    ,       A.TOT_SALE_AMT
-                    ,       A.TOT_DC_AMT
-                    ,       A.TOT_TIP_AMT
-                    ,       A.TOT_ETC_AMT
-                    ,       A.REAL_SALE_AMT
-                    ,       A.TOT_VAT_AMT
-                    FROM    TB_SL_DAILY_PROD_SDSEL_DLVR A
-                                WHERE 1=1
-                                AND A.HQ_OFFICE_CD = #{hqOfficeCd}
-                                AND A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-                                <if test='storeCdQuery != null and storeCdQuery != ""'>
-                                    AND A.STORE_CD IN (${storeCdQuery})
-                                </if>
-                ) tsdp
-                GROUP BY tsdp.SALE_DATE, tsdp.STORE_CD, tsdp.PROD_CD
-        ) tsdp
+        TB_MS_PRODUCT tmp
         WHERE 1=1
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -179,9 +148,6 @@
         AND tmsi.STORE_CD (+)= tms.STORE_CD
         AND tmp.STORE_CD = tsdps.STORE_CD
         AND tmp.PROD_CD = tsdps.PROD_CD
-        AND tsdp.SALE_DATE = tsdps.SALE_DATE
-        AND tsdp.STORE_CD = tsdps.STORE_CD
-        AND tsdp.PROD_CD = tsdps.PROD_CD
         GROUP BY tsdps.SALE_DATE, tsdps.PROD_CD, tmp.PROD_NM
         ORDER BY tsdps.SALE_DATE, tsdps.PROD_CD
         <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -200,15 +166,15 @@
         SUM(tsdps.TOT_SALE_QTY) AS SALE_QTY1,
         SUM(tsdps.TOT_SALE_AMT) AS TOT_SALE_AMT1,
         SUM(tsdps.REAL_SALE_AMT) AS REAL_SALE_AMT1,
-        SUM(tsdp.GEN_TOT_SALE_QTY) AS GEN_SALE_QTY,
-        SUM(tsdp.GEN_TOT_SALE_AMT) AS GEN_TOT_SALE_AMT,
-        SUM(tsdp.GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
-        SUM(tsdp.DLVR_TOT_SALE_QTY) AS DLVR_SALE_QTY,
-        SUM(tsdp.DLVR_TOT_SALE_AMT) AS DLVR_TOT_SALE_AMT,
-        SUM(tsdp.DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
-        SUM(tsdp.PACK_TOT_SALE_QTY) AS PACK_SALE_QTY,
-        SUM(tsdp.PACK_TOT_SALE_AMT) AS PACK_TOT_SALE_AMT,
-        SUM(tsdp.PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
+        SUM(tsdps.GEN_TOT_SALE_QTY) AS GEN_SALE_QTY,
+        SUM(tsdps.GEN_TOT_SALE_AMT) AS GEN_TOT_SALE_AMT,
+        SUM(tsdps.GEN_REAL_SALE_AMT) AS GEN_REAL_SALE_AMT,
+        SUM(tsdps.DLVR_TOT_SALE_QTY) AS DLVR_SALE_QTY,
+        SUM(tsdps.DLVR_TOT_SALE_AMT) AS DLVR_TOT_SALE_AMT,
+        SUM(tsdps.DLVR_REAL_SALE_AMT) AS DLVR_REAL_SALE_AMT,
+        SUM(tsdps.PACK_TOT_SALE_QTY) AS PACK_SALE_QTY,
+        SUM(tsdps.PACK_TOT_SALE_AMT) AS PACK_TOT_SALE_AMT,
+        SUM(tsdps.PACK_REAL_SALE_AMT) AS PACK_REAL_SALE_AMT
         FROM
         (
             SELECT
@@ -217,8 +183,17 @@
             v4.PROD_CD,
             SUM(v4.TOT_SALE_QTY) AS TOT_SALE_QTY,
             SUM(v4.TOT_SALE_AMT) AS TOT_SALE_AMT,
-            SUM(v4.REAL_SALE_AMT) AS REAL_SALE_AMT
-            FROM TB_SL_DAILY_PROD_SDSEL_MOMS_V04 v4
+            SUM(v4.REAL_SALE_AMT) AS REAL_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '1' THEN v4.TOT_SALE_QTY ELSE 0 END) AS GEN_TOT_SALE_QTY,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '1' THEN v4.TOT_SALE_AMT ELSE 0 END) AS GEN_TOT_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '1' THEN v4.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '2' THEN v4.TOT_SALE_QTY ELSE 0 END) AS DLVR_TOT_SALE_QTY,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '2' THEN v4.TOT_SALE_AMT ELSE 0 END) AS DLVR_TOT_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '2' THEN v4.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '3' THEN v4.TOT_SALE_QTY ELSE 0 END) AS PACK_TOT_SALE_QTY,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '3' THEN v4.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
+            SUM(CASE WHEN v4.DLVR_PACK_FG = '3' THEN v4.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
+            FROM TB_SL_DAILY_PROD_SDSEL_DLVR_MOMS_V04 v4
             WHERE 1=1
             AND v4.HQ_OFFICE_CD = #{hqOfficeCd}
             AND v4.SALE_DATE BETWEEN #{startDate} AND #{endDate}
@@ -229,30 +204,7 @@
         ) tsdps,
         TB_MS_STORE tms,
         TB_MS_STORE_INFO tmsi,
-        TB_MS_PRODUCT tmp,
-        (
-            SELECT
-            tsdp.SALE_DATE,
-            tsdp.STORE_CD,
-            tsdp.PROD_CD,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.TOT_SALE_QTY ELSE 0 END) AS GEN_TOT_SALE_QTY,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.TOT_SALE_AMT ELSE 0 END) AS GEN_TOT_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '1' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS GEN_REAL_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.TOT_SALE_QTY ELSE 0 END) AS DLVR_TOT_SALE_QTY,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.TOT_SALE_AMT ELSE 0 END) AS DLVR_TOT_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '2' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS DLVR_REAL_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.TOT_SALE_QTY ELSE 0 END) AS PACK_TOT_SALE_QTY,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.TOT_SALE_AMT ELSE 0 END) AS PACK_TOT_SALE_AMT,
-            SUM(CASE WHEN tsdp.DLVR_PACK_FG = '3' THEN tsdp.REAL_SALE_AMT ELSE 0 END) AS PACK_REAL_SALE_AMT
-            FROM TB_SL_DAILY_PROD tsdp
-            WHERE 1=1
-            AND tsdp.HQ_OFFICE_CD = #{hqOfficeCd}
-            AND tsdp.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-            <if test='storeCdQuery != null and storeCdQuery != ""'>
-                AND tsdp.STORE_CD IN (${storeCdQuery})
-            </if>
-            GROUP BY tsdp.SALE_DATE, tsdp.STORE_CD, tsdp.PROD_CD
-        ) tsdp
+        TB_MS_PRODUCT tmp
         WHERE 1=1
         <if test='storeHqBrandCd != null and storeHqBrandCd != ""'>
             AND tms.HQ_BRAND_CD = #{storeHqBrandCd} -- 매장브랜드 선택일때
@@ -336,9 +288,6 @@
         AND tmsi.STORE_CD (+)= tms.STORE_CD
         AND tmp.STORE_CD = tsdps.STORE_CD
         AND tmp.PROD_CD = tsdps.PROD_CD
-        AND tsdp.SALE_DATE = tsdps.SALE_DATE
-        AND tsdp.STORE_CD = tsdps.STORE_CD
-        AND tsdp.PROD_CD = tsdps.PROD_CD
         GROUP BY tsdps.SALE_DATE, tsdps.PROD_CD, tmp.PROD_NM
         ORDER BY tsdps.SALE_DATE, tsdps.PROD_CD
     </select>
