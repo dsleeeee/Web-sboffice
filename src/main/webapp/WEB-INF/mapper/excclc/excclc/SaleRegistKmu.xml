@@ -1278,15 +1278,15 @@
             TB_MB_MEMBER_PAID_BALANCE tmmpb,
             TB_MB_MEMBER_POSTPAID tmmp
             WHERE 1=1
-            AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
-            AND tmmpb.HQ_OFFICE_CD (+)= #{hqOfficeCd}
-            AND tmmpb.STORE_CD (+)= #{storeCd}
-            AND tmm.MEMBR_NO = #{membrNo}
-            AND tmmpb.MEMBR_NO (+)= tmm.MEMBR_NO
-            AND tmmp.HQ_OFFICE_CD = tmmpb.HQ_OFFICE_CD
-            AND tmmp.STORE_CD = tmmpb.STORE_CD
+            AND tmmp.HQ_OFFICE_CD = #{hqOfficeCd}
+            AND tmmp.STORE_CD = #{storeCd}
             AND tmmp.SALE_DATE = #{saleDate}
             AND tmmp.POSTPAID_NO = #{postpaidNo}
+            AND tmm.MEMBR_ORGN_CD = #{membrOrgnCd}
+            AND tmm.MEMBR_NO = tmmpb.MEMBR_NO
+            AND tmmpb.HQ_OFFICE_CD = tmmp.HQ_OFFICE_CD
+            AND tmmpb.STORE_CD = tmmp.STORE_CD
+            AND tmmpb.MEMBR_NO = tmmp.MEMBR_NO
         ) B
         ON  (
                 A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
