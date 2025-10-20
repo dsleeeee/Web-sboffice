@@ -37,6 +37,7 @@
         (
             SELECT	SALE_HOUR
             ,		SUM(TOT_SALE_AMT) 	AS TOT_SALE_AMT
+            ,       SUM(REAL_SALE_AMT)  AS REAL_SALE_AMT
             ,		SUM(NVL(GUEST_CNT_1, 0) + NVL(GUEST_CNT_2, 0) + NVL(GUEST_CNT_3, 0) + NVL(GUEST_CNT_4, 0) + NVL(GUEST_CNT_5, 0) + NVL(GUEST_CNT_6, 0))	AS GUEST_CNT
             ,		SUM(SALE_QTY)		AS SALE_QTY
             FROM	TB_SL_DAILY_TIME
@@ -57,10 +58,12 @@
         )
         SELECT	A.SALE_HOUR_L
         ,		B.TOT_SALE_AMT  AS TOT_SALE_AMT_L
+        ,       B.REAL_SALE_AMT AS REAL_SALE_AMT_L
         ,		B.GUEST_CNT     AS GUEST_CNT_L
         ,		B.SALE_QTY      AS SALE_QTY_L
         ,		A.SALE_HOUR_R
         ,		C.TOT_SALE_AMT  AS TOT_SALE_AMT_R
+        ,       C.REAL_SALE_AMT AS REAL_SALE_AMT_R
         ,		C.GUEST_CNT     AS GUEST_CNT_R
         ,		C.SALE_QTY      AS SALE_QTY_R
         <if test='storeCd != null and storeCd != ""'>
@@ -76,8 +79,10 @@
         ,		NULL
         ,		NULL
         ,		NULL
+        ,       NULL
         ,		'매출전표'
         ,		SUM(TOT_SALE_AMT)
+        ,		SUM(REAL_SALE_AMT)
         ,		SUM(GUEST_CNT)
         ,		SUM(SALE_QTY)
         <if test='storeCd != null and storeCd != ""'>

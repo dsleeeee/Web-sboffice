@@ -140,7 +140,7 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/saleAnalysis/saleAnalysisByVendr/saleAnalysisByVendr.js?ver=20250929.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/saleAnalysis/saleAnalysisByVendr/saleAnalysisByVendr.js?ver=20251020.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCdCheck.jsp">

@@ -96,8 +96,6 @@ app.controller('saleAnalysisByVendrCtrl', ['$scope', '$http', '$timeout', functi
         params.storeCd = $("#saleAnalysisByVendrStoreCd").val();
         params.prodClassCd = $scope.prodClassCd;
 
-        console.log(params.storeCd);
-
         $scope.paramData = params;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수
