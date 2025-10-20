@@ -49,4 +49,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDeleteView.js?ver=20230609.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDeleteView.js?ver=20251020.01" charset="utf-8"></script>
