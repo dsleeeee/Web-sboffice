@@ -1108,7 +1108,7 @@
         </table>
       </div>
       <%-- [1250 맘스터치] --%>
-      <c:if test="${momsEnvstVal == '1'}">
+      <%--<c:if test="${momsEnvstVal == '1'}">--%>
         <%-- 영양정보 --%>
         <h3 class="h3_tbl"><s:message code="prod.title.nuInfo"/></h3>
         <div class="tblBr">
@@ -1203,7 +1203,7 @@
             </tbody>
           </table>
         </div>
-      </c:if>
+      <%--</c:if>--%>
       <%-- 기타정보 --%>
       <h3 class="h3_tbl"><s:message code="prod.title.etcInfo"/></h3>
       <div class="tblBr">
@@ -1326,6 +1326,7 @@
                 </div>
               </td>
             </tr>
+          </c:if>
             <tr>
               <%-- 판매방식 --%>
               <th><s:message code="prod.saleType"/></th>
@@ -1339,9 +1340,10 @@
                    <div style="float: left; padding-top: 3px; padding-left:5px; padding-right:10px;"><label><s:message code="prod.packing" /> </label></div>
                  </div>
               </td>
-              <th></th>
+              <td></td>
               <td></td>
             </tr>
+          <c:if test="${momsEnvstVal == '1'}">
             <tr>
               <%-- 판매채널 --%>
               <th><s:message code="prod.saleChannel"/></th>
@@ -1685,7 +1687,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251015.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251021.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
