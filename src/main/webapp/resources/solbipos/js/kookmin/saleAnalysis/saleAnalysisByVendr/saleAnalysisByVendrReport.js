@@ -154,8 +154,8 @@ app.controller('saleAnalysisByVendrReportCtrl', ['$scope', '$http', '$timeout', 
                             var item = payHistList[j];
                             arrSaleAnalysisListHtml += '<tr class="h25">'
                                 + '<td class="tc">' + (++rowNo) + '</td>'
-                                + '<td class="tc">' + item.vendrCd + '</td>'
-                                + '<td class="tc">' + item.vendrNm + '</td>'
+                                + '<td class="tc">' + nvl(item.vendrCd, '') + '</td>'
+                                + '<td class="tc">' + nvl(item.vendrNm, '') + '</td>'
                                 + '<td class="tc">' + item.prodCd + '</td>'
                                 + '<td class="tc">' + item.prodNm + '</td>'
                                 + '<td class="tc">' + item.prodClassNm + '</td>'
