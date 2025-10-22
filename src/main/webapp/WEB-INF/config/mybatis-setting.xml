@@ -1324,7 +1324,8 @@
     <typeAlias alias="dlvrExcelUploadVO" type="kr.co.solbipos.dlvr.info.dlvrExcelUpload.service.DlvrExcelUploadVO"/>
     <!-- 배달관리 > CID 배달정보 > 배달지정보관리 -->
     <typeAlias alias="deliveryTelNoVO" type="kr.co.solbipos.dlvr.info.deliveryTelNo.service.DeliveryTelNoVO"/>
-
+    <!-- 배달관리 > 배달정보 > 배달대행사 연동 -->
+    <typeAlias alias="dlvrAgencyLinkReqVO" type="kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.DlvrAgencyLinkReqVO"/>
 
     <!-- KDS -->
     <typeAlias alias="kdsVO" type="kr.co.solbipos.kds.anals.chart.service.KdsVO"/>

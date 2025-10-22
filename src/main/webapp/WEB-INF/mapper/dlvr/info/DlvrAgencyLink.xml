@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DlvrAgencyLink.xml
+    배달대행사 연동
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.10.14     최초작성
+-->
+<mapper namespace="kr.co.solbipos.dlvr.info.dlvrAgencyLink.service.impl.DlvrAgencyLinkMapper">
+</mapper>
