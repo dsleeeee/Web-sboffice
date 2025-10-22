@@ -116,6 +116,8 @@
       <div class="wj-TblWrapBr mr10 pd10" style="height: 480px;">
         <div class="updownSet oh mb10">
           <span class="fl bk lh30"><s:message code='systemCd.grpGridNm' /></span>
+            <%--  엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
         </div>
         <%-- 개발시 높이 조절해서 사용--%>
         <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -161,6 +163,8 @@
     <div class="wj-TblWrapBr ml10 pd10" style="height: 480px;">
       <div class="updownSet oh mb10">
         <span class="fl bk lh30"><s:message code='systemCd.gridNm' /></span>
+        <%--  엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
       </div>
       <%-- 개발시 높이 조절해서 사용--%>
       <%-- tbody영역의 셀 배경이 들어가는 부분은 .bdBg를 넣어주세요. --%>
@@ -201,4 +205,4 @@ var envstFgNm = ${ccu.getCommCode("003")};
 var envstGrpCdNm = ${envstGrpList};
 var targtFg = ${ccu.getCommCodeExcpAll("038")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChanngeEnvSetting.js?ver=20241120.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChanngeEnvSetting.js?ver=20251022.01" charset="utf-8"></script>
