@@ -121,6 +121,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 판매가 내점/배달/포장에 적용
     $scope.saleUprcApply = true;
 
+    // 판매방식
+    $scope.prodModifyInfo.saleTypeYnSin = false;
+    $scope.prodModifyInfo.saleTypeYnDlv = false;
+    $scope.prodModifyInfo.saleTypeYnPkg = false;
+
     // [1250 맘스터치] 사용시 기본 셋팅
     if(momsEnvstVal === "1") {
         // 단종여부 체크박스
@@ -130,11 +135,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         // 출시일, 단종일
         var releaseDate = wcombo.genDateVal("#releaseDate", gvStartDate);
         var disconDate = wcombo.genDateVal("#disconDate", gvEndDate);
-
-        // 판매방식
-        $scope.prodModifyInfo.saleTypeYnSin = false;
-        $scope.prodModifyInfo.saleTypeYnDlv = false;
-        $scope.prodModifyInfo.saleTypeYnPkg = false;
 
         // 판매채널
         $scope.prodModifyInfo.saleChnYnPos = false;
@@ -683,9 +683,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 params.disconDate = "";
 
                 // 판매방식
-                params.saleTypeYnSin = "";
-                params.saleTypeYnDlv = "";
-                params.saleTypeYnPkg = "";
+                params.saleTypeYnSin = $("#chkSaleTypeYnSin").is(":checked") === true ? 'Y' : 'N';  // 판매방식(내점)
+                params.saleTypeYnDlv = $("#chkSaleTypeYnDlv").is(":checked") === true ? 'Y' : 'N'; // 판매방식(배달)
+                params.saleTypeYnPkg = $("#chkSaleTypeYnPkg").is(":checked") === true ? 'Y' : 'N';  // 판매방식(포장)
 
                 // 판매채널
                 params.saleChnYnPos = "";
@@ -700,13 +700,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 params.saleChnYnDdn = "";
 
                 // 영양정보
-                params.nuTotWt = "";
-                params.nuKcal = "";
-                params.nuProtein = "";
-                params.nuSodium = "";
-                params.nuSugars = "";
-                params.nuSatFat = "";
-                params.nuCaffeine = "";
+                params.nuTotWt = $scope.prodModifyInfo.nuTotWt;
+                params.nuKcal = $scope.prodModifyInfo.nuKcal;
+                params.nuProtein = $scope.prodModifyInfo.nuProtein;
+                params.nuSodium = $scope.prodModifyInfo.nuSodium;
+                params.nuSugars = $scope.prodModifyInfo.nuSugars;
+                params.nuSatFat = $scope.prodModifyInfo.nuSatFat;
+                params.nuCaffeine = $scope.prodModifyInfo.nuCaffeine;
             }
 
             // params에 있는 값으로 한번더 value check
@@ -1605,6 +1605,10 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         $("#_depositProdNm").val("");
         $("#_depositProdNmCd").val("");
 
+        // 판매방식
+        $("input:checkbox[id='chkSaleTypeYnSin']").prop("checked", false);  // 판매방식(내점)
+        $("input:checkbox[id='chkSaleTypeYnDlv']").prop("checked", false);  // 판매방식(배달)
+        $("input:checkbox[id='chkSaleTypeYnPkg']").prop("checked", false);  // 판매방식(포장)
 
         // [1250 맘스터치] 사용시 초기화
         if(momsEnvstVal === "1") {
@@ -1627,11 +1631,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             // 출시일, 단종일
             releaseDate.value = getCurDate('-');
             disconDate.value = getCurDate('-');
-
-            // 판매방식
-            $("input:checkbox[id='chkSaleTypeYnSin']").prop("checked", false);  // 판매방식(내점)
-            $("input:checkbox[id='chkSaleTypeYnDlv']").prop("checked", false);  // 판매방식(배달)
-            $("input:checkbox[id='chkSaleTypeYnPkg']").prop("checked", false);  // 판매방식(포장)
 
             // 판매채널
             $("input:checkbox[id='chkSaleChnYnPos']").prop("checked", false);   // 판매채널(포스)
@@ -1772,6 +1771,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $scope.prodModifyInfo.momsKioskEdge = "0";
                 }
 
+                // 판매방식
+                $("input:checkbox[id='chkSaleTypeYnSin']").prop("checked", $scope.prodModifyInfo.saleTypeYnSin === 'Y' ? true : false);
+                $("input:checkbox[id='chkSaleTypeYnDlv']").prop("checked", $scope.prodModifyInfo.saleTypeYnDlv === 'Y' ? true : false);
+                $("input:checkbox[id='chkSaleTypeYnPkg']").prop("checked", $scope.prodModifyInfo.saleTypeYnPkg === 'Y' ? true : false);
+
                 // [1250 맘스터치] 사용시 기존정보 셋팅
                 if(momsEnvstVal === "1") {
 
@@ -1825,11 +1829,6 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                         disconDate.value = new Date(getFormatDate($scope.prodModifyInfo.disconDate, '-'));
                         $("#divChkDiscon").css("display", "");
                     }
-
-                    // 판매방식
-                    $("input:checkbox[id='chkSaleTypeYnSin']").prop("checked", $scope.prodModifyInfo.saleTypeYnSin === 'Y' ? true : false);
-                    $("input:checkbox[id='chkSaleTypeYnDlv']").prop("checked", $scope.prodModifyInfo.saleTypeYnDlv === 'Y' ? true : false);
-                    $("input:checkbox[id='chkSaleTypeYnPkg']").prop("checked", $scope.prodModifyInfo.saleTypeYnPkg === 'Y' ? true : false);
 
                     // 판매채널
                     $("input:checkbox[id='chkSaleChnYnPos']").prop("checked", $scope.prodModifyInfo.saleChnYnPos === 'Y' ? true : false);

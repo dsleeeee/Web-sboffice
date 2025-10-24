@@ -67,6 +67,8 @@
             </tbody>
         </table>
         <div class="mt10 oh">
+            <%--  엑셀다운로드 --%>
+            <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
             <%-- 저장 --%>
             <button class="btn_skyblue ml5 fr" id="btnSave" ng-click="saveCommCode()">
                 <s:message code="cmm.save"/>
@@ -108,4 +110,4 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeCommCode.js?ver=20250911.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeCommCode.js?ver=20251022.01" charset="utf-8"></script>

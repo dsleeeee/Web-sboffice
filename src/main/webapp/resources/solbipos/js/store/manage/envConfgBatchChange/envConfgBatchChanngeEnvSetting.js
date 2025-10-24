@@ -40,7 +40,7 @@ var useYn = [
 /**
  * 대표명칭 그리드 생성
  */
-app.controller('envConfgBatchChangeEnvSettingCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('envConfgBatchChangeEnvSettingCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
 
   $scope._setComboData("envstFg", envstFgNm);
   $scope._setComboData("envstGrpCd", envstGrpCdNm);
@@ -201,12 +201,37 @@ app.controller('envConfgBatchChangeEnvSettingCtrl', ['$scope', '$http', function
   $scope.allSearch = function () {
     $scope.searchEnvConfgBatchChangeEnvSetting();
   };
+
+    $scope.excelDownload = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    //return column.visible;
+                    return column.binding != 'gChk'; //선택
+                }
+            },
+                "환경변수일괄변경_" + messages['envConfgBatchChange.envSetting'] + "_" + messages['systemCd.grpGridNm'] + '.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
+
 }]);
 
 /**
  * 세부명칭 그리드 생성
  */
-app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
+app.controller('detailCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
   // 상위 객체 상속 : T/F 는 picker
   angular.extend(this, new RootController('detailCtrl', $scope, $http, true));
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
@@ -258,4 +283,28 @@ app.controller('detailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 기능수행 종료 : 반드시 추가
     event.preventDefault();
   });
+
+    $scope.excelDownload = function () {
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+        $timeout(function () {
+            wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.flex, {
+                includeColumnHeaders: true,
+                includeCellStyles: false,
+                includeColumns: function (column) {
+                    //return column.visible;
+                    return column.binding != 'gChk'; //선택
+                }
+            },
+                "환경변수일괄변경_" + messages['envConfgBatchChange.envSetting'] + "_" + messages['systemCd.gridNm'] + '.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                    }, 10);
+                });
+        }, 10);
+    };
 }]);

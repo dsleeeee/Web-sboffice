@@ -84,6 +84,8 @@
         <label id="lblEnvstNm"></label>
     </div>
     <div class="mt10 oh">
+        <%--  엑셀다운로드 --%>
+        <button class="btn_skyblue ml5 fr" ng-click="excelDownload()"><s:message code="cmm.excel.down" /></button>
         <%--환경변수값--%>
         <div class="sb-select dkbr ml5 fl" id="divComboEnvstVal">
             <wj-combo-box
@@ -151,4 +153,4 @@
     var userId = "${userId}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeHq.js?ver=20210617.04" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/manage/envConfgBatchChange/envConfgBatchChangeHq.js?ver=20251022.04" charset="utf-8"></script>
