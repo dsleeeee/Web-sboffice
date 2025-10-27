@@ -46,6 +46,8 @@ app.controller('saleRegistKmuMemberCtrl', ['$scope', '$http', function ($scope, 
 
                 // 회원코드
                 if (col.binding === "membrNo") {
+                    $scope._popMsg("선택한 회원 : [" + selectedRow.membrNo + "] " + selectedRow.membrNm);
+
                     $("#membrNo").val(selectedRow.membrNo);
                     $("#membrNm").val(selectedRow.membrNm);
 
