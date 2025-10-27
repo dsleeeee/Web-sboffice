@@ -3,7 +3,7 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<wj-popup control="wjSaleRegistChargeKmuMemberLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:400px;height:470px;" fade-in="false" fade-out="false">
+<wj-popup control="wjSaleRegistChargeKmuMemberLayer" show-trigger="Click" hide-trigger="Click" style="display:none;width:400px;height:500px;" fade-in="false" fade-out="false">
     <div ng-controller="saleRegistChargeKmuMemberCtrl">
 
         <%-- header --%>
@@ -49,8 +49,8 @@
             </div>
 
             <%-- 그리드 --%>
-            <div class="w100 mt10 mb20">
-                <div class="wj-gridWrap" style="height:300px; overflow-y: hidden; overflow-x: hidden;">
+            <div class="w100 mt10 mb10">
+                <div class="wj-gridWrap" style="height:330px; overflow-y: hidden; overflow-x: hidden;">
                     <wj-flex-grid
                             autoGenerateColumns.="false"
                             control="flex"
@@ -73,4 +73,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistChargeKmu/saleRegistChargeKmuMember.js?ver=20251022.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/excclc/excclc/saleRegistChargeKmu/saleRegistChargeKmuMember.js?ver=20251024.01" charset="utf-8"></script>
