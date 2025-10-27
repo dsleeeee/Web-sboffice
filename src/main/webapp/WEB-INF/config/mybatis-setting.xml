@@ -1370,6 +1370,8 @@
     <!-- 국민대 > 매입처관리 > 매입처조회 -->
     <typeAlias alias="purchaserVO" type="kr.co.solbipos.base.prod.purchaser.service.PurchaserVO"/>
 
+    <!-- 국민대 > 매장관리 > 그룹관리 -->
+    <!--<typeAlias alias="branchKmuVO" type="kr.co.solbipos.store.hq.branchKmu.service.BranchKmuVO"/>-->
 
 
     <!-- ====================================== 모바일 시작 ====================================== -->
