@@ -35,14 +35,14 @@
                 <button class="btn_skyblue ml5" ng-click="regStore('real')"><s:message code="omsLinkSample.realSearch" /></button>
             </td>
         </tr>
-        <tr>
-            <%-- 매장 배대사 등록(002) --%>
+        <%--<tr>
+            // 매장 배대사 등록(002)
             <th><s:message code="omsLinkSample.regStoreAgency"/>(002)</th>
             <td>
                 <button class="btn_skyblue ml5" ng-click="regStoreAgency('test')"><s:message code="omsLinkSample.testSearch" /></button>
                 <button class="btn_skyblue ml5" ng-click="regStoreAgency('real')"><s:message code="omsLinkSample.realSearch" /></button>
             </td>
-        <tr>
+        <tr>--%>
             <%-- 배대사 코드 조회(003) --%>
             <th><s:message code="omsLinkSample.searchAgencyCode"/>(003)</th>
             <td>

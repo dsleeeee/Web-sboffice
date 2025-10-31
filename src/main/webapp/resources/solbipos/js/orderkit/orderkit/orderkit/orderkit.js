@@ -20,4 +20,13 @@ app.controller('orderkitCtrl', ['$scope', '$http', '$timeout', function ($scope,
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('orderkitCtrl', $scope, $http, false));
 
+    $scope.$on("orderkitCtrl", function (event, data) {
+
+    });
+
+    // 오더킷(Order kit) 관리자 웹 이동
+    $scope.openWeb = function () {
+        window.open(url, 'newWindow');
+    }
+
 }]);
