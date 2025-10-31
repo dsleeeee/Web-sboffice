@@ -22,7 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import kr.co.solbipos.application.com.griditem.enums.GridDataFg;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -194,6 +196,26 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 }
             }
 
+            if(prodExcelUploadVO.getOrgProdFg() != null && prodExcelUploadVO.getOrgProdFg().equals("10")){
+                if(prodExcelUploadVO.getShPPointSaveRate() != null && !"".equals(prodExcelUploadVO.getShPPointSaveRate())){
+                    if (!Pattern.matches(pattern, prodExcelUploadVO.getShPPointSaveRate())) {
+                        prodExcelUploadVO.setShPPointSaveRate(null);
+                    }
+                }
+            }else if(prodExcelUploadVO.getOrgProdFg() != null && prodExcelUploadVO.getOrgProdFg().equals("20")){
+                if(prodExcelUploadVO.getShBDiscRate() != null && !"".equals(prodExcelUploadVO.getShBDiscRate())){
+                    if (!Pattern.matches(pattern, prodExcelUploadVO.getShBDiscRate())) {
+                        prodExcelUploadVO.setShBDiscRate(null);
+                    }
+                }
+                if(prodExcelUploadVO.getShBPointSaveRate() != null && !"".equals(prodExcelUploadVO.getShBPointSaveRate())){
+                    if (!Pattern.matches(pattern, prodExcelUploadVO.getShBPointSaveRate())) {
+                        prodExcelUploadVO.setShBPointSaveRate(null);
+                    }
+                }
+            }
+
+
             prodExcelUploadVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
             prodExcelUploadVO.setMembrOrgnCd(sessionInfoVO.getHqOfficeCd());
             prodExcelUploadVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
@@ -322,6 +344,46 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                     String cornerCd = prodExcelUploadMapper.getCornerCheck(prodExcelUploadVO);
                     prodExcelUploadVO.setCornrCd(cornerCd);
                 }
+            }
+
+            if(prodExcelUploadVO.getOrgProdFg() != null && prodExcelUploadVO.getOrgProdFg().equals("10")) {
+                // 매입VAT
+                if (prodExcelUploadVO.getShPAcquireVat() != null && !"".equals(prodExcelUploadVO.getShPAcquireVat())) {
+
+                    DefaultMap<String> shPAcquireVatMap = new DefaultMap<>();
+                    shPAcquireVatMap.put("별도", "N");
+                    shPAcquireVatMap.put("포함", "Y");
+
+                    String shPAcquireVat = (String) shPAcquireVatMap.get(prodExcelUploadVO.getShPAcquireVat());
+
+                    prodExcelUploadVO.setShPAcquireVat(shPAcquireVat);
+                }
+                //식권구분
+                if(prodExcelUploadVO.getShPTicketFg() != null && !"".equals(prodExcelUploadVO.getShPTicketFg())){
+
+                    Map<String, String> shPTicketFgMap = new HashMap<>();
+                    shPTicketFgMap.put("NO", "N");
+                    shPTicketFgMap.put("YES", "Y");
+
+                    String shPTicketFg = (String) shPTicketFgMap.get(prodExcelUploadVO.getShPTicketFg());
+                    prodExcelUploadVO.setShPTicketFg(shPTicketFg);
+                }
+                // 특정관리 (처리여부 미정)
+                prodExcelUploadVO.setShPSpcManage("N");
+            }else if(prodExcelUploadVO.getOrgProdFg() != null && prodExcelUploadVO.getOrgProdFg().equals("20")){
+                // 매입VAT
+                if (prodExcelUploadVO.getShBAcquireVat() != null && !"".equals(prodExcelUploadVO.getShBAcquireVat())) {
+
+                    DefaultMap<String> shBAcquireVatMap = new DefaultMap<>();
+                    shBAcquireVatMap.put("별도", "N");
+                    shBAcquireVatMap.put("포함", "Y");
+
+                    String shBAcquireVat = (String) shBAcquireVatMap.get(prodExcelUploadVO.getShBAcquireVat());
+
+                    prodExcelUploadVO.setShBAcquireVat(shBAcquireVat);
+                }
+                // 특정관리 (처리여부 미정)
+                prodExcelUploadVO.setShBSpcManage("N");
             }
             // <-- //업로할때는 전부 명칭으로 들어간다 -->
 
@@ -647,6 +709,52 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 }
             }
 
+            String pattern = "^[0-9]*$"; //숫자만,
+
+            if(prodExcelUploadVO.getOrgProdFg() != null && prodExcelUploadVO.getOrgProdFg().equals("10")) {
+                // 매입VAT
+                if (prodExcelUploadVO.getShPAcquireVat() != null && !"".equals(prodExcelUploadVO.getShPAcquireVat())) {
+                }else{
+                    prodExcelUploadVO.setResult("매입VAT를 선택해주세요.");
+                }
+                //식권구분
+                if(prodExcelUploadVO.getShPTicketFg() != null && !"".equals(prodExcelUploadVO.getShPTicketFg())){
+                }else{
+                    prodExcelUploadVO.setResult("식권구분을 선택해주세요.");
+                }
+                // 특정관리
+                if (prodExcelUploadVO.getShPSpcManage() != null && !"".equals(prodExcelUploadVO.getShPSpcManage())) {
+                }else{
+                    prodExcelUploadVO.setResult("특정관리를 선택해주세요.");
+                }
+            }else if(prodExcelUploadVO.getOrgProdFg() != null && prodExcelUploadVO.getOrgProdFg().equals("20")){
+                if(prodExcelUploadVO.getShBPubDate() != null && !"".equals(prodExcelUploadVO.getShBPubDate())){
+                    if(!Pattern.matches(pattern,prodExcelUploadVO.getShBPubDate())){
+                        prodExcelUploadVO.setResult("발행일은 숫자만(8자리) 입력해주세요.");
+                        prodExcelUploadVO.setShBPubDate("");
+                    }
+                    if(prodExcelUploadVO.getShBPubDate().length() > 8){
+                        prodExcelUploadVO.setResult("발행일은 숫자만(8자리) 입력해주세요.");
+                        prodExcelUploadVO.setShBPubDate("");
+                    }
+                }
+                // 매입VAT
+                if (prodExcelUploadVO.getShBAcquireVat() != null && !"".equals(prodExcelUploadVO.getShBAcquireVat())) {
+                }else{
+                    prodExcelUploadVO.setResult("매입VAT를 선택해주세요.");
+                }
+                //ISBN
+                if (prodExcelUploadVO.getShBIsbnFg() != null && !"".equals(prodExcelUploadVO.getShBIsbnFg())) {
+                }else{
+                    prodExcelUploadVO.setResult("ISBN을 선택해주세요.");
+                }
+                // 특정관리
+                if (prodExcelUploadVO.getShBSpcManage() != null && !"".equals(prodExcelUploadVO.getShBSpcManage())) {
+                }else{
+                    prodExcelUploadVO.setResult("특정관리를 선택해주세요.");
+                }
+            }
+
             // ProdVO
             ProdVO prodVO = new ProdVO();
             prodVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
@@ -669,6 +777,7 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                     }
                 }
             }
+
 
             if(prodExcelUploadVO.getStoreCd() == null) { prodExcelUploadVO.setStoreCd(""); }
             if(prodExcelUploadVO.getProdCd() == null) { prodExcelUploadVO.setProdCd(""); }

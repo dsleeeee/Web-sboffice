@@ -182,6 +182,55 @@ public class ProdExcelUploadVO extends PageVO {
     /** 코너코드 */
     private String cornrCd;
 
+    /** 상품등록주체구분 */
+    private String orgProdFg;
+
+    /** 국민대 생협 */
+    /** 상품약칭 */
+    private String shPAlias;
+    /** 식권구분 */
+    private String shPTicketFg;
+    /** 제조사 */
+    private String shPMakerNm;
+    /** 매입VAT */
+    private String shPAcquireVat;
+    /** 포인트적립율 */
+    private String shPPointSaveRate;
+    /** 규격 */
+    private String shPSpec;
+    /** 특정관리 */
+    private String shPSpcManage;
+    /** 단품코드 */
+    private String shPSingleProdCd;
+    /** 도서약칭 */
+    private String shBAlias;
+    /** 출판사 */
+    private String shBPublishNm;
+    /** 저자1 */
+    private String shBAuthor1;
+    /** 저자2 */
+    private String shBAuthor2;
+    /** 역자1 */
+    private String shBTranslator1;
+    /** 역자2 */
+    private String shBTranslator2;
+    /** 발행일 */
+    private String shBPubDate;
+    /** 할인율 */
+    private String shBDiscRate;
+    /** 매입VAT */
+    private String shBAcquireVat;
+    /** 포인트적립율 */
+    private String shBPointSaveRate;
+    /** 규격 */
+    private String shBSpec;
+    /** 특정관리 */
+    private String shBSpcManage;
+    /** ISBN */
+    private String shBIsbnFg;
+    private String shBIsbnCode;
+
+
     public String getOrgnFg() { return orgnFg; }
 
     public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
@@ -556,5 +605,189 @@ public class ProdExcelUploadVO extends PageVO {
 
     public void setCornrCd(String cornrCd) {
         this.cornrCd = cornrCd;
+    }
+
+    public String getOrgProdFg() {
+        return orgProdFg;
+    }
+
+    public void setOrgProdFg(String orgProdFg) {
+        this.orgProdFg = orgProdFg;
+    }
+
+    public String getShPAlias() {
+        return shPAlias;
+    }
+
+    public void setShPAlias(String shPAlias) {
+        this.shPAlias = shPAlias;
+    }
+
+    public String getShPTicketFg() {
+        return shPTicketFg;
+    }
+
+    public void setShPTicketFg(String shPTicketFg) {
+        this.shPTicketFg = shPTicketFg;
+    }
+
+    public String getShPMakerNm() {
+        return shPMakerNm;
+    }
+
+    public void setShPMakerNm(String shPMakerNm) {
+        this.shPMakerNm = shPMakerNm;
+    }
+
+    public String getShPAcquireVat() {
+        return shPAcquireVat;
+    }
+
+    public void setShPAcquireVat(String shPAcquireVat) {
+        this.shPAcquireVat = shPAcquireVat;
+    }
+
+    public String getShPPointSaveRate() {
+        return shPPointSaveRate;
+    }
+
+    public void setShPPointSaveRate(String shPPointSaveRate) {
+        this.shPPointSaveRate = shPPointSaveRate;
+    }
+
+    public String getShPSpec() {
+        return shPSpec;
+    }
+
+    public void setShPSpec(String shPSpec) {
+        this.shPSpec = shPSpec;
+    }
+
+    public String getShPSpcManage() {
+        return shPSpcManage;
+    }
+
+    public void setShPSpcManage(String shPSpcManage) {
+        this.shPSpcManage = shPSpcManage;
+    }
+
+    public String getShPSingleProdCd() {
+        return shPSingleProdCd;
+    }
+
+    public void setShPSingleProdCd(String shPSingleProdCd) {
+        this.shPSingleProdCd = shPSingleProdCd;
+    }
+
+    public String getShBAlias() {
+        return shBAlias;
+    }
+
+    public void setShBAlias(String shBAlias) {
+        this.shBAlias = shBAlias;
+    }
+
+    public String getShBPublishNm() {
+        return shBPublishNm;
+    }
+
+    public void setShBPublishNm(String shBPublishNm) {
+        this.shBPublishNm = shBPublishNm;
+    }
+
+    public String getShBAuthor1() {
+        return shBAuthor1;
+    }
+
+    public void setShBAuthor1(String shBAuthor1) {
+        this.shBAuthor1 = shBAuthor1;
+    }
+
+    public String getShBAuthor2() {
+        return shBAuthor2;
+    }
+
+    public void setShBAuthor2(String shBAuthor2) {
+        this.shBAuthor2 = shBAuthor2;
+    }
+
+    public String getShBTranslator1() {
+        return shBTranslator1;
+    }
+
+    public void setShBTranslator1(String shBTranslator1) {
+        this.shBTranslator1 = shBTranslator1;
+    }
+
+    public String getShBTranslator2() {
+        return shBTranslator2;
+    }
+
+    public void setShBTranslator2(String shBTranslator2) {
+        this.shBTranslator2 = shBTranslator2;
+    }
+
+    public String getShBPubDate() {
+        return shBPubDate;
+    }
+
+    public void setShBPubDate(String shBPubDate) {
+        this.shBPubDate = shBPubDate;
+    }
+
+    public String getShBDiscRate() {
+        return shBDiscRate;
+    }
+
+    public void setShBDiscRate(String shBDiscRate) {
+        this.shBDiscRate = shBDiscRate;
+    }
+
+    public String getShBAcquireVat() {
+        return shBAcquireVat;
+    }
+
+    public void setShBAcquireVat(String shBAcquireVat) {
+        this.shBAcquireVat = shBAcquireVat;
+    }
+
+    public String getShBPointSaveRate() {
+        return shBPointSaveRate;
+    }
+
+    public void setShBPointSaveRate(String shBPointSaveRate) {
+        this.shBPointSaveRate = shBPointSaveRate;
+    }
+
+    public String getShBSpec() {
+        return shBSpec;
+    }
+
+    public void setShBSpec(String shBSpec) {
+        this.shBSpec = shBSpec;
+    }
+
+    public String getShBSpcManage() {
+        return shBSpcManage;
+    }
+
+    public void setShBSpcManage(String shBSpcManage) {
+        this.shBSpcManage = shBSpcManage;
+    }
+
+    public String getShBIsbnFg() {
+        return shBIsbnFg;
+    }
+
+    public void setShBIsbnFg(String shBIsbnFg) {
+        this.shBIsbnFg = shBIsbnFg;
+    }
+
+    public String getShBIsbnCode() {
+        return shBIsbnCode;
+    }
+
+    public void setShBIsbnCode(String shBIsbnCode) {
+        this.shBIsbnCode = shBIsbnCode;
     }
 }

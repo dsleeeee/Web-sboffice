@@ -175,6 +175,25 @@ app.controller('prodExcelUploadAddCtrl', ['$scope', '$http', '$timeout', functio
             if (numChkexp.test(jsonData[i].startStockQty)) {
                 jsonData[i].startStockQty = "";
             }
+            if(urlProdFg === '1'){
+                // 포인트적립율
+                if (numChkexp.test(jsonData[i].shPPointSaveRate)) {
+                    jsonData[i].shPPointSaveRate = "";
+                }
+                jsonData[i].orgProdFg = '10';
+            }else if(urlProdFg === '2'){
+                // 할인율
+                if (numChkexp.test(jsonData[i].shBDiscRate)) {
+                    jsonData[i].shBDiscRate = "";
+                }
+                // 포인트적립율
+                if (numChkexp.test(jsonData[i].shBPointSaveRate)) {
+                    jsonData[i].shBPointSaveRate = "";
+                }
+                jsonData[i].orgProdFg = '20';
+            }else if(urlProdFg === '0'){
+                jsonData[i].orgProdFg = '00';
+            }
         }
 
         $scope.totalRows = jsonData.length;
