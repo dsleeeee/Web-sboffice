@@ -29,6 +29,39 @@ var vatIncldYnDataMap2 = [
     {"name":"포함","value":"Y"}
 ];
 
+// 식권구분
+var ticketFgComboData = [
+    {"name": "NO", "value": "N"},
+    {"name": "YES", "value": "Y"}
+];
+
+// 매입VAT 포함여부
+var acquireVatComboData = [
+    {"name": "포함", "value": "Y"},
+    {"name": "별도", "value": "N"}
+];
+
+// ISBN 구분 데이터
+var isbnComboData = [
+    {"name": "ISBN", "value": "ISBN"},
+    {"name": "ISSN", "value": "ISSN"}
+];
+
+// 특정관리 선택
+var spcManageComboData = [
+    {"name": "안함", "value": "N"},
+    {"name": "미정", "value": ""},
+    {"name": "미정", "value": ""}
+];
+
+// 상품등록구분 데이터
+var orgProdFgComboData = [
+    {"name": "", "value": "00"},
+    {"name": "일반상품", "value": "10"},
+    {"name": "도서상품", "value": "20"},
+    {"name": "OMS", "value": "30"}
+];
+
 /**
  *  상품목록 샘플양식 조회 그리드 생성
  */
@@ -83,6 +116,12 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         $scope.pointUseYnDataMap = new wijmo.grid.DataMap(pointUseYnData, 'value', 'name'); // 재고관리여부
         $scope.dcYnDataMap = new wijmo.grid.DataMap(dcYnData, 'value', 'name'); // 재고관리여부
         $scope.cornerDatamap = new wijmo.grid.DataMap(cornerList, 'value', 'name'); // 코너
+        $scope.ticketFgMap = new wijmo.grid.DataMap(ticketFgComboData, 'value', 'name'); // 식권구분
+        $scope.acquireVatMap = new wijmo.grid.DataMap(acquireVatComboData, 'value', 'name'); // 매입VAT
+        $scope.spcManageMap = new wijmo.grid.DataMap(spcManageComboData, 'value', 'name'); // 특정관리
+        $scope.isbnMap = new wijmo.grid.DataMap(isbnComboData, 'value', 'name'); // ISBN
+        $scope.orgProdFgMap = new wijmo.grid.DataMap(orgProdFgComboData, 'value', 'name'); // 상품등록주체
+
 
         // 전체삭제
         $scope.delAll();
@@ -143,6 +182,31 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
         params.dcYn="Y";
         params.cornrCd = "00";
         params.remark = "";
+        if(urlProdFg === '1'){
+            params.shPAlias = '상품약칭';
+            params.shPTicketFg = 'N';
+            params.shPMakerNm = '제조사';
+            params.shPAcquireVat = 'Y';
+            params.shPPointSaveRate = '0';
+            params.shPSpec = '0';
+            params.shPSpecialManage = 'N';
+            params.shPSingleProdCd = '';
+        }else if(urlProdFg === '2'){
+            params.shBAlias = '도서약칭';
+            params.shBPublishNm = '출판사';
+            params.shBAuthor1 = '저자1';
+            params.shBAuthor2 = '저자2';
+            params.shBTranslator1 = '역자1';
+            params.shBTranslator2 = '역자2';
+            params.shBPubDate = '20250101';
+            params.shBDiscRate = '0';
+            params.shBAcquireVat = 'Y';
+            params.shBPointSaveRate = '0';
+            params.shBSpec = '0';
+            params.shBSpcManage = 'N';
+            params.shBIsbnFg = 'ISBN';
+            params.shBIsbnCode = '';
+        }
 
         // 추가기능 수행 : 파라미터
         $scope._addRow(params);
@@ -163,6 +227,13 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
             return false;
         }
 
+        var excelTitle = '상품엑셀업로드'
+        if(urlProdFg === '1') {
+            excelTitle = '일반상품엑셀업로드'
+        }else if(urlProdFg === '2'){
+            excelTitle = '도서상품엑셀업로드'
+        }
+
         $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
         $timeout(function()	{
             wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync(	$scope.flex,
@@ -173,7 +244,7 @@ app.controller('prodExcelUploadCtrl', ['$scope', '$http', '$timeout', function (
                         return column.visible;
                     }
                 },
-                '상품엑셀업로드_'+getCurDate()+'.xlsx',
+                excelTitle + '_' +getCurDate()+'.xlsx',
                 function () {
                     $timeout(function () {
                         $scope.$broadcast('loadingPopupInactive'); //데이터 처리중 메시지 팝업 닫기
@@ -227,6 +298,11 @@ app.controller('prodExcelUploadProdCtrl', ['$scope', '$http', '$timeout', functi
         $scope.pointUseYnDataMap = new wijmo.grid.DataMap(pointUseYnData, 'value', 'name'); // 재고관리여부
         $scope.dcYnDataMap = new wijmo.grid.DataMap(dcYnData, 'value', 'name'); // 재고관리여부
         $scope.cornerDatamap = new wijmo.grid.DataMap(cornerList, 'value', 'name'); // 코너
+        $scope.ticketFgMap = new wijmo.grid.DataMap(ticketFgComboData, 'value', 'name'); // 식권구분
+        $scope.acquireVatMap = new wijmo.grid.DataMap(acquireVatComboData, 'value', 'name'); // 매입VAT
+        $scope.spcManageMap = new wijmo.grid.DataMap(spcManageComboData, 'value', 'name'); // 특정관리
+        $scope.isbnMap = new wijmo.grid.DataMap(isbnComboData, 'value', 'name'); // ISBN
+        $scope.orgProdFgMap = new wijmo.grid.DataMap(orgProdFgComboData, 'value', 'name'); // 상품등록주체
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {

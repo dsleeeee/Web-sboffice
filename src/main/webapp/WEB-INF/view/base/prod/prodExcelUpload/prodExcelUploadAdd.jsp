@@ -62,6 +62,32 @@
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.dcYn"/>" binding="dcYn" data-map="dcYnDataMap" width="85" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.corner"/>" binding="cornrCd" width="100" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="prodExcelUpload.remark"/>" binding="remark" width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                <c:if test="${urlProdFg == '1'}">
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.prodAlias"/>"      binding="shPAlias"          width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.ticketFg"/>"       binding="shPTicketFg"       width="70" align="center" data-map="ticketFgMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.makerNm"/>"        binding="shPMakerNm"        width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.acquireVat"/>"     binding="shPAcquireVat"     width="70" align="center" data-map="acquireVatMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.pointSaveRate"/>"  binding="shPPointSaveRate"  width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.spec"/>"           binding="shPSpec"           width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.specialManage"/>"  binding="shPSpecialManage"  width="70" align="center" data-map="spcManageMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.singleProdCd"/>"   binding="shPSingleProdCd"   width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
+                <c:if test="${urlProdFg == '2'}">
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.bookAlias"/>"      binding="shBAlias"          width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.publishNm"/>"      binding="shBPublishNm"      width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.author1"/>"        binding="shBAuthor1"        width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.author2"/>"        binding="shBAuthor2"        width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.translator1"/>"    binding="shBTranslator1"    width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.translator2"/>"    binding="shBTranslator2"    width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.pubDate"/>"        binding="shBPubDate"        width="80" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.discRate"/>"       binding="shBDiscRate"       width="70" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.acquireVat"/>"     binding="shBAcquireVat"     width="70" align="center" data-map="acquireVatMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.pointSaveRate"/>"  binding="shBPointSaveRate"  width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.spec"/>"           binding="shBSpec"           width="60" is-read-only="true" align="center"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.specialManage"/>"  binding="shBSpcManage"      width="70" align="center" data-map="spcManageMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.isbn"/>"           binding="shBIsbnFg"           width="60" align="center" data-map="isbnMap"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.isbnCode"/>"       binding="shBIsbnCode"       width="90" is-read-only="true" align="center"></wj-flex-grid-column>
+                </c:if>
 
             </wj-flex-grid>
         </div>
@@ -78,4 +104,4 @@
     var brandUseFg = "${brandUseFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20250206.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodExcelUpload/prodExcelUploadAdd.js?ver=20251021.01" charset="utf-8"></script>

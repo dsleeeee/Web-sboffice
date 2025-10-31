@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CouponIssueStatus.xml
+    [국민대]쿠폰상태관리(관리자) sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.10.30      최초작성
+-->
+<mapper namespace="kr.co.solbipos.kookmin.coupon.couponIssueStatus.service.impl.CouponIssueStatusMapper">
+
+    <!-- 쿠폰상태 정보 조회 -->
+    <!--
+      TABLE    :
+      PARAM    :
+      COMMENTS : 쿠폰상태 정보를 조회한다.
+    -->
+    <select id="getCouponIssueStatusList" parameterType="couponIssueStatusVO" resultType="defaultMap">
+        /* CouponIssueStatusMapper.getCouponIssueStatusList */
+        SELECT 	A.PAY_CLASS_CD || A.COUPN_CD    AS MERGE_COUPN_CD
+        ,       A.COUPN_CD
+        ,       A.PAY_CLASS_CD
+        ,		A.COUPN_NM
+        ,       G.COUPN_SER_NO
+        ,		CASE
+                    WHEN G.COUPN_SER_NO_STATUS = '1' AND #{saleDate} BETWEEN A.START_DATE AND A.END_DATE THEN '사용가능'
+                    WHEN G.COUPN_SER_NO_STATUS = '1' AND #{saleDate} > A.END_DATE THEN '기간만료'
+                    ELSE '사용불가'
+                END		    AS FINAL_STATUS
+        ,		I.NMCODE_NM AS DETAIL_FG
+        ,       G.ISSUE_STATUS_FG
+        ,		B.COUPN_USE_PART
+        ,		D.VENDR_NM
+        ,		TO_CHAR(TO_DATE(A.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd')    AS START_DATE
+        ,		TO_CHAR(TO_DATE(A.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd')      AS END_DATE
+        ,		B.COUPN_PROD_CD
+        ,		E.PROD_NM
+        ,		F.SALE_UPRC
+        ,		B.COUPN_STORE_CD
+        ,		H.STORE_NM
+        ,       TO_CHAR(TO_DATE(G.COUPN_ISSUE_DATE, 'yyyymmdd'), 'yyyy-mm-dd')          AS COUPN_ISSUE_DATE
+        ,       TO_CHAR(TO_DATE(G.COUPN_USE_DATE, 'yyyymmdd'), 'yyyy-mm-dd')            AS COUPN_USE_DATE
+        ,		TO_CHAR(TO_DATE(G.MOD_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS') AS MOD_DT
+        ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = G.MOD_ID)  AS MOD_NM
+        FROM 	TB_HQ_COUPON A
+        ,		TB_HQ_COUPON_INFO B
+        ,		TB_HQ_PAY_METHOD_CLASS C
+        ,		TB_HQ_VENDOR D
+        ,		TB_MS_PRODUCT E
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 F
+        ,		TB_HQ_COUPON_ISSUE G
+        ,	    TB_MS_STORE H
+        ,		TB_CM_NMCODE I
+        WHERE 	B.HQ_OFFICE_CD 	    = A.HQ_OFFICE_CD
+        AND 	B.PAY_CLASS_CD 	    = A.PAY_CLASS_CD
+        AND 	B.COUPN_CD 		    = A.COUPN_CD
+        AND 	C.HQ_OFFICE_CD      = A.HQ_OFFICE_CD
+        AND 	C.PAY_CLASS_CD      = A.PAY_CLASS_CD
+        AND 	D.HQ_OFFICE_CD 	    = B.HQ_OFFICE_CD
+        AND 	D.VENDR_CD 		    = B.COUPN_USE_PART
+        AND 	E.STORE_CD 		    = B.COUPN_STORE_CD
+        AND	 	E.PROD_CD 		    = B.COUPN_PROD_CD
+        AND		F.STORE_CD 		    = B.COUPN_STORE_CD
+        AND	 	F.PROD_CD 		    = B.COUPN_PROD_CD
+        AND		G.HQ_OFFICE_CD 	    = A.HQ_OFFICE_CD
+        AND 	G.PAY_CLASS_CD 	    = A.PAY_CLASS_CD
+        AND 	G.COUPN_CD 		    = A.COUPN_CD
+        AND		H.STORE_CD			= B.COUPN_STORE_CD
+        AND		I.NMCODE_CD			= G.ISSUE_STATUS_FG
+        AND		I.NMCODE_GRP_CD		= '243'
+        AND		C.PAY_TYPE_FG 	    = '3'
+        AND 	A.HQ_OFFICE_CD 	    = #{hqOfficeCd}
+        AND		F.SALE_DATE 	    = #{saleDate}
+        <if test='coupnStatusFg != null and coupnStatusFg != ""'>
+            AND G.COUPN_SER_NO_STATUS = #{coupnStatusFg}
+        </if>
+        <if test='useStatusFg != null and useStatusFg != ""'>
+            <choose>
+                <when test='useStatusFg.equals("Y")'>
+                    AND G.COUPN_SER_NO_STATUS = '1' AND #{saleDate} BETWEEN A.START_DATE AND A.END_DATE
+                </when>
+                <when test='useStatusFg.equals("N")'>
+                    AND (G.COUPN_SER_NO_STATUS != '1' OR #{saleDate} NOT BETWEEN A.START_DATE AND A.END_DATE)
+                </when>
+                <otherwise>
+                </otherwise>
+            </choose>
+        </if>
+        <if test='coupnCd != null and coupnCd != ""'>
+            AND A.PAY_CLASS_CD || A.COUPN_CD LIKE '%'||#{coupnCd}||'%'
+        </if>
+        <if test='coupnNm != null and coupnNm != ""'>
+            AND A.COUPN_NM LIKE '%'||#{coupnNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND B.COUPN_STORE_CD LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND H.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND B.COUPN_PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND E.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='partCd != null and partCd != ""'>
+            AND B.COUPN_USE_PART LIKE '%'||#{partCd}||'%'
+        </if>
+        <if test='partNm != null and partNm != ""'>
+            AND D.VENDR_NM LIKE '%'||#{partNm}||'%'
+        </if>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            AND (#{startDate} BETWEEN A.START_DATE AND A.END_DATE OR #{endDate} BETWEEN A.START_DATE AND A.END_DATE)
+        </if>
+        ORDER
+        BY      A.PAY_CLASS_CD
+        ,       A.COUPN_CD
+        ,       G.COUPN_SER_NO
+    </select>
+
+    <!-- 쿠폰상태변환주체 수정   -->
+    <!--
+        TABLE    : TB_HQ_COUPON_ISSUE
+        COMMENTS : 쿠폰상태변환주체를 수정(발행,회수,만료)한다
+    -->
+    <insert id="saveCouponIssueStatus" parameterType="CouponIssueStatusVO">
+        /* USE : CouponIssueStatusMapper.saveCouponIssueStatus */
+        MERGE INTO TB_HQ_COUPON_ISSUE A
+        USING   (
+                    SELECT  HQ_OFFICE_CD
+                    ,       PAY_CLASS_CD
+                    ,       COUPN_CD
+                    ,       COUPN_SER_NO
+                    ,		CASE
+                                  WHEN COUPN_SER_NO_STATUS = '1' AND #{coupnStatusFg} = '2' THEN '211'
+                                  WHEN COUPN_SER_NO_STATUS = '1' AND #{coupnStatusFg} = '3' THEN '311'
+                                  WHEN COUPN_SER_NO_STATUS = '2' AND #{coupnStatusFg} = '1' THEN '121'
+                                  WHEN COUPN_SER_NO_STATUS = '2' AND #{coupnStatusFg} = '3' THEN '320'
+                                  WHEN COUPN_SER_NO_STATUS = '3' AND #{coupnStatusFg} = '1' THEN '131'
+                                  WHEN COUPN_SER_NO_STATUS = '3' AND #{coupnStatusFg} = '2' THEN '231'
+                            END AS ISSUE_STATUS_FG
+                    FROM    TB_HQ_COUPON_ISSUE
+                    WHERE   HQ_OFFICE_CD        = #{hqOfficeCd}
+                    AND     PAY_CLASS_CD        = #{payClassCd}
+                    AND     COUPN_CD            = #{coupnCd}
+                    AND     COUPN_SER_NO        = #{coupnSerNo}
+                    AND     COUPN_SER_NO_STATUS != #{coupnStatusFg}
+                ) B
+        ON  (
+                    A.HQ_OFFICE_CD  = B.HQ_OFFICE_CD
+                AND A.PAY_CLASS_CD  = B.PAY_CLASS_CD
+                AND A.COUPN_CD      = B.COUPN_CD
+                AND A.COUPN_SER_NO  = B.COUPN_SER_NO
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     A.COUPN_SER_NO_STATUS   = #{coupnStatusFg}
+        ,       A.COUPN_USE_DATE        = #{coupnUseDate}
+        ,       A.ISSUE_STATUS_FG       = B.ISSUE_STATUS_FG
+        ,       A.ISSUE_IN_FG           = 'W'
+        ,       A.ISSUE_REMARK          = #{issueRemark}
+        ,       A.MOD_DT                = #{modDt}
+        ,       A.MOD_ID                = #{modId}
+    </insert>
+</mapper>

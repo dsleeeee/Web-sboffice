@@ -341,6 +341,30 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                 prodVO.setStinSaleUprc(simpleProdVO.getStinSaleUprc());
                 prodVO.setDlvrSaleUprc(simpleProdVO.getDlvrSaleUprc());
                 prodVO.setPackSaleUprc(simpleProdVO.getPackSaleUprc());
+                prodVO.setShPAlias(simpleProdVO.getShPAlias());
+                prodVO.setShPTicketFg(simpleProdVO.getShPTicketFg());
+                prodVO.setShPMakerNm(simpleProdVO.getShPMakerNm());
+                prodVO.setShPAcquireVat(simpleProdVO.getShPAcquireVat());
+                prodVO.setShPPointSaveRate(simpleProdVO.getShPPointSaveRate());
+                prodVO.setShPSpec(simpleProdVO.getShPSpec());
+                prodVO.setShPSpcManage(simpleProdVO.getShPSpcManage());
+                prodVO.setShPSingleProdCd(simpleProdVO.getShPSingleProdCd());
+                prodVO.setShBAlias(simpleProdVO.getShBAlias());
+                prodVO.setShBPublishNm(simpleProdVO.getShBPublishNm());
+                prodVO.setShBAuthor1(simpleProdVO.getShBAuthor1());
+                prodVO.setShBAuthor2(simpleProdVO.getShBAuthor2());
+                prodVO.setShBTranslator1(simpleProdVO.getShBTranslator1());
+                prodVO.setShBTranslator2(simpleProdVO.getShBTranslator2());
+                prodVO.setShBPubDate(simpleProdVO.getShBPubDate());
+                prodVO.setShBDiscRate(simpleProdVO.getShBDiscRate());
+                prodVO.setShBAcquireVat(simpleProdVO.getShBAcquireVat());
+                prodVO.setShBPointSaveRate(simpleProdVO.getShBPointSaveRate());
+                prodVO.setShBSpec(simpleProdVO.getShBSpec());
+                prodVO.setShBSpcManage(simpleProdVO.getShBSpcManage());
+                prodVO.setShBIsbnFg(simpleProdVO.getShBIsbnFg());
+                prodVO.setShBIsbnCode(simpleProdVO.getShBIsbnCode());
+                prodVO.setOrgProdFg(simpleProdVO.getOrgProdFg());
+
                 if(sessionInfoVO.getOrgnFg() == OrgnFg.STORE) {
                     prodVO.setCornrCd(simpleProdVO.getCornrCd());
                 }else{
@@ -504,6 +528,14 @@ public class SimpleProdServiceImpl implements SimpleProdService {
                     if (sessionInfoVO.getOrgnFg() == OrgnFg.HQ) {
                         // 배달앱 상품명-맵핑정보 등록
                         prodMapper.insertHqdlvrProdNm(prodVO);
+                    }
+                }
+
+                if(("prodExcelUpload").equals(simpleProdVO.getGubun())){
+                    if(simpleProdVO.getOrgProdFg() != null && simpleProdVO.getOrgProdFg().equals("10")){
+                        prodMapper.saveProdInfo(prodVO);
+                    }else if(simpleProdVO.getOrgProdFg() != null && simpleProdVO.getOrgProdFg().equals("20")){
+                        prodMapper.saveProdInfo(prodVO);
                     }
                 }
 

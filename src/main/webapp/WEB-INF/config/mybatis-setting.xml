@@ -1292,6 +1292,11 @@
     <!-- 국민대 > 총괄정보 > 월별매출분석 -->
     <typeAlias alias="saleAnalysisByMonthlyVO" type="kr.co.solbipos.kookmin.generalInfo.saleAnalysisByMonthly.service.SaleAnalysisByMonthlyVO"/>
 
+    <!-- 국민대 > 쿠폰관리 > 쿠폰관리 -->
+    <typeAlias alias="couponInfoVO" type="kr.co.solbipos.kookmin.coupon.couponInfo.service.CouponInfoVO"/>
+    <!-- 국민대 > 쿠폰관리 > 쿠폰상태관리(관리자) -->
+    <typeAlias alias="couponIssueStatusVO" type="kr.co.solbipos.kookmin.coupon.couponIssueStatus.service.CouponIssueStatusVO"/>
+
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
     <!-- 매출관리 > 배달현황 > 주문채널별현황 -->

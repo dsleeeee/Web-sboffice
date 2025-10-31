@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    CouponInfo.xml
+    [국민대]쿠폰관리 sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.10.23      최초작성
+-->
+<mapper namespace="kr.co.solbipos.kookmin.coupon.couponInfo.service.impl.CouponInfoMapper">
+
+    <!-- 쿠폰 정보 조회 -->
+    <!--
+      TABLE    :
+      PARAM    :
+      COMMENTS : 쿠폰정보를 조회한다.
+    -->
+    <select id="getCouponInfoList" parameterType="couponInfoVO" resultType="defaultMap">
+        /* CouponInfoMapper.getCouponInfoList */
+        SELECT 	A.PAY_CLASS_CD || A.COUPN_CD	AS MERGE_COUPN_CD
+        ,       A.COUPN_CD
+        ,       A.PAY_CLASS_CD
+        ,		A.COUPN_NM
+        ,		B.COUPN_USE_PART
+        ,		D.VENDR_NM
+        ,		TO_CHAR(TO_DATE(A.START_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS START_DATE
+        ,		TO_CHAR(TO_DATE(A.END_DATE, 'yyyymmdd'), 'yyyy-mm-dd') AS END_DATE
+        ,		B.COUPN_PROD_CD
+        ,		E.PROD_NM
+        ,		F.SALE_UPRC
+        ,		B.COUPN_COUNT
+        ,		F.SALE_UPRC		AS COUPN_ISSUE_UPRC
+        ,		TO_CHAR(TO_DATE(G.COUPN_ISSUE_DATE, 'yyyymmdd'), 'yyyy-mm-dd')      AS COUPN_ISSUE_DATE
+        ,		TO_CHAR(TO_DATE(B.COUPN_LAST_SALE_DATE, 'yyyymmdd'), 'yyyy-mm-dd')  AS COUPN_LAST_SALE_DATE
+        ,       G.SALE_CNT
+        ,       G.SALE_AMT
+        ,       B.COUPN_COUNT - G.SALE_CNT  AS NOT_SALE_CNT
+        ,       (B.COUPN_COUNT - G.SALE_CNT) * F.SALE_UPRC  AS NOT_SALE_AMT
+        FROM 	TB_HQ_COUPON A
+        ,		TB_HQ_COUPON_INFO B
+        ,		TB_HQ_PAY_METHOD_CLASS C
+        ,		TB_HQ_VENDOR D
+        ,		TB_MS_PRODUCT E
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 F
+        ,		(
+                    SELECT 	A.HQ_OFFICE_CD
+                    ,		A.PAY_CLASS_CD
+                    ,		A.COUPN_CD
+                    ,		A.COUPN_ISSUE_DATE
+                    ,		SUM(DECODE(A.COUPN_SER_NO_STATUS,'2',1,0))			AS SALE_CNT
+                    ,		SUM(DECODE(A.COUPN_SER_NO_STATUS,'2',B.DC_AMT,0))	AS SALE_AMT
+                    FROM 	TB_HQ_COUPON_ISSUE A
+                    ,		TB_SL_SALE_PAY_COUPN B
+                    WHERE 	B.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+                    AND 	B.SALE_DATE 	(+) = A.SALE_DATE
+                    AND 	B.POS_NO 		(+) = A.POS_NO
+                    AND		B.BILL_NO 		(+) = A.BILL_NO
+                    AND 	B.LINE_NO 		(+) = A.LINE_NO
+                    AND 	B.LINE_SEQ_NO 	(+) = A.LINE_SEQ_NO
+                    AND     A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                    GROUP
+                    BY 		A.HQ_OFFICE_CD
+                    ,		A.PAY_CLASS_CD
+                    ,		A.COUPN_CD
+                    ,		A.COUPN_ISSUE_DATE
+                ) G
+        ,	    TB_MS_STORE H
+        WHERE 	B.HQ_OFFICE_CD 	    = A.HQ_OFFICE_CD
+        AND 	B.PAY_CLASS_CD 	    = A.PAY_CLASS_CD
+        AND 	B.COUPN_CD 		    = A.COUPN_CD
+        AND 	C.HQ_OFFICE_CD      = A.HQ_OFFICE_CD
+        AND 	C.PAY_CLASS_CD      = A.PAY_CLASS_CD
+        AND 	D.HQ_OFFICE_CD 	    = B.HQ_OFFICE_CD
+        AND 	D.VENDR_CD 		    = B.COUPN_USE_PART
+        AND 	E.STORE_CD 		    = B.COUPN_STORE_CD
+        AND	 	E.PROD_CD 		    = B.COUPN_PROD_CD
+        AND		F.STORE_CD 		    = B.COUPN_STORE_CD
+        AND	 	F.PROD_CD 		    = B.COUPN_PROD_CD
+        AND		G.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+        AND		G.PAY_CLASS_CD 	(+) = A.PAY_CLASS_CD
+        AND		G.COUPN_CD 		(+) = A.COUPN_CD
+        AND		H.STORE_CD			= B.COUPN_STORE_CD
+        AND		C.PAY_TYPE_FG 	    = '3'
+        AND 	A.HQ_OFFICE_CD 	    = #{hqOfficeCd}
+        AND		F.SALE_DATE 	    = #{saleDate}
+        <if test='coupnCd != null and coupnCd != ""'>
+            AND A.PAY_CLASS_CD || A.COUPN_CD LIKE '%'||#{coupnCd}||'%'
+        </if>
+        <if test='coupnNm != null and coupnNm != ""'>
+            AND A.COUPN_NM LIKE '%'||#{coupnNm}||'%'
+        </if>
+        <if test='storeCd != null and storeCd != ""'>
+            AND B.COUPN_USE_STORE LIKE '%'||#{storeCd}||'%'
+        </if>
+        <if test='storeNm != null and storeNm != ""'>
+            AND H.STORE_NM LIKE '%'||#{storeNm}||'%'
+        </if>
+        <if test='prodCd != null and prodCd != ""'>
+            AND B.COUPN_PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND E.PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        <if test='partCd != null and partCd != ""'>
+            AND B.COUPN_USE_PART LIKE '%'||#{partCd}||'%'
+        </if>
+        <if test='partNm != null and partNm != ""'>
+            AND D.VENDR_NM LIKE '%'||#{partNm}||'%'
+        </if>
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+            AND (#{startDate} BETWEEN A.START_DATE AND A.END_DATE OR #{endDate} BETWEEN A.START_DATE AND A.END_DATE)
+        </if>
+        ORDER
+        BY      A.PAY_CLASS_CD
+        ,       A.COUPN_CD
+    </select>
+
+    <!-- 매장별 상품 목록 조회 -->
+    <!--
+      TABLE    : TB_MS_PRODUCT
+      COMMENTS : 매장별 상품목록을 조회한다.
+    -->
+    <select id="getCouponSelectProdList" parameterType="couponInfoVO" resultType="defaultMap">
+        /* CouponInfoMapper.getCouponSelectProdList */
+        SELECT  PROD_CD
+        ,       PROD_NM
+        FROM    TB_MS_PRODUCT
+        WHERE   USE_YN      = 'Y'
+        AND     STORE_CD    = #{storeCd}
+        <if test='prodCd != null and prodCd != ""'>
+            AND PROD_CD LIKE '%'||#{prodCd}||'%'
+        </if>
+        <if test='prodNm != null and prodNm != ""'>
+            AND PROD_NM LIKE '%'||#{prodNm}||'%'
+        </if>
+        ORDER
+        BY      PROD_CD
+    </select>
+
+    <!-- 매장별 거래처 목록 조회 -->
+    <!--
+      TABLE    : TB_HQ_VENDOR
+      COMMENTS : 매장별 거래처 목록을 조회한다.
+    -->
+    <select id="getcouponSelectPartList" parameterType="couponInfoVO" resultType="defaultMap">
+        /* CouponInfoMapper.getcouponSelectPartList */
+        SELECT 	VENDR_CD
+        ,		VENDR_NM
+        FROM 	TB_HQ_VENDOR
+        WHERE 	HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND 	VENDOR_FG 		= '2'
+        <if test='partCd != null and partCd != ""'>
+            AND VENDR_CD LIKE '%'||#{partCd}||'%'
+        </if>
+        <if test='partNm != null and partNm != ""'>
+            AND VENDR_NM LIKE '%'||#{partNm}||'%'
+        </if>
+    </select>
+
+    <!-- 쿠폰코드 조회 -->
+    <!--
+        TABLE    : TB_HQ_PAY_METHOD_CLASS, TB_HQ_COUPON
+        COMMENTS : 쿠폰코드 최대값을 조회한다.
+    -->
+    <select id="getMaxCoupnCd" parameterType="couponInfoVO" resultType="defaultMap">
+        /* CouponInfoMapper.getMaxCoupnCd */
+        SELECT 	PAY_CLASS_CD
+        ,       COUPN_CD
+        FROM	(
+                    SELECT 	LPAD(A.PAY_CLASS_CD, 3, '0')    AS PAY_CLASS_CD
+                    ,       LPAD(NVL(MAX(B.COUPN_CD), 0) + 1, 4 ,'0')	AS COUPN_CD
+                    FROM 	TB_HQ_PAY_METHOD_CLASS A
+                    ,		TB_HQ_COUPON B
+                    WHERE 	A.HQ_OFFICE_CD 	= B.HQ_OFFICE_CD (+)
+                    AND 	A.PAY_CLASS_CD 	= B.PAY_CLASS_CD (+)
+                    AND 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+                    GROUP
+                    BY		A.PAY_CLASS_CD
+                    <![CDATA[
+                        HAVING 	NVL(MAX(B.COUPN_CD), 0) < 9999
+                    ]]>
+                    ORDER
+                    BY		A.PAY_CLASS_CD
+        )
+        WHERE	ROWNUM = 1
+    </select>
+
+    <!-- 쿠폰 등록   -->
+    <!--
+        TABLE    : TB_HQ_COUPON
+        COMMENTS : 쿠폰을 등록한다
+    -->
+    <insert id="getCouponRegist" parameterType="CouponInfoVO">
+        /* USE : CouponInfoMapper.getCouponRegist */
+        MERGE INTO TB_HQ_COUPON
+        USING DUAL
+        ON  (
+                    HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND PAY_CLASS_CD    = #{payClassCd}
+                AND COUPN_CD        = #{coupnCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     COUPN_NM    = #{coupnNm}
+        ,       START_DATE  = #{startDate}
+        ,       END_DATE    = #{endDate}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                HQ_OFFICE_CD
+        ,       PAY_CLASS_CD
+        ,       COUPN_CD
+        ,       COUPN_NM
+        ,       COUPN_DC_FG
+        ,       COUPN_DC_RATE
+        ,       COUPN_DC_AMT
+        ,       START_DATE
+        ,       END_DATE
+        ,       COUPN_APPLY_FG
+        ,       COUPN_TARGET_FG
+        ,       USE_YN
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        ,       DISP_SEQ_NO
+        ,       COUPN_PROD_FG
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{payClassCd}
+        ,       #{coupnCd}
+        ,       #{coupnNm}
+        ,       '3'
+        ,       '0'
+        ,       '0'
+        ,       #{startDate}
+        ,       #{endDate}
+        ,       '2'
+        ,       'A'
+        ,       'Y'
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        ,       ''
+        ,       ''
+        )
+    </insert>
+
+    <!-- 쿠폰상세정보 등록   -->
+    <!--
+        TABLE    : TB_HQ_COUPON_INFO
+        COMMENTS : 쿠폰상세정보를 등록한다.
+    -->
+    <insert id="getCouponInfoRegist" parameterType="CouponInfoVO">
+        /* USE : CouponInfoMapper.getCouponInfoRegist */
+        MERGE INTO TB_HQ_COUPON_INFO
+        USING DUAL
+        ON  (
+                    HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND COUPN_CD        = #{coupnCd}
+                AND PAY_CLASS_CD    = #{payClassCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     COUPN_PROD_CD       = #{prodCd}
+        ,       COUPN_USE_PART      = #{partCd}
+        ,       COUPN_STORE_CD      = #{storeCd}
+        ,       COUPN_COUNT         = #{coupnCount}
+        ,       COUPN_PRINT_TITLE   = #{coupnPrintTitle}
+        ,       COUPN_PRINT_PART    = #{coupnPrintPart}
+        ,       COUPN_PRINT_STORE   = #{coupnPrintStore}
+        ,       COUPN_PRINT_REMARK  = #{coupnPrintRemark}
+        ,       MOD_DT              = #{modDt}
+        ,       MOD_ID              = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                HQ_OFFICE_CD
+        ,       PAY_CLASS_CD
+        ,       COUPN_CD
+        ,       COUPN_TYPE
+        ,       COUPN_PROD_CD
+        ,       COUPN_USE_PART
+        ,       COUPN_STORE_CD
+        ,       COUPN_COUNT
+        ,       COUPN_STATUS
+        ,       COUPN_PRINT_TITLE
+        ,       COUPN_PRINT_PART
+        ,       COUPN_PRINT_STORE
+        ,       COUPN_PRINT_REMARK
+        ,       COUPN_SALE_COUNT
+        ,       COUPN_SALE_AMT
+        ,       COUPN_NO_SALE_COUNT
+        ,       COUPN_NO_SALE_AMT
+        ,       COUPN_FIRST_SALE_DATE
+        ,       COUPN_LAST_SALE_DATE
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{payClassCd}
+        ,       #{coupnCd}
+        ,       '0'
+        ,       #{prodCd}
+        ,       #{partCd}
+        ,       #{storeCd}
+        ,       #{coupnCount}
+        ,       '0'
+        ,       #{coupnPrintTitle}
+        ,       #{coupnPrintPart}
+        ,       #{coupnPrintStore}
+        ,       #{coupnPrintRemark}
+        ,       ''
+        ,       ''
+        ,       ''
+        ,       ''
+        ,       ''
+        ,       ''
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
+
+    <!-- 쿠폰 상세정보 조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 쿠폰 상세정보를 조회한다.
+    -->
+    <select id="getCouponInfoDtlList" parameterType="couponInfoVO" resultType="DefaultMap">
+        /* USE : CouponInfoMapper.getCouponInfoDtlList */
+        SELECT 	A.PAY_CLASS_CD || A.COUPN_CD	AS COUPN_CD
+        ,       DECODE(B.COUPN_STATUS, '0' ,'생성', '1', '발행', '') AS COUPN_STATUS
+        ,		A.COUPN_NM
+        ,		'[' || B.COUPN_USE_PART || ']' || D.VENDR_NM    AS VENDR_NM
+        ,		A.START_DATE
+        ,		A.END_DATE
+        ,		'[' || B.COUPN_PROD_CD || ']' || E.PROD_NM      AS PROD_NM
+        ,		F.SALE_UPRC
+        ,		B.COUPN_COUNT
+        ,		B.COUPN_LAST_SALE_DATE
+        ,		B.COUPN_PRINT_TITLE
+        ,		B.COUPN_PRINT_PART
+        ,		B.COUPN_PRINT_STORE
+        ,		B.COUPN_PRINT_REMARK
+        ,		'[' || B.COUPN_STORE_CD || ']' || G.STORE_NM    AS STORE_NM
+        ,       B.COUPN_USE_PART        AS VENDR_CD
+        ,       B.COUPN_PROD_CD         AS PROD_CD
+        ,       B.COUPN_STORE_CD        AS STORE_CD
+        ,		H.SALE_CNT
+        ,		H.SALE_AMT
+        ,		B.COUPN_COUNT - H.SALE_CNT AS NOT_SALE_CNT
+        ,		(B.COUPN_COUNT - H.SALE_CNT) * F.SALE_UPRC AS NOT_SALE_AMT
+        FROM 	TB_HQ_COUPON A
+        ,		TB_HQ_COUPON_INFO B
+        ,		TB_HQ_PAY_METHOD_CLASS C
+        ,		TB_HQ_VENDOR D
+        ,		TB_MS_PRODUCT E
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 F
+        ,		TB_MS_STORE G
+        ,		(
+                    SELECT 	A.HQ_OFFICE_CD
+                    ,		A.PAY_CLASS_CD
+                    ,		A.COUPN_CD
+                    ,		A.COUPN_ISSUE_DATE
+                    ,		SUM(DECODE(A.COUPN_SER_NO_STATUS,'2',1,0))			AS SALE_CNT
+                    ,		SUM(DECODE(A.COUPN_SER_NO_STATUS,'2',B.DC_AMT,0))	AS SALE_AMT
+                    FROM 	TB_HQ_COUPON_ISSUE A
+                    ,		TB_SL_SALE_PAY_COUPN B
+                    WHERE 	B.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+                    AND 	B.SALE_DATE 	(+) = A.SALE_DATE
+                    AND 	B.POS_NO 		(+) = A.POS_NO
+                    AND		B.BILL_NO 		(+) = A.BILL_NO
+                    AND 	B.LINE_NO 		(+) = A.LINE_NO
+                    AND 	B.LINE_SEQ_NO 	(+) = A.LINE_SEQ_NO
+                    AND     A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                    GROUP
+                    BY 		A.HQ_OFFICE_CD
+                    ,		A.PAY_CLASS_CD
+                    ,		A.COUPN_CD
+                    ,		A.COUPN_ISSUE_DATE
+                ) H
+        WHERE 	B.HQ_OFFICE_CD 	    = A.HQ_OFFICE_CD
+        AND 	B.PAY_CLASS_CD 	    = A.PAY_CLASS_CD
+        AND 	B.COUPN_CD 		    = A.COUPN_CD
+        AND 	C.HQ_OFFICE_CD      = A.HQ_OFFICE_CD
+        AND 	C.PAY_CLASS_CD      = A.PAY_CLASS_CD
+        AND 	D.HQ_OFFICE_CD 	    = B.HQ_OFFICE_CD
+        AND 	D.VENDR_CD 		    = B.COUPN_USE_PART
+        AND 	E.STORE_CD 		    = B.COUPN_STORE_CD
+        AND	 	E.PROD_CD 		    = B.COUPN_PROD_CD
+        AND		F.STORE_CD 		    = B.COUPN_STORE_CD
+        AND	 	F.PROD_CD 		    = B.COUPN_PROD_CD
+        AND		G.STORE_CD 			= B.COUPN_STORE_CD
+        AND 	H.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+        AND 	H.PAY_CLASS_CD 	(+) = A.PAY_CLASS_CD
+        AND 	H.COUPN_CD 		(+) = A.COUPN_CD
+        AND 	A.HQ_OFFICE_CD 	    = #{hqOfficeCd}
+        AND		C.PAY_TYPE_FG 	    = '3'
+        AND		F.SALE_DATE 	    = #{saleDate}
+        AND     A.COUPN_CD          = #{coupnCd}
+        AND     A.PAY_CLASS_CD      = #{payClassCd}
+    </select>
+
+    <!-- 엑셀업로드 TMP 저장 -->
+    <!--
+        TABLE    : TB_TMP_COUPON_ISSUE
+        COMMENTS : 엑셀업로드 값을 TMP테이블에 저장한다.
+    -->
+    <insert id="saveCouponIssueTmp" parameterType="couponInfoVO">
+        /* USE : CouponInfoMapper.saveCouponIssueTmp */
+        INSERT INTO TB_TMP_COUPON_ISSUE
+        (
+            SESSION_ID
+        ,   HQ_OFFICE_CD
+        ,   PAY_CLASS_CD
+        ,   COUPN_CD
+        ,   COUPN_SER_NO
+        ,   COUPN_MEMBR_NO
+        ,   COUPN_ISSUE_INFO1
+        ,   COUPN_ISSUE_INFO2
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{sessionId}
+        ,   #{hqOfficeCd}
+        ,   #{payClassCd}
+        ,   #{coupnCd}
+        ,   #{coupnSerNo}
+        ,   #{coupnMembrNo}
+        ,   SBPENC.E(#{coupnIssueInfo1})
+        ,   SBPENC.E(#{coupnIssueInfo2})
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- 엑셀업로드 TMP 테이블 값 삭제 -->
+    <!--
+        TABLE    : TB_TMP_COUPON_ISSUE
+        PARAM    :
+        COMMENTS : TMP 테이블 값을 삭제한다.
+    -->
+    <delete id="getDeleteTmpData" parameterType="couponInfoVO" >
+        /* USE : CouponInfoMapper.getDeleteTmpData */
+        DELETE
+        FROM    TB_TMP_COUPON_ISSUE
+        WHERE   SESSION_ID      = #{sessionId}
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     COUPN_CD        = #{coupnCd}
+        AND     PAY_CLASS_CD    = #{payClassCd}
+    </delete>
+
+    <!-- 엑셀업로드 건수 조회 -->
+    <!--
+        TABLE    : TB_TMP_COUPON_ISSUE
+        PARAM    :
+        COMMENTS : 엑셀업로드 건수를 조회한다.
+    -->
+    <select id="getCountCouponIssueTmp" parameterType="couponInfoVO" resultType="Integer">
+        /* USE : CouponInfoMapper.getCountCouponIssueTmp */
+        SELECT  COUNT(*)
+        FROM    TB_TMP_COUPON_ISSUE
+        WHERE   SESSION_ID      = #{sessionId}
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PAY_CLASS_CD    = #{payClassCd}
+        AND     COUPN_CD        = #{coupnCd}
+    </select>
+
+    <!-- 쿠폰코드 중복 조회 -->
+    <!--
+        TABLE    : TB_TMP_COUPON_ISSUE
+        PARAM    :
+        COMMENTS : 쿠폰코드 중복여부 체크한다,
+    -->
+    <select id="getCoupnSerNoDupChk" parameterType="couponInfoVO" resultType="Integer">
+        /* USE : CouponInfoMapper.getCoupnSerNoDupChk */
+        SELECT  COUNT(*)
+        FROM    TB_TMP_COUPON_ISSUE
+        WHERE   SESSION_ID      = #{sessionId}
+        AND     HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PAY_CLASS_CD    = #{payClassCd}
+        AND     COUPN_CD        = #{coupnCd}
+        AND     COUPN_SER_NO    = #{coupnSerNo}
+    </select>
+
+    <!-- 쿠폰발행 저장 -->
+    <!--
+        TABLE    :
+        COMMENTS : 쿠폰발행값을 저장한다.
+    -->
+    <insert id="saveCouponIssue" parameterType="couponInfoVO">
+        /* USE : CouponInfoMapper.saveCouponIssue */
+        MERGE INTO TB_HQ_COUPON_ISSUE A
+        USING   (
+                    SELECT  HQ_OFFICE_CD
+                    ,		PAY_CLASS_CD
+                    ,		COUPN_CD
+                    ,		COUPN_SER_NO
+                    ,		COUPN_MEMBR_NO
+                    ,		COUPN_ISSUE_INFO1
+                    ,		COUPN_ISSUE_INFO2
+                    FROM	TB_TMP_COUPON_ISSUE
+                    WHERE 	HQ_OFFICE_CD 	= #{hqOfficeCd}
+                    AND 	SESSION_ID		= #{sessionId}
+                    AND 	PAY_CLASS_CD	= #{payClassCd}
+                    AND 	COUPN_CD		= #{coupnCd}
+                ) B
+        ON  (
+                    A.HQ_OFFICE_CD	= B.HQ_OFFICE_CD
+                AND A.PAY_CLASS_CD	= B.PAY_CLASS_CD
+                AND A.COUPN_CD		= B.COUPN_Cd
+                AND A.COUPN_SER_NO	= B.COUPN_SER_NO
+            )
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                A.HQ_OFFICE_CD
+        ,		A.PAY_CLASS_CD
+        ,		A.COUPN_CD
+        ,		A.COUPN_SER_NO
+        ,		A.COUPN_SER_NO_STATUS
+        ,		A.COUPN_MEMBR_NO
+        ,		A.COUPN_ISSUE_DATE
+        ,		A.COUPN_USE_DATE
+        ,		A.ISSUE_STATUS_FG
+        ,		A.ISSUE_IN_FG
+        ,       A.ISSUE_REMARK
+        ,		A.REG_DT
+        ,		A.REG_ID
+        ,		A.MOD_DT
+        ,		A.MOD_ID
+        ,		A.SALE_DATE
+        ,		A.POS_NO
+        ,		A.BILL_NO
+        ,		A.LINE_NO
+        ,		A.LINE_SEQ_NO
+        ,		A.RTN_SALE_DATE
+        ,		A.RTN_POS_NO
+        ,		A.RTN_BILL_NO
+        ,		A.RTN_LINE_NO
+        ,		A.RTN_LINE_SEQ_NO
+        ,		A.COUPN_ISSUE_INFO1
+        ,		A.COUPN_ISSUE_INFO2
+        ,		A.COUPN_ISSUE_INFO3
+        ,		A.COUPN_ISSUE_INFO4
+        ,		A.COUPN_ISSUE_INFO5
+        ,		A.COUPN_ISSUE_INFO6
+        ,		A.COUPN_ISSUE_INFO7
+        ,		A.COUPN_ISSUE_INFO8
+        ,		A.COUPN_ISSUE_INFO9
+        ,		A.COUPN_ISSUE_INFO10
+        ,		A.COUPN_ISSUE_INFO11
+        ,		A.COUPN_ISSUE_INFO12
+        ,		A.COUPN_ISSUE_INFO13
+        ,		A.COUPN_ISSUE_INFO14
+        ,		A.COUPN_ISSUE_INFO15
+        ,		A.COUPN_ISSUE_INFO16
+        ,		A.COUPN_ISSUE_INFO17
+        ,		A.COUPN_ISSUE_INFO18
+        ,		A.COUPN_ISSUE_INFO19
+        ,		A.COUPN_ISSUE_INFO20
+        )
+        VALUES
+        (
+                B.HQ_OFFICE_CD
+        ,		B.PAY_CLASS_CD
+        ,		B.COUPN_CD
+        ,		B.COUPN_SER_NO
+        ,		'1'
+        ,		B.COUPN_MEMBR_NO
+        ,		#{issueDate}
+        ,		''
+        ,		'100'
+        ,		'W'
+        ,       ''
+        ,		#{regDt}
+        ,		#{regId}
+        ,		#{modDt}
+        ,		#{modId}
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		B.COUPN_ISSUE_INFO1
+        ,		B.COUPN_ISSUE_INFO2
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        ,		''
+        )
+    </insert>
+
+    <!-- 쿠폰상세정보 수정 -->
+    <!--
+        TABLE    :
+        COMMENTS : 쿠폰상세정보를 수정한다
+    -->
+    <update id="updateCouponStatus" parameterType="couponInfoVO">
+        /* USE : CouponInfoMapper.updateCouponStatus */
+        UPDATE  TB_HQ_COUPON_INFO
+        SET     COUPN_STATUS    = '1'
+        ,       MOD_ID          = #{modId}
+        ,       MOD_DT          = #{modDt}
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PAY_CLASS_CD    = #{payClassCd}
+        AND     COUPN_CD        = #{coupnCd}
+    </update>
+
+
+    <!-- 회수쿠폰조회 -->
+    <!--
+        TABLE    :
+        PARAM    :
+        COMMENTS : 회수쿠폰정보를 조회한다.
+    -->
+    <select id="getSelectSaleCouponList" parameterType="couponInfoVO" resultType="DefaultMap">
+        /* USE : CouponInfoMapper.getSelectSaleCouponList */
+        SELECT 	A.HQ_OFFICE_CD
+        ,		A.PAY_CLASS_CD
+        ,		A.COUPN_CD
+        ,		B.SALE_CNT
+        ,		B.SALE_AMT
+        ,		A.COUPN_COUNT - B.SALE_CNT AS NOT_SALE_CNT
+        ,		(A.COUPN_COUNT - B.SALE_CNT) * C.SALE_UPRC AS NOT_SALE_AMT
+        FROM	TB_HQ_COUPON_INFO A
+        ,		(
+                    SELECT 	A.HQ_OFFICE_CD
+                    ,		A.PAY_CLASS_CD
+                    ,		A.COUPN_CD
+                    ,		A.COUPN_ISSUE_DATE
+                    ,		SUM(DECODE(A.COUPN_SER_NO_STATUS,'2',1,0))			AS SALE_CNT
+                    ,		SUM(DECODE(A.COUPN_SER_NO_STATUS,'2',B.DC_AMT,0))	AS SALE_AMT
+                    FROM 	TB_HQ_COUPON_ISSUE A
+                    ,		TB_SL_SALE_PAY_COUPN B
+                    WHERE 	B.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+                    AND 	B.SALE_DATE 	(+) = A.SALE_DATE
+                    AND 	B.POS_NO 		(+) = A.POS_NO
+                    AND		B.BILL_NO 		(+) = A.BILL_NO
+                    AND 	B.LINE_NO 		(+) = A.LINE_NO
+                    AND 	B.LINE_SEQ_NO 	(+) = A.LINE_SEQ_NO
+                    AND     A.HQ_OFFICE_CD      = #{hqOfficeCd}
+                    GROUP
+                    BY 		A.HQ_OFFICE_CD
+                    ,		A.PAY_CLASS_CD
+                    ,		A.COUPN_CD
+                    ,		A.COUPN_ISSUE_DATE
+                ) B
+        ,		TB_MS_PRODUCT_SALE_PRICE_V01 C
+        WHERE	B.HQ_OFFICE_CD 	= A.HQ_OFFICE_CD
+        AND		B.PAY_CLASS_CD	= A.PAY_CLASS_CD
+        AND		B.COUPN_CD		= A.COUPN_CD
+        AND		C.STORE_CD 		= A.COUPN_STORE_CD
+        AND	 	C.PROD_CD 		= A.COUPN_PROD_CD
+        AND		A.HQ_OFFICE_CD 	= #{hqOfficeCd}
+        AND		C.SALE_DATE		= #{saleDate}
+        AND     A.COUPN_CD      = #{coupnCd}
+        AND     A.PAY_CLASS_CD  = #{payClassCd}
+    </select>
+</mapper>
