@@ -1287,6 +1287,10 @@
     <typeAlias alias="saleAnalysisByVendrVO" type="kr.co.solbipos.kookmin.saleAnalysis.saleAnalysisByVendr.service.SaleAnalysisByVendrVO"/>
     <!-- 국민대 > 매출분석 > 매입처별 매출분석 -->
     <typeAlias alias="saleTotalAnalysisByTimeVO" type="kr.co.solbipos.kookmin.saleAnalysis.saleTotalAnalysisByTime.service.SaleTotalAnalysisByTimeVO"/>
+    <!-- 국민대 > 총괄정보 > 일일매출보고서 -->
+    <typeAlias alias="dailySaleReportVO" type="kr.co.solbipos.kookmin.generalInfo.dailySaleReport.service.DailySaleReportVO"/>
+    <!-- 국민대 > 총괄정보 > 월별매출분석 -->
+    <typeAlias alias="saleAnalysisByMonthlyVO" type="kr.co.solbipos.kookmin.generalInfo.saleAnalysisByMonthly.service.SaleAnalysisByMonthlyVO"/>
 
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
@@ -1372,6 +1376,9 @@
 
     <!-- 국민대 > 매장관리 > 그룹관리 -->
     <typeAlias alias="branchKmuVO" type="kr.co.solbipos.store.hq.branchKmu.service.BranchKmuVO"/>
+
+    <!-- 오더킷 > 오더킷 > 오더킷 -->
+    <typeAlias alias="orderkitVO" type="kr.co.solbipos.orderkit.orderkit.orderkit.service.OrderkitVO"/>
 
 
     <!-- ====================================== 모바일 시작 ====================================== -->

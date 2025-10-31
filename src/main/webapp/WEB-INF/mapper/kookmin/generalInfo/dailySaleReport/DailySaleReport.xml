@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    DailySaleReport.xml
+    [국민대] - [총괄정보] - [일일매출보고서] sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.10.22
+-->
+<mapper namespace="kr.co.solbipos.kookmin.generalInfo.dailySaleReport.service.impl.DailySaleReportMapper">
+
+    <!-- 일일매출보고서 리스트 조회 -->
+    <!--
+        TABLE    : TB_SL_DAILY_TOTAL
+        PARAM    : dailySaleReportVO
+        COMMENTS : 일일매출보고서 리스트를 조회한다.
+    -->
+    <select id="getDailySaleReportList" parameterType="dailySaleReportVO" resultType="DefaultMap">
+        /* DailySaleReportMapper.getDailySaleReportList */
+        SELECT STORE_CD
+        ,	   STORE_NM
+        ,      BRANCH_NM
+        ,      TOT_SALE_AMT
+        ,      B_TOT_SALE_AMT
+        ,      CONTRAST
+        <!--,      (CASE WHEN CONTRAST > 0 THEN '▲'
+                    WHEN CONTRAST = 0 THEN ''
+                    ELSE '▽' END) || TO_CHAR(CONTRAST, 'FM999,999,999,999') AS CONTRAST -->
+        ,      CASH_AMT
+        ,      CASH_AMT_TOT
+        ,      POSTPAID_AMT
+        ,      CARD_AMT
+        FROM (
+                SELECT	A.STORE_CD
+                ,	    A.STORE_NM
+                , 		A.BRANCH_NM
+                ,       NVL(A.TOT_SALE_AMT, 0) AS TOT_SALE_AMT
+                ,       NVL(B.B_TOT_SALE_AMT, 0) AS B_TOT_SALE_AMT
+                ,		(NVL(A.TOT_SALE_AMT, 0) - NVL(B.B_TOT_SALE_AMT, 0)) AS CONTRAST
+                , 		NVL(A.CASH_AMT, 0) AS CASH_AMT
+                ,		NVL(A.CASH_AMT_TOT, 0) AS CASH_AMT_TOT
+                , 		NVL(A.POSTPAID_AMT, 0) AS POSTPAID_AMT
+                ,		NVL(A.CARD_AMT, 0) AS CARD_AMT
+                FROM (
+                        SELECT  C.STORE_CD
+                        ,		A.STORE_NM
+                        , 		B.BRANCH_NM
+                        ,       NVL(SUM(C.TOT_SALE_AMT), 0) AS TOT_SALE_AMT
+                        ,		NVL(SUM(C.PAY_AMT_02), 0) AS CASH_AMT
+                        ,		NVL(SUM(C.PAY_AMT_02), 0) AS CASH_AMT_TOT
+                        ,		NVL(SUM(C.PAY_AMT_11), 0) AS POSTPAID_AMT
+                        ,		NVL(SUM(C.PAY_AMT_01), 0) AS CARD_AMT
+                        FROM TB_SL_DAILY_TOTAL C
+                        ,    TB_HQ_BRANCH_MOMS B
+                        ,    TB_MS_STORE A
+                        WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND   C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                        AND   A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                        AND   A.STORE_CD = C.STORE_CD
+                        AND   B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                        AND   B.BRANCH_CD (+)= A.BRANCH_CD
+                        GROUP BY  C.STORE_CD
+                        ,		  A.STORE_NM
+                        , 		  B.BRANCH_NM
+                    )A,
+                    (
+                        SELECT STORE_CD
+                        ,      NVL(SUM(TOT_SALE_AMT), 0) AS B_TOT_SALE_AMT
+                        FROM   TB_SL_DAILY_TOTAL
+                        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                        AND    SALE_DATE BETWEEN #{lastStartDate} AND #{lastEndDate}
+                        GROUP BY STORE_CD
+                    )B
+                WHERE 	1=1
+                AND B.STORE_CD (+)= A.STORE_CD
+                ORDER BY A.STORE_CD
+        )
+    </select>
+
+</mapper>

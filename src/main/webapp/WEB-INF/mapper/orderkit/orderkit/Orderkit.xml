@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    Orderkit.xml
+    [오더킷] - [오더킷] - [오더킷] sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.10.31
+-->
+<mapper namespace="kr.co.solbipos.orderkit.orderkit.orderkit.service.impl.OrderkitMapper">
+
+    <!-- 매장정보 조회 -->
+    <!--
+        TABLE    : TB_MS_STORE
+        PARAM    : orderkitVO
+        COMMENTS : 매장정보를 조회한다.
+    -->
+    <select id="getStoreInfo" parameterType="orderkitVO" resultType="DefaultMap">
+        /* USE : OrderkitMapper.getStoreInfo */
+        SELECT  tms.STORE_CD,
+                tms.STORE_NM,
+                tms.OWNER_NM,
+                tms.HQ_OFFICE_CD,
+                tms.BIZ_NO,
+                SUBSTR(tms.BIZ_NO, 0, 3) AS BIZ_NO1,
+                SUBSTR(tms.BIZ_NO, 4, 2) AS BIZ_NO2,
+                SUBSTR(tms.BIZ_NO, 6, 5) AS BIZ_NO3,
+                tms.TEL_NO,
+                tms.MP_NO
+          FROM TB_MS_STORE tms
+         WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
+           AND tms.STORE_CD = #{storeCd}
+    </select>
+
+</mapper>

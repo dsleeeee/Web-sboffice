@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    SaleAnalysisByMonthly.xml
+    [국민대] - [총괄정보] - [월별매출분석] sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.10.22
+-->
+<mapper namespace="kr.co.solbipos.kookmin.generalInfo.saleAnalysisByMonthly.service.impl.SaleAnalysisByMonthlyMapper">
+
+    <!-- 월별매출분석 리스트 조회 -->
+    <!--
+        TABLE    :
+        PARAM    : saleAnalysisByMonthlyVO
+        COMMENTS : 월별매출분석 리스트를 조회한다.
+    -->
+    <select id="getSaleAnalysisByMonthlyList" parameterType="saleAnalysisByMonthlyVO" resultType="DefaultMap">
+        /* SaleAnalysisByMonthlyMapper.getSaleAnalysisByMonthlyList */
+        SELECT	A.STORE_CD
+        ,	    A.STORE_NM
+        , 		A.BRANCH_NM
+        ,       NVL(A.TOT_SALE_AMT, 0) AS TOT_SALE_AMT
+        ,       NVL(B.B_TOT_SALE_AMT, 0) AS B_TOT_SALE_AMT
+        ,       NVL(A.TOT_SALE_AMT, 0) - NVL(B.B_TOT_SALE_AMT, 0) AS TOT_SALE_AMT_CONTRAST
+        ,	    TO_CHAR(((NVL(A.TOT_SALE_AMT, 0) - NVL(B.B_TOT_SALE_AMT, 0)) / DECODE(B.B_TOT_SALE_AMT, 0, NULL, B.B_TOT_SALE_AMT)) * 100, 'FM9990.9') AS TOT_SALE_AMT_PERCENT
+        ,       NVL(A.SALE_QTY, 0) AS SALE_QTY
+        ,       NVL(B.B_SALE_QTY, 0) AS B_SALE_QTY
+        ,       NVL(A.SALE_QTY, 0) - NVL(B.B_SALE_QTY, 0) AS SALE_QTY_CONTRAST
+        ,	    TO_CHAR(((NVL(A.SALE_QTY, 0) - NVL(B.B_SALE_QTY, 0)) / DECODE(B.B_SALE_QTY, 0, NULL, B.B_SALE_QTY))* 100, 'FM9990.9') AS SALE_QTY_PERCENT
+        ,       NVL(A.TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT
+        ,       NVL(B.B_TOT_GUEST_CNT, 0) AS B_TOT_GUEST_CNT
+        ,       NVL(A.TOT_GUEST_CNT, 0) - NVL(B.B_TOT_GUEST_CNT, 0) AS TOT_GUEST_CNT_CONTRAST
+        ,	    TO_CHAR(((NVL(A.TOT_GUEST_CNT, 0) - NVL(B.B_TOT_GUEST_CNT, 0)) / DECODE(B.B_TOT_GUEST_CNT, 0, NULL, B.B_TOT_GUEST_CNT)) * 100, 'FM9990.9') AS TOT_GUEST_CNT_PERCENT
+        ,   	NVL(A.WEEKDAYS, 0) AS WEEKDAYS
+        ,   	NVL(B.B_WEEKDAYS, 0) AS B_WEEKDAYS
+        ,       NVL(A.WEEKDAYS, 0) - NVL(B.B_WEEKDAYS, 0) AS WEEKDAYS_CONTRAST
+        ,   	NVL(A.WEEKEND, 0) AS WEEKEND
+        ,   	NVL(B.B_WEEKEND, 0) AS B_WEEKEND
+        ,       NVL(A.WEEKEND, 0) - NVL(B.B_WEEKEND, 0) AS WEEKEND_CONTRAST
+        FROM (
+                SELECT  C.STORE_CD
+                ,		A.STORE_NM
+                , 		B.BRANCH_NM
+                ,       NVL(SUM(C.TOT_SALE_AMT), 0) AS TOT_SALE_AMT
+                ,       NVL(SUM(C.SALE_QTY), 0) AS SALE_QTY
+                ,       NVL(SUM(C.TOT_GUEST_CNT), 0) AS TOT_GUEST_CNT
+                ,       SUM(CASE WHEN C.TOT_SALE_AMT > 0 AND TO_CHAR(TO_DATE(C.SALE_DATE, 'YYYY-MM-DD'), 'D') NOT IN ('1', '7') THEN 1 ELSE 0 END) AS WEEKDAYS
+                ,       SUM(CASE WHEN C.TOT_SALE_AMT > 0 AND TO_CHAR(TO_DATE(C.SALE_DATE, 'YYYY-MM-DD'), 'D') IN ('1', '7') THEN 1 ELSE 0 END) AS WEEKEND
+                FROM TB_SL_DAILY_TOTAL C
+                ,    TB_HQ_BRANCH_MOMS B
+                ,    TB_MS_STORE A
+                WHERE C.HQ_OFFICE_CD = #{hqOfficeCd}
+                AND   C.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND   A.HQ_OFFICE_CD = C.HQ_OFFICE_CD
+                AND   A.STORE_CD = C.STORE_CD
+                AND   B.HQ_OFFICE_CD (+)= A.HQ_OFFICE_CD
+                AND   B.BRANCH_CD (+)= A.BRANCH_CD
+                GROUP BY  C.STORE_CD
+                ,		  A.STORE_NM
+                , 		  B.BRANCH_NM
+            )A,
+            (
+                SELECT STORE_CD
+                ,      NVL(SUM(TOT_SALE_AMT), 0) AS B_TOT_SALE_AMT
+                ,      NVL(SUM(SALE_QTY), 0) AS B_SALE_QTY
+                ,      NVL(SUM(TOT_GUEST_CNT), 0) AS B_TOT_GUEST_CNT
+                ,      SUM(CASE WHEN TOT_SALE_AMT > 0 AND TO_CHAR(TO_DATE(SALE_DATE, 'YYYY-MM-DD'), 'D') NOT IN ('1', '7') THEN 1 ELSE 0 END) AS B_WEEKDAYS
+                ,      SUM(CASE WHEN TOT_SALE_AMT > 0 AND TO_CHAR(TO_DATE(SALE_DATE, 'YYYY-MM-DD'), 'D') IN ('1', '7') THEN 1 ELSE 0 END) AS B_WEEKEND
+                FROM   TB_SL_DAILY_TOTAL
+                WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                AND    SALE_DATE BETWEEN #{lastStartDate} AND #{lastEndDate}
+                GROUP BY STORE_CD
+            )B
+        WHERE 	1=1
+        AND B.STORE_CD (+)= A.STORE_CD
+        ORDER BY A.STORE_CD
+    </select>
+</mapper>
