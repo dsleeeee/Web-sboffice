@@ -731,11 +731,9 @@ public class ProdExcelUploadServiceImpl implements ProdExcelUploadService {
                 if(prodExcelUploadVO.getShBPubDate() != null && !"".equals(prodExcelUploadVO.getShBPubDate())){
                     if(!Pattern.matches(pattern,prodExcelUploadVO.getShBPubDate())){
                         prodExcelUploadVO.setResult("발행일은 숫자만(8자리) 입력해주세요.");
-                        prodExcelUploadVO.setShBPubDate("");
                     }
                     if(prodExcelUploadVO.getShBPubDate().length() > 8){
                         prodExcelUploadVO.setResult("발행일은 숫자만(8자리) 입력해주세요.");
-                        prodExcelUploadVO.setShBPubDate("");
                     }
                 }
                 // 매입VAT

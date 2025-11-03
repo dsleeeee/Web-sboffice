@@ -92,7 +92,7 @@
             AND A.COUPN_NM LIKE '%'||#{coupnNm}||'%'
         </if>
         <if test='storeCd != null and storeCd != ""'>
-            AND B.COUPN_USE_STORE LIKE '%'||#{storeCd}||'%'
+            AND B.COUPN_STORE_CD LIKE '%'||#{storeCd}||'%'
         </if>
         <if test='storeNm != null and storeNm != ""'>
             AND H.STORE_NM LIKE '%'||#{storeNm}||'%'
@@ -175,6 +175,7 @@
                     ,		TB_HQ_COUPON B
                     WHERE 	A.HQ_OFFICE_CD 	= B.HQ_OFFICE_CD (+)
                     AND 	A.PAY_CLASS_CD 	= B.PAY_CLASS_CD (+)
+                    AND     A.PAY_TYPE_FG   = '3'
                     AND 	A.HQ_OFFICE_CD 	= #{hqOfficeCd}
                     GROUP
                     BY		A.PAY_CLASS_CD
