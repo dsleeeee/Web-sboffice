@@ -77,7 +77,8 @@
                       display-member-path="name"
                       selected-value-path="value"
                       is-editable="false"
-                      initialized="_initComboBox(s)">
+                      initialized="_initComboBox(s)"
+                      control="useYnCombo">
               </wj-combo-box>
             </div>
           </td>
@@ -150,7 +151,7 @@
   <%-- 사용 여부 --%>
   var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
-<script type="text/javascript" src="/resource/solbipos/js/store/hq/branchMoms/branchMoms.js?ver=20220923.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/hq/branchMoms/branchMoms.js?ver=20251103.01" charset="utf-8"></script>
 
 <c:import url="/WEB-INF/view/store/hq/branchMoms/branchMomsDtl.jsp">
     <c:param name="menuCd" value="${menuCd}"/>

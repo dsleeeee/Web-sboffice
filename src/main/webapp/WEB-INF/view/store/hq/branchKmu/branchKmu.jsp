@@ -77,7 +77,8 @@
                             display-member-path="name"
                             selected-value-path="value"
                             is-editable="false"
-                            initialized="_initComboBox(s)">
+                            initialized="_initComboBox(s)"
+                            control="useYnCombo">
                     </wj-combo-box>
                 </div>
             </td>
@@ -151,7 +152,7 @@
     var useYn = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/store/hq/branchKmu/branchKmu.js?ver=20251027.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/store/hq/branchKmu/branchKmu.js?ver=20251103.01" charset="utf-8"></script>
 
 <%-- 그룹관리 신규 팝업 --%>
 <c:import url="/WEB-INF/view/store/hq/branchKmu/branchKmuDtl.jsp">

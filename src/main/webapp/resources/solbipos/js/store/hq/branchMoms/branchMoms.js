@@ -76,8 +76,13 @@ app.controller('branchMomsCtrl', ['$scope', '$http', function ($scope, $http) {
 
   // 그리드 조회
   $scope.searchBranchMomsList = function(){
-    var param = {};
-    $scope._inquiryMain("/store/hq/branchMoms/branchMoms/getBranchMomsList.sb", param, function(result){});
+    var params = {};
+    params.branchCd = $scope.branchCd;
+    params.branchNm = $scope.branchNm;
+    params.branchOwnerNm = $scope.branchOwnerNm;
+    params.phoneNo = $scope.phoneNo;
+    params.useYn = $scope.useYnCombo.selectedValue;
+    $scope._inquiryMain("/store/hq/branchMoms/branchMoms/getBranchMomsList.sb", params, function(result){});
   };
 
   $scope.newAdd = function (){
