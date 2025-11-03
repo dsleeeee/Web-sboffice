@@ -29,12 +29,12 @@
                     <tbody>
                     <tr>
                         <%-- 매장코드 --%>
-                        <th><s:message code="couponInfo.deptCd" /></th>
+                        <th><s:message code="couponInfo.partCd" /></th>
                         <td>
                             <input type="text" id="srchSelectPartCd" ng-model="srchSelectPartCd"/>
                         </td>
                         <%-- 매장명 --%>
-                        <th><s:message code="couponInfo.deptNm" /></th>
+                        <th><s:message code="couponInfo.partNm" /></th>
                         <td>
                             <input type="text" id="srchSelectPartNm" ng-model="srchSelectPartNm"/>
                         </td>
@@ -78,8 +78,8 @@
                             item-formatter="_itemFormatter">
 
                         <!-- define columns -->
-                        <wj-flex-grid-column header="<s:message code="couponInfo.deptCd"/>" binding="vendrCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="couponInfo.deptNm"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="couponInfo.partCd"/>" binding="vendrCd" width="100" align="center" is-read-only="true"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="couponInfo.partNm"/>" binding="vendrNm" width="*" align="left" is-read-only="true"></wj-flex-grid-column>
                     </wj-flex-grid>
                 </div>
                 <%--//위즈모 테이블--%>

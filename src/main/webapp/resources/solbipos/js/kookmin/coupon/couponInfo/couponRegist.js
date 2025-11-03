@@ -30,7 +30,7 @@ app.controller('couponRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
         $timeout(function() {
             // 신규 등록 시
             if (data.edit !== null && data.edit !== '' && data.edit !== '1') {
-                $("#couponIssue").css('display', "none");
+                $("#coupnIssue").css('display', "none");
                 $("#selectSaleCoupon").css('display', "none");
                 $("#couponInfoSave").css('display', "");
                 $scope.coupn = {};
@@ -44,7 +44,7 @@ app.controller('couponRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
                 $("#selectPart").val('선택');
             } else {
                 // 수정 시
-                $("#couponIssue").css('display', "block");
+                $("#coupnIssue").css('display', "block");
                 $("#selectSaleCoupon").css('display', "block");
                 $("#couponInfoSave").css('display', "");
 
@@ -78,7 +78,7 @@ app.controller('couponRegistCtrl', ['$scope', '$http', '$timeout', function ($sc
                     }
 
                     if($scope.coupn.coupnStatus === '발행'){
-                        $("#couponIssue").css('display', "none");
+                        $("#coupnIssue").css('display', "none");
                         $("#couponInfoSave").css('display', "none");
                     }
 

@@ -239,7 +239,7 @@
                         <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.author2"/>"        binding="shBAuthor2"        width="70" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.translator1"/>"    binding="shBTranslator1"    width="70" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.translator2"/>"    binding="shBTranslator2"    width="70" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.pubDate"/>"        binding="shBPubDate"        width="80" align="center" data-type="Number"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.pubDate"/>"        binding="shBPubDate"        width="80" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.discRate"/>"       binding="shBDiscRate"       width="70" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.acquireVat"/>"     binding="shBAcquireVat"     width="70" align="center" data-map="acquireVatMap"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="prodExcelUpload.sh.pointSaveRate"/>"  binding="shBPointSaveRate"  width="90" align="center"></wj-flex-grid-column>

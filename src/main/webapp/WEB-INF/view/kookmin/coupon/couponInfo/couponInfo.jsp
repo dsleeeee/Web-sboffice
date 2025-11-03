@@ -130,20 +130,20 @@
             <tr>
                 <%-- 매장코드 --%>
                 <th>
-                    <s:message code="couponInfo.deptCd"/>
+                    <s:message code="couponInfo.partCd"/>
                 </th>
                 <td>
                     <div class="sb-select">
-                        <input type="text" id="srchDeptCd" ng-model="deptCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+                        <input type="text" id="srchPartCd" ng-model="partCd" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                     </div>
                 </td>
                 <%-- 매장명 --%>
                 <th>
-                    <s:message code="couponInfo.deptNm"/>
+                    <s:message code="couponInfo.partNm"/>
                 </th>
                 <td>
                     <div class="sb-select">
-                        <input type="text" id="srchDeptNm" ng-model="deptNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
+                        <input type="text" id="srchPartNm" ng-model="partNm" class="sb-input w100" onkeyup="fnNxBtnSearch();"/>
                     </div>
                 </td>
             </tr>
