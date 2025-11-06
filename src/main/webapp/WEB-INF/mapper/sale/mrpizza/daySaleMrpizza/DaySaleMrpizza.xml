@@ -109,11 +109,12 @@
                          WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '18' THEN tcn.NMCODE_NM ELSE ''
                 END AS ACQUIRE_NM
         ,       tssh.ORG_BILL_NO
-        ,       tsshp.PAY_AMT AS TOT_SALE_AMT
-        ,       CASE WHEN tsshp.PAY_FG = 'PAY' THEN tsshp.PAY_AMT ELSE 0 END AS REAL_SALE_AMT
+        ,       CASE WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '18' THEN tsspt.SALE_AMT ELSE tsshp.PAY_AMT END AS TOT_SALE_AMT
+        ,       CASE WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '18' THEN tsspt.SALE_AMT
+                     WHEN tsshp.PAY_FG = 'PAY' THEN tsshp.PAY_AMT ELSE 0 END AS REAL_SALE_AMT
         ,       CASE WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '01' THEN tsshp.PAY_AMT ELSE 0 END AS PAY01
         ,       CASE WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '02' THEN tsshp.PAY_AMT ELSE 0 END AS PAY02
-        ,       CASE WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '18' THEN tsshp.PAY_AMT ELSE 0 END AS PAY18
+        ,       CASE WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD = '18' THEN tsspt.SALE_AMT ELSE 0 END AS PAY18
         , 		CASE WHEN tsshp.PAY_FG = 'PAY' AND tsshp.PAY_CD != '01'AND tsshp.PAY_CD != '02'AND tsshp.PAY_CD != '18' THEN tsshp.PAY_AMT ELSE 0 END AS TOT_ETC_PAY_AMT
         ,		CASE WHEN tsshp.PAY_FG = 'DC' AND tsshp.PAY_CD != '05' THEN tsshp.PAY_AMT ELSE 0 END AS DC_AMT
         ,		CASE WHEN tsshp.PAY_FG = 'DC' AND tsshp.PAY_CD = '05' THEN tsshp.PAY_AMT ELSE 0 END AS DC_SERVICE_AMT

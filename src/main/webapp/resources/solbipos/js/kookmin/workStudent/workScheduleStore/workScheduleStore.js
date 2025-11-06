@@ -59,16 +59,29 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
         $scope.workFgComboDataMap = new wijmo.grid.DataMap(workFgComboData, 'value', 'name'); // 열람구분
 
 
-        // 그리드 링크 효과
+        // ReadOnly 효과설정
         s.formatItem.addHandler(function (s, e) {
             if (e.panel == s.cells) {
                 var col = s.columns[e.col];
-                // if (col.binding === "storeCd") {
-                //   wijmo.addClass(e.cell, 'wijLink');
-                //   wijmo.addClass(e.cell, 'wj-custom-readonly');
-                // }
+                var item = s.rows[e.row].dataItem;
+                if(col.binding === "workSchCode"){
+                    if(nvl(item.status, '') === ''  && item.status !== 'I'){
+                        wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    }
+                }
             }
+        });
 
+        // 근무코드 그리드 에디팅 방지
+        s.beginningEdit.addHandler(function (s, e) {
+            var col = s.columns[e.col];
+            var item = s.rows[e.row].dataItem;
+            if(col.binding === "workSchCode"){
+                if(nvl(item.status, '') === ''  && item.status !== 'I'){
+                    wijmo.addClass(e.cell, 'wj-custom-readonly');
+                    e.cancel = true;
+                }
+            }
         });
 
         // 값 변경시 체크박스 체크

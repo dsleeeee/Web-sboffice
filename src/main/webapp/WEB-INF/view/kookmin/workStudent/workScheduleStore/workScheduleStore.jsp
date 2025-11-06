@@ -81,7 +81,7 @@
                 <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40" align="center"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.termYear"/>"    binding="termYear"      width=""       align="center" visible="false"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.termYear"/>"    binding="termFg"        width=""       align="center" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workScheduleStore.workSchCode"/>" binding="workSchCode"   width="80"     align="center" is-read-only="true"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workScheduleStore.workSchCode"/>" binding="workSchCode"   width="80"     align="center" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.storeCd"/>"     binding="storeCd"       width="80"     align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.storeNm"/>"     binding="storeNm"       width="120"    align="left"   is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workScheduleStore.sun"/>"         binding="sun"           width="50"     align="center" is-read-only="false"  ></wj-flex-grid-column>
@@ -105,6 +105,6 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workScheduleStore/workScheduleStore.js?ver=20250922.03" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workScheduleStore/workScheduleStore.js?ver=20251106.01" charset="utf-8"></script>
 
 

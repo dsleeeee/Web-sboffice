@@ -124,4 +124,6 @@ public interface ViewMapper {
     int deleteTouchKeyGrpNm(CopyStoreEnvVO copyStoreEnvVO);
     /** 판매터치키 그룹명 복사 */
     int copyTouchKeyGrpNm(CopyStoreEnvVO copyStoreEnvVO);
+
+    String copyNmcodeNm(CopyStoreEnvVO copyStoreEnvVO);
 }

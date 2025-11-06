@@ -29,21 +29,20 @@
         ,		TO_CHAR(TO_DATE(A.START_TIME ,'hh24mi'), 'hh24:mi')        AS BASE_START_TIME
         ,		TO_CHAR(TO_DATE(A.END_TIME ,'hh24mi'), 'hh24:mi')          AS BASE_END_TIME
         ,		ROUND((TO_DATE(A.END_TIME, 'HH24MI') - TO_DATE(A.START_TIME, 'HH24MI')) * 24, 1)  AS BASE_WORK_TIME
-        ,		CASE
-                        WHEN D.REAL_START_TIME IS NULL THEN ''
-                        WHEN SUBSTR(D.REAL_START_TIME,9,4) > A.START_TIME THEN TO_CHAR(TO_DATE(SUBSTR(D.REAL_START_TIME, 9, 4), 'HH24MI'), 'HH24:MI')
-                        ELSE TO_CHAR(TO_DATE(A.START_TIME ,'hh24mi'), 'hh24:mi')
-                END AS REAL_START_TIME
-        ,		CASE
-                        WHEN D.REAL_END_TIME IS NULL THEN ''
-                        WHEN A.END_TIME > SUBSTR(D.REAL_END_TIME,9,4) THEN TO_CHAR(TO_DATE(SUBSTR(D.REAL_END_TIME, 9, 4), 'HH24MI'), 'HH24:MI')
-                        ELSE TO_CHAR(TO_DATE(A.END_TIME ,'hh24mi'), 'hh24:mi')
-                END AS REAL_END_TIME
-        ,		D.WORK_TIME
-        ,		CASE
-                        WHEN D.REAL_START_TIME IS NOT NULL OR D.REAL_END_TIME IS NOT NULL THEN '근무'
-                        ELSE '결근'
-                END AS WORK_STATUS
+        ,		TO_CHAR(TO_DATE(SUBSTR(D.REAL_START_TIME,9,4), 'hh24mi'), 'hh24:mi')	AS REAL_START_TIME
+        ,		TO_CHAR(TO_DATE(SUBSTR(D.REAL_END_TIME,9,4), 'hh24mi'), 'hh24:mi')		AS REAL_END_TIME
+        ,		NVL(D.WORK_TIME,0)  AS WORK_TIME
+        ,		<![CDATA[
+                            CASE
+                                    WHEN D.REAL_START_TIME IS NULL AND D.REAL_END_TIME IS NULL THEN '결근'
+                                    WHEN D.REAL_START_TIME IS NUlL OR D.REAL_END_TIME IS NULL THEN '0'
+                                    WHEN ROUND((TO_DATE(A.END_TIME, 'HH24MI') - TO_DATE(A.START_TIME, 'HH24MI')) * 24, 1) = D.WORK_TIME THEN '정상'
+                                    WHEN ROUND((TO_DATE(A.END_TIME, 'HH24MI') - TO_DATE(A.START_TIME, 'HH24MI')) * 24, 1) > D.WORK_TIME THEN '조퇴'
+                                    WHEN ROUND((TO_DATE(A.END_TIME, 'HH24MI') - TO_DATE(A.START_TIME, 'HH24MI')) * 24, 1) < D.WORK_TIME THEN '초과'
+                                    ELSE ''
+                            END AS WORK_STATUS
+                ]]>
+        ,		NVL(D.WORK_TIME,0)     AS TOT_WORK_TIME
         ,       D.MOD_REASON
         ,		(SELECT USER_NM FROM TB_WB_USER_INFO_DTL_V01 WHERE USER_ID = D.MOD_ID) 	AS MOD_NM
         FROM 	TB_HQ_WORK_SCHEDULE A
@@ -104,12 +103,7 @@
         ,       REG_IN_FG       = #{regInFg}
         ,		MOD_DT			= #{modDt}
         ,		MOD_ID			= #{modId}
-        ,       WORK_TIME       = ROUND(
-                                            (
-                                                LEAST(TO_DATE(#{realEndTime}, 'YYYYMMDDHH24MISS'), TO_DATE(#{baseEndTime}, 'YYYYMMDDHH24MISS'))
-                                                -
-                                                GREATEST(TO_DATE(#{realStartTime}, 'YYYYMMDDHH24MISS'), TO_DATE(#{baseStartTime}, 'YYYYMMDDHH24MISS'))
-                                            )* 24,1)
+        ,       WORK_TIME       = NVL(TRUNC(((TO_DATE(#{realEndTime},'YYYYMMDDHH24MISS') - TO_DATE(#{realStartTime}, 'YYYYMMDDHH24MISS')) * 24)* 2) / 2, 0)
         WHEN NOT MATCHED THEN
         INSERT
         (

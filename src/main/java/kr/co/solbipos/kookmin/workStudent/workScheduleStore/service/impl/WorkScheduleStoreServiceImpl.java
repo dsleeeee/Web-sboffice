@@ -129,9 +129,9 @@ public class WorkScheduleStoreServiceImpl implements WorkScheduleStoreService {
             workScheduleStoreVO.setWorkDay(workDay);
 
             if(workScheduleStoreVO.getStatus() == GridDataFg.INSERT) {
-                // 근무코드 값 조회
-                String workSchCode = workScheduleStoreMapper.getWorkSchCodeStore(workScheduleStoreVO);
-                workScheduleStoreVO.setWorkSchCode(workSchCode);
+                // 근무코드 값 조회 (직접 입력으로 변경)
+//                String workSchCode = workScheduleStoreMapper.getWorkSchCodeStore(workScheduleStoreVO);
+//                workScheduleStoreVO.setWorkSchCode(workSchCode);
                 //추가
                 procCnt += workScheduleStoreMapper.insertWorkScheduleStore(workScheduleStoreVO);
             }

@@ -115,8 +115,8 @@
                 <wj-flex-grid-column header="<s:message code="workHistory.realEndTime"/>"   binding="realEndTime"   width="70"  align="center" data-map="timeDataMap"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.realWorkTime"/>"  binding="workTime"      width="70"  align="center" is-read-only="true" format="n1"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.workStatus"/>"    binding="workStatus"    width="60"  align="center" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workHistory.overTime"/>"      binding="overTime"      width="80"  align="center" visible="false"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="workHistory.totWorkTime"/>"   binding="totWorkTime"   width="150" align="center" visible="false"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workHistory.overTime"/>"      binding="overChk"       width="70"  align="center" data-type="Boolean"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="workHistory.totWorkTime"/>"   binding="totWorkTime"      width="70"  align="center" is-read-only="true" format="n1"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.modReason"/>"     binding="modReason"     width="120" align="center" ></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="workHistory.modNm"/>"         binding="modNm"         width="80"  align="center" is-read-only="true"></wj-flex-grid-column>
 
@@ -125,4 +125,4 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workHistory/workHistory.js?ver=20250912.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workHistory/workHistory.js?ver=20251106.01" charset="utf-8"></script>

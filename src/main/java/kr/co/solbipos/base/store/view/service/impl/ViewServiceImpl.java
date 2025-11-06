@@ -232,6 +232,9 @@ public class ViewServiceImpl implements ViewService {
             if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.DLVR_PROD) { // 배달상품명칭매핑
                 procResult = viewMapper.copyDlvrProd(copyStoreEnvVO);
             }
+            if( copyStoreEnvVO.getNmcodeCd() == StoreEnv.NMCODE_NM) { // 배달상품명칭매핑
+                procResult = viewMapper.copyNmcodeNm(copyStoreEnvVO);
+            }
         }
 
         return result;

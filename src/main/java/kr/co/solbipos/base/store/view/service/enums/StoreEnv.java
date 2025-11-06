@@ -52,7 +52,9 @@ public enum StoreEnv implements CodeEnum {
     /** 식품 알레르기 */
     FOOD_ALLERGY("12"),
     /** 배달상품명칭매핑 */
-    DLVR_PROD("13");
+    DLVR_PROD("13"),
+    /** 명칭관리 */
+    NMCODE_NM("14");
 
     private String code;
     private StoreEnv[] values;

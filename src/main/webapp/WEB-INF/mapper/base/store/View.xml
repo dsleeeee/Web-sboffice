@@ -860,4 +860,27 @@
                 AND TUKEY_GRP_CD = #{tukeyGrpCd}
             </if>
     </delete>
+
+    <!-- 명칭관리 복사 프로시져 호출 -->
+    <!--
+        TABLE    : TB_MS_STORE_NMCODE
+        PARAM    :
+        COMMENTS : 매장 명칭관리 선택그룹 정보를 복사한다.
+    -->
+    <select id="copyNmcodeNm" statementType="CALLABLE" parameterType="copyStoreEnvVO" resultType="String">
+        /* USE : ViewMapper.copyNmcodeNm */
+        {
+            CALL PKG_MS_STORE_COPY.SP_MS_STORE_NNCODE
+            (
+                #{hqOfficeCd},
+                #{originalStoreCd},
+                #{targetStoreCd},
+                #{regDt},
+                #{regId},
+                #{modDt},
+                #{modId},
+                #{result, mode=OUT, jdbcType=VARCHAR}
+            )
+        }
+    </select>
 </mapper>

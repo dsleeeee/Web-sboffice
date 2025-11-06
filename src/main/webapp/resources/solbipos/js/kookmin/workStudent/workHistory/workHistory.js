@@ -30,7 +30,7 @@ app.controller('workHistoryCtrl', ['$scope', '$http', function ($scope, $http) {
     // 근로시작, 근로종료 셋팅
     $scope.timeList = [];
     for (let h = 0; h < 24; h++) {
-        for (let m = 0; m < 60; m += 5) {
+        for (let m = 0; m < 60; m += 1) {
             var hh = h.toString().padStart(2, '0');
             var mm = m.toString().padStart(2, '0');
             var time = `${hh}:${mm}`;
@@ -42,6 +42,67 @@ app.controller('workHistoryCtrl', ['$scope', '$http', function ($scope, $http) {
 
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging    = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display    : 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display      : 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign    : 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+                var item = panel.rows[r].dataItem;
+
+                if (col.binding === "overChk") {
+                    if (item.workStatus === "초과") {
+
+                        // 체크박스 렌더링
+                        cell.innerHTML = '<input type="checkbox" class="wj-cell-check"' +
+                            (item.overChk ? 'checked' : '') + '/>';
+
+                        var cb = cell.firstChild;
+                        // console.log(item.overChk);
+
+                        if(item.overChk){
+                            item.totWorkTime = item.workTime;
+                        }else{
+                            item.totWorkTime = item.baseWorkTime;
+                        }
+                    } else {
+                        // 조건에 맞지 않으면 빈 셀
+                        cell.innerHTML = '';
+                    }
+                }
+            }
+
+        }
 
         // 값 변경시 체크박스 체크
         s.cellEditEnded.addHandler(function (s, e) {
