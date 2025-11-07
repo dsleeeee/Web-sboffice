@@ -264,4 +264,19 @@
         AND 	END_DATE IS NOT NULL
     </select>
 
+    <!-- 근무코드 중복 체크 -->
+    <!--
+        TABLE    :
+        COMMENTS :
+    -->
+    <select id="getWorkSchCodeDupChk" parameterType="WorkScheduleStoreVO" resultType="Integer">
+        /* WorkScheduleStoreMapper.getWorkSchCodeDupChk */
+        SELECT 	COUNT(*)
+        FROM 	TB_HQ_WORK_SCHEDULE
+        WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND 	TERM_YEAR       = #{termYear}
+        AND     TERM_FG         = #{termFg}
+        AND     WORK_SCH_CODE   = #{workSchCode}
+    </select>
+
 </mapper>
