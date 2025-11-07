@@ -18,6 +18,63 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('dlvrAgencyRegCtrl', $scope, $http, false));
 
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+
+        // 헤더머지
+        s.allowMerging = 2;
+        s.columnHeaders.rows.push(new wijmo.grid.Row());
+
+        // 첫째줄 헤더 생성
+        var dataItem = {};
+        dataItem.gChk = messages["cmm.chk"];
+        dataItem.storeCode = messages["dlvrAgencyLink.storeCd"];
+        dataItem.storeName = messages["dlvrAgencyLink.storeNm"];
+        dataItem.address = messages["dlvrAgencyLink.addr"];
+        dataItem.deposit = messages["dlvrAgencyLink.deposit"];
+
+        s.columnHeaders.rows[0].dataItem = dataItem;
+
+        s.itemFormatter = function (panel, r, c, cell) {
+            if (panel.cellType === wijmo.grid.CellType.ColumnHeader) {
+                //align in center horizontally and vertically
+                panel.rows[r].allowMerging = true;
+                panel.columns[c].allowMerging = true;
+                wijmo.setCss(cell, {
+                    display: 'table',
+                    tableLayout: 'fixed'
+                });
+                cell.innerHTML = '<div class=\"wj-header\">' + cell.innerHTML + '</div>';
+                wijmo.setCss(cell.children[0], {
+                    display: 'table-cell',
+                    verticalAlign: 'middle',
+                    textAlign: 'center'
+                });
+            }
+            // 로우헤더 의 RowNum 표시 ( 페이징/비페이징 구분 )
+            else if (panel.cellType === wijmo.grid.CellType.RowHeader) {
+                // GroupRow 인 경우에는 표시하지 않는다.
+                if (panel.rows[r] instanceof wijmo.grid.GroupRow) {
+                    cell.textContent = '';
+                } else {
+                    if (!isEmpty(panel._rows[r]._data.rnum)) {
+                        cell.textContent = (panel._rows[r]._data.rnum).toString();
+                    } else {
+                        cell.textContent = (r + 1).toString();
+                    }
+                }
+            }
+            // readOnly 배경색 표시
+            else if (panel.cellType === wijmo.grid.CellType.Cell) {
+                var col = panel.columns[c];
+                if (col.isReadOnly) {
+                    wijmo.addClass(cell, 'wj-custom-readonly');
+                }
+            }
+        }
+
+    };
+
     $scope.$on("dlvrAgencyRegCtrl", function (event, data) {
 
         // 배달대행사 코드 조회
@@ -34,14 +91,14 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getDlvrAgency.sb", params, function (response) {
             var data = response.data.data.list;
 
-            if(data.code === "0000") {
+            if (data.code === "0000") {
 
                 var list = data.data;
                 var comboArray = [];
                 var comboData = {};
 
                 // 콤보 기본값 '선택' 추가
-                comboData.name  = messages["cmm.select"];
+                comboData.name = messages["cmm.select"];
                 comboData.value = "";
                 comboArray.push(comboData);
 
@@ -70,7 +127,7 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         var comboData = {};
 
         // 콤보 기본값 '선택' 추가
-        comboData.name  = messages["cmm.select"];
+        comboData.name = messages["cmm.select"];
         comboData.value = "";
         comboArray.push(comboData);
 
@@ -87,7 +144,7 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getDlvrAgency.sb", params, function (response) {
             var data = response.data.data.list;
 
-            if(data.code === "0000") {
+            if (data.code === "0000") {
 
                 var list = data.data;
 
@@ -130,32 +187,145 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
     // 가맹점 조회
     $scope.seachStoreList = function () {
 
+        // 그리드 초기화
+        var cv = new wijmo.collections.CollectionView([]);
+        cv.trackChanges = true;
+        $scope.data = cv;
+
+        if (!$scope.srchSubAgencyCombo.isDisabled) {
+            if ($scope.srchSubAgencyCombo.selectedValue === "") {
+                $scope._popMsg("하위 배달대행사를 선택하세요.");
+                return;
+            }
+        }
+
         var params = {};
         params.linkType = "004";
-        params.posShopId = "omspos1";
+        //params.posShopId = "omspos1";
         params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
         params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
 
-        /*$scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/deleteAgencyLink.sb", params, function(response){
+        // 로딩바 show
+        $scope.$broadcast('loadingPopupActive');
 
-        });*/
+        $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getDlvrAgencyStore.sb", params, function (response) {
+
+            // 로딩바 hide
+            $scope.$broadcast('loadingPopupInactive');
+
+            var data = response.data.data.list;
+
+            if (data.code === "0000") {
+
+                var list = data.data;
+
+                list.forEach(item => {
+                    item.gChk = false; // 체크박스 선택을 위해 추가
+                });
+
+                console.log(list);
+
+                var grid = wijmo.Control.getControl("#wjGrid");
+                grid.itemsSource = new wijmo.collections.CollectionView(list);
+                grid.collectionView.trackChanges = true;
+
+            } else if (data.code === "2525") {
+                $scope._popMsg(data.message);
+                return;
+            } else if (data.code === "8888") {
+                $scope._popMsg(data.message);
+                return;
+            } else if (data.code === "9999") {
+                $scope._popMsg(data.message);
+                return;
+            }
+        });
 
     };
 
     // 선택
     $scope.btnSelect = function () {
 
+        var chkCnt = 0;
+
+        for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+            var item = $scope.flex.collectionView.items[i];
+            if (item.gChk) {
+                chkCnt++;
+            }
+        }
+
+        if (1 > chkCnt) {
+            $scope._popMsg(messages["dlvrAgencyLink.store.mapping.chk.msg1"]);
+            return false;
+        }
+
+
+        if (chkCnt > 1) {
+            $scope._popMsg(messages["dlvrAgencyLink.store.mapping.chk.msg2"]);
+            return false;
+        }
+
+        // 파라미터 설정
         var params = {};
-        params.linkType = "004";
-        params.posShopId = "omspos1";
-        params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
-        params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
+        for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
+            var item = $scope.flex.collectionView.items[i];
+            if (item.gChk) {
+                params.linkType = "005";
+                //params.posShopId = "omspos1";
+                params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
+                params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
+
+                if ($scope.srchDlvrAgencyCombo.selectedValue === "DR01" || $scope.srchDlvrAgencyCombo.selectedValue === "DR02" || $scope.srchDlvrAgencyCombo.selectedValue === "DR03") {
+                    params.storeCode = "";
+                } else if ($scope.srchDlvrAgencyCombo.selectedValue === "DR05") {
+                    params.storeCode = "";
+                } else {
+                    params.storeCode = item.storeCode;
+                }
+
+                if ($scope.srchDlvrAgencyCombo.selectedValue === "DR05") {
+                    params.isB2BContract = true;
+                } else {
+                    params.isB2BContract = false;
+                }
+            }
+        }
+
+        $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/regAgencyLink.sb", params, function (response) {
+
+            var data = response.data.data.list;
+
+            if (data.code === "0000") {
+                $scope._popMsg(data.message);
+                
+                // 팝업 닫기
+                $scope.btnClose();
+                console.log(data.data);
+
+            } else if (data.code === "2525") {
+                $scope._popMsg(data.message);
+                return;
+            } else if (data.code === "8888") {
+                $scope._popMsg(data.message);
+                return;
+            } else if (data.code === "9999") {
+                $scope._popMsg(data.message);
+                return;
+            }
+        });
 
 
     };
 
     // 닫기
     $scope.btnClose = function () {
+
+        // 그리드 초기화
+        var cv = new wijmo.collections.CollectionView([]);
+        cv.trackChanges = true;
+        $scope.data = cv;
+
         $scope.wjDlvrAgencyRegLayer.hide();
     };
 

@@ -60,12 +60,13 @@
             <div class="mt10 tr">
                 <div class="oh sb-select dkbr">
                     <%-- 조회 --%>
-                    <button class="btn_skyblue ml5 fr" ng-click="_broadcast('dlvrAgencyRegCtrl')"><s:message code="cmm.search" /></button>
+                    <button class="btn_skyblue ml5 fr" ng-click="seachStoreList()"><s:message code="cmm.search" /></button>
                 </div>
             </div>
 
             <div class="pdt10" style="height: 200px;">
                 <wj-flex-grid
+                        id="wjGrid"
                         autoGenerateColumns="false"
                         control="flex"
                         initialized="initGrid(s,e)"
@@ -75,10 +76,10 @@
                         item-formatter="_itemFormatter">
 
                     <!-- define columns -->
-                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="32"></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.storeCd"/>" binding="storeCd" align="center" width="100" is-read-only="true" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.storeNm"/>" binding="storeNm" align="left" width="150" is-read-only="true" ></wj-flex-grid-column>
-                    <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.addr"/>" binding="addr" width="300" align="left" is-read-only="true" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="40"></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.storeCd"/>" binding="storeCode" align="center" width="100" is-read-only="true" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.storeNm"/>" binding="storeName" align="left" width="150" is-read-only="true" ></wj-flex-grid-column>
+                    <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.addr"/>" binding="address" width="300" align="left" is-read-only="true" ></wj-flex-grid-column>
                     <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.deposit"/>" binding="deposit" align="right" width="100" is-read-only="true" ></wj-flex-grid-column>
 
                 </wj-flex-grid>
@@ -95,4 +96,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyReg.js?ver=20251014.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyReg.js?ver=20251107.01" charset="utf-8"></script>

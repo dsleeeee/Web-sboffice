@@ -113,7 +113,79 @@ public class DlvrAgencyLinkController {
     }
 
     /**
-     * 배달대행사 연동 해제
+     * 배달대행사 연동 현황
+     * @param dlvrAgencyLinkReqVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2025. 10. 14.
+     */
+    @RequestMapping(value = "/getAgencyLink.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getAgencyLink(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String apiFullUrl = API_URL + "/v1/shops/" + sessionInfoVO.getStoreCd() + "/rider";
+
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
+
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 배달대행사 매장 조회
+     * @param dlvrAgencyLinkReqVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2025. 10. 14.
+     */
+    @RequestMapping(value = "/getDlvrAgencyStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getDlvrAgencyStore(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String apiFullUrl = API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency/stores";
+
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
+
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 배달대행사 매장 등록
+     * @param dlvrAgencyLinkReqVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2025. 10. 14.
+     */
+    @RequestMapping(value = "/regAgencyLink.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result regAgencyLink(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String apiFullUrl = API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
+
+        Map<String, Object> resultMap = postRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
+
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 배달대행사 매핑 삭제
      * @param dlvrAgencyLinkReqVO
      * @param request
      * @param response
@@ -127,7 +199,9 @@ public class DlvrAgencyLinkController {
     public Result deleteAgencyLink(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
                                    HttpServletResponse response, Model model) {
 
-        String apiFullUrl = API_URL + "/oms/v1/shops/" + dlvrAgencyLinkReqVO.getPosShopId() + "/delivery-agency";
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        String apiFullUrl = API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
 
         Map<String, Object>resultMap = deleteRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
 
@@ -202,6 +276,7 @@ public class DlvrAgencyLinkController {
                         errorResponse.append(errorLine.trim());
                     }
                     apiLinkVO.setResponse(errorResponse.toString());
+                    resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>(){});
                     System.out.println("에러 응답: " + errorResponse.toString());
                 }
             }
@@ -219,6 +294,104 @@ public class DlvrAgencyLinkController {
         //
         return resultMap;
     }
+
+    /**
+     * post 호출
+     * @param dlvrAgencyLinkReqVO
+     * @param apiUrl
+     * @param accessToken
+     * @author  이다솜
+     * @since   2025.09.12
+     */
+    public Map<String, Object> postRequest(@RequestBody DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, String apiUrl, String accessToken) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
+        HttpURLConnection connection = null;
+
+        // API 호출 로그 저장을 위한 셋팅
+        ApiLinkVO apiLinkVO = new ApiLinkVO();
+        apiLinkVO.setLinkType(dlvrAgencyLinkReqVO.getLinkType());
+
+        // 결과값 셋팅
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> resultMap = null;
+
+        try {
+            // 1. URL 객체 생성
+            URL url = new URL(apiUrl);
+            apiLinkVO.setUrl(apiUrl);
+
+            // 2. HttpURLConnection 객체 생성 및 설정
+            apiLinkVO.setRequestDt(currentDateTimeString());
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
+            apiLinkVO.setRequestMethod(connection.getRequestMethod());
+
+            // 데이터 초기화(JSON payload 생성에는 필요없는 값, null 처리)
+            dlvrAgencyLinkReqVO.setLinkType(null);
+            dlvrAgencyLinkReqVO.setSearchType(null);
+
+            // 3. 서버로 데이터 전송 (JSON payload)
+            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            String jsonData = mapper.writeValueAsString(dlvrAgencyLinkReqVO);
+            apiLinkVO.setRequest(jsonData);
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonData.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+                os.flush();
+            }
+
+            // 4. 응답 코드 확인
+            int responseCode = connection.getResponseCode();
+            apiLinkVO.setResponseDt(currentDateTimeString());
+            apiLinkVO.setStatusCode(String.valueOf(responseCode));
+            System.out.println("HTTP 응답 코드: " + responseCode);
+
+            // 5. 응답 본문 읽기
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_CREATED) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder response = new StringBuilder();
+                    String responseLine = null;
+                    while ((responseLine = br.readLine()) != null) {
+                        response.append(responseLine.trim());
+                    }
+                    apiLinkVO.setResponse(response.toString());
+                    resultMap = mapper.readValue(response.toString(), new TypeReference<Map<String, Object>>() {});
+                    System.out.println("서버 응답: " + response.toString());
+                }
+            } else {
+                // 에러 발생 시 에러 스트림을 읽음
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder errorResponse = new StringBuilder();
+                    String errorLine = null;
+                    while ((errorLine = br.readLine()) != null) {
+                        errorResponse.append(errorLine.trim());
+                    }
+                    apiLinkVO.setResponse(errorResponse.toString());
+                    resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>() {});
+                    System.out.println("에러 응답: " + errorResponse.toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+
+        // API 호출 로그 저장
+        //omsLinkSampleService.saveApiLog(apiLinkVO, sessionInfoVO);
+
+        //
+        return resultMap;
+    }
+
 
     /**
      * delete 호출
@@ -305,6 +478,7 @@ public class DlvrAgencyLinkController {
                         errorResponse.append(errorLine.trim());
                     }
                     apiLinkVO.setResponse(errorResponse.toString());
+                    resultMap = mapper.readValue(errorResponse.toString(), new TypeReference<Map<String, Object>>() {});
                     System.out.println("에러 응답: " + errorResponse.toString());
                 }
             }

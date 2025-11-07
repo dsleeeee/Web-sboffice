@@ -1384,7 +1384,8 @@
 
     <!-- 오더킷 > 오더킷 > 오더킷 -->
     <typeAlias alias="orderkitVO" type="kr.co.solbipos.orderkit.orderkit.orderkit.service.OrderkitVO"/>
-
+    <!-- 오더킷 > 오더킷 > 원산지관리 -->
+    <typeAlias alias="orderkitRecpOriginVO" type="kr.co.solbipos.orderkit.orderkit.orderkitRecpOrigin.service.OrderkitRecpOriginVO"/>
 
     <!-- ====================================== 모바일 시작 ====================================== -->
     <!-- (모바일) 기초관리 > 가상로그인 -->

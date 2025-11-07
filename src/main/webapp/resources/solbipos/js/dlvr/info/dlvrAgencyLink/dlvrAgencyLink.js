@@ -31,7 +31,12 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     
     // 배달대행사 연동 현황 조회
     $scope.searchStatus = function () {
-        alert('조회');
+
+        var params = {};
+
+        $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getAgencyLink.sb", params, function (response) {
+
+        });
     };
 
     // 배달대행사 연동 팝업 호출
@@ -69,34 +74,35 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
                 params.linkType = "006";
-                params.posShopId = "omspos1";
+                //params.posShopId = "omspos1";
                 params.mappingSequence = "20250619153940";
             }
         }*/
 
         var params = {};
         params.linkType = "006";
-        params.posShopId = "omspos1";
-        params.mappingSequence = "20250619153940";
+        //params.posShopId = "omspos1";
+        params.mappingSequence = "20251105497150";
 
         // 과<br>POS 연동을 해제하시겠습니까?
         $scope._popConfirm(messages["dlvrAgencyLink.link.clear.msg"], function () {
 
-            $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/deleteAgencyLink.sb", params, function(response){
+            $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/deleteAgencyLink.sb", params, function (response) {
+
                 var data = response.data.data.list;
 
-               if(data.code === "0000") {
+                if (data.code === "0000") {
 
-                   $scope._popMsg(data.message);
+                    $scope._popMsg(data.message);
 
-                   // 배달대행사 연동 현황 재조회
-                   $scope.searchStatus();
+                    // 배달대행사 연동 현황 재조회
+                    $scope.searchStatus();
 
-               } else {
-                   $scope._popMsg(data.message);
-                   return;
-               }
-           });
+                } else {
+                    $scope._popMsg(data.message + "</br>" + data.data);
+                    return;
+                }
+            });
 
         });
     };

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    RecpOrigin.xml
+    [오더킷] - [오더킷] - [원산지관리] sql
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       이다솜     2025.11.05
+-->
+<mapper namespace="kr.co.solbipos.orderkit.orderkit.orderkitRecpOrigin.service.impl.OrderkitRecpOriginMapper">
+
+    <!-- 원산지 정보 조회 -->
+    <!--
+        TABLE    : TB_MS_PRINT_TEXT
+        PARAM    : orderkitRecpOriginVO
+        COMMENTS : 원산지 정보를 조회한다.
+    -->
+    <select id="getOrderkitRecpOrigin" parameterType="orderkitRecpOriginVO" resultType="DefaultMap">
+        /* OrderkitRecpOriginMapper.getOrderkitRecpOrigin */
+        SELECT	PRT_CD
+        ,		ORIGIN_CD
+        ,		ORIGIN_NM
+        ,       ORIGIN_TXT_1
+        ,       ORIGIN_TXT_2
+        ,       ORIGIN_TXT_3
+        ,       ORIGIN_TXT_4
+        ,       ORIGIN_TXT_5
+        FROM 	TB_MS_PRINT_TEXT
+        WHERE   STORE_CD = #{storeCd}
+        AND     PRT_CD   = #{prtCd}
+    </select>
+
+</mapper>
