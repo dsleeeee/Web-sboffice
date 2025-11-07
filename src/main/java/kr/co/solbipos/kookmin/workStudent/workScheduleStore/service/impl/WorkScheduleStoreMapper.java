@@ -49,4 +49,6 @@ public interface WorkScheduleStoreMapper {
     List<DefaultMap<Object>> getWorkScheduleStoreCdNmList(WorkScheduleStoreVO workScheduleStoreVO);
 
     List<DefaultMap<Object>> getTermInfoChk(WorkScheduleStoreVO workScheduleStoreVO);
+
+    int getWorkSchCodeDupChk(WorkScheduleStoreVO workScheduleStoreVO);
 }

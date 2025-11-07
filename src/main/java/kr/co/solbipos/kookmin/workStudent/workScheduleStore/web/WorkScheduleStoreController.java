@@ -137,7 +137,7 @@ public class WorkScheduleStoreController {
 
         int result = workScheduleStoreService.saveWorkScheduleStore(workScheduleStoreVOs, sessionInfoVO);
 
-        return returnJson(Status.OK, result);
+        return returnListJson(Status.OK, result);
     }
 
     /**

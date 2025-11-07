@@ -1,6 +1,9 @@
 package kr.co.solbipos.kookmin.workStudent.workScheduleStore.service.impl;
 
+import kr.co.common.data.enums.Status;
 import kr.co.common.data.structure.DefaultMap;
+import kr.co.common.exception.JsonException;
+import kr.co.common.service.message.MessageService;
 import kr.co.common.service.popup.impl.PopupMapper;
 import kr.co.common.utils.CmmUtil;
 import kr.co.common.utils.spring.StringUtil;
@@ -13,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static kr.co.common.utils.DateUtil.currentDateTimeString;
@@ -38,11 +40,13 @@ public class WorkScheduleStoreServiceImpl implements WorkScheduleStoreService {
 
     private final WorkScheduleStoreMapper workScheduleStoreMapper;
     private final PopupMapper popupMapper;
+    private final MessageService messageService;
 
     @Autowired
-    public WorkScheduleStoreServiceImpl(WorkScheduleStoreMapper workScheduleStoreMapper, PopupMapper popupMapper) {
+    public WorkScheduleStoreServiceImpl(WorkScheduleStoreMapper workScheduleStoreMapper, PopupMapper popupMapper, MessageService messageService) {
         this.workScheduleStoreMapper = workScheduleStoreMapper;
         this.popupMapper = popupMapper;
+        this.messageService = messageService;
     }
 
     /** 근무테이블 조회 */
@@ -132,6 +136,12 @@ public class WorkScheduleStoreServiceImpl implements WorkScheduleStoreService {
                 // 근무코드 값 조회 (직접 입력으로 변경)
 //                String workSchCode = workScheduleStoreMapper.getWorkSchCodeStore(workScheduleStoreVO);
 //                workScheduleStoreVO.setWorkSchCode(workSchCode);
+                int result = 0;
+                // 근무코드 중복 확인
+                result = workScheduleStoreMapper.getWorkSchCodeDupChk(workScheduleStoreVO);
+                if(result > 0){
+                    throw new JsonException(Status.SERVER_ERROR, messageService.get("workScheduleStore.msg.workSchCodeDupChk"));
+                }
                 //추가
                 procCnt += workScheduleStoreMapper.insertWorkScheduleStore(workScheduleStoreVO);
             }

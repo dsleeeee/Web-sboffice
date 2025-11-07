@@ -288,30 +288,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
             }
         }
 
-        // 근무코드 중복 체크
-        var arr = [];
-        var arr2 = [];
-
-        for(var i=0; i<$scope.flex.collectionView.items.length; i++){
-            if($scope.flex.collectionView.items[i].status !== 'I') {
-                arr[i] = $scope.flex.collectionView.items[i].workSchCode;
-            }
-        }
-
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            //  근무코드 중복체크
-            if(arr.includes($scope.flex.collectionView.itemsAdded[i].workSchCode)) {
-                $scope._popMsg($scope.flex.collectionView.itemsAdded[i].workSchCode + messages['workScheduleStore.msg.workSchCodeDupChk']);
-                return false;
-            }
-
-            if(arr2.includes($scope.flex.collectionView.itemsAdded[i].workSchCode)) {
-                $scope._popMsg($scope.flex.collectionView.itemsAdded[i].workSchCode + messages['workScheduleStore.msg.workSchCodeDupChk']);
-                return false;
-            }
-
-            arr2[i] = $scope.flex.collectionView.itemsAdded[i].workSchCode;
-
             $scope.flex.collectionView.itemsAdded[i].startTime = $scope.flex.collectionView.itemsAdded[i].startTime.replaceAll(":","");
             $scope.flex.collectionView.itemsAdded[i].endTime = $scope.flex.collectionView.itemsAdded[i].endTime.replaceAll(":","");
             params.push($scope.flex.collectionView.itemsAdded[i]);
@@ -379,8 +356,43 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
         }
 
         // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-        $scope._save("/kookmin/workStudent/workScheduleStore/workScheduleStore/saveWorkScheduleStore.sb", params, function () {
-            $scope.getWorkScheduleStoreList()
+        // $scope._save("/kookmin/workStudent/workScheduleStore/workScheduleStore/saveWorkScheduleStore.sb", params, function () {
+        //     $scope.getWorkScheduleStoreList();
+        // });
+
+        //가상로그인 session 설정
+        var sParam = {};
+        if(document.getElementsByName('sessionId')[0]){
+            sParam['sid'] = document.getElementsByName('sessionId')[0].value;
+        }
+
+        $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 열기
+        // ajax 통신 설정
+        $http({
+            method : 'POST', //방식
+            url    : '/kookmin/workStudent/workScheduleStore/workScheduleStore/saveWorkScheduleStore.sb', /* 통신할 URL */
+            data   : params, /* 파라메터로 보낼 데이터 : @requestBody */
+            params : sParam,
+            headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
+        }).then(function successCallback(response) {
+            if (response.data.message !== null) {
+                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                $scope._popMsg(response.data.message);
+                return false;
+            }
+            if ($scope._httpStatusCheck(response, true)) {
+                $scope._popMsg(messages['cmm.saveSucc']);
+                $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+                $scope.getWorkScheduleStoreList();
+            }
+        }, function errorCallback(response) {
+            $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+            if (response.data.message) {
+                $scope._popMsg(response.data.message);
+            } else {
+                $scope._popMsg(messages['cmm.saveFail']);
+            }
+            return false;
         });
     };
 
