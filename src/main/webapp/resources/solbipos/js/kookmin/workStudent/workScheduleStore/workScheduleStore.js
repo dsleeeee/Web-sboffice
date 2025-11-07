@@ -207,6 +207,10 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
             if(list.length > 0) {
                 for (var i = 0; i < list.length; i++) {
                     params2.gChk = true;
+                    params2.workSchCode = null;
+                    params2.startTime = null;
+                    params2.endTime = null;
+                    params2.hourPay = null;
                     params2.termYear = $scope.termYear;
                     params2.termFg = $scope.termFg;
                     params2.storeCd = list[i].storeCd;
@@ -219,7 +223,7 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
                     params2.fri = false;
                     params2.sat = false;
                     params2.status = "I";
-                    params.workFg = '1';
+                    params2.workFg = '1';
                     $scope._addRow(params2);
                 }
             }
@@ -230,8 +234,12 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
     $scope.save = function () {
         var params = [];
 
+        // 입력값 체크
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
-            // 입력값 체크
+            if($scope.flex.collectionView.itemsAdded[i].workSchCode === "" || $scope.flex.collectionView.itemsAdded[i].workSchCode === null){
+                $scope._popMsg(messages["workScheduleStore.workSchCode"] + messages["workScheduleStore.inputEnv"]);
+                return false;
+            }
             if($scope.flex.collectionView.itemsAdded[i].startTime === "" || $scope.flex.collectionView.itemsAdded[i].startTime === null){
                 $scope._popMsg(messages["workScheduleStore.startTime"] + messages["workScheduleStore.inputEnv"]);
                 return false;
@@ -280,7 +288,30 @@ app.controller('workScheduleStoreCtrl', ['$scope', '$http', function ($scope, $h
             }
         }
 
+        // 근무코드 중복 체크
+        var arr = [];
+        var arr2 = [];
+
+        for(var i=0; i<$scope.flex.collectionView.items.length; i++){
+            if($scope.flex.collectionView.items[i].status !== 'I') {
+                arr[i] = $scope.flex.collectionView.items[i].workSchCode;
+            }
+        }
+
         for (var i = 0; i < $scope.flex.collectionView.itemsAdded.length; i++) {
+            //  근무코드 중복체크
+            if(arr.includes($scope.flex.collectionView.itemsAdded[i].workSchCode)) {
+                $scope._popMsg($scope.flex.collectionView.itemsAdded[i].workSchCode + messages['workScheduleStore.msg.workSchCodeDupChk']);
+                return false;
+            }
+
+            if(arr2.includes($scope.flex.collectionView.itemsAdded[i].workSchCode)) {
+                $scope._popMsg($scope.flex.collectionView.itemsAdded[i].workSchCode + messages['workScheduleStore.msg.workSchCodeDupChk']);
+                return false;
+            }
+
+            arr2[i] = $scope.flex.collectionView.itemsAdded[i].workSchCode;
+
             $scope.flex.collectionView.itemsAdded[i].startTime = $scope.flex.collectionView.itemsAdded[i].startTime.replaceAll(":","");
             $scope.flex.collectionView.itemsAdded[i].endTime = $scope.flex.collectionView.itemsAdded[i].endTime.replaceAll(":","");
             params.push($scope.flex.collectionView.itemsAdded[i]);
