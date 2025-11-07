@@ -128,6 +128,19 @@ public class DlvrInfoController {
     return ReturnUtil.returnListJson(Status.OK, result, dlvrInfoVO);
   }
 
+    /**
+   * 배달내역 엑셀다운로드 조회
+   *
+   * @return
+   */
+  @RequestMapping(value = "/dlvr/getDlvrInfoExcelList.sb", method = RequestMethod.POST)
+  @ResponseBody
+  public Result getDlvrInfoExcelList(DlvrInfoVO dlvrInfoVO, HttpServletRequest request) {
+    SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+    List<DefaultMap<Object>> result = dlvrInfoService.getDlvrInfoExcelList(dlvrInfoVO, sessionInfoVO);
+    return ReturnUtil.returnListJson(Status.OK, result, dlvrInfoVO);
+  }
+
   /**
    * 영수번호 상세팝업 - 영수증상세조회
    * @param   request

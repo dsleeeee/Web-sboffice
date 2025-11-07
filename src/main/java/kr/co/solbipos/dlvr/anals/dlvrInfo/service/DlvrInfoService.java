@@ -25,6 +25,9 @@ public interface DlvrInfoService {
     /** 배달내역조회 */
     public List<DefaultMap<Object>> getDlvrInfoList(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
 
+    /** 배달내역 엑셀다운로드 조회 */
+    public List<DefaultMap<Object>> getDlvrInfoExcelList(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
+
     /** 영수증 상세 조회 */
     DefaultMap<String> getBillInfo(DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO);
 

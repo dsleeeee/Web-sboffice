@@ -175,4 +175,114 @@ app.controller('dlvrInfoCtrl', ['$scope', '$http', '$timeout', function ($scope,
         }, 10);
     };
 
+    // 조회조건 엑셀다운로드
+    $scope.excelDownload2 = function () {
+
+        var startDt = new Date(wijmo.Globalize.format(startDate.value, 'yyyy-MM-dd'));
+        var endDt = new Date(wijmo.Globalize.format(endDate.value, 'yyyy-MM-dd'));
+//        var startDt = new Date(wijmo.Globalize.format($scope.srchStartDate.value, 'yyyy-MM-dd'));
+//        var endDt = new Date(wijmo.Globalize.format($scope.srchEndDate.value, 'yyyy-MM-dd'));
+        var diffDay = (endDt.getTime() - startDt.getTime()) / (24 * 60 * 60 * 1000); // 시 * 분 * 초 * 밀리세컨
+
+        // 시작일자가 종료일자보다 빠른지 확인
+        if(startDt.getTime() > endDt.getTime()){
+            $scope._popMsg(messages['cmm.dateChk.error']);
+            return false;
+        }
+
+        // 조회일자 최대 1달(31일) 제한
+        if (diffDay > 31) {
+            $scope._popMsg(messages['cmm.dateOver.1month.error']);
+            return false;
+        }
+
+        if ($scope.flex.rows.length <= 0) {
+            $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+            return false;
+        }
+
+        var params = {};
+        params.startDate = wijmo.Globalize.format(startDate.value, 'yyyyMMdd');
+        params.endDate = wijmo.Globalize.format(endDate.value, 'yyyyMMdd');
+
+        // 데이터양에 따라 2-3초에서 수분이 걸릴 수도 있습니다.
+        $scope._popConfirm(messages["cmm.excel.totalExceDownload"], function() {
+            $scope._broadcast('dlvrInfoExcelCtrl', params);
+        });
+    };
+
+}]);
+
+
+/**
+ *  일별상품매출현황 엑셀 다운로드 그리드 생성
+ */
+app.controller('dlvrInfoExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+
+    // 상위 객체 상속 : T/F 는 picker
+    angular.extend(this, new RootController('dlvrInfoExcelCtrl', $scope, $http, false));
+
+    // grid 초기화 : 생성되기전 초기화되면서 생성된다
+    $scope.initGrid = function (s, e) {
+        // 그리드 링크 효과
+    };
+
+    // 다른 컨트롤러의 broadcast 받기
+    $scope.$on("dlvrInfoExcelCtrl", function (event, data) {
+
+        // 엑셀 리스트 조회
+        $scope.searchExcelList(data);
+
+        // 기능수행 종료 : 반드시 추가
+        event.preventDefault();
+    });
+
+    // 엑셀 리스트 조회
+    $scope.searchExcelList = function (params) {
+
+        // 조회 수행 : 조회URL, 파라미터, 콜백함수
+        $scope._inquiryMain("/dlvr/manage/anals/dlvr/getDlvrInfoExcelList.sb", params, function() {
+            if ($scope.excelFlex.rows.length <= 0) {
+                $scope._popMsg(messages["excelUpload.not.downloadData"]); // 다운로드 할 데이터가 없습니다.
+                return false;
+            }
+
+            // <-- 그리드 visible -->
+            // 선택한 테이블에 따른 리스트 항목 visible
+            var grid = wijmo.Control.getControl("#wjGridExcelList");
+            var columns = grid.columns;
+
+            // 컬럼 총갯수
+            var columnsCnt = columns.length;
+
+            for (var i = 0; i < columnsCnt; i++) {
+                columns[i].visible = true;
+            }
+
+            // <-- //그리드 visible -->
+
+            $scope.$broadcast('loadingPopupActive', messages["cmm.progress"]); // 데이터 처리중 메시지 팝업 오픈
+            $timeout(function () {
+                wijmo.grid.xlsx.FlexGridXlsxConverter.saveAsync($scope.excelFlex, {
+                    includeColumnHeaders: true,
+                    includeCellStyles   : false,
+                    includeColumns      : function (column) {
+                        return column.visible;
+                    }
+                }, "CID 배달정보" + '_' + params.startDate + '_' + params.endDate + '_' + getCurDateTime()+'.xlsx', function () {
+                    $timeout(function () {
+                        $scope.$broadcast('loadingPopupInactive'); // 데이터 처리중 메시지 팝업 닫기
+
+                        // 사용자 행위 기록
+                        var actParams = {};
+                        actParams.resrceCd = menuCd;
+                        actParams.pathNm = "미스터피자-마케팅조회2-CID 배달정보";
+                        actParams.contents = "[조회조건 엑셀다운로드] 버튼 클릭 시";
+
+                        $scope._postJSONSave.withOutPopUp("/common/method/saveUserAct.sb", actParams, function(response){});
+                    }, 10);
+                });
+            }, 10);
+        });
+    };
 }]);

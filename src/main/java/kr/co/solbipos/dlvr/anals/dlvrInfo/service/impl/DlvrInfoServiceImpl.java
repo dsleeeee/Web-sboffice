@@ -42,8 +42,19 @@ public class DlvrInfoServiceImpl implements DlvrInfoService {
   /** 배달내역조회 */
   @Override
   public List<DefaultMap<Object>> getDlvrInfoList(@RequestBody DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO) {
+    dlvrInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    dlvrInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
     dlvrInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
     return dlvrInfoMapper.getDlvrInfoList(dlvrInfoVO);
+  }
+
+  /** 배달내역 엑셀다운로드 조회 */
+  @Override
+  public List<DefaultMap<Object>> getDlvrInfoExcelList(@RequestBody DlvrInfoVO dlvrInfoVO, SessionInfoVO sessionInfoVO) {
+    dlvrInfoVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+    dlvrInfoVO.setOrgnFg(sessionInfoVO.getOrgnFg().getCode());
+    dlvrInfoVO.setStoreCd(sessionInfoVO.getStoreCd());
+    return dlvrInfoMapper.getDlvrInfoExcelList(dlvrInfoVO);
   }
 
   /** 영수증 상세 조회 */

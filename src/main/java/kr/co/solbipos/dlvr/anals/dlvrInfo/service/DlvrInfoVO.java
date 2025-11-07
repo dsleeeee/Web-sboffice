@@ -35,6 +35,14 @@ public class DlvrInfoVO extends PageVO {
   private String storeCd;
   private String dlvrPayEmpNm;
 
+  /**
+   * 소속구분
+   * M : 시스템
+   * A : 대리점
+   * H : 본사
+   * S : 매장, 가맹점
+   */
+  private String orgnFg;
   /** 결제수단컬럼 */
   private String payCol;
   /** 결제수단 array */
@@ -47,6 +55,11 @@ public class DlvrInfoVO extends PageVO {
   private String pivotDcCol;
   /** 쿼리문의 PIVOT IN에 사용할 결제수단 컬럼 문자열 */
   private String pivotPayCol;
+
+
+  public String getOrgnFg() { return orgnFg; }
+
+  public void setOrgnFg(String orgnFg) { this.orgnFg = orgnFg; }
 
   public String getSaleDate() {
     return saleDate;

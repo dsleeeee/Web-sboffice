@@ -13,55 +13,117 @@
 
     <select id="getDlvrInfoList" parameterType="dlvrInfoVO" resultType="DefaultMap">
         /* USE : DlvrMapper.getDlvrInfoList*/
-        <include refid="CmmSQL.PagingTemplateHeader"/>
-		SELECT 	A.SALE_DATE
-		,		A.POS_NO
-		,		A.BILL_NO
-		,		A.REAL_SALE_AMT
-		,		SBPENC.D(B.DLVR_ADDR)	AS DLVR_ADDR
-		,		SBPENC.D(B.DLVR_TEL_NO)	AS DLVR_TEL_NO
-		,		SBPENC.D(C.MEMBR_NM) 	AS MEMBR_NM
-		,		TO_CHAR(TO_DATE(A.BILL_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')	AS BILL_DT
-		,		D.EMP_NM
-		,		E.EMP_NM 	AS DLVR_PAY_EMP_NM
-		,		A.STORE_CD
-		<include refid="CmmSQL.PagingTemplateCount"/>
-		FROM 	TB_SL_SALE_HDR A
-		,		TB_SL_SALE_HDR_DLVR B
-		,		TB_SL_SALE_HDR_MEMBR C
-		,		TB_MS_EMPLOYEE D
-		,		TB_MS_EMPLOYEE E
-		WHERE 	A.HQ_OFFICE_CD 	= B.HQ_OFFICE_CD
-		AND 	A.HQ_BRAND_CD 	= B.HQ_BRAND_CD
-		AND 	A.STORE_CD 		= B.STORE_CD
-		AND 	A.SALE_DATE 	= B.SALE_DATE
-		AND		A.POS_NO 		= B.POS_NO
-		AND 	A.BILL_NO 		= B.BILL_NO
-        AND	 	C.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
-        AND 	C.HQ_BRAND_CD 	(+) = A.HQ_BRAND_CD
-        AND 	C.STORE_CD 		(+) = A.STORE_CD
-        AND 	C.SALE_DATE 	(+) = A.SALE_DATE
-        AND		C.POS_NO 		(+) = A.POS_NO
-        AND 	C.BILL_NO 		(+) = A.BILL_NO
-		AND		D.EMP_NO 	(+)	= B.DLVR_EMP_NO
-		AND		D.STORE_CD 	(+)	= B.STORE_CD
-		AND		E.EMP_NO 	(+)	= B.DLVR_PAY_EMP_NO
-		AND		E.STORE_CD 	(+)	= B.STORE_CD
-		AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
-		AND		A.DLVR_ORDER_FG = '2'
-		AND 	A.STORE_CD = #{storeCd}
-		<if test='membrNm != null and membrNm !=""'>
-			AND SBPENC.D(C.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
-		</if>
-		<if test='empNm != null and empNm !=""'>
-			AND D.EMP_NM LIKE '%'||#{empNm}||'%'
-		</if>
-		<if test='dlvrPayEmpNm != null and dlvrPayEmpNm !=""'>
-			AND E.EMP_NM LIKE '%'||#{dlvrPayEmpNm}||'%'
-		</if>
-        <include refid="CmmSQL.PagingTemplateBottom"/>
+        <choose>
+            <!-- 본사 -->
+            <when test='orgnFg != null and orgnFg == "H"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT  A.STORE_CD
+                ,       B.STORE_NM
+                ,       A.SALE_DATE
+                ,       SUBSTR(FN_IS_TELNO_CHK2(SBPENC.D(A.DLVR_TEL_NO)), 1, 3) || '****' || SUBSTR(FN_IS_TELNO_CHK2(SBPENC.D(A.DLVR_TEL_NO)), 8) AS DLVR_TEL_NO
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM    TB_SL_SALE_HDR_DLVR A
+                ,       TB_MS_STORE B
+                WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                AND     A.SALE_DATE     BETWEEN #{startDate} AND #{endDate}
+                AND     A.DLVR_IN_FG    =   '1'
+                <![CDATA[
+                AND     FN_IS_TELNO_CHK2(SBPENC.D(A.DLVR_TEL_NO))   <>  '0'
+                ]]>
+                AND     B.STORE_CD      =   A.STORE_CD
+                GROUP
+                BY      A.STORE_CD
+                ,       B.STORE_NM
+                ,       A.SALE_DATE
+                ,       FN_IS_TELNO_CHK2(SBPENC.D(A.DLVR_TEL_NO))
+                ORDER
+                BY      A.STORE_CD
+                ,       A.SALE_DATE
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+            <!-- 매장 -->
+            <when test='orgnFg != null and orgnFg == "S"'>
+                <include refid="CmmSQL.PagingTemplateHeader"/>
+                SELECT 	A.SALE_DATE
+                ,		A.POS_NO
+                ,		A.BILL_NO
+                ,		A.REAL_SALE_AMT
+                ,		SBPENC.D(B.DLVR_ADDR)	AS DLVR_ADDR
+                ,		SBPENC.D(B.DLVR_TEL_NO)	AS DLVR_TEL_NO
+                ,		SBPENC.D(C.MEMBR_NM) 	AS MEMBR_NM
+                ,		TO_CHAR(TO_DATE(A.BILL_DT, 'YYYYMMDDHH24MISS'), 'YYYY-MM-DD HH24:MI:SS')	AS BILL_DT
+                ,		D.EMP_NM
+                ,		E.EMP_NM 	AS DLVR_PAY_EMP_NM
+                ,		A.STORE_CD
+                <include refid="CmmSQL.PagingTemplateCount"/>
+                FROM 	TB_SL_SALE_HDR A
+                ,		TB_SL_SALE_HDR_DLVR B
+                ,		TB_SL_SALE_HDR_MEMBR C
+                ,		TB_MS_EMPLOYEE D
+                ,		TB_MS_EMPLOYEE E
+                WHERE 	A.HQ_OFFICE_CD 	= B.HQ_OFFICE_CD
+                AND 	A.HQ_BRAND_CD 	= B.HQ_BRAND_CD
+                AND 	A.STORE_CD 		= B.STORE_CD
+                AND 	A.SALE_DATE 	= B.SALE_DATE
+                AND		A.POS_NO 		= B.POS_NO
+                AND 	A.BILL_NO 		= B.BILL_NO
+                AND	 	C.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+                AND 	C.HQ_BRAND_CD 	(+) = A.HQ_BRAND_CD
+                AND 	C.STORE_CD 		(+) = A.STORE_CD
+                AND 	C.SALE_DATE 	(+) = A.SALE_DATE
+                AND		C.POS_NO 		(+) = A.POS_NO
+                AND 	C.BILL_NO 		(+) = A.BILL_NO
+                AND		D.EMP_NO 	(+)	= B.DLVR_EMP_NO
+                AND		D.STORE_CD 	(+)	= B.STORE_CD
+                AND		E.EMP_NO 	(+)	= B.DLVR_PAY_EMP_NO
+                AND		E.STORE_CD 	(+)	= B.STORE_CD
+                AND 	A.SALE_DATE BETWEEN #{startDate} AND #{endDate}
+                AND		A.DLVR_ORDER_FG = '2'
+                AND 	A.STORE_CD = #{storeCd}
+                <if test='membrNm != null and membrNm !=""'>
+                    AND SBPENC.D(C.MEMBR_NM) LIKE '%'||#{membrNm}||'%'
+                </if>
+                <if test='empNm != null and empNm !=""'>
+                    AND D.EMP_NM LIKE '%'||#{empNm}||'%'
+                </if>
+                <if test='dlvrPayEmpNm != null and dlvrPayEmpNm !=""'>
+                    AND E.EMP_NM LIKE '%'||#{dlvrPayEmpNm}||'%'
+                </if>
+                <include refid="CmmSQL.PagingTemplateBottom"/>
+            </when>
+        </choose>
     </select>
 
+    <!-- CID 배달내역 엑셀다운로드 조회 -->
+    <!--
+        TABLE    : TB_SL_SALE_HDR_DLVR
+        PARAM    : dlvrInfoVO
+        COMMENTS : CID 배달내역 엑셀다운로드를 조회한다.
+    -->
+    <select id="getDlvrInfoExcelList" parameterType="dlvrInfoVO" resultType="DefaultMap">
+        /* USE : DlvrMapper.getDlvrInfoExcelList */
+            SELECT  A.STORE_CD
+            ,       B.STORE_NM
+            ,       TO_CHAR(TO_DATE(A.SALE_DATE, 'YYYYMMDD'), 'YYYY-MM-DD') AS SALE_DATE
+            ,       FN_IS_TELNO_CHK2(SBPENC.D(A.DLVR_TEL_NO))               AS DLVR_TEL_NO
+            FROM    TB_SL_SALE_HDR_DLVR A
+            ,       TB_MS_STORE B
+            WHERE   A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+            AND     A.SALE_DATE     BETWEEN #{startDate} AND #{endDate}
+            AND     A.DLVR_IN_FG    =   '1'
+            AND     B.STORE_CD      =   A.STORE_CD
+            <![CDATA[
+            AND     FN_IS_TELNO_CHK2(SBPENC.D(A.DLVR_TEL_NO))   <>  '0'
+            ]]>
+            GROUP
+            BY      A.STORE_CD
+            ,       B.STORE_NM
+            ,       A.SALE_DATE
+            ,       FN_IS_TELNO_CHK2(SBPENC.D(A.DLVR_TEL_NO))
+            ORDER
+            BY      A.STORE_CD
+            ,       A.SALE_DATE
+    </select>
 
     <select id="getBillInfo" parameterType="dlvrInfoVO" resultType="DefaultMap">
     /* USE : DlvrMapper.getBillInfo*/
