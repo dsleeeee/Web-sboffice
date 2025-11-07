@@ -56,8 +56,7 @@
         AND     A.TERM_YEAR     = #{srchDate}
         AND     B.STORE_CD      = A.STORE_CD
         ORDER
-        BY		TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))
-        ,		TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))
+        BY		A.WORK_SCH_CODE
     </select>
 
     <!-- 매장별 근무코드 조회 -->

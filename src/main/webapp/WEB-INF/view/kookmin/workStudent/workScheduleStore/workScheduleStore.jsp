@@ -105,6 +105,6 @@
         <%--//위즈모 테이블--%>
     </div>
 </div>
-<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workScheduleStore/workScheduleStore.js?ver=20251106.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/kookmin/workStudent/workScheduleStore/workScheduleStore.js?ver=20251107.01" charset="utf-8"></script>
 
 
