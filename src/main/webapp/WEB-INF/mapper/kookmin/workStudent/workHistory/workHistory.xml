@@ -74,8 +74,7 @@
             AND SBPENC.D(B.STUDENT_NM) LIKE '%'|| #{studentNm} || '%'
         </if>
         ORDER
-        BY		TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))
-        ,		TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))
+        BY		A.WORK_SCH_CODE
     </select>
 
     <!-- 근무내역 저장 -->

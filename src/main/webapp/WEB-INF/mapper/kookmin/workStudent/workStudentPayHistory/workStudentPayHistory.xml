@@ -55,7 +55,6 @@
         ,		SBPENC.D(B.BANK_NM) || ' ' || SBPENC.D(B.ACCOUNT_NO)
         ,		A.HOUR_PAY
         ORDER
-        BY		TO_NUMBER(SUBSTR(A.WORK_SCH_CODE, 2, INSTR(A.WORK_SCH_CODE, '-') - 2))
-        ,		TO_NUMBER(SUBSTR(A.WORK_SCH_CODE, INSTR(A.WORK_SCH_CODE, '-') + 1 ))
+        BY		A.WORK_SCH_CODE
     </select>
 </mapper>

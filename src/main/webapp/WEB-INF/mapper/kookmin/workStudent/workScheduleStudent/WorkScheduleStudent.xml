@@ -60,8 +60,7 @@
             </choose>
         </if>
         ORDER
-        BY		TO_NUMBER(SUBSTR(WORK_SCH_CODE, 2, INSTR(WORK_SCH_CODE, '-') - 2))
-        ,		TO_NUMBER(SUBSTR(WORK_SCH_CODE, INSTR(WORK_SCH_CODE, '-') + 1 ))
+        BY		A.WORK_SCH_CODE
     </select>
 
     <!-- 근로학생 등록 팝업 - 근로학생 조회 -->
