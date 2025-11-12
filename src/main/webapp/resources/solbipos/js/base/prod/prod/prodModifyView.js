@@ -43,7 +43,7 @@ var orgProdFgComboData = [
     {"name": "", "value": "00"},
     {"name": "일반상품", "value": "10"},
     {"name": "도서상품", "value": "20"},
-    {"name": "OMS", "value": "30"}
+    {"name": "오더킷상품", "value": "30"}
 ];
 
 // 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
@@ -53,8 +53,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('prodModifyCtrl', $scope, $http, $timeout, true));
 
-    // 도서구분 콤보박스의 데이터
+    // 국민대 상품등록구분 콤보박스의 데이터
     $scope._setComboData('orgProdFgComboData', orgProdFgComboData);
+
+    // 오더킷 상품등록구분 콤보박스의 데이터
+    $scope._setComboData('orgProdFgComboData2', orgProdFgComboData);
 
     // 일반상품관리 콤보박스
     // 식권구분 쓰는 콤보박스의 데이터
@@ -323,6 +326,16 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             params.nuSugars = "";
             params.nuSatFat = "";
             params.nuCaffeine = "";
+
+            // 상품이미지 파일 업로드/삭제 버튼 show
+            $("#file").css("display", "");
+            $("#btnDelProdImage").css("display", "");
+
+            // 오더킷 전용 상품등록구분 hidden
+            $("#trOrgProdFg_Orderkit").css("display", "none");
+
+            // 저장버튼 show
+            $("#btnSaveProd").css("display", "");
 
             // 상품정보 set (초기값 셋팅)
             $scope.setProdModifyInfo(params);
@@ -1713,6 +1726,13 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     }else{
                         $scope.prodModifyInfo.orgProdFg = "00";
                     }
+                    $("#trOrgProdFg_Orderkit").css("display", "none");
+                }else{
+                    if($scope.prodModifyInfo.orgProdFg === "30") {
+                        $("#trOrgProdFg_Orderkit").css("display", ""); // 오더킷 상품 표시
+                    } else {
+                        $("#trOrgProdFg_Orderkit").css("display", "none");
+                    }
                 }
 
 
@@ -1775,6 +1795,25 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                 $("input:checkbox[id='chkSaleTypeYnSin']").prop("checked", $scope.prodModifyInfo.saleTypeYnSin === 'Y' ? true : false);
                 $("input:checkbox[id='chkSaleTypeYnDlv']").prop("checked", $scope.prodModifyInfo.saleTypeYnDlv === 'Y' ? true : false);
                 $("input:checkbox[id='chkSaleTypeYnPkg']").prop("checked", $scope.prodModifyInfo.saleTypeYnPkg === 'Y' ? true : false);
+
+                // 저장버튼, 이미지 수정버튼
+                if ($scope.prodModifyInfo.orgProdFg === "30") {
+
+                    // 오더킷 상품이미지 수정 불가
+                    $("#file").css("display", "none");
+                    $("#btnDelProdImage").css("display", "none");
+
+                    // 오더킷 상품 수정 불가
+                    $("#btnSaveProd").css("display", "none");
+                } else {
+
+                    // 상품이미지 수정 가능
+                    $("#file").css("display", "");
+                    $("#btnDelProdImage").css("display", "");
+
+                    // 상품 수정 가능
+                    $("#btnSaveProd").css("display", "");
+                }
 
                 // [1250 맘스터치] 사용시 기존정보 셋팅
                 if(momsEnvstVal === "1") {
@@ -1937,6 +1976,16 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             // 세트구성상품 등록버튼 visible 처리
             $("#btnSetConfigProd").css("display", "none");
+
+            // 상품이미지 파일 업로드/삭제 버튼 show
+            $("#file").css("display", "");
+            $("#btnDelProdImage").css("display", "");
+
+            // 오더킷 전용 상품등록구분 hidden
+            $("#trOrgProdFg_Orderkit").css("display", "none");
+
+            // 저장버튼 show
+            $("#btnSaveProd").css("display", "");
         }
     };
 

@@ -45,7 +45,8 @@ public class OrderkitController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private static final String SECRET_KEY_STRING = "q7TgPmKtjGNMtzOfy4dsF/Ti3whTXeQZwaw84vnA9N8m8zvNU2QApYZquYZlq94uczwj9x12OSzAYiDjzEUaog==";
+    //private static final String SECRET_KEY_STRING = "iVYaGN2CufNIiZJO6/oG259M8fw2GP8bEfQG73dPGw7YKHzyp1dMHJqnW08YijB8BOeTFEzNoa9sWMl5CFTjIg=="; // 운영
+    private static final String SECRET_KEY_STRING = "q7TgPmKtjGNMtzOfy4dsF/Ti3whTXeQZwaw84vnA9N8m8zvNU2QApYZquYZlq94uczwj9x12OSzAYiDjzEUaog=="; // 개발
     private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes(StandardCharsets.UTF_8));
     private static final long EXPIRATION_TIME = 1800000; // 30분 (밀리초)
 
@@ -102,9 +103,14 @@ public class OrderkitController {
                 .setHeaderParam("alg", "HS256")
 
                 // 페이로드(클레임) 설정
+                .claim("shopName", storeInfo.getStr("storeNm"))
                 .claim("businessNumber", storeInfo.getStr("bizNo"))
                 .claim("representativeName", storeInfo.getStr("ownerNm"))
                 .claim("phoneNumber", storeInfo.getStr("mpNo"))
+                .claim("postNo", storeInfo.getStr("postNo"))
+                .claim("addressBase", storeInfo.getStr("addr"))
+                .claim("addressDetail", storeInfo.getStr("addrDtl"))
+                .claim("posType", "SOLBI")
                 .claim("posShopId", storeInfo.getStr("storeCd"))
                 .claim("isOmsUser", false)
                 .claim("iat", now_unixTimestamp)         // iat: 토큰 발행 시간
@@ -131,9 +137,14 @@ public class OrderkitController {
 
             // 페이로드(클레임) 가져오기
             Claims claims = jws.getPayload();
+            LOGGER.info("shopName: " + claims.get("shopName"));
             LOGGER.info("businessNumber: " + claims.get("businessNumber"));
             LOGGER.info("representativeName: " + claims.get("representativeName"));
             LOGGER.info("phoneNumber: " + claims.get("phoneNumber"));
+            LOGGER.info("postNo: " + claims.get("postNo"));
+            LOGGER.info("addressBase: " + claims.get("addressBase"));
+            LOGGER.info("addressDetail: " + claims.get("addressDetail"));
+            LOGGER.info("posType: " + claims.get("posType"));
             LOGGER.info("posShopId: " + claims.get("posShopId"));
             LOGGER.info("isOmsUser: " + claims.get("isOmsUser"));
             LOGGER.info("iat: " + claims.get("iat"));

@@ -28,7 +28,10 @@
                 SUBSTR(tms.BIZ_NO, 4, 2) AS BIZ_NO2,
                 SUBSTR(tms.BIZ_NO, 6, 5) AS BIZ_NO3,
                 tms.TEL_NO,
-                tms.MP_NO
+                tms.MP_NO,
+                tms.POST_NO,
+                tms.ADDR,
+                tms.ADDR_DTL
           FROM TB_MS_STORE tms
          WHERE tms.HQ_OFFICE_CD = #{hqOfficeCd}
            AND tms.STORE_CD = #{storeCd}

@@ -319,6 +319,25 @@
                   </td>
                 </tr>
               </c:if>
+              <tr id="trOrgProdFg_Orderkit" style="display: none;">
+                  <%-- 오더킷 전용 상품등록구분 --%>
+                  <th>
+                      <s:message code="prod.sh.orgProdFg"/>
+                  </th>
+                  <td>
+                      <div class="sb-select">
+                          <wj-combo-box
+                                  items-source="_getComboData('orgProdFgComboData2')"
+                                  display-member-path="name"
+                                  selected-value-path="value"
+                                  is-editable="false"
+                                  initialized="_initComboBox(s)"
+                                  selected-index="3"
+                                  disabled>
+                          </wj-combo-box>
+                      </div>
+                  </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -1549,7 +1568,7 @@
     </div>
     <div class="wj-dialog-footer">
        <%--<button class="btn btn_blue" ng-click="myForm.$valid && saveProd()"><s:message code="cmm.save"/></button>--%>
-       <button class="btn btn_blue" ng-click="saveProdSave()"><s:message code="cmm.save"/></button>
+       <button class="btn btn_blue" ng-click="saveProdSave()" id="btnSaveProd"><s:message code="cmm.save"/></button>
       <button class="btn wj-hide btn_blue"><s:message code="cmm.close"/></button>
       <input type="hidden" id="saveMode" name="saveMode"/>
     </div>
@@ -1687,7 +1706,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251021.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251112.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

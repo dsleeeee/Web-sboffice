@@ -215,8 +215,8 @@
                                 {{_prcCtrlFg}}
                             </td>
                         </tr>
-                        <c:if test="${urlProdFg != '0'}">
-                            <tr>
+                        <%--<c:if test="${urlProdFg != '0'}">--%>
+                            <tr  id="trDtlOrgProdFg_Orderkit">
                                     <%-- 상품등록구분 --%>
                                 <th>
                                     <s:message code="prod.sh.orgProdFg"/>
@@ -234,7 +234,7 @@
                                     {{_orgProdFg}}
                                 </td>
                             </tr>
-                        </c:if>
+                        <%--</c:if>--%>
                     </tbody>
                 </table>
                 <%-- [국민대] - [상품정보관리] - [일반상품관리] 진입 시 --%>
@@ -1178,4 +1178,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20250224.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20251112.01" charset="utf-8"></script>

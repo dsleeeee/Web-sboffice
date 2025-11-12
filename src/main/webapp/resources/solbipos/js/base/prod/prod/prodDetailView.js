@@ -174,6 +174,31 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                 }else{
                     $("#lblSaleChannel").text("");
                 }
+
+                // 도서구분 값 없으면 [일반상품관리] 화면은 일반상품관리, [도서관리] 화면은 도서관리
+                if ($scope.prodDetail.orgProdFg === null || $scope.prodDetail.orgProdFg === "") {
+                    if (urlProdFg === "1") {
+                        $scope.prodDetail.orgProdFg = "10";
+                    } else if (urlProdFg === "2") {
+                        $scope.prodDetail.orgProdFg = "20";
+                    } else {
+                        $scope.prodDetail.orgProdFg = "00";
+                    }
+                    $("#trOrgProdFg_Orderkit").css("display", "none");
+                } else {
+                    if ($scope.prodDetail.orgProdFg === "30") {
+                        $("#trOrgProdFg_Orderkit").css("display", ""); // 오더킷 상품 표시
+                    } else {
+                        $("#trOrgProdFg_Orderkit").css("display", "none");
+                    }
+                }
+
+                // 상품등록구분
+                if ($scope.prodDetail.orgProdFg === null || $scope.prodDetail.orgProdFg === "" || $scope.prodDetail.orgProdFg === "00") {
+                    $("#trDtlOrgProdFg_Orderkit").css("display", "none");
+                } else {
+                    $("#trDtlOrgProdFg_Orderkit").css("display", "");
+                }
             }
         );
         // 기능수행 종료 : 반드시 추가

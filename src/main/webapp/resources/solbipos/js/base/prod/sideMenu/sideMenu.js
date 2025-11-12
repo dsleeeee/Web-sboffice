@@ -25,6 +25,8 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
   $scope.isSelectMenuTab = true;
   // 선택메뉴(싱글) 탭
   $scope.isSelectMenuSingleTab = true;
+  // 옵션메뉴(배달) 탭
+  $scope.isOptionMenuDlvrTab = true;
   // 사이드메뉴관리 탭
   $scope.isManageTab = true;
   // 탭변경
@@ -34,10 +36,12 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#sideMenuAttr").addClass("on");
       $("#sideMenuSelectMenu").removeClass("on");
       $("#sideMenuSelectMenuSingle").removeClass("on");
+      $("#optionMenuDlvr").removeClass("on");
       $("#sideMenuManage").removeClass("on");
       $scope.isAttrTab = false;
       $scope.isSelectMenuTab = true;
       $scope.isSelectMenuSingleTab = true;
+      $scope.isOptionMenuDlvrTab = true;
       $scope.isManageTab = true;
       // 속성 조회
       $scope._broadcast("sideMenuAttrClassCtrl");
@@ -46,10 +50,12 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#sideMenuAttr").removeClass("on");
       $("#sideMenuSelectMenu").addClass("on");
       $("#sideMenuSelectMenuSingle").removeClass("on");
+      $("#optionMenuDlvr").removeClass("on");
       $("#sideMenuManage").removeClass("on");
       $scope.isAttrTab = true;
       $scope.isSelectMenuTab = false;
       $scope.isSelectMenuSingleTab = true;
+      $scope.isOptionMenuDlvrTab = true;
       $scope.isManageTab = true;
       // 선택그룹 조회
       $scope._broadcast("sideMenuSelectGroupCtrl");
@@ -62,10 +68,12 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       $("#sideMenuAttr").removeClass("on");
       $("#sideMenuSelectMenu").removeClass("on");
       $("#sideMenuSelectMenuSingle").addClass("on");
+      $("#optionMenuDlvr").removeClass("on");
       $("#sideMenuManage").removeClass("on");
       $scope.isAttrTab = true;
       $scope.isSelectMenuTab = true;
       $scope.isSelectMenuSingleTab = false;
+      $scope.isOptionMenuDlvrTab = true;
       $scope.isManageTab = true;
       // 선택그룹(싱글) 조회
       $scope._broadcast("sideMenuSelectGroupSingleCtrl");
@@ -73,15 +81,35 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
       setTimeout(function () {
         $scope._broadcast("selectMenuSingleRefresh");
       }, 10);
+    // 옵션메뉴(배달) 탭
+    }else if( type === 'O' ){
+      $("#sideMenuAttr").removeClass("on");
+      $("#sideMenuSelectMenu").removeClass("on");
+      $("#sideMenuSelectMenuSingle").removeClass("on");
+      $("#optionMenuDlvr").addClass("on");
+      $("#sideMenuManage").removeClass("on");
+      $scope.isAttrTab = true;
+      $scope.isSelectMenuTab = true;
+      $scope.isSelectMenuSingleTab = true;
+      $scope.isOptionMenuDlvrTab = false;
+      $scope.isManageTab = true;
+      // 선택그룹 조회
+      $scope._broadcast("optionMenuDlvrSelectGroupCtrl");
+      // 그리드 refresh
+      setTimeout(function () {
+      $scope._broadcast("optionMenuDlvrRefresh");
+      }, 10);
     // 사이드메뉴관리 탭
     }else if ( type === 'M' ) {
       $("#sideMenuAttr").removeClass("on");
       $("#sideMenuSelectMenu").removeClass("on");
       $("#sideMenuSelectMenuSingle").removeClass("on");
+      $("#optionMenuDlvr").removeClass("on");
       $("#sideMenuManage").addClass("on");
       $scope.isAttrTab = true;
       $scope.isSelectMenuTab = true;
       $scope.isSelectMenuSingleTab = true;
+      $scope.isOptionMenuDlvrTab = true;
       $scope.isManageTab = false;
       // 사이드메뉴관리 조회
       $scope._broadcast("sideMenuManageCtrl");
@@ -125,6 +153,19 @@ app.controller('sideMenuCtrl', ['$scope', '$http', function ($scope, $http) {
 
       // 선택그룹(싱글) 조회
       $scope._broadcast("sideMenuSelectGroupSingleCtrl");
+
+    } else if (!$scope.isOptionMenuDlvrTab) {
+
+        $("#optionMenuDlvrSelectGroupTitle").html("");
+        var attrScope = agrid.getScope('optionMenuDlvrSelectClassCtrl');
+        attrScope._gridDataInit();   // 옵션메뉴(배달) 그리드 초기화
+
+        $("#optionMenuDlvrSelectClassTitle").html("");
+        var prodScope = agrid.getScope('optionMenuDlvrSelectProdCtrl');
+        prodScope._gridDataInit();   // 옵션메뉴(배달) 그리드 초기화
+
+        // 옵션메뉴(배달) 조회
+        $scope._broadcast("optionMenuDlvrSelectGroupCtrl");
 
     } else if (!$scope.isManageTab) {
 

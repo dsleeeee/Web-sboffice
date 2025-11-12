@@ -29,6 +29,8 @@
       <li><a id="sideMenuSelectMenu" href="#" ng-click="changeTab('C');"><s:message code="sideMenu.tab.selectMenu(set)" /></a></li>
       <%-- 선택메뉴(싱글) --%>
       <li><a id="sideMenuSelectMenuSingle" href="#" ng-click="changeTab('S');"><s:message code="sideMenu.tab.selectMenu(single)" /></a></li>
+      <%-- 옵션메뉴(배달) --%>
+      <li><a id="optionMenuDlvr" href="#" ng-click="changeTab('O');"><s:message code="sideMenu.tab.optionMenu(dlvr)" /></a></li>
       <%-- 사이드메뉴관리 --%>
       <li><a id="sideMenuManage" href="#" ng-click="changeTab('M');"><s:message code="sideMenu.tab.manage" /></a></li>
     </ul>
@@ -41,6 +43,9 @@
   </c:import>
 
   <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuSelectMenuSingle.jsp">
+  </c:import>
+
+  <c:import url="/WEB-INF/view/base/prod/sideMenu/optionMenuDlvr.jsp">
   </c:import>
 
   <c:import url="/WEB-INF/view/base/prod/sideMenu/sideMenuManage.jsp">
@@ -82,7 +87,7 @@
   }
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20250905.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/sideMenu.js?ver=20251112.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:if test="${param.gubun ne 'sideMenu'}">

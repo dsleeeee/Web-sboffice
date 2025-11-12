@@ -49,6 +49,7 @@
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.dlvrAgency"/>" binding="prodClassCd" width="200" align="center"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.deposit"/>" binding="deposit" width="100" align="center"></wj-flex-grid-column>
                         <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.linkDate"/>" binding="prodClassNm" width="200"></wj-flex-grid-column>
 
                     </wj-flex-grid>
