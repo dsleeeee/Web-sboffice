@@ -177,7 +177,362 @@
                                     SELECT
                                         twae.RESRCE_CD
                                     FROM
-                                        TB_WB_AUTHOR_EXCEPT_V01 twae
+                                        (
+                                            SELECT  A.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       DECODE(B.RESRCE_CD,NULL,'W','M') AS LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_EXCEPT A
+                                            ,       (
+                                                        SELECT  twri.RESRCE_CD AS RESRCE_CD
+                                                        FROM    TB_WB_RESRCE_INFO twr
+                                                        ,       TB_WB_RESRCE_INFO twri
+                                                        WHERE   1=1
+                                                        AND     twr.USE_YN = 'Y'
+                                                        AND     twri.USE_YN = 'Y'
+                                                        AND     twri.P_RESRCE = twr.RESRCE_CD
+                                                        AND     twri.DISP_LEVEL = '2'
+                                                        AND     twri.RESRCE_CD NOT IN   (
+                                                                                            SELECT  P_RESRCE
+                                                                                            FROM    TB_WB_RESRCE_INFO
+                                                                                            WHERE   USE_YN = 'Y'
+                                                                                            AND     DISP_LEVEL = '3'
+                                                                                        )
+                                                        AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                                    ) B
+                                            WHERE   A.RESRCE_CD =   B.RESRCE_CD (+)
+                                            AND	    A.USER_ID   =   #{userId}
+                                            UNION
+                                            SELECT  A.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_USER_IN_EX A
+                                            WHERE   1=1
+                                            AND     A.USER_ID   =   #{userId}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_HQ_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   IN  ('H', 'C')
+                                            AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
+                                            AND     (A.ORGN_CD, A.AUTHOR_PRODC_FG, A.RESRCE_CD) NOT IN (('A0001', 'C', '001499'), ('A0001', 'C', '001639'))
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_MS_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   =   'S'
+                                            AND     B.STORE_CD          =   A.ORGN_CD
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_MS_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   =   'C'
+                                            AND     B.STORE_CD          IN  (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = A.ORGN_CD)
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                                                /* 본사 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
+                                                UNION
+                                                SELECT  B.USER_ID
+                                                ,       A.RESRCE_CD
+                                                ,       A.INCLD_EXCLD_FG
+                                                ,       A.USE_YN
+                                                ,       A.REG_DT
+                                                ,       A.REG_ID
+                                                ,       A.MOD_DT
+                                                ,       A.MOD_ID
+                                                ,       A.LOGIN_FG
+                                                FROM    (
+                                                            -- [1263] SMS/알림톡사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            ,       (
+                                                                        SELECT  '000318' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD      =   '1263'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            -- [1291] 배달시스템상품명칭매핑(다중화): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '004600'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            WHERE   A.ENVST_CD      =   '1291'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001579'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            WHERE   A.ENVST_CD      =   '1291'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            -- [1304] 수불사용여부 메뉴 처리 [01] 재고사용, [02] 재고미사용 - 기본값, 수불 000007 재고 000008
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            ,       (
+                                                                        SELECT  B.RESRCE_CD     AS  RESRCE_CD
+                                                                        FROM    (
+                                                                                    SELECT  A.RESRCE_CD
+                                                                                    ,       A.RESRCE_NM
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_CD,'▶'), 2) RESRCE_CD_STR
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_NM,'▶'), 2) RESRCE_NM_STR
+                                                                                    FROM    TB_WB_RESRCE_INFO A
+                                                                                    WHERE   A.USE_YN    =   '1Y'
+                                                                                    START
+                                                                                    WITH    A.P_RESRCE  =   '000000'
+                                                                                    CONNECT
+                                                                                    BY      A.P_RESRCE  =   PRIOR A.RESRCE_CD
+                                                                                ) B
+                                                                        WHERE   B.RESRCE_CD_STR LIKE '000007%'
+                                                                        OR      B.RESRCE_CD_STR LIKE '000008%'
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD      =   '1304'
+                                                            AND     A.ENVST_VAL     =   '02'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                        ) A
+                                                ,       TB_HQ_EMPLOYEE B
+                                                WHERE   A.AUTHOR_PRODC_FG   =   'H'
+                                                AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
+                                                AND     A.ORGN_CD			=   #{orgnCd}
+                                                AND     B.EMP_NO			=   #{empNo}
+                                            </if>
+                                            <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                            /* 매장 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
+                                                UNION
+                                                SELECT  B.USER_ID
+                                                ,       A.RESRCE_CD
+                                                ,       A.INCLD_EXCLD_FG
+                                                ,       A.USE_YN
+                                                ,       A.REG_DT
+                                                ,       A.REG_ID
+                                                ,       A.MOD_DT
+                                                ,       A.MOD_ID
+                                                ,       A.LOGIN_FG
+                                                FROM    (
+                                                            -- [1117] 테이블관리 버전: [0] NX1(기본값), [1] NX2
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001920'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1117'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	    =   #{storeCd}
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001578'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1117'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1263] SMS/알림톡사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  '000318' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1263'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND     A.STORE_CD	=   #{storeCd}
+                                                            -- [1291] 배달시스템상품명칭매핑(다중화): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '004600'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1291'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001579'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1291'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1304] 수불사용여부 메뉴 처리 [01] 재고사용, [02] 재고미사용 - 기본값, 수불 000007 재고 000008
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  B.RESRCE_CD     AS  RESRCE_CD
+                                                                        FROM    (
+                                                                                    SELECT  A.RESRCE_CD
+                                                                                    ,       A.RESRCE_NM
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_CD,'▶'), 2) RESRCE_CD_STR
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_NM,'▶'), 2) RESRCE_NM_STR
+                                                                                    FROM    TB_WB_RESRCE_INFO A
+                                                                                    WHERE   A.USE_YN    =   '1Y'
+                                                                                    START
+                                                                                    WITH    A.P_RESRCE  =   '000000'
+                                                                                    CONNECT
+                                                                                    BY      A.P_RESRCE  =   PRIOR A.RESRCE_CD
+                                                                                ) B
+                                                                        WHERE   B.RESRCE_CD_STR LIKE '000007%'
+                                                                        OR      B.RESRCE_CD_STR LIKE '000008%'
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1304'
+                                                            AND     A.ENVST_VAL =   '02'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1347] 키오스크다국어사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  '005779' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '005780' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1347'
+                                                            AND     A.ENVST_VAL =   'Y'
+                                                            AND	    A.STORE_CD	= #{storeCd}
+                                                        ) A
+                                                ,       TB_MS_EMPLOYEE B
+                                                WHERE   A.AUTHOR_PRODC_FG   =   'S'
+                                                AND     B.STORE_CD      =   A.ORGN_CD
+                                                AND	    B.STORE_CD		=   #{storeCd}
+                                                AND     B.EMP_NO        =	#{empNo}
+                                            </if>
+                                        ) twae
                                     WHERE
                                         twae.USER_ID = #{userId}
                                         AND twae.INCLD_EXCLD_FG = 'I'
@@ -187,7 +542,362 @@
                                     SELECT
                                         twae.RESRCE_CD
                                     FROM
-                                        TB_WB_AUTHOR_EXCEPT_V01 twae
+                                        (
+                                            SELECT  A.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       DECODE(B.RESRCE_CD,NULL,'W','M') AS LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_EXCEPT A
+                                            ,       (
+                                                        SELECT  twri.RESRCE_CD AS RESRCE_CD
+                                                        FROM    TB_WB_RESRCE_INFO twr
+                                                        ,       TB_WB_RESRCE_INFO twri
+                                                        WHERE   1=1
+                                                        AND     twr.USE_YN = 'Y'
+                                                        AND     twri.USE_YN = 'Y'
+                                                        AND     twri.P_RESRCE = twr.RESRCE_CD
+                                                        AND     twri.DISP_LEVEL = '2'
+                                                        AND     twri.RESRCE_CD NOT IN   (
+                                                                                            SELECT  P_RESRCE
+                                                                                            FROM    TB_WB_RESRCE_INFO
+                                                                                            WHERE   USE_YN = 'Y'
+                                                                                            AND     DISP_LEVEL = '3'
+                                                                                        )
+                                                        AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                                    ) B
+                                            WHERE   A.RESRCE_CD =   B.RESRCE_CD (+)
+                                            AND	    A.USER_ID   =   #{userId}
+                                            UNION
+                                            SELECT  A.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_USER_IN_EX A
+                                            WHERE   1=1
+                                            AND     A.USER_ID   =   #{userId}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_HQ_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   IN  ('H', 'C')
+                                            AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
+                                            AND     (A.ORGN_CD, A.AUTHOR_PRODC_FG, A.RESRCE_CD) NOT IN (('A0001', 'C', '001499'), ('A0001', 'C', '001639'))
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_MS_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   =   'S'
+                                            AND     B.STORE_CD          =   A.ORGN_CD
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_MS_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   =   'C'
+                                            AND     B.STORE_CD          IN  (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = A.ORGN_CD)
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                                            /* 본사 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
+                                                UNION
+                                                SELECT  B.USER_ID
+                                                ,       A.RESRCE_CD
+                                                ,       A.INCLD_EXCLD_FG
+                                                ,       A.USE_YN
+                                                ,       A.REG_DT
+                                                ,       A.REG_ID
+                                                ,       A.MOD_DT
+                                                ,       A.MOD_ID
+                                                ,       A.LOGIN_FG
+                                                FROM    (
+                                                            -- [1263] SMS/알림톡사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            ,       (
+                                                                        SELECT  '000318' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD      =   '1263'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            -- [1291] 배달시스템상품명칭매핑(다중화): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '004600'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            WHERE   A.ENVST_CD      =   '1291'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001579'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            WHERE   A.ENVST_CD      =   '1291'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            -- [1304] 수불사용여부 메뉴 처리 [01] 재고사용, [02] 재고미사용 - 기본값, 수불 000007 재고 000008
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            ,       (
+                                                                        SELECT  B.RESRCE_CD     AS  RESRCE_CD
+                                                                        FROM    (
+                                                                                    SELECT  A.RESRCE_CD
+                                                                                    ,       A.RESRCE_NM
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_CD,'▶'), 2) RESRCE_CD_STR
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_NM,'▶'), 2) RESRCE_NM_STR
+                                                                                    FROM    TB_WB_RESRCE_INFO A
+                                                                                    WHERE   A.USE_YN    =   '1Y'
+                                                                                    START
+                                                                                    WITH    A.P_RESRCE  =   '000000'
+                                                                                    CONNECT
+                                                                                    BY      A.P_RESRCE  =   PRIOR A.RESRCE_CD
+                                                                                ) B
+                                                                        WHERE   B.RESRCE_CD_STR LIKE '000007%'
+                                                                        OR      B.RESRCE_CD_STR LIKE '000008%'
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD      =   '1304'
+                                                            AND     A.ENVST_VAL     =   '02'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                        ) A
+                                                ,       TB_HQ_EMPLOYEE B
+                                                WHERE   A.AUTHOR_PRODC_FG   =   'H'
+                                                AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
+                                                AND     A.ORGN_CD			=   #{orgnCd}
+                                                AND     B.EMP_NO			=   #{empNo}
+                                            </if>
+                                            <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                                /* 매장 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
+                                                UNION
+                                                SELECT  B.USER_ID
+                                                ,       A.RESRCE_CD
+                                                ,       A.INCLD_EXCLD_FG
+                                                ,       A.USE_YN
+                                                ,       A.REG_DT
+                                                ,       A.REG_ID
+                                                ,       A.MOD_DT
+                                                ,       A.MOD_ID
+                                                ,       A.LOGIN_FG
+                                                FROM    (
+                                                            -- [1117] 테이블관리 버전: [0] NX1(기본값), [1] NX2
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001920'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1117'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	    =   #{storeCd}
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001578'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1117'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1263] SMS/알림톡사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  '000318' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1263'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1291] 배달시스템상품명칭매핑(다중화): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '004600'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1291'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001579'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1291'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1304] 수불사용여부 메뉴 처리 [01] 재고사용, [02] 재고미사용 - 기본값, 수불 000007 재고 000008
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  B.RESRCE_CD     AS  RESRCE_CD
+                                                                        FROM    (
+                                                                                    SELECT  A.RESRCE_CD
+                                                                                    ,       A.RESRCE_NM
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_CD,'▶'), 2) RESRCE_CD_STR
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_NM,'▶'), 2) RESRCE_NM_STR
+                                                                                    FROM    TB_WB_RESRCE_INFO A
+                                                                                    WHERE   A.USE_YN    =   '1Y'
+                                                                                    START
+                                                                                    WITH    A.P_RESRCE  =   '000000'
+                                                                                    CONNECT
+                                                                                    BY      A.P_RESRCE  =   PRIOR A.RESRCE_CD
+                                                                                ) B
+                                                                        WHERE   B.RESRCE_CD_STR LIKE '000007%'
+                                                                        OR      B.RESRCE_CD_STR LIKE '000008%'
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1304'
+                                                            AND     A.ENVST_VAL =   '02'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1347] 키오스크다국어사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  '005779' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '005780' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1347'
+                                                            AND     A.ENVST_VAL =   'Y'
+                                                            AND	    A.STORE_CD	= #{storeCd}
+                                                        ) A
+                                                ,       TB_MS_EMPLOYEE B
+                                                WHERE   A.AUTHOR_PRODC_FG   =   'S'
+                                                AND     B.STORE_CD      =   A.ORGN_CD
+                                                AND     B.STORE_CD		=   #{storeCd}
+                                                AND     B.EMP_NO   =	#{empNo}
+                                            </if>
+                                        ) twae
                                     WHERE
                                         twae.USER_ID = #{userId}
                                         AND twae.INCLD_EXCLD_FG = 'E'
@@ -197,11 +907,366 @@
                                         AND twae.RESRCE_CD != #{optResrceCd}
                                     </if>
                                     <if test='orgnFgCode != null and (orgnFgCode == "H" or orgnFgCode == "S")'>
-                                        MINUS
-                                        SELECT
-                                            twae.RESRCE_CD
-                                        FROM
-                                            TB_WB_AUTHOR_EXCEPT_V01 twae
+                                    MINUS
+                                    SELECT
+                                        twae.RESRCE_CD
+                                    FROM
+                                        (
+                                            SELECT  A.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       DECODE(B.RESRCE_CD,NULL,'W','M') AS LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_EXCEPT A
+                                            ,       (
+                                                        SELECT  twri.RESRCE_CD AS RESRCE_CD
+                                                        FROM    TB_WB_RESRCE_INFO twr
+                                                        ,       TB_WB_RESRCE_INFO twri
+                                                        WHERE   1=1
+                                                        AND     twr.USE_YN = 'Y'
+                                                        AND     twri.USE_YN = 'Y'
+                                                        AND     twri.P_RESRCE = twr.RESRCE_CD
+                                                        AND     twri.DISP_LEVEL = '2'
+                                                        AND     twri.RESRCE_CD NOT IN   (
+                                                                                            SELECT  P_RESRCE
+                                                                                            FROM    TB_WB_RESRCE_INFO
+                                                                                            WHERE   USE_YN = 'Y'
+                                                                                            AND     DISP_LEVEL = '3'
+                                                                                        )
+                                                        AND (twr.SPCL_AUTHOR IS NULL OR twr.SPCL_AUTHOR NOT IN ('A01'))
+                                                    ) B
+                                            WHERE   A.RESRCE_CD =   B.RESRCE_CD (+)
+                                            AND	    A.USER_ID   =   #{userId}
+                                            UNION
+                                            SELECT  A.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_USER_IN_EX A
+                                            WHERE   1=1
+                                            AND     A.USER_ID   =   #{userId}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_HQ_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   IN  ('H', 'C')
+                                            AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
+                                            AND     (A.ORGN_CD, A.AUTHOR_PRODC_FG, A.RESRCE_CD) NOT IN (('A0001', 'C', '001499'), ('A0001', 'C', '001639'))
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_MS_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   =   'S'
+                                            AND     B.STORE_CD          =   A.ORGN_CD
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            UNION
+                                            SELECT  B.USER_ID
+                                            ,       A.RESRCE_CD
+                                            ,       A.INCLD_EXCLD_FG
+                                            ,       A.USE_YN
+                                            ,       A.REG_DT
+                                            ,       A.REG_ID
+                                            ,       A.MOD_DT
+                                            ,       A.MOD_ID
+                                            ,       A.LOGIN_FG
+                                            FROM    TB_WB_AUTHOR_ORGN_IN_EX A
+                                            ,       TB_MS_EMPLOYEE B
+                                            WHERE   A.AUTHOR_PRODC_FG   =   'C'
+                                            AND     B.STORE_CD          IN  (SELECT STORE_CD FROM TB_MS_STORE WHERE HQ_OFFICE_CD = A.ORGN_CD)
+                                            AND	    A.ORGN_CD           =   #{orgnCd}
+                                            AND     B.EMP_NO            =   #{empNo}
+                                            <if test='orgnFg != null and orgnFg.toString() == "HQ"'>
+                                                /* 본사 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
+                                                UNION
+                                                SELECT  B.USER_ID
+                                                ,       A.RESRCE_CD
+                                                ,       A.INCLD_EXCLD_FG
+                                                ,       A.USE_YN
+                                                ,       A.REG_DT
+                                                ,       A.REG_ID
+                                                ,       A.MOD_DT
+                                                ,       A.MOD_ID
+                                                ,       A.LOGIN_FG
+                                                FROM    (
+                                                            -- [1263] SMS/알림톡사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            ,       (
+                                                                        SELECT  '000318' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD      =   '1263'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            -- [1291] 배달시스템상품명칭매핑(다중화): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '004600'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            WHERE   A.ENVST_CD      =   '1291'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001579'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            WHERE   A.ENVST_CD      =   '1291'
+                                                            AND     A.ENVST_VAL     =   '1'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                            -- [1304] 수불사용여부 메뉴 처리 [01] 재고사용, [02] 재고미사용 - 기본값, 수불 000007 재고 000008
+                                                            UNION
+                                                            SELECT  A.HQ_OFFICE_CD          AS  ORGN_CD
+                                                            ,       'H'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_HQ_ENVST A
+                                                            ,       (
+                                                                        SELECT  B.RESRCE_CD     AS  RESRCE_CD
+                                                                        FROM    (
+                                                                                    SELECT  A.RESRCE_CD
+                                                                                    ,       A.RESRCE_NM
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_CD,'▶'), 2) RESRCE_CD_STR
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_NM,'▶'), 2) RESRCE_NM_STR
+                                                                                    FROM    TB_WB_RESRCE_INFO A
+                                                                                    WHERE   A.USE_YN    =   '1Y'
+                                                                                    START
+                                                                                    WITH    A.P_RESRCE  =   '000000'
+                                                                                    CONNECT
+                                                                                    BY      A.P_RESRCE  =   PRIOR A.RESRCE_CD
+                                                                                ) B
+                                                                        WHERE   B.RESRCE_CD_STR LIKE '000007%'
+                                                                        OR      B.RESRCE_CD_STR LIKE '000008%'
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD      =   '1304'
+                                                            AND     A.ENVST_VAL     =   '02'
+                                                            AND     A.HQ_OFFICE_CD  =   #{hqOfficeCd}
+                                                        ) A
+                                                ,       TB_HQ_EMPLOYEE B
+                                                WHERE   A.AUTHOR_PRODC_FG   =   'H'
+                                                AND     B.HQ_OFFICE_CD      =   A.ORGN_CD
+                                                AND     A.ORGN_CD			=   #{orgnCd}
+                                                AND     B.EMP_NO			=   #{empNo}
+                                            </if>
+                                            <if test='orgnFg != null and orgnFg.toString() == "STORE"'>
+                                                /* 매장 특이사항 및 환경설정에 따른 특수 메뉴 처리*/
+                                                UNION
+                                                SELECT  B.USER_ID
+                                                ,       A.RESRCE_CD
+                                                ,       A.INCLD_EXCLD_FG
+                                                ,       A.USE_YN
+                                                ,       A.REG_DT
+                                                ,       A.REG_ID
+                                                ,       A.MOD_DT
+                                                ,       A.MOD_ID
+                                                ,       A.LOGIN_FG
+                                                FROM    (
+                                                            -- [1117] 테이블관리 버전: [0] NX1(기본값), [1] NX2
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001920'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1117'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	    =   #{storeCd}
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001578'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1117'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1263] SMS/알림톡사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  '000318' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002180' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002461' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002503' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '002580' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1263'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND     A.STORE_CD	=   #{storeCd}
+                                                            -- [1291] 배달시스템상품명칭매핑(다중화): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '004600'                AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1291'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       '001579'                AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            WHERE   A.ENVST_CD  =   '1291'
+                                                            AND     A.ENVST_VAL =   '1'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1304] 수불사용여부 메뉴 처리 [01] 재고사용, [02] 재고미사용 - 기본값, 수불 000007 재고 000008
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'E'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  B.RESRCE_CD     AS  RESRCE_CD
+                                                                        FROM    (
+                                                                                    SELECT  A.RESRCE_CD
+                                                                                    ,       A.RESRCE_NM
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_CD,'▶'), 2) RESRCE_CD_STR
+                                                                                    ,       SUBSTR(SYS_CONNECT_BY_PATH (A.RESRCE_NM,'▶'), 2) RESRCE_NM_STR
+                                                                                    FROM    TB_WB_RESRCE_INFO A
+                                                                                    WHERE   A.USE_YN    =   '1Y'
+                                                                                    START
+                                                                                    WITH    A.P_RESRCE  =   '000000'
+                                                                                    CONNECT
+                                                                                    BY      A.P_RESRCE  =   PRIOR A.RESRCE_CD
+                                                                                ) B
+                                                                        WHERE   B.RESRCE_CD_STR LIKE '000007%'
+                                                                        OR      B.RESRCE_CD_STR LIKE '000008%'
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1304'
+                                                            AND     A.ENVST_VAL =   '02'
+                                                            AND	    A.STORE_CD	=   #{storeCd}
+                                                            -- [1347] 키오스크다국어사용(메뉴오픈): [0] 미사용(기본값), [1] 사용
+                                                            UNION
+                                                            SELECT  A.STORE_CD              AS  ORGN_CD
+                                                            ,       'S'                     AS  AUTHOR_PRODC_FG
+                                                            ,       B.RESRCE_CD             AS  RESRCE_CD
+                                                            ,       'I'                     AS  INCLD_EXCLD_FG
+                                                            ,       A.USE_YN                AS  USE_YN
+                                                            ,       A.REG_DT                AS  REG_DT
+                                                            ,       A.REG_ID                AS  REG_ID
+                                                            ,       A.MOD_DT                AS  MOD_DT
+                                                            ,       A.MOD_ID                AS  MOD_ID
+                                                            ,       'W'                     AS  LOGIN_FG
+                                                            FROM    TB_MS_STORE_ENVST A
+                                                            ,       (
+                                                                        SELECT  '005779' RESRCE_CD FROM DUAL UNION ALL
+                                                                        SELECT  '005780' RESRCE_CD FROM DUAL
+                                                                    ) B
+                                                            WHERE   A.ENVST_CD  =   '1347'
+                                                            AND     A.ENVST_VAL =   'Y'
+                                                            AND	    A.STORE_CD	= #{storeCd}
+                                                ) A
+                                                ,       TB_MS_EMPLOYEE B
+                                                WHERE   A.AUTHOR_PRODC_FG   =   'S'
+                                                AND     B.STORE_CD      =   A.ORGN_CD
+                                                AND	    B.STORE_CD		=   #{storeCd}
+                                                AND     B.EMP_NO        =	#{empNo}
+                                            </if>
+                                        ) twae
                                         WHERE
                                             1=1
                                             <choose>

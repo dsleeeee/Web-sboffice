@@ -177,4 +177,7 @@ public interface HqManageMapper {
 
     /** 모바일 권한예외 복사 시, 복사기준본사의 모바일 권한예외 값 조회  */
     List<DefaultMap<String>> exceptMobileMenu(HqMenuVO hqMenuVO);
+
+    /** 사용자ID 중복체크 */
+    int getDupChkHqUserId(HqManageVO hqManage);
 }

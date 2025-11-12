@@ -2003,4 +2003,17 @@
                                 )
           AND USE_YN = 'Y'
     </select>
+
+    <!-- 사용자 ID 중복 체크  -->
+    <!--
+        TABLE    : TB_WB_USER_INFO
+        PARAM    : hqManageVO
+        COMMENTS : 사용자 ID 중복 체크한다
+    -->
+    <select id="getDupChkHqUserId" parameterType="DefaultMap" resultType="Integer">
+        /* HqManageMapper.getDupChkHqUserId */
+        SELECT COUNT(*)
+        FROM   TB_WB_USER_INFO
+        WHERE  USER_ID = #{userId}
+    </select>
 </mapper>

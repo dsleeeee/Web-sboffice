@@ -635,4 +635,7 @@ public interface StoreManageMapper {
 
     /** 매출처 회원 후불회원 등록 (전매장) */
     int getStorePostpaidSaveMerge(StoreManageVO storeManageVO);
+
+    /** 사용자ID 중복체크 */
+    int getDupChkStoreUserId(StoreManageVO storeManageVO);
 }

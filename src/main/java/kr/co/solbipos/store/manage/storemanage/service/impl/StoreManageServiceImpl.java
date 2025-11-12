@@ -270,6 +270,14 @@ public class StoreManageServiceImpl implements StoreManageService {
             storeManageVO.setPosEmpNo(pEmpNo);
             storeManageVO.setPosUserPwd(pUserPwd);
 
+            // 사용자ID 중복체크
+            int dupChkUserId = mapper.getDupChkStoreUserId(storeManageVO);
+
+            if(dupChkUserId > 0) {
+                // 본사/매장 아이디 확인. - 관리자에게 문의하십시오.
+                throw new JsonException(Status.SERVER_ERROR, messageService.get("cmm.msg.inquryUserId"));
+            }
+
             // 단독매장
             if (storeManageVO.getHqOfficeCd().equals("00000")) {
                 storeManageVO.setAuthGrpCd("000004");
