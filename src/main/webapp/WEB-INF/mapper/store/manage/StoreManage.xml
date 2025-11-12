@@ -10988,4 +10988,16 @@
         )
     </insert>
 
+    <!-- 사용자 ID 중복 체크  -->
+    <!--
+        TABLE    : TB_WB_USER_INFO
+        PARAM    : storeManageVO
+        COMMENTS : 사용자 ID 중복 체크한다
+    -->
+    <select id="getDupChkStoreUserId" parameterType="storeManageVO" resultType="Integer">
+        /* StoreManageMapper.getDupChkStoreUserId */
+        SELECT COUNT(*)
+        FROM   TB_WB_USER_INFO
+        WHERE  USER_ID = #{userId}
+    </select>
 </mapper>

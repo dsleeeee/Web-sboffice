@@ -143,6 +143,14 @@ public class HqManageServiceImpl implements HqManageService{
 
         int result = 0;
 
+        // 사용자ID 중복체크
+        int dupChkUserId = mapper.getDupChkHqUserId(hqManage);
+
+        if(dupChkUserId > 0) {
+            // 본사/매장 아이디 확인. - 관리자에게 문의하십시오.
+            throw new JsonException(Status.FAIL, messageService.get("cmm.msg.inquryUserId"));
+        }
+
         // 본사 등록
         result = mapper.regist(hqManage);
         if(result <= 0) throw new JsonException(Status.FAIL, messageService.get("cmm.saveFail"));
