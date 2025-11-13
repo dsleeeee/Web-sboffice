@@ -83,6 +83,9 @@ public class ProdOptionVO extends PageVO {
     /**  출력여부 */
     private String printYn;
 
+    /** 표기순서 */
+    private String dispSeq;
+
     public String getOrgnFg() {
         return orgnFg;
     }
@@ -233,5 +236,13 @@ public class ProdOptionVO extends PageVO {
 
     public void setPrintYn(String printYn) {
         this.printYn = printYn;
+    }
+
+    public String getDispSeq() {
+        return dispSeq;
+    }
+
+    public void setDispSeq(String dispSeq) {
+        this.dispSeq = dispSeq;
     }
 }

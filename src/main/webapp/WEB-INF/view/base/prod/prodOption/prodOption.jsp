@@ -59,7 +59,13 @@
   <div class="wj-TblWrap mt10 mb20 w50 fl" ng-controller="prodOptionValCtrl">
     <div class="wj-TblWrapBr pd10" style="height:470px;">
       <s:message code="prodOption.optionVal"/><span id="optionGrpTitle"></span>
-      <div class="updownSet oh mb10">
+      <button class="btn_down fr ml5" id="btnDownCls" ng-click="rowMoveDownCls()">
+        <s:message code="cmm.down" />
+      </button>
+      <button class="btn_up fr" id="btnUpCls" ng-click="rowMoveUpCls()" >
+        <s:message code="cmm.up" />
+      </button>
+      <div class="updownSet oh mb10 mt10">
         <button class="btn_skyblue" id="btnOptionValAddWithProd" ng-click="addRowWithProd()"><s:message code='prodOption.addWithProd' /></button>
         <button class="btn_skyblue" id="btnOptionValAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
         <button class="btn_skyblue" id="btnOptionValDel" ng-click="del()"><s:message code='cmm.del' /></button>
@@ -86,6 +92,7 @@
           <wj-flex-grid-column header="<s:message code="prodOption.prodCd"/>" binding="optProdCd" width="105" is-read-only="true" align="center"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodOption.prodNm"/>" binding="prodNm" width="120" is-read-only="true" align="left"></wj-flex-grid-column>
           <wj-flex-grid-column header="<s:message code="prodOption.printYn"/>" binding="printYn" data-map="printYnDataMap" width="70" align="center"></wj-flex-grid-column>
+          <wj-flex-grid-column header="<s:message code="prodOption.dispSeq"/>" binding="dispSeq" width="70" align="center" visible="false"></wj-flex-grid-column>
         </wj-flex-grid>
         </div>
       </div>
@@ -107,7 +114,7 @@
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20240229.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20251113.01" charset="utf-8"></script>
 
 <%-- 추가(상품포함) 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prodOption/prodOptionAddWithProd.jsp">

@@ -193,13 +193,16 @@
                 ,       thpov.OPT_PROD_CD
                 ,       thp.PROD_NM
                 ,       NVL(thpov.PRINT_YN, 'Y') AS PRINT_YN
+                ,       thpov.DISP_SEQ
                 FROM    TB_HQ_PRODUCT_OPTION_VAL thpov
                 ,       TB_HQ_PRODUCT thp
                 WHERE   thpov.HQ_OFFICE_CD = #{hqOfficeCd}
                 AND     thpov.OPTION_GRP_CD = #{optionGrpCd}
                 AND     thp.HQ_OFFICE_CD (+)= thpov.HQ_OFFICE_CD
                 AND     thp.PROD_CD (+)= thpov.OPT_PROD_CD
-                ORDER BY thpov.OPTION_VAL_CD
+                ORDER
+                BY      thpov.DISP_SEQ
+                ,       thpov.OPTION_VAL_CD
             </when>
             <!-- 매장 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -209,13 +212,16 @@
                 ,       tmpov.OPT_PROD_CD
                 ,       tmp.PROD_NM
                 ,       NVL(tmpov.PRINT_YN, 'Y') AS PRINT_YN
+                ,       tmpov.DISP_SEQ
                 FROM    TB_MS_PRODUCT_OPTION_VAL tmpov
                 ,       TB_MS_PRODUCT tmp
                 WHERE   tmpov.STORE_CD = #{storeCd}
                 AND     tmpov.OPTION_GRP_CD = #{optionGrpCd}
                 AND     tmp.STORE_CD (+)= tmpov.STORE_CD
                 AND     tmp.PROD_CD (+)= tmpov.OPT_PROD_CD
-                ORDER BY tmpov.OPTION_VAL_CD
+                ORDER
+                BY      tmpov.DISP_SEQ
+                ,       tmpov.OPTION_VAL_CD
             </when>
         </choose>
     </select>
@@ -267,7 +273,8 @@
                     SET A.OPTION_VAL_NM = #{optionValNm},
                     A.MOD_DT = #{modDt},
                     A.MOD_ID = #{modId},
-                    A.PRINT_YN = #{printYn}
+                    A.PRINT_YN = #{printYn},
+                    A.DISP_SEQ = #{dispSeq}
                 WHEN NOT MATCHED THEN
                     INSERT (
                         A.HQ_OFFICE_CD,
@@ -279,7 +286,8 @@
                         A.MOD_DT,
                         A.MOD_ID,
                         A.OPT_PROD_CD,
-                        A.PRINT_YN
+                        A.PRINT_YN,
+                        A.DISP_SEQ
                     ) VALUES (
                         #{hqOfficeCd},
                         #{optionGrpCd},
@@ -290,7 +298,8 @@
                         #{modDt},
                         #{modId},
                         #{optProdCd},
-                        #{printYn}
+                        #{printYn},
+                        #{dispSeq}
                     )
             </when>
             <!-- 매장 -->
@@ -305,7 +314,8 @@
                     SET A.OPTION_VAL_NM = #{optionValNm},
                     A.MOD_DT = #{modDt},
                     A.MOD_ID = #{modId},
-                    A.PRINT_YN = #{printYn}
+                    A.PRINT_YN = #{printYn},
+                    A.DISP_SEQ = #{dispSeq}
                 WHEN NOT MATCHED THEN
                     INSERT (
                         A.STORE_CD,
@@ -318,7 +328,8 @@
                         A.MOD_DT,
                         A.MOD_ID,
                         A.OPT_PROD_CD,
-                        A.PRINT_YN
+                        A.PRINT_YN,
+                        A.DISP_SEQ
                     ) VALUES (
                         #{storeCd},
                         #{optionGrpCd},
@@ -330,7 +341,8 @@
                         #{modDt},
                         #{modId},
                         #{optProdCd},
-                        #{printYn}
+                        #{printYn},
+                        #{dispSeq}
                     )
             </when>
         </choose>

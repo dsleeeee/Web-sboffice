@@ -486,6 +486,9 @@ public class ProdVO extends PageVO {
     /** 상품등록주체 구분 */
     private String orgProdFg;
 
+    /** 묶음분류 */
+    private String bundleFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -2083,5 +2086,13 @@ public class ProdVO extends PageVO {
 
     public void setOrgProdFg(String orgProdFg) {
         this.orgProdFg = orgProdFg;
+    }
+
+    public String getBundleFg() {
+        return bundleFg;
+    }
+
+    public void setBundleFg(String bundleFg) {
+        this.bundleFg = bundleFg;
     }
 }

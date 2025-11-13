@@ -317,6 +317,44 @@ app.controller('prodOptionValCtrl', ['$scope', '$http', '$timeout', function ($s
     $scope._addRow(params, 2);
   };
 
+  // 카테고리(분류) 상위 순서 이동
+  $scope.rowMoveUpCls = function () {
+    var movedRows = 0;
+    for (var i = 0; i < $scope.flex.collectionView.itemCount; i++) {
+      var item = $scope.flex.collectionView.items[i];
+      if (i > 0 && item.gChk) {
+        if (!$scope.flex.collectionView.items[i - 1].gChk) {
+          movedRows = i - 1;
+          var tmpItem = $scope.flex.collectionView.items[movedRows];
+          $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+          $scope.flex.collectionView.items[i] = tmpItem;
+          $scope.flex.collectionView.commitEdit();
+          $scope.flex.collectionView.refresh();
+        }
+      }
+    }
+    $scope.flex.select(movedRows, 1);
+  };
+
+  // 카테고리(분류) 하위 순서 이동
+  $scope.rowMoveDownCls = function () {
+    var movedRows = $scope.flex.itemsSource.itemCount - 1;
+    for (var i = $scope.flex.itemsSource.itemCount - 1; i >= 0; i--) {
+      var item = $scope.flex.collectionView.items[i];
+      if (i < ($scope.flex.itemsSource.itemCount - 1) && item.gChk) {
+        if (!$scope.flex.collectionView.items[i + 1].gChk) {
+          movedRows = i + 1;
+          var tmpItem = $scope.flex.collectionView.items[movedRows];
+          $scope.flex.collectionView.items[movedRows] = $scope.flex.collectionView.items[i];
+          $scope.flex.collectionView.items[i] = tmpItem;
+          $scope.flex.collectionView.commitEdit();
+          $scope.flex.collectionView.refresh();
+        }
+      }
+    }
+    $scope.flex.select(movedRows, 1);
+  };
+
   // 속성 그리드 행 삭제
   $scope.del = function() {
     $scope._popConfirm(messages["cmm.choo.delete"], function() {
@@ -348,7 +386,16 @@ app.controller('prodOptionValCtrl', ['$scope', '$http', '$timeout', function ($s
       $scope.flex.collectionView.commitEdit();
 
       // 파라미터 설정
-      var params = [];
+      var params = new Array();
+
+      for(var s = 0, num = 1; s < $scope.flex.rows.length; s++, num++) {
+        if ($scope.flex.collectionView.items[s].dispSeq !== num) {
+          $scope.flex.collectionView.items[s].dispSeq = num;
+          $scope.flex.collectionView.editItem($scope.flex.collectionView.items[s]);
+          $scope.flex.collectionView.items[s].status = "U";
+          $scope.flex.collectionView.commitEdit();
+        }
+      }
 
       for (var u = 0; u < $scope.flex.collectionView.itemsEdited.length; u++) {
         if($scope.flex.collectionView.itemsEdited[u].optionValNm == ""){

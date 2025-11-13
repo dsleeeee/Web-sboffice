@@ -3185,7 +3185,8 @@
             SH_B_SPC_MANAGE,
             SH_B_ISBN_FG,
             SH_B_ISBN_CODE,
-            ORG_PROD_FG
+            ORG_PROD_FG,
+            BUNDLE_FG
             FROM TB_HQ_PRODUCT_INFO
             WHERE 1=1
             AND HQ_OFFICE_CD = #{hqOfficeCd}
@@ -3198,11 +3199,57 @@
             UPDATE
             SET
             PROD_INFO = B.PROD_INFO,
-            PROD_EN_INFO = B.PROD_EN_INFO,
-            PROD_CN_INFO = B.PROD_CN_INFO,
-            PROD_JP_INFO = B.PROD_JP_INFO,
             MOD_DT = B.MOD_DT,
-            MOD_ID = B.MOD_ID
+            MOD_ID = B.MOD_ID,
+            NU_TOT_WT = B.NU_TOT_WT,
+            NU_KCAL = B.NU_KCAL,
+            NU_PROTEIN = B.NU_PROTEIN,
+            NU_SODIUM = B.NU_SODIUM,
+            NU_SUGARS = B.NU_SUGARS,
+            NU_SAT_FAT = B.NU_SAT_FAT,
+            NU_CAFFEINE = B.NU_CAFFEINE,
+            MOMS_KIOSK_EDGE = B.MOMS_KIOSK_EDGE,
+            SALE_TYPE_YN_SIN = B.SALE_TYPE_YN_SIN,
+            SALE_TYPE_YN_DLV = B.SALE_TYPE_YN_DLV,
+            SALE_TYPE_YN_PKG = B.SALE_TYPE_YN_PKG,
+            SALE_CHN_YN_POS = B.SALE_CHN_YN_POS,
+            SALE_CHN_YN_KSK = B.SALE_CHN_YN_KSK,
+            SALE_CHN_YN_CMP = B.SALE_CHN_YN_CMP,
+            SALE_CHN_YN_BAE = B.SALE_CHN_YN_BAE,
+            SALE_CHN_YN_BAO = B.SALE_CHN_YN_BAO,
+            SALE_CHN_YN_YGY = B.SALE_CHN_YN_YGY,
+            SALE_CHN_YN_YGE = B.SALE_CHN_YN_YGE,
+            SALE_CHN_YN_CPN = B.SALE_CHN_YN_CPN,
+            SALE_CHN_YN_TNG = B.SALE_CHN_YN_TNG,
+            SALE_CHN_YN_DDN = B.SALE_CHN_YN_DDN,
+            PROD_EN_INFO    = B.PROD_EN_INFO,
+            PROD_CN_INFO    = B.PROD_CN_INFO,
+            PROD_JP_INFO    = B.PROD_JP_INFO,
+            ORD_QTY_DISP_FG = B.ORD_QTY_DISP_FG,
+            SH_P_ALIAS              = B.SH_P_ALIAS,
+            SH_P_TICKET_FG          = B.SH_P_TICKET_FG,
+            SH_P_MAKER_NM           = B.SH_P_MAKER_NM,
+            SH_P_ACQUIRE_VAT        = B.SH_P_ACQUIRE_VAT,
+            SH_P_POINT_SAVE_RATE    = B.SH_P_POINT_SAVE_RATE,
+            SH_P_SPEC               = B.SH_P_SPEC,
+            SH_P_SPC_MANAGE         = B.SH_P_SPC_MANAGE,
+            SH_P_SINGLE_PROD_CD     = B.SH_P_SINGLE_PROD_CD,
+            SH_B_ALIAS              = B.SH_B_ALIAS,
+            SH_B_PUBLISH_NM         = B.SH_B_PUBLISH_NM,
+            SH_B_AUTHOR1            = B.SH_B_AUTHOR1,
+            SH_B_AUTHOR2            = B.SH_B_AUTHOR2,
+            SH_B_TRANSLATOR1        = B.SH_B_TRANSLATOR1,
+            SH_B_TRANSLATOR2        = B.SH_B_TRANSLATOR2,
+            SH_B_PUB_DATE           = B.SH_B_PUB_DATE,
+            SH_B_DISC_RATE          = B.SH_B_DISC_RATE,
+            SH_B_ACQUIRE_VAT        = B.SH_B_ACQUIRE_VAT,
+            SH_B_POINT_SAVE_RATE    = B.SH_B_POINT_SAVE_RATE,
+            SH_B_SPEC               = B.SH_B_SPEC,
+            SH_B_SPC_MANAGE         = B.SH_B_SPC_MANAGE,
+            SH_B_ISBN_FG            = B.SH_B_ISBN_FG,
+            SH_B_ISBN_CODE          = B.SH_B_ISBN_CODE,
+            ORG_PROD_FG             = B.ORG_PROD_FG,
+            BUNDLE_FG               = B.BUNDLE_FG
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -3259,7 +3306,8 @@
                 A.SH_B_SPC_MANAGE,
                 A.SH_B_ISBN_FG,
                 A.SH_B_ISBN_CODE,
-                A.ORG_PROD_FG
+                A.ORG_PROD_FG,
+                A.BUNDLE_FG
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -3315,7 +3363,8 @@
                 B.SH_B_SPC_MANAGE,
                 B.SH_B_ISBN_FG,
                 B.SH_B_ISBN_CODE,
-                B.ORG_PROD_FG
+                B.ORG_PROD_FG,
+                B.BUNDLE_FG
             )
     </insert>
 
@@ -4247,7 +4296,8 @@
                             PRINT_YN,
                             OPTION_VAL_EN_NM,
                             OPTION_VAL_CN_NM,
-                            OPTION_VAL_JP_NM
+                            OPTION_VAL_JP_NM,
+                            DISP_SEQ
                     FROM    TB_HQ_PRODUCT_OPTION_VAL
                     WHERE   HQ_OFFICE_CD = #{hqOfficeCd}
                 ) B
@@ -4265,7 +4315,8 @@
                         PRINT_YN = B.PRINT_YN,
                         OPTION_VAL_EN_NM = B.OPTION_VAL_EN_NM,
                         OPTION_VAL_CN_NM = B.OPTION_VAL_CN_NM,
-                        OPTION_VAL_JP_NM = B.OPTION_VAL_JP_NM
+                        OPTION_VAL_JP_NM = B.OPTION_VAL_JP_NM,
+                        DISP_SEQ = B.DISP_SEQ
             WHEN NOT MATCHED THEN
                 INSERT (
                         A.STORE_CD,
@@ -4281,7 +4332,8 @@
                         A.PRINT_YN,
                         A.OPTION_VAL_EN_NM,
                         A.OPTION_VAL_CN_NM,
-                        A.OPTION_VAL_JP_NM
+                        A.OPTION_VAL_JP_NM,
+                        A.DISP_SEQ
                     ) VALUES (
                         B.STORE_CD,
                         B.OPTION_GRP_CD,
@@ -4296,7 +4348,8 @@
                         B.PRINT_YN,
                         B.OPTION_VAL_EN_NM,
                         B.OPTION_VAL_CN_NM,
-                        B.OPTION_VAL_JP_NM
+                        B.OPTION_VAL_JP_NM,
+                        B.DISP_SEQ
                      )
     </insert>
 
@@ -4366,7 +4419,8 @@
             SH_B_SPC_MANAGE,
             SH_B_ISBN_FG,
             SH_B_ISBN_CODE,
-            ORG_PROD_FG
+            ORG_PROD_FG,
+            BUNDLE_FG
             FROM TB_MS_PRODUCT_INFO
             WHERE 1=1
             AND STORE_CD = #{copyStoreCd}
@@ -4428,7 +4482,8 @@
             SH_B_SPC_MANAGE         = B.SH_B_SPC_MANAGE,
             SH_B_ISBN_FG            = B.SH_B_ISBN_FG,
             SH_B_ISBN_CODE          = B.SH_B_ISBN_CODE,
-            ORG_PROD_FG             = B.ORG_PROD_FG
+            ORG_PROD_FG             = B.ORG_PROD_FG,
+            BUNDLE_FG               = B.BUNDLE_FG
         WHEN NOT MATCHED THEN
             INSERT (
                 A.STORE_CD,
@@ -4485,7 +4540,8 @@
                 A.SH_B_SPC_MANAGE,
                 A.SH_B_ISBN_FG,
                 A.SH_B_ISBN_CODE,
-                A.ORG_PROD_FG
+                A.ORG_PROD_FG,
+                A.BUNDLE_FG
             ) VALUES (
                 B.STORE_CD,
                 B.PROD_CD,
@@ -4541,7 +4597,8 @@
                 B.SH_B_SPC_MANAGE,
                 B.SH_B_ISBN_FG,
                 B.SH_B_ISBN_CODE,
-                B.ORG_PROD_FG
+                B.ORG_PROD_FG,
+                B.BUNDLE_FG
             )
     </insert>
 

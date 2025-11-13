@@ -899,7 +899,16 @@
                     <input type="hidden" id="_groupProdCd" name="groupProdCd" ng-model="prodModifyInfo.groupProdCd" disabled />
                     <input type="hidden" id="_groupProdNm" name="groupProdNm" ng-model="prodModifyInfo.groupProdNm" disabled />
                     <button type="button" class="btn_skyblue fl mr5" id="btnCancelGroupProdCd" style="margin-left: 5px;" ng-click="delGroupProdCd()"><s:message code="cmm.selectCancel"/></button>
-                  </td>
+                    <div class="sb-select">
+                      <wj-combo-box id="_bundleFg" name="bundleFg"
+                                    ng-model="prodModifyInfo.bundleFg"
+                                    items-source="_getComboData('bundleFgComboData')"
+                                    display-member-path="name"
+                                    selected-value-path="value"
+                                    is-editable="false"
+                                    initialized="_initComboBox(s)">
+                      </wj-combo-box>
+                    </div>
                 </tr>
             </c:if>
             <tr>
@@ -1706,7 +1715,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251112.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251113.01" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">

@@ -46,6 +46,16 @@ var orgProdFgComboData = [
     {"name": "오더킷상품", "value": "30"}
 ];
 
+// 묶음분류 데이터
+var bundleFgComboData = [
+    {"name": "단품/세트", "value": "0"},
+    {"name": "S/R", "value": "1"},
+    {"name": "한마리/반마리", "value": "2"},
+    {"name": "Regular/Max", "value": "3"},
+    {"name": "ICE/HOT", "value": "4"},
+    {"name": "M/L", "value": "5"}
+];
+
 // 기존 세트상품구분 값 갖고 있기(수정시, 변경여부 비교하여 세트구성상품 팝업 띄우기 위해)
 var vSetProdFg = "";
 
@@ -58,6 +68,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
     // 오더킷 상품등록구분 콤보박스의 데이터
     $scope._setComboData('orgProdFgComboData2', orgProdFgComboData);
+
+    // 묶음분류 콤보박스
+    $scope._setComboData('bundleFgComboData', bundleFgComboData);
 
     // 일반상품관리 콤보박스
     // 식권구분 쓰는 콤보박스의 데이터
@@ -1753,6 +1766,11 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
                     $scope.prodModifyInfo.sdselGrpNmCd = "";
                 }else if($scope.prodModifyInfo.sideProdYn === 'Y' && $scope.prodModifyInfo.sideProdYn !== null){
                     $scope.prodModifyInfo.sdselGrpNmCd = "[" + $scope.prodModifyInfo.sdselGrpCd + "] " + $scope.prodModifyInfo.sdselGrpNm;
+                }
+
+                // bundleFg 값 없으면 '0'으로 셋팅
+                if ($scope.prodModifyInfo.bundleFg === null || $scope.prodModifyInfo.bundleFg === "") {
+                    $scope.prodModifyInfo.bundleFg = "0";
                 }
 
                 if($scope.prodModifyInfo.depositCupFg === null){

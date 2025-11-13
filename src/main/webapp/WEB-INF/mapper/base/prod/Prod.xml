@@ -501,7 +501,8 @@
                 thpi.SH_B_ISBN_FG,
                 thpi.SH_B_ISBN_CODE,
                 NVL(thp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN,
-                thpi.ORG_PROD_FG
+                thpi.ORG_PROD_FG,
+                thpi.BUNDLE_FG
                 FROM
                 TB_HQ_PRODUCT thp
                 LEFT OUTER JOIN TB_HQ_BRAND thb ON
@@ -666,7 +667,8 @@
                 tmpi.SH_B_ISBN_FG,
                 tmpi.SH_B_ISBN_CODE,
                 NVL(tmp.VAT_INCLD_YN, 'Y') AS VAT_INCLD_YN,
-                tmpi.ORG_PROD_FG
+                tmpi.ORG_PROD_FG,
+                tmpi.BUNDLE_FG
                 FROM
                 TB_MS_PRODUCT tmp
                 LEFT OUTER JOIN TB_MS_BRAND tmb ON
@@ -1218,7 +1220,8 @@
                     thpi.SH_B_SPC_MANAGE		= #{shBSpcManage},
                     thpi.SH_B_ISBN_FG			= #{shBIsbnFg},
                     thpi.SH_B_ISBN_CODE			= #{shBIsbnCode},
-                    thpi.ORG_PROD_FG            = #{orgProdFg}
+                    thpi.ORG_PROD_FG            = #{orgProdFg},
+                    thpi.BUNDLE_FG              = #{bundleFg}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -1272,7 +1275,8 @@
                     SH_B_SPC_MANAGE,
                     SH_B_ISBN_FG,
                     SH_B_ISBN_CODE,
-                    ORG_PROD_FG
+                    ORG_PROD_FG,
+                    BUNDLE_FG
                 ) VALUES (
                     #{hqOfficeCd},
                     #{prodCd},
@@ -1324,7 +1328,8 @@
                     #{shBSpcManage},
                     #{shBIsbnFg},
                     #{shBIsbnCode},
-                    #{orgProdFg}
+                    #{orgProdFg},
+                    #{bundleFg}
                 )
             </when>
             <!-- 매장 -->
@@ -1384,7 +1389,8 @@
                     tmpi.SH_B_SPC_MANAGE		= #{shBSpcManage},
                     tmpi.SH_B_ISBN_FG			= #{shBIsbnFg},
                     tmpi.SH_B_ISBN_CODE			= #{shBIsbnCode},
-                    tmpi.ORG_PROD_FG            = #{orgProdFg}
+                    tmpi.ORG_PROD_FG            = #{orgProdFg},
+                    tmpi.BUNDLE_FG              = #{bundleFg}
                 WHEN NOT MATCHED THEN
                 INSERT
                 (
@@ -1438,7 +1444,8 @@
                     SH_B_SPC_MANAGE,
                     SH_B_ISBN_FG,
                     SH_B_ISBN_CODE,
-                    ORG_PROD_FG
+                    ORG_PROD_FG,
+                    BUNDLE_FG
                 ) VALUES (
                     #{storeCd},
                     #{prodCd},
@@ -1490,7 +1497,8 @@
                     #{shBSpcManage},
                     #{shBIsbnFg},
                     #{shBIsbnCode},
-                    #{orgProdFg}
+                    #{orgProdFg},
+                    #{bundleFg}
                 )
             </when>
         </choose>

@@ -14,7 +14,6 @@
 app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상위 객체 상속 : T/F 는 picker
     angular.extend(this, new RootController('prodDetailCtrl', $scope, $http, false));
-
     // 상품 본사통제구분 (H : 본사, S: 매장)
     // $scope.prodEnvstVal = prodEnvstVal;
     // $scope.userOrgnFg = gvOrgnFg;
@@ -102,7 +101,12 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
                     prodDetail.dcYn = "Y";
                 }
 
-                // KIOSK 시간설정 셋팅
+                if(prodDetail.bundleFg === null){
+                    prodDetail.bundleFg = "0";
+                }
+
+
+            // KIOSK 시간설정 셋팅
                 if($scope.prodDetail.saleTimeFg === 'Y'){
 
                     var vParams = {};
