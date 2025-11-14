@@ -20,6 +20,7 @@ public class DlvrAgencyLinkReqVO {
 
     private static final long serialVersionUID = 2555999796764348528L;
 
+    // OMS_API 용
     private String shopName;
     private String texNo;
     private String ceoName;
@@ -29,12 +30,15 @@ public class DlvrAgencyLinkReqVO {
     private String posType;
     private String posShopId;
     private String linkType;
-    private String searchType;
     private String agencyCode;
     private String subAgencyCode;
     private String storeCode;
     private String isB2BContract;
     private String mappingSequence;
+
+    // POS_OMS_API 용
+    private String pos_shop_id;
+    private String use_orderandrider;
 
     public String getShopName() {
         return shopName;
@@ -108,14 +112,6 @@ public class DlvrAgencyLinkReqVO {
         this.linkType = linkType;
     }
 
-    public String getSearchType() {
-        return searchType;
-    }
-
-    public void setSearchType(String searchType) {
-        this.searchType = searchType;
-    }
-
     public String getAgencyCode() {
         return agencyCode;
     }
@@ -154,5 +150,21 @@ public class DlvrAgencyLinkReqVO {
 
     public void setMappingSequence(String mappingSequence) {
         this.mappingSequence = mappingSequence;
+    }
+
+    public String getPos_shop_id() {
+        return pos_shop_id;
+    }
+
+    public void setPos_shop_id(String pos_shop_id) {
+        this.pos_shop_id = pos_shop_id;
+    }
+
+    public String getUse_orderandrider() {
+        return use_orderandrider;
+    }
+
+    public void setUse_orderandrider(String use_orderandrider) {
+        this.use_orderandrider = use_orderandrider;
     }
 }

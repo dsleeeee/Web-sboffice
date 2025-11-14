@@ -60,9 +60,21 @@ import static kr.co.common.utils.DateUtil.currentDateTimeString;
 @RequestMapping(value = "/dlvr/manage/info/dlvrAgencyLink")
 public class DlvrAgencyLinkController {
 
-    // API 정보
-    public static final  String API_URL  = "https://testapi.orderpick.kr";
-    public static final  String ACCESS_TOKEN  = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0ZXN0YXBpLm9yZGVycGljay5rciIsImV4cCI6MTkxMjM4NTU4MywianRpIjoiODVhNjM2ZTQtZTFlYS00MmRlLWJlNmUtMTFkMTg5ZjA4OGI2IiwiYnJhbmRJZCI6bnVsbCwic2hvcElkIjpudWxsLCJ0YXhObyI6bnVsbCwiY2hhbm5lbCI6bnVsbCwicG9zU2VydmVyIjoiU09MQkkiLCJyaWRlciI6bnVsbCwicm9sZSI6bnVsbCwiaXNzdWVUYXJnZXQiOiJQT1NfU0VSVkVSIn0.JMsykAaMahWR229oyWFHD58iIT_fCemvVWEbRMvYeiMMQWyKVbuwXxyBb1gyJLI65k_1GZPQ9uPaDOTEpGjeyg";
+    // [OMS API 정보]
+    // (개발)
+    public static final String OMS_API_URL  = "https://testapi.orderpick.kr";
+    public static final String ACCESS_TOKEN  = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0ZXN0YXBpLm9yZGVycGljay5rciIsImV4cCI6MTkxMjM4NTU4MywianRpIjoiODVhNjM2ZTQtZTFlYS00MmRlLWJlNmUtMTFkMTg5ZjA4OGI2IiwiYnJhbmRJZCI6bnVsbCwic2hvcElkIjpudWxsLCJ0YXhObyI6bnVsbCwiY2hhbm5lbCI6bnVsbCwicG9zU2VydmVyIjoiU09MQkkiLCJyaWRlciI6bnVsbCwicm9sZSI6bnVsbCwiaXNzdWVUYXJnZXQiOiJQT1NfU0VSVkVSIn0.JMsykAaMahWR229oyWFHD58iIT_fCemvVWEbRMvYeiMMQWyKVbuwXxyBb1gyJLI65k_1GZPQ9uPaDOTEpGjeyg";
+    // (운영)
+    //public static final String OMS_API_URL  = "https://api.orderpick.kr";
+    //public static final String ACCESS_TOKEN  = "";
+
+    // [POS OMS API 정보]
+    // (개발)
+    public static final String POS_OMS_API_URL = "https://api.kcp.onesell.co.kr:14000";
+    public static final String SECRET_KEY = "Pu51+1YJD50Jp0/7ZDy94aJsh0HRZcfjKQf5bHiiZtWHerPuMSY1EEbVSVXz8P7JxOEt01DMXFw5ItGT3l9hLQ==";
+    // (운영)
+    //public static final String POS_OMS_API_URL = "https://api.orderkit.co.kr:14000";
+    //public static final String SECRET_KEY = "Sg2V9TynJ1TZf4mvCz7eOPT1nqerG0zlS5GfzeCqIN+PZnxhOd3EUhvXRMKi9oA4y0Ewbije+yzp1fSkZyDE7g==";
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -105,15 +117,15 @@ public class DlvrAgencyLinkController {
     public Result getDlvrAgency(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
                                 HttpServletResponse response, Model model) {
 
-        String apiFullUrl = API_URL + "/oms/v1/delivery-agencies";
+        String apiFullUrl = OMS_API_URL + "/oms/v1/delivery-agencies";
 
-        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
 
     /**
-     * 배달대행사 연동 현황
+     * 배달대행사 연동 현황 조회
      * @param dlvrAgencyLinkReqVO
      * @param request
      * @param response
@@ -129,9 +141,9 @@ public class DlvrAgencyLinkController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = API_URL + "/v1/shops/" + sessionInfoVO.getStoreCd() + "/rider";
+        String apiFullUrl = OMS_API_URL + "/v1/shops/" + sessionInfoVO.getStoreCd() + "/rider";
 
-        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -153,15 +165,15 @@ public class DlvrAgencyLinkController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency/stores";
+        String apiFullUrl = OMS_API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency/stores";
 
-        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
 
     /**
-     * 배달대행사 매장 등록
+     * 배달대행사 매핑 등록
      * @param dlvrAgencyLinkReqVO
      * @param request
      * @param response
@@ -177,9 +189,9 @@ public class DlvrAgencyLinkController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
+        String apiFullUrl = OMS_API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
 
-        Map<String, Object> resultMap = postRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
+        Map<String, Object> resultMap = postRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -201,9 +213,60 @@ public class DlvrAgencyLinkController {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
 
-        String apiFullUrl = API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
+        String apiFullUrl = OMS_API_URL + "/oms/v1/shops/" + sessionInfoVO.getStoreCd() + "/delivery-agency";
 
-        Map<String, Object>resultMap = deleteRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN);
+        Map<String, Object>resultMap = deleteRequest(dlvrAgencyLinkReqVO, apiFullUrl, ACCESS_TOKEN, "omsApi");
+
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 유저 상태 조회(구독여부, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
+     * @param dlvrAgencyLinkReqVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2025. 10. 14.
+     */
+    @RequestMapping(value = "/getOmsUserStatus.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getOmsUserStatus(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+
+        dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
+        //dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
+
+        String apiFullUrl = POS_OMS_API_URL + "/open/api/v1/oms_seller/status";
+
+        Map<String, Object> resultMap = getRequest(dlvrAgencyLinkReqVO, apiFullUrl, SECRET_KEY, "posOmsApi");
+
+        return ReturnUtil.returnListJson(Status.OK, resultMap);
+    }
+
+    /**
+     * 주문 중개 서비스 변경
+     * @param dlvrAgencyLinkReqVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  이다솜
+     * @since   2025. 10. 14.
+     */
+    @RequestMapping(value = "/saveOrderAndRider.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveOrderAndRider(DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) {
+
+        dlvrAgencyLinkReqVO.setPos_shop_id("shop123");
+        //dlvrAgencyLinkReqVO.setPos_shop_id(sessionInfoVO.getStoreCd());
+
+        String apiFullUrl = POS_OMS_API_URL + "/open/api/v1/oms_seller/orderandrider";
+
+        Map<String, Object> resultMap = postRequest(dlvrAgencyLinkReqVO, apiFullUrl, SECRET_KEY, "posOmsApi");
 
         return ReturnUtil.returnListJson(Status.OK, resultMap);
     }
@@ -212,11 +275,11 @@ public class DlvrAgencyLinkController {
      * get 호출
      * @param dlvrAgencyLinkReqVO
      * @param apiUrl
-     * @param accessToken
+     * @param tokenOrKey
      * @author 이다솜
      * @since 2025.09.12
      */
-    public Map<String, Object> getRequest(@RequestBody DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, String apiUrl, String accessToken) {
+    public Map<String, Object> getRequest(@RequestBody DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, String apiUrl, String tokenOrKey, String apiType) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         HttpURLConnection connection = null;
@@ -246,7 +309,14 @@ public class DlvrAgencyLinkController {
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            // 호출 API에 따른 header 정보 셋팅
+            if (apiType == "omsApi") {
+                connection.setRequestProperty("Authorization", "Bearer " + tokenOrKey);
+            } else {
+                connection.setRequestProperty("x-api-key", tokenOrKey);
+            }
+
             apiLinkVO.setRequestMethod(connection.getRequestMethod());
 
             // 3. 응답 코드 확인
@@ -299,11 +369,11 @@ public class DlvrAgencyLinkController {
      * post 호출
      * @param dlvrAgencyLinkReqVO
      * @param apiUrl
-     * @param accessToken
+     * @param tokenOrKey
      * @author  이다솜
      * @since   2025.09.12
      */
-    public Map<String, Object> postRequest(@RequestBody DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, String apiUrl, String accessToken) {
+    public Map<String, Object> postRequest(@RequestBody DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, String apiUrl, String tokenOrKey, String apiType) {
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
         HttpURLConnection connection = null;
@@ -327,13 +397,19 @@ public class DlvrAgencyLinkController {
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            // 호출 API에 따른 header 정보 셋팅
+            if (apiType == "omsApi") {
+                connection.setRequestProperty("Authorization", "Bearer " + tokenOrKey);
+            } else {
+                connection.setRequestProperty("x-api-key", tokenOrKey);
+            }
+
             connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
             apiLinkVO.setRequestMethod(connection.getRequestMethod());
 
             // 데이터 초기화(JSON payload 생성에는 필요없는 값, null 처리)
             dlvrAgencyLinkReqVO.setLinkType(null);
-            dlvrAgencyLinkReqVO.setSearchType(null);
 
             // 3. 서버로 데이터 전송 (JSON payload)
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -392,17 +468,16 @@ public class DlvrAgencyLinkController {
         return resultMap;
     }
 
-
     /**
      * delete 호출
      *
      * @param dlvrAgencyLinkReqVO
      * @param apiUrl
-     * @param accessToken
+     * @param tokenOrKey
      * @author 이다솜
      * @since 2025.09.12
      */
-    public Map<String, Object> deleteRequest(@RequestBody DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, String apiUrl, String accessToken) {
+    public Map<String, Object> deleteRequest(@RequestBody DlvrAgencyLinkReqVO dlvrAgencyLinkReqVO, String apiUrl, String tokenOrKey, String apiType) {
 
 
         SessionInfoVO sessionInfoVO = sessionService.getSessionInfo();
@@ -427,13 +502,19 @@ public class DlvrAgencyLinkController {
             connection.setRequestMethod("DELETE");
             connection.setRequestProperty("Content-Type", "application/json; utf-8");
             connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+
+            // 호출 API에 따른 header 정보 셋팅
+            if (apiType == "omsApi") {
+                connection.setRequestProperty("Authorization", "Bearer " + tokenOrKey);
+            } else {
+                connection.setRequestProperty("x-api-key", tokenOrKey);
+            }
+
             connection.setDoOutput(true); // 서버로 데이터를 전송하려면 이 설정을 true로 해야 합니다.
             apiLinkVO.setRequestMethod(connection.getRequestMethod());
 
             // 데이터 초기화(JSON payload 생성에는 필요없는 값, null 처리)
             dlvrAgencyLinkReqVO.setLinkType(null);
-            dlvrAgencyLinkReqVO.setSearchType(null);
 
             // 3. 서버로 데이터 전송 (JSON payload)
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -511,12 +592,12 @@ public class DlvrAgencyLinkController {
         Map<String, String> map = new HashMap<>();
         BeanInfo info = Introspector.getBeanInfo(vo.getClass());
         for (PropertyDescriptor pd : info.getPropertyDescriptors()) {
-            if(!pd.getName().equals("linkType") && !pd.getName().equals("searchType") && !pd.getName().equals("posShopId")) { // 파라미터로 사용하지 않는 값 제외
+            if(!pd.getName().equals("linkType")) { // 파라미터로 사용하지 않는 값 제외
                 Method reader = pd.getReadMethod();
                 if (reader != null && !pd.getName().equals("class")) {
                     Object value = reader.invoke(vo);
                     if (value != null && value != "") {
-                        System.out.println("parameter : " + pd.getName() + "-" + value);
+                        System.out.println("parameter : " + pd.getName() + "=" + value);
                         map.put(pd.getName(), String.valueOf(value));
                     }
                 }

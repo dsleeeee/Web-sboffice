@@ -192,16 +192,22 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
         cv.trackChanges = true;
         $scope.data = cv;
 
+        // 배달대행사를 선택하세요.
+        if ($scope.srchDlvrAgencyCombo.selectedValue === "") {
+            $scope._popMsg(messages['dlvrAgencyLink.link.del.chk.msg1']);
+            return;
+        }
+
+        // 하위 배달대행사를 선택하세요.
         if (!$scope.srchSubAgencyCombo.isDisabled) {
             if ($scope.srchSubAgencyCombo.selectedValue === "") {
-                $scope._popMsg("하위 배달대행사를 선택하세요.");
+                $scope._popMsg(messages['dlvrAgencyLink.store.srch.chk.msg']);
                 return;
             }
         }
 
         var params = {};
         params.linkType = "004";
-        //params.posShopId = "omspos1";
         params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
         params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
 
@@ -272,7 +278,6 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
                 params.linkType = "005";
-                //params.posShopId = "omspos1";
                 params.agencyCode = $scope.srchDlvrAgencyCombo.selectedValue;
                 params.subAgencyCode = $scope.srchSubAgencyCombo.selectedValue;
 
@@ -314,8 +319,6 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
                 return;
             }
         });
-
-
     };
 
     // 닫기
