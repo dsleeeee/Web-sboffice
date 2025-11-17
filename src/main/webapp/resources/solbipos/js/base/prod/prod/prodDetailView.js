@@ -35,6 +35,14 @@ app.controller('prodDetailCtrl', ['$scope', '$http', function ($scope, $http) {
     // 상품정보관리 그리드 조회
     $scope.$on("prodDetailCtrl", function(event, data) {
 
+        if(hqOfficeCd === 'H0514'){
+            $("#bundleTextTh").css("display", "");
+            $("#bundleTextTd").css("display", "");
+        }else{
+            $("#bundleTextTh").css("display", "none");
+            $("#bundleTextTd").css("display", "none");
+        }
+
         var url = "/base/prod/prod/prod/detail.sb";
 
         if (orgnFg === "HQ") {

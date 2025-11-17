@@ -59,14 +59,12 @@
   <div class="wj-TblWrap mt10 mb20 w50 fl" ng-controller="prodOptionValCtrl">
     <div class="wj-TblWrapBr pd10" style="height:470px;">
       <s:message code="prodOption.optionVal"/><span id="optionGrpTitle"></span>
-      <c:if test="${hqOfficeCd == 'H0514'}">
-        <button class="btn_down fr ml5" id="btnDownCls" ng-click="rowMoveDownCls()">
-          <s:message code="cmm.down" />
-        </button>
-        <button class="btn_up fr" id="btnUpCls" ng-click="rowMoveUpCls()" >
-          <s:message code="cmm.up" />
-        </button>
-      </c:if>
+      <button class="btn_down fr ml5" id="btnDownCls" ng-click="rowMoveDownCls()">
+        <s:message code="cmm.down" />
+      </button>
+      <button class="btn_up fr" id="btnUpCls" ng-click="rowMoveUpCls()" >
+        <s:message code="cmm.up" />
+      </button>
       <div class="updownSet oh mb10 mt10">
         <button class="btn_skyblue" id="btnOptionValAddWithProd" ng-click="addRowWithProd()"><s:message code='prodOption.addWithProd' /></button>
         <button class="btn_skyblue" id="btnOptionValAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
@@ -105,6 +103,7 @@
 
 <script>
   <%-- 사용여부 --%>
+  var hqOfficeCd = "${hqOfficeCd}";
   var useYn = ${ccu.getCommCodeExcpAll("067")};
   var orgnFg = "${orgnFg}";
   var gvListScaleBoxData = ${ccu.getListScale()};
@@ -116,7 +115,7 @@
   var userHqBrandCdComboList = ${userHqBrandCdComboList};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20251113.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prodOption/prodOption.js?ver=20251117.01" charset="utf-8"></script>
 
 <%-- 추가(상품포함) 팝업 --%>
 <c:import url="/WEB-INF/view/base/prod/prodOption/prodOptionAddWithProd.jsp">

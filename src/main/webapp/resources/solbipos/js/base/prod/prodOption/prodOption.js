@@ -30,6 +30,14 @@ app.controller('prodOptionCtrl', ['$scope', '$http', '$timeout', function ($scop
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
 
+    if(hqOfficeCd === 'H0514'){
+      $("#btnDownCls").css("display", "");
+      $("#btnUpCls").css("display", "");
+    }else{
+      $("#btnDownCls").css("display", "none");
+      $("#btnUpCls").css("display", "none");
+    }
+
     // 그리드 DataMap 설정
     $scope.useYnDataMap = new wijmo.grid.DataMap(useYn, 'value', 'name');
 
@@ -272,6 +280,7 @@ app.controller('prodOptionValCtrl', ['$scope', '$http', '$timeout', function ($s
 
   // grid 초기화 : 생성되기전 초기화되면서 생성된다
   $scope.initGrid = function (s, e) {
+
     // 그리드 DataMap 설정
     $scope.printYnDataMap = new wijmo.grid.DataMap(printYnData, 'value', 'name'); // 출력여부
 

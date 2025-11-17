@@ -716,22 +716,20 @@
                             <td>
                                 {{prodDetail.groupProdNm}}
                             </td>
-                            <c:if test="${hqOfficeCd == 'H0514'}">
-                                <%-- 묶음분류 --%>
-                                <th><s:message code="prod.bundleFg"/></th>
-                                <td>
-                                    <wj-combo-box
-                                            ng-model="prodDetail.bundleFg"
-                                            ng-hide="true"
-                                            text="_bundleFg"
-                                            items-source="_getComboData('bundleFgComboData')"
-                                            display-member-path="name"
-                                            selected-value-path="value"
-                                            is-editable="false">
-                                    </wj-combo-box>
-                                    {{_bundleFg}}
-                                </td>
-                            </c:if>
+                            <%-- 묶음분류 --%>
+                            <th id="bundleTextTh"><s:message code="prod.bundleFg"/></th>
+                            <td id="bundleTextTd">
+                                <wj-combo-box
+                                        ng-model="prodDetail.bundleFg"
+                                        ng-hide="true"
+                                        text="_bundleFg"
+                                        items-source="_getComboData('bundleFgComboData')"
+                                        display-member-path="name"
+                                        selected-value-path="value"
+                                        is-editable="false">
+                                </wj-combo-box>
+                                {{_bundleFg}}
+                            </td>
                         </tr>
                     </c:if>
                     <tr>
@@ -1194,4 +1192,4 @@
     </div>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20251113.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodDetailView.js?ver=20251117.01" charset="utf-8"></script>
