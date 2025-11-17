@@ -899,16 +899,18 @@
                     <input type="hidden" id="_groupProdCd" name="groupProdCd" ng-model="prodModifyInfo.groupProdCd" disabled />
                     <input type="hidden" id="_groupProdNm" name="groupProdNm" ng-model="prodModifyInfo.groupProdNm" disabled />
                     <button type="button" class="btn_skyblue fl mr5" id="btnCancelGroupProdCd" style="margin-left: 5px;" ng-click="delGroupProdCd()"><s:message code="cmm.selectCancel"/></button>
-                    <div class="sb-select" style="display:none">
-                      <wj-combo-box id="_bundleFg" name="bundleFg"
-                                    ng-model="prodModifyInfo.bundleFg"
-                                    items-source="_getComboData('bundleFgComboData')"
-                                    display-member-path="name"
-                                    selected-value-path="value"
-                                    is-editable="false"
-                                    initialized="_initComboBox(s)">
-                      </wj-combo-box>
-                    </div>
+                    <c:if test="${hqOfficeCd == 'H0514'}">
+                      <div class="sb-select">
+                        <wj-combo-box id="_bundleFg" name="bundleFg"
+                                      ng-model="prodModifyInfo.bundleFg"
+                                      items-source="_getComboData('bundleFgComboData')"
+                                      display-member-path="name"
+                                      selected-value-path="value"
+                                      is-editable="false"
+                                      initialized="_initComboBox(s)">
+                        </wj-combo-box>
+                      </div>
+                    </c:if>
                 </tr>
             </c:if>
             <tr>

@@ -59,12 +59,14 @@
   <div class="wj-TblWrap mt10 mb20 w50 fl" ng-controller="prodOptionValCtrl">
     <div class="wj-TblWrapBr pd10" style="height:470px;">
       <s:message code="prodOption.optionVal"/><span id="optionGrpTitle"></span>
-      <button class="btn_down fr ml5" style="display:none" id="btnDownCls" ng-click="rowMoveDownCls()">
-        <s:message code="cmm.down" />
-      </button>
-      <button class="btn_up fr" id="btnUpCls" style="display:none" ng-click="rowMoveUpCls()" >
-        <s:message code="cmm.up" />
-      </button>
+      <c:if test="${hqOfficeCd == 'H0514'}">
+        <button class="btn_down fr ml5" id="btnDownCls" ng-click="rowMoveDownCls()">
+          <s:message code="cmm.down" />
+        </button>
+        <button class="btn_up fr" id="btnUpCls" ng-click="rowMoveUpCls()" >
+          <s:message code="cmm.up" />
+        </button>
+      </c:if>
       <div class="updownSet oh mb10 mt10">
         <button class="btn_skyblue" id="btnOptionValAddWithProd" ng-click="addRowWithProd()"><s:message code='prodOption.addWithProd' /></button>
         <button class="btn_skyblue" id="btnOptionValAdd" ng-click="addRow()"><s:message code='cmm.add' /></button>
