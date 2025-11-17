@@ -59,10 +59,10 @@
   <div class="wj-TblWrap mt10 mb20 w50 fl" ng-controller="prodOptionValCtrl">
     <div class="wj-TblWrapBr pd10" style="height:470px;">
       <s:message code="prodOption.optionVal"/><span id="optionGrpTitle"></span>
-      <button class="btn_down fr ml5" id="btnDownCls" ng-click="rowMoveDownCls()">
+      <button class="btn_down fr ml5" style="display:none" id="btnDownCls" ng-click="rowMoveDownCls()">
         <s:message code="cmm.down" />
       </button>
-      <button class="btn_up fr" id="btnUpCls" ng-click="rowMoveUpCls()" >
+      <button class="btn_up fr" id="btnUpCls" style="display:none" ng-click="rowMoveUpCls()" >
         <s:message code="cmm.up" />
       </button>
       <div class="updownSet oh mb10 mt10">

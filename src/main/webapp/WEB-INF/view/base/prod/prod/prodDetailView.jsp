@@ -716,20 +716,20 @@
                             <td>
                                 {{prodDetail.groupProdNm}}
                             </td>
-                            <%-- 묶음분류 --%>
-                            <th><s:message code="prod.bundleFg"/></th>
-                            <td>
-                                <wj-combo-box
-                                        ng-model="prodDetail.bundleFg"
-                                        ng-hide="true"
-                                        text="_bundleFg"
-                                        items-source="_getComboData('bundleFgComboData')"
-                                        display-member-path="name"
-                                        selected-value-path="value"
-                                        is-editable="false">
-                                </wj-combo-box>
-                                {{_bundleFg}}
-                            </td>
+                            <%-- 묶음분류(포스 일정에 맞춰서 오픈) --%>
+<%--                            <th><s:message code="prod.bundleFg"/></th>--%>
+<%--                            <td>--%>
+<%--                                <wj-combo-box--%>
+<%--                                        ng-model="prodDetail.bundleFg"--%>
+<%--                                        ng-hide="true"--%>
+<%--                                        text="_bundleFg"--%>
+<%--                                        items-source="_getComboData('bundleFgComboData')"--%>
+<%--                                        display-member-path="name"--%>
+<%--                                        selected-value-path="value"--%>
+<%--                                        is-editable="false">--%>
+<%--                                </wj-combo-box>--%>
+<%--                                {{_bundleFg}}--%>
+<%--                            </td>--%>
                         </tr>
                     </c:if>
                     <tr>
