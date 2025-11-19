@@ -159,4 +159,19 @@ public interface ProdService {
 
     /** 도서 재고 정보 조회 */
     List<DefaultMap<Object>> getProdBookVendrStockInfoList(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 매입처 정보 조회 */
+    List<DefaultMap<String>> getSearchVendr(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 등록 매입처 정보 조회 */
+    List<DefaultMap<String>> getSearchRegistVendr(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 상품 매입처 저장 */
+    int saveProdVendr(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
+
+    /** 매입처 등록 매장 조회 */
+    List<DefaultMap<String>> getSearchRegistStore(ProdVO prodVO, SessionInfoVO sessionInfoVO);
+
+    /** 매입처 등록 매장 저장 */
+    int saveProdVendrStore(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO);
 }

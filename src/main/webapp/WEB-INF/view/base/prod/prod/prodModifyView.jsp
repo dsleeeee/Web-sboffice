@@ -1486,7 +1486,11 @@
       <c:if test="${urlProdFg == '1'}">
         <c:if test="${sessionInfo.orgnFg == 'HQ'}">
           <%-- 상품재고정보 --%>
-          <h3 class="h3_tbl"><s:message code="prod.sh.title.prodVendrStockInfo"/></h3>
+          <h3 class="h3_tbl lh20">
+            <s:message code="prod.sh.title.prodVendrStockInfo"/>
+              <%-- 매입처/매장추가 --%>
+            <a href="#" class="btn_grayS fr" style="line-height:20px;" id="vendrStoreRegist" ng-model="prodModifyInfo.vendrStoreRegist" ng-click="vendrStoreRegist()" ><s:message code="prod.sh.vendrStoreRegist" /></a>
+          </h3>
           <%--위즈모 테이블--%>
           <div class="wj-TblWrapBr">
             <%-- 개발시 높이 조절해서 사용--%>
@@ -1543,7 +1547,11 @@
       <%-- [국민대] - [상품정보관리] - [도서관리] 진입 시 --%>
       <c:if test="${urlProdFg == '2'}">
         <%-- 상품재고정보 --%>
-        <h3 class="h3_tbl"><s:message code="prod.sh.title.bookVendrStockInfo"/></h3>
+        <h3 class="h3_tbl lh20">
+            <s:message code="prod.sh.title.bookVendrStockInfo"/>
+            <%-- 매입처/매장추가 --%>
+            <a href="#" class="btn_grayS fr" style="line-height:20px;" id="vendrStoreRegist" ng-model="prodModifyInfo.vendrStoreRegist" ng-click="vendrStoreRegist()" ><s:message code="prod.sh.vendrStoreRegist" /></a>
+        </h3>
         <%--위즈모 테이블--%>
         <div class="wj-TblWrapBr">
         <%-- 개발시 높이 조절해서 사용--%>
@@ -1715,7 +1723,7 @@
 
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251117.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prodModifyView.js?ver=20251117.02" charset="utf-8"></script>
 
 <%-- 상품분류 팝업 --%>
 <c:import url="/WEB-INF/view/application/layer/searchProdClassCd.jsp">
@@ -1757,4 +1765,8 @@
 <c:import url="/WEB-INF/view/base/prod/prod/searchDepositProd.jsp">
 </c:import>
 
-
+<%-- 상품 매입처/매장 추가 팝업 --%>
+<c:import url="/WEB-INF/view/base/prod/prod/vendrStoreRegist.jsp">
+  <c:param name="menuCd" value="${menuCd}"/>
+  <c:param name="menuNm" value="${menuNm}"/>
+</c:import>

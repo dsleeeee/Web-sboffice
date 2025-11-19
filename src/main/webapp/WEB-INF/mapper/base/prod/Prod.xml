@@ -11,6 +11,11 @@
 -->
 <mapper namespace="kr.co.solbipos.base.prod.prod.service.impl.ProdMapper">
 
+    <!-- 매장 선택여부 ListMap -->
+    <resultMap id="prodStoreListMap" type="DefaultMap">
+        <result column="SELECT_FG" property="selectFg" typeHandler="CustomBooleanTypeHandler"/>
+    </resultMap>
+
     <!-- 상품 조회 -->
     <!--
         TABLE    : TB_HQ_PRODUCT, TB_HQ_PRODUCT_SALE_PRICE,
@@ -8171,4 +8176,212 @@
             </when>
         </choose>
     </select>
+
+    <!-- 매입처 정보 조회 -->
+    <!--
+        TABLE    :  TB_HQ_VENDOR
+        PARAM    :
+        COMMENTS :  매입처를 조회한다.
+    -->
+    <select id="getSearchVendr" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getSearchVendr */
+        SELECT 	*
+        FROM 	TB_HQ_VENDOR
+        WHERE 	HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND 	VENDOR_FG       = '1'
+        <if test="vendrCd != null and vendrCd != ''">
+            AND VENDR_CD LIKE '%'||#{vendrCd}||'%'
+        </if>
+        <if test="vendrNm != null and vendrNm != ''">
+            AND VENDR_NM LIKE '%'||#{vendrNm}||'%'
+        </if>
+    </select>
+
+    <!-- 등록 매입처 정보 조회 -->
+    <!--
+        TABLE    :  TB_HQ_PRODUCT_VENDOR_STORE_HDR
+        PARAM    :
+        COMMENTS :  등록된 매입처 정보를 조회한다.
+    -->
+    <select id="getSearchRegistVendr" parameterType="prodVO" resultType="DefaultMap">
+        /* USE : ProdMapper.getSearchRegistVendr */
+        SELECT 	A.VENDR_CD
+        ,		B.VENDR_NM
+        ,       A.SEQ
+        ,       A.TRADE_FG
+        ,       A.TRADE_FORM
+        ,       A.ACQUIRE_UPRC
+        ,       A.ACQUIRE_RATE
+        ,       C.CURR_QTY
+        FROM 	TB_HQ_PRODUCT_VENDOR_STORE_HDR A
+        ,		TB_HQ_VENDOR B
+        ,		TB_ST_HQ_STOCK_CUR C
+        WHERE 	B.HQ_OFFICE_CD      = A.HQ_OFFICE_CD
+        AND 	B.VENDR_CD 		    = A.VENDR_CD
+        AND		C.HQ_OFFICE_CD 	(+) = A.HQ_OFFICE_CD
+        AND 	C.PROD_CD 		(+) = A.PROD_CD
+        AND 	A.HQ_OFFICE_CD      = #{hqOfficeCd}
+        AND 	A.PROD_CD           = #{prodCd}
+        AND		C.STORAGE_CD 	(+) = '999'
+        ORDER
+        BY      A.VENDR_CD
+        ,       A.SEQ
+    </select>
+
+    <!-- 상품 매입처 저장 -->
+    <!--
+        TABLE    :  TB_HQ_PRODUCT_VENDOR_STORE_HDR
+        PARAM    :
+        COMMENTS :  상품의 매입처를 저장한다.
+    -->
+    <insert id="saveProdVendr" parameterType="prodVO" >
+        /* USE : ProdMapper.saveProdVendr */
+        MERGE INTO TB_HQ_PRODUCT_VENDOR_STORE_HDR
+        USING DUAL
+        ON  (
+                    HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND PROD_CD         = #{prodCd}
+                AND VENDR_CD        = #{vendrCd}
+                AND SEQ             = #{seq}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     TRADE_FG        = #{tradeFg}
+        ,       TRADE_FORM      = #{tradeForm}
+        ,       ACQUIRE_UPRC    = #{acquireUprc}
+        ,       ACQUIRE_RATE    = #{acquireRate}
+        ,       MOD_DT          = #{modDt}
+        ,       MOD_ID          = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                HQ_OFFICE_CD
+        ,       PROD_CD
+        ,       VENDR_CD
+        ,       SEQ
+        ,       TRADE_FG
+        ,       TRADE_FORM
+        ,       ACQUIRE_UPRC
+        ,       ACQUIRE_RATE
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{prodCd}
+        ,       #{vendrCd}
+        ,       (SELECT NVL(MAX(SEQ),0) + 1 FROM TB_HQ_PRODUCT_VENDOR_STORE_HDR WHERE HQ_OFFICE_CD = #{hqOfficeCd} AND PROD_CD = #{prodCd} AND VENDR_CD = #{vendrCd})
+        ,       #{tradeFg}
+        ,       #{tradeForm}
+        ,       #{acquireUprc}
+        ,       #{acquireRate}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
+
+    <!-- 매입처 등록 매장 조회 -->
+    <!--
+        TABLE    :  TB_HQ_PRODUCT_VENDOR_STORE_DTL
+        PARAM    :
+        COMMENTS :  상품 매입처별 매장을 조회한다.
+    -->
+    <select id="getSearchRegistStore" parameterType="prodVO" resultMap="prodStoreListMap">
+        /* USE : ProdMapper.getSearchRegistStore */
+        SELECT 	DECODE(B.HQ_OFFICE_CD,NULL,'N','Y')	AS SELECT_FG
+        ,		A.HQ_OFFICE_CD
+        ,		A.PROD_CD
+        ,		A.STORE_CD
+        ,		C.STORE_NM
+        ,       B.VENDR_CD
+        ,       B.SEQ
+        ,       D.CURR_QTY
+        FROM 	TB_HQ_PRODUCT_STORE A
+        ,		TB_HQ_PRODUCT_VENDOR_STORE_DTL B
+        ,       TB_MS_STORE C
+        ,		TB_ST_STORE_STOCK_CUR D
+        WHERE 	B.HQ_OFFICE_CD	(+)	= A.HQ_OFFICE_CD
+        AND 	B.PROD_CD 		(+)	= A.PROD_CD
+        AND 	B.STORE_CD 		(+)	= A.STORE_CD
+        AND		C.STORE_CD 			= A.STORE_CD
+        AND 	D.STORE_CD 		(+)	= A.STORE_CD
+        AND 	D.PROD_CD 		(+)	= A.PROD_CD
+        AND 	A.HQ_OFFICE_CD 		= #{hqOfficeCd}
+        AND 	A.PROD_CD 			= #{prodCd}
+        AND     B.VENDR_CD      (+)	= #{vendrCd}
+        AND     B.SEQ           (+)	= #{seq}
+        AND 	D.STORAGE_CD 	(+) = '999'
+        ORDER
+        BY      A.STORE_CD
+    </select>
+
+    <!-- 매입처 등록 매장 저장 -->
+    <!--
+        TABLE    :  TB_HQ_PRODUCT_VENDOR_STORE_DTL
+        PARAM    :
+        COMMENTS :  상품 매입처의 매장을 저장한다.
+    -->
+    <insert id="saveProdVendrStore" parameterType="prodVO" >
+        /* USE : ProdMapper.saveProdVendrStore */
+        MERGE INTO TB_HQ_PRODUCT_VENDOR_STORE_DTL
+        USING DUAL
+        ON  (
+                    HQ_OFFICE_CD    = #{hqOfficeCd}
+                AND PROD_CD         = #{prodCd}
+                AND VENDR_CD        = #{vendrCd}
+                AND SEQ             = #{seq}
+                AND STORE_CD        = #{storeCd}
+            )
+        WHEN MATCHED THEN
+        UPDATE
+        SET     MOD_DT          = #{modDt}
+        ,       MOD_ID          = #{modId}
+        WHEN NOT MATCHED THEN
+        INSERT
+        (
+                HQ_OFFICE_CD
+        ,       PROD_CD
+        ,       VENDR_CD
+        ,       SEQ
+        ,       STORE_CD
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        )
+        VALUES
+        (
+                #{hqOfficeCd}
+        ,       #{prodCd}
+        ,       #{vendrCd}
+        ,       #{seq}
+        ,       #{storeCd}
+        ,       #{regDt}
+        ,       #{regId}
+        ,       #{modDt}
+        ,       #{modId}
+        )
+    </insert>
+
+    <!-- 매입처 등록 매장 삭제 -->
+    <!--
+        TABLE    :  TB_HQ_PRODUCT_VENDOR_STORE_DTL
+        PARAM    :
+        COMMENTS :  상품 매입처의 매장을 삭제한다.
+    -->
+    <delete id="deleteProdVendrStore" parameterType="prodVO" >
+        /* USE : ProdMapper.deleteProdVendrStore */
+        DELETE
+        FROM    TB_HQ_PRODUCT_VENDOR_STORE_DTL
+        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
+        AND     PROD_CD         = #{prodCd}
+        AND     VENDR_CD        = #{vendrCd}
+        AND     SEQ             = #{seq}
+        AND     STORE_CD        = #{storeCd}
+    </delete>
 </mapper>

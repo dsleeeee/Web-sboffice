@@ -29,8 +29,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static kr.co.common.utils.grid.ReturnUtil.returnJson;
@@ -1231,5 +1229,115 @@ public class ProdController {
         List<DefaultMap<Object>> result = prodService.getProdBookVendrStockInfoList(prodVO, sessionInfoVO);
 
         return returnJson(Status.OK, "list", result);
+    }
+
+    /**
+     * 매입처 정보 조회
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  김유승
+     * @since   2025. 11. 14.
+     */
+    @RequestMapping(value = "/getSearchVendr.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchVendr(ProdVO prodVO, HttpServletRequest request,
+                                        HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSearchVendr(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
+     * 등록된 매입처 조회
+     * @param prodVO
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     * @author  김유승
+     * @since   2025. 11. 14.
+     */
+    @RequestMapping(value = "/getSearchRegistVendr.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchRegistVendr(ProdVO prodVO, HttpServletRequest request,
+                                 HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSearchRegistVendr(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
+     * 상품 매입처 저장
+     * @param   prodVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2025. 11. 14.
+     */
+    @RequestMapping(value = "saveProdVendr.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveProdVendr(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+                                      HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.saveProdVendr(prodVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
+    }
+
+    /**
+     * 매입처 등록 매장 조회
+     * @param   prodVO
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2025. 11. 17.
+     */
+    @RequestMapping(value = "/getSearchRegistStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result getSearchRegistStore(ProdVO prodVO, HttpServletRequest request,
+                                       HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        List<DefaultMap<String>> result = prodService.getSearchRegistStore(prodVO, sessionInfoVO);
+
+        return ReturnUtil.returnListJson(Status.OK, result, prodVO);
+    }
+
+    /**
+     * 매입처 등록 매장 저장
+     * @param   prodVOs
+     * @param   request
+     * @param   response
+     * @param   model
+     * @return
+     * @author  김유승
+     * @since   2025. 11. 19.
+     */
+    @RequestMapping(value = "saveProdVendrStore.sb", method = RequestMethod.POST)
+    @ResponseBody
+    public Result saveProdVendrStore(@RequestBody ProdVO[] prodVOs, HttpServletRequest request,
+                                HttpServletResponse response, Model model) {
+
+        SessionInfoVO sessionInfoVO = sessionService.getSessionInfo(request);
+
+        int result = prodService.saveProdVendrStore(prodVOs, sessionInfoVO);
+
+        return returnJson(Status.OK, result);
     }
 }

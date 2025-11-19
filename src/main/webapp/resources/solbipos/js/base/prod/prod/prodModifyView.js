@@ -1954,6 +1954,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#thStartStockQtyNo").css('display', '');
             $("#tdStartStockQtyNo").css('display', '');
 
+            // 매입처/매장 추가 버튼
+            $("#vendrStoreRegist").css('display', '');
+
             // 신규 모드 시
         }else{
             $scope.setMode("I");
@@ -2010,6 +2013,9 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
             // 저장버튼 show
             $("#btnSaveProd").css("display", "");
+
+            // 매입처/매장 추가 버튼
+            $("#vendrStoreRegist").css('display', 'none');
         }
     };
 
@@ -2141,6 +2147,15 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         event.preventDefault();
     };
 
+    // 매입처/매장 추가 팝업
+    $scope.vendrStoreRegist = function() {
+
+        var params = $scope.prodModifyInfo;
+        $scope.setProdModifyInfo(params);
+        $scope._broadcast('prodVendrRegistCtrl', params);
+        event.preventDefault();
+    };
+
     // 화면 ready 된 후 설정
     angular.element(document).ready(function () {
         // 팝업 핸들러 추가
@@ -2157,7 +2172,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             }, 50)
         });
     });
-    
+
     // 세트구성상품 팝업
     $scope.setConfigProd = function () {
 
@@ -2191,7 +2206,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $scope.prodModifyLayer.hide();
         }
     };
-    
+
     // 수정일때 세트상품구분 '일반상품' 으로 설정시, 이전에 등록한 구성상품이 있는지 여부 확인
     $scope.setConfigProdChk = function () {
 
@@ -2232,7 +2247,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
 
         return returnValue;
     };
-    
+
     // 단종여부 체크박스 클릭시
     $scope.isChkDisconYn = function () {
         if($scope.isCheckedDisconYn){
@@ -2247,7 +2262,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
         $scope.wjSearchOtionGrpLayer.show(true);
         $scope._broadcast('searchOptionGrpCtrl', $scope.prodModifyInfo.prodCd);
     };
-    
+
     // 상품옵션그룹코드 선택 취소 버튼
     $scope.delOptionGrp = function () {
         $("#_optionGrpNm").val("");

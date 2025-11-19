@@ -2446,4 +2446,68 @@ public class ProdServiceImpl implements ProdService {
 
         return prodMapper.getProdBookVendrStockInfoList(prodVO);
     }
+
+    /** 매입처 정보 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchVendr(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return prodMapper.getSearchVendr(prodVO);
+    }
+
+    /** 등록 매입처 정보 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchRegistVendr(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return prodMapper.getSearchRegistVendr(prodVO);
+    }
+
+    /** 상품 매입처 저장 */
+    @Override
+    public int saveProdVendr(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for(ProdVO prodVO : prodVOs ){
+
+            prodVO.setRegDt(currentDt);
+            prodVO.setModDt(currentDt);
+            prodVO.setRegId(sessionInfoVO.getUserId());
+            prodVO.setModId(sessionInfoVO.getUserId());
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            result = prodMapper.saveProdVendr(prodVO);
+        }
+        return result;
+    }
+
+    /** 매입처 등록 매장 조회 */
+    @Override
+    public List<DefaultMap<String>> getSearchRegistStore(ProdVO prodVO, SessionInfoVO sessionInfoVO) {
+        prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+        return prodMapper.getSearchRegistStore(prodVO);
+    }
+
+    /** 매입처 등록 매장 저장 */
+    @Override
+    public int saveProdVendrStore(ProdVO[] prodVOs, SessionInfoVO sessionInfoVO) {
+        int result = 0;
+        String currentDt = currentDateTimeString();
+
+        for(ProdVO prodVO : prodVOs ){
+
+            prodVO.setRegDt(currentDt);
+            prodVO.setModDt(currentDt);
+            prodVO.setRegId(sessionInfoVO.getUserId());
+            prodVO.setModId(sessionInfoVO.getUserId());
+            prodVO.setHqOfficeCd(sessionInfoVO.getHqOfficeCd());
+
+            if(prodVO.isSelectFg()){
+                result = prodMapper.saveProdVendrStore(prodVO);
+            }else{
+                result = prodMapper.deleteProdVendrStore(prodVO);
+            }
+
+        }
+        return result;
+    }
 }

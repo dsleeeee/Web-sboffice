@@ -562,4 +562,22 @@ public interface ProdMapper {
 
     /** 도서 재고 정보 조회 */
     List<DefaultMap<Object>> getProdBookVendrStockInfoList(ProdVO prodVO);
+
+    /** 매입처 정보 조회 */
+    List<DefaultMap<String>> getSearchVendr(ProdVO prodVO);
+
+    /** 등록 매입처 정보 조회 */
+    List<DefaultMap<String>> getSearchRegistVendr(ProdVO prodVO);
+
+    /** 상품 매입처 저장 */
+    int saveProdVendr(ProdVO prodVO);
+
+    /** 매입처 등록 매장 조회 */
+    List<DefaultMap<String>> getSearchRegistStore(ProdVO prodVO);
+
+    /** 매입처 등록 매장 저장 */
+    int saveProdVendrStore(ProdVO prodVO);
+
+    /** 매입처 등록 매장 삭제 */
+    int deleteProdVendrStore(ProdVO prodVO);
 }

@@ -489,6 +489,21 @@ public class ProdVO extends PageVO {
     /** 묶음분류 */
     private String bundleFg;
 
+    /** 거래처 구분 */
+    private String tradeFg;
+
+    /** 거래처 형태 */
+    private String tradeForm;
+
+    /** 매입가 */
+    private String acquireUprc;
+
+    /** 매입율 */
+    private String acquireRate;
+    
+    /** 매장 선택 여부 */
+    private boolean selectFg;
+
     /**
      * @return the hqOfficeCd
      */
@@ -2094,5 +2109,45 @@ public class ProdVO extends PageVO {
 
     public void setBundleFg(String bundleFg) {
         this.bundleFg = bundleFg;
+    }
+
+    public String getTradeFg() {
+        return tradeFg;
+    }
+
+    public void setTradeFg(String tradeFg) {
+        this.tradeFg = tradeFg;
+    }
+
+    public String getTradeForm() {
+        return tradeForm;
+    }
+
+    public void setTradeForm(String tradeForm) {
+        this.tradeForm = tradeForm;
+    }
+
+    public String getAcquireUprc() {
+        return acquireUprc;
+    }
+
+    public void setAcquireUprc(String acquireUprc) {
+        this.acquireUprc = acquireUprc;
+    }
+
+    public String getAcquireRate() {
+        return acquireRate;
+    }
+
+    public void setAcquireRate(String acquireRate) {
+        this.acquireRate = acquireRate;
+    }
+
+    public boolean isSelectFg() {
+        return selectFg;
+    }
+
+    public void setSelectFg(boolean selectFg) {
+        this.selectFg = selectFg;
     }
 }
