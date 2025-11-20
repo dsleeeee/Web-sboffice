@@ -171,7 +171,7 @@
                 <wj-flex-grid-column header="<s:message code="orderStatus.orderRegDt"/>" binding="orderRegDt" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderStatus.orderSeq"/>" binding="orderSeq" width="70" align="center" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderStatus.prodNm"/>" binding="prodNm" width="150" align="left" is-read-only="true"></wj-flex-grid-column>
-                <wj-flex-grid-column header="<s:message code="orderStatus.fg"/>" binding="orderDtlFg" width="70" align="center" is-read-only="true" data-map="orderFgDataMap"></wj-flex-grid-column>
+                <wj-flex-grid-column header="<s:message code="orderStatus.fg"/>" binding="orderDtlFg" width="70" align="center" is-read-only="true" data-map="orderDtlFgData2"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderStatus.qty"/>" binding="saleQty" width="60" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderStatus.dc"/>" binding="dcAmt" width="70" align="right" is-read-only="true"></wj-flex-grid-column>
                 <wj-flex-grid-column header="<s:message code="orderStatus.realSaleAmt"/>" binding="realSaleAmt" width="80" align="right" is-read-only="true"></wj-flex-grid-column>
@@ -213,7 +213,7 @@
   var arrGuestCol = guestCol.split(',');
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderCancel.js?ver=20250415.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/sale/status/orderStatus/orderCancel.js?ver=20251119.01" charset="utf-8"></script>
 
 <%-- 영수증 상세 레이어 --%>
 <c:import url="/WEB-INF/view/sale/cmmSalePopup/billInfo/billInfo.jsp">

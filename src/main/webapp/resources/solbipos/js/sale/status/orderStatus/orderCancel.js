@@ -74,7 +74,7 @@ app.controller('orderCancelSrch1Ctrl', ['$scope', '$http', function ($scope, $ht
         $scope.orderCancelPeriod();
         event.preventDefault();
     });
-    
+
     // 기간내 전체취소건수 조회
     $scope.orderCancelPeriod = function () {
 
@@ -241,6 +241,7 @@ app.controller('orderCancelCtrl', ['$scope', '$http', '$timeout', function ($sco
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
         $scope.orderFgDataMap = new wijmo.grid.DataMap(orderFgData, 'value', 'name');
+        $scope.orderDtlFgData2 = new wijmo.grid.DataMap(orderDtlFgData2, 'value', 'name');
 
         // 그리드 링크 효과
         s.formatItem.addHandler(function (s, e) {
@@ -254,7 +255,7 @@ app.controller('orderCancelCtrl', ['$scope', '$http', '$timeout', function ($sco
                         wijmo.addClass(e.cell, 'wijLink');
                     }
                 }
-                
+
                 // 취소건은 빨간색으로 표시
                 if (col.binding === "orderRegDt" || col.binding === "orderSeq" || col.binding === "prodNm" ||
                     col.binding === "orderDtlFg" || col.binding === "saleQty" || col.binding === "dcAmt" ||
