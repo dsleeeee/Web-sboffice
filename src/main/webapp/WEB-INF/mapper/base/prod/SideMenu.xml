@@ -585,6 +585,54 @@
                                                         AND thpsc.USE_YN = 'Y'
                                                  )
                     </if>
+                    <choose>
+                        <when test='orgProdFg == null or orgProdFg == ""'>
+                            AND thpsg.SDSEL_GRP_CD NOT IN (
+                                                    SELECT SDSEL_GRP_CD
+                                                    FROM   TB_HQ_PRODUCT_SDSEL_CLASS
+                                                    WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                    AND    USE_YN = 'Y'
+                                                    AND    SDSEL_CLASS_CD IN (
+                                                                           SELECT SDSEL_CLASS_CD
+                                                                           FROM   TB_HQ_PRODUCT_SDSEL_PROD
+                                                                           WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                           AND    USE_YN = 'Y'
+                                                                           AND    PROD_CD IN (
+                                                                                           SELECT A.PROD_CD
+                                                                                           FROM   TB_HQ_PRODUCT A
+                                                                                           ,      TB_HQ_PRODUCT_INFO B
+                                                                                           WHERE  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                                                                                           AND    A.PROD_CD = B.PROD_CD
+                                                                                           AND    A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                                           AND    A.USE_YN = 'Y'
+                                                                                           AND    ORG_PROD_FG = '30')))
+                        </when>
+                        <when test='orgProdFg != null and orgProdFg != ""'>
+                            <if test='orgProdFg == "30"'>
+                                AND thpsg.SDSEL_GRP_CD IN (
+                                                        SELECT SDSEL_GRP_CD
+                                                        FROM   TB_HQ_PRODUCT_SDSEL_CLASS
+                                                        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                        AND    USE_YN = 'Y'
+                                                        AND    SDSEL_CLASS_CD IN (
+                                                                               SELECT SDSEL_CLASS_CD
+                                                                               FROM   TB_HQ_PRODUCT_SDSEL_PROD
+                                                                               WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                               AND    USE_YN = 'Y'
+                                                                               AND    PROD_CD IN (
+                                                                                               SELECT A.PROD_CD
+                                                                                               FROM   TB_HQ_PRODUCT A
+                                                                                               ,      TB_HQ_PRODUCT_INFO B
+                                                                                               WHERE  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                                                                                               AND    A.PROD_CD = B.PROD_CD
+                                                                                               AND    A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                                                               AND    A.USE_YN = 'Y'
+                                                                                               AND    ORG_PROD_FG = '30')))
+                            </if>
+                        </when>
+                        <otherwise>
+                        </otherwise>
+                    </choose>
                 ORDER BY
                     thpsg.SDSEL_GRP_CD
             </when>
@@ -634,6 +682,54 @@
                                                         AND tmpsc.USE_YN = 'Y'
                                                   )
                     </if>
+                    <choose>
+                        <when test='orgProdFg == null or orgProdFg == ""'>
+                            AND tmpsg.SDSEL_GRP_CD NOT IN (
+                                                    SELECT SDSEL_GRP_CD
+                                                    FROM   TB_MS_PRODUCT_SDSEL_CLASS
+                                                    WHERE  STORE_CD = #{storeCd}
+                                                    AND    USE_YN = 'Y'
+                                                    AND    SDSEL_CLASS_CD IN (
+                                                                           SELECT SDSEL_CLASS_CD
+                                                                           FROM   TB_MS_PRODUCT_SDSEL_PROD
+                                                                           WHERE  STORE_CD = #{storeCd}
+                                                                           AND    USE_YN = 'Y'
+                                                                           AND    PROD_CD IN (
+                                                                                           SELECT A.PROD_CD
+                                                                                           FROM   TB_MS_PRODUCT A
+                                                                                           ,      TB_MS_PRODUCT_INFO B
+                                                                                           WHERE  A.STORE_CD = B.STORE_CD
+                                                                                           AND    A.PROD_CD = B.PROD_CD
+                                                                                           AND    A.STORE_CD = #{storeCd}
+                                                                                           AND    A.USE_YN = 'Y'
+                                                                                           AND    ORG_PROD_FG = '30')))
+                        </when>
+                        <when test='orgProdFg != null and orgProdFg != ""'>
+                            <if test='orgProdFg == "30"'>
+                                AND tmpsg.SDSEL_GRP_CD IN (
+                                                        SELECT SDSEL_GRP_CD
+                                                        FROM   TB_MS_PRODUCT_SDSEL_CLASS
+                                                        WHERE  STORE_CD = #{storeCd}
+                                                        AND    USE_YN = 'Y'
+                                                        AND    SDSEL_CLASS_CD IN (
+                                                                               SELECT SDSEL_CLASS_CD
+                                                                               FROM   TB_MS_PRODUCT_SDSEL_PROD
+                                                                               WHERE  STORE_CD = #{storeCd}
+                                                                               AND    USE_YN = 'Y'
+                                                                               AND    PROD_CD IN (
+                                                                                               SELECT A.PROD_CD
+                                                                                               FROM   TB_MS_PRODUCT A
+                                															   ,      TB_MS_PRODUCT_INFO B
+                                                                                               WHERE  A.STORE_CD = B.STORE_CD
+                                                                                               AND    A.PROD_CD = B.PROD_CD
+                                                                                               AND    A.STORE_CD = #{storeCd}
+                                                                                               AND    A.USE_YN = 'Y'
+                                                                                               AND    ORG_PROD_FG = '30')))
+                            </if>
+                        </when>
+                        <otherwise>
+                        </otherwise>
+                    </choose>
                 ORDER BY
                     tmpsg.SDSEL_GRP_CD
             </when>
@@ -1793,7 +1889,8 @@
                         TB_HQ_PRODUCT_CLASS thpc,
                         TB_HQ_BRAND thb,
                         TB_HQ_PRODUCT_SDATTR_CLASS thpsc,
-                        TB_HQ_PRODUCT_SDSEL_GROUP thpsg
+                        TB_HQ_PRODUCT_SDSEL_GROUP thpsg,
+                        TB_HQ_PRODUCT_INFO thpi
                  WHERE 1=1
                    AND thp.HQ_OFFICE_CD = #{hqOfficeCd}
                 <if test="prodCd != null and prodCd != ''">
@@ -1841,6 +1938,9 @@
                     AND thpsc.SDATTR_CLASS_CD (+)= thp.SDATTR_CLASS_CD
                     AND thpsg.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
                     AND thpsg.SDSEL_GRP_CD (+)= thp.SDSEL_GRP_CD
+                    AND thpi.HQ_OFFICE_CD (+)= thp.HQ_OFFICE_CD
+                    AND thpi.PROD_CD (+)= thp.PROD_CD
+                    AND (thpi.ORG_PROD_FG IS NULL OR thpi.ORG_PROD_FG != '30')
                   ORDER
                      BY thp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>
@@ -1873,7 +1973,8 @@
                         TB_MS_PRODUCT_CLASS tmpc,
                         TB_MS_BRAND tmb,
                         TB_MS_PRODUCT_SDATTR_CLASS tmpsc,
-                        TB_MS_PRODUCT_SDSEL_GROUP tmpsg
+                        TB_MS_PRODUCT_SDSEL_GROUP tmpsg,
+                        TB_MS_PRODUCT_INFO tmpi
                   WHERE 1=1
                     AND tmp.STORE_CD = #{storeCd}
                 <if test="prodCd != null and prodCd != ''">
@@ -1921,6 +2022,9 @@
                     AND tmpsc.SDATTR_CLASS_CD (+)= tmp.SDATTR_CLASS_CD
                     AND tmpsg.STORE_CD (+)= tmp.STORE_CD
                     AND tmpsg.SDSEL_GRP_CD (+)= tmp.SDSEL_GRP_CD
+                    AND tmpi.STORE_CD (+)= tmp.STORE_CD
+                    AND tmpi.PROD_CD (+)= tmp.PROD_CD
+                    AND (tmpi.ORG_PROD_FG IS NULL OR tmpi.ORG_PROD_FG != '30')
                  ORDER
                      BY tmp.PROD_CD
                 <include refid="CmmSQL.PagingTemplateBottom"/>

@@ -59,7 +59,7 @@
             <div class="wj-TblWrapBr pd5" style="height: 240px;" ng-controller="optionMenuDlvrSelectGroupCtrl">
                 <div class="updownSet oh mb5">
                     <span class="fl bk lh30"><s:message code='sideMenu.selectMenu.sdselGrp' /></span>
-                    <button class="btn_skyblue" id="orderkitGoto" ng-click="orderkitGoto()" >
+                    <button class="btn_skyblue" id="orderkitGoto" ng-click="orderkitGoto()" style="display: none;" <%--<c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>--%>>
                         <s:message code="sideMenu.selectMenu.orderkitGoto" />
                     </button>
                 </div>
@@ -171,4 +171,4 @@
     var useYnData = ${ccu.getCommCodeExcpAll("067")};
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/optionMenuDlvr.js?ver=20251112.02" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/sideMenu/optionMenuDlvr.js?ver=20251121.01" charset="utf-8"></script>

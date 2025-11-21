@@ -581,6 +581,24 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
       $scope._broadcast('totalExcelCtrl', params);
     });
   };
+
+  // 오더킷 바로가기
+  $scope.orderkitGoto = function () {
+
+      var params = {};
+      $scope._postJSONQuery.withOutPopUp('/orderkit/orderkit/orderkitRecpOrigin/orderkitGoto.sb', params, function (response) {
+
+          // jwtToken
+          var jwtToken = response.data.data;
+
+          // OMS웹뷰 새창 open
+          var url = "https://kcp.onesell.co.kr/auth/pos?token=" + jwtToken;
+          window.open(url, 'newWindow');
+
+      });
+  }
+
+
 }]);
 
 app.controller('totalExcelCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {

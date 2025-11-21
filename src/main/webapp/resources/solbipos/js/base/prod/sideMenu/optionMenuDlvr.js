@@ -120,6 +120,7 @@ app.controller('optionMenuDlvrSelectGroupCtrl', ['$scope', '$http', function ($s
         params.sdselGrpNm = "";
         params.sdselProdCd = "";
         params.sdselProdNm = "";
+        params.orgProdFg = '30';  // 오더킷 상품 구분자 
 
         // 그룹명, 그룹코드 검색조건
         if ($("#txtSelGroup3").val() !== "") {

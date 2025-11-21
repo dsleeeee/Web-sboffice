@@ -164,6 +164,10 @@
         <button class="btn_skyblue ml5 fr" id="btnDelProd" ng-click="delProd()" ng-show="btnShowFg" style="display: none;">
             <s:message code="prod.title.delProd" />
         </button>
+        <%-- 오더킷 바로가기 --%>
+        <button class="btn_skyblue ml5 fr" id="orderkitGoto" ng-click="orderkitGoto()" style="display: none;" <%--<c:if test="${orgnFg == 'HQ'}">style="display: none;"</c:if>--%>>
+            <s:message code="prod.title.orderkitGoto"/>
+        </button>
     </div>
 
     <%--위즈모 테이블--%>
@@ -344,7 +348,7 @@
     var urlProdFg = "${urlProdFg}";
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=20251015.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/prod/prod.js?ver=202511121.01" charset="utf-8"></script>
 
 <%-- 레이어 팝업 : 상품상세정보 --%>
 <c:import url="/WEB-INF/view/base/prod/prod/prodDetailView.jsp">

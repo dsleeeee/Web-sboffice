@@ -210,4 +210,4 @@
     <%-- //body --%>
 </wj-popup>
 
-<script type="text/javascript" src="/resource/solbipos/js/base/prod/basicSideMenu/basicSdselClassCopy.js?ver=20240812.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/base/prod/basicSideMenu/basicSdselClassCopy.js?ver=20240812.02" charset="utf-8"></script>

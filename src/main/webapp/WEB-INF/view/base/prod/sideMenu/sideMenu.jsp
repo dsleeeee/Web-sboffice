@@ -30,7 +30,7 @@
       <%-- 선택메뉴(싱글) --%>
       <li><a id="sideMenuSelectMenuSingle" href="#" ng-click="changeTab('S');"><s:message code="sideMenu.tab.selectMenu(single)" /></a></li>
       <%-- 옵션메뉴(배달) --%>
-      <%--<li><a id="optionMenuDlvr" href="#" ng-click="changeTab('O');"><s:message code="sideMenu.tab.optionMenu(dlvr)" /></a></li>--%>
+      <li><a id="optionMenuDlvr" href="#" ng-click="changeTab('O');"><s:message code="sideMenu.tab.optionMenu(dlvr)" /></a></li>
       <%-- 사이드메뉴관리 --%>
       <li><a id="sideMenuManage" href="#" ng-click="changeTab('M');"><s:message code="sideMenu.tab.manage" /></a></li>
     </ul>

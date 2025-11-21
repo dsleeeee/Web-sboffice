@@ -83,7 +83,7 @@ app.controller('basicSdselClassCopyCtrl', ['$scope', '$http', function ($scope, 
             }
 
             // 저장기능 수행 : 저장URL, 파라미터, 콜백함수
-            $scope._postJSONSave.withPopUp( "/base/prod/sideMenu/menuClass/getSdselClassCopySave.sb", params, function(response){
+            $scope._postJSONSave.withPopUp( "/base/prod/basicSideMenu/menuClass/getSdselClassCopySave.sb", params, function(response){
                 // 하단 화면에 선택분류 리스트 재조회
                 var grpGrid = agrid.getScope('basicSideMenuSelectGroupCtrl');
                 var selectedSelGroup = grpGrid.getSelectedSelGroup();
@@ -222,7 +222,7 @@ app.controller('basicSdselClassCopyGroupCtrl', ['$scope', '$http', function ($sc
         }
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-        $scope._inquiryMain('/base/prod/sideMenu/menuGrp/list.sb', params,function() {}, false);
+        $scope._inquiryMain('/base/prod/basicSideMenu/menuGrp/list.sb', params,function() {}, false);
     };
     // <-- //검색 호출 -->
 }]);
@@ -310,7 +310,7 @@ app.controller('baiscSdselClassCopyClassCtrl', ['$scope', '$http', function ($sc
         params.sdselGrpCd = data.sdselGrpCd;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-        $scope._inquiryMain('/base/prod/sideMenu/menuClass/list.sb', params,function() {}, false);
+        $scope._inquiryMain('/base/prod/basicSideMenu/menuClass/list.sb', params,function() {}, false);
 
         // 기능수행 종료 : 반드시 추가
         event.preventDefault();
@@ -359,7 +359,7 @@ app.controller('baiscSdselClassCopyProdCtrl', ['$scope', '$http', function ($sco
         params.sdselClassCd = data.sdselClassCd;
 
         // 조회 수행 : 조회URL, 파라미터, 콜백함수, 팝업결과표시여부
-        $scope._inquiryMain('/base/prod/sideMenu/menuProd/list.sb', params,function() {
+        $scope._inquiryMain('/base/prod/basicSideMenu/menuProd/list.sb', params,function() {
             // <-- 그리드 visible -->
             // 선택한 테이블에 따른 리스트 항목 visible
             var grid = wijmo.Control.getControl("#wjGridSelProdCopyList");
