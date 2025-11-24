@@ -345,6 +345,9 @@
                 FROM    TB_HQ_VENDOR thv
                 WHERE   thv.HQ_OFFICE_CD    =   #{hqOfficeCd}
                 ]]>
+                <if test='vendrFg != null and vendrFg != ""'>
+                    AND     thv.VENDOR_FG    =   #{vendrFg}
+                </if>
             </when>
             <!-- 가맹점 -->
             <when test='orgnFg != null and orgnFg == "S"'>
@@ -353,8 +356,11 @@
                 ,       tmv.SHIP_FG, tmv.VAT_INCLD_YN
                 ,       tmv.USE_YN
                 FROM    TB_MS_VENDOR tmv
-                WHERE   tmv.STORE_CD  = #{storeCd}
+                WHERE   tmv.STORE_CD  = #{storeCd}a
                 ]]>
+                <if test='vendrFg != null and vendrFg != ""'>
+                    AND     tmv.VENDOR_FG    =   #{vendrFg}
+                </if>
             </when>
         </choose>
     </select>

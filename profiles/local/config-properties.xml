@@ -29,7 +29,7 @@
   <!--  port:6379->6380,maxTotal:500,minIdle:500,maxIdle:500,maxWaitMillis:5000 변경됨 20210326 kjs-->
   <!-- ====================================-->
   <entry key="redis.hostName">192.168.0.160</entry>
-  <entry key="redis.port">6380</entry>
+  <entry key="redis.port">6379</entry>
   <entry key="redis.password"></entry>
   <entry key="redis.usePool">true</entry>
 <!--   web session  -->

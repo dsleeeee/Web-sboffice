@@ -1926,6 +1926,8 @@ public class ProdServiceImpl implements ProdService {
                 prodMapper.deleteProdInfoTouchKeyAllStore(prodVO1);            // 상품_판매터치키
                 prodMapper.deleteProdInfoPrintProdAllStore(prodVO1);           // 매장) 주방프린터_출력상품
                 prodMapper.deleteProdInfoSdselProdAllStore(prodVO1);           // 매장) 상품_사이드선택_상품
+                prodMapper.deleteProdInfoVendorStoreHdr(prodVO1);              // 상품_매입처
+                prodMapper.deleteProdInfoVendorStoreDtl(prodVO1);              // 상품_매입처_매장
 
 
                 LOGGER.info("선택_본사상품_매장삭제_이미지삭제2_시작");

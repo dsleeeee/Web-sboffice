@@ -121,6 +121,9 @@
     $scope.searchVendr = function () {
       // 파라미터
       var params = {};
+      if('${param.vendrFg}' !== null && '${param.vendrFg}' !== undefined && '${param.vendrFg}' !== ""){
+        params.vendrFg = '${param.vendrFg}';
+      }
       $scope._inquirySub("/iostock/cmm/iostockCmm/selectVendrList.sb", params, function () {
         $scope.searchFg = "Y";
       });
