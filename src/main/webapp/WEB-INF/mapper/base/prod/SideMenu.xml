@@ -588,46 +588,26 @@
                     <choose>
                         <when test='orgProdFg == null or orgProdFg == ""'>
                             AND thpsg.SDSEL_GRP_CD NOT IN (
-                                                    SELECT SDSEL_GRP_CD
-                                                    FROM   TB_HQ_PRODUCT_SDSEL_CLASS
-                                                    WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
-                                                    AND    USE_YN = 'Y'
-                                                    AND    SDSEL_CLASS_CD IN (
-                                                                           SELECT SDSEL_CLASS_CD
-                                                                           FROM   TB_HQ_PRODUCT_SDSEL_PROD
-                                                                           WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                           AND    USE_YN = 'Y'
-                                                                           AND    PROD_CD IN (
-                                                                                           SELECT A.PROD_CD
-                                                                                           FROM   TB_HQ_PRODUCT A
-                                                                                           ,      TB_HQ_PRODUCT_INFO B
-                                                                                           WHERE  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
-                                                                                           AND    A.PROD_CD = B.PROD_CD
-                                                                                           AND    A.HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                                           AND    A.USE_YN = 'Y'
-                                                                                           AND    ORG_PROD_FG = '30')))
+                                                        SELECT A.SDSEL_GRP_CD
+                                                        FROM   TB_HQ_PRODUCT A
+                                                        ,      TB_HQ_PRODUCT_INFO B
+                                                        WHERE  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                                                        AND    A.PROD_CD = B.PROD_CD
+                                                        AND    A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                        AND    B.ORG_PROD_FG = '30'
+                                                        AND    A.SDSEL_GRP_CD IS NOT NULL)
                         </when>
                         <when test='orgProdFg != null and orgProdFg != ""'>
                             <if test='orgProdFg == "30"'>
                                 AND thpsg.SDSEL_GRP_CD IN (
-                                                        SELECT SDSEL_GRP_CD
-                                                        FROM   TB_HQ_PRODUCT_SDSEL_CLASS
-                                                        WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
-                                                        AND    USE_YN = 'Y'
-                                                        AND    SDSEL_CLASS_CD IN (
-                                                                               SELECT SDSEL_CLASS_CD
-                                                                               FROM   TB_HQ_PRODUCT_SDSEL_PROD
-                                                                               WHERE  HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                               AND    USE_YN = 'Y'
-                                                                               AND    PROD_CD IN (
-                                                                                               SELECT A.PROD_CD
-                                                                                               FROM   TB_HQ_PRODUCT A
-                                                                                               ,      TB_HQ_PRODUCT_INFO B
-                                                                                               WHERE  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
-                                                                                               AND    A.PROD_CD = B.PROD_CD
-                                                                                               AND    A.HQ_OFFICE_CD = #{hqOfficeCd}
-                                                                                               AND    A.USE_YN = 'Y'
-                                                                                               AND    ORG_PROD_FG = '30')))
+                                                        SELECT A.SDSEL_GRP_CD
+                                                        FROM   TB_HQ_PRODUCT A
+                                                        ,      TB_HQ_PRODUCT_INFO B
+                                                        WHERE  A.HQ_OFFICE_CD = B.HQ_OFFICE_CD
+                                                        AND    A.PROD_CD = B.PROD_CD
+                                                        AND    A.HQ_OFFICE_CD = #{hqOfficeCd}
+                                                        AND    B.ORG_PROD_FG = '30'
+                                                        AND    A.SDSEL_GRP_CD IS NOT NULL)
                             </if>
                         </when>
                         <otherwise>
@@ -685,46 +665,26 @@
                     <choose>
                         <when test='orgProdFg == null or orgProdFg == ""'>
                             AND tmpsg.SDSEL_GRP_CD NOT IN (
-                                                    SELECT SDSEL_GRP_CD
-                                                    FROM   TB_MS_PRODUCT_SDSEL_CLASS
-                                                    WHERE  STORE_CD = #{storeCd}
-                                                    AND    USE_YN = 'Y'
-                                                    AND    SDSEL_CLASS_CD IN (
-                                                                           SELECT SDSEL_CLASS_CD
-                                                                           FROM   TB_MS_PRODUCT_SDSEL_PROD
-                                                                           WHERE  STORE_CD = #{storeCd}
-                                                                           AND    USE_YN = 'Y'
-                                                                           AND    PROD_CD IN (
-                                                                                           SELECT A.PROD_CD
-                                                                                           FROM   TB_MS_PRODUCT A
-                                                                                           ,      TB_MS_PRODUCT_INFO B
-                                                                                           WHERE  A.STORE_CD = B.STORE_CD
-                                                                                           AND    A.PROD_CD = B.PROD_CD
-                                                                                           AND    A.STORE_CD = #{storeCd}
-                                                                                           AND    A.USE_YN = 'Y'
-                                                                                           AND    ORG_PROD_FG = '30')))
+                                                        SELECT A.SDSEL_GRP_CD
+                                                        FROM   TB_MS_PRODUCT A
+                                                        ,      TB_MS_PRODUCT_INFO B
+                                                        WHERE  A.STORE_CD = B.STORE_CD
+                                                        AND    A.PROD_CD = B.PROD_CD
+                                                        AND    A.STORE_CD = #{storeCd}
+                                                        AND    B.ORG_PROD_FG = '30'
+                                                        AND    A.SDSEL_GRP_CD IS NOT NULL)
                         </when>
                         <when test='orgProdFg != null and orgProdFg != ""'>
                             <if test='orgProdFg == "30"'>
                                 AND tmpsg.SDSEL_GRP_CD IN (
-                                                        SELECT SDSEL_GRP_CD
-                                                        FROM   TB_MS_PRODUCT_SDSEL_CLASS
-                                                        WHERE  STORE_CD = #{storeCd}
-                                                        AND    USE_YN = 'Y'
-                                                        AND    SDSEL_CLASS_CD IN (
-                                                                               SELECT SDSEL_CLASS_CD
-                                                                               FROM   TB_MS_PRODUCT_SDSEL_PROD
-                                                                               WHERE  STORE_CD = #{storeCd}
-                                                                               AND    USE_YN = 'Y'
-                                                                               AND    PROD_CD IN (
-                                                                                               SELECT A.PROD_CD
-                                                                                               FROM   TB_MS_PRODUCT A
-                                															   ,      TB_MS_PRODUCT_INFO B
-                                                                                               WHERE  A.STORE_CD = B.STORE_CD
-                                                                                               AND    A.PROD_CD = B.PROD_CD
-                                                                                               AND    A.STORE_CD = #{storeCd}
-                                                                                               AND    A.USE_YN = 'Y'
-                                                                                               AND    ORG_PROD_FG = '30')))
+                                                        SELECT A.SDSEL_GRP_CD
+                                                        FROM   TB_MS_PRODUCT A
+                                                        ,      TB_MS_PRODUCT_INFO B
+                                                        WHERE  A.STORE_CD = B.STORE_CD
+                                                        AND    A.PROD_CD = B.PROD_CD
+                                                        AND    A.STORE_CD = #{storeCd}
+                                                        AND    B.ORG_PROD_FG = '30'
+                                                        AND    A.SDSEL_GRP_CD IS NOT NULL)
                             </if>
                         </when>
                         <otherwise>
