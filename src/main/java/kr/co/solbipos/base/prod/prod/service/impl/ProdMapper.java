@@ -580,4 +580,10 @@ public interface ProdMapper {
 
     /** 매입처 등록 매장 삭제 */
     int deleteProdVendrStore(ProdVO prodVO);
+
+    /** 상품 삭제 팝업 - 상품_매입처 영구삭제 */
+    int deleteProdInfoVendorStoreHdr(ProdVO prodVO1);
+
+    /** 상품 삭제 팝업 - 상품_매입처_매장 영구삭제 */
+    int deleteProdInfoVendorStoreDtl(ProdVO prodVO1);
 }
