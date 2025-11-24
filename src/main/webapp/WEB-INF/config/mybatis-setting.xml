@@ -1297,9 +1297,6 @@
     <!-- 국민대 > 쿠폰관리 > 쿠폰상태관리(관리자) -->
     <typeAlias alias="couponIssueStatusVO" type="kr.co.solbipos.kookmin.coupon.couponIssueStatus.service.CouponIssueStatusVO"/>
 
-    <!-- 국민대 > 매입관리 > 매입전표등록 -->
-    <typeAlias alias="acquireSlipRegistVO" type="kr.co.solbipos.kookmin.acquire.acquireSilpRegist.service.AcquireSlipRegistVO"/>
-
     <!-- 매출관리 > 배달현황 > 내점/배달/포장 현황 -->
     <typeAlias alias="dlvrFgVO" type="kr.co.solbipos.sale.dlvr.dlvrFg.service.DlvrFgVO"/>
     <!-- 매출관리 > 배달현황 > 주문채널별현황 -->

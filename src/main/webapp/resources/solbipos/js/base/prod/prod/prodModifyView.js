@@ -1955,11 +1955,7 @@ app.controller('prodModifyCtrl', ['$scope', '$http', '$timeout', function ($scop
             $("#tdStartStockQtyNo").css('display', '');
 
             // 매입처/매장 추가 버튼
-            if(orgnFg == "HQ") {
-                $("#vendrStoreRegist").css('display', '');
-            }else{
-                $("#vendrStoreRegist").css('display', 'none');
-            }
+            $("#vendrStoreRegist").css('display', '');
 
             // 신규 모드 시
         }else{

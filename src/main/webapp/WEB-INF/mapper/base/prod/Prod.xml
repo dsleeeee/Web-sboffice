@@ -8384,44 +8384,4 @@
         AND     SEQ             = #{seq}
         AND     STORE_CD        = #{storeCd}
     </delete>
-
-    <!-- 상품 삭제 팝업 - 상품_매입처 영구삭제 -->
-    <!--
-        TABLE    : TB_HQ_PRODUCT_VENDOR_STORE_HDR
-        PARAM    : prodVO
-        COMMENTS : 상품_매입처 영구삭제
-    -->
-    <delete id="deleteProdInfoVendorStoreHdr" parameterType="prodVO">
-        /* USE : ProdMapper.deleteProdInfoVendorStoreHdr */
-        DELETE
-        FROM    TB_HQ_PRODUCT_VENDOR_STORE_HDR
-        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-        AND     PROD_CD IN  (
-                                SELECT  PROD_CD
-                                FROM    TB_TMP_DEL_PRODUCT
-                                WHERE   SESSION_ID      = #{sessionId}
-                                AND     HQ_OFFICE_CD    = #{hqOfficeCd}
-                                AND     DEL_TYPE_FG     = #{delTypeFg}
-                            )
-    </delete>
-
-    <!-- 상품 삭제 팝업 - 상품_매입처_매장 영구삭제 -->
-    <!--
-        TABLE    : TB_HQ_PRODUCT_VENDOR_STORE_DTL
-        PARAM    : prodVO
-        COMMENTS : 상품_매입처_매장 영구삭제
-    -->
-    <delete id="deleteProdInfoVendorStoreDtl" parameterType="prodVO">
-        /* USE : ProdMapper.deleteProdInfoVendorStoreDtl */
-        DELETE
-        FROM    TB_HQ_PRODUCT_VENDOR_STORE_DTL
-        WHERE   HQ_OFFICE_CD    = #{hqOfficeCd}
-        AND     PROD_CD IN  (
-                                SELECT  PROD_CD
-                                FROM    TB_TMP_DEL_PRODUCT
-                                WHERE   SESSION_ID      = #{sessionId}
-                                AND     HQ_OFFICE_CD    = #{hqOfficeCd}
-                                AND     DEL_TYPE_FG     = #{delTypeFg}
-                            )
-    </delete>
 </mapper>
