@@ -325,6 +325,7 @@
                     TB_WB_USER_INFO
                 SET
                     USER_PWD = #{newPassword},
+                    LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
                     MOB_LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
                     LAST_PWD_CHG_DT = #{lastPwdChgDt},
                     USER_STAT_FG = '00',
@@ -361,6 +362,7 @@
                 TB_WB_USER_INFO
                 SET
                 USER_PWD = #{newPassword},
+                LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
                 MOB_LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
                 LAST_PWD_CHG_DT = #{lastPwdChgDt},
                 USER_STAT_FG = '99',

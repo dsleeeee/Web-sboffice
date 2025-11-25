@@ -348,6 +348,7 @@
         UPDATE TB_WB_USER_INFO
            SET USER_PWD = #{userPwd},
                LAST_PWD_CHG_DT = #{modDt},
+               LOGIN_AUTO_SERIAL = #{modDt},
                MOB_LOGIN_AUTO_SERIAL = #{modDt},
                USER_STAT_FG = '00',
                LOGIN_FAIL_CNT = '0',
