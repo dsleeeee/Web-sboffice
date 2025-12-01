@@ -193,6 +193,8 @@ public class PwdManageServiceImpl implements PwdManageService {
             // WEB
             pwdManageVO.setNewPassword("123456");
             pwdManageVO.setLastPwdChgDt(currentDateTimeString());
+            pwdManageVO.setModDt(currentDateTimeString());
+            pwdManageVO.setModId(sessionInfoVO.getUserId());
             newPassword = EncUtil.setEncSHA256(pwdManageVO.getUserId() + pwdManageVO.getNewPassword());
         }
         else if ( pwdManageVO.getPwdChgFg() == PwdChgFg.POS ) {

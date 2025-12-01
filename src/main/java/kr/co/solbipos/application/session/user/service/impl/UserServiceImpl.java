@@ -299,6 +299,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int updateUserPwd(SessionInfoVO sessionInfoVO) {
+        String dt = currentDateTimeString();
+
+        sessionInfoVO.setModDt(dt);
+        sessionInfoVO.setModId(sessionInfoVO.getUserId());
         return userMapper.updateUserPwd(sessionInfoVO);
     }
 

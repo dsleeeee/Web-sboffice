@@ -154,7 +154,9 @@
            USER_STAT_FG = #{userStatFg},
            LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
            MOB_LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
-           LAST_PWD_CHG_DT = #{lastPwdChgDt}
+           LAST_PWD_CHG_DT = #{lastPwdChgDt},
+           MOD_DT = #{modDt},
+           MOD_ID = #{modId}
      WHERE USER_ID = #{userId}
   </update>
 
