@@ -28,6 +28,7 @@ import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static kr.co.common.utils.DateUtil.currentDateTimeString;
 import static kr.co.common.utils.HttpUtils.getClientIp;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -267,6 +268,8 @@ public class MobileAuthController {
                 result.setLoginAutoSerial(serial);
 
                 // Serial Update
+                result.setModDt(currentDateTimeString());
+                result.setModId(result.getUserId());
                 mobileAuthService.updateLoginAutoSerial(result);
 
             }else{

@@ -71,6 +71,8 @@ public class MobileAuthServiceImpl implements MobileAuthService {
 
         // userId 로 사용자 조회
         SessionInfoVO result = selectWebUser(params);
+        result.setModDt(currentDateTimeString());
+        result.setModId(result.getUserId());
 
         String inputPw = params.getUserPwd();
 

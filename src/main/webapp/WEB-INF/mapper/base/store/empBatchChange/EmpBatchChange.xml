@@ -472,7 +472,9 @@
                            WHERE the.HQ_OFFICE_CD = #{hqOfficeCd}
                              AND the.EMP_NO = #{originalEmpNo}
                              AND twu.USER_ID = the.USER_ID
-        )
+        ),
+              MOD_DT = #{modDt},
+              MOD_ID = #{modId}
         WHERE USER_ID = (SELECT the.USER_ID
                          FROM TB_HQ_EMPLOYEE the,
                               TB_WB_USER_INFO twu

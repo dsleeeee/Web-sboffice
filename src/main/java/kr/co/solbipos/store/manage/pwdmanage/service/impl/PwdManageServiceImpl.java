@@ -116,6 +116,8 @@ public class PwdManageServiceImpl implements PwdManageService {
         // 비밀번호 암호화
         if ( pwdManageVO.getPwdChgFg() == PwdChgFg.WEB ) {
             pwdManageVO.setLastPwdChgDt(currentDateTimeString());
+            pwdManageVO.setModDt(currentDateTimeString());
+            pwdManageVO.setModId(pwdManageVO.getUserId());
             newPassword = EncUtil.setEncSHA256(pwdManageVO.getUserId() + pwdManageVO.getNewPassword());
 
             /** 패스워드 정책 체크 */
@@ -167,6 +169,8 @@ public class PwdManageServiceImpl implements PwdManageService {
 
         // 사용자 상태 - 정상
         pwdManageVO.setUserStatFg(UserStatFg.NORMAL);
+        pwdManageVO.setModDt(currentDateTimeString());
+        pwdManageVO.setModId(sessionInfoVO.getUserId());
 
         if(pwdManageMapper.updatePasswordUnLock(pwdManageVO) > 0){
             return PwChgResult.CHECK_OK;

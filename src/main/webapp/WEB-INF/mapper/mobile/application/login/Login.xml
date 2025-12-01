@@ -198,6 +198,8 @@
         <if test='userStatFg.toString() != null and userStatFg.toString() != ""'>
             , USER_STAT_FG = #{userStatFg}
         </if>
+        ,  MOD_DT = #{modDt}
+        ,  MOD_ID = #{modId}
         WHERE
         USER_ID = #{userId}
     </update>
@@ -205,7 +207,9 @@
     <update id="updateLoginAutoSerial" parameterType="sessionInfoVO">
       /* MobileAuthMapper.updateLoginAutoSerial */
       UPDATE TB_WB_USER_INFO
-         SET  LOGIN_AUTO_SERIAL = #{loginAutoSerial}
+         SET LOGIN_AUTO_SERIAL = #{loginAutoSerial},
+             MOD_DT = #{modDt},
+             MOD_ID = #{modId}
        WHERE USER_ID = #{userId}
     </update>
 

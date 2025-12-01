@@ -546,7 +546,9 @@
                                WHERE tme.STORE_CD = #{storeCd}
                                  AND tme.EMP_NO = #{copyEmpNo}
                                  AND twu.USER_ID = tme.USER_ID
-                              )
+                              ),
+               MOD_DT = #{modDt},
+               MOD_ID = #{modId}
          WHERE USER_ID = (SELECT tme.USER_ID
                             FROM TB_MS_EMPLOYEE tme,
                                  TB_WB_USER_INFO twu
