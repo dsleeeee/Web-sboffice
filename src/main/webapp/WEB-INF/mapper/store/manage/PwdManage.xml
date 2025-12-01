@@ -366,7 +366,9 @@
                 MOB_LOGIN_AUTO_SERIAL = #{lastPwdChgDt},
                 LAST_PWD_CHG_DT = #{lastPwdChgDt},
                 USER_STAT_FG = '99',
-                LOGIN_FAIL_CNT = '0'
+                LOGIN_FAIL_CNT = '0',
+                MOD_DT = #{modDt},
+                MOD_ID = #{modId}
                 WHERE
                 USER_ID = #{userId}
             </when>
