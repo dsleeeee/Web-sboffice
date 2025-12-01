@@ -413,6 +413,9 @@
     <typeAlias alias="prodImgBarrierFreeVO" type="kr.co.solbipos.base.prod.prodImgBarrierFree.service.ProdImgBarrierFreeVO"/>
     <!-- 기초관리 > 상품관리2 > T오더수량변경표시관리 -->
     <typeAlias alias="torderQtyDispVO" type="kr.co.solbipos.base.prod.torderQtyDisp.service.TorderQtyDispVO"/>
+    <!-- 기초관리 > 상품관리2 > QR주문키맵등록 -->
+    <typeAlias alias="qrOrderKeyMapVO" type="kr.co.solbipos.base.prod.qrOrderKeyMap.service.QrOrderKeyMapVO"/>
+
     <!-- 기초관리 > 상품관리 > 상품정보조회 -->
     <typeAlias alias="prodSearchVO" type="kr.co.solbipos.base.prod.prodSearch.service.ProdSearchVO"/>
     <!-- 기초관리 > 상품관리 > (기준)사이드메뉴 (개발중지, 진행안함) -->

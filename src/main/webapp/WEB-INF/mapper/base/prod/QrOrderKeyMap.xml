@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    QrOrderKeyMap.xml
+    테이블오더키맵관리
+    ======================================================
+    No  ||  수정자 ||  수정일자    ||  수정내역
+    ======================================================
+    1       김유승     2025.11.28     최초작성
+-->
+<mapper namespace="kr.co.solbipos.base.prod.qrOrderKeyMap.service.impl.QrOrderKeyMapMapper">
+
+    <!-- QR오더 카테고리 (분류) 조회 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_CLS
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : QR오더 카테고리(분류)를 가져온다.
+    -->
+    <select id="getQrOrderCategory" parameterType="qrOrderKeyMapVO" resultType="DefaultMap">
+        /* USE : QrOrderKeyMapMapper.getQrOrderCategory */
+        SELECT	TU_CLS_CD
+        ,		TU_CLS_NM
+        ,		CLS_MEMO
+        ,       NVL(
+                        (
+                            SELECT  NMCODE_ITEM_2
+                            FROM    TB_HQ_NMCODE B
+                            WHERE   B.HQ_OFFICE_CD = #{hqOfficeCd}
+                            AND     B.NMCODE_GRP_CD = '229'
+                            AND     B.NMCODE_NM = A.TU_CLS_TYPE
+                            AND     B.NMCODE_ITEM_1 = A.TU_CLS_CD
+                        )
+                        , 	'N'
+                    ) AS STORE_MOD_YN
+        ,       STORE_CD
+        ,       POS_NO
+        ,       TU_CLS_TYPE
+        ,       TU_CLS_CD
+        ,       TU_CLS_NM
+        ,       TU_PAGE
+        ,       X
+        ,       Y
+        ,       WIDTH
+        ,       HEIGHT
+        ,       INDEX_NO
+        ,       CLS_FG
+        ,       REG_DT
+        ,       REG_ID
+        ,       MOD_DT
+        ,       MOD_ID
+        ,       CLS_MEMO
+        FROM	TB_MS_KCPQR_CLS A
+        WHERE   A.STORE_CD      = #{storeCd}
+        AND     A.POS_NO        = #{posNo}
+        AND     A.TU_CLS_TYPE   = #{tuClsType}
+        ORDER
+        BY      A.INDEX_NO
+    </select>
+
+    <!-- QR오더 카테고리(분류) 저장 - 생성 시 카테고리 코드 생성 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_CLS
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : 새로운 QR오더 카테고리(분류) 생성 시 카테고리 코드를 생성한다.
+    -->
+    <select id="getQrOrderCategoryCode" parameterType="qrOrderKeyMapVO" resultType="String">
+        /* USE : QrOrderKeyMapMapper.getQrOrderCategoryCode */
+        SELECT  LPAD(NVL(MAX(TU_CLS_CD), '0') + 1, 2, '0')
+        FROM    TB_MS_KCPQR_CLS
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+    </select>
+
+    <!-- QR오더 카테고리(분류) 저장 - 생성 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_CLS
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : 새로운 QR오더 카테고리(분류) 생성한다.
+    -->
+    <insert id="insertQrOrderCategory" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.insertQrOrderCategory */
+        INSERT INTO TB_MS_KCPQR_CLS
+        (
+            STORE_CD
+        ,   POS_NO
+        ,   TU_CLS_TYPE
+        ,   TU_CLS_CD
+        ,   TU_CLS_NM
+        ,   TU_PAGE
+        ,   X
+        ,   Y
+        ,   WIDTH
+        ,   HEIGHT
+        ,   INDEX_NO
+        ,   CLS_FG
+        ,   CLS_MEMO
+        ,   TU_M_CLS_FG
+        ,   TU_CLS_EN_NM
+        ,   TU_CLS_CN_NM
+        ,   TU_CLS_JP_NM
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{storeCd}
+        ,   #{posNo}
+        ,   #{tuClsType}
+        ,   #{tuClsCd}
+        ,   #{tuClsNm}
+        ,   #{tuPage}
+        ,   #{x}
+        ,   #{y}
+        ,   #{width}
+        ,   #{height}
+        ,   #{indexNo}
+        ,   #{clsFg}
+        ,   #{clsMemo}
+        ,   #{tuMClsFg}
+        ,   #{tuClsEnNm}
+        ,   #{tuClsCnNm}
+        ,   #{tuClsJpNm}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+
+    <!-- QR오더 카테고리(분류) 저장 - 수정 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_CLS
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : QR오더 카테고리(분류) 수정한다.
+    -->
+    <update id="updateQrOrderCategory" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.updateQrOrderCategory */
+        UPDATE  TB_MS_KCPQR_CLS
+        SET     TU_CLS_NM   = #{tuClsNm}
+        ,       TU_PAGE     = #{tuPage}
+        ,       X           = #{x}
+        ,       Y           = #{y}
+        ,       WIDTH       = #{width}
+        ,       HEIGHT      = #{height}
+        ,       INDEX_NO    = #{indexNo}
+        ,       CLS_FG      = #{clsFg}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        ,       CLS_MEMO    = #{clsMemo}
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+        AND     TU_CLS_CD   = #{tuClsCd}
+    </update>
+
+    <!-- QR오더 카테고리(분류) 저장 - 삭제 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_CLS
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : QR오더 카테고리(분류) 삭제한다.
+    -->
+    <delete id="deleteQrOrderCategory" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.deleteQrOrderCategory */
+        DELETE  TB_MS_KCPQR_CLS
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+        AND     TU_CLS_CD   = #{tuClsCd}
+    </delete>
+
+    <!-- QR오더 카테고리(분류) 저장 - 카테고리 삭제 시, 카테고리에 속한 키맵도 삭제 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_KEY
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : QR오더 카테고리(분류) 삭제 시, 카테고리에 속한 키맵도 삭제한다.
+    -->
+    <delete id="deleteAllQrOrderKeyMap" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.deleteAllQrOrderKeyMap */
+        DELETE  TB_MS_KCPQR_KEY
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+        AND     TU_CLS_CD   = #{tuClsCd}
+    </delete>
+
+    <!-- QR오더 키맵 조회 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_KEY
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : QR오더 키를 가져온다.
+    -->
+    <select id="getQrOrderKeyMap" parameterType="qrOrderKeyMapVO" resultType="DefaultMap">
+        /* USE : QrOrderKeyMapMapper.getQrOrderKeyMap */
+        SELECT	A.TU_KEY_CD
+        ,		A.PROD_CD
+        ,		B.PROD_NM
+        ,       B.REMARK
+        ,       A.INDEX_NO
+        ,       A.POS_NO
+        ,       A.TU_CLS_CD
+        ,       A.TU_KEY_CD
+        ,       A.TU_PAGE
+        ,       A.X
+        ,       A.Y
+        ,       A.WIDTH
+        ,       A.HEIGHT
+        ,       A.INDEX_NO
+        ,       A.CLS_FG
+        ,       A.REG_DT
+        ,       A.REG_ID
+        ,       A.MOD_DT
+        ,       A.MOD_ID
+        ,		A.TU_CLS_TYPE
+        ,       (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = B.GROUP_PROD_CD) AS GROUP_PROD_NM
+        ,       DECODE(NVL(B.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN
+        ,       DECODE(NVL(B.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN
+        ,       B.REMARK
+        ,       DECODE(NVL(B.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
+        ,       (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.STORE_CD = #{storeCd} AND tmpst.PROD_CD = B.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+        ,       DECODE(NVL(C.SALE_TYPE_YN_SIN, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_SIN
+        ,       DECODE(NVL(C.SALE_TYPE_YN_DLV, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_DLV
+        ,       DECODE(NVL(C.SALE_TYPE_YN_PKG, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_PKG
+        FROM	TB_MS_KCPQR_KEY A
+        ,		TB_MS_PRODUCT B
+        ,		TB_MS_PRODUCT_INFO C
+        WHERE	B.STORE_CD 	    = A.STORE_CD
+        AND		B.PROD_CD 	    = A.PROD_CD
+        AND		C.STORE_CD	(+)	= A.STORE_CD
+        AND		C.PROD_CD	(+)	= A.PROD_CD
+        AND     A.STORE_CD      = #{storeCd}
+        AND     A.POS_NO        = #{posNo}
+        AND     A.TU_CLS_TYPE   = #{tuClsType}
+        AND     A.TU_CLS_CD     = #{tuClsCd}
+        ORDER
+        BY      A.INDEX_NO
+    </select>
+
+    <!-- QR오더 키맵 수정 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_KEY
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : QR오더 키맵을 수정한다.
+    -->
+    <update id="updateQrOrderKeyMap" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.updateQrOrderKeyMap */
+        UPDATE  TB_MS_KCPQR_KEY
+        SET     TU_PAGE     = #{tuPage}
+        ,       X           = #{x}
+        ,       Y           = #{y}
+        ,       WIDTH       = #{width}
+        ,       HEIGHT      = #{height}
+        ,       INDEX_NO    = #{indexNo}
+        ,       CLS_FG      = #{clsFg}
+        ,       MOD_DT      = #{modDt}
+        ,       MOD_ID      = #{modId}
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+        AND     TU_CLS_CD   = #{tuClsCd}
+        AND     TU_KEY_CD   = #{tuKeyCd}
+    </update>
+
+    <!-- QR오더 키맵 삭제 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : QR오더 키맵을 삭제한다.
+    -->
+    <delete id="deleteQrOrderKeyMap" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.deleteQrOrderKeyMap */
+        DELETE  TB_MS_KCPQR_KEY
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+        AND     TU_CLS_CD   = #{tuClsCd}
+        AND     TU_KEY_CD   = #{tuKeyCd}
+    </delete>
+
+    <!-- QR오더 상품 조회 -->
+    <!--
+        TABLE    : TB_MS_PRODUCT, TB_MS_KCPQR_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키맵으로 등록할 상품을 조회한다. ( 본사/매장 )
+    -->
+    <select id="getQrOrderProdList" parameterType="kioskKeyMapVO" resultType="DefaultMap">
+        /* USE : QrOrderKeyMapMapper.getQrOrderProdList */
+        <include refid="CmmSQL.PagingTemplateHeader"/>
+        SELECT  tmp.PROD_CD
+        ,       tmp.PROD_NM
+        ,       NVL(tmpsp.SALE_UPRC, 0) AS SALE_UPRC -- 판매단가
+        ,       (CASE WHEN tmkk.PROD_CD IS NULL THEN 'N' ELSE 'Y' END) AS REG_YN
+        ,       (SELECT PROD_NM FROM TB_MS_PRODUCT tmp2 WHERE STORE_CD = #{storeCd} AND PROD_CD = tmp.GROUP_PROD_CD) AS GROUP_PROD_NM
+        ,       DECODE(NVL(tmp.KIOSK_DISPLAY_YN, 'Y'), 'Y', '노출', 'N', '비노출') AS KIOSK_DISPLAY_YN
+        ,       DECODE(NVL(tmp.SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS SOLD_OUT_YN
+        ,       tmp.REMARK
+        ,       DECODE(NVL(tmp.CHANNEL_SOLD_OUT_YN, 'N'), 'Y', '품절', 'N', '정상') AS CHANNEL_SOLD_OUT_YN
+        ,       DECODE(NVL(tmp.SELFAPP_YN, 'N'), 'Y', '단종', 'N', '정상') AS SELFAPP_YN
+        ,       (SELECT LISTAGG(TO_CHAR(TO_DATE(S_SALE_TIME, 'HH24MI'), 'HH24:MI') || '~' || TO_CHAR(TO_DATE(E_SALE_TIME, 'HH24MI'), 'HH24:MI'), ',') WITHIN GROUP (ORDER BY S_SALE_TIME || '~' || E_SALE_TIME) AS SALE_TIME FROM TB_MS_PRODUCT_SALE_TIME tmpst WHERE tmpst.STORE_CD = #{storeCd} AND tmpst.PROD_CD = tmp.PROD_CD ) AS SALE_TIME -- KIOSK 시간설정
+        ,       DECODE(NVL(tmpi.SALE_TYPE_YN_SIN, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_SIN
+        ,       DECODE(NVL(tmpi.SALE_TYPE_YN_DLV, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_DLV
+        ,       DECODE(NVL(tmpi.SALE_TYPE_YN_PKG, 'N'),'Y','사용',NULL)   AS SALE_TYPE_YN_PKG
+        <include refid="CmmSQL.PagingTemplateCount"/>
+        FROM    TB_MS_PRODUCT tmp
+        LEFT OUTER JOIN TB_MS_PRODUCT_SALE_PRICE_V01 tmpsp ON --view
+                tmp.STORE_CD = tmpsp.STORE_CD
+            AND tmp.PROD_CD = tmpsp.PROD_CD
+            AND tmpsp.SALE_DATE = TO_CHAR(SYSDATE, 'yyyyMMdd')
+        INNER JOIN TB_MS_STORE tms ON
+            tms.STORE_CD  = tmp.STORE_CD
+        LEFT OUTER JOIN (
+                            SELECT STORE_CD
+                            ,       PROD_CD
+                            FROM    TB_MS_KCPQR_KEY
+                            WHERE   STORE_CD    = #{storeCd}
+                            AND     POS_NO      = #{posNo}
+                            AND     TU_CLS_TYPE = #{tuClsType}
+                            AND     TU_CLS_CD   = #{tuClsCd}
+                            GROUP
+                            BY      STORE_CD
+                            ,       PROD_CD
+                        ) tmkk ON
+                tmp.STORE_CD = tmkk.STORE_CD
+            AND tmp.PROD_CD = tmkk.PROD_CD
+        LEFT OUTER JOIN TB_MS_PRODUCT_INFO tmpi ON
+                tmp.STORE_CD = tmpi.STORE_CD
+            AND	tmp.PROD_CD	 = tmpi.PROD_CD
+        WHERE   1=1
+        AND     tmp.STORE_CD = #{storeCd}
+        <if test="chkDt == false">
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''">
+                <![CDATA[
+                AND tmp.REG_DT BETWEEN #{startDate}||'000000' AND #{endDate}||'235959'
+                ]]>
+            </if>
+        </if>
+        <if test="prodCd != null and prodCd != ''">
+            AND tmp.PROD_CD LIKE '%'||#{prodCd}||'%' --상품코드
+        </if>
+        <if test="prodNm != null and prodNm != ''">
+            AND tmp.PROD_NM LIKE '%'||#{prodNm}||'%' --상품명
+        </if>
+        <if test="prodClassCd != null and prodClassCd != ''">
+            AND tmp.PROD_CLASS_CD IN    (
+                                            SELECT  PROD_CLASS_CD
+                                            FROM    TB_MS_PRODUCT_CLASS
+                                            WHERE   STORE_CD = #{storeCd}
+                                            START WITH PROD_CLASS_CD = #{prodClassCd} AND STORE_CD = #{storeCd}
+                                            CONNECT BY PRIOR PROD_CLASS_CD = P_PROD_CLASS_CD  AND STORE_CD = #{storeCd}
+                                        ) --상품분류
+        </if>
+        <if test="barCd != null and barCd != ''">
+            AND EXISTS (
+                            SELECT  1
+                            FROM    TB_MS_PRODUCT_BARCD
+                            WHERE   STORE_CD = tmp.STORE_CD
+                            AND     PROD_CD = tmp.PROD_CD
+                            AND     BARCD_CD = #{barCd}
+                        ) --바코드
+        </if>
+        <if test="useYn != null and useYn != ''">
+            AND tmp.USE_YN = #{useYn} --사용여부
+        </if>
+        <if test="prodTypeFg != null and prodTypeFg != ''">
+            AND tmp.PROD_TYPE_FG = #{prodTypeFg} --상품유형
+        </if>
+        <choose>
+            <when test='regYn != null and regYn == "Y"'>
+                AND tmkk.PROD_CD IS NOT NULL
+            </when>
+            <when test='regYn != null and regYn == "N"'>
+                AND tmkk.PROD_CD IS NULL
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        ORDER
+        BY      tmp.PROD_CD ASC
+        <include refid="CmmSQL.PagingTemplateBottom"/>
+    </select>
+
+    <!-- QR오더 키맵 관련 코드 조회 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_KEY
+        PARAM    : kioskKeyMapVO
+        COMMENTS : 키를 등록하기 위한 코드값 조회한다. ( 본사/매장 )
+    -->
+    <select id="getQrOrderKeyMapCode" parameterType="qrOrderKeyMapVO" resultType="DefaultMap">
+        /* USE : QrOrderKeyMapMapper.getQrOrderKeyMapCode */
+        SELECT  LPAD(NVL(MAX(TU_KEY_CD),0)+1, 3, 0) AS TU_KEY_CD
+        ,       NVL(MAX(INDEX_NO),0)+1 AS INDEX_NO
+        FROM    TB_MS_KCPQR_KEY
+        WHERE   STORE_CD    = #{storeCd}
+        AND     POS_NO      = #{posNo}
+        AND     TU_CLS_TYPE = #{tuClsType}
+        AND     TU_CLS_CD   = #{tuClsCd}
+    </select>
+
+    <!-- QR오더 키맵 등록 -->
+    <!--
+        TABLE    : TB_MS_KCPQR_KEY
+        PARAM    : qrOrderKeyMapVO
+        COMMENTS : 상품을 키맵에 등록한다. ( 본사/매장 )
+    -->
+    <insert id="saveQrOrderKeyMap" parameterType="qrOrderKeyMapVO">
+        /* USE : QrOrderKeyMapMapper.saveQrOrderKeyMap */
+        INSERT INTO TB_MS_KCPQR_KEY
+        (
+            STORE_CD
+        ,   POS_NO
+        ,   TU_CLS_CD
+        ,   TU_CLS_TYPE
+        ,   TU_KEY_CD
+        ,   PROD_CD
+        ,   TU_PAGE
+        ,   X
+        ,   Y
+        ,   WIDTH
+        ,   HEIGHT
+        ,   INDEX_NO
+        ,   CLS_FG
+        ,   REG_DT
+        ,   REG_ID
+        ,   MOD_DT
+        ,   MOD_ID
+        )
+        VALUES
+        (
+            #{storeCd}
+        ,   #{posNo}
+        ,   #{tuClsCd}
+        ,   #{tuClsType}
+        ,   #{tuKeyCd}
+        ,   #{prodCd}
+        ,   #{tuPage}
+        ,   #{x}
+        ,   #{y}
+        ,   #{width}
+        ,   #{height}
+        ,   #{indexNo}
+        ,   #{clsFg}
+        ,   #{regDt}
+        ,   #{regId}
+        ,   #{modDt}
+        ,   #{modId}
+        )
+    </insert>
+</mapper>
