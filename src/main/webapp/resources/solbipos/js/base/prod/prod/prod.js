@@ -592,7 +592,8 @@ app.controller('prodCtrl', ['$scope', '$http', '$timeout', function ($scope, $ht
           var jwtToken = response.data.data;
 
           // OMS웹뷰 새창 open
-          var url = "https://kcp.onesell.co.kr/auth/pos?token=" + jwtToken;
+          var url = "https://kcp.onesell.co.kr/auth/pos?token=" + jwtToken; // 개발
+          //var url = "https://orderkit.co.kr/auth/pos?token=" + jwtToken; // 운영
           window.open(url, 'newWindow');
 
       });

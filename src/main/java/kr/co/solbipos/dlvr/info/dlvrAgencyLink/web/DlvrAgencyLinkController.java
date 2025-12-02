@@ -390,6 +390,7 @@ public class DlvrAgencyLinkController {
             // 1. URL 객체 생성
             URL url = new URL(apiUrl);
             apiLinkVO.setUrl(apiUrl);
+            System.out.println("API 호출 URL: " + url);
 
             // 2. HttpURLConnection 객체 생성 및 설정
             apiLinkVO.setRequestDt(currentDateTimeString());
@@ -495,6 +496,7 @@ public class DlvrAgencyLinkController {
             // 1. URL 객체 생성
             URL url = new URL(apiUrl);
             apiLinkVO.setUrl(apiUrl);
+            System.out.println("API 호출 URL: " + url);
 
             // 2. HttpURLConnection 객체 생성 및 설정
             apiLinkVO.setRequestDt(currentDateTimeString());

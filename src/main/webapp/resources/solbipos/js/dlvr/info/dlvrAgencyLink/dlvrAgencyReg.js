@@ -21,6 +21,17 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
     // grid 초기화 : 생성되기전 초기화되면서 생성된다
     $scope.initGrid = function (s, e) {
 
+        // 그리드 데이터 형태에 따른 표기 변환
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                if (col.binding === "deposit") {
+                    e.cell.innerHTML = addComma(e.cell.innerText);
+                }
+            }
+        });
+
         // 헤더머지
         s.allowMerging = 2;
         s.columnHeaders.rows.push(new wijmo.grid.Row());
@@ -306,6 +317,11 @@ app.controller('dlvrAgencyRegCtrl', ['$scope', '$http', function ($scope, $http)
                 
                 // 팝업 닫기
                 $scope.btnClose();
+                
+                // 배달대행사 연동 현황 재조회
+                var vScope = agrid.getScope('dlvrAgencyLinkCtrl');
+                vScope.searchStatus();
+
                 console.log(data.data);
 
             } else if (data.code === "2525") {

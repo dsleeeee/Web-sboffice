@@ -92,6 +92,7 @@
             <div class="w100 mt10 mb20">
                 <div class="wj-gridWrap" style="height:450px; overflow-x: hidden; overflow-y: hidden;">
                     <wj-flex-grid
+                            id="wjGridMain"
                             autoGenerateColumns="false"
                             control="flex"
                             initialized="initGrid(s,e)"
@@ -103,9 +104,9 @@
 
                         <!-- define columns -->
                         <wj-flex-grid-column header="<s:message code="cmm.chk"/>" binding="gChk" width="35"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.dlvrAgency"/>" binding="prodClassCd" width="200" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.deposit"/>" binding="deposit" width="100" align="center"></wj-flex-grid-column>
-                        <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.linkDate"/>" binding="prodClassNm" width="200"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.dlvrAgency"/>" binding="riderName" width="200" align="left"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.deposit"/>" binding="deposit" width="100" align="right"></wj-flex-grid-column>
+                        <wj-flex-grid-column header="<s:message code="dlvrAgencyLink.linkDate"/>" binding="mappingDateTime" width="200" align="center"></wj-flex-grid-column>
 
                     </wj-flex-grid>
                 </div>
@@ -127,7 +128,7 @@
 <script type="text/javascript">
 </script>
 
-<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyLink.js?ver=20251114.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/dlvr/info/dlvrAgencyLink/dlvrAgencyLink.js?ver=20251202.03" charset="utf-8"></script>
 
 <%-- 배달대행사 추가 팝업 --%>
 <c:import url="/WEB-INF/view/dlvr/info/dlvrAgencyLink/dlvrAgencyReg.jsp">

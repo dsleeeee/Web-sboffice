@@ -66,4 +66,4 @@
 </script>
 
 
-<script type="text/javascript" src="/resource/solbipos/js/orderkit/orderkit/orderkitRecpOrigin/orderkitRecpOrigin.js?ver=20251107.01" charset="utf-8"></script>
+<script type="text/javascript" src="/resource/solbipos/js/orderkit/orderkit/orderkitRecpOrigin/orderkitRecpOrigin.js?ver=20251202.01" charset="utf-8"></script>

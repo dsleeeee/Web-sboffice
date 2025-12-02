@@ -40,6 +40,21 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
 
         // 유저 상태 조회(구독여부, 주문 중개 서비스 사용여부, 배달앱 연동 정보)
         $scope.getOmsUserStatus();
+
+        // 그리드 데이터 형태에 따른 표기 변환
+        s.formatItem.addHandler(function (s, e) {
+            if (e.panel === s.cells) {
+                var col = s.columns[e.col];
+
+                if (col.binding === "deposit") {
+                    e.cell.innerHTML = addComma(e.cell.innerText);
+                }
+
+                if (col.binding === "mappingDateTime") {
+                    e.cell.innerHTML = getFormatDateTime(e.cell.innerText);
+                }
+            }
+        });
     };
 
     $scope.$on("dlvrAgencyLinkCtrl", function (event, data) {
@@ -62,6 +77,20 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
 
         $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/getAgencyLink.sb", params, function (response) {
 
+            var data = response.data.data.list;
+
+            if (data.status === 200) {
+
+                var list = data.data;
+
+                list.forEach(item => {
+                    item.gChk = false; // 체크박스 선택을 위해 추가
+                });
+
+                var grid = wijmo.Control.getControl("#wjGridMain");
+                grid.itemsSource = new wijmo.collections.CollectionView(list);
+                grid.collectionView.trackChanges = true;
+            }
         });
     };
 
@@ -74,7 +103,7 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
     // 해제
     $scope.btnClear = function () {
 
-        /*var chkCnt = 0;
+        var chkCnt = 0;
 
         for (var i = $scope.flex.collectionView.items.length - 1; i >= 0; i--) {
             var item = $scope.flex.collectionView.items[i];
@@ -100,16 +129,21 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
             var item = $scope.flex.collectionView.items[i];
             if (item.gChk) {
                 params.linkType = "006";
-                params.mappingSequence = "20250619153940";
+                params.riderName = item.riderName;
+                params.mappingSequence = item.mappingDateTime;
+
             }
-        }*/
+        }
 
-        var params = {};
+        /*var params = {};
         params.linkType = "006";
-        params.mappingSequence = "20251105497150";
+        params.riderName = "모아라인";
+        params.mappingSequence = "20251105497150"; // 모아라인*/
 
-        // 과<br>POS 연동을 해제하시겠습니까?
-        $scope._popConfirm(messages["dlvrAgencyLink.link.clear.msg"], function () {
+        console.log(params);
+
+        // 와(과)<br>POS 연동을 해제하시겠습니까?
+        $scope._popConfirm(params.riderName + messages["dlvrAgencyLink.link.clear.msg"], function () {
 
             $scope._postJSONQuery.withOutPopUp("/dlvr/manage/info/dlvrAgencyLink/deleteAgencyLink.sb", params, function (response) {
 
@@ -183,7 +217,8 @@ app.controller('dlvrAgencyLinkCtrl', ['$scope', '$http', function ($scope, $http
             var jwtToken = response.data.data;
 
             // OMS웹뷰 새창 open
-            var url = "https://kcp.onesell.co.kr/auth/pos?token=" + jwtToken;
+            var url = "https://kcp.onesell.co.kr/auth/pos?token=" + jwtToken; // 개발
+            //var url = "https://orderkit.co.kr/auth/pos?token=" + jwtToken; // 운영
             window.open(url, 'newWindow');
 
         });
